@@ -1,0 +1,38 @@
+/*
+ * @(#)SimpleDrawingView.css
+ * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ */
+
+/**
+ * This CSS is used by {@code SimpleDrawingView} to style JavaFX Nodes which are
+ * laid over a drawing, such as {@code Tool}s and {@code Handle}s.
+ */
+
+/* Styles the rubberbands drawn by tools. See {@code Tool}. */
+.tool-rubberband {
+    -fx-stroke: black;
+}
+
+/* Styles the canvas pane behind the drawing. This is a region with a checkerboard pattern on it. */
+#canvasPane {
+    /*-fx-effect: dropshadow(gaussian,rgba(0,0,0,0.6),10,0,0,2);*//* XXX very poor performance with dropshadow! */
+    -fx-border-color: green;
+}
+
+/* Styles the tool pane in front of the drawing. This is a group. */
+#toolPane {
+    -fx-border-color: black;
+    /* -fx-border-style: dashed;*//* XXX very poor performance with dashed lines! */
+}
+
+#toolEventPane {
+    -fx-border-width: 1.4;
+}
+
+#toolEventPane:focused {
+    -fx-border-color: -fx-focus-color;
+}
+
+.handle {
+-fx-effect: dropshadow(one-pass-box,white,3.24,1.0,0,0)    ;
+}

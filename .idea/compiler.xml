@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <wildcardResourcePatterns>
+      <entry name="!?*.java" />
+      <entry name="!?*.form" />
+      <entry name="!?*.class" />
+      <entry name="!?*.groovy" />
+      <entry name="!?*.scala" />
+      <entry name="!?*.flex" />
+      <entry name="!?*.kt" />
+      <entry name="!?*.clj" />
+      <entry name="!?*.aj" />
+      <entry name="*.plist" />
+      <entry name="*.png" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="org.jhotdraw8.draw" />
+        <module name="org.jhotdraw8.application" />
+        <module name="org.jhotdraw8.teddy" />
+        <module name="org.jhotdraw8.misc" />
+        <module name="org.jhotdraw8.grapher" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jhotdraw8" target="1.5" />
+      <module name="org.jhotdraw8" target="1.5" />
+      <module name="org.jhotdraw8.application" target="11" />
+      <module name="org.jhotdraw8.draw" target="11" />
+      <module name="org.jhotdraw8.grapher" target="11" />
+      <module name="org.jhotdraw8.misc" target="11" />
+      <module name="org.jhotdraw8.teddy" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
