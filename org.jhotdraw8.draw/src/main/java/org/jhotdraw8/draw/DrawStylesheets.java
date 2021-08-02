@@ -5,11 +5,21 @@
 package org.jhotdraw8.draw;
 
 
+import java.net.URL;
+import java.util.MissingResourceException;
+
 public class DrawStylesheets {
     private DrawStylesheets() {
     }
 
     public static String getInspectorsStylesheet() {
-        return DrawStylesheets.class.getResource("/org/jhotdraw8/draw/inspector/inspector.css").toString();
+        String name = "/org/jhotdraw8/draw/inspector/inspector.css";
+        URL resource = DrawStylesheets.class.getResource(name);
+        if (resource == null) {
+            throw new MissingResourceException("resource not found, name=" + name,
+                    DrawStylesheets.class.getName(),
+                    name);
+        }
+        return resource.toString();
     }
 }

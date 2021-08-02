@@ -104,7 +104,13 @@ public interface Resources {
             Class<?> clazz = Class.forName("org.jhotdraw8.util.ModulepathResources");
             Method method = clazz.getMethod("getResources", String.class, String.class);
             return (Resources) method.invoke(null, moduleName, resourceBundle);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+        } catch (IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
+            return ClasspathResources.getResources(resourceBundle);
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof MissingResourceException) {
+                throw (MissingResourceException) cause;
+            }
             return ClasspathResources.getResources(resourceBundle);
         }
     }
