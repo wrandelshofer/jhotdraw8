@@ -31,8 +31,6 @@ public class SharedKeysMapTest {
      */
     @Test
     public void testGetOrDefault() {
-        System.out.println("getOrDefault");
-
         // GIVEN
         SharedKeysMap<Object, Object> instance = new SharedKeysMap<>();
 
@@ -71,14 +69,14 @@ public class SharedKeysMapTest {
         Iterator<Map.Entry<String, Integer>> iter = instance.entrySet().iterator();
 
         // WHEN iterate a bit
-        System.out.println(iter.next());
+        iter.next();
 
         // WHEN perform concurrent modification
         instance.put("three", 3);
 
         // THEN iterator must not throw ConcurrentModificationException
         while (iter.hasNext()) {
-            System.out.println(iter.next());
+            iter.next();
         }
     }
 

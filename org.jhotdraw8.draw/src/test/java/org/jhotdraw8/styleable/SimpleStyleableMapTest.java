@@ -25,8 +25,6 @@ public class SimpleStyleableMapTest {
      */
     @Test
     public void testGetOrDefault() {
-        System.out.println("getOrDefault");
-
         // GIVEN
         SimpleStyleableMap<String, String> instance = new SimpleStyleableMap<>();
 
@@ -58,8 +56,6 @@ public class SimpleStyleableMapTest {
      */
     @Test
     public void testContainsKey() {
-        System.out.println("containsKey");
-
         // GIVEN
         SimpleStyleableMap<String, Object> instance = new SimpleStyleableMap<>();
 
@@ -90,8 +86,6 @@ public class SimpleStyleableMapTest {
      */
     @Test
     public void testContainsKeyAuthor() {
-        System.out.println("containsKey");
-
         // GIVEN
         SimpleStyleableMap<String, Object> instance = new SimpleStyleableMap<>();
 

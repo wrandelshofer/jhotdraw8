@@ -24,7 +24,6 @@ public class OSXCollatorTest {
      */
     @Test
     public void testExpandNumbers() {
-        System.out.println("expandNumbers");
         OSXCollator instance = new OSXCollator();
         String input = "a1b34";
         String expected = "a001b0134";

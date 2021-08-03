@@ -18,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
@@ -454,7 +453,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
+    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull Map<Key<?>, Object> options, boolean insert, @NonNull WorkState workState) {
         return FXWorker.supply(() -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -470,7 +469,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<Void> write(@NonNull URI uri, DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
+    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull Map<Key<?>, Object> options, WorkState workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {

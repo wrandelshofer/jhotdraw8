@@ -26,7 +26,6 @@ public class PropertyBeanTest {
      */
     @Test
     public void testGetObservableValue() {
-        System.out.println("getObservableValue");
         Key<String> key = new SimpleNullableKey<String>("key", String.class);
         PropertyBean bean = new SimplePropertyBean();
         ObservableValue<String> ov = bean.valueAt(key);

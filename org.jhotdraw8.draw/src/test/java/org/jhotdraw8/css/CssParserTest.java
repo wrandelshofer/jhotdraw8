@@ -26,7 +26,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,18 +45,9 @@ public class CssParserTest {
      * Takes a stylesheet and applies it to the given XML document.
      */
     public static void testCssSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
-        System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null);
-        //
-        System.out.println("AST: " + ast);
-        if (!p.getParseExceptions().isEmpty()) {
-            System.out.println("Errors: ");
-            for (ParseException e : p.getParseExceptions()) {
-                System.out.println("\033[31m " + e.getMessage() + " @ " + e.getErrorOffset() + "\033[0m");
-            }
-        }
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -74,12 +64,9 @@ public class CssParserTest {
             for (StyleRule r : ast.getStyleRules()) {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
-                    System.out.println("  match " + sg.toString() + " " + elem);
                     for (Declaration d : r.getDeclarations()) {
                         elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
                     }
-                } else {
-                    System.out.println(" !match " + sg.toString() + " " + elem);
                 }
             }
         }
@@ -93,12 +80,6 @@ public class CssParserTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
-        if (!actualValue.equals(expectedValue)) {
-            System.out.println(" actual  : \033[31m" + actualValue + "\033[0m");
-        } else {
-            System.out.println(" actual  : " + actualValue);
-        }
-        System.out.println(" expected: " + expectedValue);
         //---
         assertEquals(expectedValue, actualValue);
         assertEquals(valid, p.getParseExceptions().isEmpty());
@@ -276,7 +257,6 @@ public class CssParserTest {
         CssParser p = new CssParser();
         Stylesheet stylesheet = p.parseStylesheet(stylesheetStr, null);
         ReadOnlyList<Rule> rules = stylesheet.getRules();
-        System.out.println(rules);
     }
 
     /**
@@ -285,18 +265,10 @@ public class CssParserTest {
      * Takes a stylesheet and applies it to the given XML document.
      */
     public static void testSelectorSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
-        System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null);
         //
-        System.out.println("AST: " + ast);
-        if (!p.getParseExceptions().isEmpty()) {
-            System.out.println("Errors: ");
-            for (ParseException e : p.getParseExceptions()) {
-                System.out.println("\033[31m " + e.getMessage() + " @ " + e.getErrorOffset() + "\033[0m");
-            }
-        }
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -313,12 +285,9 @@ public class CssParserTest {
             for (StyleRule r : ast.getStyleRules()) {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
-                    System.out.println("  match " + sg.toString() + " " + elem);
                     for (Declaration d : r.getDeclarations()) {
                         elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
                     }
-                } else {
-                    System.out.println(" !match " + sg.toString() + " " + elem);
                 }
             }
         }
@@ -332,12 +301,6 @@ public class CssParserTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
-        if (!actualValue.equals(expectedValue)) {
-            System.out.println(" actual  : \033[31m" + actualValue + "\033[0m");
-        } else {
-            System.out.println(" actual  : " + actualValue);
-        }
-        System.out.println(" expected: " + expectedValue);
         //---
         assertEquals(expectedValue, actualValue);
         assertEquals(valid, p.getParseExceptions().isEmpty());

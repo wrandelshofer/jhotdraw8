@@ -20,8 +20,9 @@ import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
 /**
- * A {@link FileBasedActivity} is a specialization of {@link Activity} for document
- * based applications.
+ * A {@link FileBasedActivity} is a specialization of {@link Activity} for
+ * activities that work with content that is stored in a file identified
+ * by an {@link URI}.
  *
  * @author Werner Randelshofer
  */
@@ -31,12 +32,12 @@ public interface FileBasedActivity extends Activity {
     String DATA_FORMAT_PROPERTY = "dataFormat";
 
     /**
-     * The modified property indicates that the document has been
-     * modified and needs to be saved.
+     * The modified property indicates that the content has been
+     * modified and needs to be saved to the file.
      * <p>
-     * This property is set to true by the activity itself.
+     * This property is set to true if a change in the content has
+     * been detected.
      * <p>
-     * The activity does not set the property to false by itself.
      * The property is only set to false by calling {@link #clearModified()}.
      * This is typically done by an {@code Action} invoked by the user,
      * or by an automatic save function managed by the {@code Application}.
@@ -57,15 +58,15 @@ public interface FileBasedActivity extends Activity {
     void clearModified();
 
     /**
-     * This property is used to identify the resource that is
-     * used for storing the document persistently.
+     * This property is used to identify the file that is
+     * used for storing the content.
      * <p>
      * This property is managed by the {@code Action}s that load
-     * and save the document.
+     * and save the content from/to the file.
      *
      * @return the resource
      */
-    @NonNull ObjectProperty<URI> uriProperty();
+    @NonNull ObjectProperty<@Nullable URI> uriProperty();
 
     default @Nullable URI getURI() {
         return uriProperty().get();
@@ -77,15 +78,15 @@ public interface FileBasedActivity extends Activity {
 
     /**
      * This property specifies the format that is used for
-     * storing the document persistently.
+     * storing the content in the file.
      * <p>
      * This property is managed by {@code Action}s.
-     * Typically by actionss that load or save the document,
-     * and actions that manage document properties.
+     * Typically by actions that load or save the content,
+     * and actions that manage file properties.
      *
-     * @return the resource
+     * @return the data format of the content
      */
-    @NonNull ObjectProperty<DataFormat> dataFormatProperty();
+    @NonNull ObjectProperty<@Nullable DataFormat> dataFormatProperty();
 
     default @Nullable DataFormat getDataFormat() {
         return dataFormatProperty().get();
@@ -96,7 +97,7 @@ public interface FileBasedActivity extends Activity {
     }
 
     /**
-     * Asynchronously reads document data from the specified URI.
+     * Asynchronously reads content data from the specified URI.
      * <p>
      * This method must not change the current document if reading fails or is canceled.
      * <p>
@@ -124,7 +125,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed with the data format that was
      * actually used for reading the file.
      */
-    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, @Nullable Map<Key<?>, Object> options, boolean insert, WorkState workState);
+    @NonNull CompletionStage<@NonNull DataFormat> read(@NonNull URI uri, @Nullable DataFormat format, @NonNull Map<Key<?>, Object> options, boolean insert, WorkState workState);
 
     /**
      * Asynchronously writes document data to the specified URI.
@@ -144,19 +145,19 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, Map<Key<?>, Object> options, WorkState workState);
+    @NonNull CompletionStage<Void> write(@NonNull URI uri, @Nullable DataFormat format, @NonNull Map<Key<?>, Object> options, @NonNull WorkState workState);
 
     /**
-     * Clears the document.
+     * Clears the content.
      *
      * @return Returns a CompletionStage which is completed when the clear
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    CompletionStage<Void> clear();
+    @NonNull CompletionStage<Void> clear();
 
     /**
-     * Prints the current document.
+     * Prints the current content.
      * <p>
      * This method must not change the current document.
      * <p>
@@ -171,10 +172,10 @@ public interface FileBasedActivity extends Activity {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState);
+    @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState);
 
     /**
-     * Returns true if this document is empty and can be replaced by
+     * Returns true if this content is empty and can be replaced by
      * another document without that the user loses data.
      *
      * @return true if empty

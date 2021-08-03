@@ -18,13 +18,10 @@ public class CssRadialGradientConverterTest {
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
     public static void doTestFromString(CssRadialGradient expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssRadialGradientConverter instance = new CssRadialGradientConverter(false);
         CssRadialGradient actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 

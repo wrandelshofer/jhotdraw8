@@ -21,6 +21,7 @@ import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Optional;
@@ -144,7 +145,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-            v.read(uri, format, null, false, workState).whenComplete((actualFormat, exception) -> {
+            v.read(uri, format, Map.of(), false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
                     v.setURI(oldUri);

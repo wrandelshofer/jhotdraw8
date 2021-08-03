@@ -38,15 +38,6 @@ public abstract class AbstractCssScannerTest {
             buf.append((char) s.currentChar());
         }
         String actualValue = buf.toString();
-        System.out.println("testScanner:" + actualValue + " :: " + expectedValue);
-        for (char c : actualValue.toCharArray()) {
-            System.out.print(Integer.toHexString(c) + ' ');
-        }
-        System.out.println();
-        for (Integer i : actualValue.codePoints().toArray()) {
-            System.out.print(Integer.toHexString(i) + ' ');
-        }
-        System.out.println();
 
         assertEquals(actualValue, expectedValue);
     }

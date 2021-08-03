@@ -25,7 +25,6 @@ public class RegexTest {
      */
     @Test
     public void testToString() {
-        System.out.println("toString");
         RegexReplace instance = new RegexReplace();
         String expResult = "///";
         String result = instance.toString();

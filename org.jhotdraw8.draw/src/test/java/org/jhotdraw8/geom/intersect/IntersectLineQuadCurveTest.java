@@ -35,15 +35,14 @@ public class IntersectLineQuadCurveTest {
      * Test of intersectLineBezier2 method, of class Intersection.
      */
     public static void testIntersectLineQuadCurve(@NonNull Line a, @NonNull QuadCurve b, @NonNull double[] expected) {
-        System.out.println("intersectLineBezier2");
         Point2D b1 = new Point2D.Double(b.getStartX(), b.getEndX());
         Point2D b2 = new Point2D.Double(b.getControlX(), b.getControlY());
         Point2D b3 = new Point2D.Double(b.getEndX(), b.getEndX());
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
-        System.out.println("line->bezier2");
+
         IntersectionResult isec = IntersectLineQuadCurve.intersectLineQuadCurve(a1, a2, b1, b2, b3);
-        System.out.println("  isec: " + isec);
+
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
             actual[i] = isec.getAllArgumentsA().get(i);

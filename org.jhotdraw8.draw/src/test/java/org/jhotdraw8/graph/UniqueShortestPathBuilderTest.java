@@ -99,7 +99,6 @@ public class UniqueShortestPathBuilderTest {
                 + "6 -> 1, 5.";
 
         final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
-        System.out.println(actual);
 
         assertEquals(expected, actual);
     }
@@ -123,7 +122,6 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, VertexPath<Integer> expPath, double expCost) throws Exception {
-        System.out.println("doFindShortestVertexPath start:" + start + " goal:" + goal + " expResult:" + expPath + " expCost: " + expCost);
 
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -156,7 +154,6 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ArrowPath<Double> expResult) throws Exception {
-        System.out.println("doFindShortestEdgeMultiGoalPath start:" + start + " goal:" + multiGoal + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
 
@@ -185,9 +182,6 @@ public class UniqueShortestPathBuilderTest {
             }
         }
 
-        System.out.println("  individual shortest paths: " + individualShortestPaths);
-        System.out.println("  actual shortest path: " + actualShortestPath);
-
         assertEquals(expResult, actualShortestPath == null ? null : actualShortestPath.getKey());
     }
 
@@ -204,7 +198,6 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ArrowPath<Double> expResult) throws Exception {
-        System.out.println("doFindShortestEdgePath start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -244,7 +237,6 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexPath<Integer> expResult, double expCost) throws Exception {
-        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult + " expCost:" + expCost);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -271,7 +263,6 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void testFindEdgePathOverWaypoints(@NonNull List<Integer> waypoints, ArrowPath<Double> expResult, double expCost) throws Exception {
-        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);

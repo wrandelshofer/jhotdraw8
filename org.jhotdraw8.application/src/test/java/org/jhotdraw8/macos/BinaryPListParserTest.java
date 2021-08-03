@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class BinaryPListParserTest {
     private static final Properties INDENT_XML_PROPERTIES = new Properties();
 
@@ -46,13 +48,14 @@ public class BinaryPListParserTest {
         final Document docFromXml = readXmlPropertyList(xmlFile);
         File binaryFile = new File(getClass().getResource("BinaryPropertyList.plist").toURI());
         final Document docFromBinary = readBinaryPropertyList(binaryFile);
-        writeDocument(System.out, docFromXml, NO_INDENT_XML_PROPERTIES);
-        System.out.println();
-        writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
+        // writeDocument(System.out, docFromXml, NO_INDENT_XML_PROPERTIES);
+        // System.out.println();
+        // writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
     }
 
     private static Document readXmlPropertyList(@NonNull File file) throws Exception {
         InputSource inputSource = new InputSource(file.toString());
+        assertTrue(file.exists(), "file does not exist, file=" + file);
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();

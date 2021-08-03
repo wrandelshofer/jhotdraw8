@@ -32,14 +32,11 @@ public class CssLinearGradientConverterTest {
      * Test of toString method, of class CssLinearGradientConverter.
      */
     public static void testToString(CssLinearGradient value, String expected) throws Exception {
-        System.out.println("toString(" + value + ")");
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssLinearGradientConverter instance = new CssLinearGradientConverter();
         instance.toString(out, idFactory, value);
         String actual = out.toString();
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 
@@ -47,13 +44,10 @@ public class CssLinearGradientConverterTest {
      * Test of fromString method, of class CssLinearGradientConverter.
      */
     public static void testFromString(CssLinearGradient expected, @NonNull String string) throws Exception {
-        System.out.println("fromString(" + string + ")");
         CharBuffer in = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssLinearGradientConverter instance = new CssLinearGradientConverter(true);
         CssLinearGradient actual = instance.fromString(in, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
 

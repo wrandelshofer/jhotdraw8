@@ -38,7 +38,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
@@ -87,9 +86,13 @@ public class SvgReadWriteAndCompareTest {
         }
 
         public void launch() {
-            new Thread(() -> {
-                Application.launch();
-            }).start();
+            try {
+                new Thread(() -> {
+                    Application.launch();
+                }).start();
+            } catch (IllegalStateException e) {
+                // javafx is already launched
+            }
         }
     }
 
@@ -116,13 +119,10 @@ public class SvgReadWriteAndCompareTest {
     }
 
     private void doTest(Path testFile) throws Exception {
-        System.out.println("Performing W3C SVG 1.2 Tiny test:");
-        System.out.println("  test file     : " + testFile.toAbsolutePath());
 
         FigureSvgTinyReader reader = new FigureSvgTinyReader();
         reader.setBestEffort(true);
         Figure drawing1 = reader.read(new StreamSource(testFile.toFile()));
-        System.out.println(String.join("\n", reader.getCopyOfErrors()));
 
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node drawing1Node = r.render(drawing1);
@@ -135,7 +135,6 @@ public class SvgReadWriteAndCompareTest {
         writer.write(bufOutputStream, drawing1Node, drawing1Size);
 
         ByteArrayInputStream bufInputStream = new ByteArrayInputStream(bufOutputStream.toByteArray());
-        System.out.println(bufOutputStream.toString(StandardCharsets.UTF_8));
         reader.setBestEffort(false);
         Figure drawing2 = reader.read(new StreamSource(bufInputStream));
         Node drawing2Node = r.render(drawing2);

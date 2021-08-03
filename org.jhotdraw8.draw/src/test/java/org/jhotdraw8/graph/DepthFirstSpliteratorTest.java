@@ -79,7 +79,6 @@ public class DepthFirstSpliteratorTest {
                 + "6 -> 1, 5.";
 
         final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
-        System.out.println(actual);
 
         assertEquals(expected, actual);
     }
@@ -95,7 +94,6 @@ public class DepthFirstSpliteratorTest {
      * Test of findAnyVertexPath method, of class DirectedGraphPathBuilderWithArrows.
      */
     static void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         DepthFirstSpliterator<Integer> instance = new DepthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
@@ -107,7 +105,7 @@ public class DepthFirstSpliteratorTest {
                 break;
             }
         }
-        System.out.println("actual:" + result);
+
         assertEquals(result, expResult);
     }
 

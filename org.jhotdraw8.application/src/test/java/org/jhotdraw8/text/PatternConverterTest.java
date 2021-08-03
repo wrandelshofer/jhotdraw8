@@ -41,9 +41,9 @@ public class PatternConverterTest {
     public static void testFromString(@NonNull String pattern, Object[] expectedValue, @NonNull String input) throws IOException, ParseException {
         PatternConverter c = new PatternConverter(pattern, new MessageFormatConverterFactory());
         PatternConverter.AST ast = PatternConverter.parseTextFormatPattern(pattern);
-        System.out.println("ast:" + ast);
+        //System.out.println("ast:" + ast);
         Object[] actualValue = c.fromString(input);
-        System.out.println(Arrays.asList(actualValue));
+        // System.out.println(Arrays.asList(actualValue));
         assertArrayEquals(expectedValue, actualValue);
     }
 

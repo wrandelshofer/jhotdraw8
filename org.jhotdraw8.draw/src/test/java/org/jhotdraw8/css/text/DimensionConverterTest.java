@@ -37,14 +37,11 @@ public class DimensionConverterTest {
      * Test of toString method, of class CssDoubleConverter.
      */
     public static void testToString(@Nullable Double value, String expected) throws Exception {
-        System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssSizeConverter instance = new CssSizeConverter(true);
         instance.toString(out, idFactory, value == null ? null : new CssSize(value, null));
         String actual = out.toString();
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
 
@@ -52,15 +49,12 @@ public class DimensionConverterTest {
      * Test of fromString method, of class CssDoubleConverter.
      */
     public static void testFromString(@Nullable Double expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         CssSizeConverter instance = new CssSizeConverter(true);
         CssSize actualSize = instance.fromString(buf, idFactory);
         UnitConverter c = new DefaultUnitConverter(90);
         Double actual = actualSize == null ? null : c.convert(actualSize, UnitConverter.DEFAULT);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         if (expected == null || Double.isNaN(expected)) {
             assertEquals(expected, actual);
         } else {

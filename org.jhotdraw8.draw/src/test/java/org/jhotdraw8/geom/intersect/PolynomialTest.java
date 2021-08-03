@@ -54,13 +54,9 @@ public class PolynomialTest {
     }
 
     public static void testGetRoots(@NonNull Polynomial instance, @NonNull double[] expected) {
-        System.out.println("getRoots");
-        System.out.println(instance);
         Arrays.sort(expected);
         double[] actual = instance.getRoots();
         Arrays.sort(actual);
-        System.out.println("  expected: " + Arrays.toString(expected));
-        System.out.println("  actual    : " + Arrays.toString(actual));
         Arrays.sort(actual);
         for (int i = 0; i < expected.length; i++) {
             assertEquals(actual[i], expected[i], 1e-6, "root #" + i);
@@ -68,13 +64,9 @@ public class PolynomialTest {
     }
 
     public static void testGetRootsInInterval(@NonNull Polynomial instance, double from, double to, @NonNull double[] expected) {
-        System.out.println("getRootsInInterval");
-        System.out.println(instance);
         Arrays.sort(expected);
         DoubleArrayList actual = instance.getRootsInInterval(from, to);
         actual.sort();
-        System.out.println("  expected: " + Arrays.toString(expected));
-        System.out.println("  actual    : " + Arrays.toString(actual.toArray()));
         for (int i = 0; i < expected.length; i++) {
             assertEquals(actual.get(i), expected[i], 1e-6, "root #" + i);
         }

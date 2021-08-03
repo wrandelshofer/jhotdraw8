@@ -26,13 +26,10 @@ public class SymmetricPoint2DConverterTest {
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
     public static void doTestFromString(Point2D expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SymmetricPoint2DConverter instance = new SymmetricPoint2DConverter(false);
         Point2D actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 
@@ -40,7 +37,6 @@ public class SymmetricPoint2DConverterTest {
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
     public static void doTestFromIllegalString(@NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SymmetricPoint2DConverter instance = new SymmetricPoint2DConverter(false);

@@ -19,13 +19,10 @@ public class DimensionInsetsConverterTest {
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
     public static void doTestFromString(CssInsets expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssInsetsConverter instance = new CssInsetsConverter(false);
         CssInsets actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
 

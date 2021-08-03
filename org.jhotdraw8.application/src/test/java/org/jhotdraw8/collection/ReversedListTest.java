@@ -31,11 +31,6 @@ public class ReversedListTest {
         list.addListener(recorder);
         list.add(index, value);
 
-        /*
-        System.out.println("initial :"+asList(initialList));
-        System.out.println("actual  :"+list);
-        System.out.println("expected:"+ asList(expectedList));
-        */
         assertEquals(list, asList(expectedList));
         assertEquals(list.getSource(), asReversedList(expectedList));
         assertEquals(recorder.getChanges(), expectedChanges);
@@ -60,11 +55,6 @@ public class ReversedListTest {
         list.addListener(recorder);
         list.set(index, value);
 
-        /*
-        System.out.println("initial :"+asList(initialList));
-        System.out.println("actual  :"+list);
-        System.out.println("expected:"+ asList(expectedList));
-                */
         assertEquals(list, asList(expectedList));
         assertEquals(list.getSource(), asReversedList(expectedList));
         assertEquals(recorder.getChanges(), expectedChanges);
@@ -89,10 +79,6 @@ public class ReversedListTest {
         } else {
             list.remove(index);
         }
-
-        System.out.println("initial :" + asList(initialList));
-        System.out.println("actual  :" + list);
-        System.out.println("expected:" + asList(expectedList));
         assertEquals(list, asList(expectedList));
         assertEquals(list.getSource(), asReversedList(expectedList));
         assertEquals(recorder.getChanges(), expectedChanges);

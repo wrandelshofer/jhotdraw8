@@ -19,13 +19,10 @@ public class CssPoint2DConverterTest {
      * Test of fromString method, of class CssPoint2DConverter.
      */
     public static void doTestFromString(CssPoint2D expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssPoint2DConverter instance = new CssPoint2DConverter(false);
         CssPoint2D actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
 
@@ -33,11 +30,8 @@ public class CssPoint2DConverterTest {
      * Test of toString method, of class CssPoint2DConverter.
      */
     public static void doTestToString(CssPoint2D value, String expected) throws Exception {
-        System.out.println("toString " + value);
         CssPoint2DConverter instance = new CssPoint2DConverter(false);
         String actual = instance.toString(value);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 

@@ -38,10 +38,6 @@ public class IntersectCubicCurvePointTest {
      * Test of intersectLineBezier2 method, of class Intersection.
      */
     public static void testIntersectCubicCurvePoint_11args(@NonNull CubicCurve a, @NonNull Circle b, @NonNull double[] expected) {
-        System.out.println("testIntersectBezier3Point_5args");
-        System.out.println("bezier3->point");
-        System.out.println("a:" + a);
-        System.out.println("b:" + b);
         IntersectionResult isec = IntersectCubicCurvePoint.intersectCubicCurvePoint(
                 a.getStartX(), a.getStartY(), a.getControlX1(), a.getControlY1(),
                 a.getControlX2(), a.getControlY2(), a.getEndX(), a.getEndY(),
@@ -52,8 +48,6 @@ public class IntersectCubicCurvePointTest {
         }
         Arrays.sort(actual);
         Arrays.sort(expected);
-        System.out.println("  expected: " + Arrays.toString(expected));
-        System.out.println("  actual: " + Arrays.toString(actual));
         for (int i = 0; i < expected.length; i++) {
             assertEquals(expected[i], actual[i], 1e-6, "root #" + i);
         }

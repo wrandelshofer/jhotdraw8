@@ -23,7 +23,6 @@ public class DirectedGraphBuilderTest {
      */
     @Test
     public void testBuildAddArrow() {
-        System.out.println("buildAddArrow");
         int a = 0;
         int b = 1;
         int c = 1;
@@ -47,7 +46,6 @@ public class DirectedGraphBuilderTest {
      */
     @Test
     public void testGetArrowCount() {
-        System.out.println("getArrowCount");
         int a = 0;
         int b = 1;
         int c = 1;
@@ -71,7 +69,6 @@ public class DirectedGraphBuilderTest {
      */
     @Test
     public void testGetNext() {
-        System.out.println("getNext");
         int a = 0;
         int b = 1;
         int c = 1;
@@ -95,7 +92,6 @@ public class DirectedGraphBuilderTest {
      */
     @Test
     public void testGetNextCount() {
-        System.out.println("getNextCount");
         int a = 0;
         int b = 1;
         int c = 2;
@@ -133,7 +129,6 @@ public class DirectedGraphBuilderTest {
      */
     @Test
     public void testGetVertexCount() {
-        System.out.println("getVertexCount");
         int a = 0;
         int b = 1;
         int c = 1;

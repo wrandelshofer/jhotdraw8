@@ -21,13 +21,10 @@ public class CssFontConverterTest {
      * Test of fromString method, of class CssFontConverter.
      */
     public static void doTestFromString(CssFont expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssFontConverter instance = new CssFontConverter(false);
         CssFont actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 
@@ -35,11 +32,8 @@ public class CssFontConverterTest {
      * Test of toString method, of class CssFontConverter.
      */
     public static void doTestToString(CssFont value, String expected) throws Exception {
-        System.out.println("toString " + value);
         CssFontConverter instance = new CssFontConverter(false);
         String actual = instance.toString(value);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 

@@ -54,7 +54,6 @@ public class StreamCssTokenizerTest {
         actualValue = actualValue.replaceAll("\\t", "\\\\t");
         expectedValue = expectedValue.replaceAll("\\n", "\\\\n");
         expectedValue = expectedValue.replaceAll("\\t", "\\\\t");
-        System.out.println("testTokenizer:" + actualValue + " :: " + expectedValue);
 
         assertEquals(expectedValue, actualValue);
     }

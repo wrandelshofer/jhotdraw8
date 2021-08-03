@@ -16,7 +16,7 @@ import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.PropertyBean;
 
 /**
- * Represents an activity that the user performs with help of the computer.
+ * Represents an activity that the user performs with an {@link Application}.
  * <p>
  * The life-cycle of an {@link Activity} is managed by an {@link Application},
  * it consists of the following steps:
@@ -44,9 +44,9 @@ import org.jhotdraw8.beans.PropertyBean;
  * The {@link Application} can invoke {@link #start()} again, to
  * resume execution.
  * </li>
- * <li><b>Destroy</b><br>
+ * <li><b>Destruction</b><br>
  * When the view is no longer needed, the {@link Application} ensures that the
- * activity is stopped.<br>
+ * activity is destroyed.<br>
  * The {@link Application} invokes {@link #destroy}.<br>
  * The {@link Application} removes the {@code Node} of the {@link Activity}
  * from its scene graph.<br>
@@ -122,6 +122,9 @@ public interface Activity extends Disableable, PropertyBean {
         disambiguationProperty().set(newValue);
     }
 
+    /**
+     * Returns a JavaFX node that provides a user interface for the activity.
+     */
     Node getNode();
 
     default @Nullable String getTitle() {

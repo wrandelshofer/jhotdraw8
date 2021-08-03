@@ -69,7 +69,6 @@ public class AnyPathBuilderTest {
                 + "6 -> 1, 5.";
 
         final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
-        System.out.println(actual);
 
         assertEquals(expected, actual);
     }
@@ -88,7 +87,6 @@ public class AnyPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, VertexPath<Integer> expected) throws Exception {
-        System.out.println("doFindVertexPath_3args start:" + start + " goal:" + goal + " expResult:" + expected);
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
         VertexPath<Integer> actual = instance.findVertexPath(start, goal::equals);
@@ -109,7 +107,6 @@ public class AnyPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexPath<Integer> expResult) throws Exception {
-        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
         VertexPath<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
@@ -163,7 +160,6 @@ public class AnyPathBuilderTest {
     }
 
     private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<VertexPath<Integer>> expected) {
-        System.out.println("doFindAllPaths start:" + start + ", goal:" + goal + ", depth:" + maxDepth);
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
         List<VertexPath<Integer>> actual = instance.findAllVertexPaths(start,
                 a -> a == goal, maxDepth);

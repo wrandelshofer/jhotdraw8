@@ -28,7 +28,6 @@ public class AbstractStyleablePropertyBeanTest {
 
     @Test
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
-        System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         AbstractStyleablePropertyBean instance = new AbstractStyleablePropertyBeanImpl();
         final NullablePaintableStyleableKey key = FillableFigure.FILL;
 

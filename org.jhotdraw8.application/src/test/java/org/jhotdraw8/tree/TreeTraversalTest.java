@@ -58,9 +58,6 @@ public class TreeTraversalTest {
 
         String expected = "FBADCEGIH";
         String actual = buf.toString();
-        System.out.println("Preorder:");
-        System.out.println("  expected: " + expected);
-        System.out.println("  actual  : " + actual);
         assertEquals(expected, actual);
     }
 
@@ -74,9 +71,6 @@ public class TreeTraversalTest {
 
         String expected = "ACEDBHIGF";
         String actual = buf.toString();
-        System.out.println("Postorder:");
-        System.out.println("  expected: " + expected);
-        System.out.println("  actual  : " + actual);
         assertEquals(expected, actual);
     }
 
@@ -91,9 +85,6 @@ public class TreeTraversalTest {
 
         String expected = "FBGADICEH";
         String actual = buf.toString();
-        System.out.println("BFS:");
-        System.out.println("  expected: " + expected);
-        System.out.println("  actual  : " + actual);
         assertEquals(expected, actual);
     }
 
@@ -107,9 +98,6 @@ public class TreeTraversalTest {
 
         String expected = "FGIHBDECA";
         String actual = buf.toString();
-        System.out.println("DFS:");
-        System.out.println("  expected: " + expected);
-        System.out.println("  actual  : " + actual);
         assertEquals(expected, actual);
     }
 

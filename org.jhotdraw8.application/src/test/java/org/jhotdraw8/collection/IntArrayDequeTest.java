@@ -22,7 +22,6 @@ public class IntArrayDequeTest {
      */
     @Test
     public void testAddFirst() {
-        System.out.println("addFirst");
         int e = 1;
         IntArrayDeque instance = new IntArrayDeque();
         instance.addFirst(e);
@@ -40,7 +39,6 @@ public class IntArrayDequeTest {
      */
     @Test
     public void testAddLast() {
-        System.out.println("addLast");
         int e = 1;
         IntArrayDeque instance = new IntArrayDeque();
         instance.addLast(e);

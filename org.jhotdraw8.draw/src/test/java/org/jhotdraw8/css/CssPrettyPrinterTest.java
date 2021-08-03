@@ -27,7 +27,6 @@ public class CssPrettyPrinterTest {
         CssPrettyPrinter instance = new CssPrettyPrinter(w);
         instance.print(str);
         String actual = w.toString();
-        System.out.println(actual);
         assertEquals(expected, actual);
     }
 }

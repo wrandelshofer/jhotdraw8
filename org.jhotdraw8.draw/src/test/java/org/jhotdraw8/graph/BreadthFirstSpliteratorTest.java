@@ -71,7 +71,6 @@ public class BreadthFirstSpliteratorTest {
                 + "6 -> 1, 5.";
 
         final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
-        System.out.println(actual);
 
         assertEquals(expected, actual);
     }
@@ -84,7 +83,6 @@ public class BreadthFirstSpliteratorTest {
     }
 
     static void testIterate(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
         BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         Iterator<Integer> iter = Spliterators.iterator(instance);
@@ -95,7 +93,6 @@ public class BreadthFirstSpliteratorTest {
                 break;
             }
         }
-        System.out.println("actual:" + result);
         assertEquals(expResult, result);
     }
 
@@ -107,7 +104,6 @@ public class BreadthFirstSpliteratorTest {
     }
 
     public void testTryAdvance(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
         BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
@@ -116,7 +112,6 @@ public class BreadthFirstSpliteratorTest {
             }
         }
 
-        System.out.println("actual:" + result);
         assertEquals(expResult, result);
     }
 
@@ -128,8 +123,6 @@ public class BreadthFirstSpliteratorTest {
     }
 
     public void testTrySplit(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, @NonNull List<Integer> expResult) throws Exception {
-
-        System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
         splits.add(new BreadthFirstSpliterator<>(graph::getNextVertices, start));
@@ -146,7 +139,6 @@ public class BreadthFirstSpliteratorTest {
                 }
             }
         }
-        System.out.println("actual:    " + result);
 
         // Splitting changes the order of the iterator. We don't care.
         expResult.sort(Comparator.naturalOrder());
@@ -163,14 +155,12 @@ public class BreadthFirstSpliteratorTest {
 
     public void testTrySplitParallel(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, @NonNull List<Integer> expResult) throws Exception {
 
-        System.out.println("testTrySplit start:" + start + " goal:" + goal + " expResult:" + expResult);
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
         final BreadthFirstSpliterator<Integer> instance = new BreadthFirstSpliterator<>(graph::getNextVertices, start);
         List<Integer> result = new ArrayList<>();
         instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
         result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));
-        System.out.println("actual:    " + result);
 
         // Splitting changes the order of the iterator. We don't care.
         expResult.sort(Comparator.naturalOrder());

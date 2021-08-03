@@ -73,7 +73,6 @@ public class AnyShortestPathBuilderTest {
                 + "6 -> 1, 5.";
 
         final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
-        System.out.println(actual);
 
         assertEquals(expected, actual);
     }
@@ -93,7 +92,6 @@ public class AnyShortestPathBuilderTest {
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
     public void doFindShortestVertexPath(@NonNull Integer start, @NonNull Integer goal, VertexPath<Integer> expPath, double expCost) throws Exception {
-        System.out.println("doFindShortestVertexPath start:" + start + " goal:" + goal + " expResult:" + expPath + " expCost: " + expCost);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -123,7 +121,6 @@ public class AnyShortestPathBuilderTest {
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
     public void doFindShortestEdgeMultiGoalPath(@NonNull Integer start, @NonNull List<Integer> multiGoal, ArrowPath<Double> expResult) throws Exception {
-        System.out.println("doFindShortestEdgeMultiGoalPath start:" + start + " goal:" + multiGoal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -147,9 +144,6 @@ public class AnyShortestPathBuilderTest {
         Map.Entry<ArrowPath<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
         double actualCost = actualShortestPath.getValue();
 
-        System.out.println("  individual shortest path: " + individualShortestPath + "=" + individualShortestCost);
-        System.out.println("  actual shortest path: " + actualShortestPath);
-
         assertEquals(individualShortestCost, actualCost);
         assertEquals(expResult, actualShortestPath.getKey());
     }
@@ -167,7 +161,6 @@ public class AnyShortestPathBuilderTest {
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
     private void doFindShortestArrowPath(@NonNull Integer start, @NonNull Integer goal, ArrowPath<Double> expResult) throws Exception {
-        System.out.println("doFindShortestArrowPath start:" + start + " goal:" + goal + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -207,7 +200,6 @@ public class AnyShortestPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void doFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexPath<Integer> expResult, double expCost) throws Exception {
-        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult + " expCost:" + expCost);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
@@ -230,7 +222,6 @@ public class AnyShortestPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void doFindArrowPathOverWaypoints(@NonNull List<Integer> waypoints, ArrowPath<Double> expResult, double expCost) throws Exception {
-        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);

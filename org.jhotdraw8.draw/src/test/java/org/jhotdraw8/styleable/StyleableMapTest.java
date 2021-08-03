@@ -33,7 +33,6 @@ public class StyleableMapTest {
 
     @Test
     public void testNullValueIsNotSameAsDefaultPropertyValue() {
-        System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         StyleableMap<Key<?>, Object> instance = new SimpleStyleableMap<>();
         final NullablePaintableStyleableKey key = FillableFigure.FILL;
 
@@ -108,10 +107,6 @@ public class StyleableMapTest {
         map.put(StyleOrigin.AUTHOR, "2", "author2");
         map.put(StyleOrigin.AUTHOR, "3", "author3");
 
-        for (Map.Entry<String, String> e : map.entrySet()) {
-            System.out.println(e);
-        }
-        System.out.println("---");
     }
 
     @Test
@@ -126,10 +121,6 @@ public class StyleableMapTest {
         map.put(StyleOrigin.USER, "2", "user2");
         map.put(StyleOrigin.USER, "3", "user3");
 
-        for (Map.Entry<String, String> e : map.entrySet()) {
-            System.out.println(e);
-        }
-        System.out.println("---");
     }
 
     @Test
@@ -160,16 +151,9 @@ public class StyleableMapTest {
         });
 
         // Check if the shared keys map is okay
-        System.out.println(sharedKeysMap);
         ArrayList<Map.Entry<Character, Integer>> entries = new ArrayList<>(sharedKeysMap.entrySet());
         entries.sort(Map.Entry.comparingByValue());
-        System.out.println(entries);
-        System.out.println(sharedKeysMap.size());
-        System.out.println(new LinkedHashSet<>(sharedKeysMap.values()).size());
         assertEquals(sharedKeysMap.size(), new LinkedHashSet<>(sharedKeysMap.values()).size());
-
-        // Get stats about individual maps
-        System.out.println("avg: " + list.stream().mapToInt(SimpleStyleableMap::size).summaryStatistics().getAverage());
 
         // Check if the individual maps are okay
         List<SimpleStyleableMap<Character, Character>> badMaps = list.stream().filter(m -> {
@@ -181,7 +165,6 @@ public class StyleableMapTest {
             return false;
         }).collect(Collectors.toList());
 
-        System.out.println("badMaps: " + badMaps);
         assertTrue(badMaps.isEmpty());
     }
 }

@@ -50,7 +50,7 @@ public class MacOSPreferencesTest {
             throw new IllegalArgumentException("Could not find resource with filename=\"" + filename + "\" for class=" + getClass() + ".");
         }
         File file = new File(resource.toURI());
-        System.out.println(filename + ", " + key.replaceAll("\t", "→") + " = " + expectedValue);
+       // System.out.println(filename + ", " + key.replaceAll("\t", "→") + " = " + expectedValue);
         final Object actualValue = MacOSPreferences.get(file, key);
         if (expectedValue instanceof byte[]) {
             assertArrayEquals((byte[]) expectedValue, (byte[]) actualValue, "key=" + key);

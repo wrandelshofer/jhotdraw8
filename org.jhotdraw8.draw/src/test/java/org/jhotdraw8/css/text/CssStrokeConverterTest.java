@@ -32,14 +32,10 @@ public class CssStrokeConverterTest {
      * Test of fromString method, of class CssStrokeStyleConverter.
      */
     public static void doTestFromString(CssStrokeStyle expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
-
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
         CssStrokeStyle actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 
@@ -47,11 +43,8 @@ public class CssStrokeConverterTest {
      * Test of toString method, of class CssStrokeStyleConverter.
      */
     public static void doTestToString(CssStrokeStyle value, String expected) throws Exception {
-        System.out.println("toString " + value);
         CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
         String actual = instance.toString(value);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 

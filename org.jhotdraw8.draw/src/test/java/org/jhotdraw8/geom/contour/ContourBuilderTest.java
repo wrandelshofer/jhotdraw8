@@ -165,17 +165,13 @@ public class ContourBuilderTest {
 
         if (!isEqual) {
             for (PolyArcPath p : actual) {
-                System.out.println("polylineOf(" + p.isClosed() + ",new double[][]{");
                 boolean first = true;
                 for (PlineVertex v : p) {
                     if (first) {
                         first = false;
                     } else {
-                        System.out.print(", ");
                     }
-                    System.out.println("{" + v.getX() + "," + v.getY() + "," + v.bulge() + "}");
                 }
-                System.out.println("})");
             }
             SwingUtilities.invokeAndWait(() -> {
                 JDialog f = new JDialog();

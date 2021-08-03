@@ -35,16 +35,11 @@ public class CssRectangle2DConverterTest {
      * Test of fromString method, of class CssDoubleConverter.
      */
     public static void testFromString(CssRectangle2D expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         CssRectangle2DConverter instance = new CssRectangle2DConverter(false);
         CssRectangle2D actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         String actualString = instance.toString(expected);
-        System.out.println("  expectedString: " + string);
-        System.out.println("    actualString: " + actualString);
         assertEquals(expected, actual);
         assertEquals(string, actualString);
     }

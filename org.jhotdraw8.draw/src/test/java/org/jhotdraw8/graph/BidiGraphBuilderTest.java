@@ -23,7 +23,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testBuildAddArrow() {
-        System.out.println("buildAddArrow");
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
@@ -47,7 +46,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testGetArrowCount() {
-        System.out.println("getArrowCount");
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
@@ -71,7 +69,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testGetNext() {
-        System.out.println("getNext");
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
@@ -95,7 +92,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testGetPrev() {
-        System.out.println("getPrev");
         Integer a = 0;
         Integer b = 1;
         Integer c = 1;
@@ -119,7 +115,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testGetNextCount() {
-        System.out.println("getNextCount");
         Integer a = 0;
         Integer b = 1;
         Integer c = 2;
@@ -157,7 +152,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testGetPrevCount() {
-        System.out.println("getPrevCount");
         Integer a = 0;
         Integer b = 1;
         Integer c = 2;
@@ -195,7 +189,6 @@ public class BidiGraphBuilderTest {
      */
     @Test
     public void testGetVertexCount() {
-        System.out.println("getVertexCount");
         Integer a = 0;
         Integer b = 1;
         Integer c = 2;
@@ -216,7 +209,6 @@ public class BidiGraphBuilderTest {
 
     @Test
     public void testRemoveVertex() {
-        System.out.println("removeVertex");
         String a = "a";
         String b = "b";
         String c = "c";

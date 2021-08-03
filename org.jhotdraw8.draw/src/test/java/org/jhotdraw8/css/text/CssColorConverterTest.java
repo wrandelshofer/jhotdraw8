@@ -34,13 +34,10 @@ public class CssColorConverterTest {
      * Test of fromString method, of class CssColorConverter.
      */
     static void testFromString(@NonNull CssColor expected, @NonNull String string) throws Exception {
-        System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         Converter<CssColor> instance = new CssColorConverter(true);
         CssColor actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
         if (actual != null) {
             assertEquals(actual.getName(), expected.getName());

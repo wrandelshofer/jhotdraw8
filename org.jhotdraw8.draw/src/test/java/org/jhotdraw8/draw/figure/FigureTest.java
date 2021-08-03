@@ -46,10 +46,10 @@ public class FigureTest {
     public void testGetDeclaredAndInheritedKeys() {
         Set<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
         Set<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
-        System.out.println("rr:" + rectangleFigureKeys);
+        //System.out.println("rr:" + rectangleFigureKeys);
         Set<MapAccessor<?>> intersection = new HashSet<>(figureKeys);
         intersection.retainAll(rectangleFigureKeys);
-        System.out.println("ri:" + intersection);
+        //System.out.println("ri:" + intersection);
         assertEquals(figureKeys, intersection);
     }
 

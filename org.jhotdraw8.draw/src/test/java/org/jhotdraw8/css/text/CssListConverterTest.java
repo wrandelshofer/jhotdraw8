@@ -35,14 +35,11 @@ public class CssListConverterTest {
      * Test of toString method.
      */
     public void testToString(@Nullable List<Double> value, String expected) throws Exception {
-        System.out.println("toString " + value);
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), " ");
         instance.toString(out, idFactory, value == null ? null : ImmutableLists.ofCollection(value));
         String actual = out.toString();
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
 
@@ -50,13 +47,10 @@ public class CssListConverterTest {
      * Test of fromString method with a {@code Double} element type.
      */
     public void testDoubleFromString(List<Double> expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false));
         ImmutableList<Double> actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual.toArrayList());
     }
 
@@ -64,13 +58,10 @@ public class CssListConverterTest {
      * Test of fromString method with a {@code Double} element type and "=>" delimiter.
      */
     public void testDoubleArrowFromString(List<Double> expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), "=>");
         ImmutableList<Double> actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual.toArrayList());
     }
 
@@ -79,13 +70,10 @@ public class CssListConverterTest {
      * Test of fromString method with a {@code String} element type.
      */
     public void testStringFromString(List<String> expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssListConverter<String> instance = new CssListConverter<>(new CssStringConverter(false));
         ImmutableList<String> actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual.toArrayList());
     }
 

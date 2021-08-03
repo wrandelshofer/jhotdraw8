@@ -107,13 +107,8 @@ public class GraphSearchTest {
     }
 
     void testFindDisjointSets(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
-        System.out.println("find disjoint sets");
-        System.out.println("graph:");
-        System.out.println(DumpGraphs.dumpAsAdjacencyList(graph));
 
         List<Set<String>> actualSets = GraphSearch.findDisjointSets(graph);
-        System.out.println("disjoint sets:");
-        System.out.println(actualSets);
 
         assertEquals(expectedSetCount, actualSets.size());
     }
@@ -124,9 +119,6 @@ public class GraphSearchTest {
         DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
         DirectedGraph<String, Integer> expectedMst = createMSTGraph();
         DirectedGraphBuilder<String, Integer> actualMst = GraphSearch.findMinimumSpanningTreeGraph(nonMst, Integer::doubleValue);
-        System.out.println(DumpGraphs.dumpAsAdjacencyList(nonMst));
-        System.out.println(DumpGraphs.dumpAsAdjacencyList(expectedMst));
-        System.out.println(DumpGraphs.dumpAsAdjacencyList(actualMst));
         assertEquals(DumpGraphs.dumpAsAdjacencyList(expectedMst), DumpGraphs.dumpAsAdjacencyList(actualMst));
     }
 
@@ -140,13 +132,8 @@ public class GraphSearchTest {
     }
 
     void testSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
-        System.out.println("find strongly connected components");
-        System.out.println("graph:");
-        System.out.println(DumpGraphs.dumpAsAdjacencyList(graph));
 
         List<List<String>> actualSets = GraphSearch.findStronglyConnectedComponents(graph);
-        System.out.println("strongly connected components");
-        System.out.println(actualSets);
 
         assertEquals(expectedSetCount, actualSets.size());
     }

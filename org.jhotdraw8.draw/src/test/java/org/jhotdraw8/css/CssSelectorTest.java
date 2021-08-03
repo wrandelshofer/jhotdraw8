@@ -28,7 +28,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,18 +45,10 @@ public class CssSelectorTest {
      * Test various selectors.
      */
     public static void testSelector(@NonNull String stylesheet, @NonNull String before, @NonNull String expectedValue) throws Exception {
-        System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null);
         //
-        System.out.println("AST: " + ast);
-        if (!p.getParseExceptions().isEmpty()) {
-            System.out.println("Errors: ");
-            for (ParseException e : p.getParseExceptions()) {
-                System.out.println("\033[31m " + e.getMessage() + " @ " + e.getErrorOffset() + "\033[0m");
-            }
-        }
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -74,12 +65,9 @@ public class CssSelectorTest {
             for (StyleRule r : ast.getStyleRules()) {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
-                    System.out.println("  match " + sg.toString() + " " + elem);
                     for (Declaration d : r.getDeclarations()) {
                         elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
                     }
-                } else {
-                    System.out.println(" !match " + sg.toString() + " " + elem);
                 }
             }
         }
@@ -93,12 +81,6 @@ public class CssSelectorTest {
         String actualValue = w.toString();
         actualValue = actualValue.substring(XML_PREFIX.length());
 
-        if (!actualValue.equals(expectedValue)) {
-            System.out.println(" actual  : \033[31m" + actualValue + "\033[0m");
-        } else {
-            System.out.println(" actual  : " + actualValue);
-        }
-        System.out.println(" expected: " + expectedValue);
         //---
         assertEquals(expectedValue, actualValue);
     }
@@ -189,7 +171,6 @@ public class CssSelectorTest {
      * Test various selectors.
      */
     public static void testSelectorSpecificity(@NonNull String stylesheet, @NonNull String xml, int expectedSpecifity) throws IOException, ParserConfigurationException, SAXException {
-        System.out.println(stylesheet);
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null);
@@ -213,11 +194,7 @@ public class CssSelectorTest {
                 SelectorGroup sg = r.getSelectorGroup();
                 Selector matchedSelector = sg.matchSelector(dsd, elem);
                 if (matchedSelector != null) {
-                    System.out.println("  match " + sg.toString() + " " + elem);
-                    System.out.println("specificity: " + matchedSelector.getSpecificity());
                     actualSpecificity = matchedSelector.getSpecificity();
-                } else {
-                    System.out.println(" !match " + sg.toString() + " " + elem);
                 }
             }
         }

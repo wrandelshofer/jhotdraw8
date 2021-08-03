@@ -39,11 +39,6 @@ public class CssColorConverterTest {
         String recreatedActualStr = cssColorRecreatedFromJavaFXColor.getName();
         CssColor recreatedColor = c.fromString(recreatedActualStr);
         Color recreated = recreatedColor.getColor();
-        System.out.println("inputStr     " + inputStr);
-        System.out.println("actualStr    " + actualStr);
-        System.out.println("recreatedStr " + recreatedActualStr);
-        System.out.println("expected     " + expected.getRed() + "," + expected.getGreen() + "," + expected.getBlue() + "," + expected.getOpacity());
-        System.out.println("recreated    " + recreated.getRed() + "," + recreated.getGreen() + "," + recreated.getBlue() + "," + recreated.getOpacity());
 
         assertEquals(expected.toString(), actual.getColor().toString());
         assertEquals(inputStr, actualStr);

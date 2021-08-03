@@ -36,7 +36,6 @@ public class FigureSelectorModelTest {
      */
     @Test
     public void testNullValueIsNotSameAsDefaultPropertyValue() throws ParseException {
-        System.out.println("testNullValueIsNotSameAsDefaultPropertyValue");
         LabelFigure figure = new LabelFigure();
         FigureSelectorModel instance = new FigureSelectorModel();
 

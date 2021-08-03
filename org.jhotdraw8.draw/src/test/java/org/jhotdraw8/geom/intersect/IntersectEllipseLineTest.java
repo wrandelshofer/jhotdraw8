@@ -36,14 +36,12 @@ public class IntersectEllipseLineTest {
     }
 
     public static void testIntersectLineEllipse_5args(@NonNull Line a, @NonNull Ellipse b, @NonNull double[] expected) {
-        System.out.println("intersectLineEllipse");
         Point2D bc = new Point2D.Double(b.getCenterX(), b.getCenterX());
         double brx = b.getRadiusX();
         double bry = b.getRadiusY();
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
         IntersectionResult isec = IntersectEllipseLine.intersectLineEllipse(a1, a2, bc, brx, bry);
-        System.out.println("  isec: " + isec);
         double[] actual = new double[isec.size()];
         for (int i = 0; i < actual.length; i++) {
             actual[i] = isec.getAllArgumentsA().get(i);

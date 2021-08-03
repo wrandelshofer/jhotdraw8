@@ -18,13 +18,10 @@ public class CssPoint3DConverterTest {
      * Test of fromString method, of class CssPoint3DConverter.
      */
     public static void doTestFromString(CssPoint3D expected, @NonNull String string) throws Exception {
-        System.out.println("fromString " + string);
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssPoint3DConverter instance = new CssPoint3DConverter(false);
         CssPoint3D actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected);
     }
 
@@ -32,11 +29,8 @@ public class CssPoint3DConverterTest {
      * Test of toString method, of class CssPoint3DConverter.
      */
     public static void doTestToString(CssPoint3D value, String expected) throws Exception {
-        System.out.println("toString " + value);
         CssPoint3DConverter instance = new CssPoint3DConverter(false);
         String actual = instance.toString(value);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(expected, actual);
     }
 

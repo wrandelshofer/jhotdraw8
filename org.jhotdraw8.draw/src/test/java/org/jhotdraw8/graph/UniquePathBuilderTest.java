@@ -96,8 +96,6 @@ public class UniquePathBuilderTest {
                 + "6 -> 1, 5.";
 
         final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
-        System.out.println(actual);
-
         assertEquals(expected, actual);
     }
 
@@ -120,8 +118,6 @@ public class UniquePathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, VertexPath<Integer> expPath) throws Exception {
-        System.out.println("doFindShortestVertexPath start:" + start + " goal:" + goal + " expResult:" + expPath);
-
         ToDoubleFunction<Double> costf = arg -> arg;
         UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
         VertexPath<Integer> result = instance.findVertexPath(start, goal::equals);
@@ -148,15 +144,12 @@ public class UniquePathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, VertexPath<Integer> expResult) throws Exception {
-        System.out.println("doFindUniqueMultiGoalPath start:" + start + " goal:" + multiGoal + " expResult:" + expResult);
         ToDoubleFunction<Double> costf = arg -> arg;
         UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
 
         // Find unique path to any of the goals
         VertexPath<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
         double actualLength = actualPath == null ? 0.0 : actualPath.numOfVertices();
-
-        System.out.println("  actual path: " + actualPath);
 
         assertEquals(expResult, actualPath);
     }
@@ -194,7 +187,6 @@ public class UniquePathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexPath<Integer> expResult) throws Exception {
-        System.out.println("doFindVertexPathOverWaypoints waypoints:" + waypoints + " expResult:" + expResult);
         DirectedGraph<Integer, Double> graph = createGraph();
         UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
         VertexPath<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);

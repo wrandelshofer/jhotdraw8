@@ -93,14 +93,10 @@ public class IntersectLineLineTest {
 
         DoubleArrayList actualA = isec.getAllArgumentsA();
         DoubleArrayList expectedA = DoubleArrayList.of(expectedParamsA);
-        System.out.println("  expected A: " + expectedA);
-        System.out.println("  actual A: " + actualA);
         assertEquals(expectedA, actualA);
 
         DoubleArrayList actualB = isec.getAllArgumentsB();
         DoubleArrayList expectedB = DoubleArrayList.of(expectedParamsB);
-        System.out.println("  expected B: " + expectedB);
-        System.out.println("  actual B: " + actualB);
         assertEquals(expectedB, actualB);
 
         assertEquals(expectedStatus, isec.getStatus());

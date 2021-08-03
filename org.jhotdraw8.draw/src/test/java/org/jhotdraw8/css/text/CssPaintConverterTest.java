@@ -36,13 +36,10 @@ public class CssPaintConverterTest {
      * Test of fromString method, of class CssPaintConverter.
      */
     public static void testFromString(@Nullable Paintable expected, @NonNull String string) throws Exception {
-        System.out.println("fromString(" + string + ")");
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         CssPaintConverter instance = new CssPaintConverter(true);
         Paint actual = instance.fromString(buf, idFactory);
-        System.out.println("  expected: " + expected);
-        System.out.println("    actual: " + actual);
         assertEquals(actual, expected == null ? null : expected.getPaint());
 
     }

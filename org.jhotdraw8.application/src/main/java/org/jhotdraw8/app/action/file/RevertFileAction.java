@@ -17,6 +17,7 @@ import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -80,7 +81,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
         if (uri == null) {
             view.clear().handle((ignored, throwable) -> handler.apply(null, throwable));
         } else {
-            view.read(uri, dataFormat, null, false, workState).handle(handler);
+            view.read(uri, dataFormat, Map.of(), false, workState).handle(handler);
         }
     }
 

@@ -21,9 +21,6 @@ import org.jhotdraw8.collection.SimpleNullableKey;
  * Action.
  *
  * @author Werner Randelshofer
- * @design.pattern org.jhotdraw8.app.Application Framework, KeyAbstraction.
- * @design.pattern Action Command, Command. The command pattern is used to treat
- * commands like objects inside of an application.
  */
 public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disableable {
 
@@ -31,22 +28,22 @@ public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disable
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.
      */
-    NullableKey<String> ID_KEY = new SimpleNullableKey<String>("id", String.class);
+    NullableKey<String> ID_KEY = new SimpleNullableKey<>("id", String.class);
     /**
      * The key used for storing the {@code String} name for the action, used for
      * a menu or button.
      */
-    NullableKey<String> LABEL = new SimpleNullableKey<String>("label", String.class);
+    NullableKey<String> LABEL = new SimpleNullableKey<>("label", String.class);
     /**
      * The key used for storing a short {@code String} description for the
      * action, used for tooltip text.
      */
-    NullableKey<String> SHORT_DESCRIPTION = new SimpleNullableKey<String>("ShortDescription", String.class);
+    NullableKey<String> SHORT_DESCRIPTION = new SimpleNullableKey<>("ShortDescription", String.class);
     /**
      * The key used for storing a longer {@code String} description for the
      * action, could be used for context-sensitive help.
      */
-    NullableKey<String> LONG_DESCRIPTION = new SimpleNullableKey<String>("LongDescription", String.class);
+    NullableKey<String> LONG_DESCRIPTION = new SimpleNullableKey<>("LongDescription", String.class);
     /**
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.

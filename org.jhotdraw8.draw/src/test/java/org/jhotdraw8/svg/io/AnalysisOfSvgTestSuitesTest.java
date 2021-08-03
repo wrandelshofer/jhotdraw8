@@ -47,7 +47,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -91,9 +90,13 @@ public class AnalysisOfSvgTestSuitesTest {
         }
 
         public void launch() {
-            new Thread(() -> {
-                Application.launch();
-            }).start();
+            try {
+                new Thread(() -> {
+                    Application.launch();
+                }).start();
+            } catch (IllegalStateException e) {
+                //javafx is already started
+            }
         }
     }
 
@@ -201,14 +204,10 @@ public class AnalysisOfSvgTestSuitesTest {
     }
 
     private void testW3CSvg12Tiny(Path testFile, Path referenceFile) throws Exception {
-        System.out.println("Performing W3C SVG 1.2 Tiny test:");
-        System.out.println("  test file     : " + testFile);
-        System.out.println("  reference file: " + referenceFile);
 
         FigureSvgTinyReader instance = new FigureSvgTinyReader();
         instance.setBestEffort(true);
         Figure testFigure = instance.read(new StreamSource(testFile.toFile()));
-        System.out.println(instance.getCopyOfErrors().stream().collect(Collectors.joining("\n")));
         dump(testFigure, 0);
 
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
@@ -238,14 +237,10 @@ public class AnalysisOfSvgTestSuitesTest {
     }
 
     private void testWebPlatformTest(Path testFile, Path referenceFile) throws Exception {
-        System.out.println("Performing web-platform test:");
-        System.out.println("  test file     : " + testFile);
-        System.out.println("  reference file: " + referenceFile);
 
         FigureSvgTinyReader instance = new FigureSvgTinyReader();
         instance.setBestEffort(true);
         Figure testFigure = instance.read(new StreamSource(testFile.toFile()));
-        System.out.println(instance.getCopyOfErrors().stream().collect(Collectors.joining("\n")));
         dump(testFigure, 0);
         Figure referenceFigure = instance.read(new StreamSource(referenceFile.toFile()));
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
@@ -355,7 +350,6 @@ public class AnalysisOfSvgTestSuitesTest {
 
 
     private void dump(Figure f, int depth) {
-        System.out.println(".".repeat(depth) + f.getTypeSelector() + " " + f.getId());
         for (Figure child : f.getChildren()) {
             dump(child, depth + 1);
         }

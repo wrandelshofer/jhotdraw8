@@ -150,7 +150,15 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     public LayersInspector(Supplier<Layer> layerFactory) {
-        this(LayersInspector.class.getResource("LayersInspector.fxml"), layerFactory);
+        this(getResourceNonNull("LayersInspector.fxml"), layerFactory);
+    }
+
+    private static URL getResourceNonNull(String s) {
+        URL resource = LayersInspector.class.getResource(s);
+        if (resource == null) {
+            throw new RuntimeException("Could not load resource=" + s);
+        }
+        return resource;
     }
 
     private boolean isUpdateSelection;
