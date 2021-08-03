@@ -26,15 +26,15 @@ public interface TreePresentationModel<N> {
      */
     String MODEL_PROPERTY = "model";
 
-    default TreeModel<N> getTreeModel() {
+    default@NonNull  TreeModel<N> getTreeModel() {
         return treeModelProperty().get();
     }
 
-    default void setTreeModel(TreeModel<N> newValue) {
+    default void setTreeModel(@NonNull TreeModel<N> newValue) {
         treeModelProperty().set(newValue);
     }
 
-    @Nullable NonNullObjectProperty<TreeModel<N>> treeModelProperty();
+    @NonNull NonNullObjectProperty<TreeModel<N>> treeModelProperty();
 
     @NonNull TreeItem<N> getRoot();
 

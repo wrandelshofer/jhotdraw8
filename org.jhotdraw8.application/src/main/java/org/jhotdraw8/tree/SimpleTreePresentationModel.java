@@ -12,7 +12,9 @@ import org.jhotdraw8.event.Listener;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * This model can be used to present a {@code TreeModel}
@@ -25,8 +27,11 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class SimpleTreePresentationModel<N> extends AbstractTreePresentationModel<N> {
-
-    private final Map<N, TreeItem<N>> items = new HashMap<>();
+    /**
+     * Performance: An identity hash map can be significantly faster than a
+     *              an equals/hashCode based map.
+     */
+    private final Map<N, TreeItem<N>> items;
     private final Listener<TreeModelEvent<N>> modelHandler = new Listener<TreeModelEvent<N>>() {
         @Override
         public void handle(@NonNull TreeModelEvent<N> event) {
@@ -63,6 +68,17 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
             }
         }
     };
+
+    /**
+     * Creates a new instance.
+     * @param mapFactory used to create a map which maps from nodes of
+     *                  type {@code N} to {@link TreeItem<N>}.
+     *                   For best performance, try to
+     *                   provide an {@link IdentityHashMap} here.
+     */
+    public SimpleTreePresentationModel(Supplier<Map<N, TreeItem<N>>> mapFactory) {
+        this.items = mapFactory.get();
+    }
 
     private boolean reversed = true;
     private final TreeItem<N> root = new TreeItem<>();

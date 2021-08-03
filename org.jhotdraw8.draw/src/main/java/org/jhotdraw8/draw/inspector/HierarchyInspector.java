@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.SetChangeListener;
@@ -33,6 +34,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
@@ -53,6 +55,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -121,7 +124,9 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             throw new InternalError(ex);
         }
 
-        model = new SimpleTreePresentationModel<>();
+        model = new SimpleTreePresentationModel<>(IdentityHashMap::new);
+        dummyDrawingModel.setDrawing(new SimpleDrawing());
+        model.setTreeModel(dummyDrawingModel);
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
                 cell.getValue() == null ? null : cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
         );
@@ -293,6 +298,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
         treeView.setRoot(model.getRoot());
         model.getRoot().setExpanded(true);
+        showingProperty().addListener(this::onShowingChanged);
+    }
+
+    private void onShowingChanged(Observable observable,Boolean oldValue,Boolean newValue) {
+        if (newValue&&model.getTreeModel()==dummyDrawingModel
+        &&drawingView!=null) {
+            model.setTreeModel(drawingView.getModel());
+        }
     }
 
     @NonNull
@@ -336,20 +349,20 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             return row;
         };
     }
+            private final SimpleDrawingModel dummyDrawingModel = new SimpleDrawingModel();
 
     @Override
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, null);
+            model.setTreeModel(dummyDrawingModel);
         }
         drawingView = newValue;
         if (newValue != null) {
-            model.setTreeModel(newValue.getModel());
+            if (isShowing()) model.setTreeModel(newValue.getModel());
             newValue.getSelectedFigures().addListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, drawingView);
-        } else {
-            model.setTreeModel(new SimpleDrawingModel());
         }
     }
 
