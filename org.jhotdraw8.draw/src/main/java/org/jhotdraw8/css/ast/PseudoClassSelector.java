@@ -12,6 +12,9 @@ package org.jhotdraw8.css.ast;
  */
 public abstract class PseudoClassSelector extends SimpleSelector {
 
+    public PseudoClassSelector() {
+    }
+
     @Override
     public final int getSpecificity() {
         return 10;

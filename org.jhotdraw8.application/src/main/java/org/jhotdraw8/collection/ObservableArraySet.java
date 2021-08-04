@@ -13,6 +13,9 @@ import java.util.ArrayList;
 public class ObservableArraySet<E> extends ArrayList<E> implements ObservableSet<E> {
     private static final long serialVersionUID = 1L;
 
+    public ObservableArraySet() {
+    }
+
     @Override
     public void addListener(SetChangeListener<? super E> listener) {
         throw new UnsupportedOperationException();

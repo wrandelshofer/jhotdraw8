@@ -13,6 +13,11 @@ import java.util.Map;
 
 public class ImmutableMaps {
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private ImmutableMaps() {
+    }
 
     @SafeVarargs
     public static @NonNull <K, V> ImmutableMap<K, V> ofEntries(Map.Entry<K, V>... entries) {

@@ -18,6 +18,9 @@ import org.jhotdraw8.css.SelectorModel;
  */
 public class SelectNothingSelector extends SimpleSelector {
 
+    public SelectNothingSelector() {
+    }
+
     @Override
     public @NonNull String toString() {
         return "SelectNothing";

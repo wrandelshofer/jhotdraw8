@@ -28,6 +28,9 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class DefaultFontChooserModelFactory {
 
+    public DefaultFontChooserModelFactory() {
+    }
+
     public FontChooserModel create() {
         final FontChooserModel model = new FontChooserModel();
         model.setFontCollections(generateCollections(loadFonts()));

@@ -15,6 +15,9 @@ import java.util.function.BiConsumer;
 public class FontFamilyPicker extends AbstractPicker<String> {
     private FontFamilyDialog dialog;
 
+    public FontFamilyPicker() {
+    }
+
     private void update(Node anchor) {
         if (dialog == null) {
             dialog = new FontFamilyDialog();

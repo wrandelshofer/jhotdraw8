@@ -13,6 +13,9 @@ import java.util.function.BiConsumer;
 public class CssColorPicker extends AbstractPicker<CssColor> {
     private CssColorDialog dialog;
 
+    public CssColorPicker() {
+    }
+
     private void update(@NonNull Node anchor, CssColor initialValue, @NonNull BiConsumer<Boolean, CssColor> callback) {
         if (dialog == null) {
             dialog = new CssColorDialog(anchor.getScene().getWindow());

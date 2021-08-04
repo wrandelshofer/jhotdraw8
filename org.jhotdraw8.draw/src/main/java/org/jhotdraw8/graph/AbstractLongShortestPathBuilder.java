@@ -264,7 +264,10 @@ public abstract class AbstractLongShortestPathBuilder<V, A> {
                                                        Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                                        ToLongTriFunction<V, V, A> costf);
 
-    public abstract static class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
+    protected abstract static class BackLink<VV, AA> implements Comparable<BackLink<VV, AA>> {
+        public BackLink() {
+        }
+
         @Override
         public int compareTo(@NonNull BackLink<VV, AA> that) {
             return Long.compare(this.getCost(), that.getCost());

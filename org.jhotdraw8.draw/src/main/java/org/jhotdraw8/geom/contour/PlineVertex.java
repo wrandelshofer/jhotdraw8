@@ -186,8 +186,8 @@ public class PlineVertex implements Cloneable {
     /**
      * Split the segment defined by v1 to v2 at some point defined along it.
      */
-    public static SplitResult splitAtPoint(final PlineVertex v1, final PlineVertex v2,
-                                           final Point2D.Double point) {
+    static SplitResult splitAtPoint(final PlineVertex v1, final PlineVertex v2,
+                                    final Point2D.Double point) {
         SplitResult result = new SplitResult();
         if (v1.bulgeIsZero()) {
             result.updatedStart = v1;

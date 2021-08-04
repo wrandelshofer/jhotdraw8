@@ -16,6 +16,9 @@ import org.jhotdraw8.css.SelectorModel;
 public abstract class Selector extends AbstractSyntaxTree {
 
 
+    public Selector() {
+    }
+
     /**
      * Returns the specificity of this selector.
      * <p>

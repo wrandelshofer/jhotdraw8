@@ -24,6 +24,9 @@ import java.text.ParseException;
  */
 public class XmlUriConverter implements Converter<URI> {
 
+    public XmlUriConverter() {
+    }
+
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable URI value) throws IOException {
         out.append(value == null ? CssTokenType.IDENT_NONE :

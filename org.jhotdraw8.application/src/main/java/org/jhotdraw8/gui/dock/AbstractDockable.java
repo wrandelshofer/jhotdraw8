@@ -25,6 +25,9 @@ public abstract class AbstractDockable implements Dockable {
     protected final StringProperty text = new SimpleStringProperty(this, TEXT_PROPERTY);
     protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
 
+    public AbstractDockable() {
+    }
+
     @Override
     public @NonNull ObjectProperty<Node> graphicProperty() {
         return graphic;

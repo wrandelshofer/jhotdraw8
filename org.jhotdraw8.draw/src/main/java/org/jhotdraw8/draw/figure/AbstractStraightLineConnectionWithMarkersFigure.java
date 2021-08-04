@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Shapes;
@@ -191,7 +191,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                 // Note: we must not add individual elements to the ObservableList
                 // of the markerNode, because this fires too many change events.
                 List<PathElement> nodes = new ArrayList<>();
-                FXPathBuilder builder = new FXPathBuilder(nodes);
+                FXPathElementsBuilder builder = new FXPathElementsBuilder(nodes);
                 SvgPaths.buildFromSvgString(builder, svgString);
                 builder.build();
                 if (!nodes.equals(markerNode.getElements())) {

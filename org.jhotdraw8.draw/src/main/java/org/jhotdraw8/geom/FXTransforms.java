@@ -45,6 +45,12 @@ public class FXTransforms {
      */
     public static final Transform IDENTITY = new Translate();
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private FXTransforms() {
+    }
+
     public static @NonNull Transform concat(@Nullable Transform... transforms) {
         Transform a = null;
         for (Transform b : transforms) {

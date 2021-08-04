@@ -41,6 +41,9 @@ public class AbstractDisableable implements Disableable {
         disabled.bind(Bindings.isNotEmpty(disablers));
     }
 
+    public AbstractDisableable() {
+    }
+
     @Override
     public ReadOnlyBooleanProperty disabledProperty() {
         return disabled.getReadOnlyProperty();

@@ -29,6 +29,9 @@ public class GroupFigure extends AbstractCompositeFigure
      */
     public static final String TYPE_SELECTOR = "Group";
 
+    public GroupFigure() {
+    }
+
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         javafx.scene.Group n = new javafx.scene.Group();

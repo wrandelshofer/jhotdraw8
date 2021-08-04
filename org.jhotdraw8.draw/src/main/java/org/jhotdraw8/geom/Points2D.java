@@ -8,6 +8,9 @@ import java.awt.geom.Point2D;
 import java.util.DoubleSummaryStatistics;
 
 public class Points2D {
+    public Points2D() {
+    }
+
     public static Point2D.Double add(Point2D a, Point2D b) {
         return new Point2D.Double(a.getX() + b.getX(), a.getY() + b.getY());
     }

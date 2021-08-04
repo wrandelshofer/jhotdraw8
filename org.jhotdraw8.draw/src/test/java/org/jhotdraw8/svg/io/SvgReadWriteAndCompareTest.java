@@ -86,13 +86,13 @@ public class SvgReadWriteAndCompareTest {
         }
 
         public void launch() {
-            try {
-                new Thread(() -> {
+            new Thread(() -> {
+                try {
                     Application.launch();
-                }).start();
-            } catch (IllegalStateException e) {
-                // javafx is already launched
-            }
+                } catch (IllegalStateException e) {
+                    // javafx is already launched
+                }
+            }).start();
         }
     }
 

@@ -17,6 +17,9 @@ import org.jhotdraw8.text.DefaultConverter;
  */
 public class CssConverterFactory implements ConverterFactory {
 
+    public CssConverterFactory() {
+    }
+
     @Override
     public @NonNull Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {

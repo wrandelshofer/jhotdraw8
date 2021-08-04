@@ -211,6 +211,9 @@ public abstract class AbstractIntPathBuilder {
                                       @NonNull AddToIntSet visited, int maxLength);
 
     protected abstract static class BackLink {
+        public BackLink() {
+        }
+
         abstract BackLink getParent();
 
         abstract int getVertex();

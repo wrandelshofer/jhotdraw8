@@ -46,6 +46,9 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
     public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
+    public XmlWordListConverter() {
+    }
+
     @Override
     public <TT extends ImmutableList<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {

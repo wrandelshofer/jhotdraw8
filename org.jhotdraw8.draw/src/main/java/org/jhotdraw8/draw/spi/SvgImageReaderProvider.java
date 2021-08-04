@@ -12,6 +12,9 @@ import org.jhotdraw8.app.spi.NodeReaderProvider;
 import java.net.URL;
 
 public class SvgImageReaderProvider implements NodeReaderProvider {
+    public SvgImageReaderProvider() {
+    }
+
     @Override
     public boolean canDecodeInput(@NonNull URL source) {
         return canDecodeInput(source.getFile());

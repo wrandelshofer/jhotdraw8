@@ -7,6 +7,9 @@ package org.jhotdraw8.collection;
 import java.util.Map;
 
 public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
+    public AbstractReadOnlyMap() {
+    }
+
     public boolean equals(Object o) {
         if (o == this) {
             return true;

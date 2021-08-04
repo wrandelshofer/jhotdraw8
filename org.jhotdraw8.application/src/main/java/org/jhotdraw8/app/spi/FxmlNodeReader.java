@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class FxmlNodeReader implements NodeReader {
+    public FxmlNodeReader() {
+    }
+
     @Override
     public Node read(@NonNull URL url) throws IOException {
         FXMLLoader loader = new FXMLLoader(url);

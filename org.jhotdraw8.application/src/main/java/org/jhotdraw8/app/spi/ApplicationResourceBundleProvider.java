@@ -12,6 +12,9 @@ import java.util.spi.AbstractResourceBundleProvider;
 
 public class ApplicationResourceBundleProvider extends AbstractResourceBundleProvider {
 
+    public ApplicationResourceBundleProvider() {
+    }
+
     @Override
     public ResourceBundle getBundle(@NonNull String baseName, @NonNull Locale locale) {
         return ResourceBundle.getBundle(baseName, locale);

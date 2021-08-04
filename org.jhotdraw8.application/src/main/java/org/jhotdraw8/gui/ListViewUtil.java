@@ -34,6 +34,12 @@ import static java.lang.Math.min;
  */
 public class ListViewUtil {
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private ListViewUtil() {
+    }
+
     private static class DnDSupport<T> {
 
         private final ListView<T> listView;

@@ -27,6 +27,12 @@ import java.util.Objects;
  */
 public abstract class MessageStringFormatter extends StringBinding {
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private MessageStringFormatter() {
+    }
+
     private static Object extractValue(Object obj) {
         Object value = obj instanceof ObservableValue ? ((ObservableValue<?>) obj).getValue() : obj;
         // since message format can not handle booleans, we convert them to 1 and 0

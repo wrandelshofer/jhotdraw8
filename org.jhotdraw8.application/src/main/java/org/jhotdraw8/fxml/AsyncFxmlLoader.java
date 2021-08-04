@@ -25,6 +25,9 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class AsyncFxmlLoader {
 
+    public AsyncFxmlLoader() {
+    }
+
     /**
      * Asynchronously loads the specified FXML file on the common fork-join pool, and returns a completion
      * stage with the FXMLLoader.

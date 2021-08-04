@@ -150,6 +150,9 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         });
     }
 
+    public AbstractDrawingEditor() {
+    }
+
     @Override
     public @NonNull ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;

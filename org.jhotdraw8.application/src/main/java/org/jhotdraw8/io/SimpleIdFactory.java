@@ -23,6 +23,9 @@ public class SimpleIdFactory implements IdFactory {
 
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
 
+    public SimpleIdFactory() {
+    }
+
     @Override
     public void reset() {
         prefixToNextId.clear();

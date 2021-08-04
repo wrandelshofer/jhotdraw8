@@ -373,4 +373,7 @@ public class CssTokenType {
      */
     public static final int TT_GREATER_THAN = '>';
     public static final int TT_TILDE = '~';
+
+    public CssTokenType() {
+    }
 }

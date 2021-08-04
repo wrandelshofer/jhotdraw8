@@ -75,6 +75,7 @@ public class BreadthFirstSpliteratorTest {
         assertEquals(expected, actual);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testIterateWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
@@ -96,6 +97,7 @@ public class BreadthFirstSpliteratorTest {
         assertEquals(expResult, result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testForEachRemainingWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
@@ -115,6 +117,7 @@ public class BreadthFirstSpliteratorTest {
         assertEquals(expResult, result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testTrySplitWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {
@@ -146,6 +149,7 @@ public class BreadthFirstSpliteratorTest {
         assertEquals(expResult, result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testTrySplitParallelWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {

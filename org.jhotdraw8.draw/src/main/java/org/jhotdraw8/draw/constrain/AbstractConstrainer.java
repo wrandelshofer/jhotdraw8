@@ -13,4 +13,6 @@ import org.jhotdraw8.beans.SimpleObservable;
  */
 public abstract class AbstractConstrainer extends SimpleObservable implements Constrainer {
 
+    public AbstractConstrainer() {
+    }
 }

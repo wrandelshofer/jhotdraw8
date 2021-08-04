@@ -15,6 +15,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class ImageNodeReader implements NodeReader {
+    public ImageNodeReader() {
+    }
+
     @Override
     public Node read(@NonNull URL url) throws IOException {
         return new ImageView(url.toString());

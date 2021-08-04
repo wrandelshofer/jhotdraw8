@@ -15,6 +15,12 @@ public class ArcToCubicBezier {
     private static final double TAU = Math.PI * 2.0;
 
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private ArcToCubicBezier() {
+    }
+
+    /**
      * Approximates one unit arc segment with a bézier curve.
      * <p>
      * See discussion in

@@ -167,6 +167,9 @@ public class FigureSvgTinyReader {
      */
     private boolean bestEffort;
 
+    public FigureSvgTinyReader() {
+    }
+
 
     /**
      * Returns true if the reader runs in best effort mode.

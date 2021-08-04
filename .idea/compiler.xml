@@ -26,8 +26,7 @@
         <module name="org.jhotdraw8.grapher" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="jhotdraw8" target="1.5" />
+    <bytecodeTargetLevel target="16">
       <module name="org.jhotdraw8" target="1.5" />
       <module name="org.jhotdraw8.application" target="11" />
       <module name="org.jhotdraw8.draw" target="11" />
@@ -35,5 +34,14 @@
       <module name="org.jhotdraw8.misc" target="11" />
       <module name="org.jhotdraw8.teddy" target="11" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="org.jhotdraw8.application" options="-Xlint:all" />
+      <module name="org.jhotdraw8.draw" options="-Xlint:all" />
+      <module name="org.jhotdraw8.grapher" options="-Xlint:all" />
+      <module name="org.jhotdraw8.misc" options="-Xlint:all" />
+      <module name="org.jhotdraw8.teddy" options="-Xlint:all" />
+    </option>
   </component>
 </project>

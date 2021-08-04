@@ -20,6 +20,9 @@ import java.util.function.BiConsumer;
 public class CssFontPicker extends AbstractPicker<CssFont> {
     private FontDialog dialog;
 
+    public CssFontPicker() {
+    }
+
     private void update(Node anchor) {
         if (dialog == null) {
             dialog = new FontDialog();

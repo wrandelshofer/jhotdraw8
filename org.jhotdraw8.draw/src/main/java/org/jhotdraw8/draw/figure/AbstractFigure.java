@@ -46,6 +46,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     private Transform cachedLocalToParent;
     private Transform cachedWorldToLocal;
 
+    public AbstractFigure() {
+    }
+
 
     protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {

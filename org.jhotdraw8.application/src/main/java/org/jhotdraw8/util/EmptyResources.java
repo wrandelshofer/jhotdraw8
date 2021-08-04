@@ -28,6 +28,9 @@ public class EmptyResources implements Resources {
         }
     }
 
+    public EmptyResources() {
+    }
+
     @Override
     public ResourceBundle asResourceBundle() {
         return emptyResourceBundle;

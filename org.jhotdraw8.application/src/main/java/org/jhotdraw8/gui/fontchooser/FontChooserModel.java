@@ -19,6 +19,9 @@ public class FontChooserModel {
 
     private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>();
 
+    public FontChooserModel() {
+    }
+
     public @NonNull ListProperty<FontCollection> fontCollectionsProperty() {
         return fontCollections;
     }

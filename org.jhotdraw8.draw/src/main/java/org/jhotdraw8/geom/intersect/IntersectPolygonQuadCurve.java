@@ -22,6 +22,12 @@ import java.util.List;
  */
 public class IntersectPolygonQuadCurve {
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private IntersectPolygonQuadCurve() {
+    }
+
+    /**
      * Computes the intersection between quadratic bezier curve 'p' and the
      * given closed polygon.
      * <p>

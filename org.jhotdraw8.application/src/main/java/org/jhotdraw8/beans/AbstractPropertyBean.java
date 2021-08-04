@@ -26,6 +26,9 @@ public abstract class AbstractPropertyBean implements PropertyBean {
      */
     protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
 
+    public AbstractPropertyBean() {
+    }
+
     @Override
     public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
         return properties;

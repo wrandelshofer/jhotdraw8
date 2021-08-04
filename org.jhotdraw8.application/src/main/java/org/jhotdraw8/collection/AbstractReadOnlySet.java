@@ -5,6 +5,9 @@
 package org.jhotdraw8.collection;
 
 public abstract class AbstractReadOnlySet<E> extends AbstractReadOnlyCollection<E> implements ReadOnlySet<E> {
+    public AbstractReadOnlySet() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {

@@ -34,6 +34,12 @@ public class SvgPaths {
     private static final Logger LOGGER = Logger.getLogger(SvgPaths.class.getName());
 
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private SvgPaths() {
+    }
+
+    /**
      * Returns a value as a SvgPath2D.
      * <p>
      * Also supports elliptical arc commands 'a' and 'A' as specified in
@@ -656,7 +662,7 @@ public class SvgPaths {
      * @param b       the desired bounds
      * @param builder the builder into which the path is output
      */
-    public static void reshape(@Nullable String pathstr, @NonNull Bounds b, @NonNull PathBuilder builder) {
+    public static void reshape(@Nullable String pathstr, @NonNull Bounds b, @NonNull PathBuilder<?> builder) {
         if (pathstr != null) {
             Shape shape = null;
             try {
@@ -683,11 +689,11 @@ public class SvgPaths {
 
     }
 
-    public static @NonNull <T extends PathBuilder> T buildFromPathIterator(@NonNull T builder, @NonNull PathIterator iter) {
+    public static @NonNull <T extends PathBuilder<?>> T buildFromPathIterator(@NonNull T builder, @NonNull PathIterator iter) {
         return buildFromPathIterator(builder, iter, true);
     }
 
-    public static @NonNull <T extends PathBuilder> T buildFromPathIterator(@NonNull T builder, @NonNull PathIterator iter, boolean doPathDone) {
+    public static @NonNull <T extends PathBuilder<?>> T buildFromPathIterator(@NonNull T builder, @NonNull PathIterator iter, boolean doPathDone) {
         double[] coords = new double[6];
         boolean needsMoveTo = true;
         for (; !iter.isDone(); iter.next()) {

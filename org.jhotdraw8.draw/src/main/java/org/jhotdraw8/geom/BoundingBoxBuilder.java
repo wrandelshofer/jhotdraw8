@@ -6,7 +6,6 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.BoundingBox;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Builder;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
@@ -18,13 +17,15 @@ import static java.lang.Math.min;
  *
  * @author Werner Randelshofer
  */
-public class BoundingBoxBuilder extends AbstractPathBuilder
-        implements Builder<BoundingBox> {
+public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
 
     private double minx = Double.POSITIVE_INFINITY,
             miny = Double.POSITIVE_INFINITY,
             maxx = Double.NEGATIVE_INFINITY,
             maxy = Double.NEGATIVE_INFINITY;
+
+    public BoundingBoxBuilder() {
+    }
 
     @Override
     protected void doClosePath() {

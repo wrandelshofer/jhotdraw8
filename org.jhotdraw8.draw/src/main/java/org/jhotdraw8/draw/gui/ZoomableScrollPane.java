@@ -88,7 +88,7 @@ import java.util.ResourceBundle;
  *   </ul></li>
  * </ul>
  */
-public @NonNull class ZoomableScrollPane extends GridPane {
+public class ZoomableScrollPane extends GridPane {
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS}.
      */
@@ -134,6 +134,9 @@ public @NonNull class ZoomableScrollPane extends GridPane {
     private StackPane content;
     @FXML // fx:id="foregroundPane"
     private StackPane foreground; // Value injected by FXMLLoader
+
+    public ZoomableScrollPane() {
+    }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete

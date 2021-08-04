@@ -37,7 +37,7 @@ public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
     private double cy;
     private @NonNull State state = State.EXPECTING_INITIAL_MOVETO;
 
-    public CutStartPathBuilder(PathBuilder out, double radius) {
+    public CutStartPathBuilder(PathBuilder<T> out, double radius) {
         this.radius = radius;
         this.out = out;
     }

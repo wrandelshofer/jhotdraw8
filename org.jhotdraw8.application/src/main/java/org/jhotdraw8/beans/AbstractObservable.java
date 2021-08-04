@@ -17,6 +17,9 @@ public class AbstractObservable implements ObservableMixin {
 
     private CopyOnWriteArrayList<InvalidationListener> invalidationListeners;
 
+    public AbstractObservable() {
+    }
+
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         if (invalidationListeners == null) {
             invalidationListeners = new CopyOnWriteArrayList<>();

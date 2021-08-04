@@ -39,6 +39,12 @@ public class Utils {
     // absolute threshold to be used for pruning invalid slices for offset
     public static final double offsetThreshold = 1e-4;
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private Utils() {
+    }
+
 
     /// Perpendicular dot product. Equivalent to dot(v0, perp(v1)).
     public static double perpDot(final Point2D.Double v0, final Point2D.Double v1) {

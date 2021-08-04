@@ -25,17 +25,7 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(Object key) {
-        boolean b = target.containsKey(origin, (K) key);
-        boolean sb = super.containsKey(key);
-        if (sb != b) {
-            System.err.println(entrySet());
-            for (Entry<K, V> kvEntry : entrySet()) {
-                System.err.println(kvEntry.getKey() + "=" + kvEntry.getValue() + " -> b:" + b + " sb:" + sb);
-            }
-
-            throw new AssertionError("buhu");
-        }
-        return b;
+        return target.containsKey(origin, (K) key);
     }
 
     @Override

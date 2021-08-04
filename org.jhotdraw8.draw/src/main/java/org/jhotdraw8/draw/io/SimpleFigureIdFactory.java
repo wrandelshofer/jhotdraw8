@@ -16,6 +16,9 @@ import org.jhotdraw8.styleable.StyleableBean;
  * @author Werner Randelshofer
  */
 public class SimpleFigureIdFactory extends SimpleIdFactory {
+    public SimpleFigureIdFactory() {
+    }
+
     @Override
     public @Nullable String createId(Object object) {
         String id = getId(object);

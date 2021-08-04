@@ -19,6 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Werner Randelshofer
  */
 public class SimpleTreeModel<E> implements TreeModel<E> {
+    public SimpleTreeModel() {
+    }
 
     @Override
     public @NonNull E getChild(E parent, int index) {

@@ -17,6 +17,12 @@ import java.util.concurrent.FutureTask;
  */
 public class PlatformUtil {
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private PlatformUtil() {
+    }
+
     public static void invokeAndWait(@NonNull Runnable r) {
         if (Platform.isFxApplicationThread()) {
             r.run();

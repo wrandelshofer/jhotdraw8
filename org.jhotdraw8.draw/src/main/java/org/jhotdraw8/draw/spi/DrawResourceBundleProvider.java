@@ -12,6 +12,9 @@ import java.util.spi.AbstractResourceBundleProvider;
 
 public class DrawResourceBundleProvider extends AbstractResourceBundleProvider {
 
+    public DrawResourceBundleProvider() {
+    }
+
     @Override
     public ResourceBundle getBundle(@NonNull String baseName, @NonNull Locale locale) {
         return ResourceBundle.getBundle(baseName, locale);

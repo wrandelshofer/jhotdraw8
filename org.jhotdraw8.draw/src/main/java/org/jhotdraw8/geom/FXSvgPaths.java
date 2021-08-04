@@ -597,12 +597,12 @@ public class FXSvgPaths {
      * @param elems   on output contains the reshaped path elements
      */
     public static void reshapePathElements(String pathstr, @NonNull Bounds b, List<PathElement> elems) {
-        FXPathBuilder builder = new FXPathBuilder(elems);
+        FXPathElementsBuilder builder = new FXPathElementsBuilder(elems);
         SvgPaths.reshape(pathstr, b, builder);
         builder.pathDone();
     }
 
-    public static @NonNull <T extends PathBuilder> T buildFromFXPathElements(@NonNull T builder, @NonNull List<PathElement> pathElements) {
+    public static @NonNull <T extends PathBuilder<?>> T buildFromFXPathElements(@NonNull T builder, @NonNull List<PathElement> pathElements) {
         double x = 0;
         double y = 0;
         double ix = 0, iy = 0;

@@ -9,6 +9,9 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Iterator;
 
 public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollection<E> {
+    public AbstractReadOnlyCollection() {
+    }
+
     /**
      * Returns a string representation of this collection.  The string
      * representation consists of a list of the collection's elements in the

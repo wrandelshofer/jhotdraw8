@@ -17,6 +17,9 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {
 
+    public AbstractLeafFigure() {
+    }
+
     @Override
     public final @NonNull ObservableList<Figure> getChildren() {
         return FXCollections.emptyObservableList();

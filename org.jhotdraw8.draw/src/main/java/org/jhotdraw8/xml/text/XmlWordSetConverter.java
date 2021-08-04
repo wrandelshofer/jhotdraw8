@@ -46,6 +46,9 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
     public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
+    public XmlWordSetConverter() {
+    }
+
     @Override
     public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {

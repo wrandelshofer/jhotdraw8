@@ -57,8 +57,10 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * FXML Controller class
@@ -124,7 +126,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             throw new InternalError(ex);
         }
 
-        model = new SimpleTreePresentationModel<>(IdentityHashMap::new);
+        Supplier<Map<Figure, TreeItem<Figure>>> mapSupplier = () -> new IdentityHashMap<>();
+        model = new SimpleTreePresentationModel<Figure>(mapSupplier);
         dummyDrawingModel.setDrawing(new SimpleDrawing());
         model.setTreeModel(dummyDrawingModel);
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(

@@ -18,6 +18,9 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class FXWorker {
 
+    public FXWorker() {
+    }
+
     /**
      * Calls the runnable on a new Thread. The completion stage is
      * completed on the FX Application Thread.

@@ -23,6 +23,9 @@ public class FontChooserController extends FontFamilyChooserController {
     @FXML
     private TextField fontSizeField;
 
+    public FontChooserController() {
+    }
+
 
     @FXML
     void initialize() {

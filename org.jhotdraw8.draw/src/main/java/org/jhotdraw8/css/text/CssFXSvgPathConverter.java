@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.IdResolver;
@@ -45,9 +45,9 @@ public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement
         final String svgPathString = tt.currentStringNonNull();
 
         try {
-            final FXPathBuilder builder = new FXPathBuilder();
+            final FXPathElementsBuilder builder = new FXPathElementsBuilder();
             SvgPaths.buildFromSvgString(builder, svgPathString);
-            return builder.build().getElements();
+            return builder.build();
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
             p.add(new MoveTo(0, 0));

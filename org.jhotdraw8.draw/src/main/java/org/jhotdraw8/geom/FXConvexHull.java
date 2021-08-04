@@ -19,6 +19,12 @@ import java.util.List;
 public class FXConvexHull {
 
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private FXConvexHull() {
+    }
+
+    /**
      * Computes the convex hull from a set of points.
      *
      * @param points the points

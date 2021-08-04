@@ -18,6 +18,12 @@ import org.jhotdraw8.geom.Geom;
  */
 public class IntersectPointRay {
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private IntersectPointRay() {
+    }
+
+    /**
      * Projects a point on an infinite line defined by the given ray.
      * The returned argument value is in range
      * [{@link Double#NEGATIVE_INFINITY},{@link Double#POSITIVE_INFINITY}].

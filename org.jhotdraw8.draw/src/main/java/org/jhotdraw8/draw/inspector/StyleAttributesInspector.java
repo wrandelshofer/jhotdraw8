@@ -35,6 +35,9 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     protected final @NonNull ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
 
+    public StyleAttributesInspector() {
+    }
+
     public @NonNull ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }

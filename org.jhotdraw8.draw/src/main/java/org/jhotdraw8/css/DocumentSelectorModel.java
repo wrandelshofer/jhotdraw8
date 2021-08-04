@@ -29,6 +29,9 @@ import java.util.Set;
  */
 public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
+    public DocumentSelectorModel() {
+    }
+
     @Override
     public String getAttributeAsString(@NonNull Element elem, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         return getAttributeAsString(elem, namespace, name);

@@ -10,6 +10,9 @@ import java.util.Iterator;
 
 public abstract class AbstractReadOnlyList<E> extends AbstractReadOnlyCollection<E> implements ReadOnlyList<E> {
 
+    public AbstractReadOnlyList() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {

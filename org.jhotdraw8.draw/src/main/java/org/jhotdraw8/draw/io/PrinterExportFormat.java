@@ -42,6 +42,9 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     private static final double INCH_2_MM = 25.4;
 
+    public PrinterExportFormat() {
+    }
+
     @Override
     protected @NonNull String getExtension() {
         return "png";

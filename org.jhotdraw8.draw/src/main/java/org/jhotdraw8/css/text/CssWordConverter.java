@@ -21,6 +21,9 @@ import java.text.ParseException;
  */
 public class CssWordConverter implements Converter<String> {
 
+    public CssWordConverter() {
+    }
+
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull String value) throws IOException {
         for (char ch : value.toCharArray()) {

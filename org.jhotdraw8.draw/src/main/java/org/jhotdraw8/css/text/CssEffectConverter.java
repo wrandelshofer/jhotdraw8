@@ -103,6 +103,9 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private @NonNull CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class, false);
     private @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
 
+    public CssEffectConverter() {
+    }
+
     @Override
     public <TT extends Effect> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         Deque<Effect> effects = new ArrayDeque<Effect>();

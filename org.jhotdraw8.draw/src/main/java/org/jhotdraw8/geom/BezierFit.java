@@ -56,7 +56,7 @@ public class BezierFit {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder builder, Point2D[] digitizedPoints, double error) {
+    public static void fitBezierPath(@NonNull PathBuilder<?> builder, Point2D[] digitizedPoints, double error) {
         fitBezierPath(builder, Arrays.asList(digitizedPoints), error);
     }
 
@@ -68,7 +68,7 @@ public class BezierFit {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder builder, @NonNull java.util.List<Point2D> digitizedPoints, double error) {
+    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull java.util.List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D>> segments;
         segments = splitAtCorners(digitizedPoints, 77 / 180d * Math.PI, error * error);
@@ -141,7 +141,7 @@ public class BezierFit {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder builder, @NonNull BezierNodePath digitizedPoints, double error) {
+    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull BezierNodePath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();
         for (BezierNode n : digitizedPoints.getNodes()) {
             d.add(new Point2D(n.getX0(), n.getY0()));
@@ -362,7 +362,7 @@ public class BezierFit {
      * @param errorSquared User-defined errorSquared squared.
      * @param builder      Path to which the bezier curve segments are added.
      */
-    private static void fitCubic(@NonNull PathBuilder builder, @NonNull ArrayList<Point2D> d, int first, int last,
+    private static void fitCubic(@NonNull PathBuilder<?> builder, @NonNull ArrayList<Point2D> d, int first, int last,
                                  Point2D tHat1, Point2D tHat2,
                                  double errorSquared) {
 
@@ -461,7 +461,7 @@ public class BezierFit {
      * @param bezCurve
      * @param builder
      */
-    private static void addCurveTo(@NonNull PathBuilder builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
+    private static void addCurveTo(@NonNull PathBuilder<?> builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
         java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
         if (connectsCorners && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)

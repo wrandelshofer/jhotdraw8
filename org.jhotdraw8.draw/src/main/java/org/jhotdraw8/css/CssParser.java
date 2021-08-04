@@ -177,6 +177,9 @@ public class CssParser {
     private @Nullable URI documentHome;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
 
+    public CssParser() {
+    }
+
     private @NonNull FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
         final @NonNull String ident = tt.currentStringNonNull();

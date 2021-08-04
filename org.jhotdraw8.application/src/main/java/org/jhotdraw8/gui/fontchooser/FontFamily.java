@@ -20,6 +20,9 @@ public class FontFamily {
 
     private final ObservableList<FontTypeface> typefaces = FXCollections.observableArrayList();
 
+    public FontFamily() {
+    }
+
     public @NonNull ObservableList<FontTypeface> getTypefaces() {
         return typefaces;
     }

@@ -10,6 +10,9 @@ import org.jhotdraw8.annotation.NonNull;
 import java.net.URL;
 
 public class ImageNodeReaderProvider implements NodeReaderProvider {
+    public ImageNodeReaderProvider() {
+    }
+
     @Override
     public boolean canDecodeInput(@NonNull URL source) {
         return canDecodeInput(source.getFile());

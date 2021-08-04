@@ -11,6 +11,9 @@ package org.jhotdraw8.css.ast;
  */
 public abstract class AbstractAttributeSelector extends SimpleSelector {
 
+    public AbstractAttributeSelector() {
+    }
+
     @Override
     public final int getSpecificity() {
         return 10;

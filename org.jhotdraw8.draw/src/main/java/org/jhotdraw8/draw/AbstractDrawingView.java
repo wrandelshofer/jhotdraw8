@@ -69,6 +69,9 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
+    public AbstractDrawingView() {
+    }
+
 
     @Override
     public @NonNull ObjectProperty<DrawingEditor> editorProperty() {

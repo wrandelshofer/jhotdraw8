@@ -24,6 +24,9 @@ import java.text.ParseException;
  */
 public class CssStringOrIdentConverter implements Converter<String> {
 
+    public CssStringOrIdentConverter() {
+    }
+
     @Override
     public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));

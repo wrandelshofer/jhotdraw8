@@ -33,6 +33,9 @@ import java.text.ParseException;
  */
 public class DefaultConverter implements Converter<Object> {
 
+    public DefaultConverter() {
+    }
+
     @Override
     public @Nullable Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String str = buf.toString();

@@ -23,6 +23,12 @@ import java.util.Map;
 public class UriUtil {
 
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private UriUtil() {
+    }
+
+    /**
      * Prevent instance creation.
      */
     private void URIUtil() {

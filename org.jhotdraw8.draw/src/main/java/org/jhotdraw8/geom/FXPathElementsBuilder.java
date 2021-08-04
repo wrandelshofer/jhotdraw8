@@ -9,7 +9,6 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
 import org.jhotdraw8.annotation.NonNull;
@@ -18,18 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * FXPathBuilder.
+ * FXPathElementsBuilder.
  *
  * @author Werner Randelshofer
  */
-public class FXPathBuilder extends AbstractPathBuilder {
+public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>> {
     public static final ClosePath CLOSE_PATH = new ClosePath();
 
-    public FXPathBuilder() {
+    public FXPathElementsBuilder() {
         this(new ArrayList<>());
     }
 
-    public FXPathBuilder(List<PathElement> elements) {
+    public FXPathElementsBuilder(List<PathElement> elements) {
         this.elements = elements;
     }
 
@@ -70,12 +69,7 @@ public class FXPathBuilder extends AbstractPathBuilder {
         // empty
     }
 
-    public @NonNull Path build() {
-        pathDone();
-        return new Path(elements);
-    }
-
-    public List<PathElement> getElements() {
+    public @NonNull List<PathElement> build() {
         pathDone();
         return elements;
     }

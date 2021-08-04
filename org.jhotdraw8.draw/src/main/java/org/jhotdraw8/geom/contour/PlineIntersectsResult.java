@@ -19,9 +19,12 @@ import java.util.List;
  *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
  */
-public class PlineIntersectsResult {
+class PlineIntersectsResult {
     List<PlineIntersect> intersects = new ArrayList<>();
     List<PlineCoincidentIntersect> coincidentIntersects = new ArrayList<>();
+
+    PlineIntersectsResult() {
+    }
 
     @Override
     public String toString() {

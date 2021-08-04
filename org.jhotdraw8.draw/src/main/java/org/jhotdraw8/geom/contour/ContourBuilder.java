@@ -66,6 +66,9 @@ import static org.jhotdraw8.geom.contour.Utils.unitPerp;
 public class ContourBuilder {
 
 
+    public ContourBuilder() {
+    }
+
     /// Function to test if a point is a valid distance from the original polyline.
     static boolean pointValidForOffset(PolyArcPath pline, double offset,
                                        StaticSpatialIndex spatialIndex,

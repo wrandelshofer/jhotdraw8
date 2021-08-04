@@ -7,7 +7,6 @@ package org.jhotdraw8.geom;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 
@@ -19,7 +18,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class FXPathPointsBuilder extends AbstractPathBuilder {
+public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> {
 
     private boolean needsSquareAtLastPoint;
     private double squareSize = 5;
@@ -76,12 +75,12 @@ public class FXPathPointsBuilder extends AbstractPathBuilder {
         needsSquareAtLastPoint = true;
     }
 
-    public @NonNull Path build() {
+    public @NonNull List<PathElement> build() {
         if (needsSquareAtLastPoint) {
             addSquare(getLastX(), getLastY());
             needsSquareAtLastPoint = false;
         }
-        return new Path(elements);
+        return elements;
     }
 
     public List<PathElement> getElements() {

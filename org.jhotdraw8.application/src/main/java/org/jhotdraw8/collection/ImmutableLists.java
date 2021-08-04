@@ -12,6 +12,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class ImmutableLists {
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private ImmutableLists() {
+    }
+
     public static @NonNull <T> ImmutableList<T> add(@Nullable ReadOnlyCollection<T> collection, T item) {
         if (collection == null || collection.isEmpty()) {
             return of(item);

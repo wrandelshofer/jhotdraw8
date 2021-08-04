@@ -20,6 +20,9 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 
     private int numCommands = 0;
 
+    public AbstractPathBuilder() {
+    }
+
     @Override
     public void arcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         if (numCommands++ == 0) {

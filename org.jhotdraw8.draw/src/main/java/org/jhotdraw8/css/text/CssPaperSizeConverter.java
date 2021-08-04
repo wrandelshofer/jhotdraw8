@@ -68,6 +68,9 @@ public class CssPaperSizeConverter implements Converter<CssDimension2D> {
     private static final String LANDSCAPE = "landscape";
     private static final String PORTRAIT = "portrait";
 
+    public CssPaperSizeConverter() {
+    }
+
     private @Nullable CssDimension2D parsePageSize(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
             CssDimension2D paperSize = paperSizes.get(tt.currentString());

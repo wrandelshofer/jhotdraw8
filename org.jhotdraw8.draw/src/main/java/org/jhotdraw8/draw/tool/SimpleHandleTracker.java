@@ -40,6 +40,9 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
     private Handle handle;
     private Collection<Figure> compatibleFigures;
 
+    public SimpleHandleTracker() {
+    }
+
     @Override
     public void setHandles(Handle handle, Collection<Figure> compatibleFigures) {
         this.handle = handle;

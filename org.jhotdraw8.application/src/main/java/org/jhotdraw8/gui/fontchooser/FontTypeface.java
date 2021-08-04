@@ -21,6 +21,9 @@ public class FontTypeface {
     private final BooleanProperty regular = new SimpleBooleanProperty();
     private final StringProperty shortName = new SimpleStringProperty();
 
+    public FontTypeface() {
+    }
+
     public String getName() {
         return name.get();
     }

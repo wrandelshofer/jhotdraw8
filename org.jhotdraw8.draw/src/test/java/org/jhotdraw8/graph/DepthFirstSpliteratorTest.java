@@ -83,6 +83,7 @@ public class DepthFirstSpliteratorTest {
         assertEquals(expected, actual);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testIterateWithAnyPathProvider() throws Exception {
         for (Object[] args : anyPathProvider()) {

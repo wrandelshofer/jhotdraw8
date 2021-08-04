@@ -9,6 +9,12 @@ import org.jhotdraw8.annotation.Nullable;
 
 public class Exceptions {
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private Exceptions() {
+    }
+
+    /**
      * Gets the most specific localized error message from the given throwable.
      *
      * @param t a throwable

@@ -24,6 +24,9 @@ public class RegionFigure extends AbstractRegionFigure
      */
     public static final String TYPE_SELECTOR = "Region";
 
+    public RegionFigure() {
+    }
+
     @Override
     public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));

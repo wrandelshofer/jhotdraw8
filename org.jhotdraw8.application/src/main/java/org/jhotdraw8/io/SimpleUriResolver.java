@@ -19,6 +19,9 @@ import java.nio.file.Paths;
  */
 public class SimpleUriResolver implements UriResolver {
 
+    public SimpleUriResolver() {
+    }
+
     @Override
     public @NonNull URI relativize(@Nullable URI base, @NonNull URI uri) {
         URI relativized = uri;

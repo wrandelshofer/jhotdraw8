@@ -39,6 +39,9 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>();
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>();
 
+    public AbstractFileBasedActivity() {
+    }
+
     protected void initTitle() {
         titleProperty().bind(CustomBinding.convert(uri, uri ->
                 uri == null ?

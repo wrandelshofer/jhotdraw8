@@ -12,6 +12,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ImmutableSets {
+    public ImmutableSets() {
+    }
+
     public static @NonNull <T> ImmutableSet<T> add(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:

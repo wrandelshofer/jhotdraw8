@@ -23,6 +23,9 @@ public class NullConstrainer extends AbstractConstrainer {
 
     private final Path node = new Path();
 
+    public NullConstrainer() {
+    }
+
     @Override
     public @NonNull CssPoint2D translatePoint(Figure f, @NonNull CssPoint2D cssp, @NonNull CssPoint2D cssdir) {
         Point2D p = cssp.getConvertedValue();

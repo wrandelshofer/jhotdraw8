@@ -185,6 +185,9 @@ public abstract class AbstractPathBuilder<V, A> {
                                                        @NonNull AddToSet<V> visited, int maxLength);
 
     protected abstract static class BackLink<VV, AA> {
+        public BackLink() {
+        }
+
         abstract BackLink<VV, AA> getParent();
 
         abstract VV getVertex();

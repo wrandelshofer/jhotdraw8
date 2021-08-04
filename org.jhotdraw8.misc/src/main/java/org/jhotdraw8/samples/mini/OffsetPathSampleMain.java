@@ -27,7 +27,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Shapes;
@@ -199,12 +199,12 @@ public class OffsetPathSampleMain extends Application {
             Polygon poly = new Polygon();
             poly.getPoints().addAll(polyline.getPoints());
             SvgPaths.buildFromPathIterator(
-                    new OffsetPathBuilder(new FXPathBuilder(elements), offset),
+                    new OffsetPathBuilder<>(new FXPathElementsBuilder(elements), offset),
                     Shapes.awtShapeFromFX(poly).getPathIterator(null)
             );
         } else {
             SvgPaths.buildFromPathIterator(
-                    new OffsetPathBuilder(new FXPathBuilder(elements), offset),
+                    new OffsetPathBuilder<>(new FXPathElementsBuilder(elements), offset),
                     Shapes.awtShapeFromFX(polyline).getPathIterator(null)
             );
         }

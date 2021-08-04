@@ -16,6 +16,9 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class SvgNodeReader implements NodeReader {
+    public SvgNodeReader() {
+    }
+
     @Override
     public Node read(@NonNull URL url) throws IOException {
         return new FXSvgTinyReader().read(new StreamSource(url.toString()));

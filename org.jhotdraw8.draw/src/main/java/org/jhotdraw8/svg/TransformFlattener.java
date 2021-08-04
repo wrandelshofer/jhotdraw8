@@ -34,6 +34,9 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class TransformFlattener {
 
+    public TransformFlattener() {
+    }
+
     private boolean canFlattenTranslate(@NonNull Node node) {
         if (node.getRotate() != 0.0
                 || node.getScaleX() != 1.0

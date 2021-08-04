@@ -27,6 +27,9 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
         subject.addListener(this::onDrawingViewChanged);
     }
 
+    public AbstractDrawingInspector() {
+    }
+
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         Drawing oldDrawing = drawing;
         DrawingModel oldModel = drawingModel;

@@ -37,6 +37,12 @@ import java.awt.geom.Point2D;
  */
 public class BulgeConversionFunctions {
 
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private BulgeConversionFunctions() {
+    }
+
     public static class ArcRadiusAndCenter {
         final double radius;
         final Point2D.Double center;

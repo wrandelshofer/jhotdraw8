@@ -20,6 +20,9 @@ public abstract class AbstractInspector<S> implements Inspector<S> {
     protected final @NonNull ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
     protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
 
+    public AbstractInspector() {
+    }
+
     public @NonNull ObjectProperty<S> subjectProperty() {
         return subject;
     }

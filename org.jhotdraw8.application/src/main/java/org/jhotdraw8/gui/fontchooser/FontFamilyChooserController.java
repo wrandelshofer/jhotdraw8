@@ -72,6 +72,9 @@ public class FontFamilyChooserController {
     @FXML
     private ListView<FontTypeface> typefaceList;
 
+    public FontFamilyChooserController() {
+    }
+
     private void addDroppedFamiliesToCollection(@Nullable FontCollection collection, String[] familyNames) {
         final FontChooserModel model = getModel();
         FontCollection allFonts = model.getAllFonts();

@@ -21,8 +21,11 @@ import java.util.List;
  *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
  */
-public class CoincidentSlicesResult {
+class CoincidentSlicesResult {
     Deque<PolyArcPath> coincidentSlices = new ArrayDeque<>();
     Deque<PlineIntersect> sliceStartPoints = new ArrayDeque<>();
     Deque<PlineIntersect> sliceEndPoints = new ArrayDeque<>();
+
+    CoincidentSlicesResult() {
+    }
 }

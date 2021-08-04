@@ -17,6 +17,9 @@ import java.util.prefs.Preferences;
  */
 public class PreferencesFontChooserModelFactory extends DefaultFontChooserModelFactory {
 
+    public PreferencesFontChooserModelFactory() {
+    }
+
     @Override
     public FontChooserModel create() {
         FontChooserModel model = super.create();

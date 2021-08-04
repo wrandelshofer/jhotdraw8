@@ -16,6 +16,9 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
     private final List<PolyArcPath> paths = new ArrayList<>();
     private PolyArcPath current;
 
+    public PolyArcPathBuilder() {
+    }
+
     @Override
     public List<PolyArcPath> build() {
         return paths;

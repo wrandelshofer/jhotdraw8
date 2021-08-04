@@ -28,6 +28,9 @@ public abstract class AbstractSelectionInspector extends AbstractInspector<Drawi
         subject.addListener(this::onDrawingViewChanged);
     }
 
+    public AbstractSelectionInspector() {
+    }
+
     protected Drawing getDrawing() {
         DrawingView subject = getSubject();
         return subject == null ? null : subject.getDrawing();

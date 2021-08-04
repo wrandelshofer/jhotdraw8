@@ -24,6 +24,9 @@ import org.jhotdraw8.text.XmlWordConverter;
  */
 public class XmlConverterFactory implements ConverterFactory {
 
+    public XmlConverterFactory() {
+    }
+
     @Override
     public @NonNull Converter<?> apply(@Nullable String type, String style) {
         if (type == null) {

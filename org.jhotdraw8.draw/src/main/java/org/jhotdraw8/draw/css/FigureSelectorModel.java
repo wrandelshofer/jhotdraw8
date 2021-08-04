@@ -63,6 +63,9 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     private @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
 
+    public FigureSelectorModel() {
+    }
+
 
     @Override
     public boolean hasId(@NonNull Figure element, @NonNull String id) {

@@ -22,6 +22,12 @@ import java.util.List;
  */
 public class IntersectQuadCurveRectangle {
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private IntersectQuadCurveRectangle() {
+    }
+
+    /**
      * Computes the intersection between quadratic bezier curve 'p' and the
      * provided rectangle.
      *

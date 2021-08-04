@@ -33,6 +33,9 @@ import java.text.ParseException;
  */
 public class XmlSvgPathConverter implements Converter<SVGPath> {
 
+    public XmlSvgPathConverter() {
+    }
+
     @Override
     public @Nullable SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());

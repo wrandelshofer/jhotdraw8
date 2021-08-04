@@ -76,6 +76,9 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     public static final String JPEG_MIME_TYPE = "image/jpeg";
     public static final String PNG_MIME_TYPE = "image/png";
 
+    public BitmapExportOutputFormat() {
+    }
+
     private WritableImage doRenderImage(@NonNull Figure slice, @NonNull Node node, @NonNull Bounds bounds, double dpi) {
         SnapshotParameters parameters = new SnapshotParameters();
         double scale = dpi / RenderContext.DPI.getDefaultValueNonNull();

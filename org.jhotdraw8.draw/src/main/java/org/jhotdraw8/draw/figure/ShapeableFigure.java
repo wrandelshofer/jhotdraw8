@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.geom.SvgPaths;
 
@@ -81,11 +81,11 @@ public interface ShapeableFigure extends Figure {
             final Bounds srcBounds = shapeBounds == null || FXGeom.isEmpty(shapeBounds) ? FXGeom.getBounds(path) : FXGeom.getBounds(shapeBounds);
             Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
 
-            FXPathBuilder builder2 = new FXPathBuilder();
-            final NineRegionsScalingBuilder nineRegionsScalingBuilder = new NineRegionsScalingBuilder(builder2, srcBounds, shapeSlice, b);
+            FXPathElementsBuilder builder2 = new FXPathElementsBuilder();
+            final NineRegionsScalingBuilder<List<PathElement>> nineRegionsScalingBuilder = new NineRegionsScalingBuilder<>(builder2, srcBounds, shapeSlice, b);
 
             SvgPaths.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
-            List<PathElement> elements = builder2.getElements();
+            List<PathElement> elements = nineRegionsScalingBuilder.build();
             node.getElements().setAll(elements);
             node.setVisible(true);
         } catch (ParseException ex) {

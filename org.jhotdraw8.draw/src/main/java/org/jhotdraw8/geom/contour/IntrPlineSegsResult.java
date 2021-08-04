@@ -20,9 +20,12 @@ import java.awt.geom.Point2D;
  *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
  */
-public class IntrPlineSegsResult {
+class IntrPlineSegsResult {
     PlineSegIntrType intrType;
     Point2D.Double point1;
     Point2D.Double point2;
+
+    public IntrPlineSegsResult() {
+    }
 }
 

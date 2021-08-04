@@ -19,6 +19,9 @@ import java.util.function.Consumer;
  */
 public class UniversalSelector extends SimpleSelector {
 
+    public UniversalSelector() {
+    }
+
     @Override
     public @NonNull String toString() {
         return "Universal:*";

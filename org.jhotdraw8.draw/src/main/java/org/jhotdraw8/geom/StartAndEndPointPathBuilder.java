@@ -23,6 +23,9 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     private double endTangentY;
     private boolean startDone;
 
+    public StartAndEndPointPathBuilder() {
+    }
+
     @Override
     protected void doClosePath() {
         //empty

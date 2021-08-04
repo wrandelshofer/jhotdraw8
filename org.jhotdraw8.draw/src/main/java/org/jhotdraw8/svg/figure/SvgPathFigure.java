@@ -9,6 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.FillRule;
+import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -21,7 +22,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
@@ -32,6 +33,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
+import java.util.List;
 
 
 /**
@@ -98,8 +100,8 @@ public class SvgPathFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        FXPathBuilder bb = new FXPathBuilder();
-        FXTransformPathBuilder b = new FXTransformPathBuilder(bb);
+        FXPathElementsBuilder bb = new FXPathElementsBuilder();
+        FXTransformPathBuilder<List<PathElement>> b = new FXTransformPathBuilder<>(bb);
         b.setTransform(transform);
         String d = get(D);
         if (d != null) {
@@ -110,7 +112,8 @@ public class SvgPathFigure extends AbstractLeafFigure
             }
         }
 
-        set(D, FXSvgPaths.svgStringFromElements(bb.getElements(), new XmlNumberConverter()));
+        List<PathElement> build = b.build();
+        set(D, build == null ? null : FXSvgPaths.svgStringFromElements(build, new XmlNumberConverter()));
     }
 
     @Override
@@ -135,7 +138,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         applySvgDefaultableCompositingProperties(ctx, node);
         applySvgShapeProperties(ctx, n0, n1);
 
-        FXPathBuilder bb = new FXPathBuilder();
+        FXPathElementsBuilder bb = new FXPathElementsBuilder();
         String d = get(D);
         if (d != null) {
             try {
@@ -144,8 +147,9 @@ public class SvgPathFigure extends AbstractLeafFigure
                 // bail
             }
         }
-        n0.getElements().setAll(bb.getElements());
-        n1.getElements().setAll(bb.getElements());
+        List<PathElement> build = bb.build();
+        n0.getElements().setAll(build);
+        n1.getElements().setAll(build);
 
         FillRule fillRule = getDefaultableStyled(FILL_RULE_KEY);
         n0.setFillRule(fillRule);

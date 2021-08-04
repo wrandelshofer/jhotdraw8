@@ -17,6 +17,9 @@ import java.io.IOException;
  * Reads an SVG "Tiny" 1.2 file and creates JavaFX nodes from it.
  */
 public class FXSvgTinyReader {
+    public FXSvgTinyReader() {
+    }
+
     public Node read(@NonNull Source in) throws IOException {
         Figure figure = new FigureSvgTinyReader().read(in);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();

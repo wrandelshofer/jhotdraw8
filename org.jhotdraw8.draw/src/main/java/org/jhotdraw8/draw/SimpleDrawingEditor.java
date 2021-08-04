@@ -11,4 +11,6 @@ package org.jhotdraw8.draw;
  */
 public class SimpleDrawingEditor extends AbstractDrawingEditor {
 
+    public SimpleDrawingEditor() {
+    }
 }

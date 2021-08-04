@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class OffsetPathBuilderTest {
@@ -53,9 +54,10 @@ public class OffsetPathBuilderTest {
 
     private void testOffsetPath(Polyline input, double offset, Polyline expected) throws Exception, InterruptedException {
         AwtPathBuilder ab = new AwtPathBuilder();
-        OffsetPathBuilder instance = new OffsetPathBuilder(ab, offset);
+        OffsetPathBuilder<Path2D.Double> instance = new OffsetPathBuilder<>(ab, offset);
         SvgPaths.buildFromPathIterator(instance, Shapes.awtShapeFromFX(input).getPathIterator(null));
-        Path2D built = ab.build();
+        Path2D.Double built = instance.build();
+        assertNotNull(built);
         Polyline actual = new Polyline();
         ObservableList<Double> pp = actual.getPoints();
         PathIterator it = built.getPathIterator(null);

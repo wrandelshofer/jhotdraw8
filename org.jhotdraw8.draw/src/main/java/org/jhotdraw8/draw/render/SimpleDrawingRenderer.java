@@ -30,6 +30,9 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
     // ---
     protected final Map<Figure, Node> figureToNodeMap = new HashMap<>();
 
+    public SimpleDrawingRenderer() {
+    }
+
 
     // ---
     // Behavior

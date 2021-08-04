@@ -11,9 +11,9 @@ import java.util.Arrays;
 /**
  * A PathBuilder that allows to store data on each path segment.
  *
- * @param <T>
+ * @param <S> type of semantic data
  */
-public class SemanticPathBuilder<T> extends AbstractPathBuilder {
+public class SemanticPathBuilder<S> extends AbstractPathBuilder<Path2D.Double> {
     private final Path2D.Double path;
     public final static int CLOSE_PATH = 1;
     public final static int CURVE_TO = 2;
@@ -26,7 +26,7 @@ public class SemanticPathBuilder<T> extends AbstractPathBuilder {
     private int size;
     private int lastOffset;
     @SuppressWarnings("unchecked")
-    private T[] data = (T[]) new Object[0];
+    private S[] data = (S[]) new Object[0];
 
     public SemanticPathBuilder() {
         this.path = new Path2D.Double();
@@ -58,7 +58,7 @@ public class SemanticPathBuilder<T> extends AbstractPathBuilder {
             System.arraycopy(temp, 0, offsets, 0, temp.length);
             Object[] tmp = data;
             @SuppressWarnings("unchecked")
-            Object[] suppress = data = (T[]) new Object[Math.max(16, size + size / 2)];
+            Object[] suppress = data = (S[]) new Object[Math.max(16, size + size / 2)];
             System.arraycopy(tmp, 0, data, 0, tmp.length);
         }
         ops[size] = opcode;
@@ -74,7 +74,7 @@ public class SemanticPathBuilder<T> extends AbstractPathBuilder {
 
     }
 
-    public void setData(T data) {
+    public void setData(S data) {
         this.data[size - 1] = data;
     }
 

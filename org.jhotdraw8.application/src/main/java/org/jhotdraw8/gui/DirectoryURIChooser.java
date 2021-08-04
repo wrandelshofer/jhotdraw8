@@ -24,6 +24,9 @@ public class DirectoryURIChooser implements URIChooser {
      */
     private final DirectoryChooser chooser = new DirectoryChooser();
 
+    public DirectoryURIChooser() {
+    }
+
     public @NonNull DirectoryChooser getDirectoryChooser() {
         return chooser;
     }

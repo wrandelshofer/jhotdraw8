@@ -22,6 +22,9 @@ import java.text.ParseException;
  */
 public class XmlUrlConverter implements Converter<URL> {
 
+    public XmlUrlConverter() {
+    }
+
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull URL value) throws IOException {
         out.append(value.toString());

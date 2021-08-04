@@ -46,6 +46,9 @@ public class LayerFigure extends AbstractCompositeFigure
 
     private static final int MIN_NODES_FOR_CLIPPING = 100;
 
+    public LayerFigure() {
+    }
+
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
         for (Figure child : getChildren()) {

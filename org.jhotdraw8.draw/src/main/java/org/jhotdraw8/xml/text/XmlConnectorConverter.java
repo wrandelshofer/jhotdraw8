@@ -56,6 +56,9 @@ public class XmlConnectorConverter implements Converter<Connector> {
         choiceToConnectorMap.put("ellipse", EllipseConnector::new);
     }
 
+    public XmlConnectorConverter() {
+    }
+
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable Connector value) throws IOException {
         if (value == null) {

@@ -13,4 +13,6 @@ import org.jhotdraw8.css.text.CssEffectConverter;
  */
 public class XmlEffectConverter extends CssEffectConverter {
 
+    public XmlEffectConverter() {
+    }
 }

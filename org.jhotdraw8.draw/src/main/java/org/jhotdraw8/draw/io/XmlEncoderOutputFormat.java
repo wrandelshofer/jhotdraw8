@@ -22,6 +22,9 @@ import java.net.URI;
 public class XmlEncoderOutputFormat extends AbstractPropertyBean implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
 
+    public XmlEncoderOutputFormat() {
+    }
+
     @Override
     public void write(@NonNull OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {

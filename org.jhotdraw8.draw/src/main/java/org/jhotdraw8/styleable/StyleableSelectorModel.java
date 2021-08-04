@@ -37,6 +37,9 @@ import java.util.stream.Collectors;
 public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
 
+    public StyleableSelectorModel() {
+    }
+
     @Override
     public @Nullable String getAttributeAsString(@NonNull Styleable element, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
         if (origin == StyleOrigin.USER) {

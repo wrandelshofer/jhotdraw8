@@ -42,6 +42,9 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 public abstract class AbstractExportOutputFormat extends AbstractPropertyBean implements ExportOutputFormat {
     private static final Logger LOGGER = Logger.getLogger(AbstractExportOutputFormat.class.getName());
 
+    public AbstractExportOutputFormat() {
+    }
+
     protected abstract @NonNull String getExtension();
 
 

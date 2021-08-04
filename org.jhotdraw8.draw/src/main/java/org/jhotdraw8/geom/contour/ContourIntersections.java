@@ -93,7 +93,7 @@ public class ContourIntersections {
     }
 
 
-    public static CoincidentSlicesResult
+    static CoincidentSlicesResult
     sortAndJoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
                                 PolyArcPath pline1, PolyArcPath pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();

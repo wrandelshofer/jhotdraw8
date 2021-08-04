@@ -15,6 +15,9 @@ public class SvgFloatPathBuilder implements PathBuilder<String> {
 
     private @NonNull StringBuilder buf = new StringBuilder();
 
+    public SvgFloatPathBuilder() {
+    }
+
     @Override
     public void arcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         buf.append('A')

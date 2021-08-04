@@ -18,6 +18,12 @@ import java.util.List;
  */
 public class ConvexHull {
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private ConvexHull() {
+    }
+
+    /**
      * Computes the convex hull from a set of points.
      *
      * @param points the points

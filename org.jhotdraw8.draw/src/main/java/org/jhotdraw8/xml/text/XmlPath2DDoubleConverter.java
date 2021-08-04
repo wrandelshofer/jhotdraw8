@@ -34,6 +34,9 @@ import java.text.ParseException;
  */
 public class XmlPath2DDoubleConverter implements Converter<Path2D.Double> {
 
+    public XmlPath2DDoubleConverter() {
+    }
+
     @Override
     public @Nullable Path2D.Double fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());

@@ -29,6 +29,9 @@ public abstract class AbstractStyleablePropertyBean
     protected final StyleableMap<Key<?>, Object> properties =
             createStyleableMap();
 
+    public AbstractStyleablePropertyBean() {
+    }
+
     private @NonNull SimpleStyleableMap<Key<?>, Object> createStyleableMap() {
         // Explicit type arguments needed for Java 8!
         return new SimpleStyleableMap<Key<?>, Object>(createKeyMap()) {

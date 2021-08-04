@@ -17,7 +17,7 @@ import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.geom.FXPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.SvgPaths;
@@ -87,7 +87,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
         PathIterableFigure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();
-        FXPathBuilder builder = new FXPathBuilder(elements);
+        FXPathElementsBuilder builder = new FXPathElementsBuilder(elements);
         SvgPaths.buildFromPathIterator(builder, f.getPathIterator(view, Shapes.awtTransformFromFX(t)));
         path1.getElements().setAll(elements);
         path2.getElements().setAll(elements);

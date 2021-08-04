@@ -19,6 +19,9 @@ public abstract class AbstractDockRoot
 
     private final @NonNull ObjectProperty<Predicate<Dockable>> dockablePredicate = new SimpleObjectProperty<>(d -> true);
 
+    public AbstractDockRoot() {
+    }
+
     @Override
     public @NonNull ObjectProperty<Predicate<Dockable>> dockablePredicateProperty() {
         return dockablePredicate;

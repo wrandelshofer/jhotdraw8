@@ -58,6 +58,9 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
      */
     private final NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
 
+    public FigureSpecificConstrainer() {
+    }
+
     // ----
     // property methods
     // ----

@@ -22,6 +22,9 @@ public class SimpleRenderContext implements WritableRenderContext {
     private @NonNull Map<Figure, Node> nodeMap = new HashMap<>();
     private @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
+    public SimpleRenderContext() {
+    }
+
     @Override
     public Node getNode(Figure figure) {
         return nodeMap.computeIfAbsent(figure, f -> f.createNode(this));

@@ -101,6 +101,9 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;
 
+    public SvgExportOutputFormat() {
+    }
+
     public void setExporterFactory(BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory) {
         this.exporterFactory = exporterFactory;
     }

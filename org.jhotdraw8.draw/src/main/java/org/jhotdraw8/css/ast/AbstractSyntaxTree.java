@@ -14,6 +14,9 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public abstract class AbstractSyntaxTree {
+    public AbstractSyntaxTree() {
+    }
+
     public void produceTokens(Consumer<CssToken> consumer) {
     }
 }

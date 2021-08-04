@@ -55,6 +55,9 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     private CssPoint2D oldPoint;
     private CssPoint2D anchor;
 
+    public SimpleDragTracker() {
+    }
+
     // ---
     // Behaviors
     // ---

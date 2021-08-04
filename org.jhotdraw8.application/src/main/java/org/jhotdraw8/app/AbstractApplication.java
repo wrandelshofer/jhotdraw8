@@ -93,6 +93,9 @@ public abstract class AbstractApplication extends javafx.application.Application
         disabled = readOnlyProperty;
     }
 
+    public AbstractApplication() {
+    }
+
     @Override
     public ReadOnlyBooleanProperty disabledProperty() {
         return disabled;

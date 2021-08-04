@@ -11,4 +11,6 @@ package org.jhotdraw8.css.ast;
  */
 public abstract class SimpleSelector extends Selector {
 
+    public SimpleSelector() {
+    }
 }

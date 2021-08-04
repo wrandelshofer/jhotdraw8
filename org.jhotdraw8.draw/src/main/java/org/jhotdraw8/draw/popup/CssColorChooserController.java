@@ -33,6 +33,9 @@ public class CssColorChooserController {
     private ColorPicker colorPicker; // Value injected by FXMLLoader
     private final @NonNull CssColorConverter converter = new CssColorConverter();
 
+    public CssColorChooserController() {
+    }
+
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {

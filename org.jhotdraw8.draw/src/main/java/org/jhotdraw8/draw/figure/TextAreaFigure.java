@@ -36,6 +36,9 @@ public class TextAreaFigure extends AbstractLeafFigure
     public static final String TYPE_SELECTOR = "TextArea";
     private Path path;
 
+    public TextAreaFigure() {
+    }
+
     @Override
     public @NonNull Node createNode(@NonNull RenderContext ctx) {
         Group n = new Group();

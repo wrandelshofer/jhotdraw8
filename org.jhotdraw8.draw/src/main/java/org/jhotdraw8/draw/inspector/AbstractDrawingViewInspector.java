@@ -21,6 +21,9 @@ public abstract class AbstractDrawingViewInspector extends AbstractInspector<Dra
         subject.addListener(this::onDrawingViewChanged);
     }
 
+    public AbstractDrawingViewInspector() {
+    }
+
     protected DrawingModel getDrawingModel() {
         return getSubject().getModel();
     }

@@ -15,6 +15,12 @@ import java.util.List;
  */
 public class CardinalSplines {
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private CardinalSplines() {
+    }
+
+    /**
      * Converts a cardinal spline into a bezier curve.
      * <p>
      * Cardinal spline from B to E with control points A, B, E, F and

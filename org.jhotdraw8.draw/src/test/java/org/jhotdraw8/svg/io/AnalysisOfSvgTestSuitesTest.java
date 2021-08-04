@@ -90,13 +90,13 @@ public class AnalysisOfSvgTestSuitesTest {
         }
 
         public void launch() {
-            try {
-                new Thread(() -> {
+            new Thread(() -> {
+                try {
                     Application.launch();
-                }).start();
-            } catch (IllegalStateException e) {
-                //javafx is already started
-            }
+                } catch (IllegalStateException e) {
+                    //javafx is already started
+                }
+            }).start();
         }
     }
 

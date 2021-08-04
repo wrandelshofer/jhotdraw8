@@ -43,4 +43,7 @@ public class HandleType {
      * Handle of this type should allow to edit a point of a figure.
      */
     public static final HandleType POINT = new HandleType();
+
+    public HandleType() {
+    }
 }

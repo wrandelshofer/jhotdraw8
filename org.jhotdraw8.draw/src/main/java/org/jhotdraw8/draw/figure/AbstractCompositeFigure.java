@@ -26,6 +26,9 @@ import static java.lang.Math.min;
 public abstract class AbstractCompositeFigure extends AbstractFigure {
     private final ChildList<Figure> children = new ChildList<>(this);
 
+    public AbstractCompositeFigure() {
+    }
+
     @Override
     public @NonNull ObservableList<Figure> getChildren() {
         return children;

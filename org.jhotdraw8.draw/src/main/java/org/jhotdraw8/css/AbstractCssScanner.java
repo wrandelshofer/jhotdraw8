@@ -27,6 +27,9 @@ public abstract class AbstractCssScanner implements CssScanner {
      */
     protected boolean skipLF;
 
+    public AbstractCssScanner() {
+    }
+
     public int currentChar() {
         return currentChar;
     }

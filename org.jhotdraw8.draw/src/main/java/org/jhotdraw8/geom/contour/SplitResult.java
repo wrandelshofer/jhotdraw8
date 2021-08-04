@@ -16,9 +16,12 @@ package org.jhotdraw8.geom.contour;
  *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
  */
-public class SplitResult {
+class SplitResult {
     /// Updated starting vertex.
     PlineVertex updatedStart;
     /// Vertex at the split point.
     PlineVertex splitVertex;
+
+    SplitResult() {
+    }
 };

@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.PathIterator;
 
-public class PathIteratorPathBuilder extends AbstractPathBuilder {
+public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     private int numCommands;
     private int numCoords;
     private @NonNull byte[] commands = new byte[10];

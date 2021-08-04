@@ -20,6 +20,9 @@ import java.text.ParseException;
  */
 public class XmlWordConverter implements Converter<String> {
 
+    public XmlWordConverter() {
+    }
+
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull String value) throws IOException {
         for (char ch : value.toCharArray()) {

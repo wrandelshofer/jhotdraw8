@@ -18,6 +18,9 @@ public class SvgPath2D extends Path2D.Double {
 
     private static final long serialVersionUID = 1L;
 
+    public SvgPath2D() {
+    }
+
     /**
      * Adds an elliptical arc, defined by two radii, an angle from the x-axis, a
      * flag to choose the large arc or not, a flag to indicate if we increase or

@@ -15,6 +15,9 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
     // FIXME create CssPaintableDialog
     private CssColorPopup dialog;
 
+    public PaintablePicker() {
+    }
+
     private void update(@NonNull Node anchor, CssColor initialValue, @NonNull BiConsumer<Boolean, CssColor> callback) {
         if (dialog == null) {
             dialog = new CssColorPopup();

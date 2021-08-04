@@ -26,6 +26,12 @@ import static org.jhotdraw8.geom.Geom.REAL_THRESHOLD;
 public class IntersectRayRay {
 
     /**
+     * Don't let anyone instantiate this class.
+     */
+    private IntersectRayRay() {
+    }
+
+    /**
      * Computes the intersection between two infinitely long rays 'a' and 'b'.
      * <p>
      * The intersection will contain the parameters 't' of ray 'a' in range
