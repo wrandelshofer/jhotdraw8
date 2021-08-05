@@ -41,6 +41,7 @@ import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
 import java.util.function.Consumer;
@@ -139,13 +140,15 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         );
         Deque<Figure> stack = new ArrayDeque<>();
         List<Runnable> secondPass = new ArrayList<>();
+        List<Runnable> parallelPass = new ArrayList<>();
         List<FutureTask<Void>> futures = new ArrayList<>();
         List<Consumer<Figure>> processingInstructions = new ArrayList<>();
         try {
             XMLStreamReader xmlStreamReader = (in instanceof InputStream) ? dbf.createXMLStreamReader((InputStream) in)
                     : dbf.createXMLStreamReader((Reader) in);
             while (xmlStreamReader.hasNext()) {
-                readNode(xmlStreamReader, xmlStreamReader.next(), stack, processingInstructions, secondPass, futures);
+                readNode(xmlStreamReader, xmlStreamReader.next(), stack, processingInstructions,
+                        secondPass, parallelPass, futures);
             }
 
         } catch (XMLStreamException e) {
@@ -158,16 +161,17 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         for (Consumer<Figure> processingInstruction : processingInstructions) {
             processingInstruction.accept(stack.getFirst());
         }
-        processingInstructions.clear();
-
+        forkParallelPass(futures, parallelPass);
         try {
-            forkSecondPass(futures, secondPass);
+            secondPass.parallelStream().forEach(Runnable::run);
+        } catch (UncheckedIOException e) {
+            throw e.getCause();
+        }
+        try {
             for (FutureTask<Void> future : futures) {
                 future.get();
             }
-        } catch (UncheckedIOException e) {
-            throw e.getCause();
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new IOException(e);
         }
         return stack;
@@ -219,7 +223,7 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     }
 
-    private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass) throws IOException {
+    private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass, @NonNull List<Runnable> parallelPass) throws IOException {
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String ns = r.getAttributeNamespace(i);
             if (namespaceURI != null && ns != null && !namespaceURI.equals(ns)) {
@@ -238,17 +242,15 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
                 if (key == null) {
                     throw new IOException("Unsupported attribute \"" + attributeLocalName + "\" at line " + location.getLineNumber() + ", col " + location.getColumnNumber());
                 }
-                //if (figureFactory.needsIdResolver(key)) {
-                secondPass.add(() -> {
+                List<Runnable> pass = figureFactory.needsIdResolver(key) ? secondPass : parallelPass;
+                pass.add(() -> {
                     try {
                         figure.set(key, figureFactory.stringToValue(key, attributeValue));
                     } catch (IOException e) {
                         throw new UncheckedIOException(e);
                     }
                 });
-                //} else {
-                //    figure.set(key, figureFactory.stringToValue(key, attributeValue));
-                // }
+
             }
         }
     }
@@ -259,11 +261,11 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     private void readNode(XMLStreamReader r, int next, @NonNull Deque<Figure> stack,
                           @NonNull List<Consumer<Figure>> processingInstructions,
-                          @NonNull List<Runnable> secondPass,
+                          @NonNull List<Runnable> secondPass, @NonNull List<Runnable> parallelPass,
                           @NonNull List<FutureTask<Void>> futures) throws IOException {
         switch (next) {
         case XMLStreamReader.START_ELEMENT:
-            readStartElement(r, stack, secondPass);
+            readStartElement(r, stack, secondPass, parallelPass);
             break;
         case XMLStreamReader.END_ELEMENT:
             readEndElement(r, stack);
@@ -291,16 +293,16 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
             throw new IOException("unsupported XMLStream event: " + next);
         }
 
-        if (secondPass.size() > 1_000) {
-            ArrayList<Runnable> runNow = new ArrayList<>(secondPass);
-            secondPass.clear();
-            forkSecondPass(futures, runNow);
+        if (parallelPass.size() > 1_000) {
+            ArrayList<Runnable> runParallel = new ArrayList<>(parallelPass);
+            parallelPass.clear();
+            forkParallelPass(futures, runParallel);
         }
     }
 
-    private void forkSecondPass(List<FutureTask<Void>> futures, List<Runnable> runNow) {
+    private void forkParallelPass(List<FutureTask<Void>> futures, List<Runnable> runParallel) {
         FutureTask<Void> task = new FutureTask<>(() -> {
-            for (final Runnable runner : runNow) {
+            for (final Runnable runner : runParallel) {
                 runner.run();
             }
             return null;
@@ -333,13 +335,14 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
         return null;
     }
 
-    private void readStartElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack, @NonNull List<Runnable> secondPass) throws IOException {
+    private void readStartElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack,
+                                  @NonNull List<Runnable> secondPass, @NonNull List<Runnable> parallelPass) throws IOException {
         if (namespaceURI != null && !namespaceURI.equals(r.getNamespaceURI())) {
             return;
         }
 
         Figure figure = createFigure(r, stack);
-        readAttributes(r, figure, secondPass);
+        readAttributes(r, figure, secondPass, parallelPass);
     }
 
     public void setFigureFactory(@NonNull FigureFactory figureFactory) {

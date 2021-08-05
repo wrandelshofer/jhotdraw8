@@ -54,11 +54,6 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private final int originOrdinal;
     private final @NonNull int[] sizes;
 
-    protected void setKeyMap(Map<K, Integer> keyMap) {
-        this.keyMap = keyMap;
-        this.values = new Object[keyMap.size() * numOrigins];
-    }
-
     private Object[] values;
     private final @NonNull SimpleStyleableMap<K, V> originalMap;
     static final int AUTO_ORIGIN = -StyleOrigin.INLINE.ordinal();
@@ -83,24 +78,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      * Creates a new instance which uses the provided key map.
      * <p>
      * The key map can be shared with other instances, provided that
-     * either the key map is immutable, or the key map is mutable and
-     * the only allowed mutation is the insertion of new entries.
+     * the key map is immutable.
      * <p>
      * All entries in the key map must contain distinct integer
      * values in the range [0, keyMap.size() - 1].
-     * <p>
-     * A shared mutable implementation of {@code keyMap} could be implemented
-     * as follows:
-     * <pre>{@literal
-     * Map<K>, V> keyMap = new ConcurrentHashMap<K>, V>() {
-     *
-     *     final AtomicInteger nextIndex = new AtomicInteger();
-     *
-     *     public Integer get(Object key) {
-     *         return super.computeIfAbsent((K) key, k -> nextIndex.getAndIncrement());
-     *     }
-     * };
-     * }</pre>
      *
      * @param keyMap a map which maps from keys to indices. The indices must be
      *               in the range {@code [0,keyMap.size()-1]}.

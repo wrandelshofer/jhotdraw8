@@ -15,9 +15,7 @@ import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -42,20 +40,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private Object[] values;
 
     /**
-     * Creates a new instance with a synchronized linked hash map for its
-     * keys.
-     */
-    public SharedKeysMap() {
-        this(Collections.synchronizedMap(new LinkedHashMap<>()));
-    }
-
-    /**
      * Creates a new instance.
      *
      * @param keyMap a map which maps from keys to indices. The indices must be
-     *               in the range {@code [0,keyMap.size()-1]}. This map will add new keys to
-     *               the keyMap if necessary, and assign {@code keyMap.size()} to each new
-     *               key. Keys may be added to this map, but may never be removed.
+     *               in the range {@code [0,keyMap.size()-1]}.
      *               <p>
      *               This map must be immutable.
      */
@@ -122,18 +110,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         return false;
     }
 
-    private int ensureCapacity(K key) {
-        // Method computeIfAbsent is not available in UnmodifiableMap,
-        // so we have to try a get() first.
-        Integer indexNullable = keyMap.get(key);
-        int index = indexNullable == null ? keyMap.computeIfAbsent(key, k -> keyMap.size()) : indexNullable;
-        if (values.length <= index) {
-            Object[] temp = new Object[index + 1];
-            System.arraycopy(values, 0, temp, 0, values.length);
-            values = temp;
-        }
-        return index;
-    }
+
 
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
@@ -169,14 +146,20 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
     @Override
     public V put(K key, V value) {
-        int index = ensureCapacity(key);
+        Integer index = keyMap.get(key);
+        if (index == null) {
+            throw new UnsupportedOperationException("cannot put key=" + key + " value=" + value);
+        }
         return setValue(index, key, value);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V remove(Object key) {
-        int index = ensureCapacity((K) key);
+        Integer index = keyMap.get(key);
+        if (index == null) {
+            throw new UnsupportedOperationException("cannot remove key=" + key);
+        }
         return removeValue(index, (K) key);
     }
 

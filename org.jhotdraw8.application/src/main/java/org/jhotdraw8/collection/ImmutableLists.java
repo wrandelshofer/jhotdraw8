@@ -103,6 +103,10 @@ public class ImmutableLists {
             @SuppressWarnings("unchecked")
             Collection<T> unchecked = (Collection<T>) iterable;
             return ofCollection(unchecked);
+        } else if (iterable instanceof ReadOnlyCollection) {
+            @SuppressWarnings("unchecked")
+            ReadOnlyCollection<T> unchecked = (ReadOnlyCollection<T>) iterable;
+            return ofCollection(unchecked);
         }
         ArrayList<T> list = new ArrayList<>();
         for (T t : iterable) {

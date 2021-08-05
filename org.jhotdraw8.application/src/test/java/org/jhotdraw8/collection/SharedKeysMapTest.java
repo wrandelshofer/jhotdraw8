@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -32,10 +33,12 @@ public class SharedKeysMapTest {
     @Test
     public void testGetOrDefault() {
         // GIVEN
-        SharedKeysMap<Object, Object> instance = new SharedKeysMap<>();
+        LinkedHashMap<Object, Integer> keysMap = new LinkedHashMap<>();
+        keysMap.put("k", 0);
+        SharedKeysMap<Object, Object> instance = new SharedKeysMap<>(Collections.unmodifiableMap(keysMap));
 
         // WHEN getOrDefault and no value has been put
-        Object key = "dummyKey";
+        Object key = "k";
         Object defaultValue = "defaultValue";
         Object result = instance.getOrDefault(key, defaultValue);
 
@@ -61,7 +64,12 @@ public class SharedKeysMapTest {
     @Test
     public void testConcurrentModification() {
         // GIVEN
-        SharedKeysMap<String, Integer> instance = new SharedKeysMap<>();
+        LinkedHashMap<String, Integer> keyMap = new LinkedHashMap<>();
+        keyMap.put("one", 0);
+        keyMap.put("two", 1);
+        keyMap.put("three", 2);
+        keyMap.put("four", 3);
+        SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
         instance.put("one", 1);
         instance.put("two", 2);
 
@@ -84,6 +92,10 @@ public class SharedKeysMapTest {
     public void testSharing() {
         // GIVEN
         HashMap<String, Integer> keyMap = new HashMap<>();
+        keyMap.put("one", 0);
+        keyMap.put("two", 1);
+        keyMap.put("three", 2);
+        keyMap.put("four", 3);
         SharedKeysMap<String, Integer> instance1 = new SharedKeysMap<>(keyMap);
         SharedKeysMap<String, Integer> instance2 = new SharedKeysMap<>(keyMap);
 
@@ -117,7 +129,10 @@ public class SharedKeysMapTest {
     public void testMapChangeListener() {
         // GIVEN
         HashMap<String, Integer> keyMap = new HashMap<>();
-        SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
+        keyMap.put("one", 0);
+        keyMap.put("two", 1);
+        keyMap.put("three", 2);
+        SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(Collections.unmodifiableMap(keyMap));
 
         List<String> changes = new ArrayList<>();
         MapChangeListener<String, Integer> listener = change -> {
@@ -148,6 +163,10 @@ public class SharedKeysMapTest {
     public void testInvalidationListener() {
         // GIVEN
         HashMap<String, Integer> keyMap = new HashMap<>();
+        keyMap.put("one", 0);
+        keyMap.put("two", 1);
+        keyMap.put("three", 2);
+        keyMap.put("four", 3);
         SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
 
         int[] count = {0};
@@ -173,6 +192,10 @@ public class SharedKeysMapTest {
     public void testValuesIterator() {
         // GIVEN
         Map<String, Integer> keyMap = new LinkedHashMap<>();
+        keyMap.put("one", 0);
+        keyMap.put("two", 1);
+        keyMap.put("three", 2);
+        keyMap.put("four", 3);
         SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
 
         // WHEN
@@ -211,6 +234,10 @@ public class SharedKeysMapTest {
     public void testKeysIterator() {
         // GIVEN
         Map<String, Integer> keyMap = new LinkedHashMap<>();
+        keyMap.put("one", 0);
+        keyMap.put("two", 1);
+        keyMap.put("three", 2);
+        keyMap.put("four", 3);
         SharedKeysMap<String, Integer> instance = new SharedKeysMap<>(keyMap);
 
         // WHEN
