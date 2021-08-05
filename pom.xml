@@ -22,7 +22,7 @@
     <module>org.jhotdraw8.draw</module>
     <module>org.jhotdraw8.grapher</module>
     <module>org.jhotdraw8.teddy</module>
-    <module>org.jhotdraw8.misc</module>
+    <module>org.jhotdraw8.examples</module>
   </modules>
 
   <properties>

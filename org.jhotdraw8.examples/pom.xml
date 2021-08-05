@@ -15,24 +15,25 @@
     <version>1.0</version>
   </parent>
 
-  <artifactId>org.jhotdraw8.grapher</artifactId>
+  <artifactId>org.jhotdraw8.misc</artifactId>
   <packaging>jar</packaging>
-  <name>JHotDraw8 Grapher Demo Application</name>
+  <name>JHotDraw8 Miscellaneous Demos</name>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.grapher</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.grapher</testSourceDirectory>
+    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.examples</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.examples</testSourceDirectory>
     <resources>
       <resource>
-        <directory>${basedir}/src/main/java/org.jhotdraw8.grapher</directory>
+        <directory>${basedir}/src/main/java/org.jhotdraw8.examples</directory>
       </resource>
     </resources>
     <testResources>
       <testResource>
-        <directory>${basedir}/src/test/java/org.jhotdraw8.grapher</directory>
+        <directory>${basedir}/src/test/java/org.jhotdraw8.examples</directory>
       </testResource>
     </testResources>
   </build>
+
 
   <dependencies>
     <dependency>

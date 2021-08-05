@@ -1,0 +1,1358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @(#)build-jhotdraw.xml
+  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  -->
+<project name="jhotdraw8" basedir="." default="all"
+         xmlns:unless="ant:unless"
+         xmlns:if="ant:if"
+>
+  <!-- gobal build properties -->
+  <property file="build.properties"/>
+
+  <!-- ignore system classpath to get consistent builds on different platforms -->
+  <property name="build.sysclasspath" value="ignore"/>
+
+
+  <exec executable="git" outputproperty="git.hash.date.author" failifexecutionfails="false" errorproperty="">
+    <arg value="log"/>
+    <arg value="-1"/>
+    <arg value="--pretty=format:%h %cI %cn"/>
+  </exec>
+  <exec executable="git" outputproperty="git.describe" failifexecutionfails="false" errorproperty="">
+    <arg value="describe"/>
+    <arg value="--tags"/>
+    <arg value="--always"/>
+    <arg value="HEAD"/>
+  </exec>
+  <exec executable="git" outputproperty="git.version" failifexecutionfails="false" errorproperty="">
+    <arg value="log"/>
+    <arg value="--max-count=1"/>
+    <arg value="--date=short"/>
+    <arg value="--pretty=format:%cd_%h"/>
+  </exec>
+
+  <tstamp>
+    <format property="pub-year" pattern="yyyy" locale="en,GB"/>
+  </tstamp>
+  <property name="name" value="${ant.project.name}"/>
+  <property name="copyright" value="Copyright © ${pub-year} ${author}."/>
+  <property name="version" value="${git.version}"/>
+  <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
+
+  <property name="manifest.application-name" value="${ant.project.name}"/>
+  <property name="manifest.implementation-version" value="${version}"/>
+  <property name="manifest.implementation-vendor" value="org.jhotdraw"/>
+  <property name="manifest.main-class" value="org.jhotdraw8.grapher.GrapherApplication"/>
+
+  <property name="build" value="build"/>
+  <property name="bin" value="bin"/>
+  <property name="doc" value="doc"/>
+  <property name="dist" value="dist/${name}-${version}"/>
+  <property name="build.javadoc" value="${build}/javadoc"/>
+  <property name="lib" value="lib"/>
+  <property name="lib.runtime" value="${lib}/runtime"/>
+  <property name="lib.compile" value="${lib}/compile"/>
+  <property name="lib.doc" value="${lib}/doc"/>
+  <property name="build.doc" value="${build}/doc"/>
+  <property name="lib.test" value="${lib}/test"/>
+  <property name="src" value="src"/>
+  <property name="doc" location="doc"/>
+  <property name="build.main.classes" value="${build}/classes"/>
+  <property name="module.classes" value="${build}/module-classes"/>
+  <property name="build.main.modules" value="${build}/modules"/>
+  <property name="build.doc.classes" value="${build}/doc/classes"/>
+  <property name="builddoc" value="builddoc"/>
+  <property name="build.doc.tools" value="${build}/doc/tools"/>
+  <property name="lib.doc.docbook" value="${build.doc.tools}/docbook-5.0b5"/>
+  <property name="lib.doc.xalan" value="${build.doc.tools}/xalan-j_2_7_2"/>
+  <property name="lib.doc.docbook-xsl" value="${build.doc.tools}/docbook-xsl-ns-1.79.1"/>
+  <property name="build.doc.html" value="${build}/doc/html"/>
+  <property name="build.doc.chunked" value="${build}/doc/chunk"/>
+  <property name="build.doc" value="${build}/doc"/>
+  <property name="build.main.jars" value="${build}/jars"/>
+  <property name="dist.standalone" value="${dist}/${ant.project.name}/${manifest.application-name}"/>
+
+  <property name="src.main.java" value="${src}/main/java"/>
+  <property name="src.doc.java" value="${src}/doc/java"/>
+  <property name="src.test.java" value="${src}/test/java"/>
+  <property name="src.doc.xsl" value="${src}/doc/xsl"/>
+
+
+  <target name="init">
+    <echo>app.version: ${version}</echo>
+    <echo>java.home: ${java.home}</echo>
+    <echo>The following values must be configured in build.properties</echo>
+    <echo>jdk : ${jdk}</echo>
+    <echo>jdk.version: ${jdk.version}</echo>
+    <echo>jdk.modular : ${jdk.modular}</echo>
+    <echo>jdk.modular.version: ${jdk.modular.version}</echo>
+  </target>
+
+  <target name="do-clean.compile" depends="init">
+    <delete dir="${build.main.classes}"/>
+    <delete dir="${module.classes}"/>
+  </target>
+  <target name="do-clean.jar" depends="init">
+    <delete dir="${build.main.jars}"/>
+  </target>
+  <target name="do-clean.dist" depends="init">
+    <delete dir="${dist.standalone}"/>
+  </target>
+  <target name="do-clean" depends="init">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+  </target>
+
+  <target name="do-compile-classes" depends="init">
+    <mkdir dir="${build.main.classes}"/>
+    <echo message="javac executable=${jdk}/bin/javac"/>
+    <javac executable="${jdk}/bin/javac" fork="yes"
+           source="${jdk.version}" target="${jdk.version}"
+           encoding="UTF-8" destdir="${build.main.classes}"
+           debug="true"
+           verbose="false"
+    >
+      <src path="org.jhotdraw8.application/src/main/java/org.jhotdraw8.application/"/>
+      <src path="org.jhotdraw8.draw/src/main/java/org.jhotdraw8.draw"/>
+      <compilerarg value="-Xlint"/>
+      <exclude name="**/*DepsMain.java"/>
+      <exclude name="module-info.java"/>
+      <exclude name="**/*ResourceBundleProvider.java"/>
+      <exclude name="**/ModulepathResources.java"/>
+      <!-- Use JavaFX that came with Java SE 8 -->
+      <!--
+      <classpath>
+        <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
+      </classpath>
+      -->
+      <compilerarg value="-version"/>
+    </javac>
+    <copy todir="${build.main.classes}">
+      <fileset dir="org.jhotdraw8.application/src/main/java/org.jhotdraw8.application">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.draw/src/main/java/org.jhotdraw8.draw">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.grapher/src/main/java/org.jhotdraw8.grapher">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.examples/src/main/java/org.jhotdraw8.examples">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="do-compile-modules" depends="init">
+    <mkdir dir="${module.classes}"/>
+    <javac executable="${jdk.modular}/bin/javac" fork="yes"
+           source="${jdk.modular.version}" target="${jdk.modular.version}"
+           encoding="UTF-8" destdir="${module.classes}"
+           debug="true"
+           verbose="false"
+           createmissingpackageinfoclass="false"
+    >
+      <compilerarg value="-Xlint"/>
+      <compilerarg value="-XprintRounds"/>
+      <compilerarg value="-Xdiags:verbose"/>
+      <modulesourcepath path="org.jhotdraw8.application/src/main/java/"/>
+      <modulesourcepath path="org.jhotdraw8.draw/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.grapher/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.teddy/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.examples/src/main/java"/>
+      <modulepath>
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+      </modulepath>
+      <classpath>
+        <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
+      </classpath>
+      <compilerarg value="-version"/>
+    </javac>
+    <copy todir="${module.classes}">
+      <fileset dir="org.jhotdraw8.application/src/main/java">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.draw/src/main/java">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.grapher/src/main/java">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.teddy/src/main/java">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.examples/src/main/java">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.svg"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="do-docbook.unzip-docbook" depends="init">
+    <unzip dest="${build.doc.tools}" src="${lib.doc}/docbook-5.0b5.zip"/>
+    <unzip dest="${build.doc.tools}" src="${lib.doc}/docbook-xsl-ns-1.79.1.zip"/>
+    <copy todir="${lib.doc.xalan}">
+      <fileset dir="${lib.doc}">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="do-docbook.copy" depends="init">
+    <copy todir="${builddoc}">
+      <fileset dir="${doc}"/>
+    </copy>
+    <copy todir="${lib.doc.docbook-xsl}">
+      <fileset dir="${doc}/config">
+        <include name="*.xsl"/>
+      </fileset>
+    </copy>
+    <copy todir="${lib.doc.docbook-xsl}">
+      <fileset dir="${doc}">
+        <include name="custom-*.xsl"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="do-docbook.crossreference" depends="init"
+          description="creates a cross-reference uses unix xsltproc command">
+
+    <!--
+            <apply executable="xsltproc" dir=".">
+                <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+                <env key="XML_DEBUG_CATALOG" value="1"/>
+
+                <arg value="- -output"/>
+                <arg value="${builddoc}/handbook/general/introduction/crossreference.xml"/>
+                <arg value="- -param"/>
+                <arg value="writing.mode"/>
+                <arg value="lr"/>
+                <arg value="- -xinclude"/>
+                <arg value="${src.doc.xsl}/crossreference.xsl"/>
+                <srcfile/>
+
+                <fileset dir="${builddoc}">
+                    <include name="**/Book.xml"/>
+                </fileset>
+            </apply>
+            -->
+
+    <exec executable="xsltproc" dir=".">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+
+      <arg value="--output"/>
+      <arg value="${builddoc}/handbook/general/introduction/crossreference.xml"/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--xinclude"/>
+      <arg value="${src.doc.xsl}/crossreference.xsl"/>
+      <arg value="${doc}/helloworld/Book.xml"/>
+    </exec>
+    <exec executable="xsltproc" dir=".">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+      <arg value="--output"/>
+      <arg value="${builddoc}/handbook/general/introduction/References.xml"/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--xinclude"/>
+      <arg value="${src.doc.xsl}/collectbiblio.xsl"/>
+      <arg value="${doc}/handbook/Book.xml"/>
+    </exec>
+    <exec executable="xsltproc" dir=".">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+      <arg value="--output"/>
+      <arg value="${builddoc}/specification/introduction/References.xml"/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--xinclude"/>
+      <arg value="${src.doc.xsl}/collectbiblio.xsl"/>
+      <arg value="${doc}/specification/Book.xml"/>
+    </exec>
+  </target>
+  <target name="do-docbook.validate" depends="init,do-docbook.copy,do-docbook.crossreference">
+    <!--property name="docbookfiles" value="doc/JHotDraw8Handbook.xml"/-->
+    <pathconvert property="docbookfiles" pathsep=" ">
+      <map from="${basedir}${file.separator}" to=""/>
+
+      <!--            <fileset dir="${builddoc}/handbook">
+                      <include name="*.xml"/>
+                      <exclude name="catalog.xml"/>
+                  </fileset>
+                  <fileset dir="${builddoc}/specification">
+                      <include name="*.xml"/>
+                      <exclude name="catalog.xml"/>
+                  </fileset>  -->
+      <fileset dir="${builddoc}">
+        <include name="**/Book.xml"/>
+      </fileset>
+    </pathconvert>
+    <echo message="docbookfiles: ${docbookfiles}"/>
+    <exec executable="xmllint" dir=".">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/validate/catalog.xml"/>
+
+      <arg value="--noout"/>
+      <arg value="--xinclude"/>
+      <arg value="--schema"/>
+      <arg value="${lib.doc.docbook}/xsd/docbook.xsd"/>
+      <!--           <arg value="- -relaxng"/>
+                  <arg value="${lib.doc.docbook}/rng/docbook.rng"/>-->
+      <arg line="${docbookfiles}"/>
+    </exec>
+  </target>
+  <target name="do-docbook.transform-hello.xsltproc" depends="init" description="uses unix xsltproc command">
+    <apply executable="xsltproc" dir="." force="true">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${builddoc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+      <arg value="--output"/>
+      <targetfile/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--stringparam"/>
+      <arg value="bibliography.collection"/>
+      <arg value="${basedir}/${doc}/bibliography.xml"/>
+      <arg value="--xinclude"/>
+      <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+      <srcfile/>
+
+      <fileset dir="${builddoc}" includes="*.xml"/>
+      <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
+    </apply>
+
+    <apply executable="xsltproc" dir="." force="true">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${builddoc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+
+      <arg value="--output"/>
+      <targetfile/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--stringparam"/>
+      <arg value="bibliography.collection"/>
+      <arg value="${basedir}/${doc}/bibliography.xml"/>
+      <arg value="--xinclude"/>
+      <arg value="${lib.doc.docbook-xsl}/epub3/chunk.xsl"/>
+      <srcfile/>
+
+      <fileset dir="${doc}">
+        <include name="helloworld.xml"/>
+      </fileset>
+      <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/epub3/helloworld/*"/>
+    </apply>
+    <zip basedir="${basedir}/${build}/doc/epub3/helloworld"
+         destfile="${basedir}/${build}/doc/epub3/helloworld.epub">
+      <include name="mimetype"/>
+      <include name="META-INF/**"/>
+      <include name="OEBPS/**"/>
+    </zip>
+
+  </target>
+  <target name="do-docbook.transform.xsltproc"
+          depends="init,do-docbook.transform.xsltproc.xhtml5,do-docbook.transform.xsltproc.chunked,do-docbook.transform.xsltproc.epub3"
+          description="uses unix xsltproc command">
+  </target>
+  <target name="do-docbook.transform.xsltproc.xhtml5" depends="init" description="uses unix xsltproc command">
+    <apply executable="xsltproc" dir="." force="true">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+
+      <arg value="--output"/>
+      <targetfile/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--stringparam"/>
+      <arg value="bibliography.collection"/>
+      <arg value="${basedir}/${doc}/bibliography.xml"/>
+      <arg value="--xinclude"/>
+      <arg value="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+      <!--<arg value="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"/>-->
+      <srcfile/>
+
+      <fileset dir="${builddoc}">
+        <include name="handbook/JHotDraw8Handbook.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
+      </fileset>
+      <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.html}/*/index.html"/>
+    </apply>
+  </target>
+  <target name="do-docbook.transform.xsltproc.chunked" depends="init,do-docbook.validate"
+          description="uses unix xsltproc command">
+    <apply executable="xsltproc" dir="." force="true">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+
+      <arg value="--output"/>
+      <targetfile/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--stringparam"/>
+      <arg value="bibliography.collection"/>
+      <arg value="${basedir}/${doc}/bibliography.xml"/>
+      <arg value="--xinclude"/>
+      <arg value="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
+      <srcfile/>
+
+      <fileset dir="${builddoc}">
+        <include name="handbook/JHotDraw8Handbook.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
+      </fileset>
+      <mapper type="glob" from="*.xml" to="${basedir}/${build.doc.chunked}/*/index.html"/>
+    </apply>
+    <copy toDir="${basedir}/${build.doc.chunked}/handbook/JHotDraw8Handbook">
+      <fileset dir="doc/specification/requirements/draw">
+        <include name="**/*.svg"/>
+      </fileset>
+    </copy>
+    <copy toDir="${basedir}/${build.doc.chunked}/specification/JHotDraw8SRS">
+      <fileset dir="doc/specification/requirements/draw">
+        <include name="**/*.svg"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="do-docbook.transform.xsltproc.fo" depends="init" description="uses unix xsltproc command">
+    <apply executable="xsltproc" dir="." force="true">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+
+      <arg value="--output"/>
+      <targetfile/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--stringparam"/>
+      <arg value="bibliography.collection"/>
+      <arg value="${basedir}/${doc}/bibliography.xml"/>
+      <arg value="--xinclude"/>
+      <arg value="${lib.doc.docbook-xsl}/fo/docbook.xsl"/>
+      <srcfile/>
+
+      <fileset dir="${builddoc}">
+        <include name="handbook/JHotDraw8Handbook.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
+      </fileset>
+      <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/fo/*.xml"/>
+    </apply>
+  </target>
+
+  <target name="do-docbook.transform.xsltproc.epub3" depends="init" description="uses unix xsltproc command">
+    <apply executable="xsltproc" dir="." force="true">
+      <env key="XML_CATALOG_FILES" value="${basedir}/${doc}/catalog.xml"/>
+      <env key="XML_DEBUG_CATALOG" value="1"/>
+
+      <arg value="--output"/>
+      <targetfile/>
+      <arg value="--param"/>
+      <arg value="writing.mode"/>
+      <arg value="lr"/>
+      <arg value="--stringparam"/>
+      <arg value="bibliography.collection"/>
+      <arg value="${basedir}/${doc}/bibliography.xml"/>
+      <arg value="--xinclude"/>
+      <arg value="${lib.doc.docbook-xsl}/epub3/chunk.xsl"/>
+      <srcfile/>
+
+      <fileset dir="${builddoc}">
+        <include name="handbook/JHotDraw8Handbook.xml"/>
+        <include name="specification/JHotDraw8SRS.xml"/>
+      </fileset>
+      <mapper type="glob" from="*.xml" to="${basedir}/${build}/doc/epub3/*"/>
+    </apply>
+
+    <copy toDir="${basedir}/${build}/doc/epub3/handbook/OEBPS">
+      <fileset dir="${doc}/handbook/draw">
+        <include name="**/*.svg"/>
+      </fileset>
+    </copy>
+    <copy toDir="${basedir}/${build}/doc/epub3/specification/OEBPS">
+      <fileset dir="doc/specification/requirements/draw">
+        <include name="**/*.svg"/>
+      </fileset>
+    </copy>
+
+    <zip basedir="${basedir}/${build}/doc/epub3/specification"
+         destfile="${basedir}/${build}/doc/epub3/specification.epub">
+      <include name="mimetype"/>
+      <include name="META-INF/**"/>
+      <include name="OEBPS/**"/>
+    </zip>
+  </target>
+
+  <target name="do-docbook.transform.built-in" depends="init" description="uses ant xslt command">
+    <xslt basedir="${doc}" destdir="${build.doc.html}/book-built-in"
+          style="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl">
+      <include name="JHotDraw8Handbook.xml"/>
+    </xslt>
+  </target>
+  <target name="do-docbook.transform.xbuilt-in-saxon" depends="init" description="uses saxon with ant xslt command">
+    <xslt basedir="${doc}" destdir="${build.doc.html}/xslt-with-saxon"
+          style="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl">
+      <include name="JHotDraw8Handbook.xml"/>
+      <classpath>
+        <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+      <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
+  </target>
+  <target name="do-docbook.transform.xalan.chunked.helloworld" depends="init" description="uses xalan">
+    <mkdir dir="${build.doc.chunked}/xalan/helloworld"/>
+    <java classname="org.apache.xalan.xslt.Process" dir="${build.doc.chunked}/xalan/helloworld">
+      <arg value="-in"/>
+      <arg file="${doc}/helloworld-assembly-entity.xml"/>
+      <arg value="-xsl"/>
+      <arg file="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
+      <classpath>
+        <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+  <macrodef name="call-saxon-9he">
+    <!-- calls Saxon 9 HE from docbook tools -->
+    <attribute name="srcfile"/>
+    <attribute name="srcdir"/>
+    <attribute name="destdir"/>
+    <attribute name="imgdestdir" default="@{destdir}"/>
+    <attribute name="destfile"/>
+    <attribute name="style"/>
+    <sequential>
+      <mkdir dir="@{destdir}"/>
+      <java classname="com.icl.saxon.StyleSheet" dir="@{destdir}" fork="true">
+        <jvmarg value="-Dxslthl.config=file://${basedir}/${lib.doc.docbook-xsl}/highlighting/xslthl-config.xml"/>
+        <jvmarg value="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+        <jvmarg value="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+        <jvmarg value="-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+        <jvmarg value="-Dxml.catalog.files=${basedir}/${doc}/config/catalog.xml"/>
+        <arg line="-x org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+        <arg line="-y org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+        <arg line="-r org.apache.xml.resolver.tools.CatalogResolver"/>
+        <arg value="-o"/>
+        <arg file="@{destfile}"/>
+        <arg file="@{srcfile}"/>
+        <arg file="@{style}"/>
+        <classpath>
+          <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+            <include name="**/*.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc.xalan}">
+            <include name="**/*.jar"/>
+          </fileset>
+          <dirset dir="${builddoc}/config">
+            <!-- includes the file CatalogManager.properties in the classpath -->
+          </dirset>
+        </classpath>
+      </java>
+
+      <copy toDir="@{imgdestdir}" flatten="true">
+        <fileset dir="@{srcdir}">
+          <include name="**/*.svg"/>
+          <include name="**/*.png"/>
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
+  <macrodef name="call-saxon">
+    <!-- calls Saxon 9 HE from docbook tools -->
+    <attribute name="srcfile"/>
+    <attribute name="srcdir"/>
+    <attribute name="destdir"/>
+    <attribute name="imgdestdir" default="@{destdir}"/>
+    <attribute name="destfile"/>
+    <attribute name="style"/>
+    <sequential>
+      <mkdir dir="@{destdir}"/>
+      <java classname="com.icl.saxon.StyleSheet" dir="@{destdir}" fork="true">
+        <jvmarg value="-Dxslthl.config=file://${basedir}/${lib.doc.docbook-xsl}/highlighting/xslthl-config.xml"/>
+        <jvmarg value="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+        <jvmarg value="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+        <jvmarg value="-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+        <jvmarg value="-Dxml.catalog.files=${basedir}/${doc}/config/catalog.xml"/>
+        <arg line="-x org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+        <arg line="-y org.apache.xml.resolver.tools.ResolvingXMLReader"/>
+        <arg line="-r org.apache.xml.resolver.tools.CatalogResolver"/>
+        <arg value="-o"/>
+        <arg file="@{destfile}"/>
+        <arg file="@{srcfile}"/>
+        <arg file="@{style}"/>
+        <classpath>
+          <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+            <include name="**/saxon*.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc.xalan}">
+            <include name="**/xalan.jar"/>
+            <include name="**/xslthl-2.1.3.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc}/xerces-2.12.0-patched">
+            <include name="**/*.jar"/>
+          </fileset>
+          <dirset dir="${builddoc}/config">
+            <!-- includes the file CatalogManager.properties in the classpath -->
+          </dirset>
+        </classpath>
+      </java>
+
+      <copy toDir="@{imgdestdir}" flatten="false">
+        <fileset dir="@{srcdir}">
+          <include name="**/*.svg"/>
+          <include name="**/*.png"/>
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
+  <macrodef name="call-saxon-9.9.1.1he">
+    <!-- calls Saxon HE 9.1.1.1 (does not work because chunking not supported) -->
+    <attribute name="srcfile"/>
+    <attribute name="srcdir"/>
+    <attribute name="destdir"/>
+    <attribute name="imgdestdir" default="@{destdir}"/>
+    <attribute name="destfile"/>
+    <attribute name="style"/>
+    <sequential>
+      <mkdir dir="@{destdir}"/>
+      <java classname="net.sf.saxon.Transform" dir="@{destdir}" fork="true">
+        <arg value="-xi:on"/>
+        <arg prefix="-xsl:" file="@{style}"/>
+        <arg prefix="-catalog:" file="@{srcdir}/../config/catalog.xml"/>
+        <arg prefix="-s:" file="@{srcfile}"/>
+        <arg prefix="-o:" file="@{destfile}"/>
+        <classpath>
+          <fileset dir="${lib.doc}/xerces-2.12.0-patched">
+            <include name="**/*.jar"/>
+          </fileset>
+          <fileset dir="${lib.doc}/SaxonHE9-9-1-1J">
+            <include name="**/*.jar"/>
+          </fileset>
+        </classpath>
+      </java>
+
+      <copy toDir="@{imgdestdir}" flatten="true">
+        <fileset dir="@{srcdir}">
+          <include name="**/*.svg"/>
+          <include name="**/*.png"/>
+        </fileset>
+      </copy>
+    </sequential>
+  </macrodef>
+  <target name="do-docbook.transform.saxon.chunk" depends="init,do-docbook.crossreference" description="uses saxon">
+    <call-saxon destdir="${build.doc}/chunk/handbook"
+                srcfile="${builddoc}/handbook/Book.xml"
+                srcdir="${builddoc}/handbook"
+                destfile="${build.doc}/chunk/handbook/JHotDraw8Handbook.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
+    />
+
+    <call-saxon destdir="${build.doc}/chunk/specification"
+                srcfile="${builddoc}/specification/Book.xml"
+                srcdir="${builddoc}/specification"
+                destfile="${build.doc}/chunk/specification/JHotDraw8SRS.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-chunk.xsl"
+    />
+  </target>
+  <target name="do-docbook.transform.saxon.epub3" depends="init,do-docbook.crossreference" description="uses saxon">
+    <call-saxon destdir="${build.doc}/epub3/handbook"
+                srcfile="${builddoc}/handbook/Book.xml"
+                srcdir="${builddoc}/handbook"
+                destfile="${build.doc.html}/epub3/JHotDraw8Handbook.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
+                imgdestdir="${build.doc}/epub3/handbook/OEBPS"
+    />
+
+    <call-saxon destdir="${build.doc}/epub3/specification"
+                srcfile="${builddoc}/specification/Book.xml"
+                srcdir="${builddoc}/specification"
+                destfile="${build.doc.html}/epub3/specification/JHotDraw8SRS.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
+                imgdestdir="${build.doc}/epub3/specification/OEBPS"
+    />
+
+    <zip basedir="${basedir}/${build.doc}/epub3/specification"
+         destfile="${basedir}/${build.doc}/epub3/JHotDraw8-Specification.epub">
+      <include name="mimetype"/>
+      <include name="META-INF/**"/>
+      <include name="OEBPS/**"/>
+    </zip>
+    <zip basedir="${basedir}/${build.doc}/epub3/handbook"
+         destfile="${basedir}/${build.doc}/epub3/JHotDraw8-Handbook.epub">
+      <include name="mimetype"/>
+      <include name="META-INF/**"/>
+      <include name="OEBPS/**"/>
+    </zip>
+
+
+  </target>
+  <target name="do-docbook.transform.saxon.xhtml5" depends="init,do-docbook.crossreference" description="uses saxon">
+    <call-saxon destdir="${build.doc}/html5/handbook"
+                srcfile="${builddoc}/handbook/Book.xml"
+                srcdir="${builddoc}/handbook"
+                destfile="${build.doc}/html5/handbook/JHotDraw8Handbook.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
+    />
+
+    <call-saxon destdir="${build.doc}/html5/specification"
+                srcfile="${builddoc}/specification/Book.xml"
+                srcdir="${builddoc}/specification"
+                destfile="${build.doc}/html5/specification/JHotDraw8Specification.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-xhtml5.xsl"
+    />
+  </target>
+  <target name="do-docbook.transform.xalan.chunked" depends="init,do-docbook.crossreference" description="uses xalan">
+    <mkdir dir="${build.doc.chunked}/xalan/handbook"/>
+    <java classname="org.apache.xalan.xslt.Process" dir="${build.doc.chunked}/xalan/handbook">
+      <!--
+              <jvmarg value="-Djavax.xml.parsers.DocumentBuilderFactory=org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+      <jvmarg value="-Djavax.xml.parsers.SAXParserFactory=org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+      -->
+      <jvmarg value="-Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+      <jvmarg value="-Dxml.catalog.files=${basedir}/${doc}/catalog.xml"/>
+      <jvmarg value="-Dxml.catalog.verbosity=1"/>
+      <jvmarg value="-Dxslthl.config=file:///${lib.doc.docbook-xsl}/highlighting/xslthl-config.xml"/>
+      <arg value="-ENTITYRESOLVER"/>
+      <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
+      <arg value="-URIRESOLVER"/>
+      <arg value="org.apache.xml.resolver.tools.CatalogResolver"/>
+      <arg value="-in"/>
+      <arg file="${builddoc}/handbook/Book.xml"/>
+      <arg value="-xsl"/>
+      <arg file="${lib.doc.docbook-xsl}/xhtml5/chunk.xsl"/>
+      <arg line="-param highlight.source 1"/>
+      <arg line="-param callout.graphics 0"/>
+      <arg line="-param callout.unicode 1 "/>
+      <!--
+      <arg line="-param use.extensions 1"/>
+      <arg line="-param linenumbering.extension 1"/>
+      -->
+      <classpath>
+        <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${lib.doc.xalan}">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+  <target name="do-docbook.transform.saxon"
+          depends="init,do-docbook.transform.saxon.xhtml5,do-docbook.transform.saxon.chunk,do-docbook.transform.saxon.epub3"
+          description="uses saxon">
+  </target>
+  <target name="do-docbook.transform.xalan" depends="init" description="uses xalan">
+    <!--<java classname="org.apache.xalan.xslt.EnvironmentCheck">
+        <classpath>
+            <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </java>
+    -->
+    <java classname="org.apache.xalan.xslt.Process">
+      <arg value="-out"/>
+      <arg file="${build.doc.html}/xalan-helloworld-assembly-entity.xhtml"/>
+      <arg value="-in"/>
+      <arg file="${doc}/helloworld-assembly-entity.xml"/>
+      <arg value="-xsl"/>
+      <arg file="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+      <classpath>
+        <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </java>
+  </target>
+  <target name="do-docbook.transform.saxon-helloworld" depends="init" description="uses saxon">
+    <!--        <java classname="com.icl.saxon.StyleSheet">
+                <arg value="-o"/>
+                <arg file="${build.doc.html}/saxon/helloworld.xhtml"/>
+                <arg file="${doc}/HelloWorld/Book.xml"/>
+                <arg file="${lib.doc.docbook-xsl}/xhtml5/docbook.xsl"/>
+                <classpath>
+                    <fileset dir="${lib.doc.docbook-xsl}/tools/lib">
+                        <include name="**/*.jar"/>
+                    </fileset>
+                </classpath>
+            </java>-->
+
+
+    <call-saxon destdir="${build.doc}/epub3/helloworld"
+                srcfile="${doc}/HelloWorld/Book.xml"
+                srcdir="${doc}/HelloWorld"
+                destfile="${basedir}/${build.doc.html}/epub3/HelloWorld.xhtml"
+                style="${lib.doc.docbook-xsl}/custom-epub3.xsl"
+                imgdestdir="${build.doc}/epub3/helloworld/OEBPS"
+    />
+    <zip basedir="${basedir}/${build.doc}/epub3/helloworld"
+         destfile="${basedir}/${build.doc}/epub3/HelloWorld.epub">
+      <include name="mimetype"/>
+      <include name="META-INF/**"/>
+      <include name="OEBPS/**"/>
+    </zip>
+  </target>
+  <target name="do-docbook"
+          depends="do-docbook.copy,do-docbook.compile,do-docbook.unzip-docbook,do-docbook.validate,do-docbook.transform.saxon"
+          description="generates specification and user documentation">
+  </target>
+  <target name="do-uml-to-epub--01-copy-into-build-dir"
+          depends="">
+    <delete dir="${build}/epub-docs"/>
+    <delete file="${build}/jhotdraw-uml.epub"/>
+    <mkdir dir="${build}/epub-docs/contents-html"/>
+    <copy todir="${build}/epub-docs/contents-html">
+      <fileset dir="${doc}/html-docs/contents">
+        <include name="*.html"/>
+      </fileset>
+    </copy>
+  </target>
+  <target name="do-uml-to-epub--02-tidy"
+          depends="">
+    <echo file="${build}/tidy-config.txt">// config file for HTML tidy
+      show-warnings: no
+      indent: auto
+      indent-spaces: 2
+      wrap: 120
+      markup: yes
+      output-xhtml: yes
+      input-xml: no
+      numeric-entities: yes
+      quote-marks: yes
+      quote-nbsp: yes
+      quote-ampersand: no
+      break-before-br: no
+      uppercase-tags: no
+      uppercase-attributes: no
+      char-encoding: utf8
+      new-inline-tags: section
+    </echo>
+    <exec dir="${build}" executable="bash">
+      <arg value="-c"/>
+      <arg value="tidy -config tidy-config.txt -quiet -modify ./epub-docs/contents-html/*.html"/>
+    </exec>
+    <copy todir="${build}/epub-docs/contents-html">
+      <fileset dir="${build}/epub-docs/contents-html">
+        <include name="*.html"/>
+      </fileset>
+      <globmapper from="*.html" to="*.xhtml"/>
+    </copy>
+    <xslt style="${doc}/staruml4-to-epub-tidy.xsl"
+          basedir="${build}/epub-docs/contents-html"
+          includes="*.xhtml"
+          extension=".xhtml"
+          destdir="${build}/epub-docs/OEBPS/contents"
+    >
+    </xslt>
+    <!--
+    <replaceregexp flags="g" encoding="UTF-8">
+      <regexp pattern="\.html"/>
+      <substitution expression=".xhtml"/>
+      <fileset dir="${build}/epub-docs/OEBPS/contents">
+        <include name="*.xhtml"/>
+      </fileset>
+    </replaceregexp>
+    -->
+  </target>
+  <target name="do-uml-to-epub--03-extract-spine"
+          depends=""
+          description="">
+    <xslt style="${doc}/staruml4-to-epub-extract-spine.xsl"
+          in="${build}/epub-docs/OEBPS/contents/navigation.xhtml"
+          out="${build}/epub-spine.txt"
+    />
+    <loadfile property="pub-spine" srcFile="${build}/epub-spine.txt"/>
+
+    <xslt style="${doc}/staruml4-to-epub-extract-toc.xsl"
+          in="${build}/epub-docs/OEBPS/contents/navigation.xhtml"
+          out="${build}/epub-docs/OEBPS/toc.ncx"
+    />
+
+    <copy todir="${build}/epub-docs/OEBPS">
+      <fileset dir="${doc}/html-docs">
+        <include name="**/*.svg"/>
+        <include name="**/*.css"/>
+        <include name="**/*.woff"/>
+      </fileset>
+    </copy>
+    <mkdir dir="${build}/epub-docs/META-INF"/>
+    <delete dir="${build}/epub-docs/contents-html"/>
+    <echo file="${build}/epub-docs/mimetype" message="application/epub+zip"/>
+    <echo file="${build}/epub-docs/META-INF/container.xml">&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+      &lt;container xmlns="urn:oasis:names:tc:opendocument:xmlns:container" version="1.0"&gt;
+      &lt;rootfiles&gt;
+      &lt;rootfile full-path="OEBPS/package.opf" media-type="application/oebps-package+xml"/&gt;
+      &lt;/rootfiles&gt;
+      &lt;/container&gt;
+    </echo>
+
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-html-files.fileset">
+      <include name="**/*.xhtml"/>
+      <exclude name="**/navigation.xhtml"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-html-files" refid="pub-html-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="html:"/>
+    </pathconvert>
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-svg-files.fileset">
+      <include name="**/*.svg"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-svg-files" refid="pub-svg-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="svg:"/>
+    </pathconvert>
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-css-files.fileset">
+      <include name="**/*.css"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-css-files" refid="pub-css-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="css:"/>
+    </pathconvert>
+    <fileset dir="${build}/epub-docs/OEBPS" id="pub-woff-files.fileset">
+      <include name="**/*.woff"/>
+    </fileset>
+    <pathconvert targetos="unix" property="pub-woff-files" refid="pub-woff-files.fileset"
+                 pathsep=",">
+      <map from="${basedir}/${build}/epub-docs/OEBPS/" to="woff:"/>
+    </pathconvert>
+
+    <tstamp>
+      <format property="pub-modified" pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ" locale="en,GB"/>
+    </tstamp>
+    <property name="pub-title" value="JHotDraw 8 Specification ${pub-modified}"/>
+    <property name="pub-author" value="Werner Randelshofer"/>
+    <property name="pub-rights-holder" value="The authors and contributors of JHotDraw"/>
+    <property name="pub-copyright" value="Copyright © ${pub-year} ${pub-rights-holder}"/>
+    <echo file="${build}/epub-docs/OEBPS/package.opf">&lt;?xml version="1.0" encoding="utf-8" standalone="no"?&gt;
+      &lt;package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:dcterms="http://purl.org/dc/terms/" version="3.0" xml:lang="en" unique-identifier="pub-identifier"&gt;
+      &lt;metadata&gt;
+      &lt;dc:identifier id="pub-identifier"&gt;_d0e2&lt;/dc:identifier&gt;
+      &lt;meta id="meta-identifier" property="dcterms:identifier"&gt;_d0e2&lt;/meta&gt;
+      &lt;dc:title id="pub-title"&gt;${pub-title}&lt;/dc:title&gt;
+      &lt;meta property="dcterms:title" id="meta-title"&gt;${pub-title}&lt;/meta&gt;
+      &lt;dc:language id="pub-language"&gt;en&lt;/dc:language&gt;
+      &lt;meta property="dcterms:language" id="meta-language"&gt;en&lt;/meta&gt;
+      &lt;meta property="dcterms:modified"&gt;${pub-modified}&lt;/meta&gt;&lt;!--The preceding date value is actually
+      local time (not UTC) in UTC format because there is no function in XSLT 1.0 to generate a correct UTC time--&gt;
+      &lt;meta id="meta-creator2" property="dcterms:creator"&gt;Werner Randelshofer&lt;/meta&gt;
+      &lt;dc:creator id="pub-creator2"&gt;${pub-author}&lt;/dc:creator&gt;
+      &lt;meta property="dcterms:date"&gt;2017&lt;/meta&gt;
+      &lt;dc:date&gt;${pub-year}&lt;/dc:date&gt;
+      &lt;meta property="dcterms:rights"&gt;${pub-copyright}&lt;/meta&gt;
+      &lt;dc:rights&gt;${pub-copyright}&lt;/dc:rights&gt;
+      &lt;meta property="dcterms:rightsHolder"&gt;${pub-rights-holder}&lt;/meta&gt;
+      &lt;meta property="dcterms:rightsHolder"&gt;${pub-rights-holder}&lt;/meta&gt;
+      &lt;/metadata&gt;
+      &lt;manifest&gt;
+      &lt;item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/&gt;
+      ${pub-html-files}
+      ${pub-svg-files}
+      ${pub-css-files}
+      ${pub-woff-files}
+      &lt;/manifest&gt;
+      &lt;spine toc="ncx"&gt;
+      &lt;itemref idref="htmltoc" linear="yes"/&gt;
+      ${pub-spine}
+      &lt;itemref idref="diagrams.xhtml"/&gt;
+      &lt;itemref idref="element_index.xhtml"/&gt;
+      &lt;/spine&gt;
+      &lt;/package&gt;
+    </echo>
+    <replaceregexp flags="g">
+      <regexp pattern="html:(contents/(.*?\.xhtml)),?"/>
+      <substitution
+              expression="    &lt;item id=&quot;\2&quot; media-type=&quot;application/xhtml+xml&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp flags="g">
+      <regexp pattern="svg:(diagrams/(.*?.svg)),?"/>
+      <substitution
+              expression="    &lt;item id=&quot;\2&quot; media-type=&quot;image/svg+xml&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp flags="g">
+      <regexp pattern="css:(.*?/([^/]+?).css),?"/>
+      <substitution
+              expression="    &lt;item media-type=&quot;text/css&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+    <replaceregexp flags="g">
+      <regexp pattern="woff:(.*?/([^/]+?).woff),?"/>
+      <substitution
+              expression="    &lt;item media-type=&quot;font/woff&quot; href=&quot;\1&quot; /&gt;${line.separator}"/>
+      <fileset dir="${build}/epub-docs/OEBPS">
+        <include name="package.opf"/>
+      </fileset>
+    </replaceregexp>
+  </target>
+  <target name="do-uml-to-epub"
+          depends="do-uml-to-epub--01-copy-into-build-dir, do-uml-to-epub--02-tidy, do-uml-to-epub--03-extract-spine"
+          description="converts uml documentation to epub">
+
+
+    <zip destfile="${build}/jhotdraw-uml.epub">
+      <fileset dir="${build}/epub-docs">
+        <exclude name="**/navigation.xhtml"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="do-docbook.compile" depends="init">
+    <mkdir dir="${build.doc.classes}"/>
+    <javac executable="${jdk.documentation}/bin/javac" fork="yes"
+           source="${jdk.documentation.version}" target="${jdk.documentation.version}" encoding="UTF-8"
+           destdir="${build.doc.classes}"
+           debug="true"
+    >
+      <compilerarg value="-Xlint"/>
+      <src path="${src.doc.java}"/>
+      <classpath>
+        <fileset dir="${lib.doc}"/>
+        <fileset file="${jdk}/lib/tools.jar"/>
+      </classpath>
+      <compilerarg value="-version"/>
+    </javac>
+    <copy todir="${build.doc.classes}">
+      <fileset dir="${src.doc.java}">
+        <exclude name="**/.*"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.png"/>
+        <include name="**/*.fxml"/>
+        <include name="**/*.css"/>
+      </fileset>
+    </copy>
+  </target>
+  <target depends="init" name="do-javadoc">
+    <mkdir dir="${build.javadoc}"/>
+    <javadoc destdir="${build.javadoc}"
+             footer="&lt;font size=-2&gt;${copyright}&lt;/font&gt;"
+             header="${ant.project.name} ${version}"
+             windowtitle="${ant.project.name} ${version}"
+             maxmemory="256M"
+             charset="UTF-8"
+             encoding="UTF-8"
+             executable="${jdk.documentation}/bin/javadoc"
+             additionalparam="-html5"
+    >
+
+      <module name="org.jhotdraw8.application"/>
+      <module name="org.jhotdraw8.draw"/>
+
+      <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
+      <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
+
+      <modulesourcepath path="src/main/java"/>
+      <modulepath>
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+      </modulepath>
+      <classpath>
+        <pathelement path="${lib.runtime}"/>
+        <fileset file="${jdk}/lib/tools.jar"/>
+        <fileset dir="${lib.compile}/classpath" includes="**/*.jar"/>
+      </classpath>
+      <modulepath>
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+      </modulepath>
+    </javadoc>
+  </target>
+  <target name="do-jar-classes" depends="init">
+    <pathconvert property="manifest.class-path" pathsep=" ">
+      <map from="${basedir}/${lib.runtime}/" to=""/>
+      <fileset dir="${basedir}/${lib.runtime}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+    </pathconvert>
+    <echo file="${build.main.classes}/META-INF/services/org.jhotdraw8.app.spi.NodeReaderProvider">
+      org.jhotdraw8.app.spi.FxmlNodeReaderProvider
+      org.jhotdraw8.app.spi.ImageNodeReaderProvider
+      org.jhotdraw8.draw.spi.SvgImageReaderProvider
+    </echo>
+
+    <jar destfile="${build.main.jars}/${ant.project.name}.jar">
+      <!-- The attributes are structured into section has described here:
+      https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jar.html#Main_Attributes
+      https://docs.oracle.com/javase/8/docs/technotes/guides/deploy/manifest.html
+      -->
+      <manifest>
+        <!--
+          ~ Main Attributes
+        -->
+        <!-- general main attributes -->
+        <attribute name="Manifest-Version" value="1.0"/>
+        <attribute name="Created-By" value="${manifest.implementation-vendor}"/>
+        <attribute name="Signature-Version" value="1.0"/>
+        <attribute name="Class-Path" value="${manifest.class-path}"/>
+
+        <!-- attribute defined for stand-alone applications (non-modular)  -->
+        <attribute name="Main-Class" value="${manifest.main-class}"/>
+
+        <!-- attribute defined for extension identification -->
+        <!-- attribute name="Extension-Name" value="..."/-->
+
+        <!-- attributes defined for extension and package versioning and sealing information -->
+        <attribute name="Implementation-Title" value="${manifest.application-name}"/>
+        <attribute name="Implementation-Version" value="${manifest.implementation-version}"/>
+        <attribute name="Implementation-Vendor" value="${manifest.implementation-vendor}"/>
+        <attribute name="Specification-Title" value="${manifest.application-name}"/>
+        <attribute name="Specification-Version" value="${manifest.implementation-version}"/>
+        <attribute name="Specification-Vendor" value="${manifest.implementation-vendor}"/>
+        <attribute name="Sealed" value="false"/>
+
+        <!-- attributes for security -->
+        <attribute name="Permissions" value="all-permissions"/>
+        <attribute name="Codebase" value="*"/>
+        <attribute name="Application-Name" value="${manifest.application-name}"/>
+        <attribute name="Application-Library-Allowable-Codebase" value="*"/>
+        <attribute name="Caller-Allowable-Codebase" value="*"/>
+        <attribute name="Entry-Point" value="${manifest.main-class}"/>
+        <attribute name="Trusted-Only" value="false"/>
+        <attribute name="Trusted-Library" value="false"/>
+      </manifest>
+      <fileset dir="${build.main.classes}">
+        <exclude name=".*"/>
+      </fileset>
+    </jar>
+    <exec executable="jar" dir="${build.main.jars}">
+      <arg value="--update"/>
+      <arg value="--file=${ant.project.name}.jar"/>
+      <arg value="--main-class=${manifest.main-class}"/>
+    </exec>
+    <!--
+    <jar destfile="${build.main.jars}/${ant.project.name}-javadoc.jar">
+      <fileset dir="src/main/java">
+        <exclude name="**/.*"/>
+      </fileset>
+    </jar>
+    -->
+    <jar file="${build}/sources/${ant.project.name}-src.jar">
+      <fileset dir="org.jhotdraw8.application/src/main/java/org.jhotdraw8.application">
+        <exclude name=".*"/>
+      </fileset>
+      <fileset dir="org.jhotdraw8.draw/src/main/java/org.jhotdraw8.draw">
+        <exclude name=".*"/>
+      </fileset>
+    </jar>
+
+  </target>
+
+  <macrodef name="modular-jar">
+    <attribute name="module"/>
+    <attribute name="mainclass" default=""/>
+    <sequential>
+      <mkdir dir="${build}/modules"/>
+      <jar destfile="${build}/modules/@{module}.jar"
+           basedir="${module.classes}/@{module}"
+      >
+
+        <manifest>
+          <attribute name="Copyright" value="${author}"/>
+          <attribute name="License" value="${license}"/>
+          <attribute name="Implementation-Title" value="@{module}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+          <attribute name="Implementation-Vendor" value="${author}"/>
+          <attribute name="Specification-Title" value="@{module}"/>
+          <attribute name="Specification-Version" value="${version}"/>
+          <attribute name="Specification-Vendor" value="${author}"/>
+        </manifest>
+      </jar>
+      <echo message="Updating version number in jar @{module}.jar to version: ${version}"/>
+      <exec executable="jar" unless:blank="@{mainclass}">
+        <arg line="--update"/>
+        <arg line="--main-class @{mainclass}"/>
+        <arg line="--module-version=${version}"/>
+        <arg line="-f"/>
+        <arg file="${build}/modules/@{module}.jar"/>
+      </exec>
+      <exec executable="jar" if:blank="@{mainclass}">
+        <arg line="--update"/>
+        <arg line="--module-version=${version}"/>
+        <arg line="-f"/>
+        <arg file="${build}/modules/@{module}.jar"/>
+      </exec>
+
+      <jar destfile="${build}/sources/@{module}-src.jar"
+           basedir="@{module}/src/main/java/@{module}"
+      >
+      </jar>
+    </sequential>
+  </macrodef>
+
+  <target name="do-jar-modules" depends="init">
+    <modular-jar module="org.jhotdraw8.application"/>
+    <modular-jar module="org.jhotdraw8.draw"/>
+    <modular-jar module="org.jhotdraw8.grapher"/>
+    <modular-jar module="org.jhotdraw8.examples"/>
+    <modular-jar module="org.jhotdraw8.teddy"/>
+  </target>
+
+  <macrodef name="modular-package">
+    <attribute name="name"/>
+    <attribute name="module"/>
+    <attribute name="mainclass"/>
+    <sequential>
+      <delete dir="${build}/packages"/>
+      <path id="modulepath">
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+        <fileset dir="${build}/modules" includes="**/*.jar"/>
+      </path>
+      <mkdir dir="${build}/packages/input"/>
+      <mkdir dir="${build}/packages"/>
+      <exec executable="${jpackage}">
+        <arg value="--name"/>
+        <arg value="@{name}"/>
+        <arg value="-p"/>
+        <arg pathref="modulepath"/>
+        <arg value="-m"/>
+        <arg value="@{module}/@{mainclass}"/>
+        <arg value="-d"/>
+        <arg value="${build}/packages"/>
+        <arg value="--type"/>
+        <arg value="app-image"/>
+      </exec>
+      <copy todir="${build}/packages/@{name}.app/Contents/runtime/Contents/Home/lib" flatten="true">
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.dylib"/>
+      </copy>
+    </sequential>
+  </macrodef>
+
+  <target name="do-package-modules" depends="init">
+    <modular-package
+            name="Grapher"
+            module="org.jhotdraw8.grapher"
+            mainclass="org.jhotdraw8.grapher.GrapherMain"
+    />
+  </target>
+
+  <target name="do-dist" depends="init">
+    <mkdir dir="${dist}/class"/>
+    <mkdir dir="${dist}/module"/>
+    <mkdir dir="${dist}/source"/>
+    <copy todir="${dist}/class">
+      <fileset dir="${build.main.jars}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${lib.runtime}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist}/module">
+      <fileset dir="${build.main.modules}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${lib.runtime}">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist}/source">
+      <fileset dir="${build}/sources">
+        <exclude name=".*"/>
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+    <!-- FIXME can't build modular javadoc with ANT
+    <jar file="${dist}/${ant.project.name}-javadoc.jar">
+      <fileset dir="${build.javadoc}">
+        <exclude name=".*"/>
+      </fileset>
+    </jar>
+    -->
+  </target>
+  <target name="do-run" depends="init" description="runs the built jar files">
+    <java module="org.jhotdraw8" fork="true"
+          classname="org.jhotdraw8.grapher.GrapherMain"
+    >
+      <modulepath>
+        <pathelement location="${build.main.modules}"/>
+        <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
+      </modulepath>
+    </java>
+  </target>
+
+  <target name="clean" depends="do-clean" description="deletes all build artifacts including intermediate artifacts">
+  </target>
+  <target name="compile-classes" depends="clean,do-compile-classes"
+          description="compiles the java sources and copies resource files">
+  </target>
+  <target name="compile-modules" depends="clean,do-compile-modules"
+          description="compiles the java sources and copies resource files">
+  </target>
+  <target name="jar-classes" depends="compile-classes,do-jar-classes"
+          description="bundles the class files into a jar file">
+  </target>
+  <target name="jar-modules" depends="compile-modules,do-jar-modules"
+          description="bundles the class files into a jar file">
+  </target>
+  <target name="javadoc" depends="clean,compile-classes,do-docbook.compile,do-javadoc"
+          description="generates api documentation">
+  </target>
+  <target name="docbook" depends="clean,javadoc,do-docbook"
+          description="generates specification and user documentation">
+  </target>
+  <target name="dist" depends="clean,jar-classes,jar-modules,do-dist"
+          description="creates a distributable stand-alone application">
+  </target>
+  <target name="run" depends="jar-classes,do-run" description="runs the built jar files">
+  </target>
+  <target name="all" depends="dist" description="Everything">
+  </target>
+</project>
+

@@ -20,16 +20,18 @@
     <name>JHotDraw8 Drawing Framework</name>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/java</directory>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>${basedir}/src/test/java</directory>
-            </testResource>
-        </testResources>
+      <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.draw</sourceDirectory>
+      <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.draw</testSourceDirectory>
+      <resources>
+        <resource>
+          <directory>${basedir}/src/main/java/org.jhotdraw8.draw</directory>
+        </resource>
+      </resources>
+      <testResources>
+        <testResource>
+          <directory>${basedir}/src/test/java/org.jhotdraw8.draw</directory>
+        </testResource>
+      </testResources>
     </build>
 
     <dependencies>

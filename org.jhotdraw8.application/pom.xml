@@ -20,14 +20,16 @@
   <name>JHotDraw8 Application Framework</name>
 
   <build>
+    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.application</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.application</testSourceDirectory>
     <resources>
       <resource>
-        <directory>${basedir}/src/main/java</directory>
+        <directory>${basedir}/src/main/java/org.jhotdraw8.application</directory>
       </resource>
     </resources>
     <testResources>
       <testResource>
-        <directory>${basedir}/src/test/java</directory>
+        <directory>${basedir}/src/test/java/org.jhotdraw8.application</directory>
       </testResource>
     </testResources>
   </build>

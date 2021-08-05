@@ -5,3 +5,6 @@
 /target/
 /org.jhotdraw8.misc/target/
 /org.jhotdraw8.teddy/target/
+/build/
+/lib/
+/dist/
