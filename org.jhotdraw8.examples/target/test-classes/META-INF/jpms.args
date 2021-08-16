@@ -1,4 +1,0 @@
---patch-module
-org.jhotdraw8.samples.misc=_
---add-reads
-org.jhotdraw8.samples.misc=ALL-UNNAMED

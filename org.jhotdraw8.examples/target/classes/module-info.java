@@ -1,4 +1,4 @@
-module org.jhotdraw8.samples.misc {
+module org.jhotdraw8.examples {
     requires java.desktop;
     requires org.jhotdraw8.draw;
     requires java.logging;
