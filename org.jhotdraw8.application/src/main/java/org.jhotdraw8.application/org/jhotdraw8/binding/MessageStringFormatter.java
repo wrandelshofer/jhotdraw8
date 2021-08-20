@@ -65,7 +65,7 @@ public abstract class MessageStringFormatter extends StringBinding {
     }
 
     public static @NonNull StringExpression format(final @Nullable String format, final @NonNull Object... args) {
-        Objects.requireNonNull(format, "format is null");
+        Objects.requireNonNull(format, "format");
         if (extractDependencies(args).length == 0) {
             return ConstantStringExpression.of(String.format(format, args));
         }

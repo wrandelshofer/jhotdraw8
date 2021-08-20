@@ -66,9 +66,9 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @param defaultValue   The default value.
      */
     public AbstractMapAccessor(@Nullable String name, @Nullable Class<?> type, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
-        Objects.requireNonNull(name, "name is null");
-        Objects.requireNonNull(type, "clazz is null");
-        Objects.requireNonNull(defaultValue, "default value is null");
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(type, "clazz");
+        Objects.requireNonNull(defaultValue, "defaultValue");
 
         this.name = name;
         this.type = type;

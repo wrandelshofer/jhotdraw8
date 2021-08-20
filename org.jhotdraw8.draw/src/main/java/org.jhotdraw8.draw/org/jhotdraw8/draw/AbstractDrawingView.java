@@ -112,7 +112,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
                 @Override
                 public Object put(@Nullable DataFormat key, Object value) {
-                    Objects.requireNonNull(key, "key is null");
+                    Objects.requireNonNull(key, "key");
                     return super.put(key, value);
                 }
 

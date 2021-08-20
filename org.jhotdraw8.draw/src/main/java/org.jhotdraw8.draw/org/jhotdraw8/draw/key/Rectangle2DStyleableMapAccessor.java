@@ -78,7 +78,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
 
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Rectangle2D value) {
-        Objects.requireNonNull(value, "value is null");
+        Objects.requireNonNull(value, "value");
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
         widthKey.put(a, value.getWidth());

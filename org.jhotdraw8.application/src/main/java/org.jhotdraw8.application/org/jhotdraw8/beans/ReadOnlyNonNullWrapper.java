@@ -21,7 +21,7 @@ public class ReadOnlyNonNullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 
     @Override
     protected void fireValueChangedEvent() {
-        Objects.requireNonNull(get(), "new value is null");
+        Objects.requireNonNull(get(), "new value");
         super.fireValueChangedEvent();
     }
 

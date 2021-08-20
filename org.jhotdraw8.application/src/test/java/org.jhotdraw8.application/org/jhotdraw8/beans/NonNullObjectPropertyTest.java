@@ -23,7 +23,7 @@ public class NonNullObjectPropertyTest {
         NonNullObjectProperty<String> p1 = new NonNullObjectProperty<>(null, null, "hello");
         ObjectProperty<String> p2 = new SimpleObjectProperty<>(null);
         p1.addListener((o, oldv, newv) -> {
-            Objects.requireNonNull(newv);
+            Objects.requireNonNull(newv, "newValue");
         });
 
         // must not set a null value

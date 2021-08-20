@@ -35,7 +35,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param app the application
      */
     public AbstractApplicationAction(@NonNull Application app) {
-        Objects.requireNonNull(app, "app is null");
+        Objects.requireNonNull(app, "app");
         this.app = app;
         disabled.unbind();
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));

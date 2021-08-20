@@ -184,7 +184,7 @@ public class OSXCollator extends Collator {
     public static <T> Comparator<T> comparing(
             @NonNull Function<? super T, String> keyExtractor) {
         OSXCollator collator = new OSXCollator();
-        Objects.requireNonNull(keyExtractor);
+        Objects.requireNonNull(keyExtractor, "keyExtractor");
         return (Comparator<T> & Serializable)
                 (c1, c2) -> collator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
     }

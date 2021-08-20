@@ -25,8 +25,8 @@ public class Arc<V, A> {
     private final @Nullable A data;
 
     public Arc(@NonNull V start, @NonNull V end, @Nullable A data) {
-        Objects.requireNonNull(start, "start is null");
-        Objects.requireNonNull(end, "end is null");
+        Objects.requireNonNull(start, "start");
+        Objects.requireNonNull(end, "end");
         this.start = start;
         this.end = end;
         this.data = data;

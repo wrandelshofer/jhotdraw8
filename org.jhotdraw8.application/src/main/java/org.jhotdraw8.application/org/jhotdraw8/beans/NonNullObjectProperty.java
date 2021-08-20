@@ -50,7 +50,7 @@ public class NonNullObjectProperty<T> extends SimpleObjectProperty<T> {
     }
 
     public void setNonNull(@NonNull T newValue) {
-        Objects.requireNonNull(newValue, "newValue is null");
+        Objects.requireNonNull(newValue, "newValue");
         super.set(newValue);
     }
 

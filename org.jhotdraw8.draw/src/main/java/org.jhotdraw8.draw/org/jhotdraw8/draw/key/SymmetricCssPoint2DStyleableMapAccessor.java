@@ -60,7 +60,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssPoint2D value) {
-        Objects.requireNonNull(value, "value is null");
+        Objects.requireNonNull(value, "value");
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
     }

@@ -34,7 +34,7 @@ public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStylea
     public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull T defaultValue) {
         super(name, clazz, defaultValue);
 
-        Objects.requireNonNull(defaultValue, "defaultValue is null");
+        Objects.requireNonNull(defaultValue, "defaultValue");
 
         converter = new CssEnumConverter<>(getRawValueType(), false);
     }

@@ -60,7 +60,7 @@ public class SimpleRenderContext implements WritableRenderContext {
     @Override
     public @NonNull <T> T getNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = key.get(getProperties());
-        return Objects.requireNonNull(value);
+        return Objects.requireNonNull(value, "value");
     }
 
 }

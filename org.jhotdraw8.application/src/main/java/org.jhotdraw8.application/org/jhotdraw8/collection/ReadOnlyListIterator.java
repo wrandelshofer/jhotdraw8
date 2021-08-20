@@ -94,7 +94,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
 
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
-        Objects.requireNonNull(action, "action is null");
+        Objects.requireNonNull(action, "action");
         if (index >= 0 && index < getSize()) {
             action.accept(current = list.get(index++));
             return true;

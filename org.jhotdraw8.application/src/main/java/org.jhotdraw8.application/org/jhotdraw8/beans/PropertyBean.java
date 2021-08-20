@@ -117,7 +117,7 @@ public interface PropertyBean {
      */
     default @NonNull <T> T getNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = key.get(getProperties());
-        return Objects.requireNonNull(value);
+        return Objects.requireNonNull(value, "value is null for key=" + key);
     }
 
     /**

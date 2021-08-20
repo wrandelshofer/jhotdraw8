@@ -254,7 +254,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param v vertex
      */
     public void addVertex(@Nullable V v) {
-        Objects.requireNonNull(v, "v is null");
+        Objects.requireNonNull(v, "v");
         vertexMap.computeIfAbsent(v, k -> {
             vertices.add(v);
             buildAddVertex();

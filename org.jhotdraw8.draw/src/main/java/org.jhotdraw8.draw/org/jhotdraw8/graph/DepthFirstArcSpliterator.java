@@ -48,9 +48,9 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumeratorSpliterato
      */
     public DepthFirstArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        Objects.requireNonNull(nextFunction, "nextFunction is null");
-        Objects.requireNonNull(root, "root is null");
-        Objects.requireNonNull(visited, "visited is null");
+        Objects.requireNonNull(nextFunction, "nextFunction");
+        Objects.requireNonNull(root, "root");
+        Objects.requireNonNull(visited, "visited");
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;

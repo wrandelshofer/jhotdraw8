@@ -90,7 +90,7 @@ public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Spliterat
     @SuppressWarnings("unchecked")
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
-        Objects.requireNonNull(action, "action is null");
+        Objects.requireNonNull(action, "action");
         if (index >= 0 && index < getSize()) {
             action.accept(current = (E) list[index++]);
             return true;

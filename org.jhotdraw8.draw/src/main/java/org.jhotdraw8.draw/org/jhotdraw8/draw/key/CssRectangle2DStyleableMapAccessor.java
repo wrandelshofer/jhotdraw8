@@ -70,7 +70,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
 
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssRectangle2D value) {
-        Objects.requireNonNull(value, "value is null");
+        Objects.requireNonNull(value, "value");
         xKey.put(a, value.getMinX());
         yKey.put(a, value.getMinY());
         widthKey.put(a, value.getWidth());

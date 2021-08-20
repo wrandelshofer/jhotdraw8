@@ -37,7 +37,7 @@ public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> im
 
     @Override
     public @NonNull Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        Objects.requireNonNull(idResolver);
+        Objects.requireNonNull(idResolver, "idResolver");
         if (tt.next() == CssTokenType.TT_URL) {
             final String urlString = tt.currentStringNonNull();
             if (urlString.startsWith("#")) {

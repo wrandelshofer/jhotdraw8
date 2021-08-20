@@ -55,7 +55,7 @@ public class CssPaintConverter extends AbstractCssConverter<Paint> {
     public @NonNull Paint parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Paintable p = paintableConverter.parseNonNull(tt, idResolver);
         if (p.getPaint() == null) {
-            throw new ParseException("paint is null", 0);
+            throw new ParseException("paint", 0);
         }
         return p.getPaint();
     }

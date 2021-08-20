@@ -112,7 +112,7 @@ public interface CssTokenizer {
     default @NonNull Number currentNumberNonNull() {
         Number number = currentNumber();
         if (number == null) {
-            throw new AssertionError("currentNumber is null");
+            throw new AssertionError("currentNumber");
         }
         return number;
     }
@@ -128,7 +128,7 @@ public interface CssTokenizer {
     default @NonNull String currentStringNonNull() {
         String str = currentString();
         if (str == null) {
-            throw new AssertionError("currentString is null");
+            throw new AssertionError("currentString");
         }
         return str;
     }

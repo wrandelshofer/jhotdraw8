@@ -17,11 +17,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
- * The Nullable annotation indicates that a null value can be
- * assigned to the annotated element.
- * <o>
- * Code that retrieves a null value from the element must not
- * throw a {@link NullPointerException}.
+ * The Nullable annotation indicates that the {@code null} value is
+ * allowed for the annotated element.
  */
 @Documented
 @Retention(CLASS)

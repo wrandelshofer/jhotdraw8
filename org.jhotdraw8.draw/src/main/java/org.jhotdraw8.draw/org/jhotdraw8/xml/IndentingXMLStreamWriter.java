@@ -344,7 +344,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public @Nullable String getPrefix(@NonNull String uri) throws XMLStreamException {
-        Objects.requireNonNull(uri);
+        Objects.requireNonNull(uri, "uri");
         for (Element element : stack) {
             if (element.namespaceContext != null) {
                 String prefix = element.namespaceContext.getPrefix(uri);
@@ -363,7 +363,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public @Nullable Object getProperty(@NonNull String name) throws IllegalArgumentException {
-        Objects.requireNonNull(name);
+        Objects.requireNonNull(name, "name");
         throw new IllegalArgumentException("unsupported property: " + name);
     }
 
@@ -430,7 +430,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeCData(@NonNull String data) throws XMLStreamException {
-        Objects.requireNonNull(data);
+        Objects.requireNonNull(data, "data");
         if (data.contains(END_CDATA)) {
             throw new XMLStreamException("CData must not contain \"" + END_CDATA + "\", CData: " + data);
         }
@@ -460,7 +460,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeCharacters(@NonNull String text) throws XMLStreamException {
-        Objects.requireNonNull(text);
+        Objects.requireNonNull(text, "text");
         closeStartTagOrCloseEmptyElemTag();
         setHasContent(true);
         writeXmlContent(text, false, false);
@@ -469,7 +469,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeCharacters(@NonNull char[] text, int start, int len) throws XMLStreamException {
-        Objects.requireNonNull(text);
+        Objects.requireNonNull(text, "text");
         Preconditions.checkFromIndexSize(start, len, text.length);
         closeStartTagOrCloseEmptyElemTag();
         setHasContent(true);
@@ -478,7 +478,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeComment(@NonNull String data) throws XMLStreamException {
-        Objects.requireNonNull(data);
+        Objects.requireNonNull(data, "data");
         closeStartTagOrCloseEmptyElemTag();
         Element element = stack.peek();
         assert element != null : "the stack is never empty!";
@@ -495,7 +495,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeDTD(@NonNull String dtd) throws XMLStreamException {
-        Objects.requireNonNull(dtd);
+        Objects.requireNonNull(dtd, "dtd");
         closeStartTagOrCloseEmptyElemTag();
         write(dtd);
     }
@@ -593,7 +593,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeEntityRef(String name) throws XMLStreamException {
-        Objects.requireNonNull(name);
+        Objects.requireNonNull(name, "name");
         closeStartTagOrCloseEmptyElemTag();
         write(START_ENTITY_REF);
         write(name);
@@ -602,8 +602,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeNamespace(@NonNull String prefix, @NonNull String namespaceURI) throws XMLStreamException {
-        Objects.requireNonNull(prefix);
-        Objects.requireNonNull(namespaceURI);
+        Objects.requireNonNull(prefix, "prefix");
+        Objects.requireNonNull(namespaceURI, "namespaceURI");
         requireStartTagOpened();
         attributes.add(new Attribute(prefix.isEmpty() ? "" : XMLNS_ATTRIBUTE,
                 XMLNS_NAMESPACE, prefix.isEmpty() ? XMLNS_ATTRIBUTE : prefix, namespaceURI));
@@ -611,7 +611,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeProcessingInstruction(@NonNull String target) throws XMLStreamException {
-        Objects.requireNonNull(target);
+        Objects.requireNonNull(target, "target");
         closeStartTagOrCloseEmptyElemTag();
         write(START_PROCESSING_INSTRUCTION);
         write(target);
@@ -620,7 +620,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     @Override
     public void writeProcessingInstruction(@NonNull String target, @NonNull String data) throws XMLStreamException {
-        Objects.requireNonNull(target);
+        Objects.requireNonNull(target, "target");
         closeStartTagOrCloseEmptyElemTag();
         write(START_PROCESSING_INSTRUCTION);
         write(target);
@@ -753,14 +753,14 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
         @Override
         public String getPrefix(@NonNull String namespaceURI) {
-            Objects.requireNonNull(namespaceURI);
+            Objects.requireNonNull(namespaceURI, "namespaceURI");
             List<String> prefixes = nsToPrefix.get(namespaceURI);
             return prefixes == null || prefixes.isEmpty() ? null : prefixes.get(0);
         }
 
         @Override
         public Iterator<String> getPrefixes(@NonNull String namespaceURI) {
-            Objects.requireNonNull(namespaceURI);
+            Objects.requireNonNull(namespaceURI, "namespaceURI");
             List<String> prefixes = nsToPrefix.get(namespaceURI);
             return prefixes == null ? Collections.emptyIterator() : prefixes.iterator();
         }

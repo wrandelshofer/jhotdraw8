@@ -252,7 +252,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public @NonNull <T> T setNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key, @NonNull T newValue) {
         T v = set(figure, key, newValue);
-        return Objects.requireNonNull(v);
+        return Objects.requireNonNull(v, "oldValue");
     }
 
     @Override

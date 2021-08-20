@@ -26,7 +26,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     private final boolean isTransient;
 
     public SetValueMapAccessor(@NonNull String name, boolean isTransient, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
-        Objects.requireNonNull(value, "value is null");
+        Objects.requireNonNull(value, "value");
         this.setAccessor = setAccessor;
         this.value = value;
         this.defaultValue = defaultValue;

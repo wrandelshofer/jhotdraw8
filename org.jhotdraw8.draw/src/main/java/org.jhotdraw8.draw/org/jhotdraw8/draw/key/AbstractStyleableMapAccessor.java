@@ -74,8 +74,8 @@ public abstract class AbstractStyleableMapAccessor<T>
      */
     public AbstractStyleableMapAccessor(@Nullable String name, @Nullable Class<?> type, @Nullable Class<?>[] typeParameters,
                                         @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
-        Objects.requireNonNull(name, "name is null");
-        Objects.requireNonNull(type, "clazz is null");
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(type, "clazz");
 
         this.name = name;
         this.type = type;

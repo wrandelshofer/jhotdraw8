@@ -292,7 +292,7 @@ public class InteractiveHandleRenderer {
     }
 
     private DrawingView getDrawingViewNonNull() {
-        return Objects.requireNonNull(drawingView.get());
+        return Objects.requireNonNull(drawingView.get(), "drawingView");
     }
 
     DrawingEditor getEditor() {

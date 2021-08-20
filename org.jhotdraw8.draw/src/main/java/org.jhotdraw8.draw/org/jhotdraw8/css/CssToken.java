@@ -72,16 +72,17 @@ public class CssToken /*extends AST*/ {
     public CssToken(int ttype, @Nullable String stringValue, @Nullable Number numericValue, @Nullable Character preferredQuoteChar, int lineNumber, int startPos, int endPos) {
         switch (ttype) {
         case CssTokenType.TT_DIMENSION:
-            Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=" + ttype);
-            Objects.requireNonNull(stringValue, "string value must not be null for ttype=" + ttype);
+            Objects.requireNonNull(numericValue, "numericValue must not be null for ttype=TT_DIMENSION");
+            Objects.requireNonNull(stringValue, "stringValue must not be null for ttype=TT_DIMENSION");
             break;
         case CssTokenType.TT_NUMBER:
         case CssTokenType.TT_PERCENTAGE:
-            Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=" + ttype);
+            Objects.requireNonNull(numericValue, "numeric value must not be null for ttype=TT_NUMBER or ttype=TT_PERCENTAGE");
             break;
         case CssTokenType.TT_IDENT:
+        case CssTokenType.TT_AT_KEYWORD:
             if (stringValue == null || stringValue.isEmpty()) {
-                throw new IllegalArgumentException("string value must not be null or empty for ttype=" + ttype);
+                throw new IllegalArgumentException("stringValue must not be null or empty for ttype=TT_IDENT or ttype=TT_AT_KEYWORD");
             }
             break;
         default:
@@ -100,11 +101,11 @@ public class CssToken /*extends AST*/ {
     }
 
     public @NonNull String getStringValueNonNull() {
-        return Objects.requireNonNull(stringValue);
+        return Objects.requireNonNull(stringValue, "stringValue");
     }
 
     public @NonNull Number getNumericValueNonNull() {
-        return Objects.requireNonNull(numericValue);
+        return Objects.requireNonNull(numericValue, "numericValue");
     }
 
     @Override

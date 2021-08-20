@@ -76,7 +76,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
-        Objects.requireNonNull(value, "value is null");
+        Objects.requireNonNull(value, "value");
         xKey.put(a, value.getX());
         yKey.put(a, value.getY());
     }

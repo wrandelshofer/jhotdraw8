@@ -93,7 +93,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
 
     @Override
     public boolean containsKey(@Nullable String key) {
-        Objects.requireNonNull(key, "key is null");
+        Objects.requireNonNull(key, "key");
         if (resource.containsKey(key)) {
             return true;
         }

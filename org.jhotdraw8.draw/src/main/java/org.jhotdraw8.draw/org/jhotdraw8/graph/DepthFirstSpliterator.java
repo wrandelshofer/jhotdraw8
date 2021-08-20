@@ -48,9 +48,9 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
      */
     public DepthFirstSpliterator(@Nullable Function<V, Iterable<V>> nextFunction, @Nullable V root, @Nullable AddToSet<V> visited) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-        Objects.requireNonNull(nextFunction, "nextFunction is null");
-        Objects.requireNonNull(root, "root is null");
-        Objects.requireNonNull(visited, "visited is null");
+        Objects.requireNonNull(nextFunction, "nextFunction");
+        Objects.requireNonNull(root, "root");
+        Objects.requireNonNull(visited, "visited");
         this.nextFunction = nextFunction;
         deque = new ArrayDeque<>(16);
         this.visited = visited;

@@ -103,8 +103,8 @@ public abstract class AbstractKey<T> implements Key<T> {
 
 
     public AbstractKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
-        Objects.requireNonNull(name, "name is null");
-        Objects.requireNonNull(clazz, "clazz is null");
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(clazz, "clazz");
         if (!isNullable && initialValue == null) {
             throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
         }

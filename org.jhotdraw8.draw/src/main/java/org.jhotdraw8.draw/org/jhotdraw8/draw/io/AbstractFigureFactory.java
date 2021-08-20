@@ -63,7 +63,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     public AbstractFigureFactory(@Nullable IdFactory idFactory) {
-        Objects.requireNonNull(idFactory, "idFactory is null");
+        Objects.requireNonNull(idFactory, "idFactory");
         this.idFactory = idFactory;
     }
 

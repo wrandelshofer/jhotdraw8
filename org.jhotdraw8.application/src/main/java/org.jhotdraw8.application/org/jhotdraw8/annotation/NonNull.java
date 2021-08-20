@@ -17,11 +17,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 
 /**
- * The NonNull annotation indicates that a null value must not be
- * assigned to the annotated element.
- * <o>
- * Code that retrieves a null value from the element must throw a
- * {@link NullPointerException}.
+ * The NonNull annotation indicates that the {@code null} value is
+ * forbidden for the annotated element.
  */
 @Documented
 @Retention(CLASS)

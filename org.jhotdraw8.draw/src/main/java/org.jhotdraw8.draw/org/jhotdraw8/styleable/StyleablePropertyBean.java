@@ -52,7 +52,7 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      */
     default @NonNull <T> T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
         T value = getStyled(key);
-        return Objects.requireNonNull(value);
+        return Objects.requireNonNull(value, "value");
     }
 
     /**

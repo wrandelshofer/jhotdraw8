@@ -68,7 +68,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
                                                                 @Nullable TT value) throws IOException {
         if (value == null) {
             if (!nullable) {
-                throw new IllegalArgumentException("value is null");
+                throw new IllegalArgumentException("value");
             }
             out.append("none");
             return;

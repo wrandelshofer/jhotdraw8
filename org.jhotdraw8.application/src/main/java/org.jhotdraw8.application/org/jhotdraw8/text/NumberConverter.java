@@ -315,7 +315,7 @@ public class NumberConverter implements Converter<Number> {
             return null;
         }
         if (str == null) {
-            throw new ParseException("str is null", 0);
+            throw new ParseException("str", 0);
         }
 
         // Parse the remaining characters from the CharBuffer

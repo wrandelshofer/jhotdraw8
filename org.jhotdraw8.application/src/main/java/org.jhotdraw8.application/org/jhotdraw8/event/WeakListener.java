@@ -23,7 +23,7 @@ public final class WeakListener<E extends EventObject> implements Listener<E>, j
     private Consumer<Listener<E>> removeListener;
 
     public WeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
-        Objects.requireNonNull(listener, "listener is null");
+        Objects.requireNonNull(listener, "listener");
         this.ref = new WeakReference<>(listener);
         this.removeListener = removeListener;
     }

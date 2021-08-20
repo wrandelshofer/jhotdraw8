@@ -78,9 +78,9 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
     }
 
     public NonNullObjectKey(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
-        Objects.requireNonNull(name, "name is null");
-        Objects.requireNonNull(type, "clazz is null");
-        Objects.requireNonNull(defaultValue, "defaultValue may not be null if isNullable==false");
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(type, "clazz");
+        Objects.requireNonNull(defaultValue, "defaultValue");
 
         this.name = name;
         this.type = type;

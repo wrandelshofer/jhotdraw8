@@ -44,6 +44,6 @@ public interface NonNullMapAccessor<@NonNull T> extends MapAccessor<T> {
 
     default @NonNull T getDefaultValueNonNull() {
         T v = getDefaultValue();
-        return Objects.requireNonNull(v);
+        return Objects.requireNonNull(v, "default value");
     }
 }

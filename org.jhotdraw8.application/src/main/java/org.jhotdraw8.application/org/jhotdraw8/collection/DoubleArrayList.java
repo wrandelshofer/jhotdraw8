@@ -383,9 +383,9 @@ public class DoubleArrayList implements Iterable<Double> {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIf(DoublePredicate filter) {
+    public boolean removeIf(@NonNull DoublePredicate filter) {
         boolean hasRemoved = false;
-        Objects.requireNonNull(filter);
+        Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
             if (filter.test(get(i))) {
                 removeAt(i);
