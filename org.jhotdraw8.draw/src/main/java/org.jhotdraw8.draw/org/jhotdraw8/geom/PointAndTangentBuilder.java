@@ -18,9 +18,29 @@ import java.util.Collections;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
+/**
+ * Builder for creating points and tangents at the relative arc distance
+ * {@code t ∈ [0,1]} of a path iterator.
+ * <p>
+ * Empty segments of a path have zero arc distance. A segment is considered
+ * empty, if its length is smaller than {@code ε=1e-7}.
+ * <p>
+ * If a path consists of entirely empty segments, then all {@code t}
+ * are mapped to {@code point=(x,y), tangent=(1,0)} where {@code (x,y)} is the
+ * last empty segment of the path.
+ * <p>
+ * If the path is empty, then all {@code t} are mapped to {@code point=(0,0),
+ * tangent=(1,0)}.
+ */
 public class PointAndTangentBuilder {
     private final @NonNull List<Segment> segments = new ArrayList<>();
     private final double length;
+
+    /**
+     * If all segments are degenerated, the builder will create a point and
+     * tangent at the last degenerated point.
+     */
+    private double degeneratedX, degeneratedY;
 
     /**
      * Creates a new PointAndTangentBuilder.
@@ -58,6 +78,9 @@ public class PointAndTangentBuilder {
                     Line2D.Double line = new Line2D.Double(x1, y1, x2, y2);
                     stats.accept(length);
                     segments.add(new Segment(distanceFromStart, length, line));
+                } else {
+                    degeneratedX = x2;
+                    degeneratedY = y2;
                 }
                 break;
             }
@@ -73,6 +96,9 @@ public class PointAndTangentBuilder {
                 if (length > eps) {
                     stats.accept(length);
                     segments.add(new Segment(distanceFromStart, length, quadCurve));
+                } else {
+                    degeneratedX = x3;
+                    degeneratedY = y3;
                 }
                 break;
             }
@@ -90,6 +116,9 @@ public class PointAndTangentBuilder {
                 if (length > eps) {
                     stats.accept(length);
                     segments.add(new Segment(distanceFromStart, length, cubicCurve));
+                } else {
+                    degeneratedX = x4;
+                    degeneratedY = y4;
                 }
                 break;
             }
@@ -99,6 +128,9 @@ public class PointAndTangentBuilder {
                     Line2D.Double line = new Line2D.Double(x, y, startX, startY);
                     stats.accept(length);
                     segments.add(new Segment(distanceFromStart, length, line));
+                } else {
+                    degeneratedX = x;
+                    degeneratedY = y;
                 }
                 break;
             }
@@ -111,6 +143,10 @@ public class PointAndTangentBuilder {
     }
 
     public PointAndTangent getPointAndTangentAt(double t) {
+        if (segments.isEmpty()) {
+            return new PointAndTangent(degeneratedX, degeneratedY, 1, 0);
+        }
+
         double distanceFromStart = length * t;
         int searchResult = Collections.binarySearch(segments, new Segment(distanceFromStart, length, null));
         int index = (searchResult < 0) ? Math.min(-(searchResult) - 1, segments.size() - 1) : searchResult;
