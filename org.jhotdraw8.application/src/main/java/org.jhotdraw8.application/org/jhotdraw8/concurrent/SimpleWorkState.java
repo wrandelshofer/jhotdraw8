@@ -4,244 +4,154 @@
  */
 package org.jhotdraw8.concurrent;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
-import java.text.MessageFormat;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.jhotdraw8.concurrent.FXConcurrentUtil.NO_UPDATE_IS_IN_PROGRESS;
+import static org.jhotdraw8.concurrent.FXConcurrentUtil.update;
 
 /**
- *
+ * A simple implementation of the {@link WorkState} interface.
  */
-public class SimpleWorkState implements WorkState, Worker<Void> {
-    private volatile boolean cancelled;
+public class SimpleWorkState<V> implements WorkState<V> {
+    private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, "title", null);
+    private final @NonNull AtomicReference<Object> titleUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, "message", null);
+    private final @NonNull AtomicReference<Object> messageUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, "state", null);
+    private final @NonNull AtomicReference<Object> valueUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, "workDone", -1.0);
+    private final @NonNull AtomicReference<Object> workDoneUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, "totalWork", -1.0);
+    private final @NonNull AtomicReference<Object> totalWorkUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, "progress", -1.0);
+    private final @NonNull AtomicReference<Object> progressUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private volatile boolean isCancelled;
 
-    private class CompletionTask extends Task<Void> {
-        @Override
-        protected @NonNull Void call() throws Exception {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void updateMessage(String newValue) {
-            try {
-                super.updateMessage(newValue);
-            } catch (IllegalStateException e) {
-                // JavaFX platform is not running
-            }
-        }
-
-        @Override
-        protected void updateProgress(long workDone, long max) {
-            try {
-                super.updateProgress(workDone, max);
-            } catch (IllegalStateException e) {
-                // JavaFX platform is not running
-            }
-        }
-
-        @Override
-        protected void updateProgress(double workDone, double max) {
-            try {
-                super.updateProgress(workDone, max);
-            } catch (IllegalStateException e) {
-                // JavaFX platform is not running
-            }
-        }
-
-        @Override
-        protected void updateTitle(String title) {
-            try {
-                super.updateTitle(title);
-            } catch (IllegalStateException e) {
-                // JavaFX platform is not running
-            }
-        }
-
-        @Override
-        protected void updateValue(Void value) {
-            try {
-                super.updateValue(value);
-            } catch (IllegalStateException e) {
-                // JavaFX platform is not running
-            }
-        }
-    }
-
-    private final CompletionTask task = new CompletionTask();
-
+    /**
+     * Creates a new instance.
+     */
     public SimpleWorkState() {
     }
 
-    public SimpleWorkState(String title) {
+    /**
+     * Creates a new instance with the specified title.
+     *
+     * @param title a title
+     */
+    public SimpleWorkState(@Nullable String title) {
         updateTitle(title);
-        updateMessage("...");
     }
 
-    @Override
-    public State getState() {
-        return task.getState();
+    /**
+     * This method may be called on any thread.
+     *
+     * @param newValue the new value
+     */
+    public void updateValue(@Nullable V newValue) {
+        update(newValue, value, valueUpdate);
     }
 
-    @Override
-    public ReadOnlyObjectProperty<State> stateProperty() {
-        return task.stateProperty();
+    public @Nullable V getValue() {
+        return value.get();
     }
 
-    @Override
-    public Void getValue() {
-        return task.getValue();
+    public @NonNull ReadOnlyObjectProperty<V> valueProperty() {
+        return value;
     }
 
-    @Override
-    public ReadOnlyObjectProperty<Void> valueProperty() {
-        return task.valueProperty();
+    /**
+     * This method may be called on any thread.
+     *
+     * @param newValue the new value
+     */
+    public void updateWorkDone(double newValue) {
+        update(newValue, workDone, workDoneUpdate);
     }
 
-    @Override
-    public Throwable getException() {
-        return task.getException();
-    }
-
-    @Override
-    public ReadOnlyObjectProperty<Throwable> exceptionProperty() {
-        return task.exceptionProperty();
-    }
-
-    @Override
     public double getWorkDone() {
-        return task.getWorkDone();
+        return workDone.get();
     }
 
-    @Override
-    public ReadOnlyDoubleProperty workDoneProperty() {
-        return task.workDoneProperty();
+    public @NonNull ReadOnlyDoubleProperty workDoneProperty() {
+        return workDone.getReadOnlyProperty();
     }
 
-    @Override
+    /**
+     * This method may be called on any thread.
+     *
+     * @param newValue the new value
+     */
+    public void updateTotalWork(double newValue) {
+        update(newValue, totalWork, totalWorkUpdate);
+    }
+
     public double getTotalWork() {
-        return task.getTotalWork();
+        return totalWork.get();
     }
 
-    @Override
-    public ReadOnlyDoubleProperty totalWorkProperty() {
-        return task.totalWorkProperty();
+
+    public @NonNull ReadOnlyDoubleProperty totalWorkProperty() {
+        return totalWork.getReadOnlyProperty();
     }
 
-    @Override
+    /**
+     * This method may be called on any thread.
+     *
+     * @param newValue the new value
+     */
+    public void updateProgress(double newValue) {
+        update(newValue, progress, progressUpdate);
+    }
+
     public double getProgress() {
-        return task.getProgress();
+        return progress.get();
+    }
+
+    public @NonNull ReadOnlyDoubleProperty progressProperty() {
+        return progress.getReadOnlyProperty();
+    }
+
+    public @Nullable String getMessage() {
+        return message.get();
+    }
+
+    public @NonNull ReadOnlyStringProperty messageProperty() {
+        return message.getReadOnlyProperty();
+    }
+
+    public @Nullable String getTitle() {
+        return title.get();
+    }
+
+    public @NonNull ReadOnlyStringProperty titleProperty() {
+        return title.getReadOnlyProperty();
     }
 
     @Override
-    public ReadOnlyDoubleProperty progressProperty() {
-        return task.progressProperty();
+    public void updateMessage(@Nullable String value) {
+        update(value, message, messageUpdate);
     }
 
     @Override
-    public boolean isRunning() {
-        return task.isRunning();
-    }
-
-    @Override
-    public ReadOnlyBooleanProperty runningProperty() {
-        return task.runningProperty();
-    }
-
-    @Override
-    public String getMessage() {
-        return task.getMessage();
-    }
-
-    @Override
-    public ReadOnlyStringProperty messageProperty() {
-        return task.messageProperty();
-    }
-
-    @Override
-    public String getTitle() {
-        return task.getTitle();
-    }
-
-    @Override
-    public ReadOnlyStringProperty titleProperty() {
-        return task.titleProperty();
-    }
-
-    @Override
-    public boolean cancel() {
-        cancelled = true;
-        return task.cancel();
-    }
-
-    /**
-     * Updates the message of the work state.
-     * This method is safe to be called from any thread.
-     *
-     * @param value the new value
-     */
-    @Override
-    public void updateMessage(String value) {
-        task.updateMessage(value);
-    }
-
-    @Override
-    public void updateMessage(@NonNull String pattern, Object... arguments) {
-        task.updateMessage(MessageFormat.format(pattern, arguments));
-    }
-
-    /**
-     * Updates the message of the work state.
-     * This method is safe to be called from any thread.
-     *
-     * @param workDone the new value
-     * @param max      the maximally expected work
-     */
-    @Override
-    public void updateProgress(long workDone, long max) {
-        task.updateProgress(workDone, max);
-    }
-
-    /**
-     * Updates the message of the work state.
-     * This method is safe to be called from any thread.
-     *
-     * @param workDone the new value
-     * @param max      the maximally expected work
-     */
-    @Override
-    public void updateProgress(double workDone, double max) {
-        task.updateProgress(workDone, max);
-    }
-
-    /**
-     * Updates the message of the work state.
-     * This method is safe to be called from any thread.
-     *
-     * @param title the new value
-     */
-    @Override
-    public void updateTitle(String title) {
-        task.updateTitle(title);
-    }
-
-    /**
-     * Updates the message of the work state.
-     * This method is safe to be called from any thread.
-     *
-     * @param value the new value
-     */
-    @Override
-    public void updateValue(Void value) {
-        task.updateValue(value);
+    public void updateTitle(String value) {
+        update(value, title, titleUpdate);
     }
 
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        return isCancelled;
+    }
+
+    public void cancel() {
+        isCancelled = true;
     }
 }
