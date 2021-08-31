@@ -13,8 +13,6 @@ import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
-import java.util.List;
-
 /**
  * NullableAwtSvgPathStyleableKey.
  *
@@ -46,7 +44,7 @@ public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<Immutabl
      * @param defaultValue The default value.
      */
     public NullableFXSvgPathStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
-        super(null, key, new TypeToken<List<PathElement>>() {
+        super(null, key, new TypeToken<ImmutableList<PathElement>>() {
         }.getType(), true, defaultValue);
 
         converter = new CssFXSvgPathConverter(isNullable());
