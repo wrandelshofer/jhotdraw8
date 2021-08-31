@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -36,7 +37,6 @@ import org.jhotdraw8.geom.Shapes;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -230,7 +230,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     public void updateIconNode(final @NonNull RenderContext ctx, final @NonNull Path path) {
-        final List<PathElement> elements = getStyled(ICON_SHAPE);
+        final ImmutableList<PathElement> elements = getStyled(ICON_SHAPE);
         if (elements == null) {
             return;
         }
@@ -238,7 +238,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
         path.setFill(Paintable.getPaint(getStyled(TEXT_FILL)));
         path.setStroke(null);
-        path.getElements().setAll(elements);
+        path.getElements().setAll(elements.asList());
         final Bounds b = getLayoutBounds();
         path.setTranslateX(padding.getLeft() + b.getMinX());
         path.setTranslateY(padding.getTop() + b.getMinY());
@@ -274,7 +274,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      */
     protected @NonNull Insets getTotalPaddingAroundText() {
         final Insets padding = getStyledNonNull(PADDING).getConvertedValue();
-        final List<PathElement> shape = getStyled(ICON_SHAPE);
+        final ImmutableList<PathElement> shape = getStyled(ICON_SHAPE);
         if (shape == null) {
             return padding;
         }

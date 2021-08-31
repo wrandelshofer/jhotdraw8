@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssFXSvgPathConverter;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
@@ -19,11 +20,11 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<List<PathElement>> implements WritableStyleableMapAccessor<List<PathElement>> {
+public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<ImmutableList<PathElement>> implements WritableStyleableMapAccessor<ImmutableList<PathElement>> {
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull Converter<List<PathElement>> converter;
+    private final @NonNull Converter<ImmutableList<PathElement>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,7 +45,7 @@ public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<List<Pat
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableFXSvgPathStyleableKey(@NonNull String key, @Nullable List<PathElement> defaultValue) {
+    public NullableFXSvgPathStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
         super(null, key, new TypeToken<List<PathElement>>() {
         }.getType(), true, defaultValue);
 
@@ -52,7 +53,7 @@ public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<List<Pat
     }
 
     @Override
-    public @NonNull Converter<List<PathElement>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<PathElement>> getCssConverter() {
         return converter;
     }
 }

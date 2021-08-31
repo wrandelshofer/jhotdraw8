@@ -10,6 +10,8 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -32,7 +34,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement>> {
+public class CssFXSvgPathConverter extends AbstractCssConverter<ImmutableList<PathElement>> {
 
 
     public CssFXSvgPathConverter(boolean nullable) {
@@ -40,14 +42,14 @@ public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement
     }
 
     @Override
-    public @NonNull List<PathElement> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull ImmutableList<PathElement> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
         final String svgPathString = tt.currentStringNonNull();
 
         try {
             final FXPathElementsBuilder builder = new FXPathElementsBuilder();
             SvgPaths.buildFromSvgString(builder, svgPathString);
-            return builder.build();
+            return ImmutableLists.ofCollection(builder.build());
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
             p.add(new MoveTo(0, 0));
@@ -55,18 +57,19 @@ public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement
             p.add(new LineTo(10, 10));
             p.add(new LineTo(0, 10));
             p.add(new ClosePath());
-            return p;
+            return ImmutableLists.ofCollection(p);
         }
     }
 
     @Override
-    protected <TT extends List<PathElement>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.doubleSvgStringFromElements(value)));
+    protected <TT extends ImmutableList<PathElement>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.doubleSvgStringFromElements(value.asList())));
     }
 
     @Override
     public @NonNull String getHelpText() {
-        StringBuilder buf = new StringBuilder("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩｛ moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ ｝ \"");
+        final StringBuilder buf = new StringBuilder();
+        buf.append("Format of ⟨SvgPath⟩: \" ⟨moveTo ⟩｛ moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ ｝ \"");
         buf.append("\nFormat of ⟨moveTo ⟩: M ⟨x⟩ ⟨y⟩ ｜m ⟨dx⟩ ⟨dy⟩ ");
         buf.append("\nFormat of ⟨lineTo ⟩: L ⟨x⟩ ⟨y⟩ ｜l ⟨dx⟩ ⟨dy⟩ | H ⟨x⟩ | h ⟨dx⟩ | V ⟨y⟩ | v ⟨dy⟩");
         buf.append("\nFormat of ⟨quadTo ⟩: Q ⟨x⟩ ⟨y⟩  ⟨x1⟩ ⟨y1⟩ ｜q ⟨dx⟩ ⟨dy⟩  ⟨x1⟩ ⟨y1⟩ ｜T ⟨x⟩ ⟨y⟩ ｜t ⟨dx⟩ ⟨dy⟩");
@@ -78,8 +81,8 @@ public class CssFXSvgPathConverter extends AbstractCssConverter<List<PathElement
 
 
     @Override
-    public @Nullable List<PathElement> getDefaultValue() {
-        return null;
+    public @Nullable ImmutableList<PathElement> getDefaultValue() {
+        return isNullable() ? null : ImmutableLists.emptyList();
     }
 
 
