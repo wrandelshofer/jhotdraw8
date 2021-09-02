@@ -17,6 +17,31 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public interface WorkState<V> {
     /**
+     * The name of the {@link #titleProperty()}.
+     */
+    String TITLE_PROPERTY = "title";
+    /**
+     * The name of the {@link #messageProperty()}.
+     */
+    String MESSAGE_PROPERTY = "message";
+    /**
+     * The name of the {@link #valueProperty()}.
+     */
+    String VALUE_PROPERTY = "value";
+    /**
+     * The name of the {@link #workDoneProperty()}.
+     */
+    String WORK_DONE_PROPERTY = "workDone";
+    /**
+     * The name of the {@link #totalWorkProperty()}.
+     */
+    String TOTAL_WORK_PROPERTY = "totalWork";
+    /**
+     * The name of the {@link #progressProperty()}.
+     */
+    String PROGRESS_PROPERTY = "progress";
+
+    /**
      * Asynchronously updates the current message of the work state.
      * <p>
      * Calls to this method
@@ -35,9 +60,9 @@ public interface WorkState<V> {
      * <p>
      * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
      *
-     * @param title the new value
+     * @param value the new value
      */
-    void updateTitle(@Nullable String title);
+    void updateTitle(@Nullable String value);
 
     /**
      * Asynchronously updates the current value of the work state.
