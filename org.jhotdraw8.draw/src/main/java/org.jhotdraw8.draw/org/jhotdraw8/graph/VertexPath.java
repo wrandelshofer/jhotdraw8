@@ -16,7 +16,7 @@ import java.util.Objects;
 /**
  * Represents a vertex path through a graph.
  * <p>
- * Path elements are vertices.
+ * Path elements are vertices. The same vertex may occur more than once.
  *
  * @author Werner Randelshofer
  */

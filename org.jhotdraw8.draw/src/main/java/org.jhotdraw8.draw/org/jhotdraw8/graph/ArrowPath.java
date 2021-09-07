@@ -17,6 +17,7 @@ import java.util.Objects;
  * Represents an arrow data path through a graph.
  * <p>
  * Path elements are data elements of directed edges (arrows).
+ * The same arrow may occur more than once.
  *
  * @param <A> the arrow data type
  * @author Werner Randelshofer
