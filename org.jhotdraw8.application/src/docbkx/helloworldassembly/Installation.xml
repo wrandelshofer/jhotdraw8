@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ @(#)Installation.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en">
+  <info>
+    <title>Installation</title>
+  </info>
+
+  <section os="win">
+    <title>Installation on Windows</title>
+    <para>...</para>
+  </section>
+  <section os="linux">
+    <title>Installation on Linux</title>
+    <para>...</para>
+  </section>
+
+</chapter>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @(#)Resources.xml
+  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  -->
+
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Resources</title>
+  <itemizedlist>
+    <listitem>
+      <para>The JHotDraw 8 <link xlink:href="http://www.randelshofer.ch/oop/jhotdraw">web-site</link>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>The JHotDraw 8 <link xlink:href="https://github.com/wrandelshofer/jhotdraw">github-site</link>.
+      </para>
+    </listitem>
+  </itemizedlist>
+</section>
