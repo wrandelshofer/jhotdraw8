@@ -21,7 +21,6 @@ import java.nio.file.Paths;
  * OutputFormat.
  *
  * @author Werner Randelshofer
- * @design.pattern Drawing Strategy, Strategy.
  */
 public interface OutputFormat extends PropertyBean {
     /**

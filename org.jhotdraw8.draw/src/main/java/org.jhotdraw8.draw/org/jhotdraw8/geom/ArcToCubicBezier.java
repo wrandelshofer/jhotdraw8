@@ -61,7 +61,7 @@ public class ArcToCubicBezier {
      * <dl>
      *     <dt>[1] svgpath library</dt>
      *     <dd>svgpath. Copyright (C) 2013-2015 by Vitaly Puzrin, MIT License.
-     *     <a href="https://github.com/fontello/svgpath/blob/master/lib/a2c.js>github.com</a></dd>
+     *     <a href="https://github.com/fontello/svgpath/blob/master/lib/a2c.js">github.com</a></dd>
      * </dl>
      *
      * @param lastX         the last x coordinate

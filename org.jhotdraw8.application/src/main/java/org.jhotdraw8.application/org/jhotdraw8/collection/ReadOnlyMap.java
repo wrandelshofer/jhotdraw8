@@ -11,15 +11,14 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Provides query methods to a map. The state of the map
- * may change.
+ * Provides query methods to a map. The state of the map may change.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
  * convention in JavaFX for APIs that provide read methods but no write methods.
  *
- * @param <K>
- * @param <V>
+ * @param <K> the key type of the map
+ * @param <V> the value type of the map
  */
 public interface ReadOnlyMap<K, V> {
     boolean isEmpty();

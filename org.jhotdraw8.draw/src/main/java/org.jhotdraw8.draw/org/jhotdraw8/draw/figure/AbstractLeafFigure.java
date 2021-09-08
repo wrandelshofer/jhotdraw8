@@ -13,7 +13,6 @@ import org.jhotdraw8.annotation.NonNull;
  * figures.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Composite, Leaf.
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {
 

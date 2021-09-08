@@ -28,7 +28,6 @@ import org.jhotdraw8.draw.render.RenderingIntent;
  * A figure which supports font attributes.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface TextFontableFigure extends Figure {
 

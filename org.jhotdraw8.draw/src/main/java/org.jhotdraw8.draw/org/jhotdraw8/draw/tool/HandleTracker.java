@@ -15,12 +15,6 @@ import java.util.Collection;
  * {@link Handle} of a figure to the {@link SelectionTool}.
  *
  * @author Werner Randelshofer
- * @design.pattern SelectionTool Strategy, Strategy.
- * @design.pattern HandleTracker Chain of Responsibility, Handler. Mouse and
- * keyboard events occur on a {@link org.jhotdraw8.draw.DrawingView}, and are
- * preprocessed by {@link SelectionTool}, and then by {@link HandleTracker}.
- * {@code HandleTracker} invokes corresponding methods on a {@link Handle} which
- * in turn changes an aspect of a figure.
  */
 public interface HandleTracker extends Tracker {
 

@@ -55,40 +55,40 @@ import java.util.Objects;
  *  [8]  Nmtokens       ::=  Nmtoken (#x20 Nmtoken)*
  *
  * Literals
- *  [9]  EntityValue    ::=  '"' ([^%&"] | PEReference | Reference)* '"'
- *                        |  "'" ([^%&'] | PEReference | Reference)* "'"
- * [10]  AttValue       ::=  '"' ([^&lt;&"] | Reference)* '"'
- *                        |  "'" ([^&lt;&'] | Reference)* "'"
+ *  [9]  EntityValue    ::=  '"' ([^%&amp;"] | PEReference | Reference)* '"'
+ *                        |  "'" ([^%&amp;'] | PEReference | Reference)* "'"
+ * [10]  AttValue       ::=  '"' ([^&lt;&amp;"] | Reference)* '"'
+ *                        |  "'" ([^&lt;&amp;'] | Reference)* "'"
  * [11]  SystemLiteral  ::=  ('"' [^"]* '"') | ("'" [^']* "'")
  * [12]  PubidLiteral   ::=  '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
  * [13]  PubidChar      ::=  #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
  *
  * Character Data
- * [14]  CharData       ::=  [^&lt;&]* - ([^&lt;&]* ']]>' [^&lt;&]*)
+ * [14]  CharData       ::=  [^&lt;&amp;]* - ([^&lt;&amp;]* ']]&gt;' [^&lt;&amp;]*)
  *
  * Comments
- * [15]  Comment        ::=  '&lt;!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
+ * [15]  Comment        ::=  '&lt;!--' ((Char - '-') | ('-' (Char - '-')))* '--&gt;'
  *
  * Processing Instructions
- * [16]  PI             ::=  '&lt;?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
+ * [16]  PI             ::=  '&lt;?' PITarget (S (Char* - (Char* '?&gt;' Char*)))? '?&gt;'
  * [17]  PITarget       ::=  Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
  *
  * CDATA Sections
  * [18]  CDSect         ::=  CDStart CData CDEnd
  * [19]  CDStart        ::=  '&lt;![CDATA['
- * [20]  CData          ::=  (Char* - (Char* ']]>' Char*))
- * [21]  CDEnd          ::=  ']]>'
+ * [20]  CData          ::=  (Char* - (Char* ']]&gt;' Char*))
+ * [21]  CDEnd          ::=  ']]&gt;'
  *
  * Prolog
  * [22] prolog          ::=  XMLDecl? Misc* (doctypedecl Misc*)?
- * [23] XMLDecl         ::=  '&lt;?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
+ * [23] XMLDecl         ::=  '&lt;?xml' VersionInfo EncodingDecl? SDDecl? S? '?&gt;'
  * [24] VersionInfo     ::=  S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
  * [25] Eq              ::=  S? '=' S?
  * [26] VersionNum      ::=  '1.' [0-9]+
  * [27] Misc            ::=  Comment | PI | S
  *
  * Document Type Definition
- * [28]  doctypedecl    ::=  '&lt;!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
+ * [28]  doctypedecl    ::=  '&lt;!DOCTYPE' S Name (S ExternalID)? S? ('[' intSubset ']' S?)? '&gt;'
  * [28a] DeclSep        ::=  PEReference | S     [WFC: PE Between Declarations]
  * [28b] intSubset      ::=  (markupdecl | DeclSep)*
  * [29]  markupdecl     ::=  elementdecl | AttlistDecl | EntityDecl | NotationDecl | PI | Comment
@@ -105,20 +105,20 @@ import java.util.Objects;
  *                        |  STag content ETag
  *
  * Start-tag
- * [40]  STag           ::=  '&lt;' Name (S Attribute)* S? '>'
+ * [40]  STag           ::=  '&lt;' Name (S Attribute)* S? '&gt;'
  * [41]  Attribute      ::=  Name Eq AttValue
  *
  * End-tag
- * [42]  ETag           ::=  '&lt;/' Name S? '>'
+ * [42]  ETag           ::=  '&lt;/' Name S? '&gt;'
  *
  * Content of Elements
  * [43]  content        ::=  CharData? ((element | Reference | CDSect | PI | Comment) CharData?)*
  *
  * Tags for Empty Elements
- * [44]  EmptyElemTag   ::=  '&lt;' Name (S Attribute)* S? '/>'    [WFC: Unique Att Spec]
+ * [44]  EmptyElemTag   ::=  '&lt;' Name (S Attribute)* S? '/&gt;'    [WFC: Unique Att Spec]
  *
  * Element Type Declaration
- * [45]  elementdecl    ::=  '&lt;!ELEMENT' S Name S contentspec S? '>'    [VC: Unique Element Type Declaration]
+ * [45]  elementdecl    ::=  '&lt;!ELEMENT' S Name S contentspec S? '&gt;'    [VC: Unique Element Type Declaration]
  * [46]  contentspec    ::=  'EMPTY' | 'ANY' | Mixed | children
  *
  * Element-content Models
@@ -132,7 +132,7 @@ import java.util.Objects;
  *                        | '(' S? '#PCDATA' S? ')'
  *
  * Attribute-list Declaration
- * [52]  AttlistDecl    ::=  '&lt;!ATTLIST' S Name AttDef* S? '>'
+ * [52]  AttlistDecl    ::=  '&lt;!ATTLIST' S Name AttDef* S? '&gt;'
  * [53]  AttDef         ::=  S Name S AttType S DefaultDecl
  *
  * Attribute Types
@@ -159,24 +159,24 @@ import java.util.Objects;
  *
  * Conditional Section
  * [61]  conditionalSect ::= includeSect | ignoreSect
- * [62]  includeSect    ::=  '&lt;![' S? 'INCLUDE' S? '[' extSubsetDecl ']]>'
- * [63]  ignoreSect     ::=  '&lt;![' S? 'IGNORE' S? '[' ignoreSectContents* ']]>'
- * [64]  ignoreSectContents ::= Ignore ('&lt;![' ignoreSectContents ']]>' Ignore)*
- * [65]  Ignore         ::=  Char* - (Char* ('&lt;![' | ']]>') Char*)
+ * [62]  includeSect    ::=  '&lt;![' S? 'INCLUDE' S? '[' extSubsetDecl ']]&gt;'
+ * [63]  ignoreSect     ::=  '&lt;![' S? 'IGNORE' S? '[' ignoreSectContents* ']]&gt;'
+ * [64]  ignoreSectContents ::= Ignore ('&lt;![' ignoreSectContents ']]&gt;' Ignore)*
+ * [65]  Ignore         ::=  Char* - (Char* ('&lt;![' | ']]&gt;') Char*)
  *
  * Character Reference
- * [66]  CharRef        ::=  '&' '#' [0-9]+ ';'
- *                        |  '&' '#' 'x' [0-9a-fA-F]+ ';'
+ * [66]  CharRef        ::=  '&amp;' '#' [0-9]+ ';'
+ *                        |  '&amp;' '#' 'x' [0-9a-fA-F]+ ';'
  *
  * Entity Reference
  * [67]  Reference      ::=  EntityRef | CharRef
- * [68]  EntityRef      ::=  '&' Name ';'
+ * [68]  EntityRef      ::=  '&amp;' Name ';'
  * [69]  PEReference    ::=  '%' Name ';'
  *
  * Entity Declaration
  * [70]  EntityDecl     ::=  GEDecl | PEDecl
- * [71]  GEDecl         ::=  '&lt;!ENTITY' S Name S EntityDef S? '>'
- * [72]  PEDecl         ::=  '&lt;!ENTITY' S '%' S Name S PEDef S? '>'
+ * [71]  GEDecl         ::=  '&lt;!ENTITY' S Name S EntityDef S? '&gt;'
+ * [72]  PEDecl         ::=  '&lt;!ENTITY' S '%' S Name S PEDef S? '&gt;'
  * [73]  EntityDef      ::=  EntityValue | (ExternalID NDataDecl?)
  * [74]  PEDef          ::=  EntityValue | ExternalID
  *
@@ -187,7 +187,7 @@ import java.util.Objects;
  *
  *
  * Text Declaration
- * [77]  TextDecl       ::=  '&lt;?xml' VersionInfo? EncodingDecl S? '?>'
+ * [77]  TextDecl       ::=  '&lt;?xml' VersionInfo? EncodingDecl S? '?&gt;'
  *
  * Well-Formed External Parsed Entity
  * [78]  extParsedEnt   ::=  TextDecl? content
@@ -197,7 +197,7 @@ import java.util.Objects;
  * [81]  EncName        ::=  [A-Za-z] ([A-Za-z0-9._] | '-')*
  *
  * Notation Declarations
- * [82]  NotationDecl   ::=  '&lt;!NOTATION' S Name S (ExternalID | PublicID) S? '>'
+ * [82]  NotationDecl   ::=  '&lt;!NOTATION' S Name S (ExternalID | PublicID) S? '&gt;'
  * [83]  PublicID       ::=  'PUBLIC' S PubidLiteral
  * </pre>
  * <p>
@@ -372,7 +372,6 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     }
 
     public void setEscapeGreaterThan(boolean newValue) {
-
         this.escapeGreaterThan = newValue;
     }
 

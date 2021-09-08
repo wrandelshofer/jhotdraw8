@@ -25,7 +25,7 @@ import java.awt.geom.Point2D;
  * an anticlockwise oriented arc.
  * A bulge of 0 indicates a straight segment, and a bulge of 1 is a semicircle.
  * <p>
- * An AutoCAD Arc Entity is defined by a center, radius and start & end angle.
+ * An AutoCAD Arc Entity is defined by a center, radius, start and end angle.
  * The arc is always defined to be anticlockwise oriented, that is, following
  * an anticlockwise direction from the start angle to the end angle.
  * <p>

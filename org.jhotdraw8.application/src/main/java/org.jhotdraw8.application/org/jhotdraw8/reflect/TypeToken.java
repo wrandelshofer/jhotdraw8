@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
  * {@literal Type type = tt.getType();}
  * </pre>
  *
- * @param <T>
+ * @param <T> The type that this type token captures
  */
 public class TypeToken<T> {
     private final Type runtimeType;

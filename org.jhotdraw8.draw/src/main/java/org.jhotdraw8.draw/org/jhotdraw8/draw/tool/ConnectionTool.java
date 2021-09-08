@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
  * ConnectionTool.
  *
  * @author Werner Randelshofer
- * @design.pattern CreationTool AbstractFactory, Client.
  */
 public class ConnectionTool extends AbstractTool {
 

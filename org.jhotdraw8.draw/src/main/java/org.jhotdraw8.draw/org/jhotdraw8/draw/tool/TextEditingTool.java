@@ -26,8 +26,6 @@ import static java.lang.Math.max;
  * TextEditingTool.
  *
  * @author Werner Randelshofer
- * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
- * abstract factories (Supplier) for creating new {@link Figure}s.
  */
 public class TextEditingTool extends AbstractTool {
 

@@ -17,7 +17,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * a fill rule.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface FillRulableFigure extends Figure {
 

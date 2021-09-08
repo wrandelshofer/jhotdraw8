@@ -18,7 +18,7 @@ import static org.jhotdraw8.concurrent.FXConcurrentUtil.update;
 /**
  * A {@code CompletableWorker} is a worker .
  *
- * @param <V>
+ * @param <V> the result type
  */
 public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
     private final static @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();

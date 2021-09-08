@@ -20,7 +20,6 @@ import org.jhotdraw8.draw.render.RenderingIntent;
  * and a non-user-editable "pseudo-class" property.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface StyleableFigure extends Figure {
 

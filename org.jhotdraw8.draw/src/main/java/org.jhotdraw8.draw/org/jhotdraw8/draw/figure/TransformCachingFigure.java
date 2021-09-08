@@ -17,7 +17,6 @@ import org.jhotdraw8.geom.FXTransforms;
  * values in a map.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface TransformCachingFigure extends Figure {
     boolean CACHE = true;

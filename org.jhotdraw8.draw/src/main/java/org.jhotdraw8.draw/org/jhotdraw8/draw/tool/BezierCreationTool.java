@@ -36,8 +36,6 @@ import java.util.function.Supplier;
  * CreationTool for bezier figures.
  *
  * @author Werner Randelshofer
- * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
- * abstract factories (Supplier) for creating new {@link Figure}s.
  */
 public class BezierCreationTool extends AbstractCreationTool<Figure> {
 

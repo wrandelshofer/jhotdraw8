@@ -9,7 +9,6 @@ package org.jhotdraw8.draw.model;
  * affects dependent objects.
  *
  * @author Werner Randelshofer
- * @design.pattern org.jhotdraw8.draw.model.DrawingModel Strategy, Context.
  */
 public enum DirtyBits {
 

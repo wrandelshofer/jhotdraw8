@@ -39,8 +39,6 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  * @design.pattern Figure Mixin, Traits.
- * <p>
- * FIXME most doubles should be CSS sizes!
  */
 public interface StrokableFigure extends Figure {
 

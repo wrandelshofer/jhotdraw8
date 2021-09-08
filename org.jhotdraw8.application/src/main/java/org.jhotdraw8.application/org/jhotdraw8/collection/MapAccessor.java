@@ -19,8 +19,6 @@ import java.util.Map;
  *
  * @param <T> The value type.
  * @author Werner Randelshofer
- * @design.pattern MapAccessor Strategy, Strategy. Encapsulates a strategy for
- * accessing property values of a map.
  */
 public interface MapAccessor<T> extends Serializable {
 

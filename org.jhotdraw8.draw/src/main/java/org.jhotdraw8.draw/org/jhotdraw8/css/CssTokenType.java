@@ -10,7 +10,7 @@ package org.jhotdraw8.css;
  * References:
  * <dl>
  * <dt>CSS Syntax Module Level 3, Tokenization</dt>
- * <dd><a href="https://www.w3.org/TR/css-syntax-3/#tokenization">w3.org</a></a></dd>
+ * <dd><a href="https://www.w3.org/TR/css-syntax-3/#tokenization">w3.org</a></dd>
  * </dl>
  */
 public class CssTokenType {
@@ -297,36 +297,36 @@ public class CssTokenType {
     public static final int TT_URL = -12;
 
     /**
-     * Defines the comma "," delim-token.
+     * Defines the comma {@literal ","} delim-token.
      */
     public static final int TT_COMMA = ',';
 
     /**
-     * Defines the semicolon ";" delim-token.
+     * Defines the semicolon {@literal ";"} delim-token.
      */
     public static final int TT_SEMICOLON = ';';
 
     /**
-     * Defines the point "." delim-token.
+     * Defines the point {@literal "."} delim-token.
      */
     public static final int TT_POINT = '.';
 
     /**
-     * Defines the colon ":" delim-token.
+     * Defines the colon {@literal ":"} delim-token.
      */
     public static final int TT_COLON = ':';
 
     /**
-     * Defines the asterisk "*" delim-token.
+     * Defines the asterisk {@literal "*"} delim-token.
      */
     public static final int TT_ASTERISK = '*';
 
     /**
-     * Defines the left bracket ")" delim-token.
+     * Defines the left bracket {@literal ")"} delim-token.
      */
     public static final int TT_LEFT_BRACKET = '(';
     /**
-     * Defines the right round bracket ")" delim-token.
+     * Defines the right round bracket {@literal ")"} delim-token.
      */
     public static final int TT_RIGHT_BRACKET = ')';
     /**
@@ -338,38 +338,38 @@ public class CssTokenType {
      */
     public static final int TT_LEFT_CURLY_BRACKET = '{';
     /**
-     * Defines the right square bracket "]" delim-token.
+     * Defines the right square bracket {@literal "]"} delim-token.
      */
     public static final int TT_RIGHT_SQUARE_BRACKET = ']';
     /**
-     * Defines the left square bracket "[" delim-token.
+     * Defines the left square bracket {@literal "["} delim-token.
      */
     public static final int TT_LEFT_SQUARE_BRACKET = '[';
     /**
-     * Defines the equals "=" delim-token.
+     * Defines the equals {@literal "="} delim-token.
      */
     public static final int TT_EQUALS = '=';
     /**
-     * Defines the slash "/" delim-token.
+     * Defines the slash {@literal "/"} delim-token.
      */
     public static final int TT_SLASH = '/';
 
     /**
-     * Defines the plus "+" delim-token.
+     * Defines the plus {@literal "+"} delim-token.
      */
     public static final int TT_PLUS = '+';
     /**
-     * Defines the percent "%" delim-token.
+     * Defines the percent {@literal "%"} delim-token.
      */
     public static final int TT_PERCENT_DELIM = '%';
 
     /**
-     * Defines the vertical line "|" delim-token.
+     * Defines the vertical line {@literal "|"} delim-token.
      */
     public static final int TT_VERTICAL_LINE = '|';
 
     /**
-     * Defines the greater than ">" delim-token.
+     * Defines the greater than {@literal ">"} delim-token.
      */
     public static final int TT_GREATER_THAN = '>';
     public static final int TT_TILDE = '~';

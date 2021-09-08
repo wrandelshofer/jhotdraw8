@@ -26,7 +26,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * </pre>
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface CompositableFigure extends Figure {
 

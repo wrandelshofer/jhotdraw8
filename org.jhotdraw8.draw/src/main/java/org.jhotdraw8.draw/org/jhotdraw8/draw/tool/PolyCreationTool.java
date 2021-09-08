@@ -29,8 +29,6 @@ import java.util.function.Supplier;
  * CreationTool for polyline figures.
  *
  * @author Werner Randelshofer
- * @design.pattern CreationTool AbstractFactory, Client. Creation tools use
- * abstract factories (Supplier) for creating new {@link Figure}s.
  */
 public class PolyCreationTool extends AbstractCreationTool<Figure> {
 

@@ -42,9 +42,6 @@ import java.util.Map;
  * function.
  *
  * @author Werner Randelshofer
- * @design.pattern SelectionTool Strategy, Context. The different behavior
- * states of the selection tool are implemented by trackers.
- * @design.pattern HandleTracker Chain of Responsibility, Handler.
  */
 public class SelectionTool extends AbstractTool {
 

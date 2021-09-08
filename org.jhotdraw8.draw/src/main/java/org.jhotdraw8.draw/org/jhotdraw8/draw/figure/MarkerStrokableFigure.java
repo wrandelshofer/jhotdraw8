@@ -27,14 +27,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Interface for figures which can render a second stroke.
- * <p>
- * FIXME move out of JHotDraw.
+ * Interface for figures which can stroke a marker.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
- * <p>
- * FIXME most doubles should be CSS sizes!
  */
 public interface MarkerStrokableFigure extends Figure {
 

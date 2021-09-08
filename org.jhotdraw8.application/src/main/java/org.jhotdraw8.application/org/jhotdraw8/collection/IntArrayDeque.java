@@ -123,7 +123,7 @@ public class IntArrayDeque {
     }
 
     /**
-     * @throws NoSuchElementException {@inheritDoc}
+     * @throws NoSuchElementException if queue is empty
      */
     public int getFirst() {
         if (head == tail) {
@@ -134,7 +134,7 @@ public class IntArrayDeque {
     }
 
     /**
-     * @throws NoSuchElementException {@inheritDoc}
+     * @throws NoSuchElementException if queue is empty
      */
     public int getLast() {
         if (head == tail) {

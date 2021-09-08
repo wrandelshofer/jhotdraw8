@@ -30,11 +30,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * {@code TextStrokeableFigure} allows to change the stroke ofCollection the
+ * {@code TextStrokeableFigure} allows to change the stroke of the
  * text.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface TextStrokeableFigure extends Figure {
 

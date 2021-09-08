@@ -17,7 +17,6 @@ import java.util.Map;
  * OutputFormat for clipboard.
  *
  * @author Werner Randelshofer
- * @design.pattern Drawing Strategy, Strategy.
  */
 public interface ClipboardOutputFormat {
 

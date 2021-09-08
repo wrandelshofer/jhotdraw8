@@ -29,13 +29,8 @@ import java.util.Objects;
 
 /**
  * Interface for figures which can render a second stroke.
- * <p>
- * FIXME move out of JHotDraw.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
- * <p>
- * FIXME most doubles should be CSS sizes!
  */
 public interface SecondStrokableFigure extends Figure {
 

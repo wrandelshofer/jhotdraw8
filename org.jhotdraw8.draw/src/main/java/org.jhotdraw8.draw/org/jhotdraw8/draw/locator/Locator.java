@@ -12,8 +12,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * {@link Figure}.
  *
  * @author Werner Randelshofer
- * @design.pattern Locator Strategy, Strategy. {@link Locator} encapsulates a
- * strategy for locating a point on a {@link Figure}.
  */
 public interface Locator {
 

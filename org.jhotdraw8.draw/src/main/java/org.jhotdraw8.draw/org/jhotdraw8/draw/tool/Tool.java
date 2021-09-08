@@ -23,15 +23,9 @@ import org.jhotdraw8.event.Listener;
  * Tool.
  *
  * @author Werner Randelshofer
- * @design.pattern org.jhotdraw8.draw.figure.Drawing Framework, KeyAbstraction.
- * @design.pattern org.jhotdraw8.draw.model.DrawingModel MVC, Controller.
- * @design.pattern org.jhotdraw8.draw.DrawingEditor Mediator, Colleague.
  */
 public interface Tool extends PropertyBean, Disableable {
 
-    // ---
-    // Property Names
-    // ----
     /**
      * The name of the drawing view property.
      */
@@ -40,9 +34,7 @@ public interface Tool extends PropertyBean, Disableable {
      * The name of the drawing editor property.
      */
     String DRAWING_EDITOR_PROPERTY = "drawingEditor";
-    // ---
-    // Property Keys
-    // ---
+
     /**
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.

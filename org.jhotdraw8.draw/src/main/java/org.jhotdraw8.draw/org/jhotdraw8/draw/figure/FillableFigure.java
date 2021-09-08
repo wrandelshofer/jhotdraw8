@@ -21,7 +21,6 @@ import java.util.Objects;
  * filled.
  *
  * @author Werner Randelshofer
- * @design.pattern Figure Mixin, Traits.
  */
 public interface FillableFigure extends Figure {
 

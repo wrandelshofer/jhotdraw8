@@ -41,7 +41,7 @@ public interface StyleableBean {
      * The style class selector of this {@code StyleableBean}.
      * <p>
      * This is analogous to the "class" attribute on an HTML element
-     * (<a href="http://www.w3.org/TR/css3-selectors/#class-html">>CSS3 class</a>).
+     * (<a href="http://www.w3.org/TR/css3-selectors/#class-html">CSS3 class</a>).
      *
      * @return the classes of this {@code StyleableBean}
      */

@@ -4,7 +4,7 @@
  */
 
 /**
- * Provides model classes for {@link org.jhotdraw8.gui.FontChooser}.
+ * Provides a {@link org.jhotdraw8.gui.fontchooser.FontDialog}.
  */
 package org.jhotdraw8.gui.fontchooser;
 

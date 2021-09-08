@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * IntArrayDeque.
+ * LongArrayDeque.
  *
  * @author Werner Randelshofer
  */
@@ -110,7 +110,7 @@ public class LongArrayDeque {
     }
 
     /**
-     * @throws NoSuchElementException {@inheritDoc}
+     * @throws NoSuchElementException if the queue is empty
      */
     public long removeLast() {
         if (head == tail) {
@@ -123,7 +123,7 @@ public class LongArrayDeque {
     }
 
     /**
-     * @throws NoSuchElementException {@inheritDoc}
+     * @throws NoSuchElementException if the queue is empty
      */
     public long getFirst() {
         if (head == tail) {
@@ -134,7 +134,7 @@ public class LongArrayDeque {
     }
 
     /**
-     * @throws NoSuchElementException {@inheritDoc}
+     * @throws NoSuchElementException if the queue is empty
      */
     public long getLast() {
         if (head == tail) {

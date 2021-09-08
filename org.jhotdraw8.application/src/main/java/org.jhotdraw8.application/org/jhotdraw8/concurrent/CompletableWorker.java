@@ -9,7 +9,7 @@ import java.util.concurrent.CompletionStage;
  * provides value that it produces in a {@link java.util.concurrent.CompletionStage}
  * which completes (or fails) on the FX Application Thread.
  *
- * @param <V>
+ * @param <V> the result type
  */
 public interface CompletableWorker<V> extends Worker<V> {
     /**

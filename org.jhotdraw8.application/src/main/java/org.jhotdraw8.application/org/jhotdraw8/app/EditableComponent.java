@@ -12,8 +12,6 @@ import org.jhotdraw8.annotation.Nullable;
  * and have a selection.
  *
  * @author Werner Randelshofer
- * @design.pattern EditableComponent Adapter, Adapter. Provides a common API for
- * GUI components which support editing.
  */
 public interface EditableComponent {
 

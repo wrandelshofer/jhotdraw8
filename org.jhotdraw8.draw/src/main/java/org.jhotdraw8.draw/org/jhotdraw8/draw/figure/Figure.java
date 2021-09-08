@@ -114,21 +114,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * {@link org.jhotdraw8.draw.model.DrawingModel}.
  *
  * @author Werner Randelshofer
- * @design.pattern Drawing Framework, KeyAbstraction.
- * @design.pattern org.jhotdraw8.draw.model.DrawingModel Facade, Subsystem.
- * @design.pattern org.jhotdraw8.draw.model.DrawingModel Strategy, Context.
- * @design.pattern RenderContext Builder, Builder.
- * @design.pattern Handle Adapter, Adaptee.
- * @design.pattern org.jhotdraw8.draw.tool.CreationTool AbstractFactory,
- * AbstractProduct.
- * @design.pattern org.jhotdraw8.draw.locator.Locator Strategy, Context.
- * @design.pattern org.jhotdraw8.draw.connector.Connector Strategy, Context.
- * @design.pattern Figure Mixin, Mixin. The Mixin pattern is used to extend the
- * functionality of a class that implements the {@link Figure} interface. The
- * functionality is provided by interfaces with default methods (traits).
- * @design.pattern Figure Composite, Component. {@link Figure} uses the
- * composite pattern to provide uniform access to composite nodes and leaf nodes
- * of a tree structure.
  */
 public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
