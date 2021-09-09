@@ -57,21 +57,21 @@ public class IntAnyPathBuilder extends AbstractIntPathBuilder {
      * @param maxLength the maximal length of a path
      * @return the enumerated paths
      */
-    public @NonNull List<VertexPath<Integer>> findAllVertexPaths(int start,
-                                                                 @NonNull IntPredicate goal,
-                                                                 int maxLength) {
+    public @NonNull List<VertexSequence<Integer>> findAllVertexPaths(int start,
+                                                                     @NonNull IntPredicate goal,
+                                                                     int maxLength) {
         List<MyBackLink> backlinks = new ArrayList<>();
         searchAll(new MyBackLink(start, null, 1), goal,
                 getNextNodesFunction(),
                 backlinks, maxLength);
-        List<VertexPath<Integer>> vertexPaths = new ArrayList<>(backlinks.size());
+        List<VertexSequence<Integer>> vertexPaths = new ArrayList<>(backlinks.size());
         Deque<Integer> path = new ArrayDeque<>();
         for (MyBackLink list : backlinks) {
             path.clear();
             for (MyBackLink backlink = list; backlink != null; backlink = backlink.parent) {
                 path.addFirst(backlink.vertex);
             }
-            vertexPaths.add(new VertexPath<Integer>(path));
+            vertexPaths.add(new VertexSequence<Integer>(path));
         }
         return vertexPaths;
     }

@@ -58,7 +58,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible
      */
-    public @Nullable Map.Entry<ArrowPath<A>, Double> findArrowPath(@NonNull V start, @NonNull V goal) {
+    public @Nullable Map.Entry<ArrowSequence<A>, Double> findArrowPath(@NonNull V start, @NonNull V goal) {
         return findArrowPath(start, goal::equals);
     }
 
@@ -72,7 +72,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible
      */
-    public @Nullable Map.Entry<ArrowPath<A>, Double> findArrowPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
+    public @Nullable Map.Entry<ArrowSequence<A>, Double> findArrowPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
         return findArrowPath(start, goalPredicate, Double.MAX_VALUE);
     }
 
@@ -91,12 +91,12 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible
      */
-    public @Nullable Map.Entry<ArrowPath<A>, Double> findArrowPath(@NonNull V start, @NonNull Predicate<V> goalPredicate, double maxCost) {
+    public @Nullable Map.Entry<ArrowSequence<A>, Double> findArrowPath(@NonNull V start, @NonNull Predicate<V> goalPredicate, double maxCost) {
         BackLink<V, A> node = search(start, goalPredicate, maxCost);
         return toArrowPath(node);
     }
 
-    public static <V, A> Map.@Nullable Entry<ArrowPath<A>, Double> toArrowPath(BackLink<V, A> node) {
+    public static <V, A> Map.@Nullable Entry<ArrowSequence<A>, Double> toArrowPath(BackLink<V, A> node) {
         if (node == null) {
             return null;
         }
@@ -107,7 +107,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
             assert arrow != null;
             edges.addFirst(arrow);
         }
-        return new AbstractMap.SimpleEntry<>(new ArrowPath<>(edges), node.getCost());
+        return new AbstractMap.SimpleEntry<>(new ArrowSequence<>(edges), node.getCost());
     }
 
     /**
@@ -117,17 +117,17 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param maxCost   the maximal cost of the path
      * @return a ArrowPath if traversal is possible and if the past does not exceed the max cost
      */
-    public @Nullable Map.Entry<ArrowPath<A>, Double> findArrowPathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
+    public @Nullable Map.Entry<ArrowSequence<A>, Double> findArrowPathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
         List<A> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<ArrowPath<A>, Double> pathWithCost = findArrowPath(start, via::equals, maxCost - cost);
+                Map.Entry<ArrowSequence<A>, Double> pathWithCost = findArrowPath(start, via::equals, maxCost - cost);
                 if (pathWithCost == null) {
                     return null;
                 }
-                ArrowPath<A> path = pathWithCost.getKey();
+                ArrowSequence<A> path = pathWithCost.getKey();
                 cost += pathWithCost.getValue();
                 ImmutableList<A> edges = path.getArrows();
                 for (int i = 0, n = edges.size(); i < n; i++) {
@@ -136,7 +136,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
             }
             start = via;
         }
-        return new AbstractMap.SimpleEntry<>(new ArrowPath<>(combinedPath), cost);
+        return new AbstractMap.SimpleEntry<>(new ArrowSequence<>(combinedPath), cost);
     }
 
     /**
@@ -149,8 +149,8 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible
      */
-    public @Nullable Map.Entry<VertexPath<V>, Double> findVertexPath(@NonNull V start,
-                                                                     @NonNull Predicate<V> goalPredicate) {
+    public @Nullable Map.Entry<VertexSequence<V>, Double> findVertexPath(@NonNull V start,
+                                                                         @NonNull Predicate<V> goalPredicate) {
         return findVertexPath(start, goalPredicate, Double.MAX_VALUE);
     }
 
@@ -172,14 +172,14 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param maxCost       the maximal cost
      * @return a VertexPath if traversal is possible and if the past does not exceed the max cost
      */
-    public @Nullable Map.Entry<VertexPath<V>, Double> findVertexPath(@NonNull V start,
-                                                                     @NonNull Predicate<V> goalPredicate, double maxCost) {
+    public @Nullable Map.Entry<VertexSequence<V>, Double> findVertexPath(@NonNull V start,
+                                                                         @NonNull Predicate<V> goalPredicate, double maxCost) {
 
         BackLink<V, A> node = search(start, goalPredicate, maxCost);
         return toVertexPath(node);
     }
 
-    public static <V, A> Map.@Nullable Entry<VertexPath<V>, Double> toVertexPath(BackLink<V, A> node) {
+    public static <V, A> Map.@Nullable Entry<VertexSequence<V>, Double> toVertexPath(BackLink<V, A> node) {
         if (node == null) {
             return null;
         }
@@ -188,10 +188,10 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
         for (BackLink<V, A> parent = node; parent != null; parent = parent.getParent()) {
             vertices.addFirst(parent.getVertex());
         }
-        return new AbstractMap.SimpleEntry<>(new VertexPath<>(vertices), node.getCost());
+        return new AbstractMap.SimpleEntry<>(new VertexSequence<>(vertices), node.getCost());
     }
 
-    public static <V, A> Map.@Nullable Entry<VertexPath<V>, Long> toVertexPathLong(BackLink<V, A> node) {
+    public static <V, A> Map.@Nullable Entry<VertexSequence<V>, Long> toVertexPathLong(BackLink<V, A> node) {
         if (node == null) {
             return null;
         }
@@ -200,7 +200,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
         for (BackLink<V, A> parent = node; parent != null; parent = parent.getParent()) {
             vertices.addFirst(parent.getVertex());
         }
-        return new AbstractMap.SimpleEntry<>(new VertexPath<>(vertices), node.getCostLong());
+        return new AbstractMap.SimpleEntry<>(new VertexSequence<>(vertices), node.getCostLong());
     }
 
     /**
@@ -209,7 +209,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param waypoints the waypoints
      * @return the shortest path
      */
-    public @Nullable Map.Entry<VertexPath<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints) {
+    public @Nullable Map.Entry<VertexSequence<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints) {
         return findVertexPathOverWaypoints(waypoints, Double.MAX_VALUE);
     }
 
@@ -220,17 +220,17 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
      * @param maxCost   the maximal cost of the path
      * @return the shortest path that does not exceed maxCost
      */
-    public @Nullable Map.Entry<VertexPath<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
+    public @Nullable Map.Entry<VertexSequence<V>, Double> findVertexPathOverWaypoints(@NonNull Collection<? extends V> waypoints, double maxCost) {
         List<V> combinedPath = new ArrayList<>();
         V start = null;
         double cost = 0.0;
         for (V via : waypoints) {
             if (start != null) {
-                Map.Entry<VertexPath<V>, Double> pathWithCost = findVertexPath(start, via::equals, maxCost - cost);
+                Map.Entry<VertexSequence<V>, Double> pathWithCost = findVertexPath(start, via::equals, maxCost - cost);
                 if (pathWithCost == null) {
                     return null;
                 }
-                VertexPath<V> path = pathWithCost.getKey();
+                VertexSequence<V> path = pathWithCost.getKey();
                 cost += pathWithCost.getValue();
                 ImmutableList<V> vertices = path.getVertices();
                 for (int i = combinedPath.isEmpty() ? 0 : 1, n = vertices.size(); i < n; i++) {
@@ -239,7 +239,7 @@ public abstract class AbstractDoubleShortestPathBuilder<V, A> {
             }
             start = via;
         }
-        return new AbstractMap.SimpleEntry<>(new VertexPath<>(combinedPath), cost);
+        return new AbstractMap.SimpleEntry<>(new VertexSequence<>(combinedPath), cost);
     }
 
     private @Nullable BackLink<V, A> search(@NonNull V start,

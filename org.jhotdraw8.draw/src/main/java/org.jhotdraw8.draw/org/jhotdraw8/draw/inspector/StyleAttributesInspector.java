@@ -178,4 +178,12 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
             drawingView.jiggleHandles();
         }
     }
+
+    @Override
+    protected void recreateHandles() {
+        DrawingView drawingView = getSubject();
+        if (drawingView != null) {
+            drawingView.recreateHandles();
+        }
+    }
 }

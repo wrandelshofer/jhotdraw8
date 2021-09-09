@@ -262,6 +262,7 @@ public class FXSvgPaths {
             double x = 0, y = 0; // current point
             double cx1 = 0, cy1 = 0, cx2 = 0, cy2 = 0;// control points
             double ix = 0, iy = 0; // initial point of subpath
+            boolean first = true;
             Commands:
             while (tt.nextToken() != StreamPosTokenizer.TT_EOF) {
                 double px = x, py = y; // previous points
@@ -283,24 +284,27 @@ public class FXSvgPaths {
                     ix = cx2 = cx1 = x;
                     iy = cy2 = cy1 = y;
                     break;
-                case 'm':
-                    // relative-moveto dx dy
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'm'");
-                    y = tt.nval;
-                    MoveTo moveTo = new MoveTo(x, y);
-                    moveTo.setAbsolute(false);
-                    builder.add(moveTo);
-                    next = 'l';
-                    ix = cx2 = cx1 = x += px;
-                    iy = cy2 = cy1 = y += px;
+                    case 'm':
+                        // relative-moveto dx dy
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'm'");
+                        y = tt.nval;
+                        MoveTo moveTo = new MoveTo(x, y);
+                        if (!first) {
+                            // The first element of a path can not be relative.
+                            moveTo.setAbsolute(false);
+                        }
+                        builder.add(moveTo);
+                        next = 'l';
+                        ix = cx2 = cx1 = x += px;
+                        iy = cy2 = cy1 = y += px;
 
-                    break;
-                case 'Z':
-                    // close path
-                    builder.add(new ClosePath());
-                    next = 'Z';
+                        break;
+                    case 'Z':
+                        // close path
+                        builder.add(new ClosePath());
+                        next = 'Z';
                     cx2 = cx1 = x = ix;
                     cy2 = cy1 = y = iy;
                     break;
@@ -581,6 +585,7 @@ public class FXSvgPaths {
                 default:
                     throw tt.createException("Illegal command: " + command);
                 }
+                first = false;
             }
         } catch (IOException e) {
             // suppress exception
@@ -602,7 +607,7 @@ public class FXSvgPaths {
         builder.pathDone();
     }
 
-    public static @NonNull <T extends PathBuilder<?>> T buildFromFXPathElements(@NonNull T builder, @NonNull List<PathElement> pathElements) {
+    public static @NonNull <T extends PathBuilder<?>> T buildFromFXPathElements(@NonNull T builder, @NonNull Iterable<PathElement> pathElements) {
         double x = 0;
         double y = 0;
         double ix = 0, iy = 0;

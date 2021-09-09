@@ -38,7 +38,7 @@ public abstract class AbstractIntPathBuilder {
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexPath<Integer> findVertexPath(int start, int goal) {
+    public @Nullable VertexSequence<Integer> findVertexPath(int start, int goal) {
         return findVertexPath(start, i -> i == goal);
     }
 
@@ -78,11 +78,11 @@ public abstract class AbstractIntPathBuilder {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexPath<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate) {
+    public @Nullable VertexSequence<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate) {
         return findVertexPath(start, goalPredicate, addToBitSet(new BitSet()));
     }
 
-    public @Nullable VertexPath<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+    public @Nullable VertexSequence<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
         BackLink current = search(start, goalPredicate, visited);
         if (current == null) {
             return null;
@@ -91,7 +91,7 @@ public abstract class AbstractIntPathBuilder {
         for (BackLink i = current; i != null; i = i.getParent()) {
             vertices.addFirst(i.getVertex());
         }
-        return new VertexPath<>(vertices);
+        return new VertexSequence<>(vertices);
     }
 
     /**
@@ -140,7 +140,7 @@ public abstract class AbstractIntPathBuilder {
      *                  determines how the waypoints are traversed
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexPath<Integer> findVertexPathOverWaypoints(@NonNull Iterable<Integer> waypoints) {
+    public @Nullable VertexSequence<Integer> findVertexPathOverWaypoints(@NonNull Iterable<Integer> waypoints) {
         try {
             return findVertexPathOverWaypointsNonNull(waypoints);
         } catch (PathBuilderException e) {
@@ -159,7 +159,7 @@ public abstract class AbstractIntPathBuilder {
      * @return a VertexPath
      * @throws PathBuilderException if the path cannot be constructed
      */
-    public @Nullable VertexPath<Integer> findVertexPathOverWaypointsNonNull(@NonNull Iterable<Integer> waypoints) throws PathBuilderException {
+    public @Nullable VertexSequence<Integer> findVertexPathOverWaypointsNonNull(@NonNull Iterable<Integer> waypoints) throws PathBuilderException {
         Iterator<Integer> i = waypoints.iterator();
         List<Integer> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -181,7 +181,7 @@ public abstract class AbstractIntPathBuilder {
             }
             start = goal;
         }
-        return new VertexPath<>(pathElements);
+        return new VertexSequence<>(pathElements);
     }
 
     public @NonNull Function<Integer, Spliterator.OfInt> getNextNodesFunction() {

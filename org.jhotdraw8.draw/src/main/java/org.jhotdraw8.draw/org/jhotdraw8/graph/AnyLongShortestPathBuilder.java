@@ -153,7 +153,7 @@ public class AnyLongShortestPathBuilder<V, A> extends AbstractLongShortestPathBu
         return null;
     }
 
-    public static <Vertex> Map.Entry<VertexPath<Vertex>, Long> findShortestVertexPathLong(
+    public static <Vertex> Map.Entry<VertexSequence<Vertex>, Long> findShortestVertexPathLong(
             Set<Vertex> starts,
             Predicate<Vertex> goalf, long maxCost, Function<Vertex, Iterable<Vertex>> nextf,
             ToLongBiFunction<Vertex, Vertex> costf

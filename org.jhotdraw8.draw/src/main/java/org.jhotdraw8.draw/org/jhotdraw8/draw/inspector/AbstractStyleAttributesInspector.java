@@ -237,6 +237,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     fireInvalidated(entity);
                 }
             }
+            recreateHandles();
         } catch (IOException ex) {
             ex.printStackTrace();
             return;
@@ -248,6 +249,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
         isApplying = false;
     }
+
+    protected abstract void recreateHandles();
 
     /**
      * Attribute filter can be used to show only a specific set
