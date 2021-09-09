@@ -67,6 +67,7 @@ public class IntersectPathIteratorPoint {
         int counterClockwiseCrossingsSum = 0;
         int clockwiseCrossings = 0;
         int counterClockwiseCrossings = 0;
+        int segment = 0;
 
         for (; !pit.isDone(); pit.next(), i++) {
             IntersectionResult boundaryCheck;
@@ -114,7 +115,8 @@ public class IntersectPathIteratorPoint {
             }
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
-                result.add(boundaryCheck.getFirst());
+                final IntersectionPoint first = boundaryCheck.getFirst();
+                result.add(new IntersectionPoint(first.getX(), first.getY(), first.getArgumentA(), segment));
                 break;
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -139,7 +141,7 @@ public class IntersectPathIteratorPoint {
                 clockwiseCrossings = counterClockwiseCrossings = 0;
                 break;
             }
-
+            segment++;
         }
 
         if (windingRule == PathIterator.WIND_EVEN_ODD) {

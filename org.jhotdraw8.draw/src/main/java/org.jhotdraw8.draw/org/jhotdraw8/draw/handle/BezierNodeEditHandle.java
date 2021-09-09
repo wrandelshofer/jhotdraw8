@@ -146,17 +146,19 @@ public class BezierNodeEditHandle extends AbstractHandle {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
-                    BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+                    final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+                    if (nodes == null) return;
+                    BezierNodePath path = new BezierNodePath(nodes);
                     BezierNode node = path.getNodes().get(pointIndex);
                     switch (node.getMask()) {
-                    case C0_MASK:
-                        node = node.setMask(C0C1_MASK);
-                        break;
-                    case C0C1_MASK:
-                        node = node.setMask(C0C2_MASK);
-                        break;
-                    case C0C2_MASK:
-                        node = node.setMask(C0C1C2_MASK);
+                        case C0_MASK:
+                            node = node.setMask(C0C1_MASK);
+                            break;
+                        case C0C1_MASK:
+                            node = node.setMask(C0C2_MASK);
+                            break;
+                        case C0C2_MASK:
+                            node = node.setMask(C0C1C2_MASK);
                         break;
                     case C0C1C2_MASK:
                     default:
