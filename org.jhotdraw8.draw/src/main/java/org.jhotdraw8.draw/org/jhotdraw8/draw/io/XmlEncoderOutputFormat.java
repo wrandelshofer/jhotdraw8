@@ -5,7 +5,8 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.beans.AbstractPropertyBean;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 
@@ -19,8 +20,9 @@ import java.net.URI;
  *
  * @author Werner Randelshofer
  */
-public class XmlEncoderOutputFormat extends AbstractPropertyBean implements OutputFormat {
+public class XmlEncoderOutputFormat implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
+    private @NonNull ReadOnlyOptionsMap options = new SimpleOptionsMap();
 
     public XmlEncoderOutputFormat() {
     }
@@ -36,4 +38,14 @@ public class XmlEncoderOutputFormat extends AbstractPropertyBean implements Outp
         }
     }
 
+    @NonNull
+    @Override
+    public ReadOnlyOptionsMap getOptions() {
+        return options;
+    }
+
+    @Override
+    public void setOptions(ReadOnlyOptionsMap options) {
+        this.options = options;
+    }
 }

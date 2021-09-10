@@ -25,15 +25,15 @@ public interface ReadOnlyMap<K, V> {
 
     int size();
 
-    V get(K key);
+    V get(Object key);
 
     Iterator<Map.Entry<K, V>> entries();
 
     Iterator<K> keys();
 
-    boolean containsKey(K key);
+    boolean containsKey(Object key);
 
-    default @NonNull ReadOnlySet<Map.Entry<K, V>> entrySet() {
+    default @NonNull ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new ReadOnlySet<Map.Entry<K, V>>() {
 
             @Override
@@ -59,7 +59,7 @@ public interface ReadOnlyMap<K, V> {
         };
     }
 
-    default @NonNull ReadOnlySet<K> keySet() {
+    default @NonNull ReadOnlySet<K> readOnlyKeySet() {
         return new ReadOnlySet<K>() {
 
             @Override

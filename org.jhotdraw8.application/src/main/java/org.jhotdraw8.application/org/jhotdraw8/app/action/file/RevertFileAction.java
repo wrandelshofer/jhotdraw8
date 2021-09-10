@@ -13,11 +13,11 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -81,7 +81,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
         if (uri == null) {
             view.clear().handle((ignored, throwable) -> handler.apply(null, throwable));
         } else {
-            view.read(uri, dataFormat, Collections.emptyMap(), false, workState).handle(handler);
+            view.read(uri, dataFormat, new SimpleOptionsMap(), false, workState).handle(handler);
         }
     }
 

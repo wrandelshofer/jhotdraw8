@@ -27,8 +27,19 @@ import java.util.function.Supplier;
  */
 public class SimpleTreePresentationModel<N> extends AbstractTreePresentationModel<N> {
     /**
-     * Performance: An identity hash map can be significantly faster than a
-     * an equals/hashCode based map.
+     * TODO implement lazy tree item as described in {@link TreeItem}.
+     *
+     * @param <N> the value type
+     */
+    private static class LazyTreeItem<N> extends TreeItem<N> {
+        public LazyTreeItem(N value) {
+            super(value);
+        }
+    }
+
+    /**
+     * Performance: An identity hash map can be significantly faster than
+     * an equality-based map.
      */
     private final Map<N, TreeItem<N>> items;
     private final Listener<TreeModelEvent<N>> modelHandler = new Listener<TreeModelEvent<N>>() {
@@ -81,7 +92,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     private boolean reversed = true;
-    private final TreeItem<N> root = new TreeItem<>();
+    private final TreeItem<N> root = new LazyTreeItem<>(null);
 
     protected int updating;
 
@@ -109,29 +120,16 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         }
     }
 
-    protected void onNodeAddedToTreeOld(N node, N parent, int index) {
-        TreeModel<N> m = getTreeModel();
-        TreeItem<N> item = new TreeItem<>(node);
-        item.setExpanded(false);
-        items.put(node, item);
-        int childIndex = 0;
-        for (int i = 0, n = m.getChildCount(node); i < n; i++) {
-            N child = m.getChild(node, i);
-            onNodeAddedToTree(child, node, childIndex);
-            onNodeAdded(child, node, childIndex);
-            childIndex++;
-        }
-    }
-
     protected void onNodeAddedToTree(N node, N parent, int index) {
         TreeModel<N> m = getTreeModel();
-        TreeItem<N> item = new TreeItem<>(node);
+        TreeItem<N> item = new LazyTreeItem<>(node);
         item.setExpanded(false);
         items.put(node, item);
         int childIndex = 0;
         Deque<TreeItem<N>> deque = new ArrayDeque<>();
         for (int i = 0, n = m.getChildCount(node); i < n; i++) {
             N child = m.getChild(node, i);
+            // Performance: recursion may overflow!
             onNodeAddedToTree(child, node, childIndex);
             // Performance: this is extremely slow
             TreeItem<N> childItem = items.computeIfAbsent(child, TreeItem::new);
@@ -142,7 +140,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
             }
             childIndex++;
         }
-        // instead of calling onNodeAdded for every child, we this instead
+        // instead of calling onNodeAdded for every child, we do this instead
         item.getChildren().addAll(deque);
     }
 
@@ -168,17 +166,17 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
 
     protected void onRootChanged() {
         TreeModel<N> m = getTreeModel();
-        N drawing = m.getRoot();
-        root.setValue(drawing);
+        N modelRoot = m.getRoot();
+        root.setValue(modelRoot);
         root.getChildren().clear();
         items.clear();
-        items.put(drawing, root);
+        items.put(modelRoot, root);
         int childIndex = 0;
-        if (drawing != null) {
-            for (int i = 0, n = m.getChildCount(drawing); i < n; i++) {
-                N child = m.getChild(drawing, i);
-                onNodeAddedToTree(child, drawing, childIndex);
-                onNodeAdded(child, drawing, childIndex);
+        if (modelRoot != null) {
+            for (int i = 0, n = m.getChildCount(modelRoot); i < n; i++) {
+                N child = m.getChild(modelRoot, i);
+                onNodeAddedToTree(child, modelRoot, childIndex);
+                onNodeAdded(child, modelRoot, childIndex);
                 childIndex++;
             }
         }

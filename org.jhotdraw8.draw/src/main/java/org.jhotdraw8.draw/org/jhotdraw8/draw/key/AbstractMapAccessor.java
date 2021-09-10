@@ -82,7 +82,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @return name string.
      */
     @Override
-    public @Nullable String getName() {
+    public @NonNull String getName() {
         return name;
     }
 

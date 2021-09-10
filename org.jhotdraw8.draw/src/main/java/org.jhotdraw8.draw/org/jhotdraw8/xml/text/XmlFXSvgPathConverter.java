@@ -38,12 +38,12 @@ public class XmlFXSvgPathConverter implements Converter<ImmutableList<PathElemen
         if ("none".equals(string)) {
             return null;
         }
-        return ImmutableLists.ofCollection(FXSvgPaths.fxPathElementsFromSvgString(string));
+        return ImmutableLists.ofCollection(FXSvgPaths.pathElementsFromSvgString(string));
     }
 
     @Override
     public <TT extends ImmutableList<PathElement>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
-        final String content = value == null ? null : FXSvgPaths.doubleSvgStringFromElements(value.asList());
+        final String content = value == null ? null : FXSvgPaths.doubleSvgStringFromPathElements(value.asList());
         out.append(content == null ? "none" : content);
     }
 

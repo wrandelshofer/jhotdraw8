@@ -15,13 +15,13 @@ import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.net.UriUtil;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Optional;
@@ -145,7 +145,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-            v.read(uri, format, Collections.emptyMap(), false, workState).whenComplete((actualFormat, exception) -> {
+            v.read(uri, format, new SimpleOptionsMap(), false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
                     v.setURI(oldUri);

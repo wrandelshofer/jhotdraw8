@@ -18,6 +18,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -27,7 +28,6 @@ import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
@@ -228,7 +228,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState workState) {
         final FileBasedActivity v = unsavedView;
-        v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
+        v.write(uri, format, new SimpleOptionsMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -258,7 +258,7 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState workState) {
         final FileBasedActivity v = unsavedView;
-        v.write(uri, format, Collections.emptyMap(), workState).handle((result, exception) -> {
+        v.write(uri, format, new SimpleOptionsMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

@@ -18,7 +18,9 @@ import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractActivityAction;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.OptionsMap;
 import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -28,7 +30,6 @@ import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
@@ -136,8 +137,8 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     }
 
     protected void saveFileChooseOptions(final @NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
-        Map<Key<?>, Object> options = null;
-        Dialog<Map<Key<?>, Object>> dialog = null;
+        OptionsMap options = new SimpleOptionsMap();
+        Dialog<OptionsMap> dialog = null;
         try {
             dialog = createOptionsDialog(format);
         } catch (RuntimeException e) {
@@ -152,7 +153,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         if (dialog != null) {
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(v.getNode().getScene().getWindow());
-            Optional<Map<Key<?>, Object>> result = dialog.showAndWait();
+            Optional<OptionsMap> result = dialog.showAndWait();
 
             if (result.isPresent()) {
                 options = result.get();
@@ -164,7 +165,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, Map<Key<?>, Object> options, WorkState workState) {
+    protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, @NonNull OptionsMap options, WorkState workState) {
         view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
@@ -194,7 +195,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         });
     }
 
-    protected @Nullable Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected @Nullable Dialog<OptionsMap> createOptionsDialog(DataFormat format) {
         return null;
     }
 

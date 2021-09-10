@@ -8,7 +8,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
@@ -73,7 +72,7 @@ import java.util.regex.Pattern;
  *
  * @author Werner Randelshofer
  */
-public class SimpleXmlDomReader extends AbstractPropertyBean implements InputFormat, ClipboardInputFormat {
+public class SimpleXmlDomReader extends AbstractInputFormat implements ClipboardInputFormat {
     private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
     protected List<String> comments;
     protected FigureFactory figureFactory;

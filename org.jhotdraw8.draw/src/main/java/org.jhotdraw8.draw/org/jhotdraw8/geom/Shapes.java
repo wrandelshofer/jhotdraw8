@@ -551,7 +551,7 @@ public class Shapes {
 
     public static PathIterator awtPathIteratorFromFXPathElements(List<PathElement> pathElements, int windingRule, AffineTransform tx) {
         final PathIteratorPathBuilder b = new PathIteratorPathBuilder(windingRule);
-        FXSvgPaths.buildFromFXPathElements(b, pathElements);
+        FXSvgPaths.buildFromPathElements(b, pathElements);
         return b.build();
     }
 }

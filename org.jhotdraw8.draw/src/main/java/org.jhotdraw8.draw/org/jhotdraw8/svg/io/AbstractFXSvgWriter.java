@@ -898,7 +898,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (isRelativizePaths()) {
             d = SvgPaths.doubleRelativeSvgStringFromAwt(Shapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
-            d = FXSvgPaths.doubleSvgStringFromElements(node.getElements());
+            d = FXSvgPaths.doubleSvgStringFromPathElements(node.getElements());
         }
         w.writeAttribute("d", d);
     }

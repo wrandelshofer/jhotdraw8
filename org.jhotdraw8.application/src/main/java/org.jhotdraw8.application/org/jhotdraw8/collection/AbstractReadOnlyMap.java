@@ -25,7 +25,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
         }
 
         try {
-            for (Map.Entry<K, V> e : entrySet()) {
+            for (Map.Entry<K, V> e : readOnlyEntrySet()) {
                 K key = e.getKey();
                 V value = e.getValue();
                 if (value == null) {
@@ -48,7 +48,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
 
     public int hashCode() {
         int h = 0;
-        for (Map.Entry<K, V> kvEntry : entrySet()) {
+        for (Map.Entry<K, V> kvEntry : readOnlyEntrySet()) {
             h += kvEntry.hashCode();
         }
         return h;

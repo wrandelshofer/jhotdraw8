@@ -11,12 +11,11 @@ import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -125,7 +124,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed with the data format that was
      * actually used for reading the file.
      */
-    @NonNull CompletionStage<@NonNull DataFormat> read(@NonNull URI uri, @Nullable DataFormat format, @NonNull Map<Key<?>, Object> options, boolean insert, WorkState workState);
+    @NonNull CompletionStage<@NonNull DataFormat> read(@NonNull URI uri, @Nullable DataFormat format, @NonNull ReadOnlyOptionsMap options, boolean insert, WorkState workState);
 
     /**
      * Asynchronously writes document data to the specified URI.
@@ -145,7 +144,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    @NonNull CompletionStage<Void> write(@NonNull URI uri, @Nullable DataFormat format, @NonNull Map<Key<?>, Object> options, @NonNull WorkState workState);
+    @NonNull CompletionStage<Void> write(@NonNull URI uri, @Nullable DataFormat format, @NonNull ReadOnlyOptionsMap options, @NonNull WorkState workState);
 
     /**
      * Clears the content.

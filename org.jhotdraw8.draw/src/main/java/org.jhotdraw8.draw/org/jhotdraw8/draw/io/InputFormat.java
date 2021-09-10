@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.PropertyBean;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -25,8 +25,10 @@ import java.nio.file.Paths;
  *
  * @author Werner Randelshofer
  */
-public interface InputFormat extends PropertyBean {
+public interface InputFormat {
+    void setOptions(@NonNull ReadOnlyOptionsMap newValue);
 
+    @NonNull ReadOnlyOptionsMap getOptions();
 
     /**
      * Reads a figure from an URI

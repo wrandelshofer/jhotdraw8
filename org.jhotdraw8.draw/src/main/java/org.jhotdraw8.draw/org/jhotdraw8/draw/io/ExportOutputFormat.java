@@ -4,15 +4,19 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.beans.PropertyBean;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullObjectKey;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
 
 /**
  * ExportOutputFormat.
  *
  * @author Werner Randelshofer
  */
-public interface ExportOutputFormat extends PropertyBean {
+public interface ExportOutputFormat {
+    void setOptions(@NonNull ReadOnlyOptionsMap newValue);
+
+    @NonNull ReadOnlyOptionsMap getOptions();
 
     NonNullObjectKey<Double> EXPORT_DRAWING_DPI_KEY = new NonNullObjectKey<>("exportDrawingDpi", Double.class, 72.0);
     NonNullObjectKey<Boolean> EXPORT_DRAWING_KEY = new NonNullObjectKey<>("exportDrawing", Boolean.class, true);

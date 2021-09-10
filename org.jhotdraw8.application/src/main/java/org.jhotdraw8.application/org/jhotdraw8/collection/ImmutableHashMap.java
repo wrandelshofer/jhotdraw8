@@ -33,7 +33,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         } else {
             LinkedHashMap<K, V> backingMap1 = new LinkedHashMap<>(backingMap.size());
             this.backingMap = backingMap1;
-            for (Map.Entry<? extends K, ? extends V> entry : backingMap.entrySet()) {
+            for (Map.Entry<? extends K, ? extends V> entry : backingMap.readOnlyEntrySet()) {
                 backingMap1.put(entry.getKey(), entry.getValue());
             }
 
@@ -111,7 +111,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     @Override
-    public V get(K key) {
+    public V get(Object key) {
         return backingMap.get(key);
     }
 
@@ -126,7 +126,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     @Override
-    public boolean containsKey(K key) {
+    public boolean containsKey(Object key) {
         return backingMap.containsKey(key);
     }
 

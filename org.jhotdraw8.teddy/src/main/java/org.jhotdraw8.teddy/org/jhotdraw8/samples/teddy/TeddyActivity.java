@@ -18,7 +18,7 @@ import org.jhotdraw8.app.AbstractFileBasedActivity;
 import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.samples.teddy.action.FontAction;
@@ -30,7 +30,6 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -88,7 +87,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull Map<Key<?>, Object> options, boolean insert, WorkState workState) {
+    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, boolean insert, WorkState workState) {
         return FXWorker.supply(() -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
@@ -114,7 +113,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull Map<Key<?>, Object> options, WorkState workState) {
+    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, @NonNull WorkState workState) {
         final String text = textArea.getText();
         return FXWorker.run(() -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {

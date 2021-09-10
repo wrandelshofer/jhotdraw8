@@ -52,6 +52,7 @@ import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.OSXCollator;
@@ -557,7 +558,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             }
             getActivities().add(v);
             v.addDisabler(this);
-            v.read(uri, null, Collections.emptyMap(), false, new SimpleWorkState()).whenComplete((result, ex) -> {
+            v.read(uri, null, new SimpleOptionsMap(), false, new SimpleWorkState()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();
                     final Alert alert = new Alert(Alert.AlertType.ERROR,

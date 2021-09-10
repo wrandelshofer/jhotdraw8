@@ -37,7 +37,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return name string.
      */
-    @Nullable
+    @NonNull
     String getName();
 
     /**

@@ -49,7 +49,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 

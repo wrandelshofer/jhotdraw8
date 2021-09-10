@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.beans.PropertyBean;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 
@@ -22,7 +22,11 @@ import java.nio.file.Paths;
  *
  * @author Werner Randelshofer
  */
-public interface OutputFormat extends PropertyBean {
+public interface OutputFormat {
+    void setOptions(@NonNull ReadOnlyOptionsMap newValue);
+
+    @NonNull ReadOnlyOptionsMap getOptions();
+
     /**
      * Writes a Drawing into the resource identified by the given URI.
      *

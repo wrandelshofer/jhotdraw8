@@ -70,7 +70,9 @@ import java.util.function.Supplier;
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     private final CachingCollator collator = new CachingCollator(new OSXCollator());
-
+    private final @NonNull XmlWordListConverter wordListConverter = new XmlWordListConverter();
+    private final XmlWordSetConverter wordSetConverter = new XmlWordSetConverter();
+    private final SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();
     private @Nullable DrawingView drawingView;
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
@@ -83,6 +85,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, ImmutableSet<String>> pseudoClassesColumn;
     @FXML
     private TreeTableColumn<Figure, ImmutableSet<String>> styleClassesColumn;
+    @FXML
+    private TreeTableView<Figure> treeView;
     private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
@@ -91,16 +95,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
     };
     @FXML
-    private TreeTableView<Figure> treeView;
-    @FXML
     private TreeTableColumn<Figure, String> typeColumn;
-    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
     @FXML
     private TreeTableColumn<Figure, Boolean> visibleColumn;
     private boolean willUpdateSelectionInTree;
-
-    private final @NonNull XmlWordListConverter wordListConverter = new XmlWordListConverter();
-    private final XmlWordSetConverter wordSetConverter = new XmlWordSetConverter();
+    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
@@ -109,6 +108,48 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     public HierarchyInspector(@NonNull URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
+    }
+
+    @NonNull
+    private Callback<TreeTableView<Figure>, TreeTableRow<Figure>> createRow() {
+        return tv -> {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteMenuItem = new MenuItem(InspectorLabels.getResources().getString("edit.delete.text"));
+            contextMenu.getItems().add(deleteMenuItem);
+
+            TreeTableRow<Figure> row = new TreeTableRow<Figure>() {
+                @Override
+                public void updateItem(Figure item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(null);
+                    } else {
+                        // configure context menu with appropriate menu items,
+                        // depending on value of item
+                        setContextMenu(contextMenu);
+                        deleteMenuItem.setDisable(!item.isDeletable());
+                    }
+                }
+            };
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Figure rowData = row.getItem();
+                    DrawingView myDrawingView = this.drawingView;
+                    if (myDrawingView != null) {
+                        myDrawingView.scrollFigureToVisible(rowData);
+                    }
+                }
+            });
+            deleteMenuItem.setOnAction(evt -> {
+                final Figure item = row.getItem();
+                if (item != null && item.isDeletable() && drawingView != null) {
+                    final DrawingModel model = drawingView.getModel();
+                    model.disconnect(item);
+                    model.removeFromParent(item);
+                }
+            });
+            return row;
+        };
     }
 
     @Override
@@ -126,10 +167,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             throw new InternalError(ex);
         }
 
-        Supplier<Map<Figure, TreeItem<Figure>>> mapSupplier = () -> new IdentityHashMap<>();
+        Supplier<Map<Figure, TreeItem<Figure>>> mapSupplier = IdentityHashMap::new;
         model = new SimpleTreePresentationModel<Figure>(mapSupplier);
-        dummyDrawingModel.setDrawing(new SimpleDrawing());
-        model.setTreeModel(dummyDrawingModel);
+        stubDrawingModel.setDrawing(new SimpleDrawing());
+        model.setTreeModel(stubDrawingModel);
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
                 cell.getValue() == null ? null : cell.getValue().getValue() == null ? null : cell.getValue().getValue().getTypeSelector())
         );
@@ -223,11 +264,11 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             public @NonNull TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
                 // Type arguments needed for Java 8!
                 return new TextFieldTreeTableCell<Figure, ImmutableSet<String>>() {
+                    private final @NonNull Set<String> syntheticClasses = new HashSet<>();
+
                     {
                         setConverter(new StringConverterAdapter<>(wordSetConverter));
                     }
-
-                    private final @NonNull Set<String> syntheticClasses = new HashSet<>();
 
                     @Override
                     public void cancelEdit() {
@@ -304,68 +345,27 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         showingProperty().addListener(this::onShowingChanged);
     }
 
-    private void onShowingChanged(Observable observable,Boolean oldValue,Boolean newValue) {
-        if (newValue&&model.getTreeModel()==dummyDrawingModel
-        &&drawingView!=null) {
-            model.setTreeModel(drawingView.getModel());
-        }
-    }
-
-    @NonNull
-    private Callback<TreeTableView<Figure>, TreeTableRow<Figure>> createRow() {
-        return tv -> {
-            ContextMenu contextMenu = new ContextMenu();
-            MenuItem deleteMenuItem = new MenuItem(InspectorLabels.getResources().getString("edit.delete.text"));
-            contextMenu.getItems().add(deleteMenuItem);
-
-            TreeTableRow<Figure> row = new TreeTableRow<Figure>() {
-                @Override
-                public void updateItem(Figure item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setContextMenu(null);
-                    } else {
-                        // configure context menu with appropriate menu items,
-                        // depending on value of item
-                        setContextMenu(contextMenu);
-                        deleteMenuItem.setDisable(!item.isDeletable());
-                    }
-                }
-            };
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Figure rowData = row.getItem();
-                    DrawingView myDrawingView = this.drawingView;
-                    if (myDrawingView != null) {
-                        myDrawingView.scrollFigureToVisible(rowData);
-                    }
-                }
-            });
-            deleteMenuItem.setOnAction(evt -> {
-                final Figure item = row.getItem();
-                if (item != null && item.isDeletable() && drawingView != null) {
-                    final DrawingModel model = drawingView.getModel();
-                    model.disconnect(item);
-                    model.removeFromParent(item);
-                }
-            });
-            return row;
-        };
-    }
-            private final SimpleDrawingModel dummyDrawingModel = new SimpleDrawingModel();
-
     @Override
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         if (oldValue != null) {
             oldValue.getSelectedFigures().removeListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, null);
-            model.setTreeModel(dummyDrawingModel);
+            model.setTreeModel(stubDrawingModel);
         }
         drawingView = newValue;
         if (newValue != null) {
-            if (isShowing()) model.setTreeModel(newValue.getModel());
+            if (isShowing()) {
+                model.setTreeModel(newValue.getModel());
+            }
             newValue.getSelectedFigures().addListener(viewSelectionHandler);
             treeView.getProperties().put(EditableComponent.EDITABLE_COMPONENT, drawingView);
+        }
+    }
+
+    private void onShowingChanged(Observable observable, Boolean oldValue, Boolean newValue) {
+        if (newValue && model.getTreeModel() == stubDrawingModel
+                && drawingView != null) {
+            model.setTreeModel(drawingView.getModel());
         }
     }
 

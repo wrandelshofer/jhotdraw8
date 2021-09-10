@@ -17,6 +17,7 @@ import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.OptionsMap;
 import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
@@ -114,7 +115,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
 
     protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState workState) {
         final Application app = getApplication();
-        Map<Key<?>, Object> options = getReadOptions();
+        OptionsMap options = getReadOptions();
         app.removeDisabler(workState);
         if (options == null) {
             return; // The user has decided, that he/she does not want to open a file after all.
@@ -164,7 +165,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
      *
      * @return options or null if the user has aborted the dialog window
      */
-    protected abstract @NonNull Map<Key<?>, Object> getReadOptions();
+    protected abstract @NonNull OptionsMap getReadOptions();
 
 
 }

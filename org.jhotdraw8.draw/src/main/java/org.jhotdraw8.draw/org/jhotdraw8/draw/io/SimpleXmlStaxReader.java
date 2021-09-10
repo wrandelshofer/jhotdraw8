@@ -5,15 +5,12 @@
 
 package org.jhotdraw8.draw.io;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
@@ -52,9 +49,8 @@ import java.util.regex.Pattern;
 /**
  * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
  */
-public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
+public class SimpleXmlStaxReader extends AbstractInputFormat implements ClipboardInputFormat {
     private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
-    private final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
     private final @NonNull IdFactory idFactory;
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
@@ -106,11 +102,6 @@ public class SimpleXmlStaxReader implements InputFormat, ClipboardInputFormat {
 
     public void setLayerFactory(Supplier<Layer> layerFactory) {
         this.layerFactory = layerFactory;
-    }
-
-    @Override
-    public @NonNull ObservableMap<Key<?>, Object> getProperties() {
-        return properties;
     }
 
     @Override

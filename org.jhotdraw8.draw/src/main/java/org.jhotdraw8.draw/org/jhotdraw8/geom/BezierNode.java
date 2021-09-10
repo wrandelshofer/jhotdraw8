@@ -108,10 +108,10 @@ public class BezierNode {
         this.collinear = false;
         this.equidistant = false;
         this.x0 = c0x;
-        this.x1 = c0y;
+        this.x1 = c0x;
         this.x2 = c0x;
         this.y0 = c0y;
-        this.y1 = c0x;
+        this.y1 = c0y;
         this.y2 = c0y;
 
     }

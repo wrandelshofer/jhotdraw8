@@ -8,10 +8,11 @@ import javafx.css.StyleOrigin;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.ReadOnlyOptionsMap;
+import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.ClippingFigure;
@@ -68,7 +69,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Werner Randelshofer
  */
-public class SimpleXmlWriter extends AbstractPropertyBean implements OutputFormat, ClipboardOutputFormat {
+public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected FigureFactory figureFactory;
     /**
      * Performance: This does not need to be a linked hash map, because we iterate in parallel over it.
@@ -83,6 +84,7 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
      */
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
+    private @NonNull ReadOnlyOptionsMap options = new SimpleOptionsMap();
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -174,6 +176,16 @@ public class SimpleXmlWriter extends AbstractPropertyBean implements OutputForma
         } catch (XMLStreamException | ParserConfigurationException e) {
             throw new IOException("Error writing to DOM.", e);
         }
+    }
+
+    @Override
+    public void setOptions(@NonNull ReadOnlyOptionsMap newValue) {
+        options = newValue;
+    }
+
+    @Override
+    public @NonNull ReadOnlyOptionsMap getOptions() {
+        return options;
     }
 
     @Override
