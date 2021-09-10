@@ -136,7 +136,6 @@
           </reportSet>
         </reportSets>
         <configuration>
-          <additionalparam>-Xdoclint:none</additionalparam>
           <additionalOptions>-Xdoclint:none</additionalOptions>
           <additionalJOption>-Xdoclint:none</additionalJOption>
         </configuration>
@@ -151,10 +150,11 @@
       <version>5.7.2</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>17-ea+16</version>
+      <version>17-ea+18</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
