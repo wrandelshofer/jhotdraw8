@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -264,7 +265,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         skipFigures.add(figure);
     }
 
-    public void checkConverters(boolean throwException) throws IllegalStateException {
+    public void checkConverters(boolean throwException, @NonNull Consumer<String> logger) throws IllegalStateException {
         for (HashMap<MapAccessor<?>, String> map : keyToAttr.values()) {
             for (MapAccessor<?> k : map.keySet()) {
                 Type fullValueType = k.getValueType();
@@ -273,7 +274,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
                     if (throwException) {
                         throw new IllegalStateException(msg);
                     } else {
-                        LOGGER.warning(msg);
+                        logger.accept(msg);
                     }
                 }
             }

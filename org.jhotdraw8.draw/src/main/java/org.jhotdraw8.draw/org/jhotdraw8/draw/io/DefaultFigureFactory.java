@@ -14,6 +14,7 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Effect;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.FillRule;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
@@ -21,8 +22,10 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssFont;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.css.CssPoint2D;
@@ -32,6 +35,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssColorConverter;
+import org.jhotdraw8.css.text.CssDimension2DConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssEffectConverter;
 import org.jhotdraw8.css.text.CssEnumConverter;
@@ -82,11 +86,13 @@ import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.TextStrokeableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.io.IdFactory;
+import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.DefaultConverter;
 import org.jhotdraw8.text.RegexReplace;
 import org.jhotdraw8.xml.text.XmlBezierNodeListConverter;
 import org.jhotdraw8.xml.text.XmlBooleanConverter;
 import org.jhotdraw8.xml.text.XmlConnectorConverter;
+import org.jhotdraw8.xml.text.XmlFXSvgPathConverter;
 import org.jhotdraw8.xml.text.XmlObjectReferenceConverter;
 import org.jhotdraw8.xml.text.XmlPoint2DConverter;
 import org.jhotdraw8.xml.text.XmlPoint3DConverter;
@@ -100,6 +106,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * DefaultFigureFactory.
@@ -172,6 +179,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(CssSize.class, new CssSizeConverter(false));
         addConverterForType(CssInsets.class, new CssInsetsConverter(false));
         addConverterForType(CssRectangle2D.class, new CssRectangle2DConverter(false));
+        addConverterForType(CssDimension2D.class, new CssDimension2DConverter(false));
         addConverterForType(CssPoint2D.class, new CssPoint2DConverter(false));
         addConverterForType(CssPoint3D.class, new CssPoint3DConverter(false));
         addConverterForType(FillRule.class, new CssEnumConverter<>(FillRule.class));
@@ -183,6 +191,8 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(StrokeLineCap.class, new CssEnumConverter<>(StrokeLineCap.class));
         addConverterForType(StrokeType.class, new CssEnumConverter<>(StrokeType.class));
         addConverterForType(CssStrokeStyle.class, new CssStrokeStyleConverter(false));
+        addConverterForType(new TypeToken<ImmutableList<PathElement>>() {
+        }.getType(), new XmlFXSvgPathConverter());
 
         addConverter(PageFigure.PAPER_SIZE, new CssPaperSizeConverter());
         addConverter(StyleableFigure.STYLE_CLASS, new XmlWordSetConverter());
@@ -196,7 +206,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
 
         removeKey(StyleableFigure.PSEUDO_CLASS);
 
-        checkConverters(false);
+        checkConverters(false, Logger.getLogger(DefaultFigureFactory.class.getName())::warning);
     }
 
 }

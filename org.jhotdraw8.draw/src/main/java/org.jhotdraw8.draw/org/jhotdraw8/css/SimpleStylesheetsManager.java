@@ -32,8 +32,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -67,7 +67,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private @Nullable Map<String, ImmutableList<CssToken>> cachedAuthorCustomProperties;
     private @Nullable Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
     private @Nullable Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
-    private static final @NonNull Logger LOGGER = Logger.getLogger(SimpleStylesheetsManager.class.getName());
+
+    private @NonNull BiConsumer<String, Throwable> logger = (s, t) -> {
+    };
 
     public SimpleStylesheetsManager(@NonNull SelectorModel<E> selectorModel) {
         this(selectorModel, Collections.emptyList());
@@ -103,23 +105,48 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return selectorModel;
     }
 
+    /**
+     * @return the logger
+     * @see #setLogger(BiConsumer)
+     */
+    @NonNull
+    public BiConsumer<String, Throwable> getLogger() {
+        return logger;
+    }
+
+    /**
+     * Sets the logger.
+     * <p>
+     * Per default this class does not log anything.
+     * <p>
+     * A good logger value would be:
+     * <pre>
+     * (s,t)->Logger.getLogger(SimpleStylesheetsManager.class.getName()).log(Level.INFO,s,t);
+     * </pre>
+     *
+     * @param logger a logger
+     */
+    public void setLogger(@NonNull BiConsumer<String, Throwable> logger) {
+        this.logger = logger;
+    }
+
     @Override
     public void addStylesheet(@NonNull StyleOrigin origin, @Nullable URI documentHome, @NonNull URI uri) {
         URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
         invalidate();
-        getMap(origin).put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri));
+        getMap(origin).put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, logger));
     }
 
     @Override
     public void addStylesheet(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet) {
         invalidate();
-        getMap(origin).put(stylesheet, new StylesheetEntry(origin, stylesheet));
+        getMap(origin).put(stylesheet, new StylesheetEntry(origin, stylesheet, logger));
     }
 
     @Override
     public void addStylesheet(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome) {
         invalidate();
-        getMap(origin).put(str, new StylesheetEntry(origin, str, documentHome));
+        getMap(origin).put(str, new StylesheetEntry(origin, str, documentHome, logger));
     }
 
     private void invalidate() {
@@ -183,13 +210,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 URI uri = (URI) t;
                 URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
                 StylesheetEntry old = oldMap.get(absolutizedUri);
-                newMap.put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri));
+                newMap.put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, logger));
             } else if (t instanceof String) {
                 StylesheetEntry old = oldMap.get(t);
                 if (old != null) {
                     newMap.put(t, old);
                 } else {
-                    newMap.put(t, new StylesheetEntry(origin, (String) t, documentHome));
+                    newMap.put(t, new StylesheetEntry(origin, (String) t, documentHome, logger));
                 }
             } else {
                 throw new IllegalArgumentException("illegal item " + t);
@@ -236,7 +263,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             Declaration d = entry.getDeclaration();
                             doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
-                            LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
+                            logger.accept("applyStylesheetsTo", e);
                         }
                     }
 
@@ -249,7 +276,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             Declaration d = entry.getDeclaration();
                             doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
-                            LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
+                            logger.accept("applyStylesheetsTo", e);
                         }
                     }
 
@@ -259,7 +286,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             Declaration d = entry.getDeclaration();
                             doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
-                            LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
+                            logger.accept("applyStylesheetsTo", e);
                         }
                     }
 
@@ -279,7 +306,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                                     inlineDeclarations.put(new QualifiedName(d.getNamespace(), d.getPropertyName()), d.getTerms());
                                 }
                             } catch (IOException ex) {
-                                System.err.println("DOMStyleManager: Invalid style attribute on element. style=" + styleValue);
+                                logger.accept("invalid style attribute on element. style=" + styleValue, null);
                                 ex.printStackTrace();
                             }
                         }
@@ -288,7 +315,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             try {
                                 doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
                             } catch (ParseException e) {
-                                LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
+                                logger.accept("error applying inline style attribute. style=" + styleValue, e);
                             }
                         }
                         inlineDeclarations.clear();
@@ -424,7 +451,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         appliedValue);
             } catch (ParseException e) {
                 if (suppressParseException) {
-                    LOGGER.throwing(SimpleStylesheetsManager.class.getName(), "applyStylesheetsTo", e);
+                    logger.accept("error parsing stylesheet", e);
                 } else {
                     throw e;
                 }
@@ -491,7 +518,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         try {
             return processor.process(elem, terms);
         } catch (ParseException e) {
-            LOGGER.throwing(getClass().getName(), "error preprocessing token", e);
+            logger.accept("error preprocessing token", e);
             return terms;
         }
     }
@@ -502,40 +529,44 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         private final @NonNull StyleOrigin origin;
         private @Nullable FutureTask<Stylesheet> future;
         private @Nullable Stylesheet stylesheet;
+        private final @NonNull BiConsumer<String, Throwable> logger;
 
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri, @NonNull BiConsumer<String, Throwable> logger) {
             this.origin = origin;
             this.uri = uri;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
                 Stylesheet s = p.parseStylesheet(uri);
-                LOGGER.info("Parsed " + uri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size());
+                logger.accept("Parsed " + uri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    LOGGER.info("Parsed " + uri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
+                    logger.accept("Parsed " + uri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
                 }
                 return s;
             });
+            this.logger = logger;
             executor.execute(future);
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet, @NonNull BiConsumer<String, Throwable> logger) {
+            this.logger = logger;
             this.uri = null;
             this.origin = origin;
             this.stylesheet = stylesheet;
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome, @NonNull BiConsumer<String, Throwable> logger) {
+            this.logger = logger;
             this.uri = null;
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = parserFactory.get();
                 Stylesheet s = p.parseStylesheet(str, documentHome);
-                LOGGER.info("Parsed " + str + "\nRules: " + s.getStyleRules());
+                logger.accept("Parsed " + str + "\nRules: " + s.getStyleRules(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    LOGGER.info("Parsed " + str + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")));
+                    logger.accept("Parsed " + str + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
                 }
                 return s;
             });
@@ -559,7 +590,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 } catch (InterruptedException ex) {
                     // retry later
                 } catch (ExecutionException ex) {
-                    LOGGER.throwing(getClass().getName(), "getStylesheet", ex);
+                    logger.accept("failed to get stylesheet", ex);
                     ex.printStackTrace();
                     stylesheet = null;
                     future = null;
