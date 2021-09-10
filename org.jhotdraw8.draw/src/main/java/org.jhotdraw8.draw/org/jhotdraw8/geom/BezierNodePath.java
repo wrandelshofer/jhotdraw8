@@ -8,6 +8,7 @@ import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -57,7 +58,13 @@ public class BezierNodePath implements Shape {
 
     @Override
     public boolean contains(double x, double y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return contains(x, y, 0);
+    }
+
+    public boolean contains(double x, double y, double tolerance) {
+        final IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
+        return isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE && closed ||
+                isect.getStatus() == IntersectionStatus.INTERSECTION;
     }
 
     @Override

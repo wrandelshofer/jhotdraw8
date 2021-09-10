@@ -31,7 +31,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
      * @param typeToken    The type of the value.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@NonNull String key, @NonNull TypeToken<T> typeToken, T defaultValue) {
+    public AbstractStyleableKey(@NonNull String key, @NonNull TypeToken<T> typeToken, @Nullable T defaultValue) {
         this(null, key, typeToken.getType(), defaultValue == null, defaultValue);
     }
 
@@ -43,7 +43,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@NonNull String key, @NonNull Type type, T defaultValue) {
+    public AbstractStyleableKey(@NonNull String key, @NonNull Type type, @Nullable T defaultValue) {
         this(null, key, ReadOnlyStyleableMapAccessor.toCssName(key), type, defaultValue == null, defaultValue);
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
      * @param isNullable   Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Type type, boolean isNullable, T defaultValue) {
+    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Type type, boolean isNullable, @Nullable T defaultValue) {
         this(namespace, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, isNullable, defaultValue);
     }
 
@@ -72,7 +72,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
      * @param isNullable   Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull String cssName, @NonNull Type type, boolean isNullable, T defaultValue) {
+    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull String cssName, @NonNull Type type, boolean isNullable, @Nullable T defaultValue) {
         super(name, type, isNullable, defaultValue);
         this.cssName = cssName;
         this.namespace = namespace;

@@ -81,21 +81,21 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPath() {
         return Arrays.asList(
-                dynamicTest("0", () -> doFindShortestVertexPath(1, 1, VertexPath.of(1), 0.0)),
-                dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexPath.of(1, 3, 6, 5), 20.0)),
-                dynamicTest("2", () -> doFindShortestVertexPath(1, 4, VertexPath.of(1, 3, 4), 20.0)),
-                dynamicTest("3", () -> doFindShortestVertexPath(2, 6, VertexPath.of(2, 3, 6), 12.0))
+                dynamicTest("0", () -> doFindShortestVertexPath(1, 1, VertexSequence.of(1), 0.0)),
+                dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VertexSequence.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> doFindShortestVertexPath(1, 4, VertexSequence.of(1, 3, 4), 20.0)),
+                dynamicTest("3", () -> doFindShortestVertexPath(2, 6, VertexSequence.of(2, 3, 6), 12.0))
         );
     }
 
     /**
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
-    public void doFindShortestVertexPath(@NonNull Integer start, @NonNull Integer goal, VertexPath<Integer> expPath, double expCost) throws Exception {
+    public void doFindShortestVertexPath(@NonNull Integer start, @NonNull Integer goal, VertexSequence<Integer> expPath, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<VertexPath<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
+        Map.Entry<VertexSequence<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
         if (result == null) {
             assertNull(expPath);
         } else {
@@ -107,30 +107,30 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
         return Arrays.asList(
-                dynamicTest("0", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(1, 6), ArrowPath.of())),
-                dynamicTest("1", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 6), ArrowPath.of(9.0, 2.0))),
-                dynamicTest("2", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(4, 5), ArrowPath.of(9.0, 11.0))),
-                dynamicTest("3", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(3, 6), ArrowPath.of(10.0))),
-                dynamicTest("4", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(6, 5), ArrowPath.of(9.0, 2.0))),
-                dynamicTest("5", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 4), ArrowPath.of(9.0, 11.0))),
-                dynamicTest("6", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(6, 3), ArrowPath.of(10.0)))
+                dynamicTest("0", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(1, 6), ArrowSequence.of())),
+                dynamicTest("1", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 6), ArrowSequence.of(9.0, 2.0))),
+                dynamicTest("2", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(4, 5), ArrowSequence.of(9.0, 11.0))),
+                dynamicTest("3", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(3, 6), ArrowSequence.of(10.0))),
+                dynamicTest("4", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(6, 5), ArrowSequence.of(9.0, 2.0))),
+                dynamicTest("5", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 4), ArrowSequence.of(9.0, 11.0))),
+                dynamicTest("6", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(6, 3), ArrowSequence.of(10.0)))
         );
     }
 
     /**
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
-    public void doFindShortestEdgeMultiGoalPath(@NonNull Integer start, @NonNull List<Integer> multiGoal, ArrowPath<Double> expResult) throws Exception {
+    public void doFindShortestEdgeMultiGoalPath(@NonNull Integer start, @NonNull List<Integer> multiGoal, ArrowSequence<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
 
         // Find a path for each individual goal, and remember the shortest path
-        ArrowPath<Double> individualShortestPath = null;
+        ArrowSequence<Double> individualShortestPath = null;
         double individualShortestCost = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            Map.Entry<ArrowPath<Double>, Double> resultEntry = instance.findArrowPath(start, goal::equals);
-            ArrowPath<Double> result = resultEntry.getKey();
+            Map.Entry<ArrowSequence<Double>, Double> resultEntry = instance.findArrowPath(start, goal::equals);
+            ArrowSequence<Double> result = resultEntry.getKey();
             double resultLength = result.getArrows().stream().mapToDouble(Double::doubleValue).sum();
             if (resultLength < individualShortestCost
                     || resultLength == individualShortestCost && result.size() < individualShortestPath.size()
@@ -141,7 +141,7 @@ public class AnyShortestPathBuilderTest {
         }
 
         // Find shortest path to any of the goals
-        Map.Entry<ArrowPath<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
+        Map.Entry<ArrowSequence<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
         double actualCost = actualShortestPath.getValue();
 
         assertEquals(individualShortestCost, actualCost);
@@ -151,20 +151,20 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindShortestArrowPath() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindShortestArrowPath(1, 5, ArrowPath.of(9.0, 2.0, 9.0))),
-                dynamicTest("2", () -> doFindShortestArrowPath(1, 4, ArrowPath.of(9.0, 11.0))),
-                dynamicTest("3", () -> doFindShortestArrowPath(2, 6, ArrowPath.of(10.0, 2.0)))
+                dynamicTest("1", () -> doFindShortestArrowPath(1, 5, ArrowSequence.of(9.0, 2.0, 9.0))),
+                dynamicTest("2", () -> doFindShortestArrowPath(1, 4, ArrowSequence.of(9.0, 11.0))),
+                dynamicTest("3", () -> doFindShortestArrowPath(2, 6, ArrowSequence.of(10.0, 2.0)))
         );
     }
 
     /**
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
-    private void doFindShortestArrowPath(@NonNull Integer start, @NonNull Integer goal, ArrowPath<Double> expResult) throws Exception {
+    private void doFindShortestArrowPath(@NonNull Integer start, @NonNull Integer goal, ArrowSequence<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ArrowPath<Double>, Double> result = instance.findArrowPath(start, goal::equals);
+        Map.Entry<ArrowSequence<Double>, Double> result = instance.findArrowPath(start, goal::equals);
         assertEquals(expResult, result.getKey());
     }
 
@@ -189,21 +189,21 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 5), VertexPath.of(1, 3, 6, 5), 20.0)),
-                dynamicTest("2", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VertexPath.of(1, 3, 4), 20.0)),
-                dynamicTest("3", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), VertexPath.of(2, 3, 6), 12.0)),
-                dynamicTest("4", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VertexPath.of(1, 3, 6, 5), 20.0))
+                dynamicTest("1", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 5), VertexSequence.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VertexSequence.of(1, 3, 4), 20.0)),
+                dynamicTest("3", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), VertexSequence.of(2, 3, 6), 12.0)),
+                dynamicTest("4", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VertexSequence.of(1, 3, 6, 5), 20.0))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void doFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexPath<Integer> expResult, double expCost) throws Exception {
+    private void doFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexSequence<Integer> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<VertexPath<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
+        Map.Entry<VertexSequence<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
         assertEquals(expResult, actual.getKey());
         assertEquals(expCost, actual.getValue().doubleValue());
     }
@@ -211,21 +211,21 @@ public class AnyShortestPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindArrowPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 5), ArrowPath.of(9.0, 2.0, 9.0), 20.0)),
-                dynamicTest("2", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 4), ArrowPath.of(9.0, 11.0), 20.0)),
-                dynamicTest("3", () -> doFindArrowPathOverWaypoints(Arrays.asList(2, 6), ArrowPath.of(10.0, 2.0), 12.0)),
-                dynamicTest("4", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 6, 5), ArrowPath.of(9.0, 2.0, 9.0), 20.0))
+                dynamicTest("1", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 5), ArrowSequence.of(9.0, 2.0, 9.0), 20.0)),
+                dynamicTest("2", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 4), ArrowSequence.of(9.0, 11.0), 20.0)),
+                dynamicTest("3", () -> doFindArrowPathOverWaypoints(Arrays.asList(2, 6), ArrowSequence.of(10.0, 2.0), 12.0)),
+                dynamicTest("4", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 6, 5), ArrowSequence.of(9.0, 2.0, 9.0), 20.0))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void doFindArrowPathOverWaypoints(@NonNull List<Integer> waypoints, ArrowPath<Double> expResult, double expCost) throws Exception {
+    private void doFindArrowPathOverWaypoints(@NonNull List<Integer> waypoints, ArrowSequence<Double> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyDoubleShortestPathBuilder<Integer, Double> instance = new AnyDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ArrowPath<Double>, Double> actual = instance.findArrowPathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        Map.Entry<ArrowSequence<Double>, Double> actual = instance.findArrowPathOverWaypoints(waypoints, Integer.MAX_VALUE);
         assertEquals(expResult, actual.getKey());
         assertEquals(expCost, actual.getValue().doubleValue());
     }

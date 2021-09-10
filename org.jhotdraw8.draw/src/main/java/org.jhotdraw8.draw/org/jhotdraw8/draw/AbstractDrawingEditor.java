@@ -25,46 +25,38 @@ import org.jhotdraw8.draw.tool.ToolEvent;
 import org.jhotdraw8.event.Listener;
 
 import java.util.HashSet;
-import java.util.prefs.Preferences;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
     private final @NonNull DoubleProperty handleSize = new SimpleDoubleProperty(
-            this, HANDLE_SIZE_PROPERTY,
-            Preferences.userNodeForPackage(DrawingEditor.class).getDouble(HANDLE_SIZE_PROPERTY, 5.0)) {
+            this, HANDLE_SIZE_PROPERTY, 5.0) {
         @Override
         public void set(double newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(HANDLE_SIZE_PROPERTY, newValue);
             recreateHandles();
         }
     };
     private final @NonNull DoubleProperty tolerance = new SimpleDoubleProperty(
-            this, TOLERANCE_PROPERTY,
-            Preferences.userNodeForPackage(DrawingEditor.class).getDouble(TOLERANCE_PROPERTY, 5.0)) {
+            this, TOLERANCE_PROPERTY, 5.0) {
         @Override
         public void set(double newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(TOLERANCE_PROPERTY, newValue);
             recreateHandles();
         }
     };
     private final @NonNull DoubleProperty handleStrokeWidth = new SimpleDoubleProperty(
-            this, HANDLE_STROKE_WDITH_PROPERTY,
-            Preferences.userNodeForPackage(DrawingEditor.class).getDouble(HANDLE_STROKE_WDITH_PROPERTY, 1.0)) {
+            this, HANDLE_STROKE_WDITH_PROPERTY, 1.0) {
         @Override
         public void set(double newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(DrawingEditor.class).putDouble(HANDLE_STROKE_WDITH_PROPERTY, newValue);
             recreateHandles();
         }
     };
     private final @NonNull NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
-            CssColor.valueOf(Preferences.userNodeForPackage(DrawingEditor.class).get(HANDLE_COLOR_PROPERTY, "blue"))) {
+            CssColor.valueOf("blue")) {
         @Override
         public void set(CssColor newValue) {
             super.set(newValue);
-            Preferences.userNodeForPackage(DrawingEditor.class).put(HANDLE_COLOR_PROPERTY, newValue.getName());
             recreateHandles();
         }
     };

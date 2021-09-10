@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.geom.BezierNode;
@@ -33,7 +34,7 @@ public class BezierNodeListStyleableKey
      * @param name The name of the key.
      */
     public BezierNodeListStyleableKey(@NonNull String name) {
-        this(name, null);
+        this(name, ImmutableLists.emptyList());
     }
 
     /**
@@ -42,7 +43,7 @@ public class BezierNodeListStyleableKey
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public BezierNodeListStyleableKey(@NonNull String name, ImmutableList<BezierNode> defaultValue) {
+    public BezierNodeListStyleableKey(@NonNull String name, @NonNull ImmutableList<BezierNode> defaultValue) {
         super(name, new TypeToken<ImmutableList<BezierNode>>() {
         }, defaultValue);
 

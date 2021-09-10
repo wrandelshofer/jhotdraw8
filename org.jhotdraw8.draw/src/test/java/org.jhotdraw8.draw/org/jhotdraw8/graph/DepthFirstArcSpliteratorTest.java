@@ -80,7 +80,7 @@ public class DepthFirstArcSpliteratorTest {
 
     private void testPathBuilding(DirectedGraph<Integer, Integer> graph, List<Integer> waypoints,
                                   String expected) {
-        List<VertexPath<Integer>> paths = new ArrayList<>();
+        List<VertexSequence<Integer>> paths = new ArrayList<>();
         List<Integer> path = null;
         for (Integer root : waypoints) {
             DepthFirstArcSpliterator<Integer, Integer> itr = new DepthFirstArcSpliterator<>(graph::getNextArcs, root);
@@ -93,7 +93,7 @@ public class DepthFirstArcSpliteratorTest {
                 } else if (path.get(path.size() - 1).equals(current.getStart())) {
                     path.add(current.getEnd());
                 } else {
-                    paths.add(new VertexPath<>(path));
+                    paths.add(new VertexSequence<>(path));
                     path = new ArrayList<>();
                     path.add(current.getStart());
                     path.add(current.getEnd());
@@ -101,7 +101,7 @@ public class DepthFirstArcSpliteratorTest {
             }
         }
         if (path != null) {
-            paths.add(new VertexPath<Integer>(path));
+            paths.add(new VertexSequence<Integer>(path));
         }
 
         String actual = paths.toString();

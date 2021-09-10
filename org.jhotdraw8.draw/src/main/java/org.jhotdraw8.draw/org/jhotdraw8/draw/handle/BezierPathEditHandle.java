@@ -14,17 +14,17 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
+import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 
-public class BezierPathEditHandle extends PathIterableOutlineHandle {
+public class BezierPathEditHandle extends BezierPathOutlineHandle {
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
 
-    public BezierPathEditHandle(PathIterableFigure figure, MapAccessor<ImmutableList<BezierNode>> pointKey) {
-        super(figure, true);
+    public BezierPathEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey) {
+        super(figure, pointKey, true);
         this.pointKey = pointKey;
     }
 
@@ -40,9 +40,10 @@ public class BezierPathEditHandle extends PathIterableOutlineHandle {
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
 
         addPoint.setOnAction(actionEvent -> {
-            BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+            final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+            BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
             Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
-            IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), 10.0);// / view.getZoomFactor());// FIXME tolerance not
+            IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
             if (!intersectionResultEx.isEmpty()) {
                 IntersectionPoint intersectionPointEx = intersectionResultEx.get(0);
                 int segment = intersectionPointEx.getSegmentA();

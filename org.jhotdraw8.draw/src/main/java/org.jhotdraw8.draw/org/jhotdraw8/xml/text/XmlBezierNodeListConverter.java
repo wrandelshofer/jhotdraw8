@@ -48,10 +48,9 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.current(), buf.position());
             }
-            if ("none".equals(tt.currentString())) {
+            if (CssTokenType.IDENT_NONE.equals(tt.currentString())) {
                 buf.position(buf.limit());
-
-                return p;
+                return null;
             }
         }
         BezierNodePathBuilder builder = new BezierNodePathBuilder();
@@ -80,6 +79,6 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
 
     @Override
     public ImmutableList<BezierNode> getDefaultValue() {
-        return ImmutableLists.emptyList();
+        return nullable ? null : ImmutableLists.emptyList();
     }
 }
