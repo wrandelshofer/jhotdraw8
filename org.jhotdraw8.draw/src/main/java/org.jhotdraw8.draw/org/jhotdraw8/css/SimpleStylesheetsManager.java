@@ -518,7 +518,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         try {
             return processor.process(elem, terms);
         } catch (ParseException e) {
-            logger.accept("error preprocessing token", e);
+            // This may happen extremely often - do not log!
+            //logger.accept("error preprocessing token", e);
             return terms;
         }
     }
