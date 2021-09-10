@@ -13,16 +13,16 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * WeakListener.
+ * SimpleWeakListener.
  *
  * @author Werner Randelshofer
  */
-public final class WeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {
+public final class SimpleWeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {
 
     private final @NonNull WeakReference<Listener<E>> ref;
     private Consumer<Listener<E>> removeListener;
 
-    public WeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
+    public SimpleWeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
         Objects.requireNonNull(listener, "listener");
         this.ref = new WeakReference<>(listener);
         this.removeListener = removeListener;

@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ObservableListProxy;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.event.WeakListener;
+import org.jhotdraw8.event.SimpleWeakListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -82,7 +82,7 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
             }
         };
         model.addDrawingModelListener(
-                new WeakListener<>(
+                new SimpleWeakListener<>(
                         drawingModelEventListener
                         , model::removeDrawingModelListener)
         );

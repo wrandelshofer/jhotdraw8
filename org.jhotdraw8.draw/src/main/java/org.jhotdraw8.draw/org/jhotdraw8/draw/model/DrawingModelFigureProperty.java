@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.event.WeakListener;
+import org.jhotdraw8.event.SimpleWeakListener;
 
 import java.lang.ref.WeakReference;
 
@@ -27,7 +27,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
     protected final @Nullable WeakReference<Figure> figure;
     private final @Nullable Key<T> key;
     private final @Nullable Listener<DrawingModelEvent> modelListener;
-    private final @Nullable WeakListener<DrawingModelEvent> weakListener;
+    private final @Nullable SimpleWeakListener<DrawingModelEvent> weakListener;
     private final boolean isDeclaredKey;
 
     public DrawingModelFigureProperty(@NonNull DrawingModel model, Figure figure, Key<T> key) {
@@ -56,7 +56,7 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
                 }
             };
 
-            model.addDrawingModelListener(weakListener = new WeakListener<>(modelListener, model::removeDrawingModelListener));
+            model.addDrawingModelListener(weakListener = new SimpleWeakListener<>(modelListener, model::removeDrawingModelListener));
         } else {
             modelListener = null;
             weakListener = null;
