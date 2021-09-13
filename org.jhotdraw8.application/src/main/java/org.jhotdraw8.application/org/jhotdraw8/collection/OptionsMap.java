@@ -42,6 +42,10 @@ public interface OptionsMap extends ReadOnlyOptionsMap, Map<String, String> {
         put(key, Base64.getEncoder().encodeToString(value));
     }
 
+    default void putByteArray(@NonNull NonNullKey<byte[]> key, byte @NonNull [] value) {
+        putByteArray(key.getName(), value);
+    }
+
     /**
      * Associates the specified key with the specified double value.
      *
@@ -51,6 +55,10 @@ public interface OptionsMap extends ReadOnlyOptionsMap, Map<String, String> {
      */
     default void putDouble(@NonNull String key, double value) {
         put(key, Double.toString(value));
+    }
+
+    default void putDouble(@NonNull NonNullKey<Double> key, double value) {
+        putDouble(key.getName(), value);
     }
 
     /**
@@ -64,6 +72,10 @@ public interface OptionsMap extends ReadOnlyOptionsMap, Map<String, String> {
         put(key, Float.toString(value));
     }
 
+    default void putFloat(@NonNull NonNullKey<Float> key, float value) {
+        putFloat(key.getName(), value);
+    }
+
     /**
      * Associates the specified key with the specified int value.
      *
@@ -75,6 +87,10 @@ public interface OptionsMap extends ReadOnlyOptionsMap, Map<String, String> {
         put(key, Integer.toString(value));
     }
 
+    default void putInt(@NonNull NonNullKey<Integer> key, int value) {
+        putInt(key.getName(), value);
+    }
+
     /**
      * Associates the specified key with the specified long value.
      *
@@ -84,6 +100,14 @@ public interface OptionsMap extends ReadOnlyOptionsMap, Map<String, String> {
      */
     default void putLong(@NonNull String key, long value) {
         put(key, Long.toString(value));
+    }
+
+    default void putLong(@NonNull NonNullKey<Long> key, long value) {
+        putLong(key.getName(), value);
+    }
+
+    default void putString(@NonNull NonNullKey<String> key, @NonNull String value) {
+        put(key.getName(), value);
     }
 
     /**
