@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.jhotdraw8.concurrent.FXConcurrentUtil.update;
 
 /**
- * A {@code CompletableWorker} is a worker .
+ * Simple implementation of {@code CompletableWorker}.
  *
  * @param <V> the result type
  */
