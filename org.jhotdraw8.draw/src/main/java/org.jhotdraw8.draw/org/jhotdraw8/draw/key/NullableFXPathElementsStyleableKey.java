@@ -18,7 +18,7 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<ImmutableList<PathElement>> implements WritableStyleableMapAccessor<ImmutableList<PathElement>> {
+public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<ImmutableList<PathElement>> implements WritableStyleableMapAccessor<ImmutableList<PathElement>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<Immutabl
      *
      * @param name The name of the key.
      */
-    public NullableFXSvgPathStyleableKey(@NonNull String name) {
+    public NullableFXPathElementsStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -43,7 +43,7 @@ public class NullableFXSvgPathStyleableKey extends AbstractStyleableKey<Immutabl
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableFXSvgPathStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
+    public NullableFXPathElementsStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
         super(null, key, new TypeToken<ImmutableList<PathElement>>() {
         }.getType(), true, defaultValue);
 

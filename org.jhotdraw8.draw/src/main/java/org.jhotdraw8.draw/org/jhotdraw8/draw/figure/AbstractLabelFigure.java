@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.NullableFXSvgPathStyleableKey;
+import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -52,7 +52,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
     public static final @NonNull CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
-    public static final @NonNull NullableFXSvgPathStyleableKey ICON_SHAPE = new NullableFXSvgPathStyleableKey("iconShape", null);
+    public static final @NonNull NullableFXPathElementsStyleableKey ICON_SHAPE = new NullableFXPathElementsStyleableKey("iconShape", null);
     public static final @NonNull CssDimension2DStyleableKey ICON_SIZE = new CssDimension2DStyleableKey("iconSize", new CssDimension2D(16, 16));
     public static final @NonNull CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", new CssSize(4));
 
