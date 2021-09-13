@@ -93,7 +93,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
-        if (pointIndex >= list.size()) {
+        if (list == null || pointIndex >= list.size()) {
             return;
         }
         BezierNode bn = getBezierNode();
