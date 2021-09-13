@@ -558,7 +558,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             }
             getActivities().add(v);
             v.addDisabler(this);
-            v.read(uri, null, new SimpleOptionsMap(), false, new SimpleWorkState()).whenComplete((result, ex) -> {
+            v.read(uri, null, new SimpleOptionsMap(), false, new SimpleWorkState<>()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();
                     final Alert alert = new Alert(Alert.AlertType.ERROR,

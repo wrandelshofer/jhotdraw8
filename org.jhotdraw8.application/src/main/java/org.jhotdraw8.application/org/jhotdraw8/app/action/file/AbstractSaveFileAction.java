@@ -136,7 +136,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         }
     }
 
-    protected void saveFileChooseOptions(final @NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState workState) {
+    protected void saveFileChooseOptions(final @NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState<Void> workState) {
         OptionsMap options = new SimpleOptionsMap();
         Dialog<OptionsMap> dialog = null;
         try {
@@ -165,7 +165,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, @NonNull OptionsMap options, WorkState workState) {
+    protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, @NonNull OptionsMap options, WorkState<Void> workState) {
         view.write(uri, format, options, workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);

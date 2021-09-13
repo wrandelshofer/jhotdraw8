@@ -453,14 +453,16 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, boolean insert, @NonNull WorkState workState) {
+    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, boolean insert, @NonNull WorkState<Void> workState) {
         return FXWorker.supply(() -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
             SimpleXmlStaxReader io = new SimpleXmlStaxReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
-            applyUserAgentStylesheet(drawing);
+            if (drawing != null) {
+                applyUserAgentStylesheet(drawing);
+            }
             return drawing;
         }).thenApply(drawing -> {
             drawingView.setDrawing(drawing);
@@ -469,7 +471,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, @NonNull WorkState workState) {
+    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, @NonNull WorkState<Void> workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {

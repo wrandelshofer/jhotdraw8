@@ -35,7 +35,7 @@ public interface OutputFormat {
      * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@NonNull URI uri, Drawing drawing, WorkState workState) throws IOException {
+    default void write(@NonNull URI uri, Drawing drawing, WorkState<Void> workState) throws IOException {
         write(Paths.get(uri), drawing, workState);
     }
 
@@ -48,7 +48,7 @@ public interface OutputFormat {
      * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@NonNull Path file, Drawing drawing, WorkState workState) throws IOException {
+    default void write(@NonNull Path file, Drawing drawing, WorkState<?> workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             write(out, file.getParent().toUri(), drawing, workState);
         }

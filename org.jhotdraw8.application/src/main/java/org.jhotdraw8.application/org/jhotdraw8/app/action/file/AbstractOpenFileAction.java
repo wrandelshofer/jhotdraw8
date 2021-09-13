@@ -28,7 +28,6 @@ import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
@@ -113,7 +112,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState workState) {
+    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState<Void> workState) {
         final Application app = getApplication();
         OptionsMap options = getReadOptions();
         app.removeDisabler(workState);
@@ -144,9 +143,6 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
                 alert.showAndWait();
                 v.removeDisabler(workState);
             } else {
-
-                String mimeType = (actualFormat == null) ? null
-                        : actualFormat.getIdentifiers().iterator().next();
                 v.setURI(uri);
                 v.setDataFormat(actualFormat);
                 v.clearModified();
@@ -157,7 +153,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
     /**
-     * Gets options for {@link FileBasedActivity#read(URI, DataFormat, Map, boolean, WorkState)}.
+     * Gets options for {@link FileBasedActivity#read}.
      * The options can be null, a constant, or from user input through a dialog window.
      * <p>
      * The value null means that the user has aborted the dialog window. In this case, the action

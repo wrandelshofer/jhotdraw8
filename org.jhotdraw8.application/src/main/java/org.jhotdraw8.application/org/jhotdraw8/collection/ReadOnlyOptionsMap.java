@@ -210,7 +210,16 @@ public interface ReadOnlyOptionsMap extends ReadOnlyMap<String, String> {
         return buf.toString();
     }
 
-    private static void escapeString(StringBuilder buf, String str) {
+    /**
+     * Escapes a string and adds it to the provided buffer.
+     * <p>
+     * This method is private, but Java 8 does not support private interface methods.
+     *
+     * @param buf a buffer
+     * @param str a string to be escaped and to be added to the buffer
+     */
+    /*private*/
+    static void escapeString(StringBuilder buf, String str) {
         buf.append('"');
         int start = 0;
         int end = indexOfBadChar(str, 0);
@@ -224,13 +233,24 @@ public interface ReadOnlyOptionsMap extends ReadOnlyMap<String, String> {
         buf.append('"');
     }
 
-    private static int indexOfBadChar(String str, int start) {
+    /**
+     * Returns the first index of a 'bad' char that needs escaping in the
+     * provided string.
+     * <p>
+     * This method is private, but Java 8 does not support private interface methods.
+     *
+     * @param str   a string
+     * @param start the start position of the search
+     * @return first index of bad char or -1
+     */
+    /*private*/
+    static int indexOfBadChar(String str, int start) {
         for (int i = start, n = str.length(); i < n; i++) {
             switch (str.charAt(i)) {
-            case '\r':
-            case '\n':
-            case '"':
-                return i;
+                case '\r':
+                case '\n':
+                case '"':
+                    return i;
             }
         }
         return -1;

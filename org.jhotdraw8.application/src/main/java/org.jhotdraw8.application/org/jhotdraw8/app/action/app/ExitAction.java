@@ -226,8 +226,9 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState workState) {
+    protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
+        if (v == null) return;
         v.write(uri, format, new SimpleOptionsMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -235,8 +236,7 @@ public class ExitAction extends AbstractApplicationAction {
                     oldFocusOwner.requestFocus();
                 }
             } else if (exception != null) {
-                Throwable value = exception;
-                String message = (value != null && value.getMessage() != null) ? value.getMessage() : value.toString();
+                String message = (exception.getMessage() != null) ? exception.getMessage() : exception.toString();
                 Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getFormatted("file.save.couldntSave.message", UriUtil.getName(uri)) + "</b><p>"
@@ -256,8 +256,9 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState workState) {
+    protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
+        if (v == null) return;
         v.write(uri, format, new SimpleOptionsMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
@@ -286,7 +287,7 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void doExit(WorkState workState) {
+    protected void doExit(WorkState<Void> workState) {
         for (Activity pr : new ArrayList<>(app.getActivities())) {
             FileBasedActivity p = (FileBasedActivity) pr;
             if (!p.isDisabled() && !p.isModified()) {

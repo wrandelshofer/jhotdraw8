@@ -136,7 +136,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, DataFormat format) {
         final Application app = getApplication();
-        WorkState workState = new SimpleWorkState(getLabel());
+        WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         v.addDisabler(workState);
         URI oldUri = v.getURI();
 

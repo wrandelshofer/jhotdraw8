@@ -201,7 +201,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    protected void saveViewToURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState workState) {
+    protected void saveViewToURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState<Void> workState) {
         v.write(uri, dataFormat, new SimpleOptionsMap(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
