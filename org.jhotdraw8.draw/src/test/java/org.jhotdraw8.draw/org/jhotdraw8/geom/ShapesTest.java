@@ -135,7 +135,7 @@ public class ShapesTest {
     public @NonNull List<DynamicTest> dynamicTestsDoubleSvgStringFromElements() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSvgStringFromElements("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
-                dynamicTest("2", () -> testSvgStringFromElements("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 Z")),
+                dynamicTest("2", () -> testSvgStringFromElements("m0,0 1,0 0,1 -1,0Z", "M0,0 l1,0 0,1 -1,0 Z")),
                 dynamicTest("3", () -> testSvgStringFromElements(
                         "M600,350 l 50,-25 "
                                 + "a25,25 -30 0,1 50,-25 l 50,-25"

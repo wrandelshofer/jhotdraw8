@@ -74,9 +74,9 @@ public class DepthFirstArcSpliteratorTest {
     public List<DynamicTest> dynamicTestsPathBuilding() {
         return Arrays.asList(
                 dynamicTest("5->", () -> testPathBuilding(createDoubleVertexGraph(), Arrays.asList(5),
-                        "[VertexPath{[5, 6, 8, 9]}, VertexPath{[6, 7, 4, 9]}, VertexPath{[5, 2, 3, 4]}]")),
+                        "[[5, 6, 8, 9], [6, 7, 4, 9], [5, 2, 3, 4]]")),
                 dynamicTest("1->", () -> testPathBuilding(createDoubleVertexGraph(), Arrays.asList(1),
-                        "[VertexPath{[1, 2, 3, 4, 9]}]"))
+                        "[[1, 2, 3, 4, 9]]"))
         );
     }
 
