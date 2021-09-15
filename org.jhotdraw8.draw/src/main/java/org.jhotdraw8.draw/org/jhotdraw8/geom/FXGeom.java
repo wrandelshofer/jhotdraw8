@@ -53,6 +53,16 @@ public class FXGeom {
     }
 
     /**
+     * Converts a bounding box to a AWT rectangle.
+     *
+     * @param r a bounding box
+     * @return the rectangle
+     */
+    public static @NonNull java.awt.geom.Rectangle2D.Double toRectangle2D(@NonNull BoundingBox r) {
+        return new java.awt.geom.Rectangle2D.Double(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+    }
+
+    /**
      * Computes the linear interpolation/extrapolation between two points.
      *
      * @param start point a
