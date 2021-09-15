@@ -318,7 +318,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
                         ImmutableList<URI> listOrNull = drawing.get(figureFactory.getStylesheetsKey());
                         List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                         stylesheets.add(uri);
-                        drawing.set(figureFactory.getStylesheetsKey(), ImmutableLists.ofCollection(stylesheets));
+                        drawing.set(figureFactory.getStylesheetsKey(), ImmutableLists.copyOf(stylesheets));
                     }
                 });
             }

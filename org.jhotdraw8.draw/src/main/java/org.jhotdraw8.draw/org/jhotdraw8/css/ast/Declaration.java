@@ -28,7 +28,7 @@ public class Declaration extends AbstractSyntaxTree {
     public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
         this.namespace = namespace;
         this.propertyName = propertyName;
-        this.terms = ImmutableLists.ofCollection(terms);
+        this.terms = ImmutableLists.copyOf(terms);
         this.startPos = startPos;
         this.endPos = endPos;
     }

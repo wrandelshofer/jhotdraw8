@@ -168,7 +168,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
                         break;
                     }
                     path.getNodes().set(pointIndex, node);
-                    dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+                    dv.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
                     dv.recreateHandles();
                 }
             } else if (event.getClickCount() == 2) {
@@ -183,7 +183,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         if (owner.get(pointKey).size() > 2) {
             BezierNodePath path = new BezierNodePath(owner.get(pointKey));
             path.join(pointIndex, 1.0);
-            dv.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            dv.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             dv.recreateHandles();
         }
     }
@@ -245,25 +245,25 @@ public class BezierNodeEditHandle extends AbstractHandle {
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         inRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C1_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         outRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C2_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C1C2_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 

@@ -46,7 +46,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
 
         try {
             final List<PathElement> pathElements = FXSvgPaths.pathElementsFromSvgString(svgPathString);
-            return ImmutableLists.ofCollection(pathElements);
+            return ImmutableLists.copyOf(pathElements);
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
             p.add(new MoveTo(0, 0));
@@ -54,7 +54,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
             p.add(new LineTo(10, 10));
             p.add(new LineTo(0, 10));
             p.add(new ClosePath());
-            return ImmutableLists.ofCollection(p);
+            return ImmutableLists.copyOf(p);
         }
     }
 

@@ -87,7 +87,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 out.add(t);
             }
         }
-        return ImmutableLists.ofCollection(out);
+        return ImmutableLists.copyOf(out);
     }
 
     @Override

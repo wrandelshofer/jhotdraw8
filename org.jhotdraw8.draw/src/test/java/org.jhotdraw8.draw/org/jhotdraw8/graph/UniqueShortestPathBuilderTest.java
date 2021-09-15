@@ -5,6 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -110,8 +112,8 @@ public class UniqueShortestPathBuilderTest {
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
                 dynamicTest("graph.nonunique", () -> testFindShortestVertexPath(graph, 1, 5, null, 0.0)),
-                dynamicTest("graph.2", () -> testFindShortestVertexPath(graph, 1, 4, VertexSequence.of(1, 4), 14.0)),
-                dynamicTest("graph.3", () -> testFindShortestVertexPath(graph, 2, 6, VertexSequence.of(2, 3, 6), 12.0)),
+                dynamicTest("graph.2", () -> testFindShortestVertexPath(graph, 1, 4, ImmutableLists.of(1, 4), 14.0)),
+                dynamicTest("graph.3", () -> testFindShortestVertexPath(graph, 2, 6, ImmutableLists.of(2, 3, 6), 12.0)),
                 dynamicTest("graph.nopath", () -> testFindShortestVertexPath(graph, 2, 99, null, 0.0)),
                 dynamicTest("diamond.1.nonunique", () -> testFindShortestVertexPath(diamondGraph, 1, 4, null, 0.0)),
                 dynamicTest("diamond.2.nonunique", () -> testFindShortestVertexPath(diamondGraph, 1, 5, null, 0.0))
@@ -121,11 +123,11 @@ public class UniqueShortestPathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, VertexSequence<Integer> expPath, double expCost) throws Exception {
+    public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
 
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<VertexSequence<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
+        Map.Entry<ImmutableList<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
         if (result == null) {
             assertNull(expPath);
         } else {
@@ -141,10 +143,10 @@ public class UniqueShortestPathBuilderTest {
         return Arrays.asList(
                 dynamicTest("graph.1.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(5, 6), null)),
                 dynamicTest("graph.2.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(4, 5), null)),
-                dynamicTest("graph.3", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(3, 6), ArrowSequence.of(10.0))),
+                dynamicTest("graph.3", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(3, 6), ImmutableLists.of(10.0))),
                 dynamicTest("graph.4.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(6, 5), null)),
                 dynamicTest("graph.5.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(5, 4), null)),
-                dynamicTest("graph.6", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(6, 3), ArrowSequence.of(10.0))),
+                dynamicTest("graph.6", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(6, 3), ImmutableLists.of(10.0))),
                 dynamicTest("graph.7.unreachable", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(600, 300), null)),
                 dynamicTest("diamond.1.nonunique", () -> testFindShortestEdgeMultiGoalPath(diamondGraph, 1, Arrays.asList(2, 3), null))
         );
@@ -153,25 +155,25 @@ public class UniqueShortestPathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ArrowSequence<Double> expResult) throws Exception {
+    public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
 
         // Find shortest path to any of the goals
-        Map.Entry<ArrowSequence<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
+        Map.Entry<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
         double actualLength = actualShortestPath == null ? 0.0 : actualShortestPath.getValue();
 
         // Find a path for each individual goal, and remember the shortest path
-        List<ArrowSequence<Double>> individualShortestPaths = new ArrayList<>();
+        List<ImmutableList<Double>> individualShortestPaths = new ArrayList<>();
         double individualShortestLength = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            Map.Entry<ArrowSequence<Double>, Double> resultEntry = instance.findArrowPath(start, goal::equals);
+            Map.Entry<ImmutableList<Double>, Double> resultEntry = instance.findArrowPath(start, goal::equals);
             if (resultEntry == null) {
                 assertNull(expResult);
                 return;
             } else {
-                ArrowSequence<Double> result = resultEntry.getKey();
-                double resultLength = result.getArrows().stream().mapToDouble(Double::doubleValue).sum();
+                ImmutableList<Double> result = resultEntry.getKey();
+                double resultLength = result.stream().mapToDouble(Double::doubleValue).sum();
                 if (resultLength < individualShortestLength) {
                     individualShortestLength = resultLength;
                     individualShortestPaths.clear();
@@ -189,19 +191,19 @@ public class UniqueShortestPathBuilderTest {
     public @NonNull List<DynamicTest> dynamicTestsFindShortestEdgePath() throws Exception {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> testFindShortestEdgePath(1, 5, null)),
-                dynamicTest("2", () -> testFindShortestEdgePath(1, 4, ArrowSequence.of(14.0))),
-                dynamicTest("3", () -> testFindShortestEdgePath(2, 6, ArrowSequence.of(10.0, 2.0)))
+                dynamicTest("2", () -> testFindShortestEdgePath(1, 4, ImmutableLists.of(14.0))),
+                dynamicTest("3", () -> testFindShortestEdgePath(2, 6, ImmutableLists.of(10.0, 2.0)))
         );
     }
 
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ArrowSequence<Double> expResult) throws Exception {
+    private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ArrowSequence<Double>, Double> result = instance.findArrowPath(start, goal::equals);
+        Map.Entry<ImmutableList<Double>, Double> result = instance.findArrowPath(start, goal::equals);
         assertEquals(expResult, result == null ? null : result.getKey());
     }
 
@@ -226,21 +228,21 @@ public class UniqueShortestPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 3, 5), VertexSequence.of(1, 3, 6, 5), 20.0)),
-                dynamicTest("2", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VertexSequence.of(1, 4), 14.0)),
-                dynamicTest("3", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), VertexSequence.of(2, 3, 6), 12.0)),
-                dynamicTest("4", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VertexSequence.of(1, 3, 6, 5), 20.0))
+                dynamicTest("1", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 3, 5), ImmutableLists.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), ImmutableLists.of(1, 4), 14.0)),
+                dynamicTest("3", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), ImmutableLists.of(2, 3, 6), 12.0)),
+                dynamicTest("4", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), ImmutableLists.of(1, 3, 6, 5), 20.0))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexSequence<Integer> expResult, double expCost) throws Exception {
+    private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<VertexSequence<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
+        Map.Entry<ImmutableList<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
         if (actual == null) {
             assertNull(expResult);
         } else {
@@ -253,20 +255,20 @@ public class UniqueShortestPathBuilderTest {
     public @NonNull List<DynamicTest> dynamicTestsFindEdgePathOverWaypoints() {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 5), null, 0.0)),
-                dynamicTest("2", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 4), ArrowSequence.of(14.0), 14.0)),
-                dynamicTest("3", () -> testFindEdgePathOverWaypoints(Arrays.asList(2, 6), ArrowSequence.of(10.0, 2.0), 12.0)),
-                dynamicTest("4", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 6, 5), ArrowSequence.of(9.0, 2.0, 9.0), 20.0))
+                dynamicTest("2", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 4), ImmutableLists.of(14.0), 14.0)),
+                dynamicTest("3", () -> testFindEdgePathOverWaypoints(Arrays.asList(2, 6), ImmutableLists.of(10.0, 2.0), 12.0)),
+                dynamicTest("4", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 6, 5), ImmutableLists.of(9.0, 2.0, 9.0), 20.0))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindEdgePathOverWaypoints(@NonNull List<Integer> waypoints, ArrowSequence<Double> expResult, double expCost) throws Exception {
+    private void testFindEdgePathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ArrowSequence<Double>, Double> actual = instance.findArrowPathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        Map.Entry<ImmutableList<Double>, Double> actual = instance.findArrowPathOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (actual == null) {
             assertNull(expResult);
         } else {

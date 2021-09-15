@@ -38,7 +38,7 @@ public class XmlFXSvgPathConverter implements Converter<ImmutableList<PathElemen
         if ("none".equals(string)) {
             return null;
         }
-        return ImmutableLists.ofCollection(FXSvgPaths.pathElementsFromSvgString(string));
+        return ImmutableLists.copyOf(FXSvgPaths.pathElementsFromSvgString(string));
     }
 
     @Override

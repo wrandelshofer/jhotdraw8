@@ -26,11 +26,11 @@ public class ListCssTokenizer implements CssTokenizer {
     private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
     public ListCssTokenizer(@NonNull List<CssToken> in) {
-        this(ImmutableLists.ofCollection(in));
+        this(ImmutableLists.copyOf(in));
     }
 
     public ListCssTokenizer(@NonNull ReadOnlyList<CssToken> in) {
-        this.in = ImmutableLists.ofCollection(in);
+        this.in = ImmutableLists.copyOf(in);
         current = in.isEmpty() ? EOF : in.get(0);
     }
 

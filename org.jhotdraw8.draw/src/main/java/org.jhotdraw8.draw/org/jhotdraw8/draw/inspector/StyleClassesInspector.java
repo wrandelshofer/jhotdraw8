@@ -108,7 +108,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getModel().set(f, tagsKey, ImmutableSets.ofCollection(newTags));
+                        getModel().set(f, tagsKey, ImmutableSets.copyOf(newTags));
                     }
                 }
                 updateList();
@@ -187,7 +187,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getModel().set(f, tagsKey, ImmutableSets.ofCollection(newTags));
+                        getModel().set(f, tagsKey, ImmutableSets.copyOf(newTags));
                     }
                 }
                 updateList();

@@ -6,6 +6,8 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -56,21 +58,21 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      * @param maxLength the maximal length of a path
      * @return the enumerated paths
      */
-    public @NonNull List<VertexSequence<V>> findAllVertexPaths(@NonNull V start,
-                                                               @NonNull Predicate<V> goal,
-                                                               int maxLength) {
+    public @NonNull List<ImmutableList<V>> findAllVertexPaths(@NonNull V start,
+                                                              @NonNull Predicate<V> goal,
+                                                              int maxLength) {
         List<MyBackLink<V, A>> backlinks = new ArrayList<>();
         searchAll(new MyBackLink<>(start, null, 1), goal,
                 getNextNodesFunction(),
                 backlinks, maxLength);
-        List<VertexSequence<V>> vertexPaths = new ArrayList<>(backlinks.size());
+        List<ImmutableList<V>> vertexPaths = new ArrayList<>(backlinks.size());
         Deque<V> path = new ArrayDeque<>();
         for (MyBackLink<V, A> list : backlinks) {
             path.clear();
             for (MyBackLink<V, A> backlink = list; backlink != null; backlink = backlink.parent) {
                 path.addFirst(backlink.vertex);
             }
-            vertexPaths.add(new VertexSequence<V>(path));
+            vertexPaths.add(ImmutableLists.copyOf(path));
         }
         return vertexPaths;
     }

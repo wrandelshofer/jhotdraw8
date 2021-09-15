@@ -5,6 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -117,10 +118,10 @@ public class UniquePathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, VertexSequence<Integer> expPath) throws Exception {
+    public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
-        VertexSequence<Integer> result = instance.findVertexPath(start, goal::equals);
+        ImmutableList<Integer> result = instance.findVertexPath(start, goal::equals);
         assertEquals(expPath, result);
     }
 
@@ -143,13 +144,13 @@ public class UniquePathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, VertexSequence<Integer> expResult) throws Exception {
+    public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
 
         // Find unique path to any of the goals
-        VertexSequence<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
-        double actualLength = actualPath == null ? 0.0 : actualPath.numOfVertices();
+        ImmutableList<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
+        double actualLength = actualPath == null ? 0.0 : actualPath.size();
 
         assertEquals(expResult, actualPath);
     }
@@ -186,10 +187,10 @@ public class UniquePathBuilderTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexSequence<Integer> expResult) throws Exception {
+    private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
-        VertexSequence<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
+        ImmutableList<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
         assertEquals(expResult, actual);
     }
 

@@ -58,28 +58,28 @@ public class ImmutableSets {
         }
     }
 
-    public static @NonNull <T> ImmutableSet<T> ofCollection(@NonNull Collection<T> collection) {
+    public static @NonNull <T> ImmutableSet<T> copyOf(@NonNull Collection<T> collection) {
         switch (collection.size()) {
-        case 0:
-            return emptySet();
-        case 1:
-            return new ImmutableSingletonSet<>(collection.iterator().next());
-        default:
-            return new ImmutableHashSet<T>(collection);
+            case 0:
+                return emptySet();
+            case 1:
+                return new ImmutableSingletonSet<>(collection.iterator().next());
+            default:
+                return new ImmutableHashSet<T>(collection);
         }
     }
 
-    public static @NonNull <T> ImmutableSet<T> ofCollection(ReadOnlyCollection<T> collection) {
+    public static @NonNull <T> ImmutableSet<T> copyOf(ReadOnlyCollection<T> collection) {
         if (collection instanceof ImmutableSet) {
             return (ImmutableSet<T>) collection;
         }
         switch (collection.size()) {
-        case 0:
-            return emptySet();
-        case 1:
-            return new ImmutableSingletonSet<>(collection.iterator().next());
-        default:
-            return new ImmutableHashSet<T>(collection);
+            case 0:
+                return emptySet();
+            case 1:
+                return new ImmutableSingletonSet<>(collection.iterator().next());
+            default:
+                return new ImmutableHashSet<T>(collection);
         }
     }
 
@@ -104,7 +104,7 @@ public class ImmutableSets {
             if (collection.contains(item)) {
                 return (ImmutableSet<T>) emptySet();
             } else {
-                return ofCollection(collection);
+                return copyOf(collection);
             }
         case 2:
             if (collection.contains(item)) {
@@ -114,7 +114,7 @@ public class ImmutableSets {
                 return new ImmutableSingletonSet<>(one.equals(item) ? two : one);
 
             } else {
-                return ofCollection(collection);
+                return copyOf(collection);
             }
         default:
             if (collection.contains(item)) {
@@ -122,7 +122,7 @@ public class ImmutableSets {
                 a.remove(item);
                 return new ImmutableHashSet<>(true, a);
             } else {
-                return ofCollection(collection);
+                return copyOf(collection);
             }
         }
     }
@@ -142,7 +142,7 @@ public class ImmutableSets {
             return emptySet();
         }
         if (c.isEmpty()) {
-            return ofCollection(collection);
+            return copyOf(collection);
         }
 
         LinkedHashSet<T> tmp = new LinkedHashSet<>(collection.size());
@@ -151,7 +151,7 @@ public class ImmutableSets {
                 tmp.add(elem);
             }
         }
-        return ofCollection(tmp);
+        return copyOf(tmp);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -163,7 +163,7 @@ public class ImmutableSets {
             if (collection.contains(item)) {
                 return (ImmutableSet<T>) emptySet();
             } else {
-                return ofCollection(collection);
+                return copyOf(collection);
             }
         case 2:
             if (collection.contains(item)) {
@@ -172,7 +172,7 @@ public class ImmutableSets {
                 T two = iter.next();
                 return new ImmutableSingletonSet<>(one.equals(item) ? two : one);
             } else {
-                return ofCollection(collection);
+                return copyOf(collection);
             }
         default:
             if (collection.contains(item)) {
@@ -180,7 +180,7 @@ public class ImmutableSets {
                 a.remove(item);
                 return new ImmutableHashSet<>(true, a);
             } else {
-                return ofCollection(collection);
+                return copyOf(collection);
             }
         }
     }

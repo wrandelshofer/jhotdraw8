@@ -76,7 +76,7 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return ImmutableSets.ofCollection(tree);
+        return ImmutableSets.copyOf(tree);
     }
 
     @Override

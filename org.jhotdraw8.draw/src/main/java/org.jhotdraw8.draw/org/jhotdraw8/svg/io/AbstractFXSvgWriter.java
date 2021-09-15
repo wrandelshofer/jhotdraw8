@@ -1275,7 +1275,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
         }
         if (!shape.getStrokeDashArray().isEmpty()) {
-            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(shape.getStrokeDashArray())));
+            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.copyOf(shape.getStrokeDashArray())));
         }
         if (shape.getStrokeDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
@@ -1339,7 +1339,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
         }
         if (!style.getDashArray().isEmpty()) {
-            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.ofCollection(style.getDashArray())));
+            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.copyOf(style.getDashArray())));
         }
         if (style.getDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
@@ -1487,7 +1487,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull List<Transform> txs) throws XMLStreamException {
 
         if (txs.size() > 0) {
-            String value = tx.toString(ImmutableLists.ofCollection(txs));
+            String value = tx.toString(ImmutableLists.copyOf(txs));
             if (!value.isEmpty()) {
                 w.writeAttribute("transform", value);
             }

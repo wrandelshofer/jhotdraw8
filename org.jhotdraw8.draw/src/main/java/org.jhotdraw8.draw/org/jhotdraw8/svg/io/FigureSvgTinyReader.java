@@ -287,7 +287,7 @@ public class FigureSvgTinyReader {
                 secondPass.run();
             }
 
-            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableLists.ofCollection(ctx.stylesheets));
+            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableLists.copyOf(ctx.stylesheets));
 
 
             if (!(root instanceof SvgDrawing)) {

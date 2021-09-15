@@ -298,25 +298,25 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(false).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         collinearRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(true).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         equidistantRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(false).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(true).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 

@@ -91,7 +91,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
             throw tt.createParseException("<font-family>: <font-family> or <generic-family> expected.");
         }
         tt.requireNextToken(CssTokenType.TT_EOF, "<font-family>: EOF expected.");
-        return ImmutableLists.ofCollection(list);
+        return ImmutableLists.copyOf(list);
     }
 
     @Override

@@ -4,6 +4,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -76,9 +78,9 @@ public class AnyPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindVertexPath_3args() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindVertexPath_3args(1, 5, VertexSequence.of(1, 6, 5))),
-                dynamicTest("2", () -> testFindVertexPath_3args(1, 4, VertexSequence.of(1, 2, 4))),
-                dynamicTest("3", () -> testFindVertexPath_3args(2, 6, VertexSequence.of(2, 1, 6)))
+                dynamicTest("1", () -> testFindVertexPath_3args(1, 5, ImmutableLists.of(1, 6, 5))),
+                dynamicTest("2", () -> testFindVertexPath_3args(1, 4, ImmutableLists.of(1, 2, 4))),
+                dynamicTest("3", () -> testFindVertexPath_3args(2, 6, ImmutableLists.of(2, 1, 6)))
         );
     }
 
@@ -86,30 +88,30 @@ public class AnyPathBuilderTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, VertexSequence<Integer> expected) throws Exception {
+    public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
-        VertexSequence<Integer> actual = instance.findVertexPath(start, goal::equals);
+        ImmutableList<Integer> actual = instance.findVertexPath(start, goal::equals);
         assertEquals(expected, actual);
     }
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 5), VertexSequence.of(1, 6, 5))),
-                dynamicTest("2", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 4), VertexSequence.of(1, 2, 4))),
-                dynamicTest("3", () -> testFindVertexPathOverWaypoints(Arrays.asList(2, 6), VertexSequence.of(2, 1, 6))),
-                dynamicTest("4", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VertexSequence.of(1, 6, 5)))
+                dynamicTest("1", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 5), ImmutableLists.of(1, 6, 5))),
+                dynamicTest("2", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 4), ImmutableLists.of(1, 2, 4))),
+                dynamicTest("3", () -> testFindVertexPathOverWaypoints(Arrays.asList(2, 6), ImmutableLists.of(2, 1, 6))),
+                dynamicTest("4", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 6, 5), ImmutableLists.of(1, 6, 5)))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexSequence<Integer> expResult) throws Exception {
+    private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
-        VertexSequence<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
+        ImmutableList<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
         assertEquals(expResult, actual);
     }
 
@@ -146,22 +148,22 @@ public class AnyPathBuilderTest {
 
         return Arrays.asList(
                 dynamicTest("1", () -> testFindAllPaths(graph, 1, 5, 5, Arrays.asList(
-                        new VertexSequence<>(Arrays.asList(1, 3, 5)),
-                        new VertexSequence<>(Arrays.asList(1, 3, 4, 5)),
-                        new VertexSequence<>(Arrays.asList(1, 2, 3, 5)),
-                        new VertexSequence<>(Arrays.asList(1, 2, 3, 4, 5))
+                        ImmutableLists.of(1, 3, 5),
+                        ImmutableLists.of(1, 3, 4, 5),
+                        ImmutableLists.of(1, 2, 3, 5),
+                        ImmutableLists.of(1, 2, 3, 4, 5)
                 ))),
                 dynamicTest("2", () -> testFindAllPaths(graph, 1, 5, 4, Arrays.asList(
-                        new VertexSequence<>(Arrays.asList(1, 3, 5)),
-                        new VertexSequence<>(Arrays.asList(1, 3, 4, 5)),
-                        new VertexSequence<>(Arrays.asList(1, 2, 3, 5))
+                        ImmutableLists.of(1, 3, 5),
+                        ImmutableLists.of(1, 3, 4, 5),
+                        ImmutableLists.of(1, 2, 3, 5)
                 )))
         );
     }
 
-    private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<VertexSequence<Integer>> expected) {
+    private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<ImmutableList<Integer>> expected) {
         AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
-        List<VertexSequence<Integer>> actual = instance.findAllVertexPaths(start,
+        List<ImmutableList<Integer>> actual = instance.findAllVertexPaths(start,
                 a -> a == goal, maxDepth);
         assertEquals(expected, actual);
     }

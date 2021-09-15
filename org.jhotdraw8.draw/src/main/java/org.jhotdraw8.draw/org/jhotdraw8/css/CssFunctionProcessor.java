@@ -71,7 +71,7 @@ public interface CssFunctionProcessor<T> {
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception.", e);
         }
-        return ImmutableLists.ofCollection(out);
+        return ImmutableLists.copyOf(out);
     }
 
     /**

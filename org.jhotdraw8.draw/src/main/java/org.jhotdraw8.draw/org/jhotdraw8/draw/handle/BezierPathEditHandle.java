@@ -49,7 +49,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 int segment = intersectionPointEx.getSegmentA();
                 path.getNodes().add(segment, new BezierNode(
                         pointInLocal));
-                view.getModel().set(owner, pointKey, ImmutableLists.ofCollection(path.getNodes()));
+                view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
                 view.recreateHandles();
             }
         });

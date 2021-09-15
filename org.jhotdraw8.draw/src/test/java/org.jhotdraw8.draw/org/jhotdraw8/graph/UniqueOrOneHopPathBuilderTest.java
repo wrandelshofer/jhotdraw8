@@ -5,6 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -107,7 +109,7 @@ public class UniqueOrOneHopPathBuilderTest {
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
                 dynamicTest("graph.nonunique", () -> testFindUniqueVertexPath(graph, 1, 5, null)),
-                dynamicTest("graph.2.nonunique but one hop", () -> testFindUniqueVertexPath(graph, 1, 4, new VertexSequence<Integer>(1, 4))),
+                dynamicTest("graph.2.nonunique but one hop", () -> testFindUniqueVertexPath(graph, 1, 4, ImmutableLists.of(1, 4))),
                 dynamicTest("graph.3", () -> testFindUniqueVertexPath(graph, 2, 6, null)),
                 dynamicTest("graph.nopath", () -> testFindUniqueVertexPath(graph, 2, 99, null)),
                 dynamicTest("diamond.1.nonunique", () -> testFindUniqueVertexPath(diamondGraph, 1, 4, null)),
@@ -118,10 +120,10 @@ public class UniqueOrOneHopPathBuilderTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, VertexSequence<Integer> expPath) throws Exception {
+    public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueOrOneHopPathBuilder<Integer, Double> instance = new UniqueOrOneHopPathBuilder<>(graph::getNextVertices);
-        VertexSequence<Integer> result = instance.findVertexPath(start, goal::equals);
+        ImmutableList<Integer> result = instance.findVertexPath(start, goal::equals);
         assertEquals(expPath, result);
     }
 
@@ -130,28 +132,26 @@ public class UniqueOrOneHopPathBuilderTest {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
-                dynamicTest("graph.1.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, Arrays.asList(5, 6), VertexSequence.of(1, 6))),
-                dynamicTest("graph.2.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, Arrays.asList(4, 5), VertexSequence.of(1, 4))),
-                dynamicTest("graph.3", () -> testFindUniqueMultiGoalPath(graph, 2, Arrays.asList(3, 6), VertexSequence.of(2, 3))),
-                dynamicTest("graph.4.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, Arrays.asList(6, 5), VertexSequence.of(1, 6))),
-                dynamicTest("graph.5.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, Arrays.asList(5, 4), VertexSequence.of(1, 4))),
-                dynamicTest("graph.6.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 2, Arrays.asList(6, 3), VertexSequence.of(2, 3))),
-                dynamicTest("graph.7.unreachable", () -> testFindUniqueMultiGoalPath(graph, 2, Arrays.asList(600, 300), null)),
-                dynamicTest("diamond.1.nonunique but one hop", () -> testFindUniqueMultiGoalPath(diamondGraph, 1, Arrays.asList(2, 3), VertexSequence.of(1, 2)))
+                dynamicTest("graph.1.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, ImmutableLists.of(5, 6), ImmutableLists.of(1, 6))),
+                dynamicTest("graph.2.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, ImmutableLists.of(4, 5), ImmutableLists.of(1, 4))),
+                dynamicTest("graph.3", () -> testFindUniqueMultiGoalPath(graph, 2, ImmutableLists.of(3, 6), ImmutableLists.of(2, 3))),
+                dynamicTest("graph.4.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, ImmutableLists.of(6, 5), ImmutableLists.of(1, 6))),
+                dynamicTest("graph.5.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 1, ImmutableLists.of(5, 4), ImmutableLists.of(1, 4))),
+                dynamicTest("graph.6.nonunique but one hop", () -> testFindUniqueMultiGoalPath(graph, 2, ImmutableLists.of(6, 3), ImmutableLists.of(2, 3))),
+                dynamicTest("graph.7.unreachable", () -> testFindUniqueMultiGoalPath(graph, 2, ImmutableLists.of(600, 300), null)),
+                dynamicTest("diamond.1.nonunique but one hop", () -> testFindUniqueMultiGoalPath(diamondGraph, 1, ImmutableLists.of(2, 3), ImmutableLists.of(1, 2)))
         );
     }
 
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, VertexSequence<Integer> expResult) throws Exception {
+    public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull ImmutableList<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         UniqueOrOneHopPathBuilder<Integer, Double> instance = new UniqueOrOneHopPathBuilder<>(graph::getNextVertices);
 
         // Find unique path to any of the goals
-        VertexSequence<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
-        double actualLength = actualPath == null ? 0.0 : actualPath.numOfVertices();
-
+        ImmutableList<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
         assertEquals(expResult, actualPath);
     }
 
@@ -177,20 +177,20 @@ public class UniqueOrOneHopPathBuilderTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindUniqueVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 3, 5), null)),
-                dynamicTest("2", () -> testFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 4), VertexSequence.of(1, 4))),
-                dynamicTest("3", () -> testFindUniqueVertexPathOverWaypoints(Arrays.asList(2, 6), null)),
-                dynamicTest("4", () -> testFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VertexSequence.of(1, 6, 5)))
+                dynamicTest("1", () -> testFindUniqueVertexPathOverWaypoints(ImmutableLists.of(1, 3, 5), null)),
+                dynamicTest("2", () -> testFindUniqueVertexPathOverWaypoints(ImmutableLists.of(1, 4), ImmutableLists.of(1, 4))),
+                dynamicTest("3", () -> testFindUniqueVertexPathOverWaypoints(ImmutableLists.of(2, 6), null)),
+                dynamicTest("4", () -> testFindUniqueVertexPathOverWaypoints(ImmutableLists.of(1, 6, 5), ImmutableLists.of(1, 6, 5)))
         );
     }
 
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, VertexSequence<Integer> expResult) throws Exception {
+    private void testFindUniqueVertexPathOverWaypoints(@NonNull ImmutableList<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         UniqueOrOneHopPathBuilder<Integer, Double> instance = new UniqueOrOneHopPathBuilder<>(graph::getNextVertices);
-        VertexSequence<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
+        ImmutableList<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
         assertEquals(expResult, actual);
     }
 

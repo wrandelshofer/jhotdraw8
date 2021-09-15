@@ -156,7 +156,7 @@ public class BezierFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).transform(transform));
         }
-        set(PATH, ImmutableLists.ofCollection(newP));
+        set(PATH, ImmutableLists.copyOf(newP));
     }
 
     @Override

@@ -32,7 +32,29 @@ import java.util.Spliterator;
  */
 public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
 
+    /**
+     * Returns the element at the specified position in this list.
+     *
+     * @param index the index of the element
+     * @return the element
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *                                   ({@code index < 0 || index >= size()})
+     */
     E get(int index);
+
+    /**
+     * Returns the element at the specified position in this list, counted
+     * from the last element of the list.
+     *
+     * @param index the index of the element, counted from the last
+     *              element.
+     * @return the element
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *                                   ({@code index < 0 || index >= size()})
+     */
+    default E getLast(int index) {
+        return get(size() - index - 1);
+    }
 
     /**
      * Gets the first element of the list.
@@ -119,8 +141,10 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
     }
 
     /**
-     * Returns a list iterator over elements of type {@code E}.
+     * Returns a list iterator over elements of type {@code E} starting
+     * at the specified index.
      *
+     * @param index the start index
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator(int index) {

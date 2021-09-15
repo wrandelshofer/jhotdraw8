@@ -23,8 +23,8 @@ public class Stylesheet extends AbstractSyntaxTree {
     private final @NonNull ImmutableList<StyleRule> styleRules;
 
     public Stylesheet(@NonNull List<Rule> rules) {
-        this.rules = ImmutableLists.ofCollection(rules);
-        this.styleRules = ImmutableLists.ofCollection(
+        this.rules = ImmutableLists.copyOf(rules);
+        this.styleRules = ImmutableLists.copyOf(
                 rules.stream()
                         .filter(r -> r instanceof StyleRule)
                         .map(r -> (StyleRule) r)

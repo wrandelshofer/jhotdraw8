@@ -561,7 +561,7 @@ public class SimpleXmlDomReader extends AbstractInputFormat implements Clipboard
                     ImmutableList<URI> listOrNull = external.get(figureFactory.getStylesheetsKey());
                     List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                     stylesheets.add(uri);
-                    external.set(figureFactory.getStylesheetsKey(), ImmutableLists.ofCollection(stylesheets));
+                    external.set(figureFactory.getStylesheetsKey(), ImmutableLists.copyOf(stylesheets));
                 }
             }
         }

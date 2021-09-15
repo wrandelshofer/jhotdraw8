@@ -92,7 +92,7 @@ public class PolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, transform.transform(newP.get(i)));
         }
-        set(POINTS, ImmutableLists.ofCollection(newP));
+        set(POINTS, ImmutableLists.copyOf(newP));
     }
 
     @Override
@@ -101,7 +101,7 @@ public class PolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
-        set(POINTS, ImmutableLists.ofCollection(newP));
+        set(POINTS, ImmutableLists.copyOf(newP));
     }
 
     @Override

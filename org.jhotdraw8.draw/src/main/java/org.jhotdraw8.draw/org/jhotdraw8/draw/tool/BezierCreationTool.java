@@ -94,7 +94,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
+                    dm.set(createdFigure, key, ImmutableLists.copyOf(points));
                     dv.getSelectedFigures().clear();
                     dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
@@ -119,7 +119,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             } else {
                 points.add(new BezierNode(c2));
             }
-            dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
+            dm.set(createdFigure, key, ImmutableLists.copyOf(points));
         }
         event.consume();
     }
@@ -172,7 +172,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         } else {
             points.add(new BezierNode(c.getConvertedValue()));
         }
-        dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
+        dm.set(createdFigure, key, ImmutableLists.copyOf(points));
 
         rubberBand.setVisible(false);
         dragStartIndex = -1;
@@ -211,7 +211,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             points = newList;
 
             DrawingModel dm = dv.getModel();
-            dm.set(createdFigure, key, ImmutableLists.ofCollection(points));
+            dm.set(createdFigure, key, ImmutableLists.copyOf(points));
             dragStartIndex = -1;
         }
     }

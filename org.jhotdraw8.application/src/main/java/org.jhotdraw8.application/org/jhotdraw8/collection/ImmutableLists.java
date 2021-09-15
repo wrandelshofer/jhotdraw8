@@ -66,7 +66,7 @@ public class ImmutableLists {
 
     public static @NonNull <T> ImmutableList<T> addAll(@Nullable ReadOnlyCollection<T> first, @NonNull ReadOnlyCollection<T> second) {
         if (first == null || first.isEmpty()) {
-            return ofCollection(second);
+            return copyOf(second);
         }
         Object[] a = new Object[first.size() + second.size()];
         int i = 0;
@@ -90,7 +90,7 @@ public class ImmutableLists {
         return items.length == 0 ? emptyList() : new ImmutableArrayList<>(items, 0, items.length);
     }
 
-    public static @NonNull <T> ImmutableList<T> ofCollection(@NonNull Collection<? extends T> collection) {
+    public static @NonNull <T> ImmutableList<T> copyOf(@NonNull Collection<? extends T> collection) {
         return collection.isEmpty() ? emptyList() : new ImmutableArrayList<>(collection);
     }
 
@@ -102,11 +102,11 @@ public class ImmutableLists {
         } else if (iterable instanceof Collection) {
             @SuppressWarnings("unchecked")
             Collection<T> unchecked = (Collection<T>) iterable;
-            return ofCollection(unchecked);
+            return copyOf(unchecked);
         } else if (iterable instanceof ReadOnlyCollection) {
             @SuppressWarnings("unchecked")
             ReadOnlyCollection<T> unchecked = (ReadOnlyCollection<T>) iterable;
-            return ofCollection(unchecked);
+            return copyOf(unchecked);
         }
         ArrayList<T> list = new ArrayList<>();
         for (T t : iterable) {
@@ -115,7 +115,7 @@ public class ImmutableLists {
         return new ImmutableArrayList<>(list);
     }
 
-    public static @NonNull <T> ImmutableList<T> ofCollection(ReadOnlyCollection<? extends T> collection) {
+    public static @NonNull <T> ImmutableList<T> copyOf(ReadOnlyCollection<? extends T> collection) {
         if (collection instanceof ImmutableList) {
             @SuppressWarnings("unchecked")
             ImmutableList<T> unchecked = (ImmutableList<T>) collection;

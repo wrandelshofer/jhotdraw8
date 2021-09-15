@@ -153,7 +153,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return ImmutableLists.ofCollection(list);
+        return ImmutableLists.copyOf(list);
     }
 
     @Override

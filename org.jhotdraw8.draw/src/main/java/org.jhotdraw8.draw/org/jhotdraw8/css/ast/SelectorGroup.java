@@ -30,7 +30,7 @@ public class SelectorGroup extends Selector {
     }
 
     public SelectorGroup(@NonNull List<Selector> selectors) {
-        this.selectors = ImmutableLists.ofCollection(selectors);
+        this.selectors = ImmutableLists.copyOf(selectors);
     }
 
     @Override

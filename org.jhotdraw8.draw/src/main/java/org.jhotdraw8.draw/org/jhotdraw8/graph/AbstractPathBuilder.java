@@ -6,6 +6,8 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -36,7 +38,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexSequence<V> findVertexPath(@NonNull V start, @NonNull V goal) {
+    public @Nullable ImmutableList<V> findVertexPath(@NonNull V start, @NonNull V goal) {
         return findVertexPath(start, goal::equals);
     }
 
@@ -62,11 +64,11 @@ public abstract class AbstractPathBuilder<V, A> {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexSequence<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
+    public @Nullable ImmutableList<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
         return findVertexPath(start, goalPredicate, new HashSet<>()::add);
     }
 
-    public @Nullable VertexSequence<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate, @NonNull AddToSet<V> visited) {
+    public @Nullable ImmutableList<V> findVertexPath(@NonNull V start, @NonNull Predicate<V> goalPredicate, @NonNull AddToSet<V> visited) {
         BackLink<V, A> current = search(start, goalPredicate, visited);
         if (current == null) {
             return null;
@@ -75,7 +77,7 @@ public abstract class AbstractPathBuilder<V, A> {
         for (BackLink<V, A> i = current; i != null; i = i.getParent()) {
             vertices.addFirst(i.getVertex());
         }
-        return new VertexSequence<>(vertices);
+        return ImmutableLists.copyOf(vertices);
     }
 
     public boolean isReachable(@NonNull V start, @NonNull Predicate<V> goalPredicate) {
@@ -93,7 +95,7 @@ public abstract class AbstractPathBuilder<V, A> {
      *                  determines how the waypoints are traversed
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexSequence<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints) {
+    public @Nullable ImmutableList<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints) {
         try {
             return findVertexPathOverWaypointsNonNull(waypoints);
         } catch (PathBuilderException e) {
@@ -101,9 +103,9 @@ public abstract class AbstractPathBuilder<V, A> {
         }
     }
 
-    public @Nullable VertexSequence<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints,
-                                                                   Runnable clearVisitedSet,
-                                                                   AddToSet<V> addToVisitedSet) {
+    public @Nullable ImmutableList<V> findVertexPathOverWaypoints(@NonNull Iterable<? extends V> waypoints,
+                                                                  Runnable clearVisitedSet,
+                                                                  AddToSet<V> addToVisitedSet) {
         try {
             return findVertexPathOverWaypointsNonNull(waypoints, clearVisitedSet, addToVisitedSet);
         } catch (PathBuilderException e) {
@@ -122,7 +124,7 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath
      * @throws PathBuilderException if the path cannot be constructed
      */
-    public @Nullable VertexSequence<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints) throws PathBuilderException {
+    public @Nullable ImmutableList<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints) throws PathBuilderException {
         HashSet<Object> visitedSet = new HashSet<>();
         return findVertexPathOverWaypointsNonNull(waypoints, visitedSet::clear, visitedSet::add);
     }
@@ -141,9 +143,9 @@ public abstract class AbstractPathBuilder<V, A> {
      * @return a VertexPath
      * @throws PathBuilderException if the path cannot be constructed
      */
-    public @Nullable VertexSequence<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints,
-                                                                          Runnable clearVisitedSet,
-                                                                          AddToSet<V> addToVisitedSet) throws PathBuilderException {
+    public @Nullable ImmutableList<V> findVertexPathOverWaypointsNonNull(@NonNull Iterable<? extends V> waypoints,
+                                                                         Runnable clearVisitedSet,
+                                                                         AddToSet<V> addToVisitedSet) throws PathBuilderException {
 
         Iterator<? extends V> i = waypoints.iterator();
         List<V> pathElements = new ArrayList<>(16);
@@ -166,7 +168,7 @@ public abstract class AbstractPathBuilder<V, A> {
             }
             start = goal;
         }
-        return new VertexSequence<>(pathElements);
+        return ImmutableLists.copyOf(pathElements);
     }
 
     public @NonNull Function<V, Iterable<V>> getNextNodesFunction() {

@@ -184,7 +184,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             // The drawing is currently being replaced by a new one. Don't fire events.
             return;
         }
-        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.ofCollection(listView.getItems()));
+        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.copyOf(listView.getItems()));
         updateAllFigures();
     }
 

@@ -110,7 +110,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
                 t.add(transformed.getX());
                 t.add(transformed.getY());
             }
-            set(POINTS, ImmutableLists.ofCollection(t));
+            set(POINTS, ImmutableLists.copyOf(t));
         }
     }
 

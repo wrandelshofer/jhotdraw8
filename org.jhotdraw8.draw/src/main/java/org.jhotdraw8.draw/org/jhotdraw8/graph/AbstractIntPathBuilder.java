@@ -6,6 +6,8 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.ArrayDeque;
@@ -38,7 +40,7 @@ public abstract class AbstractIntPathBuilder {
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexSequence<Integer> findVertexPath(int start, int goal) {
+    public @Nullable ImmutableList<Integer> findVertexPath(int start, int goal) {
         return findVertexPath(start, i -> i == goal);
     }
 
@@ -78,11 +80,11 @@ public abstract class AbstractIntPathBuilder {
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexSequence<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate) {
+    public @Nullable ImmutableList<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate) {
         return findVertexPath(start, goalPredicate, addToBitSet(new BitSet()));
     }
 
-    public @Nullable VertexSequence<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+    public @Nullable ImmutableList<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
         BackLink current = search(start, goalPredicate, visited);
         if (current == null) {
             return null;
@@ -91,7 +93,7 @@ public abstract class AbstractIntPathBuilder {
         for (BackLink i = current; i != null; i = i.getParent()) {
             vertices.addFirst(i.getVertex());
         }
-        return new VertexSequence<>(vertices);
+        return ImmutableLists.copyOf(vertices);
     }
 
     /**
@@ -140,7 +142,7 @@ public abstract class AbstractIntPathBuilder {
      *                  determines how the waypoints are traversed
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable VertexSequence<Integer> findVertexPathOverWaypoints(@NonNull Iterable<Integer> waypoints) {
+    public @Nullable ImmutableList<Integer> findVertexPathOverWaypoints(@NonNull Iterable<Integer> waypoints) {
         try {
             return findVertexPathOverWaypointsNonNull(waypoints);
         } catch (PathBuilderException e) {
@@ -159,7 +161,7 @@ public abstract class AbstractIntPathBuilder {
      * @return a VertexPath
      * @throws PathBuilderException if the path cannot be constructed
      */
-    public @Nullable VertexSequence<Integer> findVertexPathOverWaypointsNonNull(@NonNull Iterable<Integer> waypoints) throws PathBuilderException {
+    public @Nullable ImmutableList<Integer> findVertexPathOverWaypointsNonNull(@NonNull Iterable<Integer> waypoints) throws PathBuilderException {
         Iterator<Integer> i = waypoints.iterator();
         List<Integer> pathElements = new ArrayList<>(16);
         if (!i.hasNext()) {
@@ -181,7 +183,7 @@ public abstract class AbstractIntPathBuilder {
             }
             start = goal;
         }
-        return new VertexSequence<>(pathElements);
+        return ImmutableLists.copyOf(pathElements);
     }
 
     public @NonNull Function<Integer, Spliterator.OfInt> getNextNodesFunction() {
