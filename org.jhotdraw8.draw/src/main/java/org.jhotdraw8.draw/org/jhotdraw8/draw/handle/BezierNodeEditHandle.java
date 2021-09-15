@@ -291,9 +291,11 @@ public class BezierNodeEditHandle extends AbstractHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
         if (list == null || pointIndex >= list.size()) {
+            node.setVisible(false);
             return;
+        } else {
+            node.setVisible(true);
         }
-        BezierNode p = getBezierNode();
         Point2D c0 = getLocation();
         pickLocation = c0 = t.transform(c0);
         double size = node.getWidth();

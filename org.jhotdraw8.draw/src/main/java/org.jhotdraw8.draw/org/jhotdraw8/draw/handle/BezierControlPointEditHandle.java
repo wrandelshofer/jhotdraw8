@@ -284,7 +284,11 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         RadioMenuItem equidistantRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.equidistantConstraint.text"));
         RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.collinearAndEquidistantConstraint.text"));
 
-        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
+        final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+        if (nodes == null) {
+            return;
+        }
+        BezierNodePath path = new BezierNodePath(nodes);
         BezierNode bnode = path.getNodes().get(pointIndex);
         if (bnode.isEquidistant() && bnode.isCollinear()) {
             bothRadio.setSelected(true);
@@ -343,11 +347,12 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
-        if (pointIndex >= list.size()) {
+        if (list == null || pointIndex >= list.size()) {
             node.setVisible(false);
             return;
+        } else {
+            node.setVisible(true);
         }
-        BezierNode p = getBezierNode();
         Point2D cp = getLocation();
         pickLocation = cp = t == null ? cp : t.transform(cp);
         double size = node.getWidth();
