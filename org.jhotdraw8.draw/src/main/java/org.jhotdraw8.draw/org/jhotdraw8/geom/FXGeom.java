@@ -58,8 +58,18 @@ public class FXGeom {
      * @param r a bounding box
      * @return the rectangle
      */
-    public static @NonNull java.awt.geom.Rectangle2D.Double toRectangle2D(@NonNull Bounds r) {
+    public static @NonNull java.awt.geom.Rectangle2D.Double toAwtRectangle2D(@NonNull Bounds r) {
         return new java.awt.geom.Rectangle2D.Double(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
+    }
+
+    /**
+     * Converts a bounding box to a FX rectangle.
+     *
+     * @param r a bounding box
+     * @return the rectangle
+     */
+    public static @NonNull Rectangle2D toRectangle2D(@NonNull Bounds r) {
+        return new Rectangle2D(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
     /**
