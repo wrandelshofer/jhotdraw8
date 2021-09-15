@@ -290,12 +290,12 @@ public class BezierNodeEditHandle extends AbstractHandle {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
-        if (pointIndex >= list.size()) {
+        if (list == null || pointIndex >= list.size()) {
             return;
         }
         BezierNode p = getBezierNode();
         Point2D c0 = getLocation();
-        pickLocation = c0 = t == null ? c0 : t.transform(c0);
+        pickLocation = c0 = t.transform(c0);
         double size = node.getWidth();
         node.relocate(c0.getX() - size * 0.5, c0.getY() - size * 0.5);
         // rotates the node:
