@@ -16,7 +16,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -26,9 +25,6 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -50,14 +46,11 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
- * Handle for the point ofCollection a figure.
+ * Handle for the point of a figure.
  *
  * @author Werner Randelshofer
  */
 public class BezierControlPointEditHandle extends AbstractHandle {
-    public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
-    public static final BorderWidths WIDTH_2 = new BorderWidths(2, 2, 2, 2, false, false, false, false);
-
     private static final @Nullable Background REGION_BACKGROUND =
             new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(
@@ -354,11 +347,11 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             node.setVisible(true);
         }
         Point2D cp = getLocation();
-        pickLocation = cp = t == null ? cp : t.transform(cp);
+        pickLocation = cp = t.transform(cp);
         double size = node.getWidth();
         node.relocate(cp.getX() - size * 0.5, cp.getY() - size * 0.5);
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
+        node.setRotate(f.getStyledNonNull(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
