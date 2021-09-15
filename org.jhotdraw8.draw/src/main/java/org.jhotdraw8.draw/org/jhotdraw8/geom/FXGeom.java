@@ -58,7 +58,7 @@ public class FXGeom {
      * @param r a bounding box
      * @return the rectangle
      */
-    public static @NonNull java.awt.geom.Rectangle2D.Double toRectangle2D(@NonNull BoundingBox r) {
+    public static @NonNull java.awt.geom.Rectangle2D.Double toRectangle2D(@NonNull Bounds r) {
         return new java.awt.geom.Rectangle2D.Double(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
