@@ -78,7 +78,7 @@ public class PathIterablePointsHandle extends AbstractHandle {
         PathIterableFigure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();
-        FXPathPointsBuilder builder = new FXPathPointsBuilder(elements);
+        FXPathPointsBuilder builder = new FXPathPointsBuilder(view.getEditor().getHandleSize(), elements);
         SvgPaths.buildFromPathIterator(builder, f.getPathIterator(view, Shapes.awtTransformFromFX(t)));
 
         node.getElements().setAll(builder.getElements());

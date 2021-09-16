@@ -356,7 +356,7 @@ public interface DrawingView extends WritableRenderContext {
      * Distance 0 means that vx,vy is inside the figure.
      */
     @NonNull
-    List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate);
+    List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, @NonNull Predicate<Figure> predicate);
 
     /**
      * Returns all figures that lie within the specified bounds given in view
@@ -384,10 +384,26 @@ public interface DrawingView extends WritableRenderContext {
      * @param vwidth    width in view coordinates
      * @param vheight   height in view coordinates
      * @param decompose whether to decompose the figures
+     * @return A list of figures from front to back
+     */
+    default @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+        return findFiguresIntersecting(vx, vy, vwidth, vheight, decompose, f -> true);
+    }
+
+    /**
+     * Returns all figures that intersect the specified bounds given in view
+     * coordinates. The figures are returned in Z-order from front to back.
+     * Skips disabled figures.
+     *
+     * @param vx        x in view coordinates
+     * @param vy        y in view coordinates
+     * @param vwidth    width in view coordinates
+     * @param vheight   height in view coordinates
+     * @param decompose whether to decompose the figures
      * @param predicate predicate for filtering figures
      * @return A list of figures from front to back
      */
-    @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate);
+    @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate);
 
     // Handles
 
@@ -471,7 +487,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param decompose       whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default @NonNull List<Figure> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose, Figure::isSelectable);
     }
 

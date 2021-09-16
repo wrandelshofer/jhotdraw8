@@ -137,53 +137,64 @@ public class InteractiveHandleRenderer {
     public static Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
         double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(LINE45DEG, LINE45DEG).magnitude();
 
+        if (!node.isVisible()) {
+            return null;
+        }
+
+        final Node clip = node.getClip();
+        if (clip != null && !clip.contains(pointInLocal)) {
+            return null;
+        }
+
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
+
             if (shape.contains(pointInLocal)) {
                 return 0.0;
             }
 
             double widthFactor;
             switch (shape.getStrokeType()) {
-            case CENTERED:
-            default:
-                widthFactor = 0.5;
-                break;
-            case INSIDE:
-                widthFactor = 0;
-                break;
-            case OUTSIDE:
-                widthFactor = 1;
-                break;
+                case CENTERED:
+                default:
+                    widthFactor = 0.5;
+                    break;
+                case INSIDE:
+                    widthFactor = 0;
+                    break;
+                case OUTSIDE:
+                    widthFactor = 1;
+                    break;
             }
-            if (FXGeom.grow(shape.getBoundsInLocal(), toleranceInLocal, toleranceInLocal).contains(pointInLocal)) {
+            if (FXGeom.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 int cap;
                 switch (shape.getStrokeLineCap()) {
-                case SQUARE:
-                    cap = BasicStroke.CAP_SQUARE;
-                    break;
-                case BUTT:
-                    cap = BasicStroke.CAP_BUTT;
-                    break;
-                case ROUND:
-                    cap = BasicStroke.CAP_ROUND;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
+                    case SQUARE:
+                        cap = BasicStroke.CAP_SQUARE;
+                        break;
+                    case BUTT:
+                        // we wan't tolerance around the end of the shape
+                        // therefore BUTT must be ROUND
+                        // fallthrough
+                    case ROUND:
+                        cap = BasicStroke.CAP_ROUND;
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
                 }
                 int join;
                 switch (shape.getStrokeLineJoin()) {
-                case MITER:
-                    join = BasicStroke.JOIN_MITER;
-                    break;
-                case BEVEL:
-                    join = BasicStroke.JOIN_BEVEL;
-                    break;
-                case ROUND:
-                    join = BasicStroke.JOIN_ROUND;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
+                    case MITER:
+                        join = BasicStroke.JOIN_MITER;
+                        break;
+                    case BEVEL:
+                        join = BasicStroke.JOIN_BEVEL;
+                        break;
+                    case ROUND:
+                        join = BasicStroke.JOIN_ROUND;
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
                 }
                 final java.awt.Shape awtShape = Shapes.awtShapeFromFX(shape);
                 return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
@@ -409,27 +420,27 @@ public class InteractiveHandleRenderer {
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            onFigureRemoved(f);
-            break;
-        case NODE_ADDED_TO_TREE:
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            break;
-        case NODE_CHANGED:
-            onNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            onRootChanged();
-            break;
-        case SUBTREE_NODES_CHANGED:
-            onSubtreeNodesChanged(f);
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                onFigureRemoved(f);
+                break;
+            case NODE_ADDED_TO_TREE:
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                break;
+            case NODE_CHANGED:
+                onNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                onRootChanged();
+                break;
+            case SUBTREE_NODES_CHANGED:
+                onSubtreeNodesChanged(f);
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     }
 

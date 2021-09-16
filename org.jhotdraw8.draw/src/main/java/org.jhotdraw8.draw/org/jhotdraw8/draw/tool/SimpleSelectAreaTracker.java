@@ -13,6 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.util.Resources;
 
 import java.util.List;
@@ -102,7 +103,12 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
 
         double w = x - event.getX();
         double h = y - event.getY();
-        List<Figure> f = dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false)
+        final List<Map.Entry<Figure, Double>> result =
+                event.isAltDown()
+                        ? dv.findFiguresIntersecting(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false
+                        , f -> !(f instanceof Layer))
+                        : dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false);
+        List<Figure> f = result
                 .stream().map(Map.Entry::getKey).collect(Collectors.toList());
         if (event.isShiftDown()) {
             if (dv.getSelectedFigures().containsAll(f)) {

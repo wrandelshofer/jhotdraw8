@@ -194,7 +194,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate) {
+    public @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, @NonNull Predicate<Figure> predicate) {
         return drawingRenderer.findFigures(vx, vy, decompose, predicate);
     }
 
@@ -204,7 +204,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull List<Figure> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
+    public @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         return drawingRenderer.findFiguresIntersecting(vx, vy, vwidth, vheight, decompose, predicate);
     }
 

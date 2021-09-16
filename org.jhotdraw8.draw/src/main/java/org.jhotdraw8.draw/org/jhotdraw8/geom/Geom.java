@@ -201,7 +201,7 @@ public class Geom {
      * @param tolerance the tolerance
      * @return true if inside
      */
-    public static boolean contains(@NonNull double rx, double ry, double rw, double rh, double x, double y, double tolerance) {
+    public static boolean contains(double rx, double ry, double rw, double rh, double x, double y, double tolerance) {
         return rx - tolerance <= x && x <= (rx + rw) + tolerance
                 && ry - tolerance <= y && y <= (ry + rh) + tolerance;
     }
@@ -311,7 +311,7 @@ public class Geom {
         double ydiff = yb - ya;
         double l2 = xdiff * xdiff + ydiff * ydiff;
 
-        if (l2 == 0) {
+        if (l2 == 0) {// Line is a single point
             return Geom.squaredDistance(xa, ya, xc, yc);
         }
 
