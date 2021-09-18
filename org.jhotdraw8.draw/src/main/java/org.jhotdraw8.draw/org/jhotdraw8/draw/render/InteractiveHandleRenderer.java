@@ -141,8 +141,11 @@ public class InteractiveHandleRenderer {
             return null;
         }
 
-        final Node clip = node.getClip();
-        if (clip != null && !clip.contains(pointInLocal)) {
+        // If the node has a clip, we only proceed if the point is inside
+        // the clip with tolerance.
+        final Node nodeClip = node.getClip();
+        if (nodeClip != null && !node.getClip().intersects(pointInLocal.getX() - tolerance,
+                pointInLocal.getY() - tolerance, tolerance * 2, tolerance * 2)) {
             return null;
         }
 
@@ -169,18 +172,17 @@ public class InteractiveHandleRenderer {
             if (FXGeom.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 int cap;
                 switch (shape.getStrokeLineCap()) {
-                    case SQUARE:
-                        cap = BasicStroke.CAP_SQUARE;
-                        break;
-                    case BUTT:
-                        // we wan't tolerance around the end of the shape
-                        // therefore BUTT must be ROUND
-                        // fallthrough
-                    case ROUND:
-                        cap = BasicStroke.CAP_ROUND;
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
+                case SQUARE:
+                    cap = BasicStroke.CAP_SQUARE;
+                    break;
+                case BUTT:
+                    cap = (toleranceInLocal > 0) ? BasicStroke.CAP_ROUND : BasicStroke.CAP_BUTT;
+                    break;
+                case ROUND:
+                    cap = BasicStroke.CAP_ROUND;
+                    break;
+                default:
+                    throw new IllegalArgumentException();
                 }
                 int join;
                 switch (shape.getStrokeLineJoin()) {
@@ -208,6 +210,7 @@ public class InteractiveHandleRenderer {
         } else if (node instanceof Group) {
             if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 return childContains((Parent) node, pointInLocal, tolerance);
+
             }
             return null;
         } else if (node instanceof Region) {

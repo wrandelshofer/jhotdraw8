@@ -107,70 +107,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         this.drawingView.set(drawingView);
     }
 
-    public @Nullable Figure findFigure(double vx, double vy, Predicate<Figure> predicate) {
-        Drawing dr = getDrawing();
-        Figure f = findFigureRecursive((Parent) getNode(dr),
-                getDrawingView().viewToWorld(vx, vy),
-                getEditor().getTolerance(), predicate);
-        return f;
-    }
-
-    /**
-     * Finds a figure at the specified coordinate, but looks only at figures in
-     * the specified set.
-     * <p>
-     * Uses a default tolerance value. See {@link #findFigure(double, double, java.util.Set, double)
-     * }.
-     *
-     * @param vx      point in view coordinates
-     * @param vy      point in view coordinates
-     * @param figures figures of interest
-     * @return a figure in the specified set which contains the point, or null.
-     */
-    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures) {
-        return findFigure(vx, vy, figures, getEditor().getTolerance());
-    }
-
-    /**
-     * Finds a figure at the specified coordinate, but looks only at figures in
-     * the specified set.
-     *
-     * @param vx        point in view coordinates
-     * @param vy        point in view coordinates
-     * @param figures   figures of interest
-     * @param tolerance the number of pixels around the figure in view
-     *                  coordinates, in which the the point is considered to be inside the figure
-     * @return a figure in the specified set which contains the point, or null.
-     */
-    public @Nullable Figure findFigure(double vx, double vy, @NonNull Set<Figure> figures, double tolerance) {
-        Node worldNode = getNode(getDrawing());
-        if (worldNode != null) {
-            Point2D pointInScene = worldNode.getLocalToSceneTransform().transform(
-                    getDrawingView().viewToWorld(vx, vy));
-            Figure closestFigure = null;
-            double closestDistance = Double.POSITIVE_INFINITY;
-            for (Figure f : figures) {
-                if (f.isShowing()) {
-                    Node n = getNode(f);
-                    if (n != null) {
-                        Point2D pointInLocal = n.sceneToLocal(pointInScene);
-                        Double distance = InteractiveHandleRenderer.contains(n, pointInLocal, tolerance);
-                        if (distance != null && distance < closestDistance) {
-                            closestFigure = f;
-                            closestDistance = distance;
-                            if (distance == 0.0) {
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            return closestFigure;
-        }
-
-        return null;
-    }
-
 
     public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
         Node n = figureToNodeMap.get(figure);
@@ -208,41 +144,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                     }
                 }
 
-            }
-        }
-        return null;
-    }
-
-    private @Nullable Figure findFigureRecursive(@Nullable Parent p, @NonNull Point2D pp, double tolerance, Predicate<Figure> predicate) {
-        if (p == null) {
-            return null;
-        }
-
-        final Node clip = p.getClip();
-        if (clip != null) {
-            if (!clip.intersects(p.parentToLocal(new BoundingBox(pp.getX() - tolerance, pp.getY() - tolerance, tolerance * 2, tolerance * 2)))) {
-                // The point with tolerance is outside the clip shape.
-                return null;
-            }
-        }
-
-        ObservableList<Node> list = p.getChildrenUnmodifiable();
-        for (int i = list.size() - 1; i >= 0; i--) {// front to back
-            Node n = list.get(i);
-            if (!n.isVisible()) {
-                continue;
-            }
-            Point2D pl = n.parentToLocal(pp);
-            if (InteractiveHandleRenderer.contains(n, pl, tolerance) != null) {
-                Figure f = nodeToFigureMap.get(n);
-                if (f == null || !predicate.test(f)) {
-                    if (n instanceof Parent) {
-                        f = findFigureRecursive((Parent) n, pl, tolerance, predicate);
-                    }
-                }
-                if (f != null && predicate.test(f)) {
-                    return f;
-                }
             }
         }
         return null;
@@ -296,11 +197,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private boolean findFiguresInsideRecursive(@NonNull Node node, @NonNull Bounds pp, @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
         // base case
         // ---------
-        boolean intersects = pp.intersects(node.getBoundsInLocal());
-        if (!intersects) {
+        if (!node.isVisible()) {
             return false;
         }
-        boolean isInside = intersects && pp.contains(node.getBoundsInLocal());
+
+        boolean isIntersecting = pp.intersects(node.getBoundsInLocal());
+        if (!isIntersecting) {
+            return false;
+        }
+        boolean isInside = pp.contains(node.getBoundsInLocal());
 
         final Figure figure = nodeToFigureMap.get(node);
         final boolean isWanted = figure != null && predicate.test(figure);
@@ -349,6 +254,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private boolean findFiguresIntersectingRecursive(@NonNull Node node, @NonNull Bounds pp, @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
         // base case
         // ---------
+        if (!node.isVisible()) {
+            return false;
+        }
+
         boolean intersects = pp.intersects(node.getBoundsInLocal());
         if (!intersects) {
             return false;
@@ -401,6 +310,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                                          @NonNull Predicate<Figure> figurePredicate, double radius) {
         // base case
         // ---------
+        if (!node.isVisible()) {
+            return false;
+        }
+
         Double distance = InteractiveHandleRenderer.contains(node, center, radius);
         if (distance == null) {
             return false;
@@ -429,7 +342,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                             found,
                             decompose,
                             figurePredicate,
-                            child.getLocalToParentTransform().inverseDeltaTransform(radius, radius).getX());
+                            Math.abs(child.getLocalToParentTransform().inverseDeltaTransform(radius, radius).getX()));
                 } catch (NonInvertibleTransformException e) {
                     // should never happen
                 }

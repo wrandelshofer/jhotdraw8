@@ -106,7 +106,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
         final List<Map.Entry<Figure, Double>> result =
                 event.isAltDown()
                         ? dv.findFiguresIntersecting(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false
-                        , f -> !(f instanceof Layer))
+                        , f -> !(f instanceof Layer) && f.isSelectable())
                         : dv.findFiguresInside(min(x, event.getX()), min(y, event.getY()), abs(w), abs(h), false);
         List<Figure> f = result
                 .stream().map(Map.Entry::getKey).collect(Collectors.toList());
