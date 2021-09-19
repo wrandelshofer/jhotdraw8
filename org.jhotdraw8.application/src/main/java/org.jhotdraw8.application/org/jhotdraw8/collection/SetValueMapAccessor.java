@@ -44,6 +44,11 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
+    public Boolean get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+        return setAccessor.get(a).contains(value);
+    }
+
+    @Override
     public Boolean getDefaultValue() {
         return defaultValue;
     }

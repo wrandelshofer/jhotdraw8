@@ -49,6 +49,10 @@ public interface MapAccessor<T> extends Serializable {
     @Nullable
     T get(@NonNull Map<? super Key<?>, Object> a);
 
+    default @Nullable T get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+        return get(a.asMap());
+    }
+
     /**
      * Puts the value of the attribute denoted by this accessor from a Map.
      *

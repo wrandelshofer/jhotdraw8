@@ -27,6 +27,13 @@ public interface ReadOnlyMap<K, V> {
 
     V get(Object key);
 
+    default V getOrDefault(Object key, V defaultValue) {
+        V v;
+        return (((v = get(key)) != null) || containsKey(key))
+                ? v
+                : defaultValue;
+    }
+
     Iterator<Map.Entry<K, V>> entries();
 
     Iterator<K> keys();

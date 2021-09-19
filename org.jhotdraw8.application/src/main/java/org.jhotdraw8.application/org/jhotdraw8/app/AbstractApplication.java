@@ -35,6 +35,8 @@ import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
@@ -208,6 +210,11 @@ public abstract class AbstractApplication extends javafx.application.Application
     @Override
     public @NonNull NonNullObjectProperty<Preferences> preferencesProperty() {
         return preferences;
+    }
+
+    @Override
+    public Executor getExecutor() {
+        return ForkJoinPool.commonPool();
     }
 }
 

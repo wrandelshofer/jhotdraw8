@@ -26,7 +26,8 @@ import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.app.action.file.PrintFileAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ReadOnlyOptionsMap;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssDimension2D;
@@ -453,7 +454,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, boolean insert, @NonNull WorkState<Void> workState) {
+    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, boolean insert, @NonNull WorkState<Void> workState) {
         return FXWorker.supply(() -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -471,7 +472,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyOptionsMap options, @NonNull WorkState<Void> workState) {
+    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, @NonNull WorkState<Void> workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {

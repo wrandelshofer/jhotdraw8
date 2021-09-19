@@ -150,6 +150,7 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
         update(value, exception, exceptionUpdate);
     }
 
+    @Override
     public void complete(V result) {
         workState.updateValue(result);
         updateState(Worker.State.SUCCEEDED);
@@ -157,6 +158,7 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
         completableFuture.complete(result);
     }
 
+    @Override
     public void completeExceptionally(Throwable exception) {
         updateException(exception);
         updateState(State.FAILED);

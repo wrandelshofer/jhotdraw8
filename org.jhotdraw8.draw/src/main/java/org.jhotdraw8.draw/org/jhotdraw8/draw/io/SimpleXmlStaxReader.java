@@ -105,7 +105,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
     }
 
     @Override
-    public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
+    public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState<?> workState) throws IOException {
         idFactory.setDocumentHome(documentHome);
         Deque<Figure> stack = doRead(in);
 

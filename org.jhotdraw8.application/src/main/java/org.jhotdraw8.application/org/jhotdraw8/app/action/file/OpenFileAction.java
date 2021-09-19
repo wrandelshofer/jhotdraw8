@@ -7,8 +7,10 @@ package org.jhotdraw8.app.action.file;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedApplication;
-import org.jhotdraw8.collection.OptionsMap;
-import org.jhotdraw8.collection.SimpleOptionsMap;
+import org.jhotdraw8.collection.Key;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
@@ -38,7 +40,7 @@ public class OpenFileAction extends AbstractOpenFileAction {
     }
 
     @Override
-    protected @NonNull OptionsMap getReadOptions() {
-        return new SimpleOptionsMap();
+    protected @NonNull Map<Key<?>, Object> getReadOptions() {
+        return new LinkedHashMap<>();
     }
 }

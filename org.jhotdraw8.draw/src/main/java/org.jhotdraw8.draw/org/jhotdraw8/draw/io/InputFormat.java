@@ -6,7 +6,8 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ReadOnlyOptionsMap;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -26,9 +27,9 @@ import java.nio.file.Paths;
  * @author Werner Randelshofer
  */
 public interface InputFormat {
-    void setOptions(@NonNull ReadOnlyOptionsMap newValue);
+    void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> newValue);
 
-    @NonNull ReadOnlyOptionsMap getOptions();
+    @NonNull ReadOnlyMap<Key<?>, Object> getOptions();
 
     /**
      * Reads a figure from an URI
@@ -42,7 +43,7 @@ public interface InputFormat {
      * @return the figure
      * @throws java.io.IOException if an IO error occurs
      */
-    default @Nullable Figure read(@NonNull URI uri, @Nullable Drawing drawing, @NonNull WorkState workState) throws IOException {
+    default @Nullable Figure read(@NonNull URI uri, @Nullable Drawing drawing, @NonNull WorkState<?> workState) throws IOException {
         return read(Paths.get(uri), drawing, workState);
     }
 
@@ -58,7 +59,7 @@ public interface InputFormat {
      * @return the figure
      * @throws java.io.IOException if an IO error occurs
      */
-    default @Nullable Figure read(@NonNull Path file, @Nullable Drawing drawing, @NonNull WorkState workState) throws IOException {
+    default @Nullable Figure read(@NonNull Path file, @Nullable Drawing drawing, @NonNull WorkState<?> workState) throws IOException {
         URI documentHome = file.getParent() == null ? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri() : file.getParent().toUri();
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(in, drawing, documentHome, workState);
@@ -77,6 +78,6 @@ public interface InputFormat {
      * @return the drawing
      * @throws java.io.IOException if an IO error occurs
      */
-    @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException;
+    @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState<?> workState) throws IOException;
 
 }

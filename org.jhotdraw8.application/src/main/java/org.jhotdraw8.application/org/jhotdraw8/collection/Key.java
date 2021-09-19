@@ -66,6 +66,17 @@ public interface Key<T> extends MapAccessor<T> {
      * @param a A Map.
      * @return The value of the attribute.
      */
+    @Override
+    default @Nullable T get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+        return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
+    }
+
+    /**
+     * Gets the value of the attribute denoted by this Key from a Map.
+     *
+     * @param a A Map.
+     * @return The value of the attribute.
+     */
     default @NonNull ObjectProperty<T> getValueProperty(@NonNull Map<? super Key<?>, ObjectProperty<?>> a) {
         if (!a.containsKey(this)) {
             a.put(this, new SimpleObjectProperty<>(getDefaultValue()));

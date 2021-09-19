@@ -10,13 +10,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.OptionsMap;
 import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.reflect.TypeToken;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
-    private final Function<DataFormat, Dialog<OptionsMap>> optionsDialogFactory;
+    private final Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialogFactory;
     public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new SimpleNullableKey<>("exportChooser", URIChooser.class);
     public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("exportChooserFactory",
             new TypeToken<Supplier<URIChooser>>() {
@@ -45,7 +45,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         this(activity, ID, null);
     }
 
-    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<OptionsMap>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialog) {
         this(activity, ID, optionsDialog);
     }
 
@@ -57,7 +57,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<OptionsMap>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialog) {
         super(activity, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
@@ -73,7 +73,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected @Nullable Dialog<OptionsMap> createOptionsDialog(DataFormat format) {
+    protected @Nullable Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return optionsDialogFactory == null ? null : optionsDialogFactory.apply(format);
     }
 

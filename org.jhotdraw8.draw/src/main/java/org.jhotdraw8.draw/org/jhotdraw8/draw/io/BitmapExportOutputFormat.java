@@ -119,14 +119,14 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
         if (!Platform.isFxApplicationThread()) {
             CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds,
-                    getOptions().getDouble(EXPORT_DRAWING_DPI_KEY)), Platform::runLater);
+                    EXPORT_DRAWING_DPI_KEY.get(getOptions())), Platform::runLater);
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
-            return doRenderImage(drawing, node, bounds, getOptions().getDouble(EXPORT_DRAWING_DPI_KEY));
+            return doRenderImage(drawing, node, bounds, EXPORT_DRAWING_DPI_KEY.get(getOptions()));
         }
     }
 
@@ -164,15 +164,15 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     public void write(@NonNull Map<DataFormat, Object> out, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
-        WritableImage image = renderImage(drawing, selection, getOptions().getDouble(EXPORT_DRAWING_DPI_KEY));
+        WritableImage image = renderImage(drawing, selection, EXPORT_DRAWING_DPI_KEY.get(getOptions()));
         out.put(DataFormat.IMAGE, image);
     }
 
     @Override
     public void write(@NonNull OutputStream out, URI documentHome, @NonNull Drawing drawing, WorkState workState) throws IOException {
-        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), getOptions().getDouble(EXPORT_DRAWING_DPI_KEY));
+        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), EXPORT_DRAWING_DPI_KEY.get(getOptions()));
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
-        writeImage(out, writableImage, getOptions().getDouble(EXPORT_DRAWING_DPI_KEY));
+        writeImage(out, writableImage, EXPORT_DRAWING_DPI_KEY.get(getOptions()));
 
     }
 
@@ -221,9 +221,9 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
-        WritableImage image = renderSlice(page, pageBounds, node, getOptions().getDouble(EXPORT_PAGES_DPI_KEY) * factor);
+        WritableImage image = renderSlice(page, pageBounds, node, EXPORT_PAGES_DPI_KEY.get(getOptions()) * factor);
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
-            writeImage(out, image, getOptions().getDouble(EXPORT_PAGES_DPI_KEY));
+            writeImage(out, image, EXPORT_PAGES_DPI_KEY.get(getOptions()));
         }
     }
 

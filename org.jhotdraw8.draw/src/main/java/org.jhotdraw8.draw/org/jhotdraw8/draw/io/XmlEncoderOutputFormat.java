@@ -5,8 +5,9 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ReadOnlyOptionsMap;
-import org.jhotdraw8.collection.SimpleOptionsMap;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlyMap;
+import org.jhotdraw8.collection.ReadOnlyMapWrapper;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 
@@ -14,6 +15,7 @@ import java.beans.XMLEncoder;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.LinkedHashMap;
 
 /**
  * XMLEncoderOutputFormat.
@@ -22,7 +24,7 @@ import java.net.URI;
  */
 public class XmlEncoderOutputFormat implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
-    private @NonNull ReadOnlyOptionsMap options = new SimpleOptionsMap();
+    private @NonNull ReadOnlyMap<Key<?>, Object> options = new ReadOnlyMapWrapper<>(new LinkedHashMap<>());
 
     public XmlEncoderOutputFormat() {
     }
@@ -40,12 +42,12 @@ public class XmlEncoderOutputFormat implements OutputFormat {
 
     @NonNull
     @Override
-    public ReadOnlyOptionsMap getOptions() {
+    public ReadOnlyMap<Key<?>, Object> getOptions() {
         return options;
     }
 
     @Override
-    public void setOptions(ReadOnlyOptionsMap options) {
+    public void setOptions(ReadOnlyMap<Key<?>, Object> options) {
         this.options = options;
     }
 }

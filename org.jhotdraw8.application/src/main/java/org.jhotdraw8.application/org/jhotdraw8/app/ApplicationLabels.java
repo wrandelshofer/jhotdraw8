@@ -30,6 +30,14 @@ public class ApplicationLabels {
         return labels;
     }
 
+    public static void setResources(Resources labels) {
+        ApplicationLabels.labels = labels;
+    }
+
+    public static void setGuiResources(Resources labels) {
+        ApplicationLabels.guilabels = labels;
+    }
+
     public static Resources getGuiResources() {
         if (guilabels == null) {
             guilabels = Resources.getResources("org.jhotdraw8.application", "org.jhotdraw8.gui.Labels");

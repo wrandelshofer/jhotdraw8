@@ -152,7 +152,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
 
-        printSlice(page.get(PageFigure.PAPER_SIZE), page, pageBounds, node, getOptions().getDouble(EXPORT_PAGES_DPI_KEY) * factor);
+        printSlice(page.get(PageFigure.PAPER_SIZE), page, pageBounds, node, EXPORT_PAGES_DPI_KEY.get(getOptions()) * factor);
     }
 
     protected boolean writeSlice(Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {

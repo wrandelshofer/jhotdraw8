@@ -17,7 +17,7 @@ import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.OptionsMap;
+import org.jhotdraw8.collection.ReadOnlyMapWrapper;
 import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
@@ -28,6 +28,7 @@ import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
@@ -103,7 +104,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
                 }
             }
 
-            openViewFromURI(view, uri, chooser, workState);
+            openActivityFromURI(view, uri, chooser, workState);
         } else {
             if (disposeView) {
                 app.getActivities().remove(view);
@@ -112,20 +113,17 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState<Void> workState) {
+    protected void openActivityFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState<Void> workState) {
         final Application app = getApplication();
-        OptionsMap options = getReadOptions();
+        Map<Key<?>, Object> options = getReadOptions();
         app.removeDisabler(workState);
-        if (options == null) {
-            return; // The user has decided, that he/she does not want to open a file after all.
-        }
 
         v.addDisabler(workState);
         final DataFormat chosenFormat = chooser.getDataFormat();
         v.setDataFormat(chosenFormat);
 
         // Open the file
-        v.read(uri, chosenFormat, options, false, workState).whenComplete((actualFormat, exception) -> {
+        v.read(uri, chosenFormat, new ReadOnlyMapWrapper<>(options), false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {
@@ -161,7 +159,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
      *
      * @return options or null if the user has aborted the dialog window
      */
-    protected abstract @NonNull OptionsMap getReadOptions();
+    protected abstract @NonNull Map<Key<?>, Object> getReadOptions();
 
 
 }

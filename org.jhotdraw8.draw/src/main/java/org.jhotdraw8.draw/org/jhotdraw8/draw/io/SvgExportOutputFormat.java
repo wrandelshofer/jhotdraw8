@@ -111,7 +111,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     private @NonNull AbstractFXSvgWriter createExporter() {
         AbstractFXSvgWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setExportInvisibleElements(
-                getOptions().getBoolean(SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.getName(), SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.getDefaultValue()));
+                SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.get(getOptions()));
         return exporter;
     }
 

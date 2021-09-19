@@ -49,6 +49,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
+
     @Override
     public @NonNull BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         BoundingBox oldValue = get(a);

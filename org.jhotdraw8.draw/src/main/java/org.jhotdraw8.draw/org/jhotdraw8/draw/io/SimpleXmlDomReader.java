@@ -172,7 +172,7 @@ public class SimpleXmlDomReader extends AbstractInputFormat implements Clipboard
     }
 
     @Override
-    public @NonNull Figure read(@NonNull Path file, Drawing drawing, @NonNull WorkState workState) throws IOException {
+    public @NonNull Figure read(@NonNull Path file, Drawing drawing, @NonNull WorkState<?> workState) throws IOException {
         try {
             URI documentHome = file.getParent() == null ? Paths.get(System.getProperty("user.home")).toUri() : file.getParent().toUri();
             final Drawing newDrawing;
@@ -185,7 +185,7 @@ public class SimpleXmlDomReader extends AbstractInputFormat implements Clipboard
         }
     }
 
-    public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
+    public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState<?> workState) throws IOException {
         Document doc = XmlUtil.readWithLocations(new InputSource(in), isNamespaceAware());
         return read(doc, drawing, documentHome);
     }

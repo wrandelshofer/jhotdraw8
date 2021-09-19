@@ -28,6 +28,7 @@ import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 import java.util.prefs.Preferences;
 
@@ -61,6 +62,8 @@ public interface Application extends Disableable, PropertyBean {
      * @return the activities
      */
     @NonNull ReadOnlySetProperty<Activity> activitiesProperty();
+
+    Executor getExecutor();
 
     @NonNull NonNullObjectProperty<Preferences> preferencesProperty();
 

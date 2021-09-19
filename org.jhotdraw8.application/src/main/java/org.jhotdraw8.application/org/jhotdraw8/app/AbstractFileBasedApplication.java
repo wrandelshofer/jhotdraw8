@@ -52,7 +52,6 @@ import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleNullableKey;
-import org.jhotdraw8.collection.SimpleOptionsMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.OSXCollator;
@@ -62,7 +61,6 @@ import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -131,10 +129,10 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     {
         activeActivity.addListener((o, oldv, newv) -> {
             if (oldv != null) {
-                onViewDeactivated((FileBasedActivity) oldv);
+                onActivityDeactivated((FileBasedActivity) oldv);
             }
             if (newv != null) {
-                onViewActivated((FileBasedActivity) newv);
+                onActivityActivated((FileBasedActivity) newv);
             }
         });
     }
@@ -259,7 +257,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         );
     }
 
-    private void disambiguateViews() {
+    private void disambiguateActivities() {
         HashMap<String, ArrayList<Activity>> titles = new HashMap<>();
         for (Activity v : getActivities()) {
             String t = v.getTitle();
@@ -297,7 +295,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      *
      * @param view the view
      */
-    protected void onViewActivated(@NonNull FileBasedActivity view) {
+    protected void onActivityActivated(@NonNull FileBasedActivity view) {
 
     }
 
@@ -325,7 +323,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         };
         activity.set(FOCUS_LISTENER_KEY, focusListener);
         stage.focusedProperty().addListener(focusListener);
-        disambiguateViews();
+        disambiguateActivities();
 
         Screen screen = Screen.getPrimary();
         if (screen != null) {
@@ -409,7 +407,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      *
      * @param view the view
      */
-    protected void onViewDeactivated(@NonNull FileBasedActivity view) {
+    protected void onActivityDeactivated(@NonNull FileBasedActivity view) {
 
     }
 
@@ -502,7 +500,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     }
 
     protected void onTitleChanged(Observable obs) {
-        disambiguateViews();
+        disambiguateActivities();
     }
 
 
@@ -532,10 +530,10 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
         List<URI> urisToOpen = getUrisToOpen();
         if (urisToOpen.isEmpty()) {
-            openEmptyView();
+            openEmptyActivity();
         } else {
             for (URI uri : urisToOpen) {
-                openView(uri);
+                openActivityFrom(uri);
             }
         }
     }
@@ -544,7 +542,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     }
 
 
-    private void openView(@NonNull URI uri) {
+    private void openActivityFrom(@NonNull URI uri) {
         final Resources labels = ApplicationLabels.getResources();
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
@@ -558,7 +556,9 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             }
             getActivities().add(v);
             v.addDisabler(this);
-            v.read(uri, null, new SimpleOptionsMap(), false, new SimpleWorkState<>()).whenComplete((result, ex) -> {
+            v.read(uri, null,
+                    new org.jhotdraw8.collection.ReadOnlyMapWrapper<Key<?>, Object>(new LinkedHashMap<>()),
+                    false, new SimpleWorkState<Void>()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -585,7 +585,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         );
     }
 
-    private void openEmptyView() {
+    private void openEmptyActivity() {
         final Resources labels = ApplicationLabels.getResources();
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
@@ -690,11 +690,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 }
             }
         }
-    }
-
-
-    public static URL getDocumentOrientedMenu() {
-        return AbstractFileBasedApplication.class.getResource("DocumentBasedMenu.fxml");
     }
 
     @Override

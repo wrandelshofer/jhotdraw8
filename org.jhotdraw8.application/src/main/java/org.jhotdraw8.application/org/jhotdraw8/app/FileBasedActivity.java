@@ -11,7 +11,12 @@ import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ReadOnlyOptionsMap;
+import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ReadOnlyMap;
+import org.jhotdraw8.concurrent.CompletableWorker;
+import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.concurrent.SimpleCompletableWorker;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
@@ -124,7 +129,31 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed with the data format that was
      * actually used for reading the file.
      */
-    @NonNull CompletionStage<@NonNull DataFormat> read(@NonNull URI uri, @Nullable DataFormat format, @NonNull ReadOnlyOptionsMap options, boolean insert, WorkState<Void> workState);
+    @NonNull CompletionStage<@NonNull DataFormat> read(@NonNull URI uri, @Nullable DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState);
+
+    /**
+     * Sets the content of this activity by asynchronously reading the data from
+     * the specified uri.
+     * <p>
+     * The activity must be disabled with the {@link Action} that invokes
+     * this method.
+     * <pre><code>
+     * activity.addDisablers(anAction);
+     * activity.read(uri, options).handle((data,ex)-&gt;{
+     *    ...
+     *    activity.removeDisablers(anAction);
+     * });
+     * </code></pre>
+     *
+     * @param uri     an uri
+     * @param options reading options
+     * @return a completable worker for monitoring the progress of the read operation
+     */
+    default @NonNull CompletableWorker<Void> read(@NonNull URI uri, @NonNull ReadOnlyMap<Key<?>, Object> options) {
+        SimpleCompletableWorker<Void> worker = new SimpleCompletableWorker<>(new SimpleWorkState<>(getApplication().getResources().getFormatted("file.reading.worker.title", uri.getPath())));
+        worker.completeExceptionally(new UnsupportedOperationException());
+        return worker;
+    }
 
     /**
      * Asynchronously writes document data to the specified URI.
@@ -144,7 +173,28 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    @NonNull CompletionStage<Void> write(@NonNull URI uri, @Nullable DataFormat format, @NonNull ReadOnlyOptionsMap options, @NonNull WorkState<Void> workState);
+    @NonNull CompletionStage<Void> write(@NonNull URI uri, @Nullable DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, @NonNull WorkState<Void> workState);
+
+    /**
+     * Asynchronously writes the content of this activity into the specified uri.
+     * <p>
+     * The activity must be disabled with the {@link Action} that invokes
+     * this method.
+     * <pre><code>
+     * activity.addDisablers(anAction);
+     * activity.write(uri, options).handle((data,ex)-&gt;{
+     *    ...
+     *    activity.removeDisablers(anAction);
+     * });
+     * </code></pre>
+     *
+     * @param uri     an uri
+     * @param options writing options
+     * @return a completable worker for monitoring the progress of the write operation
+     */
+    default @NonNull CompletableWorker<Void> write(@NonNull URI uri, @NonNull ReadOnlyMap<Key<?>, Object> options, WorkState<Void> state) {
+        return FXWorker.work(getApplication().getExecutor(), s -> null, state);
+    }
 
     /**
      * Clears the content.

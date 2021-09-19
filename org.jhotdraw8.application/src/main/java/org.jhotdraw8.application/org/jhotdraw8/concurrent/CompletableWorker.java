@@ -25,4 +25,8 @@ public interface CompletableWorker<V> extends Worker<V> {
      * @return
      */
     CompletionStage<V> getCompletionStage();
+
+    void complete(V result);
+
+    void completeExceptionally(Throwable exception);
 }

@@ -10,9 +10,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.ReadOnlyOptionsMap;
-import org.jhotdraw8.collection.SimpleOptionsMap;
+import org.jhotdraw8.collection.ReadOnlyMap;
+import org.jhotdraw8.collection.ReadOnlyMapWrapper;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.ClippingFigure;
@@ -46,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -84,7 +86,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
      */
     @NonNull
     Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
-    private @NonNull ReadOnlyOptionsMap options = new SimpleOptionsMap();
+    private @NonNull ReadOnlyMap<Key<?>, Object> options = new ReadOnlyMapWrapper<>(new LinkedHashMap<>());
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -179,12 +181,12 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     @Override
-    public void setOptions(@NonNull ReadOnlyOptionsMap newValue) {
+    public void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> newValue) {
         options = newValue;
     }
 
     @Override
-    public @NonNull ReadOnlyOptionsMap getOptions() {
+    public @NonNull ReadOnlyMap<Key<?>, Object> getOptions() {
         return options;
     }
 

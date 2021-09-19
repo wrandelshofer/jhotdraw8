@@ -15,8 +15,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.collection.OptionsMap;
-import org.jhotdraw8.collection.SimpleOptionsMap;
+import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.text.CssNumberConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
@@ -28,7 +27,9 @@ import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.prefs.Preferences;
@@ -45,11 +46,11 @@ import static org.jhotdraw8.io.DataFormats.registerDataFormat;
 
 public class DrawingExportOptionsPane extends GridPane {
 
-    public static @NonNull Dialog<OptionsMap> createDialog(DataFormat format) {
+    public static @NonNull Dialog<Map<Key<?>, Object>> createDialog(DataFormat format) {
         Resources labels = ApplicationLabels.getResources();
         final DrawingExportOptionsPane pane = new DrawingExportOptionsPane();
         pane.setFormat(format);
-        return new InputDialog<>(labels.getString("export.dialog.title"), labels.getString("export.dialog.headerText"), pane, pane::getExportOptions);
+        return new InputDialog<>(labels.getString("file.export.dialog.title"), labels.getString("file.export.dialog.headerText"), pane, pane::getExportOptions);
     }
 
     @FXML
@@ -111,17 +112,17 @@ public class DrawingExportOptionsPane extends GridPane {
      *
      * @return the export options
      */
-    public @NonNull OptionsMap getExportOptions() {
-        OptionsMap map = new SimpleOptionsMap();
-        map.putBoolean(EXPORT_DRAWING_KEY.getName(), exportDrawingCheckBox.isSelected());
-        map.putBoolean(EXPORT_PAGES_KEY.getName(), exportPagesCheckBox.isSelected());
-        map.putBoolean(EXPORT_SLICES_KEY.getName(), exportSlicesCheckBox.isSelected());
-        map.putDouble(EXPORT_DRAWING_DPI_KEY.getName(), drawingDpiFormatter.getValue().doubleValue());
-        map.putDouble(EXPORT_PAGES_DPI_KEY.getName(), pagesDpiFormatter.getValue().doubleValue());
-        map.putDouble(EXPORT_SLICES_DPI_KEY.getName(), slicesDpiFormatter.getValue().doubleValue());
-        map.putBoolean(EXPORT_SLICES_RESOLUTION_2X_KEY.getName(), slicesResolution2xCheckBox.isSelected());
-        map.putBoolean(EXPORT_SLICES_RESOLUTION_3X_KEY.getName(), slicesResolution3xCheckBox.isSelected());
-        map.putBoolean(SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.getName(), exportInvisibleElements.isSelected());
+    public @NonNull Map<Key<?>, Object> getExportOptions() {
+        Map<Key<?>, Object> map = new HashMap<>();
+        EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());
+        EXPORT_PAGES_KEY.put(map, exportPagesCheckBox.isSelected());
+        EXPORT_SLICES_KEY.put(map, exportSlicesCheckBox.isSelected());
+        EXPORT_DRAWING_DPI_KEY.put(map, drawingDpiFormatter.getValue().doubleValue());
+        EXPORT_PAGES_DPI_KEY.put(map, pagesDpiFormatter.getValue().doubleValue());
+        EXPORT_SLICES_DPI_KEY.put(map, slicesDpiFormatter.getValue().doubleValue());
+        EXPORT_SLICES_RESOLUTION_2X_KEY.put(map, slicesResolution2xCheckBox.isSelected());
+        EXPORT_SLICES_RESOLUTION_3X_KEY.put(map, slicesResolution3xCheckBox.isSelected());
+        SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.put(map, exportInvisibleElements.isSelected());
         return map;
     }
 

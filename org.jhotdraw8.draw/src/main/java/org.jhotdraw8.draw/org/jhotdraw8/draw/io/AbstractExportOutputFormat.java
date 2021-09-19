@@ -11,7 +11,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ReadOnlyOptionsMap;
+import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -39,7 +39,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private @NonNull ReadOnlyOptionsMap options;
+    private @NonNull ReadOnlyMap<Key<?>, Object> options;
 
     public AbstractExportOutputFormat() {
     }
@@ -48,23 +48,23 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
 
     public boolean isExportDrawing() {
-        return getOptions().getBoolean(EXPORT_DRAWING_KEY);
+        return EXPORT_DRAWING_KEY.get(getOptions());
     }
 
     public boolean isExportPages() {
-        return getOptions().getBoolean(EXPORT_PAGES_KEY);
+        return EXPORT_PAGES_KEY.get(getOptions());
     }
 
     public boolean isExportSlices() {
-        return getOptions().getBoolean(EXPORT_SLICES_KEY);
+        return EXPORT_SLICES_KEY.get(getOptions());
     }
 
     public boolean isExportSlices2x() {
-        return getOptions().getBoolean(EXPORT_SLICES_RESOLUTION_2X_KEY);
+        return EXPORT_SLICES_RESOLUTION_2X_KEY.get(getOptions());
     }
 
     public boolean isExportSlices3x() {
-        return getOptions().getBoolean(EXPORT_SLICES_RESOLUTION_3X_KEY);
+        return EXPORT_SLICES_RESOLUTION_3X_KEY.get(getOptions());
     }
 
     protected abstract boolean isResolutionIndependent();
@@ -91,7 +91,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        RenderContext.DPI.put(hints, getOptions().getDouble(EXPORT_PAGES_DPI_KEY));
+        RenderContext.DPI.put(hints, EXPORT_PAGES_DPI_KEY.get(getOptions()));
 
         writePages(dir, basename, drawing, pages, hints);
     }
@@ -184,13 +184,13 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
                 slices.add((Slice) f);
             }
         }
-        final Double slicesDpi = getOptions().getDouble(EXPORT_SLICES_DPI_KEY);
+        final Double slicesDpi = EXPORT_SLICES_DPI_KEY.get(getOptions());
         writeSlices(dir, drawing, slices, "", slicesDpi);
         if (!isResolutionIndependent()) {
-            if (getOptions().getBoolean(EXPORT_SLICES_RESOLUTION_2X_KEY)) {
+            if (EXPORT_SLICES_RESOLUTION_2X_KEY.get(getOptions())) {
                 writeSlices(dir, drawing, slices, "@2x", 2 * slicesDpi);
             }
-            if (getOptions().getBoolean(EXPORT_SLICES_RESOLUTION_3X_KEY)) {
+            if (EXPORT_SLICES_RESOLUTION_3X_KEY.get(getOptions())) {
                 writeSlices(dir, drawing, slices, "@3x", 3 * slicesDpi);
             }
         }
@@ -227,11 +227,11 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
     }
 
-    public @NonNull ReadOnlyOptionsMap getOptions() {
+    public @NonNull ReadOnlyMap<Key<?>, Object> getOptions() {
         return options;
     }
 
-    public void setOptions(@NonNull ReadOnlyOptionsMap options) {
+    public void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> options) {
         this.options = options;
     }
 
