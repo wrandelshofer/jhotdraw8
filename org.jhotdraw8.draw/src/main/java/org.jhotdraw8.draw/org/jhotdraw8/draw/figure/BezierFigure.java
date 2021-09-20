@@ -34,8 +34,8 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -179,7 +179,7 @@ public class BezierFigure extends AbstractLeafFigure
         applyCompositableFigureProperties(ctx, pathNode);
         pathNode.setFillRule(getStyled(FILL_RULE));
         final List<PathElement> elements =
-                Shapes.fxPathElementsFromAwt(
+                FXShapes.fxPathElementsFromAwt(
                         new BezierNodePath(getStyledNonNull(PATH),
                                 getStyledNonNull(CLOSED),
                                 getStyledNonNull(FILL_RULE)).getPathIterator(null));

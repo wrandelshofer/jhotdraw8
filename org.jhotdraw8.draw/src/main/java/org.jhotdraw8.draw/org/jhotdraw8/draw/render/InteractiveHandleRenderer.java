@@ -35,7 +35,6 @@ import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.SimpleDrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -44,8 +43,8 @@ import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.awt.BasicStroke;
@@ -131,7 +130,7 @@ public class InteractiveHandleRenderer {
      * @param node         The node
      * @param pointInLocal The point in local coordinates
      * @param tolerance    The maximal distance the point is allowed to be away
-     *                     from the node, in view coordinates
+     *                     from the node, in local coordinates
      * @return a distance if the node contains the point, null otherwise
      */
     public static Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
@@ -144,10 +143,14 @@ public class InteractiveHandleRenderer {
         // If the node has a clip, we only proceed if the point is inside
         // the clip with tolerance.
         final Node nodeClip = node.getClip();
-        if (nodeClip != null && !node.getClip().intersects(pointInLocal.getX() - tolerance,
-                pointInLocal.getY() - tolerance, tolerance * 2, tolerance * 2)) {
-            return null;
+        if (nodeClip instanceof Shape) {
+            final java.awt.Shape shape = FXShapes.awtShapeFromFX((Shape) nodeClip);
+            if (!shape.intersects(pointInLocal.getX() - toleranceInLocal,
+                    pointInLocal.getY() - toleranceInLocal, toleranceInLocal * 2, toleranceInLocal * 2)) {
+                return null;
+            }
         }
+
 
         if (node instanceof Shape) {
             Shape shape = (Shape) node;
@@ -198,7 +201,7 @@ public class InteractiveHandleRenderer {
                     default:
                         throw new IllegalArgumentException();
                 }
-                final java.awt.Shape awtShape = Shapes.awtShapeFromFX(shape);
+                final java.awt.Shape awtShape = FXShapes.awtShapeFromFX(shape);
                 return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
                         cap, join, (float) shape.getStrokeMiterLimit()
                 ).createStrokedShape(awtShape)
@@ -493,7 +496,7 @@ public class InteractiveHandleRenderer {
         return selectedFigures;
     }
 
-    public void setDrawingView(SimpleDrawingView newValue) {
+    public void setDrawingView(DrawingView newValue) {
         drawingView.set(newValue);
     }
 

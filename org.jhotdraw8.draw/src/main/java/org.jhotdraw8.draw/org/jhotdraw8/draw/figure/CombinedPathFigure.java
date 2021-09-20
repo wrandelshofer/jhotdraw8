@@ -19,8 +19,8 @@ import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.BasicStroke;
@@ -93,14 +93,14 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                             dash[i] = (float) dashArray.get(i).getConvertedValue();
                         }
                         basicStroke = new BasicStroke((float) strokeWidth,
-                                Shapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
-                                Shapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
+                                FXShapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
+                                FXShapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue(), dash, (float) dashOffset);
 
                     } else {
                         basicStroke = new BasicStroke((float) strokeWidth,
-                                Shapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
-                                Shapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
+                                FXShapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
+                                FXShapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }
@@ -208,7 +208,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
 
-        n.getElements().setAll(Shapes.fxPathElementsFromAwt(getPathIterator(ctx, null)));
+        n.getElements().setAll(FXShapes.fxPathElementsFromAwt(getPathIterator(ctx, null)));
     }
 
     /**

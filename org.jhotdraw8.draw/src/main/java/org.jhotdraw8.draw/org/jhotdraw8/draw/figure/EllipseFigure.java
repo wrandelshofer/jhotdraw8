@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -107,7 +107,7 @@ public class EllipseFigure extends AbstractLeafFigure
         }
         shape.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue() + offset);
         shape.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue() + offset);
-        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
+        return FXShapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
     @Override

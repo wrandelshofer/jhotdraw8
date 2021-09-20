@@ -25,8 +25,8 @@ import org.jhotdraw8.draw.handle.PolygonOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -83,7 +83,7 @@ public class PolygonFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        return Shapes.awtPathIteratorFromFxPoint2Ds(getNonNull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
+        return FXShapes.awtPathIteratorFromFxPoint2Ds(getNonNull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
     }
 
     @Override

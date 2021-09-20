@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -65,7 +65,7 @@ public class RectangleFigure extends AbstractLeafFigure
         applyFillableFigureProperties(ctx, shape);
         applyStrokableFigureProperties(ctx, shape);
 
-        return Shapes.awtShapeFromFX(shape).getPathIterator(tx);
+        return FXShapes.awtShapeFromFX(shape).getPathIterator(tx);
     }
 
 

@@ -25,8 +25,8 @@ import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
@@ -118,7 +118,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
         // FIXME include markers in path
-        return Shapes.awtShapeFromFX(new Line(
+        return FXShapes.awtShapeFromFX(new Line(
                 getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
                 getNonNull(END_X).getConvertedValue(),

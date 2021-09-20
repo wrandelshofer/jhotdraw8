@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
@@ -96,7 +96,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
     protected void updatePathNode(RenderContext ctx, @NonNull Path path) {
-        path.getElements().setAll(Shapes.fxPathElementsFromAwt(this.path.getPathIterator(null)));
+        path.getElements().setAll(FXShapes.fxPathElementsFromAwt(this.path.getPathIterator(null)));
     }
 
     @Override

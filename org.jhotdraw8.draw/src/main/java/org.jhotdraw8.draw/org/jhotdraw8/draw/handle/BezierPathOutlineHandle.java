@@ -23,8 +23,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.SvgPaths;
 
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
         List<PathElement> elements = new ArrayList<>();
         FXPathElementsBuilder builder = new FXPathElementsBuilder(elements);
         final BezierNodePath bnp = new BezierNodePath(bezierNodes);
-        SvgPaths.buildFromPathIterator(builder, bnp.getPathIterator(Shapes.awtTransformFromFX(t)));
+        SvgPaths.buildFromPathIterator(builder, bnp.getPathIterator(FXShapes.awtTransformFromFX(t)));
         path1.getElements().setAll(elements);
         path2.getElements().setAll(elements);
     }

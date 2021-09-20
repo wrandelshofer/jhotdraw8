@@ -55,9 +55,9 @@ import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.io.SimpleIdFactory;
@@ -896,7 +896,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
-            d = SvgPaths.doubleRelativeSvgStringFromAwt(Shapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
+            d = SvgPaths.doubleRelativeSvgStringFromAwt(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
             d = FXSvgPaths.doubleSvgStringFromPathElements(node.getElements());
         }
@@ -906,7 +906,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     protected void writeStrokedShapeElement(@NonNull XMLStreamWriter w, @NonNull Shape fxShape) throws XMLStreamException, IOException {
         w.writeStartElement("path");
 
-        java.awt.Shape shape = Shapes.awtShapeFromFX(fxShape);
+        java.awt.Shape shape = FXShapes.awtShapeFromFX(fxShape);
         int cap;
         switch (fxShape.getStrokeLineCap()) {
         case SQUARE:
@@ -1125,11 +1125,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                     if (s != null) {
                         if (region.isScaleShape()) {
 
-                            java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+                            java.awt.Shape awtShape = FXShapes.awtShapeFromFX(s);
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                             tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                             tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                            bgs = Shapes.fxShapeFromAwt(awtShape, tx);
+                            bgs = FXShapes.fxShapeFromAwt(awtShape, tx);
                         } else {
                             bgs = s;
                         }
@@ -1157,12 +1157,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                         Shape bgs;
                         if (s != null) {
                             if (region.isScaleShape()) {
-                                java.awt.Shape awtShape = Shapes.awtShapeFromFX(s);
+                                java.awt.Shape awtShape = FXShapes.awtShapeFromFX(s);
 
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                                 tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                                 tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                                bgs = Shapes.fxShapeFromAwt(awtShape, tx);
+                                bgs = FXShapes.fxShapeFromAwt(awtShape, tx);
                             } else {
                                 bgs = s;
                             }
@@ -1446,7 +1446,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (isConvertTextToPath()) {
             w.writeStartElement("path");
             w.writeAttribute("d",
-                    SvgPaths.doubleRelativeSvgStringFromAwt(Shapes.awtShapeFromFX(node).getPathIterator(null)));
+                    SvgPaths.doubleRelativeSvgStringFromAwt(FXShapes.awtShapeFromFX(node).getPathIterator(null)));
         } else {
             w.writeStartElement("text");
             writeTextAttributes(w, node);

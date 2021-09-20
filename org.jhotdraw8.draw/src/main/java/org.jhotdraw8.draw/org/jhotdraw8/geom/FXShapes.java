@@ -54,15 +54,15 @@ import java.util.logging.Logger;
  *
  * @author Werner Randelshofer
  */
-public class Shapes {
+public class FXShapes {
 
 
-    private static final Logger LOGGER = Logger.getLogger(Shapes.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(FXShapes.class.getName());
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private Shapes() {
+    private FXShapes() {
     }
 
     public static int awtCapFromFX(@Nullable StrokeLineCap cap) {

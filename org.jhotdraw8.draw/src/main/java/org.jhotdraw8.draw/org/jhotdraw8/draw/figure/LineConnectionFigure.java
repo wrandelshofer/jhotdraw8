@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -112,7 +112,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
-        return Shapes.awtShapeFromFX(new Line(
+        return FXShapes.awtShapeFromFX(new Line(
                 getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
                 getNonNull(END_X).getConvertedValue(),

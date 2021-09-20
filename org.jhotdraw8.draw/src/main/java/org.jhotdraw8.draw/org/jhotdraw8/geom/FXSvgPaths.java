@@ -693,7 +693,7 @@ public class FXSvgPaths {
 
     public static @NonNull List<PathElement> transformPathElements(@NonNull List<PathElement> elements, FillRule fillRule, javafx.scene.transform.Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
-        Shapes.awtShapeFromFXPathElements(elements, fillRule);
+        FXShapes.awtShapeFromFXPathElements(elements, fillRule);
         return result;
     }
 }

@@ -38,7 +38,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 
@@ -178,7 +178,7 @@ public class HitTestSampleMain extends Application {
             }
         }
 
-        java.awt.Shape awtPath = Shapes.awtShapeFromFX(path);
+        java.awt.Shape awtPath = FXShapes.awtShapeFromFX(path);
         double tolerance = epsilon.get() + width.get() * 0.5;
 
         IntStream.range(0, 100_000).parallel().forEach(i -> {

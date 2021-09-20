@@ -28,9 +28,9 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.OffsetPathBuilder;
-import org.jhotdraw8.geom.Shapes;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PlineVertex;
@@ -200,12 +200,12 @@ public class OffsetPathSampleMain extends Application {
             poly.getPoints().addAll(polyline.getPoints());
             SvgPaths.buildFromPathIterator(
                     new OffsetPathBuilder<>(new FXPathElementsBuilder(elements), offset),
-                    Shapes.awtShapeFromFX(poly).getPathIterator(null)
+                    FXShapes.awtShapeFromFX(poly).getPathIterator(null)
             );
         } else {
             SvgPaths.buildFromPathIterator(
                     new OffsetPathBuilder<>(new FXPathElementsBuilder(elements), offset),
-                    Shapes.awtShapeFromFX(polyline).getPathIterator(null)
+                    FXShapes.awtShapeFromFX(polyline).getPathIterator(null)
             );
         }
     }
@@ -219,7 +219,7 @@ public class OffsetPathSampleMain extends Application {
         elements.clear();
         for (var offPap : offsetPlines) {
             elements.addAll(
-                    Shapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
+                    FXShapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
         }
     }
 
@@ -241,11 +241,11 @@ public class OffsetPathSampleMain extends Application {
         elements.clear();
         PolyArcPath offPap = papb.createRawOffsetPline(pap, offset);
         elements.addAll(
-                Shapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
+                FXShapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
 
         offPap = papb.createRawOffsetPline(pap, -offset);
         elements.addAll(
-                Shapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
+                FXShapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
     }
 
 

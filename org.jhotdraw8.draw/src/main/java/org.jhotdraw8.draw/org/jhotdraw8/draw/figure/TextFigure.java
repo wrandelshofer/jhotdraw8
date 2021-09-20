@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -142,7 +142,7 @@ public class TextFigure extends AbstractLeafFigure
         if (textNode == null) {
             layout(new SimpleRenderContext());
         }
-        return Shapes.awtShapeFromFX(textNode).getPathIterator(tx);
+        return FXShapes.awtShapeFromFX(textNode).getPathIterator(tx);
     }
 
 

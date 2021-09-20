@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.figure.TextableFigure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
-import org.jhotdraw8.geom.Shapes;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.svg.text.SvgFontSize;
 import org.jhotdraw8.svg.text.SvgTextAnchor;
 
@@ -169,7 +169,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
         tn.setText(getText(null));
 
-        return Shapes.awtShapeFromFX(tn).getPathIterator(tx);
+        return FXShapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
     protected @Nullable String getText(RenderContext ctx) {
