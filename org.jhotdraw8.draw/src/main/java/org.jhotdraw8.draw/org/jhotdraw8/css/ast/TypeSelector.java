@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -52,5 +53,18 @@ public class TypeSelector extends SimpleSelector {
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, type));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TypeSelector that = (TypeSelector) o;
+        return Objects.equals(namespace, that.namespace) && type.equals(that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace, type);
     }
 }

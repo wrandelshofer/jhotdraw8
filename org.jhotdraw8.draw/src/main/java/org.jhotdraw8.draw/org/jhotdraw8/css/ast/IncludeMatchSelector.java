@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -50,5 +51,18 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
         consumer.accept(new CssToken(CssTokenType.TT_INCLUDE_MATCH));
         consumer.accept(new CssToken(CssTokenType.TT_STRING, word));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_SQUARE_BRACKET));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IncludeMatchSelector that = (IncludeMatchSelector) o;
+        return Objects.equals(namespace, that.namespace) && attributeName.equals(that.attributeName) && word.equals(that.word);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace, attributeName, word);
     }
 }

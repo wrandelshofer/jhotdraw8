@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -51,5 +52,18 @@ public class SuffixMatchSelector extends AbstractAttributeSelector {
         consumer.accept(new CssToken(CssTokenType.TT_SUFFIX_MATCH));
         consumer.accept(new CssToken(CssTokenType.TT_STRING, substring));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_SQUARE_BRACKET));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SuffixMatchSelector that = (SuffixMatchSelector) o;
+        return Objects.equals(namespace, that.namespace) && attributeName.equals(that.attributeName) && substring.equals(that.substring);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace, attributeName, substring);
     }
 }

@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -20,9 +21,9 @@ import java.util.function.Consumer;
  */
 public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
-    private final String functionIdentifier;
+    private final @NonNull String functionIdentifier;
 
-    public FunctionPseudoClassSelector(String functionIdentifier) {
+    public FunctionPseudoClassSelector(@NonNull String functionIdentifier) {
         this.functionIdentifier = functionIdentifier;
     }
 
@@ -46,5 +47,18 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
         consumer.accept(new CssToken(CssTokenType.TT_COLON));
         consumer.accept(new CssToken(CssTokenType.TT_FUNCTION, functionIdentifier));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FunctionPseudoClassSelector that = (FunctionPseudoClassSelector) o;
+        return functionIdentifier.equals(that.functionIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(functionIdentifier);
     }
 }

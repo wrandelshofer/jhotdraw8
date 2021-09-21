@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * The {@code CssParser} processes a stream of characters into a
@@ -176,6 +177,11 @@ public class CssParser {
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
     private @Nullable URI documentHome;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
+    /**
+     * To reduce memory pressure, we deduplicate selectors.
+     */
+    private final @NonNull Map<Selector, Selector> deduplicatedSelectors = new LinkedHashMap<>();
+
 
     public CssParser() {
     }
@@ -184,7 +190,7 @@ public class CssParser {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
         final @NonNull String ident = tt.currentStringNonNull();
         switch (ident) {
-        case "not":
+            case "not":
             final SimpleSelector simpleSelector = parseSimpleSelector(tt);
             tt.requireNextToken(')', ":not() Selector: ')' expected.");
             return new NegationPseudoClassSelector(ident, simpleSelector);
@@ -582,7 +588,7 @@ public class CssParser {
             }
         }
         tt.pushBack();
-        return selector;
+        return deduplicatedSelectors.computeIfAbsent(selector, Function.identity());
     }
 
     public @NonNull SelectorGroup parseSelectorGroup(@NonNull CssTokenizer tt) throws IOException, ParseException {
@@ -604,47 +610,52 @@ public class CssParser {
     }
 
     private @NonNull SimpleSelector parseSimpleSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+        final SimpleSelector simpleSelector = parseSimpleSelector0(tt);
+        return (SimpleSelector) deduplicatedSelectors.computeIfAbsent(simpleSelector, Function.identity());
+    }
+
+    private @NonNull SimpleSelector parseSimpleSelector0(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
 
         try {
             switch (tt.current()) {
-            case '*':
-                if (tt.nextNoSkip() == '|') {
-                    tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after *|");
-                    return new TypeSelector(resolveNamespacePrefix(ALL_NAMESPACES_PREFIX), tt.currentStringNonNull());
-                } else {
+                case '*':
+                    if (tt.nextNoSkip() == '|') {
+                        tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after *|");
+                        return new TypeSelector(resolveNamespacePrefix(ALL_NAMESPACES_PREFIX), tt.currentStringNonNull());
+                    } else {
+                        tt.pushBack();
+                        return new UniversalSelector();
+                    }
+                case CssTokenType.TT_IDENT:
+                    String typeOrPrefix = tt.currentStringNonNull();
+                    if (tt.nextNoSkip() == '|') {
+                        tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after " + typeOrPrefix + "|");
+                        return new TypeSelector(resolveNamespacePrefix(typeOrPrefix), tt.currentStringNonNull());
+                    } else {
+                        tt.pushBack();
+                        return new TypeSelector(resolveNamespacePrefix(null), typeOrPrefix);
+                    }
+                case CssTokenType.TT_HASH:
+                    return new IdSelector(tt.currentString());
+                case '.':
+                    if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
+                        throw tt.createParseException("SimpleSelector: identifier expected.");
+                    }
+                    return new ClassSelector(tt.currentString());
+                case ':':
                     tt.pushBack();
-                    return new UniversalSelector();
-                }
-            case CssTokenType.TT_IDENT:
-                String typeOrPrefix = tt.currentStringNonNull();
-                if (tt.nextNoSkip() == '|') {
-                    tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after " + typeOrPrefix + "|");
-                    return new TypeSelector(resolveNamespacePrefix(typeOrPrefix), tt.currentStringNonNull());
-                } else {
+                    return parsePseudoClassSelector(tt);
+                case '[':
                     tt.pushBack();
-                    return new TypeSelector(resolveNamespacePrefix(null), typeOrPrefix);
-                }
-            case CssTokenType.TT_HASH:
-                return new IdSelector(tt.currentString());
-            case '.':
-                if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
-                    throw tt.createParseException("SimpleSelector: identifier expected.");
-                }
-                return new ClassSelector(tt.currentString());
-            case ':':
-                tt.pushBack();
-                return parsePseudoClassSelector(tt);
-            case '[':
-                tt.pushBack();
-                return parseAttributeSelector(tt);
-            case '{':
-                tt.pushBack();
-                throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
-            default:
-                // don't push back!
-                throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
+                    return parseAttributeSelector(tt);
+                case '{':
+                    tt.pushBack();
+                    throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
+                default:
+                    // don't push back!
+                    throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
             }
         } catch (ParseException e) {
             exceptions.add(e);

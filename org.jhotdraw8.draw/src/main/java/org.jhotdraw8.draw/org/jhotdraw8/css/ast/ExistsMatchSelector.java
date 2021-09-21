@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -46,5 +47,18 @@ public class ExistsMatchSelector extends AbstractAttributeSelector {
         }
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeName));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_SQUARE_BRACKET));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExistsMatchSelector that = (ExistsMatchSelector) o;
+        return Objects.equals(namespace, that.namespace) && attributeName.equals(that.attributeName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespace, attributeName);
     }
 }

@@ -8,6 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
+
 /**
  * Implements the negation pseudo-class selector.
  * <p>
@@ -23,9 +25,9 @@ import org.jhotdraw8.css.SelectorModel;
  */
 public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
-    private final SimpleSelector selector;
+    private final @NonNull SimpleSelector selector;
 
-    public NegationPseudoClassSelector(String functionIdentifier, @NonNull SimpleSelector selector) {
+    public NegationPseudoClassSelector(@NonNull String functionIdentifier, @NonNull SimpleSelector selector) {
         super(functionIdentifier);
         this.selector = selector;
     }
@@ -39,5 +41,19 @@ public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
     public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
         final T match = selector.match(model, element);
         return match == null ? element : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        NegationPseudoClassSelector that = (NegationPseudoClassSelector) o;
+        return selector.equals(that.selector);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), selector);
     }
 }

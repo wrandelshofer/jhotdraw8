@@ -41,4 +41,16 @@ public class UniversalSelector extends SimpleSelector {
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_ASTERISK));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return UniversalSelector.class.hashCode();
+    }
 }

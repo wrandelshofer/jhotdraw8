@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -20,9 +21,9 @@ import java.util.function.Consumer;
  */
 public class IdSelector extends SimpleSelector {
 
-    private final String id;
+    private final @NonNull String id;
 
-    public IdSelector(String id) {
+    public IdSelector(@NonNull String id) {
         this.id = id;
     }
 
@@ -45,5 +46,18 @@ public class IdSelector extends SimpleSelector {
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_HASH, id));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IdSelector that = (IdSelector) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

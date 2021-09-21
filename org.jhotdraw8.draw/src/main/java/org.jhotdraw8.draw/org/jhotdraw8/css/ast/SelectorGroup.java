@@ -13,6 +13,7 @@ import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -25,7 +26,7 @@ public class SelectorGroup extends Selector {
 
     private final @NonNull ReadOnlyList<Selector> selectors;
 
-    public SelectorGroup(Selector selector) {
+    public SelectorGroup(@NonNull Selector selector) {
         this.selectors = ImmutableLists.of(selector);
     }
 
@@ -126,5 +127,18 @@ public class SelectorGroup extends Selector {
             s.produceTokens(consumer);
 
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SelectorGroup that = (SelectorGroup) o;
+        return selectors.equals(that.selectors);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(selectors);
     }
 }

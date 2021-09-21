@@ -61,7 +61,11 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< Immutable
      * @param defaultValue The default value.
      */
     public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
-        super(name, type.getType(),new CssListConverter<>(converter), defaultValue);
+        super(name, type.getType(), new CssListConverter<>(converter), defaultValue);
+    }
+
+    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
+        super(xmlName, cssName, type.getType(), new CssListConverter<>(converter), defaultValue);
     }
 
 }

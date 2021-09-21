@@ -10,6 +10,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -20,9 +21,9 @@ import java.util.function.Consumer;
  */
 public class SimplePseudoClassSelector extends PseudoClassSelector {
 
-    private final String pseudoClass;
+    private final @NonNull String pseudoClass;
 
-    public SimplePseudoClassSelector(String pseudoClass) {
+    public SimplePseudoClassSelector(@NonNull String pseudoClass) {
         this.pseudoClass = pseudoClass;
     }
 
@@ -43,4 +44,16 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, pseudoClass));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimplePseudoClassSelector that = (SimplePseudoClassSelector) o;
+        return pseudoClass.equals(that.pseudoClass);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pseudoClass);
+    }
 }

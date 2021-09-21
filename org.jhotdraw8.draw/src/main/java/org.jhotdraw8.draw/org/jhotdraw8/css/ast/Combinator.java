@@ -6,6 +6,8 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.Objects;
+
 /**
  * Abstract superclass for "combinator"s.
  * <p>
@@ -15,10 +17,10 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public abstract class Combinator extends Selector {
 
-    protected final SimpleSelector firstSelector;
-    protected final Selector secondSelector;
+    protected final @NonNull SimpleSelector firstSelector;
+    protected final @NonNull Selector secondSelector;
 
-    public Combinator(SimpleSelector firstSelector, Selector secondSelector) {
+    public Combinator(@NonNull SimpleSelector firstSelector, @NonNull Selector secondSelector) {
         this.firstSelector = firstSelector;
         this.secondSelector = secondSelector;
 
@@ -29,4 +31,16 @@ public abstract class Combinator extends Selector {
         return "Combinator{" + "simpleSelector=" + firstSelector + ", selector=" + secondSelector + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Combinator that = (Combinator) o;
+        return firstSelector.equals(that.firstSelector) && secondSelector.equals(that.secondSelector);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstSelector, secondSelector);
+    }
 }
