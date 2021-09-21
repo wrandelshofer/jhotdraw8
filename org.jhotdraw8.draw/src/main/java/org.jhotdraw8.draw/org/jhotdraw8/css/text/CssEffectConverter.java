@@ -99,8 +99,8 @@ public class CssEffectConverter implements CssConverter<Effect> {
     private static final String INNER_SHADOW = "inner-shadow";
     private static final String SHADOW = "shadow";
 
-    private @NonNull CssEnumConverter<BlurType> blurTypeConverter = new CssEnumConverter<>(BlurType.class, false);
-    private @NonNull CssEnumConverter<BlendMode> blendModeConverter = new CssEnumConverter<>(BlendMode.class, false);
+    private @NonNull CssKebabCaseEnumConverter<BlurType> blurTypeConverter = new CssKebabCaseEnumConverter<>(BlurType.class, false);
+    private @NonNull CssKebabCaseEnumConverter<BlendMode> blendModeConverter = new CssKebabCaseEnumConverter<>(BlendMode.class, false);
     private @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
 
     public CssEffectConverter() {

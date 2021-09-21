@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.text.CssLiteralEnumConverter;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
@@ -17,7 +18,8 @@ import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.styleable.SimpleStyleableKey;
+import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
+import org.jhotdraw8.draw.key.SimpleStyleableKey;
 
 /**
  * Represents an SVG 'svg' element.

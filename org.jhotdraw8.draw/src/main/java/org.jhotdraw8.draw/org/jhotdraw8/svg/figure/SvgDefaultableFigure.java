@@ -26,7 +26,7 @@ import org.jhotdraw8.css.NamedCssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
-import org.jhotdraw8.css.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssMappedConverter;
 import org.jhotdraw8.css.text.CssPercentageConverter;
@@ -195,7 +195,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new DefaultableStyleableKey<SvgTextAnchor>("text-anchor",
                     new TypeToken<CssDefaultableValue<SvgTextAnchor>>() {
                     },
-                    new CssEnumConverter<>(SvgTextAnchor.class),
+                    new CssKebabCaseEnumConverter<>(SvgTextAnchor.class),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgTextAnchor.START
             );
     /**

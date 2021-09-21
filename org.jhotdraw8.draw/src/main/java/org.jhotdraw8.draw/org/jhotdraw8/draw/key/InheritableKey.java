@@ -2,7 +2,7 @@
  * @(#)InheritableKey.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.styleable;
+package org.jhotdraw8.draw.key;
 
 /**
  * This interface is used to mark a key as inheritable.

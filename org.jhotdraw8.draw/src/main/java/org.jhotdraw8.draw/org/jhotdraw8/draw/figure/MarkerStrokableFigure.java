@@ -17,11 +17,11 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 import java.util.ArrayList;
 import java.util.Objects;

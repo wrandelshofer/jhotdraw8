@@ -2,11 +2,12 @@
  * @(#)ObjectStyleableKey.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.styleable;
+package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.AbstractKey;
 import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.lang.reflect.Type;

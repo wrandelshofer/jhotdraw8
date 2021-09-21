@@ -12,20 +12,33 @@ import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
+
+import java.lang.reflect.Type;
 
 /**
  * TListStyleableFigureKey.
  *
  * @author Werner Randelshofer
  */
-public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull ImmutableList<T>>
-        implements WritableStyleableMapAccessor<@NonNull ImmutableList<T>>,
-        NonNullMapAccessor<@NonNull ImmutableList<T>> {
+public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< ImmutableList<T>>
+        implements WritableStyleableMapAccessor< ImmutableList<T>>,
+        NonNullMapAccessor< ImmutableList<T>> {
 
     private static final long serialVersionUID = 1L;
 
-    private @NonNull Converter<@NonNull ImmutableList<T>> converter;
+
+
+    /**
+     * Creates a new instance with the specified name and with an empty list as the
+     * default value.
+     *
+     * @param name      The name of the key.
+     * @param type      the class of the type
+     * @param converter String converter for a list element
+     */
+    public ListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableList<T>> converter) {
+        super(name, type, converter, ImmutableLists.emptyList());
+    }
 
     /**
      * Creates a new instance with the specified name and with an empty list as the
@@ -36,7 +49,7 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
      * @param converter String converter for a list element
      */
     public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
-        this(name, type, converter, ImmutableLists.emptyList());
+        super(name, type.getType(), new CssListConverter<>(converter), ImmutableLists.emptyList());
     }
 
     /**
@@ -48,14 +61,7 @@ public class ListStyleableKey<T> extends AbstractStyleableKey<@NonNull Immutable
      * @param defaultValue The default value.
      */
     public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
-        super(name, type, defaultValue);
-
-        this.converter = new CssListConverter<>(converter);
-    }
-
-    @Override
-    public @NonNull Converter<ImmutableList<T>> getCssConverter() {
-        return converter;
+        super(name, type.getType(),new CssListConverter<>(converter), defaultValue);
     }
 
 }

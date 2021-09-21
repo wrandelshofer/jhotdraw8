@@ -53,23 +53,25 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull SimpleNonNullStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
             new SimpleNonNullStyleableKey<>("gradientUnits", SvgGradientUnits.class,
-                    SvgGradientUnits.OBJECT_BOUNDING_BOX,
                     new MappedConverter<SvgGradientUnits>(ImmutableMaps.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
                             "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
-                    ).asMap()));
+                    ).asMap()),
+                    SvgGradientUnits.OBJECT_BOUNDING_BOX
+            );
 
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
      */
     public static final @NonNull SimpleNonNullStyleableKey<CycleMethod> SPREAD_METHOD =
             new SimpleNonNullStyleableKey<>("spreadMethod", CycleMethod.class,
-                    CycleMethod.NO_CYCLE,
                     new MappedConverter<CycleMethod>(ImmutableMaps.of(
                             "pad", CycleMethod.NO_CYCLE,
                             "reflect", CycleMethod.REFLECT,
                             "repeat", CycleMethod.REPEAT
-                    ).asMap()));
+                   ).asMap()),
+                    CycleMethod.NO_CYCLE
+            );
 
 
     public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new SimpleNonNullKey<ImmutableList<SvgStop>>("stops",

@@ -18,21 +18,25 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /**
- * CssEnumConverter. Converts all enum names to lower-case.
+ * CssLiteralEnumConverter. Uses the names of the Java Enum literals
+ * for conversion.
+ * <p>
+ * If you need a different mapping use {@link CssMappedConverter} or
+ * {@likn CssKebabCaseEnumConverter}.
  *
  * @author Werner Randelshofer
  */
-public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
+public class CssLiteralEnumConverter<E extends Enum<E>> implements CssConverter<E> {
 
     private final @NonNull Class<E> enumClass;
     private final @NonNull String name;
     private final boolean nullable;
 
-    public CssEnumConverter(@NonNull Class<E> enumClass) {
+    public CssLiteralEnumConverter(@NonNull Class<E> enumClass) {
         this(enumClass, false);
     }
 
-    public CssEnumConverter(@NonNull Class<E> enumClass, boolean nullable) {
+    public CssLiteralEnumConverter(@NonNull Class<E> enumClass, boolean nullable) {
         this.enumClass = enumClass;
         this.name = enumClass.getName().substring(enumClass.getName().lastIndexOf('.') + 1);
         this.nullable = nullable;
@@ -44,12 +48,12 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
             throw new ParseException(name + ": identifier expected", tt.getStartPosition());
         }
 
-        String identifier = tt.currentString();
+        String identifier = tt.currentStringNonNull();
         if (nullable && CssTokenType.IDENT_NONE.equals(identifier)) {
             return null;
         }
         try {
-            return Enum.valueOf(enumClass, identifier.toUpperCase().replace('-', '_'));
+            return Enum.valueOf(enumClass, identifier);
         } catch (IllegalArgumentException e) {
             throw new ParseException(name + ": illegal identifier:" + identifier, tt.getStartPosition());
         }
@@ -72,7 +76,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
                 } else {
                     buf.append('｜');
                 }
-                buf.append(f.getName().toLowerCase().replace('_', '-'));
+                buf.append(f.getName());
             }
         }
         return buf.toString();
@@ -86,14 +90,7 @@ public class CssEnumConverter<E extends Enum<E>> implements CssConverter<E> {
             }
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
-            StringBuilder out = new StringBuilder();
-            for (char ch : value.toString().toLowerCase().replace('_', '-').toCharArray()) {
-                if (Character.isWhitespace(ch)) {
-                    break;
-                }
-                out.append(ch);
-            }
-            consumer.accept(new CssToken(CssTokenType.TT_IDENT, out.toString()));
+            consumer.accept(new CssToken(CssTokenType.TT_IDENT, value.name()));
         }
     }
 

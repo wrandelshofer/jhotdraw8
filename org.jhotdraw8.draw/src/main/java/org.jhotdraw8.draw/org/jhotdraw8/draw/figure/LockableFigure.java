@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.styleable.BooleanStyleableKey;
+import org.jhotdraw8.draw.key.BooleanStyleableKey;
 
 /**
  * LockableFigure.

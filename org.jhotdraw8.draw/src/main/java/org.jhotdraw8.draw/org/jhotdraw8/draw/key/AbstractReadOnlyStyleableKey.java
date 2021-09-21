@@ -2,11 +2,12 @@
  * @(#)SimpleReadOnlyStyleableKey.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.styleable;
+package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AbstractKey;
+import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
 import java.lang.reflect.Type;
@@ -16,7 +17,7 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class SimpleReadOnlyStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
+public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
     private final @NonNull String cssName;
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +31,7 @@ public class SimpleReadOnlyStyleableKey<T> extends AbstractKey<T> implements Rea
      * @param clazz     The type of the value.
      * @param converter the converter
      */
-    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz, @NonNull Converter<T> converter) {
+    public AbstractReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz, @NonNull Converter<T> converter) {
         this(key, clazz, converter, null);
     }
 
@@ -44,17 +45,26 @@ public class SimpleReadOnlyStyleableKey<T> extends AbstractKey<T> implements Rea
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz,
-                                      @NonNull Converter<T> converter,
-                                      @Nullable T defaultValue) {
+    public AbstractReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz,
+                                        @NonNull Converter<T> converter,
+                                        @Nullable T defaultValue) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), clazz, converter, defaultValue);
 
     }
 
-    public SimpleReadOnlyStyleableKey(@NonNull String key, @NonNull String cssName, @NonNull Type clazz,
-                                      @NonNull Converter<T> converter,
-                                      @Nullable T defaultValue) {
-        super(key, clazz, defaultValue == null, defaultValue);
+    /**
+     * Creates a new key.
+     *
+     * @param xmlName the XML name of the key
+     * @param cssName the CSS name of the key
+     * @param clazz the type of the value
+     * @param converter the CSS converter for the value
+     * @param defaultValue the default value
+     */
+    public AbstractReadOnlyStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type clazz,
+                                        @NonNull Converter<T> converter,
+                                        @Nullable T defaultValue) {
+        super(xmlName, clazz, defaultValue == null, defaultValue);
         this.converter = converter;
         this.cssName = cssName;
     }

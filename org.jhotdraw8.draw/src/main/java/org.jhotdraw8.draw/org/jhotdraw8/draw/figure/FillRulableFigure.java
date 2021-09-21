@@ -9,8 +9,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 /**
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can have

@@ -2,10 +2,13 @@
  * @(#)NulllableBooleanStyleableKey.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.styleable;
+package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.text.CssBooleanConverter;
+import org.jhotdraw8.draw.key.SimpleStyleableKey;
+import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 
 /**
  * Nullable BooleanStyleableKey.

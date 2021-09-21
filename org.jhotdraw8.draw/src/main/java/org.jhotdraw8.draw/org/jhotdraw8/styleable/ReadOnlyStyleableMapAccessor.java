@@ -63,8 +63,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
     /**
      * Returns the CSS name string.
      * <p>
-     * The default implementation converts the name from "camel case" to "dash
-     * separated words".
+     * Converts the name from "camelCase" to "kebab-case".
      *
      * @param camelCaseName string
      * @return cssName string.

@@ -5,20 +5,20 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.NonNullKey;
 import org.jhotdraw8.collection.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
-import java.util.Objects;
-
 /**
- * EnumStyleableKey.
+ * Convenience class for creating a {@link Key} for an enum type.
  *
  * @author Werner Randelshofer
  */
-public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStyleableKey<@NonNull T>
-        implements WritableStyleableMapAccessor<@NonNull T>, NonNullMapAccessor<@NonNull T> {
+public class EnumStyleableKey< T extends Enum<T>> extends SimpleStyleableKey< T>
+        implements WritableStyleableMapAccessor<T>, NonNullMapAccessor< T>, NonNullKey<T> {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,22 +27,36 @@ public class EnumStyleableKey<@NonNull T extends Enum<T>> extends AbstractStylea
      * Creates a new instance with the specified name, enum class, mask and
      * default value.
      *
-     * @param name         The name of the key.
+     * @param xmlName         The XML name of the key.
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public EnumStyleableKey(@NonNull String name, @NonNull Class<T> clazz, @NonNull T defaultValue) {
-        super(name, clazz, defaultValue);
-
-        Objects.requireNonNull(defaultValue, "defaultValue");
-
-        converter = new CssEnumConverter<>(getRawValueType(), false);
+    public EnumStyleableKey(@NonNull String xmlName, @NonNull Class<T> clazz, @NonNull T defaultValue) {
+        super(xmlName, clazz, new CssKebabCaseEnumConverter<>(clazz, false), defaultValue);
     }
-
-    private final @NonNull Converter<T> converter;
-
-    @Override
-    public @NonNull Converter<T> getCssConverter() {
-        return converter;
+    /**
+     * Creates a new instance with {@link CssKebabCaseEnumConverter}.
+     *
+     * @param xmlName         The XML name of the key.
+     * @param cssName      The CSS name of the key.
+     * @param clazz        The enum class.
+     * @param defaultValue The default value.
+     */
+    public EnumStyleableKey(@NonNull String xmlName,@NonNull String cssName, @NonNull Class<T> clazz, @NonNull T defaultValue) {
+        super(xmlName,cssName, clazz, new CssKebabCaseEnumConverter<>(clazz, false), defaultValue);
+    }
+    /**
+     * Creates a new instance.
+     *
+     * @param xmlName         The XML name of the key.
+     * @param cssName      The CSS name of the key.
+     * @param clazz        The enum class.
+     * @param converter    The CSS converter
+     * @param defaultValue The default value.
+     */
+    public EnumStyleableKey(@NonNull String xmlName,@NonNull String cssName, @NonNull Class<T> clazz,
+                            @NonNull Converter<T> converter,
+                            @NonNull T defaultValue) {
+        super(xmlName,cssName, clazz, converter, defaultValue);
     }
 }

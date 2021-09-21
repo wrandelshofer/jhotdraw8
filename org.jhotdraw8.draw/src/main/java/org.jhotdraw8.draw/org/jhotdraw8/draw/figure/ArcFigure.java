@@ -18,8 +18,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 /**
  * Renders a {@code javafx.scene.shape.Arc}.

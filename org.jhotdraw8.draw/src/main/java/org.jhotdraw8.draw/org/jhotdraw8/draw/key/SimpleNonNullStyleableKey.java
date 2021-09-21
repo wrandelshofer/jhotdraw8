@@ -6,43 +6,44 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.NonNullMapAccessor;
-import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
+
+import java.lang.reflect.Type;
 
 /**
  * CssSizeStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class SimpleNonNullStyleableKey<T> extends AbstractStyleableKey<@NonNull T> implements WritableStyleableMapAccessor<@NonNull T>,
-        NonNullMapAccessor<@NonNull T> {
+public class SimpleNonNullStyleableKey<T> extends AbstractReadOnlyStyleableKey< T> implements WritableStyleableMapAccessor<@NonNull T>,
+        NonNullMapAccessor< T> {
 
-    static final long serialVersionUID = 1L;
-
-    private final Converter<@NonNull T> converter;
-
+    private static final long serialVersionUID = 1L;
 
     /**
-     * Creates a new instance with the specified name, mask and default value.
+     * Creates a new instance.
      *
-     * @param name         The name of the key.
+     * @param name          The name of the key
+     * @param type         The type of the value.
+     * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public SimpleNonNullStyleableKey(String name, @NonNull TypeToken<T> typeToken, @NonNull T defaultValue, Converter<T> converter) {
-        super(name, typeToken, defaultValue);
-        this.converter = converter;
+    public SimpleNonNullStyleableKey(@NonNull String name, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
+        super(name, type, converter, defaultValue);
     }
 
     /**
-     * Creates a new instance with the specified name, mask and default value.
+     * Creates a new instance.
      *
-     * @param name         The name of the key.
+     * @param xmlName          The XML name of the key.
+     * @param cssName          The CSS name of the key.
+     * @param type         The type of the value.
+     * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public SimpleNonNullStyleableKey(String name, @NonNull Class<T> clazz, @NonNull T defaultValue, Converter<T> converter) {
-        super(name, clazz, defaultValue);
-        this.converter = converter;
+    public SimpleNonNullStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
+        super(xmlName, cssName, type, converter, defaultValue);
     }
 
 

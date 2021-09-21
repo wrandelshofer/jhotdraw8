@@ -32,13 +32,13 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.PointAndTangent;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {
 
     /**
-     * The horizontal position of the text. Default value: {@code baseline}
+     * The horizontal position of the text. Default value: {@link HPos#LEFT}
      */
     public static final @NonNull EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 

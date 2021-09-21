@@ -16,9 +16,9 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 /**
  * A figure which supports font attributes.

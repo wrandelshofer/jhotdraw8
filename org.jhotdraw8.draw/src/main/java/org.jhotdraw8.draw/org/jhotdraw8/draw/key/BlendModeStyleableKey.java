@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.text.CssEnumConverter;
+import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
 
@@ -40,7 +40,7 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
         super(name, BlendMode.class, defaultValue);
     }
 
-    private Converter<BlendMode> converter = new CssEnumConverter<>(BlendMode.class, false);
+    private Converter<BlendMode> converter = new CssKebabCaseEnumConverter<>(BlendMode.class, false);
     ;
 
     @Override
