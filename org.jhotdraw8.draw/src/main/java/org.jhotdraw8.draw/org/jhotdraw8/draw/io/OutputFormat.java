@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.concurrent.WorkState;
@@ -36,7 +37,7 @@ public interface OutputFormat {
      * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@NonNull URI uri, Drawing drawing, WorkState<Void> workState) throws IOException {
+    default void write(@NonNull URI uri, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         write(Paths.get(uri), drawing, workState);
     }
 
@@ -49,7 +50,7 @@ public interface OutputFormat {
      * @param workState for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    default void write(@NonNull Path file, Drawing drawing, WorkState<?> workState) throws IOException {
+    default void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             write(out, file.getParent().toUri(), drawing, workState);
         }
@@ -59,11 +60,12 @@ public interface OutputFormat {
      * Writes a Drawing into an output stream.
      *
      * @param out          The output stream.
-     * @param documentHome
+     * @param documentHome Document home URI for creating relative URIs in the document
+     *                     if this URI is null, all URIs in the document will be absolute
      * @param drawing      The drawing.
      * @param workState    for progress monitoring and cancelling the operation
      * @throws java.io.IOException if an IO error occurs
      */
-    void write(OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException;
+    void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException;
 
 }

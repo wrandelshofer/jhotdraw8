@@ -85,6 +85,7 @@ import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -755,7 +756,10 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         } else {
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                ImageIO.write(fromFXImage(node.getImage(), null), "PNG", bout);
+                final BufferedImage im = fromFXImage(node.getImage(), null);
+                if (im == null)
+                    throw new IOException("Could not create an AWT image.");
+                ImageIO.write(im, "PNG", bout);
                 bout.close();
                 byte[] imageData = bout.toByteArray();
 
@@ -1074,7 +1078,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
             // FIXME convert to path and then return
         }
-        ;
+
         w.writeStartElement("rect");
         if (node.getX() != 0.0) {
             w.writeAttribute("x", nb.toString(node.getX()));

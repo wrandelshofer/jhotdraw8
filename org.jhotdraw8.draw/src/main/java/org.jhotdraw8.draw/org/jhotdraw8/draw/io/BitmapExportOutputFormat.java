@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import javafx.application.Platform;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
@@ -17,6 +18,7 @@ import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssColor;
@@ -95,9 +97,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
         parameters.setViewport(new Rectangle2D(x, y, width, height));
 
-        WritableImage image = node.snapshot(parameters, null);
-
-        return image;
+        return node.snapshot(parameters, null);
     }
 
     @Override
@@ -115,31 +115,23 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
         Node node = toNode(drawing, selection, hints);
-        Bounds bounds = Figure.visualBounds(selection);
+        Bounds selectionBounds = Figure.visualBounds(selection);
+        Bounds bounds = selectionBounds == null ? new BoundingBox(0, 0, 640, 480) : selectionBounds;
 
-        if (!Platform.isFxApplicationThread()) {
-            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(drawing, node, bounds,
-                    EXPORT_DRAWING_DPI_KEY.get(getOptions())), Platform::runLater);
-            try {
-                return future.get();
-            } catch (InterruptedException | ExecutionException ex) {
-                throw new IOException(ex);
-            }
-        } else {
-            return doRenderImage(drawing, node, bounds, EXPORT_DRAWING_DPI_KEY.get(getOptions()));
-        }
+        return renderImageOnApplicationThread(drawing, dpi, node, bounds);
     }
 
-    private WritableImage renderSlice(@NonNull Figure slice, @NonNull Bounds bounds, @NonNull Node node, double dpi) throws IOException {
+    private WritableImage renderImageOnApplicationThread(@NonNull Figure figure, double dpi, Node node, Bounds bounds) throws IOException {
         if (!Platform.isFxApplicationThread()) {
-            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(slice, node, bounds, dpi), Platform::runLater);
+            CompletableFuture<WritableImage> future = CompletableFuture.supplyAsync(() -> doRenderImage(figure, node, bounds,
+                    dpi), Platform::runLater);
             try {
                 return future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 throw new IOException(ex);
             }
         } else {
-            return doRenderImage(slice, node, bounds, dpi);
+            return doRenderImage(figure, node, bounds, dpi);
         }
     }
 
@@ -164,19 +156,19 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     public void write(@NonNull Map<DataFormat, Object> out, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
-        WritableImage image = renderImage(drawing, selection, EXPORT_DRAWING_DPI_KEY.get(getOptions()));
+        WritableImage image = renderImage(drawing, selection, EXPORT_DRAWING_DPI_KEY.getNonNull(getOptions()));
         out.put(DataFormat.IMAGE, image);
     }
 
     @Override
-    public void write(@NonNull OutputStream out, URI documentHome, @NonNull Drawing drawing, WorkState workState) throws IOException {
-        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), EXPORT_DRAWING_DPI_KEY.get(getOptions()));
+    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+        WritableImage writableImage = renderImage(drawing, Collections.singleton(drawing), EXPORT_DRAWING_DPI_KEY.getNonNull(getOptions()));
         //ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", out);
-        writeImage(out, writableImage, EXPORT_DRAWING_DPI_KEY.get(getOptions()));
+        writeImage(out, writableImage, EXPORT_DRAWING_DPI_KEY.getNonNull(getOptions()));
 
     }
 
-    public void write(@NonNull Path file, @NonNull Drawing drawing, WorkState workState) throws IOException {
+    public void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         if (isExportDrawing()) {
             OutputFormat.super.write(file, drawing, workState);
         }
@@ -195,6 +187,8 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     private void writeImage(@NonNull OutputStream out, @NonNull WritableImage writableImage, double dpi) throws IOException {
         BufferedImage image = fromFXImage(writableImage, null);
+        if (image == null)
+            throw new IOException("Could not convert the JavaFX image to AWT.");
 
         for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("png"); iw.hasNext(); ) {
             ImageWriter writer = iw.next();
@@ -217,18 +211,19 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     protected void writePage(@NonNull Path file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
-        CssSize pw = page.get(PageFigure.PAPER_WIDTH);
+        CssSize pw = page.getNonNull(PageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
-        WritableImage image = renderSlice(page, pageBounds, node, EXPORT_PAGES_DPI_KEY.get(getOptions()) * factor);
+        final double dpi = EXPORT_PAGES_DPI_KEY.getNonNull(getOptions());
+        WritableImage image = renderImageOnApplicationThread(page, dpi * factor, node, pageBounds);
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
-            writeImage(out, image, EXPORT_PAGES_DPI_KEY.get(getOptions()));
+            writeImage(out, image, dpi);
         }
     }
 
     protected boolean writeSlice(@NonNull Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
-        WritableImage image = renderSlice(slice, slice.getLayoutBounds(), node, dpi);
+        WritableImage image = renderImageOnApplicationThread(slice, dpi, node, slice.getLayoutBounds());
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             writeImage(out, image, dpi);
         }
@@ -263,7 +258,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
      * @return a {@code BufferedImage} containing a snapshot of the JavaFX
      * {@code Image}, or null if the {@code Image} is not readable.
      */
-    public static BufferedImage fromFXImage(Image img, BufferedImage bimg) {
+    public static @Nullable BufferedImage fromFXImage(@NonNull Image img, @Nullable BufferedImage bimg) {
         // This method has been copied from class SwingFXUtils.
 
         PixelReader pr = img.getPixelReader();
@@ -291,7 +286,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             bimg = new BufferedImage(iw, ih, prefBimgType);
         }
         DataBufferInt db = (DataBufferInt) bimg.getRaster().getDataBuffer();
-        int data[] = db.getData();
+        int[] data = db.getData();
         int offset = bimg.getRaster().getDataBuffer().getOffset();
         int scan = 0;
         SampleModel sm = bimg.getRaster().getSampleModel();
@@ -307,21 +302,21 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     private static boolean isSrcPixelsAreOpaque(BufferedImage bimg, PixelReader pr, int iw, int ih, PixelFormat<?> fxFormat) {
         boolean srcPixelsAreOpaque = false;
         switch (fxFormat.getType()) {
-        case INT_ARGB_PRE:
-        case INT_ARGB:
-        case BYTE_BGRA_PRE:
-        case BYTE_BGRA:
-            // Check fx image opacity only if
-            // supplied BufferedImage is without alpha channel
-            if (bimg != null &&
-                    (bimg.getType() == BufferedImage.TYPE_INT_BGR ||
-                            bimg.getType() == BufferedImage.TYPE_INT_RGB)) {
-                srcPixelsAreOpaque = checkFXImageOpaque(pr, iw, ih);
-            }
-            break;
-        case BYTE_RGB:
-            srcPixelsAreOpaque = true;
-            break;
+            case INT_ARGB_PRE:
+            case INT_ARGB:
+            case BYTE_BGRA_PRE:
+            case BYTE_BGRA:
+                // Check fx image opacity only if
+                // supplied BufferedImage is without alpha channel
+                if (bimg != null &&
+                        (bimg.getType() == BufferedImage.TYPE_INT_BGR ||
+                                bimg.getType() == BufferedImage.TYPE_INT_RGB)) {
+                    srcPixelsAreOpaque = checkFXImageOpaque(pr, iw, ih);
+                }
+                break;
+            case BYTE_RGB:
+                srcPixelsAreOpaque = true;
+                break;
         }
         return srcPixelsAreOpaque;
     }
@@ -347,11 +342,11 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
      * @param fxFormat the PixelFormat of the source FX Image
      * @param bimg     an optional existing {@code BufferedImage} to be used
      *                 for storage if it is compatible, or null
-     * @return
+     * @return the best image type
      */
-    static int
-    getBestBufferedImageType(PixelFormat<?> fxFormat, BufferedImage bimg,
-                             boolean isOpaque) {
+    static int getBestBufferedImageType(@NonNull PixelFormat<?> fxFormat,
+                                        @Nullable BufferedImage bimg,
+                                        boolean isOpaque) {
         // This method has been copied from class SwingFXUtils.
         if (bimg != null) {
             int bimgType = bimg.getType();
@@ -371,19 +366,19 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             }
         }
         switch (fxFormat.getType()) {
-        default:
-        case BYTE_BGRA_PRE:
-        case INT_ARGB_PRE:
-            return BufferedImage.TYPE_INT_ARGB_PRE;
-        case BYTE_BGRA:
-        case INT_ARGB:
-            return BufferedImage.TYPE_INT_ARGB;
-        case BYTE_RGB:
-            return BufferedImage.TYPE_INT_RGB;
-        case BYTE_INDEXED:
-            return (fxFormat.isPremultiplied()
-                    ? BufferedImage.TYPE_INT_ARGB_PRE
-                    : BufferedImage.TYPE_INT_ARGB);
+            default:
+            case BYTE_BGRA_PRE:
+            case INT_ARGB_PRE:
+                return BufferedImage.TYPE_INT_ARGB_PRE;
+            case BYTE_BGRA:
+            case INT_ARGB:
+                return BufferedImage.TYPE_INT_ARGB;
+            case BYTE_RGB:
+                return BufferedImage.TYPE_INT_RGB;
+            case BYTE_INDEXED:
+                return (fxFormat.isPremultiplied()
+                        ? BufferedImage.TYPE_INT_ARGB_PRE
+                        : BufferedImage.TYPE_INT_ARGB);
         }
     }
 
@@ -393,24 +388,24 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
      *
      * @param bimg the BufferedImage that will be used as a destination for
      *             a {@code PixelReader<IntBuffer>#getPixels()} operation.
-     * @return
+     * @return the pixel format
      */
-    private static WritablePixelFormat<IntBuffer>
-    getAssociatedPixelFormat(BufferedImage bimg) {
+    private static @NonNull WritablePixelFormat<IntBuffer>
+    getAssociatedPixelFormat(@NonNull BufferedImage bimg) {
         // This method has been copied from class SwingFXUtils.
         switch (bimg.getType()) {
-        // We lie here for xRGB, but we vetted that the src data was opaque
-        // so we can ignore the alpha.  We use ArgbPre instead of Argb
-        // just to get a loop that does not have divides in it if the
-        // PixelReader happens to not know the data is opaque.
-        case BufferedImage.TYPE_INT_RGB:
-        case BufferedImage.TYPE_INT_ARGB_PRE:
-            return PixelFormat.getIntArgbPreInstance();
-        case BufferedImage.TYPE_INT_ARGB:
-            return PixelFormat.getIntArgbInstance();
-        default:
-            // Should not happen...
-            throw new InternalError("Failed to validate BufferedImage type");
+            // We lie here for xRGB, but we vetted that the src data was opaque
+            // so we can ignore the alpha.  We use ArgbPre instead of Argb
+            // just to get a loop that does not have divides in it if the
+            // PixelReader happens to not know the data is opaque.
+            case BufferedImage.TYPE_INT_RGB:
+            case BufferedImage.TYPE_INT_ARGB_PRE:
+                return PixelFormat.getIntArgbPreInstance();
+            case BufferedImage.TYPE_INT_ARGB:
+                return PixelFormat.getIntArgbInstance();
+            default:
+                // Should not happen...
+                throw new InternalError("Failed to validate BufferedImage type");
         }
     }
 }

@@ -54,7 +54,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
     private final @NonNull IdFactory idFactory;
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
-    private String idAttribute = "id";
+    private final String idAttribute = "id";
     private Supplier<Layer> layerFactory;
 
     public SimpleXmlStaxReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
@@ -105,15 +105,8 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
     }
 
     @Override
-    public @Nullable Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState<?> workState) throws IOException {
-        idFactory.setDocumentHome(documentHome);
-        Deque<Figure> stack = doRead(in);
-
-        Figure figure = stack.isEmpty() ? null : stack.getFirst();
-        if ((figure instanceof Drawing)) {
-            figure.set(Drawing.DOCUMENT_HOME, documentHome);
-        }
-        return figure;
+    public @NonNull Figure read(@NonNull InputStream in, @Nullable Drawing drawing, @Nullable URI documentHome, @NonNull WorkState<Void> workState) throws IOException {
+        return read((AutoCloseable) in, drawing, documentHome, workState);
     }
 
     private Deque<Figure> doRead(AutoCloseable in) throws IOException {
@@ -168,14 +161,23 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
         return stack;
     }
 
-    public @Nullable Figure read(@NonNull Reader in, Drawing drawing, URI documentHome, @NonNull WorkState workState) throws IOException {
+    public @Nullable Figure read(@NonNull Reader in, @Nullable Drawing drawing, @Nullable URI documentHome, @NonNull WorkState<Void> workState) throws IOException {
+        return read((AutoCloseable) in, drawing, documentHome, workState);
+    }
+
+    private @NonNull Figure read(@NonNull AutoCloseable in, @Nullable Drawing drawing, @Nullable URI documentHome, @NonNull WorkState<Void> workState) throws IOException {
+        workState.updateProgress(0.0);
         idFactory.setDocumentHome(documentHome);
         Deque<Figure> stack = doRead(in);
 
         Figure figure = stack.isEmpty() ? null : stack.getFirst();
+        if (figure == null) {
+            throw new IOException("Input file is empty.");
+        }
         if ((figure instanceof Drawing)) {
             figure.set(Drawing.DOCUMENT_HOME, documentHome);
         }
+        workState.updateProgress(1.0);
         return figure;
     }
 

@@ -53,44 +53,59 @@ public class DrawingExportOptionsPane extends GridPane {
         return new InputDialog<>(labels.getString("file.export.dialog.title"), labels.getString("file.export.dialog.headerText"), pane, pane::getExportOptions);
     }
 
+    @SuppressWarnings("unused")
     @FXML
     private TextField drawingDpiField;
 
     private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter(false)));
+    @SuppressWarnings("unused")
     @FXML
     private Label drawingDpiLabel;
 
+    @SuppressWarnings("unused")
     @FXML
     private CheckBox exportDrawingCheckBox;
 
+    @SuppressWarnings("unused")
     @FXML
     private CheckBox exportPagesCheckBox;
 
+    @SuppressWarnings("unused")
     @FXML
     private CheckBox exportSlicesCheckBox;
+    @SuppressWarnings("unused")
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+    @SuppressWarnings("unused")
     @FXML
     private TextField pagesDpiField;
     private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter(false)));
+    @SuppressWarnings("unused")
     @FXML
     private Label pagesDpiLabel;
+    @SuppressWarnings("unused")
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
+    @SuppressWarnings("unused")
     @FXML
     private TextField slicesDpiField;
     private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter(false)));
+    @SuppressWarnings("unused")
     @FXML
     private Label slicesDpiLabel;
 
+    @SuppressWarnings("unused")
     @FXML
     private CheckBox slicesResolution2xCheckBox;
 
+    @SuppressWarnings("unused")
     @FXML
     private CheckBox slicesResolution3xCheckBox;
+    @SuppressWarnings("unused")
     @FXML
     private CheckBox exportInvisibleElements;
+    @SuppressWarnings("unused")
     @FXML
     private Label optionsLabel;
     private DataFormat format;
@@ -117,7 +132,7 @@ public class DrawingExportOptionsPane extends GridPane {
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());
         EXPORT_PAGES_KEY.put(map, exportPagesCheckBox.isSelected());
         EXPORT_SLICES_KEY.put(map, exportSlicesCheckBox.isSelected());
-        EXPORT_DRAWING_DPI_KEY.put(map, drawingDpiFormatter.getValue().doubleValue());
+        EXPORT_DRAWING_DPI_KEY.putNonNull(map, drawingDpiFormatter.getValue().doubleValue());
         EXPORT_PAGES_DPI_KEY.put(map, pagesDpiFormatter.getValue().doubleValue());
         EXPORT_SLICES_DPI_KEY.put(map, slicesDpiFormatter.getValue().doubleValue());
         EXPORT_SLICES_RESOLUTION_2X_KEY.put(map, slicesResolution2xCheckBox.isSelected());
@@ -135,8 +150,8 @@ public class DrawingExportOptionsPane extends GridPane {
         updateFormat();
     }
 
+    @SuppressWarnings("unused")
     @FXML
-        // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert exportDrawingCheckBox != null : "fx:id=\"exportDrawingCheckBox\" was not injected: check your FXML file 'ExportDialog.fxml'.";
         assert exportPagesCheckBox != null : "fx:id=\"exportPagesCheckBox\" was not injected: check your FXML file 'ExportDialog.fxml'.";

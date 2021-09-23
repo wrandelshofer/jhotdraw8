@@ -30,6 +30,18 @@ public interface NonNullMapAccessor<@NonNull T> extends MapAccessor<T> {
     }
 
     /**
+     * Gets the value of the attribute denoted by this accessor from a Map.
+     *
+     * @param a A Map.
+     * @return The value of the attribute.
+     */
+    default @NonNull T getNonNull(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+        T t = get(a);
+        assert t != null;
+        return t;
+    }
+
+    /**
      * Puts the value of the attribute denoted by this accessor from a Map.
      *
      * @param a     A map.

@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.collection.ReadOnlyMapWrapper;
@@ -30,12 +31,8 @@ public class XmlEncoderOutputFormat implements OutputFormat {
     }
 
     @Override
-    public void write(@NonNull OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {
+    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         try (XMLEncoder o = new XMLEncoder(out)) {
-           /* final FigurePersistenceDelegate delegate = new FigurePersistenceDelegate();
-            o.setPersistenceDelegate(Figure.class, delegate);
-            o.setPersistenceDelegate(Drawing.class, delegate);
-            o.setPersistenceDelegate(RectangleFigure.class, delegate);*/
             o.writeObject(drawing);
         }
     }
@@ -47,7 +44,7 @@ public class XmlEncoderOutputFormat implements OutputFormat {
     }
 
     @Override
-    public void setOptions(ReadOnlyMap<Key<?>, Object> options) {
+    public void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> options) {
         this.options = options;
     }
 }

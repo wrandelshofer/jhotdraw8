@@ -13,12 +13,10 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -36,20 +34,12 @@ import org.jhotdraw8.svg.TransformFlattener;
 import org.jhotdraw8.svg.io.AbstractFXSvgWriter;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.SvgSceneGraphWriter;
-import org.jhotdraw8.svg.text.SvgPaintConverter;
-import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.text.Converter;
-import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -77,9 +67,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     public static final DataFormat SVG_FORMAT;
     public static final String SVG_MIME_TYPE = "image/svg+xml";
     private static final String SKIP_KEY = "skip";
-    private static final String XLINK_NS = "http://www.w3.org/1999/xlink";
-    private static final String XLINK_Q = "xlink";
-    private static final String XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType(SVG_MIME_TYPE);
@@ -89,15 +76,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         SVG_FORMAT = fmt;
     }
 
-    private final String SVG_NS = "http://www.w3.org/2000/svg";
-    private final @Nullable String namespaceQualifier = null;
     private final XmlNumberConverter nb = new XmlNumberConverter();
     private final CssSizeConverter sc = new CssSizeConverter(false);
-    private final Converter<ImmutableList<CssSize>> nbList = new CssListConverter<>(new CssSizeConverter(false));
-    private final SvgPaintConverter paint = new SvgPaintConverter(true);
     private final Converter<CssSize> sznb = new CssSizeConverter(false);
-    private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
-    private @NonNull IdFactory idFactory = new SimpleIdFactory();
+    private final @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;
 
@@ -111,7 +93,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     private @NonNull AbstractFXSvgWriter createExporter() {
         AbstractFXSvgWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setExportInvisibleElements(
-                SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.get(getOptions()));
+                SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.getNonNull(getOptions()));
         return exporter;
     }
 
@@ -142,8 +124,9 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
 
-    public Document toDocument(URI documentHome, @NonNull Drawing external, @NonNull Collection<Figure> selection) throws IOException {
+    public Document toDocument(@Nullable URI documentHome, @NonNull Drawing external, @NonNull Collection<Figure> selection) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
+        idFactory.setDocumentHome(documentHome);
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
@@ -158,21 +141,25 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
 
     @Override
     public void write(@NonNull Map<DataFormat, Object> clipboard, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
+        idFactory.reset();
         idFactory.setDocumentHome(null);
         StringWriter out = new StringWriter();
-        Document doc = toDocument(null, drawing, selection);
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(out);
-            t.transform(source, result);
-        } catch (TransformerException ex) {
-            throw new IOException(ex);
-        }
+        Map<Key<?>, Object> hints = new HashMap<>();
+        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+        javafx.scene.Node drawingNode = toNode(drawing, selection, hints);
+        final AbstractFXSvgWriter exporter = createExporter();
+        exporter.setRelativizePaths(true);
+        exporter.write(out, drawingNode,
+                new CssDimension2D(
+                        drawing.getNonNull(Drawing.WIDTH),
+                        drawing.getNonNull(Drawing.HEIGHT)));
+
         clipboard.put(SVG_FORMAT, out.toString());
     }
 
-    public void write(@NonNull Path file, @NonNull Drawing drawing, WorkState workState) throws IOException {
+    public void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+        idFactory.reset();
+        idFactory.setDocumentHome(null);
         if (isExportDrawing()) {
             Map<Key<?>, Object> hints = new HashMap<>();
             RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
@@ -198,14 +185,22 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    public void write(OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {
-        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
+    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         write(documentHome, out, drawing, drawing.getChildren());
     }
 
-    protected void write(URI documentHome, OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
-        Document doc = toDocument(documentHome, drawing, selection);
-        XmlUtil.write(out, doc);
+    protected void write(@Nullable URI documentHome, @NonNull OutputStream out, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
+        Map<Key<?>, Object> hints = new HashMap<>();
+        idFactory.reset();
+        idFactory.setDocumentHome(documentHome);
+        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+        Node drawingNode = toNode(drawing, selection, hints);
+        final AbstractFXSvgWriter exporter = createExporter();
+        exporter.setRelativizePaths(true);
+        exporter.write(out, drawingNode,
+                new CssDimension2D(
+                        drawing.getNonNull(Drawing.WIDTH),
+                        drawing.getNonNull(Drawing.HEIGHT)));
     }
 
     private void writeDrawingElementAttributes(@NonNull Element docElement, @NonNull Drawing drawing) throws IOException {
@@ -227,7 +222,6 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     private void writePageElementAttributes(@NonNull Element docElement, @NonNull Page page, int internalPageNumber) throws IOException {
-        Bounds b = page.getLayoutBounds();
         Bounds pb = page.getPageBounds(internalPageNumber);
         docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
         docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));

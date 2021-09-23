@@ -22,11 +22,8 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.io.IdFactory;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
-import org.jhotdraw8.xml.XmlUtil;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,7 +47,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * SimpleXmlWriter.
@@ -73,19 +69,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected FigureFactory figureFactory;
-    /**
-     * Performance: This does not need to be a linked hash map, because we iterate in parallel over it.
-     */
-    protected @NonNull Map<Figure, Element> figureToElementMap = new ConcurrentHashMap<>();
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    /**
-     * This is a cache which checks if Figure.class is assignable from the value
-     * type of a map accessor.
-     */
-    @NonNull
-    Map<MapAccessor<Object>, Boolean> keyValueTypeIsFigure = new ConcurrentHashMap<>();
     private @NonNull ReadOnlyMap<Key<?>, Object> options = new ReadOnlyMapWrapper<>(new LinkedHashMap<>());
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
@@ -99,21 +85,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         this.namespaceQualifier = namespaceQualifier;
     }
 
-    private IOException createIOException(@NonNull Element elem, IOException ex) {
-        Locator locator = XmlUtil.getLocator(elem);
-        if (locator == null) {
-            return ex;
-        } else {
-            return new IOException(
-                    "In " + ((locator.getSystemId() == null) ? "" : "file: \"" + locator.getSystemId() + "\", ")
-                            + "line: " + locator.getLineNumber()
-                            + ", column: " + locator.getColumnNumber() + ".",
-                    ex);
-        }
-    }
-
-
-    private DataFormat getDataFormat() {
+    private @NonNull DataFormat getDataFormat() {
         String mimeType = "application/xml";
         DataFormat df = DataFormat.lookupMimeType(mimeType);
         if (df == null) {
@@ -151,7 +123,6 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
             XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
             XMLStreamWriter w = xmlOutputFactory.createXMLStreamWriter(result);
 
-            // FIXME set document home on
             writeClipping(w, internal, selection, documentHome);
 
             w.close();
@@ -191,13 +162,14 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     @Override
-    public void write(OutputStream out, URI documentHome, Drawing drawing, WorkState workState) throws IOException {
+    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         write(documentHome, new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8)),
                 drawing, workState);
     }
 
-    protected void write(URI documentHome, Writer out, Drawing drawing, WorkState workState) throws IOException {
+    protected void write(@Nullable URI documentHome, @NonNull Writer out, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
+        workState.updateProgress(0.0);
         try {
             writeDocument(w, documentHome, drawing);
             w.flush();
@@ -224,7 +196,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         out.put(getDataFormat(), sw.toString());
     }
 
-    protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection, URI documentHome) throws IOException, XMLStreamException {
+    protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection, @Nullable URI documentHome) throws IOException, XMLStreamException {
         // bring selection in z-order
         Set<Figure> s = new HashSet<>(selection);
         ArrayList<Figure> ordered = new ArrayList<>(selection.size());
@@ -348,18 +320,16 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         if (figureFactory.getStylesheetsKey() != null) {
             ImmutableList<URI> stylesheets = external.get(figureFactory.getStylesheetsKey());
             if (stylesheets != null) {
-                for (Object stylesheet : stylesheets) {
-                    if (stylesheet instanceof URI) {
-                        stylesheet = idFactory.relativize((URI) stylesheet);
+                for (URI stylesheet : stylesheets) {
+                    stylesheet = idFactory.relativize(stylesheet);
 
-                        String stylesheetString = stylesheet.toString();
-                        String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
-                        if ("text/".equals(type)) {
-                            type = "text/css";
-                        }
-                        w.writeProcessingInstruction("xml-stylesheet", //
-                                "type=\"" + type + "\" href=\"" + stylesheet + "\"");
+                    String stylesheetString = stylesheet.toString();
+                    String type = "text/" + stylesheetString.substring(stylesheetString.lastIndexOf('.') + 1);
+                    if ("text/".equals(type)) {
+                        type = "text/css";
                     }
+                    w.writeProcessingInstruction("xml-stylesheet", //
+                            "type=\"" + type + "\" href=\"" + stylesheet + "\"");
                 }
             }
         }
