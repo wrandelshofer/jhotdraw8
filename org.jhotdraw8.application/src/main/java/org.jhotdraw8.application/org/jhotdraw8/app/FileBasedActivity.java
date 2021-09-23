@@ -221,7 +221,7 @@ public interface FileBasedActivity extends Activity {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState workState);
+    @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState<Void> workState);
 
     /**
      * Returns true if this content is empty and can be replaced by

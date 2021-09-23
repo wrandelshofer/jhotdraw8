@@ -293,7 +293,7 @@ public class ZoomableScrollPane extends GridPane {
     }
 
     private static class StyleableProperties {
-        @SuppressWarnings("uncheckded")
+      @SuppressWarnings("unchecked")
         private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> HBAR_POLICY =
                 new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-hbar-policy",
                         (StyleConverter<?, ScrollPane.ScrollBarPolicy>) StyleConverter.<ScrollPane.ScrollBarPolicy>getEnumConverter(ScrollPane.ScrollBarPolicy.class),
@@ -310,7 +310,7 @@ public class ZoomableScrollPane extends GridPane {
                     }
                 };
 
-        @SuppressWarnings("uncheckded")
+        @SuppressWarnings("unchecked")
         private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> VBAR_POLICY =
                 new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-vbar-policy",
                         (StyleConverter<?, ScrollPane.ScrollBarPolicy>) StyleConverter.<ScrollPane.ScrollBarPolicy>getEnumConverter(ScrollPane.ScrollBarPolicy.class),

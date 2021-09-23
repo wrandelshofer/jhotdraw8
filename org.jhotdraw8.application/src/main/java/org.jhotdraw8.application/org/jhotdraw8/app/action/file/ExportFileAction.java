@@ -62,7 +62,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         this.optionsDialogFactory = optionsDialog;
     }
 
-    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
+    protected @NonNull URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(EXPORT_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(EXPORT_CHOOSER_FACTORY_KEY);

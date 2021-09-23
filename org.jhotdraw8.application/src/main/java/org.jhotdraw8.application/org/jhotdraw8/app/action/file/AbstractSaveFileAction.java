@@ -76,7 +76,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         resources.configureAction(this, id);
     }
 
-    protected @Nullable URIChooser getChooser(FileBasedActivity view) {
+    protected @NonNull URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
@@ -93,17 +93,17 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
             return;
         }
         oldFocusOwner = activity.getNode().getScene().getFocusOwner();
-        WorkState workState = new SimpleWorkState(getLabel());
+        WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         activity.addDisabler(workState);
         saveFileChooseUri(activity, workState);
     }
 
-    protected void saveFileChooseUri(final @NonNull FileBasedActivity v, WorkState workState) {
+    protected void saveFileChooseUri(final @NonNull FileBasedActivity v, WorkState<Void> workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
 
-            URI uri = null;
+            URI uri;
             Outer:
             while (true) {
                 uri = chsr.showDialog(v.getNode());

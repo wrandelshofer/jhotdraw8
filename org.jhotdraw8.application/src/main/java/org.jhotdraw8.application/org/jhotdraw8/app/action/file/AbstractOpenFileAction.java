@@ -58,7 +58,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     @Override
     protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
         {
-            WorkState workState = new SimpleWorkState(getLabel());
+            WorkState<Void> workState = new SimpleWorkState<>(getLabel());
             app.addDisabler(workState);
             // Search for an empty view
             FileBasedActivity emptyView;
@@ -82,7 +82,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
 
-    public void doIt(@NonNull FileBasedActivity view, boolean disposeView, WorkState workState) {
+    public void doIt(@NonNull FileBasedActivity view, boolean disposeView, WorkState<Void> workState) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {

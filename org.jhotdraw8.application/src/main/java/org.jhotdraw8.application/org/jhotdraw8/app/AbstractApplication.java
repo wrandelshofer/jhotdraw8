@@ -26,7 +26,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.util.EmptyResources;
 import org.jhotdraw8.util.Resources;
 
@@ -47,26 +46,25 @@ import java.util.prefs.Preferences;
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.app.Application {
 
-    private static final String RECENT_URIS = ".recentUriFormats";
+    private static final @NonNull String RECENT_URIS = ".recentUriFormats";
 
     /**
      * Holds the disabled state.
      */
-    private final ReadOnlyBooleanProperty disabled;
+    private final @NonNull ReadOnlyBooleanProperty disabled;
     /**
      * Holds the disablers.
      */
-    private final ObservableSet<Object> disablers = FXCollections.observableSet();
+    private final @NonNull ObservableSet<Object> disablers = FXCollections.observableSet();
 
-    private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(this, ACTIONS_PROPERTY, FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
-    private final ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
-    private final ReadOnlyListProperty<String> stylesheets = new javafx.beans.property.ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
+    private final @NonNull ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(this, ACTIONS_PROPERTY, FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
+    private final @NonNull ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
+    private final @NonNull ReadOnlyListProperty<String> stylesheets = new javafx.beans.property.ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
 
-    private final ObjectProperty<Supplier<Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
-    private final ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
-    private final ObjectProperty<Supplier<URIChooser>> openChooserFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
-    private final NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
-    private final NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
+    private final @NonNull ObjectProperty<Supplier<Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
+    private final @NonNull ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
+    private final @NonNull NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
+    private final @NonNull NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
     /**
      * Holds the max number of recent URIs.
@@ -86,13 +84,12 @@ public abstract class AbstractApplication extends javafx.application.Application
     private final ReadOnlyMapProperty<URI, DataFormat> recentUris//
             = new ReadOnlyMapWrapper<URI, DataFormat>(//
             this, RECENT_URIS_PROPERTY, //
-            FXCollections.observableMap(new LinkedHashMap<URI, DataFormat>(16, 0.5f, true))).getReadOnlyProperty();
+            FXCollections.observableMap(new LinkedHashMap<>(16, 0.5f, true))).getReadOnlyProperty();
 
     {// initializer for 'disabled' property
         ReadOnlyBooleanWrapper robw = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
         robw.bind(Bindings.isNotEmpty(disablers));
-        final ReadOnlyBooleanProperty readOnlyProperty = robw.getReadOnlyProperty();
-        disabled = readOnlyProperty;
+        disabled = robw.getReadOnlyProperty();
     }
 
     public AbstractApplication() {
@@ -157,7 +154,7 @@ public abstract class AbstractApplication extends javafx.application.Application
                 URI uri = entry.getKey();
                 DataFormat format = entry.getValue();
                 if (uri != null) {
-                    buf.append(uri.toString());
+                    buf.append(uri);
                     if (format != null && format.getIdentifiers() != null && !format.getIdentifiers().isEmpty()) {
                         buf.append('\t').append(format.getIdentifiers().iterator().next());
                     }

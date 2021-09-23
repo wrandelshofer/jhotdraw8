@@ -90,7 +90,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
             final Resources labels = ApplicationLabels.getResources();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
             oldFocusOwner = getFocusOwner(v.getNode());
-            WorkState workState = new SimpleWorkState(getLabel());
+            WorkState<Void> workState = new SimpleWorkState<>(getLabel());
             v.addDisabler(workState);
             if (v.isModified()) {
                 URI unsavedURI = v.getURI();
@@ -164,7 +164,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected void saveView(final @NonNull FileBasedActivity v, WorkState workState) {
+    protected void saveView(final @NonNull FileBasedActivity v, WorkState<Void> workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);

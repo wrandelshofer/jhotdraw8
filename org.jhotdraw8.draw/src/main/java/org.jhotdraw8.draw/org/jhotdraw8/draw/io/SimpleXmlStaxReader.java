@@ -187,7 +187,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
-            Figure newDrawing = read(new StringReader((String) content), null, null, new SimpleWorkState());
+            Figure newDrawing = read(new StringReader((String) content), null, null, new SimpleWorkState<>());
             idFactory.reset();
             idFactory.setDocumentHome(null);
             for (Figure f : drawing.preorderIterable()) {

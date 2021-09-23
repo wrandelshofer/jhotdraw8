@@ -28,12 +28,11 @@ import java.util.LinkedHashMap;
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     protected final @NonNull ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
-    protected final ObservableMap<Key<?>, Object> properties//
-            = FXCollections.observableHashMap();
-    protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
+    protected final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    protected final @NonNull StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
             ApplicationLabels.getResources().getString("unnamedFile"));
-    private final IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
-    private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
+    private final @NonNull IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
+    private final @NonNull ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
 
 
     public AbstractActivity() {

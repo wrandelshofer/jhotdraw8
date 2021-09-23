@@ -41,7 +41,7 @@ public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     @Override
     protected void onActionPerformed(ActionEvent event, @NonNull FileBasedActivity activity) {
-        WorkState workState = new SimpleWorkState();
+        WorkState<Void> workState = new SimpleWorkState<>();
         activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(activity.getNode().getScene().getWindow())) {

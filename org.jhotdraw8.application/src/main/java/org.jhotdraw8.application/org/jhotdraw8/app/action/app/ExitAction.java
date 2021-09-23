@@ -62,7 +62,7 @@ public class ExitAction extends AbstractApplicationAction {
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
 
-        WorkState workState = new SimpleWorkState(getLabel());
+        WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         app.addDisabler(workState);
         int unsavedViewsCount = 0;
         int disabledViewsCount = 0;
@@ -139,8 +139,8 @@ public class ExitAction extends AbstractApplicationAction {
         return chooser;
     }
 
-    protected void reviewChanges(WorkState workState) {
-        if (!unsavedView.isDisabled()) {
+    protected void reviewChanges(WorkState<Void> workState) {
+        if (unsavedView != null && !unsavedView.isDisabled()) {
             final Resources labels = ApplicationLabels.getResources();
             oldFocusOwner = unsavedView.getNode().getScene().getFocusOwner();
             unsavedView.removeDisabler(workState);
@@ -184,7 +184,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveChangesAndReviewNext(WorkState workState) {
+    protected void saveChangesAndReviewNext(WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
@@ -204,7 +204,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void reviewNext(WorkState workState) {
+    protected void reviewNext(WorkState<Void> workState) {
         int unsavedViewsCount = 0;
         FileBasedActivity documentToBeReviewed = null;
         for (Activity pr : getApplication().getActivities()) {
