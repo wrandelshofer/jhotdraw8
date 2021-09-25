@@ -49,7 +49,8 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
             p.lineTo(10, 10);
             p.lineTo(0, 10);
             p.closePath();
-            p.trimToSize();
+            //XXX this method is only available since Java SE 11
+            //p.trimToSize();
             return p;
         }
     }

@@ -80,4 +80,10 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
         map.put(ExportFileAction.ID, new ExportFileAction(this));
         map.put(CloseFileAction.ID, new CloseFileAction(this));
     }
+
+    @Override
+    public void destroy() {
+        clear();
+        super.destroy();
+    }
 }

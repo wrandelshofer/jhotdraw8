@@ -353,7 +353,10 @@ public class NamedCssColor extends CssColor {
         m.put(WHITESMOKE.getName(), WHITESMOKE);
         m.put(YELLOW.getName(), YELLOW);
         m.put(YELLOWGREEN.getName(), YELLOWGREEN);
-        NAMED_COLORS = new ImmutableHashMap<>(m, Map::copyOf);
+
+        //FIXME move code below with Java SE 11
+        NAMED_COLORS = new ImmutableHashMap<>(m);
+        //NAMED_COLORS = new ImmutableHashMap<>(m, Map::copyOf);
     }
 
     /**

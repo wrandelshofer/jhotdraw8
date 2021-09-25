@@ -153,7 +153,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                     width,
                     height);
         }
-        path.trimToSize();
+        //XXX this method is only available since Java SE 11
+        //path.trimToSize();
         SvgPaths.reshape(pathstr, b, new AwtPathBuilder(path));
     }
 }

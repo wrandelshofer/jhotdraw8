@@ -19,6 +19,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.tool.Tool;
 
+import java.lang.ref.WeakReference;
+
 /**
  * FXML Controller class
  *
@@ -35,7 +37,8 @@ public class ToolsToolbar extends GridPane {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, @Nullable Toggle newValue) {
                 if (newValue != null && getDrawingEditor() != null) {
-                    getDrawingEditor().setActiveTool((Tool) newValue.getUserData());
+                    WeakReference<Tool> userData = (WeakReference<Tool>) newValue.getUserData();
+                    getDrawingEditor().setActiveTool(userData.get());
                 }
             }
         });
@@ -44,7 +47,7 @@ public class ToolsToolbar extends GridPane {
     private final @NonNull ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
-            if (button.getUserData() == newValue) {
+            if (((WeakReference<Tool>) button.getUserData()).get() == newValue) {
                 button.setSelected(true);
                 break;
             }
@@ -62,7 +65,7 @@ public class ToolsToolbar extends GridPane {
                 if (newValue != null) {
                     newValue.activeToolProperty().addListener(activeToolHandler);
                     if (group.getSelectedToggle() != null) {
-                        newValue.setActiveTool((Tool) group.getSelectedToggle().getUserData());
+                        newValue.setActiveTool(((WeakReference<Tool>) group.getSelectedToggle().getUserData()).get());
                     }
                 }
             }
@@ -92,7 +95,7 @@ public class ToolsToolbar extends GridPane {
             button.getStyleClass().add(styleClass);
         }
         button.setFocusTraversable(false);
-        button.setUserData(tool);
+        button.setUserData(new WeakReference<>(tool));
         if (group.getToggles().isEmpty()) {
             button.setSelected(true);
         }

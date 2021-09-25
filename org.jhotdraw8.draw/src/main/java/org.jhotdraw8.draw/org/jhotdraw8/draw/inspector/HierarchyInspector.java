@@ -51,6 +51,7 @@ import org.jhotdraw8.xml.text.XmlWordSetConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Comparator;
@@ -140,12 +141,21 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
                 }
             });
+
+            // XXX Use weak references because of memory leak in JavaFX
+            // https://bugs.openjdk.java.net/browse/JDK-8274022
+            WeakReference<HierarchyInspector> inspectorRef = new WeakReference<>(this);
+            WeakReference<TreeTableRow<Figure>> rowRef = new WeakReference<>(row);
             deleteMenuItem.setOnAction(evt -> {
-                final Figure item = row.getItem();
-                if (item != null && item.isDeletable() && drawingView != null) {
-                    final DrawingModel model = drawingView.getModel();
-                    model.disconnect(item);
-                    model.removeFromParent(item);
+                HierarchyInspector hierarchyInspector = inspectorRef.get();
+                TreeTableRow<Figure> theRow = rowRef.get();
+                if (hierarchyInspector != null && theRow != null) {
+                    final Figure item = theRow.getItem();
+                    if (item != null && item.isDeletable() && hierarchyInspector.drawingView != null) {
+                        final DrawingModel model = hierarchyInspector.drawingView.getModel();
+                        model.disconnect(item);
+                        model.removeFromParent(item);
+                    }
                 }
             });
             return row;

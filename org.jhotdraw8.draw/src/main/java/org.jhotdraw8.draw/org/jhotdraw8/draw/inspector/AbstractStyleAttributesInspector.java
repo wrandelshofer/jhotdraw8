@@ -72,6 +72,7 @@ import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -454,9 +455,27 @@ public abstract class AbstractStyleAttributesInspector<E> {
         composeAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("composeAttributes", newValue));
 
-        applyButton.setOnAction(this::apply);
-        selectButton.setOnAction(this::select);
-        composeAttributesCheckBox.setOnAction(event -> invalidateTextArea(null));
+        // XXX Use weak references because of memory leak in JavaFX
+        // https://bugs.openjdk.java.net/browse/JDK-8274022
+        WeakReference<AbstractStyleAttributesInspector<E>> r = new WeakReference<>(this);
+        applyButton.setOnAction(event1 -> {
+            AbstractStyleAttributesInspector<E> inspector = r.get();
+            if (inspector != null) {
+                inspector.apply(event1);
+            }
+        });
+        selectButton.setOnAction(event1 -> {
+            AbstractStyleAttributesInspector<E> inspector = r.get();
+            if (inspector != null) {
+                inspector.select(event1);
+            }
+        });
+        composeAttributesCheckBox.setOnAction(event -> {
+            AbstractStyleAttributesInspector<E> inspector = r.get();
+            if (inspector != null) {
+                inspector.invalidateTextArea(null);
+            }
+        });
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
         EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {

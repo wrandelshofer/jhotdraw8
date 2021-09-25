@@ -59,6 +59,7 @@ import org.jhotdraw8.tree.PreorderSpliterator;
 import org.jhotdraw8.util.Resources;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
@@ -316,13 +317,29 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         activity.titleProperty().addListener(this::onTitleChanged);
         activity.set(STAGE_KEY, stage);
 
+        // XXX Use weak reference because of memory leak in JavaFX
+        // https://bugs.openjdk.java.net/browse/JDK-8274022
+        WeakReference<AbstractFileBasedApplication> appRef = new WeakReference<>(this);
+        WeakReference<FileBasedActivity> activityRef = new WeakReference<>(activity);
         ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
-                activeActivity.set(activity);
+                AbstractFileBasedApplication app = appRef.get();
+                FileBasedActivity act = activityRef.get();
+                if (app != null && act != null) {
+                    app.activeActivity.set(act);
+                }
             }
         };
         activity.set(FOCUS_LISTENER_KEY, focusListener);
         stage.focusedProperty().addListener(focusListener);
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            FileBasedActivity act = activityRef.get();
+            if (act != null) {
+                act.getActions().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
+            }
+        });
+
         disambiguateActivities();
 
         Screen screen = Screen.getPrimary();
@@ -387,15 +404,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
         PreferencesUtil.installStagePrefsHandler(getPreferences(), "stage", stage);
 
-        stage.setOnCloseRequest(event -> {
-            event.consume();
-            activity.getActions().get(CloseFileAction.ID).handle(new ActionEvent(event.getSource(), event.getTarget()));
-        });
-        stage.focusedProperty().addListener((observer, oldValue, newValue) -> {
-            if (newValue) {
-                activeActivity.set(activity);
-            }
-        });
+
         stage.titleProperty().bind(CustomBinding.formatted(getResources().getString("frame.title"),
                 activity.titleProperty(), get(NAME_KEY), activity.disambiguationProperty(), activity.modifiedProperty()));
 
@@ -434,6 +443,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             activeActivity.set(null);
         }
 
+        System.gc();
+
         // Auto close feature
         if (getActivities().isEmpty() && !isSystemMenuSupported) {
             exit();
@@ -441,7 +452,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     }
 
     private void destroyStage(Stage stage) {
-        BorderPane borderPane = (BorderPane) stage.getScene().getRoot();
+        Scene scene = stage.getScene();
+        BorderPane borderPane = (BorderPane) scene.getRoot();
         MenuBar menuBar = (MenuBar) borderPane.getTop();
 
         // Workaround for JavaFX 15 unlink all bindings to menu
@@ -453,6 +465,12 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
         stage.setScene(null);
         stage.setOnCloseRequest(null);
+        stage.titleProperty().unbind();
+
+        // Clear the content of the border pane and set a new root,
+        // so that Scene does not reference it anymore.
+        borderPane.setCenter(null);
+        scene.setRoot(new BorderPane());
     }
 
 

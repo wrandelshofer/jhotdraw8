@@ -108,7 +108,8 @@ public class SemanticPathBuilder<S> extends AbstractPathBuilder<Path2D.Double> {
 
     public Path2D.Double build() {
         pathDone();
-        path.trimToSize();
+        //XXX this method is only available since Java SE 11
+        //path.trimToSize();
         return path;
     }
 

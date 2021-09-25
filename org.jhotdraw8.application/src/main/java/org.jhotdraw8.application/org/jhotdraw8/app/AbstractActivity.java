@@ -14,11 +14,18 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.Pane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.tree.PostorderSpliterator;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * AbstractActivity.
@@ -64,6 +71,16 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     @Override
     public void destroy() {
+        // XXX Unbind and destroy node hierarchy because of memory leak in JavaFX
+        // https://bugs.openjdk.java.net/browse/JDK-8274022
+        getNode().disableProperty().unbind();
+        PostorderSpliterator<Node> spliterator = new PostorderSpliterator<>(n -> (n instanceof Parent) ? ((Parent) n).getChildrenUnmodifiable() : Collections.<Node>emptyList(), getNode());
+        for (Node node : StreamSupport.stream(spliterator, false).collect(Collectors.toList())) {
+            if (node instanceof Pane) {
+                Pane pane = (Pane) node;
+                pane.getChildren().clear();
+            }
+        }
     }
 
     @Override
