@@ -188,6 +188,7 @@ public class FXShapes {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(e.getStartX(), e.getStartY());
         p.curveTo(e.getControlX1(), e.getControlY1(), e.getControlX2(), e.getControlY2(), e.getEndX(), e.getEndY());
+        p.trimToSize();
         return p;
     }
 
@@ -312,6 +313,7 @@ public class FXShapes {
             }
         }
         p.closePath();
+        p.trimToSize();
         return p;
     }
 
@@ -325,6 +327,7 @@ public class FXShapes {
                 p.lineTo(ps.get(i), ps.get(i + 1));
             }
         }
+        p.trimToSize();
         return p;
     }
 
@@ -332,6 +335,7 @@ public class FXShapes {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(node.getStartX(), node.getStartY());
         p.quadTo(node.getControlX(), node.getControlY(), node.getEndX(), node.getEndY());
+        p.trimToSize();
         return p;
     }
 

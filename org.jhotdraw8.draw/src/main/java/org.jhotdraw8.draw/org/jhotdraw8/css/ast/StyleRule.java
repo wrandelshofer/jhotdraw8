@@ -5,8 +5,9 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,11 +18,11 @@ import java.util.List;
 public class StyleRule extends Rule {
 
     private final SelectorGroup selectorList;
-    private final @NonNull List<Declaration> declarations;
+    private final @NonNull ImmutableList<Declaration> declarations;
 
     public StyleRule(SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
         this.selectorList = selectorGroup;
-        this.declarations = Collections.unmodifiableList(declarations);
+        this.declarations = ImmutableLists.copyOf(declarations);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class StyleRule extends Rule {
         return selectorList;
     }
 
-    public @NonNull List<Declaration> getDeclarations() {
+    public @NonNull ImmutableList<Declaration> getDeclarations() {
         return declarations;
     }
 }

@@ -21,8 +21,8 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 
+import java.util.HashSet;
 import java.util.IdentityHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -107,7 +107,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     public final ObservableSet<Figure> getLayoutObservers() {
         if (layoutObservers == null) {
             layoutObservers =
-                    FXCollections.observableSet(new LinkedHashSet<>());
+                    FXCollections.observableSet(new HashSet<>());
         }
         return layoutObservers;
     }

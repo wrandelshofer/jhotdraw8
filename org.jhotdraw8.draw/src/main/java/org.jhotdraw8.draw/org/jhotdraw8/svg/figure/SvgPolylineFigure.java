@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.svg.figure;
 
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -23,7 +24,6 @@ import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.DoubleListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 
 import java.awt.geom.AffineTransform;
@@ -79,18 +79,20 @@ public class SvgPolylineFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull Bounds getBoundsInLocal() {
-        Path2D.Double p = new Path2D.Double();
+        double minx = Double.POSITIVE_INFINITY, miny = Double.POSITIVE_INFINITY,
+                maxx = Double.NEGATIVE_INFINITY, maxy = Double.NEGATIVE_INFINITY;
         ImmutableList<Double> points = get(POINTS);
         if (points != null) {
             for (int i = 0, n = points.size(); i < n - 1; i += 2) {
-                if (i == 0) {
-                    p.moveTo(points.get(0), points.get(1));
-                } else {
-                    p.lineTo(points.get(i), points.get(i + 1));
-                }
+                double x = points.get(i);
+                double y = points.get(i + 1);
+                minx = Math.min(minx, x);
+                miny = Math.min(miny, y);
+                maxx = Math.max(maxx, x);
+                maxy = Math.max(maxy, y);
             }
         }
-        return FXGeom.getBounds(p.getBounds2D());
+        return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
     @Override

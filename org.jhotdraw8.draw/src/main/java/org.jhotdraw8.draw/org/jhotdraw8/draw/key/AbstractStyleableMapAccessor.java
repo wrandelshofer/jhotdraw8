@@ -80,6 +80,9 @@ public abstract class AbstractStyleableMapAccessor<T>
         this.name = name;
         this.type = type;
         this.defaultValue = defaultValue;
+
+        // Replace with Set.of once we are on Java 11
+        //this.subAccessors = Set.of(subAccessors);
         this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
 
         cssName = ReadOnlyStyleableMapAccessor.toCssName(name);

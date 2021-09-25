@@ -20,10 +20,14 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
 
 
     public ImmutableHashMap(@NonNull Map<? extends K, ? extends V> backingMap) {
+        this(backingMap, LinkedHashMap::new);
+    }
+
+    public ImmutableHashMap(@NonNull Map<? extends K, ? extends V> backingMap, @NonNull Function<Map<? extends K, ? extends V>, Map<K, V>> backingMapSupplier) {
         if (backingMap.isEmpty()) {
             this.backingMap = Collections.emptyMap();
         } else {
-            this.backingMap = new LinkedHashMap<>(backingMap);
+            this.backingMap = backingMapSupplier.apply(backingMap);
         }
     }
 

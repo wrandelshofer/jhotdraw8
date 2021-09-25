@@ -108,6 +108,7 @@ public class SemanticPathBuilder<S> extends AbstractPathBuilder<Path2D.Double> {
 
     public Path2D.Double build() {
         pathDone();
+        path.trimToSize();
         return path;
     }
 

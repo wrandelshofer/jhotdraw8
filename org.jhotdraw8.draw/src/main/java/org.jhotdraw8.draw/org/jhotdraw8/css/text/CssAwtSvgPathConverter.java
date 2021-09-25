@@ -49,6 +49,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
             p.lineTo(10, 10);
             p.lineTo(0, 10);
             p.closePath();
+            p.trimToSize();
             return p;
         }
     }

@@ -56,6 +56,7 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
 
     public @NonNull Path2D.Double build() {
         pathDone();
+        path.trimToSize();
         return path;
     }
 

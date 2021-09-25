@@ -153,6 +153,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                     width,
                     height);
         }
+        path.trimToSize();
         SvgPaths.reshape(pathstr, b, new AwtPathBuilder(path));
     }
 }

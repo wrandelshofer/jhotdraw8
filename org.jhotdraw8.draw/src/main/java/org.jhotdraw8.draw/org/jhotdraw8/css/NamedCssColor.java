@@ -8,8 +8,8 @@ package org.jhotdraw8.css;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableHashMap;
 import org.jhotdraw8.collection.ImmutableMap;
-import org.jhotdraw8.collection.ImmutableMaps;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -353,7 +353,7 @@ public class NamedCssColor extends CssColor {
         m.put(WHITESMOKE.getName(), WHITESMOKE);
         m.put(YELLOW.getName(), YELLOW);
         m.put(YELLOWGREEN.getName(), YELLOWGREEN);
-        NAMED_COLORS = ImmutableMaps.ofMap(m);
+        NAMED_COLORS = new ImmutableHashMap<>(m, Map::copyOf);
     }
 
     /**
