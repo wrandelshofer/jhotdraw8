@@ -35,7 +35,7 @@ import java.util.Objects;
 public abstract class AbstractKey<T> implements Key<T> {
 
     private static final long serialVersionUID = 1L;
-
+    private final int ordinal;
     /**
      * Holds a String representation of the name.
      */
@@ -114,6 +114,7 @@ public abstract class AbstractKey<T> implements Key<T> {
         this.isNullable = isNullable;
         this.isTransient = isTransient;
         this.initialValue = initialValue;
+        this.ordinal = Key.createNextOrdinal();
     }
 
     /**
@@ -152,5 +153,9 @@ public abstract class AbstractKey<T> implements Key<T> {
     public @NonNull String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
+    }
+
+    public int ordinal() {
+        return ordinal;
     }
 }

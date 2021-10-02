@@ -18,6 +18,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
@@ -235,5 +236,20 @@ public interface Key<T> extends MapAccessor<T> {
 
     default @NonNull T cast(Object value) {
         return getRawValueType().cast(value);
+    }
+
+    /**
+     * Gets the unique ordinal number of this key in this JVM.
+     * <p>
+     * The number is {@literal >= 0}.
+     *
+     * @return ordinal
+     */
+    int ordinal();
+
+    static AtomicInteger nextOrdinal = new AtomicInteger();
+
+    static int createNextOrdinal() {
+        return nextOrdinal.getAndIncrement();
     }
 }

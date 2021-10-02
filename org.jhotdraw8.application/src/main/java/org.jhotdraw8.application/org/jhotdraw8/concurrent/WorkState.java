@@ -13,9 +13,9 @@ import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Work state can be used to report the current state
- * of work, and to provide an ability to cancel work in progress.
+ * of work, and provides an ability to cancel work in progress.
  */
-public interface WorkState<V> {
+public interface WorkState<V> extends Worker<V> {
     /**
      * The name of the {@link #titleProperty()}.
      */
@@ -24,10 +24,13 @@ public interface WorkState<V> {
      * The name of the {@link #messageProperty()}.
      */
     String MESSAGE_PROPERTY = "message";
+    String RUNNING_PROPERTY = "running";
     /**
      * The name of the {@link #valueProperty()}.
      */
     String VALUE_PROPERTY = "value";
+    String STATE_PROPERTY = "state";
+    String EXCEPTION_PROPERTY = "exception";
     /**
      * The name of the {@link #workDoneProperty()}.
      */
@@ -54,6 +57,33 @@ public interface WorkState<V> {
      * @param value the new value
      */
     void updateMessage(@Nullable String value);
+
+    /**
+     * Asynchronously updates the current state of the work state.
+     * <p>
+     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
+     *
+     * @param value the new value
+     */
+    void updateState(@NonNull State value);
+
+    /**
+     * Asynchronously updates the current exception of the work state.
+     * <p>
+     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
+     *
+     * @param value the new value
+     */
+    void updateException(@NonNull Throwable value);
+
+    /**
+     * Asynchronously updates the current running state of the work state.
+     * <p>
+     * Calls to this method are coalesced as described in {@link #updateMessage(String)}.
+     *
+     * @param value the new value
+     */
+    void updateRunning(boolean value);
 
     /**
      * Asynchronously updates the current title of the work state.
@@ -153,9 +183,4 @@ public interface WorkState<V> {
      */
     @NonNull ReadOnlyStringProperty titleProperty();
 
-
-    /**
-     * @see Worker#cancel()
-     */
-    void cancel();
 }

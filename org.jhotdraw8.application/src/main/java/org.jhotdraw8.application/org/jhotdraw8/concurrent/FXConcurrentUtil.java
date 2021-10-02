@@ -36,7 +36,10 @@ class FXConcurrentUtil {
         if (Platform.isFxApplicationThread()) {
             property.setValue(newValue);
         } else if (propertyUpdate.getAndSet(newValue) == NO_UPDATE_IS_IN_PROGRESS) {
-            Platform.runLater(() -> property.setValue((X) propertyUpdate.getAndSet(NO_UPDATE_IS_IN_PROGRESS)));
+            Platform.runLater(() -> {
+                X andSet = (X) propertyUpdate.getAndSet(NO_UPDATE_IS_IN_PROGRESS);
+                property.setValue(andSet);
+            });
         }
     }
 }

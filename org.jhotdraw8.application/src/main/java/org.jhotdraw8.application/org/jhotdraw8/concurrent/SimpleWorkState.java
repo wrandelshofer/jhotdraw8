@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.concurrent;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -27,8 +29,14 @@ public class SimpleWorkState<V> implements WorkState<V> {
     private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
     private final @NonNull AtomicReference<Object> titleUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private final @NonNull ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
+    private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
     private final @NonNull AtomicReference<Object> messageUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private final @NonNull ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
+    private final @NonNull ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(this, STATE_PROPERTY, State.READY);
+    private final @NonNull AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final @NonNull ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, EXCEPTION_PROPERTY, null);
     private final @NonNull AtomicReference<Object> valueUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
     private final @NonNull AtomicReference<Object> workDoneUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
@@ -144,6 +152,21 @@ public class SimpleWorkState<V> implements WorkState<V> {
     }
 
     @Override
+    public void updateState(@Nullable State value) {
+        update(value, state, stateUpdate);
+    }
+
+    @Override
+    public void updateException(@Nullable Throwable value) {
+        update(value, exception, exceptionUpdate);
+    }
+
+    @Override
+    public void updateRunning(boolean value) {
+        update(value, running, runningUpdate);
+    }
+
+    @Override
     public void updateTitle(String value) {
         update(value, title, titleUpdate);
     }
@@ -153,7 +176,38 @@ public class SimpleWorkState<V> implements WorkState<V> {
         return isCancelled;
     }
 
-    public void cancel() {
+    public boolean cancel() {
         isCancelled = true;
+        return true;
+    }
+
+    @Override
+    public State getState() {
+        return null;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<State> stateProperty() {
+        return state;
+    }
+
+    @Override
+    public Throwable getException() {
+        return exception.get();
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<Throwable> exceptionProperty() {
+        return exception;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return running.get();
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty runningProperty() {
+        return running;
     }
 }

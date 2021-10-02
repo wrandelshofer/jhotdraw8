@@ -317,7 +317,6 @@ public class GraphSearch {
                 while (i < n - 1 && deg[i] <= 0) {
                     i++;
                 }
-                ;
                 if (deg[i] == 0) {
                     throw new AssertionError("bug in loop-breaking algorithm i: " + i);
                 }

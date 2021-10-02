@@ -12,6 +12,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.KeyMap;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssDefaultableValue;
@@ -50,12 +51,28 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
 
-    protected @NonNull Map<Key<?>, Integer> createKeyMap() {
+    protected @NonNull Map<Key<?>, Integer> createKeyMapOLD() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;
 
             Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
             IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
+
+            for (MapAccessor<?> accessor : accessors) {
+                if (accessor instanceof Key<?>) {
+                    m.put((Key<?>) accessor, index++);
+                }
+            }
+            return m;
+        });
+    }
+
+    protected @NonNull Map<Key<?>, Integer> createKeyMap() {
+        return keyMaps.computeIfAbsent(getClass(), k -> {
+            int index = 0;
+
+            Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
+            Map<Key<?>, Integer> m = new KeyMap(accessors.size());
 
             for (MapAccessor<?> accessor : accessors) {
                 if (accessor instanceof Key<?>) {

@@ -34,6 +34,7 @@ import java.util.Objects;
 public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
 
     private static final long serialVersionUID = 1L;
+    private final int ordinal;
 
     /**
      * Holds a String representation of the name.
@@ -86,6 +87,7 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
         this.type = type;
         this.isTransient = isTransient;
         this.defaultValue = defaultValue;
+        this.ordinal = Key.createNextOrdinal();
     }
 
     /**
@@ -129,5 +131,9 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
     public @NonNull String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
+    }
+
+    public int ordinal() {
+        return ordinal;
     }
 }

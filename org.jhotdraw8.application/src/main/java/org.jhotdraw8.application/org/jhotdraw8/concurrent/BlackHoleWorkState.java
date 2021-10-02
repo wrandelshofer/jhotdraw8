@@ -1,5 +1,6 @@
 package org.jhotdraw8.concurrent;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -32,6 +33,21 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
      */
     @Override
     public void updateMessage(@Nullable String value) {
+
+    }
+
+    @Override
+    public void updateState(@NonNull State value) {
+
+    }
+
+    @Override
+    public void updateException(@NonNull Throwable value) {
+
+    }
+
+    @Override
+    public void updateRunning(boolean value) {
 
     }
 
@@ -73,6 +89,16 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
         return isCancelled;
     }
 
+    @Override
+    public State getState() {
+        return null;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<State> stateProperty() {
+        return null;
+    }
+
     @Nullable
     @Override
     public V getValue() {
@@ -82,6 +108,16 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     @Override
     public @NonNull ReadOnlyObjectProperty<V> valueProperty() {
         return value.getReadOnlyProperty();
+    }
+
+    @Override
+    public Throwable getException() {
+        return null;
+    }
+
+    @Override
+    public ReadOnlyObjectProperty<Throwable> exceptionProperty() {
+        return null;
     }
 
     @Override
@@ -115,6 +151,16 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
+    public boolean isRunning() {
+        return false;
+    }
+
+    @Override
+    public ReadOnlyBooleanProperty runningProperty() {
+        return null;
+    }
+
+    @Override
     public @Nullable String getMessage() {
         return message.get();
     }
@@ -135,7 +181,8 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public void cancel() {
+    public boolean cancel() {
         isCancelled = true;
+        return true;
     }
 }
