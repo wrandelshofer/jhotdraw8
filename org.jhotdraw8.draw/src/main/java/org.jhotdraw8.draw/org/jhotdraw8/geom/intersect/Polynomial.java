@@ -770,7 +770,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
     /**
      * Estimates the arc length of the polynomial in the interval [min,max].
      * <p>
-     * Computes {@literal  ∫_min_max sqrt(1 + (f'(x))^2 ) }
+     * Computes {@literal  ∫_min‾max sqrt(1 + (f'(x))^2 ) }
      *
      * @param min the lower bound of the interval
      * @param max the upper bound of the interval

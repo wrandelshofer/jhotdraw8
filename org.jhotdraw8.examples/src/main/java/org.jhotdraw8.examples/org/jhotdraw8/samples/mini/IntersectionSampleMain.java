@@ -306,7 +306,7 @@ public class IntersectionSampleMain extends Application {
     }
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(@NonNull Stage stage) {
         choice1 = new ChoiceBox<>();
         choice1.getItems().setAll("Circle", "CubicCurve", "Ellipse", "Line", "Rectangle", "QuadCurve");
         choice2 = new ChoiceBox<>();
@@ -327,9 +327,9 @@ public class IntersectionSampleMain extends Application {
         choice1.setOnAction(this::updateShapes);
         choice2.setOnAction(this::updateShapes);
 
-        primaryStage.setTitle("JHotDraw: Intersection Sample");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setTitle("JHotDraw: Intersection Sample");
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
