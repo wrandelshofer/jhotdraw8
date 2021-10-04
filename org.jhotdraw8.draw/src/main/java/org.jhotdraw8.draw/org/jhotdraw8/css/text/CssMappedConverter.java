@@ -19,6 +19,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+/**
+ * This converter uses a map to convert an object from/to String.
+ *
+ * @param <E> the object type
+ */
 public class CssMappedConverter<E> implements CssConverter<E> {
 
     private final @NonNull Map<String, E> fromStringMap;

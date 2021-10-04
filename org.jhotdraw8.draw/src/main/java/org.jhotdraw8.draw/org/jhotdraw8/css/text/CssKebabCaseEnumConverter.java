@@ -18,9 +18,10 @@ import java.text.ParseException;
 import java.util.function.Consumer;
 
 /**
- * CssEnumConverter. Converts all enum names to kebab-case.
+ * CssKebabCaseEnumConverter. Converts all enum names to kebab-case.
  * <p>
- * If you need a different mapping use {@link CssMappedConverter}.
+ * If you need a different mapping use {@link CssMappedConverter} or
+ * {@link CssLiteralEnumConverter}.
  *
  * @author Werner Randelshofer
  */

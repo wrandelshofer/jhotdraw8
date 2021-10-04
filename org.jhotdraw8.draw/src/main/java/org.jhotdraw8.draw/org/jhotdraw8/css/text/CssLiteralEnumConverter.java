@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * for conversion.
  * <p>
  * If you need a different mapping use {@link CssMappedConverter} or
- * {@likn CssKebabCaseEnumConverter}.
+ * {@link CssKebabCaseEnumConverter}.
  *
  * @author Werner Randelshofer
  */
