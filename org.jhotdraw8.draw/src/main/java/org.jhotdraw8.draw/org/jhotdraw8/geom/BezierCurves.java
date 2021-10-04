@@ -766,10 +766,10 @@ public class BezierCurves {
             return Characteristics.SINGLE_INFLECTION;
         }
         if (y <= 1 && x <= 1) {
-            var cusp = (-x * x + 2 * x + 3) / 4;
+            double cusp = (-x * x + 2 * x + 3) / 4;
 
             if (x <= 0) {
-                var l1 = (-x * x + 3 * x) / 3;
+                double l1 = (-x * x + 3 * x) / 3;
                 if (Geom.almostEqual(y, l1, 0.06)) {
                     return Characteristics.LOOP_AT_T_0;
                 }
@@ -779,7 +779,7 @@ public class BezierCurves {
             }
 
             if (0 <= x) {
-                var l0 = (sqrt(3) * sqrt(4 * x - x * x) - x) / 2;
+                double l0 = (sqrt(3) * sqrt(4 * x - x * x) - x) / 2;
                 if (Geom.almostEqual(y, l0, 0.06)) {
                     return Characteristics.LOOP_AT_T_1;
                 }

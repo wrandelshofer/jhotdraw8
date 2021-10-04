@@ -37,6 +37,7 @@ public class ToolsToolbar extends GridPane {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, @Nullable Toggle newValue) {
                 if (newValue != null && getDrawingEditor() != null) {
+                    @SuppressWarnings("unchecked")
                     WeakReference<Tool> userData = (WeakReference<Tool>) newValue.getUserData();
                     getDrawingEditor().setActiveTool(userData.get());
                 }
@@ -44,6 +45,7 @@ public class ToolsToolbar extends GridPane {
         });
     }
 
+    @SuppressWarnings("unchecked")
     private final @NonNull ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {

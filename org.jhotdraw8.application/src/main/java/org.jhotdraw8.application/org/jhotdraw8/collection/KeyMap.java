@@ -93,7 +93,7 @@ public class KeyMap implements Map<Key<?>, Integer> {
 
     @Override
     public void putAll(Map<? extends Key<?>, ? extends Integer> m) {
-        for (Entry<? extends Key, ? extends Integer> entry : m.entrySet()) {
+        for (Entry<? extends Key<?>, ? extends Integer> entry : m.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
     }
