@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.function.Consumer;
@@ -21,33 +22,44 @@ import java.util.function.Consumer;
  */
 public class AdjacentSiblingCombinator extends Combinator {
 
-    public AdjacentSiblingCombinator(SimpleSelector firstSelector, Selector secondSelector) {
-        super(firstSelector, secondSelector);
+    public AdjacentSiblingCombinator(SimpleSelector first, Selector second) {
+        super(first, second);
     }
 
     @Override
     public @NonNull String toString() {
-        return firstSelector + " + " + secondSelector;
+        return first + " + " + second;
     }
 
     @Override
     public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
-        T result = secondSelector.match(model, element);
+        T result = second.match(model, element);
         if (result != null) {
-            result = firstSelector.match(model, model.getPreviousSibling(result));
+            result = first.match(model, model.getPreviousSibling(result));
         }
         return result;
     }
 
     @Override
     public int getSpecificity() {
-        return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+        return first.getSpecificity() + second.getSpecificity();
     }
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
-        firstSelector.produceTokens(consumer);
+        first.produceTokens(consumer);
         consumer.accept(new CssToken(CssTokenType.TT_PLUS));
-        secondSelector.produceTokens(consumer);
+        second.produceTokens(consumer);
+    }
+
+    /**
+     * This selector matches only on a specific type, if its second
+     * selector matches only on a specific type.
+     *
+     * @return {@code second.matchesOnlyOnASpecificType()}
+     */
+    @Override
+    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
+        return second.matchesOnlyOnASpecificType();
     }
 }

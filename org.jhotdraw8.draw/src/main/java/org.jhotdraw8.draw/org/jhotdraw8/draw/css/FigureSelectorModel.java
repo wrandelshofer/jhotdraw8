@@ -89,8 +89,8 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public String getType(@NonNull Figure element) {
-        return element.getTypeSelector();
+    public QualifiedName getType(@NonNull Figure element) {
+        return new QualifiedName(null, element.getTypeSelector());
     }
 
     @Override

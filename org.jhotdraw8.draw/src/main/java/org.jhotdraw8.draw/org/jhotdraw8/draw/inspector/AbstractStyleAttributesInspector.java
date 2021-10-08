@@ -865,7 +865,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     private @NonNull SelectorGroup createSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
         String id = null;
-        String type = null;
+        QualifiedName type = null;
         Set<String> styleClasses = new TreeSet<>();
         boolean first = true;
         for (E f : selection) {
@@ -882,8 +882,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
 
         List<SimpleSelector> selectors = new ArrayList<>();
-        if (type != null && !type.isEmpty()) {
-            selectors.add(new TypeSelector(null, type));
+        if (type != null && !type.getName().isEmpty()) {
+            selectors.add(new TypeSelector(type.getNamespace(), type.getName()));
         }
         if (id != null && id.length() > 0) {
             selectors.add(new IdSelector(id));

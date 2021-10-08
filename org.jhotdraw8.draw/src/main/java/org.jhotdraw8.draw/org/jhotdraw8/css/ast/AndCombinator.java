@@ -7,6 +7,7 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.function.Consumer;
@@ -19,29 +20,44 @@ import java.util.function.Consumer;
  */
 public class AndCombinator extends Combinator {
 
-    public AndCombinator(SimpleSelector simpleSelector, Selector selector) {
-        super(simpleSelector, selector);
+    public AndCombinator(SimpleSelector first, Selector second) {
+        super(first, second);
     }
 
     @Override
     public @NonNull String toString() {
-        return "(" + firstSelector + " && " + secondSelector + ")";
+        return "(" + first + " && " + second + ")";
     }
 
     @Override
     public @Nullable <T> T match(SelectorModel<T> model, T element) {
-        T firstResult = firstSelector.match(model, element);
-        return (firstResult != null && secondSelector.match(model, element) != null) ? firstResult : null;
+        T firstResult = first.match(model, element);
+        return (firstResult != null && second.match(model, element) != null) ? firstResult : null;
     }
 
     @Override
     public int getSpecificity() {
-        return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+        return first.getSpecificity() + second.getSpecificity();
     }
 
     @Override
     public void produceTokens(Consumer<CssToken> consumer) {
-        firstSelector.produceTokens(consumer);
-        secondSelector.produceTokens(consumer);
+        first.produceTokens(consumer);
+        second.produceTokens(consumer);
+    }
+
+    /**
+     * This selector matches only on a specific type, if its first or its second
+     * selector matches only on a specific type.
+     *
+     * @return {@code first.matchesOnlyOnASpecificType()!=null
+     * ? first.matchesOnlyOnASpecificType()
+     * : second.matchesOnlyOnASpecificType()}
+     */
+    @Override
+    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
+        QualifiedName firstQN = first.matchesOnlyOnASpecificType();
+        QualifiedName secondQN = second.matchesOnlyOnASpecificType();
+        return firstQN != null ? firstQN : secondQN;
     }
 }

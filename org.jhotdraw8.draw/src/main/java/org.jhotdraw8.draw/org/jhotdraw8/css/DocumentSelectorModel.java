@@ -63,11 +63,12 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     @Override
     public boolean hasType(@NonNull Element elem, @Nullable String namespace, @NonNull String type) {
-        String value = elem.getLocalName();
-        if (namespace != null && !Objects.equals(namespace, elem.getNamespaceURI())) {
-            return false;
+        String localName = elem.getLocalName();
+        if (ANY_NAMESPACE.equals(namespace)) {
+            return localName.equals(type);
+        } else {
+            return localName.equals(type) && Objects.equals(namespace, elem.getNamespaceURI());
         }
-        return value != null && value.equals(type);
     }
 
     @Override
@@ -76,8 +77,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public String getType(@NonNull Element elem) {
-        return elem.getNodeName();
+    public QualifiedName getType(@NonNull Element elem) {
+        return new QualifiedName(elem.getNamespaceURI(), elem.getNodeName());
     }
 
     @Override
@@ -231,18 +232,28 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     @Override
     public boolean hasAttribute(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName) {
-        return element.hasAttribute(attributeName);
+        return getAttributeAsString(element, namespace, attributeName) != null;
     }
 
     @Override
     public boolean attributeValueStartsWith(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = element.getAttribute(attributeName);
+        String actualValue = getAttributeAsString(element, namespace, attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
     public String getAttributeAsString(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName) {
-        return element.getAttribute(attributeName);
+        if (ANY_NAMESPACE.equals(namespace)) {
+            NamedNodeMap nnm = element.getAttributes();
+            for (int i = 0, n = nnm.getLength(); i < n; i++) {
+                Node item = nnm.item(i);
+                if (item.getLocalName().equals(attributeName)) {
+                    return item.getNodeValue();
+                }
+            }
+            return null;
+        }
+        return element.getAttributeNS(namespace, attributeName);
     }
 
     @Override
@@ -278,10 +289,18 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         case USER_AGENT:
         case INLINE:
         case AUTHOR:
-            if (value1 == null) {
-                element.removeAttribute(name);
-            } else {
+            if (ANY_NAMESPACE.equals(namespace)) {
+                NamedNodeMap nnm = element.getAttributes();
+                for (int i = 0, n = nnm.getLength(); i < n; i++) {
+                    Node item = nnm.item(i);
+                    if (item.getLocalName().equals(name)) {
+                        item.setNodeValue(value1);
+                        return;
+                    }
+                }
                 element.setAttribute(name, value1);
+            } else {
+                element.setAttributeNS(namespace, name, value1);
             }
             break;
         default:

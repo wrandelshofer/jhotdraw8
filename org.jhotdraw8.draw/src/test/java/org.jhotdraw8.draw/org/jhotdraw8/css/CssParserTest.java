@@ -65,7 +65,7 @@ public class CssParserTest {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
                     for (Declaration d : r.getDeclarations()) {
-                        elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
+                        elem.setAttributeNS(d.getNamespace(), d.getPropertyName(), d.getTermsAsString());
                     }
                 }
             }
@@ -286,7 +286,7 @@ public class CssParserTest {
                 SelectorGroup sg = r.getSelectorGroup();
                 if (sg.matches(dsd, elem)) {
                     for (Declaration d : r.getDeclarations()) {
-                        elem.setAttribute(d.getPropertyName(), d.getTermsAsString());
+                        elem.setAttributeNS(d.getNamespace(), d.getPropertyName(), d.getTermsAsString());
                     }
                 }
             }
@@ -353,6 +353,21 @@ public class CssParserTest {
                 dynamicTest("type selector in all ns", () -> testSelectorSyntaxNS(true, "*|a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
                         "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a x=\"1\"/><b/></xml>")),
+                dynamicTest("type selector in all elements without a declared ns", () -> testSelectorSyntaxNS(true, "|a {x:1;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a/><b/></xml>")),
+                dynamicTest("attribute selector not ns aware", () -> testSelectorSyntaxNS(true, "[x=\"1\"] {x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"2\"/><n1:a n1:x=\"1\" x=\"2\"/></xml>")),
+                dynamicTest("attribute selector any ns", () -> testSelectorSyntaxNS(true, "[*|x=\"1\"] {x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"2\"/><n1:a n1:x=\"1\" x=\"2\"/></xml>")),
+                dynamicTest("attribute selector no ns", () -> testSelectorSyntaxNS(true, "[|x=\"1\"] {x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"2\"/><n1:a n1:x=\"1\"/></xml>")),
+                dynamicTest("attribute selector ns in n1", () -> testSelectorSyntaxNS(true, "@namespace ns \"http://n1.com\"; [ns|x=\"1\"] {ns|x:2;}", //
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a n1:x=\"1\"/></xml>",//
+                        "<xml xmlns:n1=\"http://n1.com\"><a x=\"1\"/><n1:a xmlns:ns0=\"http://n1.com\" ns0:x=\"2\"/></xml>")),
                 dynamicTest("type selector with ns prefix as string", () -> testSelectorSyntaxNS(true, "@namespace ns \"http://n1.com\"; ns|a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a x=\"1\"/><b/></xml>")),

@@ -170,10 +170,19 @@ import java.util.function.Function;
  */
 public class CssParser {
 
-    public static final String ALL_NAMESPACES_PREFIX = "*";
-    public static final String DEFAULT_NAMESPACE_PREFIX = "|";
+    public static final String ANY_NAMESPACE_PREFIX = "*";
+    public static final String DEFAULT_NAMESPACE = "|";
     public static final String NAMESPACE_AT_RULE = "namespace";
     private final Map<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
+
+    {
+        //If no default namespace is declared, then names without a namespace
+        //prefix match all namespaces.
+        //See https://drafts.csswg.org/selectors/#type-nmsp
+        prefixToNamespaceMap.put(DEFAULT_NAMESPACE, ANY_NAMESPACE_PREFIX);
+        prefixToNamespaceMap.put(ANY_NAMESPACE_PREFIX, ANY_NAMESPACE_PREFIX);
+    }
+
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
     private @Nullable URI documentHome;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
@@ -190,7 +199,7 @@ public class CssParser {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
         final @NonNull String ident = tt.currentStringNonNull();
         switch (ident) {
-            case "not":
+        case "not":
             final SimpleSelector simpleSelector = parseSimpleSelector(tt);
             tt.requireNextToken(')', ":not() Selector: ')' expected.");
             return new NegationPseudoClassSelector(ident, simpleSelector);
@@ -229,7 +238,7 @@ public class CssParser {
             if (tt.next() == CssTokenType.TT_IDENT) {
                 prefix = tt.currentStringNonNull();
             } else {
-                prefix = DEFAULT_NAMESPACE_PREFIX;
+                prefix = DEFAULT_NAMESPACE;
                 tt.pushBack();
             }
             if (tt.next() == CssTokenType.TT_URL || tt.current() == CssTokenType.TT_STRING) {
@@ -270,27 +279,32 @@ public class CssParser {
 
     private @NonNull AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextNoSkip('[', "AttributeSelector: '[' expected.");
-        tt.requireNextNoSkip(CssTokenType.TT_IDENT, "AttributeSelector: Identifier expected.");
-
-        String attributeNameOrPrefix = tt.currentStringNonNull();
-        String attributeName;
-        String namespacePrefix;
-        if (tt.nextNoSkip() == CssTokenType.TT_VERTICAL_LINE) {
-            namespacePrefix = attributeNameOrPrefix;
-            tt.requireNextNoSkip(CssTokenType.TT_IDENT, "AttributeSelector: Identifier after " + namespacePrefix + "| expected.");
-            attributeName = tt.currentStringNonNull();
+        String prefixOrName = null;
+        String namespace = null;
+        String attributeName = null;
+        if (tt.nextNoSkip() == CssTokenType.TT_IDENT) {
+            prefixOrName = tt.currentStringNonNull();
+        } else if (tt.current() == '*') {
+            prefixOrName = ANY_NAMESPACE_PREFIX;
+            tt.requireNextNoSkip(CssTokenType.TT_VERTICAL_LINE, "AttriuteSelector: '|' expected.");
+            tt.pushBack();
         } else {
             tt.pushBack();
-            namespacePrefix = null;
-            attributeName = attributeNameOrPrefix;
         }
-        String namespace = resolveNamespacePrefix(namespacePrefix);
+        if (tt.nextNoSkip() == CssTokenType.TT_VERTICAL_LINE) {
+            namespace = prefixOrName == null ? SelectorModel.WITHOUT_NAMESPACE : resolveNamespacePrefix(prefixOrName, tt);
+            tt.requireNextNoSkip(CssTokenType.TT_IDENT, "AttributeSelector: Attribute name expected.");
+            attributeName = tt.currentStringNonNull();
+        } else {
+            namespace = ANY_NAMESPACE_PREFIX;
+            attributeName = prefixOrName;
+            tt.pushBack();
+        }
         AbstractAttributeSelector selector;
         switch (tt.nextNoSkip()) {
         case '=':
             if (tt.nextNoSkip() != CssTokenType.TT_IDENT
-                    && tt.current() != CssTokenType.TT_STRING
-                    && tt.current() != CssTokenType.TT_NUMBER) {
+                    && tt.current() != CssTokenType.TT_STRING) {
                 throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
             }
             selector = new EqualsMatchSelector(namespace, attributeName, tt.currentStringNonNull());
@@ -420,8 +434,19 @@ public class CssParser {
         if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
             throw tt.createParseException("Declaration: property name expected.");
         }
-        String property = tt.currentStringNonNull();
         int startPos = tt.getStartPosition();
+        String prefixOrName = tt.currentStringNonNull();
+        String namespace;
+        String name;
+        if (tt.nextNoSkip() == CssTokenType.TT_VERTICAL_LINE) {
+            namespace = resolveNamespacePrefix(prefixOrName, tt);
+            tt.requireNextNoSkip(CssTokenType.TT_IDENT, "Declaration: property name expected");
+            name = tt.currentStringNonNull();
+        } else {
+            namespace = null;
+            name = prefixOrName;
+            tt.pushBack();
+        }
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
         if (tt.current() != ':') {
@@ -430,8 +455,7 @@ public class CssParser {
         List<CssToken> terms = parseTerms(tt);
         int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.get(terms.size() - 1).getEndPos();
 
-        String namespacePrefix = null;
-        return new Declaration(namespacePrefix, property, terms, startPos, endPos);
+        return new Declaration(namespace, name, terms, startPos, endPos);
 
     }
 
@@ -620,42 +644,45 @@ public class CssParser {
 
         try {
             switch (tt.current()) {
-                case '*':
-                    if (tt.nextNoSkip() == '|') {
-                        tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after *|");
-                        return new TypeSelector(resolveNamespacePrefix(ALL_NAMESPACES_PREFIX), tt.currentStringNonNull());
-                    } else {
-                        tt.pushBack();
-                        return new UniversalSelector();
-                    }
-                case CssTokenType.TT_IDENT:
-                    String typeOrPrefix = tt.currentStringNonNull();
-                    if (tt.nextNoSkip() == '|') {
-                        tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after " + typeOrPrefix + "|");
-                        return new TypeSelector(resolveNamespacePrefix(typeOrPrefix), tt.currentStringNonNull());
-                    } else {
-                        tt.pushBack();
-                        return new TypeSelector(resolveNamespacePrefix(null), typeOrPrefix);
-                    }
-                case CssTokenType.TT_HASH:
-                    return new IdSelector(tt.currentString());
-                case '.':
-                    if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
-                        throw tt.createParseException("SimpleSelector: identifier expected.");
-                    }
-                    return new ClassSelector(tt.currentString());
-                case ':':
+            case '*':
+                if (tt.nextNoSkip() == '|') {
+                    tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after *|");
+                    return new TypeSelector(SelectorModel.ANY_NAMESPACE, tt.currentStringNonNull());
+                } else {
                     tt.pushBack();
-                    return parsePseudoClassSelector(tt);
-                case '[':
+                    return new UniversalSelector();
+                }
+            case '|':
+                tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after |");
+                return new TypeSelector(SelectorModel.WITHOUT_NAMESPACE, tt.currentStringNonNull());
+            case CssTokenType.TT_IDENT:
+                String typeOrPrefix = tt.currentStringNonNull();
+                if (tt.nextNoSkip() == '|') {
+                    tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after " + typeOrPrefix + "|");
+                    return new TypeSelector(resolveNamespacePrefix(typeOrPrefix, tt), tt.currentStringNonNull());
+                } else {
                     tt.pushBack();
-                    return parseAttributeSelector(tt);
-                case '{':
-                    tt.pushBack();
-                    throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
-                default:
-                    // don't push back!
-                    throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
+                    return new TypeSelector(resolveNamespacePrefix(DEFAULT_NAMESPACE, tt), typeOrPrefix);
+                }
+            case CssTokenType.TT_HASH:
+                return new IdSelector(tt.currentString());
+            case '.':
+                if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
+                    throw tt.createParseException("SimpleSelector: identifier expected.");
+                }
+                return new ClassSelector(tt.currentString());
+            case ':':
+                tt.pushBack();
+                return parsePseudoClassSelector(tt);
+            case '[':
+                tt.pushBack();
+                return parseAttributeSelector(tt);
+            case '{':
+                tt.pushBack();
+                throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
+            default:
+                // don't push back!
+                throw tt.createParseException("SimpleSelector: SimpleSelector expected instead of \"" + tt.currentString() + "\". Line " + tt.getLineNumber() + ".");
             }
         } catch (ParseException e) {
             exceptions.add(e);
@@ -854,17 +881,21 @@ public class CssParser {
     /**
      * Resolves the namespace prefix.
      *
-     * @param namespacePrefix a namespace prefix, null is treated as the {@link #DEFAULT_NAMESPACE_PREFIX}.
-     * @return a namespace URL or the special value '*' or the prefix, the namespace can be null
+     * @param namespacePrefix a namespace prefix
+     * @param tt              the tokenizer
+     * @return a namespace URL or null
+     * @throws ParseException if the namespace prefix is not declared.
      */
-    private @Nullable String resolveNamespacePrefix(@Nullable String namespacePrefix) {
+    private @Nullable String resolveNamespacePrefix(@Nullable String namespacePrefix, CssTokenizer tt) throws ParseException {
         if (namespacePrefix == null) {
-            return prefixToNamespaceMap.get(DEFAULT_NAMESPACE_PREFIX);
-        } else if (ALL_NAMESPACES_PREFIX.equals(namespacePrefix)) {
-            return null;
-        } else {
-            return prefixToNamespaceMap.get(namespacePrefix);
+            return prefixToNamespaceMap.get(DEFAULT_NAMESPACE);
         }
+
+        String s = prefixToNamespaceMap.get(namespacePrefix);
+        if (s == null) {
+            throw tt.createParseException("namespace prefix is not declared: \"" + namespacePrefix + "\".");
+        }
+        return s;
     }
 
     private void skipWhitespaceAndComments(@NonNull CssTokenizer tt) throws IOException {

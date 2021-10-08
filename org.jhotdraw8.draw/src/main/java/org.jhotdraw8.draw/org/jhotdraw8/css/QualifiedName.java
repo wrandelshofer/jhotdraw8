@@ -9,6 +9,9 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
 
+/**
+ * Represents a name that is optionally restricted to a specific namespace.
+ */
 public class QualifiedName implements Comparable<QualifiedName> {
     private final @Nullable String namespace;
     private final @NonNull String name;

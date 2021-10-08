@@ -71,8 +71,8 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
     }
 
     @Override
-    public String getType(@NonNull Styleable element) {
-        return element.getTypeSelector();
+    public QualifiedName getType(@NonNull Styleable element) {
+        return new QualifiedName(null, element.getTypeSelector());
     }
 
     @Override

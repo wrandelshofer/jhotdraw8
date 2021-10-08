@@ -8,14 +8,14 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * A "class selector" matches an element if the element has a type with the
- * specified value.
+ * A "typle selector" matches an element if the element has a specific type.
  *
  * @author Werner Randelshofer
  */
@@ -57,8 +57,12 @@ public class TypeSelector extends SimpleSelector {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TypeSelector that = (TypeSelector) o;
         return Objects.equals(namespace, that.namespace) && type.equals(that.type);
     }
@@ -66,5 +70,10 @@ public class TypeSelector extends SimpleSelector {
     @Override
     public int hashCode() {
         return Objects.hash(namespace, type);
+    }
+
+    @Override
+    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
+        return new QualifiedName(namespace, type);
     }
 }

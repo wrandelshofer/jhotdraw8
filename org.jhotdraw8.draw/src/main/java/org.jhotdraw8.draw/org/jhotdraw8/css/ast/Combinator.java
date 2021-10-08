@@ -17,18 +17,18 @@ import java.util.Objects;
  */
 public abstract class Combinator extends Selector {
 
-    protected final @NonNull SimpleSelector firstSelector;
-    protected final @NonNull Selector secondSelector;
+    protected final @NonNull SimpleSelector first;
+    protected final @NonNull Selector second;
 
     public Combinator(@NonNull SimpleSelector firstSelector, @NonNull Selector secondSelector) {
-        this.firstSelector = firstSelector;
-        this.secondSelector = secondSelector;
+        this.first = firstSelector;
+        this.second = secondSelector;
 
     }
 
     @Override
     public @NonNull String toString() {
-        return "Combinator{" + "simpleSelector=" + firstSelector + ", selector=" + secondSelector + '}';
+        return "Combinator{" + "simpleSelector=" + first + ", selector=" + second + '}';
     }
 
     @Override
@@ -36,11 +36,11 @@ public abstract class Combinator extends Selector {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Combinator that = (Combinator) o;
-        return firstSelector.equals(that.firstSelector) && secondSelector.equals(that.secondSelector);
+        return first.equals(that.first) && second.equals(that.second);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstSelector, secondSelector);
+        return Objects.hash(first, second);
     }
 }

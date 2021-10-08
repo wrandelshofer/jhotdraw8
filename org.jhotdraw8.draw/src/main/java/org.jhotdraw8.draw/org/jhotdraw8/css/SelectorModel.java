@@ -24,6 +24,21 @@ import java.util.Set;
  */
 public interface SelectorModel<T> {
     /**
+     * Special namespace value which means 'any namespace'.
+     * <p>
+     * Value: {@value #ANY_NAMESPACE}
+     */
+    @NonNull String ANY_NAMESPACE = "*";
+    /**
+     * Special namespace value which means 'without a namespace'.
+     * <p>
+     * See <a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>.
+     * <p>
+     * Value: {@value #WITHOUT_NAMESPACE}
+     */
+    @Nullable String WITHOUT_NAMESPACE = null;
+
+    /**
      * Pseudo classes set on the selector model.
      *
      * @return a map
@@ -36,7 +51,8 @@ public interface SelectorModel<T> {
      * the value contains the specified substring.
      *
      * @param element       An element of the document
-     * @param namespace     an optional namespace, null means any namespace
+     * @param namespace     an optional namespace ("*" means any namespace,
+     *                      null means no namespace)
      * @param attributeName an attribute name
      * @param substring     the substring
      * @return true if the element has an attribute with the specified name and
@@ -52,7 +68,8 @@ public interface SelectorModel<T> {
      * the value is a list of words which contains the specified word.
      *
      * @param element       An element of the document
-     * @param namespace     an optional namespace, null means any namespace
+     * @param namespace     an optional namespace ("*" means any namespace,
+     *                      null means no namespace)
      * @param attributeName an attribute name
      * @param word          the word
      * @return true if the element has an attribute with the specified name and
@@ -76,7 +93,8 @@ public interface SelectorModel<T> {
      * the attribute value ends with the specified substring.
      *
      * @param element       An element of the document
-     * @param namespace     The attribute namespace
+     * @param namespace     an optional namespace ("*" means any namespace,
+     *                      null means no namespace)
      * @param attributeName an attribute name
      * @param substring     the substring
      * @return true if the element has an attribute with the specified name and
@@ -92,7 +110,8 @@ public interface SelectorModel<T> {
      * value.
      *
      * @param element        An element of the document
-     * @param namespace      The attribute namespace
+     * @param namespace      an optional namespace ("*" means any namespace,
+     *                       null means no namespace)
      * @param attributeName  an attribute name
      * @param attributeValue the attribute value
      * @return true if the element has an attribute with the specified name and
@@ -123,7 +142,8 @@ public interface SelectorModel<T> {
      * Returns the attribute value with the given name from the USER style origin.
      *
      * @param element   The element
-     * @param namespace The attribute namespace
+     * @param namespace     an optional namespace ("*" means any namespace,
+     *                      null means no namespace)
      * @param name      The attribute name
      * @return The attribute value. Returns "initial" if the element does not have an
      * attribute with this name.
@@ -221,13 +241,15 @@ public interface SelectorModel<T> {
      * return null if the element is not styleable by type.
      */
     @Nullable
-    String getType(@NonNull T element);
+    QualifiedName getType(@NonNull T element);
 
     /**
      * Returns true if the element has the specified attribute.
      *
      * @param element       An element of the document
-     * @param namespace     an optional namespace (null means default namespace, "*" means any namespace)
+     * @param namespace     an optional namespace (null means any namespace
+    ,
+     *                      an empty String means no namespace)
      * @param attributeName an attribute name
      * @return true if the element has an attribute with the specified name
      */
@@ -264,7 +286,8 @@ public interface SelectorModel<T> {
      * Returns true if the element has the specified type.
      *
      * @param element   An element of the document
-     * @param namespace an optional namespace (null means any namespaces)
+     * @param namespace     an optional namespace ("*" means any namespace,
+     *                      null means no namespace)
      * @param type      an id
      * @return true if the element has the id
      */
@@ -281,7 +304,8 @@ public interface SelectorModel<T> {
      *
      * @param element   The element
      * @param origin    The style origin
-     * @param namespace an optional namespace ({@code null} means any namespace)
+     * @param namespace     an optional namespace ("*" means any namespace,
+     *                      null means no namespace)
      * @param name      The attribute name
      * @param value     The attribute value. {@code null} removes the attribute from the
      *                  element. That is, {@code null} has the same effect like the

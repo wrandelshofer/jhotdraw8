@@ -8,12 +8,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.function.Consumer;
 
 /**
- * An "generarl sibling combinator" matches an element if its first selector
+ * An "general sibling combinator" matches an element if its first selector
  * matches on a previous sibling of the element and if its second selector
  * matches the element.
  *
@@ -21,22 +22,22 @@ import java.util.function.Consumer;
  */
 public class GeneralSiblingCombinator extends Combinator {
 
-    public GeneralSiblingCombinator(SimpleSelector simpleSelector, Selector selector) {
-        super(simpleSelector, selector);
+    public GeneralSiblingCombinator(SimpleSelector first, Selector second) {
+        super(first, second);
     }
 
     @Override
     public @NonNull String toString() {
-        return firstSelector + " ~ " + secondSelector;
+        return first + " ~ " + second;
     }
 
     @Override
     public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
-        T result = secondSelector.match(model, element);
+        T result = second.match(model, element);
         T siblingElement = result;
         while (siblingElement != null) {
             siblingElement = model.getPreviousSibling(siblingElement);
-            result = firstSelector.match(model, siblingElement);
+            result = first.match(model, siblingElement);
             if (result != null) {
                 break;
             }
@@ -46,13 +47,24 @@ public class GeneralSiblingCombinator extends Combinator {
 
     @Override
     public final int getSpecificity() {
-        return firstSelector.getSpecificity() + secondSelector.getSpecificity();
+        return first.getSpecificity() + second.getSpecificity();
     }
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
-        firstSelector.produceTokens(consumer);
+        first.produceTokens(consumer);
         consumer.accept(new CssToken(CssTokenType.TT_TILDE));
-        secondSelector.produceTokens(consumer);
+        second.produceTokens(consumer);
+    }
+
+    /**
+     * This selector matches only on a specific type, if its second
+     * selector matches only on a specific type.
+     *
+     * @return {@code second.matchesOnlyOnASpecificType()}
+     */
+    @Override
+    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
+        return second.matchesOnlyOnASpecificType();
     }
 }
