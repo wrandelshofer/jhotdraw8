@@ -10,7 +10,6 @@ import org.jhotdraw8.collection.DoubleArrayList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.Polynomial;
 import org.jhotdraw8.util.function.Double2Consumer;
 import org.jhotdraw8.util.function.Double4Consumer;
 import org.jhotdraw8.util.function.Double6Consumer;
@@ -902,55 +901,12 @@ public class BezierCurves {
 
     public static double arcLengthRomberg(double[] b, double eps) {
         ToDoubleFunction<Double> f = getLengthIntegrand(b);
-        return rombergQuadrature(f, 0, 1, eps);
+        return IntegralAlgorithms.rombergQuadrature(f, 0, 1, eps);
     }
 
     public static double arcLengthSimpson(double[] b, double eps) {
         ToDoubleFunction<Double> f = getLengthIntegrand(b);
-        return Polynomial.simpson(f, 0, 1);
-    }
-
-    /**
-     * Romber Quadrature from https://github.com/Pomax/BezierInfo-2/issues/77
-     *
-     * @param f
-     * @param t0
-     * @param t1
-     * @param epsilon
-     * @return
-     */
-    private static double rombergQuadrature(ToDoubleFunction<Double> f, double t0, double t1, double epsilon) {
-        // Determine arc length using Romberg's method
-        // see https://en.wikipedia.org/wiki/Romberg%27s_method
-
-
-        int maxSteps = 5;
-        double h = t1 - t0;
-
-        double[] Rp = new double[maxSteps];
-        double[] Rc = new double[maxSteps];
-        Rp[0] = (f.applyAsDouble(t0) + f.applyAsDouble(t1)) * h * 0.5;
-
-        for (int i = 1; i < maxSteps; i++) {
-            h /= 2;
-            double c = 0;
-            int ep = 1 << (i - 1);
-            for (int j = 1; j <= ep; j++) {
-                c += f.applyAsDouble(t0 + (2 * j - 1) * h);
-            }
-            Rc[0] = h * c + 0.5 * Rp[0]; //R(i,0)
-            for (int j = 1; j <= i; j++) {
-                double n_k = Math.pow(4, j);
-                Rc[j] = (n_k * Rc[j - 1] - Rp[j - 1]) / (n_k - 1); // compute R(i,j)
-            }
-            if (i > 1 && Math.abs(Rp[i - 1] - Rc[i]) < epsilon) {
-                return Rc[i - 1];
-            }
-            double[] tmp = Rp;
-            Rp = Rc;
-            Rc = tmp;
-        }
-        return Rp[maxSteps - 1];
+        return IntegralAlgorithms.simpson(f, 0, 1, eps);
     }
 
     /**

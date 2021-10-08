@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.DoubleArrayList;
 import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.IntegralAlgorithms;
 
 import java.util.function.ToDoubleFunction;
 
@@ -778,57 +779,10 @@ public class Polynomial implements ToDoubleFunction<Double> {
      */
     public double arcLength(double min, double max) {
         final Polynomial dfdx = getDerivative();
-        return simpson(x -> {
+        return IntegralAlgorithms.simpson(x -> {
             double y = dfdx.eval(x);
             return sqrt(1 + y * y);
-        }, min, max);
-    }
-
-    /**
-     * Estimates the integral of the polynomial in the given interval using
-     * Simpsons's rule.
-     * <p>
-     * simpson Based on trapzd in "Numerical Recipes in C", page 139
-     *
-     * @param func the function
-     * @param min  the lower bound of the interval
-     * @param max  the upper bound of the interval
-     * @return the area under the curve
-     */
-    public static double simpson(@NonNull ToDoubleFunction<Double> func, double min, double max) {
-
-        double range = max - min;
-        double st = 0.5 * range * (func.applyAsDouble(min) + func.applyAsDouble(max));
-        double t = st;
-        double s = 4.0 * st / 3.0;
-        double os = s;
-        double ost = st;
-
-        int it = 1;
-        for (int n = 2; n <= 20; n++) {
-            double delta = range / it;
-            double x = min + 0.5 * delta;
-            double sum = 0;
-
-            for (double i = 1; i <= it; i++) {
-                sum += func.applyAsDouble(x);
-                x += delta;
-            }
-
-            t = 0.5 * (t + range * sum / it);
-            st = t;
-            s = (4.0 * st - ost) / 3.0;
-
-            if (abs(s - os) < EPSILON * abs(os)) {
-                break;
-            }
-
-            os = s;
-            ost = st;
-            it <<= 1;
-        }
-
-        return s;
+        }, min, max, EPSILON);
     }
 
 }
