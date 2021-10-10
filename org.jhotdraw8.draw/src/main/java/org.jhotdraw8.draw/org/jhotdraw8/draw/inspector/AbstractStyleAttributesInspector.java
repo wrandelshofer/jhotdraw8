@@ -883,7 +883,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         List<SimpleSelector> selectors = new ArrayList<>();
         if (type != null && !type.getName().isEmpty()) {
-            selectors.add(new TypeSelector(type.getNamespace(), type.getName()));
+            selectors.add(new TypeSelector(SelectorModel.ANY_NAMESPACE, type.getName()));
         }
         if (id != null && id.length() > 0) {
             selectors.add(new IdSelector(id));

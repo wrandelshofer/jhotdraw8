@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * A "typle selector" matches an element if the element has a specific type.
+ * A "type selector" matches an element if the element has a specific type.
  *
  * @author Werner Randelshofer
  */
@@ -48,8 +48,10 @@ public class TypeSelector extends SimpleSelector {
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
-        if (namespace != null) {
-            consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+        if (!SelectorModel.ANY_NAMESPACE.equals(namespace)) {
+            if (namespace != null) {
+                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+            }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
         consumer.accept(new CssToken(CssTokenType.TT_IDENT, type));

@@ -34,7 +34,7 @@ public interface SelectorModel<T> {
      * <p>
      * See <a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>.
      * <p>
-     * Value: {@value #WITHOUT_NAMESPACE}
+     * Value: {@code null}
      */
     @Nullable String WITHOUT_NAMESPACE = null;
 

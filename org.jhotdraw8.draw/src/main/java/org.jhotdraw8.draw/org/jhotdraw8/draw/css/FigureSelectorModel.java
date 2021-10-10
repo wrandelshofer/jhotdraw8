@@ -79,7 +79,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public boolean hasType(@NonNull Figure element, @Nullable String namespace, @NonNull String type) {
-        if (namespace == null) {
+        if (namespace == null || ANY_NAMESPACE.equals(namespace)) {
             return type.equals(element.getTypeSelector());
         }
         if (JAVA_CLASS_NAMESPACE.equals(namespace)) {
@@ -130,6 +130,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     if (sk.getCssNamespace() != null) {
                         m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
                     }
+                    m.put(new QualifiedName(ANY_NAMESPACE, element.getClass() + "$" + sk.getCssName()), sk);
                 }
             }
             return m;

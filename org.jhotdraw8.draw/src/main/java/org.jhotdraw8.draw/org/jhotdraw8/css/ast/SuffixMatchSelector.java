@@ -45,8 +45,10 @@ public class SuffixMatchSelector extends AbstractAttributeSelector {
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
-        if (namespace != null) {
-            consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+        if (!SelectorModel.ANY_NAMESPACE.equals(namespace)) {
+            if (namespace != null) {
+                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+            }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
         consumer.accept(new CssToken(CssTokenType.TT_SUFFIX_MATCH));
