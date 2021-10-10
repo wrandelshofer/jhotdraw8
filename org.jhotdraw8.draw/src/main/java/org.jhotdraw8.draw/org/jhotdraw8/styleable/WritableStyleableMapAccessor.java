@@ -4,6 +4,10 @@
  */
 package org.jhotdraw8.styleable;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
+
 /**
  * Interface for keys which support styled values from CSS.
  *
@@ -13,6 +17,15 @@ package org.jhotdraw8.styleable;
 public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAccessor<T> {
 
     long serialVersionUID = 1L;
+
+    /**
+     * Gets examples.
+     *
+     * @return a help text.
+     */
+    default @NonNull ImmutableList<String> getExamples() {
+        return ImmutableLists.emptyList();
+    }
 
 
 }

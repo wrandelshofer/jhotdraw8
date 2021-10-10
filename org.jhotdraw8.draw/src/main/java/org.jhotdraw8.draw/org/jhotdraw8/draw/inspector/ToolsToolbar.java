@@ -19,8 +19,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.tool.Tool;
 
-import java.lang.ref.WeakReference;
-
 /**
  * FXML Controller class
  *
@@ -38,8 +36,8 @@ public class ToolsToolbar extends GridPane {
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, @Nullable Toggle newValue) {
                 if (newValue != null && getDrawingEditor() != null) {
                     @SuppressWarnings("unchecked")
-                    WeakReference<Tool> userData = (WeakReference<Tool>) newValue.getUserData();
-                    getDrawingEditor().setActiveTool(userData.get());
+                    Tool userData = (Tool) newValue.getUserData();
+                    getDrawingEditor().setActiveTool(userData);
                 }
             }
         });
@@ -49,7 +47,7 @@ public class ToolsToolbar extends GridPane {
     private final @NonNull ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
-            if (((WeakReference<Tool>) button.getUserData()).get() == newValue) {
+            if (((Tool) button.getUserData()) == newValue) {
                 button.setSelected(true);
                 break;
             }
@@ -67,7 +65,7 @@ public class ToolsToolbar extends GridPane {
                 if (newValue != null) {
                     newValue.activeToolProperty().addListener(activeToolHandler);
                     if (group.getSelectedToggle() != null) {
-                        newValue.setActiveTool(((WeakReference<Tool>) group.getSelectedToggle().getUserData()).get());
+                        newValue.setActiveTool(((Tool) group.getSelectedToggle().getUserData()));
                     }
                 }
             }
@@ -97,7 +95,7 @@ public class ToolsToolbar extends GridPane {
             button.getStyleClass().add(styleClass);
         }
         button.setFocusTraversable(false);
-        button.setUserData(new WeakReference<>(tool));
+        button.setUserData(tool);
         if (group.getToggles().isEmpty()) {
             button.setSelected(true);
         }

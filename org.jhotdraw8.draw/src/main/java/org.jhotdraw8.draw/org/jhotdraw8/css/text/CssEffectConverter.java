@@ -19,6 +19,8 @@ import javafx.scene.effect.Shadow;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -88,6 +90,17 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements CssConverter<Effect> {
+    private final static ImmutableList<String> examples = ImmutableLists.of(
+            "blend(hard-light)",
+            "bloom(10%)",
+            "box-blur(10,3,3)",
+            "color-adjust(hue -5%,saturation 20%,brightness 10%,contrast 10%)",
+            "drop-shadow(three-pass-box,gray,5,0,3,3)",
+            "gaussian-blur(10)",
+            "inner-shadow(three-pass-box,gray,10,0,4,4)",
+            "shadow(three-pass-box,black,10)"
+
+    );
 
     private static final String BLEND = "blend";
     private static final String BLOOM = "bloom";
@@ -675,5 +688,10 @@ public class CssEffectConverter implements CssConverter<Effect> {
                 + "\n" + blendModeConverter.getHelpText()
                 + "\n" + blurTypeConverter.getHelpText()
                 + "\n" + colorConverter.getHelpText();
+    }
+
+    @Override
+    public @NonNull ImmutableList<String> getExamples() {
+        return examples;
     }
 }

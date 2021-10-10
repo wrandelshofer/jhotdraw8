@@ -6,6 +6,8 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
@@ -150,6 +152,10 @@ public interface CssConverter<T> extends Converter<T> {
      * @return a help text.
      */
     @Nullable String getHelpText();
+
+    default @NonNull ImmutableList<String> getExamples() {
+        return ImmutableLists.emptyList();
+    }
 
     boolean isNullable();
 }

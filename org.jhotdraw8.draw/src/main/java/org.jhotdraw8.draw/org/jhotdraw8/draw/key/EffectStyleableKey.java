@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import javafx.scene.effect.Effect;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.text.CssEffectConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -43,5 +44,10 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
     @Override
     public @NonNull Converter<Effect> getCssConverter() {
         return converter;
+    }
+
+    @Override
+    public @NonNull ImmutableList<String> getExamples() {
+        return converter.getExamples();
     }
 }

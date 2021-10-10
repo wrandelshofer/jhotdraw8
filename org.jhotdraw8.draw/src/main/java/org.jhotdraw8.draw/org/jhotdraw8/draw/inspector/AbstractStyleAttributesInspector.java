@@ -63,6 +63,7 @@ import org.jhotdraw8.draw.popup.BooleanPicker;
 import org.jhotdraw8.draw.popup.CssColorPicker;
 import org.jhotdraw8.draw.popup.CssFontPicker;
 import org.jhotdraw8.draw.popup.EnumPicker;
+import org.jhotdraw8.draw.popup.ExamplesPicker;
 import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
 import org.jhotdraw8.draw.popup.Picker;
@@ -324,6 +325,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
             Class<? extends Enum<?>> enumClazz = (Class<? extends Enum<?>>) type;
             @SuppressWarnings("rawtypes")
             EnumPicker suppress = new EnumPicker(enumClazz, acc.getCssConverter());
+            p = suppress;
+        } else {
+            @SuppressWarnings("rawtypes")
+            ExamplesPicker suppress = new ExamplesPicker(acc.getExamples(), acc.getCssConverter());
             p = suppress;
         }
 
