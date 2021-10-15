@@ -81,8 +81,14 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
     }
 
     @Override
-    public ReadOnlySet<String> getStyleClasses(@NonNull Styleable element) {
+    public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Styleable element) {
         return new ImmutableHashSet<String>(element.getStyleClass());
+    }
+
+    @Override
+    public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Styleable element) {
+        return new ImmutableHashSet<String>(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
+                .collect(Collectors.toList()));
     }
 
     @Override

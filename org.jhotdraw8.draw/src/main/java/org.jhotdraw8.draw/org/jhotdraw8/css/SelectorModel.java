@@ -234,6 +234,14 @@ public interface SelectorModel<T> {
     @NonNull ReadOnlySet<String> getStyleClasses(@NonNull T element);
 
     /**
+     * Returns the pseudo classes of the element.
+     *
+     * @param element the element
+     * @return the pseudo classes or an empty set.
+     */
+    @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull T element);
+
+    /**
      * Returns the style type of the element.
      *
      * @param element the element

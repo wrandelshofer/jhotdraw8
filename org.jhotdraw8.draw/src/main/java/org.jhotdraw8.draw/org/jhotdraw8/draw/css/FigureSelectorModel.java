@@ -99,9 +99,15 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public ReadOnlySet<String> getStyleClasses(@NonNull Figure element) {
+    public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Figure element) {
         return element.getStyleClasses();
     }
+
+    @Override
+    public @NonNull ReadOnlySet<String> getPseudoClasses(final @NonNull Figure element) {
+        return element.getPseudoClassStates();
+    }
+
 
     private WritableStyleableMapAccessor<?> findKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
         Map<QualifiedName, WritableStyleableMapAccessor<?>> mm = nameToKeyMap.computeIfAbsent(element.getClass(), k -> {

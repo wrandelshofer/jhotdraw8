@@ -37,7 +37,7 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
 
     @Override
     public @NonNull String toString() {
-        return "[" + attributeName + "=" + attributeValue + ']';
+        return "[" + attributeName + "=\"" + attributeValue + "\"]";
     }
 
     @Override
