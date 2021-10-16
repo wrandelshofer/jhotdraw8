@@ -228,7 +228,7 @@ public class DumpGraphs {
 
 
     /**
-     * Prevents instance creation.
+     * Don't let anyone instantiate this class.
      */
     private DumpGraphs() {
     }

@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
-import org.jhotdraw8.graph.GraphSearch;
+import org.jhotdraw8.graph.TopologicalSort;
 import org.jhotdraw8.reflect.TypeToken;
 
 import java.net.URI;
@@ -181,6 +181,6 @@ public interface Drawing extends Figure {
                 graphBuilder.addArrow(f, obs, f);
             }
         }
-        return GraphSearch.sortTopologically(graphBuilder);
+        return TopologicalSort.sortTopologically(graphBuilder);
     }
 }

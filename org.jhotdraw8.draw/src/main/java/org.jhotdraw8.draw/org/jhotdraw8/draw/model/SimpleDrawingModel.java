@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.graph.DirectedGraphBuilder;
-import org.jhotdraw8.graph.GraphSearch;
+import org.jhotdraw8.graph.TopologicalSort;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.util.AbstractMap;
@@ -529,7 +529,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
             visited.clear();
             if (graphBuilder.getVertexCount() > 0) {
-                for (Figure f : GraphSearch.sortTopologically(graphBuilder)) {
+                for (Figure f : TopologicalSort.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
                         if (!f.getLayoutSubjects().isEmpty()) {
                             // The :leftToRight pseudo class may have changed,
