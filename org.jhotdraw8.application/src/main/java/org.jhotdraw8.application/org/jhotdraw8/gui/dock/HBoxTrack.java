@@ -20,7 +20,7 @@ public class HBoxTrack extends AbstractDockParent implements Track {
         scrollPane.setFitToWidth(false);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         getStyleClass().add("track");
-        scrollPane.setStyle("-fx-background-color:transparent;-fx-border:none-fx-border-width:0,0;-fx-padding:0;");
+        scrollPane.setStyle("-fx-background-color:transparent;-fx-border:none;-fx-border-width:0,0;-fx-padding:0;");
 
         CustomBinding.bindContent(hbox.getChildren(), getDockChildren(),
                 DockNode::getNode);
