@@ -89,9 +89,9 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
         createdFigure.reshapeInLocal(
-                anchorX == 0 ? c.getX() : c.getX().subtract(new CssSize(1).multiply(anchorX)),
-                anchorY == 0 ? c.getY() : c.getY().subtract(new CssSize(1).multiply(anchorY)),
-                new CssSize(1), new CssSize(1));
+                anchorX == 0 ? c.getX() : c.getX().subtract(CssSize.from(1).multiply(anchorX)),
+                anchorY == 0 ? c.getY() : c.getY().subtract(CssSize.from(1).multiply(anchorY)),
+                CssSize.from(1), CssSize.from(1));
         DrawingModel dm = view.getModel();
 
         Figure parent = getOrCreateParent(view, createdFigure);
@@ -146,9 +146,9 @@ public class CreationTool extends AbstractCreationTool<Figure> {
                 double preferredAspectRatio = createdFigure.getPreferredAspectRatio();
                 double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = new CssSize(newWidth.getConvertedValue() * preferredAspectRatio);
+                    newHeight = CssSize.from(newWidth.getConvertedValue() * preferredAspectRatio);
                 } else {
-                    newWidth = new CssSize(newHeight.getConvertedValue() / preferredAspectRatio);
+                    newWidth = CssSize.from(newHeight.getConvertedValue() / preferredAspectRatio);
                 }
             }
 

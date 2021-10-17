@@ -6,15 +6,16 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.KeyMap;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.collection.ReadOnlySet;
+import org.jhotdraw8.collection.ReadOnlySetWrapper;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -22,7 +23,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +37,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         implements Figure, TransformCachingFigure {
 
-    private ObservableSet<Figure> layoutObservers;
+    private Set<Figure> layoutObservers;
     private @Nullable Drawing drawing;
     private final @NonNull ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
@@ -121,12 +122,19 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public final ObservableSet<Figure> getLayoutObservers() {
+    public final Set<Figure> getLayoutObservers() {
         if (layoutObservers == null) {
-            layoutObservers =
-                    FXCollections.observableSet(new HashSet<>());
+            layoutObservers = Collections.newSetFromMap(new IdentityHashMap<>(1));
         }
         return layoutObservers;
+    }
+
+    @Override
+    public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
+        if (layoutObservers == null) {
+            return ImmutableSets.emptySet();
+        }
+        return new ReadOnlySetWrapper<>(layoutObservers);
     }
 
     @Override

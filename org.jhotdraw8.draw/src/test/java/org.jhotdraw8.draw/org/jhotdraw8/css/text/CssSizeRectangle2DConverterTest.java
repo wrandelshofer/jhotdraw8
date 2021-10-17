@@ -49,8 +49,8 @@ public class CssSizeRectangle2DConverterTest {
     public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44")),
-                dynamicTest("2", () -> testFromString(new CssRectangle2D(new CssSize(0, "cm"),
-                        new CssSize(0, "cm"), new CssSize(21, "cm"), new CssSize(29.7, "cm")), "0cm 0cm 21cm 29.7cm"))
+                dynamicTest("2", () -> testFromString(new CssRectangle2D(CssSize.from(0, "cm"),
+                        CssSize.from(0, "cm"), CssSize.from(21, "cm"), CssSize.from(29.7, "cm")), "0cm 0cm 21cm 29.7cm"))
         );
     }
 }

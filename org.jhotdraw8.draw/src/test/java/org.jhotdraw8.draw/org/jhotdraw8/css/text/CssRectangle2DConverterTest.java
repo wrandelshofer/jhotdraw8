@@ -48,10 +48,10 @@ public class CssRectangle2DConverterTest {
     public @NonNull List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44")),
-                dynamicTest("1", () -> testFromString(new CssRectangle2D(new CssSize(11, "cm"),
-                        new CssSize(22, "cm"),
-                        new CssSize(33, "cm"),
-                        new CssSize(44, "cm")), "11cm 22cm 33cm 44cm"))
+                dynamicTest("1", () -> testFromString(new CssRectangle2D(CssSize.from(11, "cm"),
+                        CssSize.from(22, "cm"),
+                        CssSize.from(33, "cm"),
+                        CssSize.from(44, "cm")), "11cm 22cm 33cm 44cm"))
         );
     }
 }

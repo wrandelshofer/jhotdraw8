@@ -19,12 +19,12 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -79,7 +79,7 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", new CssSize(10.0));
+    CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", CssSize.from(10.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code null}.

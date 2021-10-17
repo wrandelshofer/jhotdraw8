@@ -23,7 +23,7 @@ public class CssStrokeStyle {
     private final CssSize miterLimit;
 
     public CssStrokeStyle() {
-        this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4.0),
+        this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.from(4.0),
                 CssSize.ZERO, ImmutableLists.emptyList());
     }
 

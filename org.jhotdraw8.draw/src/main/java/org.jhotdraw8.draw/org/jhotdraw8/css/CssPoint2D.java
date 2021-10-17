@@ -30,7 +30,7 @@ public class CssPoint2D {
     }
 
     public CssPoint2D(double x, double y, @NonNull String units) {
-        this(new CssSize(x, units), new CssSize(y, units));
+        this(CssSize.from(x, units), CssSize.from(y, units));
     }
 
     public CssPoint2D() {

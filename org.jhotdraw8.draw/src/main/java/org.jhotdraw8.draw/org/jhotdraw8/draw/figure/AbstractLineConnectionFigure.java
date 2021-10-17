@@ -42,16 +42,16 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     public AbstractLineConnectionFigure(double startX, double startY, double endX, double endY) {
         // Performance: Only set properties if they differ from the default value.
         if (startX != 0) {
-            set(START_X, new CssSize(startX));
+            set(START_X, CssSize.from(startX));
         }
         if (startY != 0) {
-            set(START_Y, new CssSize(startY));
+            set(START_Y, CssSize.from(startY));
         }
         if (endX != 0) {
-            set(END_X, new CssSize(endX));
+            set(END_X, CssSize.from(endX));
         }
         if (endY != 0) {
-            set(END_Y, new CssSize(endY));
+            set(END_Y, CssSize.from(endY));
         }
     }
 

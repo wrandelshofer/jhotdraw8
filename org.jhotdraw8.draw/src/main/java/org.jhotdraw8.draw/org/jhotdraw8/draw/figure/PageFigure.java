@@ -67,8 +67,8 @@ public class PageFigure extends AbstractCompositeFigure
     public static final @NonNull CssSizeStyleableKey PAGE_OVERLAP_X = new CssSizeStyleableKey("page-overlap-x", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey PAGE_OVERLAP_Y = new CssSizeStyleableKey("page-overlap-y", CssSize.ZERO);
     public static final @NonNull CssPoint2DStyleableMapAccessor PAGE_OVERLAP = new CssPoint2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
-    public static final @NonNull CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", new CssSize(297.0, "mm"));
-    public static final @NonNull CssSizeStyleableKey PAPER_WIDTH = new CssSizeStyleableKey("paper-size-width", new CssSize(210.0, "mm"));
+    public static final @NonNull CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", CssSize.from(297.0, "mm"));
+    public static final @NonNull CssSizeStyleableKey PAPER_WIDTH = new CssSizeStyleableKey("paper-size-width", CssSize.from(210.0, "mm"));
     public static final @NonNull PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
@@ -346,10 +346,10 @@ public class PageFigure extends AbstractCompositeFigure
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
         Bounds newBounds = transform.transform(getLayoutBounds());
-        set(X, new CssSize(newBounds.getMinX()));
-        set(Y, new CssSize(newBounds.getMinY()));
-        set(WIDTH, new CssSize(newBounds.getWidth()));
-        set(HEIGHT, new CssSize(newBounds.getHeight()));
+        set(X, CssSize.from(newBounds.getMinX()));
+        set(Y, CssSize.from(newBounds.getMinY()));
+        set(WIDTH, CssSize.from(newBounds.getWidth()));
+        set(HEIGHT, CssSize.from(newBounds.getHeight()));
     }
 
     @Override

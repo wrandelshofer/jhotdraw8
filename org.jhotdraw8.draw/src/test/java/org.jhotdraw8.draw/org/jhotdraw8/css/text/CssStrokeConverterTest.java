@@ -67,20 +67,20 @@ public class CssStrokeConverterTest {
                         new CssStrokeStyle(),
                         "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
                 dynamicTest("3", () -> testStrokeStyle(
-                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
-                                , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
+                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, CssSize.from(3)
+                                , CssSize.from(4), ImmutableLists.of(CssSize.from(5), CssSize.from(6))),
                         "type(centered) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("4", () -> testStrokeStyle(
-                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(3)
-                                , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
+                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.from(3)
+                                , CssSize.from(4), ImmutableLists.of(CssSize.from(5), CssSize.from(6))),
                         "type(centered) linecap(butt) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("5", () -> testStrokeStyle(
-                        new CssStrokeStyle(StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, new CssSize(3)
-                                , new CssSize(4), ImmutableLists.of(new CssSize(5), new CssSize(6))),
+                        new CssStrokeStyle(StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, CssSize.from(3)
+                                , CssSize.from(4), ImmutableLists.of(CssSize.from(5), CssSize.from(6))),
                         "type(inside) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("6", () -> testStrokeStyle(
-                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, new CssSize(4)
-                                , new CssSize(0), ImmutableLists.emptyList()),
+                        new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.from(4)
+                                , CssSize.from(0), ImmutableLists.emptyList()),
                         "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()"))
         );
     }

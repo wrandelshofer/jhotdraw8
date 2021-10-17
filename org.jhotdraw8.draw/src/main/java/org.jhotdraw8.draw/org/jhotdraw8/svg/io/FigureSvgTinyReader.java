@@ -552,13 +552,13 @@ public class FigureSvgTinyReader {
         if (UnitConverter.PERCENTAGE.equals(w.getUnits())) {
             root.set(SvgDrawing.WIDTH,
                     viewBox == null || UnitConverter.PERCENTAGE.equals(viewBox.getWidth().getUnits()) ?
-                            new CssSize(640) : viewBox.getWidth()
+                            CssSize.from(640) : viewBox.getWidth()
             );
         }
         if (UnitConverter.PERCENTAGE.equals(h.getUnits())) {
             root.set(SvgDrawing.HEIGHT,
                     viewBox == null || UnitConverter.PERCENTAGE.equals(viewBox.getHeight().getUnits()) ?
-                            new CssSize(480) : viewBox.getHeight()
+                            CssSize.from(480) : viewBox.getHeight()
             );
         }
     }

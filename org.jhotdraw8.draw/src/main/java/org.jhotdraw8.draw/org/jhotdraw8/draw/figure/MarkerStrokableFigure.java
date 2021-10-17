@@ -17,11 +17,11 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.reflect.TypeToken;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -78,7 +78,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    CssSizeStyleableKey MARKER_STROKE_MITER_LIMIT = new CssSizeStyleableKey("marker-stroke-miterlimit", new CssSize(4.0));
+    CssSizeStyleableKey MARKER_STROKE_MITER_LIMIT = new CssSizeStyleableKey("marker-stroke-miterlimit", CssSize.from(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.

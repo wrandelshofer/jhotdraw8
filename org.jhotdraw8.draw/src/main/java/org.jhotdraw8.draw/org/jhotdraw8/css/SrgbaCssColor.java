@@ -46,14 +46,14 @@ public class SrgbaCssColor extends CssColor {
 
     public SrgbaCssColor(@NonNull Color color) {
         super(toName(
-                new CssSize(color.getRed() * 100, UnitConverter.PERCENTAGE),
-                new CssSize(color.getGreen() * 100, UnitConverter.PERCENTAGE),
-                new CssSize(color.getBlue() * 100, UnitConverter.PERCENTAGE),
-                new CssSize(color.getOpacity())), color);
-        this.red = new CssSize(color.getRed() * 100, UnitConverter.PERCENTAGE);
-        this.green = new CssSize(color.getGreen() * 100, UnitConverter.PERCENTAGE);
-        this.blue = new CssSize(color.getBlue() * 100, UnitConverter.PERCENTAGE);
-        this.opacity = new CssSize(color.getOpacity());
+                CssSize.from(color.getRed() * 100, UnitConverter.PERCENTAGE),
+                CssSize.from(color.getGreen() * 100, UnitConverter.PERCENTAGE),
+                CssSize.from(color.getBlue() * 100, UnitConverter.PERCENTAGE),
+                CssSize.from(color.getOpacity())), color);
+        this.red = CssSize.from(color.getRed() * 100, UnitConverter.PERCENTAGE);
+        this.green = CssSize.from(color.getGreen() * 100, UnitConverter.PERCENTAGE);
+        this.blue = CssSize.from(color.getBlue() * 100, UnitConverter.PERCENTAGE);
+        this.opacity = CssSize.from(color.getOpacity());
     }
 
     public SrgbaCssColor(@NonNull CssSize red, @NonNull CssSize green, @NonNull CssSize blue, @NonNull CssSize opacity) {

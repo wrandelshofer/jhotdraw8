@@ -79,6 +79,28 @@ public class CustomBinding {
         mediator.addListener(changeListener);
     }
 
+    public static <T, M> void bindBidirectionalStrongly2(
+            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
+
+        final ChangeListener<M> changeListener = new ChangeListener<M>() {
+            private Property<T> strongReference;
+
+            @Override
+            public void changed(ObservableValue<? extends M> o, M oldv, M newv) {
+                if (oldv != null && strongReference != null) {
+                    StrongBidirectionalBinding.unbind(propertyA, strongReference);
+                    strongReference = null;
+                }
+                if (newv != null) {
+                    strongReference = propertyB.apply(newv);
+                    StrongBidirectionalBinding.bind(propertyA, strongReference);
+                }
+            }
+        };
+        changeListener.changed(mediator, null, mediator.getValue());
+        mediator.addListener(changeListener);
+    }
+
     /**
      * Binds property 'a' to property 'b'. Property b is provided by 'mediator'.
      *
@@ -342,7 +364,6 @@ public class CustomBinding {
      *
      * @param dest   list dest
      * @param src    list source
-     * @param toDest mapping function to dest
      * @param <D>    the type of list dest
      * @param <S>    the type of list source
      */

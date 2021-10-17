@@ -84,9 +84,9 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                 CssSize dim2 = parseCalcProduct(element, tt, functionProcessor);
                 if (dim2.getUnits().equals(UnitConverter.DEFAULT)
                         || dim.getUnits().equals(dim2.getUnits())) {
-                    dim = new CssSize(dim.getValue() + dim2.getValue(), dim.getUnits());
+                    dim = CssSize.from(dim.getValue() + dim2.getValue(), dim.getUnits());
                 } else {
-                    dim = new CssSize(dim.getValue() + c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    dim = CssSize.from(dim.getValue() + c.convert(dim2, dim.getUnits()), dim.getUnits());
                 }
                 break;
             }
@@ -94,9 +94,9 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                 CssSize dim2 = parseCalcProduct(element, tt, functionProcessor);
                 if (dim2.getUnits().equals(UnitConverter.DEFAULT)
                         || dim.getUnits().equals(dim2.getUnits())) {
-                    dim = new CssSize(dim.getValue() - dim2.getValue(), dim.getUnits());
+                    dim = CssSize.from(dim.getValue() - dim2.getValue(), dim.getUnits());
                 } else {
-                    dim = new CssSize(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
+                    dim = CssSize.from(dim.getValue() - c.convert(dim2, dim.getUnits()), dim.getUnits());
                 }
                 break;
             }
@@ -118,9 +118,9 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                 CssSize dim2 = parseCalcProduct(element, tt, functionProcessor);
                 if (dim2.getUnits().equals(UnitConverter.DEFAULT)
                         || dim.getUnits().equals(dim2.getUnits())) {
-                    dim = new CssSize(dim.getValue() * dim2.getValue(), dim.getUnits());
+                    dim = CssSize.from(dim.getValue() * dim2.getValue(), dim.getUnits());
                 } else {
-                    dim = c.convertSize(new CssSize(dim.getConvertedValue() * dim2.getConvertedValue(), UnitConverter.DEFAULT), dim.getUnits());
+                    dim = c.convertSize(CssSize.from(dim.getConvertedValue() * dim2.getConvertedValue(), UnitConverter.DEFAULT), dim.getUnits());
                 }
                 break;
             }
@@ -128,9 +128,9 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
                 CssSize dim2 = parseCalcProduct(element, tt, functionProcessor);
                 if (dim2.getUnits().equals(UnitConverter.DEFAULT)
                         || dim.getUnits().equals(dim2.getUnits())) {
-                    dim = new CssSize(dim.getValue() / dim2.getValue(), dim.getUnits());
+                    dim = CssSize.from(dim.getValue() / dim2.getValue(), dim.getUnits());
                 } else {
-                    dim = c.convertSize(new CssSize(dim.getConvertedValue() / dim2.getConvertedValue(), UnitConverter.DEFAULT), dim.getUnits());
+                    dim = c.convertSize(CssSize.from(dim.getConvertedValue() / dim2.getConvertedValue(), UnitConverter.DEFAULT), dim.getUnits());
                 }
                 break;
             }
@@ -155,11 +155,11 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
     protected @Nullable CssSize parseCalcValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            return new CssSize(tt.currentNumberNonNull().doubleValue());
+            return CssSize.from(tt.currentNumberNonNull().doubleValue());
         case CssTokenType.TT_PERCENTAGE:
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), "%");
+            return CssSize.from(tt.currentNumberNonNull().doubleValue(), "%");
         case CssTokenType.TT_DIMENSION:
-            return new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+            return CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
         case '(':
             CssSize dim = parseCalcSum(element, tt, functionProcessor);
             tt.requireNextToken(')', "〈calc-value〉: right bracket ')' expected.");
@@ -175,11 +175,11 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
             CssToken token = list.get(0);
             switch (token.getType()) {
             case CssTokenType.TT_NUMBER:
-                return new CssSize(token.getNumericValue().doubleValue());
+                return CssSize.from(token.getNumericValue().doubleValue());
             case CssTokenType.TT_PERCENTAGE:
-                return new CssSize(token.getNumericValue().doubleValue(), "%");
+                return CssSize.from(token.getNumericValue().doubleValue(), "%");
             case CssTokenType.TT_DIMENSION:
-                return new CssSize(token.getNumericValue().doubleValue(), token.getStringValue());
+                return CssSize.from(token.getNumericValue().doubleValue(), token.getStringValue());
             default:
                 throw new ParseException("〈calc-value〉: function " + name + "() must return numeric value.", tt.getStartPosition());
             }

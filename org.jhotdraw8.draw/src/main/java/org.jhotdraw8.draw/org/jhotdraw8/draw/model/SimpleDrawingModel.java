@@ -375,7 +375,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         while (true) {
             List<Figure> todoNext = new ArrayList<>();
             for (Figure figure : todo) {
-                for (Figure d : figure.getLayoutObservers()) {
+                for (Figure d : figure.getReadOnlyLayoutObservers()) {
                     if (done.add(d)) {
                         todoNext.add(d);
                     }
@@ -504,7 +504,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                             todo.add(i.current());
                         }
                     } else if (dm.intersects(dmLayoutObservers)) {
-                        todo.addAll(f.getLayoutObservers());
+                        for (Figure layoutObserver : f.getReadOnlyLayoutObservers()) {
+                            todo.add(layoutObserver);
+                        }
                     }
                 }
             }
@@ -517,7 +519,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Figure f = queue.removeFirst();
                 if (visited.add(f)) {
                     graphBuilder.addVertex(f);
-                    for (Figure obs : f.getLayoutObservers()) {
+                    for (Figure obs : f.getReadOnlyLayoutObservers()) {
                         graphBuilder.addVertex(obs);
                         graphBuilder.addArrow(f, obs, f);
                         if (!visited.contains(obs)) {

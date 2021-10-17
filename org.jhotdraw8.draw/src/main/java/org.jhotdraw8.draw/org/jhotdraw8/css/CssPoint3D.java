@@ -30,7 +30,7 @@ public class CssPoint3D {
     }
 
     public CssPoint3D(double x, double y, double z, String units) {
-        this(new CssSize(x, units), new CssSize(y, units), new CssSize(z, units));
+        this(CssSize.from(x, units), CssSize.from(y, units), CssSize.from(z, units));
     }
 
     public CssPoint3D() {

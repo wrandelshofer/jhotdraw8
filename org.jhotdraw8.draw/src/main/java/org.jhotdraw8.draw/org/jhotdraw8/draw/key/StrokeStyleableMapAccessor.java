@@ -117,7 +117,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
             typeKey.put(a, StrokeType.CENTERED);
             lineJoinKey.put(a, StrokeLineJoin.MITER);
             lineCapKey.put(a, StrokeLineCap.SQUARE);
-            miterLimitKey.put(a, new CssSize(10.0));
+            miterLimitKey.put(a, CssSize.from(10.0));
         } else {
             dashOffsetKey.put(a, value.getDashOffset());
             dashArrayKey.put(a, value.getDashArray());

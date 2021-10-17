@@ -34,26 +34,26 @@ public class CssPaperSizeConverter implements Converter<CssDimension2D> {
 
     static {
         Map<String, CssDimension2D> m = new LinkedHashMap<>();
-        m.put("A0", new CssDimension2D(new CssSize(841, "mm"), new CssSize(1189, "mm")));
-        m.put("A1", new CssDimension2D(new CssSize(594, "mm"), new CssSize(841, "mm")));
-        m.put("A2", new CssDimension2D(new CssSize(420, "mm"), new CssSize(594, "mm")));
-        m.put("A3", new CssDimension2D(new CssSize(297, "mm"), new CssSize(420, "mm")));
-        m.put("A4", new CssDimension2D(new CssSize(210, "mm"), new CssSize(297, "mm")));
-        m.put("A5", new CssDimension2D(new CssSize(148, "mm"), new CssSize(210, "mm")));
-        m.put("A6", new CssDimension2D(new CssSize(105, "mm"), new CssSize(148, "mm")));
-        m.put("DesignatedLong", new CssDimension2D(new CssSize(110, "mm"), new CssSize(220, "mm")));
-        m.put("Letter", new CssDimension2D(new CssSize(8.5, "in"), new CssSize(11, "in")));
-        m.put("Legal", new CssDimension2D(new CssSize(8.4, "in"), new CssSize(14, "in")));
-        m.put("Tabloid", new CssDimension2D(new CssSize(11.0, "in"), new CssSize(17.0, "in")));
-        m.put("Executive", new CssDimension2D(new CssSize(7.25, "in"), new CssSize(10.5, "in")));
-        m.put("x8x10", new CssDimension2D(new CssSize(8, "in"), new CssSize(10, "in")));
-        m.put("MonarchEnvelope", new CssDimension2D(new CssSize(3.87, "in"), new CssSize(7.5, "in")));
-        m.put("Number10Envelope", new CssDimension2D(new CssSize(4.125, "in"), new CssSize(9.5, "in")));
-        m.put("C", new CssDimension2D(new CssSize(17.0, "in"), new CssSize(22.0, "in")));
-        m.put("B4", new CssDimension2D(new CssSize(257, "mm"), new CssSize(364, "mm")));
-        m.put("B5", new CssDimension2D(new CssSize(182, "mm"), new CssSize(257, "mm")));
-        m.put("B6", new CssDimension2D(new CssSize(128, "mm"), new CssSize(182, "mm")));
-        m.put("JapanesePostcard", new CssDimension2D(new CssSize(100, "mm"), new CssSize(148, "mm")));
+        m.put("A0", new CssDimension2D(CssSize.from(841, "mm"), CssSize.from(1189, "mm")));
+        m.put("A1", new CssDimension2D(CssSize.from(594, "mm"), CssSize.from(841, "mm")));
+        m.put("A2", new CssDimension2D(CssSize.from(420, "mm"), CssSize.from(594, "mm")));
+        m.put("A3", new CssDimension2D(CssSize.from(297, "mm"), CssSize.from(420, "mm")));
+        m.put("A4", new CssDimension2D(CssSize.from(210, "mm"), CssSize.from(297, "mm")));
+        m.put("A5", new CssDimension2D(CssSize.from(148, "mm"), CssSize.from(210, "mm")));
+        m.put("A6", new CssDimension2D(CssSize.from(105, "mm"), CssSize.from(148, "mm")));
+        m.put("DesignatedLong", new CssDimension2D(CssSize.from(110, "mm"), CssSize.from(220, "mm")));
+        m.put("Letter", new CssDimension2D(CssSize.from(8.5, "in"), CssSize.from(11, "in")));
+        m.put("Legal", new CssDimension2D(CssSize.from(8.4, "in"), CssSize.from(14, "in")));
+        m.put("Tabloid", new CssDimension2D(CssSize.from(11.0, "in"), CssSize.from(17.0, "in")));
+        m.put("Executive", new CssDimension2D(CssSize.from(7.25, "in"), CssSize.from(10.5, "in")));
+        m.put("x8x10", new CssDimension2D(CssSize.from(8, "in"), CssSize.from(10, "in")));
+        m.put("MonarchEnvelope", new CssDimension2D(CssSize.from(3.87, "in"), CssSize.from(7.5, "in")));
+        m.put("Number10Envelope", new CssDimension2D(CssSize.from(4.125, "in"), CssSize.from(9.5, "in")));
+        m.put("C", new CssDimension2D(CssSize.from(17.0, "in"), CssSize.from(22.0, "in")));
+        m.put("B4", new CssDimension2D(CssSize.from(257, "mm"), CssSize.from(364, "mm")));
+        m.put("B5", new CssDimension2D(CssSize.from(182, "mm"), CssSize.from(257, "mm")));
+        m.put("B6", new CssDimension2D(CssSize.from(128, "mm"), CssSize.from(182, "mm")));
+        m.put("JapanesePostcard", new CssDimension2D(CssSize.from(100, "mm"), CssSize.from(148, "mm")));
         paperSizes = m;
 
         Map<CssDimension2D, String> x = new LinkedHashMap<>();
@@ -120,7 +120,7 @@ public class CssPaperSizeConverter implements Converter<CssDimension2D> {
 
     @Override
     public @Nullable CssDimension2D getDefaultValue() {
-        return new CssDimension2D(new CssSize(0), new CssSize(0));
+        return new CssDimension2D(CssSize.from(0), CssSize.from(0));
     }
 
     @Override

@@ -53,7 +53,7 @@ public class RoundCssFunction<T> extends CalcCssFunction<T> {
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈" + getName() + "〉: right bracket \")\" expected.");
         int end = tt.getEndPosition();
 
-        CssSize rounded = new CssSize(Math.round(dim.getValue()), dim.getUnits());
+        CssSize rounded = CssSize.from(Math.round(dim.getValue()), dim.getUnits());
         produceNumberPercentageOrDimension(out, rounded, line, start, end);
     }
 

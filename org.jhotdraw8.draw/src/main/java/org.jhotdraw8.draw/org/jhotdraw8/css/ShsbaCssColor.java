@@ -47,14 +47,14 @@ public class ShsbaCssColor extends CssColor {
 
     public ShsbaCssColor(@NonNull Color color) {
         super(toName(
-                new CssSize(color.getHue()),
-                new CssSize(color.getSaturation()),
-                new CssSize(color.getBrightness()),
-                new CssSize(color.getOpacity())), color);
-        this.hue = new CssSize(color.getHue());
-        this.saturation = new CssSize(color.getSaturation());
-        this.brightness = new CssSize(color.getBrightness());
-        this.opacity = new CssSize(color.getOpacity());
+                CssSize.from(color.getHue()),
+                CssSize.from(color.getSaturation()),
+                CssSize.from(color.getBrightness()),
+                CssSize.from(color.getOpacity())), color);
+        this.hue = CssSize.from(color.getHue());
+        this.saturation = CssSize.from(color.getSaturation());
+        this.brightness = CssSize.from(color.getBrightness());
+        this.opacity = CssSize.from(color.getOpacity());
     }
 
     public ShsbaCssColor(@NonNull CssSize hue, @NonNull CssSize saturation, @NonNull CssSize brightness, @NonNull CssSize opacity) {

@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.css.StyleOrigin;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -15,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -27,6 +27,7 @@ import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.styleable.StyleableBean;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -130,8 +131,13 @@ public class FigureTest {
             return FXCollections.emptyObservableList();
         }
 
-        public @Nullable ObservableSet<Figure> getLayoutObservers() {
-            return null;
+        public @NonNull Set<Figure> getLayoutObservers() {
+            return Collections.emptySet();
+        }
+
+        @Override
+        public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
+            return ImmutableSets.emptySet();
         }
 
         public @NonNull Transform getParentToLocal() {

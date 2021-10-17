@@ -111,10 +111,10 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
         CssSize size = null;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            size = new CssSize(tt.currentNumberNonNull().doubleValue());
+            size = CssSize.from(tt.currentNumberNonNull().doubleValue());
             break;
         case CssTokenType.TT_PERCENTAGE:
-            size = new CssSize(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+            size = CssSize.from(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
             break;
         default:
             throw tt.createParseException("〈percentage-value〉: percentage value expected.");

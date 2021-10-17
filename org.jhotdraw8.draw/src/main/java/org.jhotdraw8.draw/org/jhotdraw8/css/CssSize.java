@@ -30,16 +30,10 @@ public class CssSize {
 
     public static final @Nullable CssSize ZERO = new CssSize(0);
     public static final CssSize ONE = new CssSize(1);
-    private final @NonNull String units;
     private final double value;
 
     public CssSize(double value) {
-        this(value, UnitConverter.DEFAULT);
-    }
-
-    public CssSize(double value, @Nullable String units) {
         this.value = value;
-        this.units = units == null ? UnitConverter.DEFAULT : units;
     }
 
     public static CssSize from(double value, @Nullable String units) {
@@ -51,7 +45,7 @@ public class CssSize {
                 return CssSize.ONE;
             }
         }
-        return new CssSize(value, units);
+        return units == null || UnitConverter.DEFAULT.equals(units) ? new CssSize(value) : new CssSizeWithUnits(value, units);
     }
 
     public static CssSize from(double value) {
@@ -75,14 +69,14 @@ public class CssSize {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof CssSize)) {
             return false;
         }
         final CssSize other = (CssSize) obj;
         if (Double.doubleToLongBits(this.value) != Double.doubleToLongBits(other.value)) {
             return false;
         }
-        return Objects.equals(this.units, other.units);
+        return Objects.equals(this.getUnits(), other.getUnits());
     }
 
     public double getConvertedValue() {
@@ -98,7 +92,7 @@ public class CssSize {
     }
 
     public @NonNull String getUnits() {
-        return units;
+        return UnitConverter.DEFAULT;
     }
 
     public double getValue() {
@@ -108,14 +102,14 @@ public class CssSize {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.units);
+        hash = 97 * hash + Objects.hashCode(this.getUnits());
         hash = 97 * hash + (int) (Double.doubleToLongBits(this.value) ^ (Double.doubleToLongBits(this.value) >>> 32));
         return hash;
     }
 
     @Override
     public @NonNull String toString() {
-        return "CssSize{" + value + "\"" + units + "\"" + '}';
+        return "CssSize{" + value + "\"" + getUnits() + "\"" + '}';
     }
 
     public @NonNull CssSize subtract(@NonNull CssSize that) {
@@ -127,22 +121,22 @@ public class CssSize {
     }
 
     public @NonNull CssSize subtract(@NonNull CssSize that, @NonNull UnitConverter unitConverter) {
-        return new CssSize(this.value - unitConverter.convert(that, this.units), this.units);
+        return from(this.value - unitConverter.convert(that, this.getUnits()), this.getUnits());
     }
 
     public @NonNull CssSize add(@NonNull CssSize that, @NonNull UnitConverter unitConverter) {
-        return new CssSize(this.value + unitConverter.convert(that, this.units), this.units);
+        return from(this.value + unitConverter.convert(that, this.getUnits()), this.getUnits());
     }
 
     public @NonNull CssSize abs() {
-        return value >= 0 ? this : new CssSize(Math.abs(value), units);
+        return value >= 0 ? this : from(Math.abs(value), getUnits());
     }
 
     public @NonNull CssSize multiply(double factor) {
-        return new CssSize(value * factor, units);
+        return from(value * factor, getUnits());
     }
 
     public @NonNull CssSize divide(double divisor) {
-        return new CssSize(value / divisor, units);
+        return from(value / divisor, getUnits());
     }
 }

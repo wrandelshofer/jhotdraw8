@@ -29,7 +29,7 @@ public class CssDimension2D {
     }
 
     public CssDimension2D(double width, double height, @NonNull String units) {
-        this(new CssSize(width, units), new CssSize(height, units));
+        this(CssSize.from(width, units), CssSize.from(height, units));
     }
 
     public CssDimension2D() {

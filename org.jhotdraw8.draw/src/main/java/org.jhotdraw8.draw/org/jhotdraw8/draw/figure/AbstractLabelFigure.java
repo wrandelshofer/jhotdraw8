@@ -54,7 +54,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public static final @NonNull CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
     public static final @NonNull NullableFXPathElementsStyleableKey ICON_SHAPE = new NullableFXPathElementsStyleableKey("iconShape", null);
     public static final @NonNull CssDimension2DStyleableKey ICON_SIZE = new CssDimension2DStyleableKey("iconSize", new CssDimension2D(16, 16));
-    public static final @NonNull CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", new CssSize(4));
+    public static final @NonNull CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", CssSize.from(4));
 
 
     private @Nullable Bounds cachedLayoutBounds;
@@ -70,10 +70,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public AbstractLabelFigure(double x, double y) {
         // Performance: Only set properties if they differ from the default value.
         if (x != 0) {
-            set(ORIGIN_X, new CssSize(x));
+            set(ORIGIN_X, CssSize.from(x));
         }
         if (y != 0) {
-            set(ORIGIN_Y, new CssSize(y));
+            set(ORIGIN_Y, CssSize.from(y));
         }
     }
 

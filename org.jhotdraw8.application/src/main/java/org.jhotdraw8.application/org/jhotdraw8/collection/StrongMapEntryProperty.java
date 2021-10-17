@@ -7,36 +7,34 @@ package org.jhotdraw8.collection;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import javafx.collections.WeakMapChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
 
 /**
- * This property is weakly bound to an entry in a map.
+ * This property is strongly bound to an entry in a map.
  *
  * @param <K> key type
  * @param <V> map value type
  * @param <T> entry value type
  * @author Werner Randelshofer
  */
-public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
+public class StrongMapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
-    protected @Nullable K key;
-    protected @Nullable ObservableMap<K, V> map;
-    private @Nullable WeakMapChangeListener<K, V> weakListener;
+    private @Nullable K key;
+    private @Nullable ObservableMap<K, V> map;
     /**
      * Here char is used as an uint16.
      */
     private char changing;
 
-    public MapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Class<T> tClazz) {
+    public StrongMapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
         this.key = key;
 
-        map.addListener(weakListener = new WeakMapChangeListener<>(this));
+        map.addListener(this);
     }
 
     @Override
@@ -90,8 +88,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
     public void unbind() {
         super.unbind();
         if (map != null) {
-            map.removeListener(weakListener);
-            weakListener = null;
+            map.removeListener(this);
             map = null;
             key = null;
         }

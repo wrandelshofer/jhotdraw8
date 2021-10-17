@@ -52,7 +52,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     public AbstractDrawing(double width, double height) {
-        this(new CssSize(width), new CssSize(height));
+        this(CssSize.from(width), CssSize.from(height));
 
     }
 

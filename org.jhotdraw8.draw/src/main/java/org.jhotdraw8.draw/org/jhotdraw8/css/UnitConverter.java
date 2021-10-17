@@ -169,7 +169,7 @@ public interface UnitConverter {
     }
 
     default @NonNull CssSize convertSize(double value, @NonNull String inputUnit, @NonNull String outputUnit) {
-        return new CssSize(convert(value, inputUnit, outputUnit), outputUnit);
+        return CssSize.from(convert(value, inputUnit, outputUnit), outputUnit);
     }
 
     /**
@@ -184,7 +184,7 @@ public interface UnitConverter {
     }
 
     default @NonNull CssSize convertSize(@NonNull CssSize value, @NonNull String outputUnit) {
-        return new CssSize(convert(value.getValue(), value.getUnits(), outputUnit), outputUnit);
+        return CssSize.from(convert(value.getValue(), value.getUnits(), outputUnit), outputUnit);
     }
 
     default @NonNull CssPoint2D convertPoint2D(@NonNull CssPoint2D cssPoint2D, @NonNull String units) {

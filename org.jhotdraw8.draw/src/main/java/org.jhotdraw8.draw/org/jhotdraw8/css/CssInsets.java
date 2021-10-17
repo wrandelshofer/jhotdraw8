@@ -32,7 +32,7 @@ public class CssInsets {
     }
 
     public CssInsets(double top, double right, double bottom, double left, String units) {
-        this(new CssSize(top, units), new CssSize(right, units), new CssSize(bottom, units), new CssSize(left, units));
+        this(CssSize.from(top, units), CssSize.from(right, units), CssSize.from(bottom, units), CssSize.from(left, units));
     }
 
     public CssInsets() {

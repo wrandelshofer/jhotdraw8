@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -44,11 +43,10 @@ import org.jhotdraw8.tree.TreeNode;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -220,7 +218,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         Set<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
         if (keys == null) {
             keys = new HashSet<>();
-            LinkedList<Class<?>> todo = new LinkedList<>();
+            ArrayDeque<Class<?>> todo = new ArrayDeque<>();
             Set<Class<?>> done = new HashSet<>();
             todo.add(clazz);
             while (!todo.isEmpty()) {
@@ -426,7 +424,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * drawing.
      */
     default void disconnect() {
-        for (Figure connectedFigure : new ArrayList<>(getLayoutObservers())) {
+        for (Figure connectedFigure : getReadOnlyLayoutObservers().toArray(new Figure[0])) {
             connectedFigure.removeLayoutSubject(this);
         }
         removeAllLayoutSubjects();
@@ -632,7 +630,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of dependent figures
      */
-    ObservableSet<Figure> getLayoutObservers();
+    @NonNull Set<Figure> getLayoutObservers();
+
+    @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -1115,7 +1115,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param height desired height in parent coordinates, may be negative
      */
     default void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(new CssSize(x), new CssSize(y), new CssSize(width), new CssSize(height));
+        reshapeInLocal(CssSize.from(x), CssSize.from(y), CssSize.from(width), CssSize.from(height));
     }
 
     /**

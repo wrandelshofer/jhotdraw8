@@ -90,11 +90,11 @@ public interface Drawing extends Figure {
     /**
      * Defines the width of the canvas.
      */
-    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", new CssSize(640.0));
+    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.from(640.0));
     /**
      * Defines the height of the canvas.
      */
-    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", new CssSize(480.0));
+    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.from(480.0));
 
 
     /**
@@ -176,7 +176,7 @@ public interface Drawing extends Figure {
         DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(256, 256, true);
         for (Figure f : postorderIterable()) {
             graphBuilder.addVertex(f);
-            for (Figure obs : f.getLayoutObservers()) {
+            for (Figure obs : f.getReadOnlyLayoutObservers()) {
                 graphBuilder.addVertex(obs);
                 graphBuilder.addArrow(f, obs, f);
             }

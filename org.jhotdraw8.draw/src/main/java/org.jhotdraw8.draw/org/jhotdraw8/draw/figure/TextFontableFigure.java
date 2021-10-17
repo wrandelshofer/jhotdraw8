@@ -18,11 +18,11 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 /**
  * A figure which supports font attributes.
@@ -36,7 +36,7 @@ public interface TextFontableFigure extends Figure {
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
     StringOrIdentStyleableKey FONT_FAMILY = new StringOrIdentStyleableKey("fontFamily", "Arial");
-    CssSizeStyleableKey FONT_SIZE = new CssSizeStyleableKey("fontSize", new CssSize(12.0));
+    CssSizeStyleableKey FONT_SIZE = new CssSizeStyleableKey("fontSize", CssSize.from(12.0));
     EnumStyleableKey<FontPosture> FONT_STYLE = new EnumStyleableKey<>("fontStyle", FontPosture.class, FontPosture.REGULAR);
     EnumStyleableKey<FontWeight> FONT_WEIGHT = new EnumStyleableKey<>("fontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);

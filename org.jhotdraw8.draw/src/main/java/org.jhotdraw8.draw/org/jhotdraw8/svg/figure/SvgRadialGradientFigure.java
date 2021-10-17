@@ -33,9 +33,9 @@ public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
     public static final String TYPE_SELECTOR = "radialGradient";
-    public static final @NonNull CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", new CssSize(0.5));
-    public static final @NonNull CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", new CssSize(0.5));
-    public static final @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", new CssSize(0.5));
+    public static final @NonNull CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.from(0.5));
+    public static final @NonNull CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.from(0.5));
+    public static final @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.from(0.5));
 
     @Override
     public @Nullable Paint getPaint(@Nullable RenderContext ctx) {

@@ -561,7 +561,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
             for (Figure ff : f.preorderIterable()) {
                 StreamSupport.stream(new TreeBreadthFirstSpliterator<>(
                                 figure -> () ->
-                                        figure.getLayoutObservers().stream()
+                                        figure.getReadOnlyLayoutObservers().stream()
                                                 .filter(x -> x.getLayoutSubjects().size() == 1).iterator()
                                 , ff),
                         false)

@@ -66,8 +66,8 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeType type = StrokeType.CENTERED;
         StrokeLineCap lineCap = StrokeLineCap.BUTT;
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
-        CssSize miterLimit = new CssSize(4);
-        CssSize dashOffset = new CssSize(0);
+        CssSize miterLimit = CssSize.from(4);
+        CssSize dashOffset = CssSize.from(0);
         ImmutableList<CssSize> dashArray = ImmutableLists.emptyList();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
@@ -83,10 +83,10 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
                 lineJoin = parseLineJoin(tt);
                 break;
             case MITERLIMIT:
-                miterLimit = parseNumericFunction(MITERLIMIT, new CssSize(10), tt, idResolver);
+                miterLimit = parseNumericFunction(MITERLIMIT, CssSize.from(10), tt, idResolver);
                 break;
             case DASHOFFSET:
-                dashOffset = parseNumericFunction(DASHOFFSET, new CssSize(0), tt, idResolver);
+                dashOffset = parseNumericFunction(DASHOFFSET, CssSize.from(0), tt, idResolver);
                 break;
             case DASHARRAY:
                 dashArray = parseDashArray(tt, idResolver);
@@ -201,10 +201,10 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         CssSize value;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            value = new CssSize(tt.currentNumberNonNull().doubleValue());
+            value = CssSize.from(tt.currentNumberNonNull().doubleValue());
             break;
         case CssTokenType.TT_DIMENSION:
-            value = new CssSize(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+            value = CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             break;
         default:
             value = defaultValue;
