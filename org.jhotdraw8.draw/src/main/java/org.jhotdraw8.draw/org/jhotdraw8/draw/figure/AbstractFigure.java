@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.KeyMap;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.collection.ReadOnlySet;
@@ -73,8 +72,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
             int index = 0;
 
             Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
-            Map<Key<?>, Integer> m = new KeyMap(accessors.size());
-
+            Map<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
             for (MapAccessor<?> accessor : accessors) {
                 if (accessor instanceof Key<?>) {
                     m.put((Key<?>) accessor, index++);

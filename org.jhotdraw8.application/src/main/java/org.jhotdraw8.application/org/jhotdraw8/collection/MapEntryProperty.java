@@ -11,6 +11,7 @@ import javafx.collections.WeakMapChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -32,7 +33,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
      */
     private char changing;
 
-    public MapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Class<T> tClazz) {
+    public MapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Type tClazz) {
         this.map = map;
         this.key = key;
 
