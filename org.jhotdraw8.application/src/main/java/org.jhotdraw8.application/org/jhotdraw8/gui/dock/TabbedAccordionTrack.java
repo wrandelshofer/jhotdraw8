@@ -81,9 +81,13 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         getStyleClass().add("track");
 
         dockParentProperty().addListener(onParentChanged());
-        dockChildren.addListener((ListChangeListener<? super DockNode>) change -> onDockChildrenChanged());
+
+        // bindContent must be done before dockChildren.addListener, so that
+        // makeTab is always called be fore onDockChildrenChanged is called.
         CustomBinding.bindContent(tabPane.getTabs(), getDockChildren(),
                 this::makeTab, k -> ((TabPaneTrack.MyTab) k).dispose());
+        dockChildren.addListener((ListChangeListener<? super DockNode>) change -> onDockChildrenChanged());
+
         Binding<Boolean> expandedAndShowing = showingProperty().and(accordion.expandedPaneProperty().isNotNull());
         CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(), t -> ((TabPaneTrack.MyTab) t).showingProperty(), expandedAndShowing, false);
     }
