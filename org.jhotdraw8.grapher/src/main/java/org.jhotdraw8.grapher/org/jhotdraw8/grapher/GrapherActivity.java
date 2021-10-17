@@ -33,6 +33,7 @@ import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssInsets;
 import org.jhotdraw8.draw.DrawingEditor;
+import org.jhotdraw8.draw.DrawingEditorPreferencesHandler;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.EditorActivity;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
@@ -361,6 +362,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
 
         editor = new SimpleDrawingEditor();
+        new DrawingEditorPreferencesHandler(editor,
+                getApplication().getPreferences());
         editor.addDrawingView(drawingView);
 
         ScrollPane viewScrollPane = new ScrollPane();
