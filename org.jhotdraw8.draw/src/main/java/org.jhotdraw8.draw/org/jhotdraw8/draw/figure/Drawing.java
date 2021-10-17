@@ -8,8 +8,10 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.NonNullKey;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.SimpleNonNullListKey;
 import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.css.CssColor;
@@ -26,6 +28,8 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
 /**
  * A <em>drawing</em> is an image composed of graphical (figurative) elements.
@@ -143,8 +147,33 @@ public interface Drawing extends Figure {
      * @param ctx the render context
      */
     default void layoutAll(@NonNull RenderContext ctx) {
-        for (Figure f : layoutDependenciesIterable()) {
-            f.layout(ctx);
+        // build a graph which includes all figures that must be laid out and all their observers
+        // transitively
+        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, true);
+        for (Figure f : postorderIterable()) {
+            graphBuilder.addVertex(f);
+            for (Figure obs : f.getReadOnlyLayoutObservers()) {
+                graphBuilder.addVertex(obs);
+                graphBuilder.addArrow(f, obs, f);
+            }
+        }
+        OrderedPair<int[], IntArrayList> pair = TopologicalSort.sortTopologicallyIntBatches(graphBuilder);
+        int[] sorted = pair.first();
+        if (pair.second().isEmpty()) {
+            // graph has a loop => layout sequentially
+            for (int i : sorted) {
+                graphBuilder.getVertex(i).layout(ctx);
+            }
+        } else {
+            // graph has no loop => layout each topologically independent batch in parallel
+            int start = 0;
+            for (int end : pair.second()) {
+                StreamSupport.intStream(Spliterators.spliterator(sorted, start, end, 0), true)
+                        .forEach(i -> {
+                            graphBuilder.getVertex(i).layout(ctx);
+                        });
+                start = end;
+            }
         }
     }
 
@@ -173,7 +202,7 @@ public interface Drawing extends Figure {
     default @NonNull Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
-        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(256, 256, true);
+        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, true);
         for (Figure f : postorderIterable()) {
             graphBuilder.addVertex(f);
             for (Figure obs : f.getReadOnlyLayoutObservers()) {

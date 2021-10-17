@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executors;
 
 /**
  * TeddyActivityController.
@@ -89,7 +90,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
 
     @Override
     public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState) {
-        return FXWorker.supply(() -> {
+        return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
             try (Reader in = Files.newBufferedReader(Paths.get(uri))) {
@@ -116,7 +117,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @Override
     public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, @NonNull WorkState<Void> workState) {
         final String text = textArea.getText();
-        return FXWorker.run(() -> {
+        return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {
                 out.write(text);
             }

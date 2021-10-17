@@ -137,7 +137,7 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     /**
      * Maps a vertex index to a vertex object.
      */
-    private final @NonNull List<V> vertices;
+    private @NonNull List<V> vertices;
     /**
      * Maps an arrow index to an arrow object.
      */
@@ -255,12 +255,18 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      */
     public void addVertex(@Nullable V v) {
         Objects.requireNonNull(v, "v");
-        vertexMap.computeIfAbsent(v, k -> {
-            vertices.add(v);
-            buildAddVertex();
-            return vertices.size() - 1;
-        });
+        vertexMap.computeIfAbsent(v, addVertexIfAbsent);
     }
+
+    /**
+     * Performance: We need this lambda very often if a large graph is created
+     * with this builder.
+     */
+    private final Function<V, Integer> addVertexIfAbsent = k -> {
+        vertices.add(k);
+        buildAddVertex();
+        return vertices.size() - 1;
+    };
 
     /**
      * Builds an ImmutableDirectedGraph from this builder.

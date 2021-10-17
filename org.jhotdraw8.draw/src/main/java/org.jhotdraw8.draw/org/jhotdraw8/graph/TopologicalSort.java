@@ -5,6 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.OrderedPair;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class TopologicalSort {
         }
 
         // Step 2: put all vertices with degree zero into deque
-        final int[] queue = new int[n]; // todo deque
+        final int[] queue = new int[n];
         int first = 0, last = 0; // first and last indices in deque
         for (int i = 0; i < n; i++) {
             if (deg[i] == 0) {
@@ -113,6 +115,87 @@ public class TopologicalSort {
         }
 
         return result;
+    }
+
+    /**
+     * Sorts the specified directed graph topologically.
+     * Returns a list of batches that do not depend topologically on
+     * each other.
+     *
+     * @param model the graph
+     * @return the sorted list of vertices and the list of batches,
+     * batches will be empty if the graph has cycles
+     */
+    public static @NonNull OrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(@NonNull IntDirectedGraph model) {
+        final int n = model.getVertexCount();
+        IntArrayList batches = new IntArrayList();
+        boolean hasLoop = false;
+
+        // Step 1: compute number of incoming arrows for each vertex
+        final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
+        for (int i = 0; i < n; i++) {
+            final int m = model.getNextCount(i);
+            for (int j = 0; j < m; j++) {
+                int v = model.getNext(i, j);
+                deg[v]++;
+            }
+        }
+
+        // Step 2: put all vertices with degree zero into deque
+        final int[] queue = new int[n];
+        int first = 0, last = 0; // first and last indices in deque
+        for (int i = 0; i < n; i++) {
+            if (deg[i] == 0) {
+                queue[last++] = i;
+            }
+        }
+        int lastBatch = last;
+        batches.add(last);
+
+        // Step 3: Repeat until all vertices have been processed or a loop has been detected
+        final int[] result = new int[n];// result array
+        int done = 0;
+        while (done < n) {
+            for (; done < n; done++) {
+                if (first == last) {
+                    hasLoop = true;
+                    break;
+                }
+                int v = queue[first++];
+                final int m = model.getNextCount(v);
+                for (int j = 0; j < m; j++) {
+                    int u = model.getNext(v, j);
+                    if (--deg[u] == 0) {
+                        queue[last++] = u;
+                    }
+                }
+                result[done] = v;
+
+                if (first == lastBatch && done < n - 1) {
+                    lastBatch = last;
+                    batches.add(last);
+                }
+            }
+
+            if (done < n) {
+                // Break loop in graph by removing all arrows on a node.
+                int i = 0;
+                while (i < n - 1 && deg[i] <= 0) {
+                    i++;
+                }
+                if (deg[i] == 0) {
+                    throw new AssertionError("bug in loop-breaking algorithm i: " + i);
+                }
+                deg[i] = 0;// this can actually remove more than one arrow
+                queue[last++] = i;
+            }
+        }
+
+        if (hasLoop) {
+            batches.clear();
+        }
+
+        return new OrderedPair<>(result, batches);
     }
 
     /**

@@ -181,6 +181,14 @@ public class IntArrayList implements Iterable<Integer> {
         return items[index];
     }
 
+    public int getLast() {
+        return get(size - 1);
+    }
+
+    public int getFirst() {
+        return get(0);
+    }
+
     /**
      * Sets the size of this list. If the new size is greater than the current
      * size, new {@code 0} items are added to the end of the list. If the new
@@ -361,7 +369,15 @@ public class IntArrayList implements Iterable<Integer> {
 
     @Override
     public @NonNull String toString() {
-        return Arrays.toString(items);
+        StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; i < size; i++) {
+            if (i > 0) {
+                b.append(", ");
+            }
+            b.append(items[i]);
+        }
+        return b.append(']').toString();
     }
 
     /**

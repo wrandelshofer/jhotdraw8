@@ -145,6 +145,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
 import static org.jhotdraw8.io.DataFormats.registerDataFormat;
@@ -455,7 +456,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
 
     @Override
     public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, boolean insert, @NonNull WorkState<Void> workState) {
-        return FXWorker.supply(() -> {
+        return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
             SimpleXmlStaxReader io = new SimpleXmlStaxReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
@@ -474,7 +475,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     @Override
     public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, @NonNull WorkState<Void> workState) {
         Drawing drawing = drawingView.getDrawing();
-        return FXWorker.run(() -> {
+        return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {
             if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
                 SvgExportOutputFormat io = new SvgExportOutputFormat();
                 io.setExporterFactory(FXSvgTinyWriter::new);

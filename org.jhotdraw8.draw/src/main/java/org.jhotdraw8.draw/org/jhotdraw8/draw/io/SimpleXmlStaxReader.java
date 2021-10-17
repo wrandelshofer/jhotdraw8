@@ -152,6 +152,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
             throw e.getCause();
         }
         try {
+            // If there is not enough parallelism, this future may never return!
             for (FutureTask<Void> future : futures) {
                 future.get();
             }
@@ -300,7 +301,13 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
             }
             return null;
         });
-        ForkJoinPool.commonPool().execute(task);
+        if (ForkJoinPool.getCommonPoolParallelism() < 2) {
+            // When there is not enough parallelism, then the reader may saturate
+            // the pool!
+            task.run();
+        } else {
+            ForkJoinPool.commonPool().execute(task);
+        }
         futures.add(task);
     }
 

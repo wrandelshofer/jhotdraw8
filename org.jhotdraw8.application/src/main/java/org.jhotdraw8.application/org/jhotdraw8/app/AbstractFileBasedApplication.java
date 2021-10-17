@@ -384,9 +384,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(activity.getNode());
         if (!isSystemMenuSupported) {
-            Map<String, Action> allActions = new LinkedHashMap<>();
-            allActions.putAll(getActions());
-            allActions.putAll(getActions());
+            Map<String, Action> allActions = new LinkedHashMap<>(getActions());
             MenuBar mb = createMenuBar(activity, stage, allActions);
             if (mb != null) {
                 mb.setUseSystemMenuBar(true);
