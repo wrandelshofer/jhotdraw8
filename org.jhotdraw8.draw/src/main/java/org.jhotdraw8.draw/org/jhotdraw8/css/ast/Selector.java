@@ -5,7 +5,6 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 
@@ -85,7 +84,7 @@ public abstract class Selector extends AbstractSyntaxTree {
      *
      * @return a type name or null
      */
-    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
+    public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return null;
     }
 

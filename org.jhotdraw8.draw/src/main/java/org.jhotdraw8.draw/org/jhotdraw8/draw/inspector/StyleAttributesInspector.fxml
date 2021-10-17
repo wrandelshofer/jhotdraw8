@@ -5,18 +5,7 @@
   ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import java.lang.String?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.Button?><?import javafx.scene.control.CheckBox?><?import javafx.scene.control.MenuButton?><?import javafx.scene.control.MenuItem?><?import javafx.scene.control.RadioButton?><?import javafx.scene.control.SeparatorMenuItem?><?import javafx.scene.control.TextArea?><?import javafx.scene.control.ToggleGroup?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.VBox?><?import java.lang.String?>
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1">
   <children>
@@ -29,19 +18,17 @@
           <items>
             <MenuItem mnemonicParsing="false">
               <graphic>
-                <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true"
-                          text="%composeAttributes.checkBox.text"/>
+                <CheckBox fx:id="composeAttributesCheckBox" mnemonicParsing="false" selected="true" text="%composeAttributes.CheckBox.text"/>
               </graphic>
             </MenuItem>
             <MenuItem mnemonicParsing="false">
               <graphic>
-                <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true"
-                          text="%updateContents.checkBox.text"/>
+                <CheckBox fx:id="updateContentsCheckBox" minWidth="24.0" mnemonicParsing="false" selected="true" text="%updateContents.CheckBox.text"/>
               </graphic>
             </MenuItem>
             <MenuItem mnemonicParsing="false">
               <graphic>
-                <CheckBox fx:id="updateSelectorCheckBox" mnemonicParsing="false" text="%updateSelector.checkBox.text"/>
+                <CheckBox fx:id="updateSelectorCheckBox" mnemonicParsing="false" text="%updateSelector.CheckBox.text"/>
               </graphic>
             </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false"/>
@@ -68,14 +55,13 @@
             </MenuItem>
             <MenuItem mnemonicParsing="false">
               <graphic>
-                <RadioButton fx:id="showAppliedValues" mnemonicParsing="false" text="%shownValues.appliedValues"
-                             toggleGroup="$shownValues"/>
+                <RadioButton fx:id="showAppliedValues" mnemonicParsing="false" text="%shownValues.appliedValues" toggleGroup="$shownValues"/>
               </graphic>
             </MenuItem>
           </items>
         </MenuButton>
-        <Button fx:id="selectButton" mnemonicParsing="false" text="%selectButton.text"/>
-        <Button fx:id="applyButton" mnemonicParsing="false" text="%applyButton.text"/>
+        <Button fx:id="selectButton" mnemonicParsing="false" text="%select.Button.text"/>
+        <Button fx:id="applyButton" mnemonicParsing="false" text="%apply.Button.text"/>
       </children>
       <VBox.margin>
         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>

@@ -10,7 +10,6 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.List;
@@ -152,21 +151,21 @@ public class SelectorGroup extends Selector {
      * match on the same type.
      */
     @Override
-    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
-        QualifiedName qName = null;
+    public @Nullable TypeSelector matchesOnlyOnASpecificType() {
+        TypeSelector typeSelector = null;
         for (int i = 0, n = selectors.size(); i < n; i++) {
             if (i == 0) {
-                qName = selectors.get(i).matchesOnlyOnASpecificType();
-                if (qName == null) {
+                typeSelector = selectors.get(i).matchesOnlyOnASpecificType();
+                if (typeSelector == null) {
                     return null;
                 }
             } else {
-                if (!qName.equals(selectors.get(i).matchesOnlyOnASpecificType())) {
+                if (!typeSelector.equals(selectors.get(i).matchesOnlyOnASpecificType())) {
                     return null;
                 }
             }
         }
-        return qName;
+        return typeSelector;
     }
 
 }

@@ -33,13 +33,13 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public String getAttributeAsString(@NonNull Element elem, StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
-        return getAttributeAsString(elem, namespace, name);
+    public String getAttributeAsString(@NonNull Element elem, StyleOrigin origin, @Nullable String namespacePattern, @NonNull String name) {
+        return getAttributeAsString(elem, namespacePattern, name);
     }
 
     @Override
-    public @Nullable List<CssToken> getAttribute(@NonNull Element element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
-        String str = getAttributeAsString(element, origin, namespace, name);
+    public @Nullable List<CssToken> getAttribute(@NonNull Element element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String name) {
+        String str = getAttributeAsString(element, origin, namespacePattern, name);
         if (str == null) {
             return null;
         }
@@ -62,12 +62,12 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public boolean hasType(@NonNull Element elem, @Nullable String namespace, @NonNull String type) {
+    public boolean hasType(@NonNull Element elem, @Nullable String namespacePattern, @NonNull String type) {
         String localName = elem.getLocalName();
-        if (ANY_NAMESPACE.equals(namespace)) {
+        if (ANY_NAMESPACE.equals(namespacePattern)) {
             return localName.equals(type);
         } else {
-            return localName.equals(type) && Objects.equals(namespace, elem.getNamespaceURI());
+            return localName.equals(type) && Objects.equals(namespacePattern, elem.getNamespaceURI());
         }
     }
 
@@ -241,14 +241,14 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public boolean attributeValueStartsWith(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = getAttributeAsString(element, namespace, attributeName);
+    public boolean attributeValueStartsWith(@NonNull Element element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     @Override
-    public String getAttributeAsString(@NonNull Element element, @Nullable String namespace, @NonNull String attributeName) {
-        if (ANY_NAMESPACE.equals(namespace)) {
+    public String getAttributeAsString(@NonNull Element element, @Nullable String namespacePattern, @NonNull String attributeName) {
+        if (ANY_NAMESPACE.equals(namespacePattern)) {
             NamedNodeMap nnm = element.getAttributes();
             for (int i = 0, n = nnm.getLength(); i < n; i++) {
                 Node item = nnm.item(i);
@@ -258,7 +258,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
             }
             return null;
         }
-        return element.getAttributeNS(namespace, attributeName);
+        return element.getAttributeNS(namespacePattern, attributeName);
     }
 
     @Override

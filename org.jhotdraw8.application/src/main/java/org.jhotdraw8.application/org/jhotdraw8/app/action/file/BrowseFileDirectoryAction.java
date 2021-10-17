@@ -43,6 +43,10 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
     }
 
     private void doIt(@Nullable URI uri) {
+        browseFileDirectory(uri);
+    }
+
+    public static void browseFileDirectory(@Nullable URI uri) {
         if (uri == null) {
             return;
         }

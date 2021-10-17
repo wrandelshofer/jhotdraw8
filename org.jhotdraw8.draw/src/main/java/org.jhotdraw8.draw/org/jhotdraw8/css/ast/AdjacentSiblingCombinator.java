@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.function.Consumer;
@@ -59,7 +58,7 @@ public class AdjacentSiblingCombinator extends Combinator {
      * @return {@code second.matchesOnlyOnASpecificType()}
      */
     @Override
-    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
+    public @Nullable TypeSelector matchesOnlyOnASpecificType() {
         return second.matchesOnlyOnASpecificType();
     }
 }

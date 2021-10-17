@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.Objects;
@@ -20,24 +19,29 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class TypeSelector extends SimpleSelector {
-    private final @Nullable String namespace;
+    private final @Nullable String namespacePattern;
     private final @NonNull String type;
 
-    public TypeSelector(@Nullable String namespace, @NonNull String type) {
-        this.namespace = namespace;
+    /**
+     * @param namespacePattern null means no namespace,
+     *                         {@link SelectorModel#ANY_NAMESPACE} means any namespace
+     * @param type
+     */
+    public TypeSelector(@Nullable String namespacePattern, @NonNull String type) {
+        this.namespacePattern = namespacePattern;
         this.type = type;
     }
 
     @Override
     public @NonNull String toString() {
         return "Type:"
-                + (namespace == null ? "" : namespace + "|")
+                + (namespacePattern == null ? "" : namespacePattern + "|")
                 + type;
     }
 
     @Override
     public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
-        return (element != null && model.hasType(element, namespace, type)) //
+        return (element != null && model.hasType(element, namespacePattern, type)) //
                 ? element : null;
     }
 
@@ -48,9 +52,9 @@ public class TypeSelector extends SimpleSelector {
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
-        if (!SelectorModel.ANY_NAMESPACE.equals(namespace)) {
-            if (namespace != null) {
-                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+        if (!SelectorModel.ANY_NAMESPACE.equals(namespacePattern)) {
+            if (namespacePattern != null) {
+                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespacePattern));
             }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
@@ -66,16 +70,24 @@ public class TypeSelector extends SimpleSelector {
             return false;
         }
         TypeSelector that = (TypeSelector) o;
-        return Objects.equals(namespace, that.namespace) && type.equals(that.type);
+        return Objects.equals(namespacePattern, that.namespacePattern) && type.equals(that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(namespace, type);
+        return Objects.hash(namespacePattern, type);
+    }
+
+    public String getNamespacePattern() {
+        return namespacePattern;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
-    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
-        return new QualifiedName(namespace, type);
+    public @Nullable TypeSelector matchesOnlyOnASpecificType() {
+        return this;
     }
 }

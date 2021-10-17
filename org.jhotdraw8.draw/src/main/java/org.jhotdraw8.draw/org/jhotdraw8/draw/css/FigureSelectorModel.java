@@ -78,11 +78,11 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasType(@NonNull Figure element, @Nullable String namespace, @NonNull String type) {
-        if (namespace == null || ANY_NAMESPACE.equals(namespace)) {
+    public boolean hasType(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String type) {
+        if (namespacePattern == null || ANY_NAMESPACE.equals(namespacePattern)) {
             return type.equals(element.getTypeSelector());
         }
-        if (JAVA_CLASS_NAMESPACE.equals(namespace)) {
+        if (JAVA_CLASS_NAMESPACE.equals(namespacePattern)) {
             return element.getClass().getSimpleName().equals(type);
         }
         return false;
@@ -150,14 +150,14 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public boolean attributeValueEquals(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName, @NonNull String requestedValue) {
-        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
+    public boolean attributeValueEquals(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String requestedValue) {
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return Objects.equals(stringValue, requestedValue);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
+    public boolean attributeValueStartsWith(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return stringValue != null && stringValue.startsWith(substring);
     }
 
@@ -181,20 +181,20 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public boolean attributeValueEndsWith(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
+    public boolean attributeValueEndsWith(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return stringValue != null && stringValue.endsWith(substring);
     }
 
     @Override
-    public boolean attributeValueContains(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String stringValue = getReadOnlyAttributeValueAsString(element, namespace, attributeName);
+    public boolean attributeValueContains(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return stringValue != null && stringValue.contains(substring);
     }
 
     @Override
-    public boolean attributeValueContainsWord(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
-        ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
+    public boolean attributeValueContainsWord(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String word) {
+        ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespacePattern, attributeName);
         if (k == null) {
             return false;
         }
@@ -286,12 +286,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
-        return getAttributeAsString(element, StyleOrigin.USER, namespace, attributeName);
+    public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName) {
+        return getAttributeAsString(element, StyleOrigin.USER, namespacePattern, attributeName);
     }
 
-    public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String attributeName) {
-        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespace, attributeName);
+    public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
+        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
             return null;
         }
@@ -356,8 +356,8 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return buf.toString();
     }
 
-    public @Nullable List<CssToken> getAttribute(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String attributeName) {
-        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespace, attributeName);
+    public @Nullable List<CssToken> getAttribute(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
+        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
             return null;
         }

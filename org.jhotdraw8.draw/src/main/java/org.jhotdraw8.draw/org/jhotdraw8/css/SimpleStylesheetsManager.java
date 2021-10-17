@@ -8,11 +8,13 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.io.UriResolver;
@@ -28,6 +30,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -44,6 +48,7 @@ import java.util.stream.StreamSupport;
  * @author Werner Randelshofer
  */
 public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
+    private @Nullable String defaultNamespace;
 
     private @NonNull Supplier<CssParser> parserFactory = CssParser::new;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
@@ -153,6 +158,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         cachedAuthorCustomProperties = null;
         cachedInlineCustomProperties = null;
         cachedUserAgentCustomProperties = null;
+        candidateRules.clear();
     }
 
     @Override
@@ -396,11 +402,34 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
+    private final @NonNull ConcurrentHashMap<OrderedPair<Stylesheet, QualifiedName>, List<StyleRule>>
+            candidateRules = new ConcurrentHashMap<>();
+
+    private Iterable<StyleRule> getCandidateStyleRules(@NonNull Stylesheet s, @NonNull E elem) {
+        QualifiedName qualifiedTypeName = getSelectorModel().getType(elem);
+        String typeName = qualifiedTypeName.getName();
+        OrderedPair<Stylesheet, QualifiedName> key = new OrderedPair<>(s, qualifiedTypeName);
+        return candidateRules.computeIfAbsent(key, k -> {
+            List<StyleRule> candidates = new ArrayList<>();
+            for (StyleRule styleRule : s.getStyleRules()) {
+                TypeSelector typeSelector = styleRule.getSelectorGroup().matchesOnlyOnASpecificType();
+                String candidateTypeName = typeSelector == null || !Objects.equals(typeSelector.getNamespacePattern(), SelectorModel.ANY_NAMESPACE)
+                        ? null
+                        : typeSelector.getType();
+                if (candidateTypeName == null || candidateTypeName.equals(typeName)) {
+                    candidates.add(styleRule);
+                }
+            }
+            return candidates;
+        });
+
+    }
+
     private @NonNull List<ApplicableDeclaration> collectApplicableDeclarations(
-            E elem, @NonNull Stylesheet s,
+            @NonNull E elem, @NonNull Stylesheet s,
             @NonNull List<ApplicableDeclaration> applicableDeclarations) {
         SelectorModel<E> selectorModel = getSelectorModel();
-        for (StyleRule r : s.getStyleRules()) {
+        for (StyleRule r : getCandidateStyleRules(s, elem)) {
             Selector selector;
             if (null != (selector = r.getSelectorGroup().matchSelector(selectorModel, elem))) {
                 for (Declaration d : r.getDeclarations()) {
@@ -624,5 +653,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     public void setUriResolver(UriResolver uriResolver) {
         this.uriResolver = uriResolver;
+    }
+
+    public String getDefaultNamespace() {
+        return defaultNamespace;
+    }
+
+    public void setDefaultNamespace(String defaultNamespace) {
+        this.defaultNamespace = defaultNamespace;
     }
 }

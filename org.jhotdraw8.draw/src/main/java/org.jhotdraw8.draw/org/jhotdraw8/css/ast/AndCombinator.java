@@ -7,7 +7,6 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.SelectorModel;
 
 import java.util.function.Consumer;
@@ -55,9 +54,9 @@ public class AndCombinator extends Combinator {
      * : second.matchesOnlyOnASpecificType()}
      */
     @Override
-    public @Nullable QualifiedName matchesOnlyOnASpecificType() {
-        QualifiedName firstQN = first.matchesOnlyOnASpecificType();
-        QualifiedName secondQN = second.matchesOnlyOnASpecificType();
+    public @Nullable TypeSelector matchesOnlyOnASpecificType() {
+        TypeSelector firstQN = first.matchesOnlyOnASpecificType();
+        TypeSelector secondQN = second.matchesOnlyOnASpecificType();
         return firstQN != null ? firstQN : secondQN;
     }
 }

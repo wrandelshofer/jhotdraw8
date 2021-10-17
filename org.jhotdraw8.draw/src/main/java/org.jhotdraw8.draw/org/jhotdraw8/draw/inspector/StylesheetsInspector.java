@@ -15,13 +15,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.draw.DrawingView;
@@ -79,7 +82,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene.
+        // which immediately instantiate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
 
             FXMLLoader loader = new FXMLLoader();
@@ -91,6 +94,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 throw new InternalError(ex);
             }
             listView.getItems().addListener((InvalidationListener) (o -> onListChanged()));
+
             // int counter = 0;
             addButton.addEventHandler(ActionEvent.ACTION, this::onAddAction);
             removeButton.addEventHandler(ActionEvent.ACTION, this::onRemoveAction);
@@ -153,9 +157,34 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
             };
             StringConverter<URI> uriConverter = new StringConverterAdapter<>(new XmlUriConverter());
-            ListViewUtil.addDragAndDropSupport(listView, (ListView<URI> param)
-                    -> new TextFieldListCell<>(uriConverter), io);
+
+            ListViewUtil.addDragAndDropSupport(listView,
+                    (ListView<URI> param) -> {
+                        TextFieldListCell<URI> cell = new TextFieldListCell<>(uriConverter);
+                        cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                            if (isNowEmpty) {
+                                cell.setContextMenu(null);
+                            } else {
+                                cell.setContextMenu(createCellContextMenu(cell));
+                            }
+                        });
+                        return cell;
+                    }, io);
         });
+    }
+
+    private ContextMenu createCellContextMenu(TextFieldListCell<URI> cell) {
+        ContextMenu cm = new ContextMenu();
+        MenuItem mi = new MenuItem();
+        mi.setText(InspectorLabels.getResources().getString("file.browseFileDirectory.text"));
+        mi.setOnAction(event -> onBrowseFileDirectory(event, cell));
+        cm.getItems().add(mi);
+        return cm;
+    }
+
+    private void onBrowseFileDirectory(ActionEvent actionEvent, TextFieldListCell<URI> cell) {
+        URI uri = cell.getItem();
+        BrowseFileDirectoryAction.browseFileDirectory(uri);
     }
 
     private int isReplacingDrawing;

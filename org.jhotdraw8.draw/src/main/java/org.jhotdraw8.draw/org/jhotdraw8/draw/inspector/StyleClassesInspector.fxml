@@ -5,30 +5,23 @@
   ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import java.lang.String?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.Button?><?import javafx.scene.control.ListView?><?import javafx.scene.control.TextField?><?import javafx.scene.control.Tooltip?><?import javafx.scene.layout.BorderPane?><?import javafx.scene.layout.HBox?><?import java.lang.String?>
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1"
             xmlns:fx="http://javafx.com/fxml/1">
   <bottom>
     <HBox spacing="4.0" BorderPane.alignment="CENTER">
       <children>
-        <Button fx:id="addButton" mnemonicParsing="false" text="%addButton.text">
+        <Button fx:id="addButton" mnemonicParsing="false" text="%add.Button.text">
           <tooltip>
-            <Tooltip text="%addButton.toolTipText"/>
+            <Tooltip text="%add.Button.toolTipText"/>
           </tooltip>
           <HBox.margin>
             <Insets/>
           </HBox.margin>
         </Button>
-        <Button fx:id="removeButton" mnemonicParsing="false" text="%removeButton.text">
+        <Button fx:id="removeButton" mnemonicParsing="false" text="%remove.Button.text">
           <tooltip>
-            <Tooltip text="%removeButton.toolTipText"/>
+            <Tooltip text="%remove.Button.toolTipText"/>
           </tooltip>
           <HBox.margin>
             <Insets/>

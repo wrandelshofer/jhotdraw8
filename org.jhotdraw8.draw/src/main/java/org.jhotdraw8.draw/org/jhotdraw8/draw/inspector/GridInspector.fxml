@@ -5,23 +5,14 @@
   ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.CheckBox?><?import javafx.scene.control.ColorPicker?><?import javafx.scene.control.Label?><?import javafx.scene.control.TextField?><?import javafx.scene.control.Tooltip?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.RowConstraints?>
 <GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/8.0.65"
           xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <HBox GridPane.columnSpan="2147483647">
       <children>
-        <CheckBox fx:id="snapToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.checkBoxText"/>
-        <CheckBox fx:id="drawGridCheckBox" mnemonicParsing="false" text="%showGrid.checkBoxText">
+        <CheckBox fx:id="snapToGridCheckBox" mnemonicParsing="false" text="%snapToGrid.CheckBox.text"/>
+        <CheckBox fx:id="drawGridCheckBox" mnemonicParsing="false" text="%showGrid.CheckBox.text">
           <HBox.margin>
             <Insets left="8.0"/>
           </HBox.margin>

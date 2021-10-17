@@ -50,16 +50,16 @@ public interface SelectorModel<T> {
      * Returns true if the element has an attribute with the specified name and
      * the value contains the specified substring.
      *
-     * @param element       An element of the document
-     * @param namespace     an optional namespace ("*" means any namespace,
-     *                      null means no namespace)
-     * @param attributeName an attribute name
-     * @param substring     the substring
+     * @param element          An element of the document
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param attributeName    an attribute name
+     * @param substring        the substring
      * @return true if the element has an attribute with the specified name and
      * the value contains the specified substring.
      */
-    default boolean attributeValueContains(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = getAttributeAsString(element, namespace, attributeName);
+    default boolean attributeValueContains(@NonNull T element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
         return actualValue != null && (actualValue.contains(substring));
     }
 
@@ -67,16 +67,16 @@ public interface SelectorModel<T> {
      * Returns true if the element has an attribute with the specified name and
      * the value is a list of words which contains the specified word.
      *
-     * @param element       An element of the document
-     * @param namespace     an optional namespace ("*" means any namespace,
-     *                      null means no namespace)
-     * @param attributeName an attribute name
-     * @param word          the word
+     * @param element          An element of the document
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param attributeName    an attribute name
+     * @param word             the word
      * @return true if the element has an attribute with the specified name and
      * the value contains the specified word.
      */
-    default boolean attributeValueContainsWord(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
-        String value = getAttributeAsString(element, namespace, attributeName);
+    default boolean attributeValueContainsWord(@NonNull T element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String word) {
+        String value = getAttributeAsString(element, namespacePattern, attributeName);
         if (value != null) {
             String[] words = value.split("\\s+");
             for (int i = 0; i < words.length; i++) {
@@ -92,16 +92,16 @@ public interface SelectorModel<T> {
      * Returns true if the element has an attribute with the specified name and
      * the attribute value ends with the specified substring.
      *
-     * @param element       An element of the document
-     * @param namespace     an optional namespace ("*" means any namespace,
-     *                      null means no namespace)
-     * @param attributeName an attribute name
-     * @param substring     the substring
+     * @param element          An element of the document
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param attributeName    an attribute name
+     * @param substring        the substring
      * @return true if the element has an attribute with the specified name and
      * the value ends with the specified substring.
      */
-    default boolean attributeValueEndsWith(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = getAttributeAsString(element, namespace, attributeName);
+    default boolean attributeValueEndsWith(@NonNull T element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
         return actualValue != null && (actualValue.endsWith(substring));
     }
 
@@ -109,16 +109,16 @@ public interface SelectorModel<T> {
      * Returns true if the element has an attribute with the specified name and
      * value.
      *
-     * @param element        An element of the document
-     * @param namespace      an optional namespace ("*" means any namespace,
-     *                       null means no namespace)
-     * @param attributeName  an attribute name
-     * @param attributeValue the attribute value
+     * @param element          An element of the document
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param attributeName    an attribute name
+     * @param attributeValue   the attribute value
      * @return true if the element has an attribute with the specified name and
      * value
      */
-    default boolean attributeValueEquals(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String attributeValue) {
-        String actualValue = getAttributeAsString(element, namespace, attributeName);
+    default boolean attributeValueEquals(@NonNull T element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String attributeValue) {
+        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
         return actualValue != null && actualValue.equals(attributeValue);
     }
 
@@ -126,34 +126,34 @@ public interface SelectorModel<T> {
      * Returns true if the element has an attribute with the specified name and
      * the attribute value starts with the specified substring.
      *
-     * @param element       An element of the document
-     * @param namespace     The attribute namespace
-     * @param attributeName an attribute name
-     * @param substring     the substring
+     * @param element          An element of the document
+     * @param namespacePattern The attribute namespace
+     * @param attributeName    an attribute name
+     * @param substring        the substring
      * @return true if the element has an attribute with the specified name and
      * the value starts with the specified substring.
      */
-    default boolean attributeValueStartsWith(@NonNull T element, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = getAttributeAsString(element, namespace, attributeName);
+    default boolean attributeValueStartsWith(@NonNull T element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
         return actualValue != null && (actualValue.startsWith(substring));
     }
 
     /**
      * Returns the attribute value with the given name from the USER style origin.
      *
-     * @param element   The element
-     * @param namespace     an optional namespace ("*" means any namespace,
-     *                      null means no namespace)
-     * @param name      The attribute name
+     * @param element          The element
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param name             The attribute name
      * @return The attribute value. Returns "initial" if the element does not have an
      * attribute with this name.
      */
-    default @Nullable String getAttributeAsString(@NonNull T element, @Nullable String namespace, @NonNull String name) {
-        return getAttributeAsString(element, StyleOrigin.USER, namespace, name);
+    default @Nullable String getAttributeAsString(@NonNull T element, @Nullable String namespacePattern, @NonNull String name) {
+        return getAttributeAsString(element, StyleOrigin.USER, namespacePattern, name);
     }
 
-    default @Nullable String getAttributeAsString(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name) {
-        List<CssToken> list = getAttribute(element, origin, namespace, name);
+    default @Nullable String getAttributeAsString(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String name) {
+        List<CssToken> list = getAttribute(element, origin, namespacePattern, name);
         if (list == null) {
             return null;
         }
@@ -165,7 +165,7 @@ public interface SelectorModel<T> {
     }
 
     @Nullable
-    List<CssToken> getAttribute(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespace, @NonNull String name);
+    List<CssToken> getAttribute(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String name);
 
     /**
      * Returns all styleable attributes of the element.
@@ -293,13 +293,13 @@ public interface SelectorModel<T> {
     /**
      * Returns true if the element has the specified type.
      *
-     * @param element   An element of the document
-     * @param namespace     an optional namespace ("*" means any namespace,
-     *                      null means no namespace)
-     * @param type      an id
+     * @param element          An element of the document
+     * @param namespacePattern a namespace pattern ("*" means any namespace,
+     *                         null means no namespace)
+     * @param type             an id
      * @return true if the element has the id
      */
-    boolean hasType(@NonNull T element, @Nullable String namespace, @NonNull String type);
+    boolean hasType(@NonNull T element, @Nullable String namespacePattern, @NonNull String type);
 
     /**
      * Resets all values with non-{@link StyleOrigin#USER} origin.
