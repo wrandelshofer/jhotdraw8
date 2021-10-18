@@ -147,6 +147,21 @@ public interface Drawing extends Figure {
      * @param ctx the render context
      */
     default void layoutAll(@NonNull RenderContext ctx) {
+        layoutAll(ctx, true);
+    }
+
+    /**
+     * Performs one layout pass over the entire drawing.
+     * <p>
+     * This method lays out figures that do not depend on the layout
+     * of other figures first, and then lays out figures that depend
+     * on them, until all figures are laid out once.
+     * Circular dependencies are broken up deterministically.
+     *
+     * @param ctx      the render context
+     * @param parallel performs the layout in parallel or sequentially
+     */
+    default void layoutAll(@NonNull RenderContext ctx, boolean parallel) {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
         DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, true);
@@ -155,6 +170,10 @@ public interface Drawing extends Figure {
             for (Figure obs : f.getReadOnlyLayoutObservers()) {
                 graphBuilder.addVertex(obs);
                 graphBuilder.addArrow(f, obs, f);
+            }
+            for (Figure child : f.getChildren()) {
+                graphBuilder.addVertex(child);
+                graphBuilder.addArrow(f, child, f);
             }
         }
         OrderedPair<int[], IntArrayList> pair = TopologicalSort.sortTopologicallyIntBatches(graphBuilder);
@@ -165,10 +184,10 @@ public interface Drawing extends Figure {
                 graphBuilder.getVertex(i).layout(ctx);
             }
         } else {
-            // graph has no loop => layout each topologically independent batch in parallel
+            // graph has no loop => layout each topologically independent batch in parallel.
             int start = 0;
             for (int end : pair.second()) {
-                StreamSupport.intStream(Spliterators.spliterator(sorted, start, end, 0), true)
+                StreamSupport.intStream(Spliterators.spliterator(sorted, start, end, 0), parallel)
                         .forEach(i -> {
                             graphBuilder.getVertex(i).layout(ctx);
                         });

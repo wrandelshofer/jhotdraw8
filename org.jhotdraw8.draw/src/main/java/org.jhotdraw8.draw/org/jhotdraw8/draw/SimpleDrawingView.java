@@ -368,6 +368,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     private void onRootChanged() {
         onDrawingChanged();
+        clearSelection();
+
         revalidateLayout();
         repaint();
     }

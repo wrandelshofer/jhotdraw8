@@ -28,6 +28,7 @@ import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 
 /**
@@ -51,7 +52,7 @@ public class LayerCell extends ListCell<Figure> {
     @FXML
     private Label selectionLabel;
 
-    private DrawingModel drawingModel;
+    private WeakReference<DrawingModel> drawingModel;
 
     private boolean isUpdating;
 
@@ -66,7 +67,7 @@ public class LayerCell extends ListCell<Figure> {
     }
 
     public LayerCell(@NonNull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
-        this.drawingModel = drawingModel;
+        this.drawingModel = new WeakReference<>(drawingModel);
         this.inspector = inspector;
         init(fxmlUrl);
     }
@@ -145,13 +146,19 @@ public class LayerCell extends ListCell<Figure> {
 
     private void commitLayerVisible(Observable o) {
         if (!isUpdating) {
-            drawingModel.set(item, HideableFigure.VISIBLE, visibleCheckBox.isSelected());
+            DrawingModel m = this.drawingModel.get();
+            if (m != null) {
+                m.set(item, HideableFigure.VISIBLE, visibleCheckBox.isSelected());
+            }
         }
     }
 
     private void commitLayerLocked(Observable o) {
         if (!isUpdating) {
-            drawingModel.set(item, LockableFigure.LOCKED, lockedCheckBox.isSelected());
+            DrawingModel m = this.drawingModel.get();
+            if (m != null) {
+                m.set(item, LockableFigure.LOCKED, lockedCheckBox.isSelected());
+            }
         }
     }
 
@@ -210,7 +217,10 @@ public class LayerCell extends ListCell<Figure> {
     @Override
     public void commitEdit(Figure newValue) {
         if (editField != null && isEditing()) {
-            drawingModel.set(item, StyleableFigure.ID, editField.getText());
+            DrawingModel m = this.drawingModel.get();
+            if (m != null) {
+                m.set(item, StyleableFigure.ID, editField.getText());
+            }
         }
         super.commitEdit(newValue);
     }
