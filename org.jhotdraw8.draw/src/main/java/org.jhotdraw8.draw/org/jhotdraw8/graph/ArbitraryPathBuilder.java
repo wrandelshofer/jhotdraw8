@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  * @param <A> the arrow type
  * @author Werner Randelshofer
  */
-public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
+public class ArbitraryPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
 
 
     /**
@@ -37,7 +37,7 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      *
      * @param graph a graph
      */
-    public AnyPathBuilder(@NonNull DirectedGraph<V, A> graph) {
+    public ArbitraryPathBuilder(@NonNull DirectedGraph<V, A> graph) {
         this(graph::getNextVertices);
     }
 
@@ -46,7 +46,7 @@ public class AnyPathBuilder<V, A> extends AbstractPathBuilder<V, A> {
      *
      * @param nextNodesFunction Accessor function to next nodes in graph.
      */
-    public AnyPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
+    public ArbitraryPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
         super(nextNodesFunction);
     }
 

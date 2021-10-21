@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class AnyPathBuilderTest {
+public class ArbitraryPathBuilderTest {
 
-    public AnyPathBuilderTest() {
+    public ArbitraryPathBuilderTest() {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
@@ -90,7 +90,7 @@ public class AnyPathBuilderTest {
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
+        ArbitraryPathBuilder<Integer, Double> instance = new ArbitraryPathBuilder<>(graph);
         ImmutableList<Integer> actual = instance.findVertexPath(start, goal::equals);
         assertEquals(expected, actual);
     }
@@ -110,7 +110,7 @@ public class AnyPathBuilderTest {
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
+        ArbitraryPathBuilder<Integer, Double> instance = new ArbitraryPathBuilder<>(graph);
         ImmutableList<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
         assertEquals(expResult, actual);
     }
@@ -162,7 +162,7 @@ public class AnyPathBuilderTest {
     }
 
     private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<ImmutableList<Integer>> expected) {
-        AnyPathBuilder<Integer, Double> instance = new AnyPathBuilder<>(graph);
+        ArbitraryPathBuilder<Integer, Double> instance = new ArbitraryPathBuilder<>(graph);
         List<ImmutableList<Integer>> actual = instance.findAllVertexPaths(start,
                 a -> a == goal, maxDepth);
         assertEquals(expected, actual);
