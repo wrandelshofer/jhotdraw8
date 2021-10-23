@@ -19,7 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
 
@@ -68,8 +72,8 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         DirectedGraphBuilder<V, A> b = new DirectedGraphBuilder<>();
         for (V v : graph.getVertices()) {
             b.addVertex(v);
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                b.addArrow(v, graph.getNext(v, j), graph.getNextArrow(v, j));
+            for (Arc<V, A> arc : graph.getNextArcs(v)) {
+                b.addArrow(v, arc.getEnd(), arc.getData());
             }
         }
         return b;
@@ -94,8 +98,9 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         for (VV vv : graph.getVertices()) {
             V v = vertexMapper.apply(vv);
             b.addVertex(v);
-            for (int j = 0, m = graph.getNextCount(vv); j < m; j++) {
-                b.addArrow(v, vertexMapper.apply(graph.getNext(vv, j)), arrowMapper.apply(graph.getNextArrow(vv, j)));
+            for (Arc<VV, AA> arc : graph.getNextArcs(vv)) {
+                b.addArrow(v, vertexMapper.apply(arc.getEnd()),
+                        arrowMapper.apply(arc.getData()));
             }
         }
         return b;
@@ -120,10 +125,9 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
             }
         }
         for (V v : graph.getVertices()) {
-            for (int j = 0, m = graph.getNextCount(v); j < m; j++) {
-                final V u = graph.getNext(v, j);
-                if (vertexPredicate.test(u)) {
-                    b.addArrow(v, u, graph.getNextArrow(v, j));
+            for (Arc<V, A> arc : graph.getNextArcs(v)) {
+                if (vertexPredicate.test(arc.getEnd())) {
+                    b.addArrow(v, arc.getEnd(), arc.getData());
                 }
             }
         }
@@ -402,6 +406,53 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
                 return getVertexCount();
             }
 
+        };
+    }
+
+    public @NonNull Collection<V> getNextVertices(@NonNull V vertex) {
+        class NextVertexIterator implements Spliterator<V> {
+            private final Spliterator.OfInt it;
+
+            NextVertexIterator(Spliterator.OfInt nextVertices) {
+                this.it = nextVertices;
+            }
+
+            @Override
+            public boolean tryAdvance(Consumer<? super V> action) {
+                return it.tryAdvance((IntConsumer) i -> action.accept(getVertex(i)));
+            }
+
+            @Override
+            public Spliterator<V> trySplit() {
+                OfInt splitted = it.trySplit();
+                return splitted == null ? null : new NextVertexIterator(splitted);
+            }
+
+            @Override
+            public long estimateSize() {
+                return it.estimateSize();
+            }
+
+            @Override
+            public int characteristics() {
+                return it.characteristics();
+            }
+        }
+        return new AbstractCollection<V>() {
+            @Override
+            public @NonNull Spliterator<V> spliterator() {
+                return new NextVertexIterator(getNextVertices(getVertexIndex(vertex)));
+            }
+
+            @Override
+            public Iterator<V> iterator() {
+                return Spliterators.iterator(spliterator());
+            }
+
+            @Override
+            public int size() {
+                return getNextCount(vertex);
+            }
         };
     }
 

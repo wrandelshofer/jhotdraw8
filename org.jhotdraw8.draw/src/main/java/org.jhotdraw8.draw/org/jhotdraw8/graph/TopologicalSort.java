@@ -6,6 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.collection.OrderedPair;
 
 import java.util.ArrayDeque;
@@ -64,9 +65,8 @@ public class TopologicalSort {
         // Step 1: compute number of incoming arrows for each vertex
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
-            final int m = model.getNextCount(i);
-            for (int j = 0; j < m; j++) {
-                int v = model.getNext(i, j);
+            for (IntEnumerator iter = model.getNextVertices(i); iter.moveNext(); ) {
+                int v = iter.current();
                 deg[v]++;
             }
         }
@@ -90,9 +90,8 @@ public class TopologicalSort {
                     break;
                 }
                 int v = queue[first++];
-                final int m = model.getNextCount(v);
-                for (int j = 0; j < m; j++) {
-                    int u = model.getNext(v, j);
+                for (IntEnumerator iter = model.getNextVertices(v); iter.moveNext(); ) {
+                    int u = iter.current();
                     if (--deg[u] == 0) {
                         queue[last++] = u;
                     }
@@ -134,9 +133,8 @@ public class TopologicalSort {
         // Step 1: compute number of incoming arrows for each vertex
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
-            final int m = model.getNextCount(i);
-            for (int j = 0; j < m; j++) {
-                int v = model.getNext(i, j);
+            for (IntEnumerator iter = model.getNextVertices(i); iter.moveNext(); ) {
+                int v = iter.current();
                 deg[v]++;
             }
         }
@@ -162,12 +160,12 @@ public class TopologicalSort {
                     break;
                 }
                 int v = queue[first++];
-                final int m = model.getNextCount(v);
-                for (int j = 0; j < m; j++) {
-                    int u = model.getNext(v, j);
+                for (IntEnumerator iter = model.getNextVertices(v); iter.moveNext(); ) {
+                    int u = iter.current();
                     if (--deg[u] == 0) {
                         queue[last++] = u;
                     }
+
                 }
                 result[done] = v;
 

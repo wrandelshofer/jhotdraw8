@@ -170,12 +170,12 @@
            encoding="UTF-8" destdir="${module.classes}"
            debug="true"
            verbose="false"
-           createmissingpackageinfoclass="false"
+           createmissingpackageinfoclass="false" includeantruntime="false"
     >
       <compilerarg value="-Xlint"/>
       <compilerarg value="-XprintRounds"/>
       <compilerarg value="-Xdiags:verbose"/>
-      <modulesourcepath path="org.jhotdraw8.application/src/main/java/"/>
+      <modulesourcepath path="org.jhotdraw8.application/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.draw/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.grapher/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.teddy/src/main/java"/>

@@ -13,7 +13,7 @@ import java.util.Objects;
  * Data record for an arrow with associated data in a directed graph.
  * <p>
  * "Arc" is used as a synonym for arrow in some definitions for directed
- * graphs. In this design, "Arc" explicitly mans a data object that contains
+ * graphs. In this design, "Arc" explicitly means a data object that contains
  * the start and end vertices of and arrow and an associated data object.
  *
  * @param <V> the vertex type

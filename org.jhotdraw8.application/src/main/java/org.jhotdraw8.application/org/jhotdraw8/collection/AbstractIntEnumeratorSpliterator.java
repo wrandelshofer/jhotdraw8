@@ -6,31 +6,12 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
-/**
- * Base classes for {@link Enumerator}s that also want to fulfill the
- * {@link Spliterator} interface.
- * <p>
- * Subclasses should only implement the {@link Enumerator#moveNext()}
- * method and the {@link Spliterator#trySplit()} method:
- * <pre>
- *     public boolean moveNext() {
- *         if (...end not reached...) {
- *             current = ...;
- *             return true;
- *         }
- *         return false;
- *     }
- * </pre>
- *
- * @param <E>
- */
-public abstract class AbstractEnumeratorSpliterator<E> extends Spliterators.AbstractSpliterator<E>
-        implements Enumerator<E> {
-    protected E current;
+public abstract class AbstractIntEnumeratorSpliterator extends Spliterators.AbstractIntSpliterator
+        implements IntEnumeratorSpliterator {
+    protected int current;
 
     /**
      * Creates a spliterator reporting the given estimated size and
@@ -42,12 +23,12 @@ public abstract class AbstractEnumeratorSpliterator<E> extends Spliterators.Abst
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractEnumeratorSpliterator(long est, int additionalCharacteristics) {
+    protected AbstractIntEnumeratorSpliterator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 
     @Override
-    public final boolean tryAdvance(@NonNull Consumer<? super E> action) {
+    public final boolean tryAdvance(@NonNull IntConsumer action) {
         if (moveNext()) {
             action.accept(current);
             return true;
@@ -57,7 +38,7 @@ public abstract class AbstractEnumeratorSpliterator<E> extends Spliterators.Abst
     }
 
     @Override
-    public final E current() {
+    public final int current() {
         return current;
     }
 }

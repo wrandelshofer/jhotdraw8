@@ -79,8 +79,10 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
         }
         for (VV vv : that.getVertices()) {
             V v = vertexMapper.apply(vv);
-            for (int i = 0, n = that.getNextCount(vv); i < n; i++) {
-                addArrow(v, vertexMapper.apply(that.getNext(vv, i)), arrowMapper.apply(that.getNextArrow(vv, i)));
+            for (Arc<VV, AA> arc : that.getNextArcs(vv)) {
+                addArrow(v, vertexMapper.apply(arc.getEnd()),
+                        arrowMapper.apply(arc.getData()));
+
             }
         }
     }
@@ -273,11 +275,13 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      */
     @SuppressWarnings("unused")
     public void removeNext(@NonNull V start, V end) {
-        for (int i = 0, n = getNextCount(start); i < n; i++) {
-            if (getNext(start, i).equals(end)) {
+        int i = 0;
+        for (V v : getNextVertices(start)) {
+            if (end.equals(v)) {
                 removeNext(start, i);
                 return;
             }
+            i++;
         }
     }
 

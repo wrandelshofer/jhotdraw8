@@ -6,6 +6,8 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,9 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.IntConsumer;
 
 /**
  * ImmutableIntDirectedGraph.
@@ -157,9 +156,9 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
 
                 nextOffset[vi] = offset;
                 this.vertices[vi] = v;
-                for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
-                    next[offset] = vertexToIndexMap.get(graph.getNext(v, j));
-                    nextArrows[offset] = graph.getNextArrow(v, j);
+                for (Arc<V, A> arc : graph.getNextArcs(v)) {
+                    next[offset] = vertexToIndexMap.get(arc.getEnd());
+                    nextArrows[offset] = arc.getData();
                     offset++;
                 }
                 vi++;
@@ -257,8 +256,8 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     }
 
     @Override
-    public @NonNull Spliterator.OfInt getNextVertices(int vi) {
-        class MySpliterator extends Spliterators.AbstractIntSpliterator {
+    public @NonNull IntEnumeratorSpliterator getNextVertices(int vi) {
+        class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private int limit;
             private final int[] array;
@@ -271,9 +270,9 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
             }
 
             @Override
-            public boolean tryAdvance(@NonNull IntConsumer action) {
+            public boolean moveNext() {
                 if (index < limit) {
-                    action.accept(array[index++]);
+                    current = array[index++];
                     return true;
                 }
                 return false;

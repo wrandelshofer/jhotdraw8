@@ -6,13 +6,12 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.BitSet;
 import java.util.Deque;
-import java.util.Spliterator;
-import java.util.Spliterators.AbstractIntSpliterator;
-import java.util.function.IntConsumer;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
@@ -127,8 +126,8 @@ public interface IntDirectedGraph {
      * @param vidx a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull Spliterator.OfInt getNextVertices(int vidx) {
-        class MySpliterator extends AbstractIntSpliterator {
+    default @NonNull IntEnumeratorSpliterator getNextVertices(int vidx) {
+        class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private int limit;
             private final int vidx;
@@ -141,9 +140,9 @@ public interface IntDirectedGraph {
             }
 
             @Override
-            public boolean tryAdvance(@NonNull IntConsumer action) {
+            public boolean moveNext() {
                 if (index < limit) {
-                    action.accept(getNext(vidx, index++));
+                    current = getNext(vidx, index++);
                     return true;
                 }
                 return false;

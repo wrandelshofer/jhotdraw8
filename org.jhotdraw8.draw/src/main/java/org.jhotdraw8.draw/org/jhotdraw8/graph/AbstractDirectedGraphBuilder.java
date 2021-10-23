@@ -4,6 +4,11 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+
 import java.util.Arrays;
 
 /**
@@ -278,5 +283,59 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         vertexCount = 0;
         Arrays.fill(nextArrowHeads, 0);
         Arrays.fill(nextLastArrow, 0);
+    }
+
+    public @NonNull IntEnumeratorSpliterator getNextVertices(int vidx) {
+        class MySpliterator extends AbstractIntEnumeratorSpliterator {
+            private int index;
+            private int limit;
+            private final int vidx;
+            private final int[] arrows;
+
+            public MySpliterator(int vidx, int lo, int hi) {
+                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
+                limit = hi;
+                index = lo;
+                this.vidx = vidx;
+                int nextCount = getNextCount(vidx);
+                if (nextCount > 0) {
+                    arrows = new int[nextCount];
+                    int arrowId1 = nextLastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
+                    arrows[nextCount - 1] = nextArrowHeads[arrowId1 * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+                    for (int j = nextCount - 1; j > lo; j--) {
+                        arrowId1 = nextArrowHeads[arrowId1 * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+                        arrows[j - 1] = nextArrowHeads[arrowId1 * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+                    }
+                } else {
+                    arrows = null;
+                }
+            }
+
+            private MySpliterator(int vidx, int lo, int hi, int[] arrows) {
+                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
+                this.vidx = vidx;
+                this.index = lo;
+                this.limit = hi;
+                this.arrows = arrows;
+            }
+
+            @Override
+            public boolean moveNext() {
+                if (index < limit) {
+                    int i = index++;
+                    current = arrows[i];
+                    return true;
+                }
+                return false;
+            }
+
+            public @Nullable MySpliterator trySplit() {
+                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
+                return (lo >= mid) ? null : // divide range in half unless too small
+                        new MySpliterator(vidx, lo, index = mid, arrows);
+            }
+
+        }
+        return new MySpliterator(vidx, 0, getNextCount(vidx));
     }
 }

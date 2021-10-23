@@ -44,10 +44,12 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return index of vertex b. Returns -1 if b is not next index of a.
      */
     default int findIndexOfNext(@NonNull V a, @NonNull V b) {
-        for (int i = 0, n = getNextCount(a); i < n; i++) {
-            if (b.equals(getNext(a, i))) {
+        int i = 0;
+        for (V v : getNextVertices(a)) {
+            if (b.equals(v)) {
                 return i;
             }
+            i++;
         }
         return -1;
     }

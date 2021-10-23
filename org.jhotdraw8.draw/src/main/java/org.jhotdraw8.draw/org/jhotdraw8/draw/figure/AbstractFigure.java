@@ -51,23 +51,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     public AbstractFigure() {
     }
 
-
-    protected @NonNull Map<Key<?>, Integer> createKeyMapOLD() {
-        return keyMaps.computeIfAbsent(getClass(), k -> {
-            int index = 0;
-
-            Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
-            IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
-
-            for (MapAccessor<?> accessor : accessors) {
-                if (accessor instanceof Key<?>) {
-                    m.put((Key<?>) accessor, index++);
-                }
-            }
-            return m;
-        });
-    }
-
     protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;

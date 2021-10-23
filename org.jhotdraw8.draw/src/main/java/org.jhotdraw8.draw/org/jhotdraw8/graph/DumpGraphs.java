@@ -67,11 +67,13 @@ public class DumpGraphs {
                     w.append("\n");
                 }
                 w.append(toStringFunction.apply(v)).append(" -> ");
-                for (int j = 0, n = graph.getNextCount(v); j < n; j++) {
+                int j = 0;
+                for (V u : graph.getNextVertices(v)) {
                     if (j != 0) {
                         w.append(", ");
                     }
-                    w.append(toStringFunction.apply(graph.getNext(v, j)));
+                    w.append(toStringFunction.apply(u));
+                    j++;
                 }
                 w.append('.');
                 i++;
@@ -199,9 +201,9 @@ public class DumpGraphs {
 
         // dump arrows
         for (V start : graph.getVertices()) {
-            for (int j = 0, m = graph.getNextCount(start); j < m; j++) {
-                final V end = graph.getNext(start, j);
-                final A arrow = graph.getNextArrow(start, j);
+            for (Arc<V, A> arc : graph.getNextArcs(start)) {
+                final V end = arc.getEnd();
+                final A arrow = arc.getData();
                 final String startVertexName = vertexToString.apply(start);
                 final String endVertexName = vertexToString.apply(end);
                 if (startVertexName == null || endVertexName == null) {
