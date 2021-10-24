@@ -45,19 +45,19 @@ public interface IntDirectedGraph {
     /**
      * Returns the k-th next vertex of v.
      *
-     * @param vids a vertex index
+     * @param vidx a vertex index
      * @param k    the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
      * @return the index of the k-th next vertex of v.
      */
-    int getNext(int vids, int k);
+    int getNext(int vidx, int k);
 
     /**
      * Returns the number of next vertices of v.
      *
-     * @param vids a vertex
+     * @param vidx a vertex
      * @return the number of next vertices of v.
      */
-    int getNextCount(int vids);
+    int getNextCount(int vidx);
 
     /**
      * Returns the number of vertices {@code V}.

@@ -234,5 +234,6 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return findIndexOfNext(a, b) != -1;
     }
 
+    V getVertex(int index);
 
 }

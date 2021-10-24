@@ -8,10 +8,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-abstract class AbstractDirectedGraphBuilderTest {
+abstract class AbstractMutableDirectedGraphTest0 {
     @Test
     public void testAddAndIterate() {
-        DirectedGraphBuilder<String, Integer> instance = createInstance();
+        MutableDirectedGraph<String, Integer> instance = createInstance();
         for (String s : List.of("a", "a0", "a1", "a2", "a3", "a4",
                 "b", "b10", "b11", "b12", "b13", "b14")) {
             instance.addVertex(s);
@@ -62,5 +62,5 @@ abstract class AbstractDirectedGraphBuilderTest {
     }
 
     @NonNull
-    abstract protected DirectedGraphBuilder<String, Integer> createInstance();
+    abstract protected MutableDirectedGraph<String, Integer> createInstance();
 }

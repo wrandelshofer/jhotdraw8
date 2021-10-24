@@ -6,12 +6,14 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -35,7 +37,9 @@ import java.util.function.Predicate;
  * @author Werner Randelshofer
  */
 public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
-        implements DirectedGraph<V, A>, AttributedIntDirectedGraph<V, A> {
+        implements MutableDirectedGraph<V, A>, AttributedIntDirectedGraph<V, A> {
+
+    private static final Object TOMBSTONE_OBJECT = new Object();
 
     /**
      * Creates a builder which contains a copy of the specified graph with all arrows inverted.
@@ -143,9 +147,9 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      */
     private @NonNull List<V> vertices;
     /**
-     * Maps an arrow index to an arrow object.
+     * Maps an arrow index to an arrow object. May contain {@link #TOMBSTONE_OBJECT}s.
      */
-    private final @NonNull List<A> arrows;
+    private final @NonNull List<Object> arrows;
 
     /**
      * Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
@@ -231,13 +235,57 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      * @param vb    vertex b
      * @param arrow the arrow
      */
-    public void addArrow(@Nullable V va, @Nullable V vb, A arrow) {
+    public void addArrow(@NonNull V va, @NonNull V vb, @Nullable A arrow) {
         Objects.requireNonNull(va, "va");
         Objects.requireNonNull(vb, "vb");
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
-        super.buildAddArrow(a, b);
-        arrows.add(arrow);
+        int arrowIndex = super.buildAddArrow(a, b);
+        if (arrowIndex == arrows.size()) {
+            arrows.add(arrow);
+        } else {
+            arrows.set(arrowIndex, arrow);
+            cachedArrows = null;
+        }
+    }
+
+    @Override
+    public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A data) {
+        Integer vidx = vertexMap.get(v);
+        int index = 0;
+        for (IntEnumeratorSpliterator it = getNextVertices(vidx); it.moveNext(); ) {
+            int uidx = it.current();
+            if (u.equals(vertices.get(uidx)) && Objects.equals(data, getNextArrow(vidx, index))) {
+                int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
+                arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
+                cachedArrows = null;
+                return;
+            }
+            index++;
+        }
+    }
+
+    @Override
+    public void removeArrow(@NonNull V v, @NonNull V u) {
+        Integer vidx = vertexMap.get(v);
+        int index = 0;
+        for (IntEnumeratorSpliterator it = getNextVertices(vidx); it.moveNext(); ) {
+            int uidx = it.current();
+            if (u.equals(vertices.get(uidx))) {
+                int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
+                arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
+                cachedArrows = null;
+                return;
+            }
+            index++;
+        }
+    }
+
+    @Override
+    public void removeArrowAt(@NonNull V v, int k) {
+        int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), k);
+        arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
+        cachedArrows = null;
     }
 
     /**
@@ -257,9 +305,42 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
      *
      * @param v vertex
      */
-    public void addVertex(@Nullable V v) {
+    public void addVertex(@NonNull V v) {
         Objects.requireNonNull(v, "v");
         vertexMap.computeIfAbsent(v, addVertexIfAbsent);
+    }
+
+    @Override
+    public void removeVertex(@NonNull V v) {
+        Integer vidx = vertexMap.remove(v);
+        if (vidx == null) {
+            return;
+        }
+        // Remove all outgoing vertices
+        for (int i = getNextCount(vidx) - 1; i >= 0; i--) {
+            int indexOfRemovedArrow = buildRemoveArrowAt(vidx, i);
+            arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
+        }
+        // Remove all incoming vertices
+        for (int uidx = 0, n = getVertexCount(); uidx < n; uidx++) {
+            for (int i = getNextCount(uidx) - 1; i >= 0; i--) {
+                int next = getNext(uidx, i);
+                if (next == vidx) {
+                    int indexOfRemovedArrow = buildRemoveArrowAt(uidx, i);
+                    arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
+                }
+            }
+        }
+        buildRemoveVertexAfterArrowsHaveBeenRemoved(vidx);
+        vertices.remove(vidx);
+        for (Map.Entry<V, Integer> entry : vertexMap.entrySet()) {
+            Integer uidx = entry.getValue();
+            if (uidx > vidx) {
+                entry.setValue(uidx - 1);
+            }
+        }
+
+        cachedArrows = null;
     }
 
     /**
@@ -288,12 +369,13 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         vertexMap.clear();
         vertices.clear();
         arrows.clear();
+        cachedArrows = null;
     }
 
     @Override
     public @NonNull A getNextArrow(@NonNull V vertex, int index) {
         int arrowId = getNextArrowIndex(getVertexIndex(vertex), index);
-        return getArrow(arrowId);
+        return (A) arrows.get(arrowId);
     }
 
     @Override
@@ -320,52 +402,39 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
         return index;
     }
 
-    @SuppressWarnings("unchecked")
     public A getArrow(int index) {
-        return arrows.get(index);
+        // This has quadratic performance!
+        int i = index;
+        int vidx = 0;
+        int nextCount = getNextCount(vidx);
+        while (i >= nextCount) {
+            vidx++;
+            i -= nextCount;
+            nextCount = getNextCount(vidx);
+        }
+        return getNextArrow(vidx, i);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public A getNextArrow(int vi, int i) {
         int arrowId = getNextArrowIndex(vi, i);
-        return arrows.get(arrowId);
+        return (A) arrows.get(arrowId);
     }
 
+    private List<A> cachedArrows;
     @Override
     public @NonNull Collection<A> getArrows() {
-        class ArrowIterator implements Iterator<A> {
-
-            private int index;
-            private final int arrowCount;
-
-            public ArrowIterator() {
-                arrowCount = getArrowCount();
+        if (cachedArrows == null) {
+            List<A> list = new ArrayList<>();
+            for (Object arrow : arrows) {
+                if (arrow != TOMBSTONE_OBJECT) {
+                    list.add((A) arrow);
+                }
             }
-
-            @Override
-            public boolean hasNext() {
-                return index < arrowCount;
-            }
-
-            @Override
-            public @Nullable A next() {
-                return getArrow(index++);
-            }
-
+            cachedArrows = Collections.unmodifiableList(list);
         }
-        return new AbstractCollection<A>() {
-            @Override
-            public @NonNull Iterator<A> iterator() {
-                return new ArrowIterator();
-            }
-
-            @Override
-            public int size() {
-                return getArrowCount();
-            }
-
-        };
+        return cachedArrows;
     }
 
     @Override

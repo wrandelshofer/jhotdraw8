@@ -29,19 +29,19 @@ public interface IntBidiGraph extends IntDirectedGraph {
     /**
      * Returns the i-th direct predecessor vertex of v.
      *
-     * @param vertex a vertex
-     * @param i      index of next vertex
+     * @param vidx a vertex
+     * @param i    index of next vertex
      * @return the i-th next vertex of v
      */
-    int getPrev(int vertex, int i);
+    int getPrev(int vidx, int i);
 
     /**
      * Returns the number of direct predecessor vertices of v.
      *
-     * @param vertex a vertex
+     * @param vidx a vertex
      * @return the number of next vertices of v.
      */
-    int getPrevCount(int vertex);
+    int getPrevCount(int vidx);
 
     /**
      * Returns the direct predecessor vertices of the specified vertex.

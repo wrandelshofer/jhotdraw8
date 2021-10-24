@@ -191,11 +191,11 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     }
 
     @Override
-    public int getNext(int vi, int i) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
+    public int getNext(int vidx, int i) {
+        if (i < 0 || i >= getNextCount(vidx)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vidx));
         }
-        return next[nextOffset[vi] + i];
+        return next[nextOffset[vidx] + i];
     }
 
     @Override
@@ -211,9 +211,9 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
     }
 
     @Override
-    public int getNextCount(int vi) {
-        final int offset = nextOffset[vi];
-        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
+    public int getNextCount(int vidx) {
+        final int offset = nextOffset[vidx];
+        final int nextOffset = (vidx == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vidx + 1];
         return nextOffset - offset;
     }
 

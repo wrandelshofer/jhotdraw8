@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author Werner Randelshofer
  * @version $$Id$$
  */
-public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder implements IntBidiGraph {
+public abstract class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder implements IntBidiGraph {
 
     /**
      * Table of arrow heads.
@@ -56,14 +56,14 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder imple
     }
 
     @Override
-    public int getPrev(int vi, int i) {
-        int arrowId = getPrevArrowIndex(vi, i);
+    public int getPrev(int vidx, int i) {
+        int arrowId = getPrevArrowIndex(vidx, i);
         return prevArrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
     }
 
     @Override
-    public int getPrevCount(int vi) {
-        return prevLastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
+    public int getPrevCount(int vidx) {
+        return prevLastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
     }
 
     /**
@@ -73,12 +73,12 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder imple
      * @param vidxb vertex b
      */
     @Override
-    protected void buildAddArrow(int vidxa, int vidxb) {
-        if (prevArrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
-            prevArrowHeads = Arrays.copyOf(prevArrowHeads, arrowCount * ARROWS_NUM_FIELDS * 2);
+    protected int buildAddArrow(int vidxa, int vidxb) {
+        if (prevArrowHeads.length <= arrowCountIncludingDeletedArrows * ARROWS_NUM_FIELDS) {
+            prevArrowHeads = Arrays.copyOf(prevArrowHeads, arrowCountIncludingDeletedArrows * ARROWS_NUM_FIELDS * 2);
         }
         doAddArrow(vidxb, vidxa, prevArrowHeads, prevLastArrow);
-        super.buildAddArrow(vidxa, vidxb);
+        return super.buildAddArrow(vidxa, vidxb);
     }
 
     /**
@@ -88,7 +88,7 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder imple
      * @param i    the i-th arrow of the vertex
      */
     @Override
-    protected void buildRemoveArrow(int vidx, int i) {
+    protected int buildRemoveArrowAt(int vidx, int i) {
         int x = getNext(vidx, i);
         int xi = -1;
         for (int j = getPrevCount(x) - 1; j >= 0; j--) {
@@ -100,7 +100,6 @@ public class AbstractBidiGraphBuilder extends AbstractDirectedGraphBuilder imple
         if (xi == -1) {
             throw new RuntimeException("programming error");
         }
-        buildRemoveArrow(x, xi, prevLastArrow, prevArrowHeads, arrowCount);
-        super.buildRemoveArrow(vidx, i);
+        return buildRemoveArrowAt(x, xi, prevLastArrow, prevArrowHeads, arrowCountIncludingDeletedArrows);
     }
 }

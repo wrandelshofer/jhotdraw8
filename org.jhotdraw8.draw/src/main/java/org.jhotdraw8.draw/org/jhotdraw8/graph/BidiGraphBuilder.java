@@ -145,6 +145,11 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
     }
 
     @Override
+    public V getVertex(int index) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public @NonNull V getNext(@NonNull V vertex, int i) {
         return getVertexDataNonNull(vertex).next.get(i).end.v;
     }

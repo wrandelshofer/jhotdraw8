@@ -1,13 +1,13 @@
 package org.jhotdraw8.graph;
 
-class DirectedGraphBuilderTest extends AbstractMutableDirectedGraphTest {
+class SimpleMutableDirectedGraphTest extends AbstractMutableDirectedGraphTest {
     @Override
     protected MutableDirectedGraph<Integer, Character> newInstance() {
-        return new DirectedGraphBuilder<>(0, 0);
+        return new SimpleMutableDirectedGraph<>();
     }
 
     @Override
     protected MutableDirectedGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g) {
-        return new DirectedGraphBuilder<>(g);
+        return new SimpleMutableDirectedGraph<>(g);
     }
 }

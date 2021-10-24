@@ -164,18 +164,37 @@ public interface Drawing extends Figure {
     default void layoutAll(@NonNull RenderContext ctx, boolean parallel) {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
-        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, true);
-        for (Figure f : postorderIterable()) {
+        // IdentityMap is slower for insertion than an equality-based map.
+        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, false);
+        graphBuilder.setOrdered(false);
+        //  SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, false);
+        /*
+                SimpleMutableDirectedGraph<Figure, Figure> graphBuilder3 = new SimpleMutableDirectedGraph<>(1024, 1024, true);
+
+         */
+        /*for (Figure f : postorderIterable()) {
             graphBuilder.addVertex(f);
             for (Figure obs : f.getReadOnlyLayoutObservers()) {
                 graphBuilder.addVertex(obs);
-                graphBuilder.addArrow(f, obs, f);
+                graphBuilder.addArrow(f, obs, null);
             }
             for (Figure child : f.getChildren()) {
                 graphBuilder.addVertex(child);
                 graphBuilder.addArrow(f, child, f);
             }
+        }*/
+        for (Figure f : preorderIterable()) {
+            graphBuilder.addVertex(f);
+            for (Figure subj : f.getLayoutSubjects()) {
+                graphBuilder.addVertex(subj);
+                graphBuilder.addArrow(subj, f, null);
+            }
+            Figure parent = f.getParent();
+            if (parent != null) {
+                graphBuilder.addArrow(parent, f, null);
+            }
         }
+
         OrderedPair<int[], IntArrayList> pair = TopologicalSort.sortTopologicallyIntBatches(graphBuilder);
         int[] sorted = pair.first();
         if (pair.second().isEmpty()) {

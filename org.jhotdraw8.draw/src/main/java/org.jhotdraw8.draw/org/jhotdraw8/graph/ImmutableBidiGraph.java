@@ -52,11 +52,11 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
 
 
     @Override
-    public int getPrev(int vi, int i) {
-        if (i < 0 || i >= getPrevCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
+    public int getPrev(int vidx, int i) {
+        if (i < 0 || i >= getPrevCount(vidx)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vidx));
         }
-        return prev[prevOffset[vi] + i];
+        return prev[prevOffset[vidx] + i];
     }
 
     @Override
@@ -78,9 +78,9 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
     }
 
     @Override
-    public int getPrevCount(int vi) {
-        final int offset = prevOffset[vi];
-        final int nextOffset = (vi == prevOffset.length - 1) ? prev.length : prevOffset[vi + 1];
+    public int getPrevCount(int vidx) {
+        final int offset = prevOffset[vidx];
+        final int nextOffset = (vidx == prevOffset.length - 1) ? prev.length : prevOffset[vidx + 1];
         return nextOffset - offset;
     }
 

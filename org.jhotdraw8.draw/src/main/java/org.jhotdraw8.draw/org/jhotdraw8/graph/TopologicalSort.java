@@ -160,6 +160,7 @@ public class TopologicalSort {
                     break;
                 }
                 int v = queue[first++];
+                queue[first - 1] = 0;//for debugging
                 for (IntEnumerator iter = model.getNextVertices(v); iter.moveNext(); ) {
                     int u = iter.current();
                     if (--deg[u] == 0) {

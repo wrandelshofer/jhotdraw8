@@ -11,6 +11,8 @@ import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
 import java.util.Arrays;
 
+import static java.lang.Math.max;
+
 /**
  * AbstractDirectedGraphBuilder.
  * <p>
@@ -39,16 +41,53 @@ import java.util.Arrays;
  *     build.addArrow(4, 3);
  * </pre>
  * Then the internal representation is as follows:
+ * <ul>
+ *     <li>For each vertex, there is an entry in table {@code lastArrows}.</li>
+ *     <li>For each arrow, there is an entry in table {@code arrowHeads}.</li>
+ *     <li>{@code arrowHeads} is a linked list. The linked list is ordered
+ *     from the last arrow to the first. So we have to read it backwards!</li>
+ *     <li>Each entry in {@code lastArrows} contains two fields:
+ *     <ol>
+ *         <li>A pointer to an entry in {@code arrowHeads}.</li>
+ *         <li>The arrow count for this vertex.</li>
+ *     </ol>
+ *     <li>Each entry in {@code arrowHeads} contains two fields:
+ *     <ol>
+ *         <li>A vertex.
+ *         <br>A tombstone={@value #TOMBSTONE} marks a deleted arrow head.</li>
+ *         <li>A pointer to the next entry in {@code arrowHeads}.
+ *         <br>A sentinel={@value #SENTINEL} marks the end of a linked list.</li>
+ *     </ol>
+ * </ul>
  * <pre>
- *     vertexCount: 5
+ * vertexCount: 5
+ * arrowCountInclusiveDeleted: 5
+ * deletedArrowCount: 0
+ * lastDeletedArrow: SENT
  *
  *  vertex#    lastArrow             arrow#    arrowHeads
  *           pointer,count                    vertex, next
- *    0     [  1  ][  2  ] ─────┐       0    [  1  ][ -1  ] ←┐
+ *    0     [  1  ][  2  ] ─────┐       0    [  1  ][SENT ] ←┐
  *    1     [  2  ][  2  ] ───┐ └─────→ 1    [  3  ][  0  ] ─┘
- *    2     [  0  ][  0  ] X  │         2    [  2  ][ -1  ] ←┐
+ *    2     [  0  ][  0  ] X  │         2    [  2  ][SENT ] ←┐
  *    3     [  0  ][  0  ] X  └───────→ 3    [  4  ][  2  ] ─┘
- *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][ -1  ] X
+ *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][SENT ] X
+ * </pre>
+ * If the arrow 1 → 3 is deleted, it is removed from the linked
+ * list of vertex 1. The arrow head is marked with a tombstone.
+ * <pre>
+ * vertexCount: 5
+ * arrowCountInclusiveDeleted: 5
+ * deletedArrowCount: 1
+ * lastDeletedArrow: 1
+ *
+ *  vertex#    lastArrow             arrow#    arrowHeads
+ *           pointer,count                    vertex, next
+ *    0     [  1  ][  2  ] ───────────→ 0    [  1  ][SENT ]
+ *    1     [  2  ][  2  ] ───┐         1    [TOMB ][SENT ]
+ *    2     [  0  ][  0  ] X  │         2    [  2  ][SENT ] ←┐
+ *    3     [  0  ][  0  ] X  └───────→ 3    [  4  ][  2 ] ─┘
+ *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][SENT ] X
  * </pre>
  *
  * @author Werner Randelshofer
@@ -62,8 +101,21 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     protected static final int LASTARROW_NUM_FIELDS = 2;
     protected static final int LASTARROW_POINTER_FIELD = 1;
     protected static final int SENTINEL = -1;
+    private static final int TOMBSTONE = -2;
 
-    protected int arrowCount;
+    /**
+     * This is a linked list of deleted arrowHeads.
+     * The pointer points to the first deleted element in arrowHeads.
+     */
+    private int pointerToLastDeletedArrow = -1;
+    /**
+     * The number of deleted arrowHeads.
+     */
+    private int deletedArrowCount;
+    /**
+     * The number of used arrowHeads.
+     */
+    protected int arrowCountIncludingDeletedArrows;
     /**
      * Table of arrow heads.
      * <p>
@@ -111,13 +163,13 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      *
      * @param a vertex a
      * @param b vertex b
+     * @return index of the arrow
      */
-    protected void buildAddArrow(int a, int b) {
-        if (nextArrowHeads.length <= arrowCount * ARROWS_NUM_FIELDS) {
-            nextArrowHeads = Arrays.copyOf(nextArrowHeads, arrowCount * ARROWS_NUM_FIELDS * 2);
+    protected int buildAddArrow(int a, int b) {
+        if (nextArrowHeads.length <= arrowCountIncludingDeletedArrows * ARROWS_NUM_FIELDS) {
+            nextArrowHeads = Arrays.copyOf(nextArrowHeads, max(1, arrowCountIncludingDeletedArrows) * ARROWS_NUM_FIELDS * 2);
         }
-        doAddArrow(a, b, nextArrowHeads, nextLastArrow);
-        arrowCount++;
+        return doAddArrow(a, b, nextArrowHeads, nextLastArrow);
     }
 
     /**
@@ -128,16 +180,42 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * @param lastArrow  the array of last arrows
      * @param arrowHeads the array of arrow heads
      */
-    protected void doAddArrow(int a, int b, int[] arrowHeads, int[] lastArrow) {
-        int arrowCountOfA = lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
-        int lastArrowIdOfA = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
+    protected int doAddArrow(int a, int b, int[] arrowHeads, int[] lastArrow) {
+        int arrowCountOfA = lastArrow_getCount(lastArrow, a);
+        int lastArrowPointer = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
 
-        int newLastArrowIdOfA = arrowCount;
-        arrowHeads[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = b;
-        arrowHeads[newLastArrowIdOfA * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = lastArrowIdOfA;
+        final int newArrowPointer;
+        if (deletedArrowCount > 0) {
+            newArrowPointer = pointerToLastDeletedArrow;
+            pointerToLastDeletedArrow = arrowHead_getNext(arrowHeads, pointerToLastDeletedArrow);
+            deletedArrowCount--;
+        } else {
+            newArrowPointer = arrowCountIncludingDeletedArrows;
+            arrowCountIncludingDeletedArrows++;
+        }
 
-        lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] = arrowCountOfA + 1;
-        lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = newLastArrowIdOfA;
+        arrowHead_setNext(arrowHeads, newArrowPointer, lastArrowPointer);
+        arrowHead_setVertex(arrowHeads, newArrowPointer, b);
+        lastArrow_setLast(lastArrow, a, newArrowPointer);
+        lastArrow_setCount(lastArrow, a, arrowCountOfA + 1);
+        return newArrowPointer;
+    }
+
+    private void arrowHead_setVertex(int[] arrowHeads, int pointerToArrow, int vidx) {
+        arrowHeads[pointerToArrow * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = vidx;
+    }
+
+    private int arrowHead_getVertex(int[] arrowHeads, int pointerToArrow) {
+        return arrowHeads[pointerToArrow * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+    }
+
+
+    private int lastArrow_getCount(int[] lastArrow, int vidx) {
+        return lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
+    }
+
+    private void lastArrow_setCount(int[] lastArrow, int vidx, int count) {
+        lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] = count;
     }
 
     /**
@@ -152,24 +230,7 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
 
     @Override
     public int getArrowCount() {
-        return arrowCount;
-    }
-
-    /**
-     * Builder-method: sets the vertex count.
-     *
-     * @param newValue the new vertex count, must be larger or equal the current
-     *                 vertex count.
-     */
-    protected void buildSetVertexCount(int newValue) {
-        if (newValue < vertexCount) {
-            throw new IllegalArgumentException("can only add vertices:" + newValue);
-        }
-        vertexCount = newValue;
-        if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
-            nextLastArrow = Arrays.copyOf(nextLastArrow, vertexCount * LASTARROW_NUM_FIELDS * 2);
-        }
-
+        return arrowCountIncludingDeletedArrows - deletedArrowCount;
     }
 
     /**
@@ -178,9 +239,8 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * @param a a vertex
      * @param i the i-th arrow of vertex vi
      */
-    protected void buildRemoveArrow(int a, int i) {
-        buildRemoveArrow(a, i, nextLastArrow, nextArrowHeads, arrowCount);
-        arrowCount--;
+    protected int buildRemoveArrowAt(int a, int i) {
+        return buildRemoveArrowAt(a, i, nextLastArrow, nextArrowHeads, arrowCountIncludingDeletedArrows);
     }
 
     /**
@@ -192,61 +252,87 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
      * @param arrowHeads the array of arrow heads
      * @param arrowCount the number of arrows
      */
-    protected void buildRemoveArrow(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
+    protected int buildRemoveArrowAt(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
         if (vidx < 0 || vidx >= getVertexCount()) {
-            throw new IllegalArgumentException("a:" + i);
+            throw new IllegalArgumentException("vidx:" + i);
         }
-        if (i < 0 || i >= getNextCount(vidx)) {
+        int nextCount = getNextCount(vidx);
+        if (i < 0 || i >= nextCount) {
             throw new IllegalArgumentException("i:" + i);
         }
 
-        // find the arrowId and the previous arrowId
-        int prevArrowId = SENTINEL;
-        int arrowId = lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
-        for (int j = i - 1; j >= 0; j--) {
-            prevArrowId = arrowId;
-            arrowId = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+        // find the arrow pointer and the previous arrow pointer
+        int prevArrowPtr = SENTINEL;
+        int arrowPtr = lastArrow_getLast(lastArrow, vidx);
+        for (int j = nextCount - 1; j > i; j--) {
+            prevArrowPtr = arrowPtr;
+            arrowPtr = arrowHead_getNext(arrowHeads, arrowPtr);
         }
 
-        if (prevArrowId == SENTINEL) {
-            // if there is no previous arrowId => make the point from lastArrow point to the arrow after arrowId.
-            lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+        // place tombstone
+        arrowHead_setVertex(arrowHeads, arrowPtr, TOMBSTONE);
+
+        if (prevArrowPtr == SENTINEL) {
+            // if there is no previous arrowId => make the pointer from lastArrow point to the arrow after arrowId.
+            lastArrow_setLast(lastArrow, vidx, arrowHead_getNext(arrowHeads, arrowPtr));
         } else {
             // if there is a previous arrowId => make the pointer from prevArrowId point to the arrow after arrowId.
-            arrowHeads[prevArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            arrowHead_setNext(arrowHeads, prevArrowPtr, arrowHead_getNext(arrowHeads, arrowPtr));
         }
         // Decrease number of arrows for vertex vi
-        lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD]--;
+        lastArrow_setCount(lastArrow, vidx, lastArrow_getCount(lastArrow, vidx) - 1);
 
-        // Decrease total number of arrows
-        arrowCount--;
+        // Add the deleted arrowHead to the list of deleted arrows.
+        deletedArrowCount++;
+        arrowHead_setNext(arrowHeads, arrowPtr, pointerToLastDeletedArrow);
+        pointerToLastDeletedArrow = arrowPtr;
 
-        int moveArrowId = arrowCount;
-        if (arrowId != moveArrowId) {
-            // move moveArrowId to arrowId
-            arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD] = arrowHeads[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
-            arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowHeads[moveArrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
-            // if there is a pointer in lastArrows to moveArrowId, make it point to arrowId.
-            boolean fixed = false;
-            for (int v = 0; v < vertexCount; v++) {
-                if (lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD] > 0
-                        && lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] == moveArrowId) {
-                    lastArrow[v * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowId;
-                    fixed = true;
-                    break;
-                }
-            }
-            // if there is a pointer in arrows to moveArrowId, make it point to arrowId.
-            if (!fixed) {
-                for (int e = 0; e < arrowCount; e++) {
-                    if (arrowHeads[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] == moveArrowId) {
-                        arrowHeads[e * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = arrowId;
-                        fixed = true;
-                        break;
-                    }
-                }
+        return arrowPtr;
+    }
+
+    protected void buildRemoveVertex(int vidx) {
+        // Remove all outgoing arrows
+        for (int i = getNextCount(vidx) - 1; i >= 0; i--) {
+            buildRemoveArrowAt(vidx, i);
+        }
+        buildRemoveVertexAfterArrowsHaveBeenRemoved(vidx);
+    }
+
+    protected void buildRemoveVertexAfterArrowsHaveBeenRemoved(int vidx) {
+        // Remove vertex from nextLastArrow array
+        if (vidx < vertexCount - 1) {
+            System.arraycopy(nextLastArrow, (vidx + 1) * LASTARROW_NUM_FIELDS, nextLastArrow, vidx * LASTARROW_NUM_FIELDS,
+                    (vertexCount - vidx - 1) * LASTARROW_NUM_FIELDS);
+        }
+        lastArrow_setLast(nextLastArrow, vertexCount - 1, 0);
+        lastArrow_setCount(nextLastArrow, vertexCount - 1, 0);
+
+        // Change vertex indices of all vertices after vidx
+        for (int arrowPtr = 0; arrowPtr < arrowCountIncludingDeletedArrows; arrowPtr++) {
+            int uidx = arrowHead_getVertex(nextArrowHeads, arrowPtr);
+            if (uidx > vidx) {
+                arrowHead_setVertex(nextArrowHeads, arrowPtr, uidx - 1);
             }
         }
+
+        vertexCount--;
+    }
+
+
+    private void arrowHead_setNext(int[] arrowHeads, int arrowPointer, int pointerToNextArrow) {
+        arrowHeads[arrowPointer * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD] = pointerToNextArrow;
+    }
+
+    private void lastArrow_setLast(int[] lastArrow, int vidx, int arrowPointer) {
+        lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD] = arrowPointer;
+    }
+
+    private int lastArrow_getLast(int[] lastArrow, int vidx) {
+        return lastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
+    }
+
+    private int arrowHead_getNext(int[] arrowHeads, int arrowPointer) {
+        return arrowHeads[arrowPointer * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
     }
 
     protected int getNextArrowIndex(int vi, int i) {
@@ -254,23 +340,23 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     }
 
     protected int getArrowIndex(int vi, int i, int[] lastArrow, int[] arrowHeads) {
-        int arrowId = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
-        int nextCount = lastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
+        int arrowPointer = lastArrow_getLast(lastArrow, vi);
+        int nextCount = lastArrow_getCount(lastArrow, vi);
         for (int j = nextCount - 1; j > i; j--) {
-            arrowId = arrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
+            arrowPointer = arrowHead_getNext(arrowHeads, arrowPointer);
         }
-        return arrowId;
+        return arrowPointer;
     }
 
     @Override
-    public int getNext(int vi, int i) {
-        int arrowId = getNextArrowIndex(vi, i);
-        return nextArrowHeads[arrowId * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+    public int getNext(int vidx, int i) {
+        int arrowId = getNextArrowIndex(vidx, i);
+        return arrowHead_getVertex(nextArrowHeads, arrowId);
     }
 
     @Override
-    public int getNextCount(int vi) {
-        return nextLastArrow[vi * LASTARROW_NUM_FIELDS + LASTARROW_COUNT_FIELD];
+    public int getNextCount(int vidx) {
+        return lastArrow_getCount(nextLastArrow, vidx);
     }
 
     @Override
@@ -279,16 +365,61 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
     }
 
     public void clear() {
-        arrowCount = 0;
+        arrowCountIncludingDeletedArrows = 0;
         vertexCount = 0;
+        deletedArrowCount = 0;
+        pointerToLastDeletedArrow = -1;
         Arrays.fill(nextArrowHeads, 0);
         Arrays.fill(nextLastArrow, 0);
     }
 
+    private boolean ordered = true;
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
     public @NonNull IntEnumeratorSpliterator getNextVertices(int vidx) {
+        if (ordered) {
+            return getNextVerticesOrdered(vidx);
+        } else {
+            return getNextVerticesUnordered(vidx);
+        }
+    }
+
+    public @NonNull IntEnumeratorSpliterator getNextVerticesUnordered(int vidx) {
+        class MySpliterator extends AbstractIntEnumeratorSpliterator {
+            private int arrowPtr;
+
+            public MySpliterator(int vidx, int lo, int hi) {
+                super(hi - lo, ORDERED | NONNULL | SIZED);
+
+                arrowPtr = lastArrow_getCount(nextLastArrow, vidx) == 0 ? -1 : lastArrow_getLast(nextLastArrow, vidx);
+            }
+
+            @Override
+            public boolean moveNext() {
+                if (arrowPtr != -1) {
+                    current = arrowHead_getVertex(nextArrowHeads, arrowPtr);
+                    arrowPtr = arrowHead_getNext(nextArrowHeads, arrowPtr);
+                    return true;
+                }
+                return false;
+            }
+
+
+        }
+        return new MySpliterator(vidx, 0, getNextCount(vidx));
+    }
+
+    public @NonNull IntEnumeratorSpliterator getNextVerticesOrdered(int vidx) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
-            private int limit;
+            private final int limit;
             private final int vidx;
             private final int[] arrows;
 
@@ -300,11 +431,11 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
                 int nextCount = getNextCount(vidx);
                 if (nextCount > 0) {
                     arrows = new int[nextCount];
-                    int arrowId1 = nextLastArrow[vidx * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
-                    arrows[nextCount - 1] = nextArrowHeads[arrowId1 * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+                    int arrowPtr = lastArrow_getLast(nextLastArrow, vidx);
+                    arrows[nextCount - 1] = arrowHead_getVertex(nextArrowHeads, arrowPtr);
                     for (int j = nextCount - 1; j > lo; j--) {
-                        arrowId1 = nextArrowHeads[arrowId1 * ARROWS_NUM_FIELDS + ARROWS_NEXT_FIELD];
-                        arrows[j - 1] = nextArrowHeads[arrowId1 * ARROWS_NUM_FIELDS + ARROWS_VERTEX_FIELD];
+                        arrowPtr = arrowHead_getNext(nextArrowHeads, arrowPtr);
+                        arrows[j - 1] = arrowHead_getVertex(nextArrowHeads, arrowPtr);
                     }
                 } else {
                     arrows = null;

@@ -216,13 +216,13 @@ public class IntArrayList implements Iterable<Integer> {
     }
 
     private void increaseCapacity(int capacity) {
-        if (capacity <= size) {
-            return;
-        }
         if (items == null) {
             items = new int[capacity];
         }
-        int newCapacity = max(capacity, size + size / 2); // grow by 50%
+        if (capacity <= items.length) {
+            return;
+        }
+        int newCapacity = max(capacity, size + size); // grow by 100%
         int[] newItems = new int[newCapacity];
         System.arraycopy(items, 0, newItems, 0, size);
         items = newItems;
@@ -236,7 +236,11 @@ public class IntArrayList implements Iterable<Integer> {
      * @return the index of the item, or -1.
      */
     public int indexOf(int item) {
-        for (int i = 0; i < size; i++) {
+        return indexOf(item, 0);
+    }
+
+    public int indexOf(int item, int start) {
+        for (int i = start; i < size; i++) {
             if (items[i] == item) {
                 return i;
             }
