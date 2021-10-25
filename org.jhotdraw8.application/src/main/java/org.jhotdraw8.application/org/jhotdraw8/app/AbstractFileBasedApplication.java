@@ -52,6 +52,7 @@ import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.text.OSXCollator;
@@ -431,7 +432,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         if (focusListener != null) {
             stage.focusedProperty().removeListener(focusListener);
         }
-        stage.close();
         activity.destroy();
         activity.titleProperty().removeListener(this::onTitleChanged);
 
@@ -440,6 +440,16 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         if (activeActivity.get() == activity) {
             activeActivity.set(null);
         }
+
+        // Workaround for memory leak in Scene.dirtyNodes:
+        // https://bugs.openjdk.java.net/browse/JDK-8092779
+        // https://bugs.openjdk.java.net/browse/JDK-8269907
+        // Wait two pulses to allow for the scene to clean up its dirty nodes.
+        FXWorker.run(() -> {
+            Thread.sleep(2 * 1000 / 60);
+        }).thenRun(() -> {
+            stage.close();
+        });
 
         System.gc();
 
@@ -454,14 +464,20 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         BorderPane borderPane = (BorderPane) scene.getRoot();
         MenuBar menuBar = (MenuBar) borderPane.getTop();
 
-        // Workaround for JavaFX 15 unlink all bindings to menu
-        // items in the system menu bar, so that the activity
-        // can be garbage collected.
+        // Workaround for memory leak in ControlAcceleratorSupport
+        // https://bugs.openjdk.java.net/browse/JDK-8274022
+        // Unlink all bindings to menu items in the system menu bar,
+        // so that the activity can be garbage collected.
+        // (However this still leaks context menus).
         if (menuBar != null) {
             destroyMenuBar(menuBar);
         }
 
-        stage.setScene(null);
+        // Workaround for memory leak in Scene.dirtyNodes:
+        // https://bugs.openjdk.java.net/browse/JDK-8092779
+        // https://bugs.openjdk.java.net/browse/JDK-8269907
+        // We must not set the scene to null, because this will cause a
+        // memory leak
         stage.setOnCloseRequest(null);
         stage.titleProperty().unbind();
 

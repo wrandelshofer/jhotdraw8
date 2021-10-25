@@ -512,7 +512,13 @@ public abstract class AbstractStyleAttributesInspector<E> {
             break;
         }
 
-        shownValues.selectedToggleProperty().addListener(this::updateShownValues);
+
+        shownValues.selectedToggleProperty().addListener(o -> {
+            AbstractStyleAttributesInspector<E> inspector = r.get();
+            if (inspector != null) {
+                inspector.updateShownValues(o);
+            }
+        });
         TextArea textArea = getTextArea();
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);

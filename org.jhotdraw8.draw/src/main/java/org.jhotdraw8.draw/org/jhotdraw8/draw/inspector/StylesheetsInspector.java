@@ -40,6 +40,7 @@ import org.jhotdraw8.xml.text.XmlUriConverter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -177,7 +178,19 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         ContextMenu cm = new ContextMenu();
         MenuItem mi = new MenuItem();
         mi.setText(InspectorLabels.getResources().getString("file.browseFileDirectory.text"));
-        mi.setOnAction(event -> onBrowseFileDirectory(event, cell));
+
+
+        // Workaround for memory leak in ControlAcceleratorSupport
+        // https://bugs.openjdk.java.net/browse/JDK-8274022
+        WeakReference<StylesheetsInspector> weakInspector = new WeakReference<>(this);
+        WeakReference<TextFieldListCell<URI>> weakCell = new WeakReference<>(cell);
+        mi.setOnAction(event -> {
+            StylesheetsInspector stylesheetsInspector = weakInspector.get();
+            TextFieldListCell<URI> theCell = weakCell.get();
+            if (stylesheetsInspector != null && theCell != null) {
+                stylesheetsInspector.onBrowseFileDirectory(event, theCell);
+            }
+        });
         cm.getItems().add(mi);
         return cm;
     }
