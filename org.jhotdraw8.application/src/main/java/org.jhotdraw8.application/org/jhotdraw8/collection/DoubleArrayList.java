@@ -208,11 +208,11 @@ public class DoubleArrayList implements Iterable<Double> {
     }
 
     private void increaseCapacity(int capacity) {
-        if (capacity <= size) {
-            return;
-        }
         if (items == null) {
             items = new double[capacity];
+        }
+        if (capacity <= items.length) {
+            return;
         }
         int newCapacity = max(capacity, size + size / 2); // grow by 50%
         double[] newItems = new double[newCapacity];

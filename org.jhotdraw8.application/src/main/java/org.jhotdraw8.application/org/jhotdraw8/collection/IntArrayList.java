@@ -19,8 +19,6 @@ import java.util.Spliterators;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
-import static java.lang.Integer.max;
-
 /**
  * A lightweight int array list implementation for performance critical code.
  *
@@ -222,7 +220,7 @@ public class IntArrayList implements Iterable<Integer> {
         if (capacity <= items.length) {
             return;
         }
-        int newCapacity = max(capacity, size + size); // grow by 100%
+        int newCapacity = (int) Long.min(Integer.MAX_VALUE, Long.max(capacity, (long) size + size));
         int[] newItems = new int[newCapacity];
         System.arraycopy(items, 0, newItems, 0, size);
         items = newItems;
