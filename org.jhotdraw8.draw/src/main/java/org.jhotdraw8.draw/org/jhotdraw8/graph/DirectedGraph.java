@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 /**
  * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
  *
- * @param <V> the vertex type
+ * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
@@ -234,6 +234,13 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
         return findIndexOfNext(a, b) != -1;
     }
 
+    /**
+     * Gets the vertex data at the specified index.
+     *
+     * @param index an index
+     * @return vertex data
+     * @throws IndexOutOfBoundsException if the index is out of bounds
+     */
     V getVertex(int index);
 
 }

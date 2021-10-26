@@ -250,12 +250,12 @@ public class DirectedGraphBuilder<V, A> extends AbstractDirectedGraphBuilder
     }
 
     @Override
-    public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A data) {
+    public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
         Integer vidx = vertexMap.get(v);
         int index = 0;
         for (IntEnumeratorSpliterator it = getNextVertices(vidx); it.moveNext(); ) {
             int uidx = it.current();
-            if (u.equals(vertices.get(uidx)) && Objects.equals(data, getNextArrow(vidx, index))) {
+            if (u.equals(vertices.get(uidx)) && Objects.equals(a, getNextArrow(vidx, index))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
                 cachedArrows = null;

@@ -31,13 +31,13 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractMutableDirectedGra
     }
 
     @Override
-    public void addArrow(@NonNull V v, @NonNull V u, A data) {
-        buildAddArrow(v, u, data);
+    public void addArrow(@NonNull V v, @NonNull V u, A a) {
+        buildAddArrow(v, u, a);
     }
 
     @Override
-    public void removeArrow(@NonNull V v, @NonNull V u, A data) {
-        buildRemoveArrow(v, u, data);
+    public void removeArrow(@NonNull V v, @NonNull V u, A a) {
+        buildRemoveArrow(v, u, a);
     }
 
     @Override
