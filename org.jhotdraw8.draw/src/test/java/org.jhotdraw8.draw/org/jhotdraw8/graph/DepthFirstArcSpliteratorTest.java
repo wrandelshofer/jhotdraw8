@@ -3,6 +3,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.graph.iterator.DepthFirstArcSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class DepthFirstArcSpliteratorTest {
     protected @NonNull DirectedGraph<Integer, Integer> createDoubleVertexGraph() {
-        final DirectedGraphBuilder<Integer, Integer> builder = new DirectedGraphBuilder<>();
+        final SimpleMutableDirectedGraph<Integer, Integer> builder = new SimpleMutableDirectedGraph<>();
 
         //  (1)->(2)------------->(3)------->(4)----
         //      ↗︎                         ↗︎         \
@@ -42,7 +43,7 @@ public class DepthFirstArcSpliteratorTest {
         builder.addArrow(6, 8, 100);
         builder.addArrow(7, 4, 100);
         builder.addArrow(8, 9, 100);
-        return builder.build();
+        return new ImmutableDirectedGraph<Integer, Integer>((DirectedGraph<Integer, Integer>) builder);
     }
 
     @TestFactory

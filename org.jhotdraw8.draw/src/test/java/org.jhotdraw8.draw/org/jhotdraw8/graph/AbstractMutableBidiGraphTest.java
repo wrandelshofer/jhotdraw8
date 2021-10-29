@@ -27,7 +27,6 @@ abstract class AbstractMutableBidiGraphTest
     @Test
     public void testAddVerticesAndArrowsBidi() {
         MutableBidiGraph<Integer, Character> g = (MutableBidiGraph<Integer, Character>) buildGraph();
-
         assertEqualsInitialGraph(g);
     }
 

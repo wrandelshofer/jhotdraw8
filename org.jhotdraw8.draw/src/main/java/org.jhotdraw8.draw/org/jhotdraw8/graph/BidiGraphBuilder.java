@@ -22,8 +22,8 @@ import java.util.function.Function;
 /**
  * Provides an API for building a {@code BidiGraph}.
  *
- * @param <V> the vertex type
- * @param <A> the arrow type
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
 public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
@@ -62,8 +62,8 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
      * Creates a new instance which is a clone of the specified graph using the
      * provided mapping functions.
      *
-     * @param <VV>         the vertex type of that
-     * @param <AA>         the arrow type of that
+     * @param <VV>         the vertex data type of that
+     * @param <AA>         the arrow data type of that
      * @param that         another graph
      * @param vertexMapper a mapping function from that vertex type to the this
      *                     vertex type

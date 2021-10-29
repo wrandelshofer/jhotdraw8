@@ -44,7 +44,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @param initialCapacity the initial capacity
      */
     public IntArrayList(int initialCapacity) {
-        increaseCapacity(initialCapacity);
+        grow(initialCapacity);
     }
 
     /**
@@ -85,7 +85,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @param newItem the new item
      */
     public void add(int newItem) {
-        increaseCapacity(size + 1);
+        grow(size + 1);
         items[size++] = newItem;
     }
 
@@ -97,7 +97,7 @@ public class IntArrayList implements Iterable<Integer> {
      */
     public void add(int index, int newItem) {
         rangeCheck(index, size + 1);
-        increaseCapacity(size + 1);
+        grow(size + 1);
         System.arraycopy(items, index, items, index + 1, size - index);
         items[index] = newItem;
         ++size;
@@ -112,7 +112,7 @@ public class IntArrayList implements Iterable<Integer> {
         if (that.isEmpty()) {
             return;
         }
-        increaseCapacity(size + that.size);
+        grow(size + that.size);
         System.arraycopy(that.items, 0, this.items, this.size, that.size);
         this.size += that.size;
     }
@@ -132,6 +132,7 @@ public class IntArrayList implements Iterable<Integer> {
     }
 
     public void clear() {
+        items = null;
         size = 0;
     }
 
@@ -196,7 +197,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @param newSize the new size
      */
     public void setSize(int newSize) {
-        increaseCapacity(newSize);
+        grow(newSize);
         if (newSize > size) {
             Arrays.fill(items, size, newSize, 0);
         }
@@ -213,17 +214,8 @@ public class IntArrayList implements Iterable<Integer> {
         return result;
     }
 
-    private void increaseCapacity(int capacity) {
-        if (items == null) {
-            items = new int[capacity];
-        }
-        if (capacity <= items.length) {
-            return;
-        }
-        int newCapacity = (int) Long.min(Integer.MAX_VALUE, Long.max(capacity, (long) size + size));
-        int[] newItems = new int[newCapacity];
-        System.arraycopy(items, 0, newItems, 0, size);
-        items = newItems;
+    private void grow(int capacity) {
+        items = ListHelper.grow(size, capacity, 1, items);
     }
 
     /**

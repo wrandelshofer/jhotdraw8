@@ -92,7 +92,7 @@ import static java.lang.Math.max;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
+public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGraph {
 
     protected static final int ARROWS_NEXT_FIELD = 1;
     protected static final int ARROWS_NUM_FIELDS = 2;
@@ -316,6 +316,33 @@ public abstract class AbstractDirectedGraphBuilder implements IntDirectedGraph {
         }
 
         vertexCount--;
+    }
+
+    protected void buildInsertVertexAt(int vidx) {
+        if (nextLastArrow.length < (vertexCount + 1) * LASTARROW_NUM_FIELDS) {
+            nextLastArrow = Arrays.copyOf(nextLastArrow, (vertexCount + 1) * LASTARROW_NUM_FIELDS * 2);
+        }
+
+
+        // Insert vertex in nextLastArrow array
+        if (vidx < vertexCount) {
+            System.arraycopy(nextLastArrow,
+                    (vidx) * LASTARROW_NUM_FIELDS, nextLastArrow,
+                    (vidx + 1) * LASTARROW_NUM_FIELDS,
+                    (vertexCount - vidx) * LASTARROW_NUM_FIELDS);
+        }
+        lastArrow_setLast(nextLastArrow, vidx, 0);
+        lastArrow_setCount(nextLastArrow, vidx, 0);
+
+        // Change vertex indices of all vertices after vidx
+        for (int arrowPtr = 0; arrowPtr < arrowCountIncludingDeletedArrows; arrowPtr++) {
+            int uidx = arrowHead_getVertex(nextArrowHeads, arrowPtr);
+            if (uidx >= vidx) {
+                arrowHead_setVertex(nextArrowHeads, arrowPtr, uidx + 1);
+            }
+        }
+
+        vertexCount++;
     }
 
 

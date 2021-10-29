@@ -7,6 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.graph.path.UniqueOrOneHopPathBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -29,7 +30,7 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
-        DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
         // 1 |       7.0   9.0  14.0         14.0
@@ -61,7 +62,7 @@ public class UniqueOrOneHopPathBuilderTest {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createDiamondGraph() {
-        DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |
         // 1 |       1.0   1.0
@@ -97,7 +98,7 @@ public class UniqueOrOneHopPathBuilderTest {
                 + "5 -> 6.\n"
                 + "6 -> 1, 5.";
 
-        final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
+        final String actual = DumpGraphAlgorithm.dumpAsAdjacencyList(graph);
 
         assertEquals(expected, actual);
     }
@@ -157,7 +158,7 @@ public class UniqueOrOneHopPathBuilderTest {
 
 
     private @NonNull DirectedGraph<Integer, Double> createGraph2() {
-        DirectedGraphBuilder<Integer, Double> b = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<Integer, Double> b = new SimpleMutableDirectedGraph<>();
         b.addVertex(1);
         b.addVertex(2);
         b.addVertex(3);

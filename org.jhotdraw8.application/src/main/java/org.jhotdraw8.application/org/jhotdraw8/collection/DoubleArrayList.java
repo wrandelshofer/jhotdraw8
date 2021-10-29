@@ -19,8 +19,6 @@ import java.util.Spliterators;
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
-import static java.lang.Integer.max;
-
 /**
  * A lightweight double array list implementation for performance critical code.
  *
@@ -46,7 +44,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param initialCapacity the initial capacity
      */
     public DoubleArrayList(int initialCapacity) {
-        increaseCapacity(initialCapacity);
+        grow(initialCapacity);
     }
 
     /**
@@ -87,7 +85,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param newItem the new item
      */
     public void add(double newItem) {
-        increaseCapacity(size + 1);
+        grow(size + 1);
         items[size++] = newItem;
     }
 
@@ -99,7 +97,7 @@ public class DoubleArrayList implements Iterable<Double> {
      */
     public void add(int index, double newItem) {
         rangeCheck(index, size + 1);
-        increaseCapacity(size + 1);
+        grow(size + 1);
         System.arraycopy(items, index, items, index + 1, size - index);
         items[index] = newItem;
         ++size;
@@ -114,7 +112,7 @@ public class DoubleArrayList implements Iterable<Double> {
         if (that.isEmpty()) {
             return;
         }
-        increaseCapacity(size + that.size);
+        grow(size + that.size);
         System.arraycopy(that.items, 0, this.items, this.size, that.size);
         this.size += that.size;
     }
@@ -134,6 +132,7 @@ public class DoubleArrayList implements Iterable<Double> {
     }
 
     public void clear() {
+        items = null;
         size = 0;
     }
 
@@ -190,7 +189,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param newSize the new size
      */
     public void setSize(int newSize) {
-        increaseCapacity(newSize);
+        grow(newSize);
         if (newSize > size) {
             Arrays.fill(items, size, newSize, 0);
         }
@@ -207,17 +206,8 @@ public class DoubleArrayList implements Iterable<Double> {
         return result;
     }
 
-    private void increaseCapacity(int capacity) {
-        if (items == null) {
-            items = new double[capacity];
-        }
-        if (capacity <= items.length) {
-            return;
-        }
-        int newCapacity = max(capacity, size + size / 2); // grow by 50%
-        double[] newItems = new double[newCapacity];
-        System.arraycopy(items, 0, newItems, 0, size);
-        items = newItems;
+    private void grow(int capacity) {
+        items = ListHelper.grow(size, capacity, 1, items);
     }
 
     /**

@@ -19,11 +19,11 @@ import java.util.Set;
 /**
  * ImmutableIntDirectedGraph.
  *
- * @param <V> the vertex type
- * @param <A> the arrow type
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class ImmutableDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -90,7 +90,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIntDirectedGraph<
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(@NonNull AttributedIntDirectedGraph<V, A> graph) {
+    public ImmutableDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();

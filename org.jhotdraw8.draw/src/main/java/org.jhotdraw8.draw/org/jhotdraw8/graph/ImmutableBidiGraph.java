@@ -8,7 +8,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 
 public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
-        implements BidiGraph<V, A>, AttributedIntBidiGraph<V, A> {
+        implements BidiGraph<V, A>, AttributedIndexedBidiGraph<V, A> {
     /**
      * Holds the indices to the prev vertices.
      */
@@ -38,7 +38,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
             int i = 0;
             for (V v : graph.getVertices()) {
 
-                nextOffset[i] = arrowCount;
+                prevOffset[i] = arrowCount;
                 this.vertices[i] = v;
                 for (int j = 0, n = graph.getPrevCount(v); j < n; j++) {
                     prev[arrowCount] = vertexToIndexMap.get(graph.getPrev(v, j));

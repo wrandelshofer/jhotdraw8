@@ -4,6 +4,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.graph.iterator.BreadthFirstSpliterator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -28,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BreadthFirstSpliteratorTest {
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
-        DirectedGraphBuilder<Integer, Double> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex(1);
         builder.addVertex(2);
         builder.addVertex(3);
@@ -70,7 +71,7 @@ public class BreadthFirstSpliteratorTest {
                 + "5 -> 6.\n"
                 + "6 -> 1, 5.";
 
-        final String actual = DumpGraphs.dumpAsAdjacencyList(graph);
+        final String actual = DumpGraphAlgorithm.dumpAsAdjacencyList(graph);
 
         assertEquals(expected, actual);
     }

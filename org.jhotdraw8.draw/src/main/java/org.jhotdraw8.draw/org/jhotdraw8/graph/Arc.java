@@ -16,7 +16,7 @@ import java.util.Objects;
  * graphs. In this design, "Arc" explicitly means a data object that contains
  * the start and end vertices of and arrow and an associated data object.
  *
- * @param <V> the vertex type
+ * @param <V> the vertex data type
  * @param <A> the arrow data type
  */
 public class Arc<V, A> {

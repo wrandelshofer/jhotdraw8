@@ -1,6 +1,9 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.graph.algo.DisjointSetsAlgorithm;
+import org.jhotdraw8.graph.algo.MinimumSpanningTreeAlgorithm;
+import org.jhotdraw8.graph.algo.StronglyConnectedComponentsAlgorithm;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -14,7 +17,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class GraphSearchTest {
     private @NonNull DirectedGraph<String, Integer> createDisjointGraph() {
-        DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("a");
         builder.addVertex("b");
         builder.addVertex("c");
@@ -34,7 +37,7 @@ public class GraphSearchTest {
     }
 
     private @NonNull DirectedGraph<String, Integer> createLoopGraph() {
-        DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("a");
         builder.addVertex("b");
         builder.addVertex("c");
@@ -55,7 +58,7 @@ public class GraphSearchTest {
         // |/    |/    |
         // D--4--E--7--F
 
-        DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("A");
         builder.addVertex("B");
         builder.addVertex("C");
@@ -82,7 +85,7 @@ public class GraphSearchTest {
         //  /    |/    |
         // D     E     F
 
-        DirectedGraphBuilder<String, Integer> builder = new DirectedGraphBuilder<>();
+        SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("A");
         builder.addVertex("B");
         builder.addVertex("C");
@@ -108,7 +111,7 @@ public class GraphSearchTest {
 
     void testFindDisjointSets(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
 
-        List<Set<String>> actualSets = DisjointSets.findDisjointSets(graph);
+        List<Set<String>> actualSets = DisjointSetsAlgorithm.findDisjointSets(graph);
 
         assertEquals(expectedSetCount, actualSets.size());
     }
@@ -118,8 +121,8 @@ public class GraphSearchTest {
     public void findMinimumSpanningTree() {
         DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
         DirectedGraph<String, Integer> expectedMst = createMSTGraph();
-        DirectedGraphBuilder<String, Integer> actualMst = MinimumSpanningTree.findMinimumSpanningTreeGraph(nonMst, Integer::doubleValue);
-        assertEquals(DumpGraphs.dumpAsAdjacencyList(expectedMst), DumpGraphs.dumpAsAdjacencyList(actualMst));
+        SimpleMutableDirectedGraph<String, Integer> actualMst = MinimumSpanningTreeAlgorithm.findMinimumSpanningTreeGraph(nonMst, Integer::doubleValue);
+        assertEquals(DumpGraphAlgorithm.dumpAsAdjacencyList(expectedMst), DumpGraphAlgorithm.dumpAsAdjacencyList(actualMst));
     }
 
 
@@ -133,7 +136,7 @@ public class GraphSearchTest {
 
     void testSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
 
-        List<List<String>> actualSets = StronglyConnectedComponents.findStronglyConnectedComponents(graph);
+        List<List<String>> actualSets = StronglyConnectedComponentsAlgorithm.findStronglyConnectedComponents(graph);
 
         assertEquals(expectedSetCount, actualSets.size());
     }

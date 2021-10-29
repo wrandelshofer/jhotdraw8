@@ -20,8 +20,8 @@ import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.graph.DirectedGraphBuilder;
-import org.jhotdraw8.graph.TopologicalSort;
+import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
+import org.jhotdraw8.graph.algo.TopologicalSortAlgorithm;
 import org.jhotdraw8.reflect.TypeToken;
 
 import java.net.URI;
@@ -165,7 +165,7 @@ public interface Drawing extends Figure {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
         // IdentityMap is slower for insertion than an equality-based map.
-        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, false);
+        SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, false);
         graphBuilder.setOrdered(false);
         //  SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, false);
         /*
@@ -195,7 +195,7 @@ public interface Drawing extends Figure {
             }
         }
 
-        OrderedPair<int[], IntArrayList> pair = TopologicalSort.sortTopologicallyIntBatches(graphBuilder);
+        OrderedPair<int[], IntArrayList> pair = TopologicalSortAlgorithm.sortTopologicallyIntBatches(graphBuilder);
         int[] sorted = pair.first();
         if (pair.second().isEmpty()) {
             // graph has a loop => layout sequentially
@@ -240,7 +240,7 @@ public interface Drawing extends Figure {
     default @NonNull Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
-        DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>(1024, 1024, true);
+        SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, true);
         for (Figure f : postorderIterable()) {
             graphBuilder.addVertex(f);
             for (Figure obs : f.getReadOnlyLayoutObservers()) {
@@ -248,6 +248,6 @@ public interface Drawing extends Figure {
                 graphBuilder.addArrow(f, obs, f);
             }
         }
-        return TopologicalSort.sortTopologically(graphBuilder);
+        return TopologicalSortAlgorithm.sortTopologically(graphBuilder);
     }
 }

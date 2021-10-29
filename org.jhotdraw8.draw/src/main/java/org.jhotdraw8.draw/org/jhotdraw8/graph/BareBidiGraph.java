@@ -10,8 +10,8 @@ import org.jhotdraw8.annotation.NonNull;
  * Adds methods to the API defined in {@link BareDirectedGraph}
  * that allow to follow arrows in backward direction.
  *
- * @param <V> the vertex type
- * @param <A> the arrow type
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  */
 public interface BareBidiGraph<V, A> extends BareDirectedGraph<V, A> {
     /**

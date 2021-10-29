@@ -23,7 +23,7 @@ import java.util.Set;
  * provides methods for accessing the next vertex of a given vertex without
  * having to deal with the arrow object.
  *
- * @param <V> the vertex type
+ * @param <V> the vertex data type
  * @param <A> the arrow data type
  */
 public interface BareDirectedGraph<V, A> {

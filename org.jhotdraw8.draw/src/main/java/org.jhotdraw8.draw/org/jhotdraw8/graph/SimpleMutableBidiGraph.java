@@ -4,20 +4,30 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
 import org.jhotdraw8.collection.Enumerator;
+import org.jhotdraw8.collection.ListHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.lang.Integer.max;
 
 /**
- * AbstractDirectedGraphBuilder.
+ * A mutable bidi graph with balanced performance for all operations.
+ * <ul>
+ *     <li>Insertion of a vertex is done in amortized {@code O(1)}.</li>
+ *     <li>Insertion of an arrow is done in amortized {@code O(1)}.</li>
+ *     <li>Removal of a vertex is done in amortized {@code O(|A'|)},
+ *     where {@code |A'|} is the number of ingoing and outgoing arrows of the vertex.</li>
+ *     <li>Removal of an arrow is done in amortized {@code O(|A'|)},
+ *      where {@code |A'|} is the number of ingoing and outgoing arrows of the
+ *      involved vertices.</li>
+ * </ul>
+ * Memory locality is poor. If you need to perform query operations on the
+ * graph, then an immutable graph will give you better performance.
  * <p>
  * <b>Implementation:</b>
  * <p>
@@ -58,18 +68,35 @@ import static java.lang.Integer.max;
  * @author Werner Randelshofer
  */
 
-public class SimpleMutableBidiGraph<V, A>
-        implements MutableBidiGraph<V, A> {
+public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
     private final Map<V, Node<V, A>> nodeMap;
     private List<V> cachedVertices = null;
     private List<A> cachedArrows = null;
     private int arrowCount = 0;
 
+    /**
+     * Creates a new instance.
+     */
     public SimpleMutableBidiGraph() {
-        nodeMap = new LinkedHashMap<>();
+        this(10, 10);
     }
 
+    /**
+     * Creates a new instance.
+     *
+     * @param initialVertexCapacity the initial vertex capacity
+     * @param initialArrowCapacity  the initial arrow capacity
+     */
+    public SimpleMutableBidiGraph(final int initialVertexCapacity, final int initialArrowCapacity) {
+        nodeMap = new LinkedHashMap<>(initialVertexCapacity * 2);
+    }
+
+    /**
+     * Creates a new instance with a copy of the provided graph
+     *
+     * @param g a graph
+     */
     public SimpleMutableBidiGraph(final @NonNull DirectedGraph<V, A> g) {
         nodeMap = new LinkedHashMap<>(g.getVertexCount() * 2);
         for (V v : g.getVertices()) {
@@ -84,41 +111,46 @@ public class SimpleMutableBidiGraph<V, A>
 
     @Override
     public void addVertex(@NonNull V v) {
-        nodeMap.computeIfAbsent(v, Node::new);
+        if (nodeMap.containsKey(v)) {
+            throw new IllegalStateException("v=" + v + " is already in graph");
+        }
+        nodeMap.put(v, new Node<>(v));
         cachedVertices = null;
     }
 
     @Override
     public void removeVertex(@NonNull V v) {
         Node<V, A> node = nodeMap.remove(v);
-        if (node != null) {
-            // Unlink node from its "next" nodes
-            for (Enumerator<Node<V, A>> i = node.next.nodesEnumerator(); i.moveNext(); ) {
-                Node<V, A> next = i.current();
-                next.prev.remove(node);
-            }
-            // Unlink node from its "prev" nodes
-            for (Enumerator<Node<V, A>> i = node.prev.nodesEnumerator(); i.moveNext(); ) {
-                Node<V, A> prev = i.current();
-                prev.next.remove(node);
-            }
-            // Clear node
-            node.next.clear();
-            node.prev.clear();
+        if (node == null) {
+            throw new IllegalStateException("v=" + v + " is not in graph");
         }
+        int oldArrowCount = arrowCount;
+        // Unlink node from its "next" nodes
+        for (Enumerator<Node<V, A>> i = node.next.nodesEnumerator(); i.moveNext(); ) {
+            Node<V, A> next = i.current();
+            next.prev.remove(node);
+            arrowCount--;
+        }
+        // Unlink node from its "prev" nodes
+        for (Enumerator<Node<V, A>> i = node.prev.nodesEnumerator(); i.moveNext(); ) {
+            Node<V, A> prev = i.current();
+            prev.next.remove(node);
+            arrowCount--;
+        }
+        // Clear node
+        node.next.clear();
+        node.prev.clear();
+
         cachedVertices = null;
+        if (oldArrowCount != arrowCount) {
+            cachedArrows = null;
+        }
     }
 
     @Override
     public void addArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
-        Node<V, A> vNode = nodeMap.get(v);
-        if (vNode == null) {
-            throw new IllegalStateException("v=" + v + " is not in graph");
-        }
-        Node<V, A> uNode = nodeMap.get(u);
-        if (uNode == null) {
-            throw new IllegalStateException("u=" + u + " is not in graph");
-        }
+        Node<V, A> vNode = getNodeNonNull(v);
+        Node<V, A> uNode = getNodeNonNull(u);
         vNode.next.add(uNode, a);
         uNode.prev.add(vNode, a);
         cachedArrows = null;
@@ -127,105 +159,119 @@ public class SimpleMutableBidiGraph<V, A>
 
     @Override
     public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
-        Node<V, A> vNode = nodeMap.get(v);
-        if (vNode == null) {
-            throw new IllegalStateException("v=" + v + " is not in graph");
+        Node<V, A> vNode = getNodeNonNull(v);
+        Node<V, A> uNode = getNodeNonNull(u);
+        if (!vNode.next.remove(uNode, a)) {
+            throw new IllegalStateException("arrow v=" + v + " u=" + u + " a=" + a + " is not in graph");
         }
-        Node<V, A> uNode = nodeMap.get(u);
-        if (vNode == null) {
-            throw new IllegalStateException("u=" + u + " is not in graph");
+        if (!uNode.prev.remove(vNode, a)) {
+            throw new IllegalStateException("arrow v=" + v + " u=" + u + " a=" + a + " is not in graph");
         }
-        vNode.next.remove(uNode, a);
-        uNode.prev.remove(vNode, a);
         cachedArrows = null;
         arrowCount--;
     }
 
     @Override
     public void removeArrow(@NonNull V v, @NonNull V u) {
-        Node<V, A> vNode = nodeMap.get(v);
-        Node<V, A> uNode = nodeMap.get(u);
-        vNode.next.remove(uNode);
-        uNode.prev.remove(vNode);
+        Node<V, A> vNode = getNodeNonNull(v);
+        Node<V, A> uNode = getNodeNonNull(u);
+        if (!vNode.next.remove(uNode)) {
+            throw new IllegalStateException("arrow v=" + v + " u=" + u + " is not in graph");
+        }
+        if (!uNode.prev.remove(vNode)) {
+            throw new IllegalStateException("arrow v=" + v + " u=" + u + " is not in graph");
+        }
         cachedArrows = null;
         arrowCount--;
     }
 
+    private @NonNull Node<V, A> getNodeNonNull(@NonNull V v) {
+        final Node<V, A> node = nodeMap.get(v);
+        if (node == null) {
+            throw new IllegalArgumentException("vertex " + v + " is not in graph");
+        }
+        return node;
+    }
+
     @Override
     public void removeArrowAt(@NonNull V v, int k) {
-        Node<V, A> vNode = nodeMap.get(v);
+        Node<V, A> vNode = getNodeNonNull(v);
         Node<V, A> uNode = vNode.next.getNode(k);
         A uArrow = vNode.next.getArrow(k);
         vNode.next.removeAt(k);
-        uNode.prev.remove(vNode, uArrow);
+        if (!uNode.prev.remove(vNode, uArrow)) {
+            throw new IllegalStateException("arrow v=" + v + " k=" + k + " is not in graph");
+        }
         cachedArrows = null;
         arrowCount--;
     }
 
     @Override
     public @NonNull V getNext(@NonNull V vertex, int index) {
-        Node<V, A> vNode = nodeMap.get(vertex);
+        Node<V, A> vNode = getNodeNonNull(vertex);
         return vNode.next.getVertex(index);
     }
 
     @Override
     public @NonNull A getNextArrow(@NonNull V vertex, int index) {
-        Node<V, A> vNode = nodeMap.get(vertex);
+        Node<V, A> vNode = getNodeNonNull(vertex);
         return vNode.next.getArrow(index);
     }
 
     @Override
     public int getNextCount(@NonNull V vertex) {
-        Node<V, A> vNode = nodeMap.get(vertex);
+        Node<V, A> vNode = getNodeNonNull(vertex);
         return vNode.next.size();
     }
 
     @Override
     public V getVertex(int index) {
         if (cachedVertices == null) {
-            cachedVertices = new ArrayList<>(nodeMap.keySet());
+            cachedVertices = Collections.unmodifiableList(new ArrayList<>(nodeMap.keySet()));
         }
 
-        return (V) cachedVertices.get(index);
+        return cachedVertices.get(index);
     }
 
     @Override
     public @NonNull Set<V> getVertices() {
-        return nodeMap.keySet();
+        return Collections.unmodifiableSet(nodeMap.keySet());
     }
 
     @Override
-    public @NonNull Collection<A> getArrows() {
+    public int getArrowCount() {
+        return arrowCount;
+    }
+
+    @Override
+    public @NonNull List<A> getArrows() {
         if (cachedArrows == null) {
-            Object[] a = new Object[arrowCount];
-            int i = 0;
+            List<A> a = new ArrayList<>();
             for (Node<V, A> value : nodeMap.values()) {
                 for (Enumerator<A> it = value.next.arrowEnumerator(); it.moveNext(); ) {
-                    a[i++] = it.current();
+                    a.add(it.current());
                 }
             }
-            @SuppressWarnings("unchecked")
-            List<A> unchecked = (List<A>) Arrays.asList(a);
-            cachedArrows = Collections.unmodifiableList(unchecked);
+            cachedArrows = Collections.unmodifiableList(a);
         }
         return cachedArrows;
     }
 
     @Override
     public @NonNull V getPrev(@NonNull V vertex, int index) {
-        Node<V, A> node = nodeMap.get(vertex);
+        Node<V, A> node = getNodeNonNull(vertex);
         return node.prev.getVertex(index);
     }
 
     @Override
     public @NonNull A getPrevArrow(@NonNull V vertex, int index) {
-        Node<V, A> node = nodeMap.get(vertex);
+        Node<V, A> node = getNodeNonNull(vertex);
         return node.prev.getArrow(index);
     }
 
     @Override
     public int getPrevCount(@NonNull V vertex) {
-        Node<V, A> node = nodeMap.get(vertex);
+        Node<V, A> node = getNodeNonNull(vertex);
         return node.prev.size();
     }
 
@@ -251,8 +297,8 @@ public class SimpleMutableBidiGraph<V, A>
     /**
      * List of adjacent nodes, each element is a tuple {@literal (Node<V,A>,A)}.
      *
-     * @param <V> the vertex type
-     * @param <A> the arrow type
+     * @param <V> the vertex data type
+     * @param <A> the arrow data type
      */
     private static class AdjacencyList<V, A> {
         /**
@@ -330,13 +376,14 @@ public class SimpleMutableBidiGraph<V, A>
         }
 
         private Enumerator<Node<V, A>> nodesEnumerator() {
-            return new AbstractEnumeratorSpliterator<Node<V, A>>(size, 0) {
+            return new AbstractEnumeratorSpliterator<>(size, 0) {
                 int index = 0;
 
                 @Override
                 public boolean moveNext() {
                     if (index < size) {
                         current = getNode(index++);
+                        return true;
                     }
                     return false;
                 }
@@ -344,27 +391,20 @@ public class SimpleMutableBidiGraph<V, A>
         }
 
         private Enumerator<A> arrowEnumerator() {
-            return new AbstractEnumeratorSpliterator<A>(size, 0) {
+            return new AbstractEnumeratorSpliterator<>(size, 0) {
                 int index = 0;
 
                 @Override
                 public boolean moveNext() {
                     if (index < size) {
                         current = getArrow(index++);
+                        return true;
                     }
                     return false;
                 }
             };
         }
 
-        /**
-         * Returns true if size==0.
-         *
-         * @return true if empty
-         */
-        public boolean isEmpty() {
-            return size == 0;
-        }
 
         private void rangeCheck(int index, int maxExclusive) throws IllegalArgumentException {
             if (index < 0 || index >= maxExclusive) {
@@ -372,94 +412,48 @@ public class SimpleMutableBidiGraph<V, A>
             }
         }
 
-        private void rangeCheck(int index, int minInclusive, int maxExclusive) throws IllegalArgumentException {
-            if (index < minInclusive || index >= maxExclusive) {
-                throw new IndexOutOfBoundsException("Index out of bounds " + index);
-            }
-        }
-
-        public void remove(Node<V, A> n) {
+        public boolean remove(Node<V, A> n) {
             for (int i = 0; i < size; i++) {
                 if (getNode(i).equals(n)) {
                     removeAt(i);
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
-        public void remove(Node<V, A> n, A data) {
+        public boolean remove(Node<V, A> n, A a) {
             for (int i = 0; i < size; i++) {
-                if (getNode(i).equals(n) && getArrow(i).equals(data)) {
+                if (getNode(i).equals(n)
+                        && getArrow(i).equals(a)) {
                     removeAt(i);
-                    return;
+                    return true;
                 }
             }
+            return false;
         }
 
         /**
          * Removes the item at the specified index from this list.
          *
          * @param index an index
-         * @return the removed item
          */
         public void removeAt(int index) {
-            rangeCheck(index, 1, size);
-            shrink(size - 1);
+            rangeCheck(index, size);
             int numMoved = size - index - 1;
             if (numMoved > 0) {
                 System.arraycopy(items, (index + 1) * ITEM_SIZE, items, index * ITEM_SIZE, numMoved * ITEM_SIZE);
             }
             --size;
+            shrink(size);
         }
 
         private void grow(int targetCapacity) {
-            items = grow(targetCapacity, ITEM_SIZE, items);
+            items = ListHelper.grow(size, targetCapacity, ITEM_SIZE, items);
         }
 
         private void shrink(int targetCapacity) {
-            items = shrink(targetCapacity, ITEM_SIZE, items);
-        }
-
-        /**
-         * Grows an items array.
-         *
-         * @param targetCapacity {@literal >= 0}
-         * @param itemSize       number of array elements that an item occupies
-         * @param items          the items array
-         * @return a new item array of larger size or the same if no resizing is necessary
-         */
-        private static Object[] grow(final int targetCapacity, final int itemSize, @Nullable final Object[] items) {
-            if (items == null) {
-                return new Object[targetCapacity * itemSize];
-            }
-            if (targetCapacity * itemSize <= items.length) {
-                return items;
-            }
-            int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
-            Object[] newItems = new Object[newCapacity * itemSize];
-            System.arraycopy(items, 0, newItems, 0, items.length);
-            return newItems;
-        }
-
-        /**
-         * Shrink an items array.
-         *
-         * @param targetCapacity {@literal >= 0}
-         * @param itemSize       number of array elements that an item occupies
-         * @param items          the items array
-         * @return a new item array of smaller size or the same if no resizing is necessary
-         */
-        private static Object[] shrink(final int targetCapacity, final int itemSize, @NonNull final Object[] items) {
-            if (targetCapacity == 0) {
-                return null;
-            }
-            if (targetCapacity * itemSize < items.length / 8) {
-                return items;
-            }
-            int newCapacity = max(targetCapacity, items.length / 2); // shrink by 50%
-            Object[] newItems = new Object[newCapacity * itemSize];
-            System.arraycopy(items, 0, newItems, 0, items.length);
-            return newItems;
+            items = ListHelper.shrink(size, targetCapacity, ITEM_SIZE, items);
         }
 
 

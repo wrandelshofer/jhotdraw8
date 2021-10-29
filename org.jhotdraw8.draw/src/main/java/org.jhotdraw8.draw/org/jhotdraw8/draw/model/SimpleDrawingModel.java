@@ -22,8 +22,8 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.graph.DirectedGraphBuilder;
-import org.jhotdraw8.graph.TopologicalSort;
+import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
+import org.jhotdraw8.graph.algo.TopologicalSortAlgorithm;
 import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.util.AbstractMap;
@@ -513,7 +513,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // build a graph which includes all figures that must be laid out and all their observers
             // transitively
             visited.clear();
-            DirectedGraphBuilder<Figure, Figure> graphBuilder = new DirectedGraphBuilder<>();
+            SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>();
             ArrayDeque<Figure> queue = new ArrayDeque<>(todo);
             while (!queue.isEmpty()) {
                 Figure f = queue.removeFirst();
@@ -531,7 +531,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
             visited.clear();
             if (graphBuilder.getVertexCount() > 0) {
-                for (Figure f : TopologicalSort.sortTopologically(graphBuilder)) {
+                for (Figure f : TopologicalSortAlgorithm.sortTopologically(graphBuilder)) {
                     if (visited.add(f)) {
                         if (!f.getLayoutSubjects().isEmpty()) {
                             // The :leftToRight pseudo class may have changed,

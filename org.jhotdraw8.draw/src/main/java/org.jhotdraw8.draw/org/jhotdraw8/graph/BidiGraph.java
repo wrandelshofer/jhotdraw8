@@ -13,8 +13,8 @@ import java.util.Iterator;
 /**
  * Adds convenience methods to the API defined in {@link BareBidiGraph}.
  *
- * @param <V> the vertex type
- * @param <A> the arrow type
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
 public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A> {

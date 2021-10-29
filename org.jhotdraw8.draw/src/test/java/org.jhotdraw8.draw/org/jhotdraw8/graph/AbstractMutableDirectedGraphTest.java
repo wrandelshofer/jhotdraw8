@@ -95,8 +95,8 @@ abstract class AbstractMutableDirectedGraphTest {
         actualVertices = new HashSet<>(g.getNextVertices(4));
         assertEquals(Set.of(3), actualVertices);
 
-        if (g instanceof IntDirectedGraph) {
-            IntDirectedGraph ig = (IntDirectedGraph) g;
+        if (g instanceof IndexedDirectedGraph) {
+            IndexedDirectedGraph ig = (IndexedDirectedGraph) g;
             actualVertices = StreamSupport.intStream(ig.getNextVertices(0), false).boxed().collect(Collectors.toSet());
             assertEquals(Set.of(1, 3), actualVertices);
             actualVertices = StreamSupport.intStream(ig.getNextVertices(1), false).boxed().collect(Collectors.toSet());
@@ -224,7 +224,11 @@ abstract class AbstractMutableDirectedGraphTest {
         assertEquals(Set.of(0, 2, 3, 4), g.getVertices());
         assertEquals(List.of('b', 'e'), g.getArrows());
 
-        g.addVertex(1);
+        if (g instanceof SimpleMutableDirectedGraph) {
+            ((SimpleMutableDirectedGraph<Integer, Character>) g).addVertex(1, 1);
+        } else {
+            g.addVertex(1);
+        }
         g.addArrow(0, 1, 'a');
         g.addArrow(1, 1, 'x');
         g.addArrow(1, 2, 'c');

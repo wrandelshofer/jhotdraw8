@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.graph.BreadthFirstSpliterator;
+import org.jhotdraw8.graph.iterator.BreadthFirstSpliterator;
 
 import java.util.Collection;
 import java.util.HashSet;
