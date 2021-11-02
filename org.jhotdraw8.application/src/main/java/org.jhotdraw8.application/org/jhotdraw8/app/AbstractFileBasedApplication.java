@@ -28,6 +28,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -393,6 +394,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             }
         }
         Scene scene = new Scene(borderPane);
+        scene.setFill(Color.TRANSPARENT);
         scene.getStylesheets().addAll(getStylesheets());
         Node frameIcon = getResources().getSmallIconProperty("frame", getClass());
         if (frameIcon instanceof ImageView) {

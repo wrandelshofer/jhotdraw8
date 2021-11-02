@@ -1,0 +1,5 @@
+.root {
+    -fx-base: rgba(53, 53, 53, 255);
+    -fx-background: -fx-base;
+    -fx-accent: rgba(2, 122, 255, 255);
+}

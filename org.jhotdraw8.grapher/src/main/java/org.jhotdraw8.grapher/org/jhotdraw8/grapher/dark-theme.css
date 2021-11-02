@@ -30,7 +30,7 @@
      * -fx-selection-bar-text for text on top of -fx-selection-bar
      */
     -fx-dark-text-color: rgba(0,0,0,.87);
-    -fx-mid-text-color: #333;
+    -fx-mid-text-color: rgba(63,63,63,.87);
     -fx-light-text-color: rgba(255,255,255,.75);
 
     /* Default buttons color, this is similar to accent but more subtle */

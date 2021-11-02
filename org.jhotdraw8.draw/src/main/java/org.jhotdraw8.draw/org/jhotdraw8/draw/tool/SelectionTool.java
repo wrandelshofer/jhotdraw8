@@ -417,7 +417,7 @@ public class SelectionTool extends AbstractTool {
                 + "\nOr:"
                 + "\n  Shift+Click on the drawing view. The tool will toggle the figure at that location to/from the selection."
                 + "\nOr:"
-                + "\n  Shift+Command+Click on the drawing view. The tool will deselect all figures except the is at that location."
+                + "\n  Shift+Command+Click on the drawing view. The tool will deselect all figures except the figure that is on that location."
                 + "\nOr:"
                 + "\n  Press and drag the mouse over the drawing view to draw the diagonal of a rectangle. The tool will select all figures that fit into the rectangle.";
     }
