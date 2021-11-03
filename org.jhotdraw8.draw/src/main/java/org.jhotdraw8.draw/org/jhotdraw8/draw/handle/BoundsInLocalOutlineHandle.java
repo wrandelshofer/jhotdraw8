@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -28,10 +29,10 @@ import org.jhotdraw8.geom.FXTransforms;
  */
 public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
-    private Group node;
-    private Polygon poly1;
-    private Polygon poly2;
-    private double[] points;
+    private final Group node;
+    private final Polygon poly1;
+    private final Polygon poly2;
+    private final double[] points;
 
     public BoundsInLocalOutlineHandle(Figure figure) {
         super(figure);
@@ -39,6 +40,8 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         points = new double[8];
         poly1 = new Polygon(points);
         poly2 = new Polygon(points);
+        poly1.setStrokeLineCap(StrokeLineCap.BUTT);
+        poly2.setStrokeLineCap(StrokeLineCap.BUTT);
         poly1.setFill(null);
         poly2.setFill(null);
         node.getChildren().addAll(poly1, poly2);

@@ -162,6 +162,7 @@ public class CssEffectConverter implements CssConverter<Effect> {
                     out.accept(new CssToken(CssTokenType.TT_COMMA));
                     produceTokens(fx.getInput(), idSupplier, out);
                 }
+                out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
             } else if (eff instanceof BoxBlur) {
                 BoxBlur fx = (BoxBlur) eff;
                 out.accept(new CssToken(CssTokenType.TT_FUNCTION, BOX_BLUR));

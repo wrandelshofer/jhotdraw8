@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
@@ -32,10 +33,10 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
  * @author Werner Randelshofer
  */
 public class BoundsInTranslationOutlineHandle extends AbstractHandle {
-    private Group node;
-    private Polygon poly1;
-    private Polygon poly2;
-    private double[] points;
+    private final Group node;
+    private final Polygon poly1;
+    private final Polygon poly2;
+    private final double[] points;
 
     public BoundsInTranslationOutlineHandle(Figure figure) {
         super(figure);
@@ -44,12 +45,14 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
         points = new double[8];
         poly1 = new Polygon(points);
         poly2 = new Polygon(points);
-        poly2.getStrokeDashArray().setAll(2.0);
         poly1.setFill(null);
         poly2.setFill(null);
+        poly1.setStrokeLineCap(StrokeLineCap.BUTT);
+        poly2.setStrokeLineCap(StrokeLineCap.BUTT);
         poly1.setStrokeWidth(3);
         poly1.setStroke(Color.WHITE);
         node.getChildren().addAll(poly1, poly2);
+        poly2.getStrokeDashArray().setAll(3.0);
     }
 
     @Override
@@ -66,7 +69,8 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     public Node getNode(@NonNull DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly2.setStroke(Paintable.getPaint(color));
-        poly2.setStrokeWidth(view.getEditor().getHandleStrokeWidth());
+        double handleStrokeWidth = view.getEditor().getHandleStrokeWidth();
+        poly2.setStrokeWidth(handleStrokeWidth);
         return node;
     }
 
@@ -93,7 +97,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t != null && t.isType2D()) {
+        if (t.isType2D()) {
             t.transform2DPoints(points, 0, points, 0, 4);
         }
 
