@@ -42,8 +42,9 @@ public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
         if (key != null) {
             this.modelListener = (event) -> {
+                DrawingModelEvent.EventType eventType = event.getEventType();
                 if (event.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED
-                        && this.figure == event.getNode()) {
+                        && this.figure.get() == event.getNode()) {
                     if (this.key == event.getKey()) {
                         @SuppressWarnings("unchecked")
                         T newValue = event.getNewValue();

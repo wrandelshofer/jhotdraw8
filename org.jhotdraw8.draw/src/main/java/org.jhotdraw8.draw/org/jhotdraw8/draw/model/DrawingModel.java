@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.model;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -417,4 +418,15 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the old value
      */
     @Nullable <T> T remove(Figure f, Key<T> remove);
+
+    /**
+     * Creates a property for the specified figure and property key.
+     *
+     * @param f   a figure
+     * @param key a property key
+     * @param <T> the property type
+     * @return a property
+     */
+
+    @NonNull <T> Property<T> propertyAt(Figure f, Key<T> key);
 }

@@ -18,7 +18,6 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
-import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
@@ -119,23 +118,26 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         x2 = x1;
         y2 = y1;
         createdFigure = createFigure();
+        Figure parent = createdFigure == null ? null : getOrCreateParent(view, createdFigure);
+        if (parent == null) {
+            createdFigure = null;
+            event.consume();
+            return;
+        }
+        view.setActiveParent(parent);
+        DrawingModel dm = view.getModel();
+        dm.addChildTo(createdFigure, parent);
 
         double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
         double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
-        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
+        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
         createdFigure.reshapeInLocal(
                 anchorX == 0 ? c.getX() : c.getX().subtract(CssSize.from(defaultWidth).multiply(anchorX)),
                 anchorY == 0 ? c.getY() : c.getY().subtract(CssSize.from(defaultHeight).multiply(anchorY)),
                 CssSize.from(defaultWidth), CssSize.from(defaultHeight));
-        DrawingModel dm = view.getModel();
-        Drawing drawing = dm.getDrawing();
-
-        Figure parent = getOrCreateParent(view, createdFigure);
-        view.setActiveParent(parent);
-
-        dm.addChildTo(createdFigure, parent);
     }
 
 
@@ -163,9 +165,11 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         if (createdFigure != null) {
             event.consume();
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
-                CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-                CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1
-                        + defaultWidth, y1 + defaultHeight)), Constrainer.DIRECTION_NEAREST);
+                CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                        createdFigure.worldToParent(dv.viewToWorld(x1, y1))));
+                CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(
+                        createdFigure.worldToParent(dv.viewToWorld(x1
+                                + defaultWidth, y1 + defaultHeight))), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
                 }
@@ -194,8 +198,10 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2)));
+            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                    createdFigure.worldToParent(dv.viewToWorld(x1, y1))));
+            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                    createdFigure.worldToParent(dv.viewToWorld(x2, y2))));
             CssSize newWidth = c2.getX().subtract(c1.getX());
             CssSize newHeight = c2.getY().subtract(c1.getY());
             // shift keeps the aspect ratio

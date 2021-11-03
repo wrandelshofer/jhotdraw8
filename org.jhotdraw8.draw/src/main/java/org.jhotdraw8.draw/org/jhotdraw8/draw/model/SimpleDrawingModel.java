@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.model;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -306,6 +307,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
+    public @NonNull <T> Property<T> propertyAt(Figure f, Key<T> key) {
+        return new DrawingModelFigureProperty<>(this, f, key);
+    }
+
+    @Override
     public void reshapeInLocal(@NonNull Figure f, Transform transform) {
         f.reshapeInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
@@ -459,7 +465,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
 
             // all figures with dirty bit "TRANSFORM"
-            // invoke transformNotify
+            // invoke transformChanged
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();

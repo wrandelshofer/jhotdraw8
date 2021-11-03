@@ -77,24 +77,33 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        createdFigure = createFigure();
+        Figure parent = getOrCreateParent(view, createdFigure);
+        if (parent == null) {
+            event.consume();
+            createdFigure = null;
+            return;
+        }
+
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
         y2 = y1;
-        createdFigure = createFigure();
 
         double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
         double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
-        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
+        CssPoint2D c =
+                view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                        parent.worldToLocal(
+                                view.viewToWorld(new Point2D(x1, y1)))));
         createdFigure.reshapeInLocal(
                 anchorX == 0 ? c.getX() : c.getX().subtract(CssSize.from(1).multiply(anchorX)),
                 anchorY == 0 ? c.getY() : c.getY().subtract(CssSize.from(1).multiply(anchorY)),
                 CssSize.from(1), CssSize.from(1));
         DrawingModel dm = view.getModel();
 
-        Figure parent = getOrCreateParent(view, createdFigure);
         view.setActiveParent(parent);
 
         dm.addChildTo(createdFigure, parent);
@@ -108,9 +117,11 @@ public class CreationTool extends AbstractCreationTool<Figure> {
                 double width = getDefaultWidth();
                 double height = getDefaultHeight();
 
-                CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-                CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1
-                        + width, y1 + height)), Constrainer.DIRECTION_NEAREST);
+                CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                        createdFigure.worldToParent(dv.viewToWorld(x1, y1))));
+                CssPoint2D c2 = dv.getConstrainer().translatePoint(createdFigure, new CssPoint2D(
+                        createdFigure.worldToParent(dv.viewToWorld(x1
+                                + width, y1 + height))), Constrainer.DIRECTION_NEAREST);
                 if (c2.equals(c1)) {
                     c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(c1.getX().getConvertedValue() + defaultWidth, c1.getY().getConvertedValue() + defaultHeight));
                 }
@@ -136,8 +147,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2)));
+            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(createdFigure.worldToParent(dv.viewToWorld(x1, y1))));
+            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(createdFigure.worldToParent(dv.viewToWorld(x2, y2))));
             CssSize newWidth = c2.getX().subtract(c1.getX());
             CssSize newHeight = c2.getY().subtract(c1.getY());
             // shift keeps the aspect ratio

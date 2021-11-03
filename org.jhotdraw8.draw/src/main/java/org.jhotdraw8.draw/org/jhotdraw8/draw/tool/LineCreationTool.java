@@ -52,21 +52,25 @@ public class LineCreationTool extends CreationTool {
         x2 = x1;
         y2 = y1;
         createdFigure = createFigure();
+        Figure parent = createdFigure == null ? null : getOrCreateParent(view, createdFigure);
+        if (parent == null) {
+            createdFigure = null;
+            return;
+        }
+        DrawingModel dm = view.getModel();
+        dm.addChildTo(createdFigure, parent);
 
         double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
         double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
-        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
-        DrawingModel dm = view.getModel();
+        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure,
+                new CssPoint2D(createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
         createdFigure.set(p1, c);
         createdFigure.set(p2, c);
         Drawing drawing = dm.getDrawing();
 
-        Figure parent = getOrCreateParent(view, createdFigure);
         view.setActiveParent(parent);
-
-        dm.addChildTo(createdFigure, parent);
         event.consume();
     }
 
@@ -75,8 +79,10 @@ public class LineCreationTool extends CreationTool {
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
-            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x1, y1)));
-            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2)));
+            CssPoint2D c1 = dv.getConstrainer().constrainPoint(createdFigure,
+                    new CssPoint2D(createdFigure.worldToParent(dv.viewToWorld(x1, y1))));
+            CssPoint2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                    createdFigure.worldToParent(dv.viewToWorld(x2, y2))));
             DrawingModel dm = dv.getModel();
             dm.set(createdFigure, p1, c1);
             dm.set(createdFigure, p2, c2);

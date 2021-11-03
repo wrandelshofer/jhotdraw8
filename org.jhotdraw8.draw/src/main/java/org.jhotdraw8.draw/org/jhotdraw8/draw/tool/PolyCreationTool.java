@@ -66,17 +66,27 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
         double y1 = event.getY();
 
         DrawingModel dm = view.getModel();
-        Point2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1)))).getConvertedValue();
         if (createdFigure == null) {
             createdFigure = createFigure();
+            Figure parent = createdFigure == null ? null : getOrCreateParent(view, createdFigure);
+            if (parent == null) {
+                createdFigure = null;
+                points = null;
+                event.consume();
+                return;
+            }
+            dm.addChildTo(createdFigure, parent);
             points = new ArrayList<>();
+            Point2D c = view.getConstrainer().constrainPoint(createdFigure,
+                    new CssPoint2D(createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1))))).getConvertedValue();
             points.add(c);
-            points.add(c);
-            Figure parent = getOrCreateParent(view, createdFigure);
+            points.add(c); // we will update the last point on drag
             view.setActiveParent(parent);
 
-            dm.addChildTo(createdFigure, parent);
         } else {
+            assert points != null;
+            Point2D c = view.getConstrainer().constrainPoint(createdFigure,
+                    new CssPoint2D(createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1))))).getConvertedValue();
             points.add(c);
         }
         dm.set(createdFigure, key, ImmutableLists.copyOf(points));
@@ -98,10 +108,11 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure != null) {
+        if (createdFigure != null && points != null) {
             double x2 = event.getX();
             double y2 = event.getY();
-            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(dv.viewToWorld(x2, y2))).getConvertedValue();
+            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                    createdFigure.worldToParent(dv.viewToWorld(x2, y2)))).getConvertedValue();
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
             dm.set(createdFigure, key, ImmutableLists.copyOf(points));
@@ -112,7 +123,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     @Override
     protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.getClickCount() > 1) {
-            if (createdFigure != null) {
+            if (createdFigure != null && points != null) {
                 for (int i = points.size() - 1; i > 0; i--) {
                     if (Objects.equals(points.get(i), points.get(i - 1))) {
                         points.remove(i);

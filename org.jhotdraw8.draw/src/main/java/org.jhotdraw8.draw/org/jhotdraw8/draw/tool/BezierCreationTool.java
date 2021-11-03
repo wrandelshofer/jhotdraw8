@@ -108,10 +108,10 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure != null) {
+        if (createdFigure != null && points != null) {
             double x2 = event.getX();
             double y2 = event.getY();
-            Point2D c2 = dv.viewToWorld(x2, y2);
+            Point2D c2 = createdFigure.worldToParent(dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             if (dragStartIndex == -1) {
                 points.add(new BezierNode(c2));
@@ -126,7 +126,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure != null) {
+        if (createdFigure != null && points != null) {
             /*
             dragStartIndex = -1;
             double x2 = event.getX();
@@ -158,20 +158,24 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         double y1 = event.getY();
 
         DrawingModel dm = view.getModel();
-        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(view.viewToWorld(new Point2D(x1, y1))));
         if (createdFigure == null) {
             createdFigure = createFigure();
-            points = new ArrayList<>();
-            points.add(new BezierNode(c.getConvertedValue()));
-            Figure parent = getOrCreateParent(view, createdFigure);
-            if (parent instanceof Layer) {
-                view.setActiveParent((Layer) parent);
+            Figure parent = createdFigure == null ? null : getOrCreateParent(view, createdFigure);
+            if (parent == null) {
+                createdFigure = null;
+                points = null;
+                return;
             }
+            points = new ArrayList<>();
+            view.setActiveParent((Layer) parent);
 
             dm.addChildTo(createdFigure, parent);
-        } else {
-            points.add(new BezierNode(c.getConvertedValue()));
+
         }
+        assert points != null;
+        CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
+                createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
+        points.add(new BezierNode(c.getConvertedValue()));
         dm.set(createdFigure, key, ImmutableLists.copyOf(points));
 
         rubberBand.setVisible(false);
@@ -181,15 +185,13 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure == null) {
+        if (createdFigure == null || points == null) {
             return;
         }
         if (dragStartIndex != -1) {
             List<Point2D> digitized = new ArrayList<>(points.size() - dragStartIndex);
-            List<java.awt.geom.Point2D.Double> digiti = new ArrayList<>();
             for (int i = dragStartIndex, n = points.size(); i < n; i++) {
                 digitized.add(points.get(i).getC0());
-                digiti.add(new java.awt.geom.Point2D.Double(points.get(i).getC0().getX(), points.get(i).getC0().getY()));
             }
             BezierNodePathBuilder builder = new BezierNodePathBuilder();
             double error = 5 / dv.getZoomFactor();
@@ -202,7 +204,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
             for (int i = 0, n = built.size(); i < n; i++) {
                 if (i == 0) {
-                    newList.add(built.get(i).setMask(built.get(i).getMask() & (BezierNode.MOVE_MASK ^ -1)));
+                    newList.add(built.get(i).setMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
                 } else {
                     newList.add(built.get(i));
                 }

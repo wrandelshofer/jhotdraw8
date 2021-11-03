@@ -17,3 +17,8 @@
     -fx-border-style: solid outside, solid outside;
     -fx-border-width: 2, 1;
 }
+
+
+.split-pane {
+    -fx-padding: 0;
+}

@@ -25,15 +25,15 @@ import java.util.Objects;
 public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
-    protected @Nullable K key;
-    protected @Nullable ObservableMap<K, V> map;
+    protected @NonNull K key;
+    protected @NonNull ObservableMap<K, V> map;
     private @Nullable WeakMapChangeListener<K, V> weakListener;
     /**
      * Here char is used as an uint16.
      */
     private char changing;
 
-    public MapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Type tClazz) {
+    public MapEntryProperty(@NonNull ObservableMap<K, V> map, @NonNull K key, @NonNull Type tClazz) {
         this.map = map;
         this.key = key;
 

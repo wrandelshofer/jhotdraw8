@@ -138,11 +138,18 @@ public class DrawingInspector extends AbstractDrawingInspector {
             boundBackgroundProperty = null;
         }
         if (newValue != null) {
+            xProperty = drawingModel.propertyAt(newValue, ViewBoxableDrawing.VIEW_BOX_X);
+            yProperty = drawingModel.propertyAt(newValue, ViewBoxableDrawing.VIEW_BOX_Y);
+            widthProperty = drawingModel.propertyAt(newValue, ViewBoxableDrawing.WIDTH);
+            heightProperty = drawingModel.propertyAt(newValue, ViewBoxableDrawing.HEIGHT);
+            boundBackgroundProperty = drawingModel.propertyAt(newValue, ViewBoxableDrawing.BACKGROUND);
+            /*
             xProperty = ViewBoxableDrawing.VIEW_BOX_X.propertyAt(newValue.getProperties());
             yProperty = ViewBoxableDrawing.VIEW_BOX_Y.propertyAt(newValue.getProperties());
             widthProperty = ViewBoxableDrawing.WIDTH.propertyAt(newValue.getProperties());
             heightProperty = ViewBoxableDrawing.HEIGHT.propertyAt(newValue.getProperties());
             boundBackgroundProperty = Drawing.BACKGROUND.propertyAt(newValue.getProperties());
+             */
             xProperty.addListener(sizeCommitHandler);
             yProperty.addListener(sizeCommitHandler);
             widthProperty.addListener(sizeCommitHandler);
@@ -150,7 +157,6 @@ public class DrawingInspector extends AbstractDrawingInspector {
             myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
             myBackgroundProperty.addListener((ChangeListener<? super CssColor>) colorCommitHandler);
 
-            // FIXME binding to figure properties bypasses the DrawingModel!
             xField.textProperty().bindBidirectional(xProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
             yField.textProperty().bindBidirectional(yProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
             widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));

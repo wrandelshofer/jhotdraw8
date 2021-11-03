@@ -158,17 +158,24 @@ public class ConnectionTool extends AbstractTool {
     protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
         requestFocus();
         figure = figureFactory.get();
+        if (figure == null) {
+            return;
+        }
+        Figure parent = getOrCreateParent(view, figure);
+        if (parent == null) {
+            figure = null;
+            return;
+        }
         if (handleType != null) {
             view.getEditor().setHandleType(handleType);
         }
         Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
-        Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
+        Point2D unconstrainedPoint = parent.worldToLocal(view.viewToWorld(pointInViewCoordinates));
         Point2D constrainedPoint = view.getConstrainer().constrainPoint(figure, new CssPoint2D(unconstrainedPoint)).getConvertedValue();
         figure.reshapeInLocal(constrainedPoint.getX(), constrainedPoint.getY(), 1, 1);
         DrawingModel dm = view.getModel();
         double tolerance = view.getViewToWorld().transform(view.getEditor().getTolerance(), 0).getX();
 
-        Figure parent = getOrCreateParent(view, figure);
         view.setActiveParent(parent);
 
         Connector newConnector = null;

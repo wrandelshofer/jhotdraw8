@@ -4,42 +4,23 @@
  */
 
 .root {
-    /* The base color for objects.
-     */
     -fx-base: #323232;
-
-    /* Color for highlighting/accenting objects.
-    */
     -fx-accent: #3f628a;
-
-    /* Used for the inside of text boxes, password boxes, lists, trees, and
-     * tables.  See also -fx-text-inner-color, which should be used as the
-     * -fx-text-fill value for text painted on top of backgrounds colored
-     * with -fx-control-inner-background.
-     */
     -fx-control-inner-background: -fx-base;
 
-    /* One of these colors will be chosen based upon a ladder calculation
-     * that uses the brightness of a background color.  Instead of using these
-     * colors directly as -fx-text-fill values, the sections in this file should
-     * use a derived color to match the background in use.  See also:
-     *
-     * -fx-text-base-color for text on top of -fx-base, -fx-color, and -fx-body-color
-     * -fx-text-background-color for text on top of -fx-background
-     * -fx-text-inner-color for text on top of -fx-control-inner-color
-     * -fx-selection-bar-text for text on top of -fx-selection-bar
-     */
     -fx-dark-text-color: rgba(0,0,0,.87);
     -fx-mid-text-color: rgba(63,63,63,.87);
     -fx-light-text-color: rgba(255,255,255,.75);
 
-    /* Default buttons color, this is similar to accent but more subtle */
     -fx-default-button: #1763d8;
-
 }
 
 .jhotdraw8-drawing-view-canvas-region {
-    -fx-border-color: black;
-    -fx-border-style: solid outside;
-    -fx-border-width: 1;
+    -fx-border-color: rgba(0,0,0,0.0625), rgba(0,0,0,0.125);
+    -fx-border-style: solid outside, solid outside;
+    -fx-border-width: 2, 1;
+}
+
+.split-pane {
+    -fx-padding: 0;
 }

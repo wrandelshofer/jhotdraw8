@@ -566,17 +566,6 @@ public class ZoomableScrollPane extends GridPane {
             e.printStackTrace();
             return FXTransforms.IDENTITY;
         }
-        /*
-        double sf = 1 / getZoomFactor();
-        Bounds vcRect = getVisibleContentRect();
-        double x, y;
-        x = vcRect.getMinX();
-        y = vcRect.getMinY();
-        return new Affine(
-                sf, 0, x,
-                0, sf, y);
-
-         */
     }
 
     private final Property<Transform> contentToView = new SimpleObjectProperty<>(this, "contentToView");
