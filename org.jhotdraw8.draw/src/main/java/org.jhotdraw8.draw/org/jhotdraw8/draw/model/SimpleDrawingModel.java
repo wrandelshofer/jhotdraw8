@@ -19,7 +19,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
-import org.jhotdraw8.draw.figure.TransformableFigure;
+import org.jhotdraw8.draw.figure.TransformCachingFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.event.Listener;
@@ -446,7 +446,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
 
             // all figures with dirty bit "TRANSFORM"
-            // induce dirty bits "TRANSFORM" and "LAYOUT_OBSERVERS" on all descendants which implement the TransformableFigure interface.
+            // induce dirty bits "TRANSFORM" and "LAYOUT_OBSERVERS" on all descendants which implement the TransformingFigure interface.
             visited.clear();
             DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
             for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
@@ -456,7 +456,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                     for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
                         final Figure a = i.current();
                         if (visited.add(a)) {
-                            if (a instanceof TransformableFigure) {
+                            if (a instanceof TransformCachingFigure) {
                                 markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
                             }
                         }

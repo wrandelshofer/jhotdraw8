@@ -17,7 +17,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 /**
  * Abstract drawing that supports {@link ViewBoxableDrawing}.
  */
-public abstract class AbstractViewBoxDrawing extends AbstractDrawing implements ViewBoxableDrawing {
+public abstract class AbstractViewBoxDrawing extends AbstractDrawing implements ViewBoxableDrawing, Figure {
     public AbstractViewBoxDrawing() {
     }
 

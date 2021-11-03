@@ -56,7 +56,7 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-public interface TransformableFigure extends TransformCachingFigure {
+public interface TransformableFigure extends TransformCachingFigure, Figure {
     boolean CACHE = true;
     /**
      * Defines the angle of rotation around the rotation pivot of the figure in degrees.

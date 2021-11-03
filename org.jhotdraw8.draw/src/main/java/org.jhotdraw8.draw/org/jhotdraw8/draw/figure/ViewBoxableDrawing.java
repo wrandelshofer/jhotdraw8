@@ -10,7 +10,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 
-public interface ViewBoxableDrawing extends Drawing {
+public interface ViewBoxableDrawing extends Drawing, Figure {
     /**
      * Defines the x-coordinate of the view-box.
      * <p>

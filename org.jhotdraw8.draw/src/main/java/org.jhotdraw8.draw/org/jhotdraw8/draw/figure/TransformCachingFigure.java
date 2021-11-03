@@ -19,7 +19,7 @@ import org.jhotdraw8.geom.FXTransforms;
  * @author Werner Randelshofer
  */
 public interface TransformCachingFigure extends Figure {
-    boolean CACHE = false;
+    boolean CACHE = true;
 
     @Nullable
     Transform getCachedLocalToWorld();
