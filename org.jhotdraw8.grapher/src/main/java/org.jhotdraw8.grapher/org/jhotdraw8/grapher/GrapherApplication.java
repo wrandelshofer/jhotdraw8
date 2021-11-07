@@ -103,6 +103,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
             set(DARK_MODE_KEY, false);
             getStylesheets().add(getClass().getResource("light-theme.css").toString());
         }
+        getStylesheets().add(getClass().getResource("base-theme.css").toString());
         getStylesheets().add(DrawStylesheets.getInspectorsStylesheet());
 
     }

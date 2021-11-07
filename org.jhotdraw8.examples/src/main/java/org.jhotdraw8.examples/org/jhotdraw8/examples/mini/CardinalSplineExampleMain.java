@@ -2,7 +2,7 @@
  * @(#)CardinalSplineSampleMain.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.beans.Observable;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
  *
  * @author Werner Randelshofer
  */
-public class CardinalSplineSampleMain extends Application {
+public class CardinalSplineExampleMain extends Application {
     private Polyline polyline = new Polyline(
             10, 100,
             60, 80,

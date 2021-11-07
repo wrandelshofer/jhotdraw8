@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.annotation.NonNull;
@@ -36,7 +35,7 @@ public class CssColorPopup {
         contextMenu = new ContextMenu();
 
         colorPicker = new ColorPicker();
-        MenuItem colorPickerItem = new Menu(null, colorPicker);
+        MenuItem colorPickerItem = new MenuItem(null, colorPicker);
         contextMenu.getItems().add(colorPickerItem);
         colorPicker.setOnAction(event -> callback.accept(true, CssColor.ofColor(colorPicker.getValue())));
 

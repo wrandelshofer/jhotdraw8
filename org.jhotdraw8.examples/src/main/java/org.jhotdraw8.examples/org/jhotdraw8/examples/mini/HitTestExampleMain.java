@@ -2,7 +2,7 @@
  * @(#)HitTestSampleMain.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -51,7 +51,7 @@ import java.util.stream.IntStream;
  *
  * @author Werner Randelshofer
  */
-public class HitTestSampleMain extends Application {
+public class HitTestExampleMain extends Application {
     private DoubleProperty width = new SimpleDoubleProperty(0.5);
     private DoubleProperty miterLimit = new SimpleDoubleProperty(10);
     private ObjectProperty<StrokeLineJoin> lineJoin = new SimpleObjectProperty<>(StrokeLineJoin.MITER);

@@ -2,7 +2,7 @@
  * @(#)FontChooserMain.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;

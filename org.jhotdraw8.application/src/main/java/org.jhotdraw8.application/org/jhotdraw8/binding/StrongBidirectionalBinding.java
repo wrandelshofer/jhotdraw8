@@ -101,8 +101,8 @@ public class StrongBidirectionalBinding<T> implements InvalidationListener {
         ((ObservableValue<?>) property2).removeListener(binding);
     }
 
-    public static <T> StrongBidirectionalBinding bind(Property<T> property1, Property<T> property2) {
-        final StrongBidirectionalBinding binding = new StrongBidirectionalBinding<T>(property1, property2);
+    public static <T> StrongBidirectionalBinding<T> bind(Property<T> property1, Property<T> property2) {
+        final StrongBidirectionalBinding<T> binding = new StrongBidirectionalBinding<>(property1, property2);
         property1.setValue(property2.getValue());
         property1.addListener(binding);
         property2.addListener(binding);

@@ -2,7 +2,7 @@
  * @(#)ConnectingFiguresSample.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.figure.RectangleFigure;
 import org.jhotdraw8.draw.figure.SimpleDrawing;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 
-public class ConnectingFiguresSample {
+public class ConnectingFiguresExample {
 
     public @NonNull Drawing createDrawing() {
         RectangleFigure a = new RectangleFigure(100, 80, 150, 100);  // 1

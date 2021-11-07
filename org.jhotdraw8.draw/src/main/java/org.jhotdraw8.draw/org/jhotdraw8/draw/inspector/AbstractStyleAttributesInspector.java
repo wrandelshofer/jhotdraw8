@@ -279,6 +279,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     protected void collectHelpTexts(@NonNull Collection<E> figures) {
         StylesheetsManager<E> styleManager = getStyleManager();
+        if (styleManager == null) {
+            return;
+        }
         SelectorModel<E> selectorModel = styleManager.getSelectorModel();
 
         for (E f : figures) {
@@ -577,6 +580,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
             ObservableMap<String, Set<E>> pseudoStyles = createPseudoStyles();
 
             StylesheetsManager<E> sm = getStyleManager();
+            if (sm == null) {
+                return;
+            }
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
             Set<E> selectedF = new LinkedHashSet<>();
@@ -597,8 +603,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 @SuppressWarnings("unchecked")
                 Picker<Object> picker = (Picker<Object>) createAndCachePicker(selectedAccessor);
 
-                if (picker != null) {
-                    Object initialValue = null;
+
+                Object initialValue = null;
                     @SuppressWarnings("unchecked")
                     WritableStyleableMapAccessor<Object> finalSelectedAccessor
                             = (WritableStyleableMapAccessor<Object>) selectedAccessor;
@@ -621,7 +627,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     picker.show(getTextArea(), screenX, screenY,
                             initialValue, lambda);
                 }
-            }
+
         }
 
     }

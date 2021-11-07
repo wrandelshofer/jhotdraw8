@@ -84,7 +84,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
         List<Node> nodes = new ArrayList<>();
         new PreorderSpliterator<>(n ->
                 (n instanceof Parent) ? ((Parent) n).getChildrenUnmodifiable() : Collections.emptyList(),
-                (Node) getNode()).forEachRemaining(nodes::add);
+                getNode()).forEachRemaining(nodes::add);
         for (Node node : nodes) {
             if (node instanceof TableView) {
                 ((TableView<?>) node).setItems(FXCollections.emptyObservableList());

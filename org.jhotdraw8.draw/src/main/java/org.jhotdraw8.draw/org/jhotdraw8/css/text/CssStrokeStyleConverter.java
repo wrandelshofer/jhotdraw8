@@ -217,7 +217,6 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
     public String getHelpText() {
         return "Format of ⟨StrokeStyle⟩: ［⟨width⟩］⟨Paint⟩［⟨Type⟩］［⟨Linecap⟩］［⟨Linejoin⟩］［⟨Miterlimit⟩］［⟨Dashoffset⟩］［⟨Dasharray⟩］"
                 + "\n  with ⟨width⟩: size"
-                + "\n  with ⟨Paint⟩: ⟨Color⟩｜⟨Gradient⟩"
                 + "\n  with ⟨Type⟩: " + TYPE + "(inside｜outside｜centered)"
                 + "\n  with ⟨Linecap⟩: " + LINECAP + "(square｜butt｜round)"
                 + "\n  with ⟨Linejoin⟩: " + LINEJOIN + "(miter｜bevel｜round)"
@@ -227,6 +226,16 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
                 ;
     }
 
+    @Override
+    public @NonNull ImmutableList<String> getExamples() {
+        return ImmutableLists.of(
+                "type(inside)",
+                "type(centered)",
+                "type(outside)",
+                "linecap(round) linejoin(round)",
+                "dashoffset(2) dasharray(5 10)"
+        );
+    }
 
     @Override
     protected <TT extends CssStrokeStyle> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {

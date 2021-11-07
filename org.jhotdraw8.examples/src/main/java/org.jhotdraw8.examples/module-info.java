@@ -4,5 +4,5 @@ module org.jhotdraw8.examples {
     requires java.logging;
     requires java.prefs;
 
-    exports org.jhotdraw8.samples.mini to javafx.graphics, javafx.fxml;
+    exports org.jhotdraw8.examples.mini to javafx.graphics, javafx.fxml;
 }

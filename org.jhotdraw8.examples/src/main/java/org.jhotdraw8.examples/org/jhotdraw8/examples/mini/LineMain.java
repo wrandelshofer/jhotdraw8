@@ -1,4 +1,4 @@
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.scene.Parent;

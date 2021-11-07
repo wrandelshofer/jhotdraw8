@@ -2,7 +2,7 @@
  * @(#)CssSample.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -32,11 +32,11 @@ import java.net.URI;
 import java.util.ArrayList;
 
 /**
- * CssSample..
+ * CssExample..
  *
  * @author Werner Randelshofer
  */
-public class CssSample extends Application {
+public class CssExample extends Application {
 
     @Override
     public void start(@NonNull Stage primaryStage) throws Exception {
@@ -83,7 +83,7 @@ public class CssSample extends Application {
         vertex4.set(StyleableFigure.ID, "vertex4");
 
         ArrayList<URI> stylesheets = new ArrayList<>();
-        stylesheets.add(CssSample.class.getResource("CssSample.css").toURI());
+        stylesheets.add(CssExample.class.getResource("CssExample.css").toURI());
         drawing.set(Drawing.USER_AGENT_STYLESHEETS, ImmutableLists.copyOf(stylesheets));
 
         SimpleRenderContext ctx = new SimpleRenderContext();

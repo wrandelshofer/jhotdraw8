@@ -2,7 +2,7 @@
  * @(#)ConnectingFiguresSampleMain.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.tool.Tool;
  *
  * @author Werner Randelshofer
  */
-public class ConnectingFiguresSampleMain extends Application {
+public class ConnectingFiguresExampleMain extends Application {
 
     @Override
     public void start(@NonNull Stage primaryStage) throws Exception {
@@ -32,7 +32,7 @@ public class ConnectingFiguresSampleMain extends Application {
         DrawingView drawingView = new SimpleDrawingView();
 
         // Create the drawing and add it to the DrawingView.
-        Drawing drawing = new ConnectingFiguresSample().createDrawing();
+        Drawing drawing = new ConnectingFiguresExample().createDrawing();
         drawingView.setDrawing(drawing);
 
         // A DrawingView can display a Drawing. But it does not directly support editing.

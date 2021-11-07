@@ -5,17 +5,8 @@
   ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ColorPicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/16"
-          xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.geometry.Insets?><?import javafx.scene.control.ColorPicker?><?import javafx.scene.control.Label?><?import javafx.scene.control.TextField?><?import javafx.scene.control.Tooltip?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.HBox?><?import javafx.scene.layout.RowConstraints?>
+<GridPane hgap="4.0" styleClass="inspector" vgap="4.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <Label text="%attribute.drawingFillColor.shortLabelText">
       <tooltip>
@@ -35,15 +26,13 @@
         <Insets bottom="4.0" left="4.0" right="4.0"/>
       </opaqueInsets>
     </HBox>
-    <Label fx:id="widthLabel" text="%attribute.drawingWidth.shortLabelText" GridPane.columnIndex="2"
-           GridPane.rowIndex="1">
+    <Label fx:id="widthLabel" text="%attribute.drawingWidth.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="1">
       <tooltip>
         <Tooltip text="%attribute.drawingWidth.toolTipText"/>
       </tooltip>
     </Label>
     <TextField fx:id="widthField" prefColumnCount="5" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-    <Label fx:id="heightLabel" text="%attribute.drawingHeight.shortLabelText" GridPane.columnIndex="2"
-           GridPane.rowIndex="2">
+    <Label fx:id="heightLabel" text="%attribute.drawingHeight.shortLabelText" GridPane.columnIndex="2" GridPane.rowIndex="2">
       <tooltip>
         <Tooltip text="%attribute.drawingHeight.toolTipText"/>
       </tooltip>
@@ -65,7 +54,7 @@
   <columnConstraints>
     <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
     <ColumnConstraints fillWidth="false" hgrow="NEVER"/>
-    <ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="10.0" prefWidth="100.0"/>
+    <ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="10.0"/>
     <ColumnConstraints fillWidth="false" hgrow="NEVER" minWidth="10.0" prefWidth="100.0"/>
   </columnConstraints>
   <rowConstraints>

@@ -2,23 +2,6 @@
  * @(#)light-theme.css
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-
-#drawingView {
-    -fx-background-color: rgb(200, 200, 200);
-
-    -fx-dark-text-color: rgba(0,0,0,.87);
-    -fx-mid-text-color: rgba(63,63,63,.87);
-    -fx-light-text-color: rgba(255,255,255,.75);
-
-}
-
-.jhotdraw8-drawing-view-canvas-region {
-    -fx-border-color: rgba(0,0,0,0.0625), rgba(0,0,0,0.125);
-    -fx-border-style: solid outside, solid outside;
-    -fx-border-width: 2, 1;
-}
-
-
-.split-pane {
-    -fx-padding: 0;
+.root {
+    -fx-base: #ececec;
 }

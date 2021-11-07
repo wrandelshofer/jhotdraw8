@@ -2,7 +2,7 @@
  * @(#)BiArcApproSampleMain.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class BiArcApproSampleMain extends Application {
+public class BiArcApproExampleMain extends Application {
     private javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
             110, 200,
             160, 180,

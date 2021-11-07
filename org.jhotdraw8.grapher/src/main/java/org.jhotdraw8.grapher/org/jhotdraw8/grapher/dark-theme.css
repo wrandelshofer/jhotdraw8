@@ -4,6 +4,7 @@
  */
 
 .root {
+    -fx-color: #323232;
     -fx-base: #323232;
     -fx-accent: #3f628a;
     -fx-control-inner-background: -fx-base;
@@ -13,14 +14,21 @@
     -fx-light-text-color: rgba(255,255,255,.75);
 
     -fx-default-button: #1763d8;
+
+
+    /* A gradient that goes from a little lighter than -fx-color at the top to
+     * a little darker than -fx-color at the bottom and is used to fill the
+     * body of many controls such as buttons.
+     */
+    -fx-body-color: linear-gradient(to bottom,
+            derive(-fx-color,5%),
+            derive(-fx-color,-5%));
+    -fx-body-color-bottomup: linear-gradient(to top, derive(-fx-color,10%) ,derive(-fx-color,-6%));
+    -fx-body-color-to-right: linear-gradient(to right, derive(-fx-color,10%) ,derive(-fx-color,-6%));
+
 }
 
-.jhotdraw8-drawing-view-canvas-region {
-    -fx-border-color: rgba(0,0,0,0.0625), rgba(0,0,0,0.125);
-    -fx-border-style: solid outside, solid outside;
-    -fx-border-width: 2, 1;
-}
-
-.split-pane {
-    -fx-padding: 0;
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, derive(-fx-background,5%);
+    -fx-background-insets: 0 1 1 0, 1 2 0 1, 2 3 0 2;
 }

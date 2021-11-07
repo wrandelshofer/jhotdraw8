@@ -1,4 +1,4 @@
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -29,7 +29,7 @@ import java.util.List;
 import static java.lang.Math.round;
 
 // https://math.stackexchange.com/questions/1954845/bezier-curvature-extrema
-public class BezierArcLengthSampleMain extends Application {
+public class BezierArcLengthExampleMain extends Application {
     private class Handle {
 
         @NonNull

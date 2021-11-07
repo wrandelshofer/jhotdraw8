@@ -2,7 +2,7 @@
  * @(#)OffsetPathSampleMain.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.samples.mini;
+package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
 import javafx.beans.Observable;
@@ -43,7 +43,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class OffsetPathSampleMain extends Application {
+public class OffsetPathExampleMain extends Application {
     private javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
             110, 200,
             160, 180,

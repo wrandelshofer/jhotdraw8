@@ -292,7 +292,9 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     @Override
     public @NonNull A getNextArrow(@NonNull V vertex, int index) {
         int arrowId = getNextArrowIndex(getVertexIndex(vertex), index);
-        return (A) arrows.get(arrowId);
+        @SuppressWarnings("unchecked")
+        A a = (A) arrows.get(arrowId);
+        return a;
     }
 
     @Override
@@ -347,7 +349,9 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             List<A> list = new ArrayList<>();
             for (Object arrow : arrows) {
                 if (arrow != TOMBSTONE_OBJECT) {
-                    list.add((A) arrow);
+                    @SuppressWarnings("unchecked")
+                    A a = (A) arrow;
+                    list.add(a);
                 }
             }
             cachedArrows = Collections.unmodifiableList(list);
