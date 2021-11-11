@@ -31,3 +31,11 @@
     -fx-background-color: -fx-outer-border, -fx-base;
     -fx-background-insets: 0, 0 0 1 0;
 }
+
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-padding: 0.083333em 1em 0.0769em 0.5em;
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-insets: -4 -10 -6 -5, -2 -9 -5 -3;
+}
