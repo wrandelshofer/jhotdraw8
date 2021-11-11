@@ -456,14 +456,14 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    private void onFigureAdded(@NonNull Figure figure) {
+    private void onFigureAddedToParent(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             invalidateFigureNode(f);
         }
         repaint();
     }
 
-    private void onFigureRemoved(@NonNull Figure figure) {
+    private void onFigureRemovedFromParent(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             removeNode(f);
         }
@@ -481,6 +481,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void onNodeChanged(@NonNull Figure figure) {
         invalidateFigureNode(figure);
         repaint();
+    }
+
+    private void onNodeAddedToTree(@NonNull Figure f) {
     }
 
     private void onNodeRemovedFromTree(@NonNull Figure f) {
@@ -527,13 +530,13 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         Figure f = event.getNode();
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT:
-                onFigureAdded(f);
+                onFigureAddedToParent(f);
                 break;
             case NODE_REMOVED_FROM_PARENT:
-                onFigureRemoved(f);
+                onFigureRemovedFromParent(f);
                 break;
             case NODE_ADDED_TO_TREE:
-                onFigureRemovedFromDrawing(f);
+                onNodeAddedToTree(f);
                 break;
             case NODE_REMOVED_FROM_TREE:
                 onNodeRemovedFromTree(f);
