@@ -47,7 +47,6 @@ public interface Application extends Disableable, PropertyBean {
     String RECENT_URIS_PROPERTY = "recentUris";
     String PREFERENCES_PROPERTY = "preferences";
     String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
-    String MODEL_PROPERTY = "model";
     String STYLESHEETS_PROPERTY = "stylesheets";
 
     Key<String> NAME_KEY = new SimpleNullableKey<>("name", String.class);

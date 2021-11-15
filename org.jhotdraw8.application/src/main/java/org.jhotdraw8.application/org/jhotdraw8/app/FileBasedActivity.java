@@ -237,7 +237,7 @@ public interface FileBasedActivity extends Activity {
      * For file-based activity, the title should be bound to the file name
      * from the {@link #uriProperty()}.
      * <p>
-     * See {@link Activity#titleProperty()} for a general descriptinn of
+     * See {@link Activity#titleProperty()} for a general description of
      * this property.
      *
      * @return the title of the activity

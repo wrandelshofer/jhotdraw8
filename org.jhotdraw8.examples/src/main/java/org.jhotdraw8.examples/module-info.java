@@ -5,4 +5,7 @@ module org.jhotdraw8.examples {
     requires java.prefs;
 
     exports org.jhotdraw8.examples.mini to javafx.graphics, javafx.fxml;
+
+    exports org.jhotdraw8.examples.fxml to javafx.graphics, javafx.fxml;
+    opens org.jhotdraw8.examples.fxml to javafx.fxml;
 }

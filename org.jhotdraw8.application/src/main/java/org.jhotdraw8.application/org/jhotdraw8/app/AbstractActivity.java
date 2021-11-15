@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.collection.Key;
@@ -40,6 +41,9 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
     protected final @NonNull ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    /**
+     * The title of {@link Stage} that contains the activity will be bound to the title of the activity.
+     */
     protected final @NonNull StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
             ApplicationLabels.getResources().getString("unnamedFile"));
     private final @NonNull IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);

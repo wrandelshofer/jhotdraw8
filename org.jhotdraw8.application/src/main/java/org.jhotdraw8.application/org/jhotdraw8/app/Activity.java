@@ -168,7 +168,7 @@ public interface Activity extends Disableable, PropertyBean {
      * activity’s windows and in alert dialogs related to the activity.
      * <p>
      * If the activity can be associated to a name, then the title
-     * should be that name. If the name has not be assigned yet, the
+     * should be that name. If the name has not been assigned yet, the
      * title should be 'unnamed'.
      * <p>
      * See {@link FileBasedActivity#titleProperty()}.
