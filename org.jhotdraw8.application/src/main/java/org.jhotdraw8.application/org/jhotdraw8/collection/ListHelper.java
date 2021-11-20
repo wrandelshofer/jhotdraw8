@@ -102,7 +102,7 @@ public class ListHelper {
             return items;
         }
         // shrink to load factor 50%
-        int newCapacity = max(targetCapacity, items.length / 4);
+        int newCapacity = max(targetCapacity, targetCapacity * 2);
         Object[] newItems = new Object[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;

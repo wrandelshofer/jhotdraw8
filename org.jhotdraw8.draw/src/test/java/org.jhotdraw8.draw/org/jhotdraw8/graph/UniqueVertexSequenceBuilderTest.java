@@ -5,8 +5,10 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.graph.path.UniquePathBuilder;
+import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.graph.path.UniqueBreadthFirstVertexSequenceBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.function.ToDoubleFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
@@ -23,9 +27,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class UniquePathBuilderTest {
+public class UniqueVertexSequenceBuilderTest {
 
-    public UniquePathBuilderTest() {
+    public UniqueVertexSequenceBuilderTest() {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
@@ -121,9 +125,15 @@ public class UniquePathBuilderTest {
      */
     public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
-        UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
-        ImmutableList<Integer> result = instance.findVertexPath(start, goal::equals);
-        assertEquals(expPath, result);
+        UniqueBreadthFirstVertexSequenceBuilder<Integer, Double> instance = new UniqueBreadthFirstVertexSequenceBuilder<>(graph::getNextVertices);
+        OrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals);
+        if (expPath == null) {
+            assertNull(result);
+        } else {
+            assertNotNull(result);
+            assertEquals(expPath, result.first());
+            assertEquals(expPath.size(), result.second());
+        }
     }
 
     @TestFactory
@@ -147,13 +157,16 @@ public class UniquePathBuilderTest {
      */
     public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
-        UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
+        UniqueBreadthFirstVertexSequenceBuilder<Integer, Double> instance = new UniqueBreadthFirstVertexSequenceBuilder<>(graph::getNextVertices);
 
         // Find unique path to any of the goals
-        ImmutableList<Integer> actualPath = instance.findVertexPath(start, multiGoal::contains);
-        double actualLength = actualPath == null ? 0.0 : actualPath.size();
-
-        assertEquals(expResult, actualPath);
+        OrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains);
+        if (expResult == null) {
+            assertNull(actualPath);
+        } else {
+            assertNotNull(actualPath);
+            assertEquals(expResult, actualPath.first());
+        }
     }
 
 
@@ -188,11 +201,16 @@ public class UniquePathBuilderTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
+    private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, @Nullable ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniquePathBuilder<Integer, Double> instance = new UniquePathBuilder<>(graph::getNextVertices);
-        ImmutableList<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
-        assertEquals(expResult, actual);
+        UniqueBreadthFirstVertexSequenceBuilder<Integer, Double> instance = new UniqueBreadthFirstVertexSequenceBuilder<>(graph::getNextVertices);
+        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints);
+        if (expResult == null) {
+            assertNull(actual);
+        } else {
+            assertNotNull(actual);
+            assertEquals(expResult, actual.first());
+        }
     }
 
 

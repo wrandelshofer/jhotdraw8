@@ -8,11 +8,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -20,13 +22,24 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.function.Function;
 import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
-public abstract class AbstractIndexedPathBuilder {
+public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequenceBuilder<Integer, Integer> {
     private final @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction;
     private final int maxLength = Integer.MAX_VALUE;
 
-    public AbstractIndexedPathBuilder(@NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction) {
+    public AbstractIndexedVertexSequenceBuilder(@NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction) {
         this.nextNodesFunction = nextNodesFunction;
+    }
+
+    @Override
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(@NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate) {
+        return findVertexSequence(startVertices, (IntPredicate) goalPredicate::test);
+    }
+
+    @Override
+    public OrderedPair<ImmutableList<Integer>, Integer> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints) {
+        return VertexSequenceBuilder.findVertexSequenceOverWaypoints(waypoints, this::findVertexSequence, 0, Integer::sum);
     }
 
     /**
@@ -40,8 +53,8 @@ public abstract class AbstractIndexedPathBuilder {
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable ImmutableList<Integer> findVertexPath(int start, int goal) {
-        return findVertexPath(start, i -> i == goal);
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(int start, int goal) {
+        return findVertexSequence(Collections.singletonList(start), (IntPredicate) i -> i == goal);
     }
 
     /**
@@ -54,13 +67,10 @@ public abstract class AbstractIndexedPathBuilder {
      * @param goal  the goal vertex
      * @return true if a traversal is possible, false otherwise
      */
-    public boolean existsVertexPath(int start, int goal) {
-        return existsVertexPath(start, i -> i == goal);
+    public boolean isReachable(int start, int goal) {
+        return isReachable(start, (IntPredicate) i -> i == goal);
     }
 
-    public boolean isReachable(int start, int goal) {
-        return isReachable(start, i -> i == goal);
-    }
 
     /**
      * Builds a VertexPath through the graph which goes from the specified start
@@ -76,16 +86,20 @@ public abstract class AbstractIndexedPathBuilder {
      *      wikipedia.org</a></dd>
      * </dl>
      *
-     * @param start         the start vertex
+     * @param starts         the start vertex
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable ImmutableList<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate) {
-        return findVertexPath(start, goalPredicate, addToBitSet(new BitSet()));
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate) {
+        return findVertexSequence(starts, goalPredicate, addToBitSet(new BitSet()));
     }
 
-    public @Nullable ImmutableList<Integer> findVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
-        BackLink current = search(start, goalPredicate, visited);
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+        return findVertexSequence(Collections.singletonList(start), goalPredicate, visited);
+    }
+
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+        BackLink current = search(starts, goalPredicate, visited);
         if (current == null) {
             return null;
         }
@@ -93,28 +107,12 @@ public abstract class AbstractIndexedPathBuilder {
         for (BackLink i = current; i != null; i = i.getParent()) {
             vertices.addFirst(i.getVertex());
         }
-        return ImmutableLists.copyOf(vertices);
+        return new OrderedPair<>(ImmutableLists.copyOf(vertices), vertices.size());
     }
 
-    /**
-     * Checks whether VertexPath through the graph which goes from the specified start
-     * vertex to the specified goal vertex exists.
-     * <p>
-     * This method uses a breadth first search.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Wikipedia, Dijkstra's algorithm, Practical optimizations and infinite graphs</dt>
-     *     <dd><a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs">
-     *      wikipedia.org</a></dd>
-     * </dl>
-     *
-     * @param start         the start vertex
-     * @param goalPredicate the goal predicate
-     * @return a VertexPath if traversal is possible, null otherwise
-     */
-    public @Nullable boolean existsVertexPath(int start, @NonNull IntPredicate goalPredicate) {
-        return exists(start, goalPredicate, addToBitSet(new BitSet()));
+
+    public boolean isReachable(int start, @NonNull IntPredicate goalPredicate) {
+        return isReachable(start, goalPredicate, addToBitSet(new BitSet()));
     }
 
     public static AddToIntSet addToBitSet(BitSet bitSet) {
@@ -127,10 +125,7 @@ public abstract class AbstractIndexedPathBuilder {
         };
     }
 
-    public boolean isReachable(int start, @NonNull IntPredicate goalPredicate) {
-        BackLink current = search(start, goalPredicate, addToBitSet(new BitSet()));
-        return current != null;
-    }
+
 
     /**
      * Builds a VertexPath through the graph which traverses the specified
@@ -171,7 +166,7 @@ public abstract class AbstractIndexedPathBuilder {
         pathElements.add(start); // root element
         while (i.hasNext()) {
             int goal = i.next();
-            BackLink back = search(start, vi -> vi == goal,
+            BackLink back = search(Collections.singletonList(start), vi -> vi == goal,
                     new LinkedHashSet<>()::add);
             if (back == null) {
                 throw new PathBuilderException("Could not find path from " + start + " to " + goal + ".");
@@ -190,27 +185,27 @@ public abstract class AbstractIndexedPathBuilder {
         return nextNodesFunction;
     }
 
-    private @Nullable BackLink search(int start,
+    private @Nullable BackLink search(Iterable<Integer> start,
                                       @NonNull IntPredicate goalPredicate,
                                       @NonNull AddToIntSet visited) {
         return search(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
-    private boolean exists(int start,
-                           @NonNull IntPredicate goalPredicate,
-                           @NonNull AddToIntSet visited) {
-        return exists(start, goalPredicate, nextNodesFunction, visited, maxLength);
+    private boolean isReachable(int start,
+                                @NonNull IntPredicate goalPredicate,
+                                @NonNull AddToIntSet visited) {
+        return isReachable(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
-    protected abstract @Nullable BackLink search(int start,
+    protected abstract @Nullable BackLink search(Iterable<Integer> start,
                                                  IntPredicate goal,
                                                  Function<Integer, Spliterator.OfInt> nextNodesFunction,
                                                  @NonNull AddToIntSet visited, int maxLength);
 
-    protected abstract boolean exists(int start,
-                                      IntPredicate goal,
-                                      Function<Integer, Spliterator.OfInt> nextNodesFunction,
-                                      @NonNull AddToIntSet visited, int maxLength);
+    protected abstract boolean isReachable(int start,
+                                           IntPredicate goal,
+                                           Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                           @NonNull AddToIntSet visited, int maxLength);
 
     protected abstract static class BackLink {
         public BackLink() {

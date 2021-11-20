@@ -23,7 +23,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
 /**
- * Builder for creating any paths from a directed graph.
+ * Builder for creating arbitrary paths from a directed graph.
  * <p>
  * The builder searches for paths using a breadth-first search.<br>
  * Returns the first path that it finds.<br>
@@ -31,7 +31,7 @@ import java.util.function.IntPredicate;
  *
  * @author Werner Randelshofer
  */
-public class IndexedArbitraryPathBuilder extends AbstractIndexedPathBuilder {
+public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVertexSequenceBuilder {
 
 
     /**
@@ -39,7 +39,7 @@ public class IndexedArbitraryPathBuilder extends AbstractIndexedPathBuilder {
      *
      * @param graph a graph
      */
-    public IndexedArbitraryPathBuilder(@NonNull IndexedDirectedGraph graph) {
+    public IndexedBreadthFirstVertexSequenceBuilder(@NonNull IndexedDirectedGraph graph) {
         this(graph::getNextVertices);
     }
 
@@ -48,7 +48,7 @@ public class IndexedArbitraryPathBuilder extends AbstractIndexedPathBuilder {
      *
      * @param nextNodesFunction Accessor function to next nodes in graph.
      */
-    public IndexedArbitraryPathBuilder(@NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction) {
+    public IndexedBreadthFirstVertexSequenceBuilder(@NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction) {
         super(nextNodesFunction);
     }
 
@@ -91,7 +91,7 @@ public class IndexedArbitraryPathBuilder extends AbstractIndexedPathBuilder {
     /**
      * Searches breadth-first for a path from root to goal.
      *
-     * @param root      the starting point of the search
+     * @param starts    the starting points of the search
      * @param goal      the goal of the search
      * @param visited   a predicate with side effect. The predicate returns true
      *                  if the specified vertex has been visited, and marks the specified vertex
@@ -99,16 +99,18 @@ public class IndexedArbitraryPathBuilder extends AbstractIndexedPathBuilder {
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
-    public @Nullable BackLink search(@NonNull int root,
+    public @Nullable BackLink search(@NonNull Iterable<Integer> starts,
                                      @NonNull IntPredicate goal,
                                      @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
                                      @NonNull AddToIntSet visited,
                                      int maxLength) {
         Queue<MyBackLink> queue = new ArrayDeque<>(32);
-        MyBackLink rootBackLink = new MyBackLink(root, null, maxLength);
         MyIntConsumer consumer = new MyIntConsumer();
-        if (visited.add(root)) {
-            queue.add(rootBackLink);
+        for (Integer start : starts) {
+            MyBackLink rootBackLink = new MyBackLink(start, null, maxLength);
+            if (visited.add(start)) {
+                queue.add(rootBackLink);
+            }
         }
 
         while (!queue.isEmpty()) {
@@ -144,11 +146,11 @@ public class IndexedArbitraryPathBuilder extends AbstractIndexedPathBuilder {
      * @param maxLength the maximal path length
      * @return true on success, false on failure
      */
-    public @Nullable boolean exists(@NonNull int root,
-                                    @NonNull IntPredicate goal,
-                                    @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
-                                    @NonNull AddToIntSet visited,
-                                    int maxLength) {
+    public @Nullable boolean isReachable(@NonNull int root,
+                                         @NonNull IntPredicate goal,
+                                         @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                         @NonNull AddToIntSet visited,
+                                         int maxLength) {
         LongArrayDeque queue = new LongArrayDeque(32);
         long rootBackLink = newSearchNode(root, maxLength);
 

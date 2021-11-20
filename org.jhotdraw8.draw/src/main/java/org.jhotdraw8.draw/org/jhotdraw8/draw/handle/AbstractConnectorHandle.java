@@ -143,7 +143,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         // Meta prevents connection
         if (!event.isMetaDown()) {
             // Shift prevents search for another target figure
-            if (event.isShiftDown()) {
+            if (event.isShiftDown() && prevTarget != null) {
                 newConnectedFigure = prevTarget;
                 ConnectableFigure cff = (ConnectableFigure) prevTarget;
                 final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPointInWorld, o, cff, event, tolerance);

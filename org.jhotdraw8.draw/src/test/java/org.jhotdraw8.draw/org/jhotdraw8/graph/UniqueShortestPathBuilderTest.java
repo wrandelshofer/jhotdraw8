@@ -7,7 +7,9 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.graph.path.UniqueDoubleShortestPathBuilder;
+import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.graph.path.UniqueShortestSequenceBuilder;
+import org.jhotdraw8.util.TriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -15,7 +17,6 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.function.ToDoubleFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -126,15 +127,22 @@ public class UniqueShortestPathBuilderTest {
      */
     public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
 
-        ToDoubleFunction<Double> costf = arg -> arg;
-        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ImmutableList<Integer>, Double> result = instance.findVertexPath(start, goal::equals);
+        UniqueShortestSequenceBuilder<Integer, Double, Double> instance = newInstance(graph);
+        OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal);
         if (result == null) {
             assertNull(expPath);
         } else {
-            assertEquals(expPath, result.getKey());
-            assertEquals(expCost, result.getValue().doubleValue());
+            assertEquals(expPath, result.first());
+            assertEquals(expCost, result.second().doubleValue());
         }
+    }
+
+    @NonNull
+    private UniqueShortestSequenceBuilder<Integer, Double, Double> newInstance(@NonNull DirectedGraph<Integer, Double> graph) {
+        TriFunction<Integer, Integer, Double, Double> costf = (a, b, arg) -> arg;
+        UniqueShortestSequenceBuilder<Integer, Double, Double> instance = new UniqueShortestSequenceBuilder<>(
+                0.0, Double.POSITIVE_INFINITY, Double.MAX_VALUE, graph::getNextArcs, costf, Double::sum);
+        return instance;
     }
 
     @TestFactory
@@ -157,23 +165,22 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
-        ToDoubleFunction<Double> costf = arg -> arg;
-        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
+        UniqueShortestSequenceBuilder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find shortest path to any of the goals
-        Map.Entry<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowPath(start, multiGoal::contains);
-        double actualLength = actualShortestPath == null ? 0.0 : actualShortestPath.getValue();
+        OrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains);
+        double actualLength = actualShortestPath == null ? 0.0 : actualShortestPath.second();
 
         // Find a path for each individual goal, and remember the shortest path
         List<ImmutableList<Double>> individualShortestPaths = new ArrayList<>();
         double individualShortestLength = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            Map.Entry<ImmutableList<Double>, Double> resultEntry = instance.findArrowPath(start, goal::equals);
+            OrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal);
             if (resultEntry == null) {
                 assertNull(expResult);
                 return;
             } else {
-                ImmutableList<Double> result = resultEntry.getKey();
+                ImmutableList<Double> result = resultEntry.first();
                 double resultLength = result.stream().mapToDouble(Double::doubleValue).sum();
                 if (resultLength < individualShortestLength) {
                     individualShortestLength = resultLength;
@@ -185,7 +192,7 @@ public class UniqueShortestPathBuilderTest {
             }
         }
 
-        assertEquals(expResult, actualShortestPath == null ? null : actualShortestPath.getKey());
+        assertEquals(expResult, actualShortestPath == null ? null : actualShortestPath.first());
     }
 
     @TestFactory
@@ -202,10 +209,9 @@ public class UniqueShortestPathBuilderTest {
      */
     private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ToDoubleFunction<Double> costf = arg -> arg;
-        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ImmutableList<Double>, Double> result = instance.findArrowPath(start, goal::equals);
-        assertEquals(expResult, result == null ? null : result.getKey());
+        UniqueShortestSequenceBuilder<Integer, Double, Double> instance = newInstance(graph);
+        OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal);
+        assertEquals(expResult, result == null ? null : result.first());
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph2() {
@@ -240,15 +246,14 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
     private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
-        ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ImmutableList<Integer>, Double> actual = instance.findVertexPathOverWaypoints(waypoints);
+        UniqueShortestSequenceBuilder<Integer, Double, Double> instance = newInstance(graph);
+        OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints);
         if (actual == null) {
             assertNull(expResult);
         } else {
-            assertEquals(expResult, actual.getKey());
-            assertEquals(expCost, actual.getValue().doubleValue());
+            assertEquals(expResult, actual.first());
+            assertEquals(expCost, actual.second().doubleValue());
         }
     }
 
@@ -268,13 +273,13 @@ public class UniqueShortestPathBuilderTest {
     private void testFindEdgePathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueDoubleShortestPathBuilder<Integer, Double> instance = new UniqueDoubleShortestPathBuilder<>(graph::getNextArcs, costf);
-        Map.Entry<ImmutableList<Double>, Double> actual = instance.findArrowPathOverWaypoints(waypoints, Integer.MAX_VALUE);
+        UniqueShortestSequenceBuilder<Integer, Double, Double> instance = newInstance(graph);
+        OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints);
         if (actual == null) {
             assertNull(expResult);
         } else {
-            assertEquals(expResult, actual.getKey());
-            assertEquals(expCost, actual.getValue().doubleValue());
+            assertEquals(expResult, actual.first());
+            assertEquals(expCost, actual.second().doubleValue());
         }
     }
 }

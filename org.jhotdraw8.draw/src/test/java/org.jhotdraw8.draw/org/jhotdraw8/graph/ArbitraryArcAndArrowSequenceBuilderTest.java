@@ -4,9 +4,12 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.graph.path.ArbitraryPathBuilder;
+import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.graph.path.AllBreadthFirstSequencesBuilder;
+import org.jhotdraw8.graph.path.ArbitraryBreadthFirstSequenceBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -15,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
@@ -22,9 +26,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class ArbitraryPathBuilderTest {
+public class ArbitraryArcAndArrowSequenceBuilderTest {
 
-    public ArbitraryPathBuilderTest() {
+    public ArbitraryArcAndArrowSequenceBuilderTest() {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
@@ -91,9 +95,22 @@ public class ArbitraryPathBuilderTest {
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ArbitraryPathBuilder<Integer, Double> instance = new ArbitraryPathBuilder<>(graph);
-        ImmutableList<Integer> actual = instance.findVertexPath(start, goal::equals);
-        assertEquals(expected, actual);
+        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = newInstance(graph, Integer.MAX_VALUE);
+        @Nullable OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal);
+        assertNotNull(actual);
+        assertEquals(expected, actual.first());
+    }
+
+    @NonNull
+    private ArbitraryBreadthFirstSequenceBuilder<Integer, Double> newInstance(DirectedGraph<Integer, Double> graph, int maxDepth) {
+        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = new ArbitraryBreadthFirstSequenceBuilder<>(maxDepth, graph::getNextArcs);
+        return instance;
+    }
+
+    @NonNull
+    private AllBreadthFirstSequencesBuilder<Integer, Double> newAllInstance(DirectedGraph<Integer, Double> graph, int maxDepth) {
+        AllBreadthFirstSequencesBuilder<Integer, Double> instance = new AllBreadthFirstSequencesBuilder<>(maxDepth, graph::getNextArcs);
+        return instance;
     }
 
     @TestFactory
@@ -111,9 +128,10 @@ public class ArbitraryPathBuilderTest {
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ArbitraryPathBuilder<Integer, Double> instance = new ArbitraryPathBuilder<>(graph);
-        ImmutableList<Integer> actual = instance.findVertexPathOverWaypoints(waypoints);
-        assertEquals(expResult, actual);
+        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = newInstance(graph, Integer.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints);
+        assertNotNull(actual);
+        assertEquals(expResult, actual.first());
     }
 
 
@@ -163,9 +181,9 @@ public class ArbitraryPathBuilderTest {
     }
 
     private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<ImmutableList<Integer>> expected) {
-        ArbitraryPathBuilder<Integer, Double> instance = new ArbitraryPathBuilder<>(graph);
-        List<ImmutableList<Integer>> actual = instance.findAllVertexPaths(start,
-                a -> a == goal, maxDepth);
+        AllBreadthFirstSequencesBuilder<Integer, Double> instance = newAllInstance(graph, maxDepth);
+        List<ImmutableList<Integer>> actual = instance.findAllVertexSequences(start,
+                a -> a == goal);
         assertEquals(expected, actual);
     }
 }
