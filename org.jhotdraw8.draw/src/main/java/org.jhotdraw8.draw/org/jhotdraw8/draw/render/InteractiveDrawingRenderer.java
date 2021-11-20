@@ -350,8 +350,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
         if (!foundAChildFigure && isWanted) {
             found.add(new AbstractMap.SimpleImmutableEntry<>(figure, distance));
+            return true;
         }
-        return true;
+        return false;
     }
 
     public Bounds getClipBounds() {
