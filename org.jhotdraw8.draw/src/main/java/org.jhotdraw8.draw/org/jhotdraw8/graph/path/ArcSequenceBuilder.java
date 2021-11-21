@@ -87,6 +87,7 @@ public interface ArcSequenceBuilder<V, A, C extends Number & Comparable<C>> {
         List<Arc<VV, AA>> sequence = new ArrayList<>();
         CC sum = zero;
         VV prev = null;
+        int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
                 final OrderedPair<ImmutableList<Arc<VV, AA>>, CC> result = findArcSequenceFunction.apply(prev, next);
@@ -99,6 +100,11 @@ public interface ArcSequenceBuilder<V, A, C extends Number & Comparable<C>> {
                 }
             }
             prev = next;
+            count++;
+        }
+        if (count == 1) {
+            // the set of waypoints is degenerate
+            return new OrderedPair<>(ImmutableLists.of(), zero);
         }
 
         return new OrderedPair<>(ImmutableLists.copyOf(sequence), sum);

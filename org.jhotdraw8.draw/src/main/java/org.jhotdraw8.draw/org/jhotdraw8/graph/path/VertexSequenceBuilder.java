@@ -94,6 +94,7 @@ public interface VertexSequenceBuilder<V, C extends Number & Comparable<C>> {
         List<VV> sequence = new ArrayList<>();
         VV prev = null;
         CC sum = zero;
+        int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
                 final OrderedPair<ImmutableList<VV>, CC> result = findVertexSequenceFunction.apply(prev, next);
@@ -106,6 +107,12 @@ public interface VertexSequenceBuilder<V, C extends Number & Comparable<C>> {
                 }
             }
             prev = next;
+            count++;
+        }
+
+        if (count == 1) {
+            // the set of waypoints is degenerate
+            return new OrderedPair<>(ImmutableLists.of(prev), zero);
         }
 
         return new OrderedPair<>(ImmutableLists.copyOf(sequence), sum);
