@@ -28,26 +28,11 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ArbitraryBreadthFirstSequenceBuilder<V, A> extends AbstractShortestSequenceBuilder<V, A, Integer> {
+public class ArbitraryBreadthFirstSequenceBuilder<V, A> extends AbstractCostAndBackLinksSequenceBuilder<V, A, Integer> {
 
-    /**
-     * Creates a new instance which searches sequences up to
-     * {@link Integer#MAX_VALUE} length.
-     *
-     * @param nextArcsFunction
-     */
+
     public ArbitraryBreadthFirstSequenceBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
-        this(Integer.MAX_VALUE, nextArcsFunction);
-    }
-
-    /**
-     * Creates a new instance.
-     *
-     * @param maxPathLength    maximal path length
-     * @param nextArcsFunction
-     */
-    public ArbitraryBreadthFirstSequenceBuilder(int maxPathLength, @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
-        super(0, Integer.MAX_VALUE, maxPathLength, nextArcsFunction, (v1, v2, a) -> 1, Integer::sum);
+        super(0, Integer.MAX_VALUE, nextArcsFunction, (v1, v2, a) -> 1, Integer::sum);
     }
 
 

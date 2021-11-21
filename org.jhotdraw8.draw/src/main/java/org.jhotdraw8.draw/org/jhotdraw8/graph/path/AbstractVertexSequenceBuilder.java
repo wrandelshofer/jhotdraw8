@@ -25,17 +25,18 @@ public abstract class AbstractVertexSequenceBuilder<V> implements VertexSequence
     ) {
         this.maxLength = maxLength;
         this.nextVertexFunction = nextVerticesFunction;
+
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, Integer> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate) {
+    public @Nullable OrderedPair<ImmutableList<V>, Integer> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Integer maxCost) {
         return toVertexSequence(search(startVertices, goalPredicate, nextVertexFunction, maxLength));
     }
 
 
     @Override
-    public OrderedPair<ImmutableList<V>, Integer> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints) {
-        return VertexSequenceBuilder.findVertexSequenceOverWaypoints(waypoints, this::findVertexSequence, 0, Integer::sum);
+    public OrderedPair<ImmutableList<V>, Integer> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull Integer maxCostBetweenWaypoints) {
+        return VertexSequenceBuilder.findVertexSequenceOverWaypoints(waypoints, (start, goal) -> findVertexSequence(start, goal, maxCostBetweenWaypoints), 0, Integer::sum);
     }
 
 
@@ -64,11 +65,13 @@ public abstract class AbstractVertexSequenceBuilder<V> implements VertexSequence
         private final int remainingLength;
         private final @NonNull VV vertex;
         private final @Nullable BackLink<VV> parent;
+        private final int depth;
 
-        public BackLink(@NonNull VV node, int remainingLength, @Nullable BackLink<VV> parent) {
+        public BackLink(@NonNull VV node, @Nullable BackLink<VV> parent, int remainingLength) {
             this.vertex = node;
             this.parent = parent;
             this.remainingLength = remainingLength;
+            this.depth = parent == null ? 0 : parent.depth + 1;
         }
 
 
@@ -85,6 +88,10 @@ public abstract class AbstractVertexSequenceBuilder<V> implements VertexSequence
 
         public @NonNull VV getVertex() {
             return vertex;
+        }
+
+        public int getDepth() {
+            return depth;
         }
 
         @Override

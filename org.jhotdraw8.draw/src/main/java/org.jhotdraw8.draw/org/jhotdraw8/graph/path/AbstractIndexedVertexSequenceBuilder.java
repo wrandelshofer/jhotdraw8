@@ -33,13 +33,13 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(@NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate) {
-        return findVertexSequence(startVertices, (IntPredicate) goalPredicate::test);
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(@NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate, @NonNull Integer maxCost) {
+        return findShortestVertexPath(startVertices, (IntPredicate) goalPredicate::test);
     }
 
     @Override
-    public OrderedPair<ImmutableList<Integer>, Integer> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints) {
-        return VertexSequenceBuilder.findVertexSequenceOverWaypoints(waypoints, this::findVertexSequence, 0, Integer::sum);
+    public OrderedPair<ImmutableList<Integer>, Integer> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull Integer maxCostBetweenWaypoints) {
+        return VertexSequenceBuilder.findVertexSequenceOverWaypoints(waypoints, (start, goal) -> findVertexSequence(start, goal, maxCostBetweenWaypoints), 0, Integer::sum);
     }
 
     /**
@@ -53,8 +53,8 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
      * @param goal  the goal vertex
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(int start, int goal) {
-        return findVertexSequence(Collections.singletonList(start), (IntPredicate) i -> i == goal);
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findShortestVertexPath(int start, int goal) {
+        return findShortestVertexPath(Collections.singletonList(start), (IntPredicate) i -> i == goal);
     }
 
     /**
@@ -90,15 +90,15 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
      * @param goalPredicate the goal predicate
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate) {
-        return findVertexSequence(starts, goalPredicate, addToBitSet(new BitSet()));
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findShortestVertexPath(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate) {
+        return findShortestVertexPath(starts, goalPredicate, addToBitSet(new BitSet()));
     }
 
-    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
-        return findVertexSequence(Collections.singletonList(start), goalPredicate, visited);
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findShortestVertexPath(int start, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+        return findShortestVertexPath(Collections.singletonList(start), goalPredicate, visited);
     }
 
-    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findVertexSequence(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
+    public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findShortestVertexPath(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
         BackLink current = search(starts, goalPredicate, visited);
         if (current == null) {
             return null;
@@ -126,7 +126,6 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
     }
 
 
-
     /**
      * Builds a VertexPath through the graph which traverses the specified
      * waypoints.
@@ -137,7 +136,7 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
      *                  determines how the waypoints are traversed
      * @return a VertexPath if traversal is possible, null otherwise
      */
-    public @Nullable ImmutableList<Integer> findVertexPathOverWaypoints(@NonNull Iterable<Integer> waypoints) {
+    public @Nullable ImmutableList<Integer> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints) {
         try {
             return findVertexPathOverWaypointsNonNull(waypoints);
         } catch (PathBuilderException e) {

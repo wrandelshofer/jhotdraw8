@@ -16,6 +16,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -95,21 +96,21 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = newInstance(graph, Integer.MAX_VALUE);
-        @Nullable OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal);
+        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = newInstance(graph);
+        @Nullable OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal, Integer.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
     }
 
     @NonNull
-    private ArbitraryBreadthFirstSequenceBuilder<Integer, Double> newInstance(DirectedGraph<Integer, Double> graph, int maxDepth) {
-        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = new ArbitraryBreadthFirstSequenceBuilder<>(maxDepth, graph::getNextArcs);
+    private ArbitraryBreadthFirstSequenceBuilder<Integer, Double> newInstance(DirectedGraph<Integer, Double> graph) {
+        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = new ArbitraryBreadthFirstSequenceBuilder<>(graph::getNextArcs);
         return instance;
     }
 
     @NonNull
-    private AllBreadthFirstSequencesBuilder<Integer, Double> newAllInstance(DirectedGraph<Integer, Double> graph, int maxDepth) {
-        AllBreadthFirstSequencesBuilder<Integer, Double> instance = new AllBreadthFirstSequencesBuilder<>(maxDepth, graph::getNextArcs);
+    private AllBreadthFirstSequencesBuilder<Integer, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
+        AllBreadthFirstSequencesBuilder<Integer, Double> instance = new AllBreadthFirstSequencesBuilder<>(graph::getNextArcs);
         return instance;
     }
 
@@ -128,8 +129,8 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = newInstance(graph, Integer.MAX_VALUE);
-        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints);
+        ArbitraryBreadthFirstSequenceBuilder<Integer, Double> instance = newInstance(graph);
+        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());
     }
@@ -180,10 +181,10 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
         );
     }
 
-    private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxDepth, List<ImmutableList<Integer>> expected) {
-        AllBreadthFirstSequencesBuilder<Integer, Double> instance = newAllInstance(graph, maxDepth);
-        List<ImmutableList<Integer>> actual = instance.findAllVertexSequences(start,
-                a -> a == goal);
+    private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, int maxLength, List<ImmutableList<Integer>> expected) {
+        AllBreadthFirstSequencesBuilder<Integer, Double> instance = newAllInstance(graph);
+        List<ImmutableList<Integer>> actual = ImmutableLists.ofIterable(instance.findAllVertexSequences(start,
+                a -> a == goal, maxLength)).stream().map(OrderedPair::first).collect(Collectors.toList());
         assertEquals(expected, actual);
     }
 }

@@ -13,63 +13,14 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for finding vertex sequences with a cost through a directed graph.
+ * Defines an API for finding vertex sequences associated with a cost through a
+ * directed graph.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
 public interface VertexSequenceBuilder<V, C extends Number & Comparable<C>> {
-    /**
-     * Checks if a vertex sequence from a set of start vertices to a vertex
-     * that satisfies the goal predicate exists.
-     *
-     * @param startVertices the start vertices
-     * @param goalPredicate the goal vertex
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    default boolean isReachable(@NonNull Iterable<V> startVertices,
-                                @NonNull Predicate<V> goalPredicate) {
-        return findVertexSequence(startVertices, goalPredicate) != null;
-    }
 
-    /**
-     * Checks if a vertex sequence from a start vertex to a vertex
-     * that satisfies the goal predicate exists.
-     *
-     * @param start         the start vertex
-     * @param goalPredicate the goal vertex
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    default boolean isReachable(@NonNull V start,
-                                @NonNull Predicate<V> goalPredicate) {
-        return findVertexSequence(Collections.singletonList(start), goalPredicate) != null;
-    }
-
-    /**
-     * Checks if a vertex sequence from start to goal exists.
-     *
-     * @param start the start vertex
-     * @param goal  the goal vertex
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-
-    default boolean isReachable(@NonNull V start, @NonNull V goal) {
-        return findVertexSequence(start, goal) != null;
-    }
-
-    /**
-     * Checks if a vertex sequence through the given waypoints exists.
-     *
-     * @param waypoints a list of waypoints
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    default boolean existsVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints) {
-        return findVertexSequenceOverWaypoints(waypoints) != null;
-    }
 
     /**
      * Finds a vertex sequence from a set of start vertices to a vertex
@@ -77,11 +28,12 @@ public interface VertexSequenceBuilder<V, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
+     * @param maxCost       the maximal cost of the path
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices,
-                                                                  @NonNull Predicate<V> goalPredicate);
+                                                                  @NonNull Predicate<V> goalPredicate, @NonNull C maxCost);
 
     /**
      * Finds a vertex sequence from a start vertex to a vertex
@@ -89,39 +41,42 @@ public interface VertexSequenceBuilder<V, C extends Number & Comparable<C>> {
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
+     * @param maxCost       the maximal cost of the path
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull V start,
-                                                                          @NonNull Predicate<V> goalPredicate) {
-        return findVertexSequence(Collections.singletonList(start), goalPredicate);
+                                                                          @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+        return findVertexSequence(Collections.singletonList(start), goalPredicate, maxCost);
     }
 
     /**
      * Finds a vertex sequence from start to goal.
      *
-     * @param start the start vertex
-     * @param goal  the goal vertex
+     * @param start   the start vertex
+     * @param goal    the goal vertex
+     * @param maxCost the maximal cost of the path
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable
     default OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull V start,
-                                                                @NonNull V goal) {
-        return findVertexSequence(List.of(start), goal::equals);
+                                                                @NonNull V goal, @NonNull C maxCost) {
+        return findVertexSequence(List.of(start), goal::equals, maxCost);
     }
 
     /**
-     * Finds a vertex sequence through the given waypoints.
+     * Finds a vertex walk through the given waypoints.
      *
-     * @param waypoints a list of waypoints
+     * @param waypoints               a list of waypoints
+     * @param maxCostBetweenWaypoints the maximal cost for paths between waypoints
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints);
+    OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints);
 
     /**
-     * Helper function for implementing {@link #findVertexSequenceOverWaypoints(Iterable)}.
+     * Helper function for implementing {@link #findVertexSequenceOverWaypoints(Iterable, Number)}.
      *
      * @param waypoints                  the waypoints
      * @param findVertexSequenceFunction the search function, for example {@code this::findVertexSequence}

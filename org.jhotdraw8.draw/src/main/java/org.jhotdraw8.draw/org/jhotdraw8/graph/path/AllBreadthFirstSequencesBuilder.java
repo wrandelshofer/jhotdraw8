@@ -1,84 +1,118 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SpliteratorIterable;
 import org.jhotdraw8.graph.Arc;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class AllBreadthFirstSequencesBuilder<V, A> {
-    private final int maxLength;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
 
     public AllBreadthFirstSequencesBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
-        this(Integer.MAX_VALUE, nextArcsFunction);
-    }
-
-    public AllBreadthFirstSequencesBuilder(int maxLength, @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
-        this.maxLength = maxLength;
         this.nextArcsFunction = nextArcsFunction;
     }
 
     /**
-     * Enumerates all vertex paths from start to goal up to the specified
+     * Lazily Enumerates all vertex sequences from start to goal up to the specified
      * maximal path length.
-     * //
-     * FIXME this should return an Iterable, because there may
-     * be a very large number of vertex sequences in a graph that has
-     * cycles!
      *
      * @param start the start vertex
      * @param goal  the goal predicate
-     * @return the enumerated paths
+     * @return the enumerated sequences
      */
-    public @NonNull List<ImmutableList<V>> findAllVertexSequences(@NonNull V start,
-                                                                  @NonNull Predicate<V> goal) {
+    public @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, Integer>> findAllArcSequences(@NonNull V start,
+                                                                                                 @NonNull Predicate<V> goal,
+                                                                                                 int maxLength) {
 
-        if (maxLength <= 0) {
-            return new ArrayList<>();
-        }
-        List<AbstractShortestSequenceBuilder.BackLink<V, A, Integer>> backlinks = new ArrayList<>();
-        searchAll(new AbstractShortestSequenceBuilder.BackLink<>(start, null, null, maxLength),
-                goal,
-                nextArcsFunction,
-                backlinks);
-        List<ImmutableList<V>> vertexPaths = new ArrayList<>(backlinks.size());
-        Deque<V> path = new ArrayDeque<>();
-        for (AbstractShortestSequenceBuilder.BackLink<V, A, Integer> list : backlinks) {
-            path.clear();
-            for (AbstractShortestSequenceBuilder.BackLink<V, A, Integer> backlink = list; backlink != null; backlink = backlink.getParent()) {
-                path.addFirst(backlink.getVertex());
-            }
-            vertexPaths.add(ImmutableLists.copyOf(path));
-        }
-        return vertexPaths;
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+                start, goal, nextArcsFunction,
+                (backLink) -> AbstractCostAndBackLinksSequenceBuilder.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
+                maxLength));
     }
 
-    private void searchAll(@NonNull AbstractShortestSequenceBuilder.BackLink<V, A, Integer> start,
-                           @NonNull Predicate<V> goal,
-                           @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                           @NonNull List<AbstractShortestSequenceBuilder.BackLink<V, A, Integer>> backlinks) {
-        Deque<AbstractShortestSequenceBuilder.BackLink<V, A, Integer>> stack = new ArrayDeque<>();
-        stack.push(start);
+    /**
+     * Lazily Enumerates all vertex sequences from start to goal up to the specified
+     * maximal path length.
+     *
+     * @param start the start vertex
+     * @param goal  the goal predicate
+     * @return the enumerated sequences
+     */
+    public @NonNull Iterable<OrderedPair<ImmutableList<A>, Integer>> findAllArrowSequences(@NonNull V start,
+                                                                                           @NonNull Predicate<V> goal,
+                                                                                           int maxLength) {
 
-        while (!stack.isEmpty()) {
-            AbstractShortestSequenceBuilder.BackLink<V, A, Integer> current = stack.pop();
-            if (goal.test(current.getVertex())) {
-                backlinks.add(current);
-            }
-            if (current.getCost() > 1) {
-                for (Arc<V, A> v : nextArcsFunction.apply(current.getVertex())) {
-                    AbstractShortestSequenceBuilder.BackLink<V, A, Integer> newPath = new AbstractShortestSequenceBuilder.BackLink<>(v.getEnd(), v.getData(), current, current.getCost() - 1);
-                    stack.push(newPath);
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+                start, goal, nextArcsFunction,
+                (backLink) -> AbstractCostAndBackLinksSequenceBuilder.toArrowSequence(backLink, (a, b) -> b.getArrow()),
+                maxLength));
+    }
+
+    /**
+     * Lazily Enumerates all vertex sequences from start to goal up to the specified
+     * maximal path length.
+     *
+     * @param start the start vertex
+     * @param goal  the goal predicate
+     * @return the enumerated sequences
+     */
+    public @NonNull Iterable<OrderedPair<ImmutableList<V>, Integer>> findAllVertexSequences(@NonNull V start,
+                                                                                            @NonNull Predicate<V> goal,
+                                                                                            @NonNull int maxLength) {
+
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(start, goal, nextArcsFunction,
+                (backLink) -> AbstractCostAndBackLinksSequenceBuilder.toVertexSequence(backLink, AbstractCostAndBackLinksSequenceBuilder.BackLink::getVertex),
+                maxLength));
+    }
+
+
+    private static class AllPathsSpliterator<V, A, X> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<X>, Integer>> {
+        private final @NonNull Deque<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>> stack = new ArrayDeque<>();
+        private final @NonNull Predicate<V> goal;
+        private final int maxLength;
+        private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
+        private final @NonNull Function<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>,
+                OrderedPair<ImmutableList<X>, Integer>> sequenceFunction;
+
+        public AllPathsSpliterator(@NonNull V start,
+                                   @NonNull Predicate<V> goal,
+                                   @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                   @NonNull Function<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>,
+                                           OrderedPair<ImmutableList<X>, Integer>> sequenceFunction,
+                                   int maxLength) {
+            super(Long.MAX_VALUE, 0);
+            this.maxLength = maxLength;
+            stack.push(new AbstractCostAndBackLinksSequenceBuilder.BackLink<>(start, null, null, 1));
+            this.goal = goal;
+            this.nextArcsFunction = nextArcsFunction;
+            this.sequenceFunction = sequenceFunction;
+        }
+
+        @Override
+        public boolean moveNext() {
+            while (!stack.isEmpty()) {
+                AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer> popped = stack.pop();
+                if (goal.test(popped.getVertex())) {
+                    this.current = sequenceFunction.apply(popped);
+                    return true;
+                }
+                if (popped.getCost() < maxLength) {
+                    for (Arc<V, A> v : nextArcsFunction.apply(popped.getVertex())) {
+                        AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer> newNode = new AbstractCostAndBackLinksSequenceBuilder.BackLink<>(v.getEnd(), v.getData(), popped, popped.getCost() + 1);
+                        stack.push(newNode);
+                    }
                 }
             }
+            return false;
         }
     }
+
 
 }

@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for finding {@link Arc} sequences with a cost
+ * Defines an API for finding {@link Arc} sequences associated with a cost
  * through a directed graph.
  *
  * @param <V> the vertex data type
@@ -28,38 +28,48 @@ public interface ArcSequenceBuilder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
+     * @param maxCost       the maximal cost of the path
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable
-    OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices,
-                                                             @NonNull Predicate<V> goalPredicate);
+    OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            @NonNull C maxCost);
 
     /**
      * Finds an arc sequence from start to goal.
      *
-     * @param start the start vertex
-     * @param goal  the goal vertex
+     * @param start   the start vertex
+     * @param goal    the goal vertex
+     * @param maxCost the maximal cost of the path
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull V start,
-                                                                               @NonNull V goal) {
-        return findArcSequence(List.of(start), goal::equals);
+    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+            @NonNull V start,
+            @NonNull V goal,
+            @NonNull C maxCost) {
+        return findArcSequence(List.of(start), goal::equals, maxCost);
     }
 
 
     /**
-     * Finds an arc sequence through the given waypoints.
+     * Finds an arc walk through the given waypoints.
      *
-     * @param waypoints an iterable of waypoints
+     * @param waypoints               an iterable of waypoints
+     * @param maxCostBetweenWaypoints the maximal cost for paths between waypoints
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints);
+    OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+            @NonNull Iterable<V> waypoints,
+            @NonNull C maxCostBetweenWaypoints);
+
 
     /**
-     * Helper function for implementing {@link #findArcSequenceOverWaypoints(Iterable)}.
+     * Helper function for implementing {@link #findArcSequenceOverWaypoints(Iterable, Number)}.
      *
      * @param waypoints               the waypoints
      * @param findArcSequenceFunction the search function, for example {@code this::findArrowSequence}

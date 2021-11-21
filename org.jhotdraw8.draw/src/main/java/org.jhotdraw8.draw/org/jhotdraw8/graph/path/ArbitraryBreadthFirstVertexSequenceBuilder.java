@@ -50,7 +50,7 @@ public class ArbitraryBreadthFirstVertexSequenceBuilder<V> extends AbstractVerte
                                                                   @NonNull Predicate<V> goal,
                                                                   int maxLength) {
         List<BackLink<V>> backlinks = new ArrayList<>();
-        searchAll(new BackLink<>(start, maxLength, null),
+        searchAll(new BackLink<>(start, null, maxLength),
                 goal,
                 getNextVertexFunction(),
                 backlinks);
@@ -79,7 +79,7 @@ public class ArbitraryBreadthFirstVertexSequenceBuilder<V> extends AbstractVerte
             }
             if (current.getRemainingLength() > 0) {
                 for (V v : nextVertexFunction.apply(current.getVertex())) {
-                    BackLink<V> newPath = new BackLink<>(v, current.getRemainingLength() - 1, current);
+                    BackLink<V> newPath = new BackLink<>(v, current, current.getRemainingLength() - 1);
                     stack.push(newPath);
                 }
             }
@@ -99,7 +99,7 @@ public class ArbitraryBreadthFirstVertexSequenceBuilder<V> extends AbstractVerte
                                            @NonNull Integer maxLength, @NonNull Function<V, Iterable<V>> nextNodesFunction) {
         Queue<BackLink<V>> queue = new ArrayDeque<>(16);
         for (V root : startVertices) {
-            BackLink<V> rootBackLink = new BackLink<>(root, maxLength, null);
+            BackLink<V> rootBackLink = new BackLink<>(root, null, maxLength);
             if (visited.add(root)) {
                 queue.add(rootBackLink);
             }
@@ -114,7 +114,7 @@ public class ArbitraryBreadthFirstVertexSequenceBuilder<V> extends AbstractVerte
             if (node.getRemainingLength() > 0) {
                 for (V next : nextNodesFunction.apply(node.getVertex())) {
                     if (visited.add(next)) {
-                        BackLink<V> backLink = new BackLink<>(next, node.getRemainingLength() - 1, node);
+                        BackLink<V> backLink = new BackLink<>(next, node, node.getRemainingLength() - 1);
                         queue.add(backLink);
                     }
                 }
