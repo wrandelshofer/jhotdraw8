@@ -28,10 +28,10 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ArbitraryBreadthFirstSequenceBuilder<V, A> extends AbstractCostAndBackLinksSequenceBuilder<V, A, Integer> {
+public class ArbitraryPathBuilder<V, A> extends AbstractCostAndBackLinksSequenceBuilder<V, A, Integer> {
 
 
-    public ArbitraryBreadthFirstSequenceBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
+    public ArbitraryPathBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
         super(0, Integer.MAX_VALUE, nextArcsFunction, (v1, v2, a) -> 1, Integer::sum);
     }
 

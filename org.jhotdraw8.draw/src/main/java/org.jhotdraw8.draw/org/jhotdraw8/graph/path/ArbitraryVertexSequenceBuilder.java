@@ -29,12 +29,12 @@ import java.util.function.Predicate;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class ArbitraryBreadthFirstVertexSequenceBuilder<V> extends AbstractVertexSequenceBuilder<V> {
-    public ArbitraryBreadthFirstVertexSequenceBuilder(@NonNull Function<V, Iterable<V>> nextVertexFunction) {
+public class ArbitraryVertexSequenceBuilder<V> extends AbstractVertexSequenceBuilder<V> {
+    public ArbitraryVertexSequenceBuilder(@NonNull Function<V, Iterable<V>> nextVertexFunction) {
         this(Integer.MAX_VALUE, nextVertexFunction);
     }
 
-    public ArbitraryBreadthFirstVertexSequenceBuilder(int maxLength, @NonNull Function<V, Iterable<V>> nextVertexFunction) {
+    public ArbitraryVertexSequenceBuilder(int maxLength, @NonNull Function<V, Iterable<V>> nextVertexFunction) {
         super(maxLength, nextVertexFunction);
     }
 

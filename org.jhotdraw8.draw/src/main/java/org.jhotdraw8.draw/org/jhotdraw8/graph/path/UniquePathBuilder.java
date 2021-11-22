@@ -26,14 +26,14 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class UniqueBreadthFirstVertexPathBuilder<V, A> extends AbstractVertexSequenceBuilder<V> {
+public class UniquePathBuilder<V, A> extends AbstractVertexSequenceBuilder<V> {
 
 
-    public UniqueBreadthFirstVertexPathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
+    public UniquePathBuilder(@NonNull Function<V, Iterable<V>> nextNodesFunction) {
         this(Integer.MAX_VALUE, nextNodesFunction);
     }
 
-    public UniqueBreadthFirstVertexPathBuilder(int maxLength, @NonNull Function<V, Iterable<V>> nextNodesFunction) {
+    public UniquePathBuilder(int maxLength, @NonNull Function<V, Iterable<V>> nextNodesFunction) {
         super(maxLength, nextNodesFunction);
     }
 

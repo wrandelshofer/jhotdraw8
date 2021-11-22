@@ -12,10 +12,18 @@ import java.util.Deque;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class AllBreadthFirstSequencesBuilder<V, A> {
+/**
+ * Builder for enumerating all arc-, arrow-, or vertex-sequences from a
+ * set of start vertices to a set of goal vertices using a breadth-first
+ * algorithm.
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ */
+public class AllPathsBuilder<V, A> {
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
 
-    public AllBreadthFirstSequencesBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
+    public AllPathsBuilder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction) {
         this.nextArcsFunction = nextArcsFunction;
     }
 
@@ -31,7 +39,7 @@ public class AllBreadthFirstSequencesBuilder<V, A> {
                                                                                                  @NonNull Predicate<V> goal,
                                                                                                  int maxLength) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllSequencesSpliterator<>(
                 start, goal, nextArcsFunction,
                 (backLink) -> AbstractCostAndBackLinksSequenceBuilder.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
                 maxLength));
@@ -49,7 +57,7 @@ public class AllBreadthFirstSequencesBuilder<V, A> {
                                                                                            @NonNull Predicate<V> goal,
                                                                                            int maxLength) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllSequencesSpliterator<>(
                 start, goal, nextArcsFunction,
                 (backLink) -> AbstractCostAndBackLinksSequenceBuilder.toArrowSequence(backLink, (a, b) -> b.getArrow()),
                 maxLength));
@@ -67,13 +75,13 @@ public class AllBreadthFirstSequencesBuilder<V, A> {
                                                                                             @NonNull Predicate<V> goal,
                                                                                             @NonNull int maxLength) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(start, goal, nextArcsFunction,
+        return new SpliteratorIterable<>(() -> new AllSequencesSpliterator<>(start, goal, nextArcsFunction,
                 (backLink) -> AbstractCostAndBackLinksSequenceBuilder.toVertexSequence(backLink, AbstractCostAndBackLinksSequenceBuilder.BackLink::getVertex),
                 maxLength));
     }
 
 
-    private static class AllPathsSpliterator<V, A, X> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<X>, Integer>> {
+    private static class AllSequencesSpliterator<V, A, X> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<X>, Integer>> {
         private final @NonNull Deque<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>> stack = new ArrayDeque<>();
         private final @NonNull Predicate<V> goal;
         private final int maxLength;
@@ -81,12 +89,12 @@ public class AllBreadthFirstSequencesBuilder<V, A> {
         private final @NonNull Function<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>,
                 OrderedPair<ImmutableList<X>, Integer>> sequenceFunction;
 
-        public AllPathsSpliterator(@NonNull V start,
-                                   @NonNull Predicate<V> goal,
-                                   @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                                   @NonNull Function<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>,
-                                           OrderedPair<ImmutableList<X>, Integer>> sequenceFunction,
-                                   int maxLength) {
+        public AllSequencesSpliterator(@NonNull V start,
+                                       @NonNull Predicate<V> goal,
+                                       @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                       @NonNull Function<AbstractCostAndBackLinksSequenceBuilder.BackLink<V, A, Integer>,
+                                               OrderedPair<ImmutableList<X>, Integer>> sequenceFunction,
+                                       int maxLength) {
             super(Long.MAX_VALUE, 0);
             this.maxLength = maxLength;
             stack.push(new AbstractCostAndBackLinksSequenceBuilder.BackLink<>(start, null, null, 1));

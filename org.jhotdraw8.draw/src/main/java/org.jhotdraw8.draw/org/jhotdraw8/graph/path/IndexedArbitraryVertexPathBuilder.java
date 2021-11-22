@@ -23,15 +23,15 @@ import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
 
 /**
- * Builder for creating arbitrary paths from a directed graph.
+ * Builder for creating arbitrary vertex sequences from a directed graph.
  * <p>
  * The builder searches for paths using a breadth-first search.<br>
- * Returns the first path that it finds.<br>
- * Returns nothing if there is no path.
+ * Returns the first vertex sequence that it finds.<br>
+ * Returns nothing if there is no vertex sequence.
  *
  * @author Werner Randelshofer
  */
-public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVertexSequenceBuilder {
+public class IndexedArbitraryVertexPathBuilder extends AbstractIndexedVertexSequenceBuilder {
 
 
     /**
@@ -39,7 +39,7 @@ public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVer
      *
      * @param graph a graph
      */
-    public IndexedBreadthFirstVertexSequenceBuilder(@NonNull IndexedDirectedGraph graph) {
+    public IndexedArbitraryVertexPathBuilder(@NonNull IndexedDirectedGraph graph) {
         this(graph::getNextVertices);
     }
 
@@ -48,7 +48,7 @@ public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVer
      *
      * @param nextNodesFunction Accessor function to next nodes in graph.
      */
-    public IndexedBreadthFirstVertexSequenceBuilder(@NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction) {
+    public IndexedArbitraryVertexPathBuilder(@NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction) {
         super(nextNodesFunction);
     }
 
@@ -63,15 +63,15 @@ public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVer
     public @NonNull List<ImmutableList<Integer>> findAllVertexPaths(int start,
                                                                     @NonNull IntPredicate goal,
                                                                     int maxLength) {
-        List<MyBackLink> backlinks = new ArrayList<>();
-        searchAll(new MyBackLink(start, null, 1), goal,
+        List<MyIndexedBackLink> backlinks = new ArrayList<>();
+        searchAll(new MyIndexedBackLink(start, null, 1), goal,
                 getNextNodesFunction(),
                 backlinks, maxLength);
         List<ImmutableList<Integer>> vertexPaths = new ArrayList<>(backlinks.size());
         Deque<Integer> path = new ArrayDeque<>();
-        for (MyBackLink list : backlinks) {
+        for (MyIndexedBackLink list : backlinks) {
             path.clear();
-            for (MyBackLink backlink = list; backlink != null; backlink = backlink.parent) {
+            for (MyIndexedBackLink backlink = list; backlink != null; backlink = backlink.parent) {
                 path.addFirst(backlink.vertex);
             }
             vertexPaths.add(ImmutableLists.copyOf(path));
@@ -99,22 +99,22 @@ public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVer
      * @param maxLength the maximal path length
      * @return a back link on success, null on failure
      */
-    public @Nullable BackLink search(@NonNull Iterable<Integer> starts,
-                                     @NonNull IntPredicate goal,
-                                     @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
-                                     @NonNull AddToIntSet visited,
-                                     int maxLength) {
-        Queue<MyBackLink> queue = new ArrayDeque<>(32);
+    public @Nullable AbstractIndexedVertexSequenceBuilder.IndexedBackLink search(@NonNull Iterable<Integer> starts,
+                                                                                 @NonNull IntPredicate goal,
+                                                                                 @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                                                                 @NonNull AddToIntSet visited,
+                                                                                 int maxLength) {
+        Queue<MyIndexedBackLink> queue = new ArrayDeque<>(32);
         MyIntConsumer consumer = new MyIntConsumer();
         for (Integer start : starts) {
-            MyBackLink rootBackLink = new MyBackLink(start, null, maxLength);
+            MyIndexedBackLink rootBackLink = new MyIndexedBackLink(start, null, maxLength);
             if (visited.add(start)) {
                 queue.add(rootBackLink);
             }
         }
 
         while (!queue.isEmpty()) {
-            MyBackLink node = queue.remove();
+            MyIndexedBackLink node = queue.remove();
             int vertex = node.vertex;
             if (goal.test(vertex)) {
                 return node;
@@ -125,7 +125,7 @@ public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVer
                 Spliterator.OfInt spliterator = nextNodesFunction.apply(vertex);
                 while (spliterator.tryAdvance(consumer)) {
                     if (visited.add(consumer.value)) {
-                        MyBackLink backLink = new MyBackLink(consumer.value, node, maxRemaining - 1);
+                        MyIndexedBackLink backLink = new MyIndexedBackLink(consumer.value, node, maxRemaining - 1);
                         queue.add(backLink);
                     }
                 }
@@ -201,41 +201,41 @@ public class IndexedBreadthFirstVertexSequenceBuilder extends AbstractIndexedVer
         return (int) primitiveBackLink;
     }
 
-    private void searchAll(@NonNull MyBackLink start, @NonNull IntPredicate goal,
+    private void searchAll(@NonNull IndexedArbitraryVertexPathBuilder.MyIndexedBackLink start, @NonNull IntPredicate goal,
                            @NonNull Function<Integer, Spliterator.OfInt> nextNodesFunction,
-                           @NonNull List<MyBackLink> backlinks, int maxDepth) {
-        Deque<MyBackLink> stack = new ArrayDeque<>();
+                           @NonNull List<MyIndexedBackLink> backlinks, int maxDepth) {
+        Deque<MyIndexedBackLink> stack = new ArrayDeque<>();
         stack.push(start);
         MyIntConsumer consumer = new MyIntConsumer();
         while (!stack.isEmpty()) {
-            MyBackLink current = stack.pop();
+            MyIndexedBackLink current = stack.pop();
             if (goal.test(current.vertex)) {
                 backlinks.add(current);
             }
             if (current.maxRemaining < maxDepth) {
                 Spliterator.OfInt spliterator = nextNodesFunction.apply(current.vertex);
                 while (spliterator.tryAdvance(consumer)) {
-                    MyBackLink newPath = new MyBackLink(consumer.value, current, current.maxRemaining + 1);
+                    MyIndexedBackLink newPath = new MyIndexedBackLink(consumer.value, current, current.maxRemaining + 1);
                     stack.push(newPath);
                 }
             }
         }
     }
 
-    private static class MyBackLink extends BackLink {
+    private static class MyIndexedBackLink extends IndexedBackLink {
 
-        final MyBackLink parent;
+        final MyIndexedBackLink parent;
         final int vertex;
         final int maxRemaining;
 
-        public MyBackLink(int vertex, MyBackLink parent, int depth) {
+        public MyIndexedBackLink(int vertex, MyIndexedBackLink parent, int depth) {
             this.vertex = vertex;
             this.parent = parent;
             this.maxRemaining = depth;
         }
 
         @Override
-        BackLink getParent() {
+        IndexedBackLink getParent() {
             return parent;
         }
 

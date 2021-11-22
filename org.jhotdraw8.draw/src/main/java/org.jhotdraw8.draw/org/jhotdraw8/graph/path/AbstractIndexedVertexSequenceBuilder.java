@@ -99,12 +99,12 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
     }
 
     public @Nullable OrderedPair<ImmutableList<Integer>, Integer> findShortestVertexPath(Iterable<Integer> starts, @NonNull IntPredicate goalPredicate, @NonNull AddToIntSet visited) {
-        BackLink current = search(starts, goalPredicate, visited);
+        IndexedBackLink current = search(starts, goalPredicate, visited);
         if (current == null) {
             return null;
         }
         Deque<Integer> vertices = new ArrayDeque<Integer>();
-        for (BackLink i = current; i != null; i = i.getParent()) {
+        for (IndexedBackLink i = current; i != null; i = i.getParent()) {
             vertices.addFirst(i.getVertex());
         }
         return new OrderedPair<>(ImmutableLists.copyOf(vertices), vertices.size());
@@ -165,7 +165,7 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
         pathElements.add(start); // root element
         while (i.hasNext()) {
             int goal = i.next();
-            BackLink back = search(Collections.singletonList(start), vi -> vi == goal,
+            IndexedBackLink back = search(Collections.singletonList(start), vi -> vi == goal,
                     new LinkedHashSet<>()::add);
             if (back == null) {
                 throw new PathBuilderException("Could not find path from " + start + " to " + goal + ".");
@@ -184,9 +184,9 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
         return nextNodesFunction;
     }
 
-    private @Nullable BackLink search(Iterable<Integer> start,
-                                      @NonNull IntPredicate goalPredicate,
-                                      @NonNull AddToIntSet visited) {
+    private @Nullable AbstractIndexedVertexSequenceBuilder.IndexedBackLink search(Iterable<Integer> start,
+                                                                                  @NonNull IntPredicate goalPredicate,
+                                                                                  @NonNull AddToIntSet visited) {
         return search(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
@@ -196,21 +196,21 @@ public abstract class AbstractIndexedVertexSequenceBuilder implements VertexSequ
         return isReachable(start, goalPredicate, nextNodesFunction, visited, maxLength);
     }
 
-    protected abstract @Nullable BackLink search(Iterable<Integer> start,
-                                                 IntPredicate goal,
-                                                 Function<Integer, Spliterator.OfInt> nextNodesFunction,
-                                                 @NonNull AddToIntSet visited, int maxLength);
+    protected abstract @Nullable AbstractIndexedVertexSequenceBuilder.IndexedBackLink search(Iterable<Integer> start,
+                                                                                             IntPredicate goal,
+                                                                                             Function<Integer, Spliterator.OfInt> nextNodesFunction,
+                                                                                             @NonNull AddToIntSet visited, int maxLength);
 
     protected abstract boolean isReachable(int start,
                                            IntPredicate goal,
                                            Function<Integer, Spliterator.OfInt> nextNodesFunction,
                                            @NonNull AddToIntSet visited, int maxLength);
 
-    protected abstract static class BackLink {
-        public BackLink() {
+    protected abstract static class IndexedBackLink {
+        public IndexedBackLink() {
         }
 
-        abstract BackLink getParent();
+        abstract IndexedBackLink getParent();
 
         abstract int getVertex();
     }

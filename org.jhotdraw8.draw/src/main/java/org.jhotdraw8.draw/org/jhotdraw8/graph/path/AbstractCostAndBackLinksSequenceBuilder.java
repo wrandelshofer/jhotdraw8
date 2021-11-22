@@ -9,6 +9,7 @@ import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,7 +20,7 @@ import java.util.function.Predicate;
  * which uses a 'cost function' and 'back link' data structure.
  */
 public abstract class AbstractCostAndBackLinksSequenceBuilder<V, A, C extends Number & Comparable<C>>
-        implements SequenceBuilder<V, A, C> {
+        implements SequenceBuilder<V, A, C>, ReachabilityChecker<V, C> {
 
     private final @NonNull C zero;
     private final @NonNull C positiveInfinity;
@@ -118,6 +119,56 @@ public abstract class AbstractCostAndBackLinksSequenceBuilder<V, A, C extends Nu
         return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
     }
 
+    @Override
+    public boolean isReachable(@NonNull Iterable<V> startVertices,
+                               @NonNull Predicate<V> goalPredicate,
+                               @NonNull C maxCost) {
+        return findVertexSequence(startVertices, goalPredicate, maxCost) != null;
+    }
+
+    /**
+     * Checks if a vertex sequence from a start vertex to a vertex
+     * that satisfies the goal predicate exists.
+     *
+     * @param start         the start vertex
+     * @param goalPredicate the goal vertex
+     * @param maxCost
+     * @return an ordered pair (vertex sequence, cost),
+     * or null if no sequence was found.
+     */
+    @Override
+    public boolean isReachable(@NonNull V start,
+                               @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+        return findVertexSequence(Collections.singletonList(start), goalPredicate, maxCost) != null;
+    }
+
+    /**
+     * Checks if a vertex sequence from start to goal exists.
+     *
+     * @param start   the start vertex
+     * @param goal    the goal vertex
+     * @param maxCost
+     * @return an ordered pair (vertex sequence, cost),
+     * or null if no sequence was found.
+     */
+    @Override
+    public boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C maxCost) {
+        return findVertexSequence(start, goal, maxCost) != null;
+    }
+
+    /**
+     * Checks if a vertex sequence through the given waypoints exists.
+     *
+     * @param waypoints               a list of waypoints
+     * @param maxCostBetweenWaypoints
+     * @return an ordered pair (vertex sequence, cost),
+     * or null if no sequence was found.
+     */
+    @Override
+    public boolean isReachableOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints) {
+        return findVertexSequenceOverWaypoints(waypoints, maxCostBetweenWaypoints) != null;
+    }
+
     /**
      * Search engine method.
      *
@@ -126,9 +177,9 @@ public abstract class AbstractCostAndBackLinksSequenceBuilder<V, A, C extends Nu
      * @param zero              the zero cost value
      * @param positiveInfinity  the positive infinity value
      * @param maxCost           the maximal cost (inclusive) that a sequence may have
-     * @param nextNodesFunction
-     * @param costFunction
-     * @param sumFunction
+     * @param nextNodesFunction the next nodes function
+     * @param costFunction      the cost function
+     * @param sumFunction       the sum function for adding two cost values
      * @return
      */
     protected abstract @Nullable BackLink<V, A, C> search(@NonNull Iterable<V> startVertices,
@@ -147,7 +198,7 @@ public abstract class AbstractCostAndBackLinksSequenceBuilder<V, A, C extends Nu
      * @param <AA> the arrow type
      * @param <CC> the cost number type
      */
-    static class BackLink<VV, AA, CC extends Number & Comparable<CC>> {
+    protected static class BackLink<VV, AA, CC extends Number & Comparable<CC>> {
         private final @NonNull VV vertex;
         private final @Nullable AA arrow;
         private final @NonNull CC cost;

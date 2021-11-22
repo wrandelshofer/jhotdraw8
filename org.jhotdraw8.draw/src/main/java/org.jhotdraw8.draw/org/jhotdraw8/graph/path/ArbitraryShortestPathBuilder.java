@@ -17,6 +17,17 @@ import java.util.function.Predicate;
  * This sequence builder uses Diijkstra's 'shortest path' algorithm.
  * If more than one shortest path is possible, the builder returns an arbitrary
  * one.
+ * <p>
+ * This algorithm needs a cost function that returns values {@literal >= 0}
+ * for all arrows.
+ * <p>
+ * References:
+ * <dl>
+ * <dt>Esger W. Dijkstra (1959), A note on two problems in connexion with graphs,
+ * Problem 2.
+ * </dt>
+ * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
+ * </dl>
  */
 public class ArbitraryShortestPathBuilder<V, A, C extends Number & Comparable<C>> extends AbstractCostAndBackLinksSequenceBuilder<V, A, C> {
 
@@ -28,7 +39,7 @@ public class ArbitraryShortestPathBuilder<V, A, C extends Number & Comparable<C>
      * @param nextArcsFunction a function that given a vertex,
      *                         returns an {@link Iterable} for the next arcs
      *                         of that vertex.
-     * @param costFunction     the cost function
+     * @param costFunction     the cost function, must return values {@literal >= 0}.
      * @param sumFunction      the sum function, which adds two numbers,
      *                         e.g. {@link Integer#sum}, {@link Double#sum}.
      */
@@ -47,7 +58,9 @@ public class ArbitraryShortestPathBuilder<V, A, C extends Number & Comparable<C>
             @NonNull TriFunction<V, V, A, C> costf,
             @NonNull BiFunction<C, C, C> sumf) {
 
-        // Priority queue: back-links with lower cost and shallower depth come first.
+        // Priority queue: back-links by lower cost and shallower depth.
+        //          Ordering by shallower depth prevents that the algorithm
+        //          unnecessarily follows zero-length arrows.
         PriorityQueue<BackLink<V, A, C>> queue = new PriorityQueue<BackLink<V, A, C>>(
                 Comparator.<BackLink<V, A, C>, C>comparing(BackLink::getCost).thenComparing(BackLink::getDepth)
         );
