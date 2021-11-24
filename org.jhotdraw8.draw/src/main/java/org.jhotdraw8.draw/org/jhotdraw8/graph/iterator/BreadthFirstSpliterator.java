@@ -50,16 +50,16 @@ public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V>
         deque = new ArrayDeque<>(16);
         this.visited = visited;
         if (visited.add(root)) {
-            deque.add(root);
+            deque.addLast(root);
         }
     }
 
     @Override
     public boolean moveNext() {
-        current = deque.pollFirst();
-        if (current == null) {
+        if (deque.isEmpty()) {
             return false;
         }
+        current = deque.removeFirst();
         for (V next : nextFunction.apply(current)) {
             if (visited.add(next)) {
                 deque.addLast(next);

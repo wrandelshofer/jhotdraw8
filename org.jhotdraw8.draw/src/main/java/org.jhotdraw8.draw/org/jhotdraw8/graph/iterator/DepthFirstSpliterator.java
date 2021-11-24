@@ -61,10 +61,10 @@ public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
     @Override
     public boolean moveNext() {
-        current = deque.pollLast();
-        if (current == null) {
+        if (deque.isEmpty()) {
             return false;
         }
+        current = deque.removeLast();
         for (V next : nextFunction.apply(current)) {
             if (visited.add(next)) {
                 deque.addLast(next);
