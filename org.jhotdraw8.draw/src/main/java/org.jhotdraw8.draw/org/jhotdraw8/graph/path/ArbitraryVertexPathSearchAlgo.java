@@ -25,9 +25,11 @@ import java.util.function.Predicate;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class ArbitraryVertexPathFinderAlgo<V, C extends Number & Comparable<C>> {
+public class ArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
-    protected @Nullable VertexBackLink<V, C> search(
+
+    @Override
+    public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull C zero,

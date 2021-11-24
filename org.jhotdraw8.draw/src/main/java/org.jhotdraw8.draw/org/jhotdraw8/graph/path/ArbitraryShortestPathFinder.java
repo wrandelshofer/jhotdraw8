@@ -63,7 +63,7 @@ public class ArbitraryShortestPathFinder<V, A, C extends Number & Comparable<C>>
             @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
             @NonNull TriFunction<V, V, A, C> costf,
             @NonNull BiFunction<C, C, C> sumf) {
-        return new ArbitraryShortestPathFinderAlgo<V, A, C>().search(
+        return new ArbitraryShortestPathSearchAlgo<V, A, C>().search(
                 starts, goalPredicate, zero, positiveInfinity, maxCost, nextf, costf, sumf
         );
     }

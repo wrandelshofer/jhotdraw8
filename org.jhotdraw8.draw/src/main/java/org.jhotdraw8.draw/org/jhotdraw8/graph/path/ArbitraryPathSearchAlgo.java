@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-class ArbitraryPathFinderAlgo<V, A, C extends Number & Comparable<C>> {
+class ArbitraryPathSearchAlgo<V, A, C extends Number & Comparable<C>> {
 
 
     protected @Nullable ArcBackLink<V, A, C> search(@NonNull Iterable<V> startVertices,

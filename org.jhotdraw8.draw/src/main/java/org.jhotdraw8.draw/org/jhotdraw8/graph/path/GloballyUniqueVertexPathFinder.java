@@ -28,7 +28,7 @@ public class GloballyUniqueVertexPathFinder<V, C extends Number & Comparable<C>>
 
     @Override
     protected @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C maxCost, @NonNull Function<V, Iterable<V>> nextNodesFunction, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
-        return new GloballyUniqueVertexPathFinderAlgo<V, C>().search(startVertices, goalPredicate, zero, positiveInfinity, maxCost, nextNodesFunction, costFunction, sumFunction);
+        return new GloballyUniqueVertexPathSearchAlgo<V, C>().search(startVertices, goalPredicate, zero, positiveInfinity, maxCost, nextNodesFunction, costFunction, sumFunction);
     }
 }
 

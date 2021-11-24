@@ -48,7 +48,7 @@ public class ArbitraryVertexPathFinder<V, C extends Number & Comparable<C>> exte
             @NonNull Function<V, Iterable<V>> nextNodesFunction,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
-        return new ArbitraryVertexPathFinderAlgo<V, C>()
+        return new ArbitraryVertexPathSearchAlgo<V, C>()
                 .search(startVertices, goalPredicate, new HashSet<V>()::add, maxCost, zero, nextNodesFunction,
                         costFunction, sumFunction);
     }

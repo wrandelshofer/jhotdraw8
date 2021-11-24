@@ -22,7 +22,7 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  * @param <E> the element type of the path
  */
-class AllPathsFinderSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
+class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
     private final @NonNull Queue<ArcBackLink<V, A, C>> queue = new ArrayDeque<>();
     private final @NonNull Predicate<V> goal;
     private final @NonNull C maxCost;
@@ -33,15 +33,15 @@ class AllPathsFinderSpliterator<V, A, C extends Number & Comparable<C>, E> exten
     private final @NonNull Function<ArcBackLink<V, A, C>,
             OrderedPair<ImmutableList<E>, C>> sequenceFunction;
 
-    public AllPathsFinderSpliterator(@NonNull Iterable<V> startVertices,
-                                     @NonNull Predicate<V> goal,
-                                     @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                                     @NonNull Function<ArcBackLink<V, A, C>,
-                                             OrderedPair<ImmutableList<E>, C>> sequenceFunction,
-                                     @NonNull C maxCost,
-                                     @NonNull C zero,
-                                     @NonNull TriFunction<V, V, A, C> costFunction,
-                                     @NonNull BiFunction<C, C, C> sumFunction) {
+    public AllPathsSpliterator(@NonNull Iterable<V> startVertices,
+                               @NonNull Predicate<V> goal,
+                               @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                               @NonNull Function<ArcBackLink<V, A, C>,
+                                       OrderedPair<ImmutableList<E>, C>> sequenceFunction,
+                               @NonNull C maxCost,
+                               @NonNull C zero,
+                               @NonNull TriFunction<V, V, A, C> costFunction,
+                               @NonNull BiFunction<C, C, C> sumFunction) {
         super(Long.MAX_VALUE, 0);
         this.maxCost = maxCost;
         this.goal = goal;

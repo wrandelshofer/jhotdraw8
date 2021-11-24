@@ -57,7 +57,7 @@ public class ArbitraryShortestVertexPathFinder<V, C extends Number & Comparable<
             @NonNull Function<V, Iterable<V>> nextf,
             @NonNull BiFunction<V, V, C> costf,
             @NonNull BiFunction<C, C, C> sumf) {
-        return new ArbitraryShortestVertexPathFinderAlgo<V, C>().search(
+        return new ArbitraryShortestVertexPathSearchAlgo<V, C>().search(
                 starts, goalPredicate, zero, positiveInfinity, maxCost, nextf, costf, sumf
         );
     }

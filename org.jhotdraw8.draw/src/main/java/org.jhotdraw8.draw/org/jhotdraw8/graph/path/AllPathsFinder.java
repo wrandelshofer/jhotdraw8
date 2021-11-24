@@ -48,7 +48,7 @@ public class AllPathsFinder<V, A, C extends Number & Comparable<C>> {
                                                                                            @NonNull Predicate<V> goal,
                                                                                            @NonNull C maxCost) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsFinderSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 Collections.singletonList(start), goal, nextArcsFunction,
                 (backLink) -> AbstractSequenceFinder.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
                 maxCost, zero, costFunction, sumFunction));
@@ -66,7 +66,7 @@ public class AllPathsFinder<V, A, C extends Number & Comparable<C>> {
                                                                                      @NonNull Predicate<V> goal,
                                                                                      @NonNull C maxCost) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsFinderSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 Collections.singletonList(start), goal, nextArcsFunction,
                 (backLink) -> AbstractSequenceFinder.toArrowSequence(backLink, (a, b) -> b.getArrow()),
                 maxCost, zero, costFunction, sumFunction));
@@ -84,7 +84,7 @@ public class AllPathsFinder<V, A, C extends Number & Comparable<C>> {
                                                                                       @NonNull Predicate<V> goal,
                                                                                       @NonNull C maxCost) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsFinderSpliterator<>(Collections.singletonList(start), goal, nextArcsFunction,
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(Collections.singletonList(start), goal, nextArcsFunction,
                 (backLink) -> AbstractSequenceFinder.toVertexSequence(backLink, ArcBackLink::getVertex),
                 maxCost, zero, costFunction, sumFunction));
     }

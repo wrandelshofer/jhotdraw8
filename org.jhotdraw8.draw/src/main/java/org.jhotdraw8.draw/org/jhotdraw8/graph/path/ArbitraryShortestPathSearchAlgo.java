@@ -29,10 +29,11 @@ import java.util.function.Predicate;
  * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
  * </dl>
  */
-public class ArbitraryShortestPathFinderAlgo<V, A, C extends Number & Comparable<C>> {
+public class ArbitraryShortestPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements PathSearchAlgo<V, A, C> {
 
 
-    protected @Nullable ArcBackLink<V, A, C> search(
+    @Override
+    public @Nullable ArcBackLink<V, A, C> search(
             @NonNull Iterable<V> starts,
             @NonNull Predicate<V> goalPredicate,
             @NonNull C zero,

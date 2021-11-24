@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class GloballyUniqueVertexPathFinderAlgo<V, C extends Number & Comparable<C>> {
+public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
 
 
     protected @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C maxCost, @NonNull Function<V, Iterable<V>> nextNodesFunction, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {

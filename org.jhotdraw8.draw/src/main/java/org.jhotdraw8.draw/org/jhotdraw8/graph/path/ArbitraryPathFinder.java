@@ -58,7 +58,7 @@ public class ArbitraryPathFinder<V, A, C extends Number & Comparable<C>> extends
                                                     @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                                     @NonNull TriFunction<V, V, A, C> costFunction,
                                                     @NonNull BiFunction<C, C, C> sumFunction) {
-        return new ArbitraryPathFinderAlgo<V, A, C>().search(
+        return new ArbitraryPathSearchAlgo<V, A, C>().search(
                 startVertices,
                 goalPredicate,
                 zero,

@@ -28,11 +28,12 @@ import java.util.function.Predicate;
  *     <li>A sequences has minimal cost and has minimal number of arrows/vertices.</li>
  * </ul>
  */
-class ArbitraryShortestVertexPathFinderAlgo<V, C extends Number & Comparable<C>> {
+class ArbitraryShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
 
-    @Nullable VertexBackLink<V, C> search(
-            @NonNull Iterable<V> starts,
+    @Override
+    public @Nullable VertexBackLink<V, C> search(
+            @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull C zero,
             @NonNull C positiveInfinity,
@@ -48,7 +49,7 @@ class ArbitraryShortestVertexPathFinderAlgo<V, C extends Number & Comparable<C>>
         Map<V, C> costMap = new HashMap<>();
 
         // Insert start itself in priority queue and initialize its cost as 0.
-        for (V start : starts) {
+        for (V start : startVertices) {
             queue.add(new VertexBackLink<>(start, null, zero));
             costMap.put(start, zero);
         }
