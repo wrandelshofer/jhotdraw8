@@ -8,14 +8,15 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.graph.path.GloballyUniqueVertexPathFinder;
+import org.jhotdraw8.graph.path.SimpleVertexSequenceFinder;
+import org.jhotdraw8.graph.path.VertexSequenceFinder;
+import org.jhotdraw8.graph.path.algo.GloballyUniqueVertexPathSearchAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.ToDoubleFunction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -124,8 +125,8 @@ public class UniqueVertexSequenceFinderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
-        ToDoubleFunction<Double> costf = arg -> arg;
-        GloballyUniqueVertexPathFinder<Integer, Integer> instance = new GloballyUniqueVertexPathFinder<Integer, Integer>(0, Integer.MAX_VALUE, Integer.MAX_VALUE, graph::getNextVertices, (u, v) -> 1, Integer::sum);
+        VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
+                graph::getNextVertices, new GloballyUniqueVertexPathSearchAlgo<>());
         OrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals, Integer.MAX_VALUE);
         if (expPath == null) {
             assertNull(result);
@@ -156,8 +157,8 @@ public class UniqueVertexSequenceFinderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
-        ToDoubleFunction<Double> costf = arg -> arg;
-        GloballyUniqueVertexPathFinder<Integer, Integer> instance = new GloballyUniqueVertexPathFinder<Integer, Integer>(0, Integer.MAX_VALUE, Integer.MAX_VALUE, graph::getNextVertices, (u, v) -> 1, Integer::sum);
+        VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
+                new GloballyUniqueVertexPathSearchAlgo<>());
 
         // Find unique path to any of the goals
         OrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains, Integer.MAX_VALUE);
@@ -203,7 +204,8 @@ public class UniqueVertexSequenceFinderTest {
      */
     private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, @Nullable ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        GloballyUniqueVertexPathFinder<Integer, Integer> instance = new GloballyUniqueVertexPathFinder<Integer, Integer>(0, Integer.MAX_VALUE, Integer.MAX_VALUE, graph::getNextVertices, (u, v) -> 1, Integer::sum);
+        VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
+                new GloballyUniqueVertexPathSearchAlgo<>());
         OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);

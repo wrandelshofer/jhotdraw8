@@ -8,7 +8,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.graph.path.UniqueShortestPathFinder;
+import org.jhotdraw8.graph.path.SequenceFinder;
+import org.jhotdraw8.graph.path.SimpleSequenceFinder;
+import org.jhotdraw8.graph.path.algo.UniqueShortestPathSearchAlgo;
 import org.jhotdraw8.util.TriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -131,7 +133,7 @@ public class UniqueShortestPathBuilderTest {
      */
     public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
 
-        UniqueShortestPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
         if (result == null) {
             assertNull(expPath);
@@ -142,10 +144,10 @@ public class UniqueShortestPathBuilderTest {
     }
 
     @NonNull
-    private UniqueShortestPathFinder<Integer, Double, Double> newInstance(@NonNull DirectedGraph<Integer, Double> graph) {
+    private SequenceFinder<Integer, Double, Double> newInstance(@NonNull DirectedGraph<Integer, Double> graph) {
         TriFunction<Integer, Integer, Double, Double> costf = (a, b, arg) -> arg;
-        UniqueShortestPathFinder<Integer, Double, Double> instance = new UniqueShortestPathFinder<>(
-                0.0, Double.POSITIVE_INFINITY, graph::getNextArcs, costf, Double::sum);
+        SequenceFinder<Integer, Double, Double> instance = SimpleSequenceFinder.newDoubleCostInstance(
+                graph::getNextArcs, costf, new UniqueShortestPathSearchAlgo<>());
         return instance;
     }
 
@@ -169,7 +171,7 @@ public class UniqueShortestPathBuilderTest {
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
     public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
-        UniqueShortestPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find shortest path to any of the goals
         OrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains, Double.MAX_VALUE);
@@ -213,7 +215,7 @@ public class UniqueShortestPathBuilderTest {
      */
     private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueShortestPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal, Double.MAX_VALUE);
         assertEquals(expResult, result == null ? null : result.first());
     }
@@ -251,7 +253,7 @@ public class UniqueShortestPathBuilderTest {
      */
     private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueShortestPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         if (actual == null) {
             assertNull(expResult);
@@ -277,7 +279,7 @@ public class UniqueShortestPathBuilderTest {
     private void testFindEdgePathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        UniqueShortestPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         if (actual == null) {
             assertNull(expResult);

@@ -1,4 +1,4 @@
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;

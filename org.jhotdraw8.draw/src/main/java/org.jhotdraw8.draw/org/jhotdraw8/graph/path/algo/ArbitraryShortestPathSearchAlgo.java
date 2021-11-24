@@ -1,8 +1,9 @@
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
+import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.Comparator;
@@ -36,10 +37,9 @@ public class ArbitraryShortestPathSearchAlgo<V, A, C extends Number & Comparable
     public @Nullable ArcBackLink<V, A, C> search(
             @NonNull Iterable<V> starts,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C zero,
+            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction, @NonNull C zero,
             @NonNull C positiveInfinity,
             @NonNull C maxCost,
-            @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
             @NonNull TriFunction<V, V, A, C> costf,
             @NonNull BiFunction<C, C, C> sumf) {
 
@@ -69,7 +69,7 @@ public class ArbitraryShortestPathSearchAlgo<V, A, C extends Number & Comparable
             }
             C costToU = node.getCost();
 
-            for (Arc<V, A> arc : nextf.apply(u)) {
+            for (Arc<V, A> arc : nextArcsFunction.apply(u)) {
                 V v = arc.getEnd();
                 C bestKnownCostToV = costMap.getOrDefault(v, positiveInfinity);
                 C costFromUToV = costf.apply(u, v, arc.getData());

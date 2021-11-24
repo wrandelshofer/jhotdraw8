@@ -57,6 +57,8 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.graph.path;
     exports org.jhotdraw8.graph.iterator;
     exports org.jhotdraw8.graph.algo;
+    exports org.jhotdraw8.graph.path.backlink;
+    exports org.jhotdraw8.graph.path.algo;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
     provides NodeReaderProvider with SvgImageReaderProvider;

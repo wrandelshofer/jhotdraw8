@@ -9,7 +9,10 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.AllPathsFinder;
-import org.jhotdraw8.graph.path.ArbitraryPathFinder;
+import org.jhotdraw8.graph.path.SequenceFinder;
+import org.jhotdraw8.graph.path.SimpleAllPathsFinder;
+import org.jhotdraw8.graph.path.SimpleSequenceFinder;
+import org.jhotdraw8.graph.path.algo.ArbitraryPathSearchAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -96,23 +99,24 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ArbitraryPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         @Nullable OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
     }
 
     @NonNull
-    private ArbitraryPathFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
-        ArbitraryPathFinder<Integer, Double, Double> instance = new ArbitraryPathFinder<Integer, Double, Double>(
-                graph::getNextArcs, 0.0, Double.MAX_VALUE,
-                (u, v, a) -> a, Double::sum);
+    private SequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
+        SequenceFinder<Integer, Double, Double> instance = SimpleSequenceFinder.newDoubleCostInstance(
+                graph::getNextArcs,
+                (u, v, a) -> a,
+                new ArbitraryPathSearchAlgo<>());
         return instance;
     }
 
     @NonNull
     private AllPathsFinder<Integer, Double, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
-        AllPathsFinder<Integer, Double, Double> instance = new AllPathsFinder<>(0.0, graph::getNextArcs, (u, v, a) -> a, Double::sum);
+        AllPathsFinder<Integer, Double, Double> instance = new SimpleAllPathsFinder<>(0.0, graph::getNextArcs, (u, v, a) -> a, Double::sum);
         return instance;
     }
 
@@ -131,7 +135,7 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        ArbitraryPathFinder<Integer, Double, Double> instance = newInstance(graph);
+        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());

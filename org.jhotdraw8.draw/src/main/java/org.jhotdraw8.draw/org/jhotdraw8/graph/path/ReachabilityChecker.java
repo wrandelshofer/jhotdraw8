@@ -50,13 +50,5 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      */
     boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C maxCost);
 
-    /**
-     * Checks if a vertex sequence through the given waypoints exists.
-     *
-     * @param waypoints               a list of waypoints
-     * @param maxCostBetweenWaypoints
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    boolean isReachableOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints);
+
 }

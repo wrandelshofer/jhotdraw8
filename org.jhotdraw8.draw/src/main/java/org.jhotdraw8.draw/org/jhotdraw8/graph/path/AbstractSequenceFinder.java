@@ -6,10 +6,10 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.Arc;
+import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  * which uses a 'cost function' and 'back link' data structure.
  */
 public abstract class AbstractSequenceFinder<V, A, C extends Number & Comparable<C>>
-        implements SequenceFinder<V, A, C>, ReachabilityChecker<V, C> {
+        implements SequenceFinder<V, A, C> {
 
     private final @NonNull C zero;
     private final @NonNull C positiveInfinity;
@@ -71,17 +71,17 @@ public abstract class AbstractSequenceFinder<V, A, C extends Number & Comparable
 
     @Override
     public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
-        return toVertexSequence(search(startVertices, goalPredicate, zero, positiveInfinity, maxCost, nextArcsFunction, costFunction, sumFunction), ArcBackLink::getVertex);
+        return toVertexSequence(search(startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction), ArcBackLink::getVertex);
     }
 
     @Override
     public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
-        return toArrowSequence(search(startVertices, goalPredicate, zero, positiveInfinity, maxCost, nextArcsFunction, costFunction, sumFunction), (a, b) -> b.getArrow());
+        return toArrowSequence(search(startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction), (a, b) -> b.getArrow());
     }
 
     @Override
     public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
-        return toArrowSequence(search(startVertices, goalPredicate, zero, positiveInfinity, maxCost, nextArcsFunction, costFunction, sumFunction), (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow()));
+        return toArrowSequence(search(startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction), (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow()));
     }
 
     @Override
@@ -127,75 +127,25 @@ public abstract class AbstractSequenceFinder<V, A, C extends Number & Comparable
         return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
     }
 
-    @Override
-    public boolean isReachable(@NonNull Iterable<V> startVertices,
-                               @NonNull Predicate<V> goalPredicate,
-                               @NonNull C maxCost) {
-        return findVertexSequence(startVertices, goalPredicate, maxCost) != null;
-    }
-
-    /**
-     * Checks if a vertex sequence from a start vertex to a vertex
-     * that satisfies the goal predicate exists.
-     *
-     * @param start         the start vertex
-     * @param goalPredicate the goal vertex
-     * @param maxCost
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    @Override
-    public boolean isReachable(@NonNull V start,
-                               @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
-        return findVertexSequence(Collections.singletonList(start), goalPredicate, maxCost) != null;
-    }
-
-    /**
-     * Checks if a vertex sequence from start to goal exists.
-     *
-     * @param start   the start vertex
-     * @param goal    the goal vertex
-     * @param maxCost
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    @Override
-    public boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C maxCost) {
-        return findVertexSequence(start, goal, maxCost) != null;
-    }
-
-    /**
-     * Checks if a vertex sequence through the given waypoints exists.
-     *
-     * @param waypoints               a list of waypoints
-     * @param maxCostBetweenWaypoints
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
-     */
-    @Override
-    public boolean isReachableOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints) {
-        return findVertexSequenceOverWaypoints(waypoints, maxCostBetweenWaypoints) != null;
-    }
 
     /**
      * Search engine method.
      *
      * @param startVertices     the set of start vertices
      * @param goalPredicate     the goal predicate
+     * @param nextNodesFunction the next nodes function
      * @param zero              the zero cost value
      * @param positiveInfinity  the positive infinity value
      * @param maxCost           the maximal cost (inclusive) that a sequence may have
-     * @param nextNodesFunction the next nodes function
      * @param costFunction      the cost function
      * @param sumFunction       the sum function for adding two cost values
      * @return
      */
     protected abstract @Nullable ArcBackLink<V, A, C> search(@NonNull Iterable<V> startVertices,
                                                              @NonNull Predicate<V> goalPredicate,
-                                                             @NonNull C zero,
+                                                             @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction, @NonNull C zero,
                                                              @NonNull C positiveInfinity,
                                                              @NonNull C maxCost,
-                                                             @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                                              @NonNull TriFunction<V, V, A, C> costFunction,
                                                              @NonNull BiFunction<C, C, C> sumFunction);
 

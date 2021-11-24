@@ -5,6 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.graph.path.backlink.VertexBackLink;
 
 import java.util.ArrayDeque;
 import java.util.function.BiFunction;
@@ -18,7 +19,6 @@ import java.util.function.Predicate;
 public abstract class AbstractVertexSequenceFinder<V, C extends Number & Comparable<C>> implements VertexSequenceFinder<V, C> {
     private final @NonNull C zero;
     private final @NonNull C positiveInfinity;
-    private final @NonNull C maxCost;
     private final @NonNull Function<V, Iterable<V>> nextVerticesFunction;
     private final @NonNull BiFunction<V, V, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -30,8 +30,6 @@ public abstract class AbstractVertexSequenceFinder<V, C extends Number & Compara
      * @param positiveInfinity     the positive infinity value or max value,
      *                             e.g. {@link Integer#MAX_VALUE},
      *                             {@link Double#POSITIVE_INFINITY}.
-     * @param maxCost              the maximal cost of a sequence,
-     *                             e.g. {@link Integer#MAX_VALUE}, {@link Double#MAX_VALUE}.
      * @param nextVerticesFunction a function that given a vertex,
      *                             returns an {@link Iterable} for the next vertices
      *                             of that vertex.
@@ -41,13 +39,11 @@ public abstract class AbstractVertexSequenceFinder<V, C extends Number & Compara
      */
     public AbstractVertexSequenceFinder(@NonNull C zero,
                                         @NonNull C positiveInfinity,
-                                        @NonNull C maxCost,
                                         @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                         @NonNull BiFunction<V, V, C> costFunction,
                                         @NonNull BiFunction<C, C, C> sumFunction) {
         this.zero = zero;
         this.positiveInfinity = positiveInfinity;
-        this.maxCost = maxCost;
         this.nextVerticesFunction = nextVerticesFunction;
         this.costFunction = costFunction;
         this.sumFunction = sumFunction;
@@ -55,7 +51,7 @@ public abstract class AbstractVertexSequenceFinder<V, C extends Number & Compara
 
     @Override
     public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
-        return toVertexSequence(search(startVertices, goalPredicate, zero, positiveInfinity, this.maxCost, nextVerticesFunction, costFunction, sumFunction), VertexBackLink::getVertex);
+        return toVertexSequence(search(startVertices, goalPredicate, nextVerticesFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction), VertexBackLink::getVertex);
     }
 
     @Override
@@ -67,27 +63,6 @@ public abstract class AbstractVertexSequenceFinder<V, C extends Number & Compara
                 sumFunction
 
         );
-        /*
-        List<V> sequence = new ArrayList<>();
-        V prev = null;
-        C sum = zero;
-        for (V next : waypoints) {
-            if (prev != null) {
-                final OrderedPair<ImmutableList<V>, C> result = findVertexSequence(prev, next, maxCost);
-                if (result == null) {
-                    return null;
-                } else {
-                    final List<V> nextSequence = result.first().asList();
-                    sequence.addAll(sequence.isEmpty() ? nextSequence : nextSequence.subList(1, nextSequence.size()));
-                    sum = sumFunction.apply(sum, result.second());
-                }
-            }
-            prev = next;
-        }
-
-        return new OrderedPair<>(ImmutableLists.copyOf(sequence), sum);
-
-         */
     }
 
 
@@ -107,10 +82,10 @@ public abstract class AbstractVertexSequenceFinder<V, C extends Number & Compara
 
     protected abstract @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices,
                                                              @NonNull Predicate<V> goalPredicate,
+                                                             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                                              @NonNull C zero,
                                                              @NonNull C positiveInfinity,
                                                              @NonNull C maxCost,
-                                                             @NonNull Function<V, Iterable<V>> nextNodesFunction,
                                                              @NonNull BiFunction<V, V, C> costFunction,
                                                              @NonNull BiFunction<C, C, C> sumFunction);
 

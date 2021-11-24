@@ -2,10 +2,11 @@
  * @(#)AnyPathBuilder.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.graph.path.backlink.VertexBackLink;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -32,13 +33,12 @@ public class ArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> 
     public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C zero,
+            @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero,
             @NonNull C positiveInfinity,
             @NonNull C maxCost,
-            @NonNull Function<V, Iterable<V>> nextNodesFunction,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, new HashSet<V>()::add, maxCost, zero, nextNodesFunction,
+        return search(startVertices, goalPredicate, new HashSet<V>()::add, maxCost, zero, nextVerticesFunction,
                 costFunction, sumFunction);
     }
 

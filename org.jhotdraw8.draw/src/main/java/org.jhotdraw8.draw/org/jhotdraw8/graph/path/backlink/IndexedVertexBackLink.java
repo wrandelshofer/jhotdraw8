@@ -1,4 +1,4 @@
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -7,7 +7,7 @@ public class IndexedVertexBackLink<C extends Number & Comparable<C>> extends Abs
 
     final int vertex;
 
-    public IndexedVertexBackLink(int vertex, @Nullable IndexedVertexBackLink parent, @NonNull C cost) {
+    public IndexedVertexBackLink(int vertex, @Nullable IndexedVertexBackLink<C> parent, @NonNull C cost) {
         super(parent, cost);
         this.vertex = vertex;
     }
@@ -16,4 +16,5 @@ public class IndexedVertexBackLink<C extends Number & Comparable<C>> extends Abs
     public int getVertex() {
         return vertex;
     }
+
 }

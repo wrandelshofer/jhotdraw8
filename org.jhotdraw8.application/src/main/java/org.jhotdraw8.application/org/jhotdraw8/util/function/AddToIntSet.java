@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.util.function;
 
+import java.util.BitSet;
+
 /**
  * Represents a function that adds an element to a set if not already present.
  */
@@ -17,4 +19,21 @@ public interface AddToIntSet {
      * element
      */
     boolean add(int e);
+
+
+    /**
+     * Creates an instance that adds to a bit set.
+     *
+     * @param bitSet a bit set
+     * @return a new instance
+     */
+    static AddToIntSet addToBitSet(BitSet bitSet) {
+        return i -> {
+            boolean b = bitSet.get(i);
+            if (!b) {
+                bitSet.set(i);
+            }
+            return !b;
+        };
+    }
 }

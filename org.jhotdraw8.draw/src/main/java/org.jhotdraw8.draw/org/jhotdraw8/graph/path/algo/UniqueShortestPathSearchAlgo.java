@@ -1,8 +1,10 @@
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
+import org.jhotdraw8.graph.path.VertexSequenceFinder;
+import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.Comparator;
@@ -22,24 +24,7 @@ import java.util.function.Predicate;
  * <p>
  * If more than one shortest path is possible, the builder returns null.
  */
-public class UniqueShortestPathFinder<V, A, C extends Number & Comparable<C>> extends AbstractSequenceFinder<V, A, C> {
-
-    /**
-     * @param zero             the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param positiveInfinity the positive infinity value or max value,
-     *                         e.g. {@link Integer#MAX_VALUE},
-     *                         {@link Double#POSITIVE_INFINITY}.
-     * @param nextArcsFunction a function that given a vertex,
-     *                         returns an {@link Iterable} for the next arcs
-     *                         of that vertex.
-     * @param costFunction     the cost function, must return values {@literal >= 0}.
-     * @param sumFunction      the sum function, which adds two numbers,
-     *                         e.g. {@link Integer#sum}, {@link Double#sum}.
-     */
-    public UniqueShortestPathFinder(@NonNull C zero, @NonNull C positiveInfinity, @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction, @NonNull TriFunction<V, V, A, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
-        super(zero, positiveInfinity, nextArcsFunction, costFunction, sumFunction);
-    }
-
+public class UniqueShortestPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements PathSearchAlgo<V, A, C> {
     private static class CostData<C> {
         private final C cost;
         private int visiCount;
@@ -63,13 +48,12 @@ public class UniqueShortestPathFinder<V, A, C extends Number & Comparable<C>> ex
     }
 
     @Override
-    protected @Nullable ArcBackLink<V, A, C> search(
+    public @Nullable ArcBackLink<V, A, C> search(
             @NonNull Iterable<V> starts,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C zero,
+            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction, @NonNull C zero,
             @NonNull C positiveInfinity,
             @NonNull C maxCost,
-            @NonNull Function<V, Iterable<Arc<V, A>>> nextf,
             @NonNull TriFunction<V, V, A, C> costf,
             @NonNull BiFunction<C, C, C> sumf) {
         // Priority queue: back-links by lower cost and shallower depth.
@@ -118,7 +102,7 @@ public class UniqueShortestPathFinder<V, A, C extends Number & Comparable<C>> ex
                 break;
             }
 
-            for (Arc<V, A> arc : nextf.apply(u)) {
+            for (Arc<V, A> arc : nextArcsFunction.apply(u)) {
                 V v = arc.getEnd();
                 A a = arc.getData();
                 CostData<C> costDataV = costMap.getOrDefault(v, infiniteCost);

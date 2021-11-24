@@ -1,7 +1,9 @@
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.graph.path.VertexSequenceFinder;
+import org.jhotdraw8.graph.path.backlink.VertexBackLink;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,17 +30,16 @@ import java.util.function.Predicate;
  *     <li>A sequences has minimal cost and has minimal number of arrows/vertices.</li>
  * </ul>
  */
-class ArbitraryShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class ArbitraryShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
 
     @Override
     public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C zero,
+            @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero,
             @NonNull C positiveInfinity,
             @NonNull C maxCost,
-            @NonNull Function<V, Iterable<V>> nextf,
             @NonNull BiFunction<V, V, C> costf,
             @NonNull BiFunction<C, C, C> sumf) {
         // Priority queue: back-links with shortest distance from start come first.
@@ -63,7 +64,7 @@ class ArbitraryShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>>
             }
             C costToU = node.getCost();
 
-            for (V v : nextf.apply(u)) {
+            for (V v : nextVerticesFunction.apply(u)) {
                 C bestKnownCost = costMap.getOrDefault(v, positiveInfinity);
                 C costFromUToV = costf.apply(u, v);
                 if (costFromUToV.compareTo(zero) < 0) {

@@ -2,10 +2,11 @@
  * @(#)UniqueOrOneHopPathBuilder.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.graph.path.backlink.VertexBackLink;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -31,8 +32,8 @@ public class GloballyUniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Co
 
 
     @Override
-    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C maxCost, @NonNull Function<V, Iterable<V>> nextNodesFunction, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextNodesFunction, new HashSet<>(16)::add, zero, maxCost, costFunction, sumFunction);
+    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C maxCost, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
+        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, zero, maxCost, costFunction, sumFunction);
     }
 
 
