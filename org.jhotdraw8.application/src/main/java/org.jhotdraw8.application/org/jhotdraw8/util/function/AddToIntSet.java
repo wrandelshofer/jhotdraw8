@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.util.function;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.BitSet;
 
 /**
@@ -41,7 +43,8 @@ public interface AddToIntSet {
      * @param bitSet a bit set
      * @return a new instance
      */
-    static AddToIntSet addToBitSet(BitSet bitSet) {
+    @NonNull
+    static AddToIntSet addToBitSet(@NonNull BitSet bitSet) {
         return i -> {
             boolean b = bitSet.get(i);
             if (!b) {

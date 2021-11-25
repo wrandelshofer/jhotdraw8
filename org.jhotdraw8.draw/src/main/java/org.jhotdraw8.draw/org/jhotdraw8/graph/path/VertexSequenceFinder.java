@@ -73,7 +73,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints);
+    @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints);
 
     /**
      * Helper function for implementing {@link #findVertexSequenceOverWaypoints(Iterable, Number)}.
@@ -86,6 +86,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @param <CC>                       the number type
      * @return an ordered pair with the combined sequence
      */
+    @Nullable
     static <VV, CC extends Number & Comparable<CC>> OrderedPair<ImmutableList<VV>, CC> findVertexSequenceOverWaypoints(
             @NonNull Iterable<VV> waypoints,
             @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<VV>, CC>> findVertexSequenceFunction,

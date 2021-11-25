@@ -9,6 +9,12 @@ import org.jhotdraw8.collection.OrderedPair;
 import java.util.ArrayDeque;
 import java.util.function.Function;
 
+/**
+ * Represents a vertex back link with cost and depth.
+ *
+ * @param <V> the vertex data type
+ * @param <C> the cost number type
+ */
 public class VertexBackLink<V, C extends Number & Comparable<C>> extends AbstractBackLink<VertexBackLink<V, C>, C> {
     private final @NonNull V vertex;
 

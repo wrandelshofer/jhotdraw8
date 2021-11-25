@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Represents a back link with cost and depth.
+ * Represents an arc back link with cost and depth.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type

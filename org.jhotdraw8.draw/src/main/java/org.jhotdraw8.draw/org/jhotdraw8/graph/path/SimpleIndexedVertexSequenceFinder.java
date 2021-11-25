@@ -117,7 +117,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     }
 
     @Override
-    public OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull C maxCostBetweenWaypoints) {
+    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull C maxCostBetweenWaypoints) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
                 (start, goal) -> this.findVertexSequence(start, goal, maxCostBetweenWaypoints),
