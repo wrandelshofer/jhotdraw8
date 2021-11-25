@@ -16,13 +16,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Implements the {@link SequenceFinder} interface.
+ * Implements the {@link CombinedSequenceFinder} interface.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implements SequenceFinder<V, A, C> {
+public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>> implements CombinedSequenceFinder<V, A, C> {
 
     private final @NonNull C zero;
     private final @NonNull C positiveInfinity;
@@ -48,7 +48,7 @@ public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implem
      *                         e.g. {@link Integer#sum}, {@link Double#sum}.
      * @param algo             the search algorithm
      */
-    public SimpleSequenceFinder(
+    public SimpleCombinedSequenceFinder(
             @NonNull C zero,
             @NonNull C positiveInfinity,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
@@ -108,13 +108,13 @@ public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implem
      * @param algo             the search algorithm
      * @param <VV>             the vertex data type
      * @param <AA>             the arrow data type
-     * @return the new {@link SimpleSequenceFinder} instance.
+     * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleSequenceFinder<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
-        return new SimpleSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, costFunction, Integer::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -128,13 +128,13 @@ public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implem
      * @param algo             the search algorithm
      * @param <VV>             the vertex data type
      * @param <AA>             the arrow data type
-     * @return the new {@link SimpleSequenceFinder} instance.
+     * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleSequenceFinder<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull BiFunction<VV, VV, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
-        return new SimpleSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> costFunction.apply(u, v), Integer::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> costFunction.apply(u, v), Integer::sum, algo);
     }
 
     /**
@@ -147,12 +147,12 @@ public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implem
      * @param algo             the search algorithm
      * @param <VV>             the vertex data type
      * @param <AA>             the arrow data type
-     * @return the new {@link SimpleSequenceFinder} instance.
+     * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleSequenceFinder<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
-        return new SimpleSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
     }
 
     /**
@@ -166,13 +166,13 @@ public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implem
      * @param algo             the search algorithm
      * @param <VV>             the vertex data type
      * @param <AA>             the arrow data type
-     * @return the new {@link SimpleSequenceFinder} instance.
+     * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleSequenceFinder<VV, AA, Double> newDoubleCostInstance(
+    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Double> newDoubleCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Double> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Double> algo) {
-        return new SimpleSequenceFinder<>(0.0, Double.POSITIVE_INFINITY, nextArcsFunction, costFunction, Double::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0.0, Double.POSITIVE_INFINITY, nextArcsFunction, costFunction, Double::sum, algo);
     }
 
     /**
@@ -186,13 +186,13 @@ public class SimpleSequenceFinder<V, A, C extends Number & Comparable<C>> implem
      * @param algo             the search algorithm
      * @param <VV>             the vertex data type
      * @param <AA>             the arrow data type
-     * @return the new {@link SimpleSequenceFinder} instance.
+     * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleSequenceFinder<VV, AA, Long> newLongCostInstance(
+    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Long> newLongCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Long> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Long> algo) {
-        return new SimpleSequenceFinder<>(0L, Long.MAX_VALUE, nextArcsFunction, costFunction, Long::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0L, Long.MAX_VALUE, nextArcsFunction, costFunction, Long::sum, algo);
     }
 
     @Override

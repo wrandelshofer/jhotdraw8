@@ -11,8 +11,8 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.DumpGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.graph.path.SequenceFinder;
-import org.jhotdraw8.graph.path.SimpleSequenceFinder;
+import org.jhotdraw8.graph.path.CombinedSequenceFinder;
+import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
 import org.jhotdraw8.util.TriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * Tests {@link SequenceFinder}.
+ * Tests {@link CombinedSequenceFinder}.
  *
  * @author Werner Randelshofer
  */
@@ -106,7 +106,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
      */
     public void doFindShortestVertexPath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
         if (result == null) {
             assertNull(expPath);
@@ -117,9 +117,9 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     }
 
     @NonNull
-    private SequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
+    private CombinedSequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
         TriFunction<Integer, Integer, Double, Double> costf = (v1, v2, arg) -> arg;
-        SequenceFinder<Integer, Double, Double> instance = SimpleSequenceFinder.newDoubleCostInstance(
+        CombinedSequenceFinder<Integer, Double, Double> instance = SimpleCombinedSequenceFinder.newDoubleCostInstance(
                 graph::getNextArcs, costf,
                 new ArbitraryShortestArcPathSearchAlgo<>());
         return instance;
@@ -143,7 +143,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
      */
     public void doFindShortestEdgeMultiGoalPath(@NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find a path for each individual goal, and remember the shortest path
         ImmutableList<Double> individualShortestPath = ImmutableLists.of();
@@ -183,7 +183,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
      */
     private void doFindShortestArrowPath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal, Double.MAX_VALUE);
         assertEquals(expResult, result.first());
     }
@@ -222,7 +222,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     private void doFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         assertEquals(expResult, actual.first());
         assertEquals(expCost, actual.second().doubleValue());
@@ -243,7 +243,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
      */
     private void doFindArrowPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         assertEquals(expResult, actual.first());
         assertEquals(expCost, actual.second().doubleValue());

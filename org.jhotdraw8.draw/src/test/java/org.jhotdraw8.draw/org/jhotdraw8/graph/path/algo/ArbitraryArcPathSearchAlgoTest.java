@@ -12,9 +12,9 @@ import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.DumpGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.path.AllPathsFinder;
-import org.jhotdraw8.graph.path.SequenceFinder;
+import org.jhotdraw8.graph.path.CombinedSequenceFinder;
 import org.jhotdraw8.graph.path.SimpleAllPathsFinder;
-import org.jhotdraw8.graph.path.SimpleSequenceFinder;
+import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -100,15 +100,15 @@ public class ArbitraryArcPathSearchAlgoTest {
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         @Nullable OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
     }
 
     @NonNull
-    private SequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
-        SequenceFinder<Integer, Double, Double> instance = SimpleSequenceFinder.newDoubleCostInstance(
+    private CombinedSequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
+        CombinedSequenceFinder<Integer, Double, Double> instance = SimpleCombinedSequenceFinder.newDoubleCostInstance(
                 graph::getNextArcs,
                 (u, v, a) -> a,
                 new ArbitraryArcPathSearchAlgo<>());
@@ -136,7 +136,7 @@ public class ArbitraryArcPathSearchAlgoTest {
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        SequenceFinder<Integer, Double, Double> instance = newInstance(graph);
+        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());
