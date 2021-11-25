@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.SequenceFinder;
 import org.jhotdraw8.graph.path.SimpleSequenceFinder;
-import org.jhotdraw8.graph.path.algo.UniqueShortestPathSearchAlgo;
+import org.jhotdraw8.graph.path.algo.UniqueShortestArcPathSearchAlgo;
 import org.jhotdraw8.util.TriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -147,7 +147,7 @@ public class UniqueShortestPathBuilderTest {
     private SequenceFinder<Integer, Double, Double> newInstance(@NonNull DirectedGraph<Integer, Double> graph) {
         TriFunction<Integer, Integer, Double, Double> costf = (a, b, arg) -> arg;
         SequenceFinder<Integer, Double, Double> instance = SimpleSequenceFinder.newDoubleCostInstance(
-                graph::getNextArcs, costf, new UniqueShortestPathSearchAlgo<>());
+                graph::getNextArcs, costf, new UniqueShortestArcPathSearchAlgo<>());
         return instance;
     }
 

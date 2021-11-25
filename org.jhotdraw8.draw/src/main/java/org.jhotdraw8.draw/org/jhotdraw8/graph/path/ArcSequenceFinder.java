@@ -13,8 +13,8 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for finding {@link Arc} sequences associated with a cost
- * through a directed graph.
+ * Defines an API for finding {@link Arc} sequences up to (inclusive)
+ * a maximal cost in a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

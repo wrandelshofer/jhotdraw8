@@ -12,7 +12,7 @@ import java.util.function.Predicate;
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public interface VertexReachabilityCheckerAlgo<V, C extends Number & Comparable<C>> {
+public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
 
     /**
      * Search engine method.

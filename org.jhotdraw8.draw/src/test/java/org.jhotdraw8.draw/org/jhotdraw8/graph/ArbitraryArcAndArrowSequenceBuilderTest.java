@@ -12,12 +12,13 @@ import org.jhotdraw8.graph.path.AllPathsFinder;
 import org.jhotdraw8.graph.path.SequenceFinder;
 import org.jhotdraw8.graph.path.SimpleAllPathsFinder;
 import org.jhotdraw8.graph.path.SimpleSequenceFinder;
-import org.jhotdraw8.graph.path.algo.ArbitraryPathSearchAlgo;
+import org.jhotdraw8.graph.path.algo.ArbitraryArcPathSearchAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,13 +111,13 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
         SequenceFinder<Integer, Double, Double> instance = SimpleSequenceFinder.newDoubleCostInstance(
                 graph::getNextArcs,
                 (u, v, a) -> a,
-                new ArbitraryPathSearchAlgo<>());
+                new ArbitraryArcPathSearchAlgo<>());
         return instance;
     }
 
     @NonNull
     private AllPathsFinder<Integer, Double, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
-        AllPathsFinder<Integer, Double, Double> instance = new SimpleAllPathsFinder<>(0.0, graph::getNextArcs, (u, v, a) -> a, Double::sum);
+        AllPathsFinder<Integer, Double, Double> instance = new SimpleAllPathsFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
         return instance;
     }
 
@@ -189,7 +190,8 @@ public class ArbitraryArcAndArrowSequenceBuilderTest {
 
     private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<ImmutableList<Integer>> expected) {
         AllPathsFinder<Integer, Double, Double> instance = newAllInstance(graph);
-        List<ImmutableList<Integer>> actual = ImmutableLists.ofIterable(instance.findAllVertexSequences(start,
+        List<ImmutableList<Integer>> actual = ImmutableLists.ofIterable(instance.findAllVertexSequences(
+                Collections.singletonList(start),
                 a -> a == goal, maxCost)).stream().map(OrderedPair::first).collect(Collectors.toList());
         assertEquals(expected, actual);
     }

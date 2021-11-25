@@ -9,13 +9,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for a reachability test algorithm.
+ * Defines an API for a reachability checker algorithm over a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public interface ReachabilityAlgo<V, A, C extends Number & Comparable<C>> {
+public interface ArcReachabilityAlgo<V, A, C extends Number & Comparable<C>> {
 
     /**
      * Search engine method.

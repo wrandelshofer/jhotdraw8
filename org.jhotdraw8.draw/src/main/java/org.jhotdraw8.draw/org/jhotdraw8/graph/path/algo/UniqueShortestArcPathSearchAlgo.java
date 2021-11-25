@@ -3,7 +3,6 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
-import org.jhotdraw8.graph.path.VertexSequenceFinder;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.util.TriFunction;
 
@@ -16,15 +15,24 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * This {@link VertexSequenceFinder} uses a variant of Diijkstra's
- * 'shortest path' algorithm.
+ * Searches a unique shortest path from a set of start vertices to a set of goal
+ * vertices using Dijkstra's algorithm.
  * <p>
- * This algorithm needs a cost function that returns values {@literal >= 0}
- * for all arrows.
+ * The provided cost function must return values {@literal >= 0} for all arrows.
  * <p>
- * If more than one shortest path is possible, the builder returns null.
+ * References:
+ * <dl>
+ * <dt>Esger W. Dijkstra (1959), A note on two problems in connexion with graphs,
+ * Problem 2.
+ * </dt>
+ * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
+ * </dl>
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ * @param <C> the cost number type
  */
-public class UniqueShortestPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements PathSearchAlgo<V, A, C> {
+public class UniqueShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     private static class CostData<C> {
         private final C cost;
         private int visiCount;

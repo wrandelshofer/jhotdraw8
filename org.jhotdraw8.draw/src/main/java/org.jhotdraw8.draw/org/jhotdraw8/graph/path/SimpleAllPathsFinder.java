@@ -9,15 +9,12 @@ import org.jhotdraw8.graph.path.algo.AllPathsSpliterator;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.util.TriFunction;
 
-import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Builder for enumerating all arc-, arrow-, or vertex-sequences from a
- * set of start vertices to a set of goal vertices using a breadth-first
- * algorithm.
+ * Implements the {@link AllPathsFinder} interface.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
@@ -28,8 +25,16 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     private final @NonNull TriFunction<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
 
-    public SimpleAllPathsFinder(@NonNull C zero,
-                                @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+    /**
+     * Creates a new instance.
+     *
+     * @param nextArcsFunction the next arcs function
+     * @param zero             the zero cost value
+     * @param costFunction     the cost function
+     * @param sumFunction      the sum function
+     */
+    public SimpleAllPathsFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                @NonNull C zero,
                                 @NonNull TriFunction<V, V, A, C> costFunction,
                                 @NonNull BiFunction<C, C, C> sumFunction) {
         this.zero = zero;
@@ -38,61 +43,42 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
         this.sumFunction = sumFunction;
     }
 
-    /**
-     * Lazily Enumerates all vertex sequences from start to goal up to the specified
-     * maximal path length.
-     *
-     * @param start the start vertex
-     * @param goal  the goal predicate
-     * @return the enumerated sequences
-     */
+
     @Override
-    public @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(@NonNull V start,
-                                                                                           @NonNull Predicate<V> goal,
-                                                                                           @NonNull C maxCost) {
+    public @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            @NonNull C maxCost) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
-                Collections.singletonList(start), goal, nextArcsFunction,
-                (backLink) -> AbstractSequenceFinder.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
+                startVertices, goalPredicate, nextArcsFunction,
+                (backLink) -> ArcBackLink.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
                 maxCost, zero, costFunction, sumFunction));
     }
 
-    /**
-     * Lazily Enumerates all array sequences from start to goal up to the specified
-     * maximal cost.
-     *
-     * @param start   the start vertex
-     * @param goal    the goal predicate
-     * @param maxCost the maximal cost
-     * @return the enumerated sequences
-     */
+
     @Override
-    public @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(@NonNull V start,
-                                                                                     @NonNull Predicate<V> goal,
-                                                                                     @NonNull C maxCost) {
+    public @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            @NonNull C maxCost) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
-                Collections.singletonList(start), goal, nextArcsFunction,
-                (backLink) -> AbstractSequenceFinder.toArrowSequence(backLink, (a, b) -> b.getArrow()),
+                startVertices, goalPredicate, nextArcsFunction,
+                (backLink) -> ArcBackLink.toArrowSequence(backLink, (a, b) -> b.getArrow()),
                 maxCost, zero, costFunction, sumFunction));
     }
 
-    /**
-     * Lazily Enumerates all vertex sequences from start to goal up to the specified
-     * maximal path length.
-     *
-     * @param start   the start vertex
-     * @param goal    the goal predicate
-     * @param maxCost the maximal cost
-     * @return the enumerated sequences
-     */
-    @Override
-    public @NonNull Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(@NonNull V start,
-                                                                                      @NonNull Predicate<V> goal,
-                                                                                      @NonNull C maxCost) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(Collections.singletonList(start), goal, nextArcsFunction,
-                (backLink) -> AbstractSequenceFinder.toVertexSequence(backLink, ArcBackLink::getVertex),
+    @Override
+    public @NonNull Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            @NonNull C maxCost) {
+
+        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+                startVertices, goalPredicate, nextArcsFunction,
+                (backLink) -> ArcBackLink.toVertexSequence(backLink, ArcBackLink::getVertex),
                 maxCost, zero, costFunction, sumFunction));
     }
 

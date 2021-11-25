@@ -2,10 +2,13 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.algo.IndexedVertexPathSearchAlgo;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLink;
-import org.jhotdraw8.util.function.AddToIntSet;
 
+import java.util.ArrayDeque;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -16,8 +19,13 @@ import java.util.function.Predicate;
  *
  * @param <C> the cost number type
  */
-public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>> extends AbstractIndexedVertexSequenceFinder<C> {
+public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>> implements VertexSequenceFinder<Integer, C> {
     private final @NonNull IndexedVertexPathSearchAlgo<C> algo;
+    private final @NonNull C zero;
+    private final @NonNull C positiveInfinity;
+    private final @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction;
+    private final @NonNull BiFunction<Integer, Integer, C> costFunction;
+    private final @NonNull BiFunction<C, C, C> sumFunction;
 
     /**
      * Creates a new instance.
@@ -32,7 +40,6 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function, which adds two numbers,
      *                             e.g. {@link Integer#sum}, {@link Double#sum}.
-     * @param algo                 the search algorithm
      */
     public SimpleIndexedVertexSequenceFinder(
             @NonNull C zero,
@@ -41,10 +48,13 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
             @NonNull BiFunction<Integer, Integer, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
             @NonNull IndexedVertexPathSearchAlgo<C> algo) {
-        super(zero, positiveInfinity, nextVerticesFunction, costFunction, sumFunction);
+        this.zero = zero;
+        this.positiveInfinity = positiveInfinity;
+        this.nextVerticesFunction = nextVerticesFunction;
+        this.costFunction = costFunction;
+        this.sumFunction = sumFunction;
         this.algo = algo;
     }
-
 
     /**
      * Creates a new instance which has a cost function that returns integer
@@ -61,7 +71,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, Integer> costFunction,
             @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
-        return new SimpleIndexedVertexSequenceFinder<Integer>(0, Integer.MAX_VALUE, nextVerticesFunction, costFunction, Integer::sum, algo);
+        return new SimpleIndexedVertexSequenceFinder<>(0, Integer.MAX_VALUE, nextVerticesFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -77,9 +87,8 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
-        return new SimpleIndexedVertexSequenceFinder<Integer>(0, Integer.MAX_VALUE, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
+        return new SimpleIndexedVertexSequenceFinder<>(0, Integer.MAX_VALUE, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
     }
-
 
     /**
      * Creates a new instance which has a cost function that returns long
@@ -96,23 +105,39 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, Long> costFunction,
             @NonNull IndexedVertexPathSearchAlgo<Long> algo) {
-        return new SimpleIndexedVertexSequenceFinder<Long>(0L, Long.MAX_VALUE, nextVerticesFunction, costFunction, Long::sum, algo);
+        return new SimpleIndexedVertexSequenceFinder<>(0L, Long.MAX_VALUE, nextVerticesFunction, costFunction, Long::sum, algo);
     }
 
+    @Override
+    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequence(
+            @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate, @NonNull C maxCost) {
+        return toVertexSequence(algo.search(
+                startVertices, goalPredicate::test, nextVerticesFunction, maxCost, zero, positiveInfinity, costFunction, sumFunction
+        ), IndexedVertexBackLink::getVertex);
+    }
 
     @Override
-    protected @Nullable IndexedVertexBackLink<C> search(@NonNull Iterable<Integer> starts,
-                                                        @NonNull Predicate<Integer> goalPredicate,
-                                                        @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                                                        @NonNull AddToIntSet visited,
-                                                        @NonNull C maxCost,
-                                                        @NonNull C zero,
-                                                        @NonNull C positiveInfinity,
-                                                        @NonNull BiFunction<Integer, Integer, C> costFunction,
-                                                        @NonNull BiFunction<C, C, C> sumFunction) {
-        return algo.search(
-                starts, goalPredicate::test, nextVerticesFunction, visited, maxCost, zero, positiveInfinity, costFunction, sumFunction
+    public OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull C maxCostBetweenWaypoints) {
+        return VertexSequenceFinder.findVertexSequenceOverWaypoints(
+                waypoints,
+                (start, goal) -> this.findVertexSequence(start, goal, maxCostBetweenWaypoints),
+                zero,
+                sumFunction
+
         );
+    }
+
+    private <X> @Nullable OrderedPair<ImmutableList<X>, C> toVertexSequence(@Nullable IndexedVertexBackLink<C> node,
+                                                                            @NonNull Function<IndexedVertexBackLink<C>, X> mappingFunction) {
+        if (node == null) {
+            return null;
+        }
+        //
+        ArrayDeque<X> deque = new ArrayDeque<>();
+        for (IndexedVertexBackLink<C> parent = node; parent != null; parent = parent.getParent()) {
+            deque.addFirst(mappingFunction.apply(parent));
+        }
+        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
     }
 
 }

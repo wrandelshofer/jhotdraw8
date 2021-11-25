@@ -5,8 +5,8 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for checking if a set of vertices can be reached from
- * a set of start vertices with a shortest path.
+ * Defines an API for checking if there is a vertex sequence
+ * up to (inclusive) a maximal cost in a directed graph.
  *
  * @param <V>
  * @param <C>

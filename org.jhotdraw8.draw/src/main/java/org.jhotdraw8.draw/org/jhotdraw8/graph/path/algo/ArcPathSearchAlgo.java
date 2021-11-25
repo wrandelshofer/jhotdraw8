@@ -11,13 +11,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for path search algorithm.
+ * Defines an API for an arc path search algorithm over a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public interface PathSearchAlgo<V, A, C extends Number & Comparable<C>> {
+public interface ArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> {
 
     /**
      * Search engine method.

@@ -13,8 +13,8 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for finding vertex sequences associated with a cost through a
- * directed graph.
+ * Defines an API for finding vertex sequences up to (inclusive) a maximal cost
+ * in a directed graph.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
@@ -117,5 +117,4 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
 
         return new OrderedPair<>(ImmutableLists.copyOf(sequence), sum);
     }
-
 }

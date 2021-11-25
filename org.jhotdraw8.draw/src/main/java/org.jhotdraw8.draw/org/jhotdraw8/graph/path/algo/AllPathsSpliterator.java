@@ -15,8 +15,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * This spliterator iterates over all paths from a given set of start vertices
- * to a set of goal vertices.
+ * Iterates over all paths from a set of start vertices to a set of goal
+ * vertices.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

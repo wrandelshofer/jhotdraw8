@@ -8,6 +8,20 @@ import java.util.BitSet;
 
 /**
  * Represents a function that adds an element to a set if not already present.
+ * <p>
+ * The set can be implemented in various ways. For example:
+ * <ul>
+ *     <li>The set can be an implementation of one of the collection classes
+ *     provided by the Java API.
+ *          <pre>
+ *         {@literal AddToIntSet=new HashSet<Integer>()::add;}
+ *         </pre>
+ *     </li>
+ *     <li>The set can be a marker bit in a {@link BitSet}.
+ *     <pre>
+ *        {@literal AddToIntSet=AddToIntSet.addToBitSet(new BitSet());}
+ *     </li>
+ * </ul>
  */
 @FunctionalInterface
 public interface AddToIntSet {

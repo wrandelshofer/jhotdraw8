@@ -15,12 +15,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * This sequence builder uses Diijkstra's 'shortest path' algorithm.
- * If more than one shortest path is possible, the builder returns an arbitrary
- * one.
+ * Searches an arbitrary shortest path from a set of start vertices to a set of goal
+ * vertices using Dijkstra's algorithm.
  * <p>
- * This algorithm needs a cost function that returns values {@literal >= 0}
- * for all arrows.
+ * The provided cost function must return values {@literal >= 0} for all arrows.
  * <p>
  * References:
  * <dl>
@@ -29,8 +27,12 @@ import java.util.function.Predicate;
  * </dt>
  * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
  * </dl>
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ * @param <C> the cost number type
  */
-public class ArbitraryShortestPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements PathSearchAlgo<V, A, C> {
+public class ArbitraryShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
 
 
     @Override
@@ -80,7 +82,7 @@ public class ArbitraryShortestPathSearchAlgo<V, A, C extends Number & Comparable
 
                 // If there is a cheaper path to v through u.
                 if (costThroughU.compareTo(bestKnownCostToV) < 0 && costThroughU.compareTo(maxCost) <= 0) {
-                    // Update cost to v.
+                    // Update cost to v and add v again to the queue.
                     costMap.put(v, costThroughU);
                     queue.add(new ArcBackLink<>(v, arc.getData(), node, costThroughU));
                 }

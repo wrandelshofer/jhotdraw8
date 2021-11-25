@@ -17,14 +17,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Builder for creating arbitrary paths from a directed graph.
- * <p>
- * The builder searches for paths using a breadth-first search.<br>
- * Returns the first path that it finds.<br>
- * Returns nothing if there is no path.
+ * Searches an arbitrary vertex path from a set of start vertices to a
+ * set of goal vertices using a breadth-first search algorithm.
  *
  * @param <V> the vertex data type
- * @author Werner Randelshofer
+ * @param <C> the cost number type
  */
 public class ArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
@@ -33,21 +30,36 @@ public class ArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> 
     public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero,
+            @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+            @NonNull C zero,
             @NonNull C positiveInfinity,
             @NonNull C maxCost,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, new HashSet<V>()::add, maxCost, zero, nextVerticesFunction,
+        return search(startVertices, goalPredicate, nextVerticesFunction,
+                new HashSet<V>()::add, maxCost, zero,
                 costFunction, sumFunction);
     }
 
+    /**
+     * Search engine method.
+     *
+     * @param startVertices    the set of start vertices
+     * @param goalPredicate    the goal predicate
+     * @param nextArcsFunction the next arcs function
+     * @param visited          the set of visited vertices (see {@link AddToSet})
+     * @param maxCost          the maximal cost (inclusive) that a sequence may have
+     * @param zero             the zero cost value
+     * @param costFunction     the cost function
+     * @param sumFunction      the sum function for adding two cost values
+     * @return on success: a back link, otherwise: null
+     */
     protected @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices,
-                                                    @NonNull Predicate<V> goal,
+                                                    @NonNull Predicate<V> goalPredicate,
+                                                    @NonNull Function<V, Iterable<V>> nextArcsFunction,
                                                     @NonNull AddToSet<V> visited,
                                                     @NonNull C maxCost,
                                                     @NonNull C zero,
-                                                    @NonNull Function<V, Iterable<V>> nextNodesFunction,
                                                     @NonNull BiFunction<V, V, C> costFunction,
                                                     @NonNull BiFunction<C, C, C> sumFunction) {
         Queue<VertexBackLink<V, C>> queue = new ArrayDeque<>(16);
@@ -60,11 +72,11 @@ public class ArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> 
 
         while (!queue.isEmpty()) {
             VertexBackLink<V, C> node = queue.remove();
-            if (goal.test(node.getVertex())) {
+            if (goalPredicate.test(node.getVertex())) {
                 return node;
             }
 
-            for (V next : nextNodesFunction.apply(node.getVertex())) {
+            for (V next : nextArcsFunction.apply(node.getVertex())) {
                 if (visited.add(next)) {
                     C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next));
                     if (cost.compareTo(maxCost) <= 0) {

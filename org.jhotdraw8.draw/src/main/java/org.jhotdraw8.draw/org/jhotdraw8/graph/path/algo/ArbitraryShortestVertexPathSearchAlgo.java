@@ -2,7 +2,6 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.graph.path.VertexSequenceFinder;
 import org.jhotdraw8.graph.path.backlink.VertexBackLink;
 
 import java.util.Comparator;
@@ -14,21 +13,22 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * This {@link VertexSequenceFinder} uses Diijkstra's 'shortest path' algorithm.
- * If more than one shortest path is possible, the builder returns an arbitrary
- * one.
+ * Searches an arbitrary vertex path from a set of start vertices to a set of goal
+ * vertices using Dijkstra's algorithm.
  * <p>
- * The provided cost function must always return a value &gt;= 0.
+ * The provided cost function must return values {@literal >= 0} for all arrows.
  * <p>
- * Invariants of a sequences returned by the {@code findSequence} methods
- * (excluding the {@code findSequenceOverWaypoints} methods):
- * <ul>
- *     <li>A sequence is a path.</li>
- *     <li>A sequence is directed. That is, the sequence respects
- *     the direction of the arrows in the graph.</li>
- *     <li>A sequence does not include zero-weight arrows that form cycles.</li>
- *     <li>A sequences has minimal cost and has minimal number of arrows/vertices.</li>
- * </ul>
+ * References:
+ * <dl>
+ * <dt>Esger W. Dijkstra (1959), A note on two problems in connexion with graphs,
+ * Problem 2.
+ * </dt>
+ * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
+ * </dl>
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ * @param <C> the cost number type
  */
 public class ArbitraryShortestVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 

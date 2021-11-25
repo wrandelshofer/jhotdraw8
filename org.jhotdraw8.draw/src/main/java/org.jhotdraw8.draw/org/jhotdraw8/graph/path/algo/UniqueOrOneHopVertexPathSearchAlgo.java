@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class GloballyUniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
 
     @Override
@@ -37,9 +37,22 @@ public class GloballyUniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Co
     }
 
 
-    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> starts,
-                                                 @NonNull Predicate<V> goal,
-                                                 @NonNull Function<V, Iterable<V>> nextNodesFunction,
+    /**
+     * Search engine method.
+     *
+     * @param startVertices        the set of start vertices
+     * @param goalPredicate        the goal predicate
+     * @param nextVerticesFunction the next arcs function
+     * @param visited              the set of visited vertices (see {@link AddToSet})
+     * @param maxCost              the maximal cost (inclusive) that a sequence may have
+     * @param zero                 the zero cost value
+     * @param costFunction         the cost function
+     * @param sumFunction          the sum function for adding two cost values
+     * @return on success: a back link, otherwise: null
+     */
+    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices,
+                                                 @NonNull Predicate<V> goalPredicate,
+                                                 @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                                  @NonNull AddToSet<V> visited,
                                                  @NonNull C zero,
                                                  @NonNull C maxCost,
@@ -48,7 +61,7 @@ public class GloballyUniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Co
 
         Queue<VertexBackLink<V, C>> queue = new ArrayDeque<>(16);
 
-        for (V start : starts) {
+        for (V start : startVertices) {
             VertexBackLink<V, C> rootBackLink = new VertexBackLink<>(start, null, zero);
             if (visited.add(start)) {
                 queue.add(rootBackLink);
@@ -59,7 +72,7 @@ public class GloballyUniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Co
         Set<V> nonUnique = new LinkedHashSet<>();
         while (!queue.isEmpty()) {
             VertexBackLink<V, C> node = queue.remove();
-            if (goal.test(node.getVertex())) {
+            if (goalPredicate.test(node.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
                 }
@@ -69,7 +82,7 @@ public class GloballyUniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Co
                 found = node;
             }
 
-            for (V next : nextNodesFunction.apply(node.getVertex())) {
+            for (V next : nextVerticesFunction.apply(node.getVertex())) {
                 if (visited.add(next)) {
                     C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next));
                     if (cost.compareTo(maxCost) <= 0) {

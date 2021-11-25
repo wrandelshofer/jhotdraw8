@@ -18,28 +18,52 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ArbitraryPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements PathSearchAlgo<V, A, C> {
+/**
+ * Searches an arbitrary path from a set of start vertices to a set of goal
+ * vertices using a breadth-first search algorithm.
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ * @param <C> the cost number type
+ */
+public class ArbitraryArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
 
     @Override
     public @Nullable ArcBackLink<V, A, C> search(@NonNull Iterable<V> startVertices,
                                                  @NonNull Predicate<V> goalPredicate,
-                                                 @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction, @NonNull C zero,
+                                                 @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                                 @NonNull C zero,
                                                  @NonNull C positiveInfinity,
                                                  @NonNull C maxCost,
                                                  @NonNull TriFunction<V, V, A, C> costFunction,
                                                  @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, new HashSet<V>()::add, zero, maxCost, nextArcsFunction,
+        return search(startVertices, goalPredicate, nextArcsFunction, new HashSet<V>()::add, zero, maxCost,
                 costFunction, sumFunction);
     }
 
+    /**
+     * Search engine method.
+     *
+     * @param startVertices    the set of start vertices
+     * @param goalPredicate    the goal predicate
+     * @param nextArcsFunction the next arcs function
+     * @param visited          the set of visited vertices (see {@link AddToSet})
+     * @param zero             the zero cost value
+     * @param maxCost          the maximal cost (inclusive) that a sequence may have
+     * @param costFunction     the cost function
+     * @param sumFunction      the sum function for adding two cost values
+     * @return on success: a back link, otherwise: null
+     */
     public @Nullable ArcBackLink<V, A, C> search(@NonNull Iterable<V> startVertices,
-                                                 @NonNull Predicate<V> goal,
+                                                 @NonNull Predicate<V> goalPredicate,
+                                                 @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
                                                  @NonNull AddToSet<V> visited,
                                                  @NonNull C zero,
                                                  @NonNull C maxCost,
-                                                 @NonNull Function<V, Iterable<Arc<V, A>>> nextNodesFunction,
                                                  @NonNull TriFunction<V, V, A, C> costFunction,
                                                  @NonNull BiFunction<C, C, C> sumFunction) {
+        // This is breadth-first search algorithm
+
         Queue<ArcBackLink<V, A, C>> queue = new ArrayDeque<>(16);
         for (V root : startVertices) {
             ArcBackLink<V, A, C> rootBackLink = new ArcBackLink<>(root, null, null, zero);
@@ -50,11 +74,11 @@ public class ArbitraryPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
 
         while (!queue.isEmpty()) {
             ArcBackLink<V, A, C> node = queue.remove();
-            if (goal.test(node.getVertex())) {
+            if (goalPredicate.test(node.getVertex())) {
                 return node;
             }
 
-            for (Arc<V, A> next : nextNodesFunction.apply(node.getVertex())) {
+            for (Arc<V, A> next : nextArcsFunction.apply(node.getVertex())) {
                 if (visited.add(next.getEnd())) {
                     C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next.getEnd(), next.getData()));
                     if (cost.compareTo(maxCost) <= 0) {
