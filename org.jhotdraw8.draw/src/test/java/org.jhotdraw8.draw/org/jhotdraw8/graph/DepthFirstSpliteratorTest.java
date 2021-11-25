@@ -79,7 +79,7 @@ public class DepthFirstSpliteratorTest {
                 + "5 -> 6.\n"
                 + "6 -> 1, 5.";
 
-        final String actual = DumpGraphAlgorithm.dumpAsAdjacencyList(graph);
+        final String actual = DumpGraph.dumpAsAdjacencyList(graph);
 
         assertEquals(expected, actual);
     }

@@ -122,7 +122,7 @@ public class GraphSearchTest {
         DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
         DirectedGraph<String, Integer> expectedMst = createMSTGraph();
         SimpleMutableDirectedGraph<String, Integer> actualMst = MinimumSpanningTreeAlgorithm.findMinimumSpanningTreeGraph(nonMst, Integer::doubleValue);
-        assertEquals(DumpGraphAlgorithm.dumpAsAdjacencyList(expectedMst), DumpGraphAlgorithm.dumpAsAdjacencyList(actualMst));
+        assertEquals(DumpGraph.dumpAsAdjacencyList(expectedMst), DumpGraph.dumpAsAdjacencyList(actualMst));
     }
 
 

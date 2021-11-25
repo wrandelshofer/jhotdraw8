@@ -27,7 +27,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * that satisfies the goal predicate.
      *
      * @param startVertices the start vertex
-     * @param goalPredicate the goal vertex
+     * @param goalPredicate the goal predicate
      * @param maxCost       the maximal cost of the path
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
