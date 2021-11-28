@@ -21,7 +21,9 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
      * @param goalPredicate        the goal predicate
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have
+     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     *                             Set this value as small as you can, to prevent
+     *                             long search times if the goal can not be reached.
      * @param nextVerticesFunction the next nodes function
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values

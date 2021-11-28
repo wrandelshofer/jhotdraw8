@@ -19,7 +19,9 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have
+     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     *                             Set this value as small as you can, to prevent
+     *                             long search times if the goal can not be reached.
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
      * @param costFunction         the cost function

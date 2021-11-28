@@ -49,7 +49,9 @@ public class ArbitraryArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> 
      * @param nextArcsFunction the next arcs function
      * @param visited          the set of visited vertices (see {@link AddToSet})
      * @param zero             the zero cost value
-     * @param maxCost          the maximal cost (inclusive) that a sequence may have
+     * @param maxCost          the maximal cost (inclusive) that a sequence may have.
+     *                         Set this value as small as you can, to prevent
+     *                         long search times if the goal can not be reached.
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
      * @return on success: a back link, otherwise: null

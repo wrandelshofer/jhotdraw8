@@ -63,7 +63,9 @@ public class IndexedArbitraryVertexPathSearchAlgo<C extends Number & Comparable<
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param visited              the set of visited vertices (see {@link AddToIntSet})
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have
+     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     *                             Set this value as small as you can, to prevent
+     *                             long search times if the goal can not be reached.
      * @param zero                 the zero cost value
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
