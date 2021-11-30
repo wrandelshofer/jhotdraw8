@@ -50,7 +50,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
-     * @return
+     * @return on success: a back link, otherwise: null
      */
     @Override
     public @Nullable VertexBackLink<V, C> search(

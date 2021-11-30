@@ -46,7 +46,7 @@ public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
-     * @return
+     * @return on success: a back link, otherwise: null
      */
     @Override
     public @Nullable VertexBackLink<V, C> search(
@@ -62,6 +62,20 @@ public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
                 zero, searchLimit.intValue(), costFunction, sumFunction);
     }
 
+    /**
+     * Search engine method.
+     *
+     * @param startVertices        the set of start vertices
+     * @param goalPredicate        the goal predicate
+     * @param nextVerticesFunction the next vertices function
+     * @param zero                 the zero cost value
+     * @param maxDepth             the maximal depth (inclusive) of a back link.
+     *                             Set this value as small as you can, to prevent
+     *                             long search times if the goal can not be reached.
+     * @param costFunction         the cost function
+     * @param sumFunction          the sum function for adding two cost values
+     * @return on success: a back link, otherwise: null
+     */
     public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,

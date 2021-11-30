@@ -61,16 +61,31 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param startVertices    the set of start vertices
+     * @param goalPredicate    the goal predicate
+     * @param nextArcsFunction the next arcs function
+     * @param zero             the zero cost value
+     * @param positiveInfinity the positive infinity value
+     * @param searchLimit      the maximal cost (inclusive) of a path.
+     *                         Set this value as small as you can, to prevent
+     *                         long search times if the goal can not be reached.
+     * @param costFunction     the cost function
+     * @param sumFunction      the sum function for adding two cost values
+     * @return on success: a back link, otherwise: null
+     */
     @Override
     public @Nullable ArcBackLink<V, A, C> search(
             final @NonNull Iterable<V> startVertices,
             final @NonNull Predicate<V> goalPredicate,
-            final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction, @NonNull C zero,
+            final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            final @NonNull C zero,
             final @NonNull C positiveInfinity,
             final @NonNull C searchLimit,
             final @NonNull TriFunction<V, V, A, C> costFunction,
             final @NonNull BiFunction<C, C, C> sumFunction) {
-
 
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by depth prevents that the algorithm
