@@ -22,8 +22,8 @@ import java.util.function.Predicate;
  * <p>
  * Expected run time:
  * <dl>
- *     <dt>When a path can be found</dt><dd>less or equal O( |E| + |V| ) within max depth</dd>
- *     <dt>When no path can be found</dt><dd>exactly O( |E| + |V| ) within max depth</dd>
+ *     <dt>When a path can be found</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
+ *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
  * </dl>
  *
  * @param <V> the vertex data type

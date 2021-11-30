@@ -20,7 +20,7 @@ import java.util.function.Predicate;
  * Searches a globally unique vertex path from a set of start vertices to a
  * set of goal vertices using a breadth-first search algorithm.
  * <p>
- * Uniqueness is global up to (inclusive) the specified maximal cost.
+ * Uniqueness is global up to (inclusive) the specified maximal depth.
  * <p>
  * Performance characteristics:
  * <dl>
