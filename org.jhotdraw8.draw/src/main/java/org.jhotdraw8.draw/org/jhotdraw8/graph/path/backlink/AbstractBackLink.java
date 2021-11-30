@@ -28,6 +28,7 @@ public class AbstractBackLink<T extends AbstractBackLink<T, C>, C extends Number
      * Creates a new instance.
      *
      * @param parent the parent back link
+     * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
      */
     public AbstractBackLink(@Nullable T parent, @NonNull C cost) {
         this.parent = parent;

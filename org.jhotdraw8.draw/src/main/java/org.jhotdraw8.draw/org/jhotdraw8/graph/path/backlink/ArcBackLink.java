@@ -21,9 +21,17 @@ public class ArcBackLink<V, A, C extends Number & Comparable<C>> extends Abstrac
     private final @NonNull V vertex;
     private final @Nullable A arrow;
 
-    public ArcBackLink(@NonNull V node, @Nullable A arrow, @Nullable ArcBackLink<V, A, C> parent, @NonNull C cost) {
+    /**
+     * Creates a new instance.
+     *
+     * @param vertex the vertex data
+     * @param arrow  the arrow data
+     * @param parent the parent back link
+     * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
+     */
+    public ArcBackLink(@NonNull V vertex, @Nullable A arrow, @Nullable ArcBackLink<V, A, C> parent, @NonNull C cost) {
         super(parent, cost);
-        this.vertex = node;
+        this.vertex = vertex;
         this.arrow = arrow;
     }
 

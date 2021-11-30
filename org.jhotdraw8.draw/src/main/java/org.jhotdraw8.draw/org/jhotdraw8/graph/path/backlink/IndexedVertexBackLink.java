@@ -12,6 +12,13 @@ public class IndexedVertexBackLink<C extends Number & Comparable<C>> extends Abs
 
     final int vertex;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param vertex the vertex index
+     * @param parent the parent back link
+     * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
+     */
     public IndexedVertexBackLink(int vertex, @Nullable IndexedVertexBackLink<C> parent, @NonNull C cost) {
         super(parent, cost);
         this.vertex = vertex;

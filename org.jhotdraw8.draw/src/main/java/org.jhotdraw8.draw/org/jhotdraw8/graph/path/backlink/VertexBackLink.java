@@ -18,9 +18,16 @@ import java.util.function.Function;
 public class VertexBackLink<V, C extends Number & Comparable<C>> extends AbstractBackLink<VertexBackLink<V, C>, C> {
     private final @NonNull V vertex;
 
-    public VertexBackLink(@NonNull V node, @Nullable VertexBackLink<V, C> parent, @NonNull C cost) {
+    /**
+     * Creates a new instance.
+     *
+     * @param vertex the vertex data
+     * @param parent the parent back link
+     * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
+     */
+    public VertexBackLink(@NonNull V vertex, @Nullable VertexBackLink<V, C> parent, @NonNull C cost) {
         super(parent, cost);
-        this.vertex = node;
+        this.vertex = vertex;
     }
 
     public static <V, C extends Number & Comparable<C>, X> @Nullable OrderedPair<ImmutableList<X>, C> toVertexSequence(@Nullable VertexBackLink<V, C> node,
