@@ -21,7 +21,7 @@ public interface AllPathsFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the set of start vertices
      * @param goalPredicate the goal predicate
-     * @param searchLimit   the search limit
+     * @param searchLimit   the algorithm-specific search limit
      * @return all paths
      */
     @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
@@ -34,7 +34,7 @@ public interface AllPathsFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the set of start vertices
      * @param goalPredicate the goal predicate
-     * @param searchLimit       the search limit
+     * @param searchLimit   the algorithm-specific search limit
      * @return all paths
      */
     @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
@@ -47,7 +47,7 @@ public interface AllPathsFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the set of start vertices
      * @param goalPredicate the goal predicate
-     * @param searchLimit       the search limit
+     * @param searchLimit       the algorithm-specific search limit
      * @return all paths
      */
     @NonNull Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(

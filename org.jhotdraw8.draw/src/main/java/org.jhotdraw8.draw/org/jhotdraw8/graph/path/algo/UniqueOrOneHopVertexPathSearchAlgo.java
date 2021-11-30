@@ -44,7 +44,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next arcs function
      * @param visited              the set of visited vertices (see {@link AddToSet})
-     * @param searchLimit          the meaning of this value is implementation-specific
+     * @param searchLimit          the algorithm-specific search limit
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param zero                 the zero cost value

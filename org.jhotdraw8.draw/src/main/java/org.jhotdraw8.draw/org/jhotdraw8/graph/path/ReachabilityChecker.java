@@ -18,7 +18,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the search limit
+     * @param searchLimit   the algorithm-specific search limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
@@ -32,7 +32,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the search limit
+     * @param searchLimit   the algorithm-specific search limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
@@ -45,7 +45,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param start       the start vertex
      * @param goal        the goal vertex
-     * @param searchLimit the search limit
+     * @param searchLimit the algorithm-specific search limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */

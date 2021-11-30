@@ -21,7 +21,7 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
      * @param goalPredicate        the goal predicate
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the search limit is algorith-specific
+     * @param searchLimit          the algorithm-specific search limit
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param nextVerticesFunction the next nodes function

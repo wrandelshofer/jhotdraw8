@@ -19,7 +19,7 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
-     * @param searchLimit          the meaning of this value is implementation-specific
+     * @param searchLimit          the algorithm-specific search limit
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param zero                 the zero cost value

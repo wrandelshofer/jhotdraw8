@@ -28,7 +28,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertex
      * @param goalPredicate the goal predicate
-     * @param searchLimit   the search limit
+     * @param searchLimit   the algorithm-specific search limit
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
@@ -40,9 +40,9 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     /**
      * Finds an arrow sequence from start to goal.
      *
-     * @param start   the start vertex
-     * @param goal    the goal vertex
-     * @param searchLimit the search limit
+     * @param start       the start vertex
+     * @param goal        the goal vertex
+     * @param searchLimit the algorithm-specific search limit
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
@@ -57,7 +57,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * Finds an arrow walk through the given waypoints.
      *
      * @param waypoints               a list of waypoints
-     * @param searchLimit the search limit for paths between waypoints
+     * @param searchLimit the algorithm-specific search limit for paths between waypoints
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
