@@ -52,7 +52,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
      * @param nextVerticesFunction the next vertices function
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal depth of a back link.
+     * @param searchLimit          the maximal depth (inclusive) of a back link.
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function
@@ -70,9 +70,10 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
             @NonNull BiFunction<Integer, Integer, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
         return search(startVertices, goalPredicate, nextVerticesFunction,
-                AddToIntSet.addToBitSet(new BitSet()), searchLimit.intValue(), zero,
-                positiveInfinity,
-                costFunction, sumFunction);
+                AddToIntSet.addToBitSet(new BitSet()), searchLimit.intValue(),
+                zero,
+                costFunction,
+                sumFunction);
     }
 
     /**
@@ -82,9 +83,13 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param visited              the set of visited vertices (see {@link AddToIntSet})
-     * @param maxDepth              the maximal depth of a back link.
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
+     * @param maxDepth             the maximal depth (inclusive) of a back link.
+     *                             Set this value as small as you can, to prevent
+     *                             long search times if the goal can not be reached.
+     * @param zero                 the zero cost value
+     * @param costFunction         the cost function
+     * @param sumFunction          the sum function for adding two cost values
+     * @return
      * @return on success: a back link, otherwise: null
      */
     public @Nullable IndexedVertexBackLink<C> search(@NonNull Iterable<Integer> startVertices,
@@ -93,7 +98,6 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
                                                      @NonNull AddToIntSet visited,
                                                      int maxDepth,
                                                      @NonNull C zero,
-                                                     @NonNull C positiveInfinity,
                                                      @NonNull BiFunction<Integer, Integer, C> costFunction,
                                                      @NonNull BiFunction<C, C, C> sumFunction) {
         Queue<IndexedVertexBackLink<C>> queue = new ArrayDeque<>(32);

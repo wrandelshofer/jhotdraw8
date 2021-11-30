@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
     private final @NonNull Queue<ArcBackLink<V, A, C>> queue = new ArrayDeque<>();
     private final @NonNull Predicate<V> goal;
-    private final @NonNull C searchLimit;
+    private final @NonNull C maxCost;
     private final @NonNull C zero;
     private final @NonNull TriFunction<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -34,6 +34,19 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
     private final @NonNull Function<ArcBackLink<V, A, C>,
             OrderedPair<ImmutableList<E>, C>> sequenceFunction;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param startVertices    the set of start vertices
+     * @param goal             the goal predicate
+     * @param nextArcsFunction the next arcs function
+     * @param sequenceFunction the function that converts a back link into a
+     *                         sequence
+     * @param maxCost          the maximal cost (inclusive) of a sequence
+     * @param zero             the zero cost value
+     * @param costFunction     the cost function
+     * @param sumFunction      the function for adding two cost values
+     */
     public AllPathsSpliterator(@NonNull Iterable<V> startVertices,
                                @NonNull Predicate<V> goal,
                                @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
@@ -44,7 +57,7 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
                                @NonNull TriFunction<V, V, A, C> costFunction,
                                @NonNull BiFunction<C, C, C> sumFunction) {
         super(Long.MAX_VALUE, 0);
-        this.searchLimit = maxCost;
+        this.maxCost = maxCost;
         this.goal = goal;
         this.nextArcsFunction = nextArcsFunction;
         this.sequenceFunction = sequenceFunction;
@@ -68,7 +81,7 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
             }
             for (Arc<V, A> arc : nextArcsFunction.apply(polled.getVertex())) {
                 C cost = sumFunction.apply(polled.getCost(), costFunction.apply(polled.getVertex(), arc.getEnd(), arc.getData()));
-                if (cost.compareTo(searchLimit) <= 0) {
+                if (cost.compareTo(maxCost) <= 0) {
                     ArcBackLink<V, A, C> newNode = new ArcBackLink<>(arc.getEnd(), arc.getData(), polled, cost);
                     queue.add(newNode);
                 }

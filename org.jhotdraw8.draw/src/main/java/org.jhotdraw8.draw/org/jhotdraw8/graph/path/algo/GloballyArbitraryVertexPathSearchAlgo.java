@@ -39,7 +39,7 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param nextVerticesFunction the next vertices function
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal depth of a back link.
+     * @param searchLimit          the maximal depth (inclusive) of a back link.
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function

@@ -30,7 +30,7 @@ import java.util.function.Predicate;
  *
  * @param <V> the vertex data type
  */
-public class GloballyUniqueVertexPathSearchAlgo<V> implements VertexPathSearchAlgo<V, Integer> {
+public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
 
     /**
@@ -41,7 +41,7 @@ public class GloballyUniqueVertexPathSearchAlgo<V> implements VertexPathSearchAl
      * @param nextVerticesFunction the next vertices function
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal depth of a back link.
+     * @param searchLimit          the maximal depth (inclusive) of a back link.
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function
@@ -49,36 +49,40 @@ public class GloballyUniqueVertexPathSearchAlgo<V> implements VertexPathSearchAl
      * @return
      */
     @Override
-    public @Nullable VertexBackLink<V, Integer> search(
+    public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            @NonNull Integer zero,
-            @NonNull Integer positiveInfinity,
-            @NonNull Integer searchLimit,
-            @NonNull BiFunction<V, V, Integer> costFunction,
-            @NonNull BiFunction<Integer, Integer, Integer> sumFunction) {
-        return search(startVertices, goalPredicate, nextVerticesFunction, searchLimit);
+            @NonNull C zero,
+            @NonNull C positiveInfinity,
+            @NonNull C searchLimit,
+            @NonNull BiFunction<V, V, C> costFunction,
+            @NonNull BiFunction<C, C, C> sumFunction) {
+        return search(startVertices, goalPredicate, nextVerticesFunction,
+                zero, searchLimit.intValue(), costFunction, sumFunction);
     }
 
-    public @Nullable VertexBackLink<V, Integer> search(
+    public @Nullable VertexBackLink<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            int maxDepth) {
+            @NonNull C zero,
+            int maxDepth,
+            @NonNull BiFunction<V, V, C> costFunction,
+            @NonNull BiFunction<C, C, C> sumFunction) {
 
-        Queue<VertexBackLink<V, Integer>> queue = new ArrayDeque<>(16);
+        Queue<VertexBackLink<V, C>> queue = new ArrayDeque<>(16);
         Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
         for (V start : startVertices) {
-            VertexBackLink<V, Integer> rootBackLink = new VertexBackLink<>(start, null, 0);
+            VertexBackLink<V, C> rootBackLink = new VertexBackLink<>(start, null, zero);
             if (visitedCount.put(start, 1) == null) {
                 queue.add(rootBackLink);
             }
         }
 
-        VertexBackLink<V, Integer> found = null;
+        VertexBackLink<V, C> found = null;
         while (!queue.isEmpty()) {
-            VertexBackLink<V, Integer> node = queue.remove();
+            VertexBackLink<V, C> node = queue.remove();
             if (goalPredicate.test(node.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
@@ -88,7 +92,8 @@ public class GloballyUniqueVertexPathSearchAlgo<V> implements VertexPathSearchAl
             if (node.getDepth() < maxDepth) {
                 for (V next : nextVerticesFunction.apply(node.getVertex())) {
                     if (visitedCount.merge(next, 1, Integer::sum) == 1) {
-                        VertexBackLink<V, Integer> backLink = new VertexBackLink<V, Integer>(next, node, 0);
+                        VertexBackLink<V, C> backLink = new VertexBackLink<V, C>(next, node,
+                                sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next)));
                         queue.add(backLink);
                     }
                 }
@@ -96,7 +101,7 @@ public class GloballyUniqueVertexPathSearchAlgo<V> implements VertexPathSearchAl
         }
 
         // Check if any of the preceding nodes has a non-unique path
-        for (VertexBackLink<V, Integer> node = found; node != null; node = node.getParent()) {
+        for (VertexBackLink<V, C> node = found; node != null; node = node.getParent()) {
             if (visitedCount.get(node.getVertex()) > 1) {
                 return null;// path is not unique!
             }

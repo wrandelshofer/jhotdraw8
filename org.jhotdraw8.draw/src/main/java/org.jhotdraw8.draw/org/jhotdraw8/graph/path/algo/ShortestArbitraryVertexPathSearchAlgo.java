@@ -45,7 +45,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param nextVerticesFunction the next vertices function
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal cost of a path.
+     * @param searchLimit          the maximal cost (inclusive) of a path.
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function
