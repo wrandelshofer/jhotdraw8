@@ -196,39 +196,39 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+    public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
         return toArrowSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
         ), (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow()));
     }
 
     @Override
-    public OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints) {
-        return ArcSequenceFinder.findArcSequenceOverWaypoints(waypoints, (start, goal) -> findArcSequence(start, goal, maxCostBetweenWaypoints), zero, sumFunction);
+    public OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
+        return ArcSequenceFinder.findArcSequenceOverWaypoints(waypoints, (start, goal) -> findArcSequence(start, goal, searchLimit), zero, sumFunction);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+    public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
         return toArrowSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
         ), (a, b) -> b.getArrow());
     }
 
     @Override
-    public OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints) {
-        return ArrowSequenceFinder.findArrowSequenceOverWaypoints(waypoints, (start, goal) -> findArrowSequence(start, goal, maxCostBetweenWaypoints), zero, sumFunction);
+    public OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
+        return ArrowSequenceFinder.findArrowSequenceOverWaypoints(waypoints, (start, goal) -> findArrowSequence(start, goal, searchLimit), zero, sumFunction);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
         return toVertexSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
         ), ArcBackLink::getVertex);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints) {
-        return VertexSequenceFinder.findVertexSequenceOverWaypoints(waypoints, (start, goal) -> findVertexSequence(start, goal, maxCostBetweenWaypoints), zero, sumFunction);
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
+        return VertexSequenceFinder.findVertexSequenceOverWaypoints(waypoints, (start, goal) -> findVertexSequence(start, goal, searchLimit), zero, sumFunction);
     }
 
 

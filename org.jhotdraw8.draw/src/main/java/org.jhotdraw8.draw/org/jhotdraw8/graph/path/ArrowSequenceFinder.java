@@ -28,38 +28,40 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertex
      * @param goalPredicate the goal predicate
-     * @param maxCost       the maximal cost of the path
+     * @param searchLimit   the search limit
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable
     OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices,
-                                                       @NonNull Predicate<V> goalPredicate, @NonNull C maxCost);
+                                                       @NonNull Predicate<V> goalPredicate,
+                                                       @NonNull C searchLimit);
 
     /**
      * Finds an arrow sequence from start to goal.
      *
      * @param start   the start vertex
      * @param goal    the goal vertex
-     * @param maxCost the maximal cost of the path
+     * @param searchLimit the search limit
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable
     default OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull V start,
-                                                               @NonNull V goal, @NonNull C maxCost) {
-        return findArrowSequence(List.of(start), goal::equals, maxCost);
+                                                               @NonNull V goal,
+                                                               @NonNull C searchLimit) {
+        return findArrowSequence(List.of(start), goal::equals, searchLimit);
     }
 
     /**
      * Finds an arrow walk through the given waypoints.
      *
      * @param waypoints               a list of waypoints
-     * @param maxCostBetweenWaypoints the maximal cost for paths between waypoints
+     * @param searchLimit the search limit for paths between waypoints
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints);
+    OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit);
 
     /**
      * Helper function for implementing {@link #findArrowSequenceOverWaypoints(Iterable, Number)}.

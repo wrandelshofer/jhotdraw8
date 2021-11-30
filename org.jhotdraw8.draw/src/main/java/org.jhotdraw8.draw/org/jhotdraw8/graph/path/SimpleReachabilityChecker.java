@@ -140,9 +140,10 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     @Override
     public boolean isReachable(@NonNull Iterable<V> startVertices,
                                @NonNull Predicate<V> goalPredicate,
-                               @NonNull C maxCost) {
+                               @NonNull C searchLimit) {
         return algo.tryToReach(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit,
+                costFunction, sumFunction
         );
     }
 
@@ -152,31 +153,32 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
-     * @param maxCost
+     * @param searchLimit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Override
     public boolean isReachable(@NonNull V start,
-                               @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+                               @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
         return algo.tryToReach(
-                Collections.singletonList(start), goalPredicate, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                Collections.singletonList(start), goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit,
+                costFunction, sumFunction
         );
     }
 
     /**
      * Checks if a vertex sequence from start to goal exists.
      *
-     * @param start   the start vertex
-     * @param goal    the goal vertex
-     * @param maxCost
+     * @param start       the start vertex
+     * @param goal        the goal vertex
+     * @param searchLimit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Override
-    public boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C maxCost) {
+    public boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C searchLimit) {
         return algo.tryToReach(
-                Collections.singletonList(start), goal::equals, nextArcsFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                Collections.singletonList(start), goal::equals, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
         );
     }
 

@@ -100,18 +100,18 @@ public class ArbitraryArcPathSearchAlgoTest {
      */
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        @Nullable OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
+        CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
+        @Nullable OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal, Integer.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
     }
 
     @NonNull
-    private CombinedSequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
-        CombinedSequenceFinder<Integer, Double, Double> instance = SimpleCombinedSequenceFinder.newDoubleCostInstance(
+    private CombinedSequenceFinder<Integer, Double, Integer> newInstance(DirectedGraph<Integer, Double> graph) {
+        CombinedSequenceFinder<Integer, Double, Integer> instance = SimpleCombinedSequenceFinder.newIntCostInstance(
                 graph::getNextArcs,
-                (u, v, a) -> a,
-                new ArbitraryArcPathSearchAlgo<>());
+                (u, v, a) -> a.intValue(),
+                new GloballyArbitraryArcPathSearchAlgo<>());
         return instance;
     }
 
@@ -136,8 +136,8 @@ public class ArbitraryArcPathSearchAlgoTest {
      */
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
+        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());
     }

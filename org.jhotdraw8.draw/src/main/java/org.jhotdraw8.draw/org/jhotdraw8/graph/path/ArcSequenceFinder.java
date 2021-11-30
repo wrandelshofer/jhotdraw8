@@ -28,7 +28,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
-     * @param maxCost       the maximal cost of the path
+     * @param searchLimit   the search limit
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
@@ -36,22 +36,22 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C maxCost);
+            @NonNull C searchLimit);
 
     /**
      * Finds an arc sequence from start to goal.
      *
      * @param start   the start vertex
      * @param goal    the goal vertex
-     * @param maxCost the maximal cost of the path
+     * @param searchLimit the search limit
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
     default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
             @NonNull V start,
             @NonNull V goal,
-            @NonNull C maxCost) {
-        return findArcSequence(List.of(start), goal::equals, maxCost);
+            @NonNull C searchLimit) {
+        return findArcSequence(List.of(start), goal::equals, searchLimit);
     }
 
 
@@ -59,13 +59,13 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * Finds an arc walk through the given waypoints.
      *
      * @param waypoints               an iterable of waypoints
-     * @param maxCostBetweenWaypoints the maximal cost for paths between waypoints
+     * @param searchLimit the search limit for paths between waypoints
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
     OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints,
-            @NonNull C maxCostBetweenWaypoints);
+            @NonNull C searchLimit);
 
 
     /**

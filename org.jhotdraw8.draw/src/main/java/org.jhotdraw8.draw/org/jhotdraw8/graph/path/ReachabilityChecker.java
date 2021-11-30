@@ -18,13 +18,13 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
-     * @param maxCost
+     * @param searchLimit   the search limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     boolean isReachable(@NonNull Iterable<V> startVertices,
                         @NonNull Predicate<V> goalPredicate,
-                        @NonNull C maxCost);
+                        @NonNull C searchLimit);
 
     /**
      * Checks if a vertex sequence from a start vertex to a vertex
@@ -32,23 +32,24 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
-     * @param maxCost
+     * @param searchLimit   the search limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     boolean isReachable(@NonNull V start,
-                        @NonNull Predicate<V> goalPredicate, @NonNull C maxCost);
+                        @NonNull Predicate<V> goalPredicate,
+                        @NonNull C searchLimit);
 
     /**
      * Checks if a vertex sequence from start to goal exists.
      *
-     * @param start   the start vertex
-     * @param goal    the goal vertex
-     * @param maxCost
+     * @param start       the start vertex
+     * @param goal        the goal vertex
+     * @param searchLimit the search limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C maxCost);
+    boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C searchLimit);
 
 
 }

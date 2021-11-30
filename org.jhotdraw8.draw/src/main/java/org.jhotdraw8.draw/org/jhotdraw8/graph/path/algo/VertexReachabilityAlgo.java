@@ -21,7 +21,7 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
      * @param goalPredicate        the goal predicate
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     * @param searchLimit          the search limit is algorith-specific
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param nextVerticesFunction the next nodes function
@@ -34,7 +34,7 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
             @NonNull Predicate<V> goalPredicate,
             @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C maxCost,
+            @NonNull C searchLimit,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);

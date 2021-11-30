@@ -111,17 +111,17 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C maxCost) {
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
         return VertexBackLink.toVertexSequence(algo.search(
-                startVertices, goalPredicate, nextVerticesFunction, zero, positiveInfinity, maxCost, costFunction, sumFunction
+                startVertices, goalPredicate, nextVerticesFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
         ), VertexBackLink::getVertex);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C maxCostBetweenWaypoints) {
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
-                (start, goal) -> this.findVertexSequence(start, goal, maxCostBetweenWaypoints),
+                (start, goal) -> this.findVertexSequence(start, goal, searchLimit),
                 zero,
                 sumFunction
 

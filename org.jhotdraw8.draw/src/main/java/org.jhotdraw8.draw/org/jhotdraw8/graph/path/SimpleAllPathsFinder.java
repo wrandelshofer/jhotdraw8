@@ -48,12 +48,12 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     public @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C maxCost) {
+            @NonNull C searchLimit) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
                 (backLink) -> ArcBackLink.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
-                maxCost, zero, costFunction, sumFunction));
+                searchLimit, zero, costFunction, sumFunction));
     }
 
 
@@ -61,12 +61,12 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     public @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C maxCost) {
+            @NonNull C searchLimit) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
                 (backLink) -> ArcBackLink.toArrowSequence(backLink, (a, b) -> b.getArrow()),
-                maxCost, zero, costFunction, sumFunction));
+                searchLimit, zero, costFunction, sumFunction));
     }
 
 
@@ -74,12 +74,12 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     public @NonNull Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C maxCost) {
+            @NonNull C searchLimit) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
                 (backLink) -> ArcBackLink.toVertexSequence(backLink, ArcBackLink::getVertex),
-                maxCost, zero, costFunction, sumFunction));
+                searchLimit, zero, costFunction, sumFunction));
     }
 
 

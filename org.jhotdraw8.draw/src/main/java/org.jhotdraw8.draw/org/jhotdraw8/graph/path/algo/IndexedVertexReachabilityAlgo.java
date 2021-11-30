@@ -19,7 +19,7 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     * @param searchLimit          the meaning of this value is implementation-specific
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param zero                 the zero cost value
@@ -31,7 +31,7 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
     boolean tryToReach(@NonNull Iterable<Integer> startVertices,
                        @NonNull IntPredicate goalPredicate,
                        @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                       @NonNull C maxCost,
+                       @NonNull C searchLimit,
                        @NonNull C zero,
                        @NonNull C positiveInfinity,
                        @NonNull BiFunction<Integer, Integer, C> costFunction,

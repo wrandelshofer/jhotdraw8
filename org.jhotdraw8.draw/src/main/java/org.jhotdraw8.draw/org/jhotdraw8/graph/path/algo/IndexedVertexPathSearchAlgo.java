@@ -26,7 +26,7 @@ public interface IndexedVertexPathSearchAlgo<C extends Number & Comparable<C>> {
      * @param nextVerticesFunction the next vertices function
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     * @param searchLimit          the meaning of this value is implementation-specific
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param costFunction         the cost function
@@ -36,7 +36,7 @@ public interface IndexedVertexPathSearchAlgo<C extends Number & Comparable<C>> {
     @Nullable IndexedVertexBackLink<C> search(@NonNull Iterable<Integer> startVertices,
                                               @NonNull IntPredicate goalPredicate,
                                               @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                                              @NonNull C maxCost,
+                                              @NonNull C searchLimit,
                                               @NonNull C zero,
                                               @NonNull C positiveInfinity,
                                               @NonNull BiFunction<Integer, Integer, C> costFunction,

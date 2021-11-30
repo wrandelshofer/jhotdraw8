@@ -23,20 +23,55 @@ import java.util.function.Predicate;
  * set of goal vertices using a breadth-first search algorithm.
  * <p>
  * Uniqueness is global up to (inclusive) the specified maximal cost.
+ * <p>
+ * Performance characteristics:
+ * <dl>
+ *     <dt>When a path can be found</dt><dd>exactly O( |A| + |V| ) within max depth/dd>
+ *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ * </dl>
  *
  * @param <V> the vertex data type
- * @param <C> the cost number type
  */
 public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
 
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param startVertices    the set of start vertices
+     * @param goalPredicate    the goal predicate
+     * @param nextArcsFunction the next arcs function
+     * @param zero             the zero cost value
+     * @param positiveInfinity the positive infinity value
+     * @param searchLimit      the maximal depth of a back link.
+     *                         Set this value as small as you can, to prevent
+     *                         long search times if the goal can not be reached.
+     * @param costFunction     the cost function
+     * @param sumFunction      the sum function for adding two cost values
+     * @return
+     */
     @Override
     public @Nullable ArcBackLink<V, A, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            @NonNull C zero, @NonNull C positiveInfinity,
-            @NonNull C maxCost,
+            @NonNull C zero,
+            @NonNull C positiveInfinity,
+            @NonNull C searchLimit,
+            @NonNull TriFunction<V, V, A, C> costFunction,
+            @NonNull BiFunction<C, C, C> sumFunction) {
+
+        return search(startVertices, goalPredicate, nextArcsFunction, zero,
+                positiveInfinity, searchLimit.intValue(), costFunction, sumFunction);
+    }
+
+    public @Nullable ArcBackLink<V, A, C> search(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            @NonNull C zero,
+            @NonNull C positiveInfinity,
+            @NonNull int maxDepth,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
 
@@ -58,11 +93,11 @@ public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
                 }
                 found = node;
             }
-            for (Arc<V, A> next : nextArcsFunction.apply(node.getVertex())) {
-                if (visitedCount.merge(next.getEnd(), 1, Integer::sum) == 1) {
-                    if (node.getCost().compareTo(maxCost) <= 0) {
-                        C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next.getEnd(), next.getData()));
-                        ArcBackLink<V, A, C> backLink = new ArcBackLink<V, A, C>(next.getEnd(), next.getData(), node, cost);
+            if (node.getDepth() < maxDepth) {
+                for (Arc<V, A> next : nextArcsFunction.apply(node.getVertex())) {
+                    if (visitedCount.merge(next.getEnd(), 1, Integer::sum) == 1) {
+                        ArcBackLink<V, A, C> backLink = new ArcBackLink<V, A, C>(next.getEnd(), next.getData(), node,
+                                sumFunction.apply(node.getCost(), costFunction.apply(next.getStart(), next.getEnd(), next.getData())));
                         queue.add(backLink);
                     }
                 }

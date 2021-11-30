@@ -110,17 +110,17 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
 
     @Override
     public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequence(
-            @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate, @NonNull C maxCost) {
+            @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate, @NonNull C searchLimit) {
         return toVertexSequence(algo.search(
-                startVertices, goalPredicate::test, nextVerticesFunction, maxCost, zero, positiveInfinity, costFunction, sumFunction
+                startVertices, goalPredicate::test, nextVerticesFunction, searchLimit, zero, positiveInfinity, costFunction, sumFunction
         ), IndexedVertexBackLink::getVertex);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull C maxCostBetweenWaypoints) {
+    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull C searchLimit) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
-                (start, goal) -> this.findVertexSequence(start, goal, maxCostBetweenWaypoints),
+                (start, goal) -> this.findVertexSequence(start, goal, searchLimit),
                 zero,
                 sumFunction
 

@@ -21,13 +21,12 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
      *
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next nodes function
+     * @param nextVerticesFunction the next vertices function
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     * @param searchLimit          the meaning of this value is implementation-specific
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
-     * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
@@ -37,7 +36,7 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C maxCost,
+            @NonNull C searchLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);
 }

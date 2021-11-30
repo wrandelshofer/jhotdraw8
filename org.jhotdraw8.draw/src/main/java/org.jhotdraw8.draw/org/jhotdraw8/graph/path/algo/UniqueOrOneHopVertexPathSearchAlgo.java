@@ -32,8 +32,8 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
 
 
     @Override
-    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C maxCost, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, zero, maxCost, costFunction, sumFunction);
+    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C searchLimit, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
+        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, zero, searchLimit, costFunction, sumFunction);
     }
 
 
@@ -44,7 +44,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next arcs function
      * @param visited              the set of visited vertices (see {@link AddToSet})
-     * @param maxCost              the maximal cost (inclusive) that a sequence may have.
+     * @param searchLimit          the meaning of this value is implementation-specific
      *                             Set this value as small as you can, to prevent
      *                             long search times if the goal can not be reached.
      * @param zero                 the zero cost value
@@ -57,7 +57,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
                                                  @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                                  @NonNull AddToSet<V> visited,
                                                  @NonNull C zero,
-                                                 @NonNull C maxCost,
+                                                 @NonNull C searchLimit,
                                                  @NonNull BiFunction<V, V, C> costFunction,
                                                  @NonNull BiFunction<C, C, C> sumFunction) {
 
@@ -85,14 +85,14 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
             }
 
             for (V next : nextVerticesFunction.apply(node.getVertex())) {
-                if (visited.add(next)) {
-                    C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next));
-                    if (cost.compareTo(maxCost) <= 0) {
+                C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next));
+                if (cost.compareTo(searchLimit) <= 0) {
+                    if (visited.add(next)) {
                         VertexBackLink<V, C> backLink = new VertexBackLink<V, C>(next, node, cost);
                         queue.add(backLink);
+                    } else {
+                        nonUnique.add(next);
                     }
-                } else {
-                    nonUnique.add(next);
                 }
             }
         }

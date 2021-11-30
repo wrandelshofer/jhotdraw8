@@ -27,7 +27,7 @@ public interface ArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> {
      * @param nextArcsFunction the next arcs function
      * @param zero             the zero cost value
      * @param positiveInfinity the positive infinity value
-     * @param maxCost          the maximal cost (inclusive) that a sequence may have.
+     * @param searchLimit      the meaning of this value is implementation-specific
      *                         Set this value as small as you can, to prevent
      *                         long search times if the goal can not be reached.
      * @param costFunction     the cost function
@@ -40,7 +40,7 @@ public interface ArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> {
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C maxCost,
+            @NonNull C searchLimit,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);
 }

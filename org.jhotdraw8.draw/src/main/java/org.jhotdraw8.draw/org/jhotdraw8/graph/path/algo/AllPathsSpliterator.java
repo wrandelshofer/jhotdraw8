@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
     private final @NonNull Queue<ArcBackLink<V, A, C>> queue = new ArrayDeque<>();
     private final @NonNull Predicate<V> goal;
-    private final @NonNull C maxCost;
+    private final @NonNull C searchLimit;
     private final @NonNull C zero;
     private final @NonNull TriFunction<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -44,7 +44,7 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
                                @NonNull TriFunction<V, V, A, C> costFunction,
                                @NonNull BiFunction<C, C, C> sumFunction) {
         super(Long.MAX_VALUE, 0);
-        this.maxCost = maxCost;
+        this.searchLimit = maxCost;
         this.goal = goal;
         this.nextArcsFunction = nextArcsFunction;
         this.sequenceFunction = sequenceFunction;
@@ -68,7 +68,7 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
             }
             for (Arc<V, A> arc : nextArcsFunction.apply(polled.getVertex())) {
                 C cost = sumFunction.apply(polled.getCost(), costFunction.apply(polled.getVertex(), arc.getEnd(), arc.getData()));
-                if (cost.compareTo(maxCost) <= 0) {
+                if (cost.compareTo(searchLimit) <= 0) {
                     ArcBackLink<V, A, C> newNode = new ArcBackLink<>(arc.getEnd(), arc.getData(), polled, cost);
                     queue.add(newNode);
                 }
