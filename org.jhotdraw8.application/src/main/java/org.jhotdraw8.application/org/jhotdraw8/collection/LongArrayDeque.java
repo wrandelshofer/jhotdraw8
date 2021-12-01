@@ -36,8 +36,16 @@ public class LongArrayDeque {
         this(8);
     }
 
+    /**
+     * Creates a new instance with the specified initial capacity rounded up
+     * to the next strictly positive power of two.
+     *
+     * @param capacity initial capacity
+     */
     public LongArrayDeque(int capacity) {
-        elements = new long[capacity];
+        elements = new long[(capacity < 1) ? 1 :
+                (capacity == Integer.MAX_VALUE) ? Integer.MAX_VALUE :
+                        capacity + 1];
     }
 
     /**

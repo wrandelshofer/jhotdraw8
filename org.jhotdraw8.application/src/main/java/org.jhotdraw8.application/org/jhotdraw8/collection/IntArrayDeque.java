@@ -36,8 +36,16 @@ public class IntArrayDeque {
         this(8);
     }
 
+    /**
+     * Creates a new instance with the specified initial capacity rounded up
+     * to the next strictly positive power of two.
+     *
+     * @param capacity initial capacity
+     */
     public IntArrayDeque(int capacity) {
-        elements = new int[capacity];
+        elements = new int[(capacity < 1) ? 1 :
+                (capacity == Integer.MAX_VALUE) ? Integer.MAX_VALUE :
+                        capacity + 1];
     }
 
     /**
