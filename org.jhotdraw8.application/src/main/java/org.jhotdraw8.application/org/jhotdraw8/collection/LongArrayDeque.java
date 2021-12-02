@@ -43,9 +43,11 @@ public class LongArrayDeque {
      * @param capacity initial capacity
      */
     public LongArrayDeque(int capacity) {
-        elements = new long[(capacity < 1) ? 1 :
-                (capacity == Integer.MAX_VALUE) ? Integer.MAX_VALUE :
-                        capacity + 1];
+        if (capacity < 0) {
+            throw new IllegalArgumentException("capacity=" + capacity);
+        }
+        int size = Integer.highestOneBit(capacity + capacity - 1);
+        elements = new long[size < 0 ? Integer.MAX_VALUE : size];
     }
 
     /**
@@ -183,16 +185,10 @@ public class LongArrayDeque {
         private int cursor = head;
 
         /**
-         * Tail recorded at construction (also in remove), to stop
-         * iterator and also to check for comodification.
+         * Tail recorded at construction, to stop
+         * iterator and also to check for co-modification.
          */
-        private int fence = tail;
-
-        /**
-         * Index of element returned by most recent call to next.
-         * Reset to -1 if element is deleted by a call to remove.
-         */
-        private int lastRet = -1;
+        private final int fence = tail;
 
         public boolean hasNext() {
             return cursor != fence;
@@ -208,7 +204,6 @@ public class LongArrayDeque {
             if (tail != fence) {
                 throw new ConcurrentModificationException();
             }
-            lastRet = cursor;
             cursor = (cursor + 1) & (elements.length - 1);
             return result;
         }
