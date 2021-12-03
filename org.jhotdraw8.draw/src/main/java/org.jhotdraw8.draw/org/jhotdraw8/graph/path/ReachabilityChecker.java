@@ -21,8 +21,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param maxDepth      the maximal depth (inclusive) of the search
      *                      Must be {@literal >= 0}.
      * @param costLimit     the algorithm-specific cost limit
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
+     * @return true if a sequence was found.
      */
     boolean isReachable(@NonNull Iterable<V> startVertices,
                         @NonNull Predicate<V> goalPredicate,
@@ -37,8 +36,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param maxDepth      the maximal depth (inclusive) of the search
      *                      Must be {@literal >= 0}.
      * @param costLimit     the algorithm-specific cost limit
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
+     * @return true if a sequence was found.
      */
     boolean isReachable(@NonNull V start,
                         @NonNull Predicate<V> goalPredicate,
@@ -52,8 +50,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param maxDepth  the maximal depth (inclusive) of the search
      *                  Must be {@literal >= 0}.
      * @param costLimit the algorithm-specific cost limit
-     * @return an ordered pair (vertex sequence, cost),
-     * or null if no sequence was found.
+     * @return true if a sequence was found.
      */
     boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit);
 
