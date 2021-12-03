@@ -30,6 +30,16 @@ public class IndexedVertexBackLink extends AbstractBackLink<IndexedVertexBackLin
         return vertex;
     }
 
+    /**
+     * Converts an {@link IndexedVertexBackLink} to {@link IndexedVertexBackLinkWithCost}.
+     *
+     * @param node         the {@link IndexedVertexBackLink}
+     * @param zero         the zero cost value
+     * @param costFunction the cost function
+     * @param sumFunction  the sum function for cost values
+     * @param <CC>         the cost number type
+     * @return the converted {@link IndexedVertexBackLinkWithCost
+     */
     public static <CC extends Number & Comparable<CC>> @Nullable IndexedVertexBackLinkWithCost<CC>
     toIndexedVertexBackLinkWithCost(@Nullable IndexedVertexBackLink node,
                                     @NonNull CC zero,

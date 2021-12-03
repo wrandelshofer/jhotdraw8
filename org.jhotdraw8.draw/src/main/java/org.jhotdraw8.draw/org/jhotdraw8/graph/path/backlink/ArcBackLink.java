@@ -49,6 +49,18 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
                 '}';
     }
 
+    /**
+     * Converts an {@link ArcBackLink} to {@link ArcBackLinkWithCost}.
+     *
+     * @param node         the {@link ArcBackLink}
+     * @param zero         the zero cost value
+     * @param costFunction the cost function
+     * @param sumFunction  the sum function for cost values
+     * @param <VV>         the vertex data type
+     * @param <AA>         the arrow data type
+     * @param <CC>         the cost number type
+     * @return the converted {@link ArcBackLinkWithCost
+     */
     public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
                                                                                                                                @NonNull CC zero,
                                                                                                                                @NonNull TriFunction<VV, VV, AA, CC> costFunction,

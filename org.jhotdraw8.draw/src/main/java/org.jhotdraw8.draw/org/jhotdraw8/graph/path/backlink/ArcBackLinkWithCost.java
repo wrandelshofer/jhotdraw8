@@ -36,6 +36,18 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
         this.arrow = arrow;
     }
 
+
+    /**
+     * Converts an {@link ArcBackLinkWithCost} into a vertex sequence.
+     *
+     * @param node            the {@link ArcBackLinkWithCost}
+     * @param mappingFunction the mapping function
+     * @param <VV>            the vertex data type
+     * @param <AA>            the arrow data type
+     * @param <CC>            the cost number type
+     * @param <XX>            the vertex sequence element type
+     * @return the vertex sequence
+     */
     public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable ArcBackLinkWithCost<VV, AA, CC> node,
                                                                                                                                  @NonNull Function<ArcBackLinkWithCost<VV, AA, CC>, XX> mappingFunction) {
         if (node == null) {
@@ -49,6 +61,17 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
         return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
     }
 
+    /**
+     * Converts an {@link ArcBackLinkWithCost} into an arrow sequence.
+     *
+     * @param node            the {@link ArcBackLinkWithCost}
+     * @param mappingFunction the mapping function
+     * @param <VV>            the vertex data type
+     * @param <AA>            the arrow data type
+     * @param <CC>            the cost number type
+     * @param <XX>            the arrow sequence element type
+     * @return the arrow sequence
+     */
     public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toArrowSequence(
             @Nullable ArcBackLinkWithCost<VV, AA, CC> node,
             @NonNull BiFunction<ArcBackLinkWithCost<VV, AA, CC>, ArcBackLinkWithCost<VV, AA, CC>, XX> mappingFunction) {
@@ -73,12 +96,4 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
         return vertex;
     }
 
-    @Override
-    public String toString() {
-        return "ArcBackLink{" +
-                "depth=" + depth +
-                ", vertex=" + vertex +
-                ", arrow=" + arrow +
-                '}';
-    }
 }

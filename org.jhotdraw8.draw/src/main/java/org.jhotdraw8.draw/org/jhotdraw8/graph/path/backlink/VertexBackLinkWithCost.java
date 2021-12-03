@@ -30,6 +30,20 @@ public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends
         this.vertex = vertex;
     }
 
+    public @NonNull V getVertex() {
+        return vertex;
+    }
+
+    /**
+     * Converts an {@link VertexBackLinkWithCost} into a vertex sequence.
+     *
+     * @param node            the {@link VertexBackLinkWithCost}
+     * @param mappingFunction the mapping function
+     * @param <VV>            the vertex data type
+     * @param <CC>            the cost number type
+     * @param <XX>            the vertex sequence element type
+     * @return the vertex sequence
+     */
     public static <VV, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(
             @Nullable VertexBackLinkWithCost<VV, CC> node,
             @NonNull Function<VertexBackLinkWithCost<VV, CC>, XX> mappingFunction) {
@@ -42,10 +56,6 @@ public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends
             deque.addFirst(mappingFunction.apply(parent));
         }
         return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
-
-    public @NonNull V getVertex() {
-        return vertex;
     }
 
 }

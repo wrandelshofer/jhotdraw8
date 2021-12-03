@@ -36,6 +36,15 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
         return vertex;
     }
 
+    /**
+     * Converts an {@link ArcBackLinkWithCost} into a vertex sequence.
+     *
+     * @param node            the {@link ArcBackLinkWithCost}
+     * @param mappingFunction the mapping function
+     * @param <CC>            the cost number type
+     * @param <XX>            the vertex sequence element type
+     * @return the vertex sequence
+     */
     public static <XX, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable IndexedVertexBackLinkWithCost<CC> node,
                                                                                                                          @NonNull Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
         if (node == null) {

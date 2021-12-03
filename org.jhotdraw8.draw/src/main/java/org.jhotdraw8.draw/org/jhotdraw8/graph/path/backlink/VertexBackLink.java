@@ -31,6 +31,17 @@ public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
         return vertex;
     }
 
+    /**
+     * Converts an {@link VertexBackLink} to {@link VertexBackLinkWithCost}.
+     *
+     * @param node         the {@link VertexBackLink}
+     * @param zero         the zero cost value
+     * @param costFunction the cost function
+     * @param sumFunction  the sum function for cost values
+     * @param <VV>         the vertex data type
+     * @param <CC>         the cost number type
+     * @return the converted {@link VertexBackLinkWithCost
+     */
     public static <VV, CC extends Number & Comparable<CC>> @Nullable VertexBackLinkWithCost<VV, CC> toVertexBackLinkWithCost(
             @Nullable VertexBackLink<VV> node,
             @NonNull CC zero,
