@@ -49,11 +49,10 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
                 '}';
     }
 
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable ArcBackLinkWithCost<VV, AA, CC>
-    toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
-                          @NonNull CC zero,
-                          @NonNull TriFunction<VV, VV, AA, CC> costFunction,
-                          @NonNull BiFunction<CC, CC, CC> sumFunction) {
+    public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
+                                                                                                                               @NonNull CC zero,
+                                                                                                                               @NonNull TriFunction<VV, VV, AA, CC> costFunction,
+                                                                                                                               @NonNull BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }

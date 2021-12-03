@@ -1,6 +1,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.TriFunction;
 
 /**
@@ -21,7 +22,7 @@ public class CheckedNonNegativeArcCostFunction<V, A, C extends Number & Comparab
     }
 
     @Override
-    public @NonNull C apply(@NonNull V v1, @NonNull V v2, @NonNull A a) {
+    public @NonNull C apply(@NonNull V v1, @NonNull V v2, @Nullable A a) {
         C cost = costFunction.apply(v1, v2, a);
         if (cost.compareTo(zero) < 0) {
             throw new IllegalStateException("cost is negative. v1=" + v1 + ", v2=" + v2 + ", a=" + a + ", cost=" + cost);

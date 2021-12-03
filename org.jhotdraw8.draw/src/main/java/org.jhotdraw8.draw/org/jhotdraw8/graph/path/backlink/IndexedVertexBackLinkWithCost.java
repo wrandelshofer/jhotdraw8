@@ -7,6 +7,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.Function;
 
 /**
@@ -40,8 +41,8 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
         if (node == null) {
             return null;
         }
-        //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
+
+        Deque<XX> deque = new ArrayDeque<>();
         for (IndexedVertexBackLinkWithCost<CC> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }

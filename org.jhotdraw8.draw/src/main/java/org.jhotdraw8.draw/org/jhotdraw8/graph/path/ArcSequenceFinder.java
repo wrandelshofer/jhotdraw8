@@ -71,7 +71,8 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      */
     OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints,
-            int maxDepth, @NonNull C costLimit);
+            int maxDepth,
+            @NonNull C costLimit);
 
 
     /**

@@ -7,6 +7,7 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -41,7 +42,7 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
             return null;
         }
         //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
+        Deque<XX> deque = new ArrayDeque<>();
         for (ArcBackLinkWithCost<VV, AA, CC> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }
@@ -55,7 +56,7 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
             return null;
         }
         //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
+        Deque<XX> deque = new ArrayDeque<>();
         ArcBackLinkWithCost<VV, AA, CC> prev = node;
         for (ArcBackLinkWithCost<VV, AA, CC> parent = node.getParent(); parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent, prev));

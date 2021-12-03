@@ -50,7 +50,8 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     public @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C costLimit) {
+            int maxDepth,
+            @NonNull C costLimit) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
@@ -63,7 +64,8 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     public @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C costLimit) {
+            int maxDepth,
+            @NonNull C costLimit) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
@@ -76,7 +78,8 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
     public @NonNull Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C costLimit) {
+            int maxDepth,
+            @NonNull C costLimit) {
 
         return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,

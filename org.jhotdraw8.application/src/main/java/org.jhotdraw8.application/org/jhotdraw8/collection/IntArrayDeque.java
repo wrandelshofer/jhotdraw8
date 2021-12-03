@@ -32,6 +32,9 @@ public class IntArrayDeque {
      */
     private int tail;
 
+    /**
+     * Creates a new instance with an initial capacity for 8 elements.
+     */
     public IntArrayDeque() {
         this(8);
     }
@@ -56,6 +59,7 @@ public class IntArrayDeque {
      * @param e the element to add
      */
     public void addFirst(int e) {
+        //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
         if (head == tail) {

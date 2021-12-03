@@ -35,9 +35,11 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @Nullable
-    OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices,
-                                                       @NonNull Predicate<V> goalPredicate,
-                                                       int maxDepth, @NonNull C costLimit);
+    OrderedPair<ImmutableList<A>, C> findArrowSequence(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            int maxDepth,
+            @NonNull C costLimit);
 
     /**
      * Finds an arrow sequence from start to goal.
@@ -51,9 +53,11 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @Nullable
-    default OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull V start,
-                                                               @NonNull V goal,
-                                                               int maxDepth, @NonNull C costLimit) {
+    default OrderedPair<ImmutableList<A>, C> findArrowSequence(
+            @NonNull V start,
+            @NonNull V goal,
+            int maxDepth,
+            @NonNull C costLimit) {
         return findArrowSequence(List.of(start), goal::equals, maxDepth, costLimit);
     }
 
@@ -81,8 +85,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param <CC>                      the number type
      * @return an ordered pair with the combined sequence
      */
-    static <VV, AA, CC extends Number & Comparable<CC>> OrderedPair<ImmutableList<AA>, CC>
-    findArrowSequenceOverWaypoints(
+    static <VV, AA, CC extends Number & Comparable<CC>> OrderedPair<ImmutableList<AA>, CC> findArrowSequenceOverWaypoints(
             @NonNull Iterable<VV> waypoints,
             @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<AA>, CC>> findArrowSequenceFunction,
             @NonNull CC zero,

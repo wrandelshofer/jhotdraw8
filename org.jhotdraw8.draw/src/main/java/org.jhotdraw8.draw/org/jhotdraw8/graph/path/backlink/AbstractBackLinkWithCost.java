@@ -32,7 +32,7 @@ public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, 
      *
      * @return cost
      */
-    public C getCost() {
+    public @NonNull C getCost() {
         return cost;
     }
 }

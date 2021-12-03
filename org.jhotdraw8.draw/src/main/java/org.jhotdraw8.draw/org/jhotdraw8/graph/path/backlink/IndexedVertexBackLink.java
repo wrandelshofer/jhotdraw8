@@ -30,7 +30,7 @@ public class IndexedVertexBackLink extends AbstractBackLink<IndexedVertexBackLin
         return vertex;
     }
 
-    public static <CC extends Number & Comparable<CC>, XX> @Nullable IndexedVertexBackLinkWithCost<CC>
+    public static <CC extends Number & Comparable<CC>> @Nullable IndexedVertexBackLinkWithCost<CC>
     toIndexedVertexBackLinkWithCost(@Nullable IndexedVertexBackLink node,
                                     @NonNull CC zero,
                                     @NonNull BiFunction<Integer, Integer, CC> costFunction,

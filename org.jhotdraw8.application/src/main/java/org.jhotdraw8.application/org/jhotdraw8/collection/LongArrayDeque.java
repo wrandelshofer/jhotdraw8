@@ -32,6 +32,9 @@ public class LongArrayDeque {
      */
     private int tail;
 
+    /**
+     * Creates a new instance with an initial capacity for 8 elements.
+     */
     public LongArrayDeque() {
         this(8);
     }
@@ -56,6 +59,7 @@ public class LongArrayDeque {
      * @param e the element to add
      */
     public void addFirst(long e) {
+        //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
         if (head == tail) {
@@ -88,6 +92,7 @@ public class LongArrayDeque {
      * @param e the element
      */
     public void addLast(long e) {
+        //Note: elements.length is a power of two.
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {

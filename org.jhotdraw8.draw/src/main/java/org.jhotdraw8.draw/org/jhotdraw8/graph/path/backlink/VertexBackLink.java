@@ -31,11 +31,11 @@ public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
         return vertex;
     }
 
-    public static <VV, CC extends Number & Comparable<CC>, XX> @Nullable VertexBackLinkWithCost<VV, CC>
-    toVertexBackLinkWithCost(@Nullable VertexBackLink<VV> node,
-                             @NonNull CC zero,
-                             @NonNull BiFunction<VV, VV, CC> costFunction,
-                             @NonNull BiFunction<CC, CC, CC> sumFunction) {
+    public static <VV, CC extends Number & Comparable<CC>> @Nullable VertexBackLinkWithCost<VV, CC> toVertexBackLinkWithCost(
+            @Nullable VertexBackLink<VV> node,
+            @NonNull CC zero,
+            @NonNull BiFunction<VV, VV, CC> costFunction,
+            @NonNull BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }
