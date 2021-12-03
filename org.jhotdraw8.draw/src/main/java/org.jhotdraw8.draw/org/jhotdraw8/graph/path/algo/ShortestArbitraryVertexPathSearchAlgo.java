@@ -24,14 +24,12 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
 
     /**
      * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
+     *  @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
      * @param costLimit            the maximal cost (inclusive) of a path.
      *                             Must be {@literal >= zero).
      * @param costFunction         the cost function
@@ -45,7 +43,6 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth,
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
@@ -83,11 +80,12 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
 
             if (u.getDepth() < maxDepth) {
                 for (V v : nextVerticesFunction.apply(u.getVertex())) {
-                    C bestKnownCost = costMap.getOrDefault(v, positiveInfinity);
+                    C bestKnownCost = costMap.get(v);
                     C cost = sumFunction.apply(u.getCost(), costf.apply(u.getVertex(), v));
 
                     // If there is a cheaper path to v through u.
-                    if (cost.compareTo(bestKnownCost) < 0 && cost.compareTo(costLimit) <= 0) {
+                    if ((bestKnownCost == null || cost.compareTo(bestKnownCost) < 0)
+                            && cost.compareTo(costLimit) <= 0) {
                         // Update cost to v and add v again to the queue.
                         costMap.put(v, cost);
                         queue.add(new VertexBackLinkWithCost<>(v, u, cost));

@@ -41,14 +41,12 @@ public class ShortestArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
 
     /**
      * {@inheritDoc}
-     *
-     * @param startVertices    the set of start vertices
+     *  @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
      * @param maxDepth         the maximal depth (inclusive) of the search
      *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
-     * @param positiveInfinity the positive infinity value
      * @param costLimit        the maximal cost (inclusive) of a path.
      *                         Must be {@literal >= zero).
      * @param costFunction     the cost function
@@ -62,7 +60,6 @@ public class ShortestArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
             final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
             final @NonNull C zero,
-            final @NonNull C positiveInfinity,
             final @NonNull C costLimit,
             final @NonNull TriFunction<V, V, A, C> costFunction,
             final @NonNull BiFunction<C, C, C> sumFunction) {
@@ -103,11 +100,12 @@ public class ShortestArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> arc : nextArcsFunction.apply(u.getVertex())) {
                     V v = arc.getEnd();
-                    C bestKnownCost = costMap.getOrDefault(v, positiveInfinity);
+                    C bestKnownCost = costMap.get(v);
                     C cost = sumFunction.apply(u.getCost(), costf.apply(u.getVertex(), v, arc.getData()));
 
                     // If there is a cheaper path to v through u.
-                    if (cost.compareTo(bestKnownCost) < 0 && cost.compareTo(costLimit) <= 0) {
+                    if ((bestKnownCost == null || cost.compareTo(bestKnownCost) < 0)
+                            && cost.compareTo(costLimit) <= 0) {
                         // Update cost to v and add v again to the queue.
                         costMap.put(v, cost);
                         queue.add(new ArcBackLinkWithCost<>(v, arc.getData(), u, cost));

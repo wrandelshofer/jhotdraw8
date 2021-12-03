@@ -23,7 +23,6 @@ import java.util.function.Predicate;
 public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>> implements CombinedSequenceFinder<V, A, C> {
 
     private final @NonNull C zero;
-    private final @NonNull C positiveInfinity;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final @NonNull TriFunction<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -34,10 +33,6 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      * Creates a new instance.
      *
      * @param zero             the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param positiveInfinity the positive infinity value or max value,
-     *                         e.g. {@link Integer#MAX_VALUE},
-     *                         {@link Double#POSITIVE_INFINITY}.
-     *                         Must be &gt;= zero.
      * @param nextArcsFunction a function that given a vertex,
      *                         returns an {@link Iterable} for the {@link Arc}s
      *                         starting at that vertex.
@@ -48,7 +43,6 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      */
     public SimpleCombinedSequenceFinder(
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
@@ -56,11 +50,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
         if (zero.doubleValue() != 0.0) {
             throw new IllegalArgumentException("zero(" + zero + ") is != 0");
         }
-        if (positiveInfinity.compareTo(zero) < 0) {
-            throw new IllegalArgumentException("positiveInfinity(" + positiveInfinity + ") is < zero(" + zero + ")");
-        }
         this.zero = zero;
-        this.positiveInfinity = positiveInfinity;
         this.nextArcsFunction = nextArcsFunction;
         this.costFunction = costFunction;
         this.sumFunction = sumFunction;
@@ -85,7 +75,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
-        return new SimpleCombinedSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, costFunction, Integer::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0, nextArcsFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -105,7 +95,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull BiFunction<VV, VV, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
-        return new SimpleCombinedSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> costFunction.apply(u, v), Integer::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0, nextArcsFunction, (u, v, a) -> costFunction.apply(u, v), Integer::sum, algo);
     }
 
     /**
@@ -123,7 +113,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
-        return new SimpleCombinedSequenceFinder<>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
     }
 
     /**
@@ -143,7 +133,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Double> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Double> algo) {
-        return new SimpleCombinedSequenceFinder<>(0.0, Double.POSITIVE_INFINITY, nextArcsFunction, costFunction, Double::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0.0, nextArcsFunction, costFunction, Double::sum, algo);
     }
 
     /**
@@ -163,13 +153,13 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Long> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Long> algo) {
-        return new SimpleCombinedSequenceFinder<>(0L, Long.MAX_VALUE, nextArcsFunction, costFunction, Long::sum, algo);
+        return new SimpleCombinedSequenceFinder<>(0L, nextArcsFunction, costFunction, Long::sum, algo);
     }
 
     @Override
     public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
         return ArcBackLinkWithCost.toArrowSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         ), (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow()));
     }
 
@@ -181,7 +171,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     @Override
     public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
         return ArcBackLinkWithCost.toArrowSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         ), (a, b) -> b.getArrow());
     }
 
@@ -193,7 +183,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     @Override
     public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
         return ArcBackLinkWithCost.toVertexSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         ), ArcBackLinkWithCost::getVertex);
     }
 

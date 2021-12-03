@@ -60,7 +60,6 @@ public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
      * @param maxDepth         the maximal depth (inclusive) of the search
      *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
-     * @param positiveInfinity the positive infinity value
      * @param costLimit        the cost limit is <b>ignored</b>
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
@@ -73,7 +72,6 @@ public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull C costLimit,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {

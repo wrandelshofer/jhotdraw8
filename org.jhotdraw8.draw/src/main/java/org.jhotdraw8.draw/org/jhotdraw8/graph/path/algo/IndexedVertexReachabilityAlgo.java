@@ -22,7 +22,6 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
      * @param costLimit            the algorithm-specific cost limit
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
@@ -33,7 +32,6 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
                        @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
                        int maxDepth,
                        @NonNull C zero,
-                       @NonNull C positiveInfinity,
                        @NonNull C costLimit,
                        @NonNull BiFunction<Integer, Integer, C> costFunction,
                        @NonNull BiFunction<C, C, C> sumFunction);

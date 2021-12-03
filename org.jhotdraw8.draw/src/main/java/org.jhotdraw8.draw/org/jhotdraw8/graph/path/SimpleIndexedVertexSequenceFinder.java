@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>> implements VertexSequenceFinder<Integer, C> {
     private final @NonNull IndexedVertexPathSearchAlgo<C> algo;
     private final @NonNull C zero;
-    private final @NonNull C positiveInfinity;
     private final @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction;
     private final @NonNull BiFunction<Integer, Integer, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -29,9 +28,6 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * Creates a new instance.
      *
      * @param zero                 the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param positiveInfinity     the positive infinity value or max value,
-     *                             e.g. {@link Integer#MAX_VALUE},
-     *                             {@link Double#POSITIVE_INFINITY}.
      * @param nextVerticesFunction a function that given a vertex,
      *                             returns an {@link Iterable} for the next vertices
      *                             of that vertex.
@@ -41,13 +37,11 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      */
     public SimpleIndexedVertexSequenceFinder(
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
             @NonNull IndexedVertexPathSearchAlgo<C> algo) {
         this.zero = zero;
-        this.positiveInfinity = positiveInfinity;
         this.nextVerticesFunction = nextVerticesFunction;
         this.costFunction = costFunction;
         this.sumFunction = sumFunction;
@@ -69,7 +63,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, Integer> costFunction,
             @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
-        return new SimpleIndexedVertexSequenceFinder<>(0, Integer.MAX_VALUE, nextVerticesFunction, costFunction, Integer::sum, algo);
+        return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -85,7 +79,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
-        return new SimpleIndexedVertexSequenceFinder<>(0, Integer.MAX_VALUE, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
+        return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
     }
 
     /**
@@ -103,7 +97,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, Long> costFunction,
             @NonNull IndexedVertexPathSearchAlgo<Long> algo) {
-        return new SimpleIndexedVertexSequenceFinder<>(0L, Long.MAX_VALUE, nextVerticesFunction, costFunction, Long::sum, algo);
+        return new SimpleIndexedVertexSequenceFinder<>(0L, nextVerticesFunction, costFunction, Long::sum, algo);
     }
 
     @Override
@@ -111,7 +105,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
             @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate,
             int maxDepth, @NonNull C costLimit) {
         return IndexedVertexBackLinkWithCost.toVertexSequence(algo.search(
-                startVertices, goalPredicate::test, nextVerticesFunction, maxDepth, costLimit, zero, positiveInfinity, costFunction, sumFunction
+                startVertices, goalPredicate::test, nextVerticesFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         ), IndexedVertexBackLinkWithCost::getVertex);
     }
 

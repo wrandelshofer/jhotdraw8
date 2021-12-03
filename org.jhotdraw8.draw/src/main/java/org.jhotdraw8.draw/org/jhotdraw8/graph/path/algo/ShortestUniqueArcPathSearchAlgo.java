@@ -46,14 +46,12 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
 
     /**
      * {@inheritDoc}
-     *
-     * @param startVertices    the set of start vertices
+     *  @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
      * @param maxDepth         the maximal depth (inclusive) of the search
      *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
-     * @param positiveInfinity the positive infinity value
      * @param costLimit        the maximal cost (inclusive) of a path.
      *                         Must be {@literal >= zero).
      * @param costFunction     the cost function
@@ -66,7 +64,6 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
             final @NonNull Predicate<V> goalPredicate,
             final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth, final @NonNull C zero,
-            final @NonNull C positiveInfinity,
             final @NonNull C costLimit,
             final @NonNull TriFunction<V, V, A, C> costFunction,
             final @NonNull BiFunction<C, C, C> sumFunction) {
@@ -91,7 +88,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
         // If an entry is missing, we assume infinity.
         Map<V, CostData<C>> costMap = new HashMap<>();
 
-        CostData<C> infiniteCost = new CostData<>(positiveInfinity, 0);
+        CostData<C> infiniteCost = new CostData<>(null, 0);
 
         // Insert start itself in priority queue and initialize its cost as 0,
         // and number of paths with 1.
@@ -133,7 +130,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
 
                     // If there is a shorter path to v through u.
                     if (cost.compareTo(maxCost) <= 0) {
-                        final int compare = cost.compareTo(bestKnownCost);
+                        final int compare = bestKnownCost == null ? -1 : cost.compareTo(bestKnownCost);
                         if (compare < 0) {
                             // Update cost data to v.
                             costMap.put(v.getEnd(), new CostData<>(cost, 1));

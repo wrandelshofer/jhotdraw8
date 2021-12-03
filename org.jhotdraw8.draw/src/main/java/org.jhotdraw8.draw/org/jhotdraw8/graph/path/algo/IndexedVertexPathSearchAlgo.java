@@ -26,9 +26,8 @@ public interface IndexedVertexPathSearchAlgo<C extends Number & Comparable<C>> {
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
-     * @param costLimit            the algorithm-specific cost limit.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
+     * @param costLimit            the algorithm-specific cost limit.
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
@@ -38,9 +37,8 @@ public interface IndexedVertexPathSearchAlgo<C extends Number & Comparable<C>> {
             @NonNull IntPredicate goalPredicate,
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             int maxDepth,
-            @NonNull C costLimit,
             @NonNull C zero,
-            @NonNull C positiveInfinity,
+            @NonNull C costLimit,
             @NonNull BiFunction<Integer, Integer, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);
 }

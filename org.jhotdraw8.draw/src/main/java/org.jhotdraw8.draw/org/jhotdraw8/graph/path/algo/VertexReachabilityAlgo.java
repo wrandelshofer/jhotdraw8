@@ -22,7 +22,6 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
      * @param costLimit            the algorithm-specific cost limit
      * @param nextVerticesFunction the next nodes function
      * @param costFunction         the cost function
@@ -33,7 +32,6 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             int maxDepth, @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull C costLimit,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             @NonNull BiFunction<V, V, C> costFunction,

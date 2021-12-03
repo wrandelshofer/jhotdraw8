@@ -60,14 +60,12 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implement
 
     /**
      * {@inheritDoc}
-     *
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
      * @param costLimit            the maximal cost (inclusive) of a path
      *                             Must be {@literal >= zero).
      * @param costFunction         the cost function
@@ -78,7 +76,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implement
     public boolean tryToReach(@NonNull Iterable<Integer> startVertices,
                               @NonNull IntPredicate goalPredicate,
                               @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                              int maxDepth, @NonNull Integer zero, @NonNull Integer positiveInfinity, @NonNull Integer costLimit,
+                              int maxDepth, @NonNull Integer zero, @NonNull Integer costLimit,
                               @NonNull BiFunction<Integer, Integer, Integer> costFunction,
                               @NonNull BiFunction<Integer, Integer, Integer> sumFunction) {
         return tryToReach(startVertices, goalPredicate, nextVerticesFunction,

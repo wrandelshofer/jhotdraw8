@@ -28,14 +28,12 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
 
     /**
      * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
+     *  @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
      * @param costLimit            the maximal cost (inclusive) of a path
      *                             Must be {@literal >= zero).
      * @param costFunction         the cost function
@@ -48,7 +46,6 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth, @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {

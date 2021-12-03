@@ -19,7 +19,6 @@ import java.util.function.Predicate;
  */
 public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> implements VertexSequenceFinder<V, C> {
     private final @NonNull C zero;
-    private final @NonNull C positiveInfinity;
     private final @NonNull Function<V, Iterable<V>> nextVerticesFunction;
     private final @NonNull BiFunction<V, V, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -29,9 +28,6 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
      * Creates a new instance.
      *
      * @param zero                 the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param positiveInfinity     the positive infinity value or max value,
-     *                             e.g. {@link Integer#MAX_VALUE},
-     *                             {@link Double#POSITIVE_INFINITY}.
      * @param nextVerticesFunction a function that given a vertex,
      *                             returns an {@link Iterable} for the next vertices
      *                             of that vertex.
@@ -42,13 +38,11 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
      */
     public SimpleVertexSequenceFinder(
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
             @NonNull VertexPathSearchAlgo<V, C> algo) {
         this.zero = zero;
-        this.positiveInfinity = positiveInfinity;
         this.nextVerticesFunction = nextVerticesFunction;
         this.costFunction = costFunction;
         this.sumFunction = sumFunction;
@@ -71,7 +65,7 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
             @NonNull Function<VV, Iterable<VV>> nextVerticesFunction,
             @NonNull BiFunction<VV, VV, Integer> costFunction,
             @NonNull VertexPathSearchAlgo<VV, Integer> algo) {
-        return new SimpleVertexSequenceFinder<>(0, Integer.MAX_VALUE, nextVerticesFunction, costFunction, Integer::sum, algo);
+        return new SimpleVertexSequenceFinder<>(0, nextVerticesFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -88,7 +82,7 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
     public static <VV> SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<VV>> nextVerticesFunction,
             @NonNull VertexPathSearchAlgo<VV, Integer> algo) {
-        return new SimpleVertexSequenceFinder<>(0, Integer.MAX_VALUE, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
+        return new SimpleVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
     }
 
     /**
@@ -107,13 +101,13 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
             @NonNull Function<VV, Iterable<VV>> nextVerticesFunction,
             @NonNull BiFunction<VV, VV, Long> costFunction,
             @NonNull VertexPathSearchAlgo<VV, Long> algo) {
-        return new SimpleVertexSequenceFinder<>(0L, Long.MAX_VALUE, nextVerticesFunction, costFunction, Long::sum, algo);
+        return new SimpleVertexSequenceFinder<>(0L, nextVerticesFunction, costFunction, Long::sum, algo);
     }
 
     @Override
     public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
         return VertexBackLinkWithCost.toVertexSequence(algo.search(
-                startVertices, goalPredicate, nextVerticesFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+                startVertices, goalPredicate, nextVerticesFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         ), VertexBackLinkWithCost::getVertex);
     }
 

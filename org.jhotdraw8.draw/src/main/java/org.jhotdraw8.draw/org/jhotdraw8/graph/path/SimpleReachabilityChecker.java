@@ -20,7 +20,6 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
         implements ReachabilityChecker<V, C> {
     private final @NonNull ArcReachabilityAlgo<V, A, C> algo;
     private final @NonNull C zero;
-    private final @NonNull C positiveInfinity;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final @NonNull TriFunction<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
@@ -29,10 +28,6 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * Creates a new instance.
      *
      * @param zero             the zero value, e.g. {@code 0}, {@code 0.0}.
-     * @param positiveInfinity the positive infinity value or max value,
-     *                         e.g. {@link Integer#MAX_VALUE},
-     *                         {@link Double#POSITIVE_INFINITY}.
-     *                         Must be &gt;= zero.
      * @param nextArcsFunction a function that given a vertex,
      *                         returns an {@link Iterable} for the {@link Arc}s
      *                         starting at that vertex.
@@ -43,7 +38,6 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      */
     public SimpleReachabilityChecker(
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
@@ -51,11 +45,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
         if (zero.doubleValue() != 0.0) {
             throw new IllegalArgumentException("zero(" + zero + ") is != 0");
         }
-        if (positiveInfinity.compareTo(zero) < 0) {
-            throw new IllegalArgumentException("positiveInfinity(" + positiveInfinity + ") is < zero(" + zero + ")");
-        }
         this.zero = zero;
-        this.positiveInfinity = positiveInfinity;
         this.nextArcsFunction = nextArcsFunction;
         this.costFunction = costFunction;
         this.sumFunction = sumFunction;
@@ -78,7 +68,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
-        return new SimpleReachabilityChecker<VV, AA, Integer>(0, Integer.MAX_VALUE, nextArcsFunction, costFunction, Integer::sum, algo);
+        return new SimpleReachabilityChecker<VV, AA, Integer>(0, nextArcsFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -95,7 +85,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     public static <VV, AA> SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
-        return new SimpleReachabilityChecker<VV, AA, Integer>(0, Integer.MAX_VALUE, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
+        return new SimpleReachabilityChecker<VV, AA, Integer>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
     }
 
     /**
@@ -114,7 +104,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Long> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Long> algo) {
-        return new SimpleReachabilityChecker<VV, AA, Long>(0L, Long.MAX_VALUE, nextArcsFunction, costFunction, Long::sum, algo);
+        return new SimpleReachabilityChecker<VV, AA, Long>(0L, nextArcsFunction, costFunction, Long::sum, algo);
     }
 
 
@@ -123,7 +113,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
                                @NonNull Predicate<V> goalPredicate,
                                int maxDepth, @NonNull C costLimit) {
         return algo.tryToReach(
-                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit,
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, costLimit,
                 costFunction, sumFunction
         );
     }
@@ -144,7 +134,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     public boolean isReachable(@NonNull V start,
                                @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
         return algo.tryToReach(
-                Collections.singletonList(start), goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit,
+                Collections.singletonList(start), goalPredicate, nextArcsFunction, maxDepth, zero, costLimit,
                 costFunction, sumFunction
         );
     }
@@ -163,7 +153,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     @Override
     public boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit) {
         return algo.tryToReach(
-                Collections.singletonList(start), goal::equals, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+                Collections.singletonList(start), goal::equals, nextArcsFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         );
     }
 

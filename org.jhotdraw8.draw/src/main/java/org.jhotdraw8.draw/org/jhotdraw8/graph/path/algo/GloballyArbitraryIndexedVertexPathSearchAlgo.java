@@ -49,9 +49,8 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
-     * @param costLimit            the cost limit is <b>ignored</b>
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
+     * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return
@@ -61,9 +60,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
             @NonNull Iterable<Integer> startVertices,
             @NonNull IntPredicate goalPredicate,
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            int maxDepth, @NonNull C costLimit,
-            @NonNull C zero,
-            @NonNull C positiveInfinity,
+            int maxDepth, @NonNull C zero, @NonNull C costLimit,
             @NonNull BiFunction<Integer, Integer, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
         return IndexedVertexBackLink.toIndexedVertexBackLinkWithCost(

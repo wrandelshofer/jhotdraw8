@@ -25,7 +25,6 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param positiveInfinity     the positive infinity value
      * @param costLimit            the algorithm-specific cost limit
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
@@ -36,7 +35,6 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth,
             @NonNull C zero,
-            @NonNull C positiveInfinity,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);
