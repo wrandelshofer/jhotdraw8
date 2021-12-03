@@ -128,8 +128,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implement
                 while (spliterator.tryAdvance(consumer)) {
                     final int v = consumer.value;
                     if (visited.add(v)) {
-                        long backLink = newSearchNode(v, searchNodeGetDepth(u) + 1);
-                        queue.addLast(backLink);
+                        queue.addLast(newSearchNode(v, searchNodeGetDepth(u) + 1));
                     }
                 }
             }
