@@ -63,16 +63,16 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
     /**
      * Search engine method.
      *
-     * @param startVertices    the set of start vertices
-     * @param goalPredicate    the goal predicate
-     * @param nextArcsFunction the next arcs function
-     * @param visited          the set of visited vertices (see {@link AddToSet})
-     * @param maxDepth         the maximal depth
+     * @param startVertices        the set of start vertices
+     * @param goalPredicate        the goal predicate
+     * @param nextVerticesFunction the next vertices function
+     * @param visited              the set of visited vertices (see {@link AddToSet})
+     * @param maxDepth             the maximal depth
      * @return on success: a back link, otherwise: null
      */
     protected @Nullable VertexBackLink<V> search(@NonNull Iterable<V> startVertices,
                                                  @NonNull Predicate<V> goalPredicate,
-                                                 @NonNull Function<V, Iterable<V>> nextArcsFunction,
+                                                 @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                                  @NonNull AddToSet<V> visited,
                                                  @NonNull int maxDepth) {
         if (maxDepth < 0) {
@@ -93,7 +93,7 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
             }
 
             if (u.getDepth() < maxDepth) {
-                for (V v : nextArcsFunction.apply(u.getVertex())) {
+                for (V v : nextVerticesFunction.apply(u.getVertex())) {
                     if (visited.add(v)) {
                         queue.add(new VertexBackLink<V>(v, u));
                     }
