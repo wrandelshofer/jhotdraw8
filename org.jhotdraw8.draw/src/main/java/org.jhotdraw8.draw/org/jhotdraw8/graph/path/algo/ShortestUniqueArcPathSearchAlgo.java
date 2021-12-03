@@ -23,7 +23,7 @@ import java.util.function.Predicate;
  * Performance characteristics:
  * <dl>
  *     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
- *     <dt>When the algorithm returns null</dt><dd>exactly {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+ *     <dt>When the algorithm returns null</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
  * </dl>
  * <p>
  * References:
