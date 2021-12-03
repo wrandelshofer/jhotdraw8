@@ -59,7 +59,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param algo                 the search algorithm
      * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
      */
-    public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
+    public static @NonNull SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, Integer> costFunction,
             @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
@@ -76,7 +76,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param algo                 the search algorithm
      * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
      */
-    public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
+    public static @NonNull SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
         return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
@@ -93,7 +93,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param algo                 the search algorithm
      * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
      */
-    public static SimpleIndexedVertexSequenceFinder<Long> newLongCostInstance(
+    public static @NonNull SimpleIndexedVertexSequenceFinder<Long> newLongCostInstance(
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             @NonNull BiFunction<Integer, Integer, Long> costFunction,
             @NonNull IndexedVertexPathSearchAlgo<Long> algo) {

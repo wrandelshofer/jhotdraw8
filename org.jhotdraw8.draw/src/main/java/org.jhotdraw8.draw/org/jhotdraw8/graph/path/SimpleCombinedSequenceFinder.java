@@ -71,7 +71,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      * @param <AA>             the arrow data type
      * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
@@ -91,7 +91,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      * @param <AA>             the arrow data type
      * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull BiFunction<VV, VV, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
@@ -110,7 +110,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      * @param <AA>             the arrow data type
      * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
         return new SimpleCombinedSequenceFinder<>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
@@ -129,7 +129,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      * @param <AA>             the arrow data type
      * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Double> newDoubleCostInstance(
+    public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Double> newDoubleCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Double> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Double> algo) {
@@ -149,7 +149,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      * @param <AA>             the arrow data type
      * @return the new {@link SimpleCombinedSequenceFinder} instance.
      */
-    public static <VV, AA> SimpleCombinedSequenceFinder<VV, AA, Long> newLongCostInstance(
+    public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Long> newLongCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Long> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Long> algo) {
@@ -164,7 +164,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     }
 
     @Override
-    public OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
+    public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
         return ArcSequenceFinder.findArcSequenceOverWaypoints(waypoints, (start, goal) -> findArcSequence(start, goal, maxDepth, costLimit), zero, sumFunction);
     }
 
@@ -176,7 +176,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     }
 
     @Override
-    public OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
+    public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
         return ArrowSequenceFinder.findArrowSequenceOverWaypoints(waypoints, (start, goal) -> findArrowSequence(start, goal, maxDepth, costLimit), zero, sumFunction);
     }
 

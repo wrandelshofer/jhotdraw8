@@ -61,7 +61,7 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
      * @param <VV>                 the vertex data type
      * @return the new {@link SimpleVertexSequenceFinder} instance.
      */
-    public static <VV> SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
+    public static <VV> @NonNull SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<VV>> nextVerticesFunction,
             @NonNull BiFunction<VV, VV, Integer> costFunction,
             @NonNull VertexPathSearchAlgo<VV, Integer> algo) {
@@ -79,7 +79,7 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
      * @param <VV>                 the vertex data type
      * @return the new {@link SimpleVertexSequenceFinder} instance.
      */
-    public static <VV> SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
+    public static <VV> @NonNull SimpleVertexSequenceFinder<VV, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<VV>> nextVerticesFunction,
             @NonNull VertexPathSearchAlgo<VV, Integer> algo) {
         return new SimpleVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
@@ -97,7 +97,7 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
      * @param <VV>                 the vertex data type
      * @return the new {@link SimpleVertexSequenceFinder} instance.
      */
-    public static <VV> SimpleVertexSequenceFinder<VV, Long> newLongCostInstance(
+    public static <VV> @NonNull SimpleVertexSequenceFinder<VV, Long> newLongCostInstance(
             @NonNull Function<VV, Iterable<VV>> nextVerticesFunction,
             @NonNull BiFunction<VV, VV, Long> costFunction,
             @NonNull VertexPathSearchAlgo<VV, Long> algo) {

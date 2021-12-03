@@ -34,8 +34,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable
-    OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+    @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             int maxDepth, @NonNull C costLimit);
@@ -69,7 +68,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints,
             int maxDepth,
             @NonNull C costLimit);
@@ -86,7 +85,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param <CC>                    the number type
      * @return an ordered pair with the combined sequence
      */
-    static <VV, AA, CC extends Number & Comparable<CC>> OrderedPair<ImmutableList<Arc<VV, AA>>, CC>
+    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<Arc<VV, AA>>, CC>
     findArcSequenceOverWaypoints(
             @NonNull Iterable<VV> waypoints,
             @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<Arc<VV, AA>>, CC>> findArcSequenceFunction,

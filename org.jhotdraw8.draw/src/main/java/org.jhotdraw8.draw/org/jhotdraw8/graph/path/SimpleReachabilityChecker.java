@@ -64,7 +64,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param <VV>             the vertex data type
      * @return the new {@link SimpleReachabilityChecker} instance.
      */
-    public static <VV, AA> SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
@@ -82,7 +82,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param <VV>             the vertex data type
      * @return the new {@link SimpleReachabilityChecker} instance.
      */
-    public static <VV, AA> SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
+    public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
         return new SimpleReachabilityChecker<VV, AA, Integer>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
@@ -100,7 +100,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param <VV>             the vertex data type
      * @return the new {@link SimpleReachabilityChecker} instance.
      */
-    public static <VV, AA> SimpleReachabilityChecker<VV, AA, Long> newLongCostInstance(
+    public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Long> newLongCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull TriFunction<VV, VV, AA, Long> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Long> algo) {
