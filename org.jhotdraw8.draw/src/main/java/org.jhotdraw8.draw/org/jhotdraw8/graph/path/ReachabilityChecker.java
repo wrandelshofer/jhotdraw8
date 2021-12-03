@@ -8,8 +8,8 @@ import java.util.function.Predicate;
  * Defines an API for checking if there is a vertex sequence
  * up to (inclusive) a maximal cost in a directed graph.
  *
- * @param <V>
- * @param <C>
+ * @param <V> the vertex data type
+ * @param <C> the cost number type
  */
 public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
     /**
