@@ -31,7 +31,7 @@ import java.util.function.Predicate;
  * Performance characteristics:
  * <dl>
  *     <dt>When the algorithm returns a back link</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
- *     <dt>When the algorithm returns null</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ *     <dt>When the algorithm returns null</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
  * </dl>
  * <p>
  * References:
