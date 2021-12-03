@@ -5,7 +5,7 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.SpliteratorIterable;
 import org.jhotdraw8.graph.Arc;
-import org.jhotdraw8.graph.path.algo.AllPathsSpliterator;
+import org.jhotdraw8.graph.path.algo.AllWalksSpliterator;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 
@@ -14,15 +14,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Implements the {@link AllPathsFinder} interface.
+ * Implements the {@link AllSequencesFinder} interface.
  * <p>
- * See {@link AllPathsSpliterator} for a description of the underlying algorithm.
+ * See {@link AllWalksSpliterator} for a description of the underlying algorithm.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implements AllPathsFinder<V, A, C> {
+public class SimpleAllWalksFinder<V, A, C extends Number & Comparable<C>> implements AllSequencesFinder<V, A, C> {
     private final @NonNull C zero;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final @NonNull TriFunction<V, V, A, C> costFunction;
@@ -36,7 +36,7 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
      * @param costFunction     the cost function
      * @param sumFunction      the sum function
      */
-    public SimpleAllPathsFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+    public SimpleAllWalksFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
                                 @NonNull C zero,
                                 @NonNull TriFunction<V, V, A, C> costFunction,
                                 @NonNull BiFunction<C, C, C> sumFunction) {
@@ -54,7 +54,7 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
             int maxDepth,
             @NonNull C costLimit) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllWalksSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
                 (backLink) -> ArcBackLinkWithCost.toArrowSequence(backLink, (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow())),
                 maxDepth, costLimit, zero, costFunction, sumFunction));
@@ -68,7 +68,7 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
             int maxDepth,
             @NonNull C costLimit) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllWalksSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
                 (backLink) -> ArcBackLinkWithCost.toArrowSequence(backLink, (a, b) -> b.getArrow()),
                 maxDepth, costLimit, zero, costFunction, sumFunction));
@@ -82,7 +82,7 @@ public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implem
             int maxDepth,
             @NonNull C costLimit) {
 
-        return new SpliteratorIterable<>(() -> new AllPathsSpliterator<>(
+        return new SpliteratorIterable<>(() -> new AllWalksSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
                 (backLink) -> ArcBackLinkWithCost.toVertexSequence(backLink, ArcBackLinkWithCost::getVertex),
                 maxDepth, costLimit, zero, costFunction, sumFunction));

@@ -8,14 +8,14 @@ import org.jhotdraw8.graph.Arc;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for finding all paths up to a maximal cost
- * in a directed graph.
+ * Defines an API for finding all sequences between a set of source
+ * vertices and goal vertices up to a maximal depth in a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public interface AllPathsFinder<V, A, C extends Number & Comparable<C>> {
+public interface AllSequencesFinder<V, A, C extends Number & Comparable<C>> {
     /**
      * Finds all arc paths up to (including) the specified maximal cost.
      *

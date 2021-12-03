@@ -11,9 +11,9 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.DumpGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.graph.path.AllPathsFinder;
+import org.jhotdraw8.graph.path.AllSequencesFinder;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
-import org.jhotdraw8.graph.path.SimpleAllPathsFinder;
+import org.jhotdraw8.graph.path.SimpleAllWalksFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -117,8 +117,8 @@ public class ArbitraryArcPathSearchAlgoTest {
     }
 
     @NonNull
-    private AllPathsFinder<Integer, Double, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
-        AllPathsFinder<Integer, Double, Double> instance = new SimpleAllPathsFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
+    private AllSequencesFinder<Integer, Double, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
+        AllSequencesFinder<Integer, Double, Double> instance = new SimpleAllWalksFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
         return instance;
     }
 

@@ -9,8 +9,8 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.graph.path.AllPathsFinder;
-import org.jhotdraw8.graph.path.SimpleAllPathsFinder;
+import org.jhotdraw8.graph.path.AllSequencesFinder;
+import org.jhotdraw8.graph.path.SimpleAllWalksFinder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -30,8 +30,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class AllPathsSpliteratorTest {
 
-    private @NonNull AllPathsFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
-        return new SimpleAllPathsFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
+    private @NonNull AllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
+        return new SimpleAllWalksFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
     }
 
 
@@ -81,7 +81,7 @@ public class AllPathsSpliteratorTest {
     }
 
     private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<ImmutableList<Integer>> expected) {
-        AllPathsFinder<Integer, Double, Double> instance = newAllInstance(graph);
+        AllSequencesFinder<Integer, Double, Double> instance = newAllInstance(graph);
         List<ImmutableList<Integer>> actual = StreamSupport.stream(instance.findAllVertexSequences(
                         Collections.singletonList(start),
                         a -> a == goal, Integer.MAX_VALUE, maxCost).spliterator(), false)
