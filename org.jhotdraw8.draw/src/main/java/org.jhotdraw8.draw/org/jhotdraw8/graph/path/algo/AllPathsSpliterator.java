@@ -81,7 +81,7 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
             throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
         }
         if (maxCost.compareTo(zero) < 0) {
-            throw new IllegalArgumentException("maxCost must be <= zero. maxCost=" + maxCost + " zero=" + zero);
+            throw new IllegalArgumentException("maxCost must be >= zero. maxCost=" + maxCost + " zero=" + zero);
         }
 
         this.maxDepth = maxDepth;
