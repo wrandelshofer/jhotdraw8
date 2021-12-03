@@ -20,6 +20,7 @@ import java.util.function.Predicate;
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
+ * @param <C> the cost number type
  */
 public class SimpleAllPathsFinder<V, A, C extends Number & Comparable<C>> implements AllPathsFinder<V, A, C> {
     private final @NonNull C zero;

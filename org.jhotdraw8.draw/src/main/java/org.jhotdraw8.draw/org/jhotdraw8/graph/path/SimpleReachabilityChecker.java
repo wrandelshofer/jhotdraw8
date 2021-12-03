@@ -14,6 +14,7 @@ import java.util.function.Predicate;
  * Implements the {@link ReachabilityChecker} interface.
  *
  * @param <V> the vertex data type
+ * @param <A> the arrow data type
  * @param <C> the cost number type
  */
 public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>

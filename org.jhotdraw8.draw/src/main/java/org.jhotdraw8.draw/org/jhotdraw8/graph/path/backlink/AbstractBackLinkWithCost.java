@@ -7,6 +7,7 @@ import org.jhotdraw8.annotation.Nullable;
  * Abstract base class for back links.
  *
  * @param <T> the concrete back link type
+ * @param <C> the cost number type
  */
 public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, C extends Number & Comparable<C>>
         extends AbstractBackLink<T> {

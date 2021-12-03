@@ -22,6 +22,7 @@ import java.util.function.Predicate;
  * algorithm.
  *
  * @param <V> the vertex data type
+ * @param <C> the cost number type
  */
 public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 

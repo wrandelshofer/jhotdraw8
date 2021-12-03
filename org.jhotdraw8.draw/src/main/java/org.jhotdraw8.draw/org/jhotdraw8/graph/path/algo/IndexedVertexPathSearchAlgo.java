@@ -13,7 +13,6 @@ import java.util.function.IntPredicate;
  * Defines an API for a vertex path search algorithm over an indexed directed
  * graph.
  *
- * @param <V> the vertex data type
  * @param <C> the cost number type
  */
 public interface IndexedVertexPathSearchAlgo<C extends Number & Comparable<C>> {

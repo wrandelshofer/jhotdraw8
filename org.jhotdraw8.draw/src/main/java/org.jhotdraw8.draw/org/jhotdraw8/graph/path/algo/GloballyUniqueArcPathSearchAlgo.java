@@ -47,6 +47,8 @@ import java.util.function.Predicate;
  * </dl>
  *
  * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ * @param <C> the cost number type
  */
 public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
 
