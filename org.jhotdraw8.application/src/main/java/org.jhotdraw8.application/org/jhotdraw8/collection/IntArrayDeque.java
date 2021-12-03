@@ -203,7 +203,7 @@ public class IntArrayDeque {
                 throw new NoSuchElementException();
             }
             int result = elements[cursor];
-            // This check doesn't catch all possible comodifications,
+            // This check doesn't catch all possible co-modifications,
             // but does catch the ones that corrupt traversal
             if (tail != fence) {
                 throw new ConcurrentModificationException();

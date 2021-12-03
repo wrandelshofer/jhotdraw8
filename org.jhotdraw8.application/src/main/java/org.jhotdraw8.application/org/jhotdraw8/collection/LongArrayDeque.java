@@ -204,7 +204,7 @@ public class LongArrayDeque {
                 throw new NoSuchElementException();
             }
             long result = elements[cursor];
-            // This check doesn't catch all possible comodifications,
+            // This check doesn't catch all possible co-modifications,
             // but does catch the ones that corrupt traversal
             if (tail != fence) {
                 throw new ConcurrentModificationException();
