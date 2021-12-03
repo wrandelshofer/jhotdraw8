@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
+import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.ArrayDeque;
@@ -24,10 +25,25 @@ import java.util.function.Predicate;
  * <p>
  * Uniqueness is global up to (inclusive) the specified maximal depth.
  * <p>
+ * This algorithm <b>ignores</b> cost limit. If you need it, use one of
+ * the shortest path search algorithms.
+ * <p>
  * Performance characteristics:
  * <dl>
- *     <dt>When a path can be found</dt><dd>exactly O( |A| + |V| ) within max depth/dd>
- *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ *     <dt>When the algorithm returns a back link</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ *     <dt>When the algorithm returns null</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ * </dl>
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
+ *     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
+ *          <a href="https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/enumerate.pdf">math.cmu.edu</dd>
+ *
+ *     <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
+ *     <dd>STCON in Directed Unique-Path Graphs.
+ *          Chapter 2.1 Properties of Unique-Path Graphs.
+ *          <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</dd>
  * </dl>
  *
  * @param <V> the vertex data type
@@ -41,71 +57,79 @@ public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
      * @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
+     * @param maxDepth         the maximal depth (inclusive) of the search
+     *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
      * @param positiveInfinity the positive infinity value
-     * @param searchLimit      the maximal depth (inclusive) of the search.
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
+     * @param costLimit        the cost limit is <b>ignored</b>
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
      * @return
      */
     @Override
-    public @Nullable ArcBackLink<V, A, C> search(
+    public @Nullable ArcBackLinkWithCost<V, A, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            int maxDepth,
             @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C searchLimit,
+            @NonNull C costLimit,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
-
-        return search(startVertices, goalPredicate, nextArcsFunction, zero,
-                positiveInfinity, searchLimit.intValue(), costFunction, sumFunction);
+        return ArcBackLink.toArcBackLinkWithCost(
+                search(startVertices, goalPredicate, nextArcsFunction, maxDepth),
+                zero, costFunction, sumFunction);
     }
 
-    public @Nullable ArcBackLink<V, A, C> search(
+
+    /**
+     * Search engine method.
+     *
+     * @param startVertices    the set of start vertices
+     * @param goalPredicate    the goal predicate
+     * @param nextArcsFunction the next arcs function
+     * @param maxDepth         the maximal depth (inclusive) of the search
+     *                         Must be {@literal >= 0}.
+     * @return
+     */
+    public @Nullable ArcBackLink<V, A> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            @NonNull C zero,
-            @NonNull C positiveInfinity,
-            int maxDepth,
-            @NonNull TriFunction<V, V, A, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction) {
+            int maxDepth) {
+        if (maxDepth < 0) {
+            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
+        }
 
-        Queue<ArcBackLink<V, A, C>> queue = new ArrayDeque<>(16);
+        Queue<ArcBackLink<V, A>> queue = new ArrayDeque<>(16);
         Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
-        for (V start : startVertices) {
-            ArcBackLink<V, A, C> rootBackLink = new ArcBackLink<>(start, null, null, zero);
-            if (visitedCount.put(start, 1) == null) {
-                queue.add(rootBackLink);
+        for (V s : startVertices) {
+            if (visitedCount.put(s, 1) == null) {
+                queue.add(new ArcBackLink<V, A>(s, null, null));
             }
         }
 
-        ArcBackLink<V, A, C> found = null;
+        ArcBackLink<V, A> found = null;
         while (!queue.isEmpty()) {
-            ArcBackLink<V, A, C> node = queue.remove();
-            if (goalPredicate.test(node.getVertex())) {
+            ArcBackLink<V, A> u = queue.remove();
+            if (goalPredicate.test(u.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
                 }
-                found = node;
+                found = u;
             }
-            if (node.getDepth() < maxDepth) {
-                for (Arc<V, A> next : nextArcsFunction.apply(node.getVertex())) {
-                    if (visitedCount.merge(next.getEnd(), 1, Integer::sum) == 1) {
-                        ArcBackLink<V, A, C> backLink = new ArcBackLink<V, A, C>(next.getEnd(), next.getData(), node,
-                                sumFunction.apply(node.getCost(), costFunction.apply(next.getStart(), next.getEnd(), next.getData())));
-                        queue.add(backLink);
+            if (u.getDepth() < maxDepth) {
+                for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
+                    if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
+                        queue.add(new ArcBackLink<>(v.getEnd(), v.getData(), u));
                     }
                 }
             }
         }
 
         // Check if any of the preceding nodes has a non-unique path
-        for (ArcBackLink<V, A, C> node = found; node != null; node = node.getParent()) {
+        for (ArcBackLink<V, A> node = found; node != null; node = node.getParent()) {
             if (visitedCount.get(node.getVertex()) > 1) {
                 return null;// path is not unique!
             }

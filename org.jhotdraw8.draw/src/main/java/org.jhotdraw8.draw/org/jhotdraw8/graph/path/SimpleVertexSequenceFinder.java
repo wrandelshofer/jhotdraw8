@@ -5,7 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.algo.VertexPathSearchAlgo;
-import org.jhotdraw8.graph.path.backlink.VertexBackLink;
+import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -111,17 +111,17 @@ public class SimpleVertexSequenceFinder<V, C extends Number & Comparable<C>> imp
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
-        return VertexBackLink.toVertexSequence(algo.search(
-                startVertices, goalPredicate, nextVerticesFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
-        ), VertexBackLink::getVertex);
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
+        return VertexBackLinkWithCost.toVertexSequence(algo.search(
+                startVertices, goalPredicate, nextVerticesFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+        ), VertexBackLinkWithCost::getVertex);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
-                (start, goal) -> this.findVertexSequence(start, goal, searchLimit),
+                (start, goal) -> this.findVertexSequence(start, goal, maxDepth, costLimit),
                 zero,
                 sumFunction
 

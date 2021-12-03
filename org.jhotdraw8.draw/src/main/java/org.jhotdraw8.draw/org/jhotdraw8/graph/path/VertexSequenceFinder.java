@@ -28,13 +28,17 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the algorithm-specific search limit
+     * @param maxDepth      the maximal depth (inclusive) of the search
+     *                      Must be {@literal >= 0}.
+     * @param costLimit     the algorithm-specific cost limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices,
-                                                                  @NonNull Predicate<V> goalPredicate,
-                                                                  @NonNull C searchLimit);
+    @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
+            @NonNull Iterable<V> startVertices,
+            @NonNull Predicate<V> goalPredicate,
+            int maxDepth,
+            @NonNull C costLimit);
 
     /**
      * Finds a vertex sequence from a start vertex to a vertex
@@ -42,43 +46,57 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the algorithm-specific search limit
+     * @param maxDepth      the maximal depth (inclusive) of the search
+     *                      Must be {@literal >= 0}.
+     * @param costLimit     the algorithm-specific cost limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull V start,
-                                                                          @NonNull Predicate<V> goalPredicate,
-                                                                          @NonNull C searchLimit) {
-        return findVertexSequence(Collections.singletonList(start), goalPredicate, searchLimit);
+    default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
+            @NonNull V start,
+            @NonNull Predicate<V> goalPredicate,
+            int maxDepth,
+            @NonNull C costLimit) {
+        return findVertexSequence(Collections.singletonList(start), goalPredicate, maxDepth, costLimit);
     }
 
     /**
      * Finds a vertex sequence from start to goal.
      *
-     * @param start   the start vertex
-     * @param goal    the goal vertex
-     * @param searchLimit the algorithm-specific search limit
+     * @param start     the start vertex
+     * @param goal      the goal vertex
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit the algorithm-specific cost limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable
-    default OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull V start,
-                                                                @NonNull V goal, @NonNull C searchLimit) {
-        return findVertexSequence(List.of(start), goal::equals, searchLimit);
+    default OrderedPair<ImmutableList<V>, C> findVertexSequence(
+            @NonNull V start,
+            @NonNull V goal,
+            int maxDepth,
+            @NonNull C costLimit) {
+        return findVertexSequence(List.of(start), goal::equals, maxDepth, costLimit);
     }
 
     /**
      * Finds a vertex walk through the given waypoints.
      *
-     * @param waypoints               a list of waypoints
-     * @param searchLimit the algorithm-specific search limit for paths between waypoints
+     * @param waypoints a list of waypoints
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit the algorithm-specific cost limit for paths between waypoints
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit);
+    @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
+            @NonNull Iterable<V> waypoints,
+            int maxDepth,
+            @NonNull C costLimit);
 
     /**
-     * Helper function for implementing {@link #findVertexSequenceOverWaypoints(Iterable, Number)}.
+     * Helper function for implementing {@link #findVertexSequenceOverWaypoints(Iterable, int, Number)}.
      *
      * @param waypoints                  the waypoints
      * @param findVertexSequenceFunction the search function, for example {@code this::findVertexSequence}

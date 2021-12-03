@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
+import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.AddToSet;
 
@@ -22,14 +23,25 @@ import java.util.function.Predicate;
  * Searches an arbitrary path from a set of start vertices to a set of goal
  * vertices using a breadth-first search algorithm.
  * <p>
+ * This algorithm <b>ignores</b> cost limit. If you need it, use one of
+ * the shortest path search algorithms.
+ * <p>
  * Expected run time:
  * <dl>
- *     <dt>When a path can be found</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
- *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ *     <dt>When the algorithm returns a back link</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
+ *     <dt>When the algorithm returns null</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
+ * </dl>
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
+ *     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
+ *          <a href="https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/enumerate.pdf">math.cmu.edu</dd>
  * </dl>
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
+ * @param <C> the cost number type
  */
 public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
 
@@ -39,28 +51,30 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
      * @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
+     * @param maxDepth         the maximal depth (inclusive) of the search
+     *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
      * @param positiveInfinity the positive infinity value
-     * @param searchLimit      the maximal depth (inclusive) of the search.
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
+     * @param costLimit        the cost limit is <b>ignored</b>
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
      * @return
      */
     @Override
-    public @Nullable ArcBackLink<V, A, C> search(@NonNull Iterable<V> startVertices,
-                                                 @NonNull Predicate<V> goalPredicate,
-                                                 @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                                                 @NonNull C zero,
-                                                 @NonNull C positiveInfinity,
-                                                 @NonNull C searchLimit,
-                                                 @NonNull TriFunction<V, V, A, C> costFunction,
-                                                 @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextArcsFunction,
-                new HashSet<V>()::add,
-                zero,
-                searchLimit.intValue(), costFunction, sumFunction);
+    public @Nullable ArcBackLinkWithCost<V, A, C> search(@NonNull Iterable<V> startVertices,
+                                                         @NonNull Predicate<V> goalPredicate,
+                                                         @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                                         int maxDepth,
+                                                         @NonNull C zero,
+                                                         @NonNull C positiveInfinity,
+                                                         @NonNull C costLimit,
+                                                         @NonNull TriFunction<V, V, A, C> costFunction,
+                                                         @NonNull BiFunction<C, C, C> sumFunction) {
+        return ArcBackLink.toArcBackLinkWithCost(
+                search(startVertices, goalPredicate, nextArcsFunction,
+                        new HashSet<V>()::add,
+                        maxDepth),
+                zero, costFunction, sumFunction);
     }
 
     /**
@@ -70,45 +84,37 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
      * @param visited          the set of visited vertices (see {@link AddToSet})
-     * @param zero             the zero cost value
      * @param maxDepth         the maximal depth (inclusive) of the search
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
-     * @param costFunction     the cost function
-     * @param sumFunction      the sum function for adding two cost values
+     *                         Must be {@literal >= 0}.
      * @return on success: a back link, otherwise: null
      */
-    public @Nullable ArcBackLink<V, A, C> search(@NonNull Iterable<V> startVertices,
-                                                 @NonNull Predicate<V> goalPredicate,
-                                                 @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                                                 @NonNull AddToSet<V> visited,
-                                                 @NonNull C zero,
-                                                 int maxDepth,
-                                                 @NonNull TriFunction<V, V, A, C> costFunction,
-                                                 @NonNull BiFunction<C, C, C> sumFunction) {
+    public @Nullable ArcBackLink<V, A> search(@NonNull Iterable<V> startVertices,
+                                              @NonNull Predicate<V> goalPredicate,
+                                              @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                              @NonNull AddToSet<V> visited,
+                                              int maxDepth) {
+        if (maxDepth < 0) {
+            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
+        }
 
-        // This is breadth-first search algorithm
-        Queue<ArcBackLink<V, A, C>> queue = new ArrayDeque<>(16);
-        for (V root : startVertices) {
-            ArcBackLink<V, A, C> rootBackLink = new ArcBackLink<>(root, null, null, zero);
-            if (visited.add(root)) {
+        Queue<ArcBackLink<V, A>> queue = new ArrayDeque<>(16);
+        for (V s : startVertices) {
+            ArcBackLink<V, A> rootBackLink = new ArcBackLink<>(s, null, null);
+            if (visited.add(s)) {
                 queue.add(rootBackLink);
             }
         }
 
         while (!queue.isEmpty()) {
-            ArcBackLink<V, A, C> node = queue.remove();
-            if (goalPredicate.test(node.getVertex())) {
-                return node;
+            ArcBackLink<V, A> u = queue.remove();
+            if (goalPredicate.test(u.getVertex())) {
+                return u;
             }
 
-            if (node.getDepth() < maxDepth) {
-                for (Arc<V, A> next : nextArcsFunction.apply(node.getVertex())) {
-                    if (visited.add(next.getEnd())) {
-                        ArcBackLink<V, A, C> backLink = new ArcBackLink<>(next.getEnd(), next.getData(), node,
-                                sumFunction.apply(costFunction.apply(next.getStart(), next.getEnd(), next.getData()),
-                                        node.getCost()));
-                        queue.add(backLink);
+            if (u.getDepth() < maxDepth) {
+                for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
+                    if (visited.add(v.getEnd())) {
+                        queue.add(new ArcBackLink<>(v.getEnd(), v.getData(), u));
                     }
                 }
             }

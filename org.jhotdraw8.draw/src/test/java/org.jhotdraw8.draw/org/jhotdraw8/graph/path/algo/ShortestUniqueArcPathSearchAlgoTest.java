@@ -135,7 +135,8 @@ public class ShortestUniqueArcPathSearchAlgoTest {
     public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
 
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal,
+                Integer.MAX_VALUE, Double.MAX_VALUE);
         if (result == null) {
             assertNull(expPath);
         } else {
@@ -175,13 +176,15 @@ public class ShortestUniqueArcPathSearchAlgoTest {
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find shortest path to any of the goals
-        OrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains,
+                Integer.MAX_VALUE, Double.MAX_VALUE);
         double actualLength = actualShortestPath == null ? 0.0 : actualShortestPath.second();
 
         // Find a path for each individual goal, and remember the shortest path
         double individualShortestLength = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            OrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal, Double.MAX_VALUE);
+            OrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal,
+                    Integer.MAX_VALUE, Double.MAX_VALUE);
             if (resultEntry == null) {
                 assertNull(expResult);
                 return;
@@ -212,7 +215,7 @@ public class ShortestUniqueArcPathSearchAlgoTest {
     private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal, Integer.MAX_VALUE, Double.MAX_VALUE);
         assertEquals(expResult, result == null ? null : result.first());
     }
 
@@ -250,7 +253,7 @@ public class ShortestUniqueArcPathSearchAlgoTest {
     private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Double.MAX_VALUE);
         if (actual == null) {
             assertNull(expResult);
         } else {
@@ -276,7 +279,7 @@ public class ShortestUniqueArcPathSearchAlgoTest {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Double.MAX_VALUE);
         if (actual == null) {
             assertNull(expResult);
         } else {

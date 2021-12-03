@@ -7,6 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.path.backlink.VertexBackLink;
+import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -17,14 +18,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Searches an arbitrary vertex path from a set of start vertices to a
- * set of goal vertices using a breadth-first search algorithm.
- * <p>
- * Expected run time:
- * <dl>
- *     <dt>When a path can be found</dt><dd>less or equal O( |A| + |V| ) within max depth</dd>
- *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
- * </dl>
+ * See {@link GloballyArbitraryArcPathSearchAlgo} for a description of this
+ * algorithm.
  *
  * @param <V> the vertex data type
  */
@@ -37,27 +32,31 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
+     * @param maxDepth             the maximal depth (inclusive) of the search
+     *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal depth (inclusive) of the search.
-     *                             Set this value as small as you can, to prevent
-     *                             long search times if the goal can not be reached.
+     * @param costLimit            the maximal cost (inclusive) of a path
+     *                             Must be {@literal >= zero).
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return
      */
     @Override
-    public @Nullable VertexBackLink<V, C> search(
+    public @Nullable VertexBackLinkWithCost<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            @NonNull C zero,
+            int maxDepth, @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C searchLimit,
+            @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextVerticesFunction,
-                new HashSet<V>()::add, searchLimit.intValue(), zero,
+        return VertexBackLink.toVertexBackLinkWithCost(
+                search(startVertices, goalPredicate, nextVerticesFunction,
+                        new HashSet<V>()::add,
+                        maxDepth),
+                zero,
                 costFunction, sumFunction);
     }
 
@@ -68,39 +67,35 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
      * @param visited          the set of visited vertices (see {@link AddToSet})
-     * @param maxDepth          the maximal depth
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
+     * @param maxDepth         the maximal depth
      * @return on success: a back link, otherwise: null
      */
-    protected @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices,
-                                                    @NonNull Predicate<V> goalPredicate,
-                                                    @NonNull Function<V, Iterable<V>> nextArcsFunction,
-                                                    @NonNull AddToSet<V> visited,
-                                                    @NonNull int maxDepth,
-                                                    @NonNull C zero,
-                                                    @NonNull BiFunction<V, V, C> costFunction,
-                                                    @NonNull BiFunction<C, C, C> sumFunction) {
-        Queue<VertexBackLink<V, C>> queue = new ArrayDeque<>(16);
-        for (V root : startVertices) {
-            VertexBackLink<V, C> rootBackLink = new VertexBackLink<>(root, null, zero);
-            if (visited.add(root)) {
-                queue.add(rootBackLink);
+    protected @Nullable VertexBackLink<V> search(@NonNull Iterable<V> startVertices,
+                                                 @NonNull Predicate<V> goalPredicate,
+                                                 @NonNull Function<V, Iterable<V>> nextArcsFunction,
+                                                 @NonNull AddToSet<V> visited,
+                                                 @NonNull int maxDepth) {
+        if (maxDepth < 0) {
+            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
+        }
+
+        Queue<VertexBackLink<V>> queue = new ArrayDeque<>(16);
+        for (V s : startVertices) {
+            if (visited.add(s)) {
+                queue.add(new VertexBackLink<V>(s, null));
             }
         }
 
         while (!queue.isEmpty()) {
-            VertexBackLink<V, C> node = queue.remove();
-            if (goalPredicate.test(node.getVertex())) {
-                return node;
+            VertexBackLink<V> u = queue.remove();
+            if (goalPredicate.test(u.getVertex())) {
+                return u;
             }
 
-            if (node.getDepth() < maxDepth) {
-                for (V next : nextArcsFunction.apply(node.getVertex())) {
-                    if (visited.add(next)) {
-                        VertexBackLink<V, C> backLink = new VertexBackLink<>(next, node,
-                                sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next)));
-                        queue.add(backLink);
+            if (u.getDepth() < maxDepth) {
+                for (V v : nextArcsFunction.apply(u.getVertex())) {
+                    if (visited.add(v)) {
+                        queue.add(new VertexBackLink<V>(v, u));
                     }
                 }
             }

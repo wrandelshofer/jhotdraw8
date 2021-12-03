@@ -1,16 +1,10 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.ArcReachabilityAlgo;
-import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.util.TriFunction;
 
-import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -123,26 +117,13 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
         return new SimpleReachabilityChecker<VV, AA, Long>(0L, Long.MAX_VALUE, nextArcsFunction, costFunction, Long::sum, algo);
     }
 
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable ArcBackLink<VV, AA, CC> node,
-                                                                                                                                 @NonNull Function<ArcBackLink<VV, AA, CC>, XX> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
-        for (ArcBackLink<VV, AA, CC> parent = node; parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent));
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
-
 
     @Override
     public boolean isReachable(@NonNull Iterable<V> startVertices,
                                @NonNull Predicate<V> goalPredicate,
-                               @NonNull C searchLimit) {
+                               int maxDepth, @NonNull C costLimit) {
         return algo.tryToReach(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit,
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit,
                 costFunction, sumFunction
         );
     }
@@ -153,15 +134,17 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
-     * @param searchLimit
+     * @param maxDepth      the maximal depth (inclusive) of the search
+     *                      Must be {@literal >= 0}.
+     * @param costLimit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Override
     public boolean isReachable(@NonNull V start,
-                               @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
+                               @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
         return algo.tryToReach(
-                Collections.singletonList(start), goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit,
+                Collections.singletonList(start), goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit,
                 costFunction, sumFunction
         );
     }
@@ -169,16 +152,18 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     /**
      * Checks if a vertex sequence from start to goal exists.
      *
-     * @param start       the start vertex
-     * @param goal        the goal vertex
-     * @param searchLimit
+     * @param start     the start vertex
+     * @param goal      the goal vertex
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     @Override
-    public boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C searchLimit) {
+    public boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit) {
         return algo.tryToReach(
-                Collections.singletonList(start), goal::equals, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
+                Collections.singletonList(start), goal::equals, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
         );
     }
 

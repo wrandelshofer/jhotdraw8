@@ -3,7 +3,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
-import org.jhotdraw8.graph.path.backlink.ArcBackLink;
+import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.function.BiFunction;
@@ -25,22 +25,23 @@ public interface ArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> {
      * @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
+     * @param maxDepth         the maximal depth (inclusive) of the search
+     *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
      * @param positiveInfinity the positive infinity value
-     * @param searchLimit      the algorithm-specific search limit.
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
+     * @param costLimit        the algorithm-specific cost limit.
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
-    @Nullable ArcBackLink<V, A, C> search(
+    @Nullable ArcBackLinkWithCost<V, A, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            int maxDepth,
             @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C searchLimit,
+            @NonNull C costLimit,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);
 }

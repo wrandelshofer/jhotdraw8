@@ -107,7 +107,8 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     public void doFindShortestVertexPath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal,
+                Integer.MAX_VALUE, Double.MAX_VALUE);
         if (result == null) {
             assertNull(expPath);
         } else {
@@ -149,7 +150,8 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         ImmutableList<Double> individualShortestPath = ImmutableLists.of();
         double individualShortestCost = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            OrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal, Double.MAX_VALUE);
+            OrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal,
+                    Integer.MAX_VALUE, Double.MAX_VALUE);
             assertNotNull(resultEntry);
             ImmutableList<Double> result = resultEntry.first();
             double resultLength = result.stream().mapToDouble(Double::doubleValue).sum();
@@ -162,7 +164,8 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         }
 
         // Find shortest path to any of the goals
-        OrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains,
+                Integer.MAX_VALUE, Double.MAX_VALUE);
         assertNotNull(actualShortestPath);
         double actualCost = actualShortestPath.second();
 
@@ -184,7 +187,8 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     private void doFindShortestArrowPath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal,
+                Integer.MAX_VALUE, Double.MAX_VALUE);
         assertEquals(expResult, result.first());
     }
 
@@ -223,7 +227,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Double.MAX_VALUE);
         assertEquals(expResult, actual.first());
         assertEquals(expCost, actual.second().doubleValue());
     }
@@ -244,7 +248,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     private void doFindArrowPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        OrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Double.MAX_VALUE);
         assertEquals(expResult, actual.first());
         assertEquals(expCost, actual.second().doubleValue());
     }

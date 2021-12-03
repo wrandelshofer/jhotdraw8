@@ -84,7 +84,7 @@ public class AllPathsSpliteratorTest {
         AllPathsFinder<Integer, Double, Double> instance = newAllInstance(graph);
         List<ImmutableList<Integer>> actual = StreamSupport.stream(instance.findAllVertexSequences(
                         Collections.singletonList(start),
-                        a -> a == goal, maxCost).spliterator(), false)
+                        a -> a == goal, Integer.MAX_VALUE, maxCost).spliterator(), false)
                 .map(OrderedPair::first).collect(Collectors.toList());
         assertEquals(expected, actual);
     }

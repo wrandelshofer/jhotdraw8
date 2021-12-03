@@ -7,6 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.path.backlink.VertexBackLink;
+import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
@@ -17,16 +18,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Searches a globally unique vertex path from a set of start vertices to a
- * set of goal vertices using a breadth-first search algorithm.
- * <p>
- * Uniqueness is global up to (inclusive) the specified maximal depth.
- * <p>
- * Performance characteristics:
- * <dl>
- *     <dt>When a path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
- *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V| ) within max depth</dd>
- * </dl>
+ * See {@link GloballyUniqueArcPathSearchAlgo} for a description of this
+ * algorithm.
  *
  * @param <V> the vertex data type
  */
@@ -39,27 +32,28 @@ public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
+     * @param maxDepth             the maximal depth (inclusive) of the search
+     *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal depth (inclusive) of the search.
-     *                             Set this value as small as you can, to prevent
-     *                             long search times if the goal can not be reached.
+     * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
     @Override
-    public @Nullable VertexBackLink<V, C> search(
+    public @Nullable VertexBackLinkWithCost<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            @NonNull C zero,
+            int maxDepth, @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C searchLimit,
+            @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextVerticesFunction,
-                zero, searchLimit.intValue(), costFunction, sumFunction);
+        return VertexBackLink.toVertexBackLinkWithCost(
+                search(startVertices, goalPredicate, nextVerticesFunction, maxDepth),
+                zero, costFunction, sumFunction);
     }
 
     /**
@@ -68,54 +62,46 @@ public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
-     * @param zero                 the zero cost value
      * @param maxDepth             the maximal depth (inclusive) of the search.
-     *                             Set this value as small as you can, to prevent
-     *                             long search times if the goal can not be reached.
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
-    public @Nullable VertexBackLink<V, C> search(
+    public @Nullable VertexBackLink<V> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            @NonNull C zero,
-            int maxDepth,
-            @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction) {
+            int maxDepth) {
+        if (maxDepth < 0) {
+            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
+        }
 
-        Queue<VertexBackLink<V, C>> queue = new ArrayDeque<>(16);
+        Queue<VertexBackLink<V>> queue = new ArrayDeque<>(16);
         Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
-        for (V start : startVertices) {
-            VertexBackLink<V, C> rootBackLink = new VertexBackLink<>(start, null, zero);
-            if (visitedCount.put(start, 1) == null) {
-                queue.add(rootBackLink);
+        for (V s : startVertices) {
+            if (visitedCount.put(s, 1) == null) {
+                queue.add(new VertexBackLink<>(s, null));
             }
         }
 
-        VertexBackLink<V, C> found = null;
+        VertexBackLink<V> found = null;
         while (!queue.isEmpty()) {
-            VertexBackLink<V, C> node = queue.remove();
-            if (goalPredicate.test(node.getVertex())) {
+            VertexBackLink<V> u = queue.remove();
+            if (goalPredicate.test(u.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
                 }
-                found = node;
+                found = u;
             }
-            if (node.getDepth() < maxDepth) {
-                for (V next : nextVerticesFunction.apply(node.getVertex())) {
-                    if (visitedCount.merge(next, 1, Integer::sum) == 1) {
-                        VertexBackLink<V, C> backLink = new VertexBackLink<V, C>(next, node,
-                                sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next)));
-                        queue.add(backLink);
+            if (u.getDepth() < maxDepth) {
+                for (V v : nextVerticesFunction.apply(u.getVertex())) {
+                    if (visitedCount.merge(v, 1, Integer::sum) == 1) {
+                        queue.add(new VertexBackLink<V>(v, u));
                     }
                 }
             }
         }
 
         // Check if any of the preceding nodes has a non-unique path
-        for (VertexBackLink<V, C> node = found; node != null; node = node.getParent()) {
+        for (VertexBackLink<V> node = found; node != null; node = node.getParent()) {
             if (visitedCount.get(node.getVertex()) > 1) {
                 return null;// path is not unique!
             }

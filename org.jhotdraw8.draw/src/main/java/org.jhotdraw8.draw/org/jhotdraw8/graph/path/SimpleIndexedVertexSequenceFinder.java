@@ -3,12 +3,10 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.algo.IndexedVertexPathSearchAlgo;
-import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLink;
+import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
 
-import java.util.ArrayDeque;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -110,34 +108,24 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
 
     @Override
     public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequence(
-            @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate, @NonNull C searchLimit) {
-        return toVertexSequence(algo.search(
-                startVertices, goalPredicate::test, nextVerticesFunction, searchLimit, zero, positiveInfinity, costFunction, sumFunction
-        ), IndexedVertexBackLink::getVertex);
+            @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate,
+            int maxDepth, @NonNull C costLimit) {
+        return IndexedVertexBackLinkWithCost.toVertexSequence(algo.search(
+                startVertices, goalPredicate::test, nextVerticesFunction, maxDepth, costLimit, zero, positiveInfinity, costFunction, sumFunction
+        ), IndexedVertexBackLinkWithCost::getVertex);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<Integer> waypoints, @NonNull C searchLimit) {
+    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(
+            @NonNull Iterable<Integer> waypoints, int maxDepth, @NonNull C costLimit) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
-                (start, goal) -> this.findVertexSequence(start, goal, searchLimit),
+                (start, goal) -> this.findVertexSequence(start, goal, maxDepth, costLimit),
                 zero,
                 sumFunction
 
         );
     }
 
-    private <X> @Nullable OrderedPair<ImmutableList<X>, C> toVertexSequence(@Nullable IndexedVertexBackLink<C> node,
-                                                                            @NonNull Function<IndexedVertexBackLink<C>, X> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<X> deque = new ArrayDeque<>();
-        for (IndexedVertexBackLink<C> parent = node; parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent));
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
 
 }

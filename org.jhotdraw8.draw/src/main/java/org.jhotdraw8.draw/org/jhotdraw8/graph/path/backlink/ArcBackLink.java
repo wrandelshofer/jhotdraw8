@@ -2,22 +2,19 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.util.TriFunction;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
- * Represents an arc back link with cost and depth.
+ * Represents an arc back link with depth.
  *
  * @param <V> the vertex type
  * @param <A> the arrow type
- * @param <C> the cost number type
  */
-public class ArcBackLink<V, A, C extends Number & Comparable<C>> extends AbstractBackLink<ArcBackLink<V, A, C>, C> {
+public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
     private final @NonNull V vertex;
     private final @Nullable A arrow;
 
@@ -27,41 +24,13 @@ public class ArcBackLink<V, A, C extends Number & Comparable<C>> extends Abstrac
      * @param vertex the vertex data
      * @param arrow  the arrow data
      * @param parent the parent back link
-     * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
      */
-    public ArcBackLink(@NonNull V vertex, @Nullable A arrow, @Nullable ArcBackLink<V, A, C> parent, @NonNull C cost) {
-        super(parent, cost);
+    public ArcBackLink(@NonNull V vertex, @Nullable A arrow, @Nullable ArcBackLink<V, A> parent) {
+        super(parent);
         this.vertex = vertex;
         this.arrow = arrow;
     }
 
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable ArcBackLink<VV, AA, CC> node,
-                                                                                                                                 @NonNull Function<ArcBackLink<VV, AA, CC>, XX> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
-        for (ArcBackLink<VV, AA, CC> parent = node; parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent));
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
-
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toArrowSequence(@Nullable ArcBackLink<VV, AA, CC> node,
-                                                                                                                                @NonNull BiFunction<ArcBackLink<VV, AA, CC>, ArcBackLink<VV, AA, CC>, XX> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
-        ArcBackLink<VV, AA, CC> prev = node;
-        for (ArcBackLink<VV, AA, CC> parent = node.getParent(); parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent, prev));
-            prev = parent;
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
 
     public @Nullable A getArrow() {
         return arrow;
@@ -79,4 +48,32 @@ public class ArcBackLink<V, A, C extends Number & Comparable<C>> extends Abstrac
                 ", arrow=" + arrow +
                 '}';
     }
+
+    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable ArcBackLinkWithCost<VV, AA, CC>
+    toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
+                          @NonNull CC zero,
+                          @NonNull TriFunction<VV, VV, AA, CC> costFunction,
+                          @NonNull BiFunction<CC, CC, CC> sumFunction) {
+        if (node == null) {
+            return null;
+        }
+
+
+        Deque<ArcBackLink<VV, AA>> deque = new ArrayDeque<>();
+        for (ArcBackLink<VV, AA> n = node; n != null; n = n.getParent()) {
+            deque.addFirst(n);
+        }
+
+
+        ArcBackLinkWithCost<VV, AA, CC> newNode = null;
+        for (ArcBackLink<VV, AA> n : deque) {
+            newNode = new ArcBackLinkWithCost<>(n.getVertex(), n.getArrow(), newNode,
+                    newNode == null
+                            ? zero
+                            : sumFunction.apply(newNode.getCost(),
+                            costFunction.apply(newNode.getVertex(), n.getVertex(), n.getArrow())));
+        }
+        return newNode;
+    }
+
 }

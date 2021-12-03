@@ -3,14 +3,12 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.ArcPathSearchAlgo;
-import org.jhotdraw8.graph.path.backlink.ArcBackLink;
+import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 
-import java.util.ArrayDeque;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -69,33 +67,6 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
         this.algo = algo;
     }
 
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable ArcBackLink<VV, AA, CC> node,
-                                                                                                                                 @NonNull Function<ArcBackLink<VV, AA, CC>, XX> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
-        for (ArcBackLink<VV, AA, CC> parent = node; parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent));
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
-
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toArrowSequence(@Nullable ArcBackLink<VV, AA, CC> node,
-                                                                                                                                @NonNull BiFunction<ArcBackLink<VV, AA, CC>, ArcBackLink<VV, AA, CC>, XX> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<XX> deque = new ArrayDeque<>();
-        ArcBackLink<VV, AA, CC> prev = node;
-        for (ArcBackLink<VV, AA, CC> parent = node.getParent(); parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent, prev));
-            prev = parent;
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
 
     /**
      * Creates a new instance with a cost function that returns integer
@@ -196,39 +167,39 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
-        return toArrowSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
+    public @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
+        return ArcBackLinkWithCost.toArrowSequence(algo.search(
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
         ), (a, b) -> new Arc<>(a.getVertex(), b.getVertex(), b.getArrow()));
     }
 
     @Override
-    public OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
-        return ArcSequenceFinder.findArcSequenceOverWaypoints(waypoints, (start, goal) -> findArcSequence(start, goal, searchLimit), zero, sumFunction);
+    public OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
+        return ArcSequenceFinder.findArcSequenceOverWaypoints(waypoints, (start, goal) -> findArcSequence(start, goal, maxDepth, costLimit), zero, sumFunction);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
-        return toArrowSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
+    public @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
+        return ArcBackLinkWithCost.toArrowSequence(algo.search(
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
         ), (a, b) -> b.getArrow());
     }
 
     @Override
-    public OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
-        return ArrowSequenceFinder.findArrowSequenceOverWaypoints(waypoints, (start, goal) -> findArrowSequence(start, goal, searchLimit), zero, sumFunction);
+    public OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
+        return ArrowSequenceFinder.findArrowSequenceOverWaypoints(waypoints, (start, goal) -> findArrowSequence(start, goal, maxDepth, costLimit), zero, sumFunction);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull C searchLimit) {
-        return toVertexSequence(algo.search(
-                startVertices, goalPredicate, nextArcsFunction, zero, positiveInfinity, searchLimit, costFunction, sumFunction
-        ), ArcBackLink::getVertex);
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
+        return ArcBackLinkWithCost.toVertexSequence(algo.search(
+                startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, positiveInfinity, costLimit, costFunction, sumFunction
+        ), ArcBackLinkWithCost::getVertex);
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, @NonNull C searchLimit) {
-        return VertexSequenceFinder.findVertexSequenceOverWaypoints(waypoints, (start, goal) -> findVertexSequence(start, goal, searchLimit), zero, sumFunction);
+    public @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(@NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
+        return VertexSequenceFinder.findVertexSequenceOverWaypoints(waypoints, (start, goal) -> findVertexSequence(start, goal, maxDepth, costLimit), zero, sumFunction);
     }
 
 

@@ -18,13 +18,15 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the algorithm-specific search limit
+     * @param maxDepth      the maximal depth (inclusive) of the search
+     *                      Must be {@literal >= 0}.
+     * @param costLimit     the algorithm-specific cost limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     boolean isReachable(@NonNull Iterable<V> startVertices,
                         @NonNull Predicate<V> goalPredicate,
-                        @NonNull C searchLimit);
+                        int maxDepth, @NonNull C costLimit);
 
     /**
      * Checks if a vertex sequence from a start vertex to a vertex
@@ -32,24 +34,28 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      *
      * @param start         the start vertex
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the algorithm-specific search limit
+     * @param maxDepth      the maximal depth (inclusive) of the search
+     *                      Must be {@literal >= 0}.
+     * @param costLimit     the algorithm-specific cost limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
     boolean isReachable(@NonNull V start,
                         @NonNull Predicate<V> goalPredicate,
-                        @NonNull C searchLimit);
+                        int maxDepth, @NonNull C costLimit);
 
     /**
      * Checks if a vertex sequence from start to goal exists.
      *
-     * @param start       the start vertex
-     * @param goal        the goal vertex
-     * @param searchLimit the algorithm-specific search limit
+     * @param start     the start vertex
+     * @param goal      the goal vertex
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit the algorithm-specific cost limit
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    boolean isReachable(@NonNull V start, @NonNull V goal, @NonNull C searchLimit);
+    boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit);
 
 
 }

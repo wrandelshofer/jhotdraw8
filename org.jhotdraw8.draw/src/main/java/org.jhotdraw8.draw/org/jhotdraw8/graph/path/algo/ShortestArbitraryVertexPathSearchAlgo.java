@@ -2,7 +2,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.graph.path.backlink.VertexBackLink;
+import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,23 +13,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Searches an arbitrary vertex path from a set of start vertices to a set of goal
- * vertices using Dijkstra's algorithm.
- * <p>
- * The provided cost function must return values {@literal >= 0} for all arrows.
- * <p>
- * References:
- * <dl>
- * <dt>Esger W. Dijkstra (1959), A note on two problems in connexion with graphs,
- * Problem 2.
- * </dt>
- * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
- * </dl>
- * Performance characteristics:
- * <dl>
- *     <dt>When a path can be found</dt><dd>less or equal O( |A| + |V|*log|V| ) within max cost</dd>
- *     <dt>When no path can be found</dt><dd>exactly O( |A| + |V|*log|V| ) within max cost</dd>
- * </dl>
+ * See {@link ShortestArbitraryArcPathSearchAlgo} for a description of this
+ * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
@@ -43,33 +28,41 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
+     * @param maxDepth             the maximal depth (inclusive) of the search
+     *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
      * @param positiveInfinity     the positive infinity value
-     * @param searchLimit          the maximal cost (inclusive) of a path.
-     *                             Set this value as small as you can, to prevent
-     *                             long search times if the goal can not be reached.
+     * @param costLimit            the maximal cost (inclusive) of a path.
+     *                             Must be {@literal >= zero).
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
     @Override
-    public @Nullable VertexBackLink<V, C> search(
+    public @Nullable VertexBackLinkWithCost<V, C> search(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+            int maxDepth,
             @NonNull C zero,
             @NonNull C positiveInfinity,
-            @NonNull C searchLimit,
+            @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
 
-        final C maxCost = searchLimit;
+        if (maxDepth < 0) {
+            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
+        }
+        if (costLimit.compareTo(zero) < 0) {
+            throw new IllegalArgumentException("costLimit must be >= zero. costLimit=" + costLimit + ", zero=" + zero);
+        }
+        CheckedNonNegativeVertexCostFunction<V, C> costf = new CheckedNonNegativeVertexCostFunction<>(zero, costFunction);
 
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by shallower depth prevents that the algorithm
         //          unnecessarily follows zero-length arrows.
-        PriorityQueue<VertexBackLink<V, C>> queue = new PriorityQueue<>(
-                Comparator.<VertexBackLink<V, C>, C>comparing(VertexBackLink::getCost).thenComparing(VertexBackLink::getDepth));
+        PriorityQueue<VertexBackLinkWithCost<V, C>> queue = new PriorityQueue<>(
+                Comparator.<VertexBackLinkWithCost<V, C>, C>comparing(VertexBackLinkWithCost::getCost).thenComparing(VertexBackLinkWithCost::getDepth));
 
         // Map with best known costs from start to a specific vertex.
         // If an entry is missing, we assume infinity.
@@ -77,27 +70,28 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
 
         // Insert start itself in priority queue and initialize its cost to 0.
         for (V start : startVertices) {
-            queue.add(new VertexBackLink<>(start, null, zero));
+            queue.add(new VertexBackLinkWithCost<>(start, null, zero));
             costMap.put(start, zero);
         }
 
         // Loop until we have reached the goal, or queue is exhausted.
         while (!queue.isEmpty()) {
-            VertexBackLink<V, C> node = queue.remove();
-            final V u = node.getVertex();
-            if (goalPredicate.test(u)) {
-                return node;
+            VertexBackLinkWithCost<V, C> u = queue.remove();
+            if (goalPredicate.test(u.getVertex())) {
+                return u;
             }
 
-            for (V v : nextVerticesFunction.apply(u)) {
-                C bestKnownCost = costMap.getOrDefault(v, positiveInfinity);
-                C cost = sumFunction.apply(node.getCost(), costFunction.apply(u, v));
+            if (u.getDepth() < maxDepth) {
+                for (V v : nextVerticesFunction.apply(u.getVertex())) {
+                    C bestKnownCost = costMap.getOrDefault(v, positiveInfinity);
+                    C cost = sumFunction.apply(u.getCost(), costf.apply(u.getVertex(), v));
 
-                // If there is a cheaper path to v through u.
-                if (cost.compareTo(bestKnownCost) < 0 && cost.compareTo(maxCost) <= 0) {
-                    // Update cost to v and add v again to the queue.
-                    costMap.put(v, cost);
-                    queue.add(new VertexBackLink<>(v, node, cost));
+                    // If there is a cheaper path to v through u.
+                    if (cost.compareTo(bestKnownCost) < 0 && cost.compareTo(costLimit) <= 0) {
+                        // Update cost to v and add v again to the queue.
+                        costMap.put(v, cost);
+                        queue.add(new VertexBackLinkWithCost<>(v, u, cost));
+                    }
                 }
             }
         }

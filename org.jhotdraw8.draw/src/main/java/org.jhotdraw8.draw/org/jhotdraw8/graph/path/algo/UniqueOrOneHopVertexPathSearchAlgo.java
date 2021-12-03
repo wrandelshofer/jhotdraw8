@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.graph.path.backlink.VertexBackLink;
+import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -32,8 +32,8 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
 
 
     @Override
-    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C searchLimit, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, zero, searchLimit, costFunction, sumFunction);
+    public @Nullable VertexBackLinkWithCost<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, int maxDepth, @NonNull C zero, @NonNull C positiveInfinity, @NonNull C costLimit, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
+        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, zero, costLimit, costFunction, sumFunction);
     }
 
 
@@ -44,36 +44,35 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next arcs function
      * @param visited              the set of visited vertices (see {@link AddToSet})
-     * @param searchLimit          the algorithm-specific search limit
-     *                             Set this value as small as you can, to prevent
-     *                             long search times if the goal can not be reached.
+     * @param costLimit            the algorithm-specific cost limit
+     *                             Must be {@literal >= zero).
      * @param zero                 the zero cost value
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
-    public @Nullable VertexBackLink<V, C> search(@NonNull Iterable<V> startVertices,
-                                                 @NonNull Predicate<V> goalPredicate,
-                                                 @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-                                                 @NonNull AddToSet<V> visited,
-                                                 @NonNull C zero,
-                                                 @NonNull C searchLimit,
-                                                 @NonNull BiFunction<V, V, C> costFunction,
-                                                 @NonNull BiFunction<C, C, C> sumFunction) {
+    public @Nullable VertexBackLinkWithCost<V, C> search(@NonNull Iterable<V> startVertices,
+                                                         @NonNull Predicate<V> goalPredicate,
+                                                         @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+                                                         @NonNull AddToSet<V> visited,
+                                                         @NonNull C zero,
+                                                         @NonNull C costLimit,
+                                                         @NonNull BiFunction<V, V, C> costFunction,
+                                                         @NonNull BiFunction<C, C, C> sumFunction) {
 
-        Queue<VertexBackLink<V, C>> queue = new ArrayDeque<>(16);
+        Queue<VertexBackLinkWithCost<V, C>> queue = new ArrayDeque<>(16);
 
         for (V start : startVertices) {
-            VertexBackLink<V, C> rootBackLink = new VertexBackLink<>(start, null, zero);
+            VertexBackLinkWithCost<V, C> rootBackLink = new VertexBackLinkWithCost<>(start, null, zero);
             if (visited.add(start)) {
                 queue.add(rootBackLink);
             }
         }
 
-        VertexBackLink<V, C> found = null;
+        VertexBackLinkWithCost<V, C> found = null;
         Set<V> nonUnique = new LinkedHashSet<>();
         while (!queue.isEmpty()) {
-            VertexBackLink<V, C> node = queue.remove();
+            VertexBackLinkWithCost<V, C> node = queue.remove();
             if (goalPredicate.test(node.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
@@ -86,9 +85,9 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
 
             for (V next : nextVerticesFunction.apply(node.getVertex())) {
                 C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next));
-                if (cost.compareTo(searchLimit) <= 0) {
+                if (cost.compareTo(costLimit) <= 0) {
                     if (visited.add(next)) {
-                        VertexBackLink<V, C> backLink = new VertexBackLink<V, C>(next, node, cost);
+                        VertexBackLinkWithCost<V, C> backLink = new VertexBackLinkWithCost<V, C>(next, node, cost);
                         queue.add(backLink);
                     } else {
                         nonUnique.add(next);
@@ -97,7 +96,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
             }
         }
 
-        for (VertexBackLink<V, C> node = found; node != null; node = node.getParent()) {
+        for (VertexBackLinkWithCost<V, C> node = found; node != null; node = node.getParent()) {
             if (nonUnique.contains(node.getVertex())) {
                 // path is not unique!
                 return null;

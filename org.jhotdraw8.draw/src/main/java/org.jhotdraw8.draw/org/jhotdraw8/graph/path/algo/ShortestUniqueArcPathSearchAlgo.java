@@ -3,7 +3,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
-import org.jhotdraw8.graph.path.backlink.ArcBackLink;
+import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 
 import java.util.Comparator;
@@ -20,18 +20,22 @@ import java.util.function.Predicate;
  * <p>
  * The provided cost function must return values {@literal >= 0} for all arrows.
  * <p>
- * References:
- * <dl>
- * <dt>Esger W. Dijkstra (1959), A note on two problems in connexion with graphs,
- * Problem 2.
- * </dt>
- * <dd><a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
- * </dl>
- * </dl>
  * Performance characteristics:
  * <dl>
- *     <dt>When a path can be found</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
- *     <dt>When no path can be found</dt><dd>exactly {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+ *     <dt>When the algorithm returns a back link</dt><dd>less or equal {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+ *     <dt>When the algorithm returns null</dt><dd>exactly {@literal O( |A| + |V|*log|V| )} within max cost</dd>
+ * </dl>
+ * <p>
+ * References:
+ * <dl>
+ *   <dt>Edsger W. Dijkstra (1959)</dt>
+ *   <dd>A note on two problems in connexion with graphs,Problem 2.
+ *   <a href="https://www-m3.ma.tum.de/twiki/pub/MN0506/WebHome/dijkstra.pdf">tum.de</a></dd>
+ *
+ *   <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
+ *   <dd>STCON in Directed Unique-Path Graphs.
+ *        Chapter 2.1 Properties of Unique-Path Graphs.
+ *        <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</dd>
  * </dl>
  *
  * @param <V> the vertex data type
@@ -39,27 +43,6 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  */
 public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
-    private static class CostData<C> {
-        private final C cost;
-        private int visiCount;
-
-        public CostData(C cost, int visiCount) {
-            this.cost = cost;
-            this.visiCount = visiCount;
-        }
-
-        public C getCost() {
-            return cost;
-        }
-
-        public int getVisiCount() {
-            return visiCount;
-        }
-
-        public void increaseVisitCount() {
-            visiCount++;
-        }
-    }
 
     /**
      * {@inheritDoc}
@@ -67,31 +50,40 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
      * @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
+     * @param maxDepth         the maximal depth (inclusive) of the search
+     *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
      * @param positiveInfinity the positive infinity value
-     * @param searchLimit      the maximal cost (inclusive) of a path.
-     *                         Set this value as small as you can, to prevent
-     *                         long search times if the goal can not be reached.
+     * @param costLimit        the maximal cost (inclusive) of a path.
+     *                         Must be {@literal >= zero).
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
     @Override
-    public @Nullable ArcBackLink<V, A, C> search(
+    public @Nullable ArcBackLinkWithCost<V, A, C> search(
             final @NonNull Iterable<V> startVertices,
             final @NonNull Predicate<V> goalPredicate,
             final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            final @NonNull C zero,
+            int maxDepth, final @NonNull C zero,
             final @NonNull C positiveInfinity,
-            final @NonNull C searchLimit,
+            final @NonNull C costLimit,
             final @NonNull TriFunction<V, V, A, C> costFunction,
             final @NonNull BiFunction<C, C, C> sumFunction) {
+
+        if (maxDepth < 0) {
+            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
+        }
+        if (costLimit.compareTo(zero) < 0) {
+            throw new IllegalArgumentException("costLimit must be >= zero. costLimit=" + costLimit + ", zero=" + zero);
+        }
+        CheckedNonNegativeArcCostFunction<V, A, C> costf = new CheckedNonNegativeArcCostFunction<>(zero, costFunction);
 
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by depth prevents that the algorithm
         //          unnecessarily follows zero-length arrows.
-        PriorityQueue<ArcBackLink<V, A, C>> queue = new PriorityQueue<>(
-                Comparator.<ArcBackLink<V, A, C>, C>comparing(ArcBackLink::getCost).thenComparing(ArcBackLink::getDepth)
+        PriorityQueue<ArcBackLinkWithCost<V, A, C>> queue = new PriorityQueue<>(
+                Comparator.<ArcBackLinkWithCost<V, A, C>, C>comparing(ArcBackLinkWithCost::getCost).thenComparing(ArcBackLinkWithCost::getDepth)
         );
 
         // Map with best known costs from start to a vertex and with the number
@@ -104,22 +96,21 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
         // Insert start itself in priority queue and initialize its cost as 0,
         // and number of paths with 1.
         for (V start : startVertices) {
-            queue.add(new ArcBackLink<>(start, null, null, zero));
+            queue.add(new ArcBackLinkWithCost<>(start, null, null, zero));
             costMap.put(start, new CostData<>(zero, 1));
         }
 
         // Loop until we have reached the goal, or queue is exhausted.
-        C maxCost = searchLimit;
-        ArcBackLink<V, A, C> found = null;
+        C maxCost = costLimit;
+        ArcBackLinkWithCost<V, A, C> found = null;
         while (!queue.isEmpty()) {
-            ArcBackLink<V, A, C> node = queue.remove();
-            final V u = node.getVertex();
-            C costToU = node.getCost();
-            if (goalPredicate.test(u)) {
+            ArcBackLinkWithCost<V, A, C> u = queue.remove();
+            C costToU = u.getCost();
+            if (goalPredicate.test(u.getVertex())) {
                 if (found == null) {
                     // We have found a shortest path for the first time.
                     // We can now limit the maxCost of further searches.
-                    found = node;
+                    found = u;
                     maxCost = costToU;
                 } else if (costToU.compareTo(maxCost) == 0) {
                     // We have found another shortest path with exactly
@@ -134,23 +125,23 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
                 break;
             }
 
-            for (Arc<V, A> arc : nextArcsFunction.apply(u)) {
-                V v = arc.getEnd();
-                A a = arc.getData();
-                CostData<C> costDataV = costMap.getOrDefault(v, infiniteCost);
-                final C bestKnownCost = costDataV.getCost();
-                C cost = sumFunction.apply(costToU, costFunction.apply(u, v, a));
+            if (u.getDepth() < maxDepth) {
+                for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
+                    CostData<C> costDataV = costMap.getOrDefault(v.getEnd(), infiniteCost);
+                    final C bestKnownCost = costDataV.getCost();
+                    C cost = sumFunction.apply(costToU, costf.apply(u.getVertex(), v.getEnd(), v.getData()));
 
-                // If there is a shorter path to v through u.
-                if (cost.compareTo(maxCost) <= 0) {
-                    final int compare = cost.compareTo(bestKnownCost);
-                    if (compare < 0) {
-                        // Update cost data to v.
-                        costMap.put(v, new CostData<>(cost, 1));
-                        queue.add(new ArcBackLink<>(v, a, node, cost));
-                    } else if (compare == 0) {
-                        // There is more than one shortest path to v!
-                        costDataV.increaseVisitCount();
+                    // If there is a shorter path to v through u.
+                    if (cost.compareTo(maxCost) <= 0) {
+                        final int compare = cost.compareTo(bestKnownCost);
+                        if (compare < 0) {
+                            // Update cost data to v.
+                            costMap.put(v.getEnd(), new CostData<>(cost, 1));
+                            queue.add(new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost));
+                        } else if (compare == 0) {
+                            // There is more than one shortest path to v!
+                            costDataV.increaseVisitCount();
+                        }
                     }
                 }
             }
@@ -158,7 +149,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
 
         // The shortest path to the goal is only unique, if all vertices on the
         // path have been visited only once.
-        for (ArcBackLink<V, A, C> node = found; node != null; node = node.getParent()) {
+        for (ArcBackLinkWithCost<V, A, C> node = found; node != null; node = node.getParent()) {
             if (costMap.get(node.getVertex()).getVisiCount() != 1) {
                 return null;
             }

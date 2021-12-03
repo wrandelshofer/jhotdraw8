@@ -2,20 +2,17 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.OrderedPair;
 
 import java.util.ArrayDeque;
-import java.util.function.Function;
+import java.util.Deque;
+import java.util.function.BiFunction;
 
 /**
- * Represents a vertex back link with cost and depth.
+ * Represents a vertex back link with depth.
  *
  * @param <V> the vertex data type
- * @param <C> the cost number type
  */
-public class VertexBackLink<V, C extends Number & Comparable<C>> extends AbstractBackLink<VertexBackLink<V, C>, C> {
+public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
     private final @NonNull V vertex;
 
     /**
@@ -23,28 +20,41 @@ public class VertexBackLink<V, C extends Number & Comparable<C>> extends Abstrac
      *
      * @param vertex the vertex data
      * @param parent the parent back link
-     * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
      */
-    public VertexBackLink(@NonNull V vertex, @Nullable VertexBackLink<V, C> parent, @NonNull C cost) {
-        super(parent, cost);
+    public VertexBackLink(@NonNull V vertex, @Nullable VertexBackLink<V> parent) {
+        super(parent);
         this.vertex = vertex;
     }
 
-    public static <V, C extends Number & Comparable<C>, X> @Nullable OrderedPair<ImmutableList<X>, C> toVertexSequence(@Nullable VertexBackLink<V, C> node,
-                                                                                                                       @NonNull Function<VertexBackLink<V, C>, X> mappingFunction) {
-        if (node == null) {
-            return null;
-        }
-        //
-        ArrayDeque<X> deque = new ArrayDeque<>();
-        for (VertexBackLink<V, C> parent = node; parent != null; parent = parent.getParent()) {
-            deque.addFirst(mappingFunction.apply(parent));
-        }
-        return new OrderedPair<>(ImmutableLists.copyOf(deque), node.getCost());
-    }
 
     public @NonNull V getVertex() {
         return vertex;
     }
 
+    public static <VV, CC extends Number & Comparable<CC>, XX> @Nullable VertexBackLinkWithCost<VV, CC>
+    toVertexBackLinkWithCost(@Nullable VertexBackLink<VV> node,
+                             @NonNull CC zero,
+                             @NonNull BiFunction<VV, VV, CC> costFunction,
+                             @NonNull BiFunction<CC, CC, CC> sumFunction) {
+        if (node == null) {
+            return null;
+        }
+
+
+        Deque<VertexBackLink<VV>> deque = new ArrayDeque<>();
+        for (VertexBackLink<VV> n = node; n != null; n = n.getParent()) {
+            deque.addFirst(n);
+        }
+
+
+        VertexBackLinkWithCost<VV, CC> newNode = null;
+        for (VertexBackLink<VV> n : deque) {
+            newNode = new VertexBackLinkWithCost<>(n.getVertex(), newNode,
+                    newNode == null
+                            ? zero
+                            : sumFunction.apply(newNode.getCost(),
+                            costFunction.apply(newNode.getVertex(), n.getVertex())));
+        }
+        return newNode;
+    }
 }

@@ -28,7 +28,9 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      *
      * @param startVertices the start vertices
      * @param goalPredicate the goal vertex
-     * @param searchLimit   the algorithm-specific search limit
+     * @param maxDepth      the maximal depth (inclusive) of the search
+     *                      Must be {@literal >= 0}.
+     * @param costLimit     the algorithm-specific search limit
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
@@ -36,40 +38,44 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            @NonNull C searchLimit);
+            int maxDepth, @NonNull C costLimit);
 
     /**
      * Finds an arc sequence from start to goal.
      *
-     * @param start       the start vertex
-     * @param goal        the goal vertex
-     * @param searchLimit the algorithm-specific search limit
+     * @param start     the start vertex
+     * @param goal      the goal vertex
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit the algorithm-specific cost limit
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
     default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
             @NonNull V start,
             @NonNull V goal,
-            @NonNull C searchLimit) {
-        return findArcSequence(List.of(start), goal::equals, searchLimit);
+            int maxDepth, @NonNull C costLimit) {
+        return findArcSequence(List.of(start), goal::equals, maxDepth, costLimit);
     }
 
 
     /**
      * Finds an arc walk through the given waypoints.
      *
-     * @param waypoints               an iterable of waypoints
-     * @param searchLimit the algorithm-specific search limit for paths between waypoints
+     * @param waypoints an iterable of waypoints
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit the algorithm-specific cost limit for paths between waypoints
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
     OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints,
-            @NonNull C searchLimit);
+            int maxDepth, @NonNull C costLimit);
 
 
     /**
-     * Helper function for implementing {@link #findArcSequenceOverWaypoints(Iterable, Number)}.
+     * Helper function for implementing {@link #findArcSequenceOverWaypoints(Iterable, int, Number)}.
      *
      * @param waypoints               the waypoints
      * @param findArcSequenceFunction the search function, for example {@code this::findArrowSequence}
@@ -79,7 +85,8 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param <CC>                    the number type
      * @return an ordered pair with the combined sequence
      */
-    static <VV, AA, CC extends Number & Comparable<CC>> OrderedPair<ImmutableList<Arc<VV, AA>>, CC> findArcSequenceOverWaypoints(
+    static <VV, AA, CC extends Number & Comparable<CC>> OrderedPair<ImmutableList<Arc<VV, AA>>, CC>
+    findArcSequenceOverWaypoints(
             @NonNull Iterable<VV> waypoints,
             @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<Arc<VV, AA>>, CC>> findArcSequenceFunction,
             @NonNull CC zero,
