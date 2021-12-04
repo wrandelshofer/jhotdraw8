@@ -76,13 +76,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
                                @NonNull TriFunction<V, V, A, C> costFunction,
                                @NonNull BiFunction<C, C, C> sumFunction) {
         super(Long.MAX_VALUE, 0);
-
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
-        if (maxCost.compareTo(zero) < 0) {
-            throw new IllegalArgumentException("maxCost must be >= zero. maxCost=" + maxCost + " zero=" + zero);
-        }
+        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, maxCost);
 
         this.maxDepth = maxDepth;
         this.maxCost = maxCost;

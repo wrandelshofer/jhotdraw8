@@ -21,10 +21,9 @@ import java.util.function.IntPredicate;
  * See {@link GloballyArbitraryArcPathSearchAlgo} for a description of this
  * algorithm.
  * <p>
- * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}
- * and for cost functions that return an int value.
+ * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
  */
-public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implements IndexedVertexReachabilityAlgo<Integer> {
+public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
 
     /**
      * A SearchNode stores for a given vertex, how long the remaining
@@ -60,14 +59,14 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implement
 
     /**
      * {@inheritDoc}
+     *
      * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
-     * @param costLimit            the maximal cost (inclusive) of a path
-     *                             Must be {@literal >= zero).
+     * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return
@@ -76,12 +75,15 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implement
     public boolean tryToReach(@NonNull Iterable<Integer> startVertices,
                               @NonNull IntPredicate goalPredicate,
                               @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                              int maxDepth, @NonNull Integer zero, @NonNull Integer costLimit,
-                              @NonNull BiFunction<Integer, Integer, Integer> costFunction,
-                              @NonNull BiFunction<Integer, Integer, Integer> sumFunction) {
+                              int maxDepth,
+                              @NonNull C zero,
+                              @NonNull C costLimit,
+                              @NonNull BiFunction<Integer, Integer, C> costFunction,
+                              @NonNull BiFunction<C, C, C> sumFunction) {
+        AlgoArguments.checkZero(zero);
         return tryToReach(startVertices, goalPredicate, nextVerticesFunction,
                 AddToIntSet.addToBitSet(new BitSet()),
-                costLimit);
+                maxDepth);
     }
 
     /**
@@ -102,9 +104,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgoWithIntCost implement
                               @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
                               @NonNull AddToIntSet visited,
                               @NonNull Integer maxDepth) {
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
+        AlgoArguments.checkMaxDepth(maxDepth);
 
         LongArrayDeque queue = new LongArrayDeque(32);
         MyIntConsumer consumer = new MyIntConsumer();

@@ -64,12 +64,7 @@ public class ShortestArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
             final @NonNull TriFunction<V, V, A, C> costFunction,
             final @NonNull BiFunction<C, C, C> sumFunction) {
 
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
-        if (costLimit.compareTo(zero) < 0) {
-            throw new IllegalArgumentException("costLimit must be >= zero. costLimit=" + costLimit + ", zero=" + zero);
-        }
+        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
         CheckedNonNegativeArcCostFunction<V, A, C> costf = new CheckedNonNegativeArcCostFunction<>(zero, costFunction);
 
 

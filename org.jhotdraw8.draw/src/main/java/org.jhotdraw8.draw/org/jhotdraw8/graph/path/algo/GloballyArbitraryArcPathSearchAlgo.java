@@ -68,6 +68,7 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
                                                          @NonNull C costLimit,
                                                          @NonNull TriFunction<V, V, A, C> costFunction,
                                                          @NonNull BiFunction<C, C, C> sumFunction) {
+        AlgoArguments.checkZero(zero);
         return ArcBackLink.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction,
                         new HashSet<V>()::add,
@@ -91,9 +92,7 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
                                               @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
                                               @NonNull AddToSet<V> visited,
                                               int maxDepth) {
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
+        AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<ArcBackLink<V, A>> queue = new ArrayDeque<>(16);
         for (V s : startVertices) {

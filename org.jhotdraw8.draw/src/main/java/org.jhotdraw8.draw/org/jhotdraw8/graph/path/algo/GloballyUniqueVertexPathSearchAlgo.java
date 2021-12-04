@@ -46,10 +46,12 @@ public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            int maxDepth, @NonNull C zero,
+            int maxDepth,
+            @NonNull C zero,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
+        AlgoArguments.checkZero(zero);
         return VertexBackLink.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction, maxDepth),
                 zero, costFunction, sumFunction);
@@ -69,9 +71,7 @@ public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth) {
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
+        AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<VertexBackLink<V>> queue = new ArrayDeque<>(16);
         Map<V, Integer> visitedCount = new LinkedHashMap<>(16);

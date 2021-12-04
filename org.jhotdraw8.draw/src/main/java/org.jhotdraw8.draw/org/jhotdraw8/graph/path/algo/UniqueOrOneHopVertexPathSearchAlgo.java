@@ -34,7 +34,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
 
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, int maxDepth, @NonNull C zero, @NonNull C costLimit, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {
-        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, zero, costLimit, costFunction, sumFunction);
+        return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, maxDepth, zero, costFunction, sumFunction);
     }
 
 
@@ -45,8 +45,6 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next arcs function
      * @param visited              the set of visited vertices (see {@link AddToSet})
-     * @param costLimit            the algorithm-specific cost limit
-     *                             Must be {@literal >= zero).
      * @param zero                 the zero cost value
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
@@ -56,11 +54,12 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
                                                          @NonNull Predicate<V> goalPredicate,
                                                          @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                                          @NonNull AddToSet<V> visited,
+                                                         int maxDepth,
                                                          @NonNull C zero,
-                                                         @NonNull C costLimit,
                                                          @NonNull BiFunction<V, V, C> costFunction,
                                                          @NonNull BiFunction<C, C, C> sumFunction) {
-
+        AlgoArguments.checkZero(zero);
+        AlgoArguments.checkMaxDepth(maxDepth);
         Queue<VertexBackLinkWithCost<V, C>> queue = new ArrayDeque<>(16);
 
         for (V start : startVertices) {
@@ -73,25 +72,24 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
         VertexBackLinkWithCost<V, C> found = null;
         Set<V> nonUnique = new LinkedHashSet<>();
         while (!queue.isEmpty()) {
-            VertexBackLinkWithCost<V, C> node = queue.remove();
-            if (goalPredicate.test(node.getVertex())) {
+            VertexBackLinkWithCost<V, C> u = queue.remove();
+            if (goalPredicate.test(u.getVertex())) {
                 if (found != null) {
                     return null;// path is not unique!
                 }
-                if (node.getDepth() <= 1) {
-                    return node; // Up to one hop is considered unique.
+                if (u.getDepth() <= 1) {
+                    return u; // Up to one hop is considered unique.
                 }
-                found = node;
+                found = u;
             }
 
-            for (V next : nextVerticesFunction.apply(node.getVertex())) {
-                C cost = sumFunction.apply(node.getCost(), costFunction.apply(node.getVertex(), next));
-                if (cost.compareTo(costLimit) <= 0) {
-                    if (visited.add(next)) {
-                        VertexBackLinkWithCost<V, C> backLink = new VertexBackLinkWithCost<V, C>(next, node, cost);
+            if (u.getDepth() < maxDepth) {
+                for (V v : nextVerticesFunction.apply(u.getVertex())) {
+                    if (visited.add(v)) {
+                        VertexBackLinkWithCost<V, C> backLink = new VertexBackLinkWithCost<>(v, u, sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v)));
                         queue.add(backLink);
                     } else {
-                        nonUnique.add(next);
+                        nonUnique.add(v);
                     }
                 }
             }

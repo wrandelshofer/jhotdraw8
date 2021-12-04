@@ -77,6 +77,7 @@ public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
             @NonNull C costLimit,
             @NonNull TriFunction<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
+        AlgoArguments.checkZero(zero);
         return ArcBackLink.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction, maxDepth),
                 zero, costFunction, sumFunction);
@@ -98,9 +99,7 @@ public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
             @NonNull Predicate<V> goalPredicate,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth) {
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
+        AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<ArcBackLink<V, A>> queue = new ArrayDeque<>(16);
         Map<V, Integer> visitedCount = new LinkedHashMap<>(16);

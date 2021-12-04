@@ -47,12 +47,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
             @NonNull BiFunction<V, V, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
 
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
-        if (costLimit.compareTo(zero) < 0) {
-            throw new IllegalArgumentException("costLimit must be >= zero. costLimit=" + costLimit + ", zero=" + zero);
-        }
+        AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
         CheckedNonNegativeVertexCostFunction<V, C> costf = new CheckedNonNegativeVertexCostFunction<>(zero, costFunction);
 
         // Priority queue: back-links by lower cost and shallower depth.

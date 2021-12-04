@@ -63,6 +63,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
             int maxDepth, @NonNull C zero, @NonNull C costLimit,
             @NonNull BiFunction<Integer, Integer, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction) {
+        AlgoArguments.checkZero(zero);
         return IndexedVertexBackLink.toIndexedVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
                         AddToIntSet.addToBitSet(new BitSet()), maxDepth),
@@ -86,9 +87,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
                                                   @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
                                                   @NonNull AddToIntSet visited,
                                                   int maxDepth) {
-        if (maxDepth < 0) {
-            throw new IllegalArgumentException("maxDepth must be >= 0. maxDepth=" + maxDepth);
-        }
+        AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<IndexedVertexBackLink> queue = new ArrayDeque<>(32);
         MyIntConsumer consumer = new MyIntConsumer();

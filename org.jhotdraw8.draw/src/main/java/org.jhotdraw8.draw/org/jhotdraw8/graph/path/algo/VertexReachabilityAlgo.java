@@ -31,7 +31,8 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
     boolean tryToReach(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C zero,
+            int maxDepth,
+            @NonNull C zero,
             @NonNull C costLimit,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             @NonNull BiFunction<V, V, C> costFunction,
