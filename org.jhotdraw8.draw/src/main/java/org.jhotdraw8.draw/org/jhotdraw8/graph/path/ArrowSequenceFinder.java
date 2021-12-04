@@ -56,7 +56,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V goal,
             int maxDepth,
             @NonNull C costLimit) {
-        return findArrowSequence(List.of(start), goal::equals, maxDepth, costLimit);
+        return findArrowSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit);
     }
 
     /**

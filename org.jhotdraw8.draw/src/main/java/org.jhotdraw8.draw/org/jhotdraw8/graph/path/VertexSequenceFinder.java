@@ -77,7 +77,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
             @NonNull V goal,
             int maxDepth,
             @NonNull C costLimit) {
-        return findVertexSequence(List.of(start), goal::equals, maxDepth, costLimit);
+        return findVertexSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit);
     }
 
     /**

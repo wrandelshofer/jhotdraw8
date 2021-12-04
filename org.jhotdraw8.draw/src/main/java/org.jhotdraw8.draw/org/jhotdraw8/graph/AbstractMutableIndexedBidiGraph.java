@@ -3,9 +3,9 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * AbstractDirectedGraphBuilder.
@@ -89,7 +89,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     }
 
     protected void buildRemoveVertex(int vidx) {
-        Objects.checkIndex(vidx, vertexCount);
+        Preconditions.checkIndex(vidx, vertexCount);
         Node vnode = nodes[vidx];
         arrowCount -= vnode.next.size();
         if (vidx < vertexCount - 1) {
@@ -155,7 +155,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     protected void buildRemoveArrow(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
-            throw new IndexOutOfBoundsException(vidx);
+            throw new IndexOutOfBoundsException("vidx=" + vidx);
         }
         buildRemoveArrowAt(vidx, node.next.indexOf(uidx));
     }
@@ -169,7 +169,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     protected void buildRemoveArrowAt(int vidx, int i) {
         Node vnode = nodes[vidx];
         if (vnode == null) {
-            throw new IndexOutOfBoundsException(i);
+            throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
         }
         int uidx = vnode.next.removeAt(i);
         if (vnode.isNodeEmpty()) {
@@ -178,7 +178,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
 
         Node unode = nodes[uidx];
         if (unode == null) {
-            throw new IndexOutOfBoundsException(i);
+            throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
         }
         unode.prev.removeAt(unode.prev.indexOf(vidx));
         if (unode.isNodeEmpty()) {
@@ -196,7 +196,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     public int getNext(int vidx, int k) {
         Node node = nodes[vidx];
         if (node == null) {
-            throw new IndexOutOfBoundsException(k);
+            throw new IndexOutOfBoundsException("vidx=" + vidx + ", k=" + k);
         }
         return node.next.get(k);
     }
@@ -211,7 +211,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     public int getPrev(int vidx, int i) {
         Node node = nodes[vidx];
         if (node == null) {
-            throw new IndexOutOfBoundsException(i);
+            throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
         }
         return node.prev.get(i);
     }

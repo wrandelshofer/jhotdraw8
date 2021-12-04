@@ -54,7 +54,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             int maxDepth, @NonNull C costLimit) {
-        return findArcSequence(List.of(start), goal::equals, maxDepth, costLimit);
+        return findArcSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit);
     }
 
 
