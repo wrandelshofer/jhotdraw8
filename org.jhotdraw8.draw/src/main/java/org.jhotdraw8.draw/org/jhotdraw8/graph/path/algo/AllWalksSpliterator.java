@@ -62,7 +62,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
      * @param maxCost          the maximal cost (inclusive) of a sequence
      *                         Must be {@literal >= zero}.
      * @param zero             the zero cost value
-     * @param costFunction     the cost function. Costs must be {@literal >= 0}.
+     * @param costFunction     the cost function.
      * @param sumFunction      the function for adding two cost values
      */
     public AllWalksSpliterator(@NonNull Iterable<V> startVertices,
@@ -103,16 +103,18 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
         while (!queue.isEmpty()) {
             ArcBackLinkWithCost<V, A, C> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
-                this.current = sequenceFunction.apply(u);
-                return true;
+                if (u.getCost().compareTo(maxCost) <= 0) {
+                    this.current = sequenceFunction.apply(u);
+                    return true;
+                } else {
+                    continue;
+                }
             }
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
                     C cost = sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v.getEnd(), v.getData()));
-                    if (cost.compareTo(maxCost) <= 0) {
-                        ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost);
-                        queue.add(newNode);
-                    }
+                    ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost);
+                    queue.add(newNode);
                 }
             }
         }

@@ -23,7 +23,7 @@ import java.util.function.Predicate;
  * If the graph has cycles, then the provided cost function must return values
  * {@literal > 0} for all arrows. (If the graph has cycles and the cost function
  * returns values that are 0, then this algorithm incorrectly considers a
- * path as non-unique, if it can be reached by a walk).<br>
+ * path as non-unique, if it can be reached by a walk).
  * <p>
  * Performance characteristics:
  * <dl>
@@ -62,7 +62,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
      * @param costFunction     the cost function.<br>
      *                         The cost must be {@literal > 0} if the graph
      *                         has cycles.<br>
-     *                         The cost can be {@literal >= 0} if the graph
+     *                         The cost must be {@literal >= 0} if the graph
      *                         is acyclic.
      * @param sumFunction      the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
