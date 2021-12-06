@@ -62,7 +62,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
      * @param maxCost          the maximal cost (inclusive) of a sequence
      *                         Must be {@literal >= zero}.
      * @param zero             the zero cost value
-     * @param costFunction     the cost function
+     * @param costFunction     the cost function. Costs must be {@literal >= 0}.
      * @param sumFunction      the function for adding two cost values
      */
     public AllWalksSpliterator(@NonNull Iterable<V> startVertices,
@@ -84,7 +84,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
         this.nextArcsFunction = nextArcsFunction;
         this.sequenceFunction = sequenceFunction;
 
-        this.costFunction = costFunction;
+        this.costFunction = new CheckedNonNegativeArcCostFunction<>(zero, costFunction);
         this.sumFunction = sumFunction;
         for (V start : startVertices) {
             queue.add(new ArcBackLinkWithCost<>(start, null, null, zero));

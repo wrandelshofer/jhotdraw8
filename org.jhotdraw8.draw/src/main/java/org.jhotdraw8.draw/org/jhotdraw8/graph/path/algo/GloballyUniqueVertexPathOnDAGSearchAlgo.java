@@ -18,13 +18,13 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * See {@link GloballyUniqueArcPathSearchAlgo} for a description of this
+ * See {@link GloballyUniqueArcPathOnDAGSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public class GloballyUniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class GloballyUniqueVertexPathOnDAGSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
 
 
     /**

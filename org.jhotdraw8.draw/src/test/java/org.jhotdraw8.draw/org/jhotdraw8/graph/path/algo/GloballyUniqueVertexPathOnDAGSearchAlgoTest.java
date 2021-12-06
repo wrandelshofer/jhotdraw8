@@ -30,9 +30,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class GloballyUniqueVertexPathSearchAlgoTest {
+public class GloballyUniqueVertexPathOnDAGSearchAlgoTest {
 
-    public GloballyUniqueVertexPathSearchAlgoTest() {
+    public GloballyUniqueVertexPathOnDAGSearchAlgoTest() {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
@@ -128,7 +128,7 @@ public class GloballyUniqueVertexPathSearchAlgoTest {
      */
     public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
-                graph::getNextVertices, new GloballyUniqueVertexPathSearchAlgo<>());
+                graph::getNextVertices, new GloballyUniqueVertexPathOnDAGSearchAlgo<>());
         OrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
                 Integer.MAX_VALUE, Integer.MAX_VALUE);
         if (expPath == null) {
@@ -161,7 +161,7 @@ public class GloballyUniqueVertexPathSearchAlgoTest {
      */
     public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
-                new GloballyUniqueVertexPathSearchAlgo<>());
+                new GloballyUniqueVertexPathOnDAGSearchAlgo<>());
 
         // Find unique path to any of the goals
         OrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains,
@@ -209,7 +209,7 @@ public class GloballyUniqueVertexPathSearchAlgoTest {
     private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, @Nullable ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
-                new GloballyUniqueVertexPathSearchAlgo<>());
+                new GloballyUniqueVertexPathOnDAGSearchAlgo<>());
         OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);

@@ -21,12 +21,17 @@ import java.util.function.Predicate;
 
 /**
  * Searches a globally unique vertex path from a set of start vertices to a
- * set of goal vertices using a breadth-first search algorithm.
+ * set of goal vertices using a breadth-first search algorithm on a directed
+ * acyclic graph (DAG).
  * <p>
  * Uniqueness is global up to (inclusive) the specified maximal depth.
  * <p>
  * This algorithm <b>ignores</b> cost limit. If you need it, use one of
  * the shortest path search algorithms.
+ * <p>
+ * The graph must be <b>acyclic</b>.
+ * (If the graph has cycles, then this algorithm incorrectly considers a
+ * path as non-unique, if it can be reached by a walk.)
  * <p>
  * Performance characteristics:
  * <dl>
@@ -50,7 +55,7 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class GloballyUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+public class GloballyUniqueArcPathOnDAGSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
 
 
     /**
