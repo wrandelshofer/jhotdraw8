@@ -61,6 +61,33 @@ public class AllWalksSpliteratorTest {
         return b;
     }
 
+    private @NonNull DirectedGraph<Integer, Double> createGraphWithCycles2() {
+        // __|  1  |  2  |  3  |  4  |  5
+        // 1 |       1.0   1.0         1.0
+        // 2 |             1.0
+        // 3 |                   1.0   1.0
+        // 4 |                         1.0
+        //
+        //
+
+
+        SimpleMutableDirectedGraph<Integer, Double> b = new SimpleMutableDirectedGraph<>();
+        b.addVertex(1);
+        b.addVertex(2);
+        b.addVertex(3);
+        b.addVertex(4);
+        b.addVertex(5);
+        b.addVertex(1);
+
+        b.addArrow(1, 2, 1.0);
+        b.addArrow(1, 3, 1.0);
+        b.addArrow(2, 3, 1.0);
+        b.addArrow(3, 4, 1.0);
+        b.addArrow(3, 5, 1.0);
+        b.addArrow(4, 5, 1.0);
+        return b;
+    }
+
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindAllPaths() {
         DirectedGraph<Integer, Double> graph = createGraph2();

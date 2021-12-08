@@ -18,6 +18,8 @@ import java.util.function.Predicate;
  * Iterates over all walks from a set of start vertices to a set of goal
  * vertices using a breadth-first search.
  * <p>
+ * Only enumerates walks that contain a goal once.
+ * <p>
  * Expected run time: The enumeration of paths in a graph is NP-complete.
  * (Because counting the paths is #P-complete).
  * <p>
@@ -103,18 +105,16 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
         while (!queue.isEmpty()) {
             ArcBackLinkWithCost<V, A, C> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
-                if (u.getCost().compareTo(maxCost) <= 0) {
-                    this.current = sequenceFunction.apply(u);
-                    return true;
-                } else {
-                    continue;
-                }
+                this.current = sequenceFunction.apply(u);
+                return true;
             }
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
                     C cost = sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v.getEnd(), v.getData()));
-                    ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost);
-                    queue.add(newNode);
+                    if (cost.compareTo(maxCost) <= 0) {
+                        ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost);
+                        queue.add(newNode);
+                    }
                 }
             }
         }
