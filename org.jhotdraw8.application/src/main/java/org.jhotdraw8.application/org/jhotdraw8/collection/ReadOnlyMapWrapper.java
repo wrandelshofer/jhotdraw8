@@ -1,5 +1,7 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -22,22 +24,22 @@ public class ReadOnlyMapWrapper<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public V get(Object key) {
+    public V get(@NonNull Object key) {
         return target.get(key);
     }
 
     @Override
-    public Iterator<Map.Entry<K, V>> entries() {
+    public @NonNull Iterator<Map.Entry<K, V>> entries() {
         return target.entrySet().iterator();
     }
 
     @Override
-    public Iterator<K> keys() {
+    public @NonNull Iterator<K> keys() {
         return target.keySet().iterator();
     }
 
     @Override
-    public boolean containsKey(Object key) {
+    public boolean containsKey(@NonNull Object key) {
         return target.containsKey(key);
     }
 }

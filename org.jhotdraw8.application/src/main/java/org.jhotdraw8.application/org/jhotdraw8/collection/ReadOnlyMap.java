@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -25,20 +26,30 @@ public interface ReadOnlyMap<K, V> {
 
     int size();
 
-    V get(Object key);
+    @Nullable V get(@NonNull Object key);
 
-    default V getOrDefault(Object key, V defaultValue) {
+    default V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
         V v;
         return (((v = get(key)) != null) || containsKey(key))
                 ? v
                 : defaultValue;
     }
 
-    Iterator<Map.Entry<K, V>> entries();
+    @NonNull Iterator<Map.Entry<K, V>> entries();
 
-    Iterator<K> keys();
+    @NonNull Iterator<K> keys();
 
-    boolean containsKey(Object key);
+    boolean containsKey(@NonNull Object key);
+
+    default boolean containsValue(@Nullable Object value) {
+        for (Iterator<Map.Entry<K, V>> i = entries(); i.hasNext(); ) {
+            Map.Entry<K, V> entry = i.next();
+            if (Objects.equals(value, entry.getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     default @NonNull ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new ReadOnlySet<Map.Entry<K, V>>() {

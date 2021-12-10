@@ -51,7 +51,7 @@ public interface PersistentSet<E> extends ReadOnlySet<E>, InsertOnlyPersistentSe
      * of this set except the elements of the specified
      * collection.
      *
-     * @param c a collection to removed from this set
+     * @param c a collection with elements to be removed from this set
      * @return the same set if it already does not contain the elements, or
      * a different set with the elements removed
      */

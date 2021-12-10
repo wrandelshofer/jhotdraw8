@@ -8,6 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
  * <p>
  * Implementations are not required to implement equals and hashCode methods
  * for comparing sets.
+ *
+ * @param <E> the element type
  */
 public interface InsertOnlyPersistentSet<E> {
     /**

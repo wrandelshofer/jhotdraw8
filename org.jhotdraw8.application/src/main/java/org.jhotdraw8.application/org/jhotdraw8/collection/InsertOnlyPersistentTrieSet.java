@@ -22,14 +22,16 @@ import java.util.Objects;
  *  This file is licensed under the BSD 2-Clause License, which accompanies this project
  *  and is available under <a href="https://opensource.org/licenses/BSD-2-Clause">BSD-2</a>.</dd>
  * </dl>
+ *
+ * @param <E> the element type
  */
-public class InsertOnlyPersistentTrieSet<K> implements InsertOnlyPersistentSet<K> {
+public class InsertOnlyPersistentTrieSet<E> implements InsertOnlyPersistentSet<E> {
 
     private static final @NonNull Node<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0);
     private static final @NonNull InsertOnlyPersistentTrieSet<?> EMPTY_SET = new InsertOnlyPersistentTrieSet<>(EMPTY_NODE);
-    private final @NonNull Node<K> root;
+    private final @NonNull Node<E> root;
 
-    private InsertOnlyPersistentTrieSet(@NonNull Node<K> root) {
+    private InsertOnlyPersistentTrieSet(@NonNull Node<E> root) {
         this.root = root;
     }
 
@@ -46,8 +48,8 @@ public class InsertOnlyPersistentTrieSet<K> implements InsertOnlyPersistentSet<K
     }
 
     @Override
-    public @NonNull InsertOnlyPersistentTrieSet<K> withAdd(final @NonNull K key) {
-        final Node<K> newRootNode = root.updated(key, key.hashCode(), 0);
+    public @NonNull InsertOnlyPersistentTrieSet<E> withAdd(final @NonNull E key) {
+        final Node<E> newRootNode = root.updated(key, key.hashCode(), 0);
         return newRootNode != root ? new InsertOnlyPersistentTrieSet<>(newRootNode) : this;
     }
 

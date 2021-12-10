@@ -29,18 +29,20 @@ import java.util.Objects;
  *         BSD 2-Clause License.
  *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
  * </dl>
+ *
+ * @param <E> the element type
  */
-public class PersistentTrieSet<K> implements PersistentSet<K> {
+public class PersistentTrieSet<E> implements PersistentSet<E> {
 
     private static final Node<?> EMPTY_NODE = new BitmapIndexedNode<>(null, 0, 0, new Object[]{});
 
     private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
 
-    private final Node<K> root;
+    private final Node<E> root;
     private final int hashCode;
     private final int size;
 
-    private PersistentTrieSet(Node<K> root, int hashCode, int size) {
+    private PersistentTrieSet(Node<E> root, int hashCode, int size) {
         this.root = root;
         this.hashCode = hashCode;
         this.size = size;
@@ -95,13 +97,13 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         return (PersistentTrieSet<K>) PersistentTrieSet.EMPTY_SET;
     }
 
-    private TransientTrieSet<K> asTransient() {
+    private TransientTrieSet<E> asTransient() {
         return new TransientTrieSet<>(this);
     }
 
     @Override
     public boolean contains(final Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
+        @SuppressWarnings("unchecked") final E key = (E) o;
         return root.contains(key, key.hashCode(), 0);
     }
 
@@ -147,7 +149,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
     }
 
     @Override
-    public Iterator<K> iterator() {
+    public Iterator<E> iterator() {
         return new TrieIterator<>(root);
     }
 
@@ -163,52 +165,52 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         return String.format("{%s}", body);
     }
 
-    public @NonNull PersistentTrieSet<K> withAdd(final @NonNull K key) {
+    public @NonNull PersistentTrieSet<E> withAdd(final @NonNull E key) {
         final int keyHash = key.hashCode();
-        final Modified modified = new Modified();
-        final Node<K> newRootNode = root.updated(null, key,
-                keyHash, 0, modified);
-        if (modified.isModified) {
+        final ChangeResult changeResult = new ChangeResult();
+        final Node<E> newRootNode = root.updated(null, key,
+                keyHash, 0, changeResult);
+        if (changeResult.isModified) {
             return new PersistentTrieSet<>(newRootNode, hashCode + keyHash, size + 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieSet<K> withAddAll(final @NonNull Iterable<? extends K> set) {
-        final TransientTrieSet<K> tmpTransient = this.asTransient();
+    public @NonNull PersistentTrieSet<E> withAddAll(final @NonNull Iterable<? extends E> set) {
+        final TransientTrieSet<E> tmpTransient = this.asTransient();
         boolean modified = false;
-        for (final K key : set) {
+        for (final E key : set) {
             modified |= tmpTransient.add(key);
         }
         return modified ? tmpTransient.freeze() : this;
     }
 
-    public @NonNull PersistentTrieSet<K> withRemove(final @NonNull K key) {
+    public @NonNull PersistentTrieSet<E> withRemove(final @NonNull E key) {
         final int keyHash = key.hashCode();
-        final Modified modified = new Modified();
-        final Node<K> newRootNode = root.removed(null, key,
-                keyHash, 0, modified);
-        if (modified.isModified) {
+        final ChangeResult changeResult = new ChangeResult();
+        final Node<E> newRootNode = root.removed(null, key,
+                keyHash, 0, changeResult);
+        if (changeResult.isModified) {
             return new PersistentTrieSet<>(newRootNode, hashCode - keyHash, size - 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieSet<K> withRemoveAll(final @NonNull Iterable<? extends K> set) {
-        final TransientTrieSet<K> tmpTransient = this.asTransient();
+    public @NonNull PersistentTrieSet<E> withRemoveAll(final @NonNull Iterable<? extends E> set) {
+        final TransientTrieSet<E> tmpTransient = this.asTransient();
         boolean modified = false;
-        for (final K key : set) {
+        for (final E key : set) {
             modified |= tmpTransient.remove(key);
         }
         return modified ? tmpTransient.freeze() : this;
     }
 
-    public @NonNull PersistentTrieSet<K> withRetainAll(final @NonNull Collection<? extends K> set) {
-        final TransientTrieSet<K> tmpTransient = this.asTransient();
+    public @NonNull PersistentTrieSet<E> withRetainAll(final @NonNull Collection<? extends E> set) {
+        final TransientTrieSet<E> tmpTransient = this.asTransient();
         boolean modified = false;
-        for (K key : this) {
+        for (E key : this) {
             if (!set.contains(key)) {
                 tmpTransient.remove(key);
                 modified = true;
@@ -307,12 +309,12 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         abstract int payloadArity();
 
         abstract Node<K> removed(final Nonce bulkMutator, final K key, final int keyHash, final int shift,
-                                 final Modified modified);
+                                 final ChangeResult changeResult);
 
         abstract byte sizePredicate();
 
         abstract Node<K> updated(final Nonce bulkMutator, final K key, final int keyHash, final int shift,
-                                 final Modified modified);
+                                 final ChangeResult changeResult);
     }
 
     private static final class BitmapIndexedNode<K> extends Node<K> {
@@ -523,7 +525,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
 
         @Override
         Node<K> removed(final Nonce bulkMutator, final K key, final int keyHash,
-                        final int shift, final Modified modified) {
+                        final int shift, final ChangeResult changeResult) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -531,7 +533,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
                 final int dataIndex = dataIndex(bitpos);
 
                 if (Objects.equals(getKey(dataIndex), key)) {
-                    modified.isModified = true;
+                    changeResult.isModified = true;
                     if (this.payloadArity() == 2 && this.nodeArity() == 0) {
                         // Create new node with remaining pair. The new node will a) either become the new root
                         // returned, or b) unwrapped and inlined during returning.
@@ -552,9 +554,9 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
             } else if ((nodeMap() & bitpos) != 0) { // node (not value)
                 final Node<K> subNode = nodeAt(bitpos);
                 final Node<K> subNodeNew =
-                        subNode.removed(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, modified);
+                        subNode.removed(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, changeResult);
 
-                if (!modified.isModified) {
+                if (!changeResult.isModified) {
                     return this;
                 }
 
@@ -596,7 +598,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
 
         @Override
         Node<K> updated(final Nonce bulkMutator, final K key,
-                        final int keyHash, final int shift, final Modified modified) {
+                        final int keyHash, final int shift, final ChangeResult changeResult) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -610,15 +612,15 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
                     final Node<K> subNodeNew = mergeTwoKeyValPairs(bulkMutator, currentKey,
                             currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
 
-                    modified.isModified = true;
+                    changeResult.isModified = true;
                     return copyAndMigrateFromInlineToNode(bulkMutator, bitpos, subNodeNew);
                 }
             } else if ((nodeMap() & bitpos) != 0) { // node (not value)
                 final Node<K> subNode = nodeAt(bitpos);
                 final Node<K> subNodeNew =
-                        subNode.updated(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, modified);
+                        subNode.updated(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, changeResult);
 
-                if (modified.isModified) {
+                if (changeResult.isModified) {
                     /*
                      * NOTE: subNode and subNodeNew may be referential equal if updated transiently in-place.
                      * Therefore diffing nodes is not an option. Changes to content and meta-data need to be
@@ -630,7 +632,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
                 }
             } else {
                 // no value
-                modified.isModified = true;
+                changeResult.isModified = true;
                 return copyAndInsertValue(bulkMutator, bitpos, key);
             }
         }
@@ -734,10 +736,10 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
 
         @Override
         Node<K> removed(final Nonce bulkMutator, final K key,
-                        final int keyHash, final int shift, final Modified modified) {
+                        final int keyHash, final int shift, final ChangeResult changeResult) {
             for (int idx = 0; idx < keys.length; idx++) {
                 if (Objects.equals(keys[idx], key)) {
-                    modified.isModified = true;
+                    changeResult.isModified = true;
 
                     if (payloadArity() == 1) {
                         return emptyNode();
@@ -747,7 +749,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
                         final K theOtherKey = (idx == 0) ? keys[1] : keys[0];
 
                         return PersistentTrieSet.<K>emptyNode().updated(bulkMutator, theOtherKey, keyHash, 0,
-                                new Modified());
+                                new ChangeResult());
                     } else {
                         // copy 'this.keys' and remove 1 element(s) at position 'idx'
                         @SuppressWarnings("unchecked") final K[] keysNew = (K[]) new Object[this.keys.length - 1];
@@ -771,7 +773,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
 
         @Override
         public Node<K> updated(final Nonce bulkMutator, final K key,
-                               final int keyHash, final int shift, final Modified modified) {
+                               final int keyHash, final int shift, final ChangeResult changeResult) {
             assert this.hash == keyHash;
 
             for (K k : keys) {
@@ -783,7 +785,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
             final K[] keysNew = Arrays.copyOf(keys, keys.length + 1);
             keysNew[keys.length] = key;
 
-            modified.isModified = true;
+            changeResult.isModified = true;
             return new HashCollisionNode<>(bulkMutator, keyHash, keysNew);
         }
     }
@@ -881,47 +883,48 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
     }
 
     static class TransientTrieSet<K> {
-        final private Nonce bulkMutator;
-        protected Node<K> rootNode;
-        protected int cachedHashCode;
-        protected int cachedSize;
+        private Nonce bulkMutator;
+        protected Node<K> root;
+        protected int hashCode;
+        protected int size;
 
         TransientTrieSet(PersistentTrieSet<K> trieSet) {
-            this.rootNode = trieSet.root;
-            this.cachedHashCode = trieSet.hashCode;
-            this.cachedSize = trieSet.size;
+            this.root = trieSet.root;
+            this.hashCode = trieSet.hashCode;
+            this.size = trieSet.size;
             this.bulkMutator = new Nonce();
         }
 
         public boolean add(final K key) {
             final int keyHash = key.hashCode();
-            final Modified modified = new Modified();
+            final ChangeResult changeResult = new ChangeResult();
             final Node<K> newRootNode =
-                    rootNode.updated(this.bulkMutator, key, keyHash, 0, modified);
-            if (modified.isModified) {
-                rootNode = newRootNode;
-                cachedHashCode += keyHash;
-                cachedSize += 1;
+                    root.updated(this.bulkMutator, key, keyHash, 0, changeResult);
+            if (changeResult.isModified) {
+                root = newRootNode;
+                hashCode += keyHash;
+                size += 1;
                 return true;
             }
             return false;
         }
 
         public PersistentTrieSet<K> freeze() {
-            return new PersistentTrieSet<>(rootNode, cachedHashCode, cachedSize);
+            bulkMutator = null;
+            return new PersistentTrieSet<>(root, hashCode, size);
         }
 
         public boolean remove(final K key) {
             final int keyHash = key.hashCode();
-            final Modified modified = new Modified();
+            final ChangeResult changeResult = new ChangeResult();
 
             final Node<K> newRootNode =
-                    rootNode.removed(this.bulkMutator, key, keyHash, 0, modified);
+                    root.removed(this.bulkMutator, key, keyHash, 0, changeResult);
 
-            if (modified.isModified) {
-                rootNode = newRootNode;
-                cachedHashCode = cachedHashCode - keyHash;
-                cachedSize = cachedSize - 1;
+            if (changeResult.isModified) {
+                root = newRootNode;
+                hashCode = hashCode - keyHash;
+                size = size - 1;
                 return true;
             }
 
@@ -929,7 +932,7 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         }
     }
 
-    private static class Modified {
+    private static class ChangeResult {
         private boolean isModified;
     }
 }

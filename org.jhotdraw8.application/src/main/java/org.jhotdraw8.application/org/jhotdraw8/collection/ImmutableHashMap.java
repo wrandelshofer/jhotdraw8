@@ -115,7 +115,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     @Override
-    public V get(Object key) {
+    public V get(@NonNull Object key) {
         return backingMap.get(key);
     }
 
@@ -130,7 +130,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     @Override
-    public boolean containsKey(Object key) {
+    public boolean containsKey(@NonNull Object key) {
         return backingMap.containsKey(key);
     }
 
