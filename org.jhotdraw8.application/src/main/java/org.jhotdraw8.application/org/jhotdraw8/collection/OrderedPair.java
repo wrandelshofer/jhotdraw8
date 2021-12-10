@@ -38,10 +38,6 @@ public class OrderedPair<U, V> implements Pair<U, V> {
         return b;
     }
 
-    public boolean isIntersectionEmpty() {
-        return !Objects.equals(a, b);
-    }
-
     @Override
     public boolean equals(@Nullable Object obj) {
         if (this == obj) {

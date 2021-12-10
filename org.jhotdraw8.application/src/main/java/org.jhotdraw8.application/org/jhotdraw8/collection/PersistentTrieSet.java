@@ -4,43 +4,90 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.collection.capsule.core.trie.SetNodeResultImpl;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 
 /**
+ * This class implements the persistent set interface with a Compressed
+ * Hash-Array Mapped Prefix-tree (CHAMP).
+ * <p>
+ * Creating a new delta persistent set with a single element added or removed
+ * is performed in {@code O(1)} time and space.
+ * <dl>
  * References:
  * <dl>
- *     <dt>Michael Steindorfer, capsule</dt>
- *     <dd>Copyright (c) Michael Steindorfer <Centrum Wiskunde & Informatica> and Contributors.
- *   All rights reserved.
- *  This file is licensed under the BSD 2-Clause License, which accompanies this project
- *  and is available under <a href="https://opensource.org/licenses/BSD-2-Clause">BSD-2</a>.</dd>
+ *     <dt>This code has been derived from "The Capsule Hash Trie Collections Library".</dt>
+ *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
+ *         BSD 2-Clause License.
+ *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
  * </dl>
  */
 public class PersistentTrieSet<K> implements PersistentSet<K> {
 
-    private static final CompactSetNode<?> EMPTY_NODE = new BitmapIndexedSetNode<>(null,
-            0, 0, new Object[]{});
+    private static final Node<?> EMPTY_NODE = new BitmapIndexedNode<>(null, 0, 0, new Object[]{});
 
     private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
 
-    private final AbstractSetNode<K> rootNode;
-    private final int cachedHashCode;
-    private final int cachedSize;
+    private final Node<K> root;
+    private final int hashCode;
+    private final int size;
 
-    PersistentTrieSet(AbstractSetNode<K> rootNode, int cachedHashCode, int cachedSize) {
-        this.rootNode = rootNode;
-        this.cachedHashCode = cachedHashCode;
-        this.cachedSize = cachedSize;
+    private PersistentTrieSet(Node<K> root, int hashCode, int size) {
+        this.root = root;
+        this.hashCode = hashCode;
+        this.size = size;
+    }
+
+    public static <K> PersistentTrieSet<K> copyOf(@NonNull Iterable<K> set) {
+        if (set instanceof PersistentTrieSet) {
+            return (PersistentTrieSet<K>) set;
+        }
+        TransientTrieSet<K> tr = new TransientTrieSet<>(of());
+        for (final K key : set) {
+            tr.add(key);
+        }
+        return tr.freeze();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <K> Node<K> emptyNode() {
+        return (Node<K>) PersistentTrieSet.EMPTY_NODE;
+    }
+
+    public static <K> PersistentTrieSet<K> of(@NonNull K key0) {
+        final int keyHash0 = key0.hashCode();
+        final int dataMap = Node.bitpos(Node.mask(keyHash0, 0));
+        final Node<K> newRootNode = new BitmapIndexedNode<>(null, 0, dataMap, new Object[]{key0});
+        return new PersistentTrieSet<>(newRootNode, keyHash0, 1);
+    }
+
+    public static <K> PersistentTrieSet<K> of(@NonNull K key0, @NonNull K key1) {
+        if (Objects.equals(key0, key1)) {
+            return of(key0);
+        }
+
+        final int keyHash0 = key0.hashCode();
+        final int keyHash1 = key1.hashCode();
+        Node<K> newRootNode = Node.mergeTwoKeyValPairs(null, key0, keyHash0, key1, keyHash1, 0);
+
+        return new PersistentTrieSet<>(newRootNode, keyHash0 + keyHash1, 2);
+    }
+
+    @SafeVarargs
+    public static <K> PersistentTrieSet<K> of(@NonNull K... keys) {
+        TransientTrieSet<K> tr = new TransientTrieSet<>(of());
+        for (final K key : keys) {
+            tr.add(key);
+        }
+        return tr.freeze();
     }
 
     @SuppressWarnings("unchecked")
@@ -48,130 +95,14 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         return (PersistentTrieSet<K>) PersistentTrieSet.EMPTY_SET;
     }
 
-    public static <K> PersistentTrieSet<K> of(K key0) {
-        final int keyHash0 = key0.hashCode();
-
-        final int dataMap = CompactSetNode.bitpos(CompactSetNode.mask(keyHash0, 0));
-
-        final CompactSetNode<K> newRootNode = CompactSetNode.nodeOf(null, dataMap, key0, keyHash0);
-
-        return new PersistentTrieSet<>(newRootNode, keyHash0, 1);
+    private TransientTrieSet<K> asTransient() {
+        return new TransientTrieSet<>(this);
     }
-
-    public static <K> PersistentTrieSet<K> of(K key0, K key1) {
-        assert !Objects.equals(key0, key1);
-
-        final int keyHash0 = key0.hashCode();
-        final int keyHash1 = key1.hashCode();
-
-        CompactSetNode<K> newRootNode =
-                CompactSetNode.mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, 0);
-
-        return new PersistentTrieSet<>(newRootNode, keyHash0 + keyHash1, 2);
-    }
-
-    public static <K> PersistentTrieSet<K> of(K... keys) {
-        @SuppressWarnings("unchecked")
-        TransientTrieSet<K> tr = new TransientTrieSet<K>((PersistentTrieSet<K>) PersistentTrieSet.EMPTY_SET);
-        for (final K key : keys) {
-            tr.__insert(key);
-        }
-        return tr.freeze();
-    }
-
 
     @Override
     public boolean contains(final Object o) {
-        try {
-            @SuppressWarnings("unchecked") final K key = (K) o;
-            return rootNode.contains(key, key.hashCode(), 0);
-        } catch (ClassCastException unused) {
-            return false;
-        }
-    }
-
-
-    public PersistentTrieSet<K> withAdd(final K key) {
-        final int keyHash = key.hashCode();
-        final SetNodeResultImpl<K> details = new SetNodeResultImpl<>();
-
-        final AbstractSetNode<K> newRootNode = rootNode.updated(null, key,
-                keyHash, 0, details);
-
-        if (details.isModified()) {
-            return new PersistentTrieSet<>(newRootNode, cachedHashCode + keyHash, cachedSize + 1);
-        }
-
-        return this;
-    }
-
-    public PersistentTrieSet<K> withAddAll(final Iterable<? extends K> set) {
-        final TransientTrieSet<K> tmpTransient = (TransientTrieSet<K>) this.asTransient();
-        boolean modified = false;
-
-        for (final K key : set) {
-            modified |= tmpTransient.__insert(key);
-        }
-
-        return modified ? (PersistentTrieSet<K>) tmpTransient.freeze() : this;
-    }
-
-    public PersistentTrieSet<K> withRemove(final K key) {
-        final int keyHash = key.hashCode();
-        final SetNodeResultImpl<K> details = new SetNodeResultImpl<>();
-
-        final AbstractSetNode<K> newRootNode = rootNode.removed(null, key,
-                keyHash, 0, details);
-
-        if (details.isModified()) {
-            return new PersistentTrieSet<>(newRootNode, cachedHashCode - keyHash, cachedSize - 1);
-        }
-
-        return this;
-    }
-
-    public PersistentTrieSet<K> withRemoveAll(final java.util.Collection<? extends K> set) {
-        final TransientTrieSet<K> tmpTransient = (TransientTrieSet<K>) this.asTransient();
-        boolean modified = false;
-        for (final K key : set) {
-            modified |= tmpTransient.__remove(key);
-        }
-
-        return modified ? (PersistentTrieSet<K>) tmpTransient.freeze() : this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public PersistentTrieSet<K> withRetainAll(final java.util.Collection<? extends K> set) {
-        final TransientTrieSet<K> tmpTransient = this.asTransient();
-        boolean modified = false;
-
-        for (K key : this) {
-            if (!set.contains(key)) {
-                tmpTransient.__remove(key);
-                modified = true;
-            }
-        }
-
-        return modified ? (PersistentTrieSet<K>) tmpTransient.freeze() : this;
-    }
-
-    @Override
-    public int size() {
-        return cachedSize;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return cachedSize == 0;
-    }
-
-    @Override
-    public Iterator<K> iterator() {
-        return keyIterator();
-    }
-
-    public Iterator<K> keyIterator() {
-        return new SetKeyIterator<>(rootNode);
+        @SuppressWarnings("unchecked") final K key = (K) o;
+        return root.contains(key, key.hashCode(), 0);
     }
 
     @Override
@@ -186,15 +117,12 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         if (other instanceof PersistentTrieSet) {
             PersistentTrieSet<?> that = (PersistentTrieSet<?>) other;
 
-            if (this.cachedSize != that.cachedSize) {
+            if (this.size != that.size
+                    || this.hashCode != that.hashCode) {
                 return false;
             }
 
-            if (this.cachedHashCode != that.cachedHashCode) {
-                return false;
-            }
-
-            return rootNode.equals(that.rootNode);
+            return root.equals(that.root);
         } else if (other instanceof java.util.Set) {
             java.util.Set<?> that = (java.util.Set<?>) other;
 
@@ -210,173 +138,113 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
 
     @Override
     public int hashCode() {
-        return cachedHashCode;
+        return hashCode;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public Iterator<K> iterator() {
+        return new TrieIterator<>(root);
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 
     @Override
     public String toString() {
-        String body = stream().map(k -> k.toString()).reduce((o1, o2) -> String.join(", ", o1, o2))
+        String body = stream().map(Object::toString).reduce((o1, o2) -> String.join(", ", o1, o2))
                 .orElse("");
         return String.format("{%s}", body);
     }
 
-    private TransientTrieSet<K> asTransient() {
-        return new TransientTrieSet<>(this);
+    public @NonNull PersistentTrieSet<K> withAdd(final @NonNull K key) {
+        final int keyHash = key.hashCode();
+        final Modified modified = new Modified();
+        final Node<K> newRootNode = root.updated(null, key,
+                keyHash, 0, modified);
+        if (modified.isModified) {
+            return new PersistentTrieSet<>(newRootNode, hashCode + keyHash, size + 1);
+        }
+
+        return this;
     }
 
-    protected static abstract class AbstractSetNode<K> implements
-            SetNodeX<K, AbstractSetNode<K>>, Iterable<K>,
-            java.io.Serializable {
+    public @NonNull PersistentTrieSet<K> withAddAll(final @NonNull Iterable<? extends K> set) {
+        final TransientTrieSet<K> tmpTransient = this.asTransient();
+        boolean modified = false;
+        for (final K key : set) {
+            modified |= tmpTransient.add(key);
+        }
+        return modified ? tmpTransient.freeze() : this;
+    }
 
-        private static final long serialVersionUID = 42L;
+    public @NonNull PersistentTrieSet<K> withRemove(final @NonNull K key) {
+        final int keyHash = key.hashCode();
+        final Modified modified = new Modified();
+        final Node<K> newRootNode = root.removed(null, key,
+                keyHash, 0, modified);
+        if (modified.isModified) {
+            return new PersistentTrieSet<>(newRootNode, hashCode - keyHash, size - 1);
+        }
 
+        return this;
+    }
+
+    public @NonNull PersistentTrieSet<K> withRemoveAll(final @NonNull Iterable<? extends K> set) {
+        final TransientTrieSet<K> tmpTransient = this.asTransient();
+        boolean modified = false;
+        for (final K key : set) {
+            modified |= tmpTransient.remove(key);
+        }
+        return modified ? tmpTransient.freeze() : this;
+    }
+
+    public @NonNull PersistentTrieSet<K> withRetainAll(final @NonNull Collection<? extends K> set) {
+        final TransientTrieSet<K> tmpTransient = this.asTransient();
+        boolean modified = false;
+        for (K key : this) {
+            if (!set.contains(key)) {
+                tmpTransient.remove(key);
+                modified = true;
+            }
+        }
+        return modified ? tmpTransient.freeze() : this;
+    }
+
+    /**
+     * Unique nonce for marking Nodes that we created during a bulk operation,
+     * and can safely be updated because nobody else can access it until
+     * the bulk operation has completed.
+     * <p>
+     * We use a null Nonce, if we do not perform a bulk operation.
+     * So that we only have to pay for the added memory if we benefit from it.
+     */
+    private static class Nonce {
+    }
+
+
+    protected static abstract class Node<K> {
         static final int TUPLE_LENGTH = 1;
-
-        static <T> boolean isAllowedToEdit(AtomicReference<?> x, AtomicReference<?> y) {
-            return x != null && y != null && (x == y || x.get() == y.get());
-        }
-
-
-        abstract boolean hasNodes();
-
-        abstract int nodeArity();
-
-        abstract AbstractSetNode<K> getNode(final int index);
-
-        @Deprecated
-        Iterator<? extends AbstractSetNode<K>> nodeIterator() {
-            return new Iterator<>() {
-
-                int nextIndex = 0;
-                final int nodeArity = AbstractSetNode.this.nodeArity();
-
-                @Override
-                public void remove() {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public AbstractSetNode<K> next() {
-                    if (!hasNext()) {
-                        throw new NoSuchElementException();
-                    }
-                    return AbstractSetNode.this.getNode(nextIndex++);
-                }
-
-                @Override
-                public boolean hasNext() {
-                    return nextIndex < nodeArity;
-                }
-            };
-        }
-
-
-        @Override
-        public Iterator<K> iterator() {
-            return new SetKeyIterator<>(this);
-        }
-
-        @Override
-        public Spliterator<K> spliterator() {
-            return Spliterators.spliteratorUnknownSize(iterator(), Spliterator.DISTINCT);
-        }
-
-        public Stream<K> stream() {
-            return StreamSupport.stream(spliterator(), false);
-        }
-
-    }
-
-    protected static abstract class CompactSetNode<K> extends AbstractSetNode<K> {
-
         static final int HASH_CODE_LENGTH = 32;
-
         static final int BIT_PARTITION_SIZE = 5;
         static final int BIT_PARTITION_MASK = 0b11111;
+        transient final @Nullable Nonce bulkMutator;
+        byte SIZE_EMPTY = 0b00;
+        byte SIZE_ONE = 0b01;
+        byte SIZE_MORE_THAN_ONE = 0b10;
 
-        static int mask(final int keyHash, final int shift) {
-            return (keyHash >>> shift) & BIT_PARTITION_MASK;
+        public Node(@Nullable Nonce bulkMutator) {
+            this.bulkMutator = bulkMutator;
         }
 
         static int bitpos(final int mask) {
             return 1 << mask;
-        }
-
-        abstract int nodeMap();
-
-        abstract int dataMap();
-
-        @Override
-        abstract CompactSetNode<K> getNode(final int index);
-
-        abstract CompactSetNode<K> copyAndRemoveValue(final AtomicReference<Thread> mutator,
-                                                      final int bitpos);
-
-        abstract CompactSetNode<K> copyAndSetNode(final AtomicReference<Thread> mutator,
-                                                  final int bitpos, final AbstractSetNode<K> node);
-
-        abstract CompactSetNode<K> copyAndMigrateFromInlineToNode(final AtomicReference<Thread> mutator,
-                                                                  final int bitpos, final AbstractSetNode<K> node);
-
-        abstract CompactSetNode<K> copyAndMigrateFromNodeToInline(final AtomicReference<Thread> mutator,
-                                                                  final int bitpos, final AbstractSetNode<K> node);
-
-        static <K> CompactSetNode<K> mergeTwoKeyValPairs(final K key0, final int keyHash0,
-                                                         final K key1, final int keyHash1, final int shift) {
-            assert !(key0.equals(key1));
-
-            if (shift >= HASH_CODE_LENGTH) {
-                // throw new
-                // IllegalStateException("Hash collision not yet fixed.");
-                //noinspection unchecked
-                return new HashCollisionSetNode<>(keyHash0, (K[]) new Object[]{key0, key1});
-            }
-
-            final int mask0 = mask(keyHash0, shift);
-            final int mask1 = mask(keyHash1, shift);
-
-            if (mask0 != mask1) {
-                // both nodes fit on same level
-                final int dataMap = bitpos(mask0) | bitpos(mask1);
-
-                if (mask0 < mask1) {
-                    return nodeOf(null, dataMap, key0, keyHash0, key1, keyHash1);
-                } else {
-                    return nodeOf(null, dataMap, key1, keyHash1, key0, keyHash0);
-                }
-            } else {
-                final CompactSetNode<K> node =
-                        mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
-                // values fit on next level
-
-                final int nodeMap = bitpos(mask0);
-                return nodeOf(null, nodeMap, node);
-            }
-        }
-
-        static <K> CompactSetNode<K> nodeOf(final AtomicReference<Thread> mutator,
-                                            final int nodeMap, final int dataMap, final Object[] nodes) {
-            return new BitmapIndexedSetNode<>(mutator, nodeMap, dataMap, nodes);
-        }
-
-        @SuppressWarnings("unchecked")
-        static <K> CompactSetNode<K> nodeOf(AtomicReference<Thread> mutator) {
-            return (CompactSetNode<K>) EMPTY_NODE;
-        }
-
-        static <K> CompactSetNode<K> nodeOf(AtomicReference<Thread> mutator,
-                                            final int dataMap, final K key, final int keyHash) {
-            return nodeOf(mutator, 0, dataMap, new Object[]{key});
-        }
-
-        static <K> CompactSetNode<K> nodeOf(AtomicReference<Thread> mutator, final int dataMap,
-                                            final K key0, final int keyHash0, final K key1, final int keyHash1) {
-            return nodeOf(mutator, 0, dataMap, new Object[]{key0, key1});
-        }
-
-        static <K> CompactSetNode<K> nodeOf(AtomicReference<Thread> mutator,
-                                            final int nodeMap, final AbstractSetNode<K> node) {
-            return nodeOf(mutator, nodeMap, 0, new Object[]{node});
         }
 
         static int index(final int bitmap, final int bitpos) {
@@ -387,20 +255,81 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
             return (bitmap == -1) ? mask : index(bitmap, bitpos);
         }
 
-        int dataIndex(final int bitpos) {
-            return Integer.bitCount(dataMap() & (bitpos - 1));
+        static boolean isAllowedToEdit(Nonce x, Nonce y) {
+            return x != null && (x == y);
         }
 
-        int nodeIndex(final int bitpos) {
-            return Integer.bitCount(nodeMap() & (bitpos - 1));
+        static int mask(final int keyHash, final int shift) {
+            return (keyHash >>> shift) & BIT_PARTITION_MASK;
         }
 
-        CompactSetNode<K> nodeAt(final int bitpos) {
-            return getNode(nodeIndex(bitpos));
+        static <K> Node<K> mergeTwoKeyValPairs(Nonce bulkMutator, final K key0, final int keyHash0,
+                                               final K key1, final int keyHash1, final int shift) {
+            assert !(key0.equals(key1));
+
+            if (shift >= HASH_CODE_LENGTH) {
+                //noinspection unchecked
+                return new HashCollisionNode<>(bulkMutator, keyHash0, (K[]) new Object[]{key0, key1});
+            }
+
+            final int mask0 = mask(keyHash0, shift);
+            final int mask1 = mask(keyHash1, shift);
+
+            if (mask0 != mask1) {
+                // both nodes fit on same level
+                final int dataMap = bitpos(mask0) | bitpos(mask1);
+                if (mask0 < mask1) {
+                    return new BitmapIndexedNode<>(bulkMutator, 0, dataMap, new Object[]{key0, key1});
+                } else {
+                    return new BitmapIndexedNode<>(bulkMutator, 0, dataMap, new Object[]{key1, key0});
+                }
+            } else {
+                final Node<K> node =
+                        mergeTwoKeyValPairs(bulkMutator, key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
+                // values fit on next level
+                final int nodeMap = bitpos(mask0);
+                return new BitmapIndexedNode<>(bulkMutator, nodeMap, 0, new Object[]{node});
+            }
+        }
+
+        abstract boolean contains(final K key, final int keyHash, final int shift);
+
+        abstract K getKey(final int index);
+
+        abstract Node<K> getNode(final int index);
+
+        abstract boolean hasNodes();
+
+        abstract boolean hasPayload();
+
+        abstract int nodeArity();
+
+        abstract int payloadArity();
+
+        abstract Node<K> removed(final Nonce bulkMutator, final K key, final int keyHash, final int shift,
+                                 final Modified modified);
+
+        abstract byte sizePredicate();
+
+        abstract Node<K> updated(final Nonce bulkMutator, final K key, final int keyHash, final int shift,
+                                 final Modified modified);
+    }
+
+    private static final class BitmapIndexedNode<K> extends Node<K> {
+        final Object[] nodes;
+        final int nodeMap;
+        final int dataMap;
+
+        BitmapIndexedNode(final @Nullable Nonce bulkMutator, final int nodeMap,
+                          final int dataMap, final Object[] nodes) {
+            super(bulkMutator);
+            this.nodeMap = nodeMap;
+            this.dataMap = dataMap;
+            this.nodes = nodes;
         }
 
         @Override
-        public boolean contains(final K key, final int keyHash, final int shift) {
+        boolean contains(final K key, final int keyHash, final int shift) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -419,186 +348,135 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
             return false;
         }
 
+        Node<K> copyAndInsertValue(final Nonce bulkMutator, final int bitpos,
+                                   final K key) {
+            final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
-        @Override
-        public AbstractSetNode<K> updated(final AtomicReference<Thread> mutator, final K key,
-                                          final int keyHash, final int shift, final SetNodeResultImpl<K> details) {
-            final int mask = mask(keyHash, shift);
-            final int bitpos = bitpos(mask);
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length + 1];
 
-            if ((dataMap() & bitpos) != 0) { // inplace value
-                final int dataIndex = dataIndex(bitpos);
-                final K currentKey = getKey(dataIndex);
+            // copy 'src' and insert 1 element(s) at position 'idx'
+            System.arraycopy(src, 0, dst, 0, idx);
+            dst[idx] = key;
+            System.arraycopy(src, idx, dst, idx + 1, src.length - idx);
 
-                if (Objects.equals(currentKey, key)) {
-                    return this;
-                } else {
-                    final AbstractSetNode<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
-                            currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
+            return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap() | bitpos, dst);
+        }
 
-                    details.modified();
-                    details.updateDeltaSize(1);
-                    details.updateDeltaHashCode(keyHash);
-                    return copyAndMigrateFromInlineToNode(mutator, bitpos, subNodeNew);
-                }
-            } else if ((nodeMap() & bitpos) != 0) { // node (not value)
-                final AbstractSetNode<K> subNode = nodeAt(bitpos);
-                final AbstractSetNode<K> subNodeNew =
-                        subNode.updated(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details);
+        Node<K> copyAndMigrateFromInlineToNode(final Nonce bulkMutator,
+                                               final int bitpos, final Node<K> node) {
 
-                if (details.isModified()) {
-                    /*
-                     * NOTE: subNode and subNodeNew may be referential equal if updated transiently in-place.
-                     * Therefore diffing nodes is not an option. Changes to content and meta-data need to be
-                     * explicitly tracked and passed when descending from recursion (i.e., {@code details}).
-                     */
-                    return copyAndSetNode(mutator, bitpos, subNodeNew);
-                } else {
-                    return this;
-                }
+            final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
+            final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
+
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length - 1 + 1];
+
+            // copy 'src' and remove 1 element(s) at position 'idxOld' and
+            // insert 1 element(s) at position 'idxNew'
+            assert idxOld <= idxNew;
+            System.arraycopy(src, 0, dst, 0, idxOld);
+            System.arraycopy(src, idxOld + 1, dst, idxOld, idxNew - idxOld);
+            dst[idxNew] = node;
+            System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
+
+            return new BitmapIndexedNode<>(bulkMutator, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
+        }
+
+        Node<K> copyAndMigrateFromNodeToInline(final Nonce bulkMutator,
+                                               final int bitpos, final Node<K> node) {
+
+            final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
+            final int idxNew = TUPLE_LENGTH * dataIndex(bitpos);
+
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length - 1 + 1];
+
+            // copy 'src' and remove 1 element(s) at position 'idxOld' and
+            // insert 1 element(s) at position 'idxNew'
+            assert idxOld >= idxNew;
+            System.arraycopy(src, 0, dst, 0, idxNew);
+            dst[idxNew] = node.getKey(0);
+            System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
+            System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
+
+            return new BitmapIndexedNode<>(bulkMutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
+        }
+
+        Node<K> copyAndRemoveValue(final Nonce bulkMutator, final int bitpos) {
+            final int idx = TUPLE_LENGTH * dataIndex(bitpos);
+
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length - 1];
+
+            // copy 'src' and remove 1 element(s) at position 'idx'
+            System.arraycopy(src, 0, dst, 0, idx);
+            System.arraycopy(src, idx + 1, dst, idx, src.length - idx - 1);
+
+            return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap() ^ bitpos, dst);
+        }
+
+        Node<K> copyAndSetNode(final Nonce bulkMutator, final int bitpos,
+                               final Node<K> newNode) {
+
+            final int nodeIndex = nodeIndex(bitpos);
+            final int idx = this.nodes.length - 1 - nodeIndex;
+
+            if (isAllowedToEdit(this.bulkMutator, bulkMutator)) {
+                // no copying if already editable
+                this.nodes[idx] = newNode;
+                return this;
             } else {
-                // no value
-                details.modified();
-                details.updateDeltaSize(1);
-                details.updateDeltaHashCode(keyHash);
-                return copyAndInsertValue(mutator, bitpos, key);
+                // copy 'src' and set 1 element(s) at position 'idx'
+                final Object[] src = this.nodes;
+                final Object[] dst = new Object[src.length];
+                System.arraycopy(src, 0, dst, 0, src.length);
+                dst[idx] = newNode;
+
+                return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap(), dst);
             }
         }
 
-        abstract CompactSetNode<K> copyAndInsertValue(final AtomicReference<Thread> mutator,
-                                                      final int bitpos, final K key);
-
-
-        @Override
-        public AbstractSetNode<K> removed(final AtomicReference<Thread> mutator, final K key, final int keyHash,
-                                          final int shift, final SetNodeResultImpl<K> details) {
-            final int mask = mask(keyHash, shift);
-            final int bitpos = bitpos(mask);
-
-            if ((dataMap() & bitpos) != 0) { // inplace value
-                final int dataIndex = dataIndex(bitpos);
-
-                if (Objects.equals(getKey(dataIndex), key)) {
-                    details.modified();
-                    details.updateDeltaSize(-1);
-                    details.updateDeltaHashCode(-keyHash);
-
-                    if (this.payloadArity() == 2 && this.nodeArity() == 0) {
-                        /*
-                         * Create new node with remaining pair. The new node will a) either become the new root
-                         * returned, or b) unwrapped and inlined during returning.
-                         */
-                        final int newDataMap =
-                                (shift == 0) ? (int) (dataMap() ^ bitpos) : bitpos(mask(keyHash, 0));
-
-                        if (dataIndex == 0) {
-                            return CompactSetNode.<K>nodeOf(mutator, newDataMap, getKey(1), getKeyHash(1));
-                        } else {
-                            return CompactSetNode.<K>nodeOf(mutator, newDataMap, getKey(0), getKeyHash(0));
-                        }
-                    } else {
-                        return copyAndRemoveValue(mutator, bitpos);
-                    }
-                } else {
-                    return this;
-                }
-            } else if ((nodeMap() & bitpos) != 0) { // node (not value)
-                final AbstractSetNode<K> subNode = nodeAt(bitpos);
-                final AbstractSetNode<K> subNodeNew =
-                        subNode.removed(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details);
-
-                if (!details.isModified()) {
-                    return this;
-                }
-
-                switch (subNodeNew.sizePredicate()) {
-                case 0: {
-                    throw new IllegalStateException("Sub-node must have at least one element.");
-                }
-                case 1: {
-                    if (this.payloadArity() == 0 && this.nodeArity() == 1) {
-                        // escalate (singleton or empty) result
-                        return subNodeNew;
-                    } else {
-                        // inline value (move to front)
-                        return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew);
-                    }
-                }
-                default: {
-                    // modify current node (set replacement node)
-                    return copyAndSetNode(mutator, bitpos, subNodeNew);
-                }
-                }
-            }
-
-            return this;
+        int dataIndex(final int bitpos) {
+            return Integer.bitCount(dataMap() & (bitpos - 1));
         }
 
-    }
-
-    protected static abstract class CompactMixedSetNode<K> extends CompactSetNode<K> {
-
-        private final int nodeMap;
-        private final int dataMap;
-
-        CompactMixedSetNode(final AtomicReference<Thread> mutator, final int nodeMap,
-                            final int dataMap) {
-            this.nodeMap = nodeMap;
-            this.dataMap = dataMap;
-        }
-
-        @Override
-        final int nodeMap() {
-            return nodeMap;
-        }
-
-        @Override
-        final int dataMap() {
+        int dataMap() {
             return dataMap;
         }
 
-    }
+        @Override
+        public boolean equals(final Object other) {
+            if (null == other) {
+                return false;
+            }
+            if (this == other) {
+                return true;
+            }
+            if (getClass() != other.getClass()) {
+                return false;
+            }
+            BitmapIndexedNode<?> that = (BitmapIndexedNode<?>) other;
+            payloadArity();
 
-    private static final class BitmapIndexedSetNode<K> extends CompactMixedSetNode<K> {
-
-        transient final AtomicReference<Thread> mutator;
-        final Object[] nodes;
-
-        private BitmapIndexedSetNode(final AtomicReference<Thread> mutator, final int nodeMap,
-                                     final int dataMap, final Object[] nodes) {
-            super(mutator, nodeMap, dataMap);
-
-            this.mutator = mutator;
-            this.nodes = nodes;
+            // technically, we compare local payload from 0 to splitAt (excluded)
+            // and then we compare the nested nodes from splitAt to length (excluded)
+            // but since we have polymorphism, we can just use Array.equals().
+            return nodeMap() == that.nodeMap()
+                    && dataMap() == that.dataMap()
+                    && Arrays.equals(nodes, that.nodes);
         }
-
 
         @SuppressWarnings("unchecked")
         @Override
-        public K getKey(final int index) {
+        K getKey(final int index) {
             return (K) nodes[TUPLE_LENGTH * index];
         }
 
-        @Override
-        public int getKeyHash(int index) {
-            return getKey(index).hashCode();
-        }
-
         @SuppressWarnings("unchecked")
         @Override
-        CompactSetNode<K> getNode(final int index) {
-            return (CompactSetNode<K>) nodes[nodes.length - 1 - index];
-        }
-
-
-        @Override
-        public boolean hasPayload() {
-            return dataMap() != 0;
-        }
-
-        @Override
-        public int payloadArity() {
-            return Integer.bitCount(dataMap());
+        Node<K> getNode(final int index) {
+            return (Node<K>) nodes[nodes.length - 1 - index];
         }
 
         @Override
@@ -607,8 +485,97 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         }
 
         @Override
+        boolean hasPayload() {
+            return dataMap() != 0;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 0;
+            result = prime * result + (nodeMap());
+            result = prime * result + (dataMap());
+            result = prime * result + Arrays.hashCode(nodes);
+            return result;
+        }
+
+        @Override
         int nodeArity() {
             return Integer.bitCount(nodeMap());
+        }
+
+        Node<K> nodeAt(final int bitpos) {
+            return getNode(nodeIndex(bitpos));
+        }
+
+        int nodeIndex(final int bitpos) {
+            return Integer.bitCount(nodeMap() & (bitpos - 1));
+        }
+
+        int nodeMap() {
+            return nodeMap;
+        }
+
+        @Override
+        int payloadArity() {
+            return Integer.bitCount(dataMap());
+        }
+
+        @Override
+        Node<K> removed(final Nonce bulkMutator, final K key, final int keyHash,
+                        final int shift, final Modified modified) {
+            final int mask = mask(keyHash, shift);
+            final int bitpos = bitpos(mask);
+
+            if ((dataMap() & bitpos) != 0) { // inplace value
+                final int dataIndex = dataIndex(bitpos);
+
+                if (Objects.equals(getKey(dataIndex), key)) {
+                    modified.isModified = true;
+                    if (this.payloadArity() == 2 && this.nodeArity() == 0) {
+                        // Create new node with remaining pair. The new node will a) either become the new root
+                        // returned, or b) unwrapped and inlined during returning.
+                        final int newDataMap =
+                                (shift == 0) ? (dataMap() ^ bitpos) : bitpos(mask(keyHash, 0));
+
+                        if (dataIndex == 0) {
+                            return new BitmapIndexedNode<>(bulkMutator, 0, newDataMap, new Object[]{getKey(1)});
+                        } else {
+                            return new BitmapIndexedNode<>(bulkMutator, 0, newDataMap, new Object[]{getKey(0)});
+                        }
+                    } else {
+                        return copyAndRemoveValue(bulkMutator, bitpos);
+                    }
+                } else {
+                    return this;
+                }
+            } else if ((nodeMap() & bitpos) != 0) { // node (not value)
+                final Node<K> subNode = nodeAt(bitpos);
+                final Node<K> subNodeNew =
+                        subNode.removed(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, modified);
+
+                if (!modified.isModified) {
+                    return this;
+                }
+
+                switch (subNodeNew.sizePredicate()) {
+                case 0:
+                    throw new IllegalStateException("Sub-node must have at least one element.");
+                case 1:
+                    if (this.payloadArity() == 0 && this.nodeArity() == 1) {
+                        // escalate (singleton or empty) result
+                        return subNodeNew;
+                    } else {
+                        // inline value (move to front)
+                        return copyAndMigrateFromNodeToInline(bulkMutator, bitpos, subNodeNew);
+                    }
+                default:
+                    // modify current node (set replacement node)
+                    return copyAndSetNode(bulkMutator, bitpos, subNodeNew);
+                }
+            }
+
+            return this;
         }
 
         @Override
@@ -627,116 +594,61 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
             }
         }
 
-
         @Override
-        CompactSetNode<K> copyAndSetNode(final AtomicReference<Thread> mutator, final int bitpos,
-                                         final AbstractSetNode<K> newNode) {
+        Node<K> updated(final Nonce bulkMutator, final K key,
+                        final int keyHash, final int shift, final Modified modified) {
+            final int mask = mask(keyHash, shift);
+            final int bitpos = bitpos(mask);
 
-            final int nodeIndex = nodeIndex(bitpos);
-            final int idx = this.nodes.length - 1 - nodeIndex;
+            if ((dataMap() & bitpos) != 0) { // inplace value
+                final int dataIndex = dataIndex(bitpos);
+                final K currentKey = getKey(dataIndex);
 
-            if (isAllowedToEdit(this.mutator, mutator)) {
-                // no copying if already editable
-                this.nodes[idx] = newNode;
-                return this;
+                if (Objects.equals(currentKey, key)) {
+                    return this;
+                } else {
+                    final Node<K> subNodeNew = mergeTwoKeyValPairs(bulkMutator, currentKey,
+                            currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
+
+                    modified.isModified = true;
+                    return copyAndMigrateFromInlineToNode(bulkMutator, bitpos, subNodeNew);
+                }
+            } else if ((nodeMap() & bitpos) != 0) { // node (not value)
+                final Node<K> subNode = nodeAt(bitpos);
+                final Node<K> subNodeNew =
+                        subNode.updated(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, modified);
+
+                if (modified.isModified) {
+                    /*
+                     * NOTE: subNode and subNodeNew may be referential equal if updated transiently in-place.
+                     * Therefore diffing nodes is not an option. Changes to content and meta-data need to be
+                     * explicitly tracked and passed when descending from recursion (i.e., {@code details}).
+                     */
+                    return copyAndSetNode(bulkMutator, bitpos, subNodeNew);
+                } else {
+                    return this;
+                }
             } else {
-                final Object[] src = this.nodes;
-                final Object[] dst = new Object[src.length];
-
-                // copy 'src' and set 1 element(s) at position 'idx'
-                System.arraycopy(src, 0, dst, 0, src.length);
-                dst[idx] = newNode;
-
-                return nodeOf(mutator, nodeMap(), dataMap(), dst);
+                // no value
+                modified.isModified = true;
+                return copyAndInsertValue(bulkMutator, bitpos, key);
             }
         }
-
-        @Override
-        CompactSetNode<K> copyAndInsertValue(final AtomicReference<Thread> mutator, final int bitpos,
-                                             final K key) {
-            final int idx = TUPLE_LENGTH * dataIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length + 1];
-
-            // copy 'src' and insert 1 element(s) at position 'idx'
-            System.arraycopy(src, 0, dst, 0, idx);
-            dst[idx] = key;
-            System.arraycopy(src, idx, dst, idx + 1, src.length - idx);
-
-            return nodeOf(mutator, nodeMap(), dataMap() | bitpos, dst);
-        }
-
-        @Override
-        CompactSetNode<K> copyAndRemoveValue(final AtomicReference<Thread> mutator, final int bitpos) {
-            final int idx = TUPLE_LENGTH * dataIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 1];
-
-            // copy 'src' and remove 1 element(s) at position 'idx'
-            System.arraycopy(src, 0, dst, 0, idx);
-            System.arraycopy(src, idx + 1, dst, idx, src.length - idx - 1);
-
-            return nodeOf(mutator, nodeMap(), dataMap() ^ bitpos, dst);
-        }
-
-        @Override
-        CompactSetNode<K> copyAndMigrateFromInlineToNode(final AtomicReference<Thread> mutator,
-                                                         final int bitpos, final AbstractSetNode<K> node) {
-
-            final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
-            final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 1 + 1];
-
-            // copy 'src' and remove 1 element(s) at position 'idxOld' and
-            // insert 1 element(s) at position 'idxNew' (TODO: carefully test)
-            assert idxOld <= idxNew;
-            System.arraycopy(src, 0, dst, 0, idxOld);
-            System.arraycopy(src, idxOld + 1, dst, idxOld, idxNew - idxOld);
-            dst[idxNew] = node;
-            System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
-
-            return nodeOf(mutator, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
-        }
-
-        @Override
-        CompactSetNode<K> copyAndMigrateFromNodeToInline(final AtomicReference<Thread> mutator,
-                                                         final int bitpos, final AbstractSetNode<K> node) {
-
-            final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
-            final int idxNew = TUPLE_LENGTH * dataIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 1 + 1];
-
-            // copy 'src' and remove 1 element(s) at position 'idxOld' and
-            // insert 1 element(s) at position 'idxNew' (TODO: carefully test)
-            assert idxOld >= idxNew;
-            System.arraycopy(src, 0, dst, 0, idxNew);
-            dst[idxNew] = node.getKey(0);
-            System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
-            System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
-
-            return nodeOf(mutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
-        }
-
     }
 
-    private static final class HashCollisionSetNode<K> extends CompactSetNode<K> {
-        private final K[] keys;
+    private static final class HashCollisionNode<K> extends Node<K> {
         private final int hash;
+        private @NonNull K[] keys;
 
-        HashCollisionSetNode(final int hash, final K[] keys) {
+        HashCollisionNode(Nonce bulkMutator, final int hash, final K[] keys) {
+            super(bulkMutator);
             this.keys = keys;
             this.hash = hash;
             assert payloadArity() >= 2;
         }
 
         @Override
-        public boolean contains(final K key, final int keyHash, final int shift) {
+        boolean contains(final K key, final int keyHash, final int shift) {
             if (this.hash == keyHash) {
                 for (K k : keys) {
                     if (Objects.equals(k, key)) {
@@ -748,72 +660,47 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         }
 
         @Override
-        public AbstractSetNode<K> updated(final AtomicReference<Thread> mutator, final K key,
-                                          final int keyHash, final int shift, final SetNodeResultImpl<K> details) {
-            assert this.hash == keyHash;
-
-            for (K k : keys) {
-                if (Objects.equals(k, key)) {
-                    return this;
-                }
+        public boolean equals(final Object other) {
+            if (null == other) {
+                return false;
+            }
+            if (this == other) {
+                return true;
+            }
+            if (getClass() != other.getClass()) {
+                return false;
             }
 
-            @SuppressWarnings("unchecked") final K[] keysNew = (K[]) new Object[this.keys.length + 1];
+            HashCollisionNode<?> that = (HashCollisionNode<?>) other;
 
-            // copy 'this.keys' and insert 1 element(s) at position
-            // 'keys.length'
-            System.arraycopy(this.keys, 0, keysNew, 0, keys.length);
-            keysNew[keys.length] = key;
+            if (hash != that.hash
+                    || payloadArity() != that.payloadArity()) {
+                return false;
+            }
 
-            details.modified();
-            details.updateDeltaSize(1);
-            details.updateDeltaHashCode(keyHash);
-            return new HashCollisionSetNode<>(keyHash, keysNew);
-        }
+            // Linear scan for each key, because of arbitrary element order.
+            outerLoop:
+            for (int i = 0, n = that.payloadArity(); i < n; i++) {
+                final Object otherKey = that.getKey(i);
 
-        @Override
-        public AbstractSetNode<K> removed(final AtomicReference<Thread> mutator, final K key,
-                                          final int keyHash, final int shift, final SetNodeResultImpl<K> details) {
-            for (int idx = 0; idx < keys.length; idx++) {
-                if (Objects.equals(keys[idx], key)) {
-                    details.modified();
-                    details.updateDeltaSize(-1);
-                    details.updateDeltaHashCode(-keyHash);
-
-                    if (payloadArity() == 1) {
-                        return nodeOf(mutator);
-                    } else if (payloadArity() == 2) {
-                        /*
-                         * Create root node with singleton element. This node will be a) either be the new root
-                         * returned, or b) unwrapped and inlined.
-                         */
-                        final K theOtherKey = (idx == 0) ? keys[1] : keys[0];
-
-                        return CompactSetNode.<K>nodeOf(mutator).updated(mutator, theOtherKey, keyHash, 0,
-                                new SetNodeResultImpl<>());
-                    } else {
-                        @SuppressWarnings("unchecked") final K[] keysNew = (K[]) new Object[this.keys.length - 1];
-
-                        // copy 'this.keys' and remove 1 element(s) at position
-                        // 'idx'
-                        System.arraycopy(this.keys, 0, keysNew, 0, idx);
-                        System.arraycopy(this.keys, idx + 1, keysNew, idx, this.keys.length - idx - 1);
-
-                        return new HashCollisionSetNode<>(keyHash, keysNew);
+                for (final K key : keys) {
+                    if (Objects.equals(key, otherKey)) {
+                        continue outerLoop;
                     }
                 }
+                return false;
             }
-            return this;
-        }
-
-        @Override
-        public boolean hasPayload() {
             return true;
         }
 
         @Override
-        public int payloadArity() {
-            return keys.length;
+        K getKey(final int index) {
+            return keys[index];
+        }
+
+        @Override
+        Node<K> getNode(int index) {
+            throw new IllegalStateException("Is leaf node.");
         }
 
         @Override
@@ -822,88 +709,100 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
         }
 
         @Override
+        boolean hasPayload() {
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 0;
+            result = prime * result + hash;
+            result = prime * result + Arrays.hashCode(keys);
+            return result;
+        }
+
+        @Override
         int nodeArity() {
             return 0;
         }
 
         @Override
-        public byte sizePredicate() {
+        int payloadArity() {
+            return keys.length;
+        }
+
+        @Override
+        Node<K> removed(final Nonce bulkMutator, final K key,
+                        final int keyHash, final int shift, final Modified modified) {
+            for (int idx = 0; idx < keys.length; idx++) {
+                if (Objects.equals(keys[idx], key)) {
+                    modified.isModified = true;
+
+                    if (payloadArity() == 1) {
+                        return emptyNode();
+                    } else if (payloadArity() == 2) {
+                        // Create root node with singleton element. This node will be a) either be the new root
+                        // returned, or b) unwrapped and inlined.
+                        final K theOtherKey = (idx == 0) ? keys[1] : keys[0];
+
+                        return PersistentTrieSet.<K>emptyNode().updated(bulkMutator, theOtherKey, keyHash, 0,
+                                new Modified());
+                    } else {
+                        // copy 'this.keys' and remove 1 element(s) at position 'idx'
+                        @SuppressWarnings("unchecked") final K[] keysNew = (K[]) new Object[this.keys.length - 1];
+                        System.arraycopy(this.keys, 0, keysNew, 0, idx);
+                        System.arraycopy(this.keys, idx + 1, keysNew, idx, this.keys.length - idx - 1);
+                        if (isAllowedToEdit(this.bulkMutator, bulkMutator)) {
+                            this.keys = keysNew;
+                        } else {
+                            return new HashCollisionNode<>(bulkMutator, keyHash, keysNew);
+                        }
+                    }
+                }
+            }
+            return this;
+        }
+
+        @Override
+        byte sizePredicate() {
             return SIZE_MORE_THAN_ONE;
         }
 
         @Override
-        public K getKey(final int index) {
-            return keys[index];
-        }
+        public Node<K> updated(final Nonce bulkMutator, final K key,
+                               final int keyHash, final int shift, final Modified modified) {
+            assert this.hash == keyHash;
 
-        @Override
-        public int getKeyHash(int index) {
-            return getKey(index).hashCode();
-        }
+            for (K k : keys) {
+                if (Objects.equals(k, key)) {
+                    return this;
+                }
+            }
 
-        @Override
-        public CompactSetNode<K> getNode(int index) {
-            throw new IllegalStateException("Is leaf node.");
-        }
+            final K[] keysNew = Arrays.copyOf(keys, keys.length + 1);
+            keysNew[keys.length] = key;
 
-        @Override
-        CompactSetNode<K> copyAndInsertValue(final AtomicReference<Thread> mutator, final int bitpos,
-                                             final K key) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        CompactSetNode<K> copyAndRemoveValue(final AtomicReference<Thread> mutator,
-                                             final int bitpos) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        CompactSetNode<K> copyAndSetNode(final AtomicReference<Thread> mutator, final int bitpos,
-                                         final AbstractSetNode<K> node) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        CompactSetNode<K> copyAndMigrateFromInlineToNode(final AtomicReference<Thread> mutator,
-                                                         final int bitpos, final AbstractSetNode<K> node) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        CompactSetNode<K> copyAndMigrateFromNodeToInline(final AtomicReference<Thread> mutator,
-                                                         final int bitpos, final AbstractSetNode<K> node) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        int nodeMap() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        int dataMap() {
-            throw new UnsupportedOperationException();
+            modified.isModified = true;
+            return new HashCollisionNode<>(bulkMutator, keyHash, keysNew);
         }
     }
 
     /**
      * Iterator skeleton that uses a fixed stack in depth.
      */
-    private static class SetKeyIterator<K> implements Iterator<K> {
+    private static class TrieIterator<K> implements Iterator<K> {
 
         private static final int MAX_DEPTH = 7;
-
+        private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
         protected int currentValueCursor;
         protected int currentValueLength;
-        protected AbstractSetNode<K> currentValueNode;
-
+        protected Node<K> currentValueNode;
+        @SuppressWarnings("unchecked")
+        Node<K>[] nodes = new Node[MAX_DEPTH];
         private int currentStackLevel = -1;
-        private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
 
-        AbstractSetNode<K>[] nodes = new AbstractSetNode[MAX_DEPTH];
-
-        SetKeyIterator(AbstractSetNode<K> rootNode) {
+        TrieIterator(Node<K> rootNode) {
             if (rootNode.hasNodes()) {
                 currentStackLevel = 0;
 
@@ -919,6 +818,27 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
             }
         }
 
+        public boolean hasNext() {
+            if (currentValueCursor < currentValueLength) {
+                return true;
+            } else {
+                return searchNextValueNode();
+            }
+        }
+
+        @Override
+        public K next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            } else {
+                return currentValueNode.getKey(currentValueCursor++);
+            }
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
         /*
          * search for next node that contains values
          */
@@ -931,13 +851,11 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
                 final int nodeLength = nodeCursorsAndLengths[currentLengthIndex];
 
                 if (nodeCursor < nodeLength) {
-                    final AbstractSetNode<K> nextNode = nodes[currentStackLevel].getNode(nodeCursor);
+                    final Node<K> nextNode = nodes[currentStackLevel].getNode(nodeCursor);
                     nodeCursorsAndLengths[currentCursorIndex]++;
 
                     if (nextNode.hasNodes()) {
-                        /*
-                         * put node on next stack level for depth-first traversal
-                         */
+                        // put node on next stack level for depth-first traversal
                         final int nextStackLevel = ++currentStackLevel;
                         final int nextCursorIndex = nextStackLevel * 2;
                         final int nextLengthIndex = nextCursorIndex + 1;
@@ -948,9 +866,6 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
                     }
 
                     if (nextNode.hasPayload()) {
-                        /*
-                         * found next node that contains values
-                         */
                         currentValueNode = nextNode;
                         currentValueCursor = 0;
                         currentValueLength = nextNode.payloadArity();
@@ -963,134 +878,58 @@ public class PersistentTrieSet<K> implements PersistentSet<K> {
 
             return false;
         }
-
-        public boolean hasNext() {
-            if (currentValueCursor < currentValueLength) {
-                return true;
-            } else {
-                return searchNextValueNode();
-            }
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public K next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            } else {
-                return currentValueNode.getKey(currentValueCursor++);
-            }
-        }
     }
 
     static class TransientTrieSet<K> {
-        protected AbstractSetNode<K> rootNode;
+        final private Nonce bulkMutator;
+        protected Node<K> rootNode;
         protected int cachedHashCode;
         protected int cachedSize;
-        final private AtomicReference<Thread> mutator;
 
         TransientTrieSet(PersistentTrieSet<K> trieSet) {
-            this.rootNode = trieSet.rootNode;
-            this.cachedHashCode = trieSet.cachedHashCode;
-            this.cachedSize = trieSet.cachedSize;
-            this.mutator = new AtomicReference<>(Thread.currentThread());
+            this.rootNode = trieSet.root;
+            this.cachedHashCode = trieSet.hashCode;
+            this.cachedSize = trieSet.size;
+            this.bulkMutator = new Nonce();
         }
 
-        protected boolean __insertWithCapability(AtomicReference<Thread> mutator, K key) {
-            if (mutator.get() == null) {
-                throw new IllegalStateException("Transient already frozen.");
-            }
-
+        public boolean add(final K key) {
             final int keyHash = key.hashCode();
-            final SetNodeResultImpl<K> details = new SetNodeResultImpl<>();
-
-            final AbstractSetNode<K> newRootNode =
-                    rootNode.updated(mutator, key, keyHash, 0, details);
-
-            if (details.isModified()) {
-
+            final Modified modified = new Modified();
+            final Node<K> newRootNode =
+                    rootNode.updated(this.bulkMutator, key, keyHash, 0, modified);
+            if (modified.isModified) {
                 rootNode = newRootNode;
                 cachedHashCode += keyHash;
                 cachedSize += 1;
-
-                return true;
-
-            }
-
-            return false;
-        }
-
-        protected boolean __removeWithCapability(AtomicReference<Thread> mutator, final K key) {
-            if (mutator.get() == null) {
-                throw new IllegalStateException("Transient already frozen.");
-            }
-
-            final int keyHash = key.hashCode();
-            final SetNodeResultImpl<K> details = new SetNodeResultImpl<>();
-
-            final AbstractSetNode<K> newRootNode =
-                    rootNode.removed(mutator, key, keyHash, 0, details);
-
-            if (details.isModified()) {
-                rootNode = newRootNode;
-                cachedHashCode = cachedHashCode - keyHash;
-                cachedSize = cachedSize - 1;
-
                 return true;
             }
-
             return false;
-        }
-
-        public boolean __insert(final K key) {
-            return __insertWithCapability(this.mutator, key);
-        }
-
-        public boolean __remove(final K key) {
-            return __removeWithCapability(this.mutator, key);
         }
 
         public PersistentTrieSet<K> freeze() {
-            if (mutator.get() == null) {
-                throw new IllegalStateException("Transient already frozen.");
+            return new PersistentTrieSet<>(rootNode, cachedHashCode, cachedSize);
+        }
+
+        public boolean remove(final K key) {
+            final int keyHash = key.hashCode();
+            final Modified modified = new Modified();
+
+            final Node<K> newRootNode =
+                    rootNode.removed(this.bulkMutator, key, keyHash, 0, modified);
+
+            if (modified.isModified) {
+                rootNode = newRootNode;
+                cachedHashCode = cachedHashCode - keyHash;
+                cachedSize = cachedSize - 1;
+                return true;
             }
 
-            mutator.set(null);
-            return new PersistentTrieSet<>(rootNode, cachedHashCode, cachedSize);
+            return false;
         }
     }
 
-    interface SetNodeX<K, R extends SetNodeX<K, R>> {
-        byte SIZE_EMPTY = 0b00;
-        byte SIZE_ONE = 0b01;
-        byte SIZE_MORE_THAN_ONE = 0b10;
-
-        /**
-         * Abstract predicate over a node's size. Value can be either {@value #SIZE_EMPTY},
-         * {@value #SIZE_ONE}, or {@value #SIZE_MORE_THAN_ONE}.
-         *
-         * @return size predicate
-         */
-        byte sizePredicate();
-
-        boolean contains(final K key, final int keyHash, final int shift);
-
-
-        R updated(final AtomicReference<Thread> mutator, final K key, final int keyHash, final int shift,
-                  final SetNodeResultImpl<K> details);
-
-        R removed(final AtomicReference<Thread> mutator, final K key, final int keyHash, final int shift,
-                  final SetNodeResultImpl<K> details);
-
-        boolean hasPayload();
-
-        int payloadArity();
-
-        K getKey(final int index);
-
-        int getKeyHash(final int index);
+    private static class Modified {
+        private boolean isModified;
     }
 }

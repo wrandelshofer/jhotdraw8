@@ -1,20 +1,29 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Collection;
 
 /**
- * Provides methods for creating a new set with an added or removed element.
+ * Provides an API for a persistent set.
+ * <p>
+ * A persistent set provides methods for creating a new persistent set with
+ * added or removed elements, without changing the original persistent set.
+ * <p>
+ * Implementations are expected to only require time and space that is
+ * proportional to the differences (also known as 'delta')
+ * between the newly created persistent set to the original persistent set.
  */
-public interface PersistentSet<E> extends ReadOnlySet<E> {
+public interface PersistentSet<E> extends ReadOnlySet<E>, InsertOnlyPersistentSet<E> {
     /**
      * Returns a persistent set that contains all elements
      * of this set and also the specified element.
      *
      * @param element an element
-     * @return the same set if it already contains the element or
+     * @return the same set if it already contains the element, or
      * a different set with the element added
      */
-    PersistentSet<E> withAdd(E element);
+    @NonNull PersistentSet<E> withAdd(@NonNull E element);
 
     /**
      * Returns a persistent set that contains all elements
@@ -22,20 +31,20 @@ public interface PersistentSet<E> extends ReadOnlySet<E> {
      * collection.
      *
      * @param c a collection to be added to this set
-     * @return the same set if it already contains the elements or
+     * @return the same set if it already contains the elements, or
      * a different set with the elements added
      */
-    PersistentSet<E> withAddAll(Iterable<? extends E> c);
+    @NonNull PersistentSet<E> withAddAll(@NonNull Iterable<? extends E> c);
 
     /**
      * Returns a persistent set that contains all elements
      * of this set except the specified element.
      *
      * @param element an element
-     * @return the same set if it already does not contain the element or
+     * @return the same set if it already does not contain the element, or
      * a different set with the element removed
      */
-    PersistentSet<E> withRemove(E element);
+    @NonNull PersistentSet<E> withRemove(@NonNull E element);
 
     /**
      * Returns a persistent set that contains all elements
@@ -43,18 +52,18 @@ public interface PersistentSet<E> extends ReadOnlySet<E> {
      * collection.
      *
      * @param c a collection to removed from this set
-     * @return the same set if it already does not contain the elements or
+     * @return the same set if it already does not contain the elements, or
      * a different set with the elements removed
      */
-    PersistentSet<E> withRemoveAll(Collection<? extends E> c);
+    @NonNull PersistentSet<E> withRemoveAll(@NonNull Iterable<? extends E> c);
 
     /**
      * Returns a persistent set that contains only elements
      * that are in this set and in the specified collection.
      *
      * @param c a collection with elements to be retained in this set
-     * @return the same set if it has not changed or
+     * @return the same set if it has not changed, or
      * a different set with elements removed
      */
-    PersistentSet<E> withRetainAll(Collection<? extends E> c);
+    @NonNull PersistentSet<E> withRetainAll(@NonNull Collection<? extends E> c);
 }
