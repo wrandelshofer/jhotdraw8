@@ -26,15 +26,15 @@ public class ImmutableMaps {
         return result;
     }
 
-    public static @NonNull <K, V> ImmutableMap<K, V> of(Map<K, V> map) {
+    public static @NonNull <K, V> ImmutableMap<K, V> copyOf(Map<K, V> map) {
         @SuppressWarnings("unchecked")
-        ImmutableMap<K, V> kvImmutableMap = map instanceof ImmutableMap<?, ?> ? (ImmutableMap<K, V>) map : new ImmutableHashMap<K, V>(map);
+        ImmutableMap<K, V> kvImmutableMap = map instanceof ImmutableMap<?, ?> ? (ImmutableMap<K, V>) map : new ImmutableHashMap<>(map);
         return kvImmutableMap;
     }
 
-    public static @NonNull <K, V> ImmutableMap<K, V> of(ReadOnlyMap<K, V> map) {
+    public static @NonNull <K, V> ImmutableMap<K, V> copyOf(ReadOnlyMap<K, V> map) {
 
-        return map instanceof ImmutableMap<?, ?> ? (ImmutableMap<K, V>) map : new ImmutableHashMap<K, V>(map);
+        return map instanceof ImmutableMap<?, ?> ? (ImmutableMap<K, V>) map : new ImmutableHashMap<>(map);
     }
 
     public static @NonNull <K, V> ImmutableMap<K, V> of(@NonNull ReadOnlyCollection<Map.Entry<K, V>> entrySet) {

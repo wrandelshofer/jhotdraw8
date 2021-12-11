@@ -72,7 +72,11 @@ public interface ReadOnlyMap<K, V> {
                 @SuppressWarnings("unchecked") Map.Entry<K, V> e = (Map.Entry<K, V>) o;
                 K key = e.getKey();
                 V value = ReadOnlyMap.this.get(key);
-                return Objects.equals(value, e.getValue());
+
+                // When value is null, then this can be because, the key is not
+                // contained in the map.
+                return Objects.equals(value, e.getValue())
+                        && (value != null || ReadOnlyMap.this.containsKey(key));
             }
         };
     }

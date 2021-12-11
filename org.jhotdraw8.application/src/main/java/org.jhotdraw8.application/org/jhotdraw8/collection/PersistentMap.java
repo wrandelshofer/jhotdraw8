@@ -57,7 +57,7 @@ public interface PersistentMap<K, V> extends ReadOnlyMap<K, V> {
      * @return the same map if it already does not contain the entries, or
      * a different map with the entries removed
      */
-    @NonNull PersistentSet<K> withRemoveAll(@NonNull Iterable<? extends K> c);
+    @NonNull PersistentMap<K, V> withRemoveAll(@NonNull Iterable<? extends K> c);
 
     /**
      * Returns a persistent map that contains only entries
@@ -67,6 +67,6 @@ public interface PersistentMap<K, V> extends ReadOnlyMap<K, V> {
      * @return the same map if it has not changed, or
      * a different map with entries removed
      */
-    @NonNull PersistentSet<K> withRetainAll(@NonNull Collection<? extends K> c);
+    @NonNull PersistentMap<K, V> withRetainAll(@NonNull Collection<? extends K> c);
 
 }

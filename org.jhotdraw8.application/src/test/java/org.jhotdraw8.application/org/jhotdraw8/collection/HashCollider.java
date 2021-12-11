@@ -7,9 +7,11 @@ package org.jhotdraw8.collection;
 class HashCollider {
     private final int value;
     private final int hash;
+    private final int hashBitMask;
 
     public HashCollider(int value, int hashBitMask) {
         this.value = value;
+        this.hashBitMask = hashBitMask;
         this.hash = value & hashBitMask;
     }
 
@@ -33,5 +35,13 @@ class HashCollider {
     @Override
     public String toString() {
         return Integer.toString(value);
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public int getHashBitMask() {
+        return hashBitMask;
     }
 }
