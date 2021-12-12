@@ -11,7 +11,7 @@ import java.util.Objects;
 
 
 /**
- * This class implements the insertion-only persistent set interface with a
+ * This class implements the add-only persistent set interface with a
  * Compressed Hash-Array Mapped Prefix-tree (CHAMP).
  * <p>
  * References:
@@ -25,32 +25,32 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public class InsertOnlyPersistentTrieSet<E> implements InsertOnlyPersistentSet<E> {
+public class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSet<E> {
 
     private static final @NonNull Node<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0);
-    private static final @NonNull InsertOnlyPersistentTrieSet<?> EMPTY_SET = new InsertOnlyPersistentTrieSet<>(EMPTY_NODE);
+    private static final @NonNull AddOnlyPersistentTrieSet<?> EMPTY_SET = new AddOnlyPersistentTrieSet<>(EMPTY_NODE);
     private final @NonNull Node<E> root;
 
-    private InsertOnlyPersistentTrieSet(@NonNull Node<E> root) {
+    private AddOnlyPersistentTrieSet(@NonNull Node<E> root) {
         this.root = root;
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull InsertOnlyPersistentTrieSet<K> of() {
-        return (InsertOnlyPersistentTrieSet<K>) InsertOnlyPersistentTrieSet.EMPTY_SET;
+    public static <K> @NonNull AddOnlyPersistentTrieSet<K> of() {
+        return (AddOnlyPersistentTrieSet<K>) AddOnlyPersistentTrieSet.EMPTY_SET;
     }
 
-    public static <K> @NonNull InsertOnlyPersistentTrieSet<K> of(@NonNull K key0) {
+    public static <K> @NonNull AddOnlyPersistentTrieSet<K> of(@NonNull K key0) {
         final int keyHash0 = key0.hashCode();
         final int dataMap = Node.bitpos(Node.mask(keyHash0, 0));
         final Node<K> newRootNode = new BitmapIndexedNode<>(0, dataMap, key0);
-        return new InsertOnlyPersistentTrieSet<>(newRootNode);
+        return new AddOnlyPersistentTrieSet<>(newRootNode);
     }
 
     @Override
-    public @NonNull InsertOnlyPersistentTrieSet<E> withAdd(final @NonNull E key) {
+    public @NonNull AddOnlyPersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final Node<E> newRootNode = root.updated(key, key.hashCode(), 0);
-        return newRootNode != root ? new InsertOnlyPersistentTrieSet<>(newRootNode) : this;
+        return newRootNode != root ? new AddOnlyPersistentTrieSet<>(newRootNode) : this;
     }
 
     protected static abstract class Node<K> {

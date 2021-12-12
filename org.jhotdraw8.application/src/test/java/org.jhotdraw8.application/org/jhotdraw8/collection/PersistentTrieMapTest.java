@@ -49,7 +49,7 @@ class PersistentTrieMapTest {
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
 
         // GIVEN: a set with values1
-        actual = actual.withPutAll(values1);
+        actual = actual.copyPutAll(values1);
 
         // WHEN: value1 is in set, then contains must be true
         assertTrue(actual.readOnlyEntrySet().contains(firstValue1));
@@ -94,12 +94,12 @@ class PersistentTrieMapTest {
         assertEquals(actual1a, actual1b);// equals of a new map that does not share trie nodes
 
         PersistentTrieMap<HashCollider, HashCollider> actual1c = actual1a;
-        actual1c = actual1c.withRemove(firstValue1.getKey());
-        actual1c = actual1c.withPut(firstValue1.getKey(), firstValue1.getValue());
+        actual1c = actual1c.copyRemove(firstValue1.getKey());
+        actual1c = actual1c.copyPut(firstValue1.getKey(), firstValue1.getValue());
         assertEquals(actual1a, actual1c);// equals of a new map that shares many trie nodes
 
         PersistentTrieMap<HashCollider, HashCollider> actual2a = PersistentTrieMap.copyOf(values2);
-        PersistentTrieMap<HashCollider, HashCollider> actual2b = actual2a.withRemove(firstValue2.getKey());
+        PersistentTrieMap<HashCollider, HashCollider> actual2b = actual2a.copyRemove(firstValue2.getKey());
         HashCollider zero = new HashCollider(0, 0);
         LinkedHashMap<HashCollider, HashCollider> expected1 = new LinkedHashMap<>(values1);
         LinkedHashMap<HashCollider, HashCollider> expected1plusZero = new LinkedHashMap<>(values1);
@@ -204,21 +204,21 @@ class PersistentTrieMapTest {
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
-        newActual = actual.withPutAll(values1);
+        newActual = actual.copyPutAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: value1 is already in set, then withAdd must yield the same map
-        newActual = actual.withPut(firstValue1.getKey(), firstValue1.getValue());
+        newActual = actual.copyPut(firstValue1.getKey(), firstValue1.getValue());
         assertSame(newActual, actual);
 
         // WHEN: value1 is updated in set, then withAdd must yield a new map
-        newActual = actual.withPut(firstValue1.getKey(),
+        newActual = actual.copyPut(firstValue1.getKey(),
                 new HashCollider(firstValue1.getValue() == null ? -1 : firstValue1.getValue().getValue() + 1, hashBitMask));
         assertNotSame(newActual, actual);
 
         // WHEN: value2 is not yet in set, then withAdd must yield a new map
-        newActual = actual.withPut(firstValue2.getKey(), firstValue2.getValue());
+        newActual = actual.copyPut(firstValue2.getKey(), firstValue2.getValue());
         assertNotSame(newActual, actual);
         actual = newActual;
 
@@ -233,12 +233,12 @@ class PersistentTrieMapTest {
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
-        newActual = actual.withPutAll(values1);
+        newActual = actual.copyPutAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: values1 are already in set, then withPutAll must yield the same map
-        newActual = actual.withPutAll(values1);
+        newActual = actual.copyPutAll(values1);
         assertSame(newActual, actual);
 
         // WHEN: values1 are updated in set, then withPutAll must yield a new map
@@ -247,12 +247,12 @@ class PersistentTrieMapTest {
             values1WithDifferentValues.put(entry.getKey(),
                     new HashCollider(entry.getValue() == null ? -1 : entry.getValue().getValue() + 1, hashBitMask));
         }
-        newActual = actual.withPutAll(values1WithDifferentValues);
+        newActual = actual.copyPutAll(values1WithDifferentValues);
         assertNotSame(newActual, actual);
 
 
         // WHEN: values2 are not yet in set, then withPutAll must yield a new map
-        newActual = actual.withPutAll(values2);
+        newActual = actual.copyPutAll(values2);
         assertNotSame(newActual, actual);
         actual = newActual;
 
@@ -270,17 +270,17 @@ class PersistentTrieMapTest {
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
-        newActual = actual.withPutAll(values1);
+        newActual = actual.copyPutAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: value1 is in set, then withRemove must yield a new map
-        newActual = actual.withRemove(firstValue1.getKey());
+        newActual = actual.copyRemove(firstValue1.getKey());
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: value2 is not in set, then withRemove must yield the same map
-        newActual = actual.withRemove(firstValue2.getKey());
+        newActual = actual.copyRemove(firstValue2.getKey());
         assertSame(newActual, actual);
 
         //
@@ -294,16 +294,16 @@ class PersistentTrieMapTest {
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
-        newActual = actual.withPutAll(values1);
+        newActual = actual.copyPutAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: values2 are not in set, then withRemoveAll must yield the same map
-        newActual = actual.withRemoveAll(values2.keySet());
+        newActual = actual.copyRemoveAll(values2.keySet());
         assertSame(newActual, actual);
 
         // WHEN: values1 are in set, then withRemoveAll must yield a new map
-        newActual = actual.withRemoveAll(values1.keySet());
+        newActual = actual.copyRemoveAll(values1.keySet());
         assertNotSame(newActual, actual);
         actual = newActual;
 
@@ -317,16 +317,16 @@ class PersistentTrieMapTest {
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
-        newActual = actual.withPutAll(values1);
+        newActual = actual.copyPutAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: values1 are in set, then withRetainAll must yield the same map
-        newActual = actual.withRetainAll(values1.keySet());
+        newActual = actual.copyRetainAll(values1.keySet());
         assertSame(newActual, actual);
 
         // WHEN: values2 are not in set, then withRetainAll must yield a new map
-        newActual = actual.withRetainAll(values2.keySet());
+        newActual = actual.copyRetainAll(values2.keySet());
         assertNotSame(newActual, actual);
         actual = newActual;
 

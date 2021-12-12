@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
  *
  * @param <E> the element type
  */
-public interface InsertOnlyPersistentSet<E> {
+public interface AddOnlyPersistentSet<E> {
     /**
      * Returns a persistent set that contains all elements
      * of this set and also the specified element.
@@ -20,6 +20,6 @@ public interface InsertOnlyPersistentSet<E> {
      * @return the same set if it already contains the element, or
      * a different set with the element added
      */
-    @NonNull InsertOnlyPersistentSet<E> withAdd(@NonNull E element);
+    @NonNull AddOnlyPersistentSet<E> copyAdd(@NonNull E element);
 
 }

@@ -181,7 +181,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         return String.format("{%s}", body);
     }
 
-    public @NonNull PersistentTrieMap<K, V> withPut(@NonNull K key, @Nullable V value) {
+    public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = key.hashCode();
         final ChangeEvent<V> details = new ChangeEvent<>();
 
@@ -205,7 +205,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         return this;
     }
 
-    public @NonNull PersistentTrieMap<K, V> withPutAll(@NonNull Map<? extends K, ? extends V> map) {
+    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
         final TransientTrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
@@ -215,7 +215,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         return modified ? t.freeze() : this;
     }
 
-    public @NonNull PersistentTrieMap<K, V> withRemove(@NonNull K key) {
+    public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = key.hashCode();
         final ChangeEvent<V> details = new ChangeEvent<>();
         final Node<K, V> newRootNode = root.removed(null, key, keyHash, 0, details);
@@ -229,7 +229,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
-    public @NonNull PersistentTrieMap<K, V> withRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
         final TransientTrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (K key : c) {
@@ -240,7 +240,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
-    public @NonNull PersistentTrieMap<K, V> withRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull PersistentTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
         final TransientTrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (K key : this.readOnlyKeySet()) {

@@ -67,7 +67,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
 
     @SafeVarargs
     public static <K> PersistentTrieSet<K> of(@NonNull K... keys) {
-        return PersistentTrieSet.<K>of().withAddAll(Arrays.asList(keys));
+        return PersistentTrieSet.<K>of().copyAddAll(Arrays.asList(keys));
     }
 
     @SuppressWarnings("unchecked")
@@ -138,7 +138,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return String.format("{%s}", body);
     }
 
-    public @NonNull PersistentTrieSet<E> withAdd(final @NonNull E key) {
+    public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = key.hashCode();
         final ChangeEvent changeEvent = new ChangeEvent();
         final Node<E> newRootNode = root.updated(null, key,
@@ -150,7 +150,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return this;
     }
 
-    public @NonNull PersistentTrieSet<E> withAddAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         final TransientTrieSet<E> t = this.asTransient();
         boolean modified = false;
         for (final E key : set) {
@@ -159,7 +159,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return modified ? t.freeze() : this;
     }
 
-    public @NonNull PersistentTrieSet<E> withRemove(final @NonNull E key) {
+    public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = key.hashCode();
         final ChangeEvent changeEvent = new ChangeEvent();
         final Node<E> newRootNode = root.removed(null, key,
@@ -171,7 +171,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return this;
     }
 
-    public @NonNull PersistentTrieSet<E> withRemoveAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull PersistentTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         final TransientTrieSet<E> t = this.asTransient();
         boolean modified = false;
         for (final E key : set) {
@@ -180,7 +180,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return modified ? t.freeze() : this;
     }
 
-    public @NonNull PersistentTrieSet<E> withRetainAll(final @NonNull Collection<? extends E> set) {
+    public @NonNull PersistentTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         final TransientTrieSet<E> t = this.asTransient();
         boolean modified = false;
         for (E key : this) {

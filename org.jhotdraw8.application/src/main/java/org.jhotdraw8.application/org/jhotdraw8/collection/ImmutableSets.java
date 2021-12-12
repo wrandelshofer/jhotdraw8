@@ -15,7 +15,7 @@ public class ImmutableSets {
     public ImmutableSets() {
     }
 
-    public static @NonNull <T> ImmutableSet<T> add(@NonNull Collection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> copyAdd(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return new ImmutableSingletonSet<>(item);
@@ -26,7 +26,7 @@ public class ImmutableSets {
         }
     }
 
-    public static @NonNull <T> ImmutableSet<T> add(@NonNull ReadOnlyCollection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> copyAdd(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return new ImmutableSingletonSet<>(item);
@@ -96,7 +96,7 @@ public class ImmutableSets {
     }
 
     @SuppressWarnings({"unchecked"})
-    public static @NonNull <T> ImmutableSet<T> remove(@NonNull Collection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> copyRemove(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return (ImmutableSet<T>) emptySet();
@@ -137,7 +137,7 @@ public class ImmutableSets {
      * @return a new immutable collection which contains all elements of
      * {@code collection} without the elements that are contained in {@code c}.
      */
-    public static @NonNull <T> ImmutableSet<T> removeAll(@NonNull ReadOnlyCollection<T> collection, Collection<T> c) {
+    public static @NonNull <T> ImmutableSet<T> copyRemoveAll(@NonNull ReadOnlyCollection<T> collection, Collection<T> c) {
         if (collection.isEmpty()) {
             return emptySet();
         }
@@ -155,7 +155,7 @@ public class ImmutableSets {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static @NonNull <T> ImmutableSet<T> remove(@NonNull ReadOnlyCollection<T> collection, T item) {
+    public static @NonNull <T> ImmutableSet<T> copyRemove(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
             return (ImmutableSet<T>) emptySet();

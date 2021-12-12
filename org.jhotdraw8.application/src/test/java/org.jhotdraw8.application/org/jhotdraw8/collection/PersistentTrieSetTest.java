@@ -47,7 +47,7 @@ class PersistentTrieSetTest {
         HashCollider firstValue2 = entries2.iterator().next();
 
         // GIVEN: a set with entries1
-        actual = actual.withAddAll(entries1);
+        actual = actual.copyAddAll(entries1);
 
         // WHEN: entry1 is in set, then contains must be true
         assertTrue(actual.contains(firstValue1));
@@ -88,13 +88,13 @@ class PersistentTrieSetTest {
         assertEquals(actual1a, actual1b);//equals of a new set that does not share trie nodes
 
         PersistentTrieSet<HashCollider> actual1c = actual1a;
-        actual1c = actual1c.withRemove(firstValue1);
-        actual1c = actual1c.withAdd(firstValue1);
+        actual1c = actual1c.copyRemove(firstValue1);
+        actual1c = actual1c.copyAdd(firstValue1);
         assertEquals(actual1a, actual1c);// equals of a new set that shares many trie nodes
 
 
         PersistentTrieSet<HashCollider> actual2a = PersistentTrieSet.copyOf(entries2);
-        PersistentTrieSet<HashCollider> actual2b = actual2a.withRemove(firstValue2);
+        PersistentTrieSet<HashCollider> actual2b = actual2a.copyRemove(firstValue2);
         HashCollider zero = new HashCollider(0, 0);
         LinkedHashSet<HashCollider> expected1 = new LinkedHashSet<>(entries1);
         LinkedHashSet<HashCollider> expected1plusZero = new LinkedHashSet<>(entries1);
@@ -169,16 +169,16 @@ class PersistentTrieSetTest {
         PersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
-        newActual = actual.withAddAll(entries1);
+        newActual = actual.copyAddAll(entries1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: entry1 is already in set, then withAdd must yield the same set
-        newActual = actual.withAdd(firstValue1);
+        newActual = actual.copyAdd(firstValue1);
         assertSame(newActual, actual);
 
         // WHEN: entry2 is not yet in set, then withAdd must yield a new set
-        newActual = actual.withAdd(firstValue2);
+        newActual = actual.copyAdd(firstValue2);
         assertNotSame(newActual, actual);
         actual = newActual;
 
@@ -193,16 +193,16 @@ class PersistentTrieSetTest {
         PersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
-        newActual = actual.withAddAll(entries1);
+        newActual = actual.copyAddAll(entries1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: entries1 are already in set, then withAddAll must yield the same set
-        newActual = actual.withAddAll(entries1);
+        newActual = actual.copyAddAll(entries1);
         assertSame(newActual, actual);
 
         // WHEN: entries2 are not yet in set, then withAddAll must yield a new set
-        newActual = actual.withAddAll(entries2);
+        newActual = actual.copyAddAll(entries2);
         assertNotSame(newActual, actual);
         actual = newActual;
 
@@ -220,17 +220,17 @@ class PersistentTrieSetTest {
         PersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
-        newActual = actual.withAddAll(entries1);
+        newActual = actual.copyAddAll(entries1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: entry1 is in set, then withRemove must yield a new set
-        newActual = actual.withRemove(firstValue1);
+        newActual = actual.copyRemove(firstValue1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: entry2 is not in set, then withRemove must yield the same set
-        newActual = actual.withRemove(firstValue2);
+        newActual = actual.copyRemove(firstValue2);
         assertSame(newActual, actual);
 
         //
@@ -244,16 +244,16 @@ class PersistentTrieSetTest {
         PersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
-        newActual = actual.withAddAll(entries1);
+        newActual = actual.copyAddAll(entries1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: entries2 are not in set, then withRemoveAll must yield the same set
-        newActual = actual.withRemoveAll(entries2);
+        newActual = actual.copyRemoveAll(entries2);
         assertSame(newActual, actual);
 
         // WHEN: entries1 are in set, then withRemoveAll must yield a new set
-        newActual = actual.withRemoveAll(entries1);
+        newActual = actual.copyRemoveAll(entries1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
@@ -267,16 +267,16 @@ class PersistentTrieSetTest {
         PersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
-        newActual = actual.withAddAll(entries1);
+        newActual = actual.copyAddAll(entries1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
         // WHEN: entries1 are in set, then withRetainAll must yield the same set
-        newActual = actual.withRetainAll(entries1);
+        newActual = actual.copyRetainAll(entries1);
         assertSame(newActual, actual);
 
         // WHEN: entries2 are not in set, then withRetainAll must yield a new set
-        newActual = actual.withRetainAll(entries2);
+        newActual = actual.copyRetainAll(entries2);
         assertNotSame(newActual, actual);
         actual = newActual;
 

@@ -79,9 +79,9 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         assert set != null;
         boolean oldValue = set.contains(this.value);
         if (value != null && value) {
-            set = ImmutableSets.add(set, this.value);
+            set = ImmutableSets.copyAdd(set, this.value);
         } else {
-            set = ImmutableSets.remove(set, this.value);
+            set = ImmutableSets.copyRemove(set, this.value);
         }
         setAccessor.put(a, set);
         return oldValue;
