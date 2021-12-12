@@ -185,11 +185,11 @@ class PersistentTrieMapTest {
                 }
             }
 
-            testWithPut(values1, values2, hashBitMask);
-            testWithRemove(values1, values2);
-            testWithPutAll(values1, values2, hashBitMask);
-            testWithRemoveAll(values1, values2);
-            testWithRetainAll(values1, values2);
+            testCopyPut(values1, values2, hashBitMask);
+            testCopyRemove(values1, values2);
+            testCopyPutAll(values1, values2, hashBitMask);
+            testCopyRemoveAll(values1, values2);
+            testCopyRetainAll(values1, values2);
             testContains(values1, values2);
             testOfEntries(values1, values2);
             testCopyOf(values1, values2);
@@ -197,7 +197,7 @@ class PersistentTrieMapTest {
         }
     }
 
-    private void testWithPut(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
+    private void testCopyPut(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
         PersistentTrieMap<HashCollider, HashCollider> actual = PersistentTrieMap.of();
@@ -228,7 +228,7 @@ class PersistentTrieMapTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithPutAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
+    private void testCopyPutAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
         PersistentTrieMap<HashCollider, HashCollider> actual = PersistentTrieMap.of();
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
@@ -263,7 +263,7 @@ class PersistentTrieMapTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithRemove(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
+    private void testCopyRemove(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
         PersistentTrieMap<HashCollider, HashCollider> actual = PersistentTrieMap.of();
@@ -289,7 +289,7 @@ class PersistentTrieMapTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithRemoveAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
+    private void testCopyRemoveAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
         PersistentTrieMap<HashCollider, HashCollider> actual = PersistentTrieMap.of();
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 
@@ -312,7 +312,7 @@ class PersistentTrieMapTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithRetainAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
+    private void testCopyRetainAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
         PersistentTrieMap<HashCollider, HashCollider> actual = PersistentTrieMap.of();
         PersistentTrieMap<HashCollider, HashCollider> newActual;
 

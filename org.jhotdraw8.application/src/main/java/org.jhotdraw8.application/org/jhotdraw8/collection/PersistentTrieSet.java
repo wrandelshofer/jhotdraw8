@@ -24,7 +24,7 @@ import java.util.Objects;
  * <p>
  * References:
  * <dl>
- *     <dt>This code has been derived from "The Capsule Hash Trie Collections Library".</dt>
+ *     <dt>This class has been derived from "The Capsule Hash Trie Collections Library".</dt>
  *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
  *         BSD 2-Clause License.
  *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>

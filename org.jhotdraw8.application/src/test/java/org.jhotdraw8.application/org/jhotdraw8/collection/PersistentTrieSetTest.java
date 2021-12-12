@@ -150,11 +150,11 @@ class PersistentTrieSetTest {
                 }
             }
 
-            testWithAdd(entries1, entries2);
-            testWithRemove(entries1, entries2);
-            testWithAddAll(entries1, entries2);
-            testWithRemoveAll(entries1, entries2);
-            testWithRetainAll(entries1, entries2);
+            testCopyAdd(entries1, entries2);
+            testCopyRemove(entries1, entries2);
+            testCopyAddAll(entries1, entries2);
+            testCopyRemoveAll(entries1, entries2);
+            testCopyRetainAll(entries1, entries2);
             testContains(entries1, entries2);
             testOf(entries1, entries2);
             testCopyOf(entries1, entries2);
@@ -162,7 +162,7 @@ class PersistentTrieSetTest {
         }
     }
 
-    private void testWithAdd(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
+    private void testCopyAdd(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         HashCollider firstValue1 = entries1.iterator().next();
         HashCollider firstValue2 = entries2.iterator().next();
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
@@ -188,7 +188,7 @@ class PersistentTrieSetTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithAddAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
+    private void testCopyAddAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
         PersistentTrieSet<HashCollider> newActual;
 
@@ -213,7 +213,7 @@ class PersistentTrieSetTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithRemove(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
+    private void testCopyRemove(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         HashCollider firstValue1 = entries1.iterator().next();
         HashCollider firstValue2 = entries2.iterator().next();
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
@@ -239,7 +239,7 @@ class PersistentTrieSetTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithRemoveAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
+    private void testCopyRemoveAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
         PersistentTrieSet<HashCollider> newActual;
 
@@ -262,7 +262,7 @@ class PersistentTrieSetTest {
         assertEquality(expected, actual);
     }
 
-    private void testWithRetainAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
+    private void testCopyRetainAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
         PersistentTrieSet<HashCollider> newActual;
 

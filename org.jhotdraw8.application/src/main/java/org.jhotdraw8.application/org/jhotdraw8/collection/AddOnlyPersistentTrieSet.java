@@ -11,16 +11,15 @@ import java.util.Objects;
 
 
 /**
- * This class implements the add-only persistent set interface with a
- * Compressed Hash-Array Mapped Prefix-tree (CHAMP).
+ * An add-only persistent set implemented with a Compressed Hash-Array Mapped
+ * Prefix-tree (CHAMP).
  * <p>
  * References:
  * <dl>
- *     <dt>Michael Steindorfer, capsule</dt>
- *     <dd>Copyright (c) Michael Steindorfer <Centrum Wiskunde & Informatica> and Contributors.
- *   All rights reserved.
- *  This file is licensed under the BSD 2-Clause License, which accompanies this project
- *  and is available under <a href="https://opensource.org/licenses/BSD-2-Clause">BSD-2</a>.</dd>
+ *     <dt>This class has been derived from "The Capsule Hash Trie Collections Library".</dt>
+ *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
+ *         BSD 2-Clause License.
+ *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
  * </dl>
  *
  * @param <E> the element type

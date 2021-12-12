@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class InsertOnlyPersistentTrieSetTest {
+class AddOnlyPersistentTrieSetTest {
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {
@@ -42,13 +42,13 @@ class InsertOnlyPersistentTrieSetTest {
                 }
             }
 
-            testWithAdd(values1, values2);
-            testWithAddFromOfWith1Value(values1, values2);
+            testCopyAddAndOfWith0Arg(values1, values2);
+            testCopyAddAndOfWith1Arg(values1, values2);
         }
     }
 
 
-    private void testWithAdd(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
+    private void testCopyAddAndOfWith0Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
         AddOnlyPersistentTrieSet<HashCollider> actual = AddOnlyPersistentTrieSet.of();
@@ -68,7 +68,7 @@ class InsertOnlyPersistentTrieSetTest {
         assertNotSame(newActual, actual);
     }
 
-    private void testWithAddFromOfWith1Value(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
+    private void testCopyAddAndOfWith1Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
         AddOnlyPersistentTrieSet<HashCollider> actual = AddOnlyPersistentTrieSet.of(firstValue1);
