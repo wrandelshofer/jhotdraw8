@@ -21,7 +21,7 @@ import java.util.Objects;
  * <p>
  * Creating a new delta persistent set with a single element added or removed
  * is performed in {@code O(1)} time and space.
- * <dl>
+ * <p>
  * References:
  * <dl>
  *     <dt>This code has been derived from "The Capsule Hash Trie Collections Library".</dt>
@@ -192,20 +192,14 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return modified ? t.freeze() : this;
     }
 
-    private enum SizeClass {
-        SIZE_EMPTY,
-        SIZE_ONE,
-        SIZE_MORE_THAN_ONE
-    }
-
     private static abstract class Node<K> {
         static final int TUPLE_LENGTH = 1;
         static final int HASH_CODE_LENGTH = 32;
         static final int BIT_PARTITION_SIZE = 5;
         static final int BIT_PARTITION_MASK = 0b11111;
-        transient final @Nullable Nonce bulkMutator;
+        transient final @Nullable PersistentTries.Nonce bulkMutator;
 
-        Node(@Nullable Nonce bulkMutator) {
+        Node(@Nullable PersistentTries.Nonce bulkMutator) {
             this.bulkMutator = bulkMutator;
         }
 
@@ -221,7 +215,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
             return (bitmap == -1) ? mask : index(bitmap, bitpos);
         }
 
-        static boolean isAllowedToEdit(Nonce x, Nonce y) {
+        static boolean isAllowedToEdit(PersistentTries.Nonce x, PersistentTries.Nonce y) {
             return x != null && (x == y);
         }
 
@@ -229,7 +223,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
             return (keyHash >>> shift) & BIT_PARTITION_MASK;
         }
 
-        static <K> Node<K> mergeTwoKeyValPairs(Nonce bulkMutator, final K key0, final int keyHash0,
+        static <K> Node<K> mergeTwoKeyValPairs(PersistentTries.Nonce bulkMutator, final K key0, final int keyHash0,
                                                final K key1, final int keyHash1, final int shift) {
             assert !(key0.equals(key1));
 
@@ -272,12 +266,12 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
 
         abstract int payloadArity();
 
-        abstract Node<K> removed(final Nonce bulkMutator, final K key, final int keyHash, final int shift,
+        abstract Node<K> removed(final PersistentTries.Nonce bulkMutator, final K key, final int keyHash, final int shift,
                                  final ChangeEvent changeEvent);
 
-        abstract SizeClass sizePredicate();
+        abstract PersistentTries.SizeClass sizePredicate();
 
-        abstract Node<K> updated(final Nonce bulkMutator, final K key, final int keyHash, final int shift,
+        abstract Node<K> updated(final PersistentTries.Nonce bulkMutator, final K key, final int keyHash, final int shift,
                                  final ChangeEvent changeEvent);
 
         abstract boolean equivalent(final @NonNull Node<?> other);
@@ -289,7 +283,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         final int nodeMap;
         final int dataMap;
 
-        BitmapIndexedNode(final @Nullable Nonce bulkMutator, final int nodeMap,
+        BitmapIndexedNode(final @Nullable PersistentTries.Nonce bulkMutator, final int nodeMap,
                           final int dataMap, final Object[] nodes) {
             super(bulkMutator);
             this.nodeMap = nodeMap;
@@ -317,75 +311,62 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
             return false;
         }
 
-        Node<K> copyAndInsertValue(final Nonce bulkMutator, final int bitpos,
+        Node<K> copyAndInsertValue(final PersistentTries.Nonce bulkMutator, final int bitpos,
                                    final K key) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length + 1];
-
             // copy 'src' and insert 1 element(s) at position 'idx'
-            System.arraycopy(src, 0, dst, 0, idx);
-            dst[idx] = key;
-            System.arraycopy(src, idx, dst, idx + 1, src.length - idx);
-
+            final Object[] dst = PersistentTries.withAdd(this.nodes, idx, key);
             return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap() | bitpos, dst);
         }
 
-        Node<K> copyAndMigrateFromInlineToNode(final Nonce bulkMutator,
+        Node<K> copyAndMigrateFromInlineToNode(final PersistentTries.Nonce bulkMutator,
                                                final int bitpos, final Node<K> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 1 + 1];
+            assert idxOld <= idxNew;
 
             // copy 'src' and remove 1 element(s) at position 'idxOld' and
             // insert 1 element(s) at position 'idxNew'
-            assert idxOld <= idxNew;
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length - 1 + 1];
             System.arraycopy(src, 0, dst, 0, idxOld);
             System.arraycopy(src, idxOld + 1, dst, idxOld, idxNew - idxOld);
-            dst[idxNew] = node;
             System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
+            dst[idxNew] = node;
 
             return new BitmapIndexedNode<>(bulkMutator, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
         }
 
-        Node<K> copyAndMigrateFromNodeToInline(final Nonce bulkMutator,
+        Node<K> copyAndMigrateFromNodeToInline(final PersistentTries.Nonce bulkMutator,
                                                final int bitpos, final Node<K> node) {
 
             final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
             final int idxNew = TUPLE_LENGTH * dataIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 1 + 1];
+            assert idxOld >= idxNew;
 
             // copy 'src' and remove 1 element(s) at position 'idxOld' and
             // insert 1 element(s) at position 'idxNew'
-            assert idxOld >= idxNew;
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length - 1 + 1];
             System.arraycopy(src, 0, dst, 0, idxNew);
-            dst[idxNew] = node.getKey(0);
             System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
             System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
+            dst[idxNew] = node.getKey(0);
 
             return new BitmapIndexedNode<>(bulkMutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        Node<K> copyAndRemoveValue(final Nonce bulkMutator, final int bitpos) {
+        Node<K> copyAndRemoveValue(final PersistentTries.Nonce bulkMutator, final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 1];
-
             // copy 'src' and remove 1 element(s) at position 'idx'
-            System.arraycopy(src, 0, dst, 0, idx);
-            System.arraycopy(src, idx + 1, dst, idx, src.length - idx - 1);
-
+            final Object[] dst = PersistentTries.withRemove(this.nodes, idx);
             return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        Node<K> copyAndSetNode(final Nonce bulkMutator, final int bitpos,
+        Node<K> copyAndSetNode(final PersistentTries.Nonce bulkMutator, final int bitpos,
                                final Node<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
@@ -397,11 +378,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
                 return this;
             } else {
                 // copy 'src' and set 1 element(s) at position 'idx'
-                final Object[] src = this.nodes;
-                final Object[] dst = new Object[src.length];
-                System.arraycopy(src, 0, dst, 0, src.length);
-                dst[idx] = newNode;
-
+                final Object[] dst = PersistentTries.withSet(this.nodes, idx, newNode);
                 return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap(), dst);
             }
         }
@@ -476,7 +453,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         }
 
         @Override
-        Node<K> removed(final Nonce bulkMutator, final K key, final int keyHash,
+        Node<K> removed(final PersistentTries.Nonce bulkMutator, final K key, final int keyHash,
                         final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -533,23 +510,23 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         }
 
         @Override
-        public SizeClass sizePredicate() {
+        public PersistentTries.SizeClass sizePredicate() {
             if (this.nodeArity() == 0) {
                 switch (this.payloadArity()) {
                 case 0:
-                    return SizeClass.SIZE_EMPTY;
+                    return PersistentTries.SizeClass.SIZE_EMPTY;
                 case 1:
-                    return SizeClass.SIZE_ONE;
+                    return PersistentTries.SizeClass.SIZE_ONE;
                 default:
-                    return SizeClass.SIZE_MORE_THAN_ONE;
+                    return PersistentTries.SizeClass.SIZE_MORE_THAN_ONE;
                 }
             } else {
-                return SizeClass.SIZE_MORE_THAN_ONE;
+                return PersistentTries.SizeClass.SIZE_MORE_THAN_ONE;
             }
         }
 
         @Override
-        Node<K> updated(final Nonce bulkMutator, final K key,
+        Node<K> updated(final PersistentTries.Nonce bulkMutator, final K key,
                         final int keyHash, final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -573,11 +550,9 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
                         subNode.updated(bulkMutator, key, keyHash, shift + BIT_PARTITION_SIZE, changeEvent);
 
                 if (changeEvent.isModified) {
-                    /*
-                     * NOTE: subNode and subNodeNew may be referential equal if updated transiently in-place.
-                     * Therefore diffing nodes is not an option. Changes to content and meta-data need to be
-                     * explicitly tracked and passed when descending from recursion (i.e., {@code details}).
-                     */
+                    // NOTE: subNode and subNodeNew may be referential equal if updated transiently in-place.
+                    // Therefore diffing nodes is not an option. Changes to content and meta-data need to be
+                    // explicitly tracked and passed when descending from recursion (i.e., {@code details}).
                     return copyAndSetNode(bulkMutator, bitpos, subNodeNew);
                 } else {
                     return this;
@@ -594,7 +569,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         private final int hash;
         private @NonNull K[] keys;
 
-        HashCollisionNode(Nonce bulkMutator, final int hash, final K[] keys) {
+        HashCollisionNode(PersistentTries.Nonce bulkMutator, final int hash, final K[] keys) {
             super(bulkMutator);
             this.keys = keys;
             this.hash = hash;
@@ -671,7 +646,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         }
 
         @Override
-        Node<K> removed(final Nonce bulkMutator, final K key,
+        Node<K> removed(final PersistentTries.Nonce bulkMutator, final K key,
                         final int keyHash, final int shift, final ChangeEvent changeEvent) {
             for (int idx = 0; idx < keys.length; idx++) {
                 if (Objects.equals(keys[idx], key)) {
@@ -680,17 +655,14 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
                     if (payloadArity() == 1) {
                         return emptyNode();
                     } else if (payloadArity() == 2) {
-                        // Create root node with singleton element. This node will be a) either be the new root
+                        // Create root node with singleton element.
+                        // This node will be a) either be the new root
                         // returned, or b) unwrapped and inlined.
                         final K theOtherKey = (idx == 0) ? keys[1] : keys[0];
-
-                        return PersistentTrieSet.<K>emptyNode().updated(bulkMutator, theOtherKey, keyHash, 0,
-                                new ChangeEvent());
+                        return new BitmapIndexedNode<>(bulkMutator, 0, bitpos(BitmapIndexedNode.mask(keyHash, 0)), new Object[]{theOtherKey});
                     } else {
                         // copy 'this.keys' and remove 1 element(s) at position 'idx'
-                        @SuppressWarnings("unchecked") final K[] keysNew = (K[]) new Object[this.keys.length - 1];
-                        System.arraycopy(this.keys, 0, keysNew, 0, idx);
-                        System.arraycopy(this.keys, idx + 1, keysNew, idx, this.keys.length - idx - 1);
+                        final K[] keysNew = PersistentTries.withRemove(this.keys, idx);
                         if (isAllowedToEdit(this.bulkMutator, bulkMutator)) {
                             this.keys = keysNew;
                         } else {
@@ -703,12 +675,12 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         }
 
         @Override
-        SizeClass sizePredicate() {
-            return SizeClass.SIZE_MORE_THAN_ONE;
+        PersistentTries.SizeClass sizePredicate() {
+            return PersistentTries.SizeClass.SIZE_MORE_THAN_ONE;
         }
 
         @Override
-        public Node<K> updated(final Nonce bulkMutator, final K key,
+        public Node<K> updated(final PersistentTries.Nonce bulkMutator, final K key,
                                final int keyHash, final int shift, final ChangeEvent changeEvent) {
             assert this.hash == keyHash;
             for (K k : keys) {
@@ -813,7 +785,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
     }
 
     private static class TransientTrieSet<K> {
-        private Nonce bulkMutator;
+        private PersistentTries.Nonce bulkMutator;
         protected Node<K> root;
         protected int hashCode;
         protected int size;
@@ -822,7 +794,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
             this.root = trieSet.root;
             this.hashCode = trieSet.hashCode;
             this.size = trieSet.size;
-            this.bulkMutator = new Nonce();
+            this.bulkMutator = new PersistentTries.Nonce();
         }
 
         public boolean add(final K key) {
@@ -852,7 +824,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         }
 
         public PersistentTrieSet<K> freeze() {
-            bulkMutator = new Nonce();
+            bulkMutator = new PersistentTries.Nonce();
             return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, hashCode, size);
         }
     }

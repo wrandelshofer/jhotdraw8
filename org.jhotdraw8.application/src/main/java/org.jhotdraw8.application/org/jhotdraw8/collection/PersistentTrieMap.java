@@ -21,7 +21,7 @@ import java.util.Objects;
  * <p>
  * Creating a new delta persistent map with a single element added or removed
  * is performed in {@code O(1)} time and space.
- * <dl>
+ * <p>
  * References:
  * <dl>
  *     <dt>This code has been derived from "The Capsule Hash Trie Collections Library".</dt>
@@ -252,20 +252,16 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         return modified ? t.freeze() : this;
     }
 
-    private enum SizeClass {
-        SIZE_EMPTY,
-        SIZE_ONE,
-        SIZE_MORE_THAN_ONE
-    }
+
 
     private static abstract class Node<K, V> {
         static final int TUPLE_LENGTH = 2;
         static final int HASH_CODE_LENGTH = 32;
         static final int BIT_PARTITION_SIZE = 5;
         static final int BIT_PARTITION_MASK = 0b11111;
-        transient final @Nullable Nonce bulkMutator;
+        transient final @Nullable PersistentTries.Nonce bulkMutator;
 
-        Node(@Nullable Nonce bulkMutator) {
+        Node(@Nullable PersistentTries.Nonce bulkMutator) {
             this.bulkMutator = bulkMutator;
         }
 
@@ -273,7 +269,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
             return 1 << mask;
         }
 
-        static boolean isAllowedToEdit(Nonce x, Nonce y) {
+        static boolean isAllowedToEdit(PersistentTries.Nonce x, PersistentTries.Nonce y) {
             return x != null && (x == y);
         }
 
@@ -281,7 +277,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
             return (keyHash >>> shift) & BIT_PARTITION_MASK;
         }
 
-        static <K, V> Node<K, V> mergeTwoKeyValPairs(Nonce bulkMutator, final K key0, final V val0,
+        static <K, V> Node<K, V> mergeTwoKeyValPairs(PersistentTries.Nonce bulkMutator, final K key0, final V val0,
                                                      final int keyHash0, final K key1, final V val1, final int keyHash1, final int shift) {
             assert !(key0.equals(key1));
 
@@ -333,103 +329,90 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
 
         abstract int payloadArity();
 
-        abstract public Node<K, V> removed(final @Nullable Nonce bulkMutator, final K key,
+        abstract public Node<K, V> removed(final @Nullable PersistentTries.Nonce bulkMutator, final K key,
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
 
-        abstract SizeClass sizePredicate();
+        abstract PersistentTries.SizeClass sizePredicate();
 
-        abstract public Node<K, V> updated(final Nonce bulkMutator, final K key, final V val,
+        abstract public Node<K, V> updated(final PersistentTries.Nonce bulkMutator, final K key, final V val,
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
 
     }
 
     private static final class BitmapIndexedNode<K, V> extends Node<K, V> {
-        final Object[] nodes;
+        private final Object[] nodes;
         private final int nodeMap;
         private final int dataMap;
 
-        private BitmapIndexedNode(final Nonce bulkMutator, final int nodeMap,
+        private BitmapIndexedNode(final PersistentTries.Nonce bulkMutator, final int nodeMap,
                                   final int dataMap, final Object[] nodes) {
             super(bulkMutator);
             this.nodeMap = nodeMap;
             this.dataMap = dataMap;
-
             this.nodes = nodes;
-
         }
 
-        Node<K, V> copyAndInsertValue(final Nonce bulkMutator, final int bitpos,
+        Node<K, V> copyAndInsertValue(final PersistentTries.Nonce bulkMutator, final int bitpos,
                                       final K key, final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length + 2];
 
             // copy 'src' and insert 2 element(s) at position 'idx'
-            System.arraycopy(src, 0, dst, 0, idx);
+            final Object[] dst = PersistentTries.withComponentAdd(this.nodes, idx, 2);
             dst[idx] = key;
             dst[idx + 1] = val;
-            System.arraycopy(src, idx, dst, idx + 2, src.length - idx);
-
             return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap() | bitpos, dst);
         }
 
-        Node<K, V> copyAndMigrateFromInlineToNode(final Nonce bulkMutator,
+        Node<K, V> copyAndMigrateFromInlineToNode(final PersistentTries.Nonce bulkMutator,
                                                   final int bitpos, final Node<K, V> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
-
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 2 + 1];
+            assert idxOld <= idxNew;
 
             // copy 'src' and remove 2 element(s) at position 'idxOld' and
-            // insert 1 element(s) at position 'idxNew' (TODO: carefully test)
-            assert idxOld <= idxNew;
+            // insert 1 element(s) at position 'idxNew'
+            final Object[] src = this.nodes;
+            final Object[] dst = new Object[src.length - 2 + 1];
             System.arraycopy(src, 0, dst, 0, idxOld);
             System.arraycopy(src, idxOld + 2, dst, idxOld, idxNew - idxOld);
-            dst[idxNew] = node;
             System.arraycopy(src, idxNew + 2, dst, idxNew + 1, src.length - idxNew - 2);
+            dst[idxNew] = node;
 
             return new BitmapIndexedNode<>(bulkMutator, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
         }
 
-        Node<K, V> copyAndMigrateFromNodeToInline(final Nonce bulkMutator,
+        Node<K, V> copyAndMigrateFromNodeToInline(final PersistentTries.Nonce bulkMutator,
                                                   final int bitpos, final Node<K, V> node) {
 
             final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
             final int idxNew = TUPLE_LENGTH * dataIndex(bitpos);
 
+            // copy 'src' and remove 1 element(s) at position 'idxOld' and
+            // insert 2 element(s) at position 'idxNew'
             final Object[] src = this.nodes;
             final Object[] dst = new Object[src.length - 1 + 2];
-
-            // copy 'src' and remove 1 element(s) at position 'idxOld' and
-            // insert 2 element(s) at position 'idxNew' (TODO: carefully test)
             assert idxOld >= idxNew;
             System.arraycopy(src, 0, dst, 0, idxNew);
-            dst[idxNew] = node.getKey(0);
-            dst[idxNew + 1] = node.getValue(0);
             System.arraycopy(src, idxNew, dst, idxNew + 2, idxOld - idxNew);
             System.arraycopy(src, idxOld + 1, dst, idxOld + 2, src.length - idxOld - 1);
+            dst[idxNew] = node.getKey(0);
+            dst[idxNew + 1] = node.getValue(0);
 
             return new BitmapIndexedNode<>(bulkMutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        Node<K, V> copyAndRemoveValue(final Nonce bulkMutator,
+        Node<K, V> copyAndRemoveValue(final PersistentTries.Nonce bulkMutator,
                                       final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
-            final Object[] src = this.nodes;
-            final Object[] dst = new Object[src.length - 2];
-
             // copy 'src' and remove 2 element(s) at position 'idx'
-            System.arraycopy(src, 0, dst, 0, idx);
-            System.arraycopy(src, idx + 2, dst, idx, src.length - idx - 2);
-
+            final Object[] dst = PersistentTries.withComponentRemove(this.nodes, idx, 2);
             return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        Node<K, V> copyAndSetNode(final Nonce bulkMutator, final int bitpos,
+        Node<K, V> copyAndSetNode(final PersistentTries.Nonce bulkMutator, final int bitpos,
                                   final Node<K, V> node) {
 
             final int idx = this.nodes.length - 1 - nodeIndex(bitpos);
@@ -439,18 +422,13 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
                 this.nodes[idx] = node;
                 return this;
             } else {
-                final Object[] src = this.nodes;
-                final Object[] dst = new Object[src.length];
-
                 // copy 'src' and set 1 element(s) at position 'idx'
-                System.arraycopy(src, 0, dst, 0, src.length);
-                dst[idx] = node;
-
+                final Object[] dst = PersistentTries.withSet(this.nodes, idx, node);
                 return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap(), dst);
             }
         }
 
-        Node<K, V> copyAndSetValue(final Nonce bulkMutator, final int bitpos,
+        Node<K, V> copyAndSetValue(final PersistentTries.Nonce bulkMutator, final int bitpos,
                                    final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos) + 1;
 
@@ -459,13 +437,8 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
                 this.nodes[idx] = val;
                 return this;
             } else {
-                final Object[] src = this.nodes;
-                final Object[] dst = new Object[src.length];
-
                 // copy 'src' and set 1 element(s) at position 'idx'
-                System.arraycopy(src, 0, dst, 0, src.length);
-                dst[idx] = val;
-
+                final Object[] dst = PersistentTries.withSet(this.nodes, idx, val);
                 return new BitmapIndexedNode<>(bulkMutator, nodeMap(), dataMap(), dst);
             }
         }
@@ -577,7 +550,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
 
         @Override
-        public Node<K, V> removed(final @Nullable Nonce bulkMutator, final K key,
+        public Node<K, V> removed(final @Nullable PersistentTries.Nonce bulkMutator, final K key,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -639,23 +612,23 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
 
         @Override
-        public SizeClass sizePredicate() {
+        public PersistentTries.SizeClass sizePredicate() {
             if (this.nodeArity() == 0) {
                 switch (this.payloadArity()) {
                 case 0:
-                    return SizeClass.SIZE_EMPTY;
+                    return PersistentTries.SizeClass.SIZE_EMPTY;
                 case 1:
-                    return SizeClass.SIZE_ONE;
+                    return PersistentTries.SizeClass.SIZE_ONE;
                 default:
-                    return SizeClass.SIZE_MORE_THAN_ONE;
+                    return PersistentTries.SizeClass.SIZE_MORE_THAN_ONE;
                 }
             } else {
-                return SizeClass.SIZE_MORE_THAN_ONE;
+                return PersistentTries.SizeClass.SIZE_MORE_THAN_ONE;
             }
         }
 
         @Override
-        public Node<K, V> updated(final Nonce bulkMutator, final K key, final V val,
+        public Node<K, V> updated(final PersistentTries.Nonce bulkMutator, final K key, final V val,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -701,12 +674,11 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     }
 
     private static final class HashCollisionNode<K, V> extends Node<K, V> {
-
         private final int hash;
         private K[] keys;
         private V[] vals;
 
-        HashCollisionNode(Nonce bulkMutator, final int hash, final K[] keys, final V[] vals) {
+        HashCollisionNode(PersistentTries.Nonce bulkMutator, final int hash, final K[] keys, final V[] vals) {
             super(bulkMutator);
             this.keys = keys;
             this.vals = vals;
@@ -716,10 +688,6 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
 
 
-        int arity() {
-            return payloadArity();
-        }
-
         @Override
         public boolean equivalent(@NonNull Object other) {
             if (this == other) {
@@ -727,13 +695,11 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
             }
             HashCollisionNode<?, ?> that = (HashCollisionNode<?, ?>) other;
             if (hash != that.hash
-                    || arity() != that.arity()) {
+                    || payloadArity() != that.payloadArity()) {
                 return false;
             }
 
-            /*
-             * Linear scan for each key, because of arbitrary element order.
-             */
+            // Linear scan for each key, because of arbitrary element order.
             outerLoop:
             for (int i = 0; i < that.payloadArity(); i++) {
                 final Object otherKey = that.getKey(i);
@@ -806,39 +772,34 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
 
         @Override
-        public Node<K, V> removed(final @Nullable Nonce bulkMutator, final K key,
+        public Node<K, V> removed(final @Nullable PersistentTries.Nonce bulkMutator, final K key,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             for (int idx = 0; idx < keys.length; idx++) {
                 if (Objects.equals(keys[idx], key)) {
                     final V currentVal = vals[idx];
                     details.updated(currentVal);
 
-                    if (this.arity() == 1) {
+                    if (payloadArity() == 1) {
                         return emptyNode();
-                    } else if (this.arity() == 2) {
-                        /*
-                         * Create root node with singleton element. This node will be a) either be the new root
-                         * returned, or b) unwrapped and inlined.
-                         */
+                    } else if (payloadArity() == 2) {
+                        // Create root node with singleton element.
+                        // This node will be a) either be the new root
+                        // returned, or b) unwrapped and inlined.
                         final K theOtherKey = (idx == 0) ? keys[1] : keys[0];
                         final V theOtherVal = (idx == 0) ? vals[1] : vals[0];
                         return PersistentTrieMap.<K, V>emptyNode().updated(bulkMutator, theOtherKey, theOtherVal,
                                 keyHash, 0, details);
                     } else {
-                        @SuppressWarnings("unchecked") final K[] keysNew = (K[]) new Object[this.keys.length - 1];
 
-                        // copy 'this.keys' and remove 1 element(s) at position
-                        // 'idx'
-                        System.arraycopy(this.keys, 0, keysNew, 0, idx);
-                        System.arraycopy(this.keys, idx + 1, keysNew, idx, this.keys.length - idx - 1);
+                        // copy keys and vals and remove 1 element at position idx
+                        final K[] keysNew = PersistentTries.withRemove(this.keys, idx);
+                        final V[] valsNew = PersistentTries.withRemove(this.vals, idx);
 
-                        @SuppressWarnings("unchecked") final V[] valsNew = (V[]) new Object[this.vals.length - 1];
-
-                        // copy 'this.vals' and remove 1 element(s) at position
-                        // 'idx'
-                        System.arraycopy(this.vals, 0, valsNew, 0, idx);
-                        System.arraycopy(this.vals, idx + 1, valsNew, idx, this.vals.length - idx - 1);
-
+                        if (this.bulkMutator == bulkMutator) {
+                            this.keys = keysNew;
+                            this.vals = valsNew;
+                            return this;
+                        }
                         return new HashCollisionNode<>(bulkMutator, keyHash, keysNew, valsNew);
                     }
                 }
@@ -847,12 +808,12 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
 
         @Override
-        public SizeClass sizePredicate() {
-            return SizeClass.SIZE_MORE_THAN_ONE;
+        public PersistentTries.SizeClass sizePredicate() {
+            return PersistentTries.SizeClass.SIZE_MORE_THAN_ONE;
         }
 
         @Override
-        public Node<K, V> updated(final Nonce bulkMutator, final K key, final V val,
+        public Node<K, V> updated(final PersistentTries.Nonce bulkMutator, final K key, final V val,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             assert this.hash == keyHash;
 
@@ -863,31 +824,17 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
                     if (Objects.equals(currentVal, val)) {
                         return this;
                     } else {
-                        // add new mapping
-                        final V[] src = this.vals;
-                        @SuppressWarnings("unchecked") final V[] dst = (V[]) new Object[src.length];
-
-                        // copy 'src' and set 1 element(s) at position 'idx'
-                        System.arraycopy(src, 0, dst, 0, src.length);
-                        dst[idx] = val;
-
-                        final Node<K, V> thisNew =
-                                new HashCollisionNode<>(bulkMutator, this.hash, this.keys, dst);
-
+                        final V[] dst = PersistentTries.withSet(this.vals, idx, val);
+                        final Node<K, V> thisNew = new HashCollisionNode<>(bulkMutator, this.hash, this.keys, dst);
                         details.updated(currentVal);
                         return thisNew;
                     }
                 }
             }
 
-            // copy 'this.keys' and insert 1 element(s) at position 'keys.length'
-            final K[] keysNew = Arrays.copyOf(this.keys, this.keys.length + 1);
-            keysNew[keys.length] = key;
-
-            // copy 'this.vals' and insert 1 element(s) at position 'vals.length'
-            final V[] valsNew = Arrays.copyOf(this.vals, this.vals.length + 1);
-            valsNew[vals.length] = val;
-
+            // copy keys and vals and add 1 element at the end
+            final K[] keysNew = PersistentTries.withAdd(this.keys, this.keys.length, key);
+            final V[] valsNew = PersistentTries.withAdd(this.vals, this.vals.length, val);
             details.modified();
             if (isAllowedToEdit(this.bulkMutator, bulkMutator)) {
                 this.keys = keysNew;
@@ -1047,20 +994,20 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     }
 
     static final class TransientTrieMap<K, V> {
-        private Nonce bulkMutator;
+        private PersistentTries.Nonce bulkMutator;
         private Node<K, V> root;
         private int hashCode;
         private int size;
 
         TransientTrieMap(PersistentTrieMap<K, V> trieMap) {
-            this.bulkMutator = new Nonce();
+            this.bulkMutator = new PersistentTries.Nonce();
             this.root = trieMap.root;
             this.hashCode = trieMap.hashCode;
             this.size = trieMap.size;
         }
 
         public PersistentTrieMap<K, V> freeze() {
-            bulkMutator = new Nonce();
+            bulkMutator = new PersistentTries.Nonce();
             return size == 0 ? PersistentTrieMap.of() : new PersistentTrieMap<>(root, hashCode, size);
         }
 
@@ -1073,10 +1020,8 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
             if (details.isModified()) {
                 if (details.hasReplacedValue()) {
                     final V old = details.getReplacedValue();
-
                     final int valHashOld = Objects.hashCode(old);
                     final int valHashNew = Objects.hashCode(val);
-
                     root = newRootNode;
                     hashCode = hashCode + (keyHash ^ valHashNew) - (keyHash ^ valHashOld);
                 } else {

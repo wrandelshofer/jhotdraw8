@@ -73,8 +73,8 @@ public interface ReadOnlyMap<K, V> {
                 K key = e.getKey();
                 V value = ReadOnlyMap.this.get(key);
 
-                // When value is null, then this can be because, the key is not
-                // contained in the map.
+                // The value returned by get(key) can be null, because the value
+                // is null, or because the map does not contain the key.
                 return Objects.equals(value, e.getValue())
                         && (value != null || ReadOnlyMap.this.containsKey(key));
             }
