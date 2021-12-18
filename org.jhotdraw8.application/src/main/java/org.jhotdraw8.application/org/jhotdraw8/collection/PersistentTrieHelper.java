@@ -8,11 +8,11 @@ import java.util.Arrays;
 /**
  * Helper class for persistent tries.
  */
-class PersistentTries {
+class PersistentTrieHelper {
     /**
      * Don't let anyone instantiate this class.
      */
-    private PersistentTries() {
+    private PersistentTrieHelper() {
     }
 
     /**
@@ -24,8 +24,8 @@ class PersistentTries {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T[] withAdd(@NonNull T[] src, int index, T value) {
-        final T[] dst = withComponentAdd(src, index, 1);
+    public static <T> @NonNull T[] copyAdd(@NonNull T[] src, int index, T value) {
+        final T[] dst = copyComponentAdd(src, index, 1);
         dst[index] = value;
         return dst;
     }
@@ -41,7 +41,7 @@ class PersistentTries {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T[] withComponentAdd(@NonNull T[] src, int index, int numComponents) {
+    public static <T> @NonNull T[] copyComponentAdd(@NonNull T[] src, int index, int numComponents) {
         if (index == src.length) {
             return Arrays.copyOf(src, src.length + numComponents);
         }
@@ -60,7 +60,7 @@ class PersistentTries {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T[] withComponentRemove(@NonNull T[] src, int index, int numComponents) {
+    public static <T> @NonNull T[] copyComponentRemove(@NonNull T[] src, int index, int numComponents) {
         if (index == src.length - numComponents) {
             return Arrays.copyOf(src, src.length - numComponents);
         }
@@ -78,8 +78,8 @@ class PersistentTries {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T[] withRemove(@NonNull T[] src, int index) {
-        return withComponentRemove(src, index, 1);
+    public static <T> @NonNull T[] copyRemove(@NonNull T[] src, int index) {
+        return copyComponentRemove(src, index, 1);
     }
 
     /**
@@ -91,7 +91,7 @@ class PersistentTries {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T[] withSet(@NonNull T[] src, int index, T value) {
+    public static <T> @NonNull T[] copySet(@NonNull T[] src, int index, T value) {
         final T[] dst = Arrays.copyOf(src, src.length);
         dst[index] = value;
         return dst;

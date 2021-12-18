@@ -202,28 +202,32 @@ class PersistentTrieMapTest {
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
         PersistentTrieMap<HashCollider, HashCollider> actual = PersistentTrieMap.of();
         PersistentTrieMap<HashCollider, HashCollider> newActual;
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
 
         // GIVEN: a set with values1
-        newActual = actual.copyPutAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
+        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
+            actual = actual.copyPut(entry.getKey(), entry.getValue());
+            expected.put(entry.getKey(), entry.getValue());
+            assertEquality(expected, actual);
+        }
 
-        // WHEN: value1 is already in set, then withAdd must yield the same map
+        // WHEN: value1 is already in set, then withPut must yield the same map
         newActual = actual.copyPut(firstValue1.getKey(), firstValue1.getValue());
         assertSame(newActual, actual);
 
-        // WHEN: value1 is updated in set, then withAdd must yield a new map
-        newActual = actual.copyPut(firstValue1.getKey(),
-                new HashCollider(firstValue1.getValue() == null ? -1 : firstValue1.getValue().getValue() + 1, hashBitMask));
+        // WHEN: value1 is updated in set, then withPut must yield a new map
+        HashCollider newValue1 = new HashCollider(firstValue1.getValue() == null ? -1 : firstValue1.getValue().getValue() + 1, hashBitMask);
+        newActual = actual.copyPut(firstValue1.getKey(), newValue1);
         assertNotSame(newActual, actual);
+        actual = newActual;
 
-        // WHEN: value2 is not yet in set, then withAdd must yield a new map
+        // WHEN: value2 is not yet in set, then withPut must yield a new map
         newActual = actual.copyPut(firstValue2.getKey(), firstValue2.getValue());
         assertNotSame(newActual, actual);
         actual = newActual;
 
         //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(values1);
+        expected.put(firstValue1.getKey(), newValue1);
         expected.put(firstValue2.getKey(), firstValue2.getValue());
         assertEquality(expected, actual);
     }

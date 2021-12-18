@@ -167,11 +167,14 @@ class PersistentTrieSetTest {
         HashCollider firstValue2 = entries2.iterator().next();
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
         PersistentTrieSet<HashCollider> newActual;
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
 
         // GIVEN: a set with entries1
-        newActual = actual.copyAddAll(entries1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
+        for (HashCollider e : entries1) {
+            actual = actual.copyAdd(e);
+            expected.add(e);
+            assertEquality(expected, actual);
+        }
 
         // WHEN: entry1 is already in set, then withAdd must yield the same set
         newActual = actual.copyAdd(firstValue1);
@@ -183,7 +186,6 @@ class PersistentTrieSetTest {
         actual = newActual;
 
         //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(entries1);
         expected.add(firstValue2);
         assertEquality(expected, actual);
     }
@@ -237,23 +239,31 @@ class PersistentTrieSetTest {
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(entries1);
         expected.remove(firstValue1);
         assertEquality(expected, actual);
+
+        // Remove all one by one
+        for (HashCollider e : entries1) {
+            actual = actual.copyRemove(e);
+            expected.remove(e);
+        }
+        assertEquality(expected, actual);
     }
 
-    private void testCopyRemoveAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
+    private void testCopyRemoveAll(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         PersistentTrieSet<HashCollider> actual = PersistentTrieSet.of();
         PersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
-        newActual = actual.copyAddAll(entries1);
+        newActual = actual.copyAddAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
+        assertEquality(values1, actual);
 
         // WHEN: entries2 are not in set, then withRemoveAll must yield the same set
-        newActual = actual.copyRemoveAll(entries2);
+        newActual = actual.copyRemoveAll(values2);
         assertSame(newActual, actual);
 
         // WHEN: entries1 are in set, then withRemoveAll must yield a new set
-        newActual = actual.copyRemoveAll(entries1);
+        newActual = actual.copyRemoveAll(values1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
