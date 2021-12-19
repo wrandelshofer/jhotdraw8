@@ -1,5 +1,5 @@
 /*
- * @(#)ImmutableBidiGraph.java
+ * @(#)IntImmutableBidiGraph.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
-public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
+public class IntImmutableBidiGraph<V, A> extends IntImmutableDirectedGraph<V, A>
         implements BidiGraph<V, A>, AttributedIndexedBidiGraph<V, A> {
     /**
      * Holds the indices to the prev vertices.
@@ -24,7 +24,7 @@ public class ImmutableBidiGraph<V, A> extends ImmutableDirectedGraph<V, A>
      */
     protected final @NonNull A[] prevArrows;
 
-    public ImmutableBidiGraph(@NonNull BidiGraph<V, A> graph) {
+    public IntImmutableBidiGraph(@NonNull BidiGraph<V, A> graph) {
         super(graph);
 
         this.prev = new int[next.length];

@@ -1,5 +1,5 @@
 /*
- * @(#)ImmutableDirectedGraph.java
+ * @(#)IntImmutableDirectedGraph.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -23,7 +23,7 @@ import java.util.Set;
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ImmutableDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -90,7 +90,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIndexedDirectedGr
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public IntImmutableDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -125,7 +125,7 @@ public class ImmutableDirectedGraph<V, A> implements AttributedIndexedDirectedGr
      *
      * @param graph a graph
      */
-    public ImmutableDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public IntImmutableDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
