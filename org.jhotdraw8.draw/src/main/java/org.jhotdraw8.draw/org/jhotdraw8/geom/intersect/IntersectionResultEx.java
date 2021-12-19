@@ -56,15 +56,4 @@ public class IntersectionResultEx extends ImmutableArrayList<IntersectionPointEx
                 .mapToDouble(IntersectionPointEx::getArgumentA)
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
-
-
-    @Override
-    public @NonNull String toString() {
-        StringBuilder b = new StringBuilder();
-        b.append("Intersection{").append(status).append(", points=");
-        b.append(super.toString());
-        b.append('}');
-        return b.toString();
-    }
-
 }

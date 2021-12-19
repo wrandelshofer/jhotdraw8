@@ -106,7 +106,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
-            return ImmutableSets.emptySet();
+            return ImmutableSets.of();
         }
         Set<Figure> ctf = new LinkedHashSet<>();
         if (startTarget != null) {

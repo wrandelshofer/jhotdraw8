@@ -743,7 +743,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return a list of layout subjects
      */
     default @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
-        return ImmutableSets.emptySet();
+        return ImmutableSets.of();
     }
 
     /**

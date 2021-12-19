@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * Implements the persistent set interface with a Compressed
- * Hash-Array Mapped Prefix-trie (CHAMP).
+ * Hash-Array Mapped Prefix-trie (CHAMP) with a bit-partition size of 5.
  * <p>
  * Creating a new delta persistent set with a single element added or removed
  * is performed in {@code O(1)} time and space.
@@ -32,26 +32,26 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public class PersistentTrieSet<E> implements PersistentSet<E> {
+public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements PersistentSet<E> {
 
     private static final Node<?> EMPTY_NODE = new BitmapIndexedNode<>(null, 0, 0, new Object[]{});
 
-    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
+    private static final PersistentTrie5Set<?> EMPTY_SET = new PersistentTrie5Set<>(EMPTY_NODE, 0, 0);
 
     private final Node<E> root;
     private final int hashCode;
     private final int size;
 
-    private PersistentTrieSet(Node<E> root, int hashCode, int size) {
+    private PersistentTrie5Set(Node<E> root, int hashCode, int size) {
         this.root = root;
         this.hashCode = hashCode;
         this.size = size;
     }
 
-    public static <K> PersistentTrieSet<K> copyOf(@NonNull Iterable<? extends K> set) {
-        if (set instanceof PersistentTrieSet) {
+    public static <K> @NonNull PersistentTrie5Set<K> copyOf(@NonNull Iterable<? extends K> set) {
+        if (set instanceof PersistentTrie5Set) {
             //noinspection unchecked
-            return (PersistentTrieSet<K>) set;
+            return (PersistentTrie5Set<K>) set;
         }
         TransientTrieSet<K> tr = new TransientTrieSet<>(of());
         for (final K key : set) {
@@ -61,28 +61,28 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
     }
 
     @SuppressWarnings("unchecked")
-    private static <K> Node<K> emptyNode() {
-        return (Node<K>) PersistentTrieSet.EMPTY_NODE;
+    private static <K> @NonNull Node<K> emptyNode() {
+        return (Node<K>) PersistentTrie5Set.EMPTY_NODE;
     }
 
     @SafeVarargs
-    public static <K> PersistentTrieSet<K> of(@NonNull K... keys) {
-        return PersistentTrieSet.<K>of().copyAddAll(Arrays.asList(keys));
+    public static <K> @NonNull PersistentTrie5Set<K> of(@NonNull K... keys) {
+        return PersistentTrie5Set.<K>of().copyAddAll(Arrays.asList(keys));
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> PersistentTrieSet<K> of() {
-        return (PersistentTrieSet<K>) PersistentTrieSet.EMPTY_SET;
+    public static <K> @NonNull PersistentTrie5Set<K> of() {
+        return (PersistentTrie5Set<K>) PersistentTrie5Set.EMPTY_SET;
     }
 
-    private TransientTrieSet<E> asTransient() {
+    private @NonNull TransientTrieSet<E> asTransient() {
         return new TransientTrieSet<>(this);
     }
 
     @Override
-    public boolean contains(final Object o) {
+    public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.contains(key, key.hashCode(), 0);
+        return root.contains(key, Objects.hashCode(key), 0);
     }
 
     @Override
@@ -94,14 +94,14 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
             return false;
         }
 
-        if (other instanceof PersistentTrieSet) {
-            PersistentTrieSet<?> that = (PersistentTrieSet<?>) other;
+        if (other instanceof PersistentTrie5Set) {
+            PersistentTrie5Set<?> that = (PersistentTrie5Set<?>) other;
             if (this.size != that.size || this.hashCode != that.hashCode) {
                 return false;
             }
             return root.equivalent(that.root);
-        } else if (other instanceof java.util.Set) {
-            java.util.Set<?> that = (java.util.Set<?>) other;
+        } else if (other instanceof ReadOnlySet) {
+            ReadOnlySet<?> that = (ReadOnlySet<?>) other;
             if (this.size() != that.size()) {
                 return false;
             }
@@ -131,26 +131,19 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return size;
     }
 
-    @Override
-    public String toString() {
-        String body = stream().map(Object::toString).reduce((o1, o2) -> String.join(", ", o1, o2))
-                .orElse("");
-        return String.format("{%s}", body);
-    }
-
-    public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
-        final int keyHash = key.hashCode();
+    public @NonNull PersistentTrie5Set<E> copyAdd(final @NonNull E key) {
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent changeEvent = new ChangeEvent();
         final Node<E> newRootNode = root.updated(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new PersistentTrieSet<>(newRootNode, hashCode + keyHash, size + 1);
+            return new PersistentTrie5Set<>(newRootNode, hashCode + keyHash, size + 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull PersistentTrie5Set<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         final TransientTrieSet<E> t = this.asTransient();
         boolean modified = false;
         for (final E key : set) {
@@ -159,19 +152,19 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return modified ? t.freeze() : this;
     }
 
-    public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
-        final int keyHash = key.hashCode();
+    public @NonNull PersistentTrie5Set<E> copyRemove(final @NonNull E key) {
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent changeEvent = new ChangeEvent();
         final Node<E> newRootNode = root.removed(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new PersistentTrieSet<>(newRootNode, hashCode - keyHash, size - 1);
+            return new PersistentTrie5Set<>(newRootNode, hashCode - keyHash, size - 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull PersistentTrie5Set<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         final TransientTrieSet<E> t = this.asTransient();
         boolean modified = false;
         for (final E key : set) {
@@ -180,7 +173,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         return modified ? t.freeze() : this;
     }
 
-    public @NonNull PersistentTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
+    public @NonNull PersistentTrie5Set<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         final TransientTrieSet<E> t = this.asTransient();
         boolean modified = false;
         for (E key : this) {
@@ -800,15 +793,15 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         protected int hashCode;
         protected int size;
 
-        TransientTrieSet(PersistentTrieSet<K> trieSet) {
+        TransientTrieSet(PersistentTrie5Set<K> trieSet) {
             this.root = trieSet.root;
             this.hashCode = trieSet.hashCode;
             this.size = trieSet.size;
             this.bulkEdit = new PersistentTrieHelper.Nonce();
         }
 
-        public boolean add(final K key) {
-            final int keyHash = key.hashCode();
+        public boolean add(final @Nullable K key) {
+            final int keyHash = Objects.hashCode(key);
             final ChangeEvent changeEvent = new ChangeEvent();
             final Node<K> newRootNode = root.updated(this.bulkEdit, key, keyHash, 0, changeEvent);
             if (changeEvent.isModified) {
@@ -821,7 +814,7 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
         }
 
         public boolean remove(final K key) {
-            final int keyHash = key.hashCode();
+            final int keyHash = Objects.hashCode(key);
             final ChangeEvent changeEvent = new ChangeEvent();
             final Node<K> newRootNode = root.removed(this.bulkEdit, key, keyHash, 0, changeEvent);
             if (changeEvent.isModified) {
@@ -833,9 +826,9 @@ public class PersistentTrieSet<E> implements PersistentSet<E> {
             return false;
         }
 
-        public PersistentTrieSet<K> freeze() {
+        public PersistentTrie5Set<K> freeze() {
             bulkEdit = new PersistentTrieHelper.Nonce();
-            return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, hashCode, size);
+            return size == 0 ? PersistentTrie5Set.of() : new PersistentTrie5Set<>(root, hashCode, size);
         }
     }
 

@@ -71,7 +71,7 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
     @Override
     public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (buf == null) {
-            return ImmutableSets.emptySet();
+            return ImmutableSets.of();
         }
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
@@ -81,6 +81,6 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
     @Override
     public ImmutableSet<String> getDefaultValue() {
-        return ImmutableSets.emptySet();
+        return ImmutableSets.of();
     }
 }

@@ -1,49 +1,44 @@
 /*
- * @(#)ReadOnlyTransformationList.java
+ * @(#)ReadOnlyTransformationSet.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.AbstractList;
+import java.util.AbstractSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Wraps a {@link List} in a {@link List} of a different type.
+ * Wraps a {@link Set} in a {@link Set} of a different type.
  * <p>
- * The underlying List is referenced - not copied.
+ * The underlying Set is referenced - not copied.
  *
  * @author Werner Randelshofer
  */
-public final class MappedList<E, F> extends AbstractList<E> {
+public final class MappedSet<E, F> extends AbstractSet<E> {
 
-    private final List<F> backingList;
+    private final Set<F> backingSet;
     private final Function<F, E> mapf;
 
-    public MappedList(List<F> backingList, Function<F, E> mapf) {
-        this.backingList = backingList;
+    public MappedSet(Set<F> backingSet, Function<F, E> mapf) {
+        this.backingSet = backingSet;
         this.mapf = mapf;
     }
 
     @Override
     public boolean contains(Object o) {
-        return backingList.contains(o);
-    }
-
-    @Override
-    public E get(int index) {
-        return mapf.apply(backingList.get(index));
+        return backingSet.contains(o);
     }
 
     @Override
     public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
-            private final Iterator<F> i = backingList.iterator();
+            private final Iterator<F> i = backingSet.iterator();
 
             @Override
             public boolean hasNext() {
@@ -92,16 +87,13 @@ public final class MappedList<E, F> extends AbstractList<E> {
                 return i.characteristics();
             }
         }
-        return new MappingSpliterator(backingList.spliterator());
+        return new MappingSpliterator(backingSet.spliterator());
     }
+
 
     @Override
     public int size() {
-        return backingList.size();
+        return backingSet.size();
     }
 
-    @Override
-    public @NonNull List<E> subList(int fromIndex, int toIndex) {
-        return new MappedList<>(backingList.subList(fromIndex, toIndex), mapf);
-    }
 }

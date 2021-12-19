@@ -11,7 +11,13 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Provides factory methods for immutable sets.
+ */
 public class ImmutableSets {
+    /**
+     * Don't let anyone instantiate this class.
+     */
     public ImmutableSets() {
     }
 
@@ -41,7 +47,7 @@ public class ImmutableSets {
     }
 
     @SuppressWarnings("unchecked")
-    public static @NonNull <T> ImmutableSet<T> emptySet() {
+    public static @NonNull <T> ImmutableSet<T> of() {
         return (ImmutableSet<T>) ImmutableHashSet.EMPTY;
     }
 
@@ -50,7 +56,7 @@ public class ImmutableSets {
     public static @NonNull <T> ImmutableSet<T> of(@NonNull T... items) {
         switch (items.length) {
         case 0:
-            return emptySet();
+            return of();
         case 1:
             return new ImmutableSingletonSet<>(items[0]);
         default:
@@ -60,12 +66,12 @@ public class ImmutableSets {
 
     public static @NonNull <T> ImmutableSet<T> copyOf(@NonNull Collection<T> collection) {
         switch (collection.size()) {
-            case 0:
-                return emptySet();
-            case 1:
-                return new ImmutableSingletonSet<>(collection.iterator().next());
-            default:
-                return new ImmutableHashSet<T>(collection);
+        case 0:
+            return of();
+        case 1:
+            return new ImmutableSingletonSet<>(collection.iterator().next());
+        default:
+            return new ImmutableHashSet<T>(collection);
         }
     }
 
@@ -74,24 +80,12 @@ public class ImmutableSets {
             return (ImmutableSet<T>) collection;
         }
         switch (collection.size()) {
-            case 0:
-                return emptySet();
-            case 1:
-                return new ImmutableSingletonSet<>(collection.iterator().next());
-            default:
-                return new ImmutableHashSet<T>(collection);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static @NonNull <T> ImmutableSet<T> ofArray(Object[] a, int offset, int length) {
-        switch (length) {
         case 0:
-            return emptySet();
+            return of();
         case 1:
-            return new ImmutableSingletonSet<>((T) a[offset]);
+            return new ImmutableSingletonSet<>(collection.iterator().next());
         default:
-            return new ImmutableHashSet<T>(a, offset, length);
+            return new ImmutableHashSet<T>(collection);
         }
     }
 
@@ -99,10 +93,10 @@ public class ImmutableSets {
     public static @NonNull <T> ImmutableSet<T> copyRemove(@NonNull Collection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
-            return (ImmutableSet<T>) emptySet();
+            return (ImmutableSet<T>) of();
         case 1:
             if (collection.contains(item)) {
-                return (ImmutableSet<T>) emptySet();
+                return (ImmutableSet<T>) of();
             } else {
                 return copyOf(collection);
             }
@@ -139,7 +133,7 @@ public class ImmutableSets {
      */
     public static @NonNull <T> ImmutableSet<T> copyRemoveAll(@NonNull ReadOnlyCollection<T> collection, Collection<T> c) {
         if (collection.isEmpty()) {
-            return emptySet();
+            return of();
         }
         if (c.isEmpty()) {
             return copyOf(collection);
@@ -158,10 +152,10 @@ public class ImmutableSets {
     public static @NonNull <T> ImmutableSet<T> copyRemove(@NonNull ReadOnlyCollection<T> collection, T item) {
         switch (collection.size()) {
         case 0:
-            return (ImmutableSet<T>) emptySet();
+            return (ImmutableSet<T>) of();
         case 1:
             if (collection.contains(item)) {
-                return (ImmutableSet<T>) emptySet();
+                return (ImmutableSet<T>) of();
             } else {
                 return copyOf(collection);
             }

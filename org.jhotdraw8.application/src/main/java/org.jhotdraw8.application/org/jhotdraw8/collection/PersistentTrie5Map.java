@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * Implements the persistent map interface with a Compressed
- * Hash-Array Mapped Prefix-trie (CHAMP).
+ * Hash-Array Mapped Prefix-trie (CHAMP) with a bit-partition size of 5.
  * <p>
  * Creating a new delta persistent map with a single element added or removed
  * is performed in {@code O(1)} time and space.
@@ -33,51 +33,59 @@ import java.util.Objects;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
+public class PersistentTrie5Map<K, V> extends AbstractReadOnlyMap<K, V> implements PersistentMap<K, V> {
 
     private static final Node<?, ?> EMPTY_NODE = new BitmapIndexedNode<>(null, (0), (0), new Object[]{});
 
-    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(EMPTY_NODE, 0, 0);
+    private static final PersistentTrie5Map<?, ?> EMPTY_MAP = new PersistentTrie5Map<>(EMPTY_NODE, 0, 0);
 
     private final @NonNull Node<K, V> root;
     private final int hashCode;
     private final int size;
 
-    private PersistentTrieMap(@NonNull Node<K, V> root, int hashCode, int size) {
+    private PersistentTrie5Map(@NonNull Node<K, V> root, int hashCode, int size) {
         this.root = root;
         this.hashCode = hashCode;
         this.size = size;
     }
 
-    public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        if (map instanceof PersistentTrieMap) {
+    public static <K, V> PersistentTrie5Map<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        if (map instanceof PersistentTrie5Map) {
             @SuppressWarnings("unchecked")
-            PersistentTrieMap<K, V> unchecked = (PersistentTrieMap<K, V>) map;
+            PersistentTrie5Map<K, V> unchecked = (PersistentTrie5Map<K, V>) map;
             return unchecked;
         }
-        PersistentTrieMap.TransientTrieMap<K, V> tr = new PersistentTrieMap.TransientTrieMap<>(of());
+        PersistentTrie5Map.TransientTrieMap<K, V> tr = new PersistentTrie5Map.TransientTrieMap<>(of());
         for (final Map.Entry<? extends K, ? extends V> entry : map.readOnlyEntrySet()) {
             tr.put(entry.getKey(), entry.getValue());
         }
         return tr.freeze();
     }
 
-    public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ofEntries(map.entrySet());
+    public static <K, V> PersistentTrie5Map<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return of(map.entrySet());
     }
 
     @SuppressWarnings("unchecked")
-    private static <K, V> PersistentTrieMap.Node<K, V> emptyNode() {
-        return (PersistentTrieMap.Node<K, V>) PersistentTrieMap.EMPTY_NODE;
+    private static <K, V> PersistentTrie5Map.Node<K, V> emptyNode() {
+        return (PersistentTrie5Map.Node<K, V>) PersistentTrie5Map.EMPTY_NODE;
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull PersistentTrieMap<K, V> of() {
-        return (PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY_MAP;
+    public static <K, V> @NonNull PersistentTrie5Map<K, V> of() {
+        return (PersistentTrie5Map<K, V>) PersistentTrie5Map.EMPTY_MAP;
     }
 
-    public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        TransientTrieMap<K, V> result = PersistentTrieMap.<K, V>of().asTransient();
+    public static <K, V> @NonNull PersistentTrie5Map<K, V> of(@NonNull Map.Entry<K, V>... entries) {
+        TransientTrieMap<K, V> result = PersistentTrie5Map.<K, V>of().asTransient();
+        for (Map.Entry<? extends K, ? extends V> entry : entries) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result.freeze();
+    }
+
+    public static <K, V> @NonNull PersistentTrie5Map<K, V> of(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        TransientTrieMap<K, V> result = PersistentTrie5Map.<K, V>of().asTransient();
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             result.put(entry.getKey(), entry.getValue());
         }
@@ -91,7 +99,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     @Override
     public boolean containsKey(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, key.hashCode(), 0).keyExists();
+        return root.findByKey(key, Objects.hashCode(key), 0).keyExists();
     }
 
     @Override
@@ -112,8 +120,8 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
             return false;
         }
 
-        if (other instanceof PersistentTrieMap) {
-            PersistentTrieMap<?, ?> that = (PersistentTrieMap<?, ?>) other;
+        if (other instanceof PersistentTrie5Map) {
+            PersistentTrie5Map<?, ?> that = (PersistentTrie5Map<?, ?>) other;
             if (this.size != that.size || this.hashCode != that.hashCode) {
                 return false;
             }
@@ -125,7 +133,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
             }
             for (Map.Entry<?, ?> entry : that.entrySet()) {
                 @SuppressWarnings("unchecked") final K key = (K) entry.getKey();
-                final SearchResult<V> result = root.findByKey(key, key.hashCode(), 0);
+                final SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
 
                 if (!result.keyExists()) {
                     return false;
@@ -144,7 +152,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     @Override
     public V get(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        final SearchResult<V> result = root.findByKey(key, key.hashCode(), 0);
+        final SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
         return result.orElse(null);
     }
 
@@ -172,16 +180,8 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         return size;
     }
 
-    @Override
-    public String toString() {
-        String body =
-                readOnlyEntrySet().stream().map(entry -> String.format("%s: %s", entry.getKey(), entry.getValue()))
-                        .reduce((o1, o2) -> String.join(", ", o1, o2)).orElse("");
-        return String.format("{%s}", body);
-    }
-
-    public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
-        final int keyHash = key.hashCode();
+    public @NonNull PersistentTrie5Map<K, V> copyPut(@NonNull K key, @Nullable V value) {
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
 
         final Node<K, V> newRootNode = root.updated(null, key, value,
@@ -192,19 +192,19 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
                 final int valHashOld = Objects.hashCode(details.getReplacedValue());
                 final int valHashNew = Objects.hashCode(value);
 
-                return new PersistentTrieMap<>(newRootNode,
+                return new PersistentTrie5Map<>(newRootNode,
                         hashCode + ((keyHash ^ valHashNew)) - ((keyHash ^ valHashOld)), size);
             }
 
             final int valHash = Objects.hashCode(value);
-            return new PersistentTrieMap<>(newRootNode, hashCode + ((keyHash ^ valHash)),
+            return new PersistentTrie5Map<>(newRootNode, hashCode + ((keyHash ^ valHash)),
                     size + 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
+    public @NonNull PersistentTrie5Map<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
         final TransientTrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
@@ -214,21 +214,21 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         return modified ? t.freeze() : this;
     }
 
-    public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
-        final int keyHash = key.hashCode();
+    public @NonNull PersistentTrie5Map<K, V> copyRemove(@NonNull K key) {
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final Node<K, V> newRootNode = root.removed(null, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             final int valHash = Objects.hashCode(details.getReplacedValue());
-            return new PersistentTrieMap<>(newRootNode, hashCode - ((keyHash ^ valHash)),
+            return new PersistentTrie5Map<>(newRootNode, hashCode - ((keyHash ^ valHash)),
                     size - 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull PersistentTrie5Map<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
         final TransientTrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (K key : c) {
@@ -239,7 +239,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
     }
 
     @Override
-    public @NonNull PersistentTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull PersistentTrie5Map<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
         final TransientTrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (K key : this.readOnlyKeySet()) {
@@ -250,7 +250,6 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
         return modified ? t.freeze() : this;
     }
-
 
 
     private static abstract class Node<K, V> {
@@ -785,7 +784,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
                         // returned, or b) unwrapped and inlined.
                         final K theOtherKey = (K) ((idx == 0) ? entries[2] : entries[0]);
                         final V theOtherVal = (V) ((idx == 0) ? entries[3] : entries[1]);
-                        return PersistentTrieMap.<K, V>emptyNode().updated(bulkEdit, theOtherKey, theOtherVal,
+                        return PersistentTrie5Map.<K, V>emptyNode().updated(bulkEdit, theOtherKey, theOtherVal,
                                 keyHash, 0, details);
                     } else {
 
@@ -995,20 +994,20 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         private int hashCode;
         private int size;
 
-        TransientTrieMap(PersistentTrieMap<K, V> trieMap) {
+        TransientTrieMap(PersistentTrie5Map<K, V> trieMap) {
             this.bulkEdit = new PersistentTrieHelper.Nonce();
             this.root = trieMap.root;
             this.hashCode = trieMap.hashCode;
             this.size = trieMap.size;
         }
 
-        public PersistentTrieMap<K, V> freeze() {
+        public PersistentTrie5Map<K, V> freeze() {
             bulkEdit = new PersistentTrieHelper.Nonce();
-            return size == 0 ? PersistentTrieMap.of() : new PersistentTrieMap<>(root, hashCode, size);
+            return size == 0 ? PersistentTrie5Map.of() : new PersistentTrie5Map<>(root, hashCode, size);
         }
 
-        public @NonNull PersistentTrieMap.ChangeEvent<V> put(final K key, final V val) {
-            final int keyHash = key.hashCode();
+        public @NonNull PersistentTrie5Map.ChangeEvent<V> put(final K key, final V val) {
+            final int keyHash = Objects.hashCode(key);
             final ChangeEvent<V> details = new ChangeEvent<>();
 
             final Node<K, V> newRootNode = root.updated(bulkEdit, key, val, keyHash, 0, details);
@@ -1032,7 +1031,7 @@ public class PersistentTrieMap<K, V> implements PersistentMap<K, V> {
         }
 
         public ChangeEvent<V> remove(final K key) {
-            final int keyHash = key.hashCode();
+            final int keyHash = Objects.hashCode(key);
             final ChangeEvent<V> details = new ChangeEvent<>();
             final Node<K, V> newRootNode = root.removed(bulkEdit, key, keyHash, 0, details);
             if (details.isModified()) {

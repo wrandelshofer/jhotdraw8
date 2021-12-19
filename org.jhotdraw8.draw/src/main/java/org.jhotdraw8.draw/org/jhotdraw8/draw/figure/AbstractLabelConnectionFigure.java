@@ -32,13 +32,13 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.PointAndTangent;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +148,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? ImmutableSets.emptySet() : ImmutableSets.of(labelTarget);
+        return labelTarget == null ? ImmutableSets.of() : ImmutableSets.of(labelTarget);
     }
 
     public boolean isConnected() {

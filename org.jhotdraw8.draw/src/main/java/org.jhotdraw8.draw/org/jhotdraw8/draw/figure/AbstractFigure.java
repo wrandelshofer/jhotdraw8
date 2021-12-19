@@ -115,7 +115,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     @Override
     public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
-            return ImmutableSets.emptySet();
+            return ImmutableSets.of();
         }
         return new ReadOnlySetWrapper<>(layoutObservers);
     }

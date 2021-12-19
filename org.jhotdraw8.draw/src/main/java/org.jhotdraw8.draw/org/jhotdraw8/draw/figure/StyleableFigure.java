@@ -37,7 +37,7 @@ public interface StyleableFigure extends Figure {
      * Default value: empty set.
      */
     @NonNull
-    ObservableWordSetKey STYLE_CLASS = new ObservableWordSetKey("class", ImmutableSets.emptySet());
+    ObservableWordSetKey STYLE_CLASS = new ObservableWordSetKey("class", ImmutableSets.of());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -46,7 +46,7 @@ public interface StyleableFigure extends Figure {
      * Default value: empty set.
      */
     @NonNull
-    ObservableWordSetKey PSEUDO_CLASS = new ObservableWordSetKey("pseudoClass", ImmutableSets.emptySet());
+    ObservableWordSetKey PSEUDO_CLASS = new ObservableWordSetKey("pseudoClass", ImmutableSets.of());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.

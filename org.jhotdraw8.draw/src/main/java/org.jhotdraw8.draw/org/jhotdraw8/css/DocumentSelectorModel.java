@@ -100,7 +100,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
-            return ImmutableSets.emptySet();
+            return ImmutableSets.of();
         }
         String[] clazzes = value.split(" +");
         return ImmutableSets.of(clazzes);
@@ -108,7 +108,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     @Override
     public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Element elem) {
-        return ImmutableSets.emptySet();
+        return ImmutableSets.of();
     }
 
     /**

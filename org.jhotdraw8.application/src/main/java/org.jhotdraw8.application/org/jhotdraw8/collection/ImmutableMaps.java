@@ -10,7 +10,11 @@ import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
+/**
+ * Provides factory methods for immutable maps.
+ */
 public class ImmutableMaps {
 
     /**
@@ -26,34 +30,28 @@ public class ImmutableMaps {
         return result;
     }
 
-    public static @NonNull <K, V> ImmutableMap<K, V> copyOf(Map<K, V> map) {
-        @SuppressWarnings("unchecked")
-        ImmutableMap<K, V> kvImmutableMap = map instanceof ImmutableMap<?, ?> ? (ImmutableMap<K, V>) map : new ImmutableHashMap<>(map);
-        return kvImmutableMap;
-    }
-
-    public static @NonNull <K, V> ImmutableMap<K, V> copyOf(ReadOnlyMap<K, V> map) {
-
+    @SuppressWarnings("unchecked")
+    public static @NonNull <K, V> ImmutableMap<K, V> copyOf(ReadOnlyMap<? extends K, ? extends V> map) {
         return map instanceof ImmutableMap<?, ?> ? (ImmutableMap<K, V>) map : new ImmutableHashMap<>(map);
     }
 
-    public static @NonNull <K, V> ImmutableMap<K, V> of(@NonNull ReadOnlyCollection<Map.Entry<K, V>> entrySet) {
+    public static @NonNull <K, V> ImmutableMap<K, V> of(@NonNull ReadOnlyCollection<Map.Entry<? extends K, ? extends V>> entrySet) {
         return new ImmutableHashMap<>(entrySet);
     }
 
-    public static @NonNull <K, V> ImmutableMap<V, K> inverseOf(@NonNull Iterable<Map.Entry<K, V>> entrySet) {
-        return new ImmutableHashMap<>(entrySet, entry -> new AbstractMap.SimpleImmutableEntry<>(entry.getValue(), entry.getKey()));
+    public static @NonNull <K, V> ImmutableMap<V, K> inverseOf(@NonNull Set<Map.Entry<K, V>> entrySet) {
+        return new ImmutableHashMap<>(new MappedSet<Map.Entry<V, K>, Map.Entry<K, V>>(entrySet, e -> entry(e.getValue(), e.getKey())));
     }
 
     public static @NonNull <K, V> ImmutableMap<K, V> of(@NonNull Collection<Map.Entry<K, V>> entrySet) {
         return new ImmutableHashMap<>(entrySet);
     }
 
-    public static @NonNull <K, V> ImmutableMap<K, V> ofMap(@NonNull Map<? extends K, ? extends V> map) {
+    public static @NonNull <K, V> ImmutableMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
         return new ImmutableHashMap<>(map);
     }
 
-    public static @NonNull <K, V> ImmutableMap<K, V> emptyMap() {
+    public static @NonNull <K, V> ImmutableMap<K, V> of() {
         @SuppressWarnings("unchecked")
         ImmutableMap<K, V> map = (ImmutableMap<K, V>) ImmutableHashMap.EMPTY_MAP;
         return map;

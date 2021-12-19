@@ -127,7 +127,7 @@ public class SystemCssColor extends CssColor {
         m.put(WINDOW_FRAME.getName(), WINDOW_FRAME);
         m.put(WINDOW_TEXT.getName(), WINDOW_TEXT);
 
-        SYSTEM_COLORS = ImmutableMaps.ofMap(m);
+        SYSTEM_COLORS = ImmutableMaps.copyOf(m);
     }
 
     /**

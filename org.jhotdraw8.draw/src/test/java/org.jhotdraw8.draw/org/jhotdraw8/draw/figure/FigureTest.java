@@ -137,7 +137,7 @@ public class FigureTest {
 
         @Override
         public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
-            return ImmutableSets.emptySet();
+            return ImmutableSets.of();
         }
 
         public @NonNull Transform getParentToLocal() {

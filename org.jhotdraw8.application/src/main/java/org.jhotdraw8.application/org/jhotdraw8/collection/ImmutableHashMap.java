@@ -78,29 +78,19 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         this.backingMap = backingMap1;
     }
 
-    public ImmutableHashMap(@NonNull Collection<? extends Map.Entry<K, V>> entries) {
+    public ImmutableHashMap(@NonNull Collection<? extends Map.Entry<? extends K, ? extends V>> entries) {
         HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size() * 2);
-        for (Map.Entry<K, V> entry : entries) {
+        for (Map.Entry<? extends K, ? extends V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
         }
         this.backingMap = backingMap1;
     }
 
-    public ImmutableHashMap(@NonNull ReadOnlyCollection<Map.Entry<K, V>> entries) {
+    public ImmutableHashMap(@NonNull ReadOnlyCollection<Map.Entry<? extends K, ? extends V>> entries) {
         HashMap<K, V> backingMap1 = new LinkedHashMap<>(entries.size() * 2);
-        for (Map.Entry<K, V> entry : entries) {
+        for (Map.Entry<? extends K, ? extends V> entry : entries) {
             backingMap1.put(entry.getKey(), entry.getValue());
         }
-        this.backingMap = backingMap1;
-    }
-
-    public <X> ImmutableHashMap(@NonNull Iterable<X> entries, @NonNull Function<X, Map.Entry<K, V>> mappingFunction) {
-        HashMap<K, V> backingMap1 = new HashMap<>();
-        for (X x : entries) {
-            Map.Entry<K, V> entry = mappingFunction.apply(x);
-            backingMap1.put(entry.getKey(), entry.getValue());
-        }
-
         this.backingMap = backingMap1;
     }
 
@@ -134,8 +124,4 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
         return backingMap.containsKey(key);
     }
 
-    @Override
-    public String toString() {
-        return backingMap.toString();
-    }
 }
