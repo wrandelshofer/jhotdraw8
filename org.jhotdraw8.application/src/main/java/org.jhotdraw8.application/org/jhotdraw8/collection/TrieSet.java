@@ -87,6 +87,10 @@ public class TrieSet<E> extends AbstractSet<E> {
 
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
+        if (c == this) {
+            return false;
+        }
+
         if ((c instanceof TrieSet) || (c instanceof PersistentTrieSet)) {
             PersistentTrieSet.Node<E> root;
             PersistentTrieSet.BulkChangeEvent bulkChange = new PersistentTrieSet.BulkChangeEvent();
