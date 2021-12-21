@@ -186,6 +186,8 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             return set;
         }
         BulkChangeEvent bulkChange = new BulkChangeEvent();
+        bulkChange.hashChange = set.hashCode;
+        bulkChange.sizeChange = set.size;
         BitmapIndexedNode<E> newNode = this.root.copyAddAll(set.root, 0, bulkChange);
         if (newNode != this.root) {
             return new PersistentTrieSet<>(newNode,
@@ -301,10 +303,6 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
 
         abstract int payloadArity();
 
-        abstract int recursiveHash();
-
-        abstract int recursiveSize();
-
         abstract Node<K> removed(final PersistentTrieHelper.Nonce bulkEdit, final K key, final int keyHash, final int shift,
                                  final ChangeEvent changeEvent);
 
@@ -321,8 +319,6 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         private final Object[] nodes;
         private final int nodeMap;
         private final int dataMap;
-        private int recursiveSize;
-        private int recursiveHash;
 
         BitmapIndexedNode(final @Nullable PersistentTrieHelper.Nonce bulkEdit, final int nodeMap,
                           final int dataMap, final Object[] nodes) {
@@ -371,7 +367,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             // case 0:
             // we will not have to do any changes
             ChangeEvent changeEvent = new ChangeEvent();
-            int sizeChangeOld = bulkChange.sizeChange;
+            boolean changed = false;
 
 
             // Step 1: Merge that.dataMap and this.dataMap into dataMapNew.
@@ -390,6 +386,8 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                     if (Objects.equals(thisKey, thatKey)) {
                         // case 5.1:
                         nodesNew[dataIndex++] = thisKey;
+                        bulkChange.hashChange -= Objects.hashCode(thatKey);
+                        bulkChange.sizeChange--;
                     } else {
                         // case 5.2:
                         dataMapNew ^= bitpos;
@@ -397,8 +395,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                         int thatKeyHash = Objects.hashCode(thatKey);
                         Node<K> subNodeNew = mergeTwoKeyValPairs(bulkEdit, thisKey, Objects.hashCode(thisKey), thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                        bulkChange.sizeChange++;
-                        bulkChange.hashChange += thatKeyHash;
+                        changed = true;
                     }
                 } else if (thisHasData) {
                     K thisKey = this.getKey(index(this.dataMap, bitpos));
@@ -412,12 +409,11 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                         Node<K> subNode = that.nodeAt(bitpos);
                         Node<K> subNodeNew = subNode.updated(bulkEdit, thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                        bulkChange.sizeChange += subNode.recursiveSize();
-                        bulkChange.hashChange += subNode.recursiveHash();
                         if (!changeEvent.isModified) {
-                            bulkChange.sizeChange--;
                             bulkChange.hashChange -= thisKeyHash;
+                            bulkChange.sizeChange--;
                         }
+                        changed = true;
                     } else {
                         // case 1:
                         nodesNew[dataIndex++] = thisKey;
@@ -435,15 +431,16 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                         Node<K> subNode = this.getNode(index(this.nodeMap, bitpos));
                         Node<K> subNodeNew = subNode.updated(bulkEdit, thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
                         if (changeEvent.isModified) {
-                            bulkChange.sizeChange++;
-                            bulkChange.hashChange += thatKeyHash;
+                            changed = true;
                             nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+                        } else {
+                            bulkChange.hashChange -= thatKeyHash;
+                            bulkChange.sizeChange--;
                         }
                     } else {
                         // case 4:
+                        changed = true;
                         nodesNew[dataIndex++] = thatKey;
-                        bulkChange.sizeChange++;
-                        bulkChange.hashChange += thatKeyHash;
                     }
                 }
             }
@@ -461,13 +458,14 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                     Node<K> thisSubNode = this.getNode(index(this.nodeMap, bitpos));
                     Node<K> thatSubNode = that.getNode(index(that.nodeMap, bitpos));
                     Node<K> subNodeNew = thisSubNode.copyAddAll(thatSubNode, shift + BIT_PARTITION_SIZE, bulkChange);
+                    changed |= subNodeNew != thisSubNode;
                     nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+
                 } else if (thatHasNodeToDo) {
                     // case 8
                     Node<K> thatSubNode = that.getNode(index(that.nodeMap, bitpos));
                     nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = thatSubNode;
-                    bulkChange.sizeChange += thatSubNode.recursiveSize();
-                    bulkChange.hashChange += thatSubNode.recursiveHash();
+                    changed = true;
                 } else {
                     // case 2
                     assert thisHasNodeToDo;
@@ -478,7 +476,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
 
             // Step 3: create new node if it has changed
             // ------
-            if (sizeChangeOld != bulkChange.sizeChange) {
+            if (changed) {
                 return new BitmapIndexedNode<>(bulkEdit, nodeMapNew, dataMapNew, nodesNew);
             }
 
@@ -654,38 +652,6 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         }
 
         @Override
-        int recursiveHash() {
-            if (recursiveHash == 0) {
-                //recursiveHash may clash with UNKNOWN_VALUE, in this hopefully
-                //rare event, we will recompute it every time
-                computeRecursiveHashAndSize();
-            }
-            return recursiveHash;
-        }
-
-        private void computeRecursiveHashAndSize() {
-            int hash = 0, size = this.payloadArity();
-            for (int i = 0; i < size; i++) {
-                hash += Objects.hashCode(getKey(i));
-            }
-            for (int i = 0, n = this.nodeArity(); i < n; i++) {
-                Node<K> node = getNode(i);
-                hash += node.recursiveHash();
-                size += node.recursiveSize();
-            }
-            this.recursiveHash = hash;
-            this.recursiveSize = size;
-        }
-
-        @Override
-        int recursiveSize() {
-            if (recursiveSize == 0) {
-                computeRecursiveHashAndSize();
-            }
-            return recursiveSize;
-        }
-
-        @Override
         Node<K> removed(final PersistentTrieHelper.Nonce bulkEdit, final K key, final int keyHash,
                         final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
@@ -806,8 +772,9 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             assert !(key0.equals(key1));
 
             if (shift >= HASH_CODE_LENGTH) {
-                //noinspection unchecked
-                return new HashCollisionNode<>(bulkEdit, keyHash0, (K[]) new Object[]{key0, key1});
+                @SuppressWarnings("unchecked")
+                HashCollisionNode<K> unchecked = new HashCollisionNode<>(bulkEdit, keyHash0, (K[]) new Object[]{key0, key1});
+                return unchecked;
             }
 
             final int mask0 = mask(keyHash0, shift);
@@ -867,6 +834,8 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                 for (int i = bs.nextClearBit(0); i >= 0 && i < this.keys.length; i = bs.nextClearBit(i + 1)) {
                     if (Objects.equals(key, this.keys[i])) {
                         bs.set(i);
+                        bulkChange.sizeChange--;
+                        bulkChange.hashChange -= hash;
                         continue outer;
                     }
                 }
@@ -874,11 +843,9 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             }
 
             if (list.size() > this.keys.length) {
-                bulkChange.sizeChange += list.size() - this.keys.length;
-                bulkChange.hashChange += (list.size() - this.keys.length) * hash;
-
-                //noinspection unchecked
-                return new HashCollisionNode<>(bulkEdit, hash, (K[]) list.toArray());
+                @SuppressWarnings("unchecked")
+                HashCollisionNode<K> unchecked = new HashCollisionNode<>(bulkEdit, hash, (K[]) list.toArray());
+                return unchecked;
             }
 
             return this;
@@ -924,17 +891,6 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                 return false;
             }
             return true;
-        }
-
-
-        @Override
-        int recursiveHash() {
-            return hash * keys.length;
-        }
-
-        @Override
-        int recursiveSize() {
-            return keys.length;
         }
 
         @Override
@@ -1032,7 +988,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         protected int currentValueCursor;
         protected int currentValueLength;
         protected Node<K> currentValueNode;
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "rawtypes"})
         Node<K>[] nodes = new Node[MAX_DEPTH];
         private int currentStackLevel = -1;
 

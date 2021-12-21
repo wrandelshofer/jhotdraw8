@@ -89,12 +89,18 @@ public class TrieSet<E> extends AbstractSet<E> {
     public boolean addAll(Iterable<? extends E> c) {
         if ((c instanceof TrieSet) || (c instanceof PersistentTrieSet)) {
             PersistentTrieSet.Node<E> root;
-            if (c instanceof TrieSet) {
-                root = (PersistentTrieSet.Node<E>) ((TrieSet<? extends E>) c).root;
-            } else {
-                root = (PersistentTrieSet.Node<E>) ((PersistentTrieSet<? extends E>) c).root;
-            }
             PersistentTrieSet.BulkChangeEvent bulkChange = new PersistentTrieSet.BulkChangeEvent();
+            if (c instanceof TrieSet) {
+                TrieSet<? extends E> trieSet = (TrieSet<? extends E>) c;
+                root = (PersistentTrieSet.Node<E>) trieSet.root;
+                bulkChange.hashChange = trieSet.hashCode;
+                bulkChange.sizeChange = trieSet.size;
+            } else {
+                PersistentTrieSet<? extends E> trieSet = (PersistentTrieSet<? extends E>) c;
+                bulkChange.hashChange = trieSet.hashCode;
+                bulkChange.sizeChange = trieSet.size;
+                root = (PersistentTrieSet.Node<E>) trieSet.root;
+            }
             PersistentTrieSet.BitmapIndexedNode<E> newNode = this.root.copyAddAll(root, 0, bulkChange);
             if (newNode == this.root) {
                 return false;

@@ -24,17 +24,17 @@ abstract class AbstractPersistentSetTest {
     private void assertEquality(LinkedHashSet<HashCollider> expected, PersistentSet<HashCollider> actual) {
         System.out.println("expected: " + expected);
         System.out.println("  actual: " + actual);
-        //noinspection EqualsBetweenInconvertibleTypes
-        assertTrue(actual.equals(new ReadOnlySetWrapper<>(expected)));
-        assertEquals(actual, actual);
+        assertEquals(expected.hashCode(), actual.hashCode(), "hashCode");
+        assertEquals(actual, actual, "equal to itself");
         //noinspection ConstantConditions
-        assertFalse(actual.equals(null));
-        assertEquals(expected, actual.asSet());
-        assertEquals(expected.hashCode(), actual.hashCode());
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected.isEmpty(), actual.isEmpty());
-        assertEquals(actual, of(actual.toArray(new HashCollider[0])));
-        assertFalse(actual.toString().isEmpty());
+        assertFalse(actual.equals(null), "equal to null");
+        assertEquals(expected.size(), actual.size(), "equal size");
+        assertEquals(expected, actual.asSet(), "expected.equals(actual.asSet)");
+        assertEquals(expected.isEmpty(), actual.isEmpty(), "equal emptyness");
+        assertEquals(actual, of(actual.toArray(new HashCollider[0])), "equal to reconstructed from array");
+        assertFalse(actual.toString().isEmpty(), "always has a string");
+        //noinspection EqualsBetweenInconvertibleTypes
+        assertTrue(actual.equals(new ReadOnlySetWrapper<>(expected)), "actual to read-only wrapped expected");
     }
 
     protected abstract PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set);
@@ -384,18 +384,21 @@ abstract class AbstractPersistentSetTest {
         int bb = 0b01_00110;
         int cc = 0b10_00110;
         int dd = 0b11_00110;
+
         return Arrays.asList(
                 dynamicTest("case 0: ∅ u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{}, -1)),
                 dynamicTest("case 1: a u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{}, -1)),
                 dynamicTest("case 2: x={a,b} u e, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{e}, -1)),
                 dynamicTest("case 4: ∅ u b, 32-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{b}, -1)),
-                dynamicTest("case 5.1: a u a, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a}, -1)),
+                dynamicTest("case 5.1.!modified: a u a, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a}, -1)),
+                dynamicTest("case 5.1.modified: a u a,e, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, e}, -1)),
                 dynamicTest("case 5.2: a u b, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{b}, -1)),
                 dynamicTest("case 6.!modified: x={a,b} u a, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a}, -1)),
                 dynamicTest("case 6.modified: x={a,b} u c, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c}, -1)),
                 dynamicTest("case 8: e u y={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{e}, new int[]{a, b}, -1)),
                 dynamicTest("case 9: a u y={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, b}, -1)),
-                dynamicTest("case 10.1: x={a,b} u x={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, -1)),
+                dynamicTest("case 10.1.!modified: x={a,b} u x={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, -1)),
+                dynamicTest("case 10.1.modified: x={a,b} u x={a,b,c}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b, c}, -1)),
                 dynamicTest("case 10.2: x={a,b} u y={c,d}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c, d}, -1)),
                 //
                 dynamicTest("case 0: ∅ u ∅, 0-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{}, 0)),
@@ -407,8 +410,22 @@ abstract class AbstractPersistentSetTest {
                 dynamicTest("case 6: x={a,b} u a, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a}, 0)),
                 dynamicTest("case 8: ∅ u y={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{a, b}, 0)),
                 dynamicTest("case 9: a u y={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, b}, 0)),
-                dynamicTest("case 10.1: x={a,b} u x={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, 0)),
+                dynamicTest("case 10.1.!modified: x={a,b} u x={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, 0)),
+                dynamicTest("case 10.1.modified: x={a,b} u x={a,b,c}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b, c}, 0)),
                 dynamicTest("case 10.2: x={a,b} u y={c,d}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c, d}, 0)),
+                //
+                dynamicTest("case 0: ∅ u ∅, 4-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{}, 15)),
+                dynamicTest("case 1: a u ∅, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{}, 15)),
+                dynamicTest("case 2: x={a,b} u ∅, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{}, 15)),
+                dynamicTest("case 4: ∅ u b, 4-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{b}, 15)),
+                dynamicTest("case 5.1: a u a, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a}, 15)),
+                dynamicTest("case 5.2: a u b, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{b}, 15)),
+                dynamicTest("case 6: x={a,b} u a, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a}, 15)),
+                dynamicTest("case 8: ∅ u y={a,b}, 4-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{a, b}, 15)),
+                dynamicTest("case 9: a u y={a,b}, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, b}, 15)),
+                dynamicTest("case 10.1.!modified: x={a,b} u x={a,b}, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, 15)),
+                dynamicTest("case 10.1.modified: x={a,b} u x={a,b,c}, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b, c}, 15)),
+                dynamicTest("case 10.2: x={a,b} u y={c,d}, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c, d}, 15)),
                 //
                 dynamicTest("case 1: a,aa u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa}, new int[]{}, -1)),
                 dynamicTest("case 2: x={a,b},xx={aa,bb} u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa, b, bb}, new int[]{}, -1)),
