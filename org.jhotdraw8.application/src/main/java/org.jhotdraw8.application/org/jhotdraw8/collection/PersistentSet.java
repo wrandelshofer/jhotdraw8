@@ -11,10 +11,19 @@ import java.util.Collection;
  * added or removed elements, without changing the original persistent set.
  * <p>
  * Implementations are expected to only require time and space that is
- * proportional to the differences (also known as 'delta')
- * between the newly created persistent set to the original persistent set.
+ * proportional to the differences between the newly created persistent set to
+ * the original persistent set.
  */
-public interface PersistentSet<E> extends ReadOnlySet<E>, AddOnlyPersistentSet<E> {
+public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<E> {
+    /**
+     * Returns a copy of this set that is empty.
+     *
+     * @param element an element
+     * @return this set if it is already empty, or a different set
+     * that is empty.
+     */
+    @NonNull PersistentSet<E> copyClear(@NonNull E element);
+
     /**
      * Returns a copy of this set that contains all elements
      * of this set and also the specified element.
@@ -66,4 +75,21 @@ public interface PersistentSet<E> extends ReadOnlySet<E>, AddOnlyPersistentSet<E
      * a different set with elements removed
      */
     @NonNull PersistentSet<E> copyRetainAll(@NonNull Collection<? extends E> c);
+
+    /**
+     * Returns a copy of this set that contains only elements
+     * that are in this set and in the specified collection.
+     *
+     * @param c a collection with elements to be retained in this set
+     * @return this set if it has not changed, or
+     * a different set with elements removed
+     */
+    default @NonNull PersistentSet<E> copyRetainAll(final @NonNull ReadOnlyCollection<? extends E> c) {
+        if (c == this) {
+            return this;
+        }
+        return copyRetainAll(c.asCollection());
+    }
+
+
 }

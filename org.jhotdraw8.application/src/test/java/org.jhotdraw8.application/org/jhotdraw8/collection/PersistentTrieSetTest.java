@@ -6,16 +6,16 @@ class PersistentTrieSetTest extends AbstractPersistentSetTest {
 
     @Override
     protected PersistentSet<HashCollider> of() {
-        return PersistentTrie5Set.of();
+        return PersistentTrieSet.of();
     }
 
     @Override
     protected PersistentSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return PersistentTrie5Set.of(keys);
+        return PersistentTrieSet.of(keys);
     }
 
     @Override
     protected PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return PersistentTrie5Set.copyOf(set);
+        return PersistentTrieSet.copyOf(set);
     }
 }

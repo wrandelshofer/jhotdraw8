@@ -33,6 +33,10 @@ public class ImmutableSets {
     }
 
     public static @NonNull <T> ImmutableSet<T> copyAdd(@NonNull ReadOnlyCollection<T> collection, T item) {
+        if (collection instanceof PersistentSet) {
+            return ((PersistentSet<T>) collection).copyAdd(item);
+        }
+
         switch (collection.size()) {
         case 0:
             return new ImmutableSingletonSet<>(item);
@@ -132,6 +136,10 @@ public class ImmutableSets {
      * {@code collection} without the elements that are contained in {@code c}.
      */
     public static @NonNull <T> ImmutableSet<T> copyRemoveAll(@NonNull ReadOnlyCollection<T> collection, Collection<T> c) {
+        if (collection instanceof PersistentSet) {
+            return ((PersistentSet<T>) collection).copyRemoveAll(c);
+        }
+
         if (collection.isEmpty()) {
             return of();
         }
@@ -148,14 +156,17 @@ public class ImmutableSets {
         return copyOf(tmp);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public static @NonNull <T> ImmutableSet<T> copyRemove(@NonNull ReadOnlyCollection<T> collection, T item) {
+        if (collection instanceof PersistentSet) {
+            return ((PersistentSet<T>) collection).copyRemove(item);
+        }
+
         switch (collection.size()) {
         case 0:
-            return (ImmutableSet<T>) of();
+            return of();
         case 1:
             if (collection.contains(item)) {
-                return (ImmutableSet<T>) of();
+                return of();
             } else {
                 return copyOf(collection);
             }

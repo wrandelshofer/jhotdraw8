@@ -19,16 +19,16 @@ public class PersistentSets {
 
     @SuppressWarnings("unchecked")
     public static @NonNull <T> PersistentSet<T> of() {
-        return PersistentTrie5Set.of();
+        return PersistentTrieSet.of();
     }
 
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static @NonNull <T> PersistentSet<T> of(@NonNull T... items) {
-        return PersistentTrie5Set.of(items[0]);
+        return PersistentTrieSet.of(items[0]);
     }
 
     public static @NonNull <T> PersistentSet<T> copyOf(@NonNull Iterable<T> collection) {
-        return PersistentTrie5Set.copyOf(collection);
+        return PersistentTrieSet.copyOf(collection);
     }
 }

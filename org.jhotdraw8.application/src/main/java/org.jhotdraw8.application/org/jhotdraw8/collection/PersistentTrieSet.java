@@ -8,18 +8,21 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
 
 /**
- * Implements the persistent set interface with a Compressed
- * Hash-Array Mapped Prefix-trie (CHAMP) with a bit-partition size of 5.
+ * Implements the {@link PersistentSet} interface with a
+ * Compressed Hash-Array Mapped Prefix-trie (CHAMP).
  * <p>
- * Creating a new delta persistent set with a single element added or removed
+ * Creating a new copy with a single element added or removed
  * is performed in {@code O(1)} time and space.
  * <p>
  * References:
@@ -32,51 +35,56 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements PersistentSet<E> {
+public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements PersistentSet<E>, ImmutableSet<E> {
 
-    private static final Node<?> EMPTY_NODE = new BitmapIndexedNode<>(null, 0, 0, new Object[]{});
+    static final BitmapIndexedNode<?> EMPTY_NODE = new BitmapIndexedNode<>(null, 0, 0, new Object[]{});
 
-    private static final PersistentTrie5Set<?> EMPTY_SET = new PersistentTrie5Set<>(EMPTY_NODE, 0, 0);
+    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
 
-    private final Node<E> root;
-    private final int hashCode;
-    private final int size;
+    final BitmapIndexedNode<E> root;
+    final int hashCode;
+    final int size;
 
-    private PersistentTrie5Set(Node<E> root, int hashCode, int size) {
+    PersistentTrieSet(BitmapIndexedNode<E> root, int hashCode, int size) {
         this.root = root;
         this.hashCode = hashCode;
         this.size = size;
     }
 
-    public static <K> @NonNull PersistentTrie5Set<K> copyOf(@NonNull Iterable<? extends K> set) {
-        if (set instanceof PersistentTrie5Set) {
-            //noinspection unchecked
-            return (PersistentTrie5Set<K>) set;
+    @SuppressWarnings("unchecked")
+    public static <K> @NonNull PersistentTrieSet<K> copyOf(@NonNull Iterable<? extends K> set) {
+        if (set instanceof PersistentTrieSet) {
+            return (PersistentTrieSet<K>) set;
         }
-        TransientTrieSet<K> tr = new TransientTrieSet<>(of());
-        for (final K key : set) {
-            tr.add(key);
-        }
-        return tr.freeze();
+        TrieSet<K> tr = new TrieSet<>(of());
+        tr.addAll(set);
+        return tr.toPersistent();
     }
 
     @SuppressWarnings("unchecked")
-    private static <K> @NonNull Node<K> emptyNode() {
-        return (Node<K>) PersistentTrie5Set.EMPTY_NODE;
+    static <K> @NonNull BitmapIndexedNode<K> emptyNode() {
+        return (BitmapIndexedNode<K>) PersistentTrieSet.EMPTY_NODE;
     }
 
     @SafeVarargs
-    public static <K> @NonNull PersistentTrie5Set<K> of(@NonNull K... keys) {
-        return PersistentTrie5Set.<K>of().copyAddAll(Arrays.asList(keys));
+    public static <K> @NonNull PersistentTrieSet<K> of(@NonNull K... keys) {
+        return PersistentTrieSet.<K>of().copyAddAll(Arrays.asList(keys));
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull PersistentTrie5Set<K> of() {
-        return (PersistentTrie5Set<K>) PersistentTrie5Set.EMPTY_SET;
+    public static <K> @NonNull PersistentTrieSet<K> of() {
+        return (PersistentTrieSet<K>) PersistentTrieSet.EMPTY_SET;
     }
 
-    private @NonNull TransientTrieSet<E> asTransient() {
-        return new TransientTrieSet<>(this);
+    /**
+     * Returns a copy of this set that is transient.
+     * <p>
+     * This operation is performed in O(1).
+     *
+     * @return a transient trie set
+     */
+    private @NonNull TrieSet<E> toTransient() {
+        return new TrieSet<>(this);
     }
 
     @Override
@@ -94,8 +102,8 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             return false;
         }
 
-        if (other instanceof PersistentTrie5Set) {
-            PersistentTrie5Set<?> that = (PersistentTrie5Set<?>) other;
+        if (other instanceof PersistentTrieSet) {
+            PersistentTrieSet<?> that = (PersistentTrieSet<?>) other;
             if (this.size != that.size || this.hashCode != that.hashCode) {
                 return false;
             }
@@ -131,61 +139,121 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
         return size;
     }
 
-    public @NonNull PersistentTrie5Set<E> copyAdd(final @NonNull E key) {
+    @Override
+    public @NonNull PersistentSet<E> copyClear(@NonNull E element) {
+        return isEmpty() ? this : of();
+    }
+
+    public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent changeEvent = new ChangeEvent();
-        final Node<E> newRootNode = root.updated(null, key,
+        final BitmapIndexedNode<E> newRootNode = (BitmapIndexedNode<E>) root.updated(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new PersistentTrie5Set<>(newRootNode, hashCode + keyHash, size + 1);
+            return new PersistentTrieSet<>(newRootNode, hashCode + keyHash, size + 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrie5Set<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
-        final TransientTrieSet<E> t = this.asTransient();
+    @SuppressWarnings("unchecked")
+    public @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+        if (set == this
+                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
+                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
+            return this;
+        }
+
+        if (set instanceof PersistentTrieSet) {
+            return copyAddAll((PersistentTrieSet<E>) set);
+        } else if (set instanceof TrieSet) {
+            return copyAddAll(((TrieSet<E>) set).toPersistent());
+        }
+
+        final TrieSet<E> t = this.toTransient();
         boolean modified = false;
         for (final E key : set) {
             modified |= t.add(key);
         }
-        return modified ? t.freeze() : this;
+        return modified ? t.toPersistent() : this;
     }
 
-    public @NonNull PersistentTrie5Set<E> copyRemove(final @NonNull E key) {
+    private @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull PersistentTrieSet<E> set) {
+        if (set.isEmpty()) {
+            return this;
+        }
+        if (this.isEmpty()) {
+            return set;
+        }
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newNode = this.root.copyAddAll(set.root, 0, bulkChange);
+        if (newNode != this.root) {
+            return new PersistentTrieSet<>(newNode,
+                    this.hashCode + bulkChange.hashChange,
+                    this.size + bulkChange.sizeChange
+            );
+        }
+        return this;
+    }
+
+    public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent changeEvent = new ChangeEvent();
-        final Node<E> newRootNode = root.removed(null, key,
+        final BitmapIndexedNode<E> newRootNode = (BitmapIndexedNode<E>) root.removed(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new PersistentTrie5Set<>(newRootNode, hashCode - keyHash, size - 1);
+            return new PersistentTrieSet<>(newRootNode, hashCode - keyHash, size - 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrie5Set<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
-        final TransientTrieSet<E> t = this.asTransient();
+    public @NonNull PersistentTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
+        if (this.isEmpty()
+                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
+                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
+            return this;
+        }
+        if (set == this) {
+            return of();
+        }
+        final TrieSet<E> t = this.toTransient();
         boolean modified = false;
         for (final E key : set) {
-            modified |= t.remove(key);
+            if (t.remove(key)) {
+                modified = true;
+                if (t.isEmpty()) {
+                    break;
+                }
+            }
+
         }
-        return modified ? t.freeze() : this;
+        return modified ? t.toPersistent() : this;
     }
 
-    public @NonNull PersistentTrie5Set<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
-        final TransientTrieSet<E> t = this.asTransient();
+    public @NonNull PersistentTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
+        if (this.isEmpty()) {
+            return this;
+        }
+        if (set.isEmpty()) {
+            return of();
+        }
+
+        final TrieSet<E> t = this.toTransient();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {
                 t.remove(key);
                 modified = true;
+                if (t.isEmpty()) {
+                    break;
+                }
             }
         }
-        return modified ? t.freeze() : this;
+        return modified ? t.toPersistent() : this;
     }
 
-    private static abstract class Node<K> {
+    static abstract class Node<K> {
         static final int TUPLE_LENGTH = 1;
         static final int HASH_CODE_LENGTH = 32;
         static final int BIT_PARTITION_SIZE = 5;
@@ -217,6 +285,8 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
         }
 
 
+        abstract @NonNull Node<K> copyAddAll(@NonNull Node<K> that, final int shift, BulkChangeEvent bulkChange);
+
         abstract boolean contains(final K key, final int keyHash, final int shift);
 
         abstract K getKey(final int index);
@@ -231,6 +301,10 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
 
         abstract int payloadArity();
 
+        abstract int recursiveHash();
+
+        abstract int recursiveSize();
+
         abstract Node<K> removed(final PersistentTrieHelper.Nonce bulkEdit, final K key, final int keyHash, final int shift,
                                  final ChangeEvent changeEvent);
 
@@ -243,10 +317,12 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
 
     }
 
-    private static final class BitmapIndexedNode<K> extends Node<K> {
+    static final class BitmapIndexedNode<K> extends Node<K> {
         private final Object[] nodes;
         private final int nodeMap;
         private final int dataMap;
+        private int recursiveSize;
+        private int recursiveHash;
 
         BitmapIndexedNode(final @Nullable PersistentTrieHelper.Nonce bulkEdit, final int nodeMap,
                           final int dataMap, final Object[] nodes) {
@@ -257,13 +333,166 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
         }
 
         @Override
+        @NonNull BitmapIndexedNode<K> copyAddAll(@NonNull Node<K> o, int shift, BulkChangeEvent bulkChange) {
+            // Given the same bit-position in this and that:
+            // case                   this.dataMap this.nodeMap that.dataMap  that.nodeMap
+            // ---------------------------------------------------------------------------
+            //.0    do nothing                -          -            -                -
+            //.1    put "a" in dataMap        "a"        -            -                -
+            //.2    put x in nodeMap          -          x            -                -
+            // 3    illegal                   "a"        x            -                -
+            //.4    put "b" in dataMap        -          -            "b"              -
+            //.5.1  put "a" in dataMap        "a"        -            "a"              -   values are equal
+            //.5.2  put {"a","b"} in nodeMap  "a"        -            "b"              -   values are not equal
+            //.6    put x ∪ {"b"} in nodeMap  -          x            "b"              -
+            // 7    illegal                   "a"        x            "b"              -
+            //.8    put y in nodeMap          -          -            -                y
+            //.9    put {"a"} ∪ y in nodeMap  "a"        -            -                y
+            //.10.1 put x in nodeMap          -          x            -                x   nodes are equivalent
+            //.10.2 put x ∪ y in nodeMap      -          x            -                y   nodes are not equivalent
+            // 11   illegal                   "a"        x            -                y
+            // 12   illegal                   -          -            "b"              y
+            // 13   illegal                   "a"        -            "b"              y
+            // 14   illegal                   -          x            "b"              y
+            // 15   illegal                   "a"        x            "b"              y
+
+            if (o == this) {
+                return this;
+            }
+            BitmapIndexedNode<K> that = (BitmapIndexedNode<K>) o;
+
+            int newNodeLength = Integer.bitCount(this.nodeMap | this.dataMap | that.nodeMap | that.dataMap);
+            Object[] nodesNew = new Object[newNodeLength];
+            int nodeMapNew = this.nodeMap | that.nodeMap;
+            int dataMapNew = this.dataMap | that.dataMap;
+            int thisNodeMapToDo = this.nodeMap;
+            int thatNodeMapToDo = that.nodeMap;
+
+            // case 0:
+            // we will not have to do any changes
+            ChangeEvent changeEvent = new ChangeEvent();
+            int sizeChangeOld = bulkChange.sizeChange;
+
+
+            // Step 1: Merge that.dataMap and this.dataMap into dataMapNew.
+            //         We may have to merge data nodes into sub-nodes.
+            // -------
+            // iterate over all bit-positions in dataMapNew which have a non-zero bit
+            int dataIndex = 0;
+            for (int mapToDo = dataMapNew; mapToDo != 0; mapToDo ^= Integer.lowestOneBit(mapToDo)) {
+                int mask = Integer.numberOfTrailingZeros(mapToDo);
+                int bitpos = bitpos(mask);
+                boolean thisHasData = (this.dataMap & bitpos) != 0;
+                boolean thatHasData = (that.dataMap & bitpos) != 0;
+                if (thisHasData && thatHasData) {
+                    K thisKey = this.getKey(index(this.dataMap, bitpos));
+                    K thatKey = that.getKey(index(that.dataMap, bitpos));
+                    if (Objects.equals(thisKey, thatKey)) {
+                        // case 5.1:
+                        nodesNew[dataIndex++] = thisKey;
+                    } else {
+                        // case 5.2:
+                        dataMapNew ^= bitpos;
+                        nodeMapNew |= bitpos;
+                        int thatKeyHash = Objects.hashCode(thatKey);
+                        Node<K> subNodeNew = mergeTwoKeyValPairs(bulkEdit, thisKey, Objects.hashCode(thisKey), thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE);
+                        nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+                        bulkChange.sizeChange++;
+                        bulkChange.hashChange += thatKeyHash;
+                    }
+                } else if (thisHasData) {
+                    K thisKey = this.getKey(index(this.dataMap, bitpos));
+                    boolean thatHasNode = (that.nodeMap & bitpos) != 0;
+                    if (thatHasNode) {
+                        // case 9:
+                        dataMapNew ^= bitpos;
+                        thatNodeMapToDo ^= bitpos;
+                        int thisKeyHash = Objects.hashCode(thisKey);
+                        changeEvent.isModified = false;
+                        Node<K> subNode = that.nodeAt(bitpos);
+                        Node<K> subNodeNew = subNode.updated(bulkEdit, thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
+                        nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+                        bulkChange.sizeChange += subNode.recursiveSize();
+                        bulkChange.hashChange += subNode.recursiveHash();
+                        if (!changeEvent.isModified) {
+                            bulkChange.sizeChange--;
+                            bulkChange.hashChange -= thisKeyHash;
+                        }
+                    } else {
+                        // case 1:
+                        nodesNew[dataIndex++] = thisKey;
+                    }
+                } else {
+                    assert thatHasData;
+                    K thatKey = that.getKey(index(that.dataMap, bitpos));
+                    int thatKeyHash = Objects.hashCode(thatKey);
+                    boolean thisHasNode = (this.nodeMap & bitpos) != 0;
+                    if (thisHasNode) {
+                        // case 6:
+                        dataMapNew ^= bitpos;
+                        thisNodeMapToDo ^= bitpos;
+                        changeEvent.isModified = false;
+                        Node<K> subNode = this.getNode(index(this.nodeMap, bitpos));
+                        Node<K> subNodeNew = subNode.updated(bulkEdit, thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
+                        if (changeEvent.isModified) {
+                            bulkChange.sizeChange++;
+                            bulkChange.hashChange += thatKeyHash;
+                            nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+                        }
+                    } else {
+                        // case 4:
+                        nodesNew[dataIndex++] = thatKey;
+                        bulkChange.sizeChange++;
+                        bulkChange.hashChange += thatKeyHash;
+                    }
+                }
+            }
+
+            // Step 2: Merge remaining sub-nodes
+            // -------
+            int nodeMapToDo = thisNodeMapToDo | thatNodeMapToDo;
+            for (int mapToDo = nodeMapToDo; mapToDo != 0; mapToDo ^= Integer.lowestOneBit(mapToDo)) {
+                int mask = Integer.numberOfTrailingZeros(mapToDo);
+                int bitpos = bitpos(mask);
+                boolean thisHasNodeToDo = (thisNodeMapToDo & bitpos) != 0;
+                boolean thatHasNodeToDo = (thatNodeMapToDo & bitpos) != 0;
+                if (thisHasNodeToDo && thatHasNodeToDo) {
+                    //cases 10.1 and 10.2
+                    Node<K> thisSubNode = this.getNode(index(this.nodeMap, bitpos));
+                    Node<K> thatSubNode = that.getNode(index(that.nodeMap, bitpos));
+                    Node<K> subNodeNew = thisSubNode.copyAddAll(thatSubNode, shift + BIT_PARTITION_SIZE, bulkChange);
+                    nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+                } else if (thatHasNodeToDo) {
+                    // case 8
+                    Node<K> thatSubNode = that.getNode(index(that.nodeMap, bitpos));
+                    nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = thatSubNode;
+                    bulkChange.sizeChange += thatSubNode.recursiveSize();
+                    bulkChange.hashChange += thatSubNode.recursiveHash();
+                } else {
+                    // case 2
+                    assert thisHasNodeToDo;
+                    Node<K> thisSubNode = this.getNode(index(this.nodeMap, bitpos));
+                    nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = thisSubNode;
+                }
+            }
+
+            // Step 3: create new node if it has changed
+            // ------
+            if (sizeChangeOld != bulkChange.sizeChange) {
+                return new BitmapIndexedNode<>(bulkEdit, nodeMapNew, dataMapNew, nodesNew);
+            }
+
+            return this;
+        }
+
+
+        @Override
         boolean contains(final K key, final int keyHash, final int shift) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
-            final int dataMap = dataMap();
-            if ((dataMap & bitpos) != 0) {
-                final int index = index(dataMap, mask, bitpos);
+            if ((this.dataMap & bitpos) != 0) {
+                final int index = index(this.dataMap, mask, bitpos);
                 return Objects.equals(getKey(index), key);
             }
 
@@ -276,24 +505,19 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             return false;
         }
 
-        Node<K> copyAndInsertValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
-                                   final K key) {
+        private Node<K> copyAndInsertValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
+                                           final K key) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and insert 1 element(s) at position 'idx'
             final Object[] dst = PersistentTrieHelper.copyAdd(this.nodes, idx, key);
-            return copyOrUpdate(bulkEdit, nodeMap(), dataMap() | bitpos, dst);
-        }
-
-        private BitmapIndexedNode<K> copyOrUpdate(final @Nullable PersistentTrieHelper.Nonce bulkEdit, final int nodeMap,
-                                                  final int dataMap, final Object[] nodes) {
-            return new BitmapIndexedNode<>(bulkEdit, nodeMap, dataMap, nodes);
+            return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap() | bitpos, dst);
 
         }
 
 
-        Node<K> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.Nonce bulkEdit,
-                                               final int bitpos, final Node<K> node) {
+        private Node<K> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.Nonce bulkEdit,
+                                                       final int bitpos, final Node<K> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
@@ -308,11 +532,12 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
             dst[idxNew] = node;
 
-            return copyOrUpdate(bulkEdit, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
+            return new BitmapIndexedNode<>(bulkEdit, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
+
         }
 
-        Node<K> copyAndMigrateFromNodeToInline(final PersistentTrieHelper.Nonce bulkEdit,
-                                               final int bitpos, final Node<K> node) {
+        private Node<K> copyAndMigrateFromNodeToInline(final PersistentTrieHelper.Nonce bulkEdit,
+                                                       final int bitpos, final Node<K> node) {
 
             final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
             final int idxNew = TUPLE_LENGTH * dataIndex(bitpos);
@@ -330,7 +555,7 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             return new BitmapIndexedNode<>(bulkEdit, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        Node<K> copyAndRemoveValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos) {
+        private Node<K> copyAndRemoveValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and remove 1 element(s) at position 'idx'
@@ -338,8 +563,8 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        Node<K> copyAndSetNode(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
-                               final Node<K> newNode) {
+        private Node<K> copyAndSetNode(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
+                                       final Node<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
             final int idx = this.nodes.length - 1 - nodeIndex;
@@ -355,11 +580,11 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             }
         }
 
-        int dataIndex(final int bitpos) {
+        private int dataIndex(final int bitpos) {
             return Integer.bitCount(dataMap() & (bitpos - 1));
         }
 
-        int dataMap() {
+        private int dataMap() {
             return dataMap;
         }
 
@@ -407,21 +632,57 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             return Integer.bitCount(nodeMap());
         }
 
-        Node<K> nodeAt(final int bitpos) {
+        private Node<K> nodeAt(final int bitpos) {
             return getNode(nodeIndex(bitpos));
         }
 
-        int nodeIndex(final int bitpos) {
+        private int nodeIndex(final int bitpos) {
             return Integer.bitCount(nodeMap() & (bitpos - 1));
         }
 
-        int nodeMap() {
+        private int nodeIndexAt(Object[] array, int nodeMap, final int bitpos) {
+            return array.length - 1 - Integer.bitCount(nodeMap & (bitpos - 1));
+        }
+
+        private int nodeMap() {
             return nodeMap;
         }
 
         @Override
         int payloadArity() {
             return Integer.bitCount(dataMap());
+        }
+
+        @Override
+        int recursiveHash() {
+            if (recursiveHash == 0) {
+                //recursiveHash may clash with UNKNOWN_VALUE, in this hopefully
+                //rare event, we will recompute it every time
+                computeRecursiveHashAndSize();
+            }
+            return recursiveHash;
+        }
+
+        private void computeRecursiveHashAndSize() {
+            int hash = 0, size = this.payloadArity();
+            for (int i = 0; i < size; i++) {
+                hash += Objects.hashCode(getKey(i));
+            }
+            for (int i = 0, n = this.nodeArity(); i < n; i++) {
+                Node<K> node = getNode(i);
+                hash += node.recursiveHash();
+                size += node.recursiveSize();
+            }
+            this.recursiveHash = hash;
+            this.recursiveSize = size;
+        }
+
+        @Override
+        int recursiveSize() {
+            if (recursiveSize == 0) {
+                computeRecursiveHashAndSize();
+            }
+            return recursiveSize;
         }
 
         @Override
@@ -442,9 +703,11 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
                                 (shift == 0) ? (dataMap() ^ bitpos) : bitpos(mask(keyHash, 0));
 
                         if (dataIndex == 0) {
-                            return copyOrUpdate(bulkEdit, 0, newDataMap, new Object[]{getKey(1)});
+                            return new BitmapIndexedNode<>(bulkEdit, 0, newDataMap, new Object[]{getKey(1)});
+
                         } else {
-                            return copyOrUpdate(bulkEdit, 0, newDataMap, new Object[]{getKey(0)});
+                            return new BitmapIndexedNode<>(bulkEdit, 0, newDataMap, new Object[]{getKey(0)});
+
                         }
                     } else {
                         return copyAndRemoveValue(bulkEdit, bitpos);
@@ -565,7 +828,6 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
                 return new BitmapIndexedNode<>(bulkEdit, nodeMap, 0, new Object[]{node});
             }
         }
-
     }
 
     private static final class HashCollisionNode<K> extends Node<K> {
@@ -577,6 +839,49 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             this.keys = keys;
             this.hash = hash;
             assert payloadArity() >= 2;
+        }
+
+        @Override
+        @NonNull Node<K> copyAddAll(@NonNull Node<K> o, int shift, BulkChangeEvent bulkChange) {
+            if (o == this) {
+                return this;
+            }
+            // The other node must be a HashCollisionNode
+            HashCollisionNode<K> that = (HashCollisionNode<K>) o;
+
+            List<K> list = new ArrayList<>(this.keys.length + that.keys.length);
+
+            // Step 1: Add all this.keys to list
+            list.addAll(Arrays.asList(this.keys));
+
+            // Step 2: Add all that.keys to list which are not in this.keys
+            //         This is quadratic.
+            //         If the sets are disjoint, we can do nothing about it.
+            //         If the sets intersect, we can mark those which are
+            //         equal in a bitset, so that we do not need to check
+            //         them over and over again.
+            BitSet bs = new BitSet(this.keys.length);
+            outer:
+            for (int j = 0; j < that.keys.length; j++) {
+                K key = that.keys[j];
+                for (int i = bs.nextClearBit(0); i >= 0 && i < this.keys.length; i = bs.nextClearBit(i + 1)) {
+                    if (Objects.equals(key, this.keys[i])) {
+                        bs.set(i);
+                        continue outer;
+                    }
+                }
+                list.add(key);
+            }
+
+            if (list.size() > this.keys.length) {
+                bulkChange.sizeChange += list.size() - this.keys.length;
+                bulkChange.hashChange += (list.size() - this.keys.length) * hash;
+
+                //noinspection unchecked
+                return new HashCollisionNode<>(bulkEdit, hash, (K[]) list.toArray());
+            }
+
+            return this;
         }
 
         @Override
@@ -604,11 +909,14 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
             }
 
             // Linear scan for each key, because of arbitrary element order.
+            // ...maybe we could use a bit set to mark keys that we have
+            //    found in both sets? But that will cost memory!
             outerLoop:
             for (int i = 0, n = that.payloadArity(); i < n; i++) {
                 final Object otherKey = that.getKey(i);
 
-                for (final K key : keys) {
+                for (int j = 0, m = keys.length; j < m; j++) {
+                    final K key = keys[j];
                     if (Objects.equals(key, otherKey)) {
                         continue outerLoop;
                     }
@@ -616,6 +924,17 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
                 return false;
             }
             return true;
+        }
+
+
+        @Override
+        int recursiveHash() {
+            return hash * keys.length;
+        }
+
+        @Override
+        int recursiveSize() {
+            return keys.length;
         }
 
         @Override
@@ -662,7 +981,8 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
                         // This node will be a) either be the new root
                         // returned, or b) unwrapped and inlined.
                         final K theOtherKey = (idx == 0) ? keys[1] : keys[0];
-                        return new BitmapIndexedNode<>(bulkEdit, 0, bitpos(BitmapIndexedNode.mask(keyHash, 0)), new Object[]{theOtherKey});
+                        return new BitmapIndexedNode<>(bulkEdit, 0, bitpos(BitmapIndexedNode.mask(keyHash, 0)), new Object[]{theOtherKey}
+                        );
                     } else {
                         // copy 'this.keys' and remove 1 element(s) at position 'idx'
                         final K[] keysNew = PersistentTrieHelper.copyRemove(this.keys, idx);
@@ -705,7 +1025,7 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
     /**
      * Iterator skeleton that uses a fixed stack in depth.
      */
-    private static class TrieIterator<K> implements Iterator<K> {
+    static class TrieIterator<K> implements Iterator<K> {
 
         private static final int MAX_DEPTH = 7;
         private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
@@ -787,52 +1107,13 @@ public class PersistentTrie5Set<E> extends AbstractReadOnlySet<E> implements Per
         }
     }
 
-    private static class TransientTrieSet<K> {
-        private PersistentTrieHelper.Nonce bulkEdit;
-        protected Node<K> root;
-        protected int hashCode;
-        protected int size;
 
-        TransientTrieSet(PersistentTrie5Set<K> trieSet) {
-            this.root = trieSet.root;
-            this.hashCode = trieSet.hashCode;
-            this.size = trieSet.size;
-            this.bulkEdit = new PersistentTrieHelper.Nonce();
-        }
-
-        public boolean add(final @Nullable K key) {
-            final int keyHash = Objects.hashCode(key);
-            final ChangeEvent changeEvent = new ChangeEvent();
-            final Node<K> newRootNode = root.updated(this.bulkEdit, key, keyHash, 0, changeEvent);
-            if (changeEvent.isModified) {
-                root = newRootNode;
-                hashCode += keyHash;
-                size += 1;
-                return true;
-            }
-            return false;
-        }
-
-        public boolean remove(final K key) {
-            final int keyHash = Objects.hashCode(key);
-            final ChangeEvent changeEvent = new ChangeEvent();
-            final Node<K> newRootNode = root.removed(this.bulkEdit, key, keyHash, 0, changeEvent);
-            if (changeEvent.isModified) {
-                root = newRootNode;
-                hashCode = hashCode - keyHash;
-                size = size - 1;
-                return true;
-            }
-            return false;
-        }
-
-        public PersistentTrie5Set<K> freeze() {
-            bulkEdit = new PersistentTrieHelper.Nonce();
-            return size == 0 ? PersistentTrie5Set.of() : new PersistentTrie5Set<>(root, hashCode, size);
-        }
+    static class ChangeEvent {
+        boolean isModified;
     }
 
-    private static class ChangeEvent {
-        private boolean isModified;
+    static class BulkChangeEvent {
+        int sizeChange;
+        int hashChange;
     }
 }

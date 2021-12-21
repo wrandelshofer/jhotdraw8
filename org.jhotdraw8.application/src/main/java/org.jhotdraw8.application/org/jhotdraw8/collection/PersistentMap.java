@@ -13,10 +13,10 @@ import java.util.Map;
  * put or removed entries, without changing the original persistent map.
  * <p>
  * Implementations are expected to only require time and space that is
- * proportional to the differences (also known as 'delta')
- * between the newly created persistent map to the original persistent amp.
+ * proportional to the differences between the newly created persistent map to
+ * the original persistent amp.
  */
-public interface PersistentMap<K, V> extends ReadOnlyMap<K, V> {
+public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
     /**
      * Returns a copy of this map that contains all entries
      * of this map with the specified entry added or updated.
