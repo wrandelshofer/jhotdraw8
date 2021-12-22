@@ -109,7 +109,8 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             }
             return root.equivalent(that.root);
         } else if (other instanceof ReadOnlySet) {
-            ReadOnlySet<?> that = (ReadOnlySet<?>) other;
+            @SuppressWarnings("unchecked")
+            ReadOnlySet<E> that = (ReadOnlySet<E>) other;
             if (this.size() != that.size()) {
                 return false;
             }
@@ -165,9 +166,9 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         }
 
         if (set instanceof PersistentTrieSet) {
-            return copyAddAll((PersistentTrieSet<E>) set);
+            return copyAddAllFromTrieSet((PersistentTrieSet<E>) set);
         } else if (set instanceof TrieSet) {
-            return copyAddAll(((TrieSet<E>) set).toPersistent());
+            return copyAddAllFromTrieSet(((TrieSet<E>) set).toPersistent());
         }
 
         final TrieSet<E> t = this.toTransient();
@@ -178,7 +179,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         return modified ? t.toPersistent() : this;
     }
 
-    private @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull PersistentTrieSet<E> set) {
+    private @NonNull PersistentTrieSet<E> copyAddAllFromTrieSet(final @NonNull PersistentTrieSet<E> set) {
         if (set.isEmpty()) {
             return this;
         }

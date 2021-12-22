@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 abstract class AbstractPersistentMapTest {
     protected abstract @NonNull PersistentMap<HashCollider, HashCollider> of();
 
+    @SuppressWarnings("unchecked")
     protected abstract @NonNull PersistentMap<HashCollider, HashCollider> of(@NonNull Map.Entry<HashCollider, HashCollider>... entries);
 
     protected abstract @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map);
@@ -362,7 +363,7 @@ abstract class AbstractPersistentMapTest {
     }
 
     public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        PersistentMap<HashCollider, HashCollider> set = of(ImmutableMaps.entry(key, value));
+        @SuppressWarnings("unchecked") PersistentMap<HashCollider, HashCollider> set = of(ImmutableMaps.entry(key, value));
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(key, value);
         assertTrue(set.containsKey(key));

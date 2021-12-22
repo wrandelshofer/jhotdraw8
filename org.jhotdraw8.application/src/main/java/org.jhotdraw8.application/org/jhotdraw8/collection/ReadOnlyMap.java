@@ -39,7 +39,7 @@ public interface ReadOnlyMap<K, V> {
 
     @NonNull Iterator<K> keys();
 
-    boolean containsKey(@NonNull Object key);
+    boolean containsKey(@Nullable Object key);
 
     default boolean containsValue(@Nullable Object value) {
         for (Iterator<Map.Entry<K, V>> i = entries(); i.hasNext(); ) {

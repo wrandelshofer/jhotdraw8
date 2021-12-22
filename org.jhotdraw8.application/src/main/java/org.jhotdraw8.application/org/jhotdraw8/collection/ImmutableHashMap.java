@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -120,7 +121,7 @@ public class ImmutableHashMap<K, V> extends AbstractReadOnlyMap<K, V> implements
     }
 
     @Override
-    public boolean containsKey(@NonNull Object key) {
+    public boolean containsKey(@Nullable Object key) {
         return backingMap.containsKey(key);
     }
 

@@ -76,6 +76,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
         return (PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY_MAP;
     }
 
+    @SuppressWarnings("unchecked")
     public static <K, V> @NonNull PersistentTrieMap<K, V> of(@NonNull Map.Entry<K, V>... entries) {
         TrieMap<K, V> result = PersistentTrieMap.<K, V>of().asTransient();
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
@@ -97,7 +98,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     }
 
     @Override
-    public boolean containsKey(final @NonNull Object o) {
+    public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return root.findByKey(key, Objects.hashCode(key), 0).keyExists();
     }
@@ -205,11 +206,6 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     }
 
     public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
-        if (map == this) {
-            return this;
-        }
-
-
         final TrieMap<K, V> t = this.asTransient();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
@@ -857,7 +853,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
         protected int currentValueCursor;
         protected int currentValueLength;
         protected Node<K, V> currentValueNode;
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "rawtypes"})
         Node<K, V>[] nodes = new Node[MAX_DEPTH];
         private int currentStackLevel = -1;
 

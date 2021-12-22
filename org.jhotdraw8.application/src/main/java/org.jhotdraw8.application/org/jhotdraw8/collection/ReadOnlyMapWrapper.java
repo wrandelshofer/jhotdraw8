@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class ReadOnlyMapWrapper<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public boolean containsKey(@NonNull Object key) {
+    public boolean containsKey(@Nullable Object key) {
         return target.containsKey(key);
     }
 }

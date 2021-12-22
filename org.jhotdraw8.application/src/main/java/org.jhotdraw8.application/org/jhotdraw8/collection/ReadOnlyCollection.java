@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -89,7 +90,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
         }
     }
 
-    boolean contains(Object e);
+    boolean contains(@Nullable Object e);
 
     /**
      * Returns true if this collection contains all elements of that collection.

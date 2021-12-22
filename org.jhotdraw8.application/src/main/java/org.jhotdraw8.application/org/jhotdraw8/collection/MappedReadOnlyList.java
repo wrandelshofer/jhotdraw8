@@ -19,17 +19,22 @@ import java.util.function.Function;
  */
 public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
 
-    private final ReadOnlyList<F> backingList;
-    private final Function<F, E> mapf;
+    private final @NonNull ReadOnlyList<F> backingList;
+    private final @NonNull Function<F, E> mapf;
 
-    public MappedReadOnlyList(ReadOnlyList<F> backingList, Function<F, E> mapf) {
+    public MappedReadOnlyList(@NonNull ReadOnlyList<F> backingList, @NonNull Function<F, E> mapf) {
         this.backingList = backingList;
         this.mapf = mapf;
     }
 
     @Override
     public boolean contains(Object o) {
-        return backingList.contains(o);
+        for (F f : backingList) {
+            if (mapf.apply(f).equals(o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
