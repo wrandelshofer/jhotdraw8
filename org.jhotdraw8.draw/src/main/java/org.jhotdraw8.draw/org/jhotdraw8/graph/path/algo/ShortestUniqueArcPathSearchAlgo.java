@@ -130,7 +130,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
                     CostData<C> costDataV = costMap.getOrDefault(v.getEnd(), infiniteCost);
                     final C bestKnownCost = costDataV.getCost();
-                    C cost = sumFunction.apply(costToU, costf.apply(u.getVertex(), v.getEnd(), v.getData()));
+                    C cost = sumFunction.apply(costToU, costf.apply(u.getVertex(), v.getEnd(), v.getArrow()));
 
                     // If there is a shorter path to v through u.
                     if (cost.compareTo(maxCost) <= 0) {
@@ -138,7 +138,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
                         if (compare < 0) {
                             // Update cost data to v.
                             costMap.put(v.getEnd(), new CostData<>(cost, 1));
-                            queue.add(new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost));
+                            queue.add(new ArcBackLinkWithCost<>(v.getEnd(), v.getArrow(), u, cost));
                         } else if (compare == 0) {
                             // There is more than one shortest path to v!
                             costDataV.increaseVisitCount();

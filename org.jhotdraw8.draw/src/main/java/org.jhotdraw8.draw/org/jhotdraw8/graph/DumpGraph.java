@@ -203,7 +203,7 @@ public class DumpGraph {
         for (V start : graph.getVertices()) {
             for (Arc<V, A> arc : graph.getNextArcs(start)) {
                 final V end = arc.getEnd();
-                final A arrow = arc.getData();
+                final A arrow = arc.getArrow();
                 final String startVertexName = vertexToString.apply(start);
                 final String endVertexName = vertexToString.apply(end);
                 if (startVertexName == null || endVertexName == null) {

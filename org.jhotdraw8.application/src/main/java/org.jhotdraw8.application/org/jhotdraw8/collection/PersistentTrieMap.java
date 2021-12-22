@@ -63,7 +63,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     }
 
     public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return of(map.entrySet());
+        return ofEntries(map.entrySet());
     }
 
     @SuppressWarnings("unchecked")
@@ -76,8 +76,8 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
         return (PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY_MAP;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull PersistentTrieMap<K, V> of(@NonNull Map.Entry<K, V>... entries) {
+    @SafeVarargs
+    public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Map.Entry<K, V>... entries) {
         TrieMap<K, V> result = PersistentTrieMap.<K, V>of().asTransient();
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             result.putAndGiveDetails(entry.getKey(), entry.getValue());
@@ -85,7 +85,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
         return result.toPersistent();
     }
 
-    public static <K, V> @NonNull PersistentTrieMap<K, V> of(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+    public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         TrieMap<K, V> result = PersistentTrieMap.<K, V>of().asTransient();
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             result.putAndGiveDetails(entry.getKey(), entry.getValue());

@@ -158,7 +158,7 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
                 this.vertices[vi] = v;
                 for (Arc<V, A> arc : graph.getNextArcs(v)) {
                     next[offset] = vertexToIndexMap.get(arc.getEnd());
-                    nextArrows[offset] = arc.getData();
+                    nextArrows[offset] = arc.getArrow();
                     offset++;
                 }
                 vi++;

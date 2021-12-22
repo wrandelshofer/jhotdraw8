@@ -104,7 +104,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         }
         for (V v : nodeMap.keySet()) {
             for (Arc<V, A> arc : g.getNextArcs(v)) {
-                addArrow(arc.getStart(), arc.getEnd(), arc.getData());
+                addArrow(arc.getStart(), arc.getEnd(), arc.getArrow());
             }
         }
     }

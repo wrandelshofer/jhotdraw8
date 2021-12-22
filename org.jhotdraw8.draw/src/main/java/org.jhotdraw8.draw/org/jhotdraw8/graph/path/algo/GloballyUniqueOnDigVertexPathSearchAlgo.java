@@ -128,11 +128,12 @@ public class GloballyUniqueOnDigVertexPathSearchAlgo<V, C extends Number & Compa
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
+                AddOnlyPersistentTrieSet<V> uAncestors = u.removeAncestors();
                 for (final V v : nextVerticesFunction.apply(u.getVertex())) {
-                    final AddOnlyPersistentTrieSet<V> vAncestors = u.getAncestors().copyAdd(v);
-                    if (vAncestors != u.getAncestors()) {//the sequence does not intersect with itself (it is a path!)
+                    final AddOnlyPersistentTrieSet<V> vAncestors = uAncestors.copyAdd(v);
+                    if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v, 1, Integer::sum) == 1) {
-                            queue.add(new VertexBackLinkWithAncestorSet<V>(v, u, vAncestors));
+                            queue.add(new VertexBackLinkWithAncestorSet<>(v, u, vAncestors));
                         }
                     }
                 }

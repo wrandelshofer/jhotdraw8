@@ -126,7 +126,7 @@ public class GloballyUniqueOnDagArcPathSearchAlgo<V, A, C extends Number & Compa
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
                     if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
-                        queue.add(new ArcBackLink<>(v.getEnd(), v.getData(), u));
+                        queue.add(new ArcBackLink<>(v.getEnd(), v.getArrow(), u));
                     }
                 }
             }

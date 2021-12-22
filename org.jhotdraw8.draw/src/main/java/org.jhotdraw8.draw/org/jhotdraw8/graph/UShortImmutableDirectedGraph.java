@@ -115,7 +115,7 @@ public class UShortImmutableDirectedGraph<V, A> implements AttributedIndexedDire
             nextOffset[vi] = offset;
             V v = graph.getVertex(vi);
             this.vertices[vi] = v;
-            vertexToIndexMap.put(v, (char) vi);
+            vertexToIndexMap.put(v, vi);
             for (int i = 0, n = graph.getNextCount(vi); i < n; i++) {
                 next[offset] = (char) graph.getNext(vi, i);
                 this.nextArrows[offset] = graph.getNextArrow(vi, i);
@@ -151,7 +151,7 @@ public class UShortImmutableDirectedGraph<V, A> implements AttributedIndexedDire
         {
             char vi = 0;
             for (V v : graph.getVertices()) {
-                vertexToIndexMap.put(v, (char) vi);
+                vertexToIndexMap.put(v, vi);
                 vi++;
             }
         }
@@ -164,8 +164,8 @@ public class UShortImmutableDirectedGraph<V, A> implements AttributedIndexedDire
                 nextOffset[vi] = offset;
                 this.vertices[vi] = v;
                 for (Arc<V, A> arc : graph.getNextArcs(v)) {
-                    next[offset] = (char) vertexToIndexMap.get(arc.getEnd());
-                    nextArrows[offset] = arc.getData();
+                    next[offset] = vertexToIndexMap.get(arc.getEnd());
+                    nextArrows[offset] = arc.getArrow();
                     offset++;
                 }
                 vi++;

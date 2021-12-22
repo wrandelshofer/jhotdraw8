@@ -110,9 +110,9 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
             }
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    C cost = sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v.getEnd(), v.getData()));
+                    C cost = sumFunction.apply(u.getCost(), costFunction.apply(u.getVertex(), v.getEnd(), v.getArrow()));
                     if (cost.compareTo(maxCost) <= 0) {
-                        ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getData(), u, cost);
+                        ArcBackLinkWithCost<V, A, C> newNode = new ArcBackLinkWithCost<>(v.getEnd(), v.getArrow(), u, cost);
                         queue.add(newNode);
                     }
                 }

@@ -24,23 +24,23 @@ public class PersistentMaps {
 
     @SafeVarargs
     public static @NonNull <K, V> PersistentMap<K, V> ofEntries(Map.Entry<K, V>... entries) {
-        return PersistentTrieMap.of(entries);
+        return PersistentTrieMap.ofEntries(entries);
     }
 
     public static @NonNull <K, V> PersistentMap<K, V> copyOf(ReadOnlyMap<K, V> map) {
-        return PersistentTrieMap.of(map.readOnlyEntrySet());
+        return PersistentTrieMap.ofEntries(map.readOnlyEntrySet());
     }
 
     public static @NonNull <K, V> PersistentMap<K, V> of(@NonNull ReadOnlyCollection<Map.Entry<K, V>> entrySet) {
-        return PersistentTrieMap.of(entrySet);
+        return PersistentTrieMap.ofEntries(entrySet);
     }
 
     public static @NonNull <K, V> PersistentMap<V, K> inverseOf(@NonNull Set<Map.Entry<K, V>> entrySet) {
-        return PersistentTrieMap.of(new MappedSet<>(entrySet, e -> entry(e.getValue(), e.getKey())));
+        return PersistentTrieMap.ofEntries(new MappedSet<>(entrySet, e -> entry(e.getValue(), e.getKey())));
     }
 
     public static @NonNull <K, V> PersistentMap<K, V> of(@NonNull Collection<Map.Entry<K, V>> entrySet) {
-        return PersistentTrieMap.of(entrySet);
+        return PersistentTrieMap.ofEntries(entrySet);
     }
 
     public static @NonNull <K, V> PersistentMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
@@ -53,22 +53,22 @@ public class PersistentMaps {
 
     @SuppressWarnings("unchecked")
     public static @NonNull <K, V> PersistentMap<K, V> of(K k1, V v1) {
-        return PersistentTrieMap.of(entry(k1, v1));
+        return PersistentTrieMap.ofEntries(entry(k1, v1));
     }
 
     @SuppressWarnings("unchecked")
     public static @NonNull <K, V> PersistentMap<K, V> of(K k1, V v1, K k2, V v2) {
-        return PersistentTrieMap.of(entry(k1, v1), entry(k2, v2));
+        return PersistentTrieMap.ofEntries(entry(k1, v1), entry(k2, v2));
     }
 
     @SuppressWarnings("unchecked")
     public static @NonNull <K, V> PersistentMap<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
-        return PersistentTrieMap.of(entry(k1, v1), entry(k2, v2), entry(k3, v3));
+        return PersistentTrieMap.ofEntries(entry(k1, v1), entry(k2, v2), entry(k3, v3));
     }
 
     @SuppressWarnings("unchecked")
     public static @NonNull <K, V> PersistentMap<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-        return PersistentTrieMap.of(entry(k1, v1), entry(k2, v2), entry(k3, v3), entry(k4, v4));
+        return PersistentTrieMap.ofEntries(entry(k1, v1), entry(k2, v2), entry(k3, v3), entry(k4, v4));
     }
 
     public static @NonNull <K, V> Map.Entry<K, V> entry(K k, V v) {

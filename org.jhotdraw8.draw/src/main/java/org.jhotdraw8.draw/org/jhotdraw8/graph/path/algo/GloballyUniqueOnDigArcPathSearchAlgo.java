@@ -165,11 +165,12 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
+                AddOnlyPersistentTrieSet<V> uAncestors = u.removeAncestors();
                 for (final Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    final AddOnlyPersistentTrieSet<V> vAncestors = u.getAncestors().copyAdd(v.getEnd());
-                    if (vAncestors != u.getAncestors()) {//the sequence does not intersect with itself (it is a path!)
+                    final AddOnlyPersistentTrieSet<V> vAncestors = uAncestors.copyAdd(v.getEnd());
+                    if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
-                            final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getData(), u, vAncestors);
+                            final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getArrow(), u, vAncestors);
                             queue.add(backLink);
                         }
                     }

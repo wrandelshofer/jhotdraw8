@@ -81,7 +81,7 @@ public class BidiGraphBuilder<V, A> implements BidiGraph<V, A> {
             V v = vertexMapper.apply(vv);
             for (Arc<VV, AA> arc : that.getNextArcs(vv)) {
                 addArrow(v, vertexMapper.apply(arc.getEnd()),
-                        arrowMapper.apply(arc.getData()));
+                        arrowMapper.apply(arc.getArrow()));
 
             }
         }

@@ -133,7 +133,8 @@ public class TrieSet<E> extends AbstractSet<E> {
     }
 
     public boolean remove(final Object o) {
-        @SuppressWarnings("RedundantExplicitVariableType") E key = (E) o;
+        @SuppressWarnings("unchecked")
+        E key = (E) o;
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSet.ChangeEvent changeEvent = new PersistentTrieSet.ChangeEvent();
         final PersistentTrieSet.BitmapIndexedNode<E> newRootNode = (PersistentTrieSet.BitmapIndexedNode<E>) root.removed(this.bulkEdit, key, keyHash, 0, changeEvent);

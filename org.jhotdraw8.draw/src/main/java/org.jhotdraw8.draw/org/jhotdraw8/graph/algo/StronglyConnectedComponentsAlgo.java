@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 import static java.lang.Math.min;
 
-public class StronglyConnectedComponentsAlgorithm {
+public class StronglyConnectedComponentsAlgo {
     /**
      * Holds bookkeeping data for a node v from the graph.
      */
@@ -35,10 +35,7 @@ public class StronglyConnectedComponentsAlgorithm {
 
     }
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
-    private StronglyConnectedComponentsAlgorithm() {
+    public StronglyConnectedComponentsAlgo() {
 
     }
 
@@ -50,7 +47,7 @@ public class StronglyConnectedComponentsAlgorithm {
      * @param <A>   the arrow data type
      * @return set of strongly connected components (sets of vertices).
      */
-    public static @NonNull <V, A> List<List<V>> findStronglyConnectedComponents(
+    public @NonNull <V, A> List<List<V>> findStronglyConnectedComponents(
             final @NonNull DirectedGraph<V, A> graph) {
         return findStronglyConnectedComponents(graph.getVertices(), graph::getNextVertices);
     }
@@ -63,7 +60,7 @@ public class StronglyConnectedComponentsAlgorithm {
      * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
-    public static @NonNull <V> List<List<V>> findStronglyConnectedComponents(
+    public @NonNull <V> List<List<V>> findStronglyConnectedComponents(
             final @NonNull Collection<? extends V> vertices, final @NonNull Function<V, Iterable<? extends V>> nextNodeFunction
     ) {
         // The following non-recursive implementation "Tarjan's strongly connected components"

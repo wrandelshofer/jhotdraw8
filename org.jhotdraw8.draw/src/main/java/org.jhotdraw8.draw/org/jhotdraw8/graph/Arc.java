@@ -32,7 +32,7 @@ public class Arc<V, A> {
         this.data = data;
     }
 
-    public @Nullable A getData() {
+    public @Nullable A getArrow() {
         return data;
     }
 

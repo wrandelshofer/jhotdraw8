@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.graph.algo.TopologicalSortAlgorithm;
+import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 import org.jhotdraw8.reflect.TypeToken;
 
 import java.net.URI;
@@ -195,7 +195,7 @@ public interface Drawing extends Figure {
             }
         }
 
-        OrderedPair<int[], IntArrayList> pair = TopologicalSortAlgorithm.sortTopologicallyIntBatches(graphBuilder);
+        OrderedPair<int[], IntArrayList> pair = new TopologicalSortAlgo().sortTopologicallyIntBatches(graphBuilder);
         int[] sorted = pair.first();
         if (pair.second().isEmpty()) {
             // graph has a loop => layout sequentially
@@ -248,6 +248,6 @@ public interface Drawing extends Figure {
                 graphBuilder.addArrow(f, obs, f);
             }
         }
-        return TopologicalSortAlgorithm.sortTopologically(graphBuilder);
+        return new TopologicalSortAlgo().sortTopologically(graphBuilder);
     }
 }

@@ -20,9 +20,13 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
     private final @Nullable A arrow;
 
     /**
-     * This set contains the vertex of this back link and the vertices of all parent backlinks.
+     * This set contains the vertex of this back link and the vertices of all
+     * parent backlinks.
+     * <p>
+     * This set is only needed for backlinks that are in the search frontier.
+     * Once they leave the search frontier, the set is removed.
      */
-    private final @NonNull AddOnlyPersistentTrieSet<V> ancestors;
+    private @Nullable AddOnlyPersistentTrieSet<V> ancestors;
 
     /**
      * Creates a new instance.
@@ -80,7 +84,12 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
         return newNode;
     }
 
-    public AddOnlyPersistentTrieSet<V> getAncestors() {
+    public @NonNull AddOnlyPersistentTrieSet<V> removeAncestors() {
+        if (ancestors == null) {
+            throw new IllegalStateException("ancestors already removed");
+        }
+        AddOnlyPersistentTrieSet<V> ancestors = this.ancestors;
+        this.ancestors = null;
         return ancestors;
     }
 

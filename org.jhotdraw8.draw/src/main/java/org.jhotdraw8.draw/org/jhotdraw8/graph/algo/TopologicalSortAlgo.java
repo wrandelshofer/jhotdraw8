@@ -28,7 +28,7 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class TopologicalSortAlgorithm {
+public class TopologicalSortAlgo {
 
 
     /**
@@ -40,7 +40,7 @@ public class TopologicalSortAlgorithm {
      * @return the sorted list of vertices
      */
     @SuppressWarnings("unchecked")
-    public static @NonNull <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
+    public @NonNull <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final AttributedIndexedDirectedGraph<V, A> im;
         if (!(m instanceof AttributedIndexedDirectedGraph)) {
             return sortTopologicallyObject(m);
@@ -62,7 +62,7 @@ public class TopologicalSortAlgorithm {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static @NonNull int[] sortTopologicallyInt(@NonNull IndexedDirectedGraph model) {
+    public @NonNull int[] sortTopologicallyInt(@NonNull IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
@@ -128,7 +128,7 @@ public class TopologicalSortAlgorithm {
      * @return the sorted list of vertices and the list of batches,
      * batches will be empty if the graph has cycles
      */
-    public static @NonNull OrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(@NonNull IndexedDirectedGraph model) {
+    public @NonNull OrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(@NonNull IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
         IntArrayList batches = new IntArrayList();
         boolean hasLoop = false;
@@ -208,7 +208,7 @@ public class TopologicalSortAlgorithm {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public static @NonNull <V, A> List<V> sortTopologicallyObject(DirectedGraph<V, A> model) {
+    public @NonNull <V, A> List<V> sortTopologicallyObject(DirectedGraph<V, A> model) {
         return sortTopologically(model.getVertices(), model::getNextVertices);
     }
 
@@ -223,8 +223,8 @@ public class TopologicalSortAlgorithm {
      * @param nextVertices a function that delivers the next vertices for a given vertex
      * @return the sorted list of vertices
      */
-    public static @NonNull <V> List<V> sortTopologically(@NonNull Collection<V> vertices,
-                                                         @NonNull Function<V, Iterable<? extends V>> nextVertices) {
+    public @NonNull <V> List<V> sortTopologically(@NonNull Collection<V> vertices,
+                                                  @NonNull Function<V, Iterable<? extends V>> nextVertices) {
         final int n = vertices.size();
         Set<V> verticesInLoops = null;
 
@@ -266,7 +266,7 @@ public class TopologicalSortAlgorithm {
             if (done < n) {
                 // FIXME only search in remaining subgraph
                 if (verticesInLoops == null) {
-                    List<List<V>> stronglyConnectedComponents = StronglyConnectedComponentsAlgorithm.findStronglyConnectedComponents(vertices, nextVertices);
+                    List<List<V>> stronglyConnectedComponents = new StronglyConnectedComponentsAlgo().findStronglyConnectedComponents(vertices, nextVertices);
                     verticesInLoops = new LinkedHashSet<>();
                     for (List<V> stronglyConnectedComponent : stronglyConnectedComponents) {
                         if (stronglyConnectedComponent.size() > 1) {
@@ -295,10 +295,5 @@ public class TopologicalSortAlgorithm {
     }
 
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
-    private TopologicalSortAlgorithm() {
-    }
 
 }

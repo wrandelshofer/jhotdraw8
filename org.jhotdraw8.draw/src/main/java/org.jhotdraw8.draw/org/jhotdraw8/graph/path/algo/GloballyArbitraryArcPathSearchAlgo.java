@@ -111,7 +111,7 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
             if (u.getDepth() < maxDepth) {
                 for (Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
                     if (visited.add(v.getEnd())) {
-                        queue.add(new ArcBackLink<>(v.getEnd(), v.getData(), u));
+                        queue.add(new ArcBackLink<>(v.getEnd(), v.getArrow(), u));
                     }
                 }
             }

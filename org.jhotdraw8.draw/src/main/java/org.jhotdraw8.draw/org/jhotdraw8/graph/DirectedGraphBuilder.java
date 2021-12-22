@@ -62,7 +62,7 @@ public class DirectedGraphBuilder<V, A> {
         for (V v : graph.getVertices()) {
             for (Arc<V, A> arc : graph.getNextArcs(v)) {
                 if (vertexPredicate.test(arc.getEnd())) {
-                    b.addArrow(v, arc.getEnd(), arc.getData());
+                    b.addArrow(v, arc.getEnd(), arc.getArrow());
                 }
             }
         }

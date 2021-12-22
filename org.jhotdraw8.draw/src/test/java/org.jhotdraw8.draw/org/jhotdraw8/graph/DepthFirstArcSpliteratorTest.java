@@ -64,7 +64,7 @@ public class DepthFirstArcSpliteratorTest {
                 if (buf.length() > 0) {
                     buf.append(",");
                 }
-                buf.append(current.getStart() + "->" + current.getEnd() + ":" + current.getData());
+                buf.append(current.getStart() + "->" + current.getEnd() + ":" + current.getArrow());
             }
         }
         String actual = buf.toString();

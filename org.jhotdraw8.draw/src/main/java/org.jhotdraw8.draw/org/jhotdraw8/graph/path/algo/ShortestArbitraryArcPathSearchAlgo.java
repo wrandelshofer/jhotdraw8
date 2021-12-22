@@ -96,14 +96,14 @@ public class ShortestArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
                 for (Arc<V, A> arc : nextArcsFunction.apply(u.getVertex())) {
                     V v = arc.getEnd();
                     C bestKnownCost = costMap.get(v);
-                    C cost = sumFunction.apply(u.getCost(), costf.apply(u.getVertex(), v, arc.getData()));
+                    C cost = sumFunction.apply(u.getCost(), costf.apply(u.getVertex(), v, arc.getArrow()));
 
                     // If there is a cheaper path to v through u.
                     if ((bestKnownCost == null || cost.compareTo(bestKnownCost) < 0)
                             && cost.compareTo(costLimit) <= 0) {
                         // Update cost to v and add v again to the queue.
                         costMap.put(v, cost);
-                        queue.add(new ArcBackLinkWithCost<>(v, arc.getData(), u, cost));
+                        queue.add(new ArcBackLinkWithCost<>(v, arc.getArrow(), u, cost));
                     }
                 }
             }

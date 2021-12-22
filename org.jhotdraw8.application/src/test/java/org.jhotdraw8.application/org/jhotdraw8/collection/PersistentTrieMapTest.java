@@ -11,8 +11,9 @@ public class PersistentTrieMapTest extends AbstractPersistentMapTest {
     }
 
     @Override
-    protected @NonNull PersistentTrieMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
-        return PersistentTrieMap.of(entries);
+    @SafeVarargs
+    protected final @NonNull PersistentTrieMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
+        return PersistentTrieMap.ofEntries(entries);
     }
 
     @Override
@@ -27,6 +28,6 @@ public class PersistentTrieMapTest extends AbstractPersistentMapTest {
 
     @Override
     protected @NonNull PersistentTrieMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries) {
-        return PersistentTrieMap.of(entries);
+        return PersistentTrieMap.ofEntries(entries);
     }
 }
