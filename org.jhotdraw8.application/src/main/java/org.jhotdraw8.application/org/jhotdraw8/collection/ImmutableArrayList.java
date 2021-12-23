@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.RandomAccess;
 import java.util.Spliterator;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Spliterator;
  * @param <E> element type
  * @author Werner Randelshofer
  */
-public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
+public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E>, RandomAccess {
 
     static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(new Object[0]);
 
@@ -103,7 +104,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
 
     @Override
     public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new ImmutableArraySubList<E>(true, this.array, fromIndex, toIndex);
+        return new ImmutableArraySubList<E>(this.array, fromIndex, toIndex);
     }
 
     @Override

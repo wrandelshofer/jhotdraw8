@@ -12,8 +12,8 @@ import java.util.List;
 /**
  * Wraps a {@link ReadOnlyList} in the {@link List} API.
  * <p>
- * The underlying ReadOnlyList is referenced - not copied. This allows to pass a
- * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
+ * The underlying {@link ReadOnlyList} is referenced - not copied. This allows to pass a
+ * {@link ReadOnlyList} to a client who does not understand the {@link ReadOnlyList} API.
  *
  * @author Werner Randelshofer
  */
