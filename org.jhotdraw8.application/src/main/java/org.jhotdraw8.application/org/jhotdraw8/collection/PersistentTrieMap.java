@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractMap;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -459,9 +458,9 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
             int splitAt = 2 * payloadArity();
             return nodeMap() == that.nodeMap()
                     && dataMap() == that.dataMap()
-                    && Arrays.equals(nodes, 0, splitAt, that.nodes, 0, splitAt)
-                    && Arrays.equals(nodes, splitAt, nodes.length, that.nodes, splitAt, that.nodes.length,
-                    (a, b) -> ((Node<?, ?>) a).equivalent(b) ? 0 : 1);
+                    && ArrayHelper.equals(nodes, 0, splitAt, that.nodes, 0, splitAt)
+                    && ArrayHelper.equals(nodes, splitAt, nodes.length, that.nodes, splitAt, that.nodes.length,
+                    (a, b) -> ((Node<?, ?>) a).equivalent(b));
         }
 
         @Override

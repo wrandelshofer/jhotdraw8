@@ -24,7 +24,9 @@ public class PersistentMaps {
 
     @SafeVarargs
     public static @NonNull <K, V> PersistentMap<K, V> ofEntries(Map.Entry<K, V>... entries) {
-        return PersistentTrieMap.ofEntries(entries);
+        @SuppressWarnings({"unchecked", "varargs"})
+        PersistentTrieMap<K, V> unchecked = PersistentTrieMap.ofEntries(entries);
+        return unchecked;
     }
 
     public static @NonNull <K, V> PersistentMap<K, V> copyOf(ReadOnlyMap<K, V> map) {

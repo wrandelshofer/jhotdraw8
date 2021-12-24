@@ -599,9 +599,9 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             int splitAt = payloadArity();
             return nodeMap() == that.nodeMap()
                     && dataMap() == that.dataMap()
-                    && Arrays.equals(nodes, 0, splitAt, that.nodes, 0, splitAt)
-                    && Arrays.equals(nodes, splitAt, nodes.length, that.nodes, splitAt, that.nodes.length,
-                    (a, b) -> ((Node<?>) a).equivalent((Node<?>) b) ? 0 : 1);
+                    && ArrayHelper.equals(nodes, 0, splitAt, that.nodes, 0, splitAt)
+                    && ArrayHelper.equals(nodes, splitAt, nodes.length, that.nodes, splitAt, that.nodes.length,
+                    (a, b) -> ((Node<?>) a).equivalent((Node<?>) b));
         }
 
         @SuppressWarnings("unchecked")

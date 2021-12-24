@@ -60,8 +60,8 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-
-        return new AbstractSet<>() {
+        // Type arguments are needed for Java 8!
+        return new AbstractSet<Entry<K, V>>() {
             @Override
             public boolean add(Entry<K, V> kvEntry) {
                 PersistentTrieMap.ChangeEvent<V> details = new PersistentTrieMap.ChangeEvent<>();

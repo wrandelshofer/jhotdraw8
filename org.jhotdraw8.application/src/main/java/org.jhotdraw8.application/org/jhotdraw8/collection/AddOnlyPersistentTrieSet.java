@@ -45,7 +45,9 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
         assert !(key0.equals(key1));
 
         if (shift >= HASH_CODE_LENGTH) {
-            return new HashCollisionNode<>(keyHash0, key0, key1);
+            @SuppressWarnings("unchecked")
+            HashCollisionNode<K> unchecked = new HashCollisionNode<>(keyHash0, key0, key1);
+            return unchecked;
         }
 
         final int mask0 = mask(keyHash0, shift);
