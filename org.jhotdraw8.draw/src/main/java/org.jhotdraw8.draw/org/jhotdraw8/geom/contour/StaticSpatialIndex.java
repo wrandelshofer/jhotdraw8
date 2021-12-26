@@ -442,8 +442,17 @@ public class StaticSpatialIndex {
         }
     }
 
+    /**
+     * {@link #query(double, double, double, double, IntArrayList, IntArrayDeque)}
+     *
+     * @param minX
+     * @param minY
+     * @param maxX
+     * @param maxY
+     * @param results
+     */
     // See other overloads for details.
-    void query(double minX, double minY, double maxX, double maxY, IntArrayList results) {
+    public void query(double minX, double minY, double maxX, double maxY, IntArrayList results) {
         IntPredicate visitor = (index) -> {
             results.add(index);
             return true;
@@ -456,8 +465,8 @@ public class StaticSpatialIndex {
      * Query the spatial index adding indexes to the results vector given. This overload accepts an
      * existing vector to use as a stack and takes care of clearing the stack before use.
      */
-    void query(double minX, double minY, double maxX, double maxY, IntArrayList results,
-               IntArrayDeque stack) {
+    public void query(double minX, double minY, double maxX, double maxY, IntArrayList results,
+                      IntArrayDeque stack) {
         IntPredicate visitor = (index) -> {
             results.add(index);
             return true;
@@ -466,7 +475,16 @@ public class StaticSpatialIndex {
         visitQuery(minX, minY, maxX, maxY, visitor, stack);
     }
 
-    void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor) {
+    /**
+     * {@link #visitQuery(double, double, double, double, IntPredicate, IntArrayDeque)}
+     *
+     * @param minX
+     * @param minY
+     * @param maxX
+     * @param maxY
+     * @param visitor
+     */
+    public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor) {
         IntArrayDeque stack = new IntArrayDeque(16);
         visitQuery(minX, minY, maxX, maxY, visitor, stack);
     }
@@ -477,8 +495,8 @@ public class StaticSpatialIndex {
      * the query stops early, otherwise the query continues. This overload accepts an existing vector
      * to use as a stack and takes care of clearing the stack before use.
      */
-    void visitQuery(double minX, double minY, double maxX, double maxY, @NonNull IntPredicate visitor,
-                    @NonNull IntArrayDeque stack) {
+    public void visitQuery(double minX, double minY, double maxX, double maxY, @NonNull IntPredicate visitor,
+                           @NonNull IntArrayDeque stack) {
         if (m_pos != 4 * m_numNodes) {
             throw new IllegalStateException("data not yet indexed - call Finish() before querying");
         }
