@@ -27,7 +27,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.binding.CustomBinding;
-import org.jhotdraw8.css.MacOSSystemColorConverter;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.constrain.NullConstrainer;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -44,7 +43,6 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -168,8 +166,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     protected void initBehavior() {
         drawingRenderer.setRenderContext(this);
-        set(SYSTEM_COLOR_CONVERTER_KEY, new MacOSSystemColorConverter());
-
     }
 
     @Override
@@ -312,14 +308,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     private void initLayout() {
-        String emptyCss = "/org/jhotdraw8/draw/empty.css";
-        URL emptyCssUrl = SimpleDrawingView.class.getResource(emptyCss);
-        if (emptyCssUrl == null) {
-            throw new RuntimeException("could not load " + emptyCss);
-        }
-        zoomableScrollPane.setSubSceneUserAgentStylesheet(
-                emptyCssUrl.toString()
-        );
         node.setCenter(zoomableScrollPane.getNode());
         background.setManaged(false);
         zoomableScrollPane.getContentChildren().add(drawingRenderer.getNode());
