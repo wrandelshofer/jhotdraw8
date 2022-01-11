@@ -126,7 +126,7 @@ public interface IndexedDirectedGraph {
      * @param vidx a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull IntEnumeratorSpliterator getNextVertices(int vidx) {
+    default @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private int limit;

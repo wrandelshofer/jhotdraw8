@@ -68,7 +68,7 @@ public class TopologicalSortAlgo {
         // Step 1: compute number of incoming arrows for each vertex
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
-            for (IntEnumerator iter = model.getNextVertices(i); iter.moveNext(); ) {
+            for (IntEnumerator iter = model.nextVerticesSpliterator(i); iter.moveNext(); ) {
                 int v = iter.current();
                 deg[v]++;
             }
@@ -93,7 +93,7 @@ public class TopologicalSortAlgo {
                     break;
                 }
                 int v = queue[first++];
-                for (IntEnumerator iter = model.getNextVertices(v); iter.moveNext(); ) {
+                for (IntEnumerator iter = model.nextVerticesSpliterator(v); iter.moveNext(); ) {
                     int u = iter.current();
                     if (--deg[u] == 0) {
                         queue[last++] = u;
@@ -136,7 +136,7 @@ public class TopologicalSortAlgo {
         // Step 1: compute number of incoming arrows for each vertex
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
-            for (IntEnumerator iter = model.getNextVertices(i); iter.moveNext(); ) {
+            for (IntEnumerator iter = model.nextVerticesSpliterator(i); iter.moveNext(); ) {
                 int v = iter.current();
                 deg[v]++;
             }
@@ -164,7 +164,7 @@ public class TopologicalSortAlgo {
                 }
                 int v = queue[first++];
                 queue[first - 1] = 0;//for debugging
-                for (IntEnumerator iter = model.getNextVertices(v); iter.moveNext(); ) {
+                for (IntEnumerator iter = model.nextVerticesSpliterator(v); iter.moveNext(); ) {
                     int u = iter.current();
                     if (--deg[u] == 0) {
                         queue[last++] = u;

@@ -65,7 +65,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     public AbstractMutableIndexedBidiGraph(@NonNull IndexedDirectedGraph g) {
         buildAddVertices(g.getVertexCount());
         for (int v = 0; v < vertexCount; v++) {
-            for (IntEnumeratorSpliterator it = g.getNextVertices(v); it.moveNext(); ) {
+            for (IntEnumeratorSpliterator it = g.nextVerticesSpliterator(v); it.moveNext(); ) {
                 buildAddArrow(v, it.current());
             }
         }

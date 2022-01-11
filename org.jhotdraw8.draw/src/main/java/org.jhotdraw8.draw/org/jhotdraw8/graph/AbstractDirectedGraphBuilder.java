@@ -410,7 +410,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         this.ordered = ordered;
     }
 
-    public @NonNull IntEnumeratorSpliterator getNextVertices(int vidx) {
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
         if (ordered) {
             return getNextVerticesOrdered(vidx);
         } else {

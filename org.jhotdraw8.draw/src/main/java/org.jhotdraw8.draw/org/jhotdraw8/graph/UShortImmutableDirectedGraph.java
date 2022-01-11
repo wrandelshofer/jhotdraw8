@@ -263,7 +263,7 @@ public class UShortImmutableDirectedGraph<V, A> implements AttributedIndexedDire
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator getNextVertices(int vi) {
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vi) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private int limit;

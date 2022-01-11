@@ -157,7 +157,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
         Integer vidx = vertexMap.get(v);
         int index = 0;
-        for (IntEnumeratorSpliterator it = getNextVertices(vidx); it.moveNext(); ) {
+        for (IntEnumeratorSpliterator it = nextVerticesSpliterator(vidx); it.moveNext(); ) {
             int uidx = it.current();
             if (u.equals(vertices.get(uidx)) && Objects.equals(a, getNextArrow(vidx, index))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
@@ -173,7 +173,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     public void removeArrow(@NonNull V v, @NonNull V u) {
         Integer vidx = vertexMap.get(v);
         int index = 0;
-        for (IntEnumeratorSpliterator it = getNextVertices(vidx); it.moveNext(); ) {
+        for (IntEnumeratorSpliterator it = nextVerticesSpliterator(vidx); it.moveNext(); ) {
             int uidx = it.current();
             if (u.equals(vertices.get(uidx))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
@@ -432,7 +432,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         return new AbstractCollection<V>() {
             @Override
             public @NonNull Spliterator<V> spliterator() {
-                return new NextVertexIterator(getNextVertices(getVertexIndex(vertex)));
+                return new NextVertexIterator(nextVerticesSpliterator(getVertexIndex(vertex)));
             }
 
             @Override

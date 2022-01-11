@@ -256,7 +256,7 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator getNextVertices(int vi) {
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vi) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private int limit;
