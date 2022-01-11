@@ -472,7 +472,7 @@ public class BinaryPListParser {
     private void parseObjectTable(@NonNull DataInputStream in) throws IOException {
         int marker;
         while ((marker = in.read()) != -1) {
-            System.err.println("parseObjectTable marker=" + Integer.toBinaryString(marker) + " 0x" + Integer.toHexString(marker) + " @0x" + Long.toHexString(getPosition()));
+            //System.err.println("parseObjectTable marker=" + Integer.toBinaryString(marker) + " 0x" + Integer.toHexString(marker) + " @0x" + Long.toHexString(getPosition()));
             switch ((marker & 0xf0) >> 4) {
             case 0: {
                 parsePrimitive(in, marker & 0xf);
