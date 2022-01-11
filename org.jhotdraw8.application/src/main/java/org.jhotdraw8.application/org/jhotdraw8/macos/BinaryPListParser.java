@@ -288,10 +288,10 @@ public class BinaryPListParser {
      * @return Returns the parsed Element.
      */
     public Document parse(@NonNull File file) throws IOException {
-        RandomAccessFile raf = null;
+        long fileLength;
         byte[] buf;
-        try {
-            raf = new RandomAccessFile(file, "r");
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+            fileLength = raf.length();
 
             // Parse the HEADER
             // ----------------
@@ -309,7 +309,7 @@ public class BinaryPListParser {
             //      byte size of object refs in arrays and dicts
             //      number of offsets in offset table (also is number of objects)
             //      element # in offset table which is top level object
-            raf.seek(raf.length() - 32);
+            raf.seek(fileLength - 32);
             //	count of offset ints in offset table
             offsetCount = (int) raf.readLong();
             //  count of object refs in arrays and dicts
@@ -318,13 +318,14 @@ public class BinaryPListParser {
             objectCount = (int) raf.readLong();
             //  element # in offset table which is top level object
             topLevelOffset = (int) raf.readLong();
+
+            if (offsetCount < 0 || refCount < 0 || objectCount < 0 || topLevelOffset < 0) {
+                throw new IOException("file is too large");
+            }
+
             buf = new byte[topLevelOffset - 8];
             raf.seek(8);
             raf.readFully(buf);
-        } finally {
-            if (raf != null) {
-                raf.close();
-            }
         }
 
         // Parse the OBJECT TABLE
@@ -350,7 +351,7 @@ public class BinaryPListParser {
         Element root = doc.createElement("plist");
         doc.appendChild(root);
         root.setAttribute("version", "1.0");
-        convertObjectTableToXML(doc, root, objectTable.get(0));
+        convertObjectTableToXML(doc, root, objectTable.get(0), (int) fileLength);
 
         return doc;
     }
@@ -375,8 +376,22 @@ public class BinaryPListParser {
 
     /**
      * Converts the object table in the binary PList into an Element.
+     *
+     * @param doc                the document to which this method adds elements
+     * @param parent             the parent element
+     * @param object             the current object table
+     * @param remainingRecursion the remaining number of recursions that
+     *                           this method may perform. Since every
+     *                           element in the binary PList is at least
+     *                           one byte long, there can be no more
+     *                           recursions than the length of the file..
+     * @throws IOException
      */
-    private void convertObjectTableToXML(@NonNull Document doc, @NonNull Element parent, Object object) {
+    private void convertObjectTableToXML(@NonNull Document doc, @NonNull Element parent, Object object, int remainingRecursion)
+            throws IOException {
+        if (remainingRecursion < 0) {
+            throw new IOException("recursion limit reached");
+        }
         Element elem;
         if (object instanceof BPLDict) {
             BPLDict dict = (BPLDict) object;
@@ -386,13 +401,13 @@ public class BinaryPListParser {
                 parent.appendChild(key);
                 key.appendChild(doc.createTextNode(dict.getKey(i)));
                 elem.appendChild(key);
-                convertObjectTableToXML(doc, elem, dict.getValue(i));
+                convertObjectTableToXML(doc, elem, dict.getValue(i), remainingRecursion - 1);
             }
         } else if (object instanceof BPLArray) {
             BPLArray arr = (BPLArray) object;
             elem = doc.createElement("array");
             for (int i = 0; i < arr.objref.length; i++) {
-                convertObjectTableToXML(doc, elem, arr.getValue(i));
+                convertObjectTableToXML(doc, elem, arr.getValue(i), remainingRecursion - 1);
             }
 
         } else if (object instanceof String) {
@@ -432,6 +447,7 @@ public class BinaryPListParser {
 
     /**
      * Object Formats (marker byte followed by additional info in some cases)
+     * <pre>
      * null	0000 0000
      * bool	0000 1000			// false
      * bool	0000 1001			// true
@@ -451,11 +467,12 @@ public class BinaryPListParser {
      * dict	1101 nnnn	[int]	keyref* objref*	// nnnn is count, unless '1111', then int count follows
      * 1110 xxxx			// unused
      * 1111 xxxx			// unused
+     * </pre>
      */
     private void parseObjectTable(@NonNull DataInputStream in) throws IOException {
         int marker;
         while ((marker = in.read()) != -1) {
-            //System.err.println("parseObjectTable marker=" + Integer.toBinaryString(marker)+" 0x"+Integer.toHexString(marker)+" @0x"+Long.toHexString(getPosition()));
+            System.err.println("parseObjectTable marker=" + Integer.toBinaryString(marker) + " 0x" + Integer.toHexString(marker) + " @0x" + Long.toHexString(getPosition()));
             switch ((marker & 0xf0) >> 4) {
             case 0: {
                 parsePrimitive(in, marker & 0xf);
@@ -550,7 +567,7 @@ public class BinaryPListParser {
                 if (count == 15) {
                     count = readCount(in);
                 }
-                if (refCount > 256) {
+                if (refCount > 255) {
                     parseShortDict(in, count);
                 } else {
                     parseByteDict(in, count);
@@ -684,7 +701,9 @@ public class BinaryPListParser {
     }
 
     /**
+     * <pre>
      * short dict	1101 ffff int keyref* objref*	// int is count
+     * </pre>
      */
     private void parseShortDict(@NonNull DataInputStream in, int count) throws IOException {
         BPLDict dict = new BPLDict();

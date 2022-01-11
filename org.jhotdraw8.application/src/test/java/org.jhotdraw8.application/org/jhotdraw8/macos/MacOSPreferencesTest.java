@@ -22,8 +22,8 @@ public class MacOSPreferencesTest {
     @TestFactory
     public List<DynamicTest> dynamicTestsPreferences() {
         List<DynamicTest> list = new ArrayList<>();
-        for (String file : Arrays.asList("XMLPropertyList.plist",
-                "BinaryPropertyList.plist")) {
+        for (String file : Arrays.asList("SmallXmlPropertyList.plist",
+                "SmallBinaryPropertyList.plist")) {
             list.addAll(Arrays.asList(
                     dynamicTest("nonexistent key", () -> testPreferences(file, "key", null)),
                     dynamicTest("array", () -> testPreferences(file, "a array", Arrays.asList("the item 0 value", "the item 1 value"))),

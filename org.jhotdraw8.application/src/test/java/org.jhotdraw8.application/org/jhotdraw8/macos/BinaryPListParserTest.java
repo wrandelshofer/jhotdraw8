@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BinaryPListParserTest {
@@ -42,12 +43,39 @@ public class BinaryPListParserTest {
         NO_INDENT_XML_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");
     }
 
+    /**
+     * Tests a small property plist where the binary presentation has
+     * less than 256 objects. In this case objects are encoded in
+     * a byte array.
+     *
+     * @throws Exception on failure
+     */
     @Test
-    public void test() throws Exception {
-        File xmlFile = new File(getClass().getResource("XMLPropertyList.plist").toURI());
+    public void testSmallPropertyList() throws Exception {
+        File xmlFile = new File(getClass().getResource("SmallXmlPropertyList.plist").toURI());
         final Document docFromXml = readXmlPropertyList(xmlFile);
-        File binaryFile = new File(getClass().getResource("BinaryPropertyList.plist").toURI());
+        File binaryFile = new File(getClass().getResource("SmallBinaryPropertyList.plist").toURI());
         final Document docFromBinary = readBinaryPropertyList(binaryFile);
+        assertEquals(docFromXml, docFromXml);
+        // writeDocument(System.out, docFromXml, NO_INDENT_XML_PROPERTIES);
+        // System.out.println();
+        // writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
+    }
+
+    /**
+     * Tests a small property plist where the binary presentation has
+     * exactly 256 objects.  In this case objects are encoded in
+     * a short array.
+     *
+     * @throws Exception on failure
+     */
+    @Test
+    public void testLargePropertyList() throws Exception {
+        File xmlFile = new File(getClass().getResource("LargeXmlPropertyList.plist").toURI());
+        final Document docFromXml = readXmlPropertyList(xmlFile);
+        File binaryFile = new File(getClass().getResource("LargeBinaryPropertyList.plist").toURI());
+        final Document docFromBinary = readBinaryPropertyList(binaryFile);
+        assertEquals(docFromXml, docFromXml);
         // writeDocument(System.out, docFromXml, NO_INDENT_XML_PROPERTIES);
         // System.out.println();
         // writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
