@@ -32,15 +32,17 @@ public class DescendantCombinator extends Combinator {
 
     @Override
     public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
-        T result = second.match(model, element);
-        for (T parentElement = model.getParent(element); parentElement != null;
-             parentElement = model.getParent(parentElement)) {
-            result = first.match(model, parentElement);
-            if (result != null) {
-                break;
+        T secondMatch = second.match(model, element);
+        if (secondMatch != null) {
+            for (T parentElement = model.getParent(element); parentElement != null;
+                 parentElement = model.getParent(parentElement)) {
+                T firstMatch = first.match(model, parentElement);
+                if (firstMatch != null) {
+                    return secondMatch;
+                }
             }
         }
-        return result;
+        return null;
     }
 
     @Override

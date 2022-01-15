@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 /**
  * An "general sibling combinator" matches an element if its first selector
- * matches on a previous sibling of the element and if its second selector
+ * matches the sibling of the element and if its second selector
  * matches the element.
  *
  * @author Werner Randelshofer
@@ -32,16 +32,18 @@ public class GeneralSiblingCombinator extends Combinator {
 
     @Override
     public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
-        T result = second.match(model, element);
-        T siblingElement = result;
-        while (siblingElement != null) {
-            siblingElement = model.getPreviousSibling(siblingElement);
-            result = first.match(model, siblingElement);
-            if (result != null) {
-                break;
+        T secondMatch = second.match(model, element);
+        if (secondMatch != null) {
+            for (T siblingElement = model.getPreviousSibling(element);
+                 siblingElement != null;
+                 siblingElement = model.getPreviousSibling(siblingElement)) {
+                T firstMatch = first.match(model, siblingElement);
+                if (firstMatch != null) {
+                    return secondMatch;
+                }
             }
         }
-        return result;
+        return null;
     }
 
     @Override
