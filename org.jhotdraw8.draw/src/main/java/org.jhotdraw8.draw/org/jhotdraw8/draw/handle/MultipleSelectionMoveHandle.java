@@ -25,6 +25,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 
 /**
@@ -111,8 +112,8 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             Point2D opl = f.worldToParent(oldPoint);
             if (f instanceof TransformableFigure) {
                 Transform tt = ((TransformableFigure) f).getInverseTransform();
-                npl = tt.transform(npl);
-                opl = tt.transform(opl);
+                npl = FXTransforms.transform(tt, npl);
+                opl = FXTransforms.transform(tt, opl);
             }
             Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());
             //tx = f.getWorldToParent().createConcatenation(tx);

@@ -22,6 +22,7 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -89,7 +90,7 @@ public class TextFigure extends AbstractLeafFigure
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
         Point2D o = getNonNull(ORIGIN).getConvertedValue();
-        o = transform.transform(o);
+        o = FXTransforms.transform(transform, o);
         set(ORIGIN, new CssPoint2D(o));
     }
 

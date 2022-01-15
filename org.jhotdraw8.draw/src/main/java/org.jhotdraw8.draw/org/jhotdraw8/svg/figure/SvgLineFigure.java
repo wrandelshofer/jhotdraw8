@@ -86,8 +86,8 @@ public class SvgLineFigure extends AbstractLeafFigure
         CssPoint2D start = new CssPoint2D(startX, startY);
         CssPoint2D end = new CssPoint2D(endX, endY);
 
-        CssPoint2D tstart = new CssPoint2D(transform.transform(start.getConvertedValue()));
-        CssPoint2D tend = new CssPoint2D(transform.transform(end.getConvertedValue()));
+        CssPoint2D tstart = new CssPoint2D(FXTransforms.transform(transform, start.getConvertedValue()));
+        CssPoint2D tend = new CssPoint2D(FXTransforms.transform(transform, end.getConvertedValue()));
         set(X1, tstart.getX());
         set(Y1, tstart.getY());
         set(X2, tend.getX());

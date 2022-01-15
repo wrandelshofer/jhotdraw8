@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -180,7 +181,7 @@ public class RotateHandle extends AbstractHandle {
         TransformableFigure o = getOwner();
         Point2D center = FXGeom.center(o.getLayoutBounds());
         Transform t = FXTransforms.concat(getWorldToRotate(), view.getViewToWorld());
-        Point2D newPoint = (t == null) ? new Point2D(event.getX(), event.getY()) : t.transform(new Point2D(event.getX(), event.getY()));
+        Point2D newPoint = FXTransforms.transform(t, new Point2D(event.getX(), event.getY()));
         double newRotate = 90 + Math.toDegrees(Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY()));
 
         newRotate = newRotate % 360;
@@ -244,15 +245,17 @@ public class RotateHandle extends AbstractHandle {
 
         Point2D p = new Point2D(centerInLocal.getX(), centerInLocal.getY() - b.getHeight() * 0.5 * scaleY);
 
-        p = t == null ? p : t.transform(p);
+        p = FXTransforms.transform(t, p);
 
         // rotates the node:
-        pickNode.setRotate(o.getStyled(ROTATE));
-        pickNode.setRotationAxis(o.getStyled(ROTATION_AXIS));
-        pivotNode.setRotate(o.getStyled(ROTATE));
-        pivotNode.setRotationAxis(o.getStyled(ROTATION_AXIS));
+        Double rotate = o.getStyledNonNull(ROTATE);
+        pickNode.setRotate(rotate);
+        Point3D rotationAxis = o.getStyled(ROTATION_AXIS);
+        pickNode.setRotationAxis(rotationAxis);
+        pivotNode.setRotate(rotate);
+        pivotNode.setRotationAxis(rotationAxis);
 
-        Point2D centerInView = t.transform(centerInLocal);
+        Point2D centerInView = FXTransforms.transform(t, centerInLocal);
         Point2D vector = new Point2D(p.getX() - centerInView.getX(), p.getY() - centerInView.getY());
         double size = pickNode.getWidth();
         vector = vector.normalize();

@@ -7,8 +7,10 @@ package org.jhotdraw8.geom;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
@@ -163,7 +165,8 @@ public class FXTransforms {
         if (t == null) {
             return new Point2D(x, y);
         } else {
-            return t.deltaTransform(x, y);
+            Point3D tp = t.deltaTransform(x, y, 0);
+            return new Point2D(tp.getX(), tp.getY());
         }
     }
 
@@ -171,7 +174,34 @@ public class FXTransforms {
         if (t == null) {
             return p;
         } else {
-            return t.deltaTransform(p);
+            Point3D tp = t.deltaTransform(p.getX(), p.getY(), 0);
+            return new Point2D(tp.getX(), tp.getY());
+        }
+    }
+
+    public static Point2D inverseDeltaTransform(@Nullable Transform t, double x, double y) {
+        if (t == null) {
+            return new Point2D(x, y);
+        } else {
+            try {
+                Point3D tp = t.inverseDeltaTransform(x, y, 0);
+                return new Point2D(tp.getX(), tp.getY());
+            } catch (NonInvertibleTransformException e) {
+                return new Point2D(x, y);
+            }
+        }
+    }
+
+    public static Point2D inverseDeltaTransform(@Nullable Transform t, @NonNull Point2D p) {
+        if (t == null) {
+            return p;
+        } else {
+            try {
+                Point3D tp = t.inverseDeltaTransform(p.getX(), p.getY(), 0);
+                return new Point2D(tp.getX(), tp.getY());
+            } catch (NonInvertibleTransformException e) {
+                return p;
+            }
         }
     }
 
@@ -187,11 +217,25 @@ public class FXTransforms {
     }
 
     public static @NonNull Point2D transform(@Nullable Transform tx, @NonNull Point2D b) {
-        return tx == null ? b : tx.transform(b);
+        if (tx == null || tx.isIdentity()) {
+            return b;
+        }
+        if (tx.isType2D()) {
+            return tx.transform(b);
+        }
+        Point3D p = tx.transform(b.getX(), b.getY(), 0);
+        return new Point2D(p.getX(), p.getY());
     }
 
     public static @NonNull Point2D transform(@Nullable Transform tx, double x, double y) {
-        return tx == null ? new Point2D(x, y) : tx.transform(x, y);
+        if (tx == null || tx.isIdentity()) {
+            return new Point2D(x, y);
+        }
+        if (tx.isType2D()) {
+            return tx.transform(x, y);
+        }
+        Point3D p = tx.transform(x, y, 0);
+        return new Point2D(p.getX(), p.getY());
     }
 
     /**
@@ -307,6 +351,28 @@ public class FXTransforms {
 
     public static boolean isIdentityOrNull(@Nullable Transform t) {
         return t == null || t.isIdentity();
+    }
+
+    public static void transform2DPoints(Transform t,
+                                         double[] srcPts, int srcOff,
+                                         double[] dstPts, int dstOff,
+                                         int numPts) {
+        if (t.isType2D()) {
+            t.transform2DPoints(srcPts, srcOff, dstPts, dstOff, numPts);
+        } else {
+
+            double[] points3d = new double[numPts * 3];
+            for (int i = 0, i3 = 0; i < numPts; i++, i3 += 3) {
+                points3d[i3] = srcPts[i * 2 + srcOff];
+                points3d[i3 + 1] = srcPts[i * 2 + 1 + srcOff];
+            }
+            t.transform3DPoints(points3d, 0, points3d, 0, 4);
+            for (int i = 0, i3 = 0; i < numPts; i++, i3 += 3) {
+                dstPts[i * 2 + dstOff] = points3d[i3];
+                dstPts[i * 2 + 1 + dstOff] = points3d[i3 + 1];
+            }
+        }
+
     }
 
     /**

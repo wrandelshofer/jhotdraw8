@@ -92,7 +92,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();
-        pickLocation = p = t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
         Connector connector = f.get(connectorKey);
         Figure target = f.get(targetKey);
         boolean isConnected = connector != null && target != null;

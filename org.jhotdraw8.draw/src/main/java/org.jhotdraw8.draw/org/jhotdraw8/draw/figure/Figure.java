@@ -999,7 +999,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return point in world coordinates
      */
     default @NonNull Point2D localToWorld(@NonNull Point2D p) {
-        return getLocalToWorld().transform(p);
+        return FXTransforms.transform(getLocalToWorld(), p);
     }
 
     /**
@@ -1283,12 +1283,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default @NonNull Point2D worldToLocal(@NonNull Point2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
-        return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : wtl.transform(pointInWorld);
+        return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : FXTransforms.transform(wtl, pointInWorld);
     }
 
     default @NonNull CssPoint2D worldToLocal(@NonNull CssPoint2D pointInWorld) {
         final Transform wtl = getWorldToLocal();
-        return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld : new CssPoint2D(wtl.transform(pointInWorld.getConvertedValue()));
+        return FXTransforms.isIdentityOrNull(wtl) ? pointInWorld
+                : new CssPoint2D(FXTransforms.transform(wtl, pointInWorld.getConvertedValue()));
     }
 
     /**
@@ -1303,12 +1304,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default @NonNull Point2D worldToParent(@NonNull Point2D pointInWorld) {
         final Transform wtp = getWorldToParent();
-        return FXTransforms.isIdentityOrNull(wtp) ? pointInWorld : wtp.transform(pointInWorld);
+        return FXTransforms.transform(wtp, pointInWorld);
     }
 
     default @NonNull Point2D worldToParent(double x, double y) {
         final Transform wtp = getWorldToParent();
-        return FXTransforms.isIdentityOrNull(wtp) ? new Point2D(x, y) : wtp.transform(x, y);
+        return FXTransforms.transform(wtp, x, y);
     }
 
     /**

@@ -140,12 +140,12 @@ public class RelativeControlPointHandle extends AbstractHandle {
         Point2D point = f.get(pointKey);
         Point2D controlPoint = f.get(controlPointKey);
         Point2D p = point.add(controlPoint);
-        pickLocation = t == null ? p : t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
         // Place the center of the node at the location.
         double size = node.getWidth();
         node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:
-        node.setRotate(f.getStyled(ROTATE));
+        node.setRotate(f.getStyledNonNull(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 

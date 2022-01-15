@@ -88,9 +88,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t != null && t.isType2D()) {
-            t.transform2DPoints(points, 0, points, 0, 4);
-        }
+        FXTransforms.transform2DPoints(t, points, 0, points, 0, 4);
 
         ObservableList<Double> pp1 = poly1.getPoints();
         ObservableList<Double> pp2 = poly2.getPoints();

@@ -108,6 +108,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
 
+    /**
+     * Given a figure and a point in view coordinates, finds the front-most
+     * JavaFX Node of the figure that intersects with the point.
+     *
+     * @param figure a figure
+     * @param vx     x coordinate of a point in view coordinates
+     * @param vy     y coordinate of a point in view coordinates
+     * @return the front-most JavaFX Node of the figure that intersects with the point
+     */
     public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
         Node n = figureToNodeMap.get(figure);
         if (n == null) {
@@ -125,10 +134,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             }
         }
         Point2D pl = FXTransforms.transform(viewToNode, vx, vy);
-        return findFigureNodeRecursive(figure, n, pl.getX(), pl.getY());
+        return findFigureNodeRecursive(n, pl.getX(), pl.getY());
     }
 
-    private @Nullable Node findFigureNodeRecursive(@NonNull Figure figure, @NonNull Node n, double vx, double vy) {
+    private @Nullable Node findFigureNodeRecursive(@NonNull Node n, double vx, double vy) {
         if (n.contains(vx, vy)) {
             if (n instanceof Shape) {
                 return n;
@@ -136,19 +145,31 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                 Point2D pl = n.parentToLocal(vx, vy);
                 Group group = (Group) n;
                 ObservableList<Node> children = group.getChildren();
+                // FIXME should take viewOrder into account
                 for (int i = children.size() - 1; i >= 0; i--) {// front to back
                     Node child = children.get(i);
-                    Node found = findFigureNodeRecursive(figure, child, pl.getX(), pl.getY());
+                    Node found = findFigureNodeRecursive(child, pl.getX(), pl.getY());
                     if (found != null) {
                         return found;
                     }
                 }
-
             }
         }
         return null;
     }
 
+    /**
+     * Finds figures that intersect with the specified point in view
+     * coordinates, or that have a distance that is less than
+     * the tolerance of the editor.
+     *
+     * @param vx        x-coordinate of the point in view coordinates
+     * @param vy        y-coordinate of the point in view coordinates
+     * @param decompose If true, a figure is decomposed in sub-figures and
+     *                  the sub-figure is returned instead of the figure.
+     * @param predicate a predicate for selecting figures
+     * @return a mutable list of figures with their distance to the point
+     */
     public @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, @NonNull Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
@@ -159,7 +180,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         for (Node child : parent.getChildrenUnmodifiable()) {
             try {
                 findFiguresRecursive(child, child.parentToLocal(pp), list, decompose,
-                        predicate, child.getLocalToParentTransform().inverseDeltaTransform(tolerance, tolerance).getX());
+                        predicate, child.getLocalToParentTransform()
+                                .inverseDeltaTransform(tolerance, tolerance).getX());
             } catch (NonInvertibleTransformException e) {
                 e.printStackTrace();
             }
@@ -335,17 +357,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             for (int i = childrenUnmodifiable.size() - 1; i >= 0; i--) {
                 Node child = childrenUnmodifiable.get(i);
 
-                try {
-                    foundAChildFigure |= findFiguresRecursive(
-                            child,
-                            child.parentToLocal(center),
-                            found,
-                            decompose,
-                            figurePredicate,
-                            Math.abs(child.getLocalToParentTransform().inverseDeltaTransform(radius, radius).getX()));
-                } catch (NonInvertibleTransformException e) {
-                    // should never happen
-                }
+                foundAChildFigure |= findFiguresRecursive(
+                        child,
+                        child.parentToLocal(center),
+                        found,
+                        decompose,
+                        figurePredicate,
+                        Math.abs(
+                                FXTransforms.inverseDeltaTransform(
+                                        child.getLocalToParentTransform(), radius, radius).getX()));
             }
         }
         if (!foundAChildFigure && isWanted) {

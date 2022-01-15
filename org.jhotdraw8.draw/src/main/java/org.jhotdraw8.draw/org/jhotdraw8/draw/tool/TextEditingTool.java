@@ -105,11 +105,8 @@ public class TextEditingTool extends AbstractTool {
             TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.worldToLocal(new Point2D(x1, y1)), view.findFigureNode(f, x1, y1));
             if (data != null) {
                 startEditing(data, view);
-                return;
             }
         }
-
-
     }
 
 

@@ -98,11 +98,13 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
         Transform t = startWorldToLocal;//owner.getWorldToLocal();
 
-        if (t.isIdentity()) {
+        if (t == null || t.isIdentity()) {
             resize(newPoint, owner, startBounds, view.getModel(), keepAspect);
         } else {
             resize(
-                    DefaultUnitConverter.getInstance().convertPoint2D(new CssPoint2D(t.transform(newPoint.getConvertedValue())), newPoint.getX().getUnits()),
+                    DefaultUnitConverter.getInstance().convertPoint2D(
+                            new CssPoint2D(FXTransforms.transform(t, newPoint.getConvertedValue())),
+                            newPoint.getX().getUnits()),
                     owner, startBounds, view.getModel(), keepAspect);
         }
     }
@@ -150,14 +152,14 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
-        pickLocation = p = t == null ? p : t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
 
         // Place the center of the node at the location.
         double size = node.getWidth();
         node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
 
         // Rotate the node.
-        node.setRotate(f.getStyled(ROTATE));
+        node.setRotate(f.getStyledNonNull(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 }

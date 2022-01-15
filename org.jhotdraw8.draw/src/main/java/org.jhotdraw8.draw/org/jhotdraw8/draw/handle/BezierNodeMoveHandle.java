@@ -130,7 +130,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         if (event.isMetaDown()) {
             // meta snaps the location ofCollection the handle to the grid
             Point2D loc = getLocation();
-            oldPoint = owner.getLocalToWorld().transform(loc);
+            oldPoint = owner.localToWorld(loc);
         }
 
         if (oldPoint.equals(newPoint)) {
@@ -184,7 +184,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t == null ? p : t.transform(p);
+        pickLocation = p = t == null ? p : FXTransforms.transform(t, p);
 
         // The node is centered around the location.
         // (The value 5.5 is half ofCollection the node size, which is 11,11.

@@ -347,7 +347,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             node.setVisible(true);
         }
         Point2D cp = getLocation();
-        pickLocation = cp = t.transform(cp);
+        pickLocation = cp = FXTransforms.transform(t, cp);
         double size = node.getWidth();
         node.relocate(cp.getX() - size * 0.5, cp.getY() - size * 0.5);
         // rotates the node:

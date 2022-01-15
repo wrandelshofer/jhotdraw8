@@ -111,7 +111,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();
-        pickLocation = p = t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
         final Connector connector = f.get(connectorKey);
         final Figure target = f.get(targetKey);
         boolean isConnected = connector != null && target != null;
@@ -121,7 +121,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         final double a = connectorTangent == null ? 0 : Geom.atan2(connectorTangent.getY(), connectorTangent.getX());
         targetNode.setRotate(a * 180 / PI);
 
-        Point2D origin = t.transform(f.getNonNull(originKey).getConvertedValue());
+        Point2D origin = FXTransforms.transform(t, f.getNonNull(originKey).getConvertedValue());
         lineNode.setStartX(origin.getX());
         lineNode.setStartY(origin.getY());
         if (isConnected) {

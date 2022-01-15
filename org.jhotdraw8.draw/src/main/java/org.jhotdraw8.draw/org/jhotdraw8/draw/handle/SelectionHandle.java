@@ -85,7 +85,7 @@ public class SelectionHandle extends LocatorHandle {
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t == null ? p : t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
 
         // Place the center of the node at the location.
         double size = node.getWidth();

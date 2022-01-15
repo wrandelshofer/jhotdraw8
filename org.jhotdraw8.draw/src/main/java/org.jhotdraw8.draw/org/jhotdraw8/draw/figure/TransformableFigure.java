@@ -383,7 +383,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     @Override
     default void reshapeInParent(@NonNull Transform transform) {
         if (transform instanceof Translate) {
-            Point2D p = getInverseTransform().deltaTransform(transform.getTx(), transform.getTy());
+            Point2D p = FXTransforms.deltaTransform(getInverseTransform(), transform.getTx(), transform.getTy());
             reshapeInLocal(new Translate(p.getX(), p.getY()));
         } else {
             // FIXME we do not want to reshape!

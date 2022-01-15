@@ -88,8 +88,8 @@ public class LineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        set(START, new CssPoint2D(transform.transform(getNonNull(START).getConvertedValue())));
-        set(END, new CssPoint2D(transform.transform(getNonNull(END).getConvertedValue())));
+        set(START, new CssPoint2D(FXTransforms.transform(transform, getNonNull(START).getConvertedValue())));
+        set(END, new CssPoint2D(FXTransforms.transform(transform, getNonNull(END).getConvertedValue())));
     }
 
     @Override

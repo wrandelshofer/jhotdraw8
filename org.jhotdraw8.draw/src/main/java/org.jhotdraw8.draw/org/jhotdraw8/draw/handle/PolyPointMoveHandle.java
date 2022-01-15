@@ -162,7 +162,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
-        pickLocation = p = t == null ? p : t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
 
         // The node is centered around the location.
         double size = node.getWidth();

@@ -17,6 +17,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -157,10 +158,12 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
         if (get(START_TARGET) == null) {
-            set(START, new CssPoint2D(transform.transform(getNonNull(START).getConvertedValue())));
+            set(START, new CssPoint2D(
+                    FXTransforms.transform(transform, getNonNull(START).getConvertedValue())));
         }
         if (get(END_TARGET) == null) {
-            set(END, new CssPoint2D(transform.transform(getNonNull(END).getConvertedValue())));
+            set(END, new CssPoint2D(
+                    FXTransforms.transform(transform, getNonNull(END).getConvertedValue())));
         }
     }
 

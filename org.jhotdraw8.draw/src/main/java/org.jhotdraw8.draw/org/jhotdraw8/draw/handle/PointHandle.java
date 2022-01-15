@@ -122,7 +122,7 @@ public class PointHandle extends AbstractHandle {
         Figure f = owner;
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();
-        pickLocation = p = t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
         double size = node.getWidth();
         node.relocate(p.getX() - size * 0.5, p.getY() - size * 0.5);
         // rotates the node:

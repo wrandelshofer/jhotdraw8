@@ -44,6 +44,7 @@ import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.tree.TreeModelEvent;
 
@@ -134,7 +135,7 @@ public class InteractiveHandleRenderer {
      * @return a distance if the node contains the point, null otherwise
      */
     public static Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
-        double toleranceInLocal = tolerance / node.getLocalToSceneTransform().deltaTransform(LINE45DEG, LINE45DEG).magnitude();
+        double toleranceInLocal = tolerance / FXTransforms.deltaTransform(node.getLocalToSceneTransform(), LINE45DEG, LINE45DEG).magnitude();
 
         if (!node.isVisible()) {
             return null;

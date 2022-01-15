@@ -84,7 +84,7 @@ public class MoveHandle extends LocatorHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
         Point2D p = getLocation();
-        pickLocation = p = t.transform(p);
+        pickLocation = p = FXTransforms.transform(t, p);
 
         // Place the center of the node at the location.
         double size = node.getWidth();

@@ -28,6 +28,7 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.WritableRenderContext;
 import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -317,7 +318,7 @@ public interface DrawingView extends WritableRenderContext {
 
 
     /**
-     * Finds the child node of the specified figure that contains the
+     * Finds the front-most node of the specified figure that contains the
      * specified view coordinates.
      *
      * @param figure the figure
@@ -569,7 +570,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return the corresponding point in world coordinates
      */
     default Point2D viewToWorld(@NonNull Point2D view) {
-        return getViewToWorld().transform(view);
+        return FXTransforms.transform(getViewToWorld(), view);
     }
 
     /**
@@ -589,7 +590,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return the corresponding point in view coordinates
      */
     default Point2D worldToView(@NonNull Point2D world) {
-        return getWorldToView().transform(world);
+        return FXTransforms.transform(getWorldToView(), world);
     }
 
     /**

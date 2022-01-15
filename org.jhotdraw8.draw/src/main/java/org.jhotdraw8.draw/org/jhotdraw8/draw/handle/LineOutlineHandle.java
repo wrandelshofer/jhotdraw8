@@ -79,7 +79,7 @@ public class LineOutlineHandle extends AbstractHandle {
         points[2] = f.getNonNull(LineConnectionFigure.END).getX().getConvertedValue();
         points[3] = f.getNonNull(LineConnectionFigure.END).getY().getConvertedValue();
 
-        t.transform2DPoints(points, 0, points, 0, 2);
+        FXTransforms.transform2DPoints(t, points, 0, points, 0, 2);
         ObservableList<Double> pp1 = polyline1.getPoints();
         ObservableList<Double> pp2 = polyline2.getPoints();
         for (int i = 0; i < points.length; i++) {

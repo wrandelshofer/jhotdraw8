@@ -122,7 +122,7 @@ public class PolylineFigure extends AbstractLeafFigure
     public void reshapeInLocal(@NonNull Transform transform) {
         ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
         for (int i = 0, n = newP.size(); i < n; i++) {
-            newP.set(i, transform.transform(newP.get(i)));
+            newP.set(i, FXTransforms.transform(transform, newP.get(i)));
         }
         set(POINTS, ImmutableLists.copyOf(newP));
     }

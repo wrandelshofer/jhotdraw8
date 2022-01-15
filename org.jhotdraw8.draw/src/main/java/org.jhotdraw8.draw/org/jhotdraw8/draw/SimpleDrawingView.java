@@ -161,7 +161,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     protected void initStyle() {
         background.getStyleClass().add(CANVAS_REGION_STYLE_CLASS);
         node.getStyleClass().add(DRAWING_VIEW_STYLE_CLASS);
-
     }
 
     protected void initBehavior() {
