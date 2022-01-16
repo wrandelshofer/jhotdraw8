@@ -551,29 +551,25 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void paint() {
         updateRenderContext();
 
-        // validate() may cause repaints for nodes. Since we are
-        // going to draw them right below, we can set the repainter to null.
+        // A call to validate may add new dirty nodes, and so may
+        // a call to updateNodes().
+        // This can happen up to 'height' times, unless there is a cyclic
+        // layout dependency between the figures.
         getModel().validate(getRenderContext());
-        repainter = null;
+        Drawing drawing = getDrawing();
+        int height = drawing == null ? 0 : drawing.getMaxDepth();
+        while (!dirtyFigureNodes.isEmpty() && height-- > 0) {
+            updateNodes();
+        }
 
-        // updateNodes() may again cause repaints for nodes.
-        // They will be painted next time.
-        updateNodes();
+        repainter = null;
     }
 
     /**
      * For testing: paints the drawing immediately.
      */
     public void paintImmediately() {
-        // A call to paint may add new dirty nodes.
-        // This can happen up to 'height' times, unless there is a cyclic
-        // layout dependency between the figures.
-        Drawing drawing = getDrawing();
-        int height = drawing == null ? 0 : drawing.getMaxDepth();
-        while (!dirtyFigureNodes.isEmpty() && height-- > 0) {
-            paint();
-        }
-        assert dirtyFigureNodes.isEmpty();
+        paint();
     }
 
     private void updateRenderContext() {
