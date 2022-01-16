@@ -579,9 +579,26 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
     private void paint() {
         updateRenderContext();
-        getModel().validate(getRenderContext());
-        updateNodes();
 
+        // validate() may cause repaints for nodes. Since we are
+        // going to draw them right below, we can set the repainter to null.
+        getModel().validate(getRenderContext());
+        repainter = null;
+
+        // updateNodes() may again cause repaints for nodes.
+        // They will be painted next time.
+        updateNodes();
+    }
+
+    /**
+     * For testing: paints the drawing immediately.
+     */
+    public void paintImmediately() {
+        // The first call to paint may add new nodes to the drawing view.
+        paint();
+        if (!dirtyFigureNodes.isEmpty()) {
+            paint();
+        }
     }
 
     private void updateRenderContext() {
@@ -601,10 +618,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
     public void repaint() {
         if (repainter == null) {
-            repainter = () -> {
-                repainter = null;
-                paint();
-            };
+            repainter = this::paint;
             Platform.runLater(repainter);
         }
     }

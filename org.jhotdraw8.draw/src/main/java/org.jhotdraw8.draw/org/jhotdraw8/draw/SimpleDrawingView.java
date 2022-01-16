@@ -88,7 +88,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private final @NonNull ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
     private final @NonNull SimpleDrawingViewNode node = new SimpleDrawingViewNode();
     private boolean constrainerNodeValid;
-    private boolean backgroundNodeValid;
 
     private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
 
@@ -289,10 +288,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         constrainerNodeValid = false;
     }
 
-    private void invalidateBackground() {
-        backgroundNodeValid = false;
-    }
-
     private void onConstrainerInvalidated(Observable o) {
         invalidateConstrainer();
         repaint();
@@ -421,36 +416,25 @@ public class SimpleDrawingView extends AbstractDrawingView {
     @Override
     protected void repaint() {
         if (repainter == null) {
-            repainter = () -> {
-                repainter = null;
-                validateConstrainer();
-            };
+            repainter = this::paint;
             Platform.runLater(repainter);
         }
     }
 
-    private void revalidateConstrainer() {
-        invalidateConstrainer();
-        repaint();
-    }
-
-    private void validateConstrainer() {
+    private void paint() {
+        repainter = null;
         if (!constrainerNodeValid) {
             updateConstrainerNode();
             constrainerNodeValid = true;
         }
     }
 
-    private void revalidateBackground() {
-        invalidateBackground();
-        repaint();
-    }
-
-    private void validateBackground() {
-        if (!backgroundNodeValid) {
-            updateBackgroundNode();
-            backgroundNodeValid = true;
-        }
+    /**
+     * For testing: paints the drawing immediately.
+     */
+    public void paintImmediately() {
+        drawingRenderer.paintImmediately();
+        paint();
     }
 
     private void updateBackgroundNode() {
@@ -549,11 +533,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
         for (Figure f : figures) {
             for (Figure ff : f.preorderIterable()) {
                 StreamSupport.stream(new TreeBreadthFirstSpliterator<>(
-                                figure -> () ->
-                                        figure.getReadOnlyLayoutObservers().stream()
-                                                .filter(x -> x.getLayoutSubjects().size() == 1).iterator()
-                                , ff),
-                        false)
+                                        figure -> () ->
+                                                figure.getReadOnlyLayoutObservers().stream()
+                                                        .filter(x -> x.getLayoutSubjects().size() == 1).iterator()
+                                        , ff),
+                                false)
                         .forEach(cascade::addFirst);
             }
         }
