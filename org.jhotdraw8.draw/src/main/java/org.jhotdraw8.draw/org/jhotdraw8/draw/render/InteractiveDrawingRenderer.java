@@ -555,10 +555,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         // a call to updateNodes().
         // This can happen up to 'height' times, unless there is a cyclic
         // layout dependency between the figures.
-        getModel().validate(getRenderContext());
         Drawing drawing = getDrawing();
-        int maxDepth = drawing == null ? 0 : drawing.getMaxDepth();
-        while (!dirtyFigureNodes.isEmpty() && maxDepth-- > 0) {
+        int depth = drawing == null ? 0 : drawing.getMaxDepth();
+        while (!dirtyFigureNodes.isEmpty() && depth-- >= 0) {
+            getModel().validate(getRenderContext());
             updateNodes();
         }
 
