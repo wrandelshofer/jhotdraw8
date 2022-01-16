@@ -565,11 +565,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * For testing: paints the drawing immediately.
      */
     public void paintImmediately() {
-        // The first call to paint may add new nodes to the drawing view.
-        paint();
-        if (!dirtyFigureNodes.isEmpty()) {
+        // A call to paint may add new dirty nodes.
+        // This can happen up to 'height' times, unless there is a cyclic
+        // layout dependency between the figures.
+        Drawing drawing = getDrawing();
+        int height = drawing == null ? 0 : drawing.getMaxDepth();
+        while (!dirtyFigureNodes.isEmpty() && height-- > 0) {
             paint();
         }
+        assert dirtyFigureNodes.isEmpty();
     }
 
     private void updateRenderContext() {

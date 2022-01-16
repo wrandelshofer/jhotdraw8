@@ -274,6 +274,17 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
+     * Gets the maximal depth of the sub-tree starting at this tree node.
+     *
+     * @return the maximal depth
+     */
+    @SuppressWarnings("unchecked")
+    default int getMaxDepth() {
+        return new TreeMaxDepthCalculator().getMaxDepth(
+                (T) this, TreeNode::getChildren);
+    }
+
+    /**
      * @param <T> the type of the tree nodes
      */
     class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {
