@@ -14,20 +14,13 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleSetProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.Region;
-import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -39,16 +32,10 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,9 +49,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class InteractiveHandleRenderer {
-    private static final String RENDER_CONTEXT = "renderContenxt";
     private static final String DRAWING_VIEW = "drawingView";
-    private static final double LINE45DEG = Math.sqrt(0.5);
     private final @NonNull Group handlesPane = new Group();
     private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
     /**
@@ -75,7 +60,7 @@ public class InteractiveHandleRenderer {
      * The selectedFiguresProperty holds the list of selected figures in the
      * sequence they were selected by the user.
      */
-    private final SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>()));
+    private final SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>()));
     private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     /**
      * Maps each JavaFX node to a handle in the drawing view.
@@ -95,7 +80,6 @@ public class InteractiveHandleRenderer {
             new BoundingBox(0, 0, 800, 600));
     private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, "model", new SimpleDrawingModel());
-    private NonNullObjectProperty<RenderContext> renderContext = new NonNullObjectProperty<>(this, RENDER_CONTEXT, new SimpleRenderContext());
     private boolean recreateHandles;
     private boolean handlesAreValid;
     private @Nullable Runnable repainter = null;
@@ -105,12 +89,7 @@ public class InteractiveHandleRenderer {
         handlesPane.setAutoSizeChildren(false);
         model.addListener(this::onDrawingModelChanged);
         clipBounds.addListener(this::onClipBoundsChanged);
-        selectedFigures.addListener(new SetChangeListener<Figure>() {
-            @Override
-            public void onChanged(Change<? extends Figure> change) {
-                recreateHandles();
-            }
-        });
+        selectedFigures.addListener((SetChangeListener<Figure>) change -> recreateHandles());
 
     }
 
@@ -124,126 +103,6 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    /**
-     * Returns true if the node contains the specified point within a
-     * tolerance.
-     *
-     * @param node         The node
-     * @param pointInLocal The point in local coordinates
-     * @param tolerance    The maximal distance the point is allowed to be away
-     *                     from the node, in local coordinates
-     * @return a distance if the node contains the point, null otherwise
-     */
-    public static Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double tolerance) {
-        double toleranceInLocal = tolerance / FXTransforms.deltaTransform(node.getLocalToSceneTransform(), LINE45DEG, LINE45DEG).magnitude();
-
-        if (!node.isVisible()) {
-            return null;
-        }
-
-        // If the node has a clip, we only proceed if the point is inside
-        // the clip with tolerance.
-        final Node nodeClip = node.getClip();
-        if (nodeClip instanceof Shape) {
-            final java.awt.Shape shape = FXShapes.awtShapeFromFX((Shape) nodeClip);
-            if (!shape.intersects(pointInLocal.getX() - toleranceInLocal,
-                    pointInLocal.getY() - toleranceInLocal, toleranceInLocal * 2, toleranceInLocal * 2)) {
-                return null;
-            }
-        }
-
-
-        if (node instanceof Shape) {
-            Shape shape = (Shape) node;
-
-            if (shape.contains(pointInLocal)) {
-                return 0.0;
-            }
-
-            double widthFactor;
-            switch (shape.getStrokeType()) {
-                case CENTERED:
-                default:
-                    widthFactor = 0.5;
-                    break;
-                case INSIDE:
-                    widthFactor = 0;
-                    break;
-                case OUTSIDE:
-                    widthFactor = 1;
-                    break;
-            }
-            if (FXGeom.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                int cap;
-                switch (shape.getStrokeLineCap()) {
-                case SQUARE:
-                    cap = BasicStroke.CAP_SQUARE;
-                    break;
-                case BUTT:
-                    cap = (toleranceInLocal > 0) ? BasicStroke.CAP_ROUND : BasicStroke.CAP_BUTT;
-                    break;
-                case ROUND:
-                    cap = BasicStroke.CAP_ROUND;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-                }
-                int join;
-                switch (shape.getStrokeLineJoin()) {
-                    case MITER:
-                        join = BasicStroke.JOIN_MITER;
-                        break;
-                    case BEVEL:
-                        join = BasicStroke.JOIN_BEVEL;
-                        break;
-                    case ROUND:
-                        join = BasicStroke.JOIN_ROUND;
-                        break;
-                    default:
-                        throw new IllegalArgumentException();
-                }
-                final java.awt.Shape awtShape = FXShapes.awtShapeFromFX(shape);
-                return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
-                        cap, join, (float) shape.getStrokeMiterLimit()
-                ).createStrokedShape(awtShape)
-                        .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()))
-                        ? Geom.distanceFromShape(awtShape, pointInLocal.getX(), pointInLocal.getY()) : null;
-            } else {
-                return null;
-            }
-        } else if (node instanceof Group) {
-            if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                return childContains((Parent) node, pointInLocal, tolerance);
-
-            }
-            return null;
-        } else if (node instanceof Region) {
-            if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                Region region = (Region) node;
-                final Background bg = region.getBackground();
-                final Border border = region.getBorder();
-                if ((bg == null || bg.isEmpty()) && (border == null || border.isEmpty())) {
-                    return childContains((Parent) node, pointInLocal, tolerance);
-                } else {
-                    return 0.0;
-                }
-            }
-            return null;
-        } else { // foolishly assumes that all other nodes are rectangular
-            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, tolerance) ? 0.0 : null;
-        }
-    }
-
-    private static @Nullable Double childContains(final @NonNull Parent node, final @NonNull Point2D pointInLocal, final double tolerance) {
-        double minDistance = Double.POSITIVE_INFINITY;
-        for (Node child : node.getChildrenUnmodifiable()) {
-            Double distance = contains(child, child.parentToLocal(pointInLocal), tolerance);
-            if (distance != null) {
-                minDistance = Math.min(minDistance, distance);
-            }
-        }
-        return Double.isFinite(minDistance) ? minDistance : null;
-    }
 
     /**
      * Creates selection handles and adds them to the provided list.
@@ -265,13 +124,15 @@ public class InteractiveHandleRenderer {
             }
         }
         HandleType handleType = getEditor().getHandleType();
-        ArrayList<Handle> list = new ArrayList<>();
-        for (Figure figure : selection) {
-            figure.createHandles(handleType, list);
-        }
-        for (Handle h : list) {
-            Figure figure = h.getOwner();
-            handles.computeIfAbsent(figure, k -> new ArrayList<>()).add(h);
+        if (handleType != null) {
+            ArrayList<Handle> list = new ArrayList<>();
+            for (Figure figure : selection) {
+                figure.createHandles(handleType, list);
+            }
+            for (Handle h : list) {
+                Figure figure = h.getOwner();
+                handles.computeIfAbsent(figure, k -> new ArrayList<>()).add(h);
+            }
         }
     }
 
@@ -281,6 +142,7 @@ public class InteractiveHandleRenderer {
     }
 
 
+    @SuppressWarnings("unused")
     public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
@@ -291,19 +153,12 @@ public class InteractiveHandleRenderer {
         }
         final double tolerance = getEditor().getTolerance();
         for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
-            final Node node = e.getKey();
             final Handle handle = e.getValue();
             if (!handle.isSelectable()) {
                 continue;
             }
             if (handle.contains(getDrawingViewNonNull(), vx, vy, tolerance)) {
                 return handle;
-            } else {
-                if (false) {
-                    if (contains(node, new Point2D(vx, vy), tolerance) != null) {
-                        return handle;
-                    }
-                }
             }
         }
         return null;
@@ -339,13 +194,6 @@ public class InteractiveHandleRenderer {
 
     ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty().get();
-    }
-
-    private void invalidateFigureNode(Figure f) {
-        if (handles.containsKey(f)) {
-            handlesAreValid = false;
-            dirtyHandles.add(f);
-        }
     }
 
     public void invalidateHandleNodes() {
@@ -396,19 +244,6 @@ public class InteractiveHandleRenderer {
         repaint();
     }
 
-    private void onDrawingModelChanged(@Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
-        if (oldValue != null) {
-            oldValue.removeTreeModelListener(treeModelListener);
-        }
-        if (newValue != null) {
-            newValue.addTreeModelListener(treeModelListener);
-            onRootChanged();
-        }
-    }
-
-    private void onDrawingModelEvent(DrawingModelEvent drawingModelEvent) {
-    }
-
     private void onFigureRemoved(@NonNull Figure figure) {
         invalidateHandles();
     }
@@ -427,27 +262,27 @@ public class InteractiveHandleRenderer {
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-            case NODE_ADDED_TO_PARENT:
-                break;
-            case NODE_REMOVED_FROM_PARENT:
-                onFigureRemoved(f);
-                break;
-            case NODE_ADDED_TO_TREE:
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                break;
-            case NODE_CHANGED:
-                onNodeChanged(f);
-                break;
-            case ROOT_CHANGED:
-                onRootChanged();
-                break;
-            case SUBTREE_NODES_CHANGED:
-                onSubtreeNodesChanged(f);
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+        case NODE_ADDED_TO_PARENT:
+            break;
+        case NODE_REMOVED_FROM_PARENT:
+            onFigureRemoved(f);
+            break;
+        case NODE_ADDED_TO_TREE:
+            break;
+        case NODE_REMOVED_FROM_TREE:
+            break;
+        case NODE_CHANGED:
+            onNodeChanged(f);
+            break;
+        case ROOT_CHANGED:
+            onRootChanged();
+            break;
+        case SUBTREE_NODES_CHANGED:
+            onSubtreeNodesChanged(f);
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + " not supported");
         }
     }
 
@@ -456,16 +291,6 @@ public class InteractiveHandleRenderer {
             dirtyHandles.add(f);
             revalidateHandles();
         }
-    }
-
-    private void onVisibleRectChanged(Observable o) {
-        invalidateHandles();
-        repaint();
-    }
-
-    private void onZoomFactorChanged(ObservableValue<? extends Number> observable, Number oldValue, @NonNull Number newValue) {
-        invalidateHandleNodes();
-        repaint();
     }
 
     public void recreateHandles() {
@@ -549,10 +374,6 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    private void updateLayout() {
-        invalidateHandleNodes();
-    }
-
     /**
      * Validates the handles.
      */
@@ -568,6 +389,4 @@ public class InteractiveHandleRenderer {
     public void setSelectedFigures(ObservableSet<Figure> selectedFigures) {
         this.selectedFigures.set(selectedFigures);
     }
-
-
 }

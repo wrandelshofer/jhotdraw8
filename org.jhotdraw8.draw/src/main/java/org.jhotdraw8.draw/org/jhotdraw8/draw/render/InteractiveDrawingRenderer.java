@@ -20,7 +20,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.shape.Shape;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -40,6 +39,7 @@ import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -80,6 +80,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     private @Nullable Runnable repainter = null;
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final @NonNull NodeFinder nodeFinder = new NodeFinder();
 
     public InteractiveDrawingRenderer() {
         drawingPane.setManaged(false);
@@ -134,29 +135,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             }
         }
         Point2D pl = FXTransforms.transform(viewToNode, vx, vy);
-        return findFigureNodeRecursive(n, pl.getX(), pl.getY());
+
+        double tolerance = getEditor().getTolerance();
+        double radius = FXTransforms.deltaTransform(viewToNode, tolerance, 0).magnitude();
+        return nodeFinder.findNodeRecursive(n, pl.getX(), pl.getY(), radius);
     }
 
-    private @Nullable Node findFigureNodeRecursive(@NonNull Node n, double vx, double vy) {
-        if (n.contains(vx, vy)) {
-            if (n instanceof Shape) {
-                return n;
-            } else if (n instanceof Group) {
-                Point2D pl = n.parentToLocal(vx, vy);
-                Group group = (Group) n;
-                ObservableList<Node> children = group.getChildren();
-                // FIXME should take viewOrder into account
-                for (int i = children.size() - 1; i >= 0; i--) {// front to back
-                    Node child = children.get(i);
-                    Node found = findFigureNodeRecursive(child, pl.getX(), pl.getY());
-                    if (found != null) {
-                        return found;
-                    }
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Finds figures that intersect with the specified point in view
@@ -176,18 +160,36 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         List<Map.Entry<Figure, Double>> list = new ArrayList<>();
         double tolerance = getEditor().getTolerance();
         final Parent parent = (Parent) figureToNodeMap.get(getDrawing());
-
-        for (Node child : parent.getChildrenUnmodifiable()) {
-            try {
-                findFiguresRecursive(child, child.parentToLocal(pp), list, decompose,
-                        predicate, child.getLocalToParentTransform()
-                                .inverseDeltaTransform(tolerance, tolerance).getX());
-            } catch (NonInvertibleTransformException e) {
-                e.printStackTrace();
-            }
+        for (Node child : frontToBack(parent)) {
+            findFiguresRecursive(child, child.parentToLocal(pp), list, decompose,
+                    predicate,
+                    FXTransforms.inverseDeltaTransform(child.getLocalToParentTransform(),
+                            tolerance, 0).magnitude());
         }
 
         return list;
+    }
+
+    /**
+     * Gets the children of this node in front-to-back order.
+     *
+     * @param parent a parent node
+     * @return the children of the node in front-to-back-order in a new
+     * mutable array
+     */
+    private @NonNull Node[] frontToBack(@Nullable Parent parent) {
+        if (parent == null) {
+            return new Node[0];
+        }
+        ObservableList<Node> children = parent.getChildrenUnmodifiable();
+        Node[] array = new Node[children.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[array.length - i - 1] = children.get(i);
+        }
+        if (array.length > 1) {
+            Arrays.sort(array, (Node a, Node b) -> Double.compare(b.getViewOrder(), a.getViewOrder()));
+        }
+        return array;
     }
 
     public @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
@@ -198,7 +200,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         List<Map.Entry<Figure, Double>> list = new ArrayList<>();
 
         final Parent parent = (Parent) figureToNodeMap.get(getDrawing());
-        for (Node child : parent.getChildrenUnmodifiable()) {
+        for (Node child : frontToBack(parent)) {
             findFiguresInsideRecursive(child, child.parentToLocal(r), list, decompose,
                     predicate);
         }
@@ -241,9 +243,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         boolean foundAChildFigure = false;
         if (node instanceof Parent) {
             Parent parent = (Parent) node;
-            ObservableList<Node> childrenUnmodifiable = parent.getChildrenUnmodifiable();
-            for (int i = childrenUnmodifiable.size() - 1; i >= 0; i--) {
-                Node child = childrenUnmodifiable.get(i);
+            for (Node child : frontToBack(parent)) {
                 foundAChildFigure |= findFiguresInsideRecursive(
                         child,
                         child.parentToLocal(pp),
@@ -266,7 +266,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         BoundingBox r = new BoundingBox(pxy.getX(), pxy.getY(), pwh.getX(), pwh.getY());
         List<Map.Entry<Figure, Double>> list = new ArrayList<>();
         final Parent parent = (Parent) figureToNodeMap.get(getDrawing());
-        for (Node child : parent.getChildrenUnmodifiable()) {
+        for (Node child : frontToBack(parent)) {
             findFiguresIntersectingRecursive(child, child.parentToLocal(r), list, decompose,
                     predicate);
         }
@@ -297,9 +297,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         boolean foundAChildFigure = false;
         if (node instanceof Parent) {
             Parent parent = (Parent) node;
-            ObservableList<Node> childrenUnmodifiable = parent.getChildrenUnmodifiable();
-            for (int i = childrenUnmodifiable.size() - 1; i >= 0; i--) {
-                Node child = childrenUnmodifiable.get(i);
+            for (Node child : frontToBack(parent)) {
                 foundAChildFigure |= findFiguresIntersectingRecursive(
                         child,
                         child.parentToLocal(pp),
@@ -336,7 +334,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             return false;
         }
 
-        Double distance = InteractiveHandleRenderer.contains(node, center, radius);
+        Double distance = nodeFinder.contains(node, center, radius);
         if (distance == null) {
             return false;
         }
@@ -353,10 +351,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         boolean foundAChildFigure = false;
         if (node instanceof Parent) {
             Parent parent = (Parent) node;
-            ObservableList<Node> childrenUnmodifiable = parent.getChildrenUnmodifiable();
-            for (int i = childrenUnmodifiable.size() - 1; i >= 0; i--) {
-                Node child = childrenUnmodifiable.get(i);
-
+            for (Node child : frontToBack(parent)) {
                 foundAChildFigure |= findFiguresRecursive(
                         child,
                         child.parentToLocal(center),
@@ -490,15 +485,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    private void onFigureRemovedFromDrawing(@NonNull Figure figure) {
-
-    }
-
-    private void onLayoutChanged(Figure f) {
-        invalidateFigureNode(f);
-        repaint();
-    }
-
     private void onNodeChanged(@NonNull Figure figure) {
         invalidateFigureNode(figure);
         repaint();
@@ -508,11 +494,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private void onNodeRemovedFromTree(@NonNull Figure f) {
-    }
-
-    private void onPropertyValueChanged(Figure f) {
-        invalidateFigureNode(f);
-        repaint();
     }
 
     private void onRootChanged(Figure f) {
@@ -530,11 +511,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         repaint();
     }
 
-    private void onStyleChanged(Figure f) {
-        invalidateFigureNode(f);
-        repaint();
-    }
-
     private void onSubtreeNodesChanged(@NonNull Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             dirtyFigureNodes.add(f);
@@ -542,38 +518,33 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         repaint();
     }
 
-    private void onTransformChanged(Figure f) {
-        invalidateFigureNode(f);
-        repaint();
-    }
-
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-            case NODE_ADDED_TO_PARENT:
-                onFigureAddedToParent(f);
-                break;
-            case NODE_REMOVED_FROM_PARENT:
-                onFigureRemovedFromParent(f);
-                break;
-            case NODE_ADDED_TO_TREE:
-                onNodeAddedToTree(f);
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                onNodeRemovedFromTree(f);
-                break;
-            case NODE_CHANGED:
-                onNodeChanged(f);
-                break;
-            case ROOT_CHANGED:
-                onRootChanged(f);
-                break;
-            case SUBTREE_NODES_CHANGED:
-                onSubtreeNodesChanged(f);
-                break;
-            default:
-                throw new UnsupportedOperationException(event.getEventType()
-                        + " not supported");
+        case NODE_ADDED_TO_PARENT:
+            onFigureAddedToParent(f);
+            break;
+        case NODE_REMOVED_FROM_PARENT:
+            onFigureRemovedFromParent(f);
+            break;
+        case NODE_ADDED_TO_TREE:
+            onNodeAddedToTree(f);
+            break;
+        case NODE_REMOVED_FROM_TREE:
+            onNodeRemovedFromTree(f);
+            break;
+        case NODE_CHANGED:
+            onNodeChanged(f);
+            break;
+        case ROOT_CHANGED:
+            onRootChanged(f);
+            break;
+        case SUBTREE_NODES_CHANGED:
+            onSubtreeNodesChanged(f);
+            break;
+        default:
+            throw new UnsupportedOperationException(event.getEventType()
+                    + " not supported");
         }
     }
 

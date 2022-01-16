@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,14 +19,14 @@ import java.util.List;
  */
 public class ReversedList<T> extends AbstractList<T> {
 
-    private List<T> target;
+    private final @NonNull List<T> target;
 
     /**
      * Creates a new instance of ReversedList.
      *
      * @param target the target list
      */
-    public ReversedList(Collection<T> target) {
+    public ReversedList(@NonNull Collection<T> target) {
         this.target = (target instanceof List) ? (List<T>) target : new ArrayList<>(target);
     }
 
