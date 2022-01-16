@@ -557,8 +557,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         // layout dependency between the figures.
         getModel().validate(getRenderContext());
         Drawing drawing = getDrawing();
-        int height = drawing == null ? 0 : drawing.getMaxDepth();
-        while (!dirtyFigureNodes.isEmpty() && height-- > 0) {
+        int maxDepth = drawing == null ? 0 : drawing.getMaxDepth();
+        while (!dirtyFigureNodes.isEmpty() && maxDepth-- > 0) {
             updateNodes();
         }
 
