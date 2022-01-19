@@ -551,18 +551,20 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void paint() {
         updateRenderContext();
 
-        // A call to validate may add new dirty nodes, and so may
+        // A call to validate() may reveal new dirty nodes, and so may
         // a call to updateNodes().
-        // This can happen up to 'height' times, unless there is a cyclic
-        // layout dependency between the figures.
-        Drawing drawing = getDrawing();
-        int depth = drawing == null ? 0 : drawing.getMaxDepth();
-        while (!dirtyFigureNodes.isEmpty() && depth-- >= 0) {
+        // We only update a limited number of figure nodes in one call
+        // to this method. If there are remaining nodes, we update
+        // them later.
+        int remainingLimit = Math.max(1, getUpdateLimit());
+        while (!dirtyFigureNodes.isEmpty() && remainingLimit > 0) {
             getModel().validate(getRenderContext());
-            updateNodes();
+            remainingLimit -= updateNodes(remainingLimit);
         }
-
         repainter = null;
+        if (!dirtyFigureNodes.isEmpty()) {
+            repaint();
+        }
     }
 
     /**
@@ -571,7 +573,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     public void paintImmediately() {
         paint();
     }
-
     private void updateRenderContext() {
         getRenderContext().set(RenderContext.CLIP_BOUNDS, getClipBounds());
         DefaultUnitConverter units = new DefaultUnitConverter(90, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
@@ -594,25 +595,28 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    private void updateNodes() {
-        Bounds visibleRectInWorld = getClipBounds();
+    /**
+     * Updates the nodes of the figures.
+     *
+     * @param limit Determines how many nodes we will update in this batch
+     * @return returns the number of updated nodes
+     */
+    private int updateNodes(final int limit) {
+        final Bounds visibleRectInWorld = getClipBounds();
 
         // create copies of the lists to allow for concurrent modification
-        Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
-
-        // Determine how many nodes we will update in this batch
-        int limit = Math.max(getUpdateLimit(), 0);
+        final Figure[] copyOfDirtyFigureNodes = dirtyFigureNodes.toArray(new Figure[0]);
 
         // If there are too many dirty figures, we update the node of
         // figures that intersect with the visible rect first.
         int count = 0;
         if (copyOfDirtyFigureNodes.length > limit) {
             for (int i = 0, n = copyOfDirtyFigureNodes.length; i < n && count < limit; i++) {
-                Figure f = copyOfDirtyFigureNodes[i];
+                final Figure f = copyOfDirtyFigureNodes[i];
                 if (f.getVisualBoundsInWorld().intersects(visibleRectInWorld)) {
                     copyOfDirtyFigureNodes[i] = null;
                     count++;
-                    Node node = getNode(f);// this may add the node again to the list of dirties!
+                    final Node node = getNode(f);// this may add the node again to the list of dirties!
                     if (node != null) {
                         f.updateNode(getRenderContext(), node);
                         dirtyFigureNodes.remove(f);
@@ -623,24 +627,25 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             // If there are more figures intersecting visibleRectInWorld that need
             // to be updated. Lets update them in the next batch.
             if (count == limit) {
-                repaint();
-                return;
+                return count;
             }
         }
 
 
         // Update figure nodes until we reach the limit.
         for (int i = 0, n = copyOfDirtyFigureNodes.length; i < n && count < limit; i++) {
-            Figure f = copyOfDirtyFigureNodes[i];
+            final Figure f = copyOfDirtyFigureNodes[i];
             if (f != null) {
                 count++;
-                Node node = getNode(f);// this may add the node again to the list of dirties!
+                final Node node = getNode(f);// this may add the node again to the list of dirties!
                 if (node != null) {
                     f.updateNode(getRenderContext(), node);
                     dirtyFigureNodes.remove(f);
                 }
             }
         }
+
+        return count;
     }
 
     public @NonNull DoubleProperty zoomFactorProperty() {
