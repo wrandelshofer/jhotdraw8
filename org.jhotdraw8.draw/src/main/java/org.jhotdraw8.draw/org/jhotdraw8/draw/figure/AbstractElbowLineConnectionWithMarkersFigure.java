@@ -18,13 +18,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
-import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXGeom;
@@ -217,7 +211,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         return path == null ? SvgPaths.emptyPathIterator() : SvgPaths.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 

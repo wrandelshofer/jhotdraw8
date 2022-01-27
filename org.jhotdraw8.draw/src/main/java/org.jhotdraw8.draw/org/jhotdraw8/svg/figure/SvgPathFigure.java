@@ -14,22 +14,13 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.figure.AbstractLeafFigure;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
-import org.jhotdraw8.geom.FXSvgPaths;
-import org.jhotdraw8.geom.FXTransformPathBuilder;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 import org.jhotdraw8.xml.text.XmlNumberConverter;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
@@ -62,7 +53,7 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         AwtPathBuilder b = new AwtPathBuilder();
         String d = get(D);
         if (d != null) {

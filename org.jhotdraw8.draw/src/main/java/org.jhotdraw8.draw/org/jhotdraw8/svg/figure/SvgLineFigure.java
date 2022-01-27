@@ -13,11 +13,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.draw.figure.AbstractLeafFigure;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
@@ -52,7 +48,7 @@ public class SvgLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(getNonNull(X1).getConvertedValue(),
                 getNonNull(Y1).getConvertedValue());

@@ -20,12 +20,7 @@ import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.draw.figure.AbstractLeafFigure;
-import org.jhotdraw8.draw.figure.HideableFigure;
-import org.jhotdraw8.draw.figure.LockableFigure;
-import org.jhotdraw8.draw.figure.PathIterableFigure;
-import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.figure.TextableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -157,7 +152,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         Text tn = new Text();
         tn.setX(getStyledNonNull(X).getConvertedValue());
         tn.setY(getStyledNonNull(Y).getConvertedValue());

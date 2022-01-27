@@ -4,11 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Dimension2D;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
+import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
@@ -18,11 +14,7 @@ import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssDimension2D;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
@@ -155,7 +147,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         Text tn = new Text();
         tn.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());

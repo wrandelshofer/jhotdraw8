@@ -17,13 +17,9 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.ConcatenatedPathIterator;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
@@ -112,7 +108,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
         if (op != null) {
             return getPathIteratorCAG(ctx, tx, op);

@@ -54,7 +54,7 @@ public class RectangleFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         Rectangle shape = new Rectangle();
         shape.setX(getNonNull(X).getConvertedValue());
         shape.setY(getNonNull(Y).getConvertedValue());

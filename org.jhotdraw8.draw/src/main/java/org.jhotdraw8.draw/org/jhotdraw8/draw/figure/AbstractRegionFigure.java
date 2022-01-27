@@ -74,7 +74,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         if (path == null) {
             path = new Path2D.Double();
         }

@@ -15,19 +15,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
-import org.jhotdraw8.geom.FXPreciseRotate;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -116,7 +107,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     public abstract @Nullable String getMarkerStartShape();
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         // FIXME include markers in path
         return FXShapes.awtShapeFromFX(new Line(
                 getNonNull(START_X).getConvertedValue(),

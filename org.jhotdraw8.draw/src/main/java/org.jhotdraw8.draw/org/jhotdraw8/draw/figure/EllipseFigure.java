@@ -86,7 +86,7 @@ public class EllipseFigure extends AbstractLeafFigure
 
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         Ellipse shape = new Ellipse();
         shape.setCenterX(getStyledNonNull(CENTER_X).getConvertedValue());
         shape.setCenterY(getStyledNonNull(CENTER_Y).getConvertedValue());
@@ -94,9 +94,9 @@ public class EllipseFigure extends AbstractLeafFigure
         double strokeWidth = getStyledNonNull(STROKE_WIDTH).getConvertedValue();
         double offset;
         switch (getStyledNonNull(STROKE_TYPE)) {
-        case CENTERED:
-        default:
-            offset = 0;
+            case CENTERED:
+            default:
+                offset = 0;
             break;
         case INSIDE:
             offset = -strokeWidth * 0.5;

@@ -13,11 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.PointHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
@@ -77,7 +73,7 @@ public class LineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue());

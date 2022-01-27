@@ -17,11 +17,7 @@ import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.PolyPointEditHandle;
-import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
-import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
@@ -109,7 +105,7 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
         return FXShapes.awtPathIteratorFromFxPoint2Ds(getNonNull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
