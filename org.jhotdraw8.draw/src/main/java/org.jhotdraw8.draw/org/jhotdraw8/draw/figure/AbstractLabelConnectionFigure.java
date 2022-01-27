@@ -6,13 +6,8 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -23,13 +18,13 @@ import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
@@ -45,18 +40,32 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A Label that can be attached to another Figure by setting LABEL_CONNECTOR and
- * LABEL_TARGET.
+ * A label that can be attached to another figure by setting {@link #LABEL_CONNECTOR} and
+ * {@link #LABEL_TARGET}.
+ * <p>
+ * When the label is attached it computes the {@link #LABELED_LOCATION} using the
+ * {@link #LABEL_CONNECTOR} on the target figure. Then it computes the {@link #ORIGIN}
+ * and rotation of the label using the properties {@link #LABEL_OFFSET}
+ * and {@link #LABEL_AUTOROTATE}.
+ * <pre>
+ * LABELED_LOCATION:    x,y (has a tangent that can be rotated)
+ *                       |
+ *                       | + LABEL_OFFSET (perpendicular to
+ *                       |                 LABELED_LOCATION)
+ *                       ↓
+ *                   +--------------------+
+ * ORIGIN:           |  x,y               |
+ * LABEL_AUTOROTATE: |   ↺                |
+ *                   |                    |
+ *                   |    layout bounds   |
+ *                   +--------------------+
+ *
+ * </pre>
  *
  * @author Werner Randelshofer
  */
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {
-
-    /**
-     * The horizontal position of the text. Default value: {@link HPos#LEFT}
-     */
-    public static final @NonNull EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
     public static final @NonNull CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
@@ -79,18 +88,19 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * Whether the label should be rotated with the target.
      */
     public static final @NonNull EnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
+    public static final @NonNull CssSizeStyleableKey LABEL_TRANSLATE_Y = new CssSizeStyleableKey("labelTranslationY", CssSize.ZERO);
+    public static final @NonNull CssSizeStyleableKey LABEL_TRANSLATE_X = new CssSizeStyleableKey("labelTranslationX", CssSize.ZERO);
     /**
      * The position relative to the parent (respectively the offset).
      */
-    public static final @NonNull CssPoint2DStyleableKey LABEL_TRANSLATE = new CssPoint2DStyleableKey(
-            "labelTranslation", new CssPoint2D(0, 0));
-    private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
+    public static final @NonNull CssPoint2DStyleableMapAccessor LABEL_TRANSLATE = new CssPoint2DStyleableMapAccessor("labelTranslation", LABEL_TRANSLATE_X, LABEL_TRANSLATE_Y);
+    private final @NonNull ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLabelConnectionFigure() {
     }
 
     @Override
-    protected <T> void onPropertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    protected <T> void onPropertyChanged(@NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (key == LABEL_TARGET) {
             if (getDrawing() != null) {
                 if (oldValue != null) {
@@ -132,7 +142,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      *
      * @return the connected property
      */
-    public ReadOnlyBooleanProperty connectedProperty() {
+    public @NonNull ReadOnlyBooleanProperty connectedProperty() {
         return connected.getReadOnlyProperty();
     }
 
@@ -189,64 +199,51 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(final @NonNull RenderContext ctx) {
+        layoutOrigin(ctx);
+        super.layout(ctx);
+    }
 
-        Figure labelTarget = get(LABEL_TARGET);
-        final Point2D labeledLoc;
-        Connector labelConnector = get(LABEL_CONNECTOR);
-        final Point2D perp;
-        final Point2D tangent;
+    /**
+     * If the label has a {@link #LABEL_TARGET} and a {@link #LABEL_CONNECTOR},
+     * computes the {@link #LABELED_LOCATION}, {@link #ORIGIN} and
+     * {@link #TRANSFORMS} of the label.
+     * <p>
+     * Else leaves the {@link #ORIGIN} and the {@link #TRANSFORMS} unchanged.
+     * <p>
+     * The following properties affect the result:
+     * {@link #LABEL_OFFSET}, {@link #LABEL_AUTOROTATE}.
+     *
+     * @param ctx
+     */
+    protected void layoutOrigin(final @NonNull RenderContext ctx) {
+        final Figure labelTarget = get(LABEL_TARGET);
+        final Connector labelConnector = get(LABEL_CONNECTOR);
 
-        Text textNode = new Text();
+        if (labelConnector == null || labelTarget == null) {
+            return;
+        }
+        final UnitConverter units = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
-        updateTextNode(ctx, textNode);
-        Bounds textNodeLayoutBounds = textNode.getLayoutBounds();
+        final PointAndTangent pointAndTangent = labelConnector.getPointAndTangentInWorld(this, labelTarget);
+        final Point2D labeledLoc = worldToParent(pointAndTangent.getPoint(Point2D::new));
+        final Point2D tangent = getWorldToParent().deltaTransform(pointAndTangent.getTangent(Point2D::new)).normalize();
+        final Point2D perp = FXGeom.perp(tangent);
 
-        if (labelConnector != null && labelTarget != null) {
-            PointAndTangent pointAndTangent = labelConnector.getPointAndTangentInWorld(this, labelTarget);
-            labeledLoc = worldToParent(pointAndTangent.getPoint(Point2D::new));
-            tangent = getWorldToParent().deltaTransform(pointAndTangent.getTangent(Point2D::new)).normalize();
-            perp = FXGeom.perp(tangent);
+        final double labelOffsetX = getStyledNonNull(LABEL_OFFSET_X).getConvertedValue(units);
+        final double labelOffsetY = getStyledNonNull(LABEL_OFFSET_Y).getConvertedValue(units);
 
-            set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
-            double hposTranslate = 0;
-            final double iconTranslate;
-            if (getStyled(ICON_SHAPE) != null) {
-                iconTranslate = getStyledNonNull(ICON_SIZE).getConvertedValue().getWidth()
-                        + getStyledNonNull(ICON_TEXT_GAP).getConvertedValue();
-            } else {
-                iconTranslate = 0;
-            }
-            switch (getStyledNonNull(TEXT_HPOS)) {
-            case CENTER: {
-                hposTranslate = textNodeLayoutBounds.getWidth() * -0.5;
-                break;
-            }
-            case LEFT:
-                hposTranslate = iconTranslate;
-                break;
-            case RIGHT: {
-                hposTranslate = -textNodeLayoutBounds.getWidth();
-                break;
-            }
-            }
+        Point2D origin = labeledLoc
+                .add(perp.multiply(-labelOffsetY))
+                .add(tangent.multiply(labelOffsetX));
 
-
-            // FIXME must convert with current font size of label!!
-            final double labelOffsetX = getStyledNonNull(LABEL_OFFSET_X).getConvertedValue();
-            final double labelOffsetY = getStyledNonNull(LABEL_OFFSET_Y).getConvertedValue();
-            Point2D origin = labeledLoc
-                    .add(perp.multiply(-labelOffsetY))
-                    .add(tangent.multiply(labelOffsetX));
-
-            Rotate rotate = null;
-            final boolean layoutTransforms;
-            switch (getStyledNonNull(LABEL_AUTOROTATE)) {
+        Rotate rotate = null;
+        final boolean layoutTransforms;
+        switch (getStyledNonNull(LABEL_AUTOROTATE)) {
             case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
                 final double theta = (Math.toDegrees(Geom.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
                 rotate = new FXPreciseRotate(theta, origin.getX(), origin.getY());
                 layoutTransforms = true;
-                // set(ROTATE, theta);
             }
             break;
             case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
@@ -254,42 +251,29 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
                 final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
                 rotate = new FXPreciseRotate(halfTheta, origin.getX(), origin.getY());
                 layoutTransforms = true;
-                // set(ROTATE, halfTheta);
             }
             break;
             case OFF:
             default:
                 layoutTransforms = false;
                 break;
-            }
-            // FIXME add tx in angle of rotated label!
-//        origin=origin.add(tangent.multiply(hposTranslate));
-            origin = origin.add(hposTranslate, 0);
-
-            Point2D labelTranslation = getStyledNonNull(LABEL_TRANSLATE).getConvertedValue();
-            origin = origin.add(labelTranslation);
-            set(ORIGIN, new CssPoint2D(origin));
-            List<Transform> transforms = new ArrayList<>();
-            if (rotate != null) {
-                transforms.add(rotate);
-            }
-            if (layoutTransforms) {
-                setTransforms(transforms.toArray(new Transform[0]));
-            }
         }
 
-        textNode.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
-        textNode.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());
-        Bounds b = textNode.getLayoutBounds();
-        Insets i = getTotalPaddingAroundText();
-        Bounds bconnected = new BoundingBox(
-                b.getMinX() - i.getLeft(),
-                b.getMinY() - i.getTop(),
-                b.getWidth() + i.getLeft() + i.getRight(),
-                textNode.getBaselineOffset() + i.getTop() + i.getBottom());
-        setCachedLayoutBounds(bconnected);
-        invalidateTransforms();
-    }
+        Point2D labelTranslation = getStyledNonNull(LABEL_TRANSLATE).getConvertedValue();
+        origin = origin.add(labelTranslation);
+        set(ORIGIN, new CssPoint2D(origin));
+
+        set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
+        set(ORIGIN, new CssPoint2D(origin));
+
+        if (layoutTransforms) {
+            final List<Transform> transforms = new ArrayList<>();
+            if (!rotate.isIdentity()) {
+                transforms.add(rotate);
+            }
+            setTransforms(transforms.toArray(new Transform[0]));
+        }
+        }
 
     @Override
     public void removeAllLayoutSubjects() {
@@ -297,7 +281,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void removeLayoutSubject(Figure subject) {
+    public void removeLayoutSubject(final @NonNull Figure subject) {
         if (subject == get(LABEL_TARGET)) {
             set(LABEL_TARGET, null);
         }
@@ -305,23 +289,20 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void updateGroupNode(@NonNull RenderContext ctx, @NonNull Group node) {
+    public void updateGroupNode(final @NonNull RenderContext ctx, final @NonNull Group node) {
         super.updateGroupNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(final @NonNull CssSize x, final @NonNull CssSize y, final @NonNull CssSize width, final @NonNull CssSize height) {
         if (get(LABEL_TARGET) == null) {
             super.reshapeInLocal(x, y, width, height);
             set(LABELED_LOCATION, getNonNull(ORIGIN));
             set(LABEL_TRANSLATE, new CssPoint2D(0, 0));
         } else {
-            CssRectangle2D bounds = getCssLayoutBounds();
-            CssSize newX, newY;
-            newX = width.getValue() > 0 ? x.add(width) : x;
-            newY = height.getValue() > 0 ? y.add(height) : y;
-            CssPoint2D oldValue = getNonNull(LABEL_TRANSLATE);
+            final CssRectangle2D bounds = getCssLayoutBounds();
+            final CssPoint2D oldValue = getNonNull(LABEL_TRANSLATE);
             set(LABEL_TRANSLATE,
                     new CssPoint2D(x.subtract(bounds.getMinX()).add(oldValue.getX()),
                             y.subtract(bounds.getMinY()).add(oldValue.getY())));
@@ -340,7 +321,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
     }
 
-    public void setLabelConnection(Figure target, Connector connector) {
+    public void setLabelConnection(final @Nullable Figure target, final @Nullable Connector connector) {
         set(LABEL_CONNECTOR, connector);
         set(LABEL_TARGET, target);
     }
