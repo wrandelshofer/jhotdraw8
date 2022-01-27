@@ -62,25 +62,53 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         // of other figures - therefore these must be synchronized lists!
 
         if (key == START_TARGET) {
-            if (oldValue != null && get(END_TARGET) != oldValue) {
-                ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
-            }
-            if (newValue != null) {
-                ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
+            if (getDrawing() != null) {
+                if (oldValue != null && get(END_TARGET) != oldValue) {
+                    ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
+                }
+                if (newValue != null) {
+                    ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
+                }
             }
             updateConnectedProperty();
         } else if (key == END_TARGET) {
-            if (oldValue != null && get(START_TARGET) != oldValue) {
-                ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
-            }
-            if (newValue != null) {
-                ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
+            if (getDrawing() != null) {
+                if (oldValue != null && get(START_TARGET) != oldValue) {
+                    ((Figure) oldValue).getLayoutObservers().remove(AbstractLineConnectionFigure.this);
+                }
+                if (newValue != null) {
+                    ((Figure) newValue).getLayoutObservers().add(AbstractLineConnectionFigure.this);
+                }
             }
             updateConnectedProperty();
         } else if (key == START_CONNECTOR) {
             updateConnectedProperty();
         } else if (key == END_CONNECTOR) {
             updateConnectedProperty();
+        }
+    }
+
+    @Override
+    public void doAddedToDrawing(final @NonNull Drawing drawing) {
+        final Figure startTarget = get(START_TARGET);
+        if (startTarget != null) {
+            startTarget.getLayoutObservers().add(this);
+        }
+        final Figure endTarget = get(END_TARGET);
+        if (endTarget != null && endTarget != startTarget) {
+            endTarget.getLayoutObservers().add(this);
+        }
+    }
+
+    @Override
+    protected void doRemovedFromDrawing(final @NonNull Drawing drawing) {
+        final Figure startTarget = get(START_TARGET);
+        if (startTarget != null) {
+            startTarget.getLayoutObservers().remove(this);
+        }
+        final Figure endTarget = get(END_TARGET);
+        if (endTarget != null && endTarget != startTarget) {
+            endTarget.getLayoutObservers().remove(this);
         }
     }
 

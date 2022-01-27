@@ -84,7 +84,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      *
      * @param drawing the drawing
      */
-    protected void doAddedToDrawing(Drawing drawing) {
+    protected void doAddedToDrawing(@NonNull Drawing drawing) {
 
     }
 

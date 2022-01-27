@@ -92,15 +92,33 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     protected <T> void onPropertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         if (key == LABEL_TARGET) {
-            if (oldValue != null) {
-                ((Figure) oldValue).getLayoutObservers().remove(this);
-            }
-            if (newValue != null) {
-                ((Figure) newValue).getLayoutObservers().add(this);
+            if (getDrawing() != null) {
+                if (oldValue != null) {
+                    ((Figure) oldValue).getLayoutObservers().remove(this);
+                }
+                if (newValue != null) {
+                    ((Figure) newValue).getLayoutObservers().add(this);
+                }
             }
             updateConnectedProperty();
         } else if (key == LABEL_CONNECTOR) {
             updateConnectedProperty();
+        }
+    }
+
+    @Override
+    public void doAddedToDrawing(final @NonNull Drawing drawing) {
+        final Figure labelTarget = get(LABEL_TARGET);
+        if (labelTarget != null) {
+            labelTarget.getLayoutObservers().add(this);
+        }
+    }
+
+    @Override
+    protected void doRemovedFromDrawing(final @NonNull Drawing drawing) {
+        final Figure labelTarget = get(LABEL_TARGET);
+        if (labelTarget != null) {
+            labelTarget.getLayoutObservers().remove(this);
         }
     }
 

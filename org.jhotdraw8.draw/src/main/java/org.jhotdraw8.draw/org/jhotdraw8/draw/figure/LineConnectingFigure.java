@@ -31,6 +31,10 @@ public interface LineConnectingFigure extends ConnectingFigure {
     SimpleNullableKey<Connector> END_CONNECTOR = new SimpleNullableKey<>("endConnector", Connector.class, null);
     /**
      * The end target.
+     * <p>
+     * This property can not be styled with CSS because it affects the
+     * layout observer relationship between the label and the target
+     * figure.
      */
     @NonNull
     SimpleNullableKey<Figure> END_TARGET = new SimpleNullableKey<>("endTarget", Figure.class, null);
@@ -56,6 +60,10 @@ public interface LineConnectingFigure extends ConnectingFigure {
     SimpleNullableKey<Connector> START_CONNECTOR = new SimpleNullableKey<>("startConnector", Connector.class, null);
     /**
      * The start target.
+     * <p>
+     * This property can not be styled with CSS because it affects the
+     * layout observer relationship between the label and the target
+     * figure.
      */
     @NonNull
     SimpleNullableKey<Figure> START_TARGET = new SimpleNullableKey<>("startTarget", Figure.class, null);

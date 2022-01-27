@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Labeled;
 import javafx.scene.text.FontSmoothingType;
@@ -16,9 +17,9 @@ import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 
 /**
  * A figure which supports font attributes.
@@ -39,6 +40,10 @@ public interface TextLayoutableFigure extends Figure {
      * The vertical position of the text. Default value: {@code baseline}
      */
     EnumStyleableKey<VPos> TEXT_VPOS = new EnumStyleableKey<>("textVPos", VPos.class, VPos.BASELINE);
+    /**
+     * The horizontal position of the text. Default value: {@code left}
+     */
+    EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
     /**
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */
