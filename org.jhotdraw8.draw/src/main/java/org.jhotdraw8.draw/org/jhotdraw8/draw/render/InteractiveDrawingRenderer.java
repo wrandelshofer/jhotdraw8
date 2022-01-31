@@ -7,12 +7,7 @@ package org.jhotdraw8.draw.render;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -37,14 +32,9 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.function.Predicate;
 
 
@@ -187,9 +177,33 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             array[array.length - i - 1] = children.get(i);
         }
         if (array.length > 1) {
-            Arrays.sort(array, (Node a, Node b) -> Double.compare(b.getViewOrder(), a.getViewOrder()));
+            sortByViewOrder(array);
         }
         return array;
+    }
+
+    private @Nullable Boolean canSortByViewOrder = null;
+    private @Nullable Method getViewOrder = null;
+
+    @SuppressWarnings("unchecked")
+    private void sortByViewOrder(Node[] array) {
+        if (canSortByViewOrder == null) {
+            try {
+                getViewOrder = Node.class.getMethod("getViewOrder");
+                canSortByViewOrder = true;
+            } catch (Throwable e) {
+                canSortByViewOrder = false;
+            }
+        }
+        if (getViewOrder != null) {
+            Arrays.sort(array, Comparator.comparingDouble(n -> {
+                try {
+                    return (double) getViewOrder.invoke(n);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    return 0.0;
+                }
+            }));
+        }
     }
 
     public @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {

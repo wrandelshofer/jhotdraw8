@@ -278,7 +278,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the maximal depth
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     default int getMaxDepth() {
         return new TreeMaxDepthCalculator().getMaxDepth(
                 (T) this, TreeNode::getChildren);
