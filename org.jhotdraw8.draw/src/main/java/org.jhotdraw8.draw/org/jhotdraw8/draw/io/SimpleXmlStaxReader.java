@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
  * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
  */
 public class SimpleXmlStaxReader extends AbstractInputFormat implements ClipboardInputFormat {
-    private static final Pattern hrefPattern = Pattern.compile("(?:^|.* )href=\"([^\"]*)\".*");
+    private static final Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
     private final @NonNull IdFactory idFactory;
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
@@ -319,7 +319,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
             if ("xml-stylesheet".equals(piTarget) && piData != null) {
                 return (drawing -> {
                     Matcher m = hrefPattern.matcher(piData);
-                    if (m.matches()) {
+                    if (m.find()) {
                         String href = m.group(1);
 
                         URI uri = URI.create(href);
