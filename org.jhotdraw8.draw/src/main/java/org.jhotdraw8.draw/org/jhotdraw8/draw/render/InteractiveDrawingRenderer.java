@@ -7,7 +7,12 @@ package org.jhotdraw8.draw.render;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -34,7 +39,15 @@ import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 
@@ -451,7 +464,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return figureToNodeMap.containsKey(f);
     }
 
-    private void invalidateFigureNode(Figure f) {
+    private void invalidateFigureNode(@NonNull Figure f) {
         if (hasNode(f)) {
             dirtyFigureNodes.add(f);
         }
@@ -510,7 +523,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void onNodeRemovedFromTree(@NonNull Figure f) {
     }
 
-    private void onRootChanged(Figure f) {
+    private void onRootChanged(@Nullable Figure f) {
         ObservableList<Node> children = drawingPane.getChildren();
         nodeToFigureMap.clear();
         figureToNodeMap.clear();
@@ -521,8 +534,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             children.setAll(node);
         }
         dirtyFigureNodes.clear();
-        dirtyFigureNodes.add(f);
-        repaint();
+        if (f != null) {
+            dirtyFigureNodes.add(f);
+            repaint();
+        }
     }
 
     private void onSubtreeNodesChanged(@NonNull Figure figure) {
@@ -535,30 +550,30 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            onFigureAddedToParent(f);
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            onFigureRemovedFromParent(f);
-            break;
-        case NODE_ADDED_TO_TREE:
-            onNodeAddedToTree(f);
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            onNodeRemovedFromTree(f);
-            break;
-        case NODE_CHANGED:
-            onNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            onRootChanged(f);
-            break;
-        case SUBTREE_NODES_CHANGED:
-            onSubtreeNodesChanged(f);
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+                onFigureAddedToParent(f);
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                onFigureRemovedFromParent(f);
+                break;
+            case NODE_ADDED_TO_TREE:
+                onNodeAddedToTree(f);
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                onNodeRemovedFromTree(f);
+                break;
+            case NODE_CHANGED:
+                onNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                onRootChanged(f);
+                break;
+            case SUBTREE_NODES_CHANGED:
+                onSubtreeNodesChanged(f);
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     }
 
@@ -587,6 +602,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     public void paintImmediately() {
         paint();
     }
+
     private void updateRenderContext() {
         getRenderContext().set(RenderContext.CLIP_BOUNDS, getClipBounds());
         DefaultUnitConverter units = new DefaultUnitConverter(90, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
@@ -633,7 +649,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                     final Node node = getNode(f);// this may add the node again to the list of dirties!
                     if (node != null) {
                         f.updateNode(getRenderContext(), node);
-                        dirtyFigureNodes.remove(f);
+                        dirtyFigureNodes.remove(i);
                     }
                 }
             }
@@ -649,14 +665,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         // Update figure nodes until we reach the limit.
         for (int i = 0, n = copyOfDirtyFigureNodes.length; i < n && count < limit; i++) {
             final Figure f = copyOfDirtyFigureNodes[i];
-            if (f != null) {
-                count++;
-                final Node node = getNode(f);// this may add the node again to the list of dirties!
-                if (node != null) {
-                    f.updateNode(getRenderContext(), node);
-                    dirtyFigureNodes.remove(f);
-                }
+            count++;
+            final Node node = getNode(f);// this may add the node again to the list of dirties!
+            if (node != null) {
+                f.updateNode(getRenderContext(), node);
             }
+            dirtyFigureNodes.remove(i);
         }
 
         return count;
