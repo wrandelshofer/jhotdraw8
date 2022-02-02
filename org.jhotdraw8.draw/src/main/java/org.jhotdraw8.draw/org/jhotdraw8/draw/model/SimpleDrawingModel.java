@@ -30,12 +30,9 @@ import org.jhotdraw8.tree.TreeModelEvent;
 import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -94,7 +91,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         public Object put(Key<?> key, Object newValue) {
             if (target != null) {
                 Object oldValue = target.put(key, newValue);
-                onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+                if (figure != null) {
+                    onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+                }
                 return oldValue;
             } else {
                 return newValue;
@@ -103,7 +102,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     }
 
-    private @NonNull MapProxy mapProxy = new MapProxy();
+    private final @NonNull MapProxy mapProxy = new MapProxy();
 
     private boolean isValidating = false;
     private boolean valid = true;
@@ -123,8 +122,8 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             onRootChanged(oldValue, newValue);
         }
     };
-    private @NonNull BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
-            = (a, b) -> a.add(b);
+    private final @NonNull BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
+            = DirtyMask::add;
 
     private void invalidate() {
         if (valid) {
@@ -144,12 +143,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 newValue.getPropertyChangeListeners().add(propertyChangeHandler);
             }
         }
-        fireTreeModelEvent(TreeModelEvent.rootChanged(this, newValue));
+        fireTreeModelEvent(TreeModelEvent.rootChanged(this, oldValue, newValue));
     }
 
-    private @NonNull Set<Figure> layoutSubjectChange = new HashSet<>();
-
-    @SuppressWarnings("unchecked")
     private void onPropertyChanged(@NonNull FigurePropertyChangeEvent event) {
         if (!Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
@@ -159,7 +155,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private <T> void onPropertyChanged(@NonNull Figure figure, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
                 key, oldValue, newValue));
@@ -261,7 +256,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (key instanceof Key<?>) {
             T oldValue = figure.put(key, newValue);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
-            @SuppressWarnings("unchecked")
             Key<Object> keyObject = (Key<Object>) key;
             onPropertyChanged(figure, keyObject, oldValue, newValue);
             return oldValue;
@@ -282,7 +276,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (key instanceof Key<?>) {
             T oldValue = figure.remove((Key<T>) key);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
-            @SuppressWarnings("unchecked")
             Key<Object> keyObject = (Key<Object>) key;
             onPropertyChanged(figure, keyObject, oldValue, null);
             return oldValue;
@@ -375,36 +368,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public void updateCss(@NonNull Figure figure) {
         figure.stylesheetChanged(new SimpleRenderContext());
-    }
-
-    private void transitivelyCollectDependentFigures(@NonNull Collection<Figure> todo, @NonNull Set<Figure> done) {
-        while (true) {
-            List<Figure> todoNext = new ArrayList<>();
-            for (Figure figure : todo) {
-                for (Figure d : figure.getReadOnlyLayoutObservers()) {
-                    if (done.add(d)) {
-                        todoNext.add(d);
-                    }
-                }
-            }
-            if (todoNext.isEmpty()) {
-                break;
-            } else {
-                todo = todoNext;
-            }
-        }
-    }
-
-    private void collectLayoutableAncestors(@NonNull Collection<Figure> todo, @NonNull Set<Figure> done) {
-        for (Figure figure : todo) {
-            for (Figure ancestor = figure; ancestor != null && ancestor.isLayoutable(); ancestor = ancestor.getParent()) {
-                if (!done.add(ancestor)) {
-                    // The ancestor must be laid out last
-                    done.remove(ancestor);
-                    done.add(ancestor);
-                }
-            }
-        }
     }
 
     @Override
@@ -505,7 +468,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
                 if (visited.add(f)) {
                     if (dm.intersects(dmLayout)) {
-                        //noinspection StatementWithEmptyBody
                         for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
                             todo.add(i.current());
                         }
@@ -531,7 +493,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                         if (!visited.contains(obs)) {
                             queue.add(obs);
                         }
-                        ;
                     }
                 }
             }
@@ -595,41 +556,41 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-        case TRANSFORM_CHANGED:
-            markDirty(figure, DirtyBits.TRANSFORM);
-            invalidate();
-            break;
-        case PROPERTY_VALUE_CHANGED: {
-            Key<Object> key = event.getKey();
-            Object oldValue = event.getOldValue();
-            Object newValue = event.getNewValue();
-            figure.propertyChanged(key, oldValue, newValue);
-
-            //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
-            final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
-                    DirtyBits.LAYOUT, DirtyBits.NODE, DirtyBits.TRANSFORM,
-                    DirtyBits.LAYOUT_OBSERVERS
-            );
-            if (!dm.isEmpty()) {
-                markDirty(figure, dm);
+            case TRANSFORM_CHANGED:
+                markDirty(figure, DirtyBits.TRANSFORM);
                 invalidate();
+                break;
+            case PROPERTY_VALUE_CHANGED: {
+                Key<Object> key = event.getKey();
+                Object oldValue = event.getOldValue();
+                Object newValue = event.getNewValue();
+                figure.propertyChanged(key, oldValue, newValue);
+
+                //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
+                final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
+                        DirtyBits.LAYOUT, DirtyBits.NODE, DirtyBits.TRANSFORM,
+                        DirtyBits.LAYOUT_OBSERVERS
+                );
+                if (!dm.isEmpty()) {
+                    markDirty(figure, dm);
+                    invalidate();
+                }
+
+                break;
             }
+            case LAYOUT_CHANGED:
+                // A layout change also changes the transform of the figure, because its center may have moved
+                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.TRANSFORM);
+                invalidate();
+                break;
+            case STYLE_CHANGED:
+                markDirty(figure, DirtyBits.STYLE);
+                invalidate();
+                break;
 
-            break;
-        }
-        case LAYOUT_CHANGED:
-            // A layout change also changes the transform of the figure, because its center may have moved
-            markDirty(figure, DirtyBits.LAYOUT, DirtyBits.TRANSFORM);
-            invalidate();
-            break;
-        case STYLE_CHANGED:
-            markDirty(figure, DirtyBits.STYLE);
-            invalidate();
-            break;
-
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + "not supported");
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
         }
     }
 
@@ -641,38 +602,38 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
-            invalidate();
-            break;
-        case NODE_ADDED_TO_TREE:
-            if (event.getRoot() instanceof Drawing) {
-                figure.addedToDrawing((Drawing) event.getRoot());
-            }
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            if (event.getRoot() instanceof Drawing) {
-                figure.removedFromDrawing((Drawing) event.getRoot());
-            }
-            removeDirty(figure);
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
-            invalidate();
-            break;
-        case NODE_CHANGED:
-            markDirty(event.getNode(), DirtyBits.TRANSFORM, DirtyBits.NODE);
-            invalidate();
-            break;
-        case ROOT_CHANGED:
-            dirties.clear();
-            valid = true;
-            break;
-        case SUBTREE_NODES_CHANGED:
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + "not supported");
+            case NODE_ADDED_TO_PARENT:
+                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
+                invalidate();
+                break;
+            case NODE_ADDED_TO_TREE:
+                if (event.getRoot() instanceof Drawing) {
+                    figure.addedToDrawing((Drawing) event.getRoot());
+                }
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                if (event.getRoot() instanceof Drawing) {
+                    figure.removedFromDrawing((Drawing) event.getRoot());
+                }
+                removeDirty(figure);
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
+                invalidate();
+                break;
+            case NODE_CHANGED:
+                markDirty(event.getNode(), DirtyBits.TRANSFORM, DirtyBits.NODE);
+                invalidate();
+                break;
+            case ROOT_CHANGED:
+                dirties.clear();
+                valid = true;
+                break;
+            case SUBTREE_NODES_CHANGED:
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + "not supported");
         }
     }
 }
