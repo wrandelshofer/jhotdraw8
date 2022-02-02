@@ -20,9 +20,11 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     public enum EventType {
         /**
          * The root of the model changed.
-         * <p>
-         * root is the new root.
-         * parent is the old root.
+         * <ul>
+         * <li>node is the new root.</li>
+         * <li>root is also the new root.</li>
+         * <li>parent is the old root.</li>
+         * </ul>
          */
         ROOT_CHANGED,
         /**
@@ -103,7 +105,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     }
 
     public static @NonNull <E> TreeModelEvent<E> rootChanged(@NonNull TreeModel<E> source, E oldRoot, E newRoot) {
-        return new TreeModelEvent<>(source, EventType.ROOT_CHANGED, null, oldRoot, newRoot, -1);
+        return new TreeModelEvent<>(source, EventType.ROOT_CHANGED, newRoot, oldRoot, newRoot, -1);
     }
 
     /**

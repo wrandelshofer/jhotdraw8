@@ -649,7 +649,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
                     final Node node = getNode(f);// this may add the node again to the list of dirties!
                     if (node != null) {
                         f.updateNode(getRenderContext(), node);
-                        dirtyFigureNodes.remove(i);
+                        dirtyFigureNodes.remove(f);
                     }
                 }
             }
@@ -669,8 +669,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             final Node node = getNode(f);// this may add the node again to the list of dirties!
             if (node != null) {
                 f.updateNode(getRenderContext(), node);
+                dirtyFigureNodes.remove(f);
             }
-            dirtyFigureNodes.remove(i);
         }
 
         return count;
