@@ -30,7 +30,7 @@ import java.util.Spliterator;
  *
  * @param <E> the element type
  */
-public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
+public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
 
     /**
      * Returns the element at the specified position in this list.
@@ -62,6 +62,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      * @return the first element
      * @throws java.util.NoSuchElementException if the list is empty
      */
+    @Override
     default E getFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException();
@@ -75,6 +76,7 @@ public interface ReadOnlyList<E> extends ReadOnlyCollection<E> {
      * @return the last element
      * @throws java.util.NoSuchElementException if the list is empty
      */
+    @Override
     default E getLast() {
         int index = size() - 1;
         if (index < 0) {

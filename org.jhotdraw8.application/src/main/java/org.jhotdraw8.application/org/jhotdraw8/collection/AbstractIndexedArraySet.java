@@ -61,7 +61,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
      *
      * @param col A collection.
      */
-    public AbstractIndexedArraySet(Collection<? extends E> col) {
+    public AbstractIndexedArraySet(@NonNull Collection<? extends E> col) {
         setAll(col);
     }
 

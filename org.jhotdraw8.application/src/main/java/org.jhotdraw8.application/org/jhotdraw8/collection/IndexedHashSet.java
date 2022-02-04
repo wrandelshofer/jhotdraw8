@@ -20,8 +20,6 @@ import java.util.Set;
 public class IndexedHashSet<E> extends AbstractIndexedArraySet<E> {
     /**
      * The hash set.
-     * <p>
-     * FIXME implement this as an inline hash array.
      */
     private final @NonNull Set<E> set = new HashSet<>();
 
