@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.SimpleNullableKey;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
@@ -84,7 +83,12 @@ public interface LineConnectingFigure extends ConnectingFigure {
         return get(END_CONNECTOR) != null && get(END_TARGET) != null;
     }
 
-    default @Nullable Point2D getStartTargetPoint() {
+    /**
+     * Gets the start target point or the start point if the start target point is not present.
+     *
+     * @return start target point or start point.
+     */
+    default @NonNull Point2D getStartTargetPoint() {
         Connector connector = get(START_CONNECTOR);
         Figure target = get(START_TARGET);
         if (connector != null && target != null) {
@@ -94,7 +98,12 @@ public interface LineConnectingFigure extends ConnectingFigure {
         }
     }
 
-    default @Nullable Point2D getEndTargetPoint() {
+    /**
+     * Gets the end target point or the end point if the end target point is not present.
+     *
+     * @return end target point or end point.
+     */
+    default @NonNull Point2D getEndTargetPoint() {
         Connector connector = get(END_CONNECTOR);
         Figure target = get(END_TARGET);
         if (connector != null && target != null) {
