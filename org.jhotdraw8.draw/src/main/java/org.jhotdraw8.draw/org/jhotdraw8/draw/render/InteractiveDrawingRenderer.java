@@ -605,7 +605,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
     private void updateRenderContext() {
         getRenderContext().set(RenderContext.CLIP_BOUNDS, getClipBounds());
-        DefaultUnitConverter units = new DefaultUnitConverter(90, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
+        DefaultUnitConverter units = new DefaultUnitConverter(96, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
         getRenderContext().set(RenderContext.UNIT_CONVERTER_KEY, units);
     }
 
