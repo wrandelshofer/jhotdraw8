@@ -7,16 +7,16 @@ package org.jhotdraw8.collection;
 import java.util.Collection;
 
 /**
- * Tests {@link IndexedHashSet}.
+ * Tests {@link IndexedHashObservableSet}.
  *
  * @author Werner Randelshofer
  */
 
-public class IndexedHashSetTest extends AbstractIndexedArraySetTest {
+public class IndexedHashSetTest extends AbstractIndexedArrayObservableSetTest {
 
     @Override
-    protected AbstractIndexedArraySet<Character> newInstance(Collection<Character> col) {
-        return new IndexedHashSet<>(col);
+    protected AbstractIndexedArrayObservableSet<Character> newInstance(Collection<Character> col) {
+        return new IndexedHashObservableSet<>(col);
     }
 
 }

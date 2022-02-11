@@ -39,7 +39,7 @@ import static java.lang.Math.min;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
+public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableListBase<E>
         implements Set<E>, Deque<E>, ReadOnlySet<E> {
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
@@ -52,7 +52,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
     /**
      * Creates a new instance.
      */
-    public AbstractIndexedArraySet() {
+    public AbstractIndexedArrayObservableSet() {
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
      *
      * @param col A collection.
      */
-    public AbstractIndexedArraySet(@NonNull Collection<? extends E> col) {
+    public AbstractIndexedArrayObservableSet(@NonNull Collection<? extends E> col) {
         setAll(col);
     }
 
@@ -529,7 +529,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
         @Override
         public void remove() {
             checkModCount();
-            AbstractIndexedArraySet.this.remove(index - 1);
+            AbstractIndexedArrayObservableSet.this.remove(index - 1);
             index--;
             to--;
             expectedModCount = modCount;
@@ -541,7 +541,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
             }
-            AbstractIndexedArraySet.this.set(index - 1, e);
+            AbstractIndexedArrayObservableSet.this.set(index - 1, e);
             expectedModCount = modCount;
         }
 
@@ -551,7 +551,7 @@ public abstract class AbstractIndexedArraySet<E> extends ObservableListBase<E>
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
             }
-            AbstractIndexedArraySet.this.add(index, e);
+            AbstractIndexedArrayObservableSet.this.add(index, e);
             index++;
             to++;
             expectedModCount = modCount;

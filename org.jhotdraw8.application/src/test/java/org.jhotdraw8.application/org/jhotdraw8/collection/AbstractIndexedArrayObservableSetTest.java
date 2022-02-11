@@ -21,19 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * Tests {@link AbstractIndexedArraySet}.
+ * Tests {@link AbstractIndexedArrayObservableSet}.
  *
  * @author Werner Randelshofer
  */
 
-public abstract class AbstractIndexedArraySetTest {
+public abstract class AbstractIndexedArrayObservableSetTest {
 
-    protected abstract AbstractIndexedArraySet<Character> newInstance(Collection<Character> col);
+    protected abstract AbstractIndexedArrayObservableSet<Character> newInstance(Collection<Character> col);
 
     public void testAdd(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
-        AbstractIndexedArraySet<Character> list = newInstance(asList(initialList));
+        AbstractIndexedArrayObservableSet<Character> list = newInstance(asList(initialList));
 
-        AbstractIndexedArraySetTest.ChangeRecorder recorder = new AbstractIndexedArraySetTest.ChangeRecorder();
+        AbstractIndexedArrayObservableSetTest.ChangeRecorder recorder = new AbstractIndexedArrayObservableSetTest.ChangeRecorder();
         list.addListener(recorder);
         list.add(index, value);
 
@@ -80,9 +80,9 @@ public abstract class AbstractIndexedArraySetTest {
     }
 
     public void testSet(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
-        AbstractIndexedArraySet<Character> list = newInstance(asList(initialList));
+        AbstractIndexedArrayObservableSet<Character> list = newInstance(asList(initialList));
 
-        AbstractIndexedArraySetTest.ChangeRecorder recorder = new AbstractIndexedArraySetTest.ChangeRecorder();
+        AbstractIndexedArrayObservableSetTest.ChangeRecorder recorder = new AbstractIndexedArrayObservableSetTest.ChangeRecorder();
         list.addListener(recorder);
         list.set(index, value);
 

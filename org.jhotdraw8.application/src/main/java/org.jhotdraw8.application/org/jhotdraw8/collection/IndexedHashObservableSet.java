@@ -17,16 +17,16 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-public class IndexedHashSet<E> extends AbstractIndexedArraySet<E> {
+public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableSet<E> {
     /**
      * The hash set.
      */
     private final @NonNull Set<E> set = new HashSet<>();
 
-    public IndexedHashSet() {
+    public IndexedHashObservableSet() {
     }
 
-    public IndexedHashSet(Collection<? extends E> col) {
+    public IndexedHashObservableSet(Collection<? extends E> col) {
         setAll(col);
     }
 

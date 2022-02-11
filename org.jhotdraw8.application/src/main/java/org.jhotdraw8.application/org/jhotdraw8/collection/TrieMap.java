@@ -38,7 +38,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
         this.root = PersistentTrieMap.emptyNode();
     }
 
-    TrieMap(PersistentTrieMap<K, V> trieMap) {
+    TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
         this.bulkEdit = new PersistentTrieHelper.Nonce();
         this.root = trieMap.root;
         this.hashCode = trieMap.hashCode;

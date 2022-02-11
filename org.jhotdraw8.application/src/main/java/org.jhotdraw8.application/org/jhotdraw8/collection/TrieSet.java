@@ -1,9 +1,11 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractSet;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -26,9 +28,10 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> {
     private PersistentTrieHelper.Nonce bulkEdit;
-    PersistentTrieSet.BitmapIndexedNode<E> root;
-    int hashCode;
-    int size;
+    private PersistentTrieSet.BitmapIndexedNode<E> root;
+    private int hashCode;
+    private int size;
+    private int modCount;
 
     /**
      * Constructs an empty set.
@@ -64,29 +67,26 @@ public class TrieSet<E> extends AbstractSet<E> {
             root = newRootNode;
             hashCode += keyHash;
             size += 1;
+            modCount++;
             return true;
         }
         return false;
     }
 
     /**
-     * Adds all of the elements in the specified collection to this set if
+     * Adds all elements in the specified collection to this set if
      * they're not already present.
      *
      * @param c a collection
      * @return true if this set has changed
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public boolean addAll(Collection<? extends E> c) {
-        if (c instanceof TrieSet) {
-            return addAll((Iterable<? extends E>) c);
-        }
-        return super.addAll(c);
+    public boolean addAll(@NonNull Collection<? extends E> c) {
+        return addAll((Iterable<? extends E>) c);
     }
 
     @SuppressWarnings("unchecked")
-    public boolean addAll(Iterable<? extends E> c) {
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
         if (c == this) {
             return false;
         }
@@ -128,7 +128,7 @@ public class TrieSet<E> extends AbstractSet<E> {
 
     @Override
     public void clear() {
-        this.root = PersistentTrieSet.<E>emptyNode();
+        this.root = PersistentTrieSet.emptyNode();
         this.size = this.hashCode = 0;
     }
 
@@ -142,9 +142,23 @@ public class TrieSet<E> extends AbstractSet<E> {
             root = newRootNode;
             hashCode = hashCode - keyHash;
             size = size - 1;
+            modCount++;
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean removeAll(@NonNull Collection<?> c) {
+        return removeAll((Iterable<?>) c);
+    }
+
+    public boolean removeAll(@NonNull Iterable<?> c) {
+        boolean modified = false;
+        for (Object o : c) {
+            modified |= remove(o);
+        }
+        return modified;
     }
 
     @Override
@@ -167,11 +181,54 @@ public class TrieSet<E> extends AbstractSet<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new PersistentTrieSet.TrieIterator<>(root);
+        return new TransientTrieIterator<>(this);
     }
 
     @Override
     public int size() {
         return size;
+    }
+
+    static class TransientTrieIterator<E> extends PersistentTrieSet.TrieIterator<E> {
+        private final @NonNull TrieSet<E> set;
+        private int expectedModCount;
+
+        TransientTrieIterator(@NonNull TrieSet<E> set) {
+            super(set.root);
+            this.set = set;
+            this.expectedModCount = set.modCount;
+        }
+
+        @Override
+        public E next() {
+            if (expectedModCount != set.modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return super.next();
+        }
+
+        @Override
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+            if (expectedModCount != set.modCount) {
+                throw new ConcurrentModificationException();
+            }
+
+            E toRemove = current;
+            if (hasNext()) {
+                E next = next();
+                set.remove(toRemove);
+                expectedModCount = set.modCount;
+                moveTo(next, set.root);
+            } else {
+                set.remove(toRemove);
+                expectedModCount = set.modCount;
+            }
+
+            current = null;
+
+        }
     }
 }

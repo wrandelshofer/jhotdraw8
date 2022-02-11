@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+import static org.jhotdraw8.collection.PersistentTrieSet.Node.BIT_PARTITION_SIZE;
+
 
 /**
  * Implements the {@link PersistentSet} interface with a
@@ -267,22 +269,57 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             this.bulkEdit = bulkEdit;
         }
 
+        /**
+         * Given a masked keyHash, returns its bit-position
+         * in the bit-map.
+         * <p>
+         * For example, if the bit partition is 5 bits, then
+         * we 2^5 == 32 distinct bit-positions.
+         * If the masked keyHash is 3 then the bit-position is
+         * the bit with index 3. That is, 1<<3 = 0b0100.
+         *
+         * @param mask
+         * @return
+         */
         static int bitpos(final int mask) {
             return 1 << mask;
         }
 
+        /**
+         * Given a bitmap and a bit-position, returns the index
+         * in the array.
+         * <p>
+         * For example, if the bitmap is 0b1101 and
+         * bit-position is 0b0100, then the index is 1.
+         *
+         * @param bitmap a bit-map
+         * @param bitpos a bit-position
+         * @return the array index
+         */
         static int index(final int bitmap, final int bitpos) {
             return Integer.bitCount(bitmap & (bitpos - 1));
         }
 
         static int index(final int bitmap, final int mask, final int bitpos) {
-            return (bitmap == -1) ? mask : index(bitmap, bitpos);
+            return index(bitmap, bitpos);
+            //return (bitmap == -1) ? mask : index(bitmap, bitpos);
         }
 
         static boolean isAllowedToEdit(PersistentTrieHelper.Nonce x, PersistentTrieHelper.Nonce y) {
             return x != null && (x == y);
         }
 
+        /**
+         * Given a keyHash and a shift, returns shifted portion of the
+         * keyHash masked by the {@link #BIT_PARTITION_MASK}.
+         * <p>
+         * For example, if the shift is 10, and the bit partition is 5,
+         * returns bits 10 to 15 shifted by 10 to the right.
+         *
+         * @param keyHash a keyHash
+         * @param shift   a shift
+         * @return shifted and masked keyHash
+         */
         static int mask(final int keyHash, final int shift) {
             return (keyHash >>> shift) & BIT_PARTITION_MASK;
         }
@@ -291,6 +328,25 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         abstract @NonNull Node<K> copyAddAll(@NonNull Node<K> that, final int shift, BulkChangeEvent bulkChange);
 
         abstract boolean contains(final K key, final int keyHash, final int shift);
+
+        /**
+         * Returns the payload index for the given keyHash and shift, or -1.
+         *
+         * @param key
+         * @param keyHash the key hash
+         * @param shift   the shift
+         * @return the payload index or -1
+         */
+        abstract int payloadIndex(@Nullable K key, final int keyHash, final int shift);
+
+        /**
+         * Returns the node index for the given keyHash and shift, or -1.
+         *
+         * @param keyHash the key hash
+         * @param shift   the shift
+         * @return the node index or -1
+         */
+        abstract int nodeIndex(final int keyHash, final int shift);
 
         abstract K getKey(final int index);
 
@@ -502,6 +558,24 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             }
 
             return false;
+        }
+
+        @Override
+        int payloadIndex(K key, final int keyHash, final int shift) {
+            final int mask = mask(keyHash, shift);
+            final int bitpos = bitpos(mask);
+            return (this.dataMap & bitpos) != 0
+                    ? index(this.dataMap, mask, bitpos)
+                    : -1;
+        }
+
+        @Override
+        int nodeIndex(int keyHash, int shift) {
+            final int mask = mask(keyHash, shift);
+            final int bitpos = bitpos(mask);
+            return (this.nodeMap & bitpos) != 0
+                    ? index(this.nodeMap, mask, bitpos)
+                    : -1;
         }
 
         private Node<K> copyAndInsertValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
@@ -798,6 +872,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         }
     }
 
+    @SuppressWarnings("ForLoopReplaceableByForEach")
     private static final class HashCollisionNode<K> extends Node<K> {
         private final int hash;
         private @NonNull K[] keys;
@@ -862,6 +937,25 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                 }
             }
             return false;
+        }
+
+        @Override
+        int payloadIndex(K key, final int keyHash, final int shift) {
+            if (this.hash != keyHash) {
+                return -1;
+            }
+            for (int i = 0, keysLength = keys.length; i < keysLength; i++) {
+                K k = keys[i];
+                if (Objects.equals(k, key)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        @Override
+        int nodeIndex(int keyHash, int shift) {
+            return -1;
         }
 
         @Override
@@ -986,16 +1080,17 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
 
         private static final int MAX_DEPTH = 7;
         private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
-        protected int currentValueCursor;
-        protected int currentValueLength;
-        protected Node<K> currentValueNode;
+        protected int nextValueCursor;
+        protected int nextValueLength;
+        protected Node<K> nextValueNode;
         @SuppressWarnings({"unchecked", "rawtypes"})
         Node<K>[] nodes = new Node[MAX_DEPTH];
-        private int currentStackLevel = -1;
+        private int nextStackLevel = -1;
+        protected K current;
 
         TrieIterator(Node<K> rootNode) {
             if (rootNode.hasNodes()) {
-                currentStackLevel = 0;
+                nextStackLevel = 0;
 
                 nodes[0] = rootNode;
                 nodeCursorsAndLengths[0] = 0;
@@ -1003,14 +1098,14 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             }
 
             if (rootNode.hasPayload()) {
-                currentValueNode = rootNode;
-                currentValueCursor = 0;
-                currentValueLength = rootNode.payloadArity();
+                nextValueNode = rootNode;
+                nextValueCursor = 0;
+                nextValueLength = rootNode.payloadArity();
             }
         }
 
         public boolean hasNext() {
-            if (currentValueCursor < currentValueLength) {
+            if (nextValueCursor < nextValueLength) {
                 return true;
             } else {
                 return searchNextValueNode();
@@ -1022,25 +1117,25 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             if (!hasNext()) {
                 throw new NoSuchElementException();
             } else {
-                return currentValueNode.getKey(currentValueCursor++);
+                return current = nextValueNode.getKey(nextValueCursor++);
             }
         }
 
         private boolean searchNextValueNode() {
-            while (currentStackLevel >= 0) {
-                final int currentCursorIndex = currentStackLevel * 2;
+            while (nextStackLevel >= 0) {
+                final int currentCursorIndex = nextStackLevel * 2;
                 final int currentLengthIndex = currentCursorIndex + 1;
 
                 final int nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
                 final int nodeLength = nodeCursorsAndLengths[currentLengthIndex];
 
                 if (nodeCursor < nodeLength) {
-                    final Node<K> nextNode = nodes[currentStackLevel].getNode(nodeCursor);
+                    final Node<K> nextNode = nodes[nextStackLevel].getNode(nodeCursor);
                     nodeCursorsAndLengths[currentCursorIndex]++;
 
                     if (nextNode.hasNodes()) {
                         // put node on next stack level for depth-first traversal
-                        final int nextStackLevel = ++currentStackLevel;
+                        final int nextStackLevel = ++this.nextStackLevel;
                         final int nextCursorIndex = nextStackLevel * 2;
                         final int nextLengthIndex = nextCursorIndex + 1;
 
@@ -1050,17 +1145,62 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
                     }
 
                     if (nextNode.hasPayload()) {
-                        currentValueNode = nextNode;
-                        currentValueCursor = 0;
-                        currentValueLength = nextNode.payloadArity();
+                        nextValueNode = nextNode;
+                        nextValueCursor = 0;
+                        nextValueLength = nextNode.payloadArity();
                         return true;
                     }
                 } else {
-                    currentStackLevel--;
+                    nextStackLevel--;
                 }
             }
 
             return false;
+        }
+
+        /**
+         * Moves the iterator so that it stands before the specified
+         * element.
+         *
+         * @param k        an element
+         * @param rootNode the root node of the set
+         */
+        protected void moveTo(final @Nullable K k, final @NonNull Node<K> rootNode) {
+            int keyHash = Objects.hashCode(k);
+            int shift = 0;
+            Node<K> node = rootNode;
+
+            nextStackLevel = -1;
+            nextValueNode = null;
+            nextValueCursor = 0;
+            nextValueLength = 0;
+            Arrays.fill(nodes, null);
+            Arrays.fill(nodeCursorsAndLengths, 0);
+            current = null;
+
+            for (int depth = 0; depth < MAX_DEPTH; depth++) {
+                nodes[depth] = node;
+
+                int nodeIndex = node.nodeIndex(keyHash, shift);
+                if (nodeIndex != -1) {
+                    final int nextCursorIndex = depth * 2;
+                    final int nextLengthIndex = nextCursorIndex + 1;
+                    nodeCursorsAndLengths[nextCursorIndex] = 0;
+                    nodeCursorsAndLengths[nextLengthIndex] = node.nodeArity();
+                    node = node.getNode(nodeIndex);
+                } else {
+                    int payloadIndex = node.payloadIndex(k, keyHash, shift);
+                    if (payloadIndex != -1) {
+                        nextValueNode = node;
+                        nextValueCursor = payloadIndex;
+                        nextValueLength = node.payloadArity();
+                        nextStackLevel = depth;
+                    }
+                    break;
+                }
+
+                shift += BIT_PARTITION_SIZE;
+            }
         }
     }
 

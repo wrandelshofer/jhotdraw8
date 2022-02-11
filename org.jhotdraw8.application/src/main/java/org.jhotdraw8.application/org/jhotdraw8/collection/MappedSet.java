@@ -32,6 +32,7 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
 
     @Override
     public boolean contains(Object o) {
+        // FIXME Should throw UnsupportedOperationException!
         return backingSet.contains(o);
     }
 

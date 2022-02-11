@@ -9,11 +9,11 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 
-public class IndexedArraySet<E> extends AbstractIndexedArraySet<E> {
-    public IndexedArraySet() {
+public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservableSet<E> {
+    public IndexedArrayObservableSet() {
     }
 
-    public IndexedArraySet(Collection<? extends E> col) {
+    public IndexedArrayObservableSet(Collection<? extends E> col) {
         super(col);
     }
 
