@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> {
     private PersistentTrieHelper.Nonce bulkEdit;
-    private PersistentTrieSet.BitmapIndexedNode<E> root;
+    private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int hashCode;
     private int size;
     private int modCount;
@@ -38,7 +38,7 @@ public class TrieSet<E> extends AbstractSet<E> {
      */
     public TrieSet() {
         this.bulkEdit = new PersistentTrieHelper.Nonce();
-        this.root = PersistentTrieSet.emptyNode();
+        this.root = PersistentTrieSetHelper.emptyNode();
     }
 
     /**
@@ -61,8 +61,9 @@ public class TrieSet<E> extends AbstractSet<E> {
 
     public boolean add(final @Nullable E key) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieSet.ChangeEvent changeEvent = new PersistentTrieSet.ChangeEvent();
-        final PersistentTrieSet.BitmapIndexedNode<E> newRootNode = (PersistentTrieSet.BitmapIndexedNode<E>) root.updated(this.bulkEdit, key, keyHash, 0, changeEvent);
+        final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
+        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode =
+                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(this.bulkEdit, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
             hashCode += keyHash;
@@ -92,20 +93,20 @@ public class TrieSet<E> extends AbstractSet<E> {
         }
 
         if ((c instanceof TrieSet) || (c instanceof PersistentTrieSet)) {
-            PersistentTrieSet.Node<E> root;
-            PersistentTrieSet.BulkChangeEvent bulkChange = new PersistentTrieSet.BulkChangeEvent();
+            PersistentTrieSetHelper.Node<E> root;
+            PersistentTrieSetHelper.BulkChangeEvent bulkChange = new PersistentTrieSetHelper.BulkChangeEvent();
             if (c instanceof TrieSet) {
                 TrieSet<? extends E> trieSet = (TrieSet<? extends E>) c;
-                root = (PersistentTrieSet.Node<E>) trieSet.root;
+                root = (PersistentTrieSetHelper.Node<E>) trieSet.root;
                 bulkChange.hashChange = trieSet.hashCode;
                 bulkChange.sizeChange = trieSet.size;
             } else {
                 PersistentTrieSet<? extends E> trieSet = (PersistentTrieSet<? extends E>) c;
                 bulkChange.hashChange = trieSet.hashCode;
                 bulkChange.sizeChange = trieSet.size;
-                root = (PersistentTrieSet.Node<E>) trieSet.root;
+                root = (PersistentTrieSetHelper.Node<E>) trieSet.root;
             }
-            PersistentTrieSet.BitmapIndexedNode<E> newNode = this.root.copyAddAll(root, 0, bulkChange);
+            PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.root.copyAddAll(root, 0, bulkChange);
             if (newNode == this.root) {
                 return false;
             }
@@ -128,7 +129,7 @@ public class TrieSet<E> extends AbstractSet<E> {
 
     @Override
     public void clear() {
-        this.root = PersistentTrieSet.emptyNode();
+        this.root = PersistentTrieSetHelper.emptyNode();
         this.size = this.hashCode = 0;
     }
 
@@ -136,8 +137,9 @@ public class TrieSet<E> extends AbstractSet<E> {
         @SuppressWarnings("unchecked")
         E key = (E) o;
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieSet.ChangeEvent changeEvent = new PersistentTrieSet.ChangeEvent();
-        final PersistentTrieSet.BitmapIndexedNode<E> newRootNode = (PersistentTrieSet.BitmapIndexedNode<E>) root.removed(this.bulkEdit, key, keyHash, 0, changeEvent);
+        final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
+        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode =
+                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(this.bulkEdit, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
             hashCode = hashCode - keyHash;
@@ -189,7 +191,7 @@ public class TrieSet<E> extends AbstractSet<E> {
         return size;
     }
 
-    static class TransientTrieIterator<E> extends PersistentTrieSet.TrieIterator<E> {
+    static class TransientTrieIterator<E> extends PersistentTrieSetHelper.TrieIterator<E> {
         private final @NonNull TrieSet<E> set;
         private int expectedModCount;
 

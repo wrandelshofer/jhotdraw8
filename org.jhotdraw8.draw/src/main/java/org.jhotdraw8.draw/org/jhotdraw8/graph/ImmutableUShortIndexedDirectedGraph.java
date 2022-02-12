@@ -1,5 +1,5 @@
 /*
- * @(#)IntImmutableDirectedGraph.java
+ * @(#)UShortImmutableDirectedGraph.java
  * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * ImmutableIntDirectedGraph.
+ * ImmutableDirectedGraph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class ImmutableUShortIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -41,7 +41,7 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final @NonNull int[] next;
+    protected final @NonNull char[] next;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -59,7 +59,7 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final @NonNull int[] nextOffset;
+    protected final @NonNull char[] nextOffset;
 
     /**
      * Holds the arrow objects.
@@ -83,37 +83,41 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
      * Given vertex {@code v},<br>
      * {@code vertexToIndexMap.get(v)} yields the vertex index {@code vi}.
      */
-    protected final @NonNull Map<V, Integer> vertexToIndexMap;
+    protected final @NonNull Map<V, Character> vertexToIndexMap;
 
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public IntImmutableDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public ImmutableUShortIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
 
-        this.next = new int[arrowCount];
+        if (arrowCount + vertexCount >= Character.MAX_VALUE) {
+            throw new IllegalArgumentException("arrowCount+vertexCount >= " + Character.MAX_VALUE + ". arrowCount=" + arrowCount + ", vertexCount=" + vertexCount);
+        }
+
+        this.next = new char[arrowCount];
 
         @SuppressWarnings("unchecked")
         A[] uncheckedArrows = (A[]) new Object[arrowCount];
         this.nextArrows = uncheckedArrows;
-        this.nextOffset = new int[vertexCount];
+        this.nextOffset = new char[vertexCount];
         @SuppressWarnings("unchecked")
         V[] uncheckedVertices = (V[]) new Object[vertexCount];
         this.vertices = uncheckedVertices;
         this.vertexToIndexMap = new HashMap<>(vertexCount);
 
-        int offset = 0;
-        for (int vi = 0; vi < vertexCount; vi++) {
+        char offset = 0;
+        for (char vi = 0; vi < vertexCount; vi++) {
             nextOffset[vi] = offset;
             V v = graph.getVertex(vi);
             this.vertices[vi] = v;
             vertexToIndexMap.put(v, vi);
             for (int i = 0, n = graph.getNextCount(vi); i < n; i++) {
-                next[offset] = graph.getNext(vi, i);
+                next[offset] = (char) graph.getNext(vi, i);
                 this.nextArrows[offset] = graph.getNextArrow(vi, i);
                 offset++;
             }
@@ -125,24 +129,27 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
      *
      * @param graph a graph
      */
-    public IntImmutableDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public ImmutableUShortIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
 
-        final int arrowCapacity = graph.getArrowCount();
-        final int vertexCapacity = graph.getVertexCount();
+        final int arrowCount = graph.getArrowCount();
+        final int vertexCount = graph.getVertexCount();
+        if (arrowCount + vertexCount >= Character.MAX_VALUE) {
+            throw new IllegalArgumentException("arrowCount+vertexCount >= " + Character.MAX_VALUE + ". arrowCount=" + arrowCount + ", vertexCount=" + vertexCount);
+        }
 
-        this.next = new int[arrowCapacity];
+        this.next = new char[arrowCount];
         @SuppressWarnings("unchecked")
-        A[] uncheckedArrows = (A[]) new Object[arrowCapacity];
+        A[] uncheckedArrows = (A[]) new Object[arrowCount];
         this.nextArrows = uncheckedArrows;
-        this.nextOffset = new int[vertexCapacity];
+        this.nextOffset = new char[vertexCount];
         @SuppressWarnings("unchecked")
-        V[] uncheckedVertices = (V[]) new Object[vertexCapacity];
+        V[] uncheckedVertices = (V[]) new Object[vertexCount];
         this.vertices = uncheckedVertices;
-        this.vertexToIndexMap = new HashMap<>(vertexCapacity);
+        this.vertexToIndexMap = new HashMap<>(vertexCount);
 
         //    Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
         {
-            int vi = 0;
+            char vi = 0;
             for (V v : graph.getVertices()) {
                 vertexToIndexMap.put(v, vi);
                 vi++;
@@ -150,7 +157,7 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
         }
 
         {
-            int offset = 0;
+            char offset = 0;
             int vi = 0;
             for (V v : graph.getVertices()) {
 
@@ -229,7 +236,7 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
 
     @Override
     public int getVertexIndex(V vertex) {
-        Integer index = vertexToIndexMap.get(vertex);
+        Character index = vertexToIndexMap.get(vertex);
         return index == null ? -1 : index;
     }
 
@@ -260,9 +267,9 @@ public class IntImmutableDirectedGraph<V, A> implements AttributedIndexedDirecte
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private int limit;
-            private final int[] array;
+            private final char[] array;
 
-            public MySpliterator(int lo, int hi, int[] nextVertices) {
+            public MySpliterator(int lo, int hi, char[] nextVertices) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 limit = hi;
                 index = lo;
