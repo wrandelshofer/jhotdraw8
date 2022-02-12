@@ -96,4 +96,19 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
         };
     }
 
+    /**
+     * Returns the index of vertex b.
+     *
+     * @param vidxa a vertex
+     * @param vidxb another vertex
+     * @return index of vertex b. Returns -1 if b is not a previous vertex of a.
+     */
+    default int findIndexOfPrev(int vidxa, int vidxb) {
+        for (int i = 0, n = getNextCount(vidxa); i < n; i++) {
+            if (vidxb == getNext(vidxa, i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

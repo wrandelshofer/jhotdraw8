@@ -71,7 +71,7 @@ public interface IndexedDirectedGraph {
      *
      * @param vidxa a vertex
      * @param vidxb another vertex
-     * @return index of vertex b. Returns -1 if b is not next index of a.
+     * @return index of vertex b. Returns -1 if b is not a next vertex of a.
      */
     default int findIndexOfNext(int vidxa, int vidxb) {
         for (int i = 0, n = getNextCount(vidxa); i < n; i++) {
