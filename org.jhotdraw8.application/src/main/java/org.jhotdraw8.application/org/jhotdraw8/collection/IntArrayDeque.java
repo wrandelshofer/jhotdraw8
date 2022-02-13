@@ -6,17 +6,20 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * IntArrayDeque.
  *
  * @author Werner Randelshofer
  */
-public class IntArrayDeque {
+public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<Integer> {
     /**
      * The length of this array is always a power of 2.
      */
@@ -58,7 +61,7 @@ public class IntArrayDeque {
      *
      * @param e the element to add
      */
-    public void addFirst(int e) {
+    public void addFirstInt(int e) {
         //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
@@ -82,8 +85,8 @@ public class IntArrayDeque {
      *
      * @param e the element to add
      */
-    public void push(int e) {
-        addFirst(e);
+    public void pushInt(int e) {
+        addFirstInt(e);
     }
 
     /**
@@ -91,7 +94,7 @@ public class IntArrayDeque {
      *
      * @param e the element
      */
-    public void addLast(int e) {
+    public void addLastInt(int e) {
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {
@@ -104,7 +107,7 @@ public class IntArrayDeque {
      *
      * @throws NoSuchElementException if the queue is empty
      */
-    public int removeFirst() {
+    public int removeFirstInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -119,14 +122,14 @@ public class IntArrayDeque {
      *
      * @throws NoSuchElementException if the queue is empty
      */
-    public int pop() {
-        return removeFirst();
+    public int popInt() {
+        return removeFirstInt();
     }
 
     /**
      * @throws NoSuchElementException {@inheritDoc}
      */
-    public int removeLast() {
+    public int removeLastInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -139,7 +142,7 @@ public class IntArrayDeque {
     /**
      * @throws NoSuchElementException if queue is empty
      */
-    public int getFirst() {
+    public int getFirstInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -150,7 +153,7 @@ public class IntArrayDeque {
     /**
      * @throws NoSuchElementException if queue is empty
      */
-    public int getLast() {
+    public int getLastInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -180,6 +183,21 @@ public class IntArrayDeque {
 
     public @NonNull Iterator<Integer> iterator() {
         return new DeqIterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public Iterator<Integer> descendingIterator() {
+        return null;
     }
 
     private class DeqIterator implements Iterator<Integer> {
@@ -215,6 +233,251 @@ public class IntArrayDeque {
 
     }
 
+
+    @Override
+    public void addFirst(Integer integer) {
+        addFirstInt(integer);
+    }
+
+    @Override
+    public void addLast(Integer integer) {
+        addLastInt(integer);
+    }
+
+    @Override
+    public boolean offerFirst(Integer integer) {
+        addFirstInt(integer);
+        return true;
+    }
+
+    @Override
+    public boolean offerLast(Integer integer) {
+        addLastInt(integer);
+        return true;
+    }
+
+    @Override
+    public Integer removeFirst() {
+        return removeFirstInt();
+    }
+
+    @Override
+    public Integer removeLast() {
+        return removeLastInt();
+    }
+
+    @Override
+    public Integer pollFirst() {
+        if (isEmpty()) {
+            return null;
+        }
+        return removeFirstInt();
+    }
+
+    @Override
+    public Integer pollLast() {
+        if (isEmpty()) {
+            return null;
+        }
+        return removeLastInt();
+    }
+
+    @Override
+    public Integer getFirst() {
+        return getFirstInt();
+    }
+
+    @Override
+    public Integer getLast() {
+        return getLastInt();
+    }
+
+    @Override
+    public Integer peekFirst() {
+        if (isEmpty()) {
+            return null;
+        }
+        return getFirstInt();
+    }
+
+    @Override
+    public Integer peekLast() {
+        if (isEmpty()) {
+            return null;
+        }
+        return getLastInt();
+    }
+
+    @Override
+    public boolean removeFirstOccurrence(Object o) {
+        if (o instanceof Integer) {
+            return removeFirstOccurrenceInt((int) o);
+        }
+        return false;
+    }
+
+    public int firstIndexOfInt(int o) {
+        if (tail < head) {
+            for (int i = head; i < elements.length; i++) {
+                if (o == (elements[i])) {
+                    return i - head;
+                }
+            }
+            for (int i = 0; i < tail; i++) {
+                if (o == (elements[i])) {
+                    return i + elements.length - head;
+                }
+            }
+        } else {
+            for (int i = head; i < tail; i++) {
+                if (o == (elements[i])) {
+                    return i - head;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOfInt(int o) {
+        if (tail < head) {
+            for (int i = elements.length - 1; i >= head; i--) {
+                if (o == (elements[i])) {
+                    return i - head;
+                }
+            }
+            for (int i = tail - 1; i >= 0; i--) {
+                if (o == (elements[i])) {
+                    return i + elements.length - head;
+                }
+            }
+        } else {
+            for (int i = tail - 1; i >= head; i--) {
+                if (o == (elements[i])) {
+                    return i - head;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public boolean removeFirstOccurrenceInt(int o) {
+        int index = firstIndexOfInt(o);
+        if (index != -1) {
+            removeAt(index);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes an element at the given array index.
+     */
+    public void removeAt(int i) {
+        int size = size();
+        Objects.checkIndex(i, size);
+        if (tail < head) {
+            if (head + i < elements.length) {
+                if (i > 0) {
+                    System.arraycopy(elements, head, elements, head + 1, i - 1);
+                }
+                elements[head] = 0;
+                head = head == elements.length ? 0 : head + 1;
+            } else {
+                if (i < size - 1) {
+                    System.arraycopy(elements, i - elements.length + head + 1, elements, i - elements.length + head, size - i);
+                }
+                elements[tail] = 0;
+                tail = tail == 0 ? elements.length : tail - 1;
+            }
+        } else {
+            if (i < size - 1) {
+                System.arraycopy(elements, head + i + 1, elements, head + i, size - i);
+            }
+            elements[head + i] = 0;
+            tail--;
+        }
+
+
+    }
+
+    @Override
+    public boolean removeLastOccurrence(Object o) {
+        if (o instanceof Integer) {
+            int index = lastIndexOfInt((int) o);
+            if (index != -1) {
+                removeAt(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean add(Integer integer) {
+        addLastInt(integer);
+        return true;
+    }
+
+    @Override
+    public boolean offer(Integer integer) {
+        addLastInt(integer);
+        return true;
+    }
+
+    @Override
+    public Integer remove() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return removeFirstInt();
+    }
+
+    @Override
+    public Integer poll() {
+        if (isEmpty()) {
+            return null;
+        }
+        return removeFirstInt();
+    }
+
+    @Override
+    public Integer element() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return getFirstInt();
+    }
+
+    @Override
+    public Integer peek() {
+        if (isEmpty()) {
+            return null;
+        }
+        return getFirstInt();
+    }
+
+    @Override
+    public void push(Integer integer) {
+        addFirstInt(integer);
+    }
+
+    @Override
+    public Integer pop() {
+        return removeFirstInt();
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return removeFirstOccurrence(o);
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        if (o instanceof Integer) {
+            return firstIndexOfInt((int) o) != -1;
+        }
+        return false;
+    }
 
     /**
      * Returns the number of elements in this deque.

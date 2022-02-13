@@ -415,14 +415,14 @@ public class StaticSpatialIndex {
                 }
 
                 if (nodeIndex >= m_numItems * 4) {
-                    stack.push(index);
-                    stack.push(level - 1);
+                    stack.pushInt(index);
+                    stack.pushInt(level - 1);
                 }
             }
 
             if (stack.size() > 1) {
-                level = stack.pop();
-                nodeIndex = stack.pop();
+                level = stack.popInt();
+                nodeIndex = stack.popInt();
             } else {
                 done = true;
             }
@@ -528,14 +528,14 @@ public class StaticSpatialIndex {
                     }
                 } else {
                     // push node index and level for further traversal
-                    stack.push(index);
-                    stack.push(level - 1);
+                    stack.pushInt(index);
+                    stack.pushInt(level - 1);
                 }
             }
 
             if (stack.size() > 1) {
-                level = stack.pop();
-                nodeIndex = stack.pop();
+                level = stack.popInt();
+                nodeIndex = stack.popInt();
             } else {
                 done = true;
             }

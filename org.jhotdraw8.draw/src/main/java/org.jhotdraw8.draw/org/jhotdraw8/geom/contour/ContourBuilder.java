@@ -1306,7 +1306,7 @@ public class ContourBuilder {
                 spatialIndex.query(currEndPoint.getX() - joinThreshold, currEndPoint.getY() - joinThreshold,
                         currEndPoint.getX() + joinThreshold, currEndPoint.getY() + joinThreshold,
                         queryResults, queryStack);
-                queryResults.removeIf(visitedIndexes::get);
+                queryResults.removeIfInt(visitedIndexes::get);
 
                 Function<Integer, OrderedPair<Integer, Boolean>> indexDistAndEqualInitial = (Integer index) -> {
                     final OpenPolylineSlice slice = slices.get(index);
@@ -1351,9 +1351,9 @@ public class ContourBuilder {
                 }
 
                 // else continue stitching
-                visitedIndexes.set(queryResults.get(0), true);
+                visitedIndexes.set(queryResults.getInt(0), true);
                 currPline.removeLast();
-                currIndex = queryResults.get(0);
+                currIndex = queryResults.getInt(0);
             }
         }
 

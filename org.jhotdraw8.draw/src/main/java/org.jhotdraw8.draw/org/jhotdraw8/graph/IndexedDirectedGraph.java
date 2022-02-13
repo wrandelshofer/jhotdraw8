@@ -9,10 +9,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
-import java.util.ArrayDeque;
-import java.util.BitSet;
-import java.util.Deque;
-
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
  * <ul>
@@ -94,33 +90,6 @@ public interface IndexedDirectedGraph {
     }
 
     /**
-     * Returns true if b is reachable from a.
-     *
-     * @param vidxa a vertex
-     * @param vidxb another vertex
-     * @return true if b is next of a.
-     */
-    default boolean isReachable(int vidxa, int vidxb) {
-        Deque<Integer> stack = new ArrayDeque<>(16);
-        stack.push(vidxb);
-        BitSet vset = new BitSet(getVertexCount());
-        while (!stack.isEmpty()) {
-            int current = stack.pop();
-            if (!vset.get(current)) {
-                vset.set(current);
-                if (current == vidxb) {
-                    return true;
-                }
-                for (int i = 0, n = this.getNextCount(current); i < n; i++) {
-                    int next = this.getNext(current, i);
-                    stack.push(next);
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Returns the direct successor vertices of the specified vertex.
      *
      * @param vidx a vertex index
@@ -129,7 +98,7 @@ public interface IndexedDirectedGraph {
     default @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
-            private int limit;
+            private final int limit;
             private final int vidx;
 
             public MySpliterator(int vidx, int lo, int hi) {

@@ -207,15 +207,16 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns all arrow datas between two vertices.
+     * Returns all arrows between two vertices.
      *
      * @param v1 vertex 1
      * @param v2 vertex 2
      * @return a collection view on all arrows
      */
     default @NonNull Collection<A> getArrows(@NonNull V v1, V v2) {
-        List<A> arrows = new ArrayList<>();
-        for (int i = 0, n = getNextCount(v1); i < n; i++) {
+        int n = getNextCount(v1);
+        List<A> arrows = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
             if (getNext(v1, i).equals(v2)) {
                 arrows.add(getNextArrow(v1, i));
             }

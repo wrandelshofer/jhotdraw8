@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -24,7 +25,7 @@ import java.util.stream.IntStream;
  *
  * @author Werner Randelshofer
  */
-public class IntArrayList implements Iterable<Integer> {
+public class IntArrayList extends AbstractList<Integer> {
 
     private int[] items;
     /**
@@ -57,6 +58,7 @@ public class IntArrayList implements Iterable<Integer> {
         this.items = new int[size];
 
         int count = 0;
+        //noinspection ForLoopReplaceableByForEach
         for (Iterator<Integer> iter = collection.iterator(); iter.hasNext(); ) {
             Integer value = iter.next();
             items[count++] = value;
@@ -175,17 +177,29 @@ public class IntArrayList implements Iterable<Integer> {
      * @param index an index
      * @return the item at the index
      */
-    public int get(int index) {
+    public int getInt(int index) {
         rangeCheck(index, size);
         return items[index];
     }
 
-    public int getLast() {
-        return get(size - 1);
+    /*
+     * Gets the item at the specified index.
+     *
+     * @param index an index
+     * @return the item at the index
+     */
+    @Override
+    public Integer get(int index) {
+        rangeCheck(index, size);
+        return items[index];
     }
 
-    public int getFirst() {
-        return get(0);
+    public int getLastInt() {
+        return getInt(size - 1);
+    }
+
+    public int getFirstInt() {
+        return getInt(0);
     }
 
     /**
@@ -225,11 +239,11 @@ public class IntArrayList implements Iterable<Integer> {
      * @param item the item
      * @return the index of the item, or -1.
      */
-    public int indexOf(int item) {
-        return indexOf(item, 0);
+    public int indexOfInt(int item) {
+        return indexOfInt(item, 0);
     }
 
-    public int indexOf(int item, int start) {
+    public int indexOfInt(int item, int start) {
         for (int i = start; i < size; i++) {
             if (items[i] == item) {
                 return i;
@@ -245,6 +259,15 @@ public class IntArrayList implements Iterable<Integer> {
      */
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    //@Override
+    public boolean contains(Object o) {
+        if (o instanceof Integer) {
+            int e = (int) o;
+            return indexOfInt(e) != -1;
+        }
+        return false;
     }
 
     private void rangeCheck(int index, int maxExclusive) throws IllegalArgumentException {
@@ -276,7 +299,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @return the removed item
      * @throws NoSuchElementException if the list is empty
      */
-    public int removeLast() {
+    public int removeLastInt() {
         if (isEmpty()) {
             throw new NoSuchElementException("List is empty.");
         }
@@ -290,7 +313,7 @@ public class IntArrayList implements Iterable<Integer> {
      * @param newItem the new item
      * @return the old item
      */
-    public int set(int index, int newItem) {
+    public int setInt(int index, int newItem) {
         rangeCheck(index, size);
         int removedItem = items[index];
         items[index] = newItem;
@@ -346,7 +369,7 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return a stream
      */
-    public @NonNull IntStream stream() {
+    public @NonNull IntStream intStream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
 
@@ -355,11 +378,31 @@ public class IntArrayList implements Iterable<Integer> {
      *
      * @return array
      */
-    public @NonNull int[] toArray() {
+    public @NonNull int[] toIntArray() {
         int[] result = new int[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }
+
+    //@Override
+    public boolean add(Integer integer) {
+        add((int) integer);
+        return true;
+    }
+
+
+    //@Override
+    public boolean remove(Object o) {
+        if (o instanceof Integer) {
+            int index = indexOfInt((int) o);
+            if (index != -1) {
+                removeAt(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public @NonNull String toString() {
@@ -389,11 +432,11 @@ public class IntArrayList implements Iterable<Integer> {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIf(@NonNull IntPredicate filter) {
+    public boolean removeIfInt(@NonNull IntPredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
-            if (filter.test(get(i))) {
+            if (filter.test(getInt(i))) {
                 removeAt(i);
                 hasRemoved = true;
             }
@@ -410,7 +453,7 @@ public class IntArrayList implements Iterable<Integer> {
      *          A {@code null} value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used.
      */
-    public void sort(Comparator<? super Integer> c) {
+    public void sort(@Nullable Comparator<? super Integer> c) {
         if (size > 1) {
             if (c == null) {
                 Arrays.sort(items, 0, size);

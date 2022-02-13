@@ -5,11 +5,9 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-
-import java.util.AbstractCollection;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.PrimitiveIterator;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
 /**
  * This interface provides read access to a directed graph {@code G = (int, A) }.
@@ -44,57 +42,43 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     int getPrevCount(int vidx);
 
     /**
-     * Returns the direct predecessor vertices of the specified vertex.
+     * Returns the direct successor vertices of the specified vertex.
      *
-     * @param vertex a vertex
-     * @return an iterable for the direct predecessor vertices of vertex
+     * @param vidx a vertex index
+     * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull PrimitiveIterator.OfInt getPrevVertexIndicesIterator(int vertex) {
-        class PrevVertexIterator implements PrimitiveIterator.OfInt {
-
+    default @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int vidx) {
+        class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
-            private final int vertex;
-            private final int prevCount;
+            private final int limit;
+            private final int vidx;
 
-            public PrevVertexIterator(int vertex) {
-                this.vertex = vertex;
-                this.prevCount = getPrevCount(vertex);
+            public MySpliterator(int vidx, int lo, int hi) {
+                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
+                limit = hi;
+                index = lo;
+                this.vidx = vidx;
             }
 
             @Override
-            public boolean hasNext() {
-                return index < prevCount;
+            public boolean moveNext() {
+                if (index < limit) {
+                    current = getPrev(vidx, index++);
+                    return true;
+                }
+                return false;
             }
 
-            @Override
-            public int nextInt() {
-                return getPrev(vertex, index++);
+            public @Nullable MySpliterator trySplit() {
+                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
+                return (lo >= mid) ? null : // divide range in half unless too small
+                        new MySpliterator(vidx, lo, index = mid);
             }
 
         }
-        return new PrevVertexIterator(vertex);
+        return new MySpliterator(vidx, 0, getPrevCount(vidx));
     }
 
-    /**
-     * Returns the direct predecessor vertices of the specified vertex.
-     *
-     * @param vertex a vertex
-     * @return a collection view on the direct predecessor vertices of vertex
-     */
-    default @NonNull Collection<Integer> getPrevVertices(int vertex) {
-
-        return new AbstractCollection<Integer>() {
-            @Override
-            public @NonNull Iterator<Integer> iterator() {
-                return getPrevVertexIndicesIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getPrevCount(vertex);
-            }
-        };
-    }
 
     /**
      * Returns the index of vertex b.

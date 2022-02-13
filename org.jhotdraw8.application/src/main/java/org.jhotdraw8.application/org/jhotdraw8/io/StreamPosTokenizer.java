@@ -477,7 +477,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         // rlw
         int data;
         if (unread.size() > 0) {
-            data = unread.removeLast();
+            data = unread.removeLastInt();
         } else {
             data = reader.read();
         }

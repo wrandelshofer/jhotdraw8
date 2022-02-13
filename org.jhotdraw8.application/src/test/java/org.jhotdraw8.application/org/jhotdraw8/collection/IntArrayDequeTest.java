@@ -24,13 +24,13 @@ public class IntArrayDequeTest {
     public void testAddFirst() {
         int e = 1;
         IntArrayDeque instance = new IntArrayDeque();
-        instance.addFirst(e);
+        instance.addFirstInt(e);
         assertFalse(instance.isEmpty());
 
-        assertEquals(1, instance.getFirst());
+        assertEquals(1, instance.getFirstInt());
 
-        instance.addFirst(2);
-        assertEquals(2, instance.getFirst());
+        instance.addFirstInt(2);
+        assertEquals(2, instance.getFirstInt());
         assertEquals(2, instance.size());
     }
 
@@ -41,13 +41,13 @@ public class IntArrayDequeTest {
     public void testAddLast() {
         int e = 1;
         IntArrayDeque instance = new IntArrayDeque();
-        instance.addLast(e);
+        instance.addLastInt(e);
         assertFalse(instance.isEmpty());
 
-        assertEquals(1, instance.getLast());
+        assertEquals(1, instance.getLastInt());
 
-        instance.addLast(2);
-        assertEquals(2, instance.getLast());
+        instance.addLastInt(2);
+        assertEquals(2, instance.getLastInt());
         assertEquals(2, instance.size());
     }
 

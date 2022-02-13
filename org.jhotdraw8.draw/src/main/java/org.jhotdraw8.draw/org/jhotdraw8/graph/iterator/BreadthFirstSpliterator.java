@@ -24,7 +24,7 @@ public class BreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V>
 
     private final @NonNull Function<V, Iterable<V>> nextFunction;
     private final @NonNull Deque<V> deque;
-    private final AddToSet<V> visited;
+    private final @NonNull AddToSet<V> visited;
 
     /**
      * Creates a new instance.
