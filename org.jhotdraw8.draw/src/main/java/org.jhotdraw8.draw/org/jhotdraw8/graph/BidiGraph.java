@@ -102,4 +102,33 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
             }
         };
     }
+
+    /**
+     * Returns the index of vertex b in the list of previous vertices
+     * of vertex a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return previouis index of vertex b. Returns -1 if b is not next index of a.
+     */
+    default int findIndexOfPrev(final V a, final @NonNull V b) {
+        for (int i = 0, n = getPrevCount(a); i < n; i++) {
+            if (b.equals(getPrev(a, i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns true if b is a previous vertex of a.
+     *
+     * @param a a vertex
+     * @param b another vertex
+     * @return true if b is next of a.
+     */
+    default boolean isPrev(final V a, final @NonNull V b) {
+        return findIndexOfPrev(a, b) != -1;
+    }
+
 }
