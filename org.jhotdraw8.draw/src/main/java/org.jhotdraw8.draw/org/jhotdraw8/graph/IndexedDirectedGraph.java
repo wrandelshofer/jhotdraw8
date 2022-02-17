@@ -79,11 +79,11 @@ public interface IndexedDirectedGraph {
     }
 
     /**
-     * Returns true if b is next of a.
+     * Returns true if b is a next vertex of a.
      *
      * @param vidxa a vertex
      * @param vidxb another vertex
-     * @return true if b is next of a.
+     * @return true if b is a next vertex of a.
      */
     default boolean isNext(int vidxa, int vidxb) {
         return findIndexOfNext(vidxa, vidxb) != -1;

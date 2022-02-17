@@ -109,7 +109,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      *
      * @param a a vertex
      * @param b another vertex
-     * @return previouis index of vertex b. Returns -1 if b is not next index of a.
+     * @return previouis index of vertex b. Returns -1 if b is not a previous vertex of a.
      */
     default int findIndexOfPrev(final V a, final @NonNull V b) {
         for (int i = 0, n = getPrevCount(a); i < n; i++) {
@@ -125,7 +125,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      *
      * @param a a vertex
      * @param b another vertex
-     * @return true if b is next of a.
+     * @return true if b is a previous vertex of a.
      */
     default boolean isPrev(final V a, final @NonNull V b) {
         return findIndexOfPrev(a, b) != -1;

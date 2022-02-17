@@ -41,7 +41,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      *
      * @param a a vertex
      * @param b another vertex
-     * @return index of vertex b. Returns -1 if b is not next index of a.
+     * @return index of vertex b. Returns -1 if b is not a previous vertex of a.
      */
     default int findIndexOfNext(@NonNull V a, @NonNull V b) {
         int i = 0;
@@ -225,11 +225,11 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns true if b is next of a.
+     * Returns true if b is a next vertex of a.
      *
      * @param a a vertex
      * @param b another vertex
-     * @return true if b is next of a.
+     * @return true if b is a next vertex of a.
      */
     default boolean isNext(@NonNull V a, @NonNull V b) {
         return findIndexOfNext(a, b) != -1;

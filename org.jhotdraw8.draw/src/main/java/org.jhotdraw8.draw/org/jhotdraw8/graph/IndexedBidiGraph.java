@@ -27,7 +27,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     /**
      * Returns the i-th direct predecessor vertex of v.
      *
-     * @param vidx a vertex
+     * @param vidx index of vertex v
      * @param i    index of next vertex
      * @return the i-th next vertex of v
      */
@@ -36,7 +36,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     /**
      * Returns the number of direct predecessor vertices of v.
      *
-     * @param vidx a vertex
+     * @param vidx index of vertex v
      * @return the number of next vertices of v.
      */
     int getPrevCount(int vidx);
@@ -44,7 +44,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     /**
      * Returns the direct successor vertices of the specified vertex.
      *
-     * @param vidx a vertex index
+     * @param vidx index of vertex v
      * @return a collection view on the direct successor vertices of vertex
      */
     default @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int vidx) {
@@ -83,8 +83,8 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     /**
      * Returns the index of vertex b.
      *
-     * @param vidxa a vertex
-     * @param vidxb another vertex
+     * @param vidxa index of vertex a
+     * @param vidxb index of vertex b
      * @return index of vertex b. Returns -1 if b is not a previous vertex of a.
      */
     default int findIndexOfPrev(int vidxa, int vidxb) {
