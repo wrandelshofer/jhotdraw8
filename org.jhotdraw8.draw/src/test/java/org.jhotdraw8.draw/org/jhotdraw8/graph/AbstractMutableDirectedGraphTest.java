@@ -186,7 +186,7 @@ abstract class AbstractMutableDirectedGraphTest {
     @Test
     public void testRemoveArrowAt() {
         MutableDirectedGraph<Integer, Character> g = buildGraph();
-        g.removeArrowAt(0, 0);
+        g.removeNext(0, 0);
         continueTestRemoveArrow(g);
     }
 

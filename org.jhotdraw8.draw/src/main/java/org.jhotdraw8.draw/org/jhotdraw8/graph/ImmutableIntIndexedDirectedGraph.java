@@ -9,8 +9,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -243,11 +241,6 @@ public class ImmutableIntIndexedDirectedGraph<V, A> implements AttributedIndexed
     public @NonNull Set<V> getVertices() {
         return Collections.unmodifiableSet(vertexToIndexMap.keySet());
 
-    }
-
-    @Override
-    public @NonNull Collection<A> getArrows() {
-        return Arrays.asList(nextArrows);
     }
 
 

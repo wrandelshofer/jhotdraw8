@@ -113,7 +113,7 @@ abstract class AbstractMutableBidiGraphTest
     public void testRemoveArrowAtBidi() {
         MutableBidiGraph<Integer, Character> g = (MutableBidiGraph<Integer, Character>) buildGraph();
 
-        g.removeArrowAt(0, 0);
+        g.removeNext(0, 0);
 
         assertEquals(5, g.getVertexCount());
         assertEquals(5, g.getArrowCount());

@@ -53,12 +53,12 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
     void removeArrow(@NonNull V v, @NonNull V u);
 
     /**
-     * Removes the k-th outgoing arrow from vertex v.
+     * Removes the k-th next arrow from vertex v.
      *
      * @param v vertex data v
      * @param k index of arrow to be removed
-     * @throws IllegalStateException if the arrow is not in the graph
+     * @throws IllegalStateException     if the arrow is not in the graph
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
-    void removeArrowAt(@NonNull V v, int k);
+    void removeNext(@NonNull V v, int k);
 }

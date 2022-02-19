@@ -6,17 +6,18 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 
 /**
  * DirectedGraphBuilder.
  *
- * @param <V> the vertex data type
- * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class DirectedGraphBuilder<V, A> {
+public class DirectedGraphBuilder {
 
     /**
      * Creates a builder which contains a copy of the specified graph with all arrows inverted.
@@ -69,5 +70,50 @@ public class DirectedGraphBuilder<V, A> {
         return b;
     }
 
+    /**
+     * Adds the source graph to the target graph.
+     *
+     * @param source the source graph
+     * @param target the target graph
+     * @param <V>    the vertex type
+     * @param <A>    the arrow type
+     */
+    public <V, A> void addAll(final @NonNull DirectedGraph<V, A> source, final @NonNull MutableDirectedGraph<V, A> target) {
+        for (V v : source.getVertices()) {
+            target.addVertex(v);
+        }
+        for (V v : source.getVertices()) {
+            for (Arc<V, A> arc : source.getNextArcs(v)) {
+                target.addArrow(arc.getStart(), arc.getEnd(), arc.getArrow());
+            }
+        }
+    }
+
+    /**
+     * Adds the source graph to the target graph.
+     *
+     * @param source the source graph
+     * @param target the target graph
+     * @param <V>    the vertex type of the target graph
+     * @param <A>    the arrow type of the target graph
+     * @param <VV>   the vertex type of the source graph
+     * @param <AA>   the arrow type of the target graph
+     */
+    public <V, A, VV, AA> void addAll(final DirectedGraph<VV, AA> source, final @NonNull MutableDirectedGraph<V, A> target,
+                                      @NonNull final Function<VV, V> vertexMapper, @NonNull final Function<AA, A> arrowMapper) {
+        LinkedHashMap<VV, V> vertexMap = new LinkedHashMap<>(2 * target.getVertexCount());
+        for (final VV vv : source.getVertices()) {
+            V v = vertexMapper.apply(vv);
+            vertexMap.put(vv, v);
+            target.addVertex(v);
+        }
+        for (Map.Entry<VV, V> entry : vertexMap.entrySet()) {
+            VV vv = entry.getKey();
+            V v = entry.getValue();
+            for (int i = 0, n = source.getNextCount(vv); i < n; i++) {
+                target.addArrow(v, vertexMapper.apply(source.getNext(vv, i)), arrowMapper.apply(source.getNextArrow(vv, i)));
+            }
+        }
+    }
 
 }

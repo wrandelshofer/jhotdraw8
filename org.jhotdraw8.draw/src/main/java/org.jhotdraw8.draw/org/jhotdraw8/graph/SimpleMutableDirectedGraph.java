@@ -9,11 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 import org.jhotdraw8.util.TriFunction;
 
-import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -21,11 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.IntConsumer;
 
 
 /**
@@ -148,7 +141,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             arrows.add(arrow);
         } else {
             arrows.set(arrowIndex, arrow);
-            cachedArrows = null;
         }
     }
 
@@ -162,7 +154,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             if (u.equals(vertices.get(uidx)) && Objects.equals(a, getNextArrow(vidx, index))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
-                cachedArrows = null;
                 return;
             }
             index++;
@@ -178,7 +169,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             if (u.equals(vertices.get(uidx))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
-                cachedArrows = null;
                 return;
             }
             index++;
@@ -186,10 +176,9 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public void removeArrowAt(@NonNull V v, int k) {
+    public void removeNext(@NonNull V v, int k) {
         int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), k);
         arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
-        cachedArrows = null;
     }
 
     /**
@@ -231,8 +220,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             }
         }
         vertexMap.put(v, vidx);
-
-        cachedArrows = null;
     }
 
     @Override
@@ -265,8 +252,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
                 entry.setValue(uidx - 1);
             }
         }
-
-        cachedArrows = null;
     }
 
     /**
@@ -286,7 +271,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         vertexMap.clear();
         vertices.clear();
         arrows.clear();
-        cachedArrows = null;
     }
 
     @Override
@@ -341,24 +325,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         return (A) arrows.get(arrowId);
     }
 
-    private List<A> cachedArrows;
-
-    @Override
-    public @NonNull Collection<A> getArrows() {
-        if (cachedArrows == null) {
-            List<A> list = new ArrayList<>();
-            for (Object arrow : arrows) {
-                if (arrow != TOMBSTONE_OBJECT) {
-                    @SuppressWarnings("unchecked")
-                    A a = (A) arrow;
-                    list.add(a);
-                }
-            }
-            cachedArrows = Collections.unmodifiableList(list);
-        }
-        return cachedArrows;
-    }
-
     @Override
     public @NonNull Set<V> getVertices() {
         class VertexIterator implements Iterator<V> {
@@ -399,53 +365,5 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
         };
     }
-
-    public @NonNull Collection<V> getNextVertices(@NonNull V vertex) {
-        class NextVertexIterator implements Spliterator<V> {
-            private final Spliterator.OfInt it;
-
-            NextVertexIterator(Spliterator.OfInt nextVertices) {
-                this.it = nextVertices;
-            }
-
-            @Override
-            public boolean tryAdvance(Consumer<? super V> action) {
-                return it.tryAdvance((IntConsumer) i -> action.accept(getVertex(i)));
-            }
-
-            @Override
-            public Spliterator<V> trySplit() {
-                OfInt splitted = it.trySplit();
-                return splitted == null ? null : new NextVertexIterator(splitted);
-            }
-
-            @Override
-            public long estimateSize() {
-                return it.estimateSize();
-            }
-
-            @Override
-            public int characteristics() {
-                return it.characteristics();
-            }
-        }
-        return new AbstractCollection<V>() {
-            @Override
-            public @NonNull Spliterator<V> spliterator() {
-                return new NextVertexIterator(nextVerticesSpliterator(getVertexIndex(vertex)));
-            }
-
-            @Override
-            public Iterator<V> iterator() {
-                return Spliterators.iterator(spliterator());
-            }
-
-            @Override
-            public int size() {
-                return getNextCount(vertex);
-            }
-        };
-    }
-
 
 }

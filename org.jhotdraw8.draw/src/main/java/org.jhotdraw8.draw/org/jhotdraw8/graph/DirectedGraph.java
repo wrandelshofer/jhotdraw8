@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 
     /**
-     * Returns the arrow if b is successor of a.
+     * Returns the arrow if b is a next vertex of a.
      *
      * @param a a vertex
      * @param b a vertex
@@ -202,22 +202,36 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      *
      * @return arrow count
      */
-    default int getArrowCount() {
-        return getArrows().size();
-    }
+    int getArrowCount();
 
     /**
      * Returns all arrows between two vertices.
      *
      * @param v1 vertex 1
      * @param v2 vertex 2
-     * @return a collection view on all arrows
+     * @return a collection of all arrows
      */
     default @NonNull Collection<A> getArrows(@NonNull V v1, V v2) {
         int n = getNextCount(v1);
         List<A> arrows = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             if (getNext(v1, i).equals(v2)) {
+                arrows.add(getNextArrow(v1, i));
+            }
+        }
+        return Collections.unmodifiableList(arrows);
+    }
+
+    /**
+     * Returns all arrows.
+     *
+     * @return a collection of all arrows
+     */
+    default @NonNull Collection<A> getArrows() {
+        ArrayList<A> arrows = new ArrayList<>(getArrowCount());
+        for (V v1 : getVertices()) {
+            int n = getNextCount(v1);
+            for (int i = 0; i < n; i++) {
                 arrows.add(getNextArrow(v1, i));
             }
         }

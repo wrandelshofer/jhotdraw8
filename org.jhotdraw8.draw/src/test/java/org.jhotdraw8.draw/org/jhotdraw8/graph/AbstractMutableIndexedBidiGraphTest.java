@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-abstract class MutableIndexedBidiGraphTest
+abstract class AbstractMutableIndexedBidiGraphTest
         extends AbstractMutableDirectedGraphTest {
     protected abstract MutableBidiGraph<Integer, Character> newInstance();
 
@@ -113,7 +113,7 @@ abstract class MutableIndexedBidiGraphTest
     public void testRemoveArrowAtBidi() {
         MutableBidiGraph<Integer, Character> g = (MutableBidiGraph<Integer, Character>) buildGraph();
 
-        g.removeArrowAt(0, 0);
+        g.removeNext(0, 0);
 
         assertEquals(5, g.getVertexCount());
         assertEquals(5, g.getArrowCount());

@@ -7,6 +7,10 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
+/**
+ * @param <V>
+ * @param <A>
+ */
 public class ImmutableIntIndexedBidiGraph<V, A> extends ImmutableIntIndexedDirectedGraph<V, A>
         implements BidiGraph<V, A>, AttributedIndexedBidiGraph<V, A> {
     /**

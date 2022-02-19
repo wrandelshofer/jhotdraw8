@@ -6,7 +6,6 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -70,11 +69,4 @@ public interface BareDirectedGraph<V, A> {
     @NonNull
     Set<V> getVertices();
 
-    /**
-     * Returns all arrow data objects.
-     *
-     * @return a collection view on all arrow data objects
-     */
-    @NonNull
-    Collection<A> getArrows();
 }

@@ -72,7 +72,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
     private final Map<V, Node<V, A>> nodeMap;
     private List<V> cachedVertices = null;
-    private List<A> cachedArrows = null;
     private int arrowCount = 0;
 
     /**
@@ -142,9 +141,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         node.prev.clear();
 
         cachedVertices = null;
-        if (oldArrowCount != arrowCount) {
-            cachedArrows = null;
-        }
     }
 
     @Override
@@ -153,7 +149,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         Node<V, A> uNode = getNodeNonNull(u);
         vNode.next.add(uNode, a);
         uNode.prev.add(vNode, a);
-        cachedArrows = null;
         arrowCount++;
     }
 
@@ -167,7 +162,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         if (!uNode.prev.remove(vNode, a)) {
             throw new IllegalStateException("arrow v=" + v + " u=" + u + " a=" + a + " is not in graph");
         }
-        cachedArrows = null;
         arrowCount--;
     }
 
@@ -181,7 +175,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         if (!uNode.prev.remove(vNode)) {
             throw new IllegalStateException("arrow v=" + v + " u=" + u + " is not in graph");
         }
-        cachedArrows = null;
         arrowCount--;
     }
 
@@ -194,7 +187,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void removeArrowAt(@NonNull V v, int k) {
+    public void removeNext(@NonNull V v, int k) {
         Node<V, A> vNode = getNodeNonNull(v);
         Node<V, A> uNode = vNode.next.getNode(k);
         A uArrow = vNode.next.getArrow(k);
@@ -202,7 +195,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         if (!uNode.prev.remove(vNode, uArrow)) {
             throw new IllegalStateException("arrow v=" + v + " k=" + k + " is not in graph");
         }
-        cachedArrows = null;
         arrowCount--;
     }
 
@@ -241,20 +233,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     @Override
     public int getArrowCount() {
         return arrowCount;
-    }
-
-    @Override
-    public @NonNull List<A> getArrows() {
-        if (cachedArrows == null) {
-            List<A> a = new ArrayList<>();
-            for (Node<V, A> value : nodeMap.values()) {
-                for (Enumerator<A> it = value.next.arrowEnumerator(); it.moveNext(); ) {
-                    a.add(it.current());
-                }
-            }
-            cachedArrows = Collections.unmodifiableList(a);
-        }
-        return cachedArrows;
     }
 
     @Override
