@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
  * @param <V>
  * @param <A>
  */
-public class ImmutableIntIndexedBidiGraph<V, A> extends ImmutableIntIndexedDirectedGraph<V, A>
+public class ImmutableIntAttributedIndexedBidiGraph<V, A> extends ImmutableIntAttributedIndexedDirectedGraph<V, A>
         implements BidiGraph<V, A>, AttributedIndexedBidiGraph<V, A> {
     /**
      * Holds the indices to the prev vertices.
@@ -28,7 +28,7 @@ public class ImmutableIntIndexedBidiGraph<V, A> extends ImmutableIntIndexedDirec
      */
     protected final @NonNull A[] prevArrows;
 
-    public ImmutableIntIndexedBidiGraph(@NonNull BidiGraph<V, A> graph) {
+    public ImmutableIntAttributedIndexedBidiGraph(@NonNull BidiGraph<V, A> graph) {
         super(graph);
 
         this.prev = new int[next.length];

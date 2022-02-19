@@ -7,13 +7,12 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.SetViewOverList;
 import org.jhotdraw8.util.TriFunction;
 
-import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -327,43 +326,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public @NonNull Set<V> getVertices() {
-        class VertexIterator implements Iterator<V> {
-
-            private int index;
-            private final int vertexCount;
-
-            public VertexIterator() {
-                vertexCount = getVertexCount();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < vertexCount;
-            }
-
-            @Override
-            public V next() {
-                return getVertex(index++);
-            }
-
-        }
-        return new AbstractSet<V>() {
-            @Override
-            public @NonNull Iterator<V> iterator() {
-                return new VertexIterator();
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return vertices.contains(o);
-            }
-
-            @Override
-            public int size() {
-                return getVertexCount();
-            }
-
-        };
+        return new SetViewOverList<>(vertices);
     }
-
 }

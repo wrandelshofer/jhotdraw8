@@ -5,8 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntCharArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 
 import java.util.Collections;
@@ -21,7 +20,7 @@ import java.util.Set;
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ImmutableUShortIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class ImmutableCharAttributedIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -88,7 +87,7 @@ public class ImmutableUShortIndexedDirectedGraph<V, A> implements AttributedInde
      *
      * @param graph a graph
      */
-    public ImmutableUShortIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public ImmutableCharAttributedIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -127,7 +126,7 @@ public class ImmutableUShortIndexedDirectedGraph<V, A> implements AttributedInde
      *
      * @param graph a graph
      */
-    public ImmutableUShortIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public ImmutableCharAttributedIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -256,37 +255,8 @@ public class ImmutableUShortIndexedDirectedGraph<V, A> implements AttributedInde
 
     @Override
     public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vi) {
-        class MySpliterator extends AbstractIntEnumeratorSpliterator {
-            private int index;
-            private int limit;
-            private final char[] array;
-
-            public MySpliterator(int lo, int hi, char[] nextVertices) {
-                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
-                limit = hi;
-                index = lo;
-                this.array = nextVertices;
-            }
-
-            @Override
-            public boolean moveNext() {
-                if (index < limit) {
-                    current = array[index++];
-                    return true;
-                }
-                return false;
-            }
-
-            public @Nullable MySpliterator trySplit() {
-                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
-                return (lo >= mid) ? null : // divide range in half unless too small
-                        new MySpliterator(lo, index = mid, array);
-            }
-
-        }
         final int offset = nextOffset[vi];
         final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
-        return new MySpliterator(offset, nextOffset, this.next);
+        return new IntCharArrayEnumeratorSpliterator(offset, nextOffset, this.next);
     }
-
 }

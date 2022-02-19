@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.ListHelper;
 
 import java.util.Arrays;
@@ -203,13 +203,13 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     @Override
     public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
         int offset = vidx * stride;
-        return new IntArrayEnumeratorSpliterator(offset + 1, offset + 1 + nextArrows[offset], nextArrows);
+        return new IntIntArrayEnumeratorSpliterator(offset + 1, offset + 1 + nextArrows[offset], nextArrows);
     }
 
     @Override
     public @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int vidx) {
         int offset = vidx * stride;
-        return new IntArrayEnumeratorSpliterator(offset + 1, offset + 1 + prevArrows[offset], prevArrows);
+        return new IntIntArrayEnumeratorSpliterator(offset + 1, offset + 1 + prevArrows[offset], prevArrows);
     }
 
     @Override

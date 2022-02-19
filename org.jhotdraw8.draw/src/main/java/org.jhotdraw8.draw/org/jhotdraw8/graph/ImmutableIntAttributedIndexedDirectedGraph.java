@@ -5,9 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ import java.util.Set;
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ImmutableIntIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -88,7 +87,7 @@ public class ImmutableIntIndexedDirectedGraph<V, A> implements AttributedIndexed
      *
      * @param graph a graph
      */
-    public ImmutableIntIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public ImmutableIntAttributedIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -123,7 +122,7 @@ public class ImmutableIntIndexedDirectedGraph<V, A> implements AttributedIndexed
      *
      * @param graph a graph
      */
-    public ImmutableIntIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public ImmutableIntAttributedIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -138,7 +137,6 @@ public class ImmutableIntIndexedDirectedGraph<V, A> implements AttributedIndexed
         this.vertices = uncheckedVertices;
         this.vertexToIndexMap = new HashMap<>(vertexCapacity);
 
-        //    Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
         {
             int vi = 0;
             for (V v : graph.getVertices()) {
@@ -250,37 +248,8 @@ public class ImmutableIntIndexedDirectedGraph<V, A> implements AttributedIndexed
 
     @Override
     public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vi) {
-        class MySpliterator extends AbstractIntEnumeratorSpliterator {
-            private int index;
-            private int limit;
-            private final int[] array;
-
-            public MySpliterator(int lo, int hi, int[] nextVertices) {
-                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
-                limit = hi;
-                index = lo;
-                this.array = nextVertices;
-            }
-
-            @Override
-            public boolean moveNext() {
-                if (index < limit) {
-                    current = array[index++];
-                    return true;
-                }
-                return false;
-            }
-
-            public @Nullable MySpliterator trySplit() {
-                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
-                return (lo >= mid) ? null : // divide range in half unless too small
-                        new MySpliterator(lo, index = mid, array);
-            }
-
-        }
         final int offset = nextOffset[vi];
         final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
-        return new MySpliterator(offset, nextOffset, this.next);
+        return new IntIntArrayEnumeratorSpliterator(offset, nextOffset, this.next);
     }
-
 }
