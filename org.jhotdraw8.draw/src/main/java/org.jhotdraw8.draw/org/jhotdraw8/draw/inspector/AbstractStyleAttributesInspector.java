@@ -380,7 +380,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private @Nullable LookupEntry getLookupEntryAt(@NonNull int caretPosition) {
         int insertionPoint = Collections.binarySearch(lookupTable, new LookupEntry(caretPosition, null, null));
         if (insertionPoint < 0) {
-            insertionPoint = (-(insertionPoint) - 1) - 1;
+            insertionPoint = ~insertionPoint - 1;
         }
         LookupEntry d = null;
         if (0 <= insertionPoint && insertionPoint < lookupTable.size()) {

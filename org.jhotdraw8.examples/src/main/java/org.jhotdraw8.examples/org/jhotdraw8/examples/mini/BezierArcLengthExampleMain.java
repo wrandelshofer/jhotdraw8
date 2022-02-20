@@ -375,7 +375,7 @@ public class BezierArcLengthExampleMain extends Application {
             double pos = s * length;
             Segment key = new Segment(pos);
             int search = Collections.binarySearch(segments, key);
-            int index = Math.min(search < 0 ? -2 - search : search, segments.size() - 1);
+            int index = Math.min(search < 0 ? ~search - 1 : search, segments.size() - 1);
             if (index < 0) {
                 return new javafx.geometry.Point2D(0, 0);// path is empty
             } else {

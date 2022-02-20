@@ -149,7 +149,7 @@ public class PointAndTangentBuilder {
 
         double distanceFromStart = length * t;
         int searchResult = Collections.binarySearch(segments, new Segment(distanceFromStart, length, null));
-        int index = (searchResult < 0) ? Math.min(-(searchResult) - 1, segments.size() - 1) : searchResult;
+        int index = (searchResult < 0) ? Math.min(~searchResult, segments.size() - 1) : searchResult;
         Segment seg = segments.get(index);
         if (seg.shape instanceof Line2D.Double) {
             Line2D.Double line = (Line2D.Double) seg.shape;

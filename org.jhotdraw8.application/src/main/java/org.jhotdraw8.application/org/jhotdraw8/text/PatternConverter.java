@@ -298,10 +298,9 @@ public class PatternConverter implements Converter<Object[]> {
 
         @Override
         public void toString(Object[] value, Appendable out, ConverterFactory factory, int[] indices) throws IOException {
-            //int choiceIndex = Collections.binarySearch(limits, ((Number) value[index]).doubleValue());
             int choiceIndex = Arrays.binarySearch(limits, ((Number) value[index]).doubleValue());
             if (choiceIndex < 0) {
-                choiceIndex = -choiceIndex - 1;
+                choiceIndex = ~choiceIndex;
             }
             if (choiceIndex >= limits.length) {
                 choiceIndex = limits.length - 1;
