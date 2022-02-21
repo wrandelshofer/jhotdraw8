@@ -32,9 +32,9 @@ public abstract class AbstractSetTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsAddAndRemove() {
         return Arrays.asList(
-                dynamicTest("0", () -> doTestAddAndRemove(-1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
-                dynamicTest("1", () -> doTestAddAndRemove(1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
-                dynamicTest("2", () -> doTestAddAndRemove(0, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1))
+                dynamicTest("full mask", () -> doTestAddAndRemove(-1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
+                dynamicTest("some collisions", () -> doTestAddAndRemove(1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
+                dynamicTest("all collisions", () -> doTestAddAndRemove(0, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1))
         );
     }
 

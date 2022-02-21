@@ -3,7 +3,13 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implements the {@link Map} interface with a
@@ -29,6 +35,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     private PersistentTrieMapHelper.Node<K, V> root;
     private int hashCode;
     private int size;
+    private int modCount;
 
     public TrieMap() {
         this.bulkEdit = new PersistentTrieHelper.Nonce();
@@ -85,7 +92,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
 
             @Override
             public Iterator<Entry<K, V>> iterator() {
-                return new PersistentTrieMapHelper.MapEntryIterator<>(root);
+                return new TransientMapEntryIterator<K, V>(TrieMap.this);
             }
 
             @Override
@@ -118,7 +125,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
 
     @Override
     public V put(K key, V value) {
-        return putAndGiveDetails(key, value).getReplacedValue();
+        return putAndGiveDetails(key, value).getOldValue();
     }
 
     @NonNull PersistentTrieMapHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
@@ -129,7 +136,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                final V old = details.getReplacedValue();
+                final V old = details.getOldValue();
                 final int valHashOld = Objects.hashCode(old);
                 final int valHashNew = Objects.hashCode(val);
                 root = newRootNode;
@@ -140,6 +147,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
                 hashCode += (keyHash ^ valHashNew);
                 size += 1;
             }
+            modCount++;
         }
 
         return details;
@@ -148,7 +156,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return removeAndGiveDetails(key).getReplacedValue();
+        return removeAndGiveDetails(key).getOldValue();
     }
 
     @NonNull PersistentTrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
@@ -157,10 +165,11 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
         final PersistentTrieMapHelper.Node<K, V> newRootNode = root.removed(bulkEdit, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
-            final int valHash = Objects.hashCode(details.getReplacedValue());
+            final int valHash = Objects.hashCode(details.getOldValue());
             root = newRootNode;
             hashCode = hashCode - (keyHash ^ valHash);
             size = size - 1;
+            modCount++;
         }
         return details;
     }
@@ -170,6 +179,67 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
         return size == 0 ? PersistentTrieMap.of() : new PersistentTrieMap<>(root, hashCode, size);
     }
 
+    static abstract class AbstractTransientMapEntryIterator<K, V> extends PersistentTrieMapHelper.AbstractMapIterator<K, V> {
+        private final @NonNull TrieMap<K, V> map;
+        private int expectedModCount;
+
+        public AbstractTransientMapEntryIterator(@NonNull TrieMap<K, V> map) {
+            super(map.root);
+            this.map = map;
+            this.expectedModCount = map.modCount;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (expectedModCount != map.modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return super.hasNext();
+        }
+
+        public Map.Entry<K, V> nextEntry() {
+            if (expectedModCount != map.modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return super.nextEntry();
+        }
+
+
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+            if (expectedModCount != map.modCount) {
+                throw new ConcurrentModificationException();
+            }
+            Map.Entry<K, V> toRemove = current;
+
+            if (hasNext()) {
+                Map.Entry<K, V> next = nextEntry();
+                map.remove(toRemove.getKey());
+                expectedModCount = map.modCount;
+                moveTo(next.getKey(), map.root);
+            } else {
+                map.remove(toRemove.getKey());
+                expectedModCount = map.modCount;
+            }
+
+            current = null;
+        }
+    }
+
+
+    private static class TransientMapEntryIterator<K, V> extends AbstractTransientMapEntryIterator<K, V> implements Iterator<Entry<K, V>> {
+
+        public TransientMapEntryIterator(@NonNull TrieMap<K, V> map) {
+            super(map);
+        }
+
+        @Override
+        public Entry<K, V> next() {
+            return nextEntry();
+        }
+    }
 }
 
 

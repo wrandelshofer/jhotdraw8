@@ -4,7 +4,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Package private class with code for {@link PersistentTrieMap}
@@ -19,17 +24,32 @@ class PersistentTrieMapHelper {
     private PersistentTrieMapHelper() {
     }
 
+    static final int TUPLE_LENGTH = 2;
+    static final int HASH_CODE_LENGTH = 32;
+    static final int BIT_PARTITION_SIZE = 5;
+    static final int BIT_PARTITION_MASK = 0b11111;
 
     static abstract class Node<K, V> implements Serializable {
         private final static long serialVersionUID = 0L;
-        static final int TUPLE_LENGTH = 2;
-        static final int HASH_CODE_LENGTH = 32;
-        static final int BIT_PARTITION_SIZE = 5;
-        static final int BIT_PARTITION_MASK = 0b11111;
         transient final @Nullable PersistentTrieHelper.Nonce bulkEdit;
 
         Node(@Nullable PersistentTrieHelper.Nonce bulkEdit) {
             this.bulkEdit = bulkEdit;
+        }
+
+        /**
+         * Given a bitmap and a bit-position, returns the index
+         * in the array.
+         * <p>
+         * For example, if the bitmap is 0b1101 and
+         * bit-position is 0b0100, then the index is 1.
+         *
+         * @param bitmap a bit-map
+         * @param bitpos a bit-position
+         * @return the array index
+         */
+        static int index(final int bitmap, final int bitpos) {
+            return Integer.bitCount(bitmap & (bitpos - 1));
         }
 
         static int bitpos(final int mask) {
@@ -92,7 +112,26 @@ class PersistentTrieMapHelper {
 
         abstract int nodeArity();
 
+        /**
+         * Returns the node index for the given keyHash and shift, or -1.
+         *
+         * @param keyHash the key hash
+         * @param shift   the shift
+         * @return the node index or -1
+         */
+        abstract int nodeIndex(final int keyHash, final int shift);
+
         abstract int payloadArity();
+
+        /**
+         * Returns the payload index for the given keyHash and shift, or -1.
+         *
+         * @param key
+         * @param keyHash the key hash
+         * @param shift   the shift
+         * @return the payload index or -1
+         */
+        abstract int payloadIndex(@Nullable K key, final int keyHash, final int shift);
 
         abstract public Node<K, V> removed(final @Nullable PersistentTrieHelper.Nonce bulkEdit, final K key,
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
@@ -305,6 +344,15 @@ class PersistentTrieMapHelper {
             return Integer.bitCount(nodeMap() & (bitpos - 1));
         }
 
+        @Override
+        int nodeIndex(int keyHash, int shift) {
+            final int mask = mask(keyHash, shift);
+            final int bitpos = bitpos(mask);
+            return (this.nodeMap & bitpos) != 0
+                    ? index(this.nodeMap, bitpos)
+                    : -1;
+        }
+
         public int nodeMap() {
             return nodeMap;
         }
@@ -312,6 +360,15 @@ class PersistentTrieMapHelper {
         @Override
         int payloadArity() {
             return Integer.bitCount(dataMap());
+        }
+
+        @Override
+        int payloadIndex(K key, final int keyHash, final int shift) {
+            final int mask = mask(keyHash, shift);
+            final int bitpos = bitpos(mask);
+            return (this.dataMap & bitpos) != 0
+                    ? index(this.dataMap, bitpos)
+                    : -1;
         }
 
         @Override
@@ -402,16 +459,16 @@ class PersistentTrieMapHelper {
                 final int dataIndex = dataIndex(bitpos);
                 final K currentKey = getKey(dataIndex);
 
+                final V currentVal = getValue(dataIndex);
                 if (Objects.equals(currentKey, key)) {
-                    final V currentVal = getValue(dataIndex);
                     if (Objects.equals(currentVal, val)) {
+                        details.found(currentVal);
                         return this;
                     }
                     // update mapping
                     details.updated(currentVal);
                     return copyAndSetValue(bulkEdit, bitpos, val);
                 } else {
-                    final V currentVal = getValue(dataIndex);
                     final Node<K, V> subNodeNew =
                             mergeTwoKeyValPairs(bulkEdit, currentKey, currentVal, currentKey.hashCode(),
                                     key, val, keyHash, shift + BIT_PARTITION_SIZE);
@@ -451,6 +508,10 @@ class PersistentTrieMapHelper {
             assert payloadArity() >= 2;
         }
 
+        @Override
+        int nodeIndex(int keyHash, int shift) {
+            return -1;
+        }
 
         @Override
         public boolean equivalent(@NonNull Object other) {
@@ -538,6 +599,20 @@ class PersistentTrieMapHelper {
             return entries.length >> 1;
         }
 
+        @Override
+        int payloadIndex(K key, final int keyHash, final int shift) {
+            if (this.hash != keyHash) {
+                return -1;
+            }
+            for (int i = 0, n = payloadArity(); i < n; i++) {
+                K k = getKey(i);
+                if (Objects.equals(k, key)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         @SuppressWarnings("unchecked")
         @Override
         public Node<K, V> removed(final @Nullable PersistentTrieHelper.Nonce bulkEdit, final K key,
@@ -586,8 +661,8 @@ class PersistentTrieMapHelper {
             for (int idx = 0, n = payloadArity(); idx < n; idx++) {
                 if (Objects.equals(getKey(idx), key)) {
                     final V currentVal = getValue(idx);
-
                     if (Objects.equals(currentVal, val)) {
+                        details.found(currentVal);
                         return this;
                     } else {
                         final Object[] dst = PersistentTrieHelper.copySet(this.entries, idx * 2 + 1, val);
@@ -616,20 +691,22 @@ class PersistentTrieMapHelper {
     /**
      * Iterator skeleton that uses a fixed stack in depth.
      */
-    private static abstract class AbstractMapIterator<K, V> {
+    static abstract class AbstractMapIterator<K, V> {
 
         private static final int MAX_DEPTH = 7;
         private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
-        protected int currentValueCursor;
-        protected int currentValueLength;
-        protected Node<K, V> currentValueNode;
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        protected int nextValueCursor;
+        protected int nextValueLength;
+        protected Node<K, V> nextValueNode;
+        private int nextStackLevel = -1;
+        protected Map.Entry<K, V> current;
+
+        @SuppressWarnings({"unchecked"})
         Node<K, V>[] nodes = new Node[MAX_DEPTH];
-        private int currentStackLevel = -1;
 
         AbstractMapIterator(Node<K, V> rootNode) {
             if (rootNode.hasNodes()) {
-                currentStackLevel = 0;
+                nextStackLevel = 0;
 
                 nodes[0] = rootNode;
                 nodeCursorsAndLengths[0] = 0;
@@ -637,17 +714,70 @@ class PersistentTrieMapHelper {
             }
 
             if (rootNode.hasPayload()) {
-                currentValueNode = rootNode;
-                currentValueCursor = 0;
-                currentValueLength = rootNode.payloadArity();
+                nextValueNode = rootNode;
+                nextValueCursor = 0;
+                nextValueLength = rootNode.payloadArity();
             }
         }
 
         public boolean hasNext() {
-            if (currentValueCursor < currentValueLength) {
+            if (nextValueCursor < nextValueLength) {
                 return true;
             } else {
                 return searchNextValueNode();
+            }
+        }
+
+        protected Map.Entry<K, V> nextEntry() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            } else {
+                return current = nextValueNode.getKeyValueEntry(nextValueCursor++);
+            }
+        }
+
+        /**
+         * Moves the iterator so that it stands before the specified
+         * element.
+         *
+         * @param k        an element
+         * @param rootNode the root node of the set
+         */
+        protected void moveTo(final @Nullable K k, final @NonNull Node<K, V> rootNode) {
+            int keyHash = Objects.hashCode(k);
+            int shift = 0;
+            Node<K, V> node = rootNode;
+
+            nextStackLevel = -1;
+            nextValueNode = null;
+            nextValueCursor = 0;
+            nextValueLength = 0;
+            Arrays.fill(nodes, null);
+            Arrays.fill(nodeCursorsAndLengths, 0);
+            current = null;
+
+            for (int depth = 0; depth < MAX_DEPTH; depth++) {
+                nodes[depth] = node;
+
+                int nodeIndex = node.nodeIndex(keyHash, shift);
+                if (nodeIndex != -1) {
+                    final int nextCursorIndex = depth * 2;
+                    final int nextLengthIndex = nextCursorIndex + 1;
+                    nodeCursorsAndLengths[nextCursorIndex] = 0;
+                    nodeCursorsAndLengths[nextLengthIndex] = node.nodeArity();
+                    node = node.getNode(nodeIndex);
+                } else {
+                    int payloadIndex = node.payloadIndex(k, keyHash, shift);
+                    if (payloadIndex != -1) {
+                        nextValueNode = node;
+                        nextValueCursor = payloadIndex;
+                        nextValueLength = node.payloadArity();
+                        nextStackLevel = depth;
+                    }
+                    break;
+                }
+
+                shift += BIT_PARTITION_SIZE;
             }
         }
 
@@ -656,22 +786,22 @@ class PersistentTrieMapHelper {
          * search for next node that contains values
          */
         private boolean searchNextValueNode() {
-            while (currentStackLevel >= 0) {
-                final int currentCursorIndex = currentStackLevel * 2;
+            while (nextStackLevel >= 0) {
+                final int currentCursorIndex = nextStackLevel * 2;
                 final int currentLengthIndex = currentCursorIndex + 1;
 
                 final int nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
                 final int nodeLength = nodeCursorsAndLengths[currentLengthIndex];
 
                 if (nodeCursor < nodeLength) {
-                    final Node<K, V> nextNode = nodes[currentStackLevel].getNode(nodeCursor);
+                    final Node<K, V> nextNode = nodes[nextStackLevel].getNode(nodeCursor);
                     nodeCursorsAndLengths[currentCursorIndex]++;
 
                     if (nextNode.hasNodes()) {
                         /*
                          * put node on next stack level for depth-first traversal
                          */
-                        final int nextStackLevel = ++currentStackLevel;
+                        final int nextStackLevel = ++this.nextStackLevel;
                         final int nextCursorIndex = nextStackLevel * 2;
                         final int nextLengthIndex = nextCursorIndex + 1;
 
@@ -684,13 +814,13 @@ class PersistentTrieMapHelper {
                         /*
                          * found next node that contains values
                          */
-                        currentValueNode = nextNode;
-                        currentValueCursor = 0;
-                        currentValueLength = nextNode.payloadArity();
+                        nextValueNode = nextNode;
+                        nextValueCursor = 0;
+                        nextValueLength = nextNode.payloadArity();
                         return true;
                     }
                 } else {
-                    currentStackLevel--;
+                    nextStackLevel--;
                 }
             }
 
@@ -707,11 +837,7 @@ class PersistentTrieMapHelper {
 
         @Override
         public K next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            } else {
-                return currentValueNode.getKey(currentValueCursor++);
-            }
+            return nextEntry().getKey();
         }
 
     }
@@ -725,11 +851,7 @@ class PersistentTrieMapHelper {
 
         @Override
         public Map.Entry<K, V> next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            } else {
-                return currentValueNode.getKeyValueEntry(currentValueCursor++);
-            }
+            return nextEntry();
         }
 
     }
@@ -761,15 +883,15 @@ class PersistentTrieMapHelper {
 
     static class ChangeEvent<V> {
 
-        private V replacedValue;
+        private V oldValue;
         boolean isModified;
         private boolean isReplaced;
 
         ChangeEvent() {
         }
 
-        public V getReplacedValue() {
-            return replacedValue;
+        public V getOldValue() {
+            return oldValue;
         }
 
         public boolean hasReplacedValue() {
@@ -785,10 +907,14 @@ class PersistentTrieMapHelper {
             this.isModified = true;
         }
 
-        public void updated(V replacedValue) {
-            this.replacedValue = replacedValue;
+        public void updated(V oldValue) {
+            this.oldValue = oldValue;
             this.isModified = true;
             this.isReplaced = true;
+        }
+
+        public void found(V oldValue) {
+            this.oldValue = oldValue;
         }
     }
 

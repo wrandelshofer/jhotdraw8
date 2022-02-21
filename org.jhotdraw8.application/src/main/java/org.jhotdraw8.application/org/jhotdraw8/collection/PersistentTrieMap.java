@@ -182,7 +182,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                final int valHashOld = Objects.hashCode(details.getReplacedValue());
+                final int valHashOld = Objects.hashCode(details.getOldValue());
                 final int valHashNew = Objects.hashCode(value);
 
                 return new PersistentTrieMap<>(newRootNode,
@@ -213,7 +213,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
         final PersistentTrieMapHelper.Node<K, V> newRootNode = root.removed(null, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
-            final int valHash = Objects.hashCode(details.getReplacedValue());
+            final int valHash = Objects.hashCode(details.getOldValue());
             return new PersistentTrieMap<>(newRootNode, hashCode - ((keyHash ^ valHash)),
                     size - 1);
         }

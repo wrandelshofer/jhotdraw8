@@ -4,7 +4,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Package private class with code for {@link PersistentTrieSet}
@@ -853,11 +859,11 @@ class PersistentTrieSetHelper {
         protected int nextValueCursor;
         protected int nextValueLength;
         protected Node<K> nextValueNode;
+        private int nextStackLevel = -1;
         protected K current;
 
         @SuppressWarnings({"rawtypes", "unchecked"})
         Node<K>[] nodes = new Node[MAX_DEPTH];
-        private int nextStackLevel = -1;
 
         TrieIterator(Node<K> rootNode) {
             if (rootNode.hasNodes()) {
@@ -881,7 +887,6 @@ class PersistentTrieSetHelper {
             } else {
                 return searchNextValueNode();
             }
-
         }
 
         /**

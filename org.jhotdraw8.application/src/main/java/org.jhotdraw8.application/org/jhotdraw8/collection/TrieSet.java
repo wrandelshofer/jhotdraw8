@@ -4,7 +4,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Implements the {@link Set} interface with a
@@ -227,7 +232,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
             }
 
             current = null;
-
         }
     }
 }
