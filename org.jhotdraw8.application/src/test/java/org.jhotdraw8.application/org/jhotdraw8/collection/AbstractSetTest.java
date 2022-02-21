@@ -101,6 +101,12 @@ public abstract class AbstractSetTest {
         assertEquals(expected.retainAll(list), instance.retainAll(list));
         assertEquals(expected.containsAll(list), instance.containsAll(list));
 
+        // WHEN: set is cleared
+        // THEN: set must be equal to expected
+        expected.clear();
+        instance.clear();
+        assertEquals(expected, instance);
+
         assertEquals(expected, instance);
     }
 

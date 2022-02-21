@@ -42,6 +42,12 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
         this.root = PersistentTrieMapHelper.emptyNode();
     }
 
+    public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
+        this.bulkEdit = new PersistentTrieHelper.Nonce();
+        this.root = PersistentTrieMapHelper.emptyNode();
+        this.putAll(m);
+    }
+
     TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
         this.bulkEdit = new PersistentTrieHelper.Nonce();
         this.root = trieMap.root;
