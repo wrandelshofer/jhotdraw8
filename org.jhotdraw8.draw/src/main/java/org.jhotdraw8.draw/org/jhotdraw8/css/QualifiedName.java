@@ -9,19 +9,27 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
 
+import static org.jhotdraw8.css.SelectorModel.ANY_NAMESPACE;
+
 /**
  * Represents a name that is optionally restricted to a specific namespace.
  */
 public class QualifiedName implements Comparable<QualifiedName> {
-    private final @Nullable String namespace;
+    private final @NonNull String namespace;
     private final @NonNull String name;
 
-    public QualifiedName(String namespace, @NonNull String name) {
-        this.namespace = namespace;
+    /**
+     * Creates a qualified name
+     *
+     * @param namespace namespace, if null assigns {@link org.jhotdraw8.css.SelectorModel#ANY_NAMESPACE}
+     * @param name      the name
+     */
+    public QualifiedName(@Nullable String namespace, @NonNull String name) {
+        this.namespace = namespace == null ? ANY_NAMESPACE : namespace;
         this.name = name;
     }
 
-    public @Nullable String getNamespace() {
+    public @NonNull String getNamespace() {
         return namespace;
     }
 
