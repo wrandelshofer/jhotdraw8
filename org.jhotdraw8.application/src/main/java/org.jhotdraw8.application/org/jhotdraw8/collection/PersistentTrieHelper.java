@@ -2,6 +2,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -106,6 +107,7 @@ class PersistentTrieHelper {
     /**
      * A one time key. Each instance is unique in this JVM.
      */
-    static class Nonce {
+    static class Nonce implements Serializable {
+        private final static long serialVersionUID = 0L;
     }
 }

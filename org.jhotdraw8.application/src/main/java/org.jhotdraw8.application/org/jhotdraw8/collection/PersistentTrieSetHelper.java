@@ -3,13 +3,8 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Package private class with code for {@link PersistentTrieSet}
@@ -43,6 +38,7 @@ class PersistentTrieSetHelper {
     }
 
     static class BitmapIndexedNode<K> extends Node<K> {
+        private final static long serialVersionUID = 0L;
         private final @NonNull Object[] nodes;
         private final int nodeMap;
         private final int dataMap;
@@ -541,7 +537,8 @@ class PersistentTrieSetHelper {
 
     }
 
-    static abstract class Node<K> {
+    static abstract class Node<K> implements Serializable {
+        private final static long serialVersionUID = 0L;
         transient final @Nullable PersistentTrieHelper.Nonce bulkEdit;
 
         Node(@Nullable PersistentTrieHelper.Nonce bulkEdit) {
@@ -647,6 +644,7 @@ class PersistentTrieSetHelper {
 
     @SuppressWarnings("ForLoopReplaceableByForEach")
     private static final class HashCollisionNode<K> extends Node<K> {
+        private final static long serialVersionUID = 0L;
         private final int hash;
         private @NonNull K[] keys;
 
@@ -856,7 +854,8 @@ class PersistentTrieSetHelper {
         protected int nextValueLength;
         protected Node<K> nextValueNode;
         protected K current;
-        @SuppressWarnings({"unchecked"})
+
+        @SuppressWarnings({"rawtypes", "unchecked"})
         Node<K>[] nodes = new Node[MAX_DEPTH];
         private int nextStackLevel = -1;
 

@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,7 +34,8 @@ import static org.jhotdraw8.collection.PersistentTrieSetHelper.EMPTY_NODE;
  *
  * @param <E> the element type
  */
-public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements PersistentSet<E>, ImmutableSet<E> {
+public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
+    private final static long serialVersionUID = 0L;
 
     private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
 

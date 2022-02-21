@@ -2,12 +2,8 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Implements the {@link Map} interface with a
@@ -27,15 +23,16 @@ import java.util.Set;
  * @param <V> the value type
  */
 
-public class TrieMap<K, V> extends AbstractMap<K, V> {
+public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
+    private final static long serialVersionUID = 0L;
     private PersistentTrieHelper.Nonce bulkEdit;
-    private PersistentTrieMap.Node<K, V> root;
+    private PersistentTrieMapHelper.Node<K, V> root;
     private int hashCode;
     private int size;
 
     public TrieMap() {
         this.bulkEdit = new PersistentTrieHelper.Nonce();
-        this.root = PersistentTrieMap.emptyNode();
+        this.root = PersistentTrieMapHelper.emptyNode();
     }
 
     TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
@@ -47,7 +44,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public void clear() {
-        this.root = PersistentTrieMap.emptyNode();
+        this.root = PersistentTrieMapHelper.emptyNode();
         this.size = 0;
         this.hashCode = 0;
     }
@@ -64,7 +61,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
         return new AbstractSet<Entry<K, V>>() {
             @Override
             public boolean add(Entry<K, V> kvEntry) {
-                PersistentTrieMap.ChangeEvent<V> details = new PersistentTrieMap.ChangeEvent<>();
+                PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
                 root.updated(bulkEdit, kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
                 return details.isModified();
             }
@@ -80,7 +77,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    PersistentTrieMap.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                    PersistentTrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
                     return result.keyExists() && Objects.equals(result.get(), entry.getValue());
                 }
                 return false;
@@ -88,7 +85,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
 
             @Override
             public Iterator<Entry<K, V>> iterator() {
-                return new PersistentTrieMap.MapEntryIterator<>(root);
+                return new PersistentTrieMapHelper.MapEntryIterator<>(root);
             }
 
             @Override
@@ -97,7 +94,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    PersistentTrieMap.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                    PersistentTrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
                     if (result.keyExists() && Objects.equals(result.get(), entry.getValue())) {
                         removeAndGiveDetails(key);
                         return true;
@@ -124,11 +121,11 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
         return putAndGiveDetails(key, value).getReplacedValue();
     }
 
-    @NonNull PersistentTrieMap.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
+    @NonNull PersistentTrieMapHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieMap.ChangeEvent<V> details = new PersistentTrieMap.ChangeEvent<>();
+        final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
 
-        final PersistentTrieMap.Node<K, V> newRootNode = root.updated(bulkEdit, key, val, keyHash, 0, details);
+        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.updated(bulkEdit, key, val, keyHash, 0, details);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -154,10 +151,10 @@ public class TrieMap<K, V> extends AbstractMap<K, V> {
         return removeAndGiveDetails(key).getReplacedValue();
     }
 
-    @NonNull PersistentTrieMap.ChangeEvent<V> removeAndGiveDetails(final K key) {
+    @NonNull PersistentTrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieMap.ChangeEvent<V> details = new PersistentTrieMap.ChangeEvent<>();
-        final PersistentTrieMap.Node<K, V> newRootNode = root.removed(bulkEdit, key, keyHash, 0, details);
+        final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
+        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.removed(bulkEdit, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             final int valHash = Objects.hashCode(details.getReplacedValue());

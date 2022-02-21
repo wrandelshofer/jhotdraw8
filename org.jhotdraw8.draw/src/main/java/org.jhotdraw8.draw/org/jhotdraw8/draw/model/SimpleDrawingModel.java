@@ -27,15 +27,7 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.AbstractMap;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /**
@@ -256,6 +248,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (key instanceof Key<?>) {
             T oldValue = figure.put(key, newValue);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
+            @SuppressWarnings({"unchecked", "RedundantSuppression"})
             Key<Object> keyObject = (Key<Object>) key;
             onPropertyChanged(figure, keyObject, oldValue, newValue);
             return oldValue;
@@ -276,6 +269,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (key instanceof Key<?>) {
             T oldValue = figure.remove((Key<T>) key);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
+            @SuppressWarnings({"unchecked", "RedundantSuppression"})
             Key<Object> keyObject = (Key<Object>) key;
             onPropertyChanged(figure, keyObject, oldValue, null);
             return oldValue;

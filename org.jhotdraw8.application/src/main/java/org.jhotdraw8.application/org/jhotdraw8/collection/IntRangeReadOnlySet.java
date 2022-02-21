@@ -1,9 +1,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class IntRangeReadOnlySet extends AbstractReadOnlySet<Integer> {
@@ -17,7 +17,7 @@ public class IntRangeReadOnlySet extends AbstractReadOnlySet<Integer> {
      * @param to   exclusive
      */
     public IntRangeReadOnlySet(int from, int to) {
-        Objects.checkIndex(from, to);
+        Preconditions.checkIndex(from, to);
         this.from = from;
         this.to = to;
     }

@@ -3,12 +3,8 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Implements the {@link Set} interface with a
@@ -26,7 +22,8 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class TrieSet<E> extends AbstractSet<E> {
+public class TrieSet<E> extends AbstractSet<E> implements Serializable {
+    private final static long serialVersionUID = 0L;
     private PersistentTrieHelper.Nonce bulkEdit;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int hashCode;

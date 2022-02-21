@@ -20,11 +20,13 @@ public class DrawingModelUndoEventEmitter {
 
 
     private class DrawingModelListener implements Listener<DrawingModelEvent> {
+        private final static long serialVersionUID = 0L;
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
                 case PROPERTY_VALUE_CHANGED:
                     fire(new AbstractUndoableEdit() {
+                        private final static long serialVersionUID = 0L;
                         @Override
                         public void undo() throws CannotUndoException {
                             super.undo();
@@ -49,12 +51,15 @@ public class DrawingModelUndoEventEmitter {
     }
 
     private class TreeModelListener implements Listener<TreeModelEvent<Figure>> {
+        private final static long serialVersionUID = 0L;
 
         @Override
         public void handle(TreeModelEvent<Figure> event) {
             switch (event.getEventType()) {
                 case ROOT_CHANGED:
                     fire(new AbstractUndoableEdit() {
+                        private final static long serialVersionUID = 0L;
+
                         @Override
                         public void undo() throws CannotUndoException {
                             super.undo();
@@ -74,6 +79,7 @@ public class DrawingModelUndoEventEmitter {
                 case NODE_ADDED_TO_TREE:
                 case NODE_REMOVED_FROM_TREE:
                     fire(new AbstractUndoableEdit() {
+                        private final static long serialVersionUID = 0L;
                         // can not undo/redo yet
                     });
                     break;

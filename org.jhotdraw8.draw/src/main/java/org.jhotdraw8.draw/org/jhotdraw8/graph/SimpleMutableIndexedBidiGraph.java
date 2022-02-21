@@ -8,10 +8,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 import static java.lang.Math.max;
 
@@ -144,8 +144,8 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public int findIndexOfPrev(int vidxa, int vidxb) {
-        Objects.checkIndex(vidxa, vertexCount);
-        Objects.checkIndex(vidxb, vertexCount);
+        Preconditions.checkIndex(vidxa, vertexCount);
+        Preconditions.checkIndex(vidxb, vertexCount);
         int offset = vidxa * stride;
         for (int i = offset + 1, n = prevArrows[offset]; i < n; i++) {
             if (prevArrows[i] == vidxb) {
@@ -163,7 +163,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     @Override
     public int getNext(int vidx, int i) {
         int offset = vidx * stride;
-        Objects.checkIndex(i, nextArrows[offset]);
+        Preconditions.checkIndex(i, nextArrows[offset]);
         return nextArrows[offset + i + 1];
     }
 
@@ -175,7 +175,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     @Override
     public int getPrev(int vidx, int i) {
         int offset = vidx * stride;
-        Objects.checkIndex(i, prevArrows[offset]);
+        Preconditions.checkIndex(i, prevArrows[offset]);
         return prevArrows[offset + i + 1];
     }
 
@@ -214,7 +214,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public void removeAllPrev(int vidx) {
-        Objects.checkIndex(vidx, vertexCount);
+        Preconditions.checkIndex(vidx, vertexCount);
         int vOffset = vidx * stride;
         int vPrevCount = prevArrows[vOffset];
         for (int i = vPrevCount; i >= 0; i--) {
@@ -234,7 +234,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public void removeAllNext(int vidx) {
-        Objects.checkIndex(vidx, vertexCount);
+        Preconditions.checkIndex(vidx, vertexCount);
         int vOffset = vidx * stride;
         int vNextCount = nextArrows[vOffset];
         for (int i = vNextCount; i >= 0; i--) {
@@ -278,7 +278,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public void removeVertex(int vidx) {
-        Objects.checkIndex(vidx, vertexCount);
+        Preconditions.checkIndex(vidx, vertexCount);
         removeAllNext(vidx);
         removeAllPrev(vidx);
         if (vidx < vertexCount - 1) {

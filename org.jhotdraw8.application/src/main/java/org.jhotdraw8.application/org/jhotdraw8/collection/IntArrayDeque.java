@@ -5,14 +5,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.util.Preconditions;
 
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * IntArrayDeque.
@@ -374,7 +369,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
      */
     public void removeAt(int i) {
         int size = size();
-        Objects.checkIndex(i, size);
+        Preconditions.checkIndex(i, size);
         if (tail < head) {
             if (head + i < elements.length) {
                 if (i > 0) {
