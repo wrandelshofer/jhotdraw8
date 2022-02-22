@@ -10,8 +10,7 @@ import org.jhotdraw8.util.Resources;
  * ApplicationLabels.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- */
+  */
 public class ApplicationLabels {
 
     private static Resources labels;

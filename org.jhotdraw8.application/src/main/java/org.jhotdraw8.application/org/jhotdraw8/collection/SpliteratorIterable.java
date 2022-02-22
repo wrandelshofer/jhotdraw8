@@ -18,8 +18,7 @@ import java.util.function.Supplier;
  * Iterable methods.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- */
+  */
 public class SpliteratorIterable<T> implements Iterable<T> {
     private final Supplier<Spliterator<T>> factory;
 

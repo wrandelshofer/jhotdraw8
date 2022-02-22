@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * TreeTraversalTest.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- */
+  */
 public class TreeTraversalTest {
 
     private static @NonNull SimpleTreeNode<String> createTree() {

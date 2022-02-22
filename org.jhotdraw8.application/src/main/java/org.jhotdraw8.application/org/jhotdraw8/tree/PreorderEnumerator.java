@@ -16,8 +16,7 @@ import java.util.function.Function;
  * PreorderSpliterator.
  *
  * @author Werner Randelshofer
- * @version $$Id$$
- */
+  */
 public class PreorderEnumerator<T> extends AbstractEnumeratorSpliterator<T> {
     private final Function<T, Enumerator<T>> getChildrenFunction;
     private final Deque<Enumerator<T>> stack = new ArrayDeque<>();
