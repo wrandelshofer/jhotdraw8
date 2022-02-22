@@ -39,11 +39,25 @@ public class PageLabelFigure extends AbstractLabelFigure
         this(0, 0, "");
     }
 
-    public PageLabelFigure(@NonNull Point2D position, String text) {
+    /**
+     * Creates a new instance.
+     *
+     * @param position of the label
+     * @param text     text of the label
+     */
+    public PageLabelFigure(@NonNull Point2D position, @NonNull String text) {
         this(position.getX(), position.getY(), text);
     }
 
-    public PageLabelFigure(double x, double y, String text, @NonNull Object... keyValues) {
+    /**
+     * Creates a new instance.
+     *
+     * @param x         x-coordinate of the label
+     * @param y         y-coordinate of the label
+     * @param text      text of the label
+     * @param keyValues properties to set
+     */
+    public PageLabelFigure(double x, double y, @NonNull String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
@@ -55,7 +69,7 @@ public class PageLabelFigure extends AbstractLabelFigure
 
     @Override
     protected String getText(@Nullable RenderContext ctx) {
-        String text = get(TEXT_WITH_PLACEHOLDERS);
+        String text = getNonNull(TEXT_WITH_PLACEHOLDERS);
         final Integer pageNumber = ctx == null ? 0 : ctx.get(RenderContext.RENDER_PAGE_NUMBER);
         final Integer numPages = ctx == null ? 0 : ctx.get(RenderContext.RENDER_NUMBER_OF_PAGES);
         final Instant timestamp = ctx == null ? Instant.now() : ctx.get(RenderContext.RENDER_TIMESTAMP);
