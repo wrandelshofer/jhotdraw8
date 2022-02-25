@@ -32,6 +32,9 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
     private static final @NonNull AddOnlyPersistentTrieSet<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0);
 
+    public AddOnlyPersistentTrieSet() {
+    }
+
     private static int bitpos(final int mask) {
         return 1 << mask;
     }

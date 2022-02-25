@@ -14,6 +14,9 @@ import java.util.function.Function;
  * Computes the maximal depth of a tree.
  */
 public class TreeMaxDepthCalculator {
+    public TreeMaxDepthCalculator() {
+    }
+
     /**
      * Computes the maximal depth of the sub-tree starting at this tree node.
      * <p>
