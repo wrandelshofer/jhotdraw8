@@ -110,12 +110,12 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
         MyIntConsumer consumer = new MyIntConsumer();
         for (int s : startVertices) {
             if (visited.add(s)) {
-                queue.addLast(newSearchNode(s, 0));
+                queue.addLastLong(newSearchNode(s, 0));
             }
         }
 
         while (!queue.isEmpty()) {
-            long u = queue.removeFirst();
+            long u = queue.removeFirstLong();
             int vertex = searchNodeGetVertex(u);
             if (goalPredicate.test(vertex)) {
                 return true;
@@ -126,7 +126,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
                 while (spliterator.tryAdvance(consumer)) {
                     final int v = consumer.value;
                     if (visited.add(v)) {
-                        queue.addLast(newSearchNode(v, searchNodeGetDepth(u) + 1));
+                        queue.addLastLong(newSearchNode(v, searchNodeGetDepth(u) + 1));
                     }
                 }
             }

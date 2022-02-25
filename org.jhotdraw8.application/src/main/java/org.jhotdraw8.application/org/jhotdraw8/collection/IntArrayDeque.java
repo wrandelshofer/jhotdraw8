@@ -56,6 +56,36 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         elements = new int[Math.max(size, 0)];
     }
 
+    @Override
+    public boolean add(Integer integer) {
+        addLastInt(integer);
+        return true;
+    }
+
+    @Override
+    public void addFirst(Integer integer) {
+        addFirstInt(integer);
+    }
+
+    /**
+     * Inserts the specified element at the head of this deque.
+     *
+     * @param e the element to add
+     */
+    public void addFirstInt(int e) {
+        //Note: elements.length is a power of two.
+        head = (head - 1) & (elements.length - 1);
+        elements[head] = e;
+        if (head == tail) {
+            grow(size() + 1);
+        }
+    }
+
+    @Override
+    public void addLast(Integer integer) {
+        addLastInt(integer);
+    }
+
     public void addLastAll(int[] array) {
         addLastAll(array, 0, array.length);
     }
@@ -78,15 +108,14 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
     }
 
     /**
-     * Inserts the specified element at the head of this deque.
+     * Inserts the specified element at the tail of this deque.
      *
-     * @param e the element to add
+     * @param e the element
      */
-    public void addFirstInt(int e) {
-        //Note: elements.length is a power of two.
-        head = (head - 1) & (elements.length - 1);
-        elements[head] = e;
-        if (head == tail) {
+    public void addLastInt(int e) {
+        elements[tail] = e;
+        tail = (tail + 1) & (elements.length - 1);
+        if (tail == head) {
             grow(size() + 1);
         }
     }
@@ -101,63 +130,74 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         this.head = this.tail = 0;
     }
 
-    /**
-     * Inserts the specified element at the head of this deque.
-     *
-     * @param e the element to add
-     */
-    public void pushInt(int e) {
-        addFirstInt(e);
-    }
-
-    /**
-     * Inserts the specified element at the tail of this deque.
-     *
-     * @param e the element
-     */
-    public void addLastInt(int e) {
-        elements[tail] = e;
-        tail = (tail + 1) & (elements.length - 1);
-        if (tail == head) {
-            grow(size() + 1);
+    @Override
+    public boolean contains(Object o) {
+        if (o instanceof Integer) {
+            return firstIndexOfInt((int) o) != -1;
         }
+        return false;
     }
 
-    /**
-     * Removes the element at the head of the deque.
-     *
-     * @throws NoSuchElementException if the queue is empty
-     */
-    public int removeFirstInt() {
-        if (head == tail) {
+    @Override
+    public Iterator<Integer> descendingIterator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Integer element() {
+        if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        int result = elements[head];
-        elements[head] = 0;
-        head = (head == elements.length - 1) ? 0 : head + 1;
-        return result;
+        return getFirstInt();
     }
 
-    /**
-     * Removes the element at the head of the deque.
-     *
-     * @throws NoSuchElementException if the queue is empty
-     */
-    public int popInt() {
-        return removeFirstInt();
-    }
-
-    /**
-     * @throws NoSuchElementException {@inheritDoc}
-     */
-    public int removeLastInt() {
-        if (head == tail) {
-            throw new NoSuchElementException();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        tail = (tail == 0) ? elements.length - 1 : tail - 1;
-        int result = elements[tail];
-        elements[tail] = 0;
-        return result;
+        if (!(o instanceof IntArrayDeque)) {
+            return false;
+        }
+        IntArrayDeque that = (IntArrayDeque) o;
+        if (this.size() != that.size()) {
+            return false;
+        }
+        int thisMask = elements.length - 1;
+        int thatMask = that.elements.length - 1;
+        for (int i = this.head, j = that.head; i != this.tail; i = (i + 1) & thisMask, j = (j + 1) & thatMask) {
+            if (this.elements[i] != that.elements[j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int firstIndexOfInt(int o) {
+        if (tail < head) {
+            for (int i = head; i < elements.length; i++) {
+                if (o == (elements[i])) {
+                    return i - head;
+                }
+            }
+            for (int i = 0; i < tail; i++) {
+                if (o == (elements[i])) {
+                    return i + elements.length - head;
+                }
+            }
+        } else {
+            for (int i = head; i < tail; i++) {
+                if (o == (elements[i])) {
+                    return i - head;
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public Integer getFirst() {
+        return getFirstInt();
     }
 
     /**
@@ -169,6 +209,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         }
         int result = elements[head];
         return result;
+    }
+
+    @Override
+    public Integer getLast() {
+        return getLastInt();
     }
 
     /**
@@ -206,161 +251,27 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         tail = size;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        int mask = elements.length - 1;
+        for (int i = head; i != tail; i = (i + 1) & mask) {
+            hash = hash * 31 + elements[i];
+        }
+        return hash;
+    }
+
+    /**
+     * Returns true if this deque is empty.
+     *
+     * @return {@code true} if this deque contains no elements
+     */
+    public boolean isEmpty() {
+        return head == tail;
+    }
+
     public @NonNull Iterator<Integer> iterator() {
         return new DeqIterator();
-    }
-
-    @Override
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
-    }
-
-    @Override
-    public Iterator<Integer> descendingIterator() {
-        return null;
-    }
-
-    private class DeqIterator implements Iterator<Integer> {
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
-        private int cursor = head;
-
-        /**
-         * Tail recorded at construction, to stop
-         * iterator and also to check for co-modification.
-         */
-        private final int fence = tail;
-
-        public boolean hasNext() {
-            return cursor != fence;
-        }
-
-        public Integer next() {
-            if (cursor == fence) {
-                throw new NoSuchElementException();
-            }
-            int result = elements[cursor];
-            // This check doesn't catch all possible co-modifications,
-            // but does catch the ones that corrupt traversal
-            if (tail != fence) {
-                throw new ConcurrentModificationException();
-            }
-            cursor = (cursor + 1) & (elements.length - 1);
-            return result;
-        }
-
-
-    }
-
-
-    @Override
-    public void addFirst(Integer integer) {
-        addFirstInt(integer);
-    }
-
-    @Override
-    public void addLast(Integer integer) {
-        addLastInt(integer);
-    }
-
-    @Override
-    public boolean offerFirst(Integer integer) {
-        addFirstInt(integer);
-        return true;
-    }
-
-    @Override
-    public boolean offerLast(Integer integer) {
-        addLastInt(integer);
-        return true;
-    }
-
-    @Override
-    public Integer removeFirst() {
-        return removeFirstInt();
-    }
-
-    @Override
-    public Integer removeLast() {
-        return removeLastInt();
-    }
-
-    @Override
-    public Integer pollFirst() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeFirstInt();
-    }
-
-    @Override
-    public Integer pollLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeLastInt();
-    }
-
-    @Override
-    public Integer getFirst() {
-        return getFirstInt();
-    }
-
-    @Override
-    public Integer getLast() {
-        return getLastInt();
-    }
-
-    @Override
-    public Integer peekFirst() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getFirstInt();
-    }
-
-    @Override
-    public Integer peekLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getLastInt();
-    }
-
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        if (o instanceof Integer) {
-            return removeFirstOccurrenceInt((int) o);
-        }
-        return false;
-    }
-
-    public int firstIndexOfInt(int o) {
-        if (tail < head) {
-            for (int i = head; i < elements.length; i++) {
-                if (o == (elements[i])) {
-                    return i - head;
-                }
-            }
-            for (int i = 0; i < tail; i++) {
-                if (o == (elements[i])) {
-                    return i + elements.length - head;
-                }
-            }
-        } else {
-            for (int i = head; i < tail; i++) {
-                if (o == (elements[i])) {
-                    return i - head;
-                }
-            }
-        }
-        return -1;
     }
 
     public int lastIndexOfInt(int o) {
@@ -385,13 +296,111 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return -1;
     }
 
-    public boolean removeFirstOccurrenceInt(int o) {
-        int index = firstIndexOfInt(o);
-        if (index != -1) {
-            removeAt(index);
-            return true;
+    @Override
+    public boolean offer(Integer integer) {
+        addLastInt(integer);
+        return true;
+    }
+
+    @Override
+    public boolean offerFirst(Integer integer) {
+        addFirstInt(integer);
+        return true;
+    }
+
+    @Override
+    public boolean offerLast(Integer integer) {
+        addLastInt(integer);
+        return true;
+    }
+
+    @Override
+    public Integer peek() {
+        if (isEmpty()) {
+            return null;
         }
-        return false;
+        return getFirstInt();
+    }
+
+    @Override
+    public Integer peekFirst() {
+        if (isEmpty()) {
+            return null;
+        }
+        return getFirstInt();
+    }
+
+    @Override
+    public Integer peekLast() {
+        if (isEmpty()) {
+            return null;
+        }
+        return getLastInt();
+    }
+
+    @Override
+    public Integer poll() {
+        if (isEmpty()) {
+            return null;
+        }
+        return removeFirstInt();
+    }
+
+    @Override
+    public Integer pollFirst() {
+        if (isEmpty()) {
+            return null;
+        }
+        return removeFirstInt();
+    }
+
+    @Override
+    public Integer pollLast() {
+        if (isEmpty()) {
+            return null;
+        }
+        return removeLastInt();
+    }
+
+    @Override
+    public Integer pop() {
+        return removeFirstInt();
+    }
+
+    /**
+     * Removes the element at the head of the deque.
+     *
+     * @throws NoSuchElementException if the queue is empty
+     */
+    public int popInt() {
+        return removeFirstInt();
+    }
+
+    @Override
+    public void push(Integer integer) {
+        addFirstInt(integer);
+    }
+
+    /**
+     * Inserts the specified element at the head of this deque.
+     *
+     * @param e the element to add
+     */
+    public void pushInt(int e) {
+        addFirstInt(e);
+    }
+
+    @Override
+    public Integer remove() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return removeFirstInt();
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return removeFirstOccurrence(o);
     }
 
     /**
@@ -421,8 +430,61 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
             elements[head + i] = 0;
             tail--;
         }
+    }
 
+    @Override
+    public Integer removeFirst() {
+        return removeFirstInt();
+    }
 
+    /**
+     * Removes the element at the head of the deque.
+     *
+     * @throws NoSuchElementException if the queue is empty
+     */
+    public int removeFirstInt() {
+        if (head == tail) {
+            throw new NoSuchElementException();
+        }
+        int result = elements[head];
+        elements[head] = 0;
+        head = (head == elements.length - 1) ? 0 : head + 1;
+        return result;
+    }
+
+    @Override
+    public boolean removeFirstOccurrence(Object o) {
+        if (o instanceof Integer) {
+            return removeFirstOccurrenceInt((int) o);
+        }
+        return false;
+    }
+
+    public boolean removeFirstOccurrenceInt(int o) {
+        int index = firstIndexOfInt(o);
+        if (index != -1) {
+            removeAt(index);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Integer removeLast() {
+        return removeLastInt();
+    }
+
+    /**
+     * @throws NoSuchElementException {@inheritDoc}
+     */
+    public int removeLastInt() {
+        if (head == tail) {
+            throw new NoSuchElementException();
+        }
+        tail = (tail == 0) ? elements.length - 1 : tail - 1;
+        int result = elements[tail];
+        elements[tail] = 0;
+        return result;
     }
 
     @Override
@@ -437,73 +499,6 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return false;
     }
 
-    @Override
-    public boolean add(Integer integer) {
-        addLastInt(integer);
-        return true;
-    }
-
-    @Override
-    public boolean offer(Integer integer) {
-        addLastInt(integer);
-        return true;
-    }
-
-    @Override
-    public Integer remove() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return removeFirstInt();
-    }
-
-    @Override
-    public Integer poll() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeFirstInt();
-    }
-
-    @Override
-    public Integer element() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return getFirstInt();
-    }
-
-    @Override
-    public Integer peek() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getFirstInt();
-    }
-
-    @Override
-    public void push(Integer integer) {
-        addFirstInt(integer);
-    }
-
-    @Override
-    public Integer pop() {
-        return removeFirstInt();
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return removeFirstOccurrence(o);
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        if (o instanceof Integer) {
-            return firstIndexOfInt((int) o) != -1;
-        }
-        return false;
-    }
-
     /**
      * Returns the number of elements in this deque.
      *
@@ -511,15 +506,6 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
      */
     public int size() {
         return (tail - head) & (elements.length - 1);
-    }
-
-    /**
-     * Returns true if this deque is empty.
-     *
-     * @return {@code true} if this deque contains no elements
-     */
-    public boolean isEmpty() {
-        return head == tail;
     }
 
     public @NonNull String toString() {
@@ -540,35 +526,35 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof IntArrayDeque)) {
-            return false;
-        }
-        IntArrayDeque that = (IntArrayDeque) o;
-        if (this.size() != that.size()) {
-            return false;
-        }
-        int thisMask = elements.length - 1;
-        int thatMask = that.elements.length - 1;
-        for (int i = this.head, j = that.head; i != this.tail; i = (i + 1) & thisMask, j = (j + 1) & thatMask) {
-            if (this.elements[i] != that.elements[j]) {
-                return false;
-            }
-        }
-        return true;
-    }
+    private class DeqIterator implements Iterator<Integer> {
+        /**
+         * Tail recorded at construction, to stop
+         * iterator and also to check for co-modification.
+         */
+        private final int fence = tail;
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
+        private int cursor = head;
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        int mask = elements.length - 1;
-        for (int i = head; i != tail; i = (i + 1) & mask) {
-            hash = hash * 31 + elements[i];
+        public boolean hasNext() {
+            return cursor != fence;
         }
-        return hash;
+
+        public Integer next() {
+            if (cursor == fence) {
+                throw new NoSuchElementException();
+            }
+            int result = elements[cursor];
+            // This check doesn't catch all possible co-modifications,
+            // but does catch the ones that corrupt traversal
+            if (tail != fence) {
+                throw new ConcurrentModificationException();
+            }
+            cursor = (cursor + 1) & (elements.length - 1);
+            return result;
+        }
+
+
     }
 }
