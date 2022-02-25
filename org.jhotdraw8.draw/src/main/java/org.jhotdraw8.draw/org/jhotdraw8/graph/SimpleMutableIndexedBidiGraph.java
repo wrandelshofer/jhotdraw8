@@ -5,18 +5,25 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.util.Preconditions;
+import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.NoSuchElementException;
 
 import static java.lang.Math.max;
 
 /**
  * A mutable indexed bi-directional graph.
+ * <p>
+ * Supports one integer of data for every vertex. The integer data is in the
+ * same array row as the next- and previous-arrows.
  */
 public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     private final int maxArity;
@@ -37,6 +44,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     private int[] nextArrows;
     private int vertexCount;
     private int arrowCount;
+    private int offset = 1;
 
     /**
      * Creates a new instance.
@@ -53,16 +61,16 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
         }
         this.vertexCount = 0;
         this.maxArity = maxArity;
-        this.stride = 1 + maxArity;
+        this.stride = 2 + maxArity;
         this.nextArrows = new int[vertexCapacity * stride];
         this.prevArrows = new int[vertexCapacity * stride];
     }
 
     @Override
     public void addArrow(int vidx, int uidx) {
-        int vOffset = vidx * stride;
+        int vOffset = vidx * stride + offset;
         int vNextCount = nextArrows[vOffset] + 1;
-        int uOffset = uidx * stride;
+        int uOffset = uidx * stride + offset;
         int uPrevCount = prevArrows[uOffset] + 1;
         if (vNextCount >= maxArity || uPrevCount >= maxArity) {
             throw new IndexOutOfBoundsException("Not enough capacity for a new arrow " + vidx + "->" + uidx);
@@ -87,8 +95,8 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
      * @param addend the number to add
      */
     private void addToVectorIndices(int[] src, int vsrc, int[] dest, int vdst, int length, int vidx, int addend) {
-        int srcOffset = vsrc * stride;
-        int dstOffset = vdst * stride;
+        int srcOffset = vsrc * stride + offset;
+        int dstOffset = vdst * stride + offset;
         for (int v = 0; v < length; v++) {
             int nDest = dest[dstOffset];
             int nSrc = src[srcOffset];
@@ -125,7 +133,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
             addToVectorIndices(prevArrows, 0, prevArrows, 0, vidx, vidx, 1);
             addToVectorIndices(prevArrows, vidx, prevArrows, vidx + 1, vertexCount - vidx, vidx, 1);
         }
-        int vOffset = vidx * stride;
+        int vOffset = vidx * stride + offset;
         Arrays.fill(nextArrows, vOffset, vOffset + stride, 0);
         Arrays.fill(prevArrows, vOffset, vOffset + stride, 0);
         vertexCount = newVertexCount;
@@ -133,10 +141,10 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public int findIndexOfNext(int vidxa, int vidxb) {
-        int offset = vidxa * stride;
-        for (int i = offset + 1, n = nextArrows[offset]; i < n; i++) {
+        int vOffset = vidxa * stride + offset;
+        for (int i = vOffset + 1, n = nextArrows[vOffset]; i < n; i++) {
             if (nextArrows[i] == vidxb) {
-                return i - offset;
+                return i - vOffset;
             }
         }
         return -1;
@@ -146,10 +154,10 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     public int findIndexOfPrev(int vidxa, int vidxb) {
         Preconditions.checkIndex(vidxa, vertexCount);
         Preconditions.checkIndex(vidxb, vertexCount);
-        int offset = vidxa * stride;
-        for (int i = offset + 1, n = prevArrows[offset]; i < n; i++) {
+        int vOffset = vidxa * stride + offset;
+        for (int i = vOffset + 1, n = prevArrows[vOffset]; i < n; i++) {
             if (prevArrows[i] == vidxb) {
-                return i - offset;
+                return i - vOffset;
             }
         }
         return -1;
@@ -162,9 +170,9 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public int getNext(int vidx, int i) {
-        int offset = vidx * stride;
-        Preconditions.checkIndex(i, nextArrows[offset]);
-        return nextArrows[offset + i + 1];
+        int vOffset = vidx * stride + offset;
+        Preconditions.checkIndex(i, nextArrows[vOffset]);
+        return nextArrows[vOffset + i + 1];
     }
 
     @Override
@@ -174,9 +182,9 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public int getPrev(int vidx, int i) {
-        int offset = vidx * stride;
-        Preconditions.checkIndex(i, prevArrows[offset]);
-        return prevArrows[offset + i + 1];
+        int vOffset = vidx * stride + offset;
+        Preconditions.checkIndex(i, prevArrows[vOffset]);
+        return prevArrows[vOffset + i + 1];
     }
 
 
@@ -202,24 +210,24 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
 
     @Override
     public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
-        int offset = vidx * stride;
-        return new IntIntArrayEnumeratorSpliterator(offset + 1, offset + 1 + nextArrows[offset], nextArrows);
+        int vOffset = vidx * stride + offset;
+        return new IntIntArrayEnumeratorSpliterator(vOffset + 1, vOffset + 1 + nextArrows[offset], nextArrows);
     }
 
     @Override
     public @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int vidx) {
-        int offset = vidx * stride;
-        return new IntIntArrayEnumeratorSpliterator(offset + 1, offset + 1 + prevArrows[offset], prevArrows);
+        int vOffset = vidx * stride + offset;
+        return new IntIntArrayEnumeratorSpliterator(vOffset + 1, vOffset + 1 + prevArrows[vOffset], prevArrows);
     }
 
     @Override
     public void removeAllPrev(int vidx) {
         Preconditions.checkIndex(vidx, vertexCount);
-        int vOffset = vidx * stride;
+        int vOffset = vidx * stride + offset;
         int vPrevCount = prevArrows[vOffset];
         for (int i = vPrevCount; i >= 0; i--) {
             int uidx = prevArrows[vOffset + i];
-            int uOffset = uidx * stride;
+            int uOffset = uidx * stride + offset;
             int uNextCount = nextArrows[uOffset];
             int vIndex = findIndexOfNext(uidx, vidx);
             if (vIndex < uNextCount - 1) {
@@ -235,11 +243,11 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     @Override
     public void removeAllNext(int vidx) {
         Preconditions.checkIndex(vidx, vertexCount);
-        int vOffset = vidx * stride;
+        int vOffset = vidx * stride + offset;
         int vNextCount = nextArrows[vOffset];
         for (int i = vNextCount; i >= 0; i--) {
             int uidx = nextArrows[vOffset + i];
-            int uOffset = uidx * stride;
+            int uOffset = uidx * stride + offset;
             int uPrevCount = prevArrows[uOffset];
             int vIndex = findIndexOfPrev(uidx, vidx);
             if (vIndex < uPrevCount - 1) {
@@ -255,9 +263,9 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     @Override
     public void removeNext(int vidx, int i) {
         int uidx = getNext(vidx, i);
-        int vOffset = vidx * stride;
+        int vOffset = vidx * stride + offset;
         int vNextCount = nextArrows[vOffset];
-        int uOffset = uidx * stride;
+        int uOffset = uidx * stride + offset;
         int uPrevCount = prevArrows[uOffset];
         int vIndex = findIndexOfPrev(uidx, vidx);
         if (vIndex == -1 || i == -1) {
@@ -287,9 +295,105 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
             addToVectorIndices(prevArrows, 0, prevArrows, 0, vidx, vidx, -1);
             addToVectorIndices(prevArrows, vidx, prevArrows, vidx + 1, vertexCount - vidx, vidx, -1);
         }
-        int vOffset = (vertexCount - 1) * stride;
+        int vOffset = (vertexCount - 1) * stride + offset;
         Arrays.fill(nextArrows, vOffset, vOffset + stride, 0);
         Arrays.fill(prevArrows, vOffset, vOffset + stride, 0);
         vertexCount--;
+    }
+
+    private static class BreadthFirstSpliteratorOfInt extends AbstractIntEnumeratorSpliterator {
+        private final int[] array;
+        private final int stride;
+        private final int offset;
+        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
+        private final @NonNull AddToIntSet visited;
+
+        /**
+         * @param array  the array
+         * @param stride the stride
+         * @param offset
+         */
+        protected BreadthFirstSpliteratorOfInt(int root, int[] array, int stride,
+                                               int offset, @NonNull AddToIntSet visited) {
+            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+            this.array = array;
+            this.stride = stride;
+            this.offset = offset;
+            this.visited = visited;
+        }
+
+        @Override
+        public boolean moveNext() {
+            boolean added = false;
+            while (!deque.isEmpty() && !added) {
+                current = deque.removeFirst();
+                added = visited.add(current);
+            }
+            if (!added) {
+                return false;
+            }
+
+            int currentOffset = current * stride + offset;
+            int size = array[currentOffset];
+            deque.addLastAll(array, currentOffset + 1, size);
+            return true;
+        }
+    }
+
+    /**
+     * Gets the vertex data of the specified index from the
+     * same table that contains the next arrows.
+     *
+     * @param vidx index of vertex v
+     * @return the vertex data
+     */
+    public int getNextVertexData(int vidx) {
+        return nextArrows[vidx * stride];
+    }
+
+    /**
+     * Gets the vertex data of the specified index from the
+     * same table that contains the previous arrows.
+     *
+     * @param vidx index of vertex v
+     * @return the vertex data
+     */
+    public int getPrevVertexData(int vidx) {
+        return nextArrows[vidx * stride];
+    }
+
+    /**
+     * Sets the vertex data for the specified vertex.
+     *
+     * @param vidx the index of the vertex
+     * @param data the vertex data
+     */
+
+    public void setVertexData(int vidx, int data) {
+        nextArrows[vidx * stride] = data;
+        prevArrows[vidx * stride] = data;
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator
+     */
+    public IntEnumeratorSpliterator breadthFirstIntSpliterator(int vidx) {
+        return new BreadthFirstSpliteratorOfInt(vidx, nextArrows, stride,
+                offset, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+    }
+
+    /**
+     * Returns a backward breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator
+     */
+    public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(int vidx) {
+        return new BreadthFirstSpliteratorOfInt(vidx, prevArrows, stride,
+                offset, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
     }
 }

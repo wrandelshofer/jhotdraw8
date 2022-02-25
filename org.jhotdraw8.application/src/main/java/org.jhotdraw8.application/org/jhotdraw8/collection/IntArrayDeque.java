@@ -7,7 +7,12 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.util.Preconditions;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.Arrays;
+import java.util.ConcurrentModificationException;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * IntArrayDeque.
@@ -48,7 +53,28 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
             throw new IllegalArgumentException("capacity=" + capacity);
         }
         int size = Integer.highestOneBit(capacity + capacity - 1);
-        elements = new int[size < 0 ? Integer.MAX_VALUE : size];
+        elements = new int[Math.max(size, 0)];
+    }
+
+    public void addLastAll(int[] array) {
+        addLastAll(array, 0, array.length);
+    }
+
+    public void addLastAll(int[] array, int offset, int length) {
+        grow(size() + length);
+
+        int firstPart = elements.length - tail;
+        if (tail >= head && firstPart >= length
+                || head - tail > length) {
+            System.arraycopy(array, offset, elements, tail, length);
+            tail = (tail + length) & (elements.length - 1);
+            return;
+        }
+
+        System.arraycopy(array, offset, elements, tail, firstPart);
+        int secondPart = length - firstPart;
+        System.arraycopy(array, offset + firstPart, elements, 0, secondPart);
+        tail = secondPart;
     }
 
     /**
@@ -61,16 +87,16 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
         if (head == tail) {
-            doubleCapacity();
+            grow(size() + 1);
         }
     }
 
     public void clear() {
-        if (head <= tail) {
-            Arrays.fill(elements, 0, head, tail);
+        if (head < tail) {
+            Arrays.fill(elements, head, tail + 1, 0);
         } else {
-            Arrays.fill(elements, 0, 0, tail);
-            Arrays.fill(elements, 0, head, elements.length);
+            Arrays.fill(elements, 0, tail + 1, 0);
+            Arrays.fill(elements, head, elements.length, 0);
         }
         this.head = this.tail = 0;
     }
@@ -93,7 +119,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {
-            doubleCapacity();
+            grow(size() + 1);
         }
     }
 
@@ -159,12 +185,16 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
     /**
      * Increases the capacity of this deque.
      */
-    private void doubleCapacity() {
-        assert head == tail;
+    private void grow(int capacity) {
+        if (elements.length >= capacity) {
+            return;
+        }
+        //assert head == tail;
+        int size = size();
         int p = head;
         int n = elements.length;
         int r = n - p; // number of elements to the right of p
-        int newCapacity = n << 1;
+        int newCapacity = Math.max(1, Integer.highestOneBit(capacity + capacity - 1));
         if (newCapacity < 0) {
             throw new IllegalStateException("Sorry, deque too big");
         }
@@ -173,7 +203,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         System.arraycopy(elements, 0, a, r, p);
         elements = a;
         head = 0;
-        tail = n;
+        tail = size;
     }
 
     public @NonNull Iterator<Integer> iterator() {
@@ -508,5 +538,37 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
             }
             sb.append(',').append(' ');
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof IntArrayDeque)) {
+            return false;
+        }
+        IntArrayDeque that = (IntArrayDeque) o;
+        if (this.size() != that.size()) {
+            return false;
+        }
+        int thisMask = elements.length - 1;
+        int thatMask = that.elements.length - 1;
+        for (int i = this.head, j = that.head; i != this.tail; i = (i + 1) & thisMask, j = (j + 1) & thatMask) {
+            if (this.elements[i] != that.elements[j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        int mask = elements.length - 1;
+        for (int i = head; i != tail; i = (i + 1) & mask) {
+            hash = hash * 31 + elements[i];
+        }
+        return hash;
     }
 }
