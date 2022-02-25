@@ -252,7 +252,8 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
             NamedNodeMap nnm = element.getAttributes();
             for (int i = 0, n = nnm.getLength(); i < n; i++) {
                 Node item = nnm.item(i);
-                if (item.getLocalName().equals(attributeName)) {
+                if (Objects.equals(item.getLocalName(), attributeName)
+                        || Objects.equals(item.getNodeName(), attributeName)) {
                     return item.getNodeValue();
                 }
             }
