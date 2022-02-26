@@ -24,6 +24,7 @@ import java.util.BitSet;
  *        {@literal AddToIntSet=AddToIntSet.addToBitSet(new BitSet());}
  *     </li>
  * </ul>
+ * @author Werner Randelshofer
  */
 @FunctionalInterface
 public interface AddToIntSet {

@@ -9,6 +9,11 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Spliterators;
 import java.util.function.LongConsumer;
 
+/**
+ * AbstractLongEnumeratorSpliterator.
+ *
+ * @author Werner Randelshofer
+ */
 public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.AbstractLongSpliterator
         implements LongEnumeratorSpliterator {
     protected long current;

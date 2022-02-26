@@ -2,6 +2,11 @@ package org.jhotdraw8.graph;
 
 import java.util.NoSuchElementException;
 
+/**
+ * MutableIndexedBidiGraph.
+ *
+ * @author Werner Randelshofer
+ */
 public interface MutableIndexedBidiGraph extends IndexedBidiGraph {
     /**
      * Adds an arrow from vertex 'v' to vertex 'u'.

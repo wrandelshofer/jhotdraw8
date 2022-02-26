@@ -14,6 +14,8 @@ import static java.lang.Integer.max;
 
 /**
  * Provides helper methods for lists.
+ *
+ * @author Werner Randelshofer
  */
 public class ListHelper {
     /**

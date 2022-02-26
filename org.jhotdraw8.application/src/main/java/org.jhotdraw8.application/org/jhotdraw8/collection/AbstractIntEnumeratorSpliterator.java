@@ -9,6 +9,11 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Spliterators;
 import java.util.function.IntConsumer;
 
+/**
+ * AbstractIntEnumeratorSpliterator.
+ *
+ * @author Werner Randelshofer
+ */
 public abstract class AbstractIntEnumeratorSpliterator extends Spliterators.AbstractIntSpliterator
         implements IntEnumeratorSpliterator {
     protected int current;

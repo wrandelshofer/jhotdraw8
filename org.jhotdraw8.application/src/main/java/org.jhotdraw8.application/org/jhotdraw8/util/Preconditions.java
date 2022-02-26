@@ -7,6 +7,11 @@ package org.jhotdraw8.util;
 
 import org.jhotdraw8.annotation.NonNull;
 
+/**
+ * Preconditions.
+ *
+ * @author Werner Randelshofer
+ */
 public class Preconditions {
     private Preconditions() {
 

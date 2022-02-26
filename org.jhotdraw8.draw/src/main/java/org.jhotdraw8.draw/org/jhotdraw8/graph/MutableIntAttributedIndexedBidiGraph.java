@@ -29,12 +29,14 @@ import static java.lang.Math.max;
  * The data is stored in a long, which is a struct tat contains the data and
  * the vertex index. See {@link #getStructIndex(long)},
  * {@link #getStructData(long)}, {@link #toStruct(int, int)}.
+ *
+ * @author Werner Randelshofer
  */
 public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiGraph {
     public static final long INDEX_MASK = 0xffff_ffffL;
     public static final int DATA_SHIFT = 32;
     private static final int INDEX_SHIFT = 0;
-    private final int maxArity;
+    private int maxArity;
     private final int stride;
     /**
      * The array contains {@code stride} elements for each vertex.
@@ -74,7 +76,7 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
         }
         this.vertexCount = 0;
         this.maxArity = maxArity;
-        this.stride = 2 + maxArity;
+        this.stride = 1 + maxArity;
         this.nextArrows = new long[vertexCapacity * stride];
         this.prevArrows = new long[vertexCapacity * stride];
     }
@@ -87,17 +89,17 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
     public void addArrow(int vidx, int uidx, int data) {
         int vOffset = vidx * stride;
         long vHeader = nextArrows[vOffset];
-        int vNextCount = getStructIndex(vHeader);
+        int vNewNextCount = getStructIndex(vHeader) + 1;
         int uOffset = uidx * stride;
         long uHeader = prevArrows[uOffset];
-        int uPrevCount = getStructIndex(uHeader);
-        if (vNextCount >= maxArity || uPrevCount >= maxArity) {
+        int uNewPrevCount = getStructIndex(uHeader) + 1;
+        if (vNewNextCount > maxArity || uNewPrevCount > maxArity) {
             throw new IndexOutOfBoundsException("Not enough capacity for a new arrow " + vidx + "->" + uidx);
         }
-        nextArrows[vOffset + vNextCount] = toStruct(data, uidx);
-        nextArrows[vOffset] = toStruct(getStructData(vHeader), vNextCount);
-        prevArrows[uOffset + uPrevCount] = toStruct(data, vidx);
-        prevArrows[uOffset] = toStruct(getStructData(uHeader), uPrevCount);
+        nextArrows[vOffset] = toStruct(getStructData(vHeader), vNewNextCount);
+        nextArrows[vOffset + vNewNextCount] = toStruct(data, uidx);
+        prevArrows[uOffset] = toStruct(getStructData(uHeader), uNewPrevCount);
+        prevArrows[uOffset + uNewPrevCount] = toStruct(data, vidx);
         arrowCount++;
     }
 
@@ -150,18 +152,18 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
         addVertex(vidx, 0);
     }
 
-    public void addVertex(int vidx, int data) {
+    public void addVertex(final int vidx, final int data) {
         grow(max(vertexCount + 1, vidx));
-        int newVertexCount = max(vidx, vertexCount + 1);
+        final int newVertexCount = max(vidx, vertexCount + 1);
+        final int vOffset = vidx * stride;
         if (vidx < vertexCount) {
             addToVectorIndices(nextArrows, 0, nextArrows, 0, vidx, vidx, 1);
             addToVectorIndices(nextArrows, vidx, nextArrows, vidx + 1, vertexCount - vidx, vidx, 1);
             addToVectorIndices(prevArrows, 0, prevArrows, 0, vidx, vidx, 1);
             addToVectorIndices(prevArrows, vidx, prevArrows, vidx + 1, vertexCount - vidx, vidx, 1);
+            Arrays.fill(nextArrows, vOffset + 1, vOffset + stride - 1, 0);
+            Arrays.fill(prevArrows, vOffset + 1, vOffset + stride - 1, 0);
         }
-        int vOffset = vidx * stride;
-        Arrays.fill(nextArrows, vOffset + 1, vOffset + stride - 1, 0);
-        Arrays.fill(prevArrows, vOffset + 1, vOffset + stride - 1, 0);
         nextArrows[vOffset] = toStruct(data, 0);
         prevArrows[vOffset] = toStruct(data, 0);
         vertexCount = newVertexCount;
@@ -197,28 +199,27 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
     }
 
     @Override
-    public int findIndexOfNext(int vidxa, int vidxb) {
-        int vOffset = vidxa * stride;
-        for (int i = vOffset + 1, n = getStructIndex(nextArrows[vOffset]); i < n; i++) {
-            if (getStructIndex(nextArrows[i]) == vidxb) {
-                return i - vOffset;
+    public int findIndexOfNext(final int vidxa, final int vidxb) {
+        final int vOffset = vidxa * stride;
+        for (int i = 0, n = getStructIndex(nextArrows[vOffset]); i < n; i++) {
+            if (getStructIndex(nextArrows[i + vOffset + 1]) == vidxb) {
+                return i;
             }
         }
         return -1;
     }
 
     @Override
-    public int findIndexOfPrev(int vidxa, int vidxb) {
-        Preconditions.checkIndex(vidxa, vertexCount);
-        Preconditions.checkIndex(vidxb, vertexCount);
-        int vOffset = vidxa * stride;
-        for (int i = vOffset + 1, n = getStructIndex(prevArrows[vOffset]); i < n; i++) {
-            if (getStructIndex(prevArrows[i]) == vidxb) {
-                return i - vOffset;
+    public int findIndexOfPrev(final int vidxa, final int vidxb) {
+        final int vOffset = vidxa * stride;
+        for (int i = 0, n = getStructIndex(prevArrows[vOffset]); i < n; i++) {
+            if (getStructIndex(prevArrows[i + vOffset + 1]) == vidxb) {
+                return i;
             }
         }
         return -1;
     }
+
 
     @Override
     public int getArrowCount() {
@@ -230,6 +231,12 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
         int vOffset = vidx * stride;
         Preconditions.checkIndex(i, getStructIndex(nextArrows[vOffset]));
         return getStructIndex(nextArrows[vOffset + i + 1]);
+    }
+
+    public int getNextArrow(int vidx, int i) {
+        int vOffset = vidx * stride;
+        Preconditions.checkIndex(i, getStructIndex(nextArrows[vOffset]));
+        return getStructData(nextArrows[vOffset + i + 1]);
     }
 
     @Override
@@ -326,8 +333,8 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
         int vOffset = vidx * stride;
         long vHeader = nextArrows[vOffset];
         int vNextCount = getStructIndex(vHeader);
-        for (int i = vNextCount; i >= 0; i--) {
-            int uidx = getStructIndex(nextArrows[vOffset + i]);
+        for (int i = vNextCount - 1; i >= 0; i--) {
+            int uidx = getStructIndex(nextArrows[vOffset + i + 1]);
             int uOffset = uidx * stride;
             long uHeader = prevArrows[uOffset];
             int uPrevCount = getStructIndex(uHeader);
@@ -348,12 +355,15 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
         int vOffset = vidx * stride;
         long vHeader = prevArrows[vOffset];
         int vPrevCount = getStructIndex(vHeader);
-        for (int i = vPrevCount; i >= 0; i--) {
-            int uidx = getStructIndex(prevArrows[vOffset + i]);
+        for (int i = vPrevCount - 1; i >= 0; i--) {
+            int uidx = getStructIndex(prevArrows[vOffset + i + 1]);
             int uOffset = uidx * stride;
             long uHeader = nextArrows[uOffset];
             int uNextCount = getStructIndex(uHeader);
             int vIndex = findIndexOfNext(uidx, vidx);
+            if (vIndex == -1) {
+                throw new IllegalStateException("vidx must be next of uidx. vidx=" + vidx + " uidx=" + uidx);
+            }
             if (vIndex < uNextCount - 1) {
                 System.arraycopy(nextArrows, uOffset + vIndex + 2, nextArrows, uOffset + vIndex + 1, uNextCount - vIndex - 1);
             }
@@ -472,5 +482,23 @@ public class MutableIntAttributedIndexedBidiGraph implements MutableIndexedBidiG
             deque.addLastAll(array, currentOffset + 1, size);
             return true;
         }
+    }
+
+    public void clear() {
+        vertexCount = 0;
+        Arrays.fill(nextArrows, 0L);
+        Arrays.fill(prevArrows, 0L);
+    }
+
+    /**
+     * Sets the maximal arity. This also clears the graph!
+     *
+     * @param maxArity the new maximal arity of the graph
+     */
+    public void clearAndSetMaxArity(int maxArity) {
+        this.maxArity = maxArity;
+        vertexCount = 0;
+        nextArrows = new long[0];
+        prevArrows = new long[0];
     }
 }
