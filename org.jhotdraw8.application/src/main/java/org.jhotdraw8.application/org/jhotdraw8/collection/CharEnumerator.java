@@ -15,7 +15,7 @@ import java.util.Iterator;
  *
  * @author Werner Randelshofer
  */
-public interface LongEnumerator extends Enumerator<Long> {
+public interface CharEnumerator extends Enumerator<Character> {
     /**
      * Advances the enumerator to the next element of the collection.
      *
@@ -44,5 +44,5 @@ public interface LongEnumerator extends Enumerator<Long> {
      *
      * @return current
      */
-    long currentAsLong();
+    int currentAsChar();
 }

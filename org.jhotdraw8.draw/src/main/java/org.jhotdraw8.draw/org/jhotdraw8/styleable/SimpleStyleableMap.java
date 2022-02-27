@@ -344,7 +344,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     @SuppressWarnings("unchecked")
     public @Nullable V remove(Object key) {
         int index = indexIfPresent((K) key);
-        return index == -1 ? null : removeValue(originOrdinal, index, (K) key);
+        return index < 0 ? null : removeValue(originOrdinal, index, (K) key);
     }
 
     public void removeAll(@NonNull StyleOrigin origin) {
@@ -396,7 +396,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
     @SuppressWarnings("unchecked")
     private @Nullable V removeValue(int ordinal, int index, K key) {
-        if (ordinal == -1) {
+        if (ordinal < 0) {
             throw new UnsupportedOperationException("can not remove styled value");
         }
         final int arrayIndex = index * numOrigins + ordinal;
@@ -428,7 +428,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     private Object setRawValue(int ordinal, int keyIndex, K key, @Nullable Object newRawValue) {
-        if (ordinal == -1) {
+        if (ordinal < 0) {
             throw new UnsupportedOperationException("can not set styled value");
         }
         int valueIndex = keyIndex * numOrigins + ordinal;

@@ -387,7 +387,7 @@ public interface Resources {
         // Substitute placeholders in the value
         for (int p1 = value.indexOf("${"); p1 != -1; p1 = value.indexOf("${")) {
             int p2 = value.indexOf('}', p1 + 2);
-            if (p2 == -1) {
+            if (p2 < 0) {
                 break;
             }
 

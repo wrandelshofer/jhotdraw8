@@ -69,7 +69,7 @@ public class TopologicalSortAlgo {
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
             for (IntEnumerator iter = model.nextVerticesSpliterator(i); iter.moveNext(); ) {
-                int v = iter.current();
+                int v = iter.currentAsInt();
                 deg[v]++;
             }
         }
@@ -94,7 +94,7 @@ public class TopologicalSortAlgo {
                 }
                 int v = queue[first++];
                 for (IntEnumerator iter = model.nextVerticesSpliterator(v); iter.moveNext(); ) {
-                    int u = iter.current();
+                    int u = iter.currentAsInt();
                     if (--deg[u] == 0) {
                         queue[last++] = u;
                     }
@@ -137,7 +137,7 @@ public class TopologicalSortAlgo {
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
             for (IntEnumerator iter = model.nextVerticesSpliterator(i); iter.moveNext(); ) {
-                int v = iter.current();
+                int v = iter.currentAsInt();
                 deg[v]++;
             }
         }
@@ -151,7 +151,7 @@ public class TopologicalSortAlgo {
             }
         }
         int lastBatch = last;
-        batches.add(last);
+        batches.addAsInt(last);
 
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
         final int[] result = new int[n];// result array
@@ -165,7 +165,7 @@ public class TopologicalSortAlgo {
                 int v = queue[first++];
                 queue[first - 1] = 0;//for debugging
                 for (IntEnumerator iter = model.nextVerticesSpliterator(v); iter.moveNext(); ) {
-                    int u = iter.current();
+                    int u = iter.currentAsInt();
                     if (--deg[u] == 0) {
                         queue[last++] = u;
                     }
@@ -175,7 +175,7 @@ public class TopologicalSortAlgo {
 
                 if (first == lastBatch && done < n - 1) {
                     lastBatch = last;
-                    batches.add(last);
+                    batches.addAsInt(last);
                 }
             }
 

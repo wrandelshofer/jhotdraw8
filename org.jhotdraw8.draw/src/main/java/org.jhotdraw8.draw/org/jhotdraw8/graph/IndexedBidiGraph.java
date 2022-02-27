@@ -31,7 +31,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
      * @param i    index of next vertex
      * @return the i-th next vertex of v
      */
-    int getPrev(int vidx, int i);
+    int getPrevAsInt(int vidx, int i);
 
     /**
      * Returns the number of direct predecessor vertices of v.
@@ -63,7 +63,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
             @Override
             public boolean moveNext() {
                 if (index < limit) {
-                    current = getPrev(vidx, index++);
+                    current = getPrevAsInt(vidx, index++);
                     return true;
                 }
                 return false;
@@ -83,13 +83,14 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
     /**
      * Returns the index of vertex b.
      *
-     * @param vidxa index of vertex a
-     * @param vidxb index of vertex b
-     * @return index of vertex b. Returns -1 if b is not a previous vertex of a.
+     * @param vidx index of vertex a
+     * @param uidx index of vertex b
+     * @return index of vertex b. Returns a value {@literal < 01 if b is not a
+     * previous vertex of a.
      */
-    default int findIndexOfPrev(int vidxa, int vidxb) {
-        for (int i = 0, n = getNextCount(vidxa); i < n; i++) {
-            if (vidxb == getNext(vidxa, i)) {
+    default int findIndexOfPrevAsInt(int vidx, int uidx) {
+        for (int i = 0, n = getNextCount(vidx); i < n; i++) {
+            if (uidx == getNextAsInt(vidx, i)) {
                 return i;
             }
         }

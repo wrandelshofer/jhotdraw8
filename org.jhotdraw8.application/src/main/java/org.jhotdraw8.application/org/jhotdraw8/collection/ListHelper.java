@@ -10,6 +10,8 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.Arrays;
+
 import static java.lang.Integer.max;
 
 /**
@@ -41,9 +43,7 @@ public class ListHelper {
             return items;
         }
         int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
-        Object[] newItems = new Object[newCapacity * itemSize];
-        System.arraycopy(items, 0, newItems, 0, size * itemSize);
-        return newItems;
+        return Arrays.copyOf(items, newCapacity * itemSize, items.getClass());
     }
 
     /**
@@ -105,6 +105,27 @@ public class ListHelper {
         }
         int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
         long[] newItems = new long[newCapacity * itemSize];
+        System.arraycopy(items, 0, newItems, 0, size * itemSize);
+        return newItems;
+    }
+
+    /**
+     * Grows an items array.
+     *
+     * @param targetCapacity {@literal >= 0}
+     * @param itemSize       number of array elements that an item occupies
+     * @param items          the items array
+     * @return a new item array of larger size or the same if no resizing is necessary
+     */
+    public static char[] grow(final int size, final int targetCapacity, final int itemSize, @Nullable final char[] items) {
+        if (items == null) {
+            return new char[targetCapacity * itemSize];
+        }
+        if (targetCapacity * itemSize <= items.length) {
+            return items;
+        }
+        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        char[] newItems = new char[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;
     }

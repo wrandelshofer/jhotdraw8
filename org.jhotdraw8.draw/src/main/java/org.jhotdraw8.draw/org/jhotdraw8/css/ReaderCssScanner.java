@@ -47,7 +47,7 @@ public class ReaderCssScanner extends AbstractCssScanner {
             if (ch == '\n') {
                 lineNumber--;
             }
-            pushedChars.add(ch);
+            pushedChars.addAsInt(ch);
         }
     }
 

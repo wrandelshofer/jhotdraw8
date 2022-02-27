@@ -1443,7 +1443,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     private boolean hasNoWrapping(@NonNull Text node) {
         String text = node.getText();
-        return node.getWrappingWidth() <= 0 && text == null || text.indexOf('\n') == -1;
+        return node.getWrappingWidth() <= 0 && text == null || text.indexOf('\n') < 0;
     }
 
     private void writeTextStartElement(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {

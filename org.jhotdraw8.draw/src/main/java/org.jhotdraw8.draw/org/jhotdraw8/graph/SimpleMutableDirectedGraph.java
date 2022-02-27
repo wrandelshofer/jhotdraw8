@@ -146,11 +146,12 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
-        Integer vidx = vertexMap.get(v);
+        int vidx = vertexMap.get(v);
+        int uidx = vertexMap.get(u);
         int index = 0;
         for (IntEnumeratorSpliterator it = nextVerticesSpliterator(vidx); it.moveNext(); ) {
-            int uidx = it.current();
-            if (u.equals(vertices.get(uidx)) && Objects.equals(a, getNextArrow(vidx, index))) {
+            int widx = it.currentAsInt();
+            if (uidx == widx && Objects.equals(a, this.getNextArrow(vidx, index))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
                 return;
@@ -164,7 +165,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         Integer vidx = vertexMap.get(v);
         int index = 0;
         for (IntEnumeratorSpliterator it = nextVerticesSpliterator(vidx); it.moveNext(); ) {
-            int uidx = it.current();
+            int uidx = it.currentAsInt();
             if (u.equals(vertices.get(uidx))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
@@ -236,7 +237,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         // Remove all incoming vertices
         for (int uidx = 0, n = getVertexCount(); uidx < n; uidx++) {
             for (int i = getNextCount(uidx) - 1; i >= 0; i--) {
-                int next = getNext(uidx, i);
+                int next = getNextAsInt(uidx, i);
                 if (next == vidx) {
                     int indexOfRemovedArrow = buildRemoveArrowAt(uidx, i);
                     arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
@@ -282,7 +283,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public @NonNull V getNext(@NonNull V v, int i) {
-        return getVertex(getNext(getVertexIndex(v), i));
+        return getVertex(getNextAsInt(getVertexIndex(v), i));
     }
 
     @Override
@@ -314,7 +315,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             i -= nextCount;
             nextCount = getNextCount(vidx);
         }
-        return getNextArrow(vidx, i);
+        return this.getNextArrow(vidx, i);
     }
 
     @Override

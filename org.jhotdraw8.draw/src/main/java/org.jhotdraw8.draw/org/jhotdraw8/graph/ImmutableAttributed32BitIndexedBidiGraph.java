@@ -14,13 +14,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * ImmutableIntDirectedGraph.
+ * ImmutableDirectedGraph. Uses int-arrays for storage.
+ * <p>
+ * Supports up to {@code 2^31 - 1} vertices.
+ * <p>
+ * Uses a compressed sparse row representation (CSR).
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -87,7 +91,7 @@ public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements Attribu
      *
      * @param graph a graph
      */
-    public ImmutableIntAttributedIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -110,7 +114,7 @@ public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements Attribu
             this.vertices[vi] = v;
             vertexToIndexMap.put(v, vi);
             for (int i = 0, n = graph.getNextCount(vi); i < n; i++) {
-                next[offset] = graph.getNext(vi, i);
+                next[offset] = graph.getNextAsInt(vi, i);
                 this.nextArrows[offset] = graph.getNextArrow(vi, i);
                 offset++;
             }
@@ -122,7 +126,7 @@ public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements Attribu
      *
      * @param graph a graph
      */
-    public ImmutableIntAttributedIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull DirectedGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -178,7 +182,7 @@ public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements Attribu
 
     @Override
     public @NonNull A getNextArrow(@NonNull V v, int i) {
-        return getNextArrow(getVertexIndex(v), i);
+        return this.getNextArrow(getVertexIndex(v), i);
     }
 
     @Override
@@ -187,7 +191,7 @@ public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements Attribu
     }
 
     @Override
-    public int getNext(int vidx, int i) {
+    public int getNextAsInt(int vidx, int i) {
         if (i < 0 || i >= getNextCount(vidx)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vidx));
         }
@@ -196,7 +200,7 @@ public class ImmutableIntAttributedIndexedDirectedGraph<V, A> implements Attribu
 
     @Override
     public @NonNull V getNext(@NonNull V vertex, int i) {
-        return vertices[getNext(vertexToIndexMap.get(vertex), i)];
+        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
     }
 
     protected int getArrowIndex(int vi, int i) {

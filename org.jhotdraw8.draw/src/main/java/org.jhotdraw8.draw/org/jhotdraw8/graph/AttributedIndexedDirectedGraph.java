@@ -32,18 +32,18 @@ import java.util.Map;
  */
 public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGraph {
     /**
-     * Returns the specified arrow.
+     * Returns the data of the specified arrow.
      *
      * @param index index of arrow
-     * @return arrow
+     * @return arrow data
      */
     A getArrow(int index);
 
     /**
-     * Returns the specified vertex.
+     * Returns the data of the specified vertex.
      *
      * @param index index of vertex
-     * @return vertex
+     * @return vertex data
      */
     V getVertex(int index);
 
@@ -74,7 +74,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
      * /
         default A findArrow(int a, int b) {
         int index = findIndexOfNext(a, b);
-        return index == -1 ? null : getArrow(a, index);
+        return index < 0 ? null : getArrow(a, index);
     }*/
 
     /**
@@ -105,12 +105,12 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
             public @NonNull Map.Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
-                        getNext(vertex, i),
+                        getNextAsInt(vertex, i),
                         getNextArrow(vertex, i)
                 );
             }
-
         }
+
         return new AbstractCollection<Map.Entry<Integer, A>>() {
             @Override
             public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {

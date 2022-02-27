@@ -64,11 +64,11 @@ class ResourcesHelper {
      */
     static void generateFallbackKeys(@NonNull String key, @NonNull ArrayList<String> fallbackKeys) {
         int p1 = key.indexOf("[$");
-        if (p1 == -1) {
+        if (p1 < 0) {
             fallbackKeys.add(key);
         } else {
             int p2 = key.indexOf(']', p1 + 2);
-            if (p2 == -1) {
+            if (p2 < 0) {
                 return;
             }
             String modifierKey = key.substring(p1 + 2, p2);

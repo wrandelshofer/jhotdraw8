@@ -24,13 +24,13 @@ public class IntArrayDequeTest {
     public void testAddFirst() {
         int e = 1;
         IntArrayDeque instance = new IntArrayDeque();
-        instance.addFirstInt(e);
+        instance.addFirstAsInt(e);
         assertFalse(instance.isEmpty());
 
-        assertEquals(1, instance.getFirstInt());
+        assertEquals(1, instance.getFirstAsInt());
 
-        instance.addFirstInt(2);
-        assertEquals(2, instance.getFirstInt());
+        instance.addFirstAsInt(2);
+        assertEquals(2, instance.getFirstAsInt());
         assertEquals(2, instance.size());
     }
 
@@ -41,41 +41,41 @@ public class IntArrayDequeTest {
     public void testAddLast() {
         int e = 1;
         IntArrayDeque instance = new IntArrayDeque();
-        instance.addLastInt(e);
+        instance.addLastAsInt(e);
         assertFalse(instance.isEmpty());
 
-        assertEquals(1, instance.getLastInt());
+        assertEquals(1, instance.getLastAsInt());
 
-        instance.addLastInt(2);
-        assertEquals(2, instance.getLastInt());
+        instance.addLastAsInt(2);
+        assertEquals(2, instance.getLastAsInt());
         assertEquals(2, instance.size());
     }
 
     @Test
     public void testAddAll() {
         IntArrayDeque instance = new IntArrayDeque(4);
-        instance.addLastAll(new int[]{1, 2, 3});
-        instance.addLastAll(new int[]{4, 5});
-        instance.addLastAll(new int[]{0, 6, 7}, 1, 2);
-        assertEquals(1, instance.removeFirstInt());
-        assertEquals(2, instance.removeFirstInt());
-        instance.addLastAll(new int[]{0, 8, 9, 0}, 1, 2);
-        instance.addLastAll(new int[]{0, 10, 11, 0}, 1, 2);
+        instance.addLastAllAsInt(new int[]{1, 2, 3});
+        instance.addLastAllAsInt(new int[]{4, 5});
+        instance.addLastAllAsInt(new int[]{0, 6, 7}, 1, 2);
+        assertEquals(1, instance.removeFirstAsInt());
+        assertEquals(2, instance.removeFirstAsInt());
+        instance.addLastAllAsInt(new int[]{0, 8, 9, 0}, 1, 2);
+        instance.addLastAllAsInt(new int[]{0, 10, 11, 0}, 1, 2);
 
         IntArrayDeque expected = new IntArrayDeque(0);
-        expected.addLastAll(new int[]{3, 4, 5, 6, 7, 8, 9, 10, 11});
+        expected.addLastAllAsInt(new int[]{3, 4, 5, 6, 7, 8, 9, 10, 11});
         assertEquals(expected, instance);
         assertEquals(expected.hashCode(), instance.hashCode());
 
-        assertEquals(3, instance.removeFirstInt());
-        assertEquals(4, instance.removeFirstInt());
-        assertEquals(5, instance.removeFirstInt());
-        assertEquals(11, instance.removeLastInt());
-        assertEquals(10, instance.removeLastInt());
-        instance.addLastAll(new int[]{10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
+        assertEquals(3, instance.removeFirstAsInt());
+        assertEquals(4, instance.removeFirstAsInt());
+        assertEquals(5, instance.removeFirstAsInt());
+        assertEquals(11, instance.removeLastAsInt());
+        assertEquals(10, instance.removeLastAsInt());
+        instance.addLastAllAsInt(new int[]{10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
 
         expected.clear();
-        expected.addLastAll(new int[]{6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
+        expected.addLastAllAsInt(new int[]{6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
         assertEquals(expected, instance);
         assertEquals(expected.hashCode(), instance.hashCode());
     }

@@ -74,7 +74,7 @@ public class ReversedListTest {
 
         ChangeRecorder recorder = new ChangeRecorder();
         list.addListener(recorder);
-        if (index == -1) {
+        if (index < 0) {
             list.remove(value);
         } else {
             list.remove(index);

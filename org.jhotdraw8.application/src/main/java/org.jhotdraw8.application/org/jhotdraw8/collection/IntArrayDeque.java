@@ -10,7 +10,6 @@ import org.jhotdraw8.util.Preconditions;
 import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -19,7 +18,7 @@ import java.util.NoSuchElementException;
  *
  * @author Werner Randelshofer
  */
-public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<Integer> {
+public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeque {
     /**
      * The length of this array is always a power of 2.
      */
@@ -56,23 +55,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         elements = new int[Math.max(size, 0)];
     }
 
-    @Override
-    public boolean add(Integer integer) {
-        addLastInt(integer);
-        return true;
-    }
 
     @Override
-    public void addFirst(Integer integer) {
-        addFirstInt(integer);
-    }
-
-    /**
-     * Inserts the specified element at the head of this deque.
-     *
-     * @param e the element to add
-     */
-    public void addFirstInt(int e) {
+    public void addFirstAsInt(int e) {
         //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
@@ -81,16 +66,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         }
     }
 
-    @Override
-    public void addLast(Integer integer) {
-        addLastInt(integer);
+    public void addLastAllAsInt(int[] array) {
+        addLastAllAsInt(array, 0, array.length);
     }
 
-    public void addLastAll(int[] array) {
-        addLastAll(array, 0, array.length);
-    }
-
-    public void addLastAll(int[] array, int offset, int length) {
+    public void addLastAllAsInt(int[] array, int offset, int length) {
         grow(size() + length);
 
         int firstPart = elements.length - tail;
@@ -107,12 +87,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         tail = secondPart;
     }
 
-    /**
-     * Inserts the specified element at the tail of this deque.
-     *
-     * @param e the element
-     */
-    public void addLastInt(int e) {
+    public void addLastAsInt(int e) {
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {
@@ -130,26 +105,14 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         this.head = this.tail = 0;
     }
 
-    @Override
-    public boolean contains(Object o) {
-        if (o instanceof Integer) {
-            return firstIndexOfInt((int) o) != -1;
-        }
-        return false;
-    }
+
 
     @Override
     public Iterator<Integer> descendingIterator() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public Integer element() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return getFirstInt();
-    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -173,7 +136,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return true;
     }
 
-    public int firstIndexOfInt(int o) {
+    public int firstIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = head; i < elements.length; i++) {
                 if (o == (elements[i])) {
@@ -195,31 +158,16 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return -1;
     }
 
-    @Override
-    public Integer getFirst() {
-        return getFirstInt();
-    }
 
-    /**
-     * @throws NoSuchElementException if queue is empty
-     */
-    public int getFirstInt() {
+    public int getFirstAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
-        int result = elements[head];
-        return result;
+        return elements[head];
     }
 
-    @Override
-    public Integer getLast() {
-        return getLastInt();
-    }
 
-    /**
-     * @throws NoSuchElementException if queue is empty
-     */
-    public int getLastInt() {
+    public int getLastAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -274,7 +222,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return new DeqIterator();
     }
 
-    public int lastIndexOfInt(int o) {
+    public int lastIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = elements.length - 1; i >= head; i--) {
                 if (o == (elements[i])) {
@@ -294,113 +242,6 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
             }
         }
         return -1;
-    }
-
-    @Override
-    public boolean offer(Integer integer) {
-        addLastInt(integer);
-        return true;
-    }
-
-    @Override
-    public boolean offerFirst(Integer integer) {
-        addFirstInt(integer);
-        return true;
-    }
-
-    @Override
-    public boolean offerLast(Integer integer) {
-        addLastInt(integer);
-        return true;
-    }
-
-    @Override
-    public Integer peek() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getFirstInt();
-    }
-
-    @Override
-    public Integer peekFirst() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getFirstInt();
-    }
-
-    @Override
-    public Integer peekLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getLastInt();
-    }
-
-    @Override
-    public Integer poll() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeFirstInt();
-    }
-
-    @Override
-    public Integer pollFirst() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeFirstInt();
-    }
-
-    @Override
-    public Integer pollLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeLastInt();
-    }
-
-    @Override
-    public Integer pop() {
-        return removeFirstInt();
-    }
-
-    /**
-     * Removes the element at the head of the deque.
-     *
-     * @throws NoSuchElementException if the queue is empty
-     */
-    public int popInt() {
-        return removeFirstInt();
-    }
-
-    @Override
-    public void push(Integer integer) {
-        addFirstInt(integer);
-    }
-
-    /**
-     * Inserts the specified element at the head of this deque.
-     *
-     * @param e the element to add
-     */
-    public void pushInt(int e) {
-        addFirstInt(e);
-    }
-
-    @Override
-    public Integer remove() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return removeFirstInt();
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return removeFirstOccurrence(o);
     }
 
     /**
@@ -433,16 +274,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
     }
 
     @Override
-    public Integer removeFirst() {
-        return removeFirstInt();
-    }
-
-    /**
-     * Removes the element at the head of the deque.
-     *
-     * @throws NoSuchElementException if the queue is empty
-     */
-    public int removeFirstInt() {
+    public int removeFirstAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -452,16 +284,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return result;
     }
 
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        if (o instanceof Integer) {
-            return removeFirstOccurrenceInt((int) o);
-        }
-        return false;
-    }
 
-    public boolean removeFirstOccurrenceInt(int o) {
-        int index = firstIndexOfInt(o);
+    public boolean removeFirstOccurrenceAsInt(int o) {
+        int index = firstIndexOfAsInt(o);
         if (index != -1) {
             removeAt(index);
             return true;
@@ -470,14 +295,16 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
     }
 
     @Override
-    public Integer removeLast() {
-        return removeLastInt();
+    public boolean removeLastOccurrenceAsInt(int o) {
+        int index = lastIndexOfAsInt((int) o);
+        if (index != -1) {
+            removeAt(index);
+            return true;
+        }
+        return false;
     }
 
-    /**
-     * @throws NoSuchElementException {@inheritDoc}
-     */
-    public int removeLastInt() {
+    public int removeLastAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -487,23 +314,6 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
         return result;
     }
 
-    @Override
-    public boolean removeLastOccurrence(Object o) {
-        if (o instanceof Integer) {
-            int index = lastIndexOfInt((int) o);
-            if (index != -1) {
-                removeAt(index);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns the number of elements in this deque.
-     *
-     * @return the number of elements in this deque
-     */
     public int size() {
         return (tail - head) & (elements.length - 1);
     }
@@ -554,7 +364,5 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements Deque<
             cursor = (cursor + 1) & (elements.length - 1);
             return result;
         }
-
-
     }
 }

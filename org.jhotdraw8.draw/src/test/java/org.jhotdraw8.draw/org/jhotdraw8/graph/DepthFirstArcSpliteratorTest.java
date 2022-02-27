@@ -43,7 +43,7 @@ public class DepthFirstArcSpliteratorTest {
         builder.addArrow(6, 8, 100);
         builder.addArrow(7, 4, 100);
         builder.addArrow(8, 9, 100);
-        return new ImmutableIntAttributedIndexedDirectedGraph<Integer, Integer>((DirectedGraph<Integer, Integer>) builder);
+        return new ImmutableAttributed32BitIndexedDirectedGraph<Integer, Integer>((DirectedGraph<Integer, Integer>) builder);
     }
 
     @TestFactory

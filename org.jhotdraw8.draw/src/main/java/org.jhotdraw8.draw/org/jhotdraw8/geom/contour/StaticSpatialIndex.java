@@ -415,14 +415,14 @@ public class StaticSpatialIndex {
                 }
 
                 if (nodeIndex >= m_numItems * 4) {
-                    stack.pushInt(index);
-                    stack.pushInt(level - 1);
+                    stack.pushAsInt(index);
+                    stack.pushAsInt(level - 1);
                 }
             }
 
             if (stack.size() > 1) {
-                level = stack.popInt();
-                nodeIndex = stack.popInt();
+                level = stack.popAsInt();
+                nodeIndex = stack.popAsInt();
             } else {
                 done = true;
             }
@@ -454,7 +454,7 @@ public class StaticSpatialIndex {
     // See other overloads for details.
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results) {
         IntPredicate visitor = (index) -> {
-            results.add(index);
+            results.addAsInt(index);
             return true;
         };
 
@@ -468,7 +468,7 @@ public class StaticSpatialIndex {
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results,
                       IntArrayDeque stack) {
         IntPredicate visitor = (index) -> {
-            results.add(index);
+            results.addAsInt(index);
             return true;
         };
 
@@ -528,14 +528,14 @@ public class StaticSpatialIndex {
                     }
                 } else {
                     // push node index and level for further traversal
-                    stack.pushInt(index);
-                    stack.pushInt(level - 1);
+                    stack.pushAsInt(index);
+                    stack.pushAsInt(level - 1);
                 }
             }
 
             if (stack.size() > 1) {
-                level = stack.popInt();
-                nodeIndex = stack.popInt();
+                level = stack.popAsInt();
+                nodeIndex = stack.popAsInt();
             } else {
                 done = true;
             }

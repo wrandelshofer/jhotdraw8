@@ -24,13 +24,13 @@ public class LongArrayDequeTest {
     public void testAddFirst() {
         int e = 1;
         LongArrayDeque instance = new LongArrayDeque();
-        instance.addFirstLong(e);
+        instance.addFirstAsLong(e);
         assertFalse(instance.isEmpty());
 
-        assertEquals(1, instance.getFirstLong());
+        assertEquals(1, instance.getFirstAsLong());
 
-        instance.addFirstLong(2);
-        assertEquals(2, instance.getFirstLong());
+        instance.addFirstAsLong(2);
+        assertEquals(2, instance.getFirstAsLong());
         assertEquals(2, instance.size());
     }
 
@@ -41,41 +41,41 @@ public class LongArrayDequeTest {
     public void testAddLast() {
         int e = 1;
         LongArrayDeque instance = new LongArrayDeque();
-        instance.addLastLong(e);
+        instance.addLastAsLong(e);
         assertFalse(instance.isEmpty());
 
-        assertEquals(1, instance.getLastLong());
+        assertEquals(1, instance.getLastAsLong());
 
-        instance.addLastLong(2);
-        assertEquals(2, instance.getLastLong());
+        instance.addLastAsLong(2);
+        assertEquals(2, instance.getLastAsLong());
         assertEquals(2, instance.size());
     }
 
     @Test
     public void testAddAll() {
         LongArrayDeque instance = new LongArrayDeque(4);
-        instance.addLastAll(new long[]{1, 2, 3});
-        instance.addLastAll(new long[]{4, 5});
-        instance.addLastAll(new long[]{0, 6, 7}, 1, 2);
-        assertEquals(1, instance.removeFirstLong());
-        assertEquals(2, instance.removeFirstLong());
-        instance.addLastAll(new long[]{0, 8, 9, 0}, 1, 2);
-        instance.addLastAll(new long[]{0, 10, 11, 0}, 1, 2);
+        instance.addLastAllAsLong(new long[]{1, 2, 3});
+        instance.addLastAllAsLong(new long[]{4, 5});
+        instance.addLastAllAsLong(new long[]{0, 6, 7}, 1, 2);
+        assertEquals(1, instance.removeFirstAsLong());
+        assertEquals(2, instance.removeFirstAsLong());
+        instance.addLastAllAsLong(new long[]{0, 8, 9, 0}, 1, 2);
+        instance.addLastAllAsLong(new long[]{0, 10, 11, 0}, 1, 2);
 
         LongArrayDeque expected = new LongArrayDeque(0);
-        expected.addLastAll(new long[]{3, 4, 5, 6, 7, 8, 9, 10, 11});
+        expected.addLastAllAsLong(new long[]{3, 4, 5, 6, 7, 8, 9, 10, 11});
         assertEquals(expected, instance);
         assertEquals(expected.hashCode(), instance.hashCode());
 
-        assertEquals(3, instance.removeFirstLong());
-        assertEquals(4, instance.removeFirstLong());
-        assertEquals(5, instance.removeFirstLong());
-        assertEquals(11, instance.removeLastLong());
-        assertEquals(10, instance.removeLastLong());
-        instance.addLastAll(new long[]{10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
+        assertEquals(3, instance.removeFirstAsLong());
+        assertEquals(4, instance.removeFirstAsLong());
+        assertEquals(5, instance.removeFirstAsLong());
+        assertEquals(11, instance.removeLastAsLong());
+        assertEquals(10, instance.removeLastAsLong());
+        instance.addLastAllAsLong(new long[]{10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
 
         expected.clear();
-        expected.addLastAll(new long[]{6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
+        expected.addLastAllAsLong(new long[]{6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
         assertEquals(expected, instance);
         assertEquals(expected.hashCode(), instance.hashCode());
     }

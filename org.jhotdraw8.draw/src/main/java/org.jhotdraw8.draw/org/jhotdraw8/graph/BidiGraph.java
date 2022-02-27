@@ -7,6 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
+import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -90,7 +91,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
             }
 
         }
-        return new AbstractCollection<V>() {
+        return new AbstractSet<V>() {
             @Override
             public @NonNull Iterator<V> iterator() {
                 return new PrevVertexIterator(vertex);
@@ -109,7 +110,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      *
      * @param a a vertex
      * @param b another vertex
-     * @return previouis index of vertex b. Returns -1 if b is not a previous vertex of a.
+     * @return previouis index of vertex b. Returns a value {@literal < 0}
+     * if b is not a previous vertex of a.
      */
     default int findIndexOfPrev(final V a, final @NonNull V b) {
         for (int i = 0, n = getPrevCount(a); i < n; i++) {
@@ -128,7 +130,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return true if b is a previous vertex of a.
      */
     default boolean isPrev(final V a, final @NonNull V b) {
-        return findIndexOfPrev(a, b) != -1;
+        return findIndexOfPrev(a, b) >= 0;
     }
 
 }

@@ -168,7 +168,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         Boolean isContained = onContains(element);
         int oldIndex = Boolean.FALSE.equals(isContained) ? -1 : indexOf(element); // linear search!
         int clampedIndex = min(index, size() - 1);
-        if (oldIndex == -1) {
+        if (oldIndex < 0) {
             // the element is not yet in the list => insert it
             arrayDoAdd(index, element);
             beginChange();
@@ -218,7 +218,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     @Override
     public E set(int index, E element) {
         int oldIndex = indexOf(element);
-        if (oldIndex == -1) {
+        if (oldIndex < 0) {
             beginChange();
             E old = doSet(index, element);
             onRemoved(old);

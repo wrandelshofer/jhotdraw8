@@ -739,7 +739,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      */
     private boolean unicodeAfterBackslashMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         int unicodeScalar = hexToInt(ch);
-        if (unicodeScalar == -1) {
+        if (unicodeScalar < 0) {
             return false;
         }
         int count = 1;
@@ -892,7 +892,7 @@ public class StreamCssTokenizer implements CssTokenizer {
         }
         while (true) {
             ch = in.nextChar();
-            if (ch == -1) {
+            if (ch < 0) {
                 return false;
             } else if (ch == '\\') {
                 if (!escapeMacro(ch, buf)) {

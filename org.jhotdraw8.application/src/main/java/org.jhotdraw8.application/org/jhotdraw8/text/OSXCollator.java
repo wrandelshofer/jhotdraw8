@@ -144,7 +144,7 @@ public class OSXCollator extends Collator {
         for (int i = 0; i < n; i++) {
             char ch = s.charAt(i);
             if ('0' <= ch && ch <= '9') {
-                if (start == -1) {
+                if (start < 0) {
                     start = i;
                 }
             } else {

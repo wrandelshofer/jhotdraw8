@@ -113,7 +113,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             double y2 = event.getY();
             Point2D c2 = createdFigure.worldToParent(dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
-            if (dragStartIndex == -1) {
+            if (dragStartIndex < 0) {
                 points.add(new BezierNode(c2));
                 dragStartIndex = points.size() - 1;
             } else {

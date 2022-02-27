@@ -376,7 +376,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
     }
 
     @Override
-    public int getNext(int vidx, int i) {
+    public int getNextAsInt(int vidx, int i) {
         int arrowId = getNextArrowIndex(vidx, i);
         return arrowHead_getVertex(nextArrowHeads, arrowId);
     }

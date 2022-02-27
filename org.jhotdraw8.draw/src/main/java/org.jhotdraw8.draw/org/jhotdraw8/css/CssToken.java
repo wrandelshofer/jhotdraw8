@@ -287,7 +287,7 @@ public class CssToken /*extends AST*/ {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
-                        : value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
+                        : value.indexOf('"') < 0 || value.indexOf('\'') < 0 ? '"' : '\'';
         return fromSTRING(value, quoteChar, quoteChar);
     }
 
@@ -299,7 +299,7 @@ public class CssToken /*extends AST*/ {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
-                        : value.indexOf('"') == -1 || value.indexOf('\'') == -1 ? '"' : '\'';
+                        : value.indexOf('"') < 0 || value.indexOf('\'') < 0 ? '"' : '\'';
         return fromSTRING(value, quoteChar, '\n');
     }
 

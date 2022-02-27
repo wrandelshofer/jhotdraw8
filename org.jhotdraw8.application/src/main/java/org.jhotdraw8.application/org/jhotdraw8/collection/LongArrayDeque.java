@@ -10,7 +10,6 @@ import org.jhotdraw8.util.Preconditions;
 import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -19,7 +18,7 @@ import java.util.NoSuchElementException;
  *
  * @author Werner Randelshofer
  */
-public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Long> {
+public class LongArrayDeque extends AbstractCollection<Long> implements LongDeque {
     /**
      * The length of this array is always a power of 2.
      */
@@ -56,17 +55,12 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         elements = new long[Math.max(size, 0)];
     }
 
-    @Override
-    public void addFirst(Long integer) {
-        addFirstLong(integer);
-    }
-
     /**
      * Inserts the specified element at the head of this deque.
      *
      * @param e the element to add
      */
-    public void addFirstLong(long e) {
+    public void addFirstAsLong(long e) {
         //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
@@ -75,16 +69,11 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         }
     }
 
-    @Override
-    public void addLast(Long integer) {
-        addLastLong(integer);
+    public void addLastAllAsLong(long[] array) {
+        addLastAllAsLong(array, 0, array.length);
     }
 
-    public void addLastAll(long[] array) {
-        addLastAll(array, 0, array.length);
-    }
-
-    public void addLastAll(long[] array, int offset, int length) {
+    public void addLastAllAsLong(long[] array, int offset, int length) {
         grow(size() + length);
 
         int firstPart = elements.length - tail;
@@ -106,7 +95,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
      *
      * @param e the element
      */
-    public void addLastLong(long e) {
+    public void addLastAsLong(long e) {
         //Note: elements.length is a power of two.
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
@@ -135,7 +124,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        return getFirstLong();
+        return getFirstAsLong();
     }
 
     @Override
@@ -160,7 +149,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         return true;
     }
 
-    public int firstIndexOfLong(long o) {
+    public int firstIndexOfAsLong(long o) {
         if (tail < head) {
             for (int i = head; i < elements.length; i++) {
                 if (o == (elements[i])) {
@@ -182,15 +171,10 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         return -1;
     }
 
-    @Override
-    public Long getFirst() {
-        return getFirstLong();
-    }
-
     /**
      * @throws NoSuchElementException if the queue is empty
      */
-    public long getFirstLong() {
+    public long getFirstAsLong() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -198,15 +182,10 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         return result;
     }
 
-    @Override
-    public Long getLast() {
-        return getLastLong();
-    }
-
     /**
      * @throws NoSuchElementException if the queue is empty
      */
-    public long getLastLong() {
+    public long getLastAsLong() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -261,7 +240,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         return new DeqIterator();
     }
 
-    public int lastIndexOfLong(long o) {
+    public int lastIndexOfAsLong(long o) {
         if (tail < head) {
             for (int i = elements.length - 1; i >= head; i--) {
                 if (o == (elements[i])) {
@@ -281,108 +260,6 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
             }
         }
         return -1;
-    }
-
-    @Override
-    public boolean offer(Long integer) {
-        addLastLong(integer);
-        return true;
-    }
-
-    @Override
-    public boolean offerFirst(Long integer) {
-        addFirstLong(integer);
-        return true;
-    }
-
-    @Override
-    public boolean offerLast(Long integer) {
-        addLastLong(integer);
-        return true;
-    }
-
-    @Override
-    public Long peek() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getFirstLong();
-    }
-
-    @Override
-    public Long peekFirst() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getFirstLong();
-    }
-
-    @Override
-    public Long peekLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return getLastLong();
-    }
-
-    @Override
-    public Long poll() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeFirstLong();
-    }
-
-    @Override
-    public Long pollFirst() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeFirstLong();
-    }
-
-    @Override
-    public Long pollLast() {
-        if (isEmpty()) {
-            return null;
-        }
-        return removeLastLong();
-    }
-
-    @Override
-    public Long pop() {
-        return removeFirstLong();
-    }
-
-    /**
-     * Removes the element at the head of the deque.
-     *
-     * @throws NoSuchElementException if the queue is empty
-     */
-    public long popLong() {
-        return removeFirstLong();
-    }
-
-    @Override
-    public void push(Long integer) {
-        addFirstLong(integer);
-    }
-
-    /**
-     * Inserts the specified element at the head of this deque.
-     *
-     * @param e the element to add
-     */
-    public void pushLong(long e) {
-        addFirstLong(e);
-    }
-
-    @Override
-    public Long remove() {
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return removeFirstLong();
     }
 
     /**
@@ -414,17 +291,12 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         }
     }
 
-    @Override
-    public Long removeFirst() {
-        return removeFirstLong();
-    }
-
     /**
      * Removes the element at the head of the deque.
      *
      * @throws NoSuchElementException if the queue is empty
      */
-    public long removeFirstLong() {
+    public long removeFirstAsLong() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -434,16 +306,8 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         return result;
     }
 
-    @Override
-    public boolean removeFirstOccurrence(Object o) {
-        if (o instanceof Long) {
-            return removeFirstOccurrenceLong((long) o);
-        }
-        return false;
-    }
-
-    public boolean removeFirstOccurrenceLong(long o) {
-        int index = firstIndexOfLong(o);
+    public boolean removeFirstOccurrenceAsLong(long o) {
+        int index = firstIndexOfAsLong(o);
         if (index != -1) {
             removeAt(index);
             return true;
@@ -451,15 +315,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
         return false;
     }
 
-    @Override
-    public Long removeLast() {
-        return removeLastLong();
-    }
-
-    /**
-     * @throws NoSuchElementException if the queue is empty
-     */
-    public long removeLastLong() {
+    public long removeLastAsLong() {
         if (head == tail) {
             throw new NoSuchElementException();
         }
@@ -470,22 +326,15 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
     }
 
     @Override
-    public boolean removeLastOccurrence(Object o) {
-        if (o instanceof Long) {
-            int index = lastIndexOfLong((int) o);
-            if (index != -1) {
-                removeAt(index);
-                return true;
-            }
+    public boolean removeLastOccurrenceAsLong(long o) {
+        int index = lastIndexOfAsLong((int) o);
+        if (index != -1) {
+            removeAt(index);
+            return true;
         }
         return false;
     }
 
-    /**
-     * Returns the number of elements in this deque.
-     *
-     * @return the number of elements in this deque
-     */
     public int size() {
         return (tail - head) & (elements.length - 1);
     }
@@ -536,8 +385,5 @@ public class LongArrayDeque extends AbstractCollection<Long> implements Deque<Lo
             cursor = (cursor + 1) & (elements.length - 1);
             return result;
         }
-
-
     }
-
 }

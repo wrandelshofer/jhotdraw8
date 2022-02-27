@@ -43,7 +43,12 @@ public abstract class AbstractIntEnumeratorSpliterator extends Spliterators.Abst
     }
 
     @Override
-    public final int current() {
+    public final int currentAsInt() {
+        return current;
+    }
+
+    @Override
+    public final @NonNull Integer current() {
         return current;
     }
 }

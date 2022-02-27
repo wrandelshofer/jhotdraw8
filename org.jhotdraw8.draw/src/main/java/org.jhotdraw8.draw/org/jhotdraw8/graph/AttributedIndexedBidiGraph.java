@@ -71,7 +71,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
             public @NonNull Map.Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
-                        getPrev(vertex, i),
+                        getPrevAsInt(vertex, i),
                         getPrevArrow(vertex, i)
                 );
             }

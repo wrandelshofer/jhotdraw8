@@ -9,12 +9,23 @@ import java.util.NoSuchElementException;
  */
 public interface MutableIndexedBidiGraph extends IndexedBidiGraph {
     /**
-     * Adds an arrow from vertex 'v' to vertex 'u'.
+     * Adds an arrow from vertex 'v' to vertex 'u' with arrow data 0.
      *
      * @param vidx index of vertex 'v'
      * @param uidx index of vertex 'u'
      */
-    void addArrow(int vidx, int uidx);
+    default void addArrow(int vidx, int uidx) {
+        addArrow(vidx, uidx, 0);
+    }
+
+    /**
+     * Adds an arrow from vertex 'v' to vertex 'u'.
+     *
+     * @param vidx index of vertex 'v'
+     * @param uidx index of vertex 'u'
+     * @param data the arrow data
+     */
+    void addArrow(int vidx, int uidx, int data);
 
     /**
      * Adds a vertex to the graph.
@@ -50,7 +61,7 @@ public interface MutableIndexedBidiGraph extends IndexedBidiGraph {
      * @throws NoSuchElementException if there is no such arrow
      */
     default void removeArrow(int vidx, int uidx) {
-        removeNext(vidx, findIndexOfNext(vidx, uidx));
+        removeNext(vidx, findIndexOfNextAsInt(vidx, uidx));
     }
 
     /**

@@ -43,7 +43,12 @@ public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.Abs
     }
 
     @Override
-    public final long current() {
+    public final long currentAsLong() {
+        return current;
+    }
+
+    @Override
+    public final @NonNull Long current() {
         return current;
     }
 }

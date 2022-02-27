@@ -141,12 +141,12 @@ public class SimpleDockRoot
         switch (zone) {
         case TOP:
         case LEFT:
-            children.add(insertionIndex == -1 ? 0 : insertionIndex, child);
+            children.add(insertionIndex < 0 ? 0 : insertionIndex, child);
             break;
         case RIGHT:
         case BOTTOM:
         default:
-            children.add(insertionIndex == -1 ? children.size() : insertionIndex + 1, child);
+            children.add(insertionIndex < 0 ? children.size() : insertionIndex + 1, child);
         }
     }
 

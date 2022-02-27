@@ -77,7 +77,7 @@ public class CssPrettyPrinter implements Appendable {
             //
             switch (token.getType()) {
             case CssTokenType.TT_S:
-                if (token.getStringValueNonNull().indexOf('\n') == -1) {
+                if (token.getStringValueNonNull().indexOf('\n') < 0) {
                     if (!mustIndent) {
                         w.append(" ");
                     }

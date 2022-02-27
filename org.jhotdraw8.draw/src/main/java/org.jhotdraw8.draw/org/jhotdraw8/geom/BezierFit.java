@@ -242,11 +242,11 @@ public class BezierFit {
         if (cornerIndices.size() == 0) {
             segments.add(new ArrayList<>(digitizedPoints));
         } else {
-            segments.add(new ArrayList<>(digitizedPoints.subList(0, cornerIndices.getInt(0) + 1)));
+            segments.add(new ArrayList<>(digitizedPoints.subList(0, cornerIndices.getAsInt(0) + 1)));
             for (int i = 1; i < cornerIndices.size(); i++) {
-                segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.getInt(i - 1), cornerIndices.getInt(i) + 1)));
+                segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.getAsInt(i - 1), cornerIndices.getAsInt(i) + 1)));
             }
-            segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.getInt(cornerIndices.size() - 1), digitizedPoints.size())));
+            segments.add(new ArrayList<>(digitizedPoints.subList(cornerIndices.getAsInt(cornerIndices.size() - 1), digitizedPoints.size())));
         }
 
         return segments;
@@ -303,9 +303,9 @@ public class BezierFit {
             double angle = Math.abs(aPrev - aNext);
             if (angle < Math.PI - minAngle || angle > Math.PI + minAngle) {
                 if (intersectsPreviousCorner) {
-                    cornerIndices.setInt(cornerIndices.size() - 1, i);
+                    cornerIndices.setAsInt(cornerIndices.size() - 1, i);
                 } else {
-                    cornerIndices.add(i);
+                    cornerIndices.addAsInt(i);
                 }
                 previousCorner = i;
                 previousCornerAngle = angle;

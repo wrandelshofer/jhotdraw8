@@ -45,7 +45,15 @@ public interface IndexedDirectedGraph {
      * @param k    the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
      * @return the index of the k-th next vertex of v.
      */
-    int getNext(int vidx, int k);
+    int getNextAsInt(int vidx, int k);
+
+    default int getNextArrowAsInt(int vertex, int index) {
+        return 0;
+    }
+
+    default int getPrevArrowAsInt(int vertex, int index) {
+        return 0;
+    }
 
     /**
      * Returns the number of next vertices of v.
@@ -65,13 +73,14 @@ public interface IndexedDirectedGraph {
     /**
      * Returns the index of vertex b.
      *
-     * @param vidxa a vertex
-     * @param vidxb another vertex
-     * @return index of vertex b. Returns -1 if b is not a next vertex of a.
+     * @param vidx a vertex
+     * @param uidx another vertex
+     * @return index of vertex b. Returns a value {@literal < 0}
+     * if b is not a next vertex of a.
      */
-    default int findIndexOfNext(int vidxa, int vidxb) {
-        for (int i = 0, n = getNextCount(vidxa); i < n; i++) {
-            if (vidxb == getNext(vidxa, i)) {
+    default int findIndexOfNextAsInt(int vidx, int uidx) {
+        for (int i = 0, n = getNextCount(vidx); i < n; i++) {
+            if (uidx == getNextAsInt(vidx, i)) {
                 return i;
             }
         }
@@ -81,12 +90,12 @@ public interface IndexedDirectedGraph {
     /**
      * Returns true if b is a next vertex of a.
      *
-     * @param vidxa a vertex
-     * @param vidxb another vertex
+     * @param vidx a vertex
+     * @param uidx another vertex
      * @return true if b is a next vertex of a.
      */
-    default boolean isNext(int vidxa, int vidxb) {
-        return findIndexOfNext(vidxa, vidxb) != -1;
+    default boolean isNext(int vidx, int uidx) {
+        return findIndexOfNextAsInt(vidx, uidx) >= 0;
     }
 
     /**
@@ -111,7 +120,7 @@ public interface IndexedDirectedGraph {
             @Override
             public boolean moveNext() {
                 if (index < limit) {
-                    current = getNext(vidx, index++);
+                    current = getNextAsInt(vidx, index++);
                     return true;
                 }
                 return false;

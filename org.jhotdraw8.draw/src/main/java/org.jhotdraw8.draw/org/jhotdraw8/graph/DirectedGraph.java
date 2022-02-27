@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractCollection;
+import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,7 +34,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      */
     default @Nullable A findArrow(@NonNull V a, @NonNull V b) {
         int index = findIndexOfNext(a, b);
-        return index == -1 ? null : getNextArrow(a, index);
+        return index < 0 ? null : getNextArrow(a, index);
     }
 
     /**
@@ -41,7 +42,8 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      *
      * @param a a vertex
      * @param b another vertex
-     * @return index of vertex b. Returns -1 if b is not a previous vertex of a.
+     * @return index of vertex b. Returns a value {@literal < 0}
+     * if b is not a previous vertex of a.
      */
     default int findIndexOfNext(@NonNull V a, @NonNull V b) {
         int i = 0;
@@ -87,7 +89,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
             }
 
         }
-        return new AbstractCollection<V>() {
+        return new AbstractSet<V>() {
             @Override
             public @NonNull Iterator<V> iterator() {
                 return new NextVertexIterator(vertex);

@@ -66,7 +66,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         buildAddVertices(g.getVertexCount());
         for (int v = 0; v < vertexCount; v++) {
             for (IntEnumeratorSpliterator it = g.nextVerticesSpliterator(v); it.moveNext(); ) {
-                buildAddArrow(v, it.current());
+                buildAddArrow(v, it.currentAsInt());
             }
         }
     }
@@ -101,20 +101,20 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
             Node node = nodes[i];
             if (node != null) {
                 for (int j = node.next.size() - 1; j >= 0; j--) {
-                    int uidx = node.next.getInt(j);
+                    int uidx = node.next.getAsInt(j);
                     if (uidx == vidx) {
                         node.next.removeAt(j);
                         arrowCount--;
                     } else if (uidx > vidx) {
-                        node.next.setInt(j, uidx - 1);
+                        node.next.setAsInt(j, uidx - 1);
                     }
                 }
                 for (int j = node.prev.size() - 1; j >= 0; j--) {
-                    int uidx = node.prev.getInt(j);
+                    int uidx = node.prev.getAsInt(j);
                     if (uidx == vidx) {
                         node.prev.removeAt(j);
                     } else if (uidx > vidx) {
-                        node.prev.setInt(j, uidx - 1);
+                        node.prev.setAsInt(j, uidx - 1);
                     }
                 }
                 if (node.isNodeEmpty()) {
@@ -135,13 +135,13 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         if (node == null) {
             node = nodes[vidx] = new Node();
         }
-        node.next.add(uidx);
+        node.next.addAsInt(uidx);
 
         node = nodes[uidx];
         if (node == null) {
             node = nodes[uidx] = new Node();
         }
-        node.prev.add(vidx);
+        node.prev.addAsInt(vidx);
 
         arrowCount++;
     }
@@ -193,12 +193,12 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     }
 
     @Override
-    public int getNext(int vidx, int k) {
+    public int getNextAsInt(int vidx, int k) {
         Node node = nodes[vidx];
         if (node == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx + ", k=" + k);
         }
-        return node.next.getInt(k);
+        return node.next.getAsInt(k);
     }
 
     @Override
@@ -208,12 +208,12 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     }
 
     @Override
-    public int getPrev(int vidx, int i) {
+    public int getPrevAsInt(int vidx, int i) {
         Node node = nodes[vidx];
         if (node == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
         }
-        return node.prev.getInt(i);
+        return node.prev.getAsInt(i);
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.Iterator;
  *
  * @author Werner Randelshofer
  */
-public interface IntEnumerator {
+public interface IntEnumerator extends Enumerator<Integer> {
     /**
      * Advances the enumerator to the next element of the collection.
      *
@@ -44,5 +44,5 @@ public interface IntEnumerator {
      *
      * @return current
      */
-    int current();
+    int currentAsInt();
 }

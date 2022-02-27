@@ -86,7 +86,7 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @param newItem the new item
      */
-    public void add(int newItem) {
+    public void addAsInt(int newItem) {
         grow(size + 1);
         items[size++] = newItem;
     }
@@ -97,7 +97,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param index   the index
      * @param newItem the new item
      */
-    public void add(int index, int newItem) {
+    public void addAsInt(int index, int newItem) {
         rangeCheck(index, size + 1);
         grow(size + 1);
         System.arraycopy(items, index, items, index + 1, size - index);
@@ -110,7 +110,7 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @param that another list
      */
-    public void addAll(@NonNull IntArrayList that) {
+    public void addAllAsInt(@NonNull IntArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -177,7 +177,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param index an index
      * @return the item at the index
      */
-    public int getInt(int index) {
+    public int getAsInt(int index) {
         rangeCheck(index, size);
         return items[index];
     }
@@ -194,12 +194,12 @@ public class IntArrayList extends AbstractList<Integer> {
         return items[index];
     }
 
-    public int getLastInt() {
-        return getInt(size - 1);
+    public int getLastAsInt() {
+        return getAsInt(size - 1);
     }
 
-    public int getFirstInt() {
-        return getInt(0);
+    public int getFirstAsInt() {
+        return getAsInt(0);
     }
 
     /**
@@ -299,7 +299,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @return the removed item
      * @throws NoSuchElementException if the list is empty
      */
-    public int removeLastInt() {
+    public int removeLastAsInt() {
         if (isEmpty()) {
             throw new NoSuchElementException("List is empty.");
         }
@@ -313,7 +313,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param newItem the new item
      * @return the old item
      */
-    public int setInt(int index, int newItem) {
+    public int setAsInt(int index, int newItem) {
         rangeCheck(index, size);
         int removedItem = items[index];
         items[index] = newItem;
@@ -386,7 +386,7 @@ public class IntArrayList extends AbstractList<Integer> {
 
     //@Override
     public boolean add(Integer integer) {
-        add((int) integer);
+        addAsInt((int) integer);
         return true;
     }
 
@@ -432,11 +432,11 @@ public class IntArrayList extends AbstractList<Integer> {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIfInt(@NonNull IntPredicate filter) {
+    public boolean removeIfAsInt(@NonNull IntPredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
-            if (filter.test(getInt(i))) {
+            if (filter.test(getAsInt(i))) {
                 removeAt(i);
                 hasRemoved = true;
             }

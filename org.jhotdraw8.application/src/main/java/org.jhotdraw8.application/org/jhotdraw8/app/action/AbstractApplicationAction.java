@@ -51,7 +51,7 @@ public abstract class AbstractApplicationAction extends AbstractAction {
             }
 
             final String msg = t.getLocalizedMessage();
-            if (buf.indexOf(msg) == -1) {
+            if (buf.indexOf(msg) < 0) {
                 if (buf.length() != 0) {
                     buf.append('\n');
                 }

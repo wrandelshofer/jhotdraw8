@@ -189,14 +189,14 @@ public class DumpGraph {
                 continue;
             }
             final String vattr = vertexAttributes == null ? null : vertexAttributes.apply(v);
-            if (graph.getNextCount(v) == 0 || vattr != null && !vattr.isEmpty()) {
+            //if (graph.getNextCount(v) == 0 || vattr != null && !vattr.isEmpty()) {
                 w.append(vertexName);
                 if (vattr != null && !vattr.isEmpty()) {
                     w.append(" [").append(vattr).append("]");
                 }
                 //w.append(";");
                 w.append('\n');
-            }
+            // }
         }
 
         // dump arrows
