@@ -24,6 +24,8 @@ import java.util.function.IntPredicate;
  * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
  */
 public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
+    public GloballyArbitraryIndexedVertexReachabilityAlgo() {
+    }
 
     /**
      * A SearchNode stores for a given vertex, how long the remaining

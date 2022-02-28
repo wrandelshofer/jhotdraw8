@@ -14,6 +14,8 @@ import javax.swing.undo.UndoableEdit;
  * Emits {@link UndoableEditEvent}s.
  */
 public class DrawingModelUndoEventEmitter {
+    public DrawingModelUndoEventEmitter() {
+    }
 
     protected void fire(UndoableEdit event) {
     }
@@ -21,6 +23,7 @@ public class DrawingModelUndoEventEmitter {
 
     private class DrawingModelListener implements Listener<DrawingModelEvent> {
         private final static long serialVersionUID = 0L;
+
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {

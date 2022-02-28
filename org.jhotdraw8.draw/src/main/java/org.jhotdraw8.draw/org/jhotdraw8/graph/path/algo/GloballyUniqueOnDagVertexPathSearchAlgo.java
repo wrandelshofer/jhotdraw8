@@ -25,7 +25,8 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  */
 public class GloballyUniqueOnDagVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
-
+    public GloballyUniqueOnDagVertexPathSearchAlgo() {
+    }
 
     /**
      * {@inheritDoc}

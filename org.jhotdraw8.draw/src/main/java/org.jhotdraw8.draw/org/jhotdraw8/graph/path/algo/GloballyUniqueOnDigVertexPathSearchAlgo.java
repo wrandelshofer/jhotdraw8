@@ -31,6 +31,8 @@ import java.util.stream.StreamSupport;
 public class GloballyUniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
+    public GloballyUniqueOnDigVertexPathSearchAlgo() {
+    }
 
     /**
      * {@inheritDoc}

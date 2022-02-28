@@ -3,18 +3,12 @@ package org.jhotdraw8.graph.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.DirectedGraph;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class DisjointSetsAlgo {
-
+    public DisjointSetsAlgo() {
+    }
 
     /**
      * Given a directed graph, returns all disjoint sets of vertices.

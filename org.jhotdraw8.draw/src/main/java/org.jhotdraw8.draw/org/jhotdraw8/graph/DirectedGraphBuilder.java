@@ -18,6 +18,8 @@ import java.util.function.Predicate;
  * @author Werner Randelshofer
  */
 public class DirectedGraphBuilder {
+    public DirectedGraphBuilder() {
+    }
 
     /**
      * Creates a builder which contains a copy of the specified graph with all arrows inverted.

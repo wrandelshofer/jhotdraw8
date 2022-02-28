@@ -20,7 +20,8 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  */
 public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
-
+    public ShortestArbitraryVertexPathSearchAlgo() {
+    }
 
     /**
      * {@inheritDoc}

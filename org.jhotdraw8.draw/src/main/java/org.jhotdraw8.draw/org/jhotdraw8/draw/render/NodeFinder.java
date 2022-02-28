@@ -16,13 +16,16 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 
 /**
  * Provides methods for finding JavaFX nodes within a radius around a point.
  */
 public class NodeFinder {
     private static final double LINE45DEG = Math.sqrt(0.5);
+
+    public NodeFinder() {
+    }
 
     /**
      * Returns true if the node contains the specified point within a

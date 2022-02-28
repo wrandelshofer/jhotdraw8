@@ -6,6 +6,9 @@ import java.awt.geom.PathIterator;
  * An immutable empty path iterator.
  */
 public class EmptyPathIterator implements PathIterator {
+    public EmptyPathIterator() {
+    }
+
     @Override
     public int getWindingRule() {
         return PathIterator.WIND_EVEN_ODD;

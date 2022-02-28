@@ -1,7 +1,6 @@
 package org.jhotdraw8.geom;
 
-import java.awt.Rectangle;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
@@ -11,6 +10,9 @@ import java.awt.geom.Rectangle2D;
  * An immutable empty shape.
  */
 public class EmptyShape implements Shape {
+    public EmptyShape() {
+    }
+
     @Override
     public Rectangle getBounds() {
         return new Rectangle(0, 0, 0, 0);

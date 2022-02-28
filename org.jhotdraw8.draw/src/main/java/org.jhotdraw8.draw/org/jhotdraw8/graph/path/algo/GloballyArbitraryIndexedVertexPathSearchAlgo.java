@@ -30,7 +30,8 @@ import java.util.function.IntPredicate;
  */
 public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
         implements IndexedVertexPathSearchAlgo<C> {
-
+    public GloballyArbitraryIndexedVertexPathSearchAlgo() {
+    }
 
     private static class MyIntConsumer implements IntConsumer {
         int value;

@@ -12,6 +12,9 @@ import java.util.List;
 public class FXPolygonBuilder extends AbstractPathBuilder<List<Double>> {
     private final List<Double> poly = new ArrayList<>();
 
+    public FXPolygonBuilder() {
+    }
+
     @Override
     public @NonNull List<Double> build() {
         return poly;

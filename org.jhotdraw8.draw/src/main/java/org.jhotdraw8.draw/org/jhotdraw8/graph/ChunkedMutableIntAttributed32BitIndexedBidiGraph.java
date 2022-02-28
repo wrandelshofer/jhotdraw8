@@ -44,6 +44,9 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      */
     private @NonNull int[][] prevChunks = new int[0][0];
 
+    public ChunkedMutableIntAttributed32BitIndexedBidiGraph() {
+    }
+
     /**
      * Creates a chunk with the specified initial capacity for each vertex
      * and the specified free space.

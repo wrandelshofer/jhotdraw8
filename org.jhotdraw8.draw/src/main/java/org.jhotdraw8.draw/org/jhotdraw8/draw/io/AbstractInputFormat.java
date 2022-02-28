@@ -10,6 +10,9 @@ import java.util.LinkedHashMap;
 public abstract class AbstractInputFormat implements InputFormat {
     private @NonNull ReadOnlyMap<Key<?>, Object> options = new ReadOnlyMapWrapper<>(new LinkedHashMap<>());
 
+    public AbstractInputFormat() {
+    }
+
     @NonNull
     @Override
     public ReadOnlyMap<Key<?>, Object> getOptions() {

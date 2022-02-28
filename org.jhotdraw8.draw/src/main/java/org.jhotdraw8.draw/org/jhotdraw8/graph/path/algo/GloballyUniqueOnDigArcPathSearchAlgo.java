@@ -13,11 +13,7 @@ import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
 
-import java.util.ArrayDeque;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -63,6 +59,8 @@ import java.util.stream.StreamSupport;
 public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
+    public GloballyUniqueOnDigArcPathSearchAlgo() {
+    }
 
     /**
      * {@inheritDoc}

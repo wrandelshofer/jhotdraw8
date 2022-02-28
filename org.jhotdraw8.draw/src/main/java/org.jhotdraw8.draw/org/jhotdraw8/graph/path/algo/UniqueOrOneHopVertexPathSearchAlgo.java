@@ -9,11 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 import org.jhotdraw8.util.function.AddToSet;
 
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -30,7 +26,8 @@ import java.util.function.Predicate;
  * @author Werner Randelshofer
  */
 public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
-
+    public UniqueOrOneHopVertexPathSearchAlgo() {
+    }
 
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, int maxDepth, @NonNull C zero, @NonNull C costLimit, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction) {

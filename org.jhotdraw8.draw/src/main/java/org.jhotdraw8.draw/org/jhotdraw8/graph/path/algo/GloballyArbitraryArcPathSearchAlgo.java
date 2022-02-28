@@ -44,6 +44,8 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  */
 public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+    public GloballyArbitraryArcPathSearchAlgo() {
+    }
 
     /**
      * {@inheritDoc}
