@@ -3,6 +3,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
 
     /**
      * {@inheritDoc}
-     *  @param startVertices        the set of start vertices
+     * @param startVertices        the set of start vertices
      * @param goalPredicate        the goal predicate
      * @param nextVerticesFunction the next vertices function
      * @param maxDepth             the maximal depth (inclusive) of the search
@@ -36,6 +37,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
+     * @param visited
      */
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
@@ -46,7 +48,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
             @NonNull C zero,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction) {
+            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
 
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
         CheckedNonNegativeVertexCostFunction<V, C> costf = new CheckedNonNegativeVertexCostFunction<>(zero, costFunction);

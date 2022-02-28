@@ -4,6 +4,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.ArcReachabilityAlgo;
 import org.jhotdraw8.util.TriFunction;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.Collections;
 import java.util.function.BiFunction;
@@ -112,7 +113,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     @Override
     public boolean isReachable(@NonNull Iterable<V> startVertices,
                                @NonNull Predicate<V> goalPredicate,
-                               int maxDepth, @NonNull C costLimit) {
+                               int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
         return algo.tryToReach(
                 startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, costLimit,
                 costFunction, sumFunction
@@ -121,7 +122,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
 
     @Override
     public boolean isReachable(@NonNull V start,
-                               @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit) {
+                               @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
         return algo.tryToReach(
                 Collections.singletonList(start), goalPredicate, nextArcsFunction, maxDepth, zero, costLimit,
                 costFunction, sumFunction
@@ -129,7 +130,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     }
 
     @Override
-    public boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit) {
+    public boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
         return algo.tryToReach(
                 Collections.singletonList(start), goal::equals, nextArcsFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         );

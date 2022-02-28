@@ -5,6 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.util.TriFunction;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -53,7 +54,8 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
 
     /**
      * {@inheritDoc}
-     *  @param startVertices    the set of start vertices
+     *
+     * @param startVertices    the set of start vertices
      * @param goalPredicate    the goal predicate
      * @param nextArcsFunction the next arcs function
      * @param maxDepth         the maximal depth (inclusive) of the search
@@ -67,6 +69,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
      *                         The cost must be {@literal >= 0} if the graph
      *                         is acyclic.
      * @param sumFunction      the sum function for adding two cost values
+     * @param visited
      * @return on success: a back link, otherwise: null
      */
     @Override
@@ -77,7 +80,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
             int maxDepth, final @NonNull C zero,
             final @NonNull C costLimit,
             final @NonNull TriFunction<V, V, A, C> costFunction,
-            final @NonNull BiFunction<C, C, C> sumFunction) {
+            final @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
 
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
         CheckedNonNegativeArcCostFunction<V, A, C> costf = new CheckedNonNegativeArcCostFunction<>(zero, costFunction);

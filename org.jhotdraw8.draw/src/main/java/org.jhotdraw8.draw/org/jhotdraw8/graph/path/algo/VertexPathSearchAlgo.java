@@ -3,6 +3,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -27,6 +28,7 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
      * @param zero                 the zero cost value
      * @param costLimit            the algorithm-specific cost limit
      * @param sumFunction          the sum function for adding two cost values
+     * @param visited the visited function
      * @return on success: a back link, otherwise: null
      */
     @Nullable VertexBackLinkWithCost<V, C> search(
@@ -37,5 +39,5 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
             @NonNull C zero,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction);
+            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited);
 }

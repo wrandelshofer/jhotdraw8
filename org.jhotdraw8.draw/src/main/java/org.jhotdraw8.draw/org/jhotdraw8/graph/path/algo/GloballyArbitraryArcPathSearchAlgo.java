@@ -59,6 +59,7 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
      * @param costLimit        the cost limit is <b>ignored</b>
      * @param costFunction     the cost function
      * @param sumFunction      the sum function for adding two cost values
+     * @param visited
      * @return
      */
     @Override
@@ -69,7 +70,7 @@ public class GloballyArbitraryArcPathSearchAlgo<V, A, C extends Number & Compara
                                                          @NonNull C zero,
                                                          @NonNull C costLimit,
                                                          @NonNull TriFunction<V, V, A, C> costFunction,
-                                                         @NonNull BiFunction<C, C, C> sumFunction) {
+                                                         @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return ArcBackLink.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction,

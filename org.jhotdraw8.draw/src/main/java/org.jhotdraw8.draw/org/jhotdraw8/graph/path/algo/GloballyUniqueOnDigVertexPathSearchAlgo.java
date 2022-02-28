@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.AddOnlyPersistentTrieSet;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
@@ -46,6 +47,7 @@ public class GloballyUniqueOnDigVertexPathSearchAlgo<V, C extends Number & Compa
      * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
+     * @param visited
      * @return on success: a back link, otherwise: null
      */
     @Override
@@ -57,7 +59,7 @@ public class GloballyUniqueOnDigVertexPathSearchAlgo<V, C extends Number & Compa
             @NonNull C zero,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction) {
+            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return VertexBackLinkWithAncestorSet.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction, maxDepth),

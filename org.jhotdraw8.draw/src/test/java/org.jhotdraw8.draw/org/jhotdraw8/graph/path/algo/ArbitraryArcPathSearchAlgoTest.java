@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -103,7 +104,7 @@ public class ArbitraryArcPathSearchAlgoTest {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
         @Nullable OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
-                Integer.MAX_VALUE, Integer.MAX_VALUE);
+                Integer.MAX_VALUE, Integer.MAX_VALUE, new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
     }
@@ -140,7 +141,8 @@ public class ArbitraryArcPathSearchAlgoTest {
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE,
+                () -> new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());
     }

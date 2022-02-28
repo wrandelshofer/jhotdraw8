@@ -5,13 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntCharArrayEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.*;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -381,7 +375,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
             this.stride = stride;
             this.offset = offset;
             this.visited = visited;
-            if (visited.add(root)) {
+            if (visited.addAsInt(root)) {
                 deque.addFirstAsInt(root);
             }
         }
@@ -397,7 +391,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
             int size = array[currentOffset];
             for (int i = 0; i < size; i++) {
                 char vidx = array[i + currentOffset];
-                if (visited.add(vidx)) {
+                if (visited.addAsInt(vidx)) {
                     deque.addLastAsInt(vidx);
                 }
             }
@@ -424,7 +418,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
             this.stride = stride;
             this.offset = offset;
             this.visited = visited;
-            if (visited.add(root)) {
+            if (visited.addAsInt(root)) {
                 deque.addFirstAsInt(root);
             }
         }
@@ -441,7 +435,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
             int size = array[currentOffset];
             for (int i = currentOffset + 1, end = currentOffset + size; i <= end; i++) {
                 char vidx = array[i];
-                if (visited.add(vidx)) {
+                if (visited.addAsInt(vidx)) {
                     deque.addLastAsInt(vidx);
                 }
             }

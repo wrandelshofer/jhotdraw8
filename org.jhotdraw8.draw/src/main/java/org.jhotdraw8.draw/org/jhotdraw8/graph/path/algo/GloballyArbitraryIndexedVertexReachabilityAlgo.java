@@ -71,6 +71,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
      * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
+     * @param visited
      * @return
      */
     @Override
@@ -81,7 +82,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
                               @NonNull C zero,
                               @NonNull C costLimit,
                               @NonNull BiFunction<Integer, Integer, C> costFunction,
-                              @NonNull BiFunction<C, C, C> sumFunction) {
+                              @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToIntSet visited) {
         AlgoArguments.checkZero(zero);
         return tryToReach(startVertices, goalPredicate, nextVerticesFunction,
                 AddToIntSet.addToBitSet(new BitSet()),
@@ -111,7 +112,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
         LongArrayDeque queue = new LongArrayDeque(32);
         MyIntConsumer consumer = new MyIntConsumer();
         for (int s : startVertices) {
-            if (visited.add(s)) {
+            if (visited.addAsInt(s)) {
                 queue.addLastAsLong(newSearchNode(s, 0));
             }
         }
@@ -127,7 +128,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
                 Spliterator.OfInt spliterator = nextVerticesFunction.apply(vertex);
                 while (spliterator.tryAdvance(consumer)) {
                     final int v = consumer.value;
-                    if (visited.add(v)) {
+                    if (visited.addAsInt(v)) {
                         queue.addLastAsLong(newSearchNode(v, searchNodeGetDepth(u) + 1));
                     }
                 }

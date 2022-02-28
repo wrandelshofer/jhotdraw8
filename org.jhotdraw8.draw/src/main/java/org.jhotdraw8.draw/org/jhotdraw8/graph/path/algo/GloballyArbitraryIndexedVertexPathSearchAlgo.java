@@ -54,6 +54,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
      * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
+     * @param visited
      * @return
      */
     @Override
@@ -63,7 +64,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
             @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             int maxDepth, @NonNull C zero, @NonNull C costLimit,
             @NonNull BiFunction<Integer, Integer, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction) {
+            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToIntSet visited) {
         AlgoArguments.checkZero(zero);
         return IndexedVertexBackLink.toIndexedVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
@@ -93,7 +94,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
         Queue<IndexedVertexBackLink> queue = new ArrayDeque<>(32);
         MyIntConsumer consumer = new MyIntConsumer();
         for (Integer s : startVertices) {
-            if (visited.add(s)) {
+            if (visited.addAsInt(s)) {
                 queue.add(new IndexedVertexBackLink(s, null));
             }
         }
@@ -108,7 +109,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
             if (u.getDepth() < maxDepth) {
                 Spliterator.OfInt spliterator = nextVerticesFunction.apply(vertex);
                 while (spliterator.tryAdvance(consumer)) {
-                    if (visited.add(consumer.value)) {
+                    if (visited.addAsInt(consumer.value)) {
                         queue.add(new IndexedVertexBackLink(consumer.value, u));
                     }
                 }

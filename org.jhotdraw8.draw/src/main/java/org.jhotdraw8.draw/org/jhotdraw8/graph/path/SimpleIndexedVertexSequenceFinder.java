@@ -6,11 +6,14 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.path.algo.IndexedVertexPathSearchAlgo;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
+import org.jhotdraw8.util.function.AddToIntSet;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * Implements the {@link VertexSequenceFinder} interface.
@@ -103,18 +106,19 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     @Override
     public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequence(
             @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate,
-            int maxDepth, @NonNull C costLimit) {
+            int maxDepth, @NonNull C costLimit, @NonNull AddToSet<Integer> visited) {
+        AddToIntSet visitedAsInt = visited instanceof AddToIntSet ? (AddToIntSet) visited : visited::add;
         return IndexedVertexBackLinkWithCost.toVertexSequence(algo.search(
-                startVertices, goalPredicate::test, nextVerticesFunction, maxDepth, zero, costLimit, costFunction, sumFunction
-        ), IndexedVertexBackLinkWithCost::getVertex);
+                startVertices, goalPredicate::test, nextVerticesFunction, maxDepth, zero, costLimit, costFunction, sumFunction,
+                visitedAsInt), IndexedVertexBackLinkWithCost::getVertex);
     }
 
     @Override
     public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(
-            @NonNull Iterable<Integer> waypoints, int maxDepth, @NonNull C costLimit) {
+            @NonNull Iterable<Integer> waypoints, int maxDepth, @NonNull C costLimit, @NonNull Supplier<AddToSet<Integer>> visitedSetFactory) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
-                (start, goal) -> this.findVertexSequence(start, goal, maxDepth, costLimit),
+                (start, goal) -> this.findVertexSequence(start, goal, maxDepth, costLimit, visitedSetFactory.get()),
                 zero,
                 sumFunction
 

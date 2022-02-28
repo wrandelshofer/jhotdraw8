@@ -47,7 +47,7 @@ public class IndexedBreadthFirstSpliterator extends AbstractIntEnumeratorSpliter
         this.nextFunction = nextFunction;
         deque = new IntArrayDeque(16);
         this.visited = visited;
-        if (visited.add(root)) {
+        if (visited.addAsInt(root)) {
             deque.addLastAsInt(root);
         }
     }
@@ -60,7 +60,7 @@ public class IndexedBreadthFirstSpliterator extends AbstractIntEnumeratorSpliter
         current = deque.removeFirstAsInt();
         for (IntEnumerator it = nextFunction.apply(current); it.moveNext(); ) {
             int next = it.currentAsInt();
-            if (visited.add(next)) {
+            if (visited.addAsInt(next)) {
                 deque.addLastAsInt(next);
             }
         }

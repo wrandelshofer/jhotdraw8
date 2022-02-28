@@ -27,7 +27,12 @@ import java.util.BitSet;
  * @author Werner Randelshofer
  */
 @FunctionalInterface
-public interface AddToIntSet {
+public interface AddToIntSet extends AddToSet<Integer> {
+    @Override
+    default boolean add(Integer integer) {
+        return addAsInt(integer);
+    }
+
     /**
      * Adds the specified element to the set if it is not already present.
      *
@@ -35,7 +40,7 @@ public interface AddToIntSet {
      * @return {@code true} if this set did not already contain the specified
      * element
      */
-    boolean add(int e);
+    boolean addAsInt(int e);
 
 
     /**

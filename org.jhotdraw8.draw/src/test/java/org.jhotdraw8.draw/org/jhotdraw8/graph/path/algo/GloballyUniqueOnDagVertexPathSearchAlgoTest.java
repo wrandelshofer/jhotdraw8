@@ -20,9 +20,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
@@ -130,7 +128,7 @@ public class GloballyUniqueOnDagVertexPathSearchAlgoTest {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new GloballyUniqueOnDagVertexPathSearchAlgo<>());
         OrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
-                Integer.MAX_VALUE, Integer.MAX_VALUE);
+                Integer.MAX_VALUE);
         if (expPath == null) {
             assertNull(result);
         } else {
@@ -165,7 +163,7 @@ public class GloballyUniqueOnDagVertexPathSearchAlgoTest {
 
         // Find unique path to any of the goals
         OrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains,
-                Integer.MAX_VALUE, Integer.MAX_VALUE);
+                Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actualPath);
         } else {
@@ -210,7 +208,7 @@ public class GloballyUniqueOnDagVertexPathSearchAlgoTest {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new GloballyUniqueOnDagVertexPathSearchAlgo<>());
-        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);
         } else {

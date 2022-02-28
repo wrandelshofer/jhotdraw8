@@ -1,6 +1,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -26,6 +27,7 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
      * @param nextVerticesFunction the next nodes function
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
+     * @param visited the visited function
      * @return true on success
      */
     boolean tryToReach(
@@ -36,5 +38,5 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
             @NonNull C costLimit,
             @NonNull Function<V, Iterable<V>> nextVerticesFunction,
             @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction);
+            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited);
 }

@@ -6,11 +6,14 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.Arc;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * Defines an API for finding {@link Arc} sequences up to (inclusive)
@@ -31,13 +34,34 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param maxDepth      the maximal depth (inclusive) of the search
      *                      Must be {@literal >= 0}.
      * @param costLimit     the algorithm-specific search limit
+     * @param visited       the visited function
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
     @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C costLimit);
+            int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
+
+    /**
+     * Finds an arc sequence from start to goal.
+     *
+     * @param start     the start vertex
+     * @param goal      the goal vertex
+     * @param maxDepth  the maximal depth (inclusive) of the search
+     *                  Must be {@literal >= 0}.
+     * @param costLimit the algorithm-specific cost limit
+     * @param visited   the visited function
+     * @return an ordered pair (arc sequence, cost),
+     * or null if no sequence was found.
+     */
+    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+            @NonNull V start,
+            @NonNull V goal,
+            int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
+        return findArcSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit, visited);
+    }
+
 
     /**
      * Finds an arc sequence from start to goal.
@@ -54,9 +78,42 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             int maxDepth, @NonNull C costLimit) {
-        return findArcSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit);
+        return findArcSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
+    /**
+     * Finds an arc sequence from start to goal.
+     *
+     * @param start     the start vertex
+     * @param goal      the goal vertex
+     * @param costLimit the algorithm-specific cost limit
+     * @return an ordered pair (arc sequence, cost),
+     * or null if no sequence was found.
+     */
+    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+            @NonNull V start,
+            @NonNull V goal,
+            @NonNull C costLimit) {
+        return findArcSequence(ImmutableLists.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
+    }
+
+
+    /**
+     * Finds an arc walk through the given waypoints.
+     *
+     * @param waypoints         an iterable of waypoints
+     * @param maxDepth          the maximal depth (inclusive) of the search
+     *                          Must be {@literal >= 0}.
+     * @param costLimit         the algorithm-specific cost limit for paths between waypoints
+     * @param visitedSetFactory the visited set factory
+     * @return an ordered pair (arc sequence, cost),
+     * or null if no sequence was found.
+     */
+    @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+            @NonNull Iterable<V> waypoints,
+            int maxDepth,
+            @NonNull C costLimit,
+            @NonNull Supplier<AddToSet<V>> visitedSetFactory);
 
     /**
      * Finds an arc walk through the given waypoints.
@@ -68,21 +125,37 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints,
             int maxDepth,
-            @NonNull C costLimit);
+            @NonNull C costLimit) {
+        return findArcSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
+    }
+
+    /**
+     * Finds an arc walk through the given waypoints.
+     *
+     * @param waypoints an iterable of waypoints
+     * @param costLimit the algorithm-specific cost limit for paths between waypoints
+     * @return an ordered pair (arc sequence, cost),
+     * or null if no sequence was found.
+     */
+    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+            @NonNull Iterable<V> waypoints,
+            @NonNull C costLimit) {
+        return findArcSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
+    }
 
 
     /**
-     * Helper function for implementing {@link #findArcSequenceOverWaypoints(Iterable, int, Number)}.
+     * Helper function for implementing {@link #findArcSequenceOverWaypoints(Iterable, int, Number, Supplier)}.
      *
+     * @param <VV>                    the vertex type
+     * @param <CC>                    the number type
      * @param waypoints               the waypoints
      * @param findArcSequenceFunction the search function, for example {@code this::findArrowSequence}
      * @param zero                    the zero value
      * @param sumFunction             the sum function
-     * @param <VV>                    the vertex type
-     * @param <CC>                    the number type
      * @return an ordered pair with the combined sequence
      */
     static <VV, AA, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<Arc<VV, AA>>, CC>

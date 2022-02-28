@@ -5,11 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
-import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.collection.*;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -337,7 +333,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
             boolean added = false;
             while (!deque.isEmpty() && !added) {
                 current = deque.removeFirst();
-                added = visited.add(current);
+                added = visited.addAsInt(current);
             }
             if (!added) {
                 return false;

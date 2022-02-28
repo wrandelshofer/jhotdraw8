@@ -40,6 +40,7 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      * @param costLimit            the cost limit is <b>ignored</b>
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
+     * @param visited
      * @return
      */
     @Override
@@ -50,7 +51,7 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
             int maxDepth, @NonNull C zero,
             @NonNull C costLimit,
             @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction) {
+            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return VertexBackLink.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,

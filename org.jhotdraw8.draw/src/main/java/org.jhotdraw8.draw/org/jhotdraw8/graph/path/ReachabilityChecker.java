@@ -1,6 +1,7 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.function.Predicate;
 
@@ -21,11 +22,12 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param maxDepth      the maximal depth (inclusive) of the search
      *                      Must be {@literal >= 0}.
      * @param costLimit     the algorithm-specific cost limit
+     * @param visited       the visited function
      * @return true if a sequence was found.
      */
     boolean isReachable(@NonNull Iterable<V> startVertices,
                         @NonNull Predicate<V> goalPredicate,
-                        int maxDepth, @NonNull C costLimit);
+                        int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
 
     /**
      * Checks if a vertex sequence from a start vertex to a vertex
@@ -36,11 +38,12 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param maxDepth      the maximal depth (inclusive) of the search
      *                      Must be {@literal >= 0}.
      * @param costLimit     the algorithm-specific cost limit
+     * @param visited       the visited function
      * @return true if a sequence was found.
      */
     boolean isReachable(@NonNull V start,
                         @NonNull Predicate<V> goalPredicate,
-                        int maxDepth, @NonNull C costLimit);
+                        int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
 
     /**
      * Checks if a vertex sequence from start to goal exists.
@@ -50,9 +53,10 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param maxDepth  the maximal depth (inclusive) of the search
      *                  Must be {@literal >= 0}.
      * @param costLimit the algorithm-specific cost limit
+     * @param visited   the visited function
      * @return true if a sequence was found.
      */
-    boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit);
+    boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
 
 
 }
