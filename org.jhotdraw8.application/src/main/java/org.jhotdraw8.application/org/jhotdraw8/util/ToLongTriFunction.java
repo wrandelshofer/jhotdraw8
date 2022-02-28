@@ -4,8 +4,16 @@
  */
 package org.jhotdraw8.util;
 
+import org.jhotdraw8.annotation.NonNull;
+
 @FunctionalInterface
-public interface ToLongTriFunction<T, U, V> {
+public interface ToLongTriFunction<T, U, V> extends TriFunction<T, U, V, Long> {
+
+    @Override
+    @NonNull
+    default Long apply(T t, U u, V v) {
+        return applyAsLong(t, u, v);
+    }
 
     /**
      * Applies this function to the given arguments.

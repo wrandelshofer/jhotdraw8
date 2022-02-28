@@ -7,12 +7,12 @@ package org.jhotdraw8.util;
 import org.jhotdraw8.annotation.NonNull;
 
 @FunctionalInterface
-public interface ToDoubleTriFunction<T, U, V> extends TriFunction<T, U, V, Double> {
+public interface ToIntTriFunction<T, U, V> extends TriFunction<T, U, V, Integer> {
 
     @Override
     @NonNull
-    default Double apply(T t, U u, V v) {
-        return applyAsDouble(t, u, v);
+    default Integer apply(T t, U u, V v) {
+        return applyAsInt(t, u, v);
     }
 
     /**
@@ -23,5 +23,5 @@ public interface ToDoubleTriFunction<T, U, V> extends TriFunction<T, U, V, Doubl
      * @param v the third function argument
      * @return the function result
      */
-    double applyAsDouble(T t, U u, V v);
+    int applyAsInt(T t, U u, V v);
 }

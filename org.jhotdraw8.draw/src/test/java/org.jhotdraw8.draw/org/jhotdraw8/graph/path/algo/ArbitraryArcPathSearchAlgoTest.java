@@ -15,6 +15,7 @@ import org.jhotdraw8.graph.path.AllSequencesFinder;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
 import org.jhotdraw8.graph.path.SimpleAllWalksFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
+import org.jhotdraw8.util.ToIntTriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -109,9 +110,10 @@ public class ArbitraryArcPathSearchAlgoTest {
 
     @NonNull
     private CombinedSequenceFinder<Integer, Double, Integer> newInstance(DirectedGraph<Integer, Double> graph) {
+        ToIntTriFunction<Integer, Integer, Double> costFunction = (u, v, a) -> a.intValue();
         CombinedSequenceFinder<Integer, Double, Integer> instance = SimpleCombinedSequenceFinder.newIntCostInstance(
                 graph::getNextArcs,
-                (u, v, a) -> a.intValue(),
+                costFunction,
                 new GloballyArbitraryArcPathSearchAlgo<>());
         return instance;
     }
