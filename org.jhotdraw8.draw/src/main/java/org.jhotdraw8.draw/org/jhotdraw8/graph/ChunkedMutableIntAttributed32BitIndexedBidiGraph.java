@@ -22,270 +22,234 @@ import java.util.Arrays;
  */
 public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
-    private static final boolean CLEAR_THE_GAP = true;
+    private static final boolean CLEAR_UNUSED_ELEMENTS = true;
+    /**
+     * Value to which sizes are rounded up.
+     * Must be a power of 2.
+     */
+    private final int sizeRounding = 4;
+    private final int sizeRoundingMask = sizeRounding - 1;
     /**
      * Number of vertices per chunk.
      * Must be a power of 2.
      */
-    private final int chunkShift = 2;
-    /**
-     * Number of vertices per chunk.
-     * Must be a power of 2.
-     */
-    private final int chunkSize = 1 << chunkShift;
+    private final int chunkSize = 4;
+    private final int chunkShift = Integer.numberOfTrailingZeros(chunkSize);
     private final int chunkMask = chunkSize - 1;
 
     /**
      * Array of chunks for arrows to next vertices.
      */
-    private @NonNull int[][] nextChunks = new int[0][0];
+    private @NonNull Chunk[] nextChunks = new Chunk[0];
     /**
      * Array of chunks for arrows to previous vertices.
      */
-    private @NonNull int[][] prevChunks = new int[0][0];
+    private @NonNull Chunk[] prevChunks = new Chunk[0];
+    private int initialChunkCapacity = 4;
 
     public ChunkedMutableIntAttributed32BitIndexedBidiGraph() {
     }
 
-    /**
-     * Creates a chunk with the specified initial capacity for each vertex
-     * and the specified free space.
-     * Chunk layout:
-     * <pre>
-     * header: [  free, vgap ]
-     *                        // free=number of unused arrows
-     *                        // vgap=index of the vertex that contains the unused arrows
-     *
-     * vertexData: [ data ... ] // 1 element for each vertex in the chunk
-     *
-     * sizes: [ cumulatedSize, ..., totalSize ]
-     *                          //1 element for each vertex in the chunk
-     *                          //+ 1 element for the total size used
-     *
-     * indices: [ index, ... ] // 1 element for each arrow
-     *                         // the arrows are sorted by index, so that binary
-     *                         // search can be used
-     *
-     * arrowData: [ data, ... ] // 1 elements for each arrow
-     *                         // starts at sentinel
-     *
-     * Functions:
-     * int freeOffset() = 0;
-     * int sizesOffset() = 2+chunkSize;
-     * int totalSizeOffset() = 3+chunkSize*2;
-     * int indicesOffset() = 3+chunkSize*2;
-     * int totalSize() =chunk[totalSizeOffset()];
-     * int arrowDataOffset() = 3+chunkSize*2+1+totalSize();
-     * int size(int vidx) = chunk[sizesOffset()+vidx+1] - chunk[sizesOffset()+vidx];
-     * int capacity() = chunk[totalSizeOffset()] + chunk[freeOffset()];
-     * int indicesFromInclusiveOffset(int vidx) = indicesOffset()+chunk[sizesOffset()+vidx]+(vidx&lt;vgap?0:free);
-     * int indicesToExclusiveOffset(int vidx) = indicesOffset()+size(vidx)+(vidx&lt;free?0:free);
-     * int arrowDataFromInclusiveOffset(int vidx) = indicesOffset()+chunk[sizesOffset()+vidx]+(vidx&lt;vgap?0:free);
-     * int arrowDataToExclusiveOffset(int vidx) = indicesOffset()+size(vidx)+(vidx&lt;free?0:free);
-     * int vertexDataOffset(int vidx) = 2+vidx;
-     *
-     * vertexData: [ data ... ] // 1 element for each vertex in the chunk
-     * capacities: [ size ... ] // 1 element for each vertex in the chunk
-     * sizes: [ size ...] // 1 element for each vertex in the chunk
-     * </pre>
-     * When arrows are inserted, capacity for the indices is taken from other vertices
-     * in the chunk until the chunk runs out of free space.
-     *
-     * @param free the initial free space for arrows
-     * @return a new chunk
-     */
-    private int[] createChunk(int free) {
-        int length = chunkSize * 2 // space needed for vertex data, sizes
-                + 3//space needed for free, vgap and totalSize
-                + free * 2; // space needed for indices and arrow data of each arrow
-        int[] chunk = new int[length];
-        chunk[chunkFreeOffset()] = free;
-        return chunk;
-    }
+    private class Chunk {
+        /**
+         * The total capacity for arrows in this chunk.
+         */
+        private int capacity;
+        /**
+         * The free capacity for arrows in this chunk.
+         */
+        private int free;
+        /**
+         * The local index of the vertex, that contains the gap.
+         */
+        private int gapIndex;
+        /**
+         * The size of the gap.
+         */
+        private int gapSize;
 
-    private int chunkFreeOffset() {
-        return 0;
-    }
+        /**
+         * Chunk array layout:
+         * <pre>
+         * vertices: [ data ... ] // Stores the vertex data for each vertex.
+         *                        // There are {@link #chunkSize} vertices in this array.
+         *
+         * sizes: [ ⌈cumulated⌉, ... ]
+         *                        // Stores the number of siblings for each vertex.
+         *                        // There are {@link #chunkSize} vertices in this array
+         *                        // Sizes are cumulated. size[i] = sizes[i] - sizes[i - 1]
+         *                        // TODO Sizes are rounded up by {@link #sizeRounding}
+         *
+         *
+         * siblings: [ siblingsOfVertex0, siblingsOfVertex1, gap, siblingsOfVertex2, ... ]
+         *                         // Stores the siblings of the vertices.
+         *                         // There are {@link #capacity} vertices in this array.
+         *                         //
+         *                         // The siblings of a vertex are stored in a consecutive sequence.
+         *                         // The siblings of a vertex are sorted by index, so that a
+         *                         // binary search can be used to find a specific sibling.
+         *                         // There is one gap of size {@link #gapSize} after the vertex with
+         *                         // index{@link #gapIndex}.
+         *
+         * arrows: [ data, ... ] // Stores the arrow data of the vertices.
+         *                       // There are {@link #capacity} vertices in this array.
+         *                       // The structure is the same as for the siblings.
+         * </pre>
+         *
+         * @param free the initial free space for arrows
+         * @return a new chunk
+         */
+        private int[] chunk;
 
-    private int chunkGapOffset() {
-        return 1;
-    }
+        public Chunk(int capacity) {
+            this.capacity = this.free = this.gapSize = capacity;
+            this.gapIndex = 0;
+            chunk = new int[chunkSize * 2 + capacity * 2];
 
-    private int chunkGetSizesOffset() {
-        return 2 + chunkSize;
-    }
-
-    private int chunkGetTotalSizeOffset() {
-        return 2 + chunkSize * 2;
-    }
-
-    private int chunkGetIndicesOffset() {
-        return 3 + chunkSize * 2;
-    }
-
-    private int chunkGetTotalSize(int[] chunk) {
-        return chunk[chunkGetTotalSizeOffset()];
-    }
-
-    private int chunkGetArrowDataOffset(int[] chunk) {
-        return 3 + chunkSize * 2 + chunkGetTotalSize(chunk) + chunkGetFree(chunk);
-    }
-
-    private int chunkGetSize(int[] chunk, int vidx) {
-        int localVidx = vidx & chunkMask;
-        return chunk[chunkGetSizesOffset() + localVidx + 1] - chunk[chunkGetSizesOffset() + localVidx];
-    }
-
-    private int chunkGetCapacity(int[] chunk) {
-        return chunk[chunkGetTotalSizeOffset()] + chunk[chunkFreeOffset()];
-    }
-
-    private int chunkGetFree(int[] chunk) {
-        return chunk[chunkFreeOffset()];
-    }
-
-    private void chunkSetFree(int[] chunk, int free) {
-        chunk[chunkFreeOffset()] = free;
-    }
-
-    private int chunkGetGap(int[] chunk) {
-        return chunk[chunkGapOffset()];
-    }
-
-    private void chunkSetGap(int[] chunk, int gap) {
-        chunk[chunkGapOffset()] = gap & chunkMask;
-    }
-
-    private int chunkGetIndicesFromInclusiveOffset(int[] chunk, int vidx) {
-        int vlocal = vidx & chunkMask;
-        return chunkGetIndicesOffset() + chunk[chunkGetSizesOffset() + vlocal] + (vlocal <= chunkGetGap(chunk) ? 0 : chunkGetFree(chunk));
-    }
-
-    private int chunkGetIndicesToExclusiveOffset(int[] chunk, int vidx) {
-        int vlocal = vidx & chunkMask;
-        return chunkGetIndicesOffset() + chunk[chunkGetSizesOffset() + vlocal + 1] + (vlocal <= chunkGetGap(chunk) ? 0 : chunkGetFree(chunk));
-    }
-
-    private int chunkGetArrowDataFromInclusiveOffset(int[] chunk, int vidx) {
-        int vlocal = vidx & chunkMask;
-        return chunkGetArrowDataOffset(chunk) + chunk[chunkGetSizesOffset() + vlocal] + (vlocal <= chunkGetGap(chunk) ? 0 : chunkGetFree(chunk));
-    }
-
-    private int chunkGetArrowDataToExclusiveOffset(int[] chunk, int vidx) {
-        int vlocal = vidx & chunkMask;
-        return chunkGetArrowDataOffset(chunk) + chunkGetSize(chunk, vlocal) + (vlocal <= chunkGetGap(chunk) ? 0 : chunkGetFree(chunk));
-    }
-
-    private int chunkVertexDataOffset(int[] chunk, int vidx) {
-        return 2 + vidx;
-    }
-
-    int vertexCount = 0;
-    int arrowCount = 0;
-
-    @Override
-    public void addArrow(int vidx, int uidx) {
-        addArrow(vidx, uidx, 0);
-    }
-
-    @Override
-    public void addArrow(int vidx, int uidx, int data) {
-        int[] vChunk = getNextChunk(vidx);
-        int[] uChunk = getPrevChunk(uidx);
-        if (chunkTryToAddIndex(vChunk, vidx, uidx, data)) {
-            chunkTryToAddIndex(uChunk, uidx, vidx, data);
-            arrowCount++;
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(chunk, getIndicesOffset(), chunk.length, -1);
+            }
         }
-    }
 
-    /**
-     * Adds the index of vertex u to the index list of vertex v
-     * if it is not already present.
-     *
-     * @param chunk a chunk
-     * @param vidx  index of vertex v
-     * @param uidx  index of vertex u
-     * @param data  the arrow data
-     * @return true on success
-     */
-    private boolean chunkTryToAddIndex(int[] chunk, int vidx, int uidx, int data) {
-        int result = chunkFindIndexOf(chunk, vidx, uidx);
-        if (result >= 0) {
-            return false;
+        /**
+         * Finds the index of vertex u in the index list of vertex v.
+         *
+         * @param v index of vertex v
+         * @param u index of vertex u
+         * @return the index of u or (-index -1) if u is not in the index list.
+         */
+        private int findIndexOf(int v, int u) {
+            int from = getSiblingsFromInclusiveOffset(v);
+            int to = getSiblingsToExclusiveOffset(v);
+            int result = Arrays.binarySearch(chunk, from, to, u);
+            return result < 0 ? result + from : result - from;
         }
-        int free = chunkGetFree(chunk);
-        if (free < 1) {
-            throw new UnsupportedOperationException("implement me");
-        }
-        int indicesFrom = chunkGetIndicesFromInclusiveOffset(chunk, vidx);
-        int indicesTo = chunkGetIndicesToExclusiveOffset(chunk, vidx);
-        int arrowDataFrom = chunkGetArrowDataFromInclusiveOffset(chunk, vidx);
-        int arrowDataTo = chunkGetArrowDataToExclusiveOffset(chunk, vidx);
-        int insertionIndex = ~result;
-        int localVidx = vidx & chunkMask;
-        int gap = chunkGetGap(chunk);
-        if (gap < localVidx) {
-            // BEFORE:
-            //                               insertionIndex
-            // indices = [........gap,,,,::::÷::;;;;;];
-            //                           ^      ^
-            //                          from   to
-            // AFTER:
-            //                            inserted element before insertionIndex
-            // indices = [........,,,,::::i÷::gp;;;;;];
-            //                        ^       ^
-            //                       from    to
 
-            // close the gap by shifting down
-            int indicesStartOfGapOffset = chunkGetIndicesToExclusiveOffset(chunk, gap);
-            int arrowDataStartOfGapOffset = chunkGetArrowDataToExclusiveOffset(chunk, gap);
-            int length = indicesFrom + insertionIndex - indicesStartOfGapOffset;
-            if (arrowDataStartOfGapOffset + free < chunk.length) {
-                System.arraycopy(chunk, indicesStartOfGapOffset + free, chunk, indicesStartOfGapOffset, length);
-                System.arraycopy(chunk, arrowDataStartOfGapOffset + free, chunk, arrowDataStartOfGapOffset, length);
+        public int getSiblingCount(int v) {
+            int vIndex = v & chunkMask;
+            int sizesOffset = getSizesOffset();
+            return vIndex == 0
+                    ? chunk[sizesOffset + vIndex]
+                    : chunk[sizesOffset + vIndex] - chunk[sizesOffset + vIndex - 1];
+        }
+
+        public int getVertexData(int v) {
+            int vIndex = v & chunkMask;
+            return chunk[vIndex];
+        }
+
+        public void setVertexData(int v, int data) {
+            int vIndex = v & chunkMask;
+            chunk[vIndex] = data;
+        }
+
+        public int getArrow(int v, int k) {
+            Preconditions.checkIndex(k, getArrowCount(v));
+            return chunk[getArrowsFromInclusiveOffset(v) + k];
+        }
+
+        private int getSiblingsFromInclusiveOffset(int v) {
+            int vIndex = v & chunkMask;
+            int indicesOffset = getIndicesOffset();
+            return vIndex == 0
+                    ? indicesOffset
+                    : indicesOffset + chunk[getSizesOffset() + vIndex - 1]
+                    + (vIndex <= gapIndex ? 0 : gapSize);
+        }
+
+        private int getSiblingsToExclusiveOffset(int v) {
+            int vIndex = v & chunkMask;
+            return getIndicesOffset()
+                    + chunk[getSizesOffset() + vIndex]
+                    + (vIndex <= gapIndex ? 0 : gapSize);
+        }
+
+        private int getIndicesOffset() {
+            return chunkSize * 2;
+        }
+
+        public int getSibling(int v, int k) {
+            Preconditions.checkIndex(k, getArrowCount(v));
+            return chunk[getSiblingsFromInclusiveOffset(v) + k];
+        }
+
+        private int getSizesOffset() {
+            return chunkSize;
+        }
+
+        private int getArrowsOffset() {
+            return chunkSize * 2 + capacity;
+        }
+
+        private int getArrowCount(int v) {
+            int vIndex = v & chunkMask;
+            int sizesOffset = getSizesOffset();
+            return vIndex == 0
+                    ? chunk[sizesOffset + vIndex]
+                    : chunk[sizesOffset + vIndex] - chunk[sizesOffset + vIndex - 1];
+        }
+
+        private int getArrowsFromInclusiveOffset(int v) {
+            int vIndex = v & chunkMask;
+            int arrowsOffset = getArrowsOffset();
+            return vIndex == 0
+                    ? arrowsOffset
+                    : arrowsOffset + chunk[getSizesOffset() + vIndex - 1]
+                    + (vIndex <= gapIndex ? 0 : gapSize);
+        }
+
+        private int getArrowsToExclusiveOffset(int v) {
+            int vIndex = v & chunkMask;
+            return getArrowsOffset()
+                    + chunk[getSizesOffset() + vIndex]
+                    + (vIndex <= gapIndex ? 0 : gapSize);
+        }
+
+        /**
+         * Adds an arrow from vertex u to vertex v, if it is not already present.
+         *
+         * @param v    index of vertex v
+         * @param u    index of vertex u
+         * @param data the arrow data
+         * @return true on success
+         */
+        private boolean tryToAddArrow(int v, int u, int data) {
+            int result = findIndexOf(v, u);
+            if (result >= 0) {
+                return false;
+            }
+            if (free < 1) {
+                throw new UnsupportedOperationException("implement growing of chunk");
+            }
+            int siblingsFrom = getSiblingsFromInclusiveOffset(v);
+            int siblingsTo = getSiblingsToExclusiveOffset(v);
+            int arrowDataFrom = getArrowsFromInclusiveOffset(v);
+            int arrowDataTo = getArrowsToExclusiveOffset(v);
+            int insertionIndex = ~result;
+            int vIndex = v & chunkMask;
+
+            if (gapIndex < vIndex) {
+                insertBeforeGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
+            } else if (gapIndex > vIndex) {
+                insertAfterGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
+            } else {
+                insertAtGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
             }
 
-            // insert the element at insertion index
-            chunk[indicesFrom + insertionIndex - free] = uidx;
-            chunk[arrowDataFrom + insertionIndex - free] = data;
 
-            // reopen the gap by shifting the remainder of the indices down
-            System.arraycopy(chunk, indicesFrom + insertionIndex, chunk, indicesFrom + insertionIndex - free + 1, indicesTo - indicesFrom - insertionIndex);
-            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex - free + 1, indicesTo - indicesFrom - insertionIndex);
+            gapIndex = vIndex;
+            free--;
+            gapSize--;
 
-            if (CLEAR_THE_GAP && (arrowDataStartOfGapOffset + free < chunk.length)) {
-                Arrays.fill(chunk, indicesTo - free + 1, indicesTo + free - 1, free - 1);
-                Arrays.fill(chunk, arrowDataTo - free + 1, arrowDataTo + free - 1, free - 1);
+            int sizesOffset = getSizesOffset();
+            for (int i = sizesOffset + vIndex, n = sizesOffset + chunkSize; i < n; i++) {
+                chunk[i]++;
             }
 
-        } else if (gap > localVidx) {
-            // BEFORE:
-            //                        insertionIndex
-            // indices = [........::::÷::;;;;;gap,,,,];
-            //                    ^      ^
-            //                    from   to
-            // AFTER:
-            //                         inserted element before insertionIndex
-            // indices = [........::::i÷::gp;;;;;,,,,];
-            //                    ^       ^
-            //                    from    to
+            return true;
+        }
 
-            // close the gap by shifting up
-            int indicesStartOfGapOffset = chunkGetIndicesToExclusiveOffset(chunk, gap);
-            int arrowDataStartOfGapOffset = chunkGetArrowDataToExclusiveOffset(chunk, gap);
-            System.arraycopy(chunk, indicesTo, chunk, indicesTo + free, indicesStartOfGapOffset - indicesTo);
-            System.arraycopy(chunk, arrowDataTo, chunk, arrowDataTo + free, indicesStartOfGapOffset - indicesTo);
-
-            // shift up to make room for the new element
-            System.arraycopy(chunk, indicesTo + insertionIndex, chunk, indicesTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
-            System.arraycopy(chunk, arrowDataTo + insertionIndex, chunk, arrowDataTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
-
-            // insert the element at insertion index
-            chunk[indicesFrom + insertionIndex] = uidx;
-            chunk[arrowDataFrom + insertionIndex] = data;
-
-
-        } else {
+        private void insertAtGap(int u, int data, int indicesFrom, int indicesTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
             // BEFORE:
             //                        insertionIndex
             // indices = [........::::÷::gap;;;;;,,,,];
@@ -302,48 +266,105 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             System.arraycopy(chunk, arrowDataTo + insertionIndex, chunk, arrowDataTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
 
             // insert the element at insertion index
-            chunk[indicesFrom + insertionIndex] = uidx;
+            chunk[indicesFrom + insertionIndex] = u;
             chunk[arrowDataFrom + insertionIndex] = data;
         }
 
+        private void insertAfterGap(int u, int data, int indicesFrom, int indicesTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
+            // BEFORE:
+            //                        insertionIndex
+            // indices = [........::::÷::;;;;;gap,,,,];
+            //                    ^      ^
+            //                    from   to
+            // AFTER:
+            //                         inserted element before insertionIndex
+            // indices = [........::::i÷::gp;;;;;,,,,];
+            //                    ^       ^
+            //                    from    to
 
-        chunkSetGap(chunk, vidx);
-        chunkSetFree(chunk, free - 1);
+            // close the gap by shifting up
+            int indicesStartOfGapOffset = getSiblingsToExclusiveOffset(gapIndex);
+            System.arraycopy(chunk, indicesTo, chunk, indicesTo + free, indicesStartOfGapOffset - indicesTo);
+            System.arraycopy(chunk, arrowDataTo, chunk, arrowDataTo + free, indicesStartOfGapOffset - indicesTo);
 
-        for (int i = chunkGetSizesOffset() + localVidx + 1, n = chunkGetTotalSizeOffset(); i <= n; i++) {
-            chunk[i]++;
+            // shift up to make room for the new element
+            System.arraycopy(chunk, indicesTo + insertionIndex, chunk, indicesTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
+            System.arraycopy(chunk, arrowDataTo + insertionIndex, chunk, arrowDataTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
+
+            // insert the element at insertion index
+            chunk[indicesFrom + insertionIndex] = u;
+            chunk[arrowDataFrom + insertionIndex] = data;
         }
 
-        return true;
+        private void insertBeforeGap(int u, int data, int indicesFrom, int indicesTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
+            // BEFORE:
+            //                               insertionIndex
+            // indices = [........gap,,,,::::÷::;;;;;];
+            //                           ^      ^
+            //                          from   to
+            // AFTER:
+            //                            inserted element before insertionIndex
+            // indices = [........,,,,::::i÷::gp;;;;;];
+            //                        ^       ^
+            //                       from    to
+
+            // close the gap by shifting down
+            int indicesStartOfGapOffset = getSiblingsToExclusiveOffset(gapIndex);
+            int arrowDataStartOfGapOffset = getArrowsToExclusiveOffset(gapIndex);
+            int length = indicesFrom + insertionIndex - indicesStartOfGapOffset;
+            if (arrowDataStartOfGapOffset + free < chunk.length) {
+                System.arraycopy(chunk, indicesStartOfGapOffset + free, chunk, indicesStartOfGapOffset, length);
+                System.arraycopy(chunk, arrowDataStartOfGapOffset + free, chunk, arrowDataStartOfGapOffset, length);
+            }
+
+            // insert the element at insertion index
+            chunk[indicesFrom + insertionIndex - free] = u;
+            chunk[arrowDataFrom + insertionIndex - free] = data;
+
+            // reopen the gap by shifting the remainder of the indices down
+            System.arraycopy(chunk, indicesFrom + insertionIndex, chunk, indicesFrom + insertionIndex - free + 1, indicesTo - indicesFrom - insertionIndex);
+            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex - free + 1, indicesTo - indicesFrom - insertionIndex);
+
+            if (CLEAR_UNUSED_ELEMENTS && (arrowDataStartOfGapOffset + free < chunk.length)) {
+                Arrays.fill(chunk, indicesTo - free + 1, indicesTo + free - 1, -1);
+                Arrays.fill(chunk, arrowDataTo - free + 1, arrowDataTo + free - 1, -1);
+            }
+        }
+
+    }
+
+
+    int vertexCount = 0;
+    int arrowCount = 0;
+
+    @Override
+    public void addArrow(int v, int u) {
+        addArrow(v, u, 0);
+    }
+
+    @Override
+    public void addArrow(int v, int u, int data) {
+        Chunk vChunk = getNextChunk(v);
+        Chunk uChunk = getPrevChunk(u);
+        if (vChunk.tryToAddArrow(v, u, data)) {
+            uChunk.tryToAddArrow(u, v, data);
+            arrowCount++;
+        }
     }
 
 
     @Override
-    public int findIndexOfPrevAsInt(int vidx, int uidx) {
-        int[] chunk = getPrevChunk(vidx);
-        return chunkFindIndexOf(chunk, vidx, uidx);
+    public int findIndexOfPrevAsInt(int v, int u) {
+        Chunk chunk = getPrevChunk(v);
+        return chunk.findIndexOf(v, u);
     }
 
     @Override
-    public int findIndexOfNextAsInt(int vidx, int uidx) {
-        int[] chunk = getNextChunk(vidx);
-        return chunkFindIndexOf(chunk, vidx, uidx);
+    public int findIndexOfNextAsInt(int v, int u) {
+        Chunk chunk = getNextChunk(v);
+        return chunk.findIndexOf(v, u);
     }
 
-    /**
-     * Finds the index of vertex u in the index list of vertex v.
-     *
-     * @param chunk a chunk
-     * @param vidx  index of vertex v
-     * @param uidx  index of vertex u
-     * @return the index of u or (-index -1) if u is not in the index list.
-     */
-    private int chunkFindIndexOf(int[] chunk, int vidx, int uidx) {
-        int from = chunkGetIndicesFromInclusiveOffset(chunk, vidx);
-        int to = chunkGetIndicesToExclusiveOffset(chunk, vidx);
-        int result = Arrays.binarySearch(chunk, from, to, uidx);
-        return result < 0 ? result + from : result - from;
-    }
 
     @Override
     public void addVertex() {
@@ -366,17 +387,17 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     }
 
     @Override
-    public void removeAllNext(int vidx) {
+    public void removeAllNext(int v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeNext(int vidx, int i) {
+    public void removeNext(int v, int i) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeVertex(int vidx) {
+    public void removeVertex(int v) {
         throw new UnsupportedOperationException();
     }
 
@@ -386,53 +407,43 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     }
 
     @Override
-    public int getNextAsInt(int vidx, int k) {
-        int[] chunk = getNextChunk(vidx);
-        int size = chunkGetSize(chunk, vidx);
-        Preconditions.checkIndex(k, size);
-        return chunk[chunkGetIndicesFromInclusiveOffset(chunk, vidx) + k];
+    public int getNextAsInt(int v, int k) {
+        return getNextChunk(v).getSibling(v, k);
     }
 
     @Override
-    public int getNextArrowAsInt(int vidx, int index) {
-        int[] chunk = getNextChunk(vidx);
-        int size = chunkGetSize(chunk, vidx);
-        Preconditions.checkIndex(index, size);
-        return chunk[chunkGetArrowDataFromInclusiveOffset(chunk, vidx) + index];
+    public int getNextArrowAsInt(int v, int k) {
+        return getNextChunk(v).getArrow(v, k);
     }
 
     @Override
-    public int getPrevArrowAsInt(int vidx, int index) {
-        int[] chunk = getPrevChunk(vidx);
-        int size = chunkGetSize(chunk, vidx);
-        Preconditions.checkIndex(index, size);
-        return chunk[chunkGetArrowDataFromInclusiveOffset(chunk, vidx) + index];
+    public int getPrevArrowAsInt(int v, int k) {
+        return getPrevChunk(v).getArrow(v, k);
     }
 
     @Override
-    public int getVertexAsInt(int vertex) {
-        throw new UnsupportedOperationException();
+    public int getVertexAsInt(int v) {
+        return getNextChunk(v).getVertexData(v);
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        int[] chunk = getNextChunk(vidx);
-        return chunkGetSize(chunk, vidx);
+    public int getNextCount(int v) {
+        return getNextChunk(v).getSiblingCount(v);
     }
 
-    private int[] getNextChunk(int vidx) {
+    private Chunk getNextChunk(int vidx) {
         return getOrCreateChunk(nextChunks, vidx);
     }
 
-    private int[] getPrevChunk(int vidx) {
+    private Chunk getPrevChunk(int vidx) {
         return getOrCreateChunk(prevChunks, vidx);
     }
 
-    private int[] getOrCreateChunk(int[][] chunks, int vidx) {
-        @NonNull int[] chunk = chunks[vidx >>> chunkShift];
+    private Chunk getOrCreateChunk(Chunk[] chunks, int v) {
+        @NonNull Chunk chunk = chunks[v >>> chunkShift];
         if (chunk == null) {
-            chunk = createChunk(chunkSize * 2);
-            chunks[vidx >>> chunkShift] = chunk;
+            chunk = new Chunk(initialChunkCapacity);
+            chunks[v >>> chunkShift] = chunk;
         }
         return chunk;
     }
@@ -443,27 +454,23 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     }
 
     @Override
-    public int getPrevAsInt(int vidx, int i) {
-        int[] chunk = getPrevChunk(vidx);
-        int size = chunkGetSize(chunk, vidx);
-        Preconditions.checkIndex(i, size);
-        return chunk[chunkGetIndicesFromInclusiveOffset(chunk, vidx) + i];
+    public int getPrevAsInt(int v, int k) {
+        return getPrevChunk(v).getSibling(v, k);
     }
 
     @Override
-    public int getPrevCount(int vidx) {
-        int[] chunk = getPrevChunk(vidx);
-        return chunkGetSize(chunk, vidx);
+    public int getPrevCount(int v) {
+        return getPrevChunk(v).getSiblingCount(v);
     }
 
     private void grow(int capacity) {
         int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
-        int[][] temp = (int[][]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
+        Chunk[] temp = (Chunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
         if (temp.length < chunkedCapacity) {
             throw new IllegalStateException("too much capacity requested:" + capacity);
         }
         nextChunks = temp;
-        prevChunks = (int[][]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
+        prevChunks = (Chunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
     }
 
 }

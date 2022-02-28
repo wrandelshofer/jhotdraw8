@@ -53,31 +53,35 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
 
         Random rng = new Random(0);
-        for (int vidx = 0; vidx < vertexCount; vidx++) {
+        for (int v = 0; v < vertexCount; v++) {
             int n = rng.nextInt(maxArity + 1);
             for (int i = 0; i < n; i++) {
-                int uidx = rng.nextInt(vertexCount);
-                assertEquals(expected.findIndexOfNext(vidx, uidx), instance.findIndexOfNextAsInt(vidx, uidx));
-                assertEquals(expected.findIndexOfPrev(uidx, vidx), instance.findIndexOfPrevAsInt(uidx, vidx));
+                int u = rng.nextInt(vertexCount);
+                assertEquals(expected.findIndexOfNext(v, u) < 0, instance.findIndexOfNextAsInt(v, u) < 0);
+                assertEquals(expected.findIndexOfPrev(u, v) < 0, instance.findIndexOfPrevAsInt(u, v) < 0);
 
-                int nextCount = expected.getNextCount(vidx);
-                int prevCount = expected.getPrevCount(uidx);
-                assertEquals(nextCount, instance.getNextCount(vidx));
-                assertEquals(prevCount, instance.getPrevCount(uidx));
+                int nextCount = expected.getNextCount(v);
+                int prevCount = expected.getPrevCount(u);
+                assertEquals(nextCount, instance.getNextCount(v));
+                assertEquals(prevCount, instance.getPrevCount(u));
 
                 if (nextCount < maxArity && prevCount < maxArity) {
-                    instance.addArrow(vidx, uidx, 0);
-                    expected.addArrow(vidx, uidx, 0);
+                    instance.addArrow(v, u, 0);
+                    expected.addArrow(v, u, 0);
                 }
 
-                assertEquals(expected.getNextCount(vidx), instance.getNextCount(vidx));
-                assertEquals(expected.getNextVertices(vidx), actual.getNextVertices(vidx));
-                assertEquals(expected.getPrevCount(uidx), instance.getPrevCount(uidx));
-                assertEquals(expected.getPrevVertices(vidx), actual.getPrevVertices(vidx));
-                assertEquals(expected.findIndexOfNext(vidx, uidx),
-                        actual.findIndexOfNext(vidx, uidx));
-                assertEquals(expected.findIndexOfPrev(uidx, vidx),
-                        actual.findIndexOfPrev(uidx, vidx));
+                assertEquals(expected.getNextCount(v), instance.getNextCount(v));
+                assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
+                assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
+                assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
+                assertEquals(expected.findIndexOfNext(v, u),
+                        actual.findIndexOfNext(v, u));
+                assertEquals(expected.findIndexOfPrev(u, v) < 0,
+                        actual.findIndexOfPrev(u, v) < 0);
+                if (expected.findIndexOfPrev(u, v) >= 0) {
+                    assertEquals(expected.findIndexOfPrev(u, v),
+                            actual.findIndexOfPrev(u, v));
+                }
             }
         }
 
