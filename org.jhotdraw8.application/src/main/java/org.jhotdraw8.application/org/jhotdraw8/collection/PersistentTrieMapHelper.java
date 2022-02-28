@@ -4,12 +4,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Package private class with code for {@link PersistentTrieMap}
@@ -701,7 +696,7 @@ class PersistentTrieMapHelper {
         private int nextStackLevel = -1;
         protected Map.Entry<K, V> current;
 
-        @SuppressWarnings({"unchecked"})
+        @SuppressWarnings({"unchecked", "rawtypes"})
         Node<K, V>[] nodes = new Node[MAX_DEPTH];
 
         AbstractMapIterator(Node<K, V> rootNode) {

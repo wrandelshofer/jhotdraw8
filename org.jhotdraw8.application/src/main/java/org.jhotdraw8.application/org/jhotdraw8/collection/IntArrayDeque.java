@@ -7,11 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.util.Preconditions;
 
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * IntArrayDeque.
@@ -296,7 +292,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
 
     @Override
     public boolean removeLastOccurrenceAsInt(int o) {
-        int index = lastIndexOfAsInt((int) o);
+        int index = lastIndexOfAsInt(o);
         if (index != -1) {
             removeAt(index);
             return true;
