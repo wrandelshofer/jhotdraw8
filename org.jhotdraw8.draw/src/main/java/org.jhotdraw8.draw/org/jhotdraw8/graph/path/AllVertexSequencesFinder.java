@@ -8,7 +8,8 @@ import java.util.function.Predicate;
 
 /**
  * Defines an API for finding all sequences between a set of source
- * vertices and goal vertices up to a maximal depth in a directed graph.
+ * vertices and goal vertices up to a maximal depth and a maximal cost
+ * in a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
