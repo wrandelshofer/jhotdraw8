@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Implements the {@link AllSequencesFinder} interface.
+ * Implements the {@link CombinedAllSequencesFinder} interface.
  * <p>
  * See {@link AllWalksSpliterator} for a description of the underlying algorithm.
  *
@@ -22,7 +22,7 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class SimpleAllWalksFinder<V, A, C extends Number & Comparable<C>> implements AllSequencesFinder<V, A, C> {
+public class SimpleCombinedAllWalksFinder<V, A, C extends Number & Comparable<C>> implements CombinedAllSequencesFinder<V, A, C> {
     private final @NonNull C zero;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final @NonNull TriFunction<V, V, A, C> costFunction;
@@ -36,10 +36,10 @@ public class SimpleAllWalksFinder<V, A, C extends Number & Comparable<C>> implem
      * @param costFunction     the cost function
      * @param sumFunction      the sum function
      */
-    public SimpleAllWalksFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                                @NonNull C zero,
-                                @NonNull TriFunction<V, V, A, C> costFunction,
-                                @NonNull BiFunction<C, C, C> sumFunction) {
+    public SimpleCombinedAllWalksFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                        @NonNull C zero,
+                                        @NonNull TriFunction<V, V, A, C> costFunction,
+                                        @NonNull BiFunction<C, C, C> sumFunction) {
         this.zero = zero;
         this.nextArcsFunction = nextArcsFunction;
         this.costFunction = costFunction;
