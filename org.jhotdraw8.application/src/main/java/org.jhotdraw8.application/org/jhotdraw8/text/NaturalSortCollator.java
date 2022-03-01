@@ -18,7 +18,10 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * The OSXCollator strives to match the collation rules used by the Mac OS X
+ * Collator for sorting numbers that are embedded in Strings as if they were
+ * a single numeric character.
+ * <p>
+ * This collator strives to match the collation rules used by the Mac OS X
  * Finder and of Mac OS X file dialogs.
  * <p>
  * If we wanted to match the OS X collation rules exactly, we would have to
@@ -39,18 +42,18 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class OSXCollator extends Collator {
+public class NaturalSortCollator extends Collator {
 
     private Collator collator;
 
     /**
      * Creates a new instance.
      */
-    public OSXCollator() {
+    public NaturalSortCollator() {
         this(Locale.getDefault());
     }
 
-    public OSXCollator(Locale locale) {
+    public NaturalSortCollator(Locale locale) {
         collator = Collator.getInstance(locale);
 
         if (collator instanceof RuleBasedCollator) {
@@ -112,8 +115,8 @@ public class OSXCollator extends Collator {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof OSXCollator) {
-            OSXCollator that = (OSXCollator) o;
+        if (o instanceof NaturalSortCollator) {
+            NaturalSortCollator that = (NaturalSortCollator) o;
             return this.collator.equals(that.collator);
         } else {
             return false;
@@ -183,7 +186,7 @@ public class OSXCollator extends Collator {
 
     public static <T> Comparator<T> comparing(
             @NonNull Function<? super T, String> keyExtractor) {
-        OSXCollator collator = new OSXCollator();
+        NaturalSortCollator collator = new NaturalSortCollator();
         Objects.requireNonNull(keyExtractor, "keyExtractor");
         return (Comparator<T> & Serializable)
                 (c1, c2) -> collator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));

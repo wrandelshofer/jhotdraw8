@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Werner Randelshofer
  */
-public class OSXCollatorTest {
+public class NaturalSortCollatorTest {
 
-    public OSXCollatorTest() {
+    public NaturalSortCollatorTest() {
     }
 
     /**
@@ -24,7 +24,7 @@ public class OSXCollatorTest {
      */
     @Test
     public void testExpandNumbers() {
-        OSXCollator instance = new OSXCollator();
+        NaturalSortCollator instance = new NaturalSortCollator();
         String input = "a1b34";
         String expected = "a001b0134";
         String actual = instance.expandNumbers(input);
