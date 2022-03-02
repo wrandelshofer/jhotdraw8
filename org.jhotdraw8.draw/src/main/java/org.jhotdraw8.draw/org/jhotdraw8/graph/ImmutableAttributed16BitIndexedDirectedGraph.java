@@ -18,7 +18,25 @@ import java.util.Set;
  * <p>
  * Supports up to {@code 2^16 - 1} vertices.
  * <p>
- * Uses a compressed sparse row representation (CSR).
+ * Uses a representation that is similar to a compressed row storage for
+ * matrices (CRS). A directed graph is represented with 4 arrays:
+ * {@code nextOffset}, {@code next}, {@code nextArrows}, {@cde vertices}
+ * <dl>
+ *     <dt>{@code nextOffset}</dt>
+ *     <dd>Holds for each vertex  {@code v}, the offset into the arrays
+ *     {@code next}, and {@code nextArrows}.
+ *     The data for vertex {@code v} can be found in these arrays in the
+ *     elements from {@code nextOffset[v]}(inclusive) to
+ *     {@code nextOffset[v + 1]} (exclusive).</dd>
+ *     <dt>{@code next}</dt>
+ *     <dd>Holds for each arrow from a vertex {@code v} to a vertex {@code u}
+ *     the index of {@code u}.</dd>
+ *     <dt>{@code nextArrows}</dt>
+ *     <dd>Holds for each arrow from a vertex {@code v} to a vertex {@code u}
+ *     the data associated to the arrow.</dd>
+ *     <dt>{@code vertices}</dt>
+ *     <dd>Holds for each vertex {@code v} the data associated to the vertex.</dd>
+ * </dl>
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
@@ -178,6 +196,27 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
         return nextArrows[index];
     }
 
+    public @NonNull A getArrow(int vertex, int index) {
+        return nextArrows[getArrowIndex(vertex, index)];
+    }
+
+    @Override
+    public int getArrowCount() {
+        return next.length;
+    }
+
+    protected int getArrowIndex(int vi, int i) {
+        if (i < 0 || i >= getNextCount(vi)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
+        }
+        return nextOffset[vi] + i;
+    }
+
+    @Override
+    public @NonNull V getNext(@NonNull V vertex, int i) {
+        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
+    }
+
     @Override
     public @NonNull A getNextArrow(int vi, int i) {
         if (i < 0 || i >= getNextCount(vi)) {
@@ -192,28 +231,11 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public int getArrowCount() {
-        return next.length;
-    }
-
-    @Override
     public int getNextAsInt(int vidx, int i) {
         if (i < 0 || i >= getNextCount(vidx)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vidx));
         }
         return next[nextOffset[vidx] + i];
-    }
-
-    @Override
-    public @NonNull V getNext(@NonNull V vertex, int i) {
-        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
-    }
-
-    protected int getArrowIndex(int vi, int i) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
-        }
-        return nextOffset[vi] + i;
     }
 
     @Override
@@ -224,8 +246,8 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public int getVertexCount() {
-        return nextOffset.length;
+    public int getNextCount(@NonNull V vertex) {
+        return getNextCount(vertexToIndexMap.get(vertex));
     }
 
     @Override
@@ -234,25 +256,20 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
+    public int getVertexCount() {
+        return nextOffset.length;
+    }
+
+    @Override
     public int getVertexIndex(V vertex) {
         Character index = vertexToIndexMap.get(vertex);
         return index == null ? -1 : index;
-    }
-
-
-    @Override
-    public int getNextCount(@NonNull V vertex) {
-        return getNextCount(vertexToIndexMap.get(vertex));
     }
 
     @Override
     public @NonNull Set<V> getVertices() {
         return Collections.unmodifiableSet(vertexToIndexMap.keySet());
 
-    }
-
-    public @NonNull A getArrow(int vertex, int index) {
-        return nextArrows[getArrowIndex(vertex, index)];
     }
 
     @Override

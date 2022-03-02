@@ -66,22 +66,20 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(prevCount, instance.getPrevCount(u));
 
                 if (nextCount < maxArity && prevCount < maxArity) {
-                    instance.addArrow(v, u, 0);
-                    expected.addArrow(v, u, 0);
+                    instance.addArrow(v, u, -u);
+                    expected.addArrow(v, u, -u);
                 }
 
                 assertEquals(expected.getNextCount(v), instance.getNextCount(v));
                 assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
                 assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
                 assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
-                assertEquals(expected.findIndexOfNext(v, u),
-                        actual.findIndexOfNext(v, u));
+                assertEquals(expected.findIndexOfNext(v, u) < 0,
+                        actual.findIndexOfNext(v, u) < 0);
                 assertEquals(expected.findIndexOfPrev(u, v) < 0,
-                        actual.findIndexOfPrev(u, v) < 0);
-                if (expected.findIndexOfPrev(u, v) >= 0) {
-                    assertEquals(expected.findIndexOfPrev(u, v),
-                            actual.findIndexOfPrev(u, v));
-                }
+                        actual.findIndexOfPrev(u, v) < 0, "expected: " + expected.findIndexOfPrev(u, v) + ", actual: " + actual.findIndexOfPrev(u, v));
+                assertEquals(expected.findIndexOfPrev(u, v),
+                        actual.findIndexOfPrev(u, v));
             }
         }
 

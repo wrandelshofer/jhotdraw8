@@ -104,6 +104,52 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
         };
     }
 
+    default @NonNull Arc<V, A> getPrevArc(@NonNull V v, int index) {
+        return new Arc<>(getPrev(v, index), v, getPrevArrow(v, index));
+    }
+
+    /**
+     * Returns the direct predecessor arcs of the specified vertex.
+     *
+     * @param vertex a vertex
+     * @return a collection view on the direct predecessor arcs of vertex
+     */
+    default @NonNull Collection<Arc<V, A>> getPrevArcs(@NonNull V vertex) {
+        class PrevArcIterator implements Iterator<Arc<V, A>> {
+
+            private int index;
+            private final @NonNull V vertex;
+            private final int prevCount;
+
+            public PrevArcIterator(@NonNull V vertex) {
+                this.vertex = vertex;
+                this.prevCount = getPrevCount(vertex);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return index < prevCount;
+            }
+
+            @Override
+            public @NonNull Arc<V, A> next() {
+                return getPrevArc(vertex, index++);
+            }
+        }
+
+        return new AbstractCollection<Arc<V, A>>() {
+            @Override
+            public @NonNull Iterator<Arc<V, A>> iterator() {
+                return new PrevArcIterator(vertex);
+            }
+
+            @Override
+            public int size() {
+                return getPrevCount(vertex);
+            }
+        };
+    }
+
     /**
      * Returns the index of vertex b in the list of previous vertices
      * of vertex a.

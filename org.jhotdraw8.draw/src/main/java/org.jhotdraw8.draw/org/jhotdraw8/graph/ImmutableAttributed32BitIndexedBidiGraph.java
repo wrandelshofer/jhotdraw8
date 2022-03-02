@@ -7,6 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,13 +19,37 @@ import java.util.Set;
  * <p>
  * Supports up to {@code 2^31 - 1} vertices.
  * <p>
- * Uses a compressed sparse row representation (CSR).
+ * Uses a representation that is similar to a compressed row storage for
+ * matrices (CRS). A bidirectional graph is represented with 7 arrays:
+ * {@code nextOffset}, {@code next}, {@code nextArrows}, {@code prevOffset},
+ * {@code prev}, {@code prevArrows}, and {@code vertices}.
+ * <dl>
+ *     <dt>{@code nextOffset}</dt>
+ *     <dd>Holds for each vertex  {@code v}, the offset into the arrays
+ *     {@code next}, and {@code nextArrows}.
+ *     The data for vertex {@code v} can be found in these arrays in the
+ *     elements from {@code nextOffset[v]}(inclusive) to
+ *     {@code nextOffset[v + 1]} (exclusive).</dd>
+ *     <dt>{@code next}</dt>
+ *     <dd>Holds for each arrow from a vertex {@code v} to a vertex {@code u}
+ *     the index of {@code u}.</dd>
+ *     <dt>{@code nextArrows}</dt>
+ *     <dd>Holds for each arrow from a vertex {@code v} to a vertex {@code u}
+ *     the data associated to the arrow.</dd>
+ *     <dt>{@code prevOffset}, {@code next}, {@code nextArrows}</dt>
+ *     <dd>These arrays have the same structure as {@code nextOffset},
+ *     {@code next}, {@code nextArrows} but they they store for a vertex
+ *     {@code v} the data for ingoing arrows from a vertex {@code u}
+ *     to the vertex {@code v}</dd>
+ *     <dt>{@code vertices}</dt>
+ *     <dd>Holds for each vertex {@code v} the data associated to the vertex.</dd>
+ * </dl>
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements AttributedIndexedDirectedGraph<V, A>, DirectedGraph<V, A> {
+public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements AttributedIndexedBidiGraph<V, A>, BidiGraph<V, A> {
 
     /**
      * Holds the indices to the next vertices.
@@ -43,6 +68,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * {@code count = nextOffset.length - offset}
      */
     protected final @NonNull int[] next;
+    protected final @NonNull int[] prev;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -61,6 +87,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * number of outgoing arrows of that vertex.
      */
     protected final @NonNull int[] nextOffset;
+    protected final @NonNull int[] prevOffset;
 
     /**
      * Holds the arrow objects.
@@ -71,6 +98,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * See {@link #next}.
      */
     protected final @NonNull A[] nextArrows;
+    protected final @NonNull A[] prevArrows;
     /**
      * Holds the vertex objects.
      * <p>
@@ -91,32 +119,43 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      *
      * @param graph a graph
      */
-    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull AttributedIndexedBidiGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
 
         this.next = new int[arrowCount];
+        this.prev = new int[arrowCount];
 
         @SuppressWarnings("unchecked")
-        A[] uncheckedArrows = (A[]) new Object[arrowCount];
-        this.nextArrows = uncheckedArrows;
+        A[] uncheckedNextArrows = (A[]) new Object[arrowCount];
+        this.nextArrows = uncheckedNextArrows;
+        @SuppressWarnings("unchecked")
+        A[] uncheckedPrevArrows = (A[]) new Object[arrowCount];
+        this.prevArrows = uncheckedPrevArrows;
         this.nextOffset = new int[vertexCount];
+        this.prevOffset = new int[vertexCount];
         @SuppressWarnings("unchecked")
         V[] uncheckedVertices = (V[]) new Object[vertexCount];
         this.vertices = uncheckedVertices;
         this.vertexToIndexMap = new HashMap<>(vertexCount);
 
-        int offset = 0;
+        int nextOffset = 0;
+        int prevOffset = 0;
         for (int vi = 0; vi < vertexCount; vi++) {
-            nextOffset[vi] = offset;
+            this.nextOffset[vi] = nextOffset;
             V v = graph.getVertex(vi);
             this.vertices[vi] = v;
             vertexToIndexMap.put(v, vi);
             for (int i = 0, n = graph.getNextCount(vi); i < n; i++) {
-                next[offset] = graph.getNextAsInt(vi, i);
-                this.nextArrows[offset] = graph.getNextArrow(vi, i);
-                offset++;
+                next[nextOffset] = graph.getNextAsInt(vi, i);
+                this.nextArrows[nextOffset] = graph.getNextArrow(vi, i);
+                nextOffset++;
+            }
+            for (int i = 0, n = graph.getPrevCount(vi); i < n; i++) {
+                prev[prevOffset] = graph.getPrevAsInt(vi, i);
+                this.prevArrows[prevOffset] = graph.getPrevArrow(vi, i);
+                prevOffset++;
             }
         }
     }
@@ -126,20 +165,25 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      *
      * @param graph a graph
      */
-    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull DirectedGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull BidiGraph<V, A> graph) {
 
-        final int arrowCapacity = graph.getArrowCount();
-        final int vertexCapacity = graph.getVertexCount();
+        final int arrowCount = graph.getArrowCount();
+        final int vertexCount = graph.getVertexCount();
 
-        this.next = new int[arrowCapacity];
+        this.next = new int[arrowCount];
+        this.prev = new int[arrowCount];
         @SuppressWarnings("unchecked")
-        A[] uncheckedArrows = (A[]) new Object[arrowCapacity];
+        A[] uncheckedArrows = (A[]) new Object[arrowCount];
         this.nextArrows = uncheckedArrows;
-        this.nextOffset = new int[vertexCapacity];
         @SuppressWarnings("unchecked")
-        V[] uncheckedVertices = (V[]) new Object[vertexCapacity];
+        A[] uncheckedPrevArrows = (A[]) new Object[arrowCount];
+        this.prevArrows = uncheckedPrevArrows;
+        this.nextOffset = new int[vertexCount];
+        this.prevOffset = new int[vertexCount];
+        @SuppressWarnings("unchecked")
+        V[] uncheckedVertices = (V[]) new Object[vertexCount];
         this.vertices = uncheckedVertices;
-        this.vertexToIndexMap = new HashMap<>(vertexCapacity);
+        this.vertexToIndexMap = new HashMap<>(vertexCount);
 
         {
             int vi = 0;
@@ -150,16 +194,21 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
         }
 
         {
-            int offset = 0;
+            int nextOffset = 0;
+            int prevOffset = 0;
             int vi = 0;
             for (V v : graph.getVertices()) {
-
-                nextOffset[vi] = offset;
+                this.nextOffset[vi] = nextOffset;
                 this.vertices[vi] = v;
                 for (Arc<V, A> arc : graph.getNextArcs(v)) {
-                    next[offset] = vertexToIndexMap.get(arc.getEnd());
-                    nextArrows[offset] = arc.getArrow();
-                    offset++;
+                    next[nextOffset] = vertexToIndexMap.get(arc.getEnd());
+                    nextArrows[nextOffset] = arc.getArrow();
+                    nextOffset++;
+                }
+                for (Arc<V, A> arc : graph.getPrevArcs(v)) {
+                    prev[prevOffset] = vertexToIndexMap.get(arc.getStart());
+                    prevArrows[prevOffset] = arc.getArrow();
+                    prevOffset++;
                 }
                 vi++;
             }
@@ -172,35 +221,13 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
         return nextArrows[index];
     }
 
-    @Override
-    public @NonNull A getNextArrow(int vi, int i) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
-        }
-        return nextArrows[nextOffset[vi] + i];
-    }
-
-    @Override
-    public @NonNull A getNextArrow(@NonNull V v, int i) {
-        return this.getNextArrow(getVertexIndex(v), i);
+    public @NonNull A getArrow(int vertex, int index) {
+        return nextArrows[getArrowIndex(vertex, index)];
     }
 
     @Override
     public int getArrowCount() {
         return next.length;
-    }
-
-    @Override
-    public int getNextAsInt(int vidx, int i) {
-        if (i < 0 || i >= getNextCount(vidx)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vidx));
-        }
-        return next[nextOffset[vidx] + i];
-    }
-
-    @Override
-    public @NonNull V getNext(@NonNull V vertex, int i) {
-        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
     }
 
     protected int getArrowIndex(int vi, int i) {
@@ -211,15 +238,71 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        final int offset = nextOffset[vidx];
-        final int nextOffset = (vidx == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vidx + 1];
-        return nextOffset - offset;
+    public @NonNull V getNext(@NonNull V vertex, int i) {
+        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
     }
 
     @Override
-    public int getVertexCount() {
-        return nextOffset.length;
+    public @NonNull A getNextArrow(int vi, int i) {
+        Preconditions.checkIndex(i, getNextCount(vi));
+        return nextArrows[nextOffset[vi] + i];
+    }
+
+    @Override
+    public @NonNull A getNextArrow(@NonNull V v, int i) {
+        return getNextArrow(getVertexIndex(v), i);
+    }
+
+    @Override
+    public int getNextAsInt(int vidx, int i) {
+        Preconditions.checkIndex(i, getNextCount(vidx));
+        return next[nextOffset[vidx] + i];
+    }
+
+    @Override
+    public int getNextCount(int vidx) {
+        final int offset = nextOffset[vidx];
+        final int offset2 = (vidx == nextOffset.length - 1) ? nextOffset.length : nextOffset[vidx + 1];
+        return offset2 - offset;
+    }
+
+    @Override
+    public int getNextCount(@NonNull V vertex) {
+        return getNextCount(vertexToIndexMap.get(vertex));
+    }
+
+    @Override
+    public @NonNull V getPrev(@NonNull V vertex, int i) {
+        return vertices[getPrevAsInt(vertexToIndexMap.get(vertex), i)];
+    }
+
+    @Override
+    public A getPrevArrow(int vi, int i) {
+        Preconditions.checkIndex(i, getPrevCount(vi));
+        return prevArrows[prevOffset[vi] + i];
+    }
+
+    @Override
+    public @NonNull A getPrevArrow(@NonNull V v, int i) {
+        return getPrevArrow(getVertexIndex(v), i);
+    }
+
+    @Override
+    public int getPrevAsInt(int vidx, int i) {
+        Preconditions.checkIndex(i, getPrevCount(vidx));
+        return prev[prevOffset[vidx] + i];
+    }
+
+    @Override
+    public int getPrevCount(@NonNull V vertex) {
+        return getPrevCount(vertexToIndexMap.get(vertex));
+    }
+
+    @Override
+    public int getPrevCount(int vidx) {
+        final int offset = prevOffset[vidx];
+        final int offset2 = (vidx == prevOffset.length - 1) ? prevOffset.length : prevOffset[vidx + 1];
+        return offset2 - offset;
     }
 
     @Override
@@ -228,26 +311,20 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
+    public int getVertexCount() {
+        return nextOffset.length;
+    }
+
+    @Override
     public int getVertexIndex(V vertex) {
         Integer index = vertexToIndexMap.get(vertex);
         return index == null ? -1 : index;
-    }
-
-
-    @Override
-    public int getNextCount(@NonNull V vertex) {
-        return getNextCount(vertexToIndexMap.get(vertex));
     }
 
     @Override
     public @NonNull Set<V> getVertices() {
         return Collections.unmodifiableSet(vertexToIndexMap.keySet());
 
-    }
-
-
-    public @NonNull A getArrow(int vertex, int index) {
-        return nextArrows[getArrowIndex(vertex, index)];
     }
 
     @Override

@@ -23,6 +23,7 @@ import java.util.Arrays;
 public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
     private static final boolean CLEAR_UNUSED_ELEMENTS = true;
+    private static final int CLEAR_VALUE = 99;
     /**
      * Value to which sizes are rounded up.
      * Must be a power of 2.
@@ -107,7 +108,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             chunk = new int[chunkSize * 2 + capacity * 2];
 
             if (CLEAR_UNUSED_ELEMENTS) {
-                Arrays.fill(chunk, getIndicesOffset(), chunk.length, -1);
+                Arrays.fill(chunk, getSiblingsFromOffset(), chunk.length, CLEAR_VALUE);
             }
         }
 
@@ -119,8 +120,8 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
          * @return the index of u or (-index -1) if u is not in the index list.
          */
         private int findIndexOf(int v, int u) {
-            int from = getSiblingsFromInclusiveOffset(v);
-            int to = getSiblingsToExclusiveOffset(v);
+            int from = getSiblingsFromOffset(v);
+            int to = getSiblingsToOffset(v);
             int result = Arrays.binarySearch(chunk, from, to, u);
             return result < 0 ? result + from : result - from;
         }
@@ -145,40 +146,48 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
         public int getArrow(int v, int k) {
             Preconditions.checkIndex(k, getArrowCount(v));
-            return chunk[getArrowsFromInclusiveOffset(v) + k];
+            return chunk[getArrowsFromOffset(v) + k];
         }
 
-        private int getSiblingsFromInclusiveOffset(int v) {
+        private int getSiblingsFromOffset(int v) {
             int vIndex = v & chunkMask;
-            int indicesOffset = getIndicesOffset();
+            int indicesOffset = getSiblingsFromOffset();
             return vIndex == 0
                     ? indicesOffset
                     : indicesOffset + chunk[getSizesOffset() + vIndex - 1]
                     + (vIndex <= gapIndex ? 0 : gapSize);
         }
 
-        private int getSiblingsToExclusiveOffset(int v) {
+        private int getSiblingsToOffset(int v) {
             int vIndex = v & chunkMask;
-            return getIndicesOffset()
+            return getSiblingsFromOffset()
                     + chunk[getSizesOffset() + vIndex]
                     + (vIndex <= gapIndex ? 0 : gapSize);
         }
 
-        private int getIndicesOffset() {
+        private int getSiblingsFromOffset() {
             return chunkSize * 2;
         }
 
         public int getSibling(int v, int k) {
             Preconditions.checkIndex(k, getArrowCount(v));
-            return chunk[getSiblingsFromInclusiveOffset(v) + k];
+            return chunk[getSiblingsFromOffset(v) + k];
         }
 
         private int getSizesOffset() {
             return chunkSize;
         }
 
-        private int getArrowsOffset() {
+        private int getArrowsFromOffset() {
             return chunkSize * 2 + capacity;
+        }
+
+        private int getArrowsToOffset() {
+            return chunk.length - (gapIndex == chunkSize - 1 ? gapSize : 0);
+        }
+
+        private int getSiblingsToOffset() {
+            return chunkSize * 2 + capacity - (gapIndex == chunkSize - 1 ? gapSize : 0);
         }
 
         private int getArrowCount(int v) {
@@ -189,18 +198,18 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
                     : chunk[sizesOffset + vIndex] - chunk[sizesOffset + vIndex - 1];
         }
 
-        private int getArrowsFromInclusiveOffset(int v) {
+        private int getArrowsFromOffset(int v) {
             int vIndex = v & chunkMask;
-            int arrowsOffset = getArrowsOffset();
+            int arrowsOffset = getArrowsFromOffset();
             return vIndex == 0
                     ? arrowsOffset
                     : arrowsOffset + chunk[getSizesOffset() + vIndex - 1]
                     + (vIndex <= gapIndex ? 0 : gapSize);
         }
 
-        private int getArrowsToExclusiveOffset(int v) {
+        private int getArrowsToOffset(int v) {
             int vIndex = v & chunkMask;
-            return getArrowsOffset()
+            return getArrowsFromOffset()
                     + chunk[getSizesOffset() + vIndex]
                     + (vIndex <= gapIndex ? 0 : gapSize);
         }
@@ -219,19 +228,19 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
                 return false;
             }
             if (free < 1) {
-                throw new UnsupportedOperationException("implement growing of chunk");
+                grow();
             }
-            int siblingsFrom = getSiblingsFromInclusiveOffset(v);
-            int siblingsTo = getSiblingsToExclusiveOffset(v);
-            int arrowDataFrom = getArrowsFromInclusiveOffset(v);
-            int arrowDataTo = getArrowsToExclusiveOffset(v);
+            int siblingsFrom = getSiblingsFromOffset(v);
+            int siblingsTo = getSiblingsToOffset(v);
+            int arrowDataFrom = getArrowsFromOffset(v);
+            int arrowDataTo = getArrowsToOffset(v);
             int insertionIndex = ~result;
             int vIndex = v & chunkMask;
 
             if (gapIndex < vIndex) {
-                insertBeforeGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
-            } else if (gapIndex > vIndex) {
                 insertAfterGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
+            } else if (gapIndex > vIndex) {
+                insertBeforeGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
             } else {
                 insertAtGap(u, data, siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, insertionIndex);
             }
@@ -249,85 +258,204 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             return true;
         }
 
-        private void insertAtGap(int u, int data, int indicesFrom, int indicesTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
+        private void grow() {
+            int newCapacity = capacity * 2;
+            if (newCapacity <= capacity) {
+                throw new OutOfMemoryError("can not grow to newCapacity=" + newCapacity + ", current capacity=" + capacity);
+            }
+
+            int[] newChunk = new int[chunkSize * 2 + newCapacity * 2];
+
+            // CASE 1: the gap is not at the end of the siblings/arrows:
+            // -------
             // BEFORE:
-            //                        insertionIndex
-            // indices = [........::::÷::gap;;;;;,,,,];
-            //                    ^      ^
-            //                    from   to
+            // ...|,,,,|::::|;;;;| = siblings list of different vertices
+            //
+            // siblings = [........::::::gap;;;;;,,,,];
+            // arrows =   [........::::::gap;;;;;,,,,];
+            //
             // AFTER:
-            //                            inserted element before insertionIndex
-            // indices = [........::::i÷::gp;;;;;,,,,];
-            //                    ^      ^
-            //                    from   to
+            //
+            // siblings = [........::::::gap+capacity;;;;;,,,,];
+            // arrows   = [........::::::gap+capacity;;;;;,,,,];
 
-            // shift up to make room for the new element
-            System.arraycopy(chunk, indicesTo + insertionIndex, chunk, indicesTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
-            System.arraycopy(chunk, arrowDataTo + insertionIndex, chunk, arrowDataTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
+            // CASE 2: the gap is at the end of the siblings/arrows:
+            // -------
+            // BEFORE:
+            // ...|,,,,|::::|;;;;| = siblings list of different vertices
+            //
+            // siblings = [........::::::;;;;;,,,,gap];
+            // arrows =   [........::::::;;;;;,,,,gap];
+            //
+            // AFTER:
+            //
+            // siblings = [........::::::;;;;;,,,,gap+capacity];
+            // arrows =   [........::::::;;;;;,,,,gap+capacity];
 
-            // insert the element at insertion index
-            chunk[indicesFrom + insertionIndex] = u;
-            chunk[arrowDataFrom + insertionIndex] = data;
+            int siblingsGapFromOffset = getSiblingsToOffset(gapIndex);
+            int arrowsGapFromOffset = getArrowsToOffset(gapIndex);
+            int siblingsGapToOffset = siblingsGapFromOffset + gapSize;
+            int arrowsGapToOffset = arrowsGapFromOffset + gapSize;
+            int arrowsFromOffset = getArrowsFromOffset();
+            int deltaCapacity = newCapacity - capacity;
+
+            System.arraycopy(chunk, 0, newChunk, 0, siblingsGapFromOffset);
+            System.arraycopy(chunk, arrowsFromOffset, newChunk, arrowsFromOffset + deltaCapacity, getArrowsToOffset(gapIndex) - arrowsFromOffset);
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(newChunk, siblingsGapFromOffset, siblingsGapToOffset + deltaCapacity, CLEAR_VALUE);
+                Arrays.fill(newChunk, arrowsGapFromOffset + deltaCapacity, arrowsGapToOffset + deltaCapacity * 2, CLEAR_VALUE);
+            }
+            int length = getSiblingsToOffset() - siblingsGapToOffset;
+            if (length > 0) {
+                System.arraycopy(chunk, siblingsGapToOffset, newChunk, siblingsGapToOffset + deltaCapacity, length);
+                System.arraycopy(chunk, arrowsGapToOffset, newChunk, arrowsGapToOffset + deltaCapacity * 2, length);
+            }
+
+            this.chunk = newChunk;
+            this.free = free + deltaCapacity;
+            this.capacity = newCapacity;
+            this.gapSize = gapSize + deltaCapacity;
         }
 
-        private void insertAfterGap(int u, int data, int indicesFrom, int indicesTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
+        /**
+         * Inserts vertex 'u' in the siblings list of vertex 'v'.
+         * <p>
+         * The gap is located at the end of the siblings list of vertex 'v'.
+         *
+         * @param u
+         * @param data
+         * @param siblingsFrom
+         * @param siblingsTo
+         * @param arrowDataFrom
+         * @param arrowDataTo
+         * @param insertionIndex
+         */
+        private void insertAtGap(int u, int data, int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
             // BEFORE:
-            //                        insertionIndex
-            // indices = [........::::÷::;;;;;gap,,,,];
-            //                    ^      ^
-            //                    from   to
+            // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
+            // ...|,,,,|::::|;;;;| = siblings list of different vertices
+            //                       the list with the colons ':' is the sibling list of 'v'.
+            //
+            // siblings = [........::::÷::gap;;;;;,,,,];
+            //                     ^      ^
+            //                     from   to
             // AFTER:
-            //                         inserted element before insertionIndex
-            // indices = [........::::i÷::gp;;;;;,,,,];
-            //                    ^       ^
-            //                    from    to
-
-            // close the gap by shifting up
-            int indicesStartOfGapOffset = getSiblingsToExclusiveOffset(gapIndex);
-            System.arraycopy(chunk, indicesTo, chunk, indicesTo + free, indicesStartOfGapOffset - indicesTo);
-            System.arraycopy(chunk, arrowDataTo, chunk, arrowDataTo + free, indicesStartOfGapOffset - indicesTo);
+            //                         i=inserted element before insertionIndex
+            // siblings = [........::::i÷::gp;;;;;,,,,];
+            //                     ^      ^
+            //                     from   to
 
             // shift up to make room for the new element
-            System.arraycopy(chunk, indicesTo + insertionIndex, chunk, indicesTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
-            System.arraycopy(chunk, arrowDataTo + insertionIndex, chunk, arrowDataTo + insertionIndex + 1, indicesFrom - indicesTo - insertionIndex);
-
-            // insert the element at insertion index
-            chunk[indicesFrom + insertionIndex] = u;
-            chunk[arrowDataFrom + insertionIndex] = data;
-        }
-
-        private void insertBeforeGap(int u, int data, int indicesFrom, int indicesTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
-            // BEFORE:
-            //                               insertionIndex
-            // indices = [........gap,,,,::::÷::;;;;;];
-            //                           ^      ^
-            //                          from   to
-            // AFTER:
-            //                            inserted element before insertionIndex
-            // indices = [........,,,,::::i÷::gp;;;;;];
-            //                        ^       ^
-            //                       from    to
-
-            // close the gap by shifting down
-            int indicesStartOfGapOffset = getSiblingsToExclusiveOffset(gapIndex);
-            int arrowDataStartOfGapOffset = getArrowsToExclusiveOffset(gapIndex);
-            int length = indicesFrom + insertionIndex - indicesStartOfGapOffset;
-            if (arrowDataStartOfGapOffset + free < chunk.length) {
-                System.arraycopy(chunk, indicesStartOfGapOffset + free, chunk, indicesStartOfGapOffset, length);
-                System.arraycopy(chunk, arrowDataStartOfGapOffset + free, chunk, arrowDataStartOfGapOffset, length);
+            int length = siblingsTo - siblingsFrom - insertionIndex;
+            if (length > 0) {
+                System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsFrom + insertionIndex + 1, length);
+                System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex + 1, length);
             }
 
             // insert the element at insertion index
-            chunk[indicesFrom + insertionIndex - free] = u;
+            chunk[siblingsFrom + insertionIndex] = u;
+            chunk[arrowDataFrom + insertionIndex] = data;
+        }
+
+        /**
+         * Inserts vertex 'u' in the siblings list of vertex 'v'.
+         * <p>
+         * The siblings list of vertex 'v' is located somewhere
+         * before the siblings list that contains the gap.
+         *
+         * @param u
+         * @param data
+         * @param siblingsFrom
+         * @param siblingsTo
+         * @param arrowDataFrom
+         * @param arrowDataTo
+         * @param insertionIndex
+         */
+        private void insertBeforeGap(int u, int data, int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
+            // BEFORE:
+            // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
+            // ...|,,,,|::::|;;;;| = siblings list of different vertices
+            //                       the list with the colons ':' is the sibling list of 'v'.
+            //
+            // siblings = [........|::::÷::|;;;;;gap|,,,,];
+            //                      ^      ^
+            //                      from   to
+            // AFTER:
+            //
+            // siblings = [........|::::u÷::gp|;;;;;|,,,,];
+            //                      ^       ^
+            //                      from    to
+
+            // close the gap by shifting up
+            int siblingsStartOfGapOffset = getSiblingsToOffset(gapIndex);
+            int arrowDataStartOfGapOffset = getArrowsToOffset(gapIndex);
+            System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsTo + free, siblingsStartOfGapOffset - siblingsFrom - insertionIndex);
+            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataTo + free, arrowDataStartOfGapOffset - arrowDataFrom - insertionIndex);
+
+            // shift up to make room for the new element
+            System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsFrom + insertionIndex + 1, siblingsTo - siblingsFrom - insertionIndex);
+            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex + 1, siblingsTo - siblingsFrom - insertionIndex);
+
+            // insert the element at insertion index
+            chunk[siblingsFrom + insertionIndex] = u;
+            chunk[arrowDataFrom + insertionIndex] = data;
+
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(chunk, siblingsTo + 1, siblingsTo + free, CLEAR_VALUE);
+                Arrays.fill(chunk, arrowDataTo + 1, arrowDataTo + free, CLEAR_VALUE);
+            }
+        }
+
+        /**
+         * Inserts vertex 'u' in the siblings list of vertex 'v'.
+         * <p>
+         * The siblings list of vertex 'v' is located somewhere after
+         * the siblings list that contains the gap.
+         *
+         * @param u
+         * @param data
+         * @param siblingsFrom
+         * @param siblingsTo
+         * @param arrowDataFrom
+         * @param arrowDataTo
+         * @param insertionIndex
+         */
+        private void insertAfterGap(int u, int data, int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
+            // BEFORE:
+            // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
+            // ....|,,,,|::::|;;;;| = siblings list of different vertices
+            //                        the list with the colons ':' is the sibling list of 'v'.
+            //
+            // siblings = [........gap|,,,,|::::÷::|;;;;;];
+            //                             ^      ^
+            //                             from   to
+            // AFTER:
+            //
+            // siblings = [........|,,,,|::::u÷::gp|;;;;;];
+            //                           ^       ^
+            //                           from    to
+
+            // close the gap by shifting down
+            int siblingsGapFrom = getSiblingsToOffset(gapIndex);
+            int arrowsGapFrom = siblingsGapFrom + capacity;
+            int length = capacity - siblingsGapFrom - gapSize;
+            if (length > 0) {
+                System.arraycopy(chunk, siblingsGapFrom + free, chunk, siblingsGapFrom, length);
+                System.arraycopy(chunk, arrowsGapFrom + free, chunk, arrowsGapFrom, length);
+            }
+
+            // insert the element at insertion index
+            chunk[siblingsFrom + insertionIndex - free] = u;
             chunk[arrowDataFrom + insertionIndex - free] = data;
 
             // reopen the gap by shifting the remainder of the indices down
-            System.arraycopy(chunk, indicesFrom + insertionIndex, chunk, indicesFrom + insertionIndex - free + 1, indicesTo - indicesFrom - insertionIndex);
-            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex - free + 1, indicesTo - indicesFrom - insertionIndex);
+            length = siblingsTo - siblingsFrom - insertionIndex;
+            System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsFrom + insertionIndex - free + 1, length);
+            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex - free + 1, length);
 
-            if (CLEAR_UNUSED_ELEMENTS && (arrowDataStartOfGapOffset + free < chunk.length)) {
-                Arrays.fill(chunk, indicesTo - free + 1, indicesTo + free - 1, -1);
-                Arrays.fill(chunk, arrowDataTo - free + 1, arrowDataTo + free - 1, -1);
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(chunk, siblingsTo - free + 1, siblingsTo, CLEAR_VALUE);
+                Arrays.fill(chunk, arrowDataTo - free + 1, arrowDataTo, CLEAR_VALUE);
             }
         }
 
