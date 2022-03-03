@@ -5,4 +5,9 @@ public class MutableIntAttributed16BitIndexedBidiGraphTest extends AbstractMutab
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
         return new MutableIntAttributed16BitIndexedBidiGraph(0, maxArity);
     }
+
+    @Override
+    protected boolean supportsMultigraph() {
+        return true;
+    }
 }

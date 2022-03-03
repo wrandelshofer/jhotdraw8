@@ -5,4 +5,9 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraphTest extends Abstra
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
         return new ChunkedMutableIntAttributed32BitIndexedBidiGraph();
     }
+
+    @Override
+    protected boolean supportsMultigraph() {
+        return false;
+    }
 }

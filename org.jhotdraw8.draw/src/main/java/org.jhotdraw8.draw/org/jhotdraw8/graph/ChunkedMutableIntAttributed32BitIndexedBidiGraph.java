@@ -215,7 +215,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         }
 
         /**
-         * Adds an arrow from vertex u to vertex v, if it is not already present.
+         * Adds an arrow from vertex v to vertex u, if it is not already present.
          *
          * @param v    index of vertex v
          * @param u    index of vertex u
@@ -256,6 +256,57 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             }
 
             return true;
+        }
+
+        /**
+         * Removes an arrow from vertex v to vertex u, if it is present.
+         *
+         * @param v index of vertex v
+         * @param u index of vertex u
+         * @return true on success
+         */
+        private boolean tryToRemoveArrow(int v, int u) {
+            int result = findIndexOf(v, u);
+            if (result < 0) {
+                return false;
+            }
+            removeArrowAt(v, result);
+            return true;
+        }
+
+        /**
+         * Removes an arrow from vertex v to the a vertex u at the specified
+         * index.
+         *
+         * @param v            index of vertex v
+         * @param removalIndex index of vertex u
+         * @return returns the removed arrow u
+         */
+        private int removeArrowAt(int v, int removalIndex) {
+            int siblingsFrom = getSiblingsFromOffset(v);
+            int siblingsTo = getSiblingsToOffset(v);
+            int arrowDataFrom = getArrowsFromOffset(v);
+            int arrowDataTo = getArrowsToOffset(v);
+            int vIndex = v & chunkMask;
+            int u = chunk[siblingsFrom + removalIndex];
+
+            if (gapIndex < vIndex) {
+                removeAfterGap(siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, removalIndex);
+            } else if (gapIndex > vIndex) {
+                removeBeforeGap(siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, removalIndex);
+            } else {
+                removeAtGap(siblingsFrom, siblingsTo, arrowDataFrom, arrowDataTo, removalIndex);
+            }
+
+            gapIndex = vIndex;
+            free++;
+            gapSize++;
+
+            int sizesOffset = getSizesOffset();
+            for (int i = sizesOffset + vIndex, n = sizesOffset + chunkSize; i < n; i++) {
+                chunk[i]--;
+            }
+            return u;
         }
 
         private void grow() {
@@ -333,17 +384,17 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         private void insertAtGap(int u, int data, int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
             // BEFORE:
             // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
-            // ...|,,,,|::::|;;;;| = siblings list of different vertices
+            // ...,,,,::::;;;; = siblings list of different vertices
             //                       the list with the colons ':' is the sibling list of 'v'.
             //
             // siblings = [........::::÷::gap;;;;;,,,,];
             //                     ^      ^
             //                     from   to
             // AFTER:
-            //                         i=inserted element before insertionIndex
-            // siblings = [........::::i÷::gp;;;;;,,,,];
-            //                     ^      ^
-            //                     from   to
+            //
+            // siblings = [........::::u÷::gp;;;;;,,,,];
+            //                     ^       ^
+            //                     from    to
 
             // shift up to make room for the new element
             int length = siblingsTo - siblingsFrom - insertionIndex;
@@ -374,17 +425,17 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         private void insertBeforeGap(int u, int data, int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
             // BEFORE:
             // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
-            // ...|,,,,|::::|;;;;| = siblings list of different vertices
+            // ...,,,,::::;;;; = siblings list of different vertices
             //                       the list with the colons ':' is the sibling list of 'v'.
             //
-            // siblings = [........|::::÷::|;;;;;gap|,,,,];
-            //                      ^      ^
-            //                      from   to
+            // siblings = [........::::÷::;;;;;gap,,,,];
+            //                     ^      ^
+            //                     from   to
             // AFTER:
             //
-            // siblings = [........|::::u÷::gp|;;;;;|,,,,];
-            //                      ^       ^
-            //                      from    to
+            // siblings = [........::::u÷::gp;;;;;,,,,];
+            //                     ^       ^
+            //                     from    to
 
             // close the gap by shifting up
             int siblingsStartOfGapOffset = getSiblingsToOffset(gapIndex);
@@ -423,22 +474,22 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         private void insertAfterGap(int u, int data, int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int insertionIndex) {
             // BEFORE:
             // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
-            // ....|,,,,|::::|;;;;| = siblings list of different vertices
+            // ....,,,,::::;;;; = siblings list of different vertices
             //                        the list with the colons ':' is the sibling list of 'v'.
             //
-            // siblings = [........gap|,,,,|::::÷::|;;;;;];
-            //                             ^      ^
-            //                             from   to
+            // siblings = [........gap,,,,::::÷::;;;;;];
+            //                            ^      ^
+            //                            from   to
             // AFTER:
             //
-            // siblings = [........|,,,,|::::u÷::gp|;;;;;];
-            //                           ^       ^
-            //                           from    to
+            // siblings = [........,,,,::::u÷::gp;;;;;];
+            //                         ^       ^
+            //                         from    to
 
             // close the gap by shifting down
             int siblingsGapFrom = getSiblingsToOffset(gapIndex);
             int arrowsGapFrom = siblingsGapFrom + capacity;
-            int length = capacity - siblingsGapFrom - gapSize;
+            int length = siblingsFrom + insertionIndex - siblingsGapFrom - free;
             if (length > 0) {
                 System.arraycopy(chunk, siblingsGapFrom + free, chunk, siblingsGapFrom, length);
                 System.arraycopy(chunk, arrowsGapFrom + free, chunk, arrowsGapFrom, length);
@@ -459,6 +510,131 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             }
         }
 
+        /**
+         * Inserts vertex 'u' in the siblings list of vertex 'v'.
+         * <p>
+         * The gap is located at the end of the siblings list of vertex 'v'.
+         *
+         * @param siblingsFrom
+         * @param siblingsTo
+         * @param arrowDataFrom
+         * @param arrowDataTo
+         * @param removalIndex
+         */
+        private void removeAtGap(int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int removalIndex) {
+            // ÷ = index after removal index, u = element to be removed
+            // ...,,,,::::;;;; = siblings list of different vertices
+            //                       the list with the colons ':' is the sibling list of 'v'.
+            //
+            // BEFORE:
+            // siblings = [........::::u÷::gp;;;;;,,,,];
+            //                     ^       ^
+            //                     from    to
+            // AFTER:
+            // siblings = [........::::÷::gap;;;;;,,,,];
+            //                     ^      ^
+            //                     from   to
+
+            // shift down to remove the room of the element
+            int length = siblingsTo - removalIndex - siblingsFrom - 1;
+            if (length > 0) {
+                System.arraycopy(chunk, siblingsFrom + removalIndex + 1, chunk, siblingsFrom + removalIndex, length);
+                System.arraycopy(chunk, arrowDataFrom + removalIndex + 1, chunk, arrowDataFrom + removalIndex, length);
+            }
+            if (CLEAR_UNUSED_ELEMENTS) {
+                chunk[siblingsTo - 1] = CLEAR_VALUE;
+                chunk[arrowDataTo - 1] = CLEAR_VALUE;
+            }
+        }
+
+        /**
+         * Inserts vertex 'u' in the siblings list of vertex 'v'.
+         * <p>
+         * The siblings list of vertex 'v' is located somewhere
+         * before the siblings list that contains the gap.
+         *
+         * @param siblingsFrom
+         * @param siblingsTo
+         * @param arrowDataFrom
+         * @param arrowDataTo
+         * @param removalIndex
+         */
+        private void removeBeforeGap(int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int removalIndex) {
+            // ÷ = index after removal index, u = element to be removed
+            // ...,,,,::::;;;; = siblings list of different vertices
+            //                       the list with the colons ':' is the sibling list of 'v'.
+            // BEFORE:
+            // siblings = [........::::u÷::;;;;;gp,,,,];
+            //                     ^       ^
+            //                     from    to
+            // AFTER:
+            // siblings = [........::::÷::gap;;;;;,,,,];
+            //                     ^      ^
+            //                     from   to
+            //
+
+            // shift up to close the gap
+            int siblingsStartOfGapOffset = getSiblingsToOffset(gapIndex);
+            int arrowDataStartOfGapOffset = getArrowsToOffset(gapIndex);
+            int length = siblingsStartOfGapOffset - siblingsTo;
+            System.arraycopy(chunk, siblingsTo, chunk, siblingsTo + free, length);
+            System.arraycopy(chunk, arrowDataTo, chunk, arrowDataTo + free, length);
+
+            // shift down to remove the room of the removed element
+            length = siblingsTo - siblingsFrom - removalIndex;
+            System.arraycopy(chunk, siblingsFrom + removalIndex + 1, chunk, siblingsFrom + removalIndex, length);
+            System.arraycopy(chunk, arrowDataFrom + removalIndex + 1, chunk, arrowDataFrom + removalIndex, length);
+
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(chunk, siblingsTo - 1, siblingsTo + free, CLEAR_VALUE);
+                Arrays.fill(chunk, arrowDataTo - 1, arrowDataTo + free, CLEAR_VALUE);
+            }
+        }
+
+        /**
+         * Inserts vertex 'u' in the siblings list of vertex 'v'.
+         * <p>
+         * The siblings list of vertex 'v' is located somewhere after
+         * the siblings list that contains the gap.
+         *
+         * @param siblingsFrom
+         * @param siblingsTo
+         * @param arrowDataFrom
+         * @param arrowDataTo
+         * @param removalIndex
+         */
+        private void removeAfterGap(int siblingsFrom, int siblingsTo, int arrowDataFrom, int arrowDataTo, int removalIndex) {
+            // ....|,,,,|::::|;;;;| = siblings list of different vertices
+            //                        the list with the colons ':' is the sibling list of 'v'.
+            //
+            // BEFORE:
+            // siblings = [........gp,,,,::::u÷::;;;;;];
+            //                           ^       ^
+            //                           from    to
+            // AFTER:
+            // siblings = [........,,,,::::÷::gap;;;;;];
+            //                         ^      ^
+            //                         from   to
+
+            // shift down to close the gap
+            int siblingsGapFrom = getSiblingsToOffset(gapIndex);
+            int arrowsGapFrom = siblingsGapFrom + capacity;
+            int length = siblingsFrom + removalIndex - siblingsGapFrom - gapSize;
+            if (length > 0) {
+                System.arraycopy(chunk, siblingsGapFrom + free, chunk, siblingsGapFrom, length);
+                System.arraycopy(chunk, arrowsGapFrom + free, chunk, arrowsGapFrom, length);
+            }
+
+            // reopen the gap by shifting the remainder of the indices down
+            length = siblingsTo - siblingsFrom - removalIndex - 1;
+            System.arraycopy(chunk, siblingsFrom + removalIndex + 1, chunk, siblingsFrom + removalIndex - free, length);
+            System.arraycopy(chunk, arrowDataFrom + removalIndex + 1, chunk, arrowDataFrom + removalIndex - free, length);
+
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(chunk, siblingsTo - free - 1, siblingsTo, CLEAR_VALUE);
+                Arrays.fill(chunk, arrowDataTo - free - 1, arrowDataTo, CLEAR_VALUE);
+            }
+        }
     }
 
 
@@ -521,7 +697,8 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
     @Override
     public void removeNext(int v, int i) {
-        throw new UnsupportedOperationException();
+        int u = getNextChunk(v).removeArrowAt(v, i);
+        getPrevChunk(u).tryToRemoveArrow(u,v);
     }
 
     @Override

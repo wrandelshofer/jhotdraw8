@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -16,12 +17,18 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public abstract class AbstractMutableIndexedBidiGraphTest {
     protected abstract MutableIndexedBidiGraph newInstance(int maxArity);
 
+    protected abstract boolean supportsMultigraph();
+
     private void assertEqualGraphs(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
         StringWriter expectedW = new StringWriter();
         DumpGraph.dumpAsDot(expectedW, expected);
         StringWriter actualW = new StringWriter();
         DumpGraph.dumpAsDot(actualW, actual);
-        assertEquals(expectedW.toString(), actualW.toString());
+        String[] expectedSplit = expectedW.toString().split("\n");
+        String[] actualSplit = actualW.toString().split("\n");
+        Arrays.sort(expectedSplit);
+        Arrays.sort(actualSplit);
+        assertEquals(Arrays.asList(actualSplit), Arrays.asList(actualSplit));
     }
 
     @TestFactory
@@ -29,7 +36,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         return Arrays.asList(
                 dynamicTest("arity0", () -> testCreateRandomGraph(8, 0)),
                 dynamicTest("arity1", () -> testCreateRandomGraph(8, 1)),
-                dynamicTest("arity7", () -> testCreateRandomGraph(8, 7))
+                dynamicTest("arity7", () -> testCreateRandomGraph(8, 7)),
+                dynamicTest("arity17", () -> testCreateRandomGraph(20, 17))
         );
     }
 
@@ -66,10 +74,11 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(prevCount, instance.getPrevCount(u));
 
                 if (nextCount < maxArity && prevCount < maxArity) {
-                    instance.addArrow(v, u, -u);
-                    expected.addArrow(v, u, -u);
+                    if (expected.findIndexOfNext(v, u) < 0 || supportsMultigraph()) {
+                        instance.addArrow(v, u, -u);
+                        expected.addArrow(v, u, -u);
+                    }
                 }
-
                 assertEquals(expected.getNextCount(v), instance.getNextCount(v));
                 assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
                 assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
@@ -78,15 +87,15 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                         actual.findIndexOfNext(v, u) < 0);
                 assertEquals(expected.findIndexOfPrev(u, v) < 0,
                         actual.findIndexOfPrev(u, v) < 0, "expected: " + expected.findIndexOfPrev(u, v) + ", actual: " + actual.findIndexOfPrev(u, v));
-                assertEquals(expected.findIndexOfPrev(u, v),
-                        actual.findIndexOfPrev(u, v));
+                assertEquals(expected.findIndexOfPrev(u, v) < 0,
+                        actual.findIndexOfPrev(u, v) < 0);
             }
         }
 
         assertEquals(expected.getVertexCount(), actual.getVertexCount());
         assertEquals(expected.getVertices(), actual.getVertices());
         assertEquals(expected.getArrowCount(), actual.getArrowCount());
-        assertEquals(expected.getArrows(), actual.getArrows());
+        assertEquals(new LinkedHashSet<>(expected.getArrows()), new LinkedHashSet<>(actual.getArrows()));
 
         assertEqualGraphs(expected, actual);
 
@@ -96,8 +105,6 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             if (nextCount > 0) {
                 int i = rng.nextInt(nextCount);
                 int uidx = expected.getNext(vidx, i);
-                assertEquals(uidx, instance.getNextAsInt(vidx, i));
-                assertEquals(expected.findIndexOfNext(vidx, uidx), instance.findIndexOfNextAsInt(vidx, uidx));
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
                     instance.removeArrow(vidx, uidx);
                     expected.removeArrow(vidx, uidx);

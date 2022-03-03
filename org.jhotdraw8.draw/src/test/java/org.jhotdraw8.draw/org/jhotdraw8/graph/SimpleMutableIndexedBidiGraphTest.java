@@ -13,6 +13,11 @@ public class SimpleMutableIndexedBidiGraphTest extends AbstractMutableIndexedBid
         return new SimpleMutableIndexedBidiGraph(0, maxArity);
     }
 
+    @Override
+    protected boolean supportsMultigraph() {
+        return true;
+    }
+
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
         return Arrays.asList(
