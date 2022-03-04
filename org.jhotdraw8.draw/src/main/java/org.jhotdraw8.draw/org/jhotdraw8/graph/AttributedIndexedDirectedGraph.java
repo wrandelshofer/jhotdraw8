@@ -58,11 +58,11 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
     /**
      * Returns the specified successor (next) arrow of the specified vertex.
      *
-     * @param vertex a vertex
-     * @param index  index of next arrow
+     * @param v     a vertex
+     * @param index index of next arrow
      * @return the specified arrow
      */
-    A getNextArrow(int vertex, int index);
+    A getNextArrow(int v, int index);
 
         /*
     /**

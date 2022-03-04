@@ -41,27 +41,22 @@ public interface IndexedDirectedGraph {
     /**
      * Returns the k-th next vertex of v.
      *
-     * @param vidx a vertex index
-     * @param k    the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
+     * @param v     a vertex index
+     * @param index the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
      * @return the index of the k-th next vertex of v.
      */
-    int getNextAsInt(int vidx, int k);
+    int getNextAsInt(int v, int index);
 
-    default int getNextArrowAsInt(int vertex, int index) {
-        return 0;
-    }
+    int getNextArrowAsInt(int v, int index);
 
-    default int getPrevArrowAsInt(int vertex, int index) {
-        return 0;
-    }
 
     /**
      * Returns the number of next vertices of v.
      *
-     * @param vidx a vertex
+     * @param v a vertex
      * @return the number of next vertices of v.
      */
-    int getNextCount(int vidx);
+    int getNextCount(int v);
 
     /**
      * Returns the number of vertices {@code V}.
@@ -73,14 +68,14 @@ public interface IndexedDirectedGraph {
     /**
      * Returns the index of vertex b.
      *
-     * @param vidx a vertex
-     * @param uidx another vertex
+     * @param v a vertex
+     * @param u another vertex
      * @return index of vertex b. Returns a value {@literal < 0}
      * if b is not a next vertex of a.
      */
-    default int findIndexOfNextAsInt(int vidx, int uidx) {
-        for (int i = 0, n = getNextCount(vidx); i < n; i++) {
-            if (uidx == getNextAsInt(vidx, i)) {
+    default int findIndexOfNextAsInt(int v, int u) {
+        for (int i = 0, n = getNextCount(v); i < n; i++) {
+            if (u == getNextAsInt(v, i)) {
                 return i;
             }
         }
@@ -88,23 +83,23 @@ public interface IndexedDirectedGraph {
     }
 
     /**
-     * Returns true if b is a next vertex of a.
+     * Returns whether there is an arrow from vertex {@code v} to vertex {@code u}.
      *
-     * @param vidx a vertex
-     * @param uidx another vertex
-     * @return true if b is a next vertex of a.
+     * @param v a vertex
+     * @param u another vertex
+     * @return true if there is an arrow from {@code u} to {@code v}
      */
-    default boolean isNext(int vidx, int uidx) {
-        return findIndexOfNextAsInt(vidx, uidx) >= 0;
+    default boolean isNext(int v, int u) {
+        return findIndexOfNextAsInt(v, u) >= 0;
     }
 
     /**
      * Returns the direct successor vertices of the specified vertex.
      *
-     * @param vidx a vertex index
+     * @param v a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
+    default @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private final int limit;
@@ -133,6 +128,6 @@ public interface IndexedDirectedGraph {
             }
 
         }
-        return new MySpliterator(vidx, 0, getNextCount(vidx));
+        return new MySpliterator(v, 0, getNextCount(v));
     }
 }

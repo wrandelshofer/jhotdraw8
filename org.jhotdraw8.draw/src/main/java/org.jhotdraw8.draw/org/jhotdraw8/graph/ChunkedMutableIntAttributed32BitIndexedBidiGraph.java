@@ -19,6 +19,11 @@ import java.util.Arrays;
  * <p>
  * This implementation uses chunks with a fixed number of vertices.
  * A chunk uses a compressed sparse row representation (CSR).
+ * <p>
+ * This implementation is efficient, if the graph is changed rarely. Changes
+ * are expensive, because this implementation uses a single gap with
+ * free elements in each chunk. The gap needs to be shifted around for
+ * every insertion and removal of an arrow in the grah.
  */
 public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
@@ -712,8 +717,8 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     }
 
     @Override
-    public int getNextAsInt(int v, int k) {
-        return getNextChunk(v).getSibling(v, k);
+    public int getNextAsInt(int v, int index) {
+        return getNextChunk(v).getSibling(v, index);
     }
 
     @Override

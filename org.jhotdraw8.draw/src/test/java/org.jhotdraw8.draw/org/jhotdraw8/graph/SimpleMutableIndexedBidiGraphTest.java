@@ -4,7 +4,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SimpleMutableIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
@@ -14,13 +14,17 @@ public class SimpleMutableIndexedBidiGraphTest extends AbstractMutableIndexedBid
     }
 
     @Override
-    protected boolean supportsMultigraph() {
-        return true;
+    public @NonNull List<DynamicTest> dynamicTestsRandomSortedGraph() {
+        return Collections.emptyList();
     }
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
-        return Arrays.asList(
-        );
+        return Collections.emptyList();
+    }
+
+    @TestFactory
+    public @NonNull List<DynamicTest> dynamicTestsRandomSortedGraphWithArrowData() {
+        return Collections.emptyList();
     }
 }

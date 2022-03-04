@@ -26,18 +26,18 @@ public class IndexedDirectedGraphWrapper implements DirectedGraph<Integer, Integ
     }
 
     @Override
-    public @NonNull Integer getNext(@NonNull Integer vertex, int index) {
-        return graph.getNextAsInt(vertex, index);
+    public @NonNull Integer getNext(@NonNull Integer v, int index) {
+        return graph.getNextAsInt(v, index);
     }
 
     @Override
-    public @NonNull Integer getNextArrow(@NonNull Integer vertex, int index) {
-        return graph.getNextArrowAsInt(vertex, index);
+    public @NonNull Integer getNextArrow(@NonNull Integer v, int index) {
+        return graph.getNextArrowAsInt(v, index);
     }
 
     @Override
-    public int getNextCount(@NonNull Integer vertex) {
-        return graph.getNextCount(vertex);
+    public int getNextCount(@NonNull Integer v) {
+        return graph.getNextCount(v);
     }
 
     @Override

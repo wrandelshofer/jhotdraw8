@@ -193,32 +193,32 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     }
 
     @Override
-    public int getNextAsInt(int vidx, int k) {
-        Node node = nodes[vidx];
+    public int getNextAsInt(int v, int index) {
+        Node node = nodes[v];
         if (node == null) {
-            throw new IndexOutOfBoundsException("vidx=" + vidx + ", k=" + k);
+            throw new IndexOutOfBoundsException("vidx=" + v + ", k=" + index);
         }
-        return node.next.getAsInt(k);
+        return node.next.getAsInt(index);
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        Node node = nodes[vidx];
+    public int getNextCount(int v) {
+        Node node = nodes[v];
         return (node == null) ? 0 : node.next.size();
     }
 
     @Override
-    public int getPrevAsInt(int vidx, int i) {
-        Node node = nodes[vidx];
+    public int getPrevAsInt(int v, int i) {
+        Node node = nodes[v];
         if (node == null) {
-            throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
+            throw new IndexOutOfBoundsException("vidx=" + v + ", i=" + i);
         }
         return node.prev.getAsInt(i);
     }
 
     @Override
-    public int getPrevCount(int vidx) {
-        Node node = nodes[vidx];
+    public int getPrevCount(int v) {
+        Node node = nodes[v];
         return (node == null) ? 0 : node.prev.size();
     }
 

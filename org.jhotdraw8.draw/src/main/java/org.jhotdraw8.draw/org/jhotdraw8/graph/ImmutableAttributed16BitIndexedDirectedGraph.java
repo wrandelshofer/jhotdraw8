@@ -213,16 +213,16 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V vertex, int i) {
-        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
+    public @NonNull V getNext(@NonNull V v, int i) {
+        return vertices[getNextAsInt(vertexToIndexMap.get(v), i)];
     }
 
     @Override
-    public @NonNull A getNextArrow(int vi, int i) {
-        if (i < 0 || i >= getNextCount(vi)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vi));
+    public @NonNull A getNextArrow(int v, int i) {
+        if (i < 0 || i >= getNextCount(v)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(v));
         }
-        return nextArrows[nextOffset[vi] + i];
+        return nextArrows[nextOffset[v] + i];
     }
 
     @Override
@@ -231,23 +231,28 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public int getNextAsInt(int vidx, int i) {
-        if (i < 0 || i >= getNextCount(vidx)) {
-            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(vidx));
+    public int getNextAsInt(int v, int index) {
+        if (index < 0 || index >= getNextCount(v)) {
+            throw new IllegalArgumentException("i(" + index + ") < 0 || i >= " + getNextCount(v));
         }
-        return next[nextOffset[vidx] + i];
+        return next[nextOffset[v] + index];
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        final int offset = nextOffset[vidx];
-        final int nextOffset = (vidx == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vidx + 1];
+    public int getNextArrowAsInt(int v, int index) {
+        return getNextAsInt(v, index);
+    }
+
+    @Override
+    public int getNextCount(int v) {
+        final int offset = nextOffset[v];
+        final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
         return nextOffset - offset;
     }
 
     @Override
-    public int getNextCount(@NonNull V vertex) {
-        return getNextCount(vertexToIndexMap.get(vertex));
+    public int getNextCount(@NonNull V v) {
+        return getNextCount(vertexToIndexMap.get(v));
     }
 
     @Override
@@ -273,9 +278,9 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vi) {
-        final int offset = nextOffset[vi];
-        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
+        final int offset = nextOffset[v];
+        final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
         return new IntCharArrayEnumeratorSpliterator(offset, nextOffset, this.next);
     }
 }

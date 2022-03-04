@@ -238,14 +238,14 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V vertex, int i) {
-        return vertices[getNextAsInt(vertexToIndexMap.get(vertex), i)];
+    public @NonNull V getNext(@NonNull V v, int i) {
+        return vertices[getNextAsInt(vertexToIndexMap.get(v), i)];
     }
 
     @Override
-    public @NonNull A getNextArrow(int vi, int i) {
-        Preconditions.checkIndex(i, getNextCount(vi));
-        return nextArrows[nextOffset[vi] + i];
+    public @NonNull A getNextArrow(int v, int i) {
+        Preconditions.checkIndex(i, getNextCount(v));
+        return nextArrows[nextOffset[v] + i];
     }
 
     @Override
@@ -254,21 +254,26 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getNextAsInt(int vidx, int i) {
-        Preconditions.checkIndex(i, getNextCount(vidx));
-        return next[nextOffset[vidx] + i];
+    public int getNextAsInt(int v, int index) {
+        Preconditions.checkIndex(index, getNextCount(v));
+        return next[nextOffset[v] + index];
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        final int offset = nextOffset[vidx];
-        final int offset2 = (vidx == nextOffset.length - 1) ? nextOffset.length : nextOffset[vidx + 1];
+    public int getNextArrowAsInt(int v, int index) {
+        return getNextAsInt(v, index);
+    }
+
+    @Override
+    public int getNextCount(int v) {
+        final int offset = nextOffset[v];
+        final int offset2 = (v == nextOffset.length - 1) ? nextOffset.length : nextOffset[v + 1];
         return offset2 - offset;
     }
 
     @Override
-    public int getNextCount(@NonNull V vertex) {
-        return getNextCount(vertexToIndexMap.get(vertex));
+    public int getNextCount(@NonNull V v) {
+        return getNextCount(vertexToIndexMap.get(v));
     }
 
     @Override
@@ -288,9 +293,14 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getPrevAsInt(int vidx, int i) {
-        Preconditions.checkIndex(i, getPrevCount(vidx));
-        return prev[prevOffset[vidx] + i];
+    public int getPrevAsInt(int v, int i) {
+        Preconditions.checkIndex(i, getPrevCount(v));
+        return prev[prevOffset[v] + i];
+    }
+
+    @Override
+    public int getPrevArrowAsInt(int v, int index) {
+        return getPrevAsInt(v, index);
     }
 
     @Override
@@ -299,9 +309,9 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getPrevCount(int vidx) {
-        final int offset = prevOffset[vidx];
-        final int offset2 = (vidx == prevOffset.length - 1) ? prevOffset.length : prevOffset[vidx + 1];
+    public int getPrevCount(int v) {
+        final int offset = prevOffset[v];
+        final int offset2 = (v == prevOffset.length - 1) ? prevOffset.length : prevOffset[v + 1];
         return offset2 - offset;
     }
 
@@ -328,9 +338,9 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vi) {
-        final int offset = nextOffset[vi];
-        final int nextOffset = (vi == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[vi + 1];
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
+        final int offset = nextOffset[v];
+        final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
         return new IntIntArrayEnumeratorSpliterator(offset, nextOffset, this.next);
     }
 }

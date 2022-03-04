@@ -274,8 +274,8 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public @NonNull A getNextArrow(@NonNull V vertex, int index) {
-        int arrowId = getNextArrowIndex(getVertexIndex(vertex), index);
+    public @NonNull A getNextArrow(@NonNull V v, int index) {
+        int arrowId = getNextArrowIndex(getVertexIndex(v), index);
         @SuppressWarnings("unchecked")
         A a = (A) arrows.get(arrowId);
         return a;
@@ -320,9 +320,14 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     @SuppressWarnings("unchecked")
-    public A getNextArrow(int vi, int i) {
-        int arrowId = getNextArrowIndex(vi, i);
+    public A getNextArrow(int v, int index) {
+        int arrowId = getNextArrowIndex(v, index);
         return (A) arrows.get(arrowId);
+    }
+
+    @Override
+    public int getNextArrowAsInt(int v, int index) {
+        return getNextAsInt(v, index);
     }
 
     @Override

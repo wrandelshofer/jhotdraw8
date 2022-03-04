@@ -376,14 +376,14 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
     }
 
     @Override
-    public int getNextAsInt(int vidx, int i) {
-        int arrowId = getNextArrowIndex(vidx, i);
+    public int getNextAsInt(int v, int index) {
+        int arrowId = getNextArrowIndex(v, index);
         return arrowHead_getVertex(nextArrowHeads, arrowId);
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        return lastArrow_getCount(nextLastArrow, vidx);
+    public int getNextCount(int v) {
+        return lastArrow_getCount(nextLastArrow, v);
     }
 
     @Override
@@ -410,11 +410,11 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         this.ordered = ordered;
     }
 
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
         if (ordered) {
-            return getNextVerticesOrdered(vidx);
+            return getNextVerticesOrdered(v);
         } else {
-            return getNextVerticesUnordered(vidx);
+            return getNextVerticesUnordered(v);
         }
     }
 

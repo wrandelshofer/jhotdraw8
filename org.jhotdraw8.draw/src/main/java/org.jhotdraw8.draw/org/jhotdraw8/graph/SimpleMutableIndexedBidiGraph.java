@@ -5,7 +5,11 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.*;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
+import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -147,10 +151,10 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     }
 
     @Override
-    public int findIndexOfNextAsInt(int vidx, int uidx) {
-        int vOffset = vidx * stride + 1;
+    public int findIndexOfNextAsInt(int v, int u) {
+        int vOffset = v * stride + 1;
         for (int i = vOffset, n = vOffset + next[vOffset - 1]; i < n; i++) {
-            if (next[i] == uidx) {
+            if (next[i] == u) {
                 return i - vOffset;
             }
         }
@@ -158,10 +162,10 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     }
 
     @Override
-    public int findIndexOfPrevAsInt(int vidx, int uidx) {
-        int vOffset = vidx * stride + 1;
+    public int findIndexOfPrevAsInt(int v, int u) {
+        int vOffset = v * stride + 1;
         for (int i = vOffset, n = vOffset + prev[vOffset - 1]; i < n; i++) {
-            if (prev[i] == uidx) {
+            if (prev[i] == u) {
                 return i - vOffset;
             }
         }
@@ -174,28 +178,38 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     }
 
     @Override
-    public int getNextAsInt(int vidx, int i) {
-        int vOffset = vidx * stride;
-        Preconditions.checkIndex(i, next[vOffset]);
-        return next[vOffset + i + 1];
+    public int getNextAsInt(int v, int index) {
+        int vOffset = v * stride;
+        Preconditions.checkIndex(index, next[vOffset]);
+        return next[vOffset + index + 1];
     }
 
     @Override
-    public int getNextCount(int vidx) {
-        return next[vidx * stride];
+    public int getPrevArrowAsInt(int v, int index) {
+        return getPrevAsInt(v, index);
     }
 
     @Override
-    public int getPrevAsInt(int vidx, int i) {
-        int vOffset = vidx * stride;
+    public int getNextArrowAsInt(int v, int index) {
+        return getNextAsInt(v, index);
+    }
+
+    @Override
+    public int getNextCount(int v) {
+        return next[v * stride];
+    }
+
+    @Override
+    public int getPrevAsInt(int v, int i) {
+        int vOffset = v * stride;
         Preconditions.checkIndex(i, prev[vOffset]);
         return prev[vOffset + i + 1];
     }
 
 
     @Override
-    public int getPrevCount(int vidx) {
-        return prev[vidx * stride];
+    public int getPrevCount(int v) {
+        return prev[v * stride];
     }
 
     @Override
@@ -214,14 +228,14 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int vidx) {
-        int vOffset = vidx * stride;
+    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
+        int vOffset = v * stride;
         return new IntIntArrayEnumeratorSpliterator(vOffset + 1, vOffset + 1 + next[0], next);
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int vidx) {
-        int vOffset = vidx * stride;
+    public @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int v) {
+        int vOffset = v * stride;
         return new IntIntArrayEnumeratorSpliterator(vOffset + 1, vOffset + 1 + prev[vOffset], prev);
     }
 

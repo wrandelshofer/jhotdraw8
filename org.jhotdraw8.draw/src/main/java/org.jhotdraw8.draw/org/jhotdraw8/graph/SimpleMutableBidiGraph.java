@@ -199,20 +199,20 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V vertex, int index) {
-        Node<V, A> vNode = getNodeNonNull(vertex);
+    public @NonNull V getNext(@NonNull V v, int index) {
+        Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.getVertex(index);
     }
 
     @Override
-    public @NonNull A getNextArrow(@NonNull V vertex, int index) {
-        Node<V, A> vNode = getNodeNonNull(vertex);
+    public @NonNull A getNextArrow(@NonNull V v, int index) {
+        Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.getArrow(index);
     }
 
     @Override
-    public int getNextCount(@NonNull V vertex) {
-        Node<V, A> vNode = getNodeNonNull(vertex);
+    public int getNextCount(@NonNull V v) {
+        Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.size();
     }
 

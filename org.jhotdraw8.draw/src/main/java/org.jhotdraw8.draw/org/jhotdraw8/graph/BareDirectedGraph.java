@@ -30,25 +30,25 @@ public interface BareDirectedGraph<V, A> {
      * Returns the next vertex associated with
      * the specified vertex and outgoing arrow index.
      *
-     * @param vertex a vertex
-     * @param index  index of outgoing arrow
+     * @param v     a vertex
+     * @param index index of outgoing arrow
      * @return the next vertex
      * @see #getNextCount
      */
     @NonNull
-    V getNext(@NonNull V vertex, int index);
+    V getNext(@NonNull V v, int index);
 
     /**
      * Returns the arrow data associated with the specified vertex and outgoing arrow
      * index.
      *
-     * @param vertex a vertex
-     * @param index  index of outgoing arrow
+     * @param v     a vertex
+     * @param index index of outgoing arrow
      * @return the next arrow data
      * @see #getNextCount
      */
     @NonNull
-    A getNextArrow(@NonNull V vertex, int index);
+    A getNextArrow(@NonNull V v, int index);
 
     /**
      * Returns the number of next vertices at the specified vertex.
@@ -56,15 +56,15 @@ public interface BareDirectedGraph<V, A> {
      * This number is the same as the number of outgoing arrows at the specified
      * vertex.
      *
-     * @param vertex a vertex
+     * @param v a vertex
      * @return the number of next vertices
      */
-    int getNextCount(@NonNull V vertex);
+    int getNextCount(@NonNull V v);
 
     /**
      * Returns all vertices.
      *
-     * @return a collection view on all vertices
+     * @return a set view on all vertices
      */
     @NonNull
     Set<V> getVertices();
