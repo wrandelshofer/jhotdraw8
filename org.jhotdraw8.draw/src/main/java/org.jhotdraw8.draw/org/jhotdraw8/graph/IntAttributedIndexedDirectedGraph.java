@@ -1,5 +1,9 @@
 package org.jhotdraw8.graph;
 
+/**
+ * This interface adds accessors for vertex data and arrow data that is
+ * represented by an int.
+ */
 public interface IntAttributedIndexedDirectedGraph extends IndexedDirectedGraph {
     /**
      * Returns the specified successor (next) arrow data of the specified vertex.

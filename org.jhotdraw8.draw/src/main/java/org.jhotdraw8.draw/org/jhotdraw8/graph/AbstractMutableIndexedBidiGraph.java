@@ -103,7 +103,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
                 for (int j = node.next.size() - 1; j >= 0; j--) {
                     int uidx = node.next.getAsInt(j);
                     if (uidx == vidx) {
-                        node.next.removeAt(j);
+                        node.next.removeAtAsInt(j);
                         arrowCount--;
                     } else if (uidx > vidx) {
                         node.next.setAsInt(j, uidx - 1);
@@ -112,7 +112,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
                 for (int j = node.prev.size() - 1; j >= 0; j--) {
                     int uidx = node.prev.getAsInt(j);
                     if (uidx == vidx) {
-                        node.prev.removeAt(j);
+                        node.prev.removeAtAsInt(j);
                     } else if (uidx > vidx) {
                         node.prev.setAsInt(j, uidx - 1);
                     }
@@ -157,7 +157,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         if (node == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx);
         }
-        buildRemoveArrowAt(vidx, node.next.indexOfInt(uidx));
+        buildRemoveArrowAt(vidx, node.next.indexOfAsInt(uidx));
     }
 
     /**
@@ -171,7 +171,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         if (vnode == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
         }
-        int uidx = vnode.next.removeAt(i);
+        int uidx = vnode.next.removeAtAsInt(i);
         if (vnode.isNodeEmpty()) {
             nodes[vidx] = null;
         }
@@ -180,7 +180,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         if (unode == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
         }
-        unode.prev.removeAt(unode.prev.indexOfInt(vidx));
+        unode.prev.removeAtAsInt(unode.prev.indexOfAsInt(vidx));
         if (unode.isNodeEmpty()) {
             nodes[uidx] = null;
         }

@@ -647,12 +647,12 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     int arrowCount = 0;
 
     @Override
-    public void addArrow(int v, int u) {
-        addArrow(v, u, 0);
+    public void addArrowAsInt(int v, int u) {
+        addArrowAsInt(v, u, 0);
     }
 
     @Override
-    public void addArrow(int v, int u, int data) {
+    public void addArrowAsInt(int v, int u, int data) {
         Chunk vChunk = getNextChunk(v);
         Chunk uChunk = getPrevChunk(u);
         if (vChunk.tryToAddArrow(v, u, data)) {
@@ -676,14 +676,14 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
 
     @Override
-    public void addVertex() {
+    public void addVertexAsInt() {
         grow(vertexCount + 1);
         vertexCount++;
     }
 
     @Override
-    public void addVertex(int vidx) {
-        if (vidx < vertexCount) {
+    public void addVertexAsInt(int v) {
+        if (v < vertexCount) {
             throw new UnsupportedOperationException();
         }
         grow(vertexCount + 1);
@@ -691,23 +691,23 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     }
 
     @Override
-    public void removeAllPrev(int vidx) {
+    public void removeAllPrevAsInt(int v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeAllNext(int v) {
+    public void removeAllNextAsInt(int v) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeNext(int v, int i) {
-        int u = getNextChunk(v).removeArrowAt(v, i);
-        getPrevChunk(u).tryToRemoveArrow(u,v);
+    public void removeNextAsInt(int v, int index) {
+        int u = getNextChunk(v).removeArrowAt(v, index);
+        getPrevChunk(u).tryToRemoveArrow(u, v);
     }
 
     @Override
-    public void removeVertex(int v) {
+    public void removeVertexAsInt(int v) {
         throw new UnsupportedOperationException();
     }
 

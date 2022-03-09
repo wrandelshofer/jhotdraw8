@@ -29,7 +29,7 @@ public class ReaderCssScanner extends AbstractCssScanner {
     @Override
     protected int read() throws IOException {
         if (!pushedChars.isEmpty()) {
-            currentChar = pushedChars.removeAt(pushedChars.size() - 1);
+            currentChar = pushedChars.removeAtAsInt(pushedChars.size() - 1);
             position++;
             return currentChar;
         }

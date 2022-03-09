@@ -7,11 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.util.Preconditions;
 
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * LongArrayDeque.
@@ -178,8 +174,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         if (head == tail) {
             throw new NoSuchElementException();
         }
-        long result = elements[head];
-        return result;
+        return elements[head];
     }
 
     /**
@@ -189,8 +184,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         if (head == tail) {
             throw new NoSuchElementException();
         }
-        long result = elements[tail == 0 ? elements.length - 1 : tail - 1];
-        return result;
+        return elements[tail == 0 ? elements.length - 1 : tail - 1];
     }
 
     /**
@@ -206,7 +200,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         int n = elements.length;
         int r = n - p; // number of elements to the right of p
         int newCapacity = Math.max(1, Integer.highestOneBit(capacity + capacity - 1));
-        if (newCapacity < 0) {
+        if (newCapacity < capacity) {
             throw new IllegalStateException("Sorry, deque too big");
         }
         long[] a = new long[newCapacity];

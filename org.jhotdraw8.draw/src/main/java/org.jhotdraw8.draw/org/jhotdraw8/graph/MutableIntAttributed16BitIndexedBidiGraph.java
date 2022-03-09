@@ -5,13 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntCharArrayEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.*;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -97,24 +91,36 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         this.prevArrow = new int[vertexCapacity * maxArity];
     }
 
-    @Override
-    public void addArrow(int vidx, int uidx) {
-        addArrow(vidx, uidx, 0);
+    /**
+     * Removes all vertices and all arrows.
+     */
+    public void clear() {
+        vertexCount = 0;
+        arrowCount = 0;
+        Arrays.fill(next, (char) 0);
+        Arrays.fill(prev, (char) 0);
+        Arrays.fill(nextArrow, 0);
+        Arrays.fill(prevArrow, 0);
     }
 
-    public void addArrow(int vidx, int uidx, int arrowData) {
-        int vOffset = vidx * stride + VERTEX_DATA_SIZE;
+    @Override
+    public void addArrowAsInt(int v, int u) {
+        addArrowAsInt(v, u, 0);
+    }
+
+    public void addArrowAsInt(int v, int u, int arrowData) {
+        int vOffset = v * stride + VERTEX_DATA_SIZE;
         int vNewNextCount = next[vOffset] + 1;
-        int uOffset = uidx * stride + VERTEX_DATA_SIZE;
+        int uOffset = u * stride + VERTEX_DATA_SIZE;
         int uNewPrevCount = prev[uOffset] + 1;
         if (vNewNextCount > maxArity || uNewPrevCount > maxArity) {
-            throw new IndexOutOfBoundsException("Not enough capacity for a new arrow " + vidx + "->" + uidx);
+            throw new IndexOutOfBoundsException("Not enough capacity for a new arrow " + v + "->" + u);
         }
-        next[vOffset + vNewNextCount] = (char) uidx;
+        next[vOffset + vNewNextCount] = (char) u;
         next[vOffset] = (char) vNewNextCount;
-        nextArrow[vidx * maxArity + vNewNextCount - 1] = arrowData;
-        prevArrow[uidx * maxArity + uNewPrevCount - 1] = arrowData;
-        prev[uOffset + uNewPrevCount] = (char) vidx;
+        nextArrow[v * maxArity + vNewNextCount - 1] = arrowData;
+        prevArrow[u * maxArity + uNewPrevCount - 1] = arrowData;
+        prev[uOffset + uNewPrevCount] = (char) v;
         prev[uOffset] = (char) uNewPrevCount;
         arrowCount++;
     }
@@ -155,27 +161,27 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     }
 
     @Override
-    public void addVertex() {
+    public void addVertexAsInt() {
         grow(vertexCount + 1);
         vertexCount += 1;
     }
 
     @Override
-    public void addVertex(int vidx) {
-        grow(max(vertexCount + 1, vidx));
-        int newVertexCount = max(vidx, vertexCount + 1);
-        int vOffset = vidx * stride + VERTEX_DATA_SIZE;
-        if (vidx < vertexCount) {
-            addToVectorIndices(next, 0, next, 0, vidx, vidx, 1);
-            addToVectorIndices(next, vidx, next, vidx + 1, vertexCount - vidx, vidx, 1);
-            addToVectorIndices(prev, 0, prev, 0, vidx, vidx, 1);
-            addToVectorIndices(prev, vidx, prev, vidx + 1, vertexCount - vidx, vidx, 1);
-            System.arraycopy(nextArrow, vidx * maxArity, nextArrow, (vidx + 1) * maxArity, (vertexCount - vidx) * maxArity);
-            System.arraycopy(prevArrow, vidx * maxArity, prevArrow, (vidx + 1) * maxArity, (vertexCount - vidx) * maxArity);
+    public void addVertexAsInt(int v) {
+        grow(max(vertexCount + 1, v));
+        int newVertexCount = max(v, vertexCount + 1);
+        int vOffset = v * stride + VERTEX_DATA_SIZE;
+        if (v < vertexCount) {
+            addToVectorIndices(next, 0, next, 0, v, v, 1);
+            addToVectorIndices(next, v, next, v + 1, vertexCount - v, v, 1);
+            addToVectorIndices(prev, 0, prev, 0, v, v, 1);
+            addToVectorIndices(prev, v, prev, v + 1, vertexCount - v, v, 1);
+            System.arraycopy(nextArrow, v * maxArity, nextArrow, (v + 1) * maxArity, (vertexCount - v) * maxArity);
+            System.arraycopy(prevArrow, v * maxArity, prevArrow, (v + 1) * maxArity, (vertexCount - v) * maxArity);
             Arrays.fill(next, vOffset, vOffset + stride, (char) 0);
             Arrays.fill(prev, vOffset, vOffset + stride, (char) 0);
-            Arrays.fill(nextArrow, vidx * maxArity, (vidx + 1) * maxArity, 0);
-            Arrays.fill(prevArrow, vidx * maxArity, (vidx + 1) * maxArity, 0);
+            Arrays.fill(nextArrow, v * maxArity, (v + 1) * maxArity, 0);
+            Arrays.fill(prevArrow, v * maxArity, (v + 1) * maxArity, 0);
         }
         vertexCount = newVertexCount;
     }
@@ -262,41 +268,41 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     }
 
     @Override
-    public void removeAllPrev(int vidx) {
-        Preconditions.checkIndex(vidx, vertexCount);
-        int vOffset = vidx * stride + VERTEX_DATA_SIZE;
+    public void removeAllPrevAsInt(int v) {
+        Preconditions.checkIndex(v, vertexCount);
+        int vOffset = v * stride + VERTEX_DATA_SIZE;
         int vPrevCount = prev[vOffset];
         for (int i = vPrevCount; i >= 0; i--) {
-            removePrev(vidx, i);
+            removePrev(v, i);
         }
         prev[vOffset] = 0;
     }
 
     @Override
-    public void removeAllNext(int vidx) {
-        Preconditions.checkIndex(vidx, vertexCount);
-        int vOffset = vidx * stride + VERTEX_DATA_SIZE;
+    public void removeAllNextAsInt(int v) {
+        Preconditions.checkIndex(v, vertexCount);
+        int vOffset = v * stride + VERTEX_DATA_SIZE;
         int vNextCount = next[vOffset];
         for (int i = vNextCount; i >= 0; i--) {
-            removeNext(vidx, i);
+            removeNextAsInt(v, i);
         }
     }
 
     @Override
-    public void removeNext(int vidx, int i) {
-        int uidx = getNextAsInt(vidx, i);
-        int vOffset = vidx * stride + VERTEX_DATA_SIZE;
+    public void removeNextAsInt(int v, int index) {
+        int uidx = getNextAsInt(v, index);
+        int vOffset = v * stride + VERTEX_DATA_SIZE;
         int vNewNextCount = next[vOffset] - 1;
         int uOffset = uidx * stride + VERTEX_DATA_SIZE;
         int uNewPrevCount = prev[uOffset] - 1;
-        int vIndex = findIndexOfPrevAsInt(uidx, vidx);
-        if (vIndex < 0 || i < 0) {
-            throw new NoSuchElementException("There is no arrow " + vidx + "->" + uidx);
+        int vIndex = findIndexOfPrevAsInt(uidx, v);
+        if (vIndex < 0 || index < 0) {
+            throw new NoSuchElementException("There is no arrow " + v + "->" + uidx);
         }
-        int vArrowOffset = vidx * maxArity;
-        if (i < vNewNextCount) {
-            System.arraycopy(next, vOffset + i + 2, next, vOffset + i + 1, vNewNextCount - i);
-            System.arraycopy(nextArrow, vArrowOffset + i + 1, nextArrow, vArrowOffset + i, vNewNextCount - i);
+        int vArrowOffset = v * maxArity;
+        if (index < vNewNextCount) {
+            System.arraycopy(next, vOffset + index + 2, next, vOffset + index + 1, vNewNextCount - index);
+            System.arraycopy(nextArrow, vArrowOffset + index + 1, nextArrow, vArrowOffset + index, vNewNextCount - index);
         }
         int uArrowOffset = uidx * maxArity;
         if (vIndex < uNewPrevCount) {
@@ -342,17 +348,17 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     }
 
     @Override
-    public void removeVertex(int vidx) {
-        Preconditions.checkIndex(vidx, vertexCount);
-        removeAllNext(vidx);
-        removeAllPrev(vidx);
-        if (vidx < vertexCount - 1) {
-            addToVectorIndices(next, 0, next, 0, vidx, vidx, -1);
-            addToVectorIndices(next, vidx, next, vidx + 1, vertexCount - vidx, vidx, -1);
-            addToVectorIndices(prev, 0, prev, 0, vidx, vidx, -1);
-            addToVectorIndices(prev, vidx, prev, vidx + 1, vertexCount - vidx, vidx, -1);
-            System.arraycopy(nextArrow, (vidx + 1) * maxArity, nextArrow, (vidx) * maxArity, (vertexCount - vidx - 1) * maxArity);
-            System.arraycopy(prevArrow, (vidx + 1) * maxArity, prevArrow, (vidx) * maxArity, (vertexCount - vidx - 1) * maxArity);
+    public void removeVertexAsInt(int v) {
+        Preconditions.checkIndex(v, vertexCount);
+        removeAllNextAsInt(v);
+        removeAllPrevAsInt(v);
+        if (v < vertexCount - 1) {
+            addToVectorIndices(next, 0, next, 0, v, v, -1);
+            addToVectorIndices(next, v, next, v + 1, vertexCount - v, v, -1);
+            addToVectorIndices(prev, 0, prev, 0, v, v, -1);
+            addToVectorIndices(prev, v, prev, v + 1, vertexCount - v, v, -1);
+            System.arraycopy(nextArrow, (v + 1) * maxArity, nextArrow, (v) * maxArity, (vertexCount - v - 1) * maxArity);
+            System.arraycopy(prevArrow, (v + 1) * maxArity, prevArrow, (v) * maxArity, (vertexCount - v - 1) * maxArity);
         }
         int vOffset = (vertexCount - 1) * stride + VERTEX_DATA_SIZE;
         Arrays.fill(next, vOffset, vOffset + stride, (char) 0);

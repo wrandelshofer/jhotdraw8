@@ -11,72 +11,72 @@ public interface MutableIndexedBidiGraph extends IndexedBidiGraph {
     /**
      * Adds an arrow from vertex 'v' to vertex 'u' with arrow data 0.
      *
-     * @param vidx index of vertex 'v'
-     * @param uidx index of vertex 'u'
+     * @param v index of vertex 'v'
+     * @param u index of vertex 'u'
      */
-    default void addArrow(int vidx, int uidx) {
-        addArrow(vidx, uidx, 0);
+    default void addArrowAsInt(int v, int u) {
+        addArrowAsInt(v, u, 0);
     }
 
     /**
      * Adds an arrow from vertex 'v' to vertex 'u'.
      *
-     * @param vidx index of vertex 'v'
-     * @param uidx index of vertex 'u'
+     * @param v    index of vertex 'v'
+     * @param u    index of vertex 'u'
      * @param data the arrow data
      */
-    void addArrow(int vidx, int uidx, int data);
+    void addArrowAsInt(int v, int u, int data);
 
     /**
      * Adds a vertex to the graph.
      */
-    void addVertex();
+    void addVertexAsInt();
 
     /**
      * Adds a vertex at the specified index to the graph.
      *
-     * @param vidx index of vertex 'v'
+     * @param v index of vertex 'v'
      */
-    void addVertex(int vidx);
+    void addVertexAsInt(int v);
 
     /**
      * Removes all arrows ending at the specified vertex.
      *
-     * @param vidx index of vertex 'v'
+     * @param v index of vertex 'v'
      */
-    void removeAllPrev(int vidx);
+    void removeAllPrevAsInt(int v);
 
     /**
      * Removes all arrows starting at the specified vertex.
      *
-     * @param vidx index of vertex 'v'
+     * @param v index of vertex 'v'
      */
-    void removeAllNext(int vidx);
+    void removeAllNextAsInt(int v);
 
     /**
      * Removes an arrow from vertex 'v' to vertex 'u'
      *
-     * @param vidx index of vertex 'v'
-     * @param uidx index of vertex 'u'
+     * @param v index of vertex 'v'
+     * @param u index of vertex 'u'
      * @throws NoSuchElementException if there is no such arrow
      */
-    default void removeArrow(int vidx, int uidx) {
-        removeNext(vidx, findIndexOfNextAsInt(vidx, uidx));
+    default void removeArrowAsInt(int v, int u) {
+        removeNextAsInt(v, findIndexOfNextAsInt(v, u));
     }
 
     /**
      * Removes the i-th arrow starting at vertex 'v'
      *
-     * @param vidx index of vertex 'v'
-     * @param i    the index of the arrow starting at 'v'
+     * @param v     index of vertex 'v'
+     * @param index the index of the arrow starting at 'v'
      * @throws NoSuchElementException if there is no such arrow
      */
-    void removeNext(int vidx, int i);
+    void removeNextAsInt(int v, int index);
 
     /**
      * Removes vertex 'v'
      *
-     * @param vidx index of vertex 'v'
+     * @param v index of vertex 'v'
      */
-    void removeVertex(int vidx);
+    void removeVertexAsInt(int v);
 }

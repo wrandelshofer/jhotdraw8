@@ -6,11 +6,7 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -83,7 +79,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
-            instance.addVertex(vidx);
+            instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
         }
 
@@ -102,7 +98,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
 
                 if (nextCount < maxArity && prevCount < maxArity) {
                     if (expected.findIndexOfNext(v, u) < 0) {
-                        instance.addArrow(v, u, -u);
+                        instance.addArrowAsInt(v, u, -u);
                         expected.addArrow(v, u, -u);
                     }
                 }
@@ -132,7 +128,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 int i = rng.nextInt(nextCount);
                 int uidx = expected.getNext(vidx, i);
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
-                    instance.removeArrow(vidx, uidx);
+                    instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
                 }
 
@@ -151,7 +147,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
-            instance.addVertex(vidx);
+            instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
         }
 
@@ -170,7 +166,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
 
                 if (nextCount < maxArity && prevCount < maxArity) {
                     if (expected.findIndexOfNext(v, u) < 0) {
-                        instance.addArrow(v, u, -u);
+                        instance.addArrowAsInt(v, u, -u);
                         expected.addArrow(v, u, -u);
                     }
                 }
@@ -198,7 +194,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 int i = rng.nextInt(nextCount);
                 int uidx = expected.getNext(vidx, i);
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
-                    instance.removeArrow(vidx, uidx);
+                    instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
                 }
 
@@ -223,7 +219,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
-            instance.addVertex(vidx);
+            instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
         }
 
@@ -241,7 +237,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(prevCount, instance.getPrevCount(u));
 
                 if (nextCount < maxArity && prevCount < maxArity) {
-                    instance.addArrow(v, u, -u);
+                    instance.addArrowAsInt(v, u, -u);
                     expected.addArrow(v, u, -u);
                 }
                 assertEquals(expected.getNextCount(v), instance.getNextCount(v));
@@ -270,7 +266,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 int i = rng.nextInt(nextCount);
                 int uidx = expected.getNext(vidx, i);
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
-                    instance.removeArrow(vidx, uidx);
+                    instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
                 }
 
@@ -289,7 +285,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
-            instance.addVertex(vidx);
+            instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
         }
 
@@ -307,7 +303,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(prevCount, instance.getPrevCount(uidx));
 
                 if (nextCount < maxArity && prevCount < maxArity) {
-                    instance.addArrow(vidx, uidx, vidx * 100 + uidx);
+                    instance.addArrowAsInt(vidx, uidx, vidx * 100 + uidx);
                     expected.addArrow(vidx, uidx, vidx * 100 + uidx);
 
 
@@ -343,7 +339,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(uidx, instance.getNextAsInt(vidx, i));
                 assertEquals(expected.findIndexOfNext(vidx, uidx), instance.findIndexOfNextAsInt(vidx, uidx));
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
-                    instance.removeArrow(vidx, uidx);
+                    instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
                 }
 
@@ -362,7 +358,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
-            instance.addVertex(vidx);
+            instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
         }
 
@@ -380,7 +376,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(prevCount, instance.getPrevCount(u));
 
                 if (nextCount < maxArity && prevCount < maxArity && expected.findIndexOfNext(v, u) < 0) {
-                    instance.addArrow(v, u, v * 100 + u);
+                    instance.addArrowAsInt(v, u, v * 100 + u);
                     expected.addArrow(v, u, v * 100 + u);
 
 
@@ -414,7 +410,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 int i = rng.nextInt(nextCount);
                 int u = expected.getNext(v, i);
                 if (expected.findIndexOfNext(v, u) != -1) {
-                    instance.removeArrow(v, u);
+                    instance.removeArrowAsInt(v, u);
                     expected.removeArrow(v, u);
                 }
 

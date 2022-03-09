@@ -9,17 +9,17 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.*;
-import java.util.function.IntPredicate;
-import java.util.stream.IntStream;
+import java.util.function.LongPredicate;
+import java.util.stream.LongStream;
 
 /**
- * A lightweight int array list implementation for performance critical code.
+ * A lightweight long array list implementation for performance critical code.
  *
  * @author Werner Randelshofer
  */
-public class IntArrayList extends AbstractList<Integer> {
+public class LongArrayList extends AbstractList<Long> {
 
-    private int[] items;
+    private long[] items;
     /**
      * Holds the size of the list. Invariant: size >= 0.
      */
@@ -28,7 +28,7 @@ public class IntArrayList extends AbstractList<Integer> {
     /**
      * Creates a new empty instance with 0 initial capacity.
      */
-    public IntArrayList() {
+    public LongArrayList() {
     }
 
     /**
@@ -36,7 +36,7 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @param initialCapacity the initial capacity
      */
-    public IntArrayList(int initialCapacity) {
+    public LongArrayList(int initialCapacity) {
         grow(initialCapacity);
     }
 
@@ -45,19 +45,19 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @param collection a collection of integers
      */
-    public IntArrayList(@NonNull Collection<Integer> collection) {
+    public LongArrayList(@NonNull Collection<Long> collection) {
         this.size = collection.size();
-        this.items = new int[size];
+        this.items = new long[size];
 
         int count = 0;
         //noinspection ForLoopReplaceableByForEach
-        for (Iterator<Integer> iter = collection.iterator(); iter.hasNext(); ) {
-            Integer value = iter.next();
+        for (Iterator<Long> iter = collection.iterator(); iter.hasNext(); ) {
+            Long value = iter.next();
             items[count++] = value;
         }
     }
 
-    private IntArrayList(@NonNull int[] items) {
+    private LongArrayList(@NonNull long[] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -69,8 +69,8 @@ public class IntArrayList extends AbstractList<Integer> {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull IntArrayList of(@NonNull int... items) {
-        return new IntArrayList(items);
+    public static @NonNull LongArrayList of(@NonNull long... items) {
+        return new LongArrayList(items);
     }
 
     /**
@@ -78,7 +78,7 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @param newItem the new item
      */
-    public void addAsInt(int newItem) {
+    public void addAsLong(long newItem) {
         grow(size + 1);
         items[size++] = newItem;
     }
@@ -89,7 +89,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param index   the index
      * @param newItem the new item
      */
-    public void addAsInt(int index, int newItem) {
+    public void addAsLong(int index, long newItem) {
         Preconditions.checkIndex(index, size + 1);
         grow(size + 1);
         System.arraycopy(items, index, items, index + 1, size - index);
@@ -102,7 +102,7 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @param that another list
      */
-    public void addAllAsInt(@NonNull IntArrayList that) {
+    public void addAllAsLong(@NonNull LongArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -118,7 +118,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param out the output collection
      * @return out
      */
-    public @NonNull <T extends Collection<Integer>> T addAllInto(@NonNull T out) {
+    public @NonNull <T extends Collection<Long>> T addAllInto(@NonNull T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -136,7 +136,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(@NonNull int[] a, int offset) {
+    public void copyInto(@NonNull long[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -148,11 +148,11 @@ public class IntArrayList extends AbstractList<Integer> {
         if (obj == null) {
             return false;
         }
-        // FIXME this is not correct since we implement List<Integer>
+        // FIXME this is not correct since we implement List<Long>
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final IntArrayList other = (IntArrayList) obj;
+        final LongArrayList other = (LongArrayList) obj;
         if (other.size != this.size) {
             return false;
         }
@@ -170,7 +170,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param index an index
      * @return the item at the index
      */
-    public int getAsInt(int index) {
+    public long getAsLong(int index) {
         Preconditions.checkIndex(index, size);
         return items[index];
     }
@@ -182,17 +182,17 @@ public class IntArrayList extends AbstractList<Integer> {
      * @return the item at the index
      */
     @Override
-    public Integer get(int index) {
+    public Long get(int index) {
         Preconditions.checkIndex(index, size);
         return items[index];
     }
 
-    public int getLastAsInt() {
-        return getAsInt(size - 1);
+    public long getLastAsLong() {
+        return getAsLong(size - 1);
     }
 
-    public int getFirstAsInt() {
-        return getAsInt(0);
+    public long getFirstAsLong() {
+        return getAsLong(0);
     }
 
     /**
@@ -215,7 +215,7 @@ public class IntArrayList extends AbstractList<Integer> {
     public int hashCode() {
         int result = 1;
         for (int i = 0; i < size; i++) {
-            result = 31 * result + items[i];
+            result = 31 * result + Long.hashCode(items[i]);
         }
 
         return result;
@@ -232,11 +232,11 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param item the item
      * @return the index of the item, or -1.
      */
-    public int indexOfAsInt(int item) {
-        return indexOfAsInt(item, 0);
+    public int indexOfAsLong(long item) {
+        return indexOfAsLong(item, 0);
     }
 
-    public int indexOfAsInt(int item, int start) {
+    public int indexOfAsLong(long item, int start) {
         for (int i = start; i < size; i++) {
             if (items[i] == item) {
                 return i;
@@ -256,9 +256,9 @@ public class IntArrayList extends AbstractList<Integer> {
 
     //@Override
     public boolean contains(Object o) {
-        if (o instanceof Integer) {
+        if (o instanceof Long) {
             int e = (int) o;
-            return indexOfAsInt(e) != -1;
+            return indexOfAsLong(e) != -1;
         }
         return false;
     }
@@ -269,9 +269,9 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param index an index
      * @return the removed item
      */
-    public int removeAtAsInt(int index) {
+    public long removeAtAsLong(int index) {
         Preconditions.checkIndex(index, size);
-        int removedItem = items[index];
+        long removedItem = items[index];
         int numMoved = size - index - 1;
         if (numMoved > 0) {
             System.arraycopy(items, index + 1, items, index, numMoved);
@@ -286,11 +286,11 @@ public class IntArrayList extends AbstractList<Integer> {
      * @return the removed item
      * @throws NoSuchElementException if the list is empty
      */
-    public int removeLastAsInt() {
+    public long removeLastAsLong() {
         if (isEmpty()) {
             throw new NoSuchElementException("List is empty.");
         }
-        return removeAtAsInt(size - 1);
+        return removeAtAsLong(size - 1);
     }
 
     /**
@@ -300,9 +300,9 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param newItem the new item
      * @return the old item
      */
-    public int setAsInt(int index, int newItem) {
+    public long setAsLong(int index, long newItem) {
         Preconditions.checkIndex(index, size);
-        int removedItem = items[index];
+        long removedItem = items[index];
         items[index] = newItem;
         return removedItem;
     }
@@ -321,14 +321,14 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @return an iterator over the elements of this list
      */
-    public @NonNull PrimitiveIterator.OfInt iterator() {
-        return new PrimitiveIterator.OfInt() {
+    public @NonNull PrimitiveIterator.OfLong iterator() {
+        return new PrimitiveIterator.OfLong() {
             private int index = 0;
-            private final int size = IntArrayList.this.size;
-            private final int[] items = IntArrayList.this.items;
+            private final int size = LongArrayList.this.size;
+            private final long[] items = LongArrayList.this.items;
 
             @Override
-            public int nextInt() {
+            public long nextLong() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
@@ -347,7 +347,7 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @return a spliterator over the elements of this list
      */
-    public @NonNull Spliterator.OfInt spliterator() {
+    public @NonNull Spliterator.OfLong spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -356,8 +356,8 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @return a stream
      */
-    public @NonNull IntStream intStream() {
-        return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
+    public @NonNull LongStream longStream() {
+        return (size == 0) ? LongStream.empty() : Arrays.stream(items, 0, size);
     }
 
     /**
@@ -365,25 +365,25 @@ public class IntArrayList extends AbstractList<Integer> {
      *
      * @return array
      */
-    public @NonNull int[] toIntArray() {
-        int[] result = new int[size];
+    public @NonNull long[] toLongArray() {
+        long[] result = new long[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }
 
     //@Override
-    public boolean add(Integer integer) {
-        addAsInt((int) integer);
+    public boolean add(Long integer) {
+        addAsLong((long) integer);
         return true;
     }
 
 
     //@Override
     public boolean remove(Object o) {
-        if (o instanceof Integer) {
-            int index = indexOfAsInt((int) o);
+        if (o instanceof Long) {
+            int index = indexOfAsLong((int) o);
             if (index != -1) {
-                removeAtAsInt(index);
+                removeAtAsLong(index);
                 return true;
             }
         }
@@ -419,12 +419,12 @@ public class IntArrayList extends AbstractList<Integer> {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIfAsInt(@NonNull IntPredicate filter) {
+    public boolean removeIfAsLong(@NonNull LongPredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
-            if (filter.test(getAsInt(i))) {
-                removeAtAsInt(i);
+            if (filter.test(getAsLong(i))) {
+                removeAtAsLong(i);
                 hasRemoved = true;
             }
         }
@@ -440,13 +440,13 @@ public class IntArrayList extends AbstractList<Integer> {
      *          A {@code null} value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used.
      */
-    public void sort(@Nullable Comparator<? super Integer> c) {
+    public void sort(@Nullable Comparator<? super Long> c) {
         if (size > 1) {
             if (c == null) {
                 Arrays.sort(items, 0, size);
             } else {
                 // FIXME this is inefficient, we need a sort method for an int-array that takes a comparator.
-                final Integer[] objects = new Integer[size];
+                final Long[] objects = new Long[size];
                 for (int i = 0; i < size; i++) objects[i] = items[i];
                 Arrays.sort(objects, 0, size, c);
                 for (int i = 0; i < size; i++) items[i] = objects[i];

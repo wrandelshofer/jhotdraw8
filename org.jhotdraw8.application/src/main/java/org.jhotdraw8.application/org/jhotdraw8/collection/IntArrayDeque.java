@@ -167,8 +167,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         if (head == tail) {
             throw new NoSuchElementException();
         }
-        int result = elements[tail == 0 ? elements.length - 1 : tail - 1];
-        return result;
+        return elements[tail == 0 ? elements.length - 1 : tail - 1];
     }
 
     /**
@@ -184,7 +183,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         int n = elements.length;
         int r = n - p; // number of elements to the right of p
         int newCapacity = Math.max(1, Integer.highestOneBit(capacity + capacity - 1));
-        if (newCapacity < 0) {
+        if (newCapacity < capacity) {
             throw new IllegalStateException("Sorry, deque too big");
         }
         int[] a = new int[newCapacity];
