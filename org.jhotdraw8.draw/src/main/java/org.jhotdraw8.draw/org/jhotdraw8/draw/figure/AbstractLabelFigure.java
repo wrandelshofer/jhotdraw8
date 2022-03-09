@@ -4,12 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -20,24 +15,13 @@ import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssDimension2D;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssRectangle2D;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.*;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
-import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
-import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
 
 import java.awt.geom.AffineTransform;
@@ -356,25 +340,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 		if (!newChildren.equals(g.getChildren())) {
 			g.getChildren().setAll(newChildren);
 		}
-/*
-        final Bounds tb = t.getLayoutBounds();
-        final Bounds lb = getLayoutBounds();
-        p.getElements().addAll(
-                new MoveTo(tb.getMinX(),tb.getMinY()),
-                new LineTo(tb.getMaxX(),tb.getMinY()),
-                new LineTo(tb.getMaxX(),tb.getMaxY()),
-                new LineTo(tb.getMinX(),tb.getMaxY()),
-                new ClosePath(),
-                new MoveTo(tb.getMinX(),tb.getMinY()+t.getBaselineOffset()),
-                new LineTo(tb.getMaxX(),tb.getMinY()+t.getBaselineOffset()),
-
-                new MoveTo(lb.getMinX(),lb.getMinY()),
-                new LineTo(lb.getMaxX(),lb.getMinY()),
-                new LineTo(lb.getMaxX(),lb.getMaxY()),
-                new LineTo(lb.getMinX(),lb.getMaxY()),
-                new ClosePath()
-        );
- */
 	}
 
 	/**
@@ -430,19 +395,24 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 		final Insets padding = getStyledNonNull(PADDING).getConvertedValue(units);
 		final Bounds b = getLayoutBounds();
 		iconGroupNode.setTranslateY(b.getMinY() + padding.getTop() + ty);
+		final double w = getStyledNonNull(ICON_SIZE).getWidth().getConvertedValue(units);
+		final double h = getStyledNonNull(ICON_SIZE).getHeight().getConvertedValue(units);
 		switch (getStyledNonNull(ICON_POSITION)) {
 			default:
 			case LEFT:
 				iconGroupNode.setTranslateX(b.getMinX() + padding.getLeft() + tx);
 				break;
 			case RIGHT:
-				final CssDimension2D iconSize = getStyledNonNull(ICON_SIZE);
-				iconGroupNode.setTranslateX(b.getMaxX() - padding.getRight() - iconSize.getWidth().getConvertedValue(units) + tx);
+				iconGroupNode.setTranslateX(b.getMaxX() - padding.getRight() - w + tx);
 				break;
 		}
 
 		final double iconRotate = getStyledNonNull(ICON_ROTATE);
-		iconGroupNode.setRotate(iconRotate);
+		if (iconRotate != 0.0) {
+			iconGroupNode.getTransforms().setAll(new FXPreciseRotate(iconRotate, w * 0.5, h * 0.5));
+		} else {
+			iconGroupNode.getTransforms().clear();
+		}
 	}
 
 	/**
