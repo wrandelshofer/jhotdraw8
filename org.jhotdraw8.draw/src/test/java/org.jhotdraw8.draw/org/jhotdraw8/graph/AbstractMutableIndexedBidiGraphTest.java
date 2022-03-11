@@ -41,7 +41,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    private void assertEqualGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
+    protected void assertEqualGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
         assertEquals(expected.getVertexCount(), actual.getVertexCount());
         assertEquals(expected.getVertices(), actual.getVertices());
         assertEquals(expected.getArrowCount(), actual.getArrowCount());

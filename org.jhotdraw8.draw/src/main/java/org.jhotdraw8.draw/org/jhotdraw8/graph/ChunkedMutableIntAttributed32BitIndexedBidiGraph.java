@@ -5,10 +5,15 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.collection.LongEnumeratorSpliterator;
 import org.jhotdraw8.util.Preconditions;
+import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Arrays;
+import java.util.BitSet;
 
 /**
  * A mutable indexed bi-directional graph.
@@ -23,7 +28,7 @@ import java.util.Arrays;
  * This implementation is efficient, if the graph is changed rarely. Changes
  * are expensive, because this implementation uses a single gap with
  * free elements in each chunk. The gap needs to be shifted around for
- * every insertion and removal of an arrow in the grah.
+ * every insertion and removal of an arrow in the graph.
  */
 public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
@@ -34,7 +39,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * Must be a power of 2.
      */
     private final int sizeRounding = 4;
-    private final int sizeRoundingMask = sizeRounding - 1;
+
     /**
      * Number of vertices per chunk.
      * Must be a power of 2.
@@ -291,6 +296,68 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             }
             removeArrowAt(v, result);
             return true;
+        }
+
+        /**
+         * Removes all arrows starting at vertex v.
+         *
+         * @param v index of vertex v
+         */
+        private void removeAllArrows(int v) {
+            int vIndex = v & chunkMask;
+            int size = getSiblingCount(vIndex);
+            if (size == 0) {
+                return;
+            }
+
+            int from = getSiblingsFromOffset(v);
+            if (gapIndex > vIndex) {
+                // BEFORE:
+                // ...,,,,::::;;;; = siblings list of different vertices
+                //                       the list with the colons ':' is the sibling list of 'v'.
+                //
+                // siblings = [........::::::;;;;;gap,,,,];
+                //                     ^     ^    ^
+                //                     from  to   gapFrom
+                // AFTER:
+                //
+                // siblings = [........::::::gap;;;;;,,,,];
+                //                     ^       ^
+                //                     from    to
+
+                int gapFrom = getSiblingsToOffset(gapIndex);
+                int to = getSiblingsToOffset(v);
+                System.arraycopy(chunk, to, chunk, to + gapSize, gapFrom - to);
+                System.arraycopy(chunk, to + capacity, chunk, to + gapSize + capacity, gapFrom - to);
+            } else if (gapIndex < vIndex) {
+                // ....|,,,,|::::|;;;;| = siblings list of different vertices
+                //                        the list with the colons ':' is the sibling list of 'v'.
+                //
+                // BEFORE:
+                // siblings = [........gap,,,,,::::::;;;;;];
+                //                     ^       ^     ^
+                //                     gapFrom from  to
+                // AFTER:
+                // siblings = [........,,,,,::::::gap;;;;;];
+                //                          ^     ^
+                //                          from  to
+                int gapFrom = getSiblingsToOffset(gapIndex);
+                System.arraycopy(chunk, gapFrom + gapSize, chunk, gapFrom, from - gapFrom - gapSize);
+                System.arraycopy(chunk, gapFrom + gapSize + capacity, chunk, gapFrom + capacity, from - gapFrom - gapSize);
+                from -= gapSize;
+            }
+            if (CLEAR_UNUSED_ELEMENTS) {
+                Arrays.fill(chunk, from, from + size + gapSize, CLEAR_VALUE);
+                Arrays.fill(chunk, from + capacity, from + capacity + size + gapSize, CLEAR_VALUE);
+            }
+
+            int sizesOffset = getSizesOffset();
+            for (int i = sizesOffset + vIndex, n = sizesOffset + chunkSize; i < n; i++) {
+                chunk[i] -= size;
+            }
+            gapIndex = vIndex;
+            gapSize += size;
+            free += size;
         }
 
         /**
@@ -594,7 +661,6 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
             // shift up to close the gap
             int siblingsStartOfGapOffset = getSiblingsToOffset(gapIndex);
-            int arrowDataStartOfGapOffset = getArrowsToOffset(gapIndex);
             int length = siblingsStartOfGapOffset - siblingsTo;
             System.arraycopy(chunk, siblingsTo, chunk, siblingsTo + free, length);
             System.arraycopy(chunk, arrowDataTo, chunk, arrowDataTo + free, length);
@@ -707,12 +773,28 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
     @Override
     public void removeAllPrevAsInt(int v) {
-        throw new UnsupportedOperationException();
+        Chunk chunk = getPrevChunk(v);
+        int from = chunk.getSiblingsFromOffset(v);
+        int to = chunk.getSiblingsToOffset(v);
+        for (int i = to - 1; i >= from; i--) {
+            int u = chunk.chunk[i];
+            Chunk prevChunk = getNextChunk(u);
+            prevChunk.tryToRemoveArrow(u, v);
+        }
+        chunk.removeAllArrows(v);
     }
 
     @Override
     public void removeAllNextAsInt(int v) {
-        throw new UnsupportedOperationException();
+        Chunk chunk = getNextChunk(v);
+        int from = chunk.getSiblingsFromOffset(v);
+        int to = chunk.getSiblingsToOffset(v);
+        for (int i = to - 1; i >= from; i--) {
+            int u = chunk.chunk[i];
+            Chunk prevChunk = getPrevChunk(u);
+            prevChunk.tryToRemoveArrow(u, v);
+        }
+        chunk.removeAllArrows(v);
     }
 
     @Override
@@ -752,17 +834,22 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         return getNextChunk(v).getVertexData(v);
     }
 
+    public void setVertexAsInt(int v, int data) {
+        getNextChunk(v).setVertexData(v, data);
+        getPrevChunk(v).setVertexData(v, data);
+    }
+
     @Override
     public int getNextCount(int v) {
         return getNextChunk(v).getSiblingCount(v);
     }
 
-    private Chunk getNextChunk(int vidx) {
-        return getOrCreateChunk(nextChunks, vidx);
+    private Chunk getNextChunk(int v) {
+        return getOrCreateChunk(nextChunks, v);
     }
 
-    private Chunk getPrevChunk(int vidx) {
-        return getOrCreateChunk(prevChunks, vidx);
+    private Chunk getPrevChunk(int v) {
+        return getOrCreateChunk(prevChunks, v);
     }
 
     private Chunk getOrCreateChunk(Chunk[] chunks, int v) {
@@ -799,4 +886,95 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         prevChunks = (Chunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
     }
 
+    public void clear() {
+        Arrays.fill(nextChunks, null);
+        Arrays.fill(prevChunks, null);
+        arrowCount = 0;
+        vertexCount = 0;
+    }
+
+    /**
+     * Returns a backward breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx) {
+        return backwardBreadthFirstLongSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+    }
+
+    /**
+     * Returns a backward breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx    the index of the vertex
+     * @param visited the set of visited vertices
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
+        return new BreadthFirstSpliteratorOfLongShort(vidx, prevChunks, visited);
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx) {
+        return breadthFirstLongSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx    the index of the vertex
+     * @param visited the set of visited vertices
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
+        return new BreadthFirstSpliteratorOfLongShort(vidx, nextChunks, visited);
+    }
+
+    private class BreadthFirstSpliteratorOfLongShort extends AbstractLongEnumeratorSpliterator {
+
+        private final Chunk[] chunks;
+        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
+        private final @NonNull AddToIntSet visited;
+
+        protected BreadthFirstSpliteratorOfLongShort(final int root, final Chunk[] chunks, @NonNull final AddToIntSet visited) {
+            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+            this.chunks = chunks;
+            this.visited = visited;
+            if (visited.addAsInt(root)) {
+                deque.addFirstAsInt(root);
+            }
+        }
+
+        @Override
+        public boolean moveNext() {
+            if (deque.isEmpty()) {
+                return false;
+            }
+            final int v = deque.removeFirst();
+            Chunk chunk = getOrCreateChunk(chunks, v);
+            current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
+            int from = chunk.getSiblingsFromOffset(v);
+            int to = chunk.getSiblingsToOffset(v);
+            for (int i = from; i < to; i++) {
+                final int u = chunk.chunk[i];
+                if (visited.addAsInt(u)) {
+                    deque.addLastAsInt(u);
+                }
+            }
+            return true;
+        }
+    }
 }

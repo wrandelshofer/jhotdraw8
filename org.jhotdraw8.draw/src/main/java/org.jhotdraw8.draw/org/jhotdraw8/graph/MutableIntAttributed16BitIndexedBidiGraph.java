@@ -28,12 +28,7 @@ import static java.lang.Math.max;
  * bfs-search is likely to encounter a different cash line or page for
  * every vertex.
  * <p>
- * References:
- * <dl>
- *     <dt>JHotDraw 8</dt>
- *     <dd> This class has been derived from JHotDraw 8.
- *      © 2018 by the authors and contributors of JHotDraw. MIT License.</dd>
- * </dl>
+ * XXX delete me, this representation is inefficient
  */
 public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
