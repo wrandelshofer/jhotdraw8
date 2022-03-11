@@ -226,7 +226,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     @Override
     public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
         int vOffset = v * stride;
-        return new IntIntArrayEnumeratorSpliterator(vOffset + 1, vOffset + 1 + next[0], next);
+        return new IntIntArrayEnumeratorSpliterator(vOffset + 1, vOffset + 1 + next[vOffset], next);
     }
 
     @Override

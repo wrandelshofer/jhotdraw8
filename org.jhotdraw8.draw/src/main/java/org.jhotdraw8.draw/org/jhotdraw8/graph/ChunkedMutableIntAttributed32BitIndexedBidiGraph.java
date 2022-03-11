@@ -51,11 +51,19 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * Array of chunks for arrows to previous vertices.
      */
     private @NonNull Chunk[] prevChunks = new Chunk[0];
-    private int initialChunkCapacity = 4;
+    private final int initialChunkCapacity = 4;
 
     public ChunkedMutableIntAttributed32BitIndexedBidiGraph() {
     }
 
+    /**
+     * A 'Compressed Row Storage' Chunk keeps the list of sibling vertices and
+     * sibling arrows close together.
+     * <p>
+     * Uses one shared gap between the list of sibling vertices/arrows.
+     * Move the gap at each insertion/deletion operation. This may make it
+     * slow for updates.
+     */
     private class Chunk {
         /**
          * The total capacity for arrows in this chunk.
@@ -220,16 +228,18 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         }
 
         /**
-         * Adds an arrow from vertex v to vertex u, if it is not already present.
+         * Adds an arrow from vertex v to vertex u with the provided arrow data.
+         * If the arrow already present, only updates the arrow data.
          *
          * @param v    index of vertex v
          * @param u    index of vertex u
          * @param data the arrow data
-         * @return true on success
+         * @return true if a new arrow was added
          */
-        private boolean tryToAddArrow(int v, int u, int data) {
+        private boolean addOrSetArrow(int v, int u, int data) {
             int result = findIndexOf(v, u);
             if (result >= 0) {
+                setArrowAt(v, result, data);
                 return false;
             }
             if (free < 1) {
@@ -261,6 +271,10 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             }
 
             return true;
+        }
+
+        private void setArrowAt(int v, int index, int data) {
+            chunk[getArrowsFromOffset(v) + index] = data;
         }
 
         /**
@@ -655,8 +669,9 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     public void addArrowAsInt(int v, int u, int data) {
         Chunk vChunk = getNextChunk(v);
         Chunk uChunk = getPrevChunk(u);
-        if (vChunk.tryToAddArrow(v, u, data)) {
-            uChunk.tryToAddArrow(u, v, data);
+        boolean added = vChunk.addOrSetArrow(v, u, data);
+        uChunk.addOrSetArrow(u, v, data);
+        if (added) {
             arrowCount++;
         }
     }
@@ -704,6 +719,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     public void removeNextAsInt(int v, int index) {
         int u = getNextChunk(v).removeArrowAt(v, index);
         getPrevChunk(u).tryToRemoveArrow(u, v);
+        arrowCount--;
     }
 
     @Override

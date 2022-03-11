@@ -75,6 +75,27 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
+    public static short[] grow(final int size, final int targetCapacity, final int itemSize, @Nullable final short[] items) {
+        if (items == null) {
+            return new short[targetCapacity * itemSize];
+        }
+        if (targetCapacity * itemSize <= items.length) {
+            return items;
+        }
+        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        short[] newItems = new short[newCapacity * itemSize];
+        System.arraycopy(items, 0, newItems, 0, size * itemSize);
+        return newItems;
+    }
+
+    /**
+     * Grows an items array.
+     *
+     * @param targetCapacity {@literal >= 0}
+     * @param itemSize       number of array elements that an item occupies
+     * @param items          the items array
+     * @return a new item array of larger size or the same if no resizing is necessary
+     */
     public static int[] grow(final int size, final int targetCapacity, final int itemSize, @Nullable final int[] items) {
         if (items == null) {
             return new int[targetCapacity * itemSize];

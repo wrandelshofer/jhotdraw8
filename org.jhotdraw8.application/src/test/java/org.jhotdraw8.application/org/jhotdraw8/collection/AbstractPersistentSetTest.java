@@ -5,25 +5,14 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 abstract class AbstractPersistentSetTest {
 
     private void assertEquality(LinkedHashSet<HashCollider> expected, PersistentSet<HashCollider> actual) {
-        System.out.println("expected: " + expected);
-        System.out.println("  actual: " + actual);
         assertEquals(expected.hashCode(), actual.hashCode(), "hashCode");
         assertEquals(actual, actual, "equal to itself");
         //noinspection ConstantConditions

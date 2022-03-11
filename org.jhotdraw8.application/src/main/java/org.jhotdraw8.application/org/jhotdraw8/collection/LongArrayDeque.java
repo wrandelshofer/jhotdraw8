@@ -61,7 +61,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
         if (head == tail) {
-            grow(size() + 1);
+            doubleCapacity();
         }
     }
 
@@ -70,7 +70,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
     }
 
     public void addLastAllAsLong(long[] array, int offset, int length) {
-        grow(size() + length);
+        grow(length + size());
 
         int firstPart = elements.length - tail;
         if (tail >= head && firstPart >= length
@@ -96,7 +96,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {
-            grow(size() + 1);
+            doubleCapacity();
         }
     }
 
@@ -188,24 +188,35 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
     }
 
     /**
-     * Increases the capacity of this deque.
+     * Increases the capacity of this deque when the elements array is full.
+     */
+    private void doubleCapacity() {
+        assert head == tail;
+        final int size = elements.length;
+        final int r = size - head; // number of elements to the right of head
+        final long[] a = new long[size << 1];
+        System.arraycopy(elements, head, a, 0, r);
+        System.arraycopy(elements, 0, a, r, head);
+        elements = a;
+        head = 0;
+        tail = size;
+    }
+
+    /**
+     * Increases the capacity of this deque when the elements array is not full.
      */
     private void grow(int capacity) {
-        if (elements.length >= capacity) {
-            return;
-        }
-        //assert head == tail;
+        if (elements.length > capacity) return;
+        int newLength = Integer.highestOneBit(capacity + capacity - 1);
+        final long[] a = new long[newLength];
         int size = size();
-        int p = head;
-        int n = elements.length;
-        int r = n - p; // number of elements to the right of p
-        int newCapacity = Math.max(1, Integer.highestOneBit(capacity + capacity - 1));
-        if (newCapacity < capacity) {
-            throw new IllegalStateException("Sorry, deque too big");
+        if (head < tail) {
+            System.arraycopy(elements, head, a, 0, size);
+        } else {
+            final int r = elements.length - head; // number of elements to the right of head
+            System.arraycopy(elements, head, a, 0, r);
+            System.arraycopy(elements, 0, a, r, head);
         }
-        long[] a = new long[newCapacity];
-        System.arraycopy(elements, p, a, 0, r);
-        System.arraycopy(elements, 0, a, r, p);
         elements = a;
         head = 0;
         tail = size;

@@ -1,12 +1,15 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.graph.iterator.BreadthFirstSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -14,7 +17,36 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public abstract class AbstractMutableIndexedBidiGraphTest {
     protected abstract MutableIndexedBidiGraph newInstance(int maxArity);
 
-    private void assertEqualGraphs(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
+    protected void assertEqualGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
+        for (Integer v : expected.getVertices()) {
+            List<Integer> actualNextList =
+                    StreamSupport.stream(actual.nextVerticesSpliterator(v), false).collect(Collectors.toList());
+            assertEquals(new ArrayList<>(expected.getNextVertices(v)), actualNextList);
+
+            List<Integer> actualPrevList =
+                    StreamSupport.stream(actual.prevVerticesSpliterator(v), false).collect(Collectors.toList());
+            assertEquals(new ArrayList<>(expected.getPrevVertices(v)), actualPrevList);
+        }
+    }
+
+    protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
+        for (Integer v : expected.getVertices()) {
+            Set<Integer> actualNextList =
+                    StreamSupport.stream(actual.nextVerticesSpliterator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
+            assertEquals(new LinkedHashSet<>(expected.getNextVertices(v)), actualNextList);
+
+            Set<Integer> actualPrevList =
+                    StreamSupport.stream(actual.prevVerticesSpliterator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
+            assertEquals(new LinkedHashSet<>(expected.getPrevVertices(v)), actualPrevList);
+        }
+    }
+
+    private void assertEqualGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
+        assertEquals(expected.getVertexCount(), actual.getVertexCount());
+        assertEquals(expected.getVertices(), actual.getVertices());
+        assertEquals(expected.getArrowCount(), actual.getArrowCount());
+
+
         StringWriter expectedW = new StringWriter();
         DumpGraph.dumpAsDot(expectedW, expected);
         StringWriter actualW = new StringWriter();
@@ -24,6 +56,53 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         Arrays.sort(expectedSplit);
         Arrays.sort(actualSplit);
         assertEquals(Arrays.asList(actualSplit), Arrays.asList(actualSplit));
+
+        for (Integer v : expected.getVertices()) {
+            assertEquals(expected.getNextCount(v), actual.getNextCount(v));
+            assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
+            assertEquals(expected.getPrevCount(v), actual.getPrevCount(v));
+            assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
+            for (Integer u : expected.getVertices()) {
+                assertEquals(expected.findIndexOfNext(v, u),
+                        actual.findIndexOfNext(v, u));
+                assertEquals(expected.findIndexOfPrev(u, v),
+                        actual.findIndexOfPrev(u, v));
+            }
+            List<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<>(expected::getNextVertices, v), false).collect(Collectors.toList());
+            List<Integer> actualBfs = StreamSupport.stream(new BreadthFirstSpliterator<>(actual::getNextVertices, v), false).collect(Collectors.toList());
+            assertEquals(expectedBfs, actualBfs);
+        }
+    }
+
+    private void assertEqualSortedGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
+        assertEquals(expected.getVertexCount(), actual.getVertexCount());
+        assertEquals(expected.getVertices(), actual.getVertices());
+        assertEquals(expected.getArrowCount(), actual.getArrowCount());
+
+        StringWriter expectedW = new StringWriter();
+        DumpGraph.dumpAsDot(expectedW, expected);
+        StringWriter actualW = new StringWriter();
+        DumpGraph.dumpAsDot(actualW, actual);
+        String[] expectedSplit = expectedW.toString().split("\n");
+        String[] actualSplit = actualW.toString().split("\n");
+        Arrays.sort(expectedSplit);
+        Arrays.sort(actualSplit);
+        assertEquals(Arrays.asList(actualSplit), Arrays.asList(actualSplit));
+
+        for (Integer v : expected.getVertices()) {
+            assertEquals(expected.getNextCount(v), actual.getNextCount(v));
+            assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
+            assertEquals(expected.getPrevCount(v), actual.getPrevCount(v));
+            assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
+            for (Integer u : expected.getVertices()) {
+                assertEquals(findSortedIndex(expected.getNextVertices(v), u),
+                        actual.findIndexOfNext(v, u));
+                assertEquals(findSortedIndex(expected.getPrevVertices(u), v),
+                        actual.findIndexOfPrev(u, v));
+            }
+        }
+        if (actual instanceof IndexedBidiGraph)
+            assertEqualGraphInt(expected, (IndexedBidiGraph) actual);
     }
 
     @TestFactory
@@ -88,38 +167,21 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             int n = rng.nextInt(maxArity + 1);
             for (int i = 0; i < n; i++) {
                 int u = rng.nextInt(vertexCount);
-                assertEquals(expected.findIndexOfNext(v, u), instance.findIndexOfNextAsInt(v, u));
-                assertEquals(expected.findIndexOfPrev(u, v), instance.findIndexOfPrevAsInt(u, v));
 
                 int nextCount = expected.getNextCount(v);
                 int prevCount = expected.getPrevCount(u);
-                assertEquals(nextCount, instance.getNextCount(v));
-                assertEquals(prevCount, instance.getPrevCount(u));
-
                 if (nextCount < maxArity && prevCount < maxArity) {
                     if (expected.findIndexOfNext(v, u) < 0) {
                         instance.addArrowAsInt(v, u, -u);
                         expected.addArrow(v, u, -u);
+                        assertEqualGraph(expected, actual);
+                        assertEqualGraphInt(expected, instance);
                     }
                 }
-                assertEquals(expected.getNextCount(v), instance.getNextCount(v));
-                assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
-                assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
-                assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
-                assertEquals(expected.findIndexOfNext(v, u),
-                        actual.findIndexOfNext(v, u));
-                assertEquals(expected.findIndexOfPrev(u, v),
-                        actual.findIndexOfPrev(u, v), "expected: " + expected.findIndexOfPrev(u, v) + ", actual: " + actual.findIndexOfPrev(u, v));
-                assertEquals(expected.findIndexOfPrev(u, v),
-                        actual.findIndexOfPrev(u, v));
             }
         }
-
-        assertEquals(expected.getVertexCount(), actual.getVertexCount());
-        assertEquals(expected.getVertices(), actual.getVertices());
-        assertEquals(expected.getArrowCount(), actual.getArrowCount());
-
-        assertEqualGraphs(expected, actual);
+        assertEqualGraph(expected, actual);
+        assertEqualGraphInt(expected, instance);
 
         // Remove random arrows
         for (int vidx = 0; vidx < vertexCount; vidx++) {
@@ -130,15 +192,14 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
                     instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
-                }
 
-                assertEquals(expected.getNextCount(vidx), instance.getNextCount(vidx));
-                assertEquals(expected.getNextVertices(vidx), actual.getNextVertices(vidx));
-                assertEquals(expected.getPrevCount(uidx), instance.getPrevCount(uidx));
-                assertEquals(expected.getPrevVertices(vidx), actual.getPrevVertices(vidx));
+                    assertEqualGraph(expected, actual);
+                    assertEqualGraphInt(expected, instance);
+                }
             }
         }
-        assertEqualGraphs(expected, actual);
+        assertEqualGraph(expected, actual);
+        assertEqualGraphInt(expected, instance);
     }
 
     public void testCreateRandomSortedGraph(int vertexCount, int maxArity) throws IOException {
@@ -149,6 +210,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
+            assertEqualSortedGraph(expected, actual);
+            assertEqualSortedGraphInt(expected, instance);
         }
 
         Random rng = new Random(0);
@@ -168,24 +231,13 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                     if (expected.findIndexOfNext(v, u) < 0) {
                         instance.addArrowAsInt(v, u, -u);
                         expected.addArrow(v, u, -u);
+                        assertEqualSortedGraph(expected, actual);
+                        assertEqualSortedGraphInt(expected, instance);
                     }
                 }
-                assertEquals(expected.getNextCount(v), instance.getNextCount(v));
-                assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
-                assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
-                assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
-                assertEquals(findSortedIndex(expected.getNextVertices(v), u),
-                        actual.findIndexOfNext(v, u));
-                assertEquals(findSortedIndex(expected.getPrevVertices(u), v),
-                        actual.findIndexOfPrev(u, v));
             }
         }
 
-        assertEquals(expected.getVertexCount(), actual.getVertexCount());
-        assertEquals(expected.getVertices(), actual.getVertices());
-        assertEquals(expected.getArrowCount(), actual.getArrowCount());
-
-        assertEqualGraphs(expected, actual);
 
         // Remove random arrows
         for (int vidx = 0; vidx < vertexCount; vidx++) {
@@ -196,15 +248,11 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
                     instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
+                    assertEqualSortedGraph(expected, actual);
+                    assertEqualSortedGraphInt(expected, instance);
                 }
-
-                assertEquals(expected.getNextCount(vidx), instance.getNextCount(vidx));
-                assertEquals(expected.getNextVertices(vidx), actual.getNextVertices(vidx));
-                assertEquals(expected.getPrevCount(uidx), instance.getPrevCount(uidx));
-                assertEquals(expected.getPrevVertices(vidx), actual.getPrevVertices(vidx));
             }
         }
-        assertEqualGraphs(expected, actual);
     }
 
     private int findSortedIndex(Collection<Integer> vertices, int v) {
@@ -221,6 +269,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
+            assertEqualGraph(expected, actual);
         }
 
         Random rng = new Random(0);
@@ -228,36 +277,16 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             int n = rng.nextInt(maxArity + 1);
             for (int i = 0; i < n; i++) {
                 int u = rng.nextInt(vertexCount);
-                assertEquals(expected.findIndexOfNext(v, u), instance.findIndexOfNextAsInt(v, u));
-                assertEquals(expected.findIndexOfPrev(u, v), instance.findIndexOfPrevAsInt(u, v));
-
                 int nextCount = expected.getNextCount(v);
                 int prevCount = expected.getPrevCount(u);
-                assertEquals(nextCount, instance.getNextCount(v));
-                assertEquals(prevCount, instance.getPrevCount(u));
-
                 if (nextCount < maxArity && prevCount < maxArity) {
                     instance.addArrowAsInt(v, u, -u);
                     expected.addArrow(v, u, -u);
+                    assertEqualGraph(expected, actual);
                 }
-                assertEquals(expected.getNextCount(v), instance.getNextCount(v));
-                assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
-                assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
-                assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
-                assertEquals(expected.findIndexOfNext(v, u),
-                        actual.findIndexOfNext(v, u));
-                assertEquals(expected.findIndexOfPrev(u, v),
-                        actual.findIndexOfPrev(u, v), "expected: " + expected.findIndexOfPrev(u, v) + ", actual: " + actual.findIndexOfPrev(u, v));
-                assertEquals(expected.findIndexOfPrev(u, v),
-                        actual.findIndexOfPrev(u, v));
             }
         }
 
-        assertEquals(expected.getVertexCount(), actual.getVertexCount());
-        assertEquals(expected.getVertices(), actual.getVertices());
-        assertEquals(expected.getArrowCount(), actual.getArrowCount());
-
-        assertEqualGraphs(expected, actual);
 
         // Remove random arrows
         for (int vidx = 0; vidx < vertexCount; vidx++) {
@@ -268,15 +297,11 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
                     instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
+                    assertEqualGraph(expected, actual);
                 }
-
-                assertEquals(expected.getNextCount(vidx), instance.getNextCount(vidx));
-                assertEquals(expected.getNextVertices(vidx), actual.getNextVertices(vidx));
-                assertEquals(expected.getPrevCount(uidx), instance.getPrevCount(uidx));
-                assertEquals(expected.getPrevVertices(vidx), actual.getPrevVertices(vidx));
             }
         }
-        assertEqualGraphs(expected, actual);
+        assertEqualGraph(expected, actual);
     }
 
     public void testCreateRandomGraphWithArrowData(int vertexCount, int maxArity) throws IOException {
@@ -287,6 +312,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
+            assertEqualGraph(expected, actual);
         }
 
         Random rng = new Random(0);
@@ -294,41 +320,17 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             int n = rng.nextInt(maxArity + 1);
             for (int i = 0; i < n; i++) {
                 int uidx = rng.nextInt(vertexCount);
-                assertEquals(expected.findIndexOfNext(vidx, uidx), instance.findIndexOfNextAsInt(vidx, uidx));
-                assertEquals(expected.findIndexOfPrev(uidx, vidx), instance.findIndexOfPrevAsInt(uidx, vidx));
 
                 int nextCount = expected.getNextCount(vidx);
                 int prevCount = expected.getPrevCount(uidx);
-                assertEquals(nextCount, instance.getNextCount(vidx));
-                assertEquals(prevCount, instance.getPrevCount(uidx));
 
                 if (nextCount < maxArity && prevCount < maxArity) {
                     instance.addArrowAsInt(vidx, uidx, vidx * 100 + uidx);
                     expected.addArrow(vidx, uidx, vidx * 100 + uidx);
-
-
-                    assertEquals(expected.getNextCount(vidx), instance.getNextCount(vidx));
-                    assertEquals(expected.getNextVertices(vidx), actual.getNextVertices(vidx));
-                    assertEquals(expected.getPrevCount(uidx), instance.getPrevCount(uidx));
-                    assertEquals(expected.getPrevVertices(vidx), actual.getPrevVertices(vidx));
-                    assertEquals(expected.findIndexOfNext(vidx, uidx),
-                            actual.findIndexOfNext(vidx, uidx));
-                    assertEquals(expected.findIndexOfPrev(uidx, vidx),
-                            actual.findIndexOfPrev(uidx, vidx));
-                    assertEquals(expected.getNextArrow(vidx, expected.findIndexOfNext(vidx, uidx)),
-                            actual.getNextArrow(vidx, actual.findIndexOfNext(vidx, uidx)));
-                    assertEquals(expected.getPrevArrow(uidx, expected.findIndexOfPrev(uidx, vidx)),
-                            actual.getPrevArrow(uidx, actual.findIndexOfPrev(uidx, vidx)));
+                    assertEqualGraph(expected, actual);
                 }
             }
         }
-
-        assertEquals(expected.getVertexCount(), actual.getVertexCount());
-        assertEquals(expected.getVertices(), actual.getVertices());
-        assertEquals(expected.getArrowCount(), actual.getArrowCount());
-        assertEquals(expected.getArrows(), actual.getArrows());
-
-        assertEqualGraphs(expected, actual);
 
         // Remove random arrows
         for (int vidx = 0; vidx < vertexCount; vidx++) {
@@ -336,20 +338,13 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             if (nextCount > 0) {
                 int i = rng.nextInt(nextCount);
                 int uidx = expected.getNext(vidx, i);
-                assertEquals(uidx, instance.getNextAsInt(vidx, i));
-                assertEquals(expected.findIndexOfNext(vidx, uidx), instance.findIndexOfNextAsInt(vidx, uidx));
                 if (expected.findIndexOfNext(vidx, uidx) != -1) {
                     instance.removeArrowAsInt(vidx, uidx);
                     expected.removeArrow(vidx, uidx);
+                    assertEqualGraph(expected, actual);
                 }
-
-                assertEquals(expected.getNextCount(vidx), instance.getNextCount(vidx));
-                assertEquals(expected.getNextVertices(vidx), actual.getNextVertices(vidx));
-                assertEquals(expected.getPrevCount(uidx), instance.getPrevCount(uidx));
-                assertEquals(expected.getPrevVertices(vidx), actual.getPrevVertices(vidx));
             }
         }
-        assertEqualGraphs(expected, actual);
     }
 
     public void testCreateRandomSortedGraphWithArrowData(int vertexCount, int maxArity) throws IOException {
@@ -360,6 +355,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
             expected.addVertex(vidx);
+            assertEqualSortedGraph(expected, actual);
+            assertEqualSortedGraphInt(expected, instance);
         }
 
         Random rng = new Random(0);
@@ -367,41 +364,20 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             int n = rng.nextInt(maxArity + 1);
             for (int i = 0; i < n; i++) {
                 int u = rng.nextInt(vertexCount);
-                assertEquals(findSortedIndex(expected.getNextVertices(v), u), instance.findIndexOfNextAsInt(v, u));
-                assertEquals(findSortedIndex(expected.getPrevVertices(u), v), instance.findIndexOfPrevAsInt(u, v));
 
                 int nextCount = expected.getNextCount(v);
                 int prevCount = expected.getPrevCount(u);
-                assertEquals(nextCount, instance.getNextCount(v));
-                assertEquals(prevCount, instance.getPrevCount(u));
 
                 if (nextCount < maxArity && prevCount < maxArity && expected.findIndexOfNext(v, u) < 0) {
                     instance.addArrowAsInt(v, u, v * 100 + u);
                     expected.addArrow(v, u, v * 100 + u);
 
-
-                    assertEquals(expected.getNextCount(v), instance.getNextCount(v));
-                    assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
-                    assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
-                    assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
-                    assertEquals(findSortedIndex(expected.getNextVertices(v), u),
-                            actual.findIndexOfNext(v, u));
-                    assertEquals(findSortedIndex(expected.getPrevVertices(u), v),
-                            actual.findIndexOfPrev(u, v));
-                    assertEquals(expected.getNextArrow(v, expected.findIndexOfNext(v, u)),
-                            actual.getNextArrow(v, actual.findIndexOfNext(v, u)));
-                    assertEquals(expected.getPrevArrow(u, expected.findIndexOfPrev(u, v)),
-                            actual.getPrevArrow(u, actual.findIndexOfPrev(u, v)));
+                    assertEqualSortedGraph(expected, actual);
+                    assertEqualSortedGraphInt(expected, instance);
                 }
             }
         }
 
-        assertEquals(expected.getVertexCount(), actual.getVertexCount());
-        assertEquals(expected.getVertices(), actual.getVertices());
-        assertEquals(expected.getArrowCount(), actual.getArrowCount());
-        assertEquals(new LinkedHashSet<>(expected.getArrows()), new LinkedHashSet<>(actual.getArrows()));
-
-        assertEqualGraphs(expected, actual);
 
         // Remove random arrows
         for (int v = 0; v < vertexCount; v++) {
@@ -409,17 +385,13 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
             if (nextCount > 0) {
                 int i = rng.nextInt(nextCount);
                 int u = expected.getNext(v, i);
-                if (expected.findIndexOfNext(v, u) != -1) {
+                if (expected.findIndexOfNext(v, u) >= 0) {
                     instance.removeArrowAsInt(v, u);
                     expected.removeArrow(v, u);
+                    assertEqualSortedGraph(expected, actual);
+                    assertEqualSortedGraphInt(expected, instance);
                 }
-
-                assertEquals(expected.getNextCount(v), instance.getNextCount(v));
-                assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
-                assertEquals(expected.getPrevCount(u), instance.getPrevCount(u));
-                assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
             }
         }
-        assertEqualGraphs(expected, actual);
     }
 }

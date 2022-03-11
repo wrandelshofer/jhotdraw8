@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntCharArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntUShortArrayEnumeratorSpliterator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * ImmutableDirectedGraph. Uses char-arrays for storage.
+ * ImmutableDirectedGraph. Uses short-arrays for storage.
  * <p>
  * Supports up to {@code 2^16 - 1} vertices.
  * <p>
@@ -60,7 +60,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final @NonNull char[] next;
+    protected final @NonNull short[] next;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -78,7 +78,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final @NonNull char[] nextOffset;
+    protected final @NonNull short[] nextOffset;
 
     /**
      * Holds the arrow objects.
@@ -102,7 +102,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
      * Given vertex {@code v},<br>
      * {@code vertexToIndexMap.get(v)} yields the vertex index {@code vi}.
      */
-    protected final @NonNull Map<V, Character> vertexToIndexMap;
+    protected final @NonNull Map<V, Short> vertexToIndexMap;
 
     /**
      * Creates a new instance from the specified graph.
@@ -113,29 +113,29 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
 
-        if (arrowCount + vertexCount >= Character.MAX_VALUE) {
-            throw new IllegalArgumentException("arrowCount+vertexCount >= " + Character.MAX_VALUE + ". arrowCount=" + arrowCount + ", vertexCount=" + vertexCount);
+        if (arrowCount + vertexCount >= Short.MAX_VALUE) {
+            throw new IllegalArgumentException("arrowCount+vertexCount >= " + Short.MAX_VALUE + ". arrowCount=" + arrowCount + ", vertexCount=" + vertexCount);
         }
 
-        this.next = new char[arrowCount];
+        this.next = new short[arrowCount];
 
         @SuppressWarnings("unchecked")
         A[] uncheckedArrows = (A[]) new Object[arrowCount];
         this.nextArrows = uncheckedArrows;
-        this.nextOffset = new char[vertexCount];
+        this.nextOffset = new short[vertexCount];
         @SuppressWarnings("unchecked")
         V[] uncheckedVertices = (V[]) new Object[vertexCount];
         this.vertices = uncheckedVertices;
         this.vertexToIndexMap = new HashMap<>(vertexCount);
 
-        char offset = 0;
-        for (char vi = 0; vi < vertexCount; vi++) {
+        short offset = 0;
+        for (short vi = 0; vi < vertexCount; vi++) {
             nextOffset[vi] = offset;
             V v = graph.getVertex(vi);
             this.vertices[vi] = v;
             vertexToIndexMap.put(v, vi);
             for (int i = 0, n = graph.getNextCount(vi); i < n; i++) {
-                next[offset] = (char) graph.getNextAsInt(vi, i);
+                next[offset] = (short) graph.getNextAsInt(vi, i);
                 this.nextArrows[offset] = graph.getNextArrow(vi, i);
                 offset++;
             }
@@ -150,15 +150,15 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     public ImmutableAttributed16BitIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
-        if (arrowCount + vertexCount >= Character.MAX_VALUE) {
-            throw new IllegalArgumentException("arrowCount+vertexCount >= " + Character.MAX_VALUE + ". arrowCount=" + arrowCount + ", vertexCount=" + vertexCount);
+        if (arrowCount + vertexCount >= Short.MAX_VALUE) {
+            throw new IllegalArgumentException("arrowCount+vertexCount >= " + Short.MAX_VALUE + ". arrowCount=" + arrowCount + ", vertexCount=" + vertexCount);
         }
 
-        this.next = new char[arrowCount];
+        this.next = new short[arrowCount];
         @SuppressWarnings("unchecked")
         A[] uncheckedArrows = (A[]) new Object[arrowCount];
         this.nextArrows = uncheckedArrows;
-        this.nextOffset = new char[vertexCount];
+        this.nextOffset = new short[vertexCount];
         @SuppressWarnings("unchecked")
         V[] uncheckedVertices = (V[]) new Object[vertexCount];
         this.vertices = uncheckedVertices;
@@ -166,7 +166,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
 
         //    Map<V, Integer> vertexToIndexMap = new HashMap<>(vertexCapacity);
         {
-            char vi = 0;
+            short vi = 0;
             for (V v : graph.getVertices()) {
                 vertexToIndexMap.put(v, vi);
                 vi++;
@@ -174,7 +174,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
         }
 
         {
-            char offset = 0;
+            short offset = 0;
             int vi = 0;
             for (V v : graph.getVertices()) {
 
@@ -235,12 +235,12 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
         if (index < 0 || index >= getNextCount(v)) {
             throw new IllegalArgumentException("i(" + index + ") < 0 || i >= " + getNextCount(v));
         }
-        return next[nextOffset[v] + index];
+        return next[nextOffset[v] + index] & 0xffff;
     }
 
     @Override
     public int getNextArrowAsInt(int v, int index) {
-        return getNextAsInt(v, index);
+        return getNextAsInt(v, index) & 0xffff;
     }
 
     @Override
@@ -267,7 +267,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
 
     @Override
     public int getVertexIndex(V vertex) {
-        Character index = vertexToIndexMap.get(vertex);
+        Short index = vertexToIndexMap.get(vertex);
         return index == null ? -1 : index;
     }
 
@@ -281,6 +281,6 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
-        return new IntCharArrayEnumeratorSpliterator(offset, nextOffset, this.next);
+        return new IntUShortArrayEnumeratorSpliterator(offset, nextOffset, this.next);
     }
 }

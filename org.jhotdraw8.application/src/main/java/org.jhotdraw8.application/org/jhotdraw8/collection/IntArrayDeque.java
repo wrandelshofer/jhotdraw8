@@ -58,7 +58,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
         if (head == tail) {
-            grow(size() + 1);
+            doubleCapacity();
         }
     }
 
@@ -67,7 +67,8 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     public void addLastAllAsInt(int[] array, int offset, int length) {
-        grow(size() + length);
+        grow(length + size());
+
 
         int firstPart = elements.length - tail;
         if (tail >= head && firstPart >= length
@@ -83,11 +84,31 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         tail = secondPart;
     }
 
+    /**
+     * Increases the capacity of this deque when the elements array is not full.
+     */
+    private void grow(int capacity) {
+        if (elements.length > capacity) return;
+        int newLength = Integer.highestOneBit(capacity + capacity - 1);
+        final int[] a = new int[newLength];
+        int size = size();
+        if (head < tail) {
+            System.arraycopy(elements, head, a, 0, size);
+        } else {
+            final int r = elements.length - head; // number of elements to the right of head
+            System.arraycopy(elements, head, a, 0, r);
+            System.arraycopy(elements, 0, a, r, head);
+        }
+        elements = a;
+        head = 0;
+        tail = size;
+    }
+
     public void addLastAsInt(int e) {
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {
-            grow(size() + 1);
+            doubleCapacity();
         }
     }
 
@@ -100,8 +121,6 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
         this.head = this.tail = 0;
     }
-
-
 
     @Override
     public Iterator<Integer> descendingIterator() {
@@ -173,26 +192,19 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     /**
      * Increases the capacity of this deque.
      */
-    private void grow(int capacity) {
-        if (elements.length >= capacity) {
-            return;
-        }
-        //assert head == tail;
-        int size = size();
-        int p = head;
-        int n = elements.length;
-        int r = n - p; // number of elements to the right of p
-        int newCapacity = Math.max(1, Integer.highestOneBit(capacity + capacity - 1));
-        if (newCapacity < capacity) {
-            throw new IllegalStateException("Sorry, deque too big");
-        }
-        int[] a = new int[newCapacity];
+    private void doubleCapacity() {
+        assert head == tail;
+        final int p = head;
+        final int n = elements.length;
+        final int r = n - p; // number of elements to the right of p
+        final int[] a = new int[n << 1];
         System.arraycopy(elements, p, a, 0, r);
         System.arraycopy(elements, 0, a, r, p);
         elements = a;
         head = 0;
-        tail = size;
+        tail = n;
     }
+
 
     @Override
     public int hashCode() {
