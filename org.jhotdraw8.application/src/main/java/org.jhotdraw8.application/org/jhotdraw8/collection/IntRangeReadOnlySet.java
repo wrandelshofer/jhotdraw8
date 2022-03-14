@@ -1,3 +1,7 @@
+/*
+ * @(#)IntRangeEnumerator.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.Nullable;
@@ -6,6 +10,9 @@ import org.jhotdraw8.util.Preconditions;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 
+/**
+ * Represents a set of integers in a given range.
+ */
 public class IntRangeReadOnlySet extends AbstractReadOnlySet<Integer> {
     private final int from;
     private final int to;

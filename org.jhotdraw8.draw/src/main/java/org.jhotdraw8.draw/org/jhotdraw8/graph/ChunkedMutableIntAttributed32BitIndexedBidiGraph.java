@@ -5,10 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.*;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -525,13 +522,14 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
             // close the gap by shifting up
             int siblingsStartOfGapOffset = getSiblingsToOffset(gapIndex);
-            int arrowDataStartOfGapOffset = getArrowsToOffset(gapIndex);
-            System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsTo + free, siblingsStartOfGapOffset - siblingsFrom - insertionIndex);
-            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataTo + free, arrowDataStartOfGapOffset - arrowDataFrom - insertionIndex);
+            int length = siblingsStartOfGapOffset - siblingsTo;
+            System.arraycopy(chunk, siblingsTo, chunk, siblingsTo + free, length);
+            System.arraycopy(chunk, arrowDataTo, chunk, arrowDataTo + free, length);
 
             // shift up to make room for the new element
-            System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsFrom + insertionIndex + 1, siblingsTo - siblingsFrom - insertionIndex);
-            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex + 1, siblingsTo - siblingsFrom - insertionIndex);
+            length = siblingsTo - siblingsFrom - insertionIndex;
+            System.arraycopy(chunk, siblingsFrom + insertionIndex, chunk, siblingsFrom + insertionIndex + 1, length);
+            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex + 1, length);
 
             // insert the element at insertion index
             chunk[siblingsFrom + insertionIndex] = u;
@@ -915,7 +913,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * and the vertex index in the 32 low-bits of the long.
      */
     public @NonNull LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
-        return new BreadthFirstSpliteratorOfLongShort(vidx, prevChunks, visited);
+        return new BreadthFirstLongSpliterator(vidx, prevChunks, visited);
     }
 
     /**
@@ -940,16 +938,41 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * and the vertex index in the 32 low-bits of the long.
      */
     public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
-        return new BreadthFirstSpliteratorOfLongShort(vidx, nextChunks, visited);
+        return new BreadthFirstLongSpliterator(vidx, nextChunks, visited);
     }
 
-    private class BreadthFirstSpliteratorOfLongShort extends AbstractLongEnumeratorSpliterator {
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
+        return breadthFirstIntSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx    the index of the vertex
+     * @param visited the set of visited vertices
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
+        return new BreadthFirstIntSpliterator(vidx, nextChunks, visited);
+    }
+
+    private class BreadthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
 
         private final Chunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
 
-        protected BreadthFirstSpliteratorOfLongShort(final int root, final Chunk[] chunks, @NonNull final AddToIntSet visited) {
+        protected BreadthFirstLongSpliterator(final int root, final Chunk[] chunks, @NonNull final AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -966,6 +989,41 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             final int v = deque.removeFirst();
             Chunk chunk = getOrCreateChunk(chunks, v);
             current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
+            int from = chunk.getSiblingsFromOffset(v);
+            int to = chunk.getSiblingsToOffset(v);
+            for (int i = from; i < to; i++) {
+                final int u = chunk.chunk[i];
+                if (visited.addAsInt(u)) {
+                    deque.addLastAsInt(u);
+                }
+            }
+            return true;
+        }
+    }
+
+    private class BreadthFirstIntSpliterator extends AbstractIntEnumeratorSpliterator {
+
+        private final Chunk[] chunks;
+        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
+        private final @NonNull AddToIntSet visited;
+
+        protected BreadthFirstIntSpliterator(final int root, final Chunk[] chunks, @NonNull final AddToIntSet visited) {
+            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+            this.chunks = chunks;
+            this.visited = visited;
+            if (visited.addAsInt(root)) {
+                deque.addFirstAsInt(root);
+            }
+        }
+
+        @Override
+        public boolean moveNext() {
+            if (deque.isEmpty()) {
+                return false;
+            }
+            final int v = deque.removeFirst();
+            Chunk chunk = getOrCreateChunk(chunks, v);
+            current = v;
             int from = chunk.getSiblingsFromOffset(v);
             int to = chunk.getSiblingsToOffset(v);
             for (int i = from; i < to; i++) {
