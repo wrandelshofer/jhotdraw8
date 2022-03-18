@@ -10,7 +10,6 @@ import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Arrays;
-import java.util.BitSet;
 
 /**
  * A mutable indexed bi-directional graph.
@@ -797,8 +796,17 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
 
     @Override
     public void removeNextAsInt(int v, int index) {
+        Preconditions.checkIndex(index, getNextCount(v));
         int u = getNextChunk(v).removeArrowAt(v, index);
         getPrevChunk(u).tryToRemoveArrow(u, v);
+        arrowCount--;
+    }
+
+    @Override
+    public void removePrevAsInt(int v, int index) {
+        Preconditions.checkIndex(index, getPrevCount(v));
+        int u = getPrevChunk(v).removeArrowAt(v, index);
+        getNextChunk(u).tryToRemoveArrow(u, v);
         arrowCount--;
     }
 
@@ -900,7 +908,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * and the vertex index in the 32 low-bits of the long.
      */
     public @NonNull LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx) {
-        return backwardBreadthFirstLongSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return backwardBreadthFirstLongSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     /**
@@ -925,7 +933,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * and the vertex index in the 32 low-bits of the long.
      */
     public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx) {
-        return breadthFirstLongSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return breadthFirstLongSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     /**
@@ -950,7 +958,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * and the vertex index in the 32 low-bits of the long.
      */
     public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
-        return breadthFirstIntSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return breadthFirstIntSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     /**

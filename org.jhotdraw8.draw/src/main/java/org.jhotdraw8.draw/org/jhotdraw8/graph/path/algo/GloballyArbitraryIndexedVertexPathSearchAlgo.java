@@ -6,12 +6,12 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.GrowableIndexedBooleanSet;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLink;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.ArrayDeque;
-import java.util.BitSet;
 import java.util.Queue;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
@@ -68,7 +68,7 @@ public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Com
         AlgoArguments.checkZero(zero);
         return IndexedVertexBackLink.toIndexedVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
-                        AddToIntSet.addToBitSet(new BitSet()), maxDepth),
+                        new GrowableIndexedBooleanSet()::add, maxDepth),
                 zero, costFunction, sumFunction
         );
     }

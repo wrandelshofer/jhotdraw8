@@ -6,11 +6,11 @@ package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IndexedBooleanSet;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.util.function.AddToIntSet;
 
-import java.util.BitSet;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -30,9 +30,12 @@ public class IndexedBreadthFirstSpliterator extends AbstractIntEnumeratorSpliter
      *
      * @param nextFunction the nextFunction
      * @param root         the root vertex
+     * @param vertexCount  the vertex count
      */
-    public IndexedBreadthFirstSpliterator(@NonNull Function<Integer, IntEnumerator> nextFunction, @NonNull int root) {
-        this(nextFunction, root, AddToIntSet.addToBitSet(new BitSet()));
+    public IndexedBreadthFirstSpliterator(@NonNull Function<Integer, IntEnumerator> nextFunction,
+                                          int root,
+                                          int vertexCount) {
+        this(nextFunction, root, new IndexedBooleanSet(vertexCount)::add);
     }
 
     /**

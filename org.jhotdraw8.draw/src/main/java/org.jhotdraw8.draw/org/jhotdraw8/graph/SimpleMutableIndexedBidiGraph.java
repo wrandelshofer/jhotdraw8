@@ -10,7 +10,6 @@ import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.NoSuchElementException;
 
 import static java.lang.Math.max;
@@ -300,6 +299,30 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     }
 
     @Override
+    public void removePrevAsInt(int v, int index) {
+        int uidx = getNextAsInt(v, index);
+        int vOffset = v * stride;
+        int vNextCount = next[vOffset];
+        int uOffset = uidx * stride;
+        int uPrevCount = prev[uOffset];
+        int vIndex = findIndexOfPrevAsInt(uidx, v);
+        if (vIndex < 0 || index < 0) {
+            throw new NoSuchElementException("There is no arrow " + v + "->" + uidx);
+        }
+        if (index < vNextCount - 1) {
+            System.arraycopy(next, vOffset + index + 2, next, vOffset + index + 1, vNextCount - index - 1);
+        }
+        if (vIndex < uPrevCount - 1) {
+            System.arraycopy(prev, uOffset + vIndex + 2, prev, uOffset + vIndex + 1, uPrevCount - vIndex - 1);
+        }
+        next[vOffset + vNextCount] = 0;
+        prev[uOffset + uPrevCount] = 0;
+        next[vOffset] = vNextCount - 1;
+        prev[uOffset] = uPrevCount - 1;
+        arrowCount--;
+    }
+
+    @Override
     public void removeVertexAsInt(int v) {
         Preconditions.checkIndex(v, vertexCount);
         removeAllNextAsInt(v);
@@ -377,7 +400,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
      */
     public IntEnumeratorSpliterator breadthFirstIntSpliterator(int vidx) {
         return new BreadthFirstSpliteratorOfInt(vidx, next, stride,
-                0, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+                0, new IndexedBooleanSet(vertexCount)::add);
     }
 
     /**
@@ -389,6 +412,6 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
      */
     public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(int vidx) {
         return new BreadthFirstSpliteratorOfInt(vidx, prev, stride,
-                0, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+                0, new IndexedBooleanSet(vertexCount)::add);
     }
 }

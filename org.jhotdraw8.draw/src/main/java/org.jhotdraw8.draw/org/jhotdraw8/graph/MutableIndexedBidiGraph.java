@@ -74,6 +74,15 @@ public interface MutableIndexedBidiGraph extends IndexedBidiGraph {
     void removeNextAsInt(int v, int index);
 
     /**
+     * Removes the i-th arrow ending at vertex 'v'
+     *
+     * @param v     index of vertex 'v'
+     * @param index the index of the arrow ending at 'v'
+     * @throws NoSuchElementException if there is no such arrow
+     */
+    void removePrevAsInt(int v, int index);
+
+    /**
      * Removes vertex 'v'
      *
      * @param v index of vertex 'v'

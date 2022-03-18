@@ -11,7 +11,6 @@ import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.NoSuchElementException;
 
 import static java.lang.Math.max;
@@ -279,7 +278,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         final int vOffset = v * stride + VERTEX_DATA_SIZE;
         final int vPrevCount = prev[vOffset];
         for (int i = vPrevCount; i >= 0; i--) {
-            removePrev(v, i);
+            removePrevAsInt(v, i);
         }
         prev[vOffset] = 0;
     }
@@ -324,7 +323,8 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         arrowCount--;
     }
 
-    public void removePrev(final int vidx, final int i) {
+    @Override
+    public void removePrevAsInt(final int vidx, final int i) {
         final int uidx = getPrevAsInt(vidx, i);
         final int vOffset = vidx * stride + VERTEX_DATA_SIZE;
         final int vNewPrevCount = prev[vOffset] - 1;
@@ -510,7 +510,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @return the spliterator
      */
     public IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
-        return breadthFirstIntSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return breadthFirstIntSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     public IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
@@ -526,7 +526,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @return the spliterator
      */
     public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(final int vidx) {
-        return backwardBreadthFirstIntSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return backwardBreadthFirstIntSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
@@ -542,7 +542,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * and the vertex index in the 32 low-bits of the long.
      */
     public LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx) {
-        return breadthFirstLongSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return breadthFirstLongSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     public LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
@@ -559,7 +559,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * and the vertex index in the 32 low-bits of the long.
      */
     public LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx) {
-        return backwardBreadthFirstLongSpliterator(vidx, AddToIntSet.addToBitSet(new BitSet(vertexCount)));
+        return backwardBreadthFirstLongSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
 
     public LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
