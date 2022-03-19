@@ -5,7 +5,13 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.*;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
+import org.jhotdraw8.collection.IndexedBooleanSet;
+import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.collection.LongEnumeratorSpliterator;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -28,7 +34,10 @@ import java.util.Arrays;
  */
 public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
-    private static final boolean CLEAR_UNUSED_ELEMENTS = true;
+    /**
+     * Set this only true for debugging, because it considerably degrades performance.
+     */
+    private static final boolean CLEAR_UNUSED_ELEMENTS = false;
     private static final int CLEAR_VALUE = 99;
     /**
      * Value to which sizes are rounded up.
@@ -40,9 +49,9 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * Number of vertices per chunk.
      * Must be a power of 2.
      */
-    private final int chunkSize = 4;
-    private final int chunkShift = Integer.numberOfTrailingZeros(chunkSize);
-    private final int chunkMask = chunkSize - 1;
+    private final int chunkSize;
+    private final int chunkShift;
+    private final int chunkMask;
 
     /**
      * Array of chunks for arrows to next vertices.
@@ -55,6 +64,15 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     private final int initialChunkCapacity = 4;
 
     public ChunkedMutableIntAttributed32BitIndexedBidiGraph() {
+        this(256);
+    }
+
+    public ChunkedMutableIntAttributed32BitIndexedBidiGraph(final int chunkSize) {
+        if (Integer.bitCount(chunkSize) != 1)
+            throw new IllegalArgumentException("chunkSize=" + chunkSize + " is not a power of 2");
+        this.chunkSize = chunkSize;
+        this.chunkShift = Integer.numberOfTrailingZeros(chunkSize);
+        this.chunkMask = chunkSize - 1;
     }
 
     /**
@@ -204,7 +222,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             return chunkSize * 2 + capacity - (gapIndex == chunkSize - 1 ? gapSize : 0);
         }
 
-        private int getArrowCount(int v) {
+        public int getArrowCount(int v) {
             int vIndex = v & chunkMask;
             int sizesOffset = getSizesOffset();
             return vIndex == 0
@@ -212,7 +230,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
                     : chunk[sizesOffset + vIndex] - chunk[sizesOffset + vIndex - 1];
         }
 
-        private int getArrowsFromOffset(int v) {
+        public int getArrowsFromOffset(int v) {
             int vIndex = v & chunkMask;
             int arrowsOffset = getArrowsFromOffset();
             return vIndex == 0
@@ -221,7 +239,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
                     + (vIndex <= gapIndex ? 0 : gapSize);
         }
 
-        private int getArrowsToOffset(int v) {
+        public int getArrowsToOffset(int v) {
             int vIndex = v & chunkMask;
             return getArrowsFromOffset()
                     + chunk[getSizesOffset() + vIndex]
@@ -237,7 +255,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
          * @param data the arrow data
          * @return true if a new arrow was added
          */
-        private boolean addOrSetArrow(int v, int u, int data) {
+        public boolean addOrSetArrow(int v, int u, int data) {
             int result = findIndexOf(v, u);
             if (result >= 0) {
                 setArrowAt(v, result, data);
@@ -274,7 +292,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             return true;
         }
 
-        private void setArrowAt(int v, int index, int data) {
+        public void setArrowAt(int v, int index, int data) {
             chunk[getArrowsFromOffset(v) + index] = data;
         }
 
@@ -285,7 +303,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
          * @param u index of vertex u
          * @return true on success
          */
-        private boolean tryToRemoveArrow(int v, int u) {
+        public boolean tryToRemoveArrow(int v, int u) {
             int result = findIndexOf(v, u);
             if (result < 0) {
                 return false;
@@ -299,7 +317,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
          *
          * @param v index of vertex v
          */
-        private void removeAllArrows(int v) {
+        public void removeAllArrows(int v) {
             int vIndex = v & chunkMask;
             int size = getSiblingCount(vIndex);
             if (size == 0) {
@@ -364,7 +382,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
          * @param removalIndex index of vertex u
          * @return returns the removed arrow u
          */
-        private int removeArrowAt(int v, int removalIndex) {
+        public int removeArrowAt(int v, int removalIndex) {
             int siblingsFrom = getSiblingsFromOffset(v);
             int siblingsTo = getSiblingsToOffset(v);
             int arrowDataFrom = getArrowsFromOffset(v);
@@ -925,6 +943,31 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     }
 
     /**
+     * Returns a backward breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator backwardDepthFirstLongSpliterator(final int vidx) {
+        return backwardDepthFirstLongSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
+    }
+
+    /**
+     * Returns a backward breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx    the index of the vertex
+     * @param visited the set of visited vertices
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator backwardDepthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
+        return new DepthFirstLongSpliterator(vidx, prevChunks, visited);
+    }
+
+    /**
      * Returns a breadth first spliterator that starts at the specified
      * vertex.
      *
@@ -957,6 +1000,31 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
+    public @NonNull LongEnumeratorSpliterator depthFirstLongSpliterator(final int vidx) {
+        return depthFirstLongSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx    the index of the vertex
+     * @param visited the set of visited vertices
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull LongEnumeratorSpliterator depthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
+        return new DepthFirstLongSpliterator(vidx, nextChunks, visited);
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
     public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
         return breadthFirstIntSpliterator(vidx, new IndexedBooleanSet(vertexCount)::add);
     }
@@ -973,6 +1041,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
     public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
         return new BreadthFirstIntSpliterator(vidx, nextChunks, visited);
     }
+
 
     private class BreadthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
 
@@ -994,7 +1063,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             if (deque.isEmpty()) {
                 return false;
             }
-            final int v = deque.removeFirst();
+            final int v = deque.removeFirstAsInt();
             Chunk chunk = getOrCreateChunk(chunks, v);
             current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
             int from = chunk.getSiblingsFromOffset(v);
@@ -1003,6 +1072,41 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
                 final int u = chunk.chunk[i];
                 if (visited.addAsInt(u)) {
                     deque.addLastAsInt(u);
+                }
+            }
+            return true;
+        }
+    }
+
+    private class DepthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
+
+        private final Chunk[] chunks;
+        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
+        private final @NonNull AddToIntSet visited;
+
+        protected DepthFirstLongSpliterator(final int root, final Chunk[] chunks, @NonNull final AddToIntSet visited) {
+            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+            this.chunks = chunks;
+            this.visited = visited;
+            if (visited.addAsInt(root)) {
+                deque.addFirstAsInt(root);
+            }
+        }
+
+        @Override
+        public boolean moveNext() {
+            if (deque.isEmpty()) {
+                return false;
+            }
+            final int v = deque.removeFirstAsInt();
+            Chunk chunk = getOrCreateChunk(chunks, v);
+            current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
+            int from = chunk.getSiblingsFromOffset(v);
+            int to = chunk.getSiblingsToOffset(v);
+            for (int i = from; i < to; i++) {
+                final int u = chunk.chunk[i];
+                if (visited.addAsInt(u)) {
+                    deque.addFirstAsInt(u);
                 }
             }
             return true;
@@ -1029,7 +1133,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
             if (deque.isEmpty()) {
                 return false;
             }
-            final int v = deque.removeFirst();
+            final int v = deque.removeFirstAsInt();
             Chunk chunk = getOrCreateChunk(chunks, v);
             current = v;
             int from = chunk.getSiblingsFromOffset(v);
