@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.GrowableIndexedBooleanSet;
+import org.jhotdraw8.collection.GrowableIntSet;
 import org.jhotdraw8.collection.LongArrayDeque;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -85,7 +85,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
                               @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToIntSet visited) {
         AlgoArguments.checkZero(zero);
         return tryToReach(startVertices, goalPredicate, nextVerticesFunction,
-                new GrowableIndexedBooleanSet()::add,
+                new GrowableIntSet()::addAsInt,
                 maxDepth);
     }
 

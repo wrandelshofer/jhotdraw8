@@ -5,7 +5,12 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.*;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.DenseIntSet;
+import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
+import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -400,7 +405,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
      */
     public IntEnumeratorSpliterator breadthFirstIntSpliterator(int vidx) {
         return new BreadthFirstSpliteratorOfInt(vidx, next, stride,
-                0, new IndexedBooleanSet(vertexCount)::add);
+                0, new DenseIntSet(vertexCount)::addAsInt);
     }
 
     /**
@@ -412,6 +417,6 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
      */
     public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(int vidx) {
         return new BreadthFirstSpliteratorOfInt(vidx, prev, stride,
-                0, new IndexedBooleanSet(vertexCount)::add);
+                0, new DenseIntSet(vertexCount)::addAsInt);
     }
 }

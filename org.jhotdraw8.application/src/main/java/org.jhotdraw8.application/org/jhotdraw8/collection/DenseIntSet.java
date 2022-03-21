@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 
 /**
- * A dense indexed boolean set.
+ * A dense set of integer values.
  * <p>
  * This set is optimised for frequent setting and clearing.
  * <p>
@@ -19,45 +19,35 @@ import java.util.BitSet;
  * <p>
  * Storage space is one byte per boolean.
  */
-public class IndexedBooleanSet {
+public class DenseIntSet implements IntSet {
     private byte[] a;
     private byte mark = 1;
 
     /**
      * Creates an empty set.
      */
-    public IndexedBooleanSet() {
+    public DenseIntSet() {
         this(0);
     }
 
     /**
-     * Creates a set of the specified size.
+     * Creates a set with the specified capacity.
      */
-    public IndexedBooleanSet(int size) {
-        a = new byte[size];
+    public DenseIntSet(int capacity) {
+        a = new byte[capacity];
     }
 
-    /**
-     * Sets the boolean at the specified index.
-     *
-     * @param index index
-     * @return true if the boolean was not set yet.
-     */
-    public boolean add(int index) {
-        if (a[index] != mark) {
-            a[index] = mark;
+    @Override
+    public boolean addAsInt(int element) {
+        if (a[element] != mark) {
+            a[element] = mark;
             return true;
         }
         return false;
     }
 
-    /**
-     * Clears the boolean at the specified index.
-     *
-     * @param index index
-     * @return true if the boolean was already set.
-     */
-    public boolean remove(int index) {
+    @Override
+    public boolean removeAsInt(int index) {
         if (a[index] == mark) {
             a[index] = 0;
             return true;
@@ -65,41 +55,34 @@ public class IndexedBooleanSet {
         return false;
     }
 
-    /**
-     * Gets the boolean at the specified index.
-     *
-     * @param index index
-     * @return the boolean
-     */
-    public boolean get(int index) {
-        return a[index] == mark;
+    @Override
+    public boolean containsAsInt(int e) {
+        return a[e] == mark;
     }
 
-    /**
-     * Clears the boolean set.
-     */
+    @Override
     public void clear() {
-        if (++mark == -1) {
+        if (++mark == 0) {
             Arrays.fill(a, (byte) 0);
             mark = 1;
         }
     }
 
     /**
-     * Sets the size of the set.
+     * Sets the capacity of the set.
      *
-     * @param size the new size.
+     * @param capacity the new capacity
      */
-    public void setSize(int size) {
-        a = Arrays.copyOf(a, size);
+    public void setCapacity(int capacity) {
+        a = Arrays.copyOf(a, capacity);
     }
 
     /**
-     * Gets the size of the set.
+     * Gets the capacity of the set.
      *
-     * @return the size
+     * @return the capacity
      */
-    public int size() {
+    public int capacity() {
         return a.length;
     }
 
@@ -107,8 +90,8 @@ public class IndexedBooleanSet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        IndexedBooleanSet that = (IndexedBooleanSet) o;
-        return this.size() == that.size()
+        DenseIntSet that = (DenseIntSet) o;
+        return this.capacity() == that.capacity()
                 && Arrays.equals(this.toLongArray(), that.toLongArray());
     }
 
@@ -135,8 +118,8 @@ public class IndexedBooleanSet {
         int length = (a.length - 1 >>> 6) + 1;
         long[] words = new long[length];
         int lastSetBit = -1;
-        for (int i = 0, n = size(); i < n; i++) {
-            if (get(i)) {
+        for (int i = 0, n = capacity(); i < n; i++) {
+            if (containsAsInt(i)) {
                 lastSetBit = i;
                 int wordIndex = i >>> 6;
                 int bitIndex = i & 63;
@@ -151,15 +134,15 @@ public class IndexedBooleanSet {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append('{');
-        int i = 0, n = size();
+        int i = 0, n = capacity();
         for (; i < n; i++) {
-            if (get(i)) {
+            if (containsAsInt(i)) {
                 buf.append(i++);
                 break;
             }
         }
         for (; i < n; i++) {
-            if (get(i)) {
+            if (containsAsInt(i)) {
                 buf.append(", ");
                 buf.append(i);
             }

@@ -42,7 +42,7 @@ public class ListHelper {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
-        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        int newCapacity = max(16, max(targetCapacity, items.length + items.length / 2)); // grow by 50%
         return Arrays.copyOf(items, newCapacity * itemSize, items.getClass());
     }
 
@@ -61,7 +61,7 @@ public class ListHelper {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
-        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        int newCapacity = max(16, max(targetCapacity, items.length + items.length / 2)); // grow by 50%
         double[] newItems = new double[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;
@@ -82,7 +82,7 @@ public class ListHelper {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
-        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        int newCapacity = max(16, max(targetCapacity, items.length + items.length / 2)); // grow by 50%
         short[] newItems = new short[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;
@@ -103,7 +103,7 @@ public class ListHelper {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
-        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        int newCapacity = max(16, max(targetCapacity, items.length + items.length / 2)); // grow by 50%
         int[] newItems = new int[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;
@@ -124,7 +124,7 @@ public class ListHelper {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
-        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        int newCapacity = max(16, max(targetCapacity, items.length + items.length / 2)); // grow by 50%
         long[] newItems = new long[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;
@@ -145,7 +145,7 @@ public class ListHelper {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
-        int newCapacity = max(targetCapacity, items.length + items.length / 2); // grow by 50%
+        int newCapacity = max(16, max(targetCapacity, items.length + items.length / 2)); // grow by 50%
         char[] newItems = new char[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;
@@ -168,7 +168,7 @@ public class ListHelper {
             return items;
         }
         // shrink to load factor 50%
-        int newCapacity = max(targetCapacity, targetCapacity * 2);
+        int newCapacity = max(16, max(targetCapacity, targetCapacity * 2));
         Object[] newItems = new Object[newCapacity * itemSize];
         System.arraycopy(items, 0, newItems, 0, size * itemSize);
         return newItems;

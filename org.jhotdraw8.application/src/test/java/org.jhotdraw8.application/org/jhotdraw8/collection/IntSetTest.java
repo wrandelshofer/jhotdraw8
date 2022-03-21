@@ -8,15 +8,15 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class IndexedBooleanSetTest {
-    private IndexedBooleanSet newInstance(int size) {
-        return new IndexedBooleanSet(size);
+public class IntSetTest {
+    private DenseIntSet newInstance(int size) {
+        return new DenseIntSet(size);
     }
 
     @Test
     public void clearAndSetUntilMarkerOverflows() {
-        IndexedBooleanSet actual = newInstance(8);
-        IndexedBooleanSet actual2 = newInstance(8);
+        DenseIntSet actual = newInstance(8);
+        DenseIntSet actual2 = newInstance(8);
         BitSet expected = new BitSet(8);
 
         // we intentionally clear actual2 two times here
@@ -41,13 +41,13 @@ public class IndexedBooleanSetTest {
                 if (remove) {
                     expectedChanged = expected.get(index);
                     expected.clear(index);
-                    actualChanged = actual.remove(index);
-                    actual2Changed = actual2.remove(index);
+                    actualChanged = actual.removeAsInt(index);
+                    actual2Changed = actual2.removeAsInt(index);
                 } else {
                     expectedChanged = !expected.get(index);
                     expected.set(index);
-                    actualChanged = actual.add(index);
-                    actual2Changed = actual2.add(index);
+                    actualChanged = actual.addAsInt(index);
+                    actual2Changed = actual2.addAsInt(index);
                 }
 
                 assertEquals(expectedChanged, actualChanged, "index=" + index + " must have changed");
@@ -69,7 +69,7 @@ public class IndexedBooleanSetTest {
     public void resizeSet() {
         int size = 8;
 
-        IndexedBooleanSet actual = newInstance(size);
+        DenseIntSet actual = newInstance(size);
         BitSet expected = new BitSet(size);
 
         Random rng = new Random(0);
@@ -84,7 +84,7 @@ public class IndexedBooleanSetTest {
                     temp.set(j, expected.get(j));
                 }
                 expected = temp;
-                actual.setSize(size);
+                actual.setCapacity(size);
 
                 assertEquals(expected.toString(), actual.toString());
                 assertArrayEquals(expected.toLongArray(), actual.toLongArray());
@@ -101,11 +101,11 @@ public class IndexedBooleanSetTest {
                 if (remove) {
                     expectedChanged = expected.get(index);
                     expected.clear(index);
-                    actualChanged = actual.remove(index);
+                    actualChanged = actual.removeAsInt(index);
                 } else {
                     expectedChanged = !expected.get(index);
                     expected.set(index);
-                    actualChanged = actual.add(index);
+                    actualChanged = actual.addAsInt(index);
                 }
                 assertEquals(expectedChanged, actualChanged, "index=" + index + " must have changed");
             }
