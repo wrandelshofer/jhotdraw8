@@ -5,13 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
-import org.jhotdraw8.collection.DenseIntSet;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.*;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -888,10 +882,12 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         final int from = chunk.getSiblingsFromOffset(v);
         int[] a = chunk.getChunkArray();
         final int to = chunk.getSiblingCount(v) + from;
-        for (int i = to - 1; i >= from; i--) {
-            final int u = a[i];
-            final Chunk prevChunk = getNextChunk(u);
-            prevChunk.tryToRemoveArrow(u, v);
+        int[] next = new int[to - from];
+        System.arraycopy(a, from, next, 0, next.length);
+        for (int i = next.length - 1; i >= 0; i--) {
+            final int u = next[i];
+            final Chunk nextChunk = getNextChunk(u);
+            nextChunk.tryToRemoveArrow(u, v);
         }
         chunk.removeAllArrows(v);
     }
@@ -902,8 +898,10 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraph implements Mutable
         final int from = chunk.getSiblingsFromOffset(v);
         final int to = chunk.getSiblingCount(v) + from;
         int[] a = chunk.getChunkArray();
-        for (int i = to - 1; i >= from; i--) {
-            final int u = a[i];
+        int[] next = new int[to - from];
+        System.arraycopy(a, from, next, 0, next.length);
+        for (int i = next.length - 1; i >= 0; i--) {
+            final int u = next[i];
             final Chunk prevChunk = getPrevChunk(u);
             prevChunk.tryToRemoveArrow(u, v);
         }
