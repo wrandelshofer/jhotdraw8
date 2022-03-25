@@ -44,7 +44,8 @@ public class IndexedStronglyConnectedComponentsAlgo {
      * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
-    public @NonNull List<IntArrayList> findStronglyConnectedComponents(int vertexCount, Function<Integer, IntEnumerator> nextNodeFunction) {
+    public @NonNull List<IntArrayList> findStronglyConnectedComponents(
+            int vertexCount, Function<Integer, IntEnumerator> nextNodeFunction) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from
         // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
@@ -67,14 +68,14 @@ public class IndexedStronglyConnectedComponentsAlgo {
                 int low = lows[v];
                 if (low == -1) {
                     lows[v] = low = pre++;
-                    stack.push(v);
+                    stack.pushAsInt(v);
                     // Level down:
-                    minStack.push(low);
+                    minStack.pushAsInt(low);
                     enumeratorStack.push(enumerator);
                     enumerator = nextNodeFunction.apply(v);
                 } else {
                     if (!minStack.isEmpty()) {
-                        minStack.push(min(low, minStack.pop()));
+                        minStack.pushAsInt(min(low, minStack.popAsInt()));
                     }
                 }
             } else {
@@ -85,7 +86,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
 
                 enumerator = enumeratorStack.pop();
                 int v = enumerator.currentAsInt();
-                int min = minStack.pop();
+                int min = minStack.popAsInt();
                 int low = lows[v];
                 if (min < low) {
                     lows[v] = low = min;
@@ -93,15 +94,15 @@ public class IndexedStronglyConnectedComponentsAlgo {
                     IntArrayList component = new IntArrayList();
                     int w;
                     do {
-                        w = stack.pop();
-                        component.add(w);
+                        w = stack.popAsInt();
+                        component.addAsInt(w);
                         lows[w] = vertexCount;
                     } while (w != v);
                     sccs.add(component);
                 }
 
                 if (!minStack.isEmpty()) {
-                    minStack.push(min(low, minStack.pop()));
+                    minStack.push(min(low, minStack.popAsInt()));
                 }
             }
         }

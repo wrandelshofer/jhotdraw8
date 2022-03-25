@@ -1,10 +1,10 @@
 package org.jhotdraw8.collection;
 
 /**
- * Extension of {@link DenseIntSet} that can be used, when
+ * Extension of {@link DenseIntSet8Bit} that can be used, when
  * the size of the set is not known.
  */
-public class GrowableIntSet extends DenseIntSet {
+public class GrowableIntSet8Bit extends DenseIntSet8Bit {
     @Override
     public boolean addAsInt(int e) {
         ensureCapacity(e);

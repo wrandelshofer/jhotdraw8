@@ -18,8 +18,9 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  */
 public class IntArrayList extends AbstractList<Integer> {
-
+private final static int[] EMPTY = new int[0];
     private int[] items;
+
     /**
      * Holds the size of the list. Invariant: size >= 0.
      */
@@ -29,6 +30,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * Creates a new empty instance with 0 initial capacity.
      */
     public IntArrayList() {
+        items = EMPTY;
     }
 
     /**
@@ -37,7 +39,7 @@ public class IntArrayList extends AbstractList<Integer> {
      * @param initialCapacity the initial capacity
      */
     public IntArrayList(int initialCapacity) {
-        grow(initialCapacity);
+        items = new int[initialCapacity];
     }
 
     /**
@@ -92,7 +94,6 @@ public class IntArrayList extends AbstractList<Integer> {
     public void addAsInt(int index, int newItem) {
         Preconditions.checkIndex(index, size + 1);
         grow(size + 1);
-        System.arraycopy(items, index, items, index + 1, size - index);
         items[index] = newItem;
         ++size;
     }
@@ -125,8 +126,11 @@ public class IntArrayList extends AbstractList<Integer> {
         return out;
     }
 
+    /**
+     * Clears list in O(1).
+     */
     public void clear() {
-        items = null;
+        // Performance: do not fill array with 0 values
         size = 0;
     }
 
@@ -222,7 +226,9 @@ public class IntArrayList extends AbstractList<Integer> {
     }
 
     private void grow(int capacity) {
-        items = ListHelper.grow(size, capacity, 1, items);
+        if (items.length < capacity) {
+            items = ListHelper.grow(size, capacity, 1, items);
+        }
     }
 
     /**

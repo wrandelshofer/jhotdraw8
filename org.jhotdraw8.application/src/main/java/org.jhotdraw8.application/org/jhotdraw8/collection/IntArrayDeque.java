@@ -7,7 +7,10 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.util.Preconditions;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * IntArrayDeque.
@@ -112,13 +115,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
+    /**
+     * Clears the deque in O(1).
+     */
     public void clear() {
-        if (head < tail) {
-            Arrays.fill(elements, head, tail + 1, 0);
-        } else {
-            Arrays.fill(elements, 0, tail + 1, 0);
-            Arrays.fill(elements, head, elements.length, 0);
-        }
+        // Performance: Do not fill the array with zeros.
         this.head = this.tail = 0;
     }
 

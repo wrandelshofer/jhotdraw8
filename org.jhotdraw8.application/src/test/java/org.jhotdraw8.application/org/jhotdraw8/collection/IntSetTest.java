@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IntSetTest {
-    private DenseIntSet newInstance(int size) {
-        return new DenseIntSet(size);
+    private DenseIntSet8Bit newInstance(int size) {
+        return new DenseIntSet8Bit(size);
     }
 
     @Test
     public void clearAndSetUntilMarkerOverflows() {
-        DenseIntSet actual = newInstance(8);
-        DenseIntSet actual2 = newInstance(8);
+        DenseIntSet8Bit actual = newInstance(8);
+        DenseIntSet8Bit actual2 = newInstance(8);
         BitSet expected = new BitSet(8);
 
         // we intentionally clear actual2 two times here
@@ -69,7 +69,7 @@ public class IntSetTest {
     public void resizeSet() {
         int size = 8;
 
-        DenseIntSet actual = newInstance(size);
+        DenseIntSet8Bit actual = newInstance(size);
         BitSet expected = new BitSet(size);
 
         Random rng = new Random(0);

@@ -19,21 +19,21 @@ import java.util.BitSet;
  * <p>
  * Storage space is one byte per boolean.
  */
-public class DenseIntSet implements IntSet {
+public class DenseIntSet8Bit implements IntSet {
     private byte[] a;
     private byte mark = 1;
 
     /**
      * Creates an empty set.
      */
-    public DenseIntSet() {
+    public DenseIntSet8Bit() {
         this(0);
     }
 
     /**
      * Creates a set with the specified capacity.
      */
-    public DenseIntSet(int capacity) {
+    public DenseIntSet8Bit(int capacity) {
         a = new byte[capacity];
     }
 
@@ -90,7 +90,7 @@ public class DenseIntSet implements IntSet {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DenseIntSet that = (DenseIntSet) o;
+        DenseIntSet8Bit that = (DenseIntSet8Bit) o;
         return this.capacity() == that.capacity()
                 && Arrays.equals(this.toLongArray(), that.toLongArray());
     }

@@ -6,14 +6,7 @@ package org.jhotdraw8.graph;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
-import org.jhotdraw8.collection.DenseIntSet;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntUShortArrayEnumeratorSpliterator;
-import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.*;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -517,7 +510,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @return the spliterator
      */
     public IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
-        return breadthFirstIntSpliterator(vidx, new DenseIntSet(vertexCount)::addAsInt);
+        return breadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
     }
 
     public IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
@@ -533,7 +526,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @return the spliterator
      */
     public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(final int vidx) {
-        return backwardBreadthFirstIntSpliterator(vidx, new DenseIntSet(vertexCount)::addAsInt);
+        return backwardBreadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
     }
 
     public IntEnumeratorSpliterator backwardBreadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
@@ -549,7 +542,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * and the vertex index in the 32 low-bits of the long.
      */
     public LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx) {
-        return breadthFirstLongSpliterator(vidx, new DenseIntSet(vertexCount)::addAsInt);
+        return breadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
     }
 
     public LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
@@ -566,7 +559,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * and the vertex index in the 32 low-bits of the long.
      */
     public LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx) {
-        return backwardBreadthFirstLongSpliterator(vidx, new DenseIntSet(vertexCount)::addAsInt);
+        return backwardBreadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
     }
 
     public LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {

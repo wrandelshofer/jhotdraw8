@@ -13,10 +13,10 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class ChunkedMutableIntAttributed32BitIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
+public class CrsBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
     @Override
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
-        return new ChunkedMutableIntAttributed32BitIndexedBidiGraph();
+        return new CrsBidiGraph(4, 1);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraphTest extends Abstra
     }
 
     public void testGraphRemoveAll(int vertexCount, int maxArity) throws IOException {
-        ChunkedMutableIntAttributed32BitIndexedBidiGraph instance = (ChunkedMutableIntAttributed32BitIndexedBidiGraph) newInstance(maxArity);
+        CrsBidiGraph instance = (CrsBidiGraph) newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
@@ -87,7 +87,7 @@ public class ChunkedMutableIntAttributed32BitIndexedBidiGraphTest extends Abstra
     @Override
     protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
         super.assertEqualSortedGraphInt(expected, actual);
-        ChunkedMutableIntAttributed32BitIndexedBidiGraph a = (ChunkedMutableIntAttributed32BitIndexedBidiGraph) actual;
+        CrsBidiGraph a = (CrsBidiGraph) actual;
         for (Integer v : expected.getVertices()) {
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getNextVertices, v), false).collect(Collectors.toCollection(LinkedHashSet::new));

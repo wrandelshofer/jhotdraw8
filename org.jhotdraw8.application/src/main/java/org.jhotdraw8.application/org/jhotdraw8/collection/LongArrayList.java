@@ -18,8 +18,9 @@ import java.util.stream.LongStream;
  * @author Werner Randelshofer
  */
 public class LongArrayList extends AbstractList<Long> {
-
+    private final static long[] EMPTY = new long[0];
     private long[] items;
+
     /**
      * Holds the size of the list. Invariant: size >= 0.
      */
@@ -29,6 +30,7 @@ public class LongArrayList extends AbstractList<Long> {
      * Creates a new empty instance with 0 initial capacity.
      */
     public LongArrayList() {
+        items = EMPTY;
     }
 
     /**
@@ -37,7 +39,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @param initialCapacity the initial capacity
      */
     public LongArrayList(int initialCapacity) {
-        grow(initialCapacity);
+        items = new long[initialCapacity];
     }
 
     /**
@@ -92,7 +94,6 @@ public class LongArrayList extends AbstractList<Long> {
     public void addAsLong(int index, long newItem) {
         Preconditions.checkIndex(index, size + 1);
         grow(size + 1);
-        System.arraycopy(items, index, items, index + 1, size - index);
         items[index] = newItem;
         ++size;
     }
@@ -125,8 +126,11 @@ public class LongArrayList extends AbstractList<Long> {
         return out;
     }
 
+    /**
+     * Clears list in O(1).
+     */
     public void clear() {
-        items = null;
+        // Performance: do not fill array with 0 values
         size = 0;
     }
 
@@ -222,7 +226,9 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     private void grow(int capacity) {
-        items = ListHelper.grow(size, capacity, 1, items);
+        if (items.length < capacity) {
+            items = ListHelper.grow(size, capacity, 1, items);
+        }
     }
 
     /**
