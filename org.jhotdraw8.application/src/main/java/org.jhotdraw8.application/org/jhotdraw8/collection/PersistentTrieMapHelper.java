@@ -4,7 +4,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Package private class with code for {@link PersistentTrieMap}
@@ -135,7 +140,6 @@ class PersistentTrieMapHelper {
 
         abstract public Node<K, V> updated(final PersistentTrieHelper.Nonce bulkEdit, final K key, final V val,
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
-
     }
 
     private static final class BitmapIndexedNode<K, V> extends Node<K, V> {
@@ -680,7 +684,6 @@ class PersistentTrieMapHelper {
                 return new HashCollisionNode<>(bulkEdit, keyHash, entriesNew);
             }
         }
-
     }
 
     /**
@@ -776,7 +779,6 @@ class PersistentTrieMapHelper {
             }
         }
 
-
         /*
          * search for next node that contains values
          */
@@ -834,7 +836,6 @@ class PersistentTrieMapHelper {
         public K next() {
             return nextEntry().getKey();
         }
-
     }
 
     protected static class MapEntryIterator<K, V> extends AbstractMapIterator<K, V>
@@ -848,7 +849,6 @@ class PersistentTrieMapHelper {
         public Map.Entry<K, V> next() {
             return nextEntry();
         }
-
     }
 
     static class SearchResult<V> {
@@ -917,6 +917,4 @@ class PersistentTrieMapHelper {
     static <K, V> PersistentTrieMapHelper.Node<K, V> emptyNode() {
         return (PersistentTrieMapHelper.Node<K, V>) PersistentTrieMapHelper.EMPTY_NODE;
     }
-
-
 }

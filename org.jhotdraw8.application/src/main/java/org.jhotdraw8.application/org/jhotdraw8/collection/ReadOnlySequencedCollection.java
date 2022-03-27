@@ -1,7 +1,7 @@
 package org.jhotdraw8.collection;
 
 /**
- * A collection with a well-defined sequencing of its elements.
+ * A collection with a well-defined linear ordering of its elements.
  *
  * @param <E> the element type
  */

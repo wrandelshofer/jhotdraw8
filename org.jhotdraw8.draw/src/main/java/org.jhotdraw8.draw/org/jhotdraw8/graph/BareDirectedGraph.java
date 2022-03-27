@@ -6,8 +6,6 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.Set;
-
 /**
  * Provides a minimal read-only API for a directed graph.
  * <p>
@@ -25,18 +23,8 @@ import java.util.Set;
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  */
-public interface BareDirectedGraph<V, A> {
-    /**
-     * Returns the next vertex associated with
-     * the specified vertex and outgoing arrow index.
-     *
-     * @param v     a vertex
-     * @param index index of outgoing arrow
-     * @return the next vertex
-     * @see #getNextCount
-     */
-    @NonNull
-    V getNext(@NonNull V v, int index);
+public interface BareDirectedGraph<V, A> extends BareDirectedVertexGraph<V> {
+
 
     /**
      * Returns the arrow data associated with the specified vertex and outgoing arrow
@@ -49,24 +37,5 @@ public interface BareDirectedGraph<V, A> {
      */
     @NonNull
     A getNextArrow(@NonNull V v, int index);
-
-    /**
-     * Returns the number of next vertices at the specified vertex.
-     * <p>
-     * This number is the same as the number of outgoing arrows at the specified
-     * vertex.
-     *
-     * @param v a vertex
-     * @return the number of next vertices
-     */
-    int getNextCount(@NonNull V v);
-
-    /**
-     * Returns all vertices.
-     *
-     * @return a set view on all vertices
-     */
-    @NonNull
-    Set<V> getVertices();
 
 }

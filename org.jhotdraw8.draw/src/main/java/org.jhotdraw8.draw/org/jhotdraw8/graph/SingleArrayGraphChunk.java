@@ -10,14 +10,18 @@ import java.util.Arrays;
  * Moves the gap at each insertion/deletion operation. This may make it
  * slow for updates.
  * <p>
- * The code in this class is simpler than the one in {@link CrsSingleArrayChunk},
- * but the performance of this class may be worse.
+ * References:
+ * <dl>
+ *     <dt>JHotDraw 8</dt>
+ *     <dd> This class has been derived from JHotDraw 8.
+ *      © 2022 by the authors and contributors of JHotDraw. MIT License.</dd>
+ * </dl>
  */
-class CrsMultiArrayChunk implements CrsChunk {
+public class SingleArrayGraphChunk implements GraphChunk {
     private static final boolean CLEAR_UNUSED_ELEMENTS = false;
     private static final int CLEAR_VALUE = 99;
 
-    private final int chunkSize;
+    private final int vertexCount;
     /**
      * The total capacity for arrows in this chunk.
      */
@@ -36,50 +40,45 @@ class CrsMultiArrayChunk implements CrsChunk {
     private int gapSize;
 
     /**
-     * Stores the vertex data for each vertex.
-     * There are {@link #chunkSize} vertices in this array.
+     * Chunk array layout:
+     * <pre>
+     * vertices: [ data ... ] // Stores the vertex data for each vertex.
+     *                        // There are {@link #vertexCount} vertices in this array.
+     *
+     * sizes: [ ⌈cumulated⌉, ... ]
+     *                        // Stores the number of siblings for each vertex.
+     *                        // There are {@link #vertexCount} vertices in this array
+     *                        // Sizes are cumulated. size[i] = sizes[i] - sizes[i - 1]
+     *
+     *
+     * siblings: [ siblingsOfVertex0, siblingsOfVertex1, gap, siblingsOfVertex2, ... ]
+     *                         // Stores the siblings of the vertices.
+     *                         // There are {@link #capacity} vertices in this array.
+     *                         //
+     *                         // The siblings of a vertex are stored in a consecutive sequence.
+     *                         // The siblings of a vertex are sorted by index, so that a
+     *                         // binary search can be used to find a specific sibling.
+     *                         // There is one gap of size {@link #gapSize} after the vertex with
+     *                         // index{@link #gapIndex}.
+     *
+     * arrows: [ data, ... ] // Stores the arrow data of the vertices.
+     *                       // There are {@link #capacity} vertices in this array.
+     *                       // The structure is the same as for the siblings.
+     * </pre>
+     *
+     * @param free the initial free space for arrows
+     * @return a new chunk
      */
-    private final int[] vertices;
-    /**
-     * Stores the number of siblings for each vertex.
-     * There are {@link #chunkSize} vertices in this array
-     * Sizes are cumulated. size[i] = sizes[i] - sizes[i - 1]
-     */
-    private final int[] sizes;
-    /**
-     * Stores the siblings of the vertices.
-     * There are {@link #capacity} vertices in this array.
-     * <p>
-     * The siblings of a vertex are stored in a consecutive sequence.
-     * The siblings of a vertex are sorted by index, so that a
-     * binary search can be used to find a specific sibling.
-     * There is one gap of size {@link #gapSize} after the vertex with
-     * index{@link #gapIndex}.
-     */
-    private int[] siblings;
-    /**
-     * Stores the arrow data of the vertices.
-     * There are {@link #capacity} vertices in this array.
-     * The structure is the same as for the siblings.
-     */
-    private int[] arrows;
+    private int[] chunk;
 
-    private final int chunkMask;
-
-    public CrsMultiArrayChunk(int chunkSize, final int capacity) {
-        this.chunkSize = chunkSize;
-        this.chunkMask = chunkSize - 1;
-        this.capacity = this.free = this.gapSize = capacity;
+    public SingleArrayGraphChunk(final int vertexCount, final int initialArrowCapacity) {
+        this.vertexCount = vertexCount;
+        this.capacity = this.free = this.gapSize = initialArrowCapacity;
         this.gapIndex = 0;
-        vertices = new int[chunkSize];
-        sizes = new int[chunkSize];
-        siblings = new int[capacity];
-        arrows = new int[capacity];
+        chunk = new int[this.vertexCount * 2 + initialArrowCapacity * 2];
 
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(vertices, CLEAR_VALUE);
-            Arrays.fill(siblings, CLEAR_VALUE);
-            Arrays.fill(arrows, CLEAR_VALUE);
+            Arrays.fill(chunk, getSiblingsFromOffset(), chunk.length, CLEAR_VALUE);
         }
     }
 
@@ -94,62 +93,87 @@ class CrsMultiArrayChunk implements CrsChunk {
         final int from = getSiblingsFromOffset(v);
         final int to = from + getSiblingCount(v);
 
-        final int result = Arrays.binarySearch(siblings, from, to, u);
+        final int result = Arrays.binarySearch(chunk, from, to, u);
         return result < 0 ? result + from : result - from;
     }
 
     public int[] getSiblingsArray() {
-        return siblings;
+        return chunk;
     }
 
     public int getSiblingCount(final int v) {
-        final int vIndex = v & chunkMask;
+        final int vIndex = v & (vertexCount - 1);
+        final int sizesOffset = getSizesOffset();
         return vIndex == 0
-                ? sizes[vIndex]
-                : sizes[vIndex] - sizes[vIndex - 1];
+                ? chunk[sizesOffset + vIndex]
+                : chunk[sizesOffset + vIndex] - chunk[sizesOffset + vIndex - 1];
     }
 
     public int getVertexData(final int v) {
-        return vertices[v & chunkMask];
+        final int vIndex = v & (vertexCount - 1);
+        return chunk[vIndex];
     }
 
     public void setVertexData(final int v, final int data) {
-        vertices[v & chunkMask] = data;
+        final int vIndex = v & (vertexCount - 1);
+        chunk[vIndex] = data;
     }
 
     public int getArrow(final int v, final int k) {
-        return arrows[getArrowsFromOffset(v) + k];
+        return chunk[getArrowsFromOffset(v) + k];
     }
 
     public int getSiblingsFromOffset(final int v) {
-        final int vIndex = v & chunkMask;
+        final int vIndex = v & (vertexCount - 1);
+        final int siblingsOffset = getSiblingsFromOffset();
         return vIndex == 0
-                ? 0
-                : sizes[vIndex - 1] + (vIndex <= gapIndex ? 0 : gapSize);
+                ? siblingsOffset
+                : siblingsOffset + chunk[getSizesOffset() + vIndex - 1]
+                + (vIndex <= gapIndex ? 0 : gapSize);
     }
 
     int getSiblingsToOffset(final int v) {
-        final int vIndex = v & chunkMask;
-        return sizes[vIndex]
+        final int vIndex = v & (vertexCount - 1);
+        return getSiblingsFromOffset()
+                + chunk[getSizesOffset() + vIndex]
                 + (vIndex <= gapIndex ? 0 : gapSize);
+    }
+
+    int getSiblingsFromOffset() {
+        return vertexCount * 2;
     }
 
     public int getSibling(final int v, final int k) {
-        return siblings[getSiblingsFromOffset(v) + k];
+        return chunk[getSiblingsFromOffset(v) + k];
     }
 
-    int getArrowsFromOffset(final int v) {
-        final int vIndex = v & chunkMask;
-        return vIndex == 0
-                ? 0
-                : sizes[vIndex - 1]
-                + (vIndex <= gapIndex ? 0 : gapSize);
+    int getSizesOffset() {
+        return vertexCount;
+    }
+
+    int getArrowsFromOffset() {
+        return vertexCount * 2 + capacity;
     }
 
     int getSiblingsToOffset() {
-        return capacity - (gapIndex == chunkSize - 1 ? gapSize : 0);
+        return vertexCount * 2 + capacity - (gapIndex == vertexCount - 1 ? gapSize : 0);
     }
 
+    int getArrowsFromOffset(final int v) {
+        final int vIndex = v & (vertexCount - 1);
+        final int arrowsOffset = getArrowsFromOffset();
+        return vIndex == 0
+                ? arrowsOffset
+                : arrowsOffset + chunk[getSizesOffset() + vIndex - 1]
+                + (vIndex <= gapIndex ? 0 : gapSize);
+    }
+
+    int getArrowsToOffset(final int v) {
+        final int vIndex = v & (vertexCount - 1);
+        return getArrowsFromOffset()
+                + chunk[getSizesOffset() + vIndex]
+                + (vIndex <= gapIndex ? 0 : gapSize);
+    }
 
     /**
      * Adds an arrow from vertex v to vertex u with the provided arrow data.
@@ -161,7 +185,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param setIfPresent sets the data if the arrow is present
      * @return true if a new arrow was added
      */
-    public boolean addArrow(final int v, final int u, final int data, final boolean setIfPresent) {
+    public boolean tryAddArrow(final int v, final int u, final int data, final boolean setIfPresent) {
         final int result = indexOf(v, u);
         if (result >= 0) {
             if (setIfPresent) {
@@ -172,34 +196,34 @@ class CrsMultiArrayChunk implements CrsChunk {
         if (free < 1) {
             grow();
         }
-        final int from = getSiblingsFromOffset(v);
+        final int siblingsFrom = getSiblingsFromOffset(v);
         final int siblingCount = getSiblingCount(v);
-        final int to = siblingCount + from;
+        final int siblingsTo = siblingCount + siblingsFrom;
         final int insertionIndex = ~result;
-        final int vIndex = v & chunkMask;
+        final int vIndex = v & (vertexCount - 1);
 
         if (gapIndex < vIndex) {
-            insertAfterGap(u, data, from, to, insertionIndex);
+            insertAfterGap(u, data, siblingsFrom, siblingsTo, insertionIndex);
         } else if (gapIndex > vIndex) {
-            insertBeforeGap(u, data, from, to, insertionIndex);
+            insertBeforeGap(u, data, siblingsFrom, siblingsTo, insertionIndex);
         } else {
-            insertAtGap(u, data, from, to, insertionIndex);
+            insertAtGap(u, data, siblingsFrom, siblingsTo, insertionIndex);
         }
-
 
         gapIndex = vIndex;
         free--;
         gapSize--;
 
-        for (int i = vIndex, n = chunkSize; i < n; i++) {
-            sizes[i]++;
+        final int sizesOffset = getSizesOffset();
+        for (int i = sizesOffset + vIndex, n = sizesOffset + vertexCount; i < n; i++) {
+            chunk[i]++;
         }
 
         return true;
     }
 
     void setArrowAt(final int v, final int index, final int data) {
-        arrows[getArrowsFromOffset(v) + index] = data;
+        chunk[getArrowsFromOffset(v) + index] = data;
     }
 
     /**
@@ -209,7 +233,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param u index of vertex u
      * @return true on success
      */
-    public boolean tryToRemoveArrow(final int v, final int u) {
+    public boolean tryRemoveArrow(final int v, final int u) {
         final int result = indexOf(v, u);
         if (result < 0) {
             return false;
@@ -224,7 +248,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param v index of vertex v
      */
     public void removeAllArrows(final int v) {
-        final int vIndex = v & chunkMask;
+        final int vIndex = v & (vertexCount - 1);
         final int size = getSiblingCount(vIndex);
         if (size == 0) {
             return;
@@ -247,8 +271,8 @@ class CrsMultiArrayChunk implements CrsChunk {
 
             final int gapFrom = getSiblingsToOffset(gapIndex);
             final int to = getSiblingsToOffset(v);
-            System.arraycopy(siblings, to, siblings, to + gapSize, gapFrom - to);
-            System.arraycopy(arrows, to, arrows, to + gapSize, gapFrom - to);
+            System.arraycopy(chunk, to, chunk, to + gapSize, gapFrom - to);
+            System.arraycopy(chunk, to + capacity, chunk, to + gapSize + capacity, gapFrom - to);
         } else if (gapIndex < vIndex) {
             // ....|,,,,|::::|;;;;| = siblings list of different vertices
             //                        the list with the colons ':' is the sibling list of 'v'.
@@ -262,17 +286,18 @@ class CrsMultiArrayChunk implements CrsChunk {
             //                          ^     ^
             //                          from  to
             final int gapFrom = getSiblingsToOffset(gapIndex);
-            System.arraycopy(siblings, gapFrom + gapSize, siblings, gapFrom, from - gapFrom - gapSize);
-            System.arraycopy(arrows, gapFrom + gapSize, arrows, gapFrom, from - gapFrom - gapSize);
+            System.arraycopy(chunk, gapFrom + gapSize, chunk, gapFrom, from - gapFrom - gapSize);
+            System.arraycopy(chunk, gapFrom + gapSize + capacity, chunk, gapFrom + capacity, from - gapFrom - gapSize);
             from -= gapSize;
         }
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(siblings, from, from + size + gapSize, CLEAR_VALUE);
-            Arrays.fill(arrows, from, from + size + gapSize, CLEAR_VALUE);
+            Arrays.fill(chunk, from, from + size + gapSize, CLEAR_VALUE);
+            Arrays.fill(chunk, from + capacity, from + capacity + size + gapSize, CLEAR_VALUE);
         }
 
-        for (int i = vIndex, n = chunkSize; i < n; i++) {
-            sizes[i] -= size;
+        final int sizesOffset = getSizesOffset();
+        for (int i = sizesOffset + vIndex, n = sizesOffset + vertexCount; i < n; i++) {
+            chunk[i] -= size;
         }
         gapIndex = vIndex;
         gapSize += size;
@@ -288,25 +313,26 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @return returns the removed arrow u
      */
     public int removeArrowAt(final int v, final int removalIndex) {
-        final int from = getSiblingsFromOffset(v);
-        final int to = getSiblingCount(v) + from;
-        final int vIndex = v & chunkMask;
-        final int u = siblings[from + removalIndex];
+        final int siblingsFrom = getSiblingsFromOffset(v);
+        final int siblingsTo = getSiblingCount(v) + siblingsFrom;
+        final int vIndex = v & (vertexCount - 1);
+        final int u = chunk[siblingsFrom + removalIndex];
 
         if (gapIndex < vIndex) {
-            removeAfterGap(from, to, removalIndex);
+            removeAfterGap(siblingsFrom, siblingsTo, removalIndex);
         } else if (gapIndex > vIndex) {
-            removeBeforeGap(from, to, removalIndex);
+            removeBeforeGap(siblingsFrom, siblingsTo, removalIndex);
         } else {
-            removeAtGap(from, to, removalIndex);
+            removeAtGap(siblingsFrom, siblingsTo, removalIndex);
         }
 
         gapIndex = vIndex;
         free++;
         gapSize++;
 
-        for (int i = vIndex, n = chunkSize; i < n; i++) {
-            sizes[i]--;
+        final int sizesOffset = getSizesOffset();
+        for (int i = sizesOffset + vIndex, n = sizesOffset + vertexCount; i < n; i++) {
+            chunk[i]--;
         }
         return u;
     }
@@ -317,8 +343,7 @@ class CrsMultiArrayChunk implements CrsChunk {
             throw new OutOfMemoryError("can not grow to newCapacity=" + newCapacity + ", current capacity=" + capacity);
         }
 
-        final int[] newSiblings = new int[newCapacity];
-        final int[] newArrows = new int[newCapacity];
+        final int[] newChunk = new int[vertexCount * 2 + newCapacity * 2];
 
         // CASE 1: the gap is not at the end of the siblings/arrows:
         // -------
@@ -346,24 +371,26 @@ class CrsMultiArrayChunk implements CrsChunk {
         // siblings = [........::::::;;;;;,,,,gap+capacity];
         // arrows =   [........::::::;;;;;,,,,gap+capacity];
 
-        final int gapFromOffset = getSiblingsToOffset(gapIndex);
-        final int gapToOffset = gapFromOffset + gapSize;
+        final int siblingsGapFromOffset = getSiblingsToOffset(gapIndex);
+        final int arrowsGapFromOffset = getArrowsToOffset(gapIndex);
+        final int siblingsGapToOffset = siblingsGapFromOffset + gapSize;
+        final int arrowsGapToOffset = arrowsGapFromOffset + gapSize;
+        final int arrowsFromOffset = getArrowsFromOffset();
         final int deltaCapacity = newCapacity - capacity;
 
-        System.arraycopy(siblings, 0, newSiblings, 0, gapFromOffset);
-        System.arraycopy(arrows, 0, newArrows, 0, gapFromOffset);
+        System.arraycopy(chunk, 0, newChunk, 0, siblingsGapFromOffset);
+        System.arraycopy(chunk, arrowsFromOffset, newChunk, arrowsFromOffset + deltaCapacity, getArrowsToOffset(gapIndex) - arrowsFromOffset);
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(newSiblings, gapFromOffset, gapToOffset + deltaCapacity, CLEAR_VALUE);
-            Arrays.fill(newArrows, gapFromOffset, gapToOffset + deltaCapacity, CLEAR_VALUE);
+            Arrays.fill(newChunk, siblingsGapFromOffset, siblingsGapToOffset + deltaCapacity, CLEAR_VALUE);
+            Arrays.fill(newChunk, arrowsGapFromOffset + deltaCapacity, arrowsGapToOffset + deltaCapacity * 2, CLEAR_VALUE);
         }
-        final int length = getSiblingsToOffset() - gapToOffset;
+        final int length = getSiblingsToOffset() - siblingsGapToOffset;
         if (length > 0) {
-            System.arraycopy(siblings, gapToOffset, newSiblings, gapToOffset + deltaCapacity, length);
-            System.arraycopy(arrows, gapToOffset, newArrows, gapToOffset + deltaCapacity, length);
+            System.arraycopy(chunk, siblingsGapToOffset, newChunk, siblingsGapToOffset + deltaCapacity, length);
+            System.arraycopy(chunk, arrowsGapToOffset, newChunk, arrowsGapToOffset + deltaCapacity * 2, length);
         }
 
-        this.siblings = newSiblings;
-        this.arrows = newArrows;
+        this.chunk = newChunk;
         this.free = free + deltaCapacity;
         this.capacity = newCapacity;
         this.gapSize = gapSize + deltaCapacity;
@@ -380,9 +407,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param to
      * @param insertionIndex
      */
-    void insertAtGap(final int u, final int data,
-                     final int from, final int to,
-                     final int insertionIndex) {
+    void insertAtGap(final int u, final int data, final int from, final int to, final int insertionIndex) {
         // BEFORE:
         // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
         // ...,,,,::::;;;; = siblings list of different vertices
@@ -398,15 +423,16 @@ class CrsMultiArrayChunk implements CrsChunk {
         //                     from    to
 
         // shift up to make room for the new element
+        int arrowDataFrom = from + capacity;
         final int length = to - from - insertionIndex;
         if (length > 0) {
-            System.arraycopy(siblings, from + insertionIndex, siblings, from + insertionIndex + 1, length);
-            System.arraycopy(arrows, from + insertionIndex, arrows, from + insertionIndex + 1, length);
+            System.arraycopy(chunk, from + insertionIndex, chunk, from + insertionIndex + 1, length);
+            System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex + 1, length);
         }
 
         // insert the element at insertion index
-        siblings[from + insertionIndex] = u;
-        arrows[from + insertionIndex] = data;
+        chunk[from + insertionIndex] = u;
+        chunk[arrowDataFrom + insertionIndex] = data;
     }
 
     /**
@@ -421,11 +447,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param to
      * @param insertionIndex
      */
-    void insertBeforeGap(final int u, final int data,
-                         final int from, final int to,
-                         final int insertionIndex) {
-
-
+    void insertBeforeGap(final int u, final int data, final int from, final int to, final int insertionIndex) {
         // BEFORE:
         // ÷ = insertionIndex of 'u' in the siblings list of vertex 'v'
         // ...,,,,::::;;;; = siblings list of different vertices
@@ -441,23 +463,23 @@ class CrsMultiArrayChunk implements CrsChunk {
         //                     from    to
 
         // close the gap by shifting up
-        final int gapFrom = getSiblingsToOffset(gapIndex);
-        int length = gapFrom - to;
-        System.arraycopy(siblings, to, siblings, to + free, length);
-        System.arraycopy(arrows, to, arrows, to + free, length);
+        final int siblingsStartOfGapOffset = getSiblingsToOffset(gapIndex);
+        int length = siblingsStartOfGapOffset - to;
+        System.arraycopy(chunk, to, chunk, to + free, length);
+        System.arraycopy(chunk, to + capacity, chunk, to + capacity + free, length);
 
         // shift up to make room for the new element
         length = to - from - insertionIndex;
-        System.arraycopy(siblings, from + insertionIndex, siblings, from + insertionIndex + 1, length);
-        System.arraycopy(arrows, from + insertionIndex, arrows, from + insertionIndex + 1, length);
+        System.arraycopy(chunk, from + insertionIndex, chunk, from + insertionIndex + 1, length);
+        System.arraycopy(chunk, from + capacity + insertionIndex, chunk, from + capacity + insertionIndex + 1, length);
 
         // insert the element at insertion index
-        siblings[from + insertionIndex] = u;
-        arrows[from + insertionIndex] = data;
+        chunk[from + insertionIndex] = u;
+        chunk[from + capacity + insertionIndex] = data;
 
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(siblings, to + 1, to + free, CLEAR_VALUE);
-            Arrays.fill(arrows, to + 1, to + free, CLEAR_VALUE);
+            Arrays.fill(chunk, to + 1, to + free, CLEAR_VALUE);
+            Arrays.fill(chunk, to + capacity + 1, to + capacity + free, CLEAR_VALUE);
         }
     }
 
@@ -491,25 +513,27 @@ class CrsMultiArrayChunk implements CrsChunk {
         //                         from    to
 
         // close the gap by shifting down
-        final int gapFrom = getSiblingsToOffset(gapIndex);
-        int length = from + insertionIndex - gapFrom - free;
+        final int siblingsGapFrom = getSiblingsToOffset(gapIndex);
+        final int arrowsGapFrom = siblingsGapFrom + capacity;
+        int length = from + insertionIndex - siblingsGapFrom - free;
         if (length > 0) {
-            System.arraycopy(siblings, gapFrom + free, siblings, gapFrom, length);
-            System.arraycopy(arrows, gapFrom + free, arrows, gapFrom, length);
+            System.arraycopy(chunk, siblingsGapFrom + free, chunk, siblingsGapFrom, length);
+            System.arraycopy(chunk, arrowsGapFrom + free, chunk, arrowsGapFrom, length);
         }
 
         // insert the element at insertion index
-        siblings[from + insertionIndex - free] = u;
-        arrows[from + insertionIndex - free] = data;
+        int arrowDataFrom = from + capacity;
+        chunk[from + insertionIndex - free] = u;
+        chunk[arrowDataFrom + insertionIndex - free] = data;
 
         // reopen the gap by shifting the remainder of the indices down
         length = to - from - insertionIndex;
-        System.arraycopy(siblings, from + insertionIndex, siblings, from + insertionIndex - free + 1, length);
-        System.arraycopy(arrows, from + insertionIndex, arrows, from + insertionIndex - free + 1, length);
+        System.arraycopy(chunk, from + insertionIndex, chunk, from + insertionIndex - free + 1, length);
+        System.arraycopy(chunk, arrowDataFrom + insertionIndex, chunk, arrowDataFrom + insertionIndex - free + 1, length);
 
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(siblings, to - free + 1, to, CLEAR_VALUE);
-            Arrays.fill(arrows, to - free + 1, to, CLEAR_VALUE);
+            Arrays.fill(chunk, to - free + 1, to, CLEAR_VALUE);
+            Arrays.fill(chunk, to + capacity - free + 1, to + capacity, CLEAR_VALUE);
         }
     }
 
@@ -522,8 +546,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param to
      * @param removalIndex
      */
-    void removeAtGap(final int from, final int to,
-                     final int removalIndex) {
+    void removeAtGap(final int from, final int to, final int removalIndex) {
         // ÷ = index after removal index, u = element to be removed
         // ...,,,,::::;;;; = siblings list of different vertices
         //                       the list with the colons ':' is the sibling list of 'v'.
@@ -540,12 +563,12 @@ class CrsMultiArrayChunk implements CrsChunk {
         // shift down to remove the room of the element
         final int length = to - removalIndex - from - 1;
         if (length > 0) {
-            System.arraycopy(siblings, from + removalIndex + 1, siblings, from + removalIndex, length);
-            System.arraycopy(arrows, from + removalIndex + 1, arrows, from + removalIndex, length);
+            System.arraycopy(chunk, from + removalIndex + 1, chunk, from + removalIndex, length);
+            System.arraycopy(chunk, from + capacity + removalIndex + 1, chunk, from + capacity + removalIndex, length);
         }
         if (CLEAR_UNUSED_ELEMENTS) {
-            siblings[to - 1] = CLEAR_VALUE;
-            arrows[to - 1] = CLEAR_VALUE;
+            chunk[to - 1] = CLEAR_VALUE;
+            chunk[to + capacity - 1] = CLEAR_VALUE;
         }
     }
 
@@ -559,8 +582,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param to
      * @param removalIndex
      */
-    void removeBeforeGap(final int from, final int to,
-                         final int removalIndex) {
+    void removeBeforeGap(final int from, final int to, final int removalIndex) {
         // ÷ = index after removal index, u = element to be removed
         // ...,,,,::::;;;; = siblings list of different vertices
         //                       the list with the colons ':' is the sibling list of 'v'.
@@ -577,17 +599,17 @@ class CrsMultiArrayChunk implements CrsChunk {
         // shift up to close the gap
         final int gapFrom = getSiblingsToOffset(gapIndex);
         int length = gapFrom - to;
-        System.arraycopy(siblings, to, siblings, to + free, length);
-        System.arraycopy(arrows, to, arrows, to + free, length);
+        System.arraycopy(chunk, to, chunk, to + free, length);
+        System.arraycopy(chunk, to + capacity, chunk, to + capacity + free, length);
 
         // shift down to remove the room of the removed element
         length = to - from - removalIndex;
-        System.arraycopy(siblings, from + removalIndex + 1, siblings, from + removalIndex, length);
-        System.arraycopy(arrows, from + removalIndex + 1, arrows, from + removalIndex, length);
+        System.arraycopy(chunk, from + removalIndex + 1, chunk, from + removalIndex, length);
+        System.arraycopy(chunk, from + capacity + removalIndex + 1, chunk, from + capacity + removalIndex, length);
 
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(siblings, to - 1, to + free, CLEAR_VALUE);
-            Arrays.fill(arrows, to - 1, to + free, CLEAR_VALUE);
+            Arrays.fill(chunk, to - 1, to + free, CLEAR_VALUE);
+            Arrays.fill(chunk, to + capacity - 1, to + capacity + free, CLEAR_VALUE);
         }
     }
 
@@ -601,9 +623,7 @@ class CrsMultiArrayChunk implements CrsChunk {
      * @param to
      * @param removalIndex
      */
-    void removeAfterGap(final int from, final int to,
-                        final int removalIndex) {
-
+    void removeAfterGap(final int from, final int to, final int removalIndex) {
         // ....|,,,,|::::|;;;;| = siblings list of different vertices
         //                        the list with the colons ':' is the sibling list of 'v'.
         //
@@ -617,21 +637,22 @@ class CrsMultiArrayChunk implements CrsChunk {
         //                         from   to
 
         // shift down to close the gap
-        final int gapFrom = getSiblingsToOffset(gapIndex);
-        int length = from + removalIndex - gapFrom - gapSize;
+        final int siblingsGapFrom = getSiblingsToOffset(gapIndex);
+        final int arrowsGapFrom = siblingsGapFrom + capacity;
+        int length = from + removalIndex - siblingsGapFrom - gapSize;
         if (length > 0) {
-            System.arraycopy(siblings, gapFrom + free, siblings, gapFrom, length);
-            System.arraycopy(arrows, gapFrom + free, arrows, gapFrom, length);
+            System.arraycopy(chunk, siblingsGapFrom + free, chunk, siblingsGapFrom, length);
+            System.arraycopy(chunk, arrowsGapFrom + free, chunk, arrowsGapFrom, length);
         }
 
         // reopen the gap by shifting the remainder of the indices down
         length = to - from - removalIndex - 1;
-        System.arraycopy(siblings, from + removalIndex + 1, siblings, from + removalIndex - free, length);
-        System.arraycopy(arrows, from + removalIndex + 1, arrows, from + removalIndex - free, length);
+        System.arraycopy(chunk, from + removalIndex + 1, chunk, from + removalIndex - free, length);
+        System.arraycopy(chunk, from + capacity + removalIndex + 1, chunk, from + capacity + removalIndex - free, length);
 
         if (CLEAR_UNUSED_ELEMENTS) {
-            Arrays.fill(siblings, to - free - 1, to, CLEAR_VALUE);
-            Arrays.fill(arrows, to - free - 1, to, CLEAR_VALUE);
+            Arrays.fill(chunk, to - free - 1, to, CLEAR_VALUE);
+            Arrays.fill(chunk, to + capacity - free - 1, to + capacity, CLEAR_VALUE);
         }
     }
 }

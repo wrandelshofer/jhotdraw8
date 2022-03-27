@@ -6,17 +6,22 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class CrsBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
+public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
     @Override
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
-        return new CrsBidiGraph(4, 1);
+        return new ChunkedMutableIndexedBidiGraph(4, 1);
     }
 
     @Override
@@ -45,7 +50,7 @@ public class CrsBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
     }
 
     public void testGraphRemoveAll(int vertexCount, int maxArity) throws IOException {
-        CrsBidiGraph instance = (CrsBidiGraph) newInstance(maxArity);
+        ChunkedMutableIndexedBidiGraph instance = (ChunkedMutableIndexedBidiGraph) newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
@@ -87,7 +92,7 @@ public class CrsBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
     @Override
     protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
         super.assertEqualSortedGraphInt(expected, actual);
-        CrsBidiGraph a = (CrsBidiGraph) actual;
+        ChunkedMutableIndexedBidiGraph a = (ChunkedMutableIndexedBidiGraph) actual;
         for (Integer v : expected.getVertices()) {
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getNextVertices, v), false).collect(Collectors.toCollection(LinkedHashSet::new));

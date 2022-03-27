@@ -1,41 +1,36 @@
 /*
- * @(#)MutableIndexedBidiGraph.java
+ * @(#)ChunkedBidiGraph.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.*;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
+import org.jhotdraw8.collection.DenseIntSet8Bit;
+import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.collection.LongEnumeratorSpliterator;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Arrays;
+import java.util.function.BiFunction;
 
 
 /**
- * A mutable indexed bi-directional graph that uses a chunked
- * compressed row storage (CRS) format.
- * <p>
- * Supports up to {@code 2^16 - 1} vertices.
- * <p>
- * This graph does not support multiple arrows between the same vertices.
- * <p>
- * This implementation uses chunks with a fixed number of vertices.
- * A chunk uses a compressed sparse row representation (CSR).
- * <p>
- * This implementation is efficient, if the graph is changed rarely. Changes
- * are expensive, because this implementation uses a single gap with
- * free elements in each chunk. The gap needs to be shifted around for
- * every insertion and removal of an arrow in the graph.
+ * A mutable indexed bi-directional graph. The data structure of the graph
+ * is split up into {@link GraphChunk}s.
  * <p>
  * References:
  * <dl>
  *     <dt>JHotDraw 8</dt>
  *     <dd> This class has been derived from JHotDraw 8.
- *      © 2018 by the authors and contributors of JHotDraw. MIT License.</dd>
+ *      © 2022 by the authors and contributors of JHotDraw. MIT License.</dd>
  * </dl>
  */
-public class CrsBidiGraph implements MutableIndexedBidiGraph
+public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph
         , IntAttributedIndexedBidiGraph {
 
 
@@ -45,33 +40,38 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
      */
     private final int chunkSize;
     private final int chunkShift;
-
+    private final int initialArityCapacity;
+    int vertexCount = 0;
+    int arrowCount = 0;
     /**
      * Array of chunks for arrows to next vertices.
      */
-    private @NonNull CrsChunk[] nextChunks = new CrsChunk[0];
+    private @NonNull GraphChunk[] nextChunks = new GraphChunk[0];
     /**
      * Array of chunks for arrows to previous vertices.
      */
-    private @NonNull CrsChunk[] prevChunks = new CrsChunk[0];
-    private final int initialArityCapacity;
+    private @NonNull GraphChunk[] prevChunks = new GraphChunk[0];
 
-    public CrsBidiGraph() {
+    private @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayGraphChunk::new;
+
+    public ChunkedMutableIndexedBidiGraph() {
         this(256, 4);
     }
 
-    public CrsBidiGraph(final int chunkSize, final int initialArityCapacity) {
+    public ChunkedMutableIndexedBidiGraph(final int chunkSize, final int initialArityCapacity) {
+        this(chunkSize, initialArityCapacity, SingleArrayGraphChunk::new);
+    }
+
+    public ChunkedMutableIndexedBidiGraph(final int chunkSize, final int initialArityCapacity,
+                                          @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory) {
         if (Integer.bitCount(chunkSize) != 1) {
             throw new IllegalArgumentException("chunkSize=" + chunkSize + " is not a power of 2");
         }
         this.chunkSize = chunkSize;
         this.initialArityCapacity = chunkSize * initialArityCapacity;
         this.chunkShift = Integer.numberOfTrailingZeros(chunkSize);
+        this.chunkFactory = chunkFactory;
     }
-
-
-    int vertexCount = 0;
-    int arrowCount = 0;
 
     /**
      * Adds the arrow if it is absent.
@@ -95,6 +95,25 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
         addArrowIfAbsentAsInt(v, u, data);
     }
 
+    /**
+     * Adds the arrow if its absent, updates the arrow data if the arrow is
+     * present.
+     *
+     * @param v    index of vertex 'v'
+     * @param u    index of vertex 'u'
+     * @param data the arrow data
+     * @return true if the arrow was absent
+     */
+    public boolean addArrowIfAbsentAsInt(final int v, final int u, final int data) {
+        final GraphChunk uChunk = getPrevChunk(u);
+        boolean added = uChunk.tryAddArrow(u, v, data, false);
+        if (added) {
+            final GraphChunk vChunk = getNextChunk(v);
+            vChunk.tryAddArrow(v, u, data, false);
+            arrowCount++;
+        }
+        return added;
+    }
 
     /**
      * Adds the arrow if its absent, updates the arrow data if the arrow is
@@ -106,50 +125,15 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
      * @return true if the arrow was absent
      */
     public boolean addOrUpdateArrowAsInt(final int v, final int u, final int data) {
-        final CrsChunk uChunk = getPrevChunk(u);
-        final boolean added = uChunk.addArrow(u, v, data, true);
-        final CrsChunk vChunk = getNextChunk(v);
-        vChunk.addArrow(v, u, data, true);
+        final GraphChunk uChunk = getPrevChunk(u);
+        final boolean added = uChunk.tryAddArrow(u, v, data, true);
+        final GraphChunk vChunk = getNextChunk(v);
+        vChunk.tryAddArrow(v, u, data, true);
         if (added) {
             arrowCount++;
         }
         return added;
     }
-
-
-    /**
-     * Adds the arrow if its absent, updates the arrow data if the arrow is
-     * present.
-     *
-     * @param v    index of vertex 'v'
-     * @param u    index of vertex 'u'
-     * @param data the arrow data
-     * @return true if the arrow was absent
-     */
-    public boolean addArrowIfAbsentAsInt(final int v, final int u, final int data) {
-        final CrsChunk uChunk = getPrevChunk(u);
-        boolean added = uChunk.addArrow(u, v, data, false);
-        if (added) {
-            final CrsChunk vChunk = getNextChunk(v);
-            vChunk.addArrow(v, u, data, false);
-            arrowCount++;
-        }
-        return added;
-    }
-
-
-    @Override
-    public int findIndexOfPrevAsInt(final int v, final int u) {
-        final CrsChunk chunk = getPrevChunk(v);
-        return chunk.indexOf(v, u);
-    }
-
-    @Override
-    public int findIndexOfNextAsInt(final int v, final int u) {
-        final CrsChunk chunk = getNextChunk(v);
-        return chunk.indexOf(v, u);
-    }
-
 
     @Override
     public void addVertexAsInt() {
@@ -164,143 +148,6 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
         }
         grow(vertexCount + 1);
         vertexCount++;
-    }
-
-    @Override
-    public void removeAllPrevAsInt(final int v) {
-        final CrsChunk chunk = getPrevChunk(v);
-        final int from = chunk.getSiblingsFromOffset(v);
-        int[] a = chunk.getSiblingsArray();
-        final int to = chunk.getSiblingCount(v) + from;
-        int[] next = new int[to - from];
-        System.arraycopy(a, from, next, 0, next.length);
-        for (int i = next.length - 1; i >= 0; i--) {
-            final int u = next[i];
-            final CrsChunk nextChunk = getNextChunk(u);
-            nextChunk.tryToRemoveArrow(u, v);
-        }
-        chunk.removeAllArrows(v);
-    }
-
-    @Override
-    public void removeAllNextAsInt(final int v) {
-        final CrsChunk chunk = getNextChunk(v);
-        final int from = chunk.getSiblingsFromOffset(v);
-        final int to = chunk.getSiblingCount(v) + from;
-        int[] a = chunk.getSiblingsArray();
-        int[] next = new int[to - from];
-        System.arraycopy(a, from, next, 0, next.length);
-        for (int i = next.length - 1; i >= 0; i--) {
-            final int u = next[i];
-            final CrsChunk prevChunk = getPrevChunk(u);
-            prevChunk.tryToRemoveArrow(u, v);
-        }
-        chunk.removeAllArrows(v);
-    }
-
-    @Override
-    public void removeNextAsInt(final int v, final int index) {
-        Preconditions.checkIndex(index, getNextCount(v));
-        final int u = getNextChunk(v).removeArrowAt(v, index);
-        getPrevChunk(u).tryToRemoveArrow(u, v);
-        arrowCount--;
-    }
-
-    @Override
-    public void removePrevAsInt(final int v, final int index) {
-        Preconditions.checkIndex(index, getPrevCount(v));
-        final int u = getPrevChunk(v).removeArrowAt(v, index);
-        getNextChunk(u).tryToRemoveArrow(u, v);
-        arrowCount--;
-    }
-
-    @Override
-    public void removeVertexAsInt(final int v) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int getArrowCount() {
-        return arrowCount;
-    }
-
-    @Override
-    public int getNextAsInt(final int v, final int index) {
-        return getNextChunk(v).getSibling(v, index);
-    }
-
-    @Override
-    public int getNextArrowAsInt(final int v, final int k) {
-        return getNextChunk(v).getArrow(v, k);
-    }
-
-    @Override
-    public int getPrevArrowAsInt(final int v, final int k) {
-        return getPrevChunk(v).getArrow(v, k);
-    }
-
-    @Override
-    public int getVertexAsInt(final int v) {
-        return getNextChunk(v).getVertexData(v);
-    }
-
-    public void setVertexAsInt(final int v, final int data) {
-        getNextChunk(v).setVertexData(v, data);
-        getPrevChunk(v).setVertexData(v, data);
-    }
-
-    @Override
-    public int getNextCount(final int v) {
-        return getNextChunk(v).getSiblingCount(v);
-    }
-
-    private CrsChunk getNextChunk(final int v) {
-        return getOrCreateChunk(nextChunks, v);
-    }
-
-    private CrsChunk getPrevChunk(final int v) {
-        return getOrCreateChunk(prevChunks, v);
-    }
-
-    CrsChunk getOrCreateChunk(final CrsChunk[] chunks, final int v) {
-        @NonNull CrsChunk chunk = chunks[v >>> chunkShift];
-        if (chunk == null) {
-            chunk = new CrsSingleArrayChunk(chunkSize, initialArityCapacity);
-            chunks[v >>> chunkShift] = chunk;
-        }
-        return chunk;
-    }
-
-    @Override
-    public int getVertexCount() {
-        return vertexCount;
-    }
-
-    @Override
-    public int getPrevAsInt(final int v, final int k) {
-        return getPrevChunk(v).getSibling(v, k);
-    }
-
-    @Override
-    public int getPrevCount(final int v) {
-        return getPrevChunk(v).getSiblingCount(v);
-    }
-
-    private void grow(final int capacity) {
-        final int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
-        final CrsChunk[] temp = (CrsChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
-        if (temp.length < chunkedCapacity) {
-            throw new IllegalStateException("too much capacity requested:" + capacity);
-        }
-        nextChunks = temp;
-        prevChunks = (CrsChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
-    }
-
-    public void clear() {
-        Arrays.fill(nextChunks, null);
-        Arrays.fill(prevChunks, null);
-        arrowCount = 0;
-        vertexCount = 0;
     }
 
     /**
@@ -361,6 +208,31 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
+    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
+        return breadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx    the index of the vertex
+     * @param visited the set of visited vertices
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
+    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
+        return new BreadthFirstIntSpliterator(vidx, nextChunks, visited);
+    }
+
+    /**
+     * Returns a breadth first spliterator that starts at the specified
+     * vertex.
+     *
+     * @param vidx the index of the vertex
+     * @return the spliterator contains the vertex data in the 32 high-bits
+     * and the vertex index in the 32 low-bits of the long.
+     */
     public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx) {
         return breadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
     }
@@ -376,6 +248,13 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
      */
     public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
         return new BreadthFirstLongSpliterator(vidx, nextChunks, visited);
+    }
+
+    public void clear() {
+        Arrays.fill(nextChunks, null);
+        Arrays.fill(prevChunks, null);
+        arrowCount = 0;
+        vertexCount = 0;
     }
 
     /**
@@ -403,38 +282,155 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
         return new DepthFirstLongSpliterator(vidx, nextChunks, visited);
     }
 
-    /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx the index of the vertex
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
-        return breadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
+    @Override
+    public int findIndexOfNextAsInt(final int v, final int u) {
+        final GraphChunk chunk = getNextChunk(v);
+        return chunk.indexOf(v, u);
     }
 
-    /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx    the index of the vertex
-     * @param visited the set of visited vertices
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
-        return new BreadthFirstIntSpliterator(vidx, nextChunks, visited);
+    @Override
+    public int findIndexOfPrevAsInt(final int v, final int u) {
+        final GraphChunk chunk = getPrevChunk(v);
+        return chunk.indexOf(v, u);
+    }
+
+    @Override
+    public int getArrowCount() {
+        return arrowCount;
+    }
+
+    @Override
+    public int getNextArrowAsInt(final int v, final int k) {
+        return getNextChunk(v).getArrow(v, k);
+    }
+
+    @Override
+    public int getNextAsInt(final int v, final int index) {
+        return getNextChunk(v).getSibling(v, index);
+    }
+
+    private GraphChunk getNextChunk(final int v) {
+        return getOrCreateChunk(nextChunks, v);
+    }
+
+    @Override
+    public int getNextCount(final int v) {
+        return getNextChunk(v).getSiblingCount(v);
+    }
+
+    GraphChunk getOrCreateChunk(final GraphChunk[] chunks, final int v) {
+        @NonNull GraphChunk chunk = chunks[v >>> chunkShift];
+        if (chunk == null) {
+            chunk = chunkFactory.apply(chunkSize, initialArityCapacity);
+            chunks[v >>> chunkShift] = chunk;
+        }
+        return chunk;
+    }
+
+    @Override
+    public int getPrevArrowAsInt(final int v, final int k) {
+        return getPrevChunk(v).getArrow(v, k);
+    }
+
+    @Override
+    public int getPrevAsInt(final int v, final int k) {
+        return getPrevChunk(v).getSibling(v, k);
+    }
+
+    private GraphChunk getPrevChunk(final int v) {
+        return getOrCreateChunk(prevChunks, v);
+    }
+
+    @Override
+    public int getPrevCount(final int v) {
+        return getPrevChunk(v).getSiblingCount(v);
+    }
+
+    @Override
+    public int getVertexAsInt(final int v) {
+        return getNextChunk(v).getVertexData(v);
+    }
+
+    @Override
+    public int getVertexCount() {
+        return vertexCount;
+    }
+
+    private void grow(final int capacity) {
+        final int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
+        final GraphChunk[] temp = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
+        if (temp.length < chunkedCapacity) {
+            throw new IllegalStateException("too much capacity requested:" + capacity);
+        }
+        nextChunks = temp;
+        prevChunks = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
+    }
+
+    @Override
+    public void removeAllNextAsInt(final int v) {
+        final GraphChunk chunk = getNextChunk(v);
+        final int from = chunk.getSiblingsFromOffset(v);
+        final int to = chunk.getSiblingCount(v) + from;
+        int[] a = chunk.getSiblingsArray();
+        int[] next = new int[to - from];
+        System.arraycopy(a, from, next, 0, next.length);
+        for (int i = next.length - 1; i >= 0; i--) {
+            final int u = next[i];
+            final GraphChunk prevChunk = getPrevChunk(u);
+            prevChunk.tryRemoveArrow(u, v);
+        }
+        chunk.removeAllArrows(v);
+    }
+
+    @Override
+    public void removeAllPrevAsInt(final int v) {
+        final GraphChunk chunk = getPrevChunk(v);
+        final int from = chunk.getSiblingsFromOffset(v);
+        int[] a = chunk.getSiblingsArray();
+        final int to = chunk.getSiblingCount(v) + from;
+        int[] next = new int[to - from];
+        System.arraycopy(a, from, next, 0, next.length);
+        for (int i = next.length - 1; i >= 0; i--) {
+            final int u = next[i];
+            final GraphChunk nextChunk = getNextChunk(u);
+            nextChunk.tryRemoveArrow(u, v);
+        }
+        chunk.removeAllArrows(v);
+    }
+
+    @Override
+    public void removeNextAsInt(final int v, final int index) {
+        Preconditions.checkIndex(index, getNextCount(v));
+        final int u = getNextChunk(v).removeArrowAt(v, index);
+        getPrevChunk(u).tryRemoveArrow(u, v);
+        arrowCount--;
+    }
+
+    @Override
+    public void removePrevAsInt(final int v, final int index) {
+        Preconditions.checkIndex(index, getPrevCount(v));
+        final int u = getPrevChunk(v).removeArrowAt(v, index);
+        getNextChunk(u).tryRemoveArrow(u, v);
+        arrowCount--;
+    }
+
+    @Override
+    public void removeVertexAsInt(final int v) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setVertexAsInt(final int v, final int data) {
+        getNextChunk(v).setVertexData(v, data);
+        getPrevChunk(v).setVertexData(v, data);
     }
 
     private class BreadthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
 
-        private final CrsChunk[] chunks;
+        private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
 
-        protected BreadthFirstLongSpliterator(final int root, final CrsChunk[] chunks, final @NonNull AddToIntSet visited) {
+        protected BreadthFirstLongSpliterator(final int root, final GraphChunk[] chunks, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -449,7 +445,7 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
                 return false;
             }
             final int v = deque.removeFirstAsInt();
-            final CrsChunk chunk = getOrCreateChunk(chunks, v);
+            final GraphChunk chunk = getOrCreateChunk(chunks, v);
             current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
             final int from = chunk.getSiblingsFromOffset(v);
             final int to = chunk.getSiblingCount(v) + from;
@@ -466,11 +462,11 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
 
     private class DepthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
 
-        private final CrsChunk[] chunks;
+        private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
 
-        protected DepthFirstLongSpliterator(final int root, final CrsChunk[] chunks, final @NonNull AddToIntSet visited) {
+        protected DepthFirstLongSpliterator(final int root, final GraphChunk[] chunks, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -485,7 +481,7 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
                 return false;
             }
             final int v = deque.removeFirstAsInt();
-            final CrsChunk chunk = getOrCreateChunk(chunks, v);
+            final GraphChunk chunk = getOrCreateChunk(chunks, v);
             current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
             final int from = chunk.getSiblingsFromOffset(v);
             final int to = chunk.getSiblingCount(v) + from;
@@ -503,11 +499,11 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
 
     private class BreadthFirstIntSpliterator extends AbstractIntEnumeratorSpliterator {
 
-        private final CrsChunk[] chunks;
+        private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
 
-        protected BreadthFirstIntSpliterator(final int root, final CrsChunk[] chunks, final @NonNull AddToIntSet visited) {
+        protected BreadthFirstIntSpliterator(final int root, final GraphChunk[] chunks, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -522,7 +518,7 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
                 return false;
             }
             final int v = deque.removeFirstAsInt();
-            final CrsChunk chunk = getOrCreateChunk(chunks, v);
+            final GraphChunk chunk = getOrCreateChunk(chunks, v);
             current = v;
             final int from = chunk.getSiblingsFromOffset(v);
             final int to = chunk.getSiblingCount(v) + from;
@@ -536,5 +532,13 @@ public class CrsBidiGraph implements MutableIndexedBidiGraph
             }
             return true;
         }
+    }
+
+    public @NonNull BiFunction<Integer, Integer, GraphChunk> getChunkFactory() {
+        return chunkFactory;
+    }
+
+    public void setChunkFactory(@NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory) {
+        this.chunkFactory = chunkFactory;
     }
 }

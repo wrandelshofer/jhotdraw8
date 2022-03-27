@@ -1,11 +1,16 @@
 /*
- * @(#)MutableIndexedBidiGraph.java
+ * @(#)ContiguousMutableIndexedBidiGraph.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.*;
+import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.DenseIntSet8Bit;
+import org.jhotdraw8.collection.IntArrayDeque;
+import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
+import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -19,8 +24,16 @@ import static java.lang.Math.max;
  * <p>
  * This implementation uses large contiguous arrays. Each row occupies
  * {@code maxArity + 1} elements in the array for the arrows.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>JHotDraw 8</dt>
+ *     <dd> This class has been derived from JHotDraw 8.
+ *      © 2022 by the authors and contributors of JHotDraw. MIT License.</dd>
+ * </dl>
  */
-public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
+
+public class ContiguousMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
     private final int maxArity;
     private final int stride;
     /**
@@ -46,7 +59,7 @@ public class SimpleMutableIndexedBidiGraph implements MutableIndexedBidiGraph {
      * @param vertexCapacity the initial vertex capacity
      * @param maxArity       the maximal number of arrows per vertex
      */
-    public SimpleMutableIndexedBidiGraph(int vertexCapacity, int maxArity) {
+    public ContiguousMutableIndexedBidiGraph(int vertexCapacity, int maxArity) {
         if (vertexCapacity < 0) {
             throw new IllegalArgumentException("vertexCount=" + vertexCapacity);
         }

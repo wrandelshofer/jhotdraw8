@@ -7,10 +7,10 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Collections;
 import java.util.List;
 
-public class SimpleMutableIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
+public class ContiguousMutableIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
     @Override
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
-        return new SimpleMutableIndexedBidiGraph(0, maxArity);
+        return new ContiguousMutableIndexedBidiGraph(0, maxArity);
     }
 
     @Override
