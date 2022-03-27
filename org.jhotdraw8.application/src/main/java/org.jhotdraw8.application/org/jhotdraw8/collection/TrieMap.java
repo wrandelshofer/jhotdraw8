@@ -31,25 +31,25 @@ import java.util.Set;
 
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     private final static long serialVersionUID = 0L;
-    private PersistentTrieHelper.Nonce bulkEdit;
+    private PersistentTrieHelper.UniqueKey bulkEdit;
     private PersistentTrieMapHelper.Node<K, V> root;
     private int hashCode;
     private int size;
     private int modCount;
 
     public TrieMap() {
-        this.bulkEdit = new PersistentTrieHelper.Nonce();
+        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
         this.root = PersistentTrieMapHelper.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.bulkEdit = new PersistentTrieHelper.Nonce();
+        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
         this.root = PersistentTrieMapHelper.emptyNode();
         this.putAll(m);
     }
 
     TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
-        this.bulkEdit = new PersistentTrieHelper.Nonce();
+        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
         this.root = trieMap.root;
         this.hashCode = trieMap.hashCode;
         this.size = trieMap.size;
@@ -181,7 +181,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     }
 
     public PersistentTrieMap<K, V> toPersistent() {
-        bulkEdit = new PersistentTrieHelper.Nonce();
+        bulkEdit = new PersistentTrieHelper.UniqueKey();
         return size == 0 ? PersistentTrieMap.of() : new PersistentTrieMap<>(root, hashCode, size);
     }
 

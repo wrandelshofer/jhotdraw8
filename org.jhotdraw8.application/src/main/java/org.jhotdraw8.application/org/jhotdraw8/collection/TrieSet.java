@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable {
     private final static long serialVersionUID = 0L;
-    private PersistentTrieHelper.Nonce bulkEdit;
+    private PersistentTrieHelper.UniqueKey bulkEdit;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int hashCode;
     private int size;
@@ -39,7 +39,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.bulkEdit = new PersistentTrieHelper.Nonce();
+        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
         this.root = PersistentTrieSetHelper.emptyNode();
     }
 
@@ -58,7 +58,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
         this.root = trieSet.root;
         this.hashCode = trieSet.hashCode;
         this.size = trieSet.size;
-        this.bulkEdit = new PersistentTrieHelper.Nonce();
+        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
     }
 
     public boolean add(final @Nullable E key) {
@@ -179,7 +179,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
      * @return a persistent trie set
      */
     public PersistentTrieSet<E> toPersistent() {
-        bulkEdit = new PersistentTrieHelper.Nonce();
+        bulkEdit = new PersistentTrieHelper.UniqueKey();
         return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, hashCode, size);
     }
 

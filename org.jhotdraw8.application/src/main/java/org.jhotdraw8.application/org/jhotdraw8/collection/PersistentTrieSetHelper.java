@@ -49,7 +49,7 @@ class PersistentTrieSetHelper {
         private final int nodeMap;
         private final int dataMap;
 
-        BitmapIndexedNode(final @Nullable PersistentTrieHelper.Nonce bulkEdit, final int nodeMap,
+        BitmapIndexedNode(final @Nullable PersistentTrieHelper.UniqueKey bulkEdit, final int nodeMap,
                           final int dataMap, final @NonNull Object[] nodes) {
             super(bulkEdit);
             this.nodeMap = nodeMap;
@@ -231,7 +231,7 @@ class PersistentTrieSetHelper {
             return this;
         }
 
-        private Node<K> copyAndInsertValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
+        private Node<K> copyAndInsertValue(final PersistentTrieHelper.UniqueKey bulkEdit, final int bitpos,
                                            final K key) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
@@ -241,7 +241,7 @@ class PersistentTrieSetHelper {
 
         }
 
-        private Node<K> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.Nonce bulkEdit,
+        private Node<K> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.UniqueKey bulkEdit,
                                                        final int bitpos, final Node<K> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
@@ -261,7 +261,7 @@ class PersistentTrieSetHelper {
 
         }
 
-        private Node<K> copyAndMigrateFromNodeToInline(final PersistentTrieHelper.Nonce bulkEdit,
+        private Node<K> copyAndMigrateFromNodeToInline(final PersistentTrieHelper.UniqueKey bulkEdit,
                                                        final int bitpos, final Node<K> node) {
 
             final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
@@ -280,7 +280,7 @@ class PersistentTrieSetHelper {
             return new BitmapIndexedNode<>(bulkEdit, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        private Node<K> copyAndRemoveValue(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos) {
+        private Node<K> copyAndRemoveValue(final PersistentTrieHelper.UniqueKey bulkEdit, final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and remove 1 element(s) at position 'idx'
@@ -288,7 +288,7 @@ class PersistentTrieSetHelper {
             return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        private Node<K> copyAndSetNode(final PersistentTrieHelper.Nonce bulkEdit, final int bitpos,
+        private Node<K> copyAndSetNode(final PersistentTrieHelper.UniqueKey bulkEdit, final int bitpos,
                                        final Node<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
@@ -352,7 +352,7 @@ class PersistentTrieSetHelper {
             return dataMap() != 0;
         }
 
-        private Node<K> mergeTwoKeyValPairs(PersistentTrieHelper.Nonce bulkEdit,
+        private Node<K> mergeTwoKeyValPairs(PersistentTrieHelper.UniqueKey bulkEdit,
                                             final K key0, final int keyHash0,
                                             final K key1, final int keyHash1,
                                             final int shift) {
@@ -428,7 +428,7 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        Node<K> removed(final PersistentTrieHelper.Nonce bulkEdit, final K key, final int keyHash,
+        Node<K> removed(final PersistentTrieHelper.UniqueKey bulkEdit, final K key, final int keyHash,
                         final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -503,7 +503,7 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        Node<K> updated(final PersistentTrieHelper.Nonce bulkEdit, final K key,
+        Node<K> updated(final PersistentTrieHelper.UniqueKey bulkEdit, final K key,
                         final int keyHash, final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -545,9 +545,9 @@ class PersistentTrieSetHelper {
 
     static abstract class Node<K> implements Serializable {
         private final static long serialVersionUID = 0L;
-        transient final @Nullable PersistentTrieHelper.Nonce bulkEdit;
+        transient final @Nullable PersistentTrieHelper.UniqueKey bulkEdit;
 
-        Node(@Nullable PersistentTrieHelper.Nonce bulkEdit) {
+        Node(@Nullable PersistentTrieHelper.UniqueKey bulkEdit) {
             this.bulkEdit = bulkEdit;
         }
 
@@ -582,7 +582,7 @@ class PersistentTrieSetHelper {
             return Integer.bitCount(bitmap & (bitpos - 1));
         }
 
-        static boolean isAllowedToEdit(PersistentTrieHelper.Nonce x, PersistentTrieHelper.Nonce y) {
+        static boolean isAllowedToEdit(PersistentTrieHelper.UniqueKey x, PersistentTrieHelper.UniqueKey y) {
             return x != null && (x == y);
         }
 
@@ -638,12 +638,12 @@ class PersistentTrieSetHelper {
          */
         abstract int payloadIndex(@Nullable K key, final int keyHash, final int shift);
 
-        abstract Node<K> removed(final PersistentTrieHelper.Nonce bulkEdit, final K key, final int keyHash, final int shift,
+        abstract Node<K> removed(final PersistentTrieHelper.UniqueKey bulkEdit, final K key, final int keyHash, final int shift,
                                  final ChangeEvent changeEvent);
 
         abstract PersistentTrieHelper.SizeClass sizePredicate();
 
-        abstract Node<K> updated(final PersistentTrieHelper.Nonce bulkEdit, final K key, final int keyHash, final int shift,
+        abstract Node<K> updated(final PersistentTrieHelper.UniqueKey bulkEdit, final K key, final int keyHash, final int shift,
                                  final ChangeEvent changeEvent);
 
     }
@@ -654,7 +654,7 @@ class PersistentTrieSetHelper {
         private final int hash;
         private @NonNull K[] keys;
 
-        HashCollisionNode(PersistentTrieHelper.Nonce bulkEdit, final int hash, final K[] keys) {
+        HashCollisionNode(PersistentTrieHelper.UniqueKey bulkEdit, final int hash, final K[] keys) {
             super(bulkEdit);
             this.keys = keys;
             this.hash = hash;
@@ -796,7 +796,7 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        Node<K> removed(final PersistentTrieHelper.Nonce bulkEdit, final K key,
+        Node<K> removed(final PersistentTrieHelper.UniqueKey bulkEdit, final K key,
                         final int keyHash, final int shift, final ChangeEvent changeEvent) {
             for (int idx = 0; idx < keys.length; idx++) {
                 if (Objects.equals(keys[idx], key)) {
@@ -830,7 +830,7 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        public Node<K> updated(final PersistentTrieHelper.Nonce bulkEdit, final K key,
+        public Node<K> updated(final PersistentTrieHelper.UniqueKey bulkEdit, final K key,
                                final int keyHash, final int shift, final ChangeEvent changeEvent) {
             assert this.hash == keyHash;
             for (K k : keys) {
