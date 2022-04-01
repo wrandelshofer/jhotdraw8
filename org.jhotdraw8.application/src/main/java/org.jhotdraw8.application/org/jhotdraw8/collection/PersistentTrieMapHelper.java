@@ -31,10 +31,10 @@ class PersistentTrieMapHelper {
 
     static abstract class Node<K, V> implements Serializable {
         private final static long serialVersionUID = 0L;
-        transient final @Nullable PersistentTrieHelper.UniqueKey bulkEdit;
+        transient final @Nullable PersistentTrieHelper.UniqueIdentity mutator;
 
-        Node(@Nullable PersistentTrieHelper.UniqueKey bulkEdit) {
-            this.bulkEdit = bulkEdit;
+        Node(@Nullable PersistentTrieHelper.UniqueIdentity mutator) {
+            this.mutator = mutator;
         }
 
         /**
@@ -56,7 +56,7 @@ class PersistentTrieMapHelper {
             return 1 << mask;
         }
 
-        static boolean isAllowedToEdit(PersistentTrieHelper.UniqueKey x, PersistentTrieHelper.UniqueKey y) {
+        static boolean isAllowedToEdit(PersistentTrieHelper.UniqueIdentity x, PersistentTrieHelper.UniqueIdentity y) {
             return x != null && (x == y);
         }
 
@@ -64,12 +64,12 @@ class PersistentTrieMapHelper {
             return (keyHash >>> shift) & BIT_PARTITION_MASK;
         }
 
-        static <K, V> Node<K, V> mergeTwoKeyValPairs(PersistentTrieHelper.UniqueKey bulkEdit, final K key0, final V val0,
+        static <K, V> Node<K, V> mergeTwoKeyValPairs(PersistentTrieHelper.UniqueIdentity mutator, final K key0, final V val0,
                                                      final int keyHash0, final K key1, final V val1, final int keyHash1, final int shift) {
             assert !(key0.equals(key1));
 
             if (shift >= HASH_CODE_LENGTH) {
-                return new HashCollisionNode<>(bulkEdit, keyHash0, new Object[]{key0, val0, key1, val1});
+                return new HashCollisionNode<>(mutator, keyHash0, new Object[]{key0, val0, key1, val1});
             }
 
             final int mask0 = mask(keyHash0, shift);
@@ -80,17 +80,17 @@ class PersistentTrieMapHelper {
                 final int dataMap = bitpos(mask0) | bitpos(mask1);
 
                 if (mask0 < mask1) {
-                    return new BitmapIndexedNode<>(bulkEdit, (0), dataMap, new Object[]{key0, val0, key1, val1});
+                    return new BitmapIndexedNode<>(mutator, (0), dataMap, new Object[]{key0, val0, key1, val1});
                 } else {
-                    return new BitmapIndexedNode<>(bulkEdit, (0), dataMap, new Object[]{key1, val1, key0, val0});
+                    return new BitmapIndexedNode<>(mutator, (0), dataMap, new Object[]{key1, val1, key0, val0});
                 }
             } else {
-                final Node<K, V> node = mergeTwoKeyValPairs(bulkEdit, key0, val0, keyHash0, key1, val1,
+                final Node<K, V> node = mergeTwoKeyValPairs(mutator, key0, val0, keyHash0, key1, val1,
                         keyHash1, shift + BIT_PARTITION_SIZE);
                 // values fit on next level
 
                 final int nodeMap = bitpos(mask0);
-                return new BitmapIndexedNode<>(bulkEdit, nodeMap, (0), new Object[]{node});
+                return new BitmapIndexedNode<>(mutator, nodeMap, (0), new Object[]{node});
             }
         }
 
@@ -133,12 +133,12 @@ class PersistentTrieMapHelper {
          */
         abstract int payloadIndex(@Nullable K key, final int keyHash, final int shift);
 
-        abstract public Node<K, V> removed(final @Nullable PersistentTrieHelper.UniqueKey bulkEdit, final K key,
+        abstract public Node<K, V> removed(final @Nullable PersistentTrieHelper.UniqueIdentity mutator, final K key,
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
 
         abstract PersistentTrieHelper.SizeClass sizePredicate();
 
-        abstract public Node<K, V> updated(final PersistentTrieHelper.UniqueKey bulkEdit, final K key, final V val,
+        abstract public Node<K, V> updated(final PersistentTrieHelper.UniqueIdentity mutator, final K key, final V val,
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
     }
 
@@ -148,16 +148,16 @@ class PersistentTrieMapHelper {
         private final int nodeMap;
         private final int dataMap;
 
-        private BitmapIndexedNode(final @Nullable PersistentTrieHelper.UniqueKey bulkEdit,
+        private BitmapIndexedNode(final @Nullable PersistentTrieHelper.UniqueIdentity mutator,
                                   final int nodeMap,
                                   final int dataMap, final @NonNull Object[] nodes) {
-            super(bulkEdit);
+            super(mutator);
             this.nodeMap = nodeMap;
             this.dataMap = dataMap;
             this.nodes = nodes;
         }
 
-        Node<K, V> copyAndInsertValue(final PersistentTrieHelper.UniqueKey bulkEdit, final int bitpos,
+        Node<K, V> copyAndInsertValue(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
                                       final K key, final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
@@ -165,10 +165,10 @@ class PersistentTrieMapHelper {
             final Object[] dst = PersistentTrieHelper.copyComponentAdd(this.nodes, idx, 2);
             dst[idx] = key;
             dst[idx + 1] = val;
-            return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap() | bitpos, dst);
+            return new BitmapIndexedNode<>(mutator, nodeMap(), dataMap() | bitpos, dst);
         }
 
-        Node<K, V> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.UniqueKey bulkEdit,
+        Node<K, V> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.UniqueIdentity mutator,
                                                   final int bitpos, final Node<K, V> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
@@ -184,10 +184,10 @@ class PersistentTrieMapHelper {
             System.arraycopy(src, idxNew + 2, dst, idxNew + 1, src.length - idxNew - 2);
             dst[idxNew] = node;
 
-            return new BitmapIndexedNode<>(bulkEdit, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
+            return new BitmapIndexedNode<>(mutator, nodeMap() | bitpos, dataMap() ^ bitpos, dst);
         }
 
-        Node<K, V> copyAndMigrateFromNodeToInline(final PersistentTrieHelper.UniqueKey bulkEdit,
+        Node<K, V> copyAndMigrateFromNodeToInline(final PersistentTrieHelper.UniqueIdentity mutator,
                                                   final int bitpos, final Node<K, V> node) {
 
             final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
@@ -204,46 +204,46 @@ class PersistentTrieMapHelper {
             dst[idxNew] = node.getKey(0);
             dst[idxNew + 1] = node.getValue(0);
 
-            return new BitmapIndexedNode<>(bulkEdit, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
+            return new BitmapIndexedNode<>(mutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        Node<K, V> copyAndRemoveValue(final PersistentTrieHelper.UniqueKey bulkEdit,
+        Node<K, V> copyAndRemoveValue(final PersistentTrieHelper.UniqueIdentity mutator,
                                       final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and remove 2 element(s) at position 'idx'
             final Object[] dst = PersistentTrieHelper.copyComponentRemove(this.nodes, idx, 2);
-            return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap() ^ bitpos, dst);
+            return new BitmapIndexedNode<>(mutator, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        Node<K, V> copyAndSetNode(final PersistentTrieHelper.UniqueKey bulkEdit, final int bitpos,
+        Node<K, V> copyAndSetNode(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
                                   final Node<K, V> node) {
 
             final int idx = this.nodes.length - 1 - nodeIndex(bitpos);
 
-            if (isAllowedToEdit(this.bulkEdit, bulkEdit)) {
+            if (isAllowedToEdit(this.mutator, mutator)) {
                 // no copying if already editable
                 this.nodes[idx] = node;
                 return this;
             } else {
                 // copy 'src' and set 1 element(s) at position 'idx'
                 final Object[] dst = PersistentTrieHelper.copySet(this.nodes, idx, node);
-                return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap(), dst);
+                return new BitmapIndexedNode<>(mutator, nodeMap(), dataMap(), dst);
             }
         }
 
-        Node<K, V> copyAndSetValue(final PersistentTrieHelper.UniqueKey bulkEdit, final int bitpos,
+        Node<K, V> copyAndSetValue(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
                                    final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos) + 1;
 
-            if (isAllowedToEdit(this.bulkEdit, bulkEdit)) {
+            if (isAllowedToEdit(this.mutator, mutator)) {
                 // no copying if already editable
                 this.nodes[idx] = val;
                 return this;
             } else {
                 // copy 'src' and set 1 element(s) at position 'idx'
                 final Object[] dst = PersistentTrieHelper.copySet(this.nodes, idx, val);
-                return new BitmapIndexedNode<>(bulkEdit, nodeMap(), dataMap(), dst);
+                return new BitmapIndexedNode<>(mutator, nodeMap(), dataMap(), dst);
             }
         }
 
@@ -372,7 +372,7 @@ class PersistentTrieMapHelper {
         }
 
         @Override
-        public Node<K, V> removed(final @Nullable PersistentTrieHelper.UniqueKey bulkEdit, final K key,
+        public Node<K, V> removed(final @Nullable PersistentTrieHelper.UniqueIdentity mutator, final K key,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -391,12 +391,12 @@ class PersistentTrieMapHelper {
                                 (shift == 0) ? (dataMap() ^ bitpos) : bitpos(mask(keyHash, 0));
 
                         if (dataIndex == 0) {
-                            return new BitmapIndexedNode<>(bulkEdit, (0), newDataMap, new Object[]{getKey(1), getValue(1)});
+                            return new BitmapIndexedNode<>(mutator, (0), newDataMap, new Object[]{getKey(1), getValue(1)});
                         } else {
-                            return new BitmapIndexedNode<>(bulkEdit, (0), newDataMap, new Object[]{getKey(0), getValue(0)});
+                            return new BitmapIndexedNode<>(mutator, (0), newDataMap, new Object[]{getKey(0), getValue(0)});
                         }
                     } else {
-                        return copyAndRemoveValue(bulkEdit, bitpos);
+                        return copyAndRemoveValue(mutator, bitpos);
                     }
                 } else {
                     return this;
@@ -404,7 +404,7 @@ class PersistentTrieMapHelper {
             } else if ((nodeMap() & bitpos) != 0) { // node (not value)
                 final Node<K, V> subNode = nodeAt(bitpos);
                 final Node<K, V> subNodeNew =
-                        subNode.removed(bulkEdit, key, keyHash, shift + BIT_PARTITION_SIZE, details);
+                        subNode.removed(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details);
 
                 if (!details.isModified()) {
                     return this;
@@ -420,12 +420,12 @@ class PersistentTrieMapHelper {
                             return subNodeNew;
                         } else {
                             // inline value (move to front)
-                            return copyAndMigrateFromNodeToInline(bulkEdit, bitpos, subNodeNew);
+                            return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew);
                         }
                     }
                     default: {
                         // modify current node (set replacement node)
-                        return copyAndSetNode(bulkEdit, bitpos, subNodeNew);
+                        return copyAndSetNode(mutator, bitpos, subNodeNew);
                     }
                 }
             }
@@ -450,7 +450,7 @@ class PersistentTrieMapHelper {
         }
 
         @Override
-        public Node<K, V> updated(final PersistentTrieHelper.UniqueKey bulkEdit, final K key, final V val,
+        public Node<K, V> updated(final PersistentTrieHelper.UniqueIdentity mutator, final K key, final V val,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -467,29 +467,29 @@ class PersistentTrieMapHelper {
                     }
                     // update mapping
                     details.updated(currentVal);
-                    return copyAndSetValue(bulkEdit, bitpos, val);
+                    return copyAndSetValue(mutator, bitpos, val);
                 } else {
                     final Node<K, V> subNodeNew =
-                            mergeTwoKeyValPairs(bulkEdit, currentKey, currentVal, currentKey.hashCode(),
+                            mergeTwoKeyValPairs(mutator, currentKey, currentVal, currentKey.hashCode(),
                                     key, val, keyHash, shift + BIT_PARTITION_SIZE);
 
                     details.modified();
-                    return copyAndMigrateFromInlineToNode(bulkEdit, bitpos, subNodeNew);
+                    return copyAndMigrateFromInlineToNode(mutator, bitpos, subNodeNew);
                 }
             } else if ((nodeMap() & bitpos) != 0) { // node (not value)
                 final Node<K, V> subNode = nodeAt(bitpos);
                 final Node<K, V> subNodeNew =
-                        subNode.updated(bulkEdit, key, val, keyHash, shift + BIT_PARTITION_SIZE, details);
+                        subNode.updated(mutator, key, val, keyHash, shift + BIT_PARTITION_SIZE, details);
 
                 if (details.isModified()) {
-                    return copyAndSetNode(bulkEdit, bitpos, subNodeNew);
+                    return copyAndSetNode(mutator, bitpos, subNodeNew);
                 } else {
                     return this;
                 }
             } else {
                 // no value
                 details.modified();
-                return copyAndInsertValue(bulkEdit, bitpos, key, val);
+                return copyAndInsertValue(mutator, bitpos, key, val);
             }
         }
 
@@ -500,8 +500,8 @@ class PersistentTrieMapHelper {
         private final int hash;
         private @NonNull Object[] entries;
 
-        HashCollisionNode(PersistentTrieHelper.UniqueKey bulkEdit, final int hash, final Object[] entries) {
-            super(bulkEdit);
+        HashCollisionNode(PersistentTrieHelper.UniqueIdentity mutator, final int hash, final Object[] entries) {
+            super(mutator);
             this.entries = entries;
             this.hash = hash;
 
@@ -615,7 +615,7 @@ class PersistentTrieMapHelper {
 
         @SuppressWarnings("unchecked")
         @Override
-        public Node<K, V> removed(final @Nullable PersistentTrieHelper.UniqueKey bulkEdit, final K key,
+        public Node<K, V> removed(final @Nullable PersistentTrieHelper.UniqueIdentity mutator, final K key,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             for (int idx = 0, n = payloadArity(); idx < n; idx++) {
                 if (Objects.equals(getKey(idx), key)) {
@@ -630,18 +630,18 @@ class PersistentTrieMapHelper {
                         // returned, or b) unwrapped and inlined.
                         final K theOtherKey = (K) ((idx == 0) ? entries[2] : entries[0]);
                         final V theOtherVal = (V) ((idx == 0) ? entries[3] : entries[1]);
-                        return PersistentTrieMapHelper.<K, V>emptyNode().updated(bulkEdit, theOtherKey, theOtherVal,
+                        return PersistentTrieMapHelper.<K, V>emptyNode().updated(mutator, theOtherKey, theOtherVal,
                                 keyHash, 0, details);
                     } else {
 
                         // copy keys and vals and remove 1 element at position idx
                         final Object[] entriesNew = PersistentTrieHelper.copyComponentRemove(this.entries, idx * 2, 2);
 
-                        if (this.bulkEdit == bulkEdit) {
+                        if (this.mutator == mutator) {
                             this.entries = entriesNew;
                             return this;
                         }
-                        return new HashCollisionNode<>(bulkEdit, keyHash, entriesNew);
+                        return new HashCollisionNode<>(mutator, keyHash, entriesNew);
                     }
                 }
             }
@@ -654,7 +654,7 @@ class PersistentTrieMapHelper {
         }
 
         @Override
-        public Node<K, V> updated(final PersistentTrieHelper.UniqueKey bulkEdit, final K key, final V val,
+        public Node<K, V> updated(final PersistentTrieHelper.UniqueIdentity mutator, final K key, final V val,
                                   final int keyHash, final int shift, final ChangeEvent<V> details) {
             assert this.hash == keyHash;
 
@@ -666,7 +666,7 @@ class PersistentTrieMapHelper {
                         return this;
                     } else {
                         final Object[] dst = PersistentTrieHelper.copySet(this.entries, idx * 2 + 1, val);
-                        final Node<K, V> thisNew = new HashCollisionNode<>(bulkEdit, this.hash, dst);
+                        final Node<K, V> thisNew = new HashCollisionNode<>(mutator, this.hash, dst);
                         details.updated(currentVal);
                         return thisNew;
                     }
@@ -678,11 +678,11 @@ class PersistentTrieMapHelper {
             entriesNew[this.entries.length] = key;
             entriesNew[this.entries.length + 1] = val;
             details.modified();
-            if (isAllowedToEdit(this.bulkEdit, bulkEdit)) {
+            if (isAllowedToEdit(this.mutator, mutator)) {
                 this.entries = entriesNew;
                 return this;
             } else {
-                return new HashCollisionNode<>(bulkEdit, keyHash, entriesNew);
+                return new HashCollisionNode<>(mutator, keyHash, entriesNew);
             }
         }
     }

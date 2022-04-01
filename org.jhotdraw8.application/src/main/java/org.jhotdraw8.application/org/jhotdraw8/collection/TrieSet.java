@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable {
     private final static long serialVersionUID = 0L;
-    private PersistentTrieHelper.UniqueKey bulkEdit;
+    private PersistentTrieHelper.UniqueIdentity mutator;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int hashCode;
     private int size;
@@ -39,7 +39,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
+        this.mutator = new PersistentTrieHelper.UniqueIdentity();
         this.root = PersistentTrieSetHelper.emptyNode();
     }
 
@@ -58,14 +58,14 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
         this.root = trieSet.root;
         this.hashCode = trieSet.hashCode;
         this.size = trieSet.size;
-        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
+        this.mutator = new PersistentTrieHelper.UniqueIdentity();
     }
 
     public boolean add(final @Nullable E key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
         final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode =
-                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(this.bulkEdit, key, keyHash, 0, changeEvent);
+                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(this.mutator, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
             hashCode += keyHash;
@@ -141,7 +141,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
         final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode =
-                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(this.bulkEdit, key, keyHash, 0, changeEvent);
+                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(this.mutator, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
             hashCode = hashCode - keyHash;
@@ -179,7 +179,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
      * @return a persistent trie set
      */
     public PersistentTrieSet<E> toPersistent() {
-        bulkEdit = new PersistentTrieHelper.UniqueKey();
+        mutator = new PersistentTrieHelper.UniqueIdentity();
         return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, hashCode, size);
     }
 

@@ -105,9 +105,9 @@ class PersistentTrieHelper {
     }
 
     /**
-     * A unique key. Each instance is unique in this JVM.
+     * An object with a unique identity whithin this VM.
      */
-    static class UniqueKey implements Serializable {
+    static class UniqueIdentity implements Serializable {
         private final static long serialVersionUID = 0L;
     }
 }

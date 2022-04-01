@@ -31,25 +31,25 @@ import java.util.Set;
 
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     private final static long serialVersionUID = 0L;
-    private PersistentTrieHelper.UniqueKey bulkEdit;
+    private PersistentTrieHelper.UniqueIdentity mutator;
     private PersistentTrieMapHelper.Node<K, V> root;
     private int hashCode;
     private int size;
     private int modCount;
 
     public TrieMap() {
-        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
+        this.mutator = new PersistentTrieHelper.UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
+        this.mutator = new PersistentTrieHelper.UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
         this.putAll(m);
     }
 
     TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
-        this.bulkEdit = new PersistentTrieHelper.UniqueKey();
+        this.mutator = new PersistentTrieHelper.UniqueIdentity();
         this.root = trieMap.root;
         this.hashCode = trieMap.hashCode;
         this.size = trieMap.size;
@@ -75,7 +75,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
             @Override
             public boolean add(Entry<K, V> kvEntry) {
                 PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-                root.updated(bulkEdit, kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
+                root.updated(mutator, kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
                 return details.isModified();
             }
 
@@ -138,7 +138,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
 
-        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.updated(bulkEdit, key, val, keyHash, 0, details);
+        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.updated(mutator, key, val, keyHash, 0, details);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -168,7 +168,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     @NonNull PersistentTrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.removed(bulkEdit, key, keyHash, 0, details);
+        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.removed(mutator, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             final int valHash = Objects.hashCode(details.getOldValue());
@@ -181,7 +181,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable {
     }
 
     public PersistentTrieMap<K, V> toPersistent() {
-        bulkEdit = new PersistentTrieHelper.UniqueKey();
+        mutator = new PersistentTrieHelper.UniqueIdentity();
         return size == 0 ? PersistentTrieMap.of() : new PersistentTrieMap<>(root, hashCode, size);
     }
 
