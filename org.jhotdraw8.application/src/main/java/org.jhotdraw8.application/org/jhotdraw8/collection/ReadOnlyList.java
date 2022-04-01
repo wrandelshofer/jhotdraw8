@@ -217,4 +217,22 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
         return -1;
     }
 
+
+    /**
+     * Returns the hash code of the provided iterable, assuming that
+     * the iterator is from a list.
+     *
+     * @param iterator an iterator over a list
+     * @return the ordered sum of the hash codes of the elements in the list
+     * @see List#hashCode()
+     */
+    static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
+        int h = 1;
+        while (iterator.hasNext()) {
+            E e = iterator.next();
+            h = 31 * h + (e == null ? 0 : e.hashCode());
+        }
+        return h;
+    }
+
 }

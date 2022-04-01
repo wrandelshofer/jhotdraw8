@@ -37,14 +37,12 @@ import static org.jhotdraw8.collection.PersistentTrieSetHelper.EMPTY_NODE;
 public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedNode<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
 
-    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
+    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0);
 
-    final int hashCode;
     final int size;
 
-    PersistentTrieSet(PersistentTrieSetHelper.BitmapIndexedNode<E> root, int hashCode, int size) {
+    PersistentTrieSet(PersistentTrieSetHelper.BitmapIndexedNode<E> root, int size) {
         super(root.nodeMap, root.dataMap, root.nodes);
-        this.hashCode = hashCode;
         this.size = size;
     }
 
@@ -52,6 +50,8 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
     public static <K> @NonNull PersistentTrieSet<K> copyOf(@NonNull Iterable<? extends K> set) {
         if (set instanceof PersistentTrieSet) {
             return (PersistentTrieSet<K>) set;
+        } else if (set instanceof TrieSet) {
+            return ((TrieSet<K>) set).toPersistent();
         }
         TrieSet<K> tr = new TrieSet<>(of());
         tr.addAll(set);
@@ -81,7 +81,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
         final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) updated(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new PersistentTrieSet<>(newRootNode, hashCode + keyHash, size + 1);
+            return new PersistentTrieSet<>(newRootNode, size + 1);
         }
 
         return this;
@@ -117,12 +117,10 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
             return that;
         }
         PersistentTrieSetHelper.BulkChangeEvent bulkChange = new PersistentTrieSetHelper.BulkChangeEvent();
-        bulkChange.hashChange = that.hashCode;
         bulkChange.sizeChange = that.size;
         PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.copyAddAll(that, 0, bulkChange);
         if (newNode != this) {
             return new PersistentTrieSet<>(newNode,
-                    this.hashCode + bulkChange.hashChange,
                     this.size + bulkChange.sizeChange
             );
         }
@@ -140,7 +138,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
         final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) removed(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new PersistentTrieSet<>(newRootNode, hashCode - keyHash, size - 1);
+            return new PersistentTrieSet<>(newRootNode, size - 1);
         }
 
         return this;
@@ -202,7 +200,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
 
         if (other instanceof PersistentTrieSet) {
             PersistentTrieSet<?> that = (PersistentTrieSet<?>) other;
-            if (this.size != that.size || this.hashCode != that.hashCode) {
+            if (this.size != that.size) {
                 return false;
             }
             return this.equivalent(that);
@@ -220,7 +218,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return ReadOnlySet.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -246,6 +244,6 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
 
     @Override
     public @NonNull String toString() {
-        return AbstractReadOnlyCollection.iterableToString(this);
+        return ReadOnlyCollection.iterableToString(this);
     }
 }

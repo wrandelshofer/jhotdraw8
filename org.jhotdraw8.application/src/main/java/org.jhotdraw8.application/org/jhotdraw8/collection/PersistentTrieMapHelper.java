@@ -17,7 +17,7 @@ import java.util.Objects;
  * and {@link TrieMap}.
  */
 class PersistentTrieMapHelper {
-    static final Node<?, ?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});
+    static final BitmapIndexedNode<?, ?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});
 
     /**
      * Don't let anyone instantiate this class.
@@ -146,21 +146,21 @@ class PersistentTrieMapHelper {
                                            final int keyHash, final int shift, final ChangeEvent<V> details);
     }
 
-    private static class BitmapIndexedNode<K, V> extends Node<K, V> {
+    static class BitmapIndexedNode<K, V> extends Node<K, V> {
         private final static long serialVersionUID = 0L;
-        private final Object[] nodes;
+        protected final Object[] nodes;
         private final int nodeMap;
         private final int dataMap;
 
-        private BitmapIndexedNode(final int nodeMap,
-                                  final int dataMap, final @NonNull Object[] nodes) {
+        BitmapIndexedNode(final int nodeMap,
+                          final int dataMap, final @NonNull Object[] nodes) {
             this.nodeMap = nodeMap;
             this.dataMap = dataMap;
             this.nodes = nodes;
         }
 
-        Node<K, V> copyAndInsertValue(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
-                                      final K key, final V val) {
+        BitmapIndexedNode<K, V> copyAndInsertValue(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
+                                                   final K key, final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and insert 2 element(s) at position 'idx'
@@ -170,8 +170,8 @@ class PersistentTrieMapHelper {
             return newBitmapIndexedNode(mutator, nodeMap(), dataMap() | bitpos, dst);
         }
 
-        Node<K, V> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.UniqueIdentity mutator,
-                                                  final int bitpos, final Node<K, V> node) {
+        BitmapIndexedNode<K, V> copyAndMigrateFromInlineToNode(final PersistentTrieHelper.UniqueIdentity mutator,
+                                                               final int bitpos, final Node<K, V> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
@@ -209,8 +209,8 @@ class PersistentTrieMapHelper {
             return newBitmapIndexedNode(mutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        Node<K, V> copyAndRemoveValue(final PersistentTrieHelper.UniqueIdentity mutator,
-                                      final int bitpos) {
+        BitmapIndexedNode<K, V> copyAndRemoveValue(final PersistentTrieHelper.UniqueIdentity mutator,
+                                                   final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and remove 2 element(s) at position 'idx'
@@ -218,8 +218,8 @@ class PersistentTrieMapHelper {
             return newBitmapIndexedNode(mutator, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        Node<K, V> copyAndSetNode(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
-                                  final Node<K, V> node) {
+        BitmapIndexedNode<K, V> copyAndSetNode(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
+                                               final Node<K, V> node) {
 
             final int idx = this.nodes.length - 1 - nodeIndex(bitpos);
 
@@ -234,8 +234,8 @@ class PersistentTrieMapHelper {
             }
         }
 
-        Node<K, V> copyAndSetValue(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
-                                   final V val) {
+        BitmapIndexedNode<K, V> copyAndSetValue(final PersistentTrieHelper.UniqueIdentity mutator, final int bitpos,
+                                                final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos) + 1;
 
             if (isAllowedToEdit(getMutator(), mutator)) {
@@ -452,8 +452,8 @@ class PersistentTrieMapHelper {
         }
 
         @Override
-        public Node<K, V> updated(final PersistentTrieHelper.UniqueIdentity mutator, final K key, final V val,
-                                  final int keyHash, final int shift, final ChangeEvent<V> details) {
+        public BitmapIndexedNode<K, V> updated(final PersistentTrieHelper.UniqueIdentity mutator, final K key, final V val,
+                                               final int keyHash, final int shift, final ChangeEvent<V> details) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -916,8 +916,8 @@ class PersistentTrieMapHelper {
     }
 
     @SuppressWarnings("unchecked")
-    static <K, V> PersistentTrieMapHelper.Node<K, V> emptyNode() {
-        return (PersistentTrieMapHelper.Node<K, V>) PersistentTrieMapHelper.EMPTY_NODE;
+    static <K, V> PersistentTrieMapHelper.BitmapIndexedNode<K, V> emptyNode() {
+        return (PersistentTrieMapHelper.BitmapIndexedNode<K, V>) PersistentTrieMapHelper.EMPTY_NODE;
     }
 
     private static final class MutableHashCollisionNode<K, V> extends HashCollisionNode<K, V> {

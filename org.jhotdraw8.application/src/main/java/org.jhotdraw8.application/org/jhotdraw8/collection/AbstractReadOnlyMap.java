@@ -6,7 +6,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.Iterator;
 import java.util.Map;
 
 public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
@@ -58,28 +57,8 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
     }
 
     final public @NonNull String toString() {
-        return mapToString(this);
+        return ReadOnlyMap.mapToString(this);
     }
 
-    public static <K, V> @NonNull String mapToString(final ReadOnlyMap<K, V> map) {
-        Iterator<Map.Entry<K, V>> i = map.entries();
-        if (!i.hasNext()) {
-            return "{}";
-        }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append('{');
-        for (; ; ) {
-            Map.Entry<K, V> e = i.next();
-            K key = e.getKey();
-            V value = e.getValue();
-            sb.append(key == map ? "(this Map)" : key);
-            sb.append('=');
-            sb.append(value == map ? "(this Map)" : value);
-            if (!i.hasNext()) {
-                return sb.append('}').toString();
-            }
-            sb.append(',').append(' ');
-        }
-    }
 }

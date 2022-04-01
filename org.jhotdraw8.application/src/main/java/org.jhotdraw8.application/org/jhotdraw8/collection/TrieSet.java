@@ -27,11 +27,10 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class TrieSet<E> extends AbstractSet<E> implements Serializable {
+public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private PersistentTrieHelper.UniqueIdentity mutator;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
-    private int hashCode;
     private int size;
     private int modCount;
 
@@ -54,11 +53,18 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
         addAll(c);
     }
 
-    TrieSet(PersistentTrieSet<E> trieSet) {
+    public TrieSet(PersistentTrieSet<E> trieSet) {
         this.root = trieSet;
-        this.hashCode = trieSet.hashCode;
         this.size = trieSet.size;
         this.mutator = new PersistentTrieHelper.UniqueIdentity();
+    }
+
+    public TrieSet(TrieSet<E> trieSet) {
+        this.root = trieSet.root;
+        this.size = trieSet.size;
+        this.modCount = 0;
+        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        trieSet.mutator = new PersistentTrieHelper.UniqueIdentity();
     }
 
     public boolean add(final @Nullable E key) {
@@ -68,7 +74,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
                 (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(this.mutator, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
-            hashCode += keyHash;
             size += 1;
             modCount++;
             return true;
@@ -100,11 +105,9 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
             if (c instanceof TrieSet) {
                 TrieSet<? extends E> trieSet = (TrieSet<? extends E>) c;
                 root = (PersistentTrieSetHelper.Node<E>) trieSet.root;
-                bulkChange.hashChange = trieSet.hashCode;
                 bulkChange.sizeChange = trieSet.size;
             } else {
                 PersistentTrieSet<? extends E> trieSet = (PersistentTrieSet<? extends E>) c;
-                bulkChange.hashChange = trieSet.hashCode;
                 bulkChange.sizeChange = trieSet.size;
                 root = (PersistentTrieSetHelper.Node<E>) trieSet;
             }
@@ -114,7 +117,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
             }
             this.root = newNode;
             this.size += bulkChange.sizeChange;
-            this.hashCode += bulkChange.hashChange;
             return true;
         }
 
@@ -132,7 +134,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
     @Override
     public void clear() {
         this.root = PersistentTrieSetHelper.emptyNode();
-        this.size = this.hashCode = 0;
+        this.size = 0;
     }
 
     public boolean remove(final Object o) {
@@ -144,7 +146,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
                 (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(this.mutator, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
-            hashCode = hashCode - keyHash;
             size = size - 1;
             modCount++;
             return true;
@@ -180,7 +181,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
      */
     public PersistentTrieSet<E> toPersistent() {
         mutator = new PersistentTrieHelper.UniqueIdentity();
-        return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, hashCode, size);
+        return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, size);
     }
 
     @Override
@@ -232,6 +233,18 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
             }
 
             current = null;
+        }
+    }
+
+    @Override
+    protected TrieSet<E> clone() {
+        try {
+            @SuppressWarnings("unchecked") final TrieSet<E> that = (TrieSet<E>) super.clone();
+            that.mutator = new PersistentTrieHelper.UniqueIdentity();
+            this.mutator = new PersistentTrieHelper.UniqueIdentity();
+            return that;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
         }
     }
 }

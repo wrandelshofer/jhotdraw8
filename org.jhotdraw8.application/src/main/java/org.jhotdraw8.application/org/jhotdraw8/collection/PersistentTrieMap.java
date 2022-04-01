@@ -31,18 +31,15 @@ import java.util.Objects;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
+public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
 
-    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(PersistentTrieMapHelper.EMPTY_NODE, 0, 0);
+    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(PersistentTrieMapHelper.EMPTY_NODE, 0);
 
-    final @NonNull PersistentTrieMapHelper.Node<K, V> root;
-    final int hashCode;
     final int size;
 
-    PersistentTrieMap(@NonNull PersistentTrieMapHelper.Node<K, V> root, int hashCode, int size) {
-        this.root = root;
-        this.hashCode = hashCode;
+    PersistentTrieMap(@NonNull PersistentTrieMapHelper.BitmapIndexedNode<K, V> root, int size) {
+        super(root.nodeMap(), root.dataMap(), root.nodes);
         this.size = size;
     }
 
@@ -92,7 +89,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0).keyExists();
+        return findByKey(key, Objects.hashCode(key), 0).keyExists();
     }
 
     @Override
@@ -101,7 +98,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     }
 
     public Iterator<Map.Entry<K, V>> entryIterator() {
-        return new PersistentTrieMapHelper.MapEntryIterator<>(root);
+        return new PersistentTrieMapHelper.MapEntryIterator<>(this);
     }
 
     @Override
@@ -115,10 +112,10 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
 
         if (other instanceof PersistentTrieMap) {
             PersistentTrieMap<?, ?> that = (PersistentTrieMap<?, ?>) other;
-            if (this.size != that.size || this.hashCode != that.hashCode) {
+            if (this.size != that.size) {
                 return false;
             }
-            return root.equivalent(that.root);
+            return this.equivalent(that);
         } else if (other instanceof Map) {
             Map<?, ?> that = (Map<?, ?>) other;
             if (this.size() != that.size()) {
@@ -126,7 +123,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
             }
             for (Map.Entry<?, ?> entry : that.entrySet()) {
                 @SuppressWarnings("unchecked") final K key = (K) entry.getKey();
-                final PersistentTrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                final PersistentTrieMapHelper.SearchResult<V> result = findByKey(key, Objects.hashCode(key), 0);
 
                 if (!result.keyExists()) {
                     return false;
@@ -145,13 +142,13 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     @Override
     public V get(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        final PersistentTrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+        final PersistentTrieMapHelper.SearchResult<V> result = findByKey(key, Objects.hashCode(key), 0);
         return result.orElse(null);
     }
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return ReadOnlyMap.iterableToHashCode(entries());
     }
 
     @Override
@@ -160,7 +157,7 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     }
 
     public Iterator<K> keyIterator() {
-        return new PersistentTrieMapHelper.MapKeyIterator<>(root);
+        return new PersistentTrieMapHelper.MapKeyIterator<>(this);
     }
 
     @Override
@@ -177,20 +174,17 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
 
-        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.updated(null, key, value,
+        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode = updated(null, key, value,
                 keyHash, 0, details);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                final int valHashOld = Objects.hashCode(details.getOldValue());
-                final int valHashNew = Objects.hashCode(value);
-
                 return new PersistentTrieMap<>(newRootNode,
-                        hashCode + ((keyHash ^ valHashNew)) - ((keyHash ^ valHashOld)), size);
+                        size);
             }
 
             final int valHash = Objects.hashCode(value);
-            return new PersistentTrieMap<>(newRootNode, hashCode + ((keyHash ^ valHash)),
+            return new PersistentTrieMap<>(newRootNode,
                     size + 1);
         }
 
@@ -210,11 +204,12 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
     public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-        final PersistentTrieMapHelper.Node<K, V> newRootNode = root.removed(null, key, keyHash, 0, details);
+        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode = (PersistentTrieMapHelper.BitmapIndexedNode<K, V>)
+                removed(null, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             final int valHash = Objects.hashCode(details.getOldValue());
-            return new PersistentTrieMap<>(newRootNode, hashCode - ((keyHash ^ valHash)),
+            return new PersistentTrieMap<>(newRootNode,
                     size - 1);
         }
         return this;
@@ -242,5 +237,10 @@ public class PersistentTrieMap<K, V> extends AbstractReadOnlyMap<K, V> implement
             }
         }
         return modified ? t.toPersistent() : this;
+    }
+
+    @Override
+    public String toString() {
+        return ReadOnlyMap.mapToString(this);
     }
 }

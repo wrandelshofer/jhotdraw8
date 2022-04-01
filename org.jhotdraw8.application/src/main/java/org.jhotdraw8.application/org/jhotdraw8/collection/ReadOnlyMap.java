@@ -115,4 +115,38 @@ public interface ReadOnlyMap<K, V> {
     default @NonNull Map<K, V> asMap() {
         return new MapWrapper<>(this);
     }
+
+    static <K, V> @NonNull String mapToString(final ReadOnlyMap<K, V> map) {
+        Iterator<Map.Entry<K, V>> i = map.entries();
+        if (!i.hasNext()) {
+            return "{}";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        for (; ; ) {
+            Map.Entry<K, V> e = i.next();
+            K key = e.getKey();
+            V value = e.getValue();
+            sb.append(key == map ? "(this Map)" : key);
+            sb.append('=');
+            sb.append(value == map ? "(this Map)" : value);
+            if (!i.hasNext()) {
+                return sb.append('}').toString();
+            }
+            sb.append(',').append(' ');
+        }
+    }
+
+    /**
+     * Returns the hash code of the provided iterable, assuming that
+     * the iterable is an entry set of a map.
+     *
+     * @param entries an iterable that is an entry set
+     * @return the sum of the hash codes of the elements in the set
+     * @see Map#hashCode()
+     */
+    static <K, V> int iterableToHashCode(@NonNull Iterator<Map.Entry<K, V>> entries) {
+        return ReadOnlySet.iteratorToHashCode(entries);
+    }
 }

@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.collections.ObservableSet;
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -39,5 +40,24 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      */
     default @NonNull ObservableSet<E> asObservableSet() {
         return new ObservableSetWrapper<>(this);
+    }
+
+    /**
+     * Returns the hash code of the provided iterator, assuming that
+     * the iterator is from a set.
+     *
+     * @param iterator an iterator over a set
+     * @return the sum of the hash codes of the elements in the set
+     * @see Set#hashCode()
+     */
+    static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
+        int h = 0;
+        while (iterator.hasNext()) {
+            E e = iterator.next();
+            if (e != null) {
+                h += e.hashCode();
+            }
+        }
+        return h;
     }
 }

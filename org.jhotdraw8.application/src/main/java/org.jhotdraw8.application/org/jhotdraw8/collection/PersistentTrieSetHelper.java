@@ -40,7 +40,6 @@ class PersistentTrieSetHelper {
 
     static class BulkChangeEvent {
         int sizeChange;
-        int hashChange;
     }
 
     static class BitmapIndexedNode<K> extends Node<K> {
@@ -133,7 +132,6 @@ class PersistentTrieSetHelper {
                     if (Objects.equals(thisKey, thatKey)) {
                         // case 5.1:
                         nodesNew[dataIndex++] = thisKey;
-                        bulkChange.hashChange -= Objects.hashCode(thatKey);
                         bulkChange.sizeChange--;
                     } else {
                         // case 5.2:
@@ -157,7 +155,6 @@ class PersistentTrieSetHelper {
                         Node<K> subNodeNew = subNode.updated(getMutator(), thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
                         if (!changeEvent.isModified) {
-                            bulkChange.hashChange -= thisKeyHash;
                             bulkChange.sizeChange--;
                         }
                         changed = true;
@@ -181,7 +178,6 @@ class PersistentTrieSetHelper {
                             changed = true;
                             nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
                         } else {
-                            bulkChange.hashChange -= thatKeyHash;
                             bulkChange.sizeChange--;
                         }
                     } else {
@@ -701,7 +697,6 @@ class PersistentTrieSetHelper {
                     if (Objects.equals(key, this.keys[i])) {
                         bs.set(i);
                         bulkChange.sizeChange--;
-                        bulkChange.hashChange -= hash;
                         continue outer;
                     }
                 }
