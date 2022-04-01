@@ -13,8 +13,7 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Spliterator<E>,
-        Enumerator<E>, Consumer<E> {
+public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Enumerator<E>, Consumer<E> {
     private final Object[] list;
     private int index;
     final int size;
@@ -74,7 +73,7 @@ public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Spliterat
 
     @Override
     public void forEachRemaining(Consumer<? super E> action) {
-        Spliterator.super.forEachRemaining(action);
+        Enumerator.super.forEachRemaining(action);
     }
 
     @Override

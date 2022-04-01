@@ -269,7 +269,7 @@ private final static int[] EMPTY = new int[0];
         return size == 0;
     }
 
-    //@Override
+    @Override
     public boolean contains(Object o) {
         if (o instanceof Integer) {
             int e = (int) o;
@@ -393,14 +393,14 @@ private final static int[] EMPTY = new int[0];
         return result;
     }
 
-    //@Override
+    @Override
     public boolean add(Integer integer) {
         addAsInt((int) integer);
         return true;
     }
 
 
-    //@Override
+    @Override
     public boolean remove(Object o) {
         if (o instanceof Integer) {
             int index = indexOfAsInt((int) o);

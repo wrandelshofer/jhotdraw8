@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
+import java.util.Spliterator;
 
 /**
  * Enumerator wrapper for Iterator.
@@ -35,5 +36,20 @@ public class IteratorEnumerator<E> implements Enumerator<E> {
     @Override
     public E current() {
         return current;
+    }
+
+    @Override
+    public Spliterator<E> trySplit() {
+        return null;
+    }
+
+    @Override
+    public long estimateSize() {
+        return Long.MAX_VALUE;
+    }
+
+    @Override
+    public int characteristics() {
+        return 0;
     }
 }

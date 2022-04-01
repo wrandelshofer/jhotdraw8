@@ -34,4 +34,20 @@ public class SpliteratorEnumerator<E> implements Enumerator<E>, Consumer<E> {
     public E current() {
         return current;
     }
+
+    @Override
+    public Spliterator<E> trySplit() {
+        final Spliterator<E> splitted = spliterator.trySplit();
+        return splitted == null ? null : new SpliteratorEnumerator<>(splitted);
+    }
+
+    @Override
+    public long estimateSize() {
+        return spliterator.estimateSize();
+    }
+
+    @Override
+    public int characteristics() {
+        return spliterator.characteristics();
+    }
 }

@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractIntEnumerator;
 import org.jhotdraw8.collection.DenseIntSet8Bit;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntEnumerator;
@@ -19,7 +19,7 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class IndexedBreadthFirstSpliterator extends AbstractIntEnumeratorSpliterator {
+public class IndexedBreadthFirstSpliterator extends AbstractIntEnumerator {
 
     private final @NonNull Function<Integer, IntEnumerator> nextFunction;
     private final @NonNull IntArrayDeque deque;

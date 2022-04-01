@@ -6,15 +6,12 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ListWrapper;
 
-import java.util.AbstractCollection;
-import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
@@ -26,172 +23,79 @@ import java.util.NoSuchElementException;
 public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 
     /**
-     * Returns the arrow if b is a next vertex of a.
+     * Returns the arrow data for the arrow going from {@code u} to {@code v}
+     * if the arrow exists.
      *
-     * @param a a vertex
-     * @param b a vertex
-     * @return the arrow or null if b is not next of a
+     * @param u a vertex
+     * @param v a vertex
+     * @return the arrow data or null
      */
-    default @Nullable A findArrow(@NonNull V a, @NonNull V b) {
-        int index = findIndexOfNext(a, b);
-        return index < 0 ? null : getNextArrow(a, index);
+    default @Nullable A findArrow(@NonNull V u, @NonNull V v) {
+        int index = findIndexOfNext(u, v);
+        return index < 0 ? null : getNextArrow(u, index);
     }
 
     /**
-     * Returns the index of vertex b.
+     * Returns the index of vertex {@code u} in the list of next vertices
+     * of {@code v} if an arrow from {@code v} to {@code u} exists.
      *
-     * @param a a vertex
-     * @param b another vertex
-     * @return index of vertex b. Returns a value {@literal < 0}
-     * if b is not a previous vertex of a.
+     * @param v a vertex
+     * @param u a vertex
+     * @return index of vertex {@code u} or a value {@literal < 0}
      */
-    default int findIndexOfNext(@NonNull V a, @NonNull V b) {
-        int i = 0;
-        for (V v : getNextVertices(a)) {
-            if (b.equals(v)) {
+    default int findIndexOfNext(@NonNull V v, @NonNull V u) {
+        for (int i = 0, n = getNextCount(v); i < n; i++) {
+            if (u.equals(getNext(v, i))) {
                 return i;
             }
-            i++;
         }
         return -1;
     }
 
     /**
-     * Returns the direct successor vertices of the specified vertex.
+     * Returns the list of next vertices of vertex {@code v}.
      *
-     * @param vertex a vertex
+     * @param v a vertex
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull Collection<V> getNextVertices(@NonNull V vertex) {
-        class NextVertexIterator implements Iterator<V> {
-
-            private int index;
-            private final @NonNull V vertex;
-            private final int nextCount;
-
-            public NextVertexIterator(@NonNull V vertex) {
-                this.vertex = vertex;
-                this.nextCount = getNextCount(vertex);
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < nextCount;
-            }
-
-            @Override
-            public @NonNull V next() {
-                if (hasNext()) {
-                    return getNext(vertex, index++);
-                } else {
-                    throw new NoSuchElementException();
-                }
-            }
-
-        }
-        return new AbstractSet<V>() {
-            @Override
-            public @NonNull Iterator<V> iterator() {
-                return new NextVertexIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getNextCount(vertex);
-            }
-        };
-    }
-
-    default @NonNull Arc<V, A> getNextArc(@NonNull V v, int index) {
-        return new Arc<>(v, getNext(v, index), getNextArrow(v, index));
+    default @NonNull Collection<V> getNextVertices(@NonNull V v) {
+        return new ListWrapper<>(() -> this.getNextCount(v), i -> getNext(v, i));
     }
 
     /**
-     * Returns the direct successor arrow datas of the specified vertex.
+     * Returns the arc data for the {@code i}-th next (outgoing)
+     * arrow from vertex {@code v}.
      *
-     * @param vertex a vertex
-     * @return a collection view on the direct successor arrows of vertex
+     * @param v a vertex
+     * @param i the index into the list of outgoing arrows
+     * @return the arc data
      */
-    default @NonNull Collection<A> getNextArrows(@NonNull V vertex) {
-        class NextArrowIterator implements Iterator<A> {
-
-            private int index;
-            private final @NonNull V vertex;
-            private final int nextCount;
-
-            public NextArrowIterator(@NonNull V vertex) {
-                this.vertex = vertex;
-                this.nextCount = getNextCount(vertex);
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < nextCount;
-            }
-
-            @Override
-            public @NonNull A next() {
-                return getNextArrow(vertex, index++);
-            }
-        }
-
-        return new AbstractCollection<A>() {
-            @Override
-            public @NonNull Iterator<A> iterator() {
-                return new NextArrowIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getNextCount(vertex);
-            }
-        };
+    default @NonNull Arc<V, A> getNextArc(@NonNull V v, int i) {
+        return new Arc<>(v, getNext(v, i), getNextArrow(v, i));
     }
 
     /**
-     * Returns the direct successor arcs of the specified vertex.
+     * Returns the list of next arrow data of vertex {@code v}.
      *
-     * @param vertex a vertex
-     * @return a collection view on the direct successor arcs of vertex
+     * @param v a vertex
+     * @return a collection view on the arrow data
      */
-    default @NonNull Collection<Arc<V, A>> getNextArcs(@NonNull V vertex) {
-        class NextArcIterator implements Iterator<Arc<V, A>> {
-
-            private int index;
-            private final @NonNull V vertex;
-            private final int nextCount;
-
-            public NextArcIterator(@NonNull V vertex) {
-                this.vertex = vertex;
-                this.nextCount = getNextCount(vertex);
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < nextCount;
-            }
-
-            @Override
-            public @NonNull Arc<V, A> next() {
-                return getNextArc(vertex, index++);
-            }
-        }
-
-        return new AbstractCollection<Arc<V, A>>() {
-            @Override
-            public @NonNull Iterator<Arc<V, A>> iterator() {
-                return new NextArcIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getNextCount(vertex);
-            }
-        };
+    default @NonNull Collection<A> getNextArrows(@NonNull V v) {
+        return new ListWrapper<>(() -> this.getNextCount(v), i -> getNextArrow(v, i));
     }
 
     /**
-     * Returns the number of vertices {@code V}.
+     * Returns the list of next arc data of vertex {@code v}.
+     *
+     * @param v a vertex
+     * @return a collection view on the arc data
+     */
+    default @NonNull Collection<Arc<V, A>> getNextArcs(@NonNull V v) {
+        return new ListWrapper<>(() -> this.getNextCount(v), i -> getNextArc(v, i));
+    }
+
+    /**
+     * Returns the number of vertices.
      *
      * @return vertex count
      */
@@ -241,14 +145,15 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
     }
 
     /**
-     * Returns true if b is a next vertex of a.
+     * Returns true if there is an arrow from vertex {@code v} to
+     * vertex {@code u}.
      *
-     * @param a a vertex
-     * @param b another vertex
-     * @return true if b is a next vertex of a.
+     * @param v a vertex
+     * @param u a vertex
+     * @return true if {@code u} is next of {@code v}
      */
-    default boolean isNext(@NonNull V a, @NonNull V b) {
-        return findIndexOfNext(a, b) != -1;
+    default boolean isNext(@NonNull V v, @NonNull V u) {
+        return findIndexOfNext(v, u) != -1;
     }
 
     /**

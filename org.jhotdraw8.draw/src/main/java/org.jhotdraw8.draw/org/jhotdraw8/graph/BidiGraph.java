@@ -5,11 +5,9 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ListWrapper;
 
-import java.util.AbstractCollection;
-import java.util.AbstractSet;
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Adds convenience methods to the API defined in {@link BareBidiGraph}.
@@ -21,147 +19,58 @@ import java.util.Iterator;
 public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A> {
 
     /**
-     * Returns the direct predecessor arrows of the specified vertex.
+     * Returns the list of previous (incoming) arrows of vertex {@code v}.
      *
-     * @param vertex a vertex
-     * @return a collection view on the direct predecessor arrows of vertex
+     * @param v a vertex
+     * @return a collection view on the previous arrows
      */
-    default @NonNull Collection<A> getPrevArrows(@NonNull V vertex) {
-        class PrevArrowIterator implements Iterator<A> {
-
-            private int index;
-            private final @NonNull V vertex;
-            private final int prevCount;
-
-            public PrevArrowIterator(@NonNull V vertex) {
-                this.vertex = vertex;
-                this.prevCount = getPrevCount(vertex);
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < prevCount;
-            }
-
-            @Override
-            public @NonNull A next() {
-                return getPrevArrow(vertex, index++);
-            }
-        }
-
-        return new AbstractCollection<A>() {
-            @Override
-            public @NonNull Iterator<A> iterator() {
-                return new PrevArrowIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getPrevCount(vertex);
-            }
-        };
+    default @NonNull Collection<A> getPrevArrows(@NonNull V v) {
+        return new ListWrapper<>(() -> this.getPrevCount(v), i -> getPrevArrow(v, i));
     }
 
     /**
-     * Returns the direct predecessor vertices of the specified vertex.
+     * Returns the list of next vertices of vertex {@code v}.
      *
-     * @param vertex a vertex
-     * @return a collection view on the direct predecessor vertices of vertex
+     * @param v a vertex
+     * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull Collection<V> getPrevVertices(@NonNull V vertex) {
-        class PrevVertexIterator implements Iterator<V> {
-
-            private int index;
-            private final @NonNull V vertex;
-            private final int prevCount;
-
-            public PrevVertexIterator(@NonNull V vertex) {
-                this.vertex = vertex;
-                this.prevCount = getPrevCount(vertex);
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < prevCount;
-            }
-
-            @Override
-            public @NonNull V next() {
-                return getPrev(vertex, index++);
-            }
-
-        }
-        return new AbstractSet<V>() {
-            @Override
-            public @NonNull Iterator<V> iterator() {
-                return new PrevVertexIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getPrevCount(vertex);
-            }
-        };
-    }
-
-    default @NonNull Arc<V, A> getPrevArc(@NonNull V v, int index) {
-        return new Arc<>(getPrev(v, index), v, getPrevArrow(v, index));
+    default @NonNull Collection<V> getPrevVertices(@NonNull V v) {
+        return new ListWrapper<>(() -> this.getPrevCount(v), i -> getPrev(v, i));
     }
 
     /**
-     * Returns the direct predecessor arcs of the specified vertex.
+     * Returns the arc data for the {@code i}-th previous (incoming)
+     * arrow from vertex {@code v}.
      *
-     * @param vertex a vertex
-     * @return a collection view on the direct predecessor arcs of vertex
+     * @param v a vertex
+     * @param i the index into the list of outgoing arrows
+     * @return the arc data
      */
-    default @NonNull Collection<Arc<V, A>> getPrevArcs(@NonNull V vertex) {
-        class PrevArcIterator implements Iterator<Arc<V, A>> {
-
-            private int index;
-            private final @NonNull V vertex;
-            private final int prevCount;
-
-            public PrevArcIterator(@NonNull V vertex) {
-                this.vertex = vertex;
-                this.prevCount = getPrevCount(vertex);
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < prevCount;
-            }
-
-            @Override
-            public @NonNull Arc<V, A> next() {
-                return getPrevArc(vertex, index++);
-            }
-        }
-
-        return new AbstractCollection<Arc<V, A>>() {
-            @Override
-            public @NonNull Iterator<Arc<V, A>> iterator() {
-                return new PrevArcIterator(vertex);
-            }
-
-            @Override
-            public int size() {
-                return getPrevCount(vertex);
-            }
-        };
+    default @NonNull Arc<V, A> getPrevArc(@NonNull V v, int i) {
+        return new Arc<>(getPrev(v, i), v, getPrevArrow(v, i));
     }
 
     /**
-     * Returns the index of vertex b in the list of previous vertices
-     * of vertex a.
+     * Returns the list of previous arc data of vertex {@code v}.
      *
-     * @param a a vertex
-     * @param b another vertex
-     * @return previouis index of vertex b. Returns a value {@literal < 0}
-     * if b is not a previous vertex of a.
+     * @param v a vertex
+     * @return a collection view on the arc data
      */
-    default int findIndexOfPrev(final V a, final @NonNull V b) {
-        for (int i = 0, n = getPrevCount(a); i < n; i++) {
-            if (b.equals(getPrev(a, i))) {
+    default @NonNull Collection<Arc<V, A>> getPrevArcs(@NonNull V v) {
+        return new ListWrapper<>(() -> this.getPrevCount(v), i -> getPrevArc(v, i));
+    }
+
+    /**
+     * Returns the index of vertex {@code u} in the list of previous vertices
+     * of {@code v} if an arrow from {@code u} to {@code v} exists.
+     *
+     * @param v a vertex
+     * @param u a vertex
+     * @return index of vertex {@code u} or a value {@literal < 0}
+     */
+    default int findIndexOfPrev(final V v, final @NonNull V u) {
+        for (int i = 0, n = getPrevCount(v); i < n; i++) {
+            if (u.equals(getPrev(v, i))) {
                 return i;
             }
         }
@@ -169,14 +78,15 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
     }
 
     /**
-     * Returns true if b is a previous vertex of a.
+     * Returns whether there is an arrow from vertex {@code u}
+     * to vertex {@code v}.
      *
-     * @param a a vertex
-     * @param b another vertex
-     * @return true if b is a previous vertex of a.
+     * @param v a vertex
+     * @param u a vertex
+     * @return true if {@code u} is previous of {@code v}
      */
-    default boolean isPrev(final V a, final @NonNull V b) {
-        return findIndexOfPrev(a, b) >= 0;
+    default boolean isPrev(final V v, final @NonNull V u) {
+        return findIndexOfPrev(v, u) >= 0;
     }
 
 }

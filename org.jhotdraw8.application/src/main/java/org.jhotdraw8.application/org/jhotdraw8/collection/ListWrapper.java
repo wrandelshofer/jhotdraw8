@@ -8,39 +8,37 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractList;
 import java.util.List;
+import java.util.function.IntFunction;
+import java.util.function.IntSupplier;
 
 /**
- * Wraps a {@link ReadOnlyList} in the {@link List} API.
+ * Wraps a list in the {@link List} API.
  * <p>
- * The underlying {@link ReadOnlyList} is referenced - not copied. This allows to pass a
- * {@link ReadOnlyList} to a client who does not understand the {@link ReadOnlyList} API.
+ * The underlying list is referenced - not copied.
  *
  * @author Werner Randelshofer
  */
 public class ListWrapper<E> extends AbstractList<E> {
-    private final ReadOnlyList<E> backingList;
+    private final @NonNull IntSupplier sizeFunction;
+    private final @NonNull IntFunction<E> getFunction;
 
-    public ListWrapper(ReadOnlyList<E> backingList) {
-        this.backingList = backingList;
+    public ListWrapper(@NonNull ReadOnlyList<E> backingList) {
+        this.sizeFunction = backingList::size;
+        this.getFunction = backingList::get;
+    }
+
+    public ListWrapper(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction) {
+        this.sizeFunction = sizeFunction;
+        this.getFunction = getFunction;
     }
 
     @Override
     public E get(int index) {
-        return backingList.get(index);
+        return getFunction.apply(index);
     }
 
     @Override
     public int size() {
-        return backingList.size();
-    }
-
-    @Override
-    public @NonNull Object[] toArray() {
-        return backingList.toArray();
-    }
-
-    @Override
-    public @NonNull <T> T[] toArray(@NonNull T[] a) {
-        return backingList.toArray(a);
+        return sizeFunction.getAsInt();
     }
 }

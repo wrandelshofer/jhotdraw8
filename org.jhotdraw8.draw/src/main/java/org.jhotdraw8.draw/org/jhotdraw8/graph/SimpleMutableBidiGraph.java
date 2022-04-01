@@ -2,7 +2,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractEnumerator;
 import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.ListHelper;
 
@@ -356,7 +356,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
         private Enumerator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8
-            return new AbstractEnumeratorSpliterator<Node<V, A>>(size, 0) {
+            return new AbstractEnumerator<Node<V, A>>(size, 0) {
                 int index = 0;
 
                 @Override
@@ -372,7 +372,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
         private Enumerator<A> arrowEnumerator() {
             // We must use explicit type arguments in Java 8
-            return new AbstractEnumeratorSpliterator<A>(size, 0) {
+            return new AbstractEnumerator<A>(size, 0) {
                 int index = 0;
 
                 @Override

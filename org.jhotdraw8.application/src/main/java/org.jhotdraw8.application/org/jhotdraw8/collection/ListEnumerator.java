@@ -15,16 +15,16 @@ import java.util.Spliterator;
  *
  * @param <T> the element type of the list
  */
-public class ListEnumeratorSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
+public class ListEnumerator<T> extends AbstractEnumerator<T> {
     private int index;
     private int endIndex;
     private final List<T> list;
 
-    public ListEnumeratorSpliterator(List<T> list) {
+    public ListEnumerator(List<T> list) {
         this(list, 0, list.size());
     }
 
-    public ListEnumeratorSpliterator(List<T> list, int startIndex, int endIndex) {
+    public ListEnumerator(List<T> list, int startIndex, int endIndex) {
         super(endIndex - startIndex, Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
         index = startIndex;
         this.endIndex = endIndex;
@@ -44,6 +44,6 @@ public class ListEnumeratorSpliterator<T> extends AbstractEnumeratorSpliterator<
     public Spliterator<T> trySplit() {
         int hi = endIndex, lo = index, mid = (lo + hi) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new ListEnumeratorSpliterator<>(list, lo, index = mid);
+                new ListEnumerator<>(list, lo, index = mid);
     }
 }

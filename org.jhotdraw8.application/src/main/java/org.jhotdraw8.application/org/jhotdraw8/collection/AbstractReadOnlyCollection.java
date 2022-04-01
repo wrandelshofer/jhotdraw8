@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollection<E> {
     public AbstractReadOnlyCollection() {
@@ -38,5 +39,14 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
             }
             sb.append(',').append(' ');
         }
+    }
+
+    public boolean contains(Object o) {
+        for (E e : this) {
+            if (Objects.equals(o, e)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -5,11 +5,14 @@
 
 package org.jhotdraw8.collection;
 
-public class SingletonEnumerator<T> implements Enumerator<T> {
+import java.util.Spliterators;
+
+public class SingletonEnumerator<T> extends Spliterators.AbstractSpliterator<T> implements Enumerator<T> {
     private final T current;
     private boolean canMove = true;
 
     public SingletonEnumerator(T singleton) {
+        super(1L, 0);
         current = singleton;
     }
 
@@ -23,5 +26,10 @@ public class SingletonEnumerator<T> implements Enumerator<T> {
     @Override
     public T current() {
         return current;
+    }
+
+    @Override
+    public long estimateSize() {
+        return canMove ? 1L : 0L;
     }
 }

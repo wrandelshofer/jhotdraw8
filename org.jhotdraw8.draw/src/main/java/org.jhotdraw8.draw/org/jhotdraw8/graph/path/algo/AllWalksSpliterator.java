@@ -1,7 +1,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractEnumerator;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.Arc;
@@ -41,7 +41,7 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  * @param <E> the element type of the path
  */
-public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
+public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumerator<OrderedPair<ImmutableList<E>, C>> {
     private final @NonNull Queue<ArcBackLinkWithCost<V, A, C>> queue = new ArrayDeque<>();
     private final @NonNull Predicate<V> goalPredicate;
     private final int maxDepth;

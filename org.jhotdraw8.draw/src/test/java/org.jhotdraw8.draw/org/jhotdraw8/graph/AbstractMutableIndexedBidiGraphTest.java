@@ -7,7 +7,13 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -20,11 +26,11 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     protected void assertEqualGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
         for (Integer v : expected.getVertices()) {
             List<Integer> actualNextList =
-                    StreamSupport.stream(actual.nextVerticesSpliterator(v), false).collect(Collectors.toList());
+                    StreamSupport.stream(actual.nextVerticesEnumerator(v), false).collect(Collectors.toList());
             assertEquals(new ArrayList<>(expected.getNextVertices(v)), actualNextList);
 
             List<Integer> actualPrevList =
-                    StreamSupport.stream(actual.prevVerticesSpliterator(v), false).collect(Collectors.toList());
+                    StreamSupport.stream(actual.prevVerticesEnumerator(v), false).collect(Collectors.toList());
             assertEquals(new ArrayList<>(expected.getPrevVertices(v)), actualPrevList);
         }
     }
@@ -32,11 +38,11 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
         for (Integer v : expected.getVertices()) {
             Set<Integer> actualNextList =
-                    StreamSupport.stream(actual.nextVerticesSpliterator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
+                    StreamSupport.stream(actual.nextVerticesEnumerator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
             assertEquals(new LinkedHashSet<>(expected.getNextVertices(v)), actualNextList);
 
             Set<Integer> actualPrevList =
-                    StreamSupport.stream(actual.prevVerticesSpliterator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
+                    StreamSupport.stream(actual.prevVerticesEnumerator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
             assertEquals(new LinkedHashSet<>(expected.getPrevVertices(v)), actualPrevList);
         }
     }

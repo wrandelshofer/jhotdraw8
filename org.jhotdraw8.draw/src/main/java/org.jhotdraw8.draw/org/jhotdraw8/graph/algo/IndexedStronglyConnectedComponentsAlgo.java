@@ -11,7 +11,11 @@ import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.collection.IntRangeEnumerator;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
 import java.util.function.Function;
 
 import static java.lang.Math.min;
@@ -33,7 +37,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
 
     public @NonNull List<IntArrayList> findStronglyConnectedComponents(
             final @NonNull IndexedDirectedGraph graph) {
-        return findStronglyConnectedComponents(graph.getVertexCount(), graph::nextVerticesSpliterator);
+        return findStronglyConnectedComponents(graph.getVertexCount(), graph::nextVerticesEnumerator);
     }
 
 

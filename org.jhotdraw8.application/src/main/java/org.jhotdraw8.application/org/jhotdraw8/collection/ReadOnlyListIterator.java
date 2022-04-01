@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * @param <E> the element type of the list
  */
 public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
-        Spliterator<E>, Enumerator<E>, Consumer<E> {
+        Enumerator<E>, Consumer<E> {
     private final ReadOnlyList<E> list;
     private int index;
     private final int size;
@@ -79,7 +79,7 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
 
     @Override
     public void forEachRemaining(Consumer<? super E> action) {
-        Spliterator.super.forEachRemaining(action);
+        Enumerator.super.forEachRemaining(action);
     }
 
     @Override

@@ -7,14 +7,14 @@ import org.jhotdraw8.annotation.Nullable;
  *
  * @author Werner Randelshofer
  */
-public class LongIntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class LongIntArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;
     private final long[] arrows;
     private int index;
     private final int shift;
     private final long mask;
 
-    public LongIntArrayEnumeratorSpliterator(int lo, int hi, long[] arrows, int shift, long mask) {
+    public LongIntArrayEnumerator(int lo, int hi, long[] arrows, int shift, long mask) {
         super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = hi;
         index = lo;
@@ -36,10 +36,10 @@ public class LongIntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpli
         return false;
     }
 
-    public @Nullable LongIntArrayEnumeratorSpliterator trySplit() {
+    public @Nullable LongIntArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new LongIntArrayEnumeratorSpliterator(lo, index = mid, arrows, shift, mask);
+                new LongIntArrayEnumerator(lo, index = mid, arrows, shift, mask);
     }
 
 }

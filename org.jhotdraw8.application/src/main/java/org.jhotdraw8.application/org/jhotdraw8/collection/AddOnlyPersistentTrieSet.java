@@ -30,7 +30,6 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
     private static final int BIT_PARTITION_SIZE = 5;
     private static final int BIT_PARTITION_MASK = 0b11111;
 
-    private static final @NonNull AddOnlyPersistentTrieSet<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0);
 
     public AddOnlyPersistentTrieSet() {
     }
@@ -76,7 +75,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
     @SuppressWarnings("unchecked")
     public static <K> @NonNull AddOnlyPersistentTrieSet<K> of() {
-        return (AddOnlyPersistentTrieSet<K>) AddOnlyPersistentTrieSet.EMPTY_NODE;
+        return (AddOnlyPersistentTrieSet<K>) BitmapIndexedNode.EMPTY_NODE;
     }
 
     public static <K> @NonNull AddOnlyPersistentTrieSet<K> of(@NonNull K key0) {
@@ -96,6 +95,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
         final @NonNull Object[] nodes;
         private final int nodeMap;
         private final int dataMap;
+        private static final @NonNull AddOnlyPersistentTrieSet<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0);
 
         BitmapIndexedNode(final int nodeMap,
                           final int dataMap, final @NonNull Object... nodes) {

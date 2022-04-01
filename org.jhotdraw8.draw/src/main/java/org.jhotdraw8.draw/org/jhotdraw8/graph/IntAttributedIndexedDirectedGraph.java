@@ -8,11 +8,11 @@ public interface IntAttributedIndexedDirectedGraph extends IndexedDirectedGraph 
     /**
      * Returns the specified successor (next) arrow data of the specified vertex.
      *
-     * @param v     a vertex
-     * @param index index of next vertex
+     * @param v a vertex
+     * @param i index of next vertex
      * @return the arrow data
      */
-    int getNextArrowAsInt(int v, int index);
+    int getNextArrowAsInt(int v, int i);
 
     /**
      * Returns the data of the specified vertex.

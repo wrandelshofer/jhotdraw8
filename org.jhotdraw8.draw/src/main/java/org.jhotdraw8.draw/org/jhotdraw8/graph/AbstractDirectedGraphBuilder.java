@@ -6,8 +6,8 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractIntEnumerator;
+import org.jhotdraw8.collection.IntEnumerator;
 
 import java.util.Arrays;
 
@@ -376,8 +376,8 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
     }
 
     @Override
-    public int getNextAsInt(int v, int index) {
-        int arrowId = getNextArrowIndex(v, index);
+    public int getNextAsInt(int v, int i) {
+        int arrowId = getNextArrowIndex(v, i);
         return arrowHead_getVertex(nextArrowHeads, arrowId);
     }
 
@@ -410,7 +410,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         this.ordered = ordered;
     }
 
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
+    public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
         if (ordered) {
             return getNextVerticesOrdered(v);
         } else {
@@ -418,8 +418,8 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         }
     }
 
-    public @NonNull IntEnumeratorSpliterator getNextVerticesUnordered(int vidx) {
-        class MySpliterator extends AbstractIntEnumeratorSpliterator {
+    public @NonNull IntEnumerator getNextVerticesUnordered(int vidx) {
+        class MySpliterator extends AbstractIntEnumerator {
             private int arrowPtr;
 
             public MySpliterator(int vidx, int lo, int hi) {
@@ -443,8 +443,8 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         return new MySpliterator(vidx, 0, getNextCount(vidx));
     }
 
-    public @NonNull IntEnumeratorSpliterator getNextVerticesOrdered(int vidx) {
-        class MySpliterator extends AbstractIntEnumeratorSpliterator {
+    public @NonNull IntEnumerator getNextVerticesOrdered(int vidx) {
+        class MySpliterator extends AbstractIntEnumerator {
             private int index;
             private final int limit;
             private final int vidx;

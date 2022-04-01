@@ -5,9 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumerator;
+import org.jhotdraw8.collection.IntRangeEnumerator;
 
 /**
  * This interface provides read access to a directed graph {@code G = (int, A) }.
@@ -25,15 +24,23 @@ import org.jhotdraw8.collection.IntEnumeratorSpliterator;
 public interface IndexedBidiGraph extends IndexedDirectedGraph {
 
     /**
-     * Returns the i-th direct predecessor vertex of v.
+     * Returns the {@code i}-th previous vertex of {@code v}.
      *
      * @param v index of vertex v
-     * @param i index of next vertex
-     * @return the i-th next vertex of v
+     * @param i index of ingoing arrow
+     * @return the vertex index of the ingoing arrow
      */
     int getPrevAsInt(int v, int i);
 
-    int getPrevArrowAsInt(int v, int index);
+    /**
+     * Returns the arrow data of the {@code i}-th ingoing arrow
+     * to {@code v}.
+     *
+     * @param v index of vertex v
+     * @param i index of ingoing arrow
+     * @return the arrow data of the ingoing arrow
+     */
+    int getPrevArrowAsInt(int v, int i);
 
     /**
      * Returns the number of direct predecessor vertices of v.
@@ -49,36 +56,8 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
      * @param v index of vertex v
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull IntEnumeratorSpliterator prevVerticesSpliterator(int v) {
-        class MySpliterator extends AbstractIntEnumeratorSpliterator {
-            private int index;
-            private final int limit;
-            private final int vidx;
-
-            public MySpliterator(int vidx, int lo, int hi) {
-                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
-                limit = hi;
-                index = lo;
-                this.vidx = vidx;
-            }
-
-            @Override
-            public boolean moveNext() {
-                if (index < limit) {
-                    current = getPrevAsInt(vidx, index++);
-                    return true;
-                }
-                return false;
-            }
-
-            public @Nullable MySpliterator trySplit() {
-                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
-                return (lo >= mid) ? null : // divide range in half unless too small
-                        new MySpliterator(vidx, lo, index = mid);
-            }
-
-        }
-        return new MySpliterator(v, 0, getPrevCount(v));
+    default @NonNull IntEnumerator prevVerticesEnumerator(int v) {
+        return new IntRangeEnumerator(i -> getPrevAsInt(v, i), 0, getPrevCount(v));
     }
 
 
@@ -100,4 +79,16 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
         }
         return -1;
     }
+
+    /**
+     * Returns whether there is an arrow from vertex {@code u} to vertex {@code v}.
+     *
+     * @param v a vertex
+     * @param u a vertex
+     * @return true if there is an arrow from {@code u} to {@code v}
+     */
+    default boolean isPrevAsInt(int v, int u) {
+        return findIndexOfNextAsInt(v, u) >= 0;
+    }
+
 }

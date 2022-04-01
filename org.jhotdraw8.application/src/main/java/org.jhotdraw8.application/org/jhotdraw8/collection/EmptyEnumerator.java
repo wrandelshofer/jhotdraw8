@@ -1,5 +1,7 @@
 package org.jhotdraw8.collection;
 
+import java.util.Spliterator;
+
 public class EmptyEnumerator<E> implements Enumerator<E> {
     private static EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
 
@@ -20,5 +22,20 @@ public class EmptyEnumerator<E> implements Enumerator<E> {
     @Override
     public E current() {
         return null;
+    }
+
+    @Override
+    public Spliterator<E> trySplit() {
+        return null;
+    }
+
+    @Override
+    public long estimateSize() {
+        return 0;
+    }
+
+    @Override
+    public int characteristics() {
+        return 0;
     }
 }

@@ -5,9 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumerator;
+import org.jhotdraw8.collection.IntRangeEnumerator;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
@@ -39,15 +38,22 @@ public interface IndexedDirectedGraph {
     int getArrowCount();
 
     /**
-     * Returns the k-th next vertex of v.
+     * Returns the {@code i}-th next vertex of {@code v}.
      *
-     * @param v     a vertex index
-     * @param index the index of the desired next vertex, {@code k ∈ {0, ..., getNextCount(v) -1 }}.
-     * @return the index of the k-th next vertex of v.
+     * @param v a vertex index
+     * @param i the index of the desired next vertex, {@code i ∈ {0, ..., getNextCount(v) -1 }}.
+     * @return the vertex index of the i-th next vertex of v.
      */
-    int getNextAsInt(int v, int index);
+    int getNextAsInt(int v, int i);
 
-    int getNextArrowAsInt(int v, int index);
+    /**
+     * Returns the {@code i}-th next arrow of {@code v}.
+     *
+     * @param v a vertex index
+     * @param i the index of the desired arrow, {@code i ∈ {0, ..., getNextCount(v) -1 }}.
+     * @return the arrow data of the i-th next vertex of v.
+     */
+    int getNextArrowAsInt(int v, int i);
 
 
     /**
@@ -89,7 +95,7 @@ public interface IndexedDirectedGraph {
      * @param u another vertex
      * @return true if there is an arrow from {@code u} to {@code v}
      */
-    default boolean isNext(int v, int u) {
+    default boolean isNextAsInt(int v, int u) {
         return findIndexOfNextAsInt(v, u) >= 0;
     }
 
@@ -99,35 +105,7 @@ public interface IndexedDirectedGraph {
      * @param v a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
-        class MySpliterator extends AbstractIntEnumeratorSpliterator {
-            private int index;
-            private final int limit;
-            private final int vidx;
-
-            public MySpliterator(int vidx, int lo, int hi) {
-                super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
-                limit = hi;
-                index = lo;
-                this.vidx = vidx;
-            }
-
-            @Override
-            public boolean moveNext() {
-                if (index < limit) {
-                    current = getNextAsInt(vidx, index++);
-                    return true;
-                }
-                return false;
-            }
-
-            public @Nullable MySpliterator trySplit() {
-                int hi = limit, lo = index, mid = (lo + hi) >>> 1;
-                return (lo >= mid) ? null : // divide range in half unless too small
-                        new MySpliterator(vidx, lo, index = mid);
-            }
-
-        }
-        return new MySpliterator(v, 0, getNextCount(v));
+    default @NonNull IntEnumerator nextVerticesEnumerator(int v) {
+        return new IntRangeEnumerator(i -> getNextAsInt(v, i), 0, getNextCount(v));
     }
 }

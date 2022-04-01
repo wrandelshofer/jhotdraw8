@@ -4,19 +4,30 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-
+import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.LongConsumer;
 
 /**
- * AbstractLongEnumeratorSpliterator.
+ * Base classes for {@link Enumerator}s that also want to fulfill the
+ * {@link Spliterator} interface.
+ * <p>
+ * Subclasses should only implement the {@link Enumerator#moveNext()}
+ * method and the {@link Spliterator#trySplit()} method:
+ * <pre>
+ *     public boolean moveNext() {
+ *         if (...end not reached...) {
+ *             current = ...;
+ *             return true;
+ *         }
+ *         return false;
+ *     }
+ * </pre>
  *
- * @author Werner Randelshofer
+ * @param <E>
  */
-public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.AbstractLongSpliterator
-        implements LongEnumeratorSpliterator {
-    protected long current;
+public abstract class AbstractEnumerator<E> extends Spliterators.AbstractSpliterator<E>
+        implements Enumerator<E> {
+    protected E current;
 
     /**
      * Creates a spliterator reporting the given estimated size and
@@ -28,27 +39,13 @@ public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.Abs
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractLongEnumeratorSpliterator(long est, int additionalCharacteristics) {
+    protected AbstractEnumerator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 
-    @Override
-    public final boolean tryAdvance(@NonNull LongConsumer action) {
-        if (moveNext()) {
-            action.accept(current);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     @Override
-    public final long currentAsLong() {
-        return current;
-    }
-
-    @Override
-    public final @NonNull Long current() {
+    public final E current() {
         return current;
     }
 }

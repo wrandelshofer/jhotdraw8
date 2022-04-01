@@ -5,6 +5,9 @@
 package org.jhotdraw8.collection;
 
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 /**
  * An object for enumerating elements of a collection.
@@ -15,34 +18,26 @@ import java.util.Iterator;
  *
  * @author Werner Randelshofer
  */
-public interface IntEnumerator extends Enumerator<Integer> {
-    /**
-     * Advances the enumerator to the next element of the collection.
-     *
-     * @return true if the enumerator was successfully advanced to the next element;
-     * false if the enumerator has passed the end of the collection.
-     */
-    boolean moveNext();
+public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
 
     /**
-     * Gets the element in the collection at the current position of the enumerator.
-     * <p>
-     * Current is undefined under any of the following conditions:
-     * <ul>
-     * <li>The enumerator is positioned before the first element in the collection.
-     * Immediately after the enumerator is created {@link #moveNext} must be called to advance
-     * the enumerator to the first element of the collection before reading the value of Current.</li>
-     *
-     * <li>The last call to {@link #moveNext} returned false, which indicates the end
-     * of the collection.</li>
-     *
-     * <li>The enumerator is invalidated due to changes made in the collection,
-     * such as adding, modifying, or deleting elements.</li>
-     * </ul>
-     * Current returns the same object until MoveNext is called.MoveNext
-     * sets Current to the next element.
-     *
      * @return current
+     * @see Enumerator#current()
      */
     int currentAsInt();
+
+    @Override
+    default boolean tryAdvance(IntConsumer action) {
+        if (moveNext()) {
+            action.accept(currentAsInt());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    default boolean tryAdvance(Consumer<? super Integer> action) {
+        return Enumerator.super.tryAdvance(action);
+    }
+
 }

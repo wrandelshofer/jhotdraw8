@@ -5,13 +5,13 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.AbstractLongEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractIntEnumerator;
+import org.jhotdraw8.collection.AbstractLongEnumerator;
 import org.jhotdraw8.collection.DenseIntSet8Bit;
 import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.LongEnumerator;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 
@@ -151,7 +151,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx) {
+    public @NonNull LongEnumerator backwardBreadthFirstLongSpliterator(final int vidx) {
         return backwardBreadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
     }
 
@@ -164,7 +164,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator backwardBreadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
+    public @NonNull LongEnumerator backwardBreadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
         return new BreadthFirstLongSpliterator(vidx, prevChunks, visited);
     }
 
@@ -176,7 +176,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator backwardDepthFirstLongSpliterator(final int vidx) {
+    public @NonNull LongEnumerator backwardDepthFirstLongSpliterator(final int vidx) {
         return backwardDepthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
     }
 
@@ -189,7 +189,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator backwardDepthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
+    public @NonNull LongEnumerator backwardDepthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
         return new DepthFirstLongSpliterator(vidx, prevChunks, visited);
     }
 
@@ -201,7 +201,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx) {
+    public @NonNull IntEnumerator breadthFirstIntSpliterator(final int vidx) {
         return breadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
     }
 
@@ -214,7 +214,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull IntEnumeratorSpliterator breadthFirstIntSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
+    public @NonNull IntEnumerator breadthFirstIntSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
         return new BreadthFirstIntSpliterator(vidx, nextChunks, visited);
     }
 
@@ -226,7 +226,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx) {
+    public @NonNull LongEnumerator breadthFirstLongSpliterator(final int vidx) {
         return breadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
     }
 
@@ -239,7 +239,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator breadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
+    public @NonNull LongEnumerator breadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
         return new BreadthFirstLongSpliterator(vidx, nextChunks, visited);
     }
 
@@ -258,7 +258,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator depthFirstLongSpliterator(final int vidx) {
+    public @NonNull LongEnumerator depthFirstLongSpliterator(final int vidx) {
         return depthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
     }
 
@@ -271,7 +271,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator depthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
+    public @NonNull LongEnumerator depthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
         return new DepthFirstLongSpliterator(vidx, nextChunks, visited);
     }
 
@@ -293,13 +293,13 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     @Override
-    public int getNextArrowAsInt(final int v, final int k) {
-        return getNextChunk(v).getArrow(v, k);
+    public int getNextArrowAsInt(final int v, final int i) {
+        return getNextChunk(v).getArrow(v, i);
     }
 
     @Override
-    public int getNextAsInt(final int v, final int index) {
-        return getNextChunk(v).getSibling(v, index);
+    public int getNextAsInt(final int v, final int i) {
+        return getNextChunk(v).getSibling(v, i);
     }
 
     private GraphChunk getNextChunk(final int v) {
@@ -321,8 +321,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     @Override
-    public int getPrevArrowAsInt(final int v, final int k) {
-        return getPrevChunk(v).getArrow(v, k);
+    public int getPrevArrowAsInt(final int v, final int i) {
+        return getPrevChunk(v).getArrow(v, i);
     }
 
     @Override
@@ -417,7 +417,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         getPrevChunk(v).setVertexData(v, data);
     }
 
-    private class BreadthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
+    private class BreadthFirstLongSpliterator extends AbstractLongEnumerator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
@@ -453,7 +453,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         }
     }
 
-    private class DepthFirstLongSpliterator extends AbstractLongEnumeratorSpliterator {
+    private class DepthFirstLongSpliterator extends AbstractLongEnumerator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
@@ -490,7 +490,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         }
     }
 
-    private class BreadthFirstIntSpliterator extends AbstractIntEnumeratorSpliterator {
+    private class BreadthFirstIntSpliterator extends AbstractIntEnumerator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();

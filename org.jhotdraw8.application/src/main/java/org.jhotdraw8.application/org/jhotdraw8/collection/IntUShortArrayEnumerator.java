@@ -3,14 +3,14 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * An integer enumerator/spliterator over a char array.
+ * An integer enumerator/spliterator over an unsigned short array.
  */
-public class IntCharArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class IntUShortArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;
-    private final char[] arrows;
+    private final short[] arrows;
     private int index;
 
-    public IntCharArrayEnumeratorSpliterator(int lo, int hi, char[] arrows) {
+    public IntUShortArrayEnumerator(int lo, int hi, short[] arrows) {
         super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = hi;
         index = lo;
@@ -20,16 +20,16 @@ public class IntCharArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpli
     @Override
     public boolean moveNext() {
         if (index < limit) {
-            current = arrows[index++];
+            current = arrows[index++] & 0xffff;
             return true;
         }
         return false;
     }
 
-    public @Nullable IntCharArrayEnumeratorSpliterator trySplit() {
+    public @Nullable IntUShortArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new IntCharArrayEnumeratorSpliterator(lo, index = mid, arrows);
+                new IntUShortArrayEnumerator(lo, index = mid, arrows);
     }
 
 }

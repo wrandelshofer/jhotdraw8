@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntUShortArrayEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntEnumerator;
+import org.jhotdraw8.collection.IntUShortArrayEnumerator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -231,16 +231,16 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public int getNextAsInt(int v, int index) {
-        if (index < 0 || index >= getNextCount(v)) {
-            throw new IllegalArgumentException("i(" + index + ") < 0 || i >= " + getNextCount(v));
+    public int getNextAsInt(int v, int i) {
+        if (i < 0 || i >= getNextCount(v)) {
+            throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(v));
         }
-        return next[nextOffset[v] + index] & 0xffff;
+        return next[nextOffset[v] + i] & 0xffff;
     }
 
     @Override
-    public int getNextArrowAsInt(int v, int index) {
-        return getNextAsInt(v, index) & 0xffff;
+    public int getNextArrowAsInt(int v, int i) {
+        return getNextAsInt(v, i) & 0xffff;
     }
 
     @Override
@@ -278,9 +278,9 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
+    public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
-        return new IntUShortArrayEnumeratorSpliterator(offset, nextOffset, this.next);
+        return new IntUShortArrayEnumerator(offset, nextOffset, this.next);
     }
 }

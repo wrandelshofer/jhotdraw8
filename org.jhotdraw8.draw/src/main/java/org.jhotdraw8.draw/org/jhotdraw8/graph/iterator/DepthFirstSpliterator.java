@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.collection.AbstractEnumerator;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -21,7 +21,7 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class DepthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
+public class DepthFirstSpliterator<V> extends AbstractEnumerator<V> {
 
     private final @NonNull Function<V, Iterable<V>> nextFunction;
     private final @NonNull Deque<V> deque;

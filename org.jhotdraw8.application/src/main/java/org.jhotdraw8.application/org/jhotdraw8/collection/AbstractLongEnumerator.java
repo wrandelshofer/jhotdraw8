@@ -7,16 +7,15 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Spliterators;
-import java.util.function.IntConsumer;
 
 /**
- * AbstractIntEnumeratorSpliterator.
+ * AbstractLongEnumerator.
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractIntEnumeratorSpliterator extends Spliterators.AbstractIntSpliterator
-        implements IntEnumeratorSpliterator {
-    protected int current;
+public abstract class AbstractLongEnumerator extends Spliterators.AbstractLongSpliterator
+        implements LongEnumerator {
+    protected long current;
 
     /**
      * Creates a spliterator reporting the given estimated size and
@@ -28,27 +27,17 @@ public abstract class AbstractIntEnumeratorSpliterator extends Spliterators.Abst
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractIntEnumeratorSpliterator(long est, int additionalCharacteristics) {
+    protected AbstractLongEnumerator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 
     @Override
-    public final boolean tryAdvance(@NonNull IntConsumer action) {
-        if (moveNext()) {
-            action.accept(current);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public final int currentAsInt() {
+    public final long currentAsLong() {
         return current;
     }
 
     @Override
-    public final @NonNull Integer current() {
+    public final @NonNull Long current() {
         return current;
     }
 }

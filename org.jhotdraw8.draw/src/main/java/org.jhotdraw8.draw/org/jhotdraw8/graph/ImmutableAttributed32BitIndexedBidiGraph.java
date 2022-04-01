@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.IntIntArrayEnumeratorSpliterator;
+import org.jhotdraw8.collection.IntArrayEnumerator;
+import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.Collections;
@@ -254,14 +254,14 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getNextAsInt(int v, int index) {
-        Preconditions.checkIndex(index, getNextCount(v));
-        return next[nextOffset[v] + index];
+    public int getNextAsInt(int v, int i) {
+        Preconditions.checkIndex(i, getNextCount(v));
+        return next[nextOffset[v] + i];
     }
 
     @Override
-    public int getNextArrowAsInt(int v, int index) {
-        return getNextAsInt(v, index);
+    public int getNextArrowAsInt(int v, int i) {
+        return getNextAsInt(v, i);
     }
 
     @Override
@@ -299,8 +299,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getPrevArrowAsInt(int v, int index) {
-        return getPrevAsInt(v, index);
+    public int getPrevArrowAsInt(int v, int i) {
+        return getPrevAsInt(v, i);
     }
 
     @Override
@@ -338,9 +338,9 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator nextVerticesSpliterator(int v) {
+    public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
-        return new IntIntArrayEnumeratorSpliterator(offset, nextOffset, this.next);
+        return new IntArrayEnumerator(offset, nextOffset, this.next);
     }
 }

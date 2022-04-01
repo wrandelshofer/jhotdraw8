@@ -97,15 +97,15 @@ abstract class AbstractMutableDirectedGraphTest {
 
         if (g instanceof IndexedDirectedGraph) {
             IndexedDirectedGraph ig = (IndexedDirectedGraph) g;
-            actualVertices = StreamSupport.intStream(ig.nextVerticesSpliterator(0), false).boxed().collect(Collectors.toSet());
+            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(0), false).boxed().collect(Collectors.toSet());
             assertEquals(Set.of(1, 3), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesSpliterator(1), false).boxed().collect(Collectors.toSet());
+            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(1), false).boxed().collect(Collectors.toSet());
             assertEquals(Set.of(1, 2, 4), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesSpliterator(2), false).boxed().collect(Collectors.toSet());
+            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(2), false).boxed().collect(Collectors.toSet());
             assertEquals(Set.of(), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesSpliterator(3), false).boxed().collect(Collectors.toSet());
+            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(3), false).boxed().collect(Collectors.toSet());
             assertEquals(Set.of(), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesSpliterator(4), false).boxed().collect(Collectors.toSet());
+            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(4), false).boxed().collect(Collectors.toSet());
             assertEquals(Set.of(3), actualVertices);
         }
 
