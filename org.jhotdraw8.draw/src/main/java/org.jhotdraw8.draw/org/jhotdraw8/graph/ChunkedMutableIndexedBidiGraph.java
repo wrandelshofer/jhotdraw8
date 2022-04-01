@@ -7,7 +7,6 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.AbstractIntEnumerator;
 import org.jhotdraw8.collection.AbstractLongEnumerator;
-import org.jhotdraw8.collection.DenseIntSet8Bit;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.collection.ListHelper;
@@ -32,10 +31,27 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * Must be a power of 2.
      */
     private final int chunkSize;
+    /**
+     * Number of bits that we need to shift a vertex index to the right to get
+     * the chunk that contains it.
+     * This is log2(chunkSize).
+     */
     private final int chunkShift;
+    /**
+     * If a new chunk is created, then we reserve for each vertex this amount
+     * of space for arrows.
+     */
     private final int initialArityCapacity;
+    /**
+     * Number of vertices in the graph.
+     */
     int vertexCount = 0;
+
+    /**
+     * Number of arrows in the graph.
+     */
     int arrowCount = 0;
+
     /**
      * Array of chunks for arrows to next vertices.
      */
@@ -45,6 +61,9 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      */
     private @NonNull GraphChunk[] prevChunks = new GraphChunk[0];
 
+    /**
+     * Factory for creating new chunks.
+     */
     private @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayCsrGraphChunk::new;
 
     public ChunkedMutableIndexedBidiGraph() {
@@ -90,7 +109,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     /**
      * Adds the arrow if its absent, updates the arrow data if the arrow is
-     * present.
+     * present. Does nothing if there is already an arrow.
      *
      * @param v    index of vertex 'v'
      * @param u    index of vertex 'u'
@@ -144,105 +163,58 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     /**
-     * Returns a backward breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx the index of the vertex
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull LongEnumerator backwardBreadthFirstLongSpliterator(final int vidx) {
-        return backwardBreadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
-    }
-
-    /**
-     * Returns a backward breadth first spliterator that starts at the specified
-     * vertex.
+     * Searches for predecessor vertices of the specified vertex.
      *
      * @param vidx    the index of the vertex
+     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
      * @param visited the set of visited vertices
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
+     * @return the enumerator provides the vertex index
      */
-    public @NonNull LongEnumerator backwardBreadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
-        return new BreadthFirstLongSpliterator(vidx, prevChunks, visited);
+    public @NonNull IntEnumerator searchPrevVertices(final int vidx, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexEnumerator(vidx, prevChunks, dfs, visited);
     }
 
     /**
-     * Returns a backward breadth first spliterator that starts at the specified
-     * vertex.
+     * Searches for predecessor vertex data of the specified vertex.
      *
-     * @param vidx the index of the vertex
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull LongEnumerator backwardDepthFirstLongSpliterator(final int vidx) {
-        return backwardDepthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
-    }
-
-    /**
-     * Returns a backward breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx    the index of the vertex
+     * @param v       a vertex
+     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
      * @param visited the set of visited vertices
-     * @return the spliterator contains the vertex data in the 32 high-bits
+     * @return the enumerator provides the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumerator backwardDepthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
-        return new DepthFirstLongSpliterator(vidx, prevChunks, visited);
+    public @NonNull LongEnumerator searchPrevVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexDataEnumerator(v, prevChunks, dfs, visited);
     }
 
     /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
+     * Searches for successor vertices of the specified vertex.
      *
-     * @param vidx the index of the vertex
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull IntEnumerator breadthFirstIntSpliterator(final int vidx) {
-        return breadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
-    }
-
-    /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx    the index of the vertex
+     * @param v       a vertex
+     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
      * @param visited the set of visited vertices
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
+     * @return the enumerator provides the vertex index
      */
-    public @NonNull IntEnumerator breadthFirstIntSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
-        return new BreadthFirstIntSpliterator(vidx, nextChunks, visited);
+    public @NonNull IntEnumerator searchNextVertices(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexEnumerator(v, nextChunks, dfs, visited);
     }
 
     /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
+     * Searches for successor vertex data of the specified vertex.
      *
-     * @param vidx the index of the vertex
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull LongEnumerator breadthFirstLongSpliterator(final int vidx) {
-        return breadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
-    }
-
-    /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx    the index of the vertex
+     * @param v       a vertex
+     * @param dfs     whether depth-first-search should be used instead of breadth-first-search
      * @param visited the set of visited vertices
-     * @return the spliterator contains the vertex data in the 32 high-bits
+     * @return the enumerator provides the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumerator breadthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
-        return new BreadthFirstLongSpliterator(vidx, nextChunks, visited);
+    public @NonNull LongEnumerator searchNextVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexDataEnumerator(v, nextChunks, dfs, visited);
     }
 
+    /**
+     * Removes all vertices and arrows from the graph.
+     */
     public void clear() {
         Arrays.fill(nextChunks, null);
         Arrays.fill(prevChunks, null);
@@ -250,30 +222,6 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         vertexCount = 0;
     }
 
-    /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx the index of the vertex
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull LongEnumerator depthFirstLongSpliterator(final int vidx) {
-        return depthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount));
-    }
-
-    /**
-     * Returns a breadth first spliterator that starts at the specified
-     * vertex.
-     *
-     * @param vidx    the index of the vertex
-     * @param visited the set of visited vertices
-     * @return the spliterator contains the vertex data in the 32 high-bits
-     * and the vertex index in the 32 low-bits of the long.
-     */
-    public @NonNull LongEnumerator depthFirstLongSpliterator(final int vidx, final @NonNull AddToIntSet visited) {
-        return new DepthFirstLongSpliterator(vidx, nextChunks, visited);
-    }
 
     @Override
     public int findIndexOfNextAsInt(final int v, final int u) {
@@ -340,7 +288,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     @Override
-    public int getVertexAsInt(final int v) {
+    public int getVertexDataAsInt(final int v) {
         return getNextChunk(v).getVertexData(v);
     }
 
@@ -351,16 +299,13 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     private void grow(final int capacity) {
         final int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
-        final GraphChunk[] temp = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
-        if (temp.length < chunkedCapacity) {
-            throw new OutOfMemoryError("too much capacity requested:" + capacity);
-        }
-        nextChunks = temp;
+        nextChunks = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
         prevChunks = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
     }
 
     @Override
     public void removeAllNextAsInt(final int v) {
+        Preconditions.checkIndex(v, vertexCount);
         final GraphChunk chunk = getNextChunk(v);
         final int from = chunk.getSiblingsFromOffset(v);
         final int to = chunk.getSiblingCount(v) + from;
@@ -377,6 +322,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     @Override
     public void removeAllPrevAsInt(final int v) {
+        Preconditions.checkIndex(v, vertexCount);
         final GraphChunk chunk = getPrevChunk(v);
         final int from = chunk.getSiblingsFromOffset(v);
         int[] a = chunk.getSiblingsArray();
@@ -412,21 +358,24 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         throw new UnsupportedOperationException();
     }
 
-    public void setVertexAsInt(final int v, final int data) {
+    public void setVertexDataAsInt(final int v, final int data) {
+        Preconditions.checkIndex(v, vertexCount);
         getNextChunk(v).setVertexData(v, data);
         getPrevChunk(v).setVertexData(v, data);
     }
 
-    private class BreadthFirstLongSpliterator extends AbstractLongEnumerator {
+    private class SearchVertexDataEnumerator extends AbstractLongEnumerator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
+        private final boolean dfs;
 
-        protected BreadthFirstLongSpliterator(final int root, final GraphChunk[] chunks, final @NonNull AddToIntSet visited) {
+        protected SearchVertexDataEnumerator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
+            this.dfs = dfs;
             if (visited.addAsInt(root)) {
                 deque.addFirstAsInt(root);
             }
@@ -446,60 +395,26 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             for (int i = from; i < to; i++) {
                 final int u = a[i];
                 if (visited.addAsInt(u)) {
-                    deque.addLastAsInt(u);
+                    if (dfs) deque.addFirstAsInt(u);
+                    else deque.addLastAsInt(u);
                 }
             }
             return true;
         }
     }
 
-    private class DepthFirstLongSpliterator extends AbstractLongEnumerator {
+    private class SearchVertexEnumerator extends AbstractIntEnumerator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
+        private final boolean dfs;
 
-        protected DepthFirstLongSpliterator(final int root, final GraphChunk[] chunks, final @NonNull AddToIntSet visited) {
+        protected SearchVertexEnumerator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
-            if (visited.addAsInt(root)) {
-                deque.addFirstAsInt(root);
-            }
-        }
-
-        @Override
-        public boolean moveNext() {
-            if (deque.isEmpty()) {
-                return false;
-            }
-            final int v = deque.removeFirstAsInt();
-            final GraphChunk chunk = getOrCreateChunk(chunks, v);
-            current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
-            final int from = chunk.getSiblingsFromOffset(v);
-            final int to = chunk.getSiblingCount(v) + from;
-            int[] a = chunk.getSiblingsArray();
-
-            for (int i = from; i < to; i++) {
-                final int u = a[i];
-                if (visited.addAsInt(u)) {
-                    deque.addFirstAsInt(u);
-                }
-            }
-            return true;
-        }
-    }
-
-    private class BreadthFirstIntSpliterator extends AbstractIntEnumerator {
-
-        private final GraphChunk[] chunks;
-        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
-        private final @NonNull AddToIntSet visited;
-
-        protected BreadthFirstIntSpliterator(final int root, final GraphChunk[] chunks, final @NonNull AddToIntSet visited) {
-            super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
-            this.chunks = chunks;
-            this.visited = visited;
+            this.dfs = dfs;
             if (visited.addAsInt(root)) {
                 deque.addLastAsInt(root);
             }
@@ -520,7 +435,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             for (int i = from; i < to; i++) {
                 final int u = a[i];
                 if (visited.addAsInt(u)) {
-                    deque.addLastAsInt(u);
+                    if (dfs) deque.addFirstAsInt(u);
+                    else deque.addLastAsInt(u);
                 }
             }
             return true;

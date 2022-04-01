@@ -496,7 +496,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return prevArrow[v * maxArity + i];
     }
 
-    public int getVertexAsInt(final int vidx) {
+    public int getVertexDataAsInt(final int vidx) {
         return getVertexDataFromNextAsInt(vidx);
     }
 

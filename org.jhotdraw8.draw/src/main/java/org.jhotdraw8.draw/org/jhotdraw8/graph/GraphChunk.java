@@ -72,14 +72,14 @@ public interface GraphChunk {
     /**
      * Tries to add an arrow from vertex {@code v} to vertex {@code u}.
      *
-     * @param v            the index of vertex v
-     * @param u            the index of vertex u
-     * @param data         the arrow data
-     * @param setIfPresent when true, overwrites the arrow data if the arrow is
-     *                     already present
+     * @param v               the index of vertex v
+     * @param u               the index of vertex u
+     * @param data            the arrow data
+     * @param updateIfPresent when true, updates the arrow data if the arrow is
+     *                        already present
      * @return true, if the arrow is already present
      */
-    boolean tryAddArrow(final int v, final int u, final int data, final boolean setIfPresent);
+    boolean tryAddArrow(final int v, final int u, final int data, final boolean updateIfPresent);
 
     /**
      * Gets the index of the arrow vertex {@code v} to {@code u}.

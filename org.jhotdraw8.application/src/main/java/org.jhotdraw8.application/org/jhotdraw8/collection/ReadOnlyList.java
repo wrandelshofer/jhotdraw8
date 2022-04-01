@@ -195,7 +195,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
      */
-    default int indexOf(E o) {
+    default int indexOf(Object o) {
         for (int i = 0, n = size(); i < n; i++) {
             if (Objects.equals(get(i), o)) {
                 return i;
@@ -208,7 +208,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * Returns the index of the last occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
      */
-    default int lastIndexOf(E o) {
+    default int lastIndexOf(Object o) {
         for (int i = size() - 1; i >= 0; i--) {
             if (Objects.equals(get(i), o)) {
                 return i;

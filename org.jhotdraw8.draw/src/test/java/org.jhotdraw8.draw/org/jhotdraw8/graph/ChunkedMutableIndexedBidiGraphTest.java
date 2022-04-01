@@ -1,6 +1,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.DenseIntSet8Bit;
 import org.jhotdraw8.graph.iterator.BreadthFirstSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -96,12 +97,12 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
         for (Integer v : expected.getVertices()) {
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getNextVertices, v), false).collect(Collectors.toCollection(LinkedHashSet::new));
-                Set<Integer> actualBfs = StreamSupport.stream(a.breadthFirstLongSpliterator(v), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> actualBfs = StreamSupport.stream(a.searchNextVertexData(v, false, new DenseIntSet8Bit()), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getPrevVertices, v), false).collect(Collectors.toCollection(LinkedHashSet::new));
-                Set<Integer> actualBfs = StreamSupport.stream(a.backwardBreadthFirstLongSpliterator(v), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> actualBfs = StreamSupport.stream(a.searchPrevVertexData(v, false, new DenseIntSet8Bit()), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
         }

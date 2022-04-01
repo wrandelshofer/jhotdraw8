@@ -20,5 +20,5 @@ public interface IntAttributedIndexedDirectedGraph extends IndexedDirectedGraph 
      * @param vertex a vertex
      * @return the vertex data
      */
-    int getVertexAsInt(int vertex);
+    int getVertexDataAsInt(int vertex);
 }

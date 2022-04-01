@@ -33,13 +33,6 @@ public interface IntDeque extends Deque<Integer> {
      */
     void addLastAsInt(int e);
 
-    @Override
-    default boolean contains(Object o) {
-        if (o instanceof Integer) {
-            return firstIndexOfAsInt((int) o) != -1;
-        }
-        return false;
-    }
 
     @Override
     default Integer element() {
@@ -48,12 +41,6 @@ public interface IntDeque extends Deque<Integer> {
         }
         return getFirstAsInt();
     }
-
-    /**
-     * Returns the first index of the specified element
-     * or -1 if this deque does not contain the element.
-     */
-    int firstIndexOfAsInt(int o);
 
     @Override
     default Integer getFirst() {
@@ -74,12 +61,6 @@ public interface IntDeque extends Deque<Integer> {
      * @see Deque#getLast()
      */
     int getLastAsInt();
-
-    /**
-     * Returns the last index of the specified element
-     * or -1 if this deque does not contain the element.
-     */
-    int lastIndexOfAsInt(int o);
 
     @Override
     default boolean offer(Integer integer) {

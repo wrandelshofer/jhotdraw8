@@ -106,7 +106,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
                 }
 
                 if (!minStack.isEmpty()) {
-                    minStack.push(min(low, minStack.popAsInt()));
+                    minStack.pushAsInt(min(low, minStack.popAsInt()));
                 }
             }
         }

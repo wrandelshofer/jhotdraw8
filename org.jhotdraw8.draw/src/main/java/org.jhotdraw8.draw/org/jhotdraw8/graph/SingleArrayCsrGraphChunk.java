@@ -178,16 +178,16 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
      * Adds an arrow from vertex v to vertex u with the provided arrow data.
      * Optionally updates the arrow data if the arrow is present.
      *
-     * @param v            index of vertex v
-     * @param u            index of vertex u
-     * @param data         the arrow data
-     * @param setIfPresent sets the data if the arrow is present
+     * @param v               index of vertex v
+     * @param u               index of vertex u
+     * @param data            the arrow data
+     * @param updateIfPresent sets the data if the arrow is present
      * @return true if a new arrow was added
      */
-    public boolean tryAddArrow(final int v, final int u, final int data, final boolean setIfPresent) {
+    public boolean tryAddArrow(final int v, final int u, final int data, final boolean updateIfPresent) {
         final int result = indexOf(v, u);
         if (result >= 0) {
-            if (setIfPresent) {
+            if (updateIfPresent) {
                 setArrowAt(v, result, data);
             }
             return false;

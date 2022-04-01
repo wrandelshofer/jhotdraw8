@@ -26,8 +26,8 @@ import java.util.stream.IntStream;
  *
  * @author Werner Randelshofer
  */
-public class IntArrayList extends AbstractList<Integer> {
-private final static int[] EMPTY = new int[0];
+public class IntArrayList extends AbstractList<Integer> implements IntList {
+    private final static int[] EMPTY = new int[0];
     private int[] items;
 
     /**
@@ -240,19 +240,27 @@ private final static int[] EMPTY = new int[0];
         }
     }
 
-    /**
-     * Returns the first index of the item, or -1 if this list does not contain
-     * the item.
-     *
-     * @param item the item
-     * @return the index of the item, or -1.
-     */
+    @Override
     public int indexOfAsInt(int item) {
         return indexOfAsInt(item, 0);
     }
 
     public int indexOfAsInt(int item, int start) {
         for (int i = start; i < size; i++) {
+            if (items[i] == item) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int lastIndexOfAsInt(int item) {
+        return lastIndexOfAsInt(item, size - 1);
+    }
+
+    public int lastIndexOfAsInt(int item, int start) {
+        for (int i = start; i >= 0; i--) {
             if (items[i] == item) {
                 return i;
             }

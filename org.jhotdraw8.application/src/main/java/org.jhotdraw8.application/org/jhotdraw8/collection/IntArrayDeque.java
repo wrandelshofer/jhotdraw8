@@ -88,7 +88,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     /**
-     * Increases the capacity of this deque when the elements array is not full.
+     * Increases the capacity of this deque.
      */
     private void grow(int capacity) {
         if (elements.length > capacity) return;
@@ -152,6 +152,13 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return true;
     }
 
+    /**
+     * Returns the first index of the specified element
+     * or -1 if this deque does not contain the element.
+     *
+     * @param o the element
+     * @return the first index of the element
+     */
     public int firstIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = head; i < elements.length; i++) {
@@ -230,6 +237,13 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return new DeqIterator();
     }
 
+    /**
+     * Returns the last index of the specified element
+     * or -1 if this deque does not contain the element.
+     *
+     * @param o the element
+     * @return the last index of the element
+     */
     public int lastIndexOfAsInt(int o) {
         if (tail < head) {
             for (int i = elements.length - 1; i >= head; i--) {
@@ -254,6 +268,8 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
 
     /**
      * Removes an element at the given array index.
+     *
+     * @param i an array index
      */
     public void removeAt(int i) {
         int size = size();
@@ -292,7 +308,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return result;
     }
 
-
+    @Override
     public boolean removeFirstOccurrenceAsInt(int o) {
         int index = firstIndexOfAsInt(o);
         if (index != -1) {
@@ -312,6 +328,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return false;
     }
 
+    @Override
     public int removeLastAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
@@ -322,6 +339,15 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return result;
     }
 
+    @Override
+    public boolean contains(Object o) {
+        if (o instanceof Integer) {
+            return firstIndexOfAsInt((int) o) != -1;
+        }
+        return false;
+    }
+
+    @Override
     public int size() {
         return (tail - head) & (elements.length - 1);
     }

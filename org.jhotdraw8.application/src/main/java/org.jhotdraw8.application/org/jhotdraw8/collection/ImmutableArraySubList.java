@@ -67,7 +67,7 @@ final class ImmutableArraySubList<E> extends AbstractReadOnlyList<E> implements 
         return size;
     }
 
-    public @NonNull <T> T[] toArray(@NonNull T[] a) {
+    public @NonNull <T> T[] toArray(T @NonNull [] a) {
         if (a.length < size) {
             @SuppressWarnings("unchecked")
             T[] t = (T[]) Arrays.copyOf(array, size, a.getClass());
