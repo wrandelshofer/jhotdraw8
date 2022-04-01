@@ -136,7 +136,7 @@ private final static int[] EMPTY = new int[0];
     }
 
     /**
-     * Clears list in O(1).
+     * Clears the list in O(1).
      */
     public void clear() {
         // Performance: do not fill array with 0 values
@@ -332,6 +332,13 @@ private final static int[] EMPTY = new int[0];
     }
 
     /**
+     * Trims the capacity of the list its current size.
+     */
+    public void trimToSize() {
+        items = ListHelper.trimToSize(size, 1, items);
+    }
+
+    /**
      * Returns an iterator for this list.
      *
      * @return an iterator over the elements of this list
@@ -460,7 +467,7 @@ private final static int[] EMPTY = new int[0];
             if (c == null) {
                 Arrays.sort(items, 0, size);
             } else {
-                // FIXME this is inefficient, we need a sort method for an int-array that takes a comparator.
+                // XXX this is inefficient, we need a sort method for an int-array that takes a comparator.
                 final Integer[] objects = new Integer[size];
                 for (int i = 0; i < size; i++) objects[i] = items[i];
                 Arrays.sort(objects, 0, size, c);

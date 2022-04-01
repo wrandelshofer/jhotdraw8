@@ -1,5 +1,5 @@
 /*
- * @(#)ChunkedBidiGraph.java
+ * @(#)ChunkedMutableIndexedBidiGraph.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -22,16 +22,9 @@ import java.util.function.BiFunction;
 /**
  * A mutable indexed bi-directional graph. The data structure of the graph
  * is split up into {@link GraphChunk}s.
- * <p>
- * References:
- * <dl>
- *     <dt>JHotDraw 8</dt>
- *     <dd> This class has been derived from JHotDraw 8.
- *      © 2022 by the authors and contributors of JHotDraw. MIT License.</dd>
- * </dl>
  */
-public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph
-        , IntAttributedIndexedBidiGraph {
+public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
+        IntAttributedIndexedBidiGraph {
 
 
     /**
@@ -52,14 +45,14 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph
      */
     private @NonNull GraphChunk[] prevChunks = new GraphChunk[0];
 
-    private @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayGraphChunk::new;
+    private @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayCsrGraphChunk::new;
 
     public ChunkedMutableIndexedBidiGraph() {
         this(256, 4);
     }
 
     public ChunkedMutableIndexedBidiGraph(final int chunkSize, final int initialArityCapacity) {
-        this(chunkSize, initialArityCapacity, SingleArrayGraphChunk::new);
+        this(chunkSize, initialArityCapacity, SingleArrayCsrGraphChunk::new);
     }
 
     public ChunkedMutableIndexedBidiGraph(final int chunkSize, final int initialArityCapacity,
@@ -360,7 +353,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph
         final int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
         final GraphChunk[] temp = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
         if (temp.length < chunkedCapacity) {
-            throw new IllegalStateException("too much capacity requested:" + capacity);
+            throw new OutOfMemoryError("too much capacity requested:" + capacity);
         }
         nextChunks = temp;
         prevChunks = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);

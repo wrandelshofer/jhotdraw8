@@ -144,6 +144,13 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     /**
+     * Trims the capacity of the list its current size.
+     */
+    public void trimToSize() {
+        items = ListHelper.trimToSize(size, 1, items);
+    }
+
+    /**
      * Copies the contents of this list into the provided array.
      *
      * @param a      an array
@@ -460,7 +467,7 @@ public class LongArrayList extends AbstractList<Long> {
             if (c == null) {
                 Arrays.sort(items, 0, size);
             } else {
-                // FIXME this is inefficient, we need a sort method for an int-array that takes a comparator.
+                // XXX this is inefficient, we need a sort method for an int-array that takes a comparator.
                 final Long[] objects = new Long[size];
                 for (int i = 0; i < size; i++) objects[i] = items[i];
                 Arrays.sort(objects, 0, size, c);

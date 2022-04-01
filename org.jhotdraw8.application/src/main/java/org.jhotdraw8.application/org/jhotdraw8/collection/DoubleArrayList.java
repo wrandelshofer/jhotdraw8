@@ -25,8 +25,9 @@ import java.util.stream.DoubleStream;
  * @author Werner Randelshofer
  */
 public class DoubleArrayList implements Iterable<Double> {
+    private final static double[] EMPTY_LIST = new double[0];
 
-    private double[] items;
+    private double[] items = EMPTY_LIST;
     /**
      * Holds the size of the list. Invariant: size >= 0.
      */
@@ -131,8 +132,11 @@ public class DoubleArrayList implements Iterable<Double> {
         return out;
     }
 
+    /**
+     * Clears the array in O(1).
+     */
     public void clear() {
-        items = null;
+        //Performance: Do not fill items with 0 values.
         size = 0;
     }
 
@@ -294,6 +298,14 @@ public class DoubleArrayList implements Iterable<Double> {
         return size;
     }
 
+
+    /**
+     * Trims the capacity of the list its current size.
+     */
+    public void trimToSize() {
+        items = ListHelper.trimToSize(size, 1, items);
+    }
+
     /**
      * Returns an iterator for this list.
      *
@@ -335,7 +347,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @return a stream
      */
     public @NonNull DoubleStream stream() {
-        return (size == 0) ? DoubleStream.empty() : Arrays.stream(items, 0, size);
+        return Arrays.stream(items, 0, size);
     }
 
     /**
@@ -399,7 +411,7 @@ public class DoubleArrayList implements Iterable<Double> {
             if (c == null) {
                 Arrays.sort(items, 0, size);
             } else {
-                // FIXME this is inefficient, we need a sort method for an int-array that takes a comparator.
+                // XXX this is inefficient, we need a sort method for a double-array that takes a comparator.
                 final Double[] objects = new Double[size];
                 for (int i = 0; i < size; i++) objects[i] = items[i];
                 Arrays.sort(objects, 0, size, c);

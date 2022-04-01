@@ -67,13 +67,6 @@ package org.jhotdraw8.graph;
  *                 arrows:   -13  -34
  *
  * </pre>
- * <p>
- * References:
- * <dl>
- *     <dt>JHotDraw 8</dt>
- *     <dd> This class has been derived from JHotDraw 8.
- *      © 2022 by the authors and contributors of JHotDraw. MIT License.</dd>
- * </dl>
  */
 public interface GraphChunk {
     /**

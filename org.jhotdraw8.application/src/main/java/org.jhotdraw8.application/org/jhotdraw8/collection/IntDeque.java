@@ -225,5 +225,8 @@ public interface IntDeque extends Deque<Integer> {
         return false;
     }
 
+    /**
+     * @see Deque#removeLastOccurrence(Object)
+     */
     boolean removeLastOccurrenceAsInt(int o);
 }

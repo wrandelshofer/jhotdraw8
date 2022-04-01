@@ -293,10 +293,11 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
          * contains a {@code A}.
          */
         private final static int ITEM_ARROW_OFFSET = 1;
+        private final static @NonNull Object[] EMPTY_ARRAY = new Object[0];
         /**
          * Item array.
          */
-        private Object[] items;
+        private @NonNull Object[] items = EMPTY_ARRAY;
         /**
          * Holds the size of the list. Invariant: size >= 0.
          */
@@ -425,17 +426,11 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
                 System.arraycopy(items, (index + 1) * ITEM_SIZE, items, index * ITEM_SIZE, numMoved * ITEM_SIZE);
             }
             --size;
-            shrink(size);
         }
 
         private void grow(int targetCapacity) {
             items = ListHelper.grow(size, targetCapacity, ITEM_SIZE, items);
         }
-
-        private void shrink(int targetCapacity) {
-            items = ListHelper.shrink(size, targetCapacity, ITEM_SIZE, items);
-        }
-
 
         /**
          * Returns the size of the list.
