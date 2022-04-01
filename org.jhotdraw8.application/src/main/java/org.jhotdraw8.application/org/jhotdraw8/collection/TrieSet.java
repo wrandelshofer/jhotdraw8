@@ -55,7 +55,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
     }
 
     TrieSet(PersistentTrieSet<E> trieSet) {
-        this.root = trieSet.root;
+        this.root = trieSet;
         this.hashCode = trieSet.hashCode;
         this.size = trieSet.size;
         this.mutator = new PersistentTrieHelper.UniqueIdentity();
@@ -106,7 +106,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable {
                 PersistentTrieSet<? extends E> trieSet = (PersistentTrieSet<? extends E>) c;
                 bulkChange.hashChange = trieSet.hashCode;
                 bulkChange.sizeChange = trieSet.size;
-                root = (PersistentTrieSetHelper.Node<E>) trieSet.root;
+                root = (PersistentTrieSetHelper.Node<E>) trieSet;
             }
             PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.root.copyAddAll(root, 0, bulkChange);
             if (newNode == this.root) {

@@ -24,21 +24,7 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
      * @return a string representation of this collection
      */
     public final @NonNull String toString() {
-        Iterator<E> it = iterator();
-        if (!it.hasNext()) {
-            return "[]";
-        }
-
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (; ; ) {
-            E e = it.next();
-            sb.append(e == this ? "(this Collection)" : e);
-            if (!it.hasNext()) {
-                return sb.append(']').toString();
-            }
-            sb.append(',').append(' ');
-        }
+        return iterableToString(this);
     }
 
     public boolean contains(Object o) {
@@ -49,4 +35,35 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
         }
         return false;
     }
+
+    /**
+     * Returns a string representation of the provided iterable.  The string
+     * representation consists of a list of the iterable's elements in the
+     * order they are returned, enclosed in square brackets
+     * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
+     * <tt>", "</tt> (comma and space).  Elements are converted to strings as
+     * by {@link String#valueOf(Object)}.
+     *
+     * @param c an iterable
+     * @return a string representation of the iterable
+     */
+    public static <E> @NonNull String iterableToString(final @NonNull Iterable<E> c) {
+        Iterator<E> it = c.iterator();
+        if (!it.hasNext()) {
+            return "[]";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (; ; ) {
+            E e = it.next();
+            sb.append(e == c ? "(this Collection)" : e);
+            if (!it.hasNext()) {
+                return sb.append(']').toString();
+            }
+            sb.append(',').append(' ');
+        }
+    }
+
+
 }

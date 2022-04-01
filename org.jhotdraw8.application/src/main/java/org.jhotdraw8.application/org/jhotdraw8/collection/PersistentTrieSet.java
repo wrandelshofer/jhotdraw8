@@ -34,17 +34,16 @@ import static org.jhotdraw8.collection.PersistentTrieSetHelper.EMPTY_NODE;
  *
  * @param <E> the element type
  */
-public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
+public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedNode<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
 
     private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0, 0);
 
-    final PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     final int hashCode;
     final int size;
 
     PersistentTrieSet(PersistentTrieSetHelper.BitmapIndexedNode<E> root, int hashCode, int size) {
-        this.root = root;
+        super(root.nodeMap, root.dataMap, root.nodes);
         this.hashCode = hashCode;
         this.size = size;
     }
@@ -73,13 +72,13 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.contains(key, Objects.hashCode(key), 0);
+        return contains(key, Objects.hashCode(key), 0);
     }
 
     public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
-        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(null, key,
+        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) updated(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, hashCode + keyHash, size + 1);
@@ -110,18 +109,18 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
         return modified ? t.toPersistent() : this;
     }
 
-    private @NonNull PersistentTrieSet<E> copyAddAllFromTrieSet(final @NonNull PersistentTrieSet<E> set) {
-        if (set.isEmpty()) {
+    private @NonNull PersistentTrieSet<E> copyAddAllFromTrieSet(final @NonNull PersistentTrieSet<E> that) {
+        if (that.isEmpty()) {
             return this;
         }
         if (this.isEmpty()) {
-            return set;
+            return that;
         }
         PersistentTrieSetHelper.BulkChangeEvent bulkChange = new PersistentTrieSetHelper.BulkChangeEvent();
-        bulkChange.hashChange = set.hashCode;
-        bulkChange.sizeChange = set.size;
-        PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.root.copyAddAll(set.root, 0, bulkChange);
-        if (newNode != this.root) {
+        bulkChange.hashChange = that.hashCode;
+        bulkChange.sizeChange = that.size;
+        PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.copyAddAll(that, 0, bulkChange);
+        if (newNode != this) {
             return new PersistentTrieSet<>(newNode,
                     this.hashCode + bulkChange.hashChange,
                     this.size + bulkChange.sizeChange
@@ -138,7 +137,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
     public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
-        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(null, key,
+        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) removed(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, hashCode - keyHash, size - 1);
@@ -206,7 +205,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
             if (this.size != that.size || this.hashCode != that.hashCode) {
                 return false;
             }
-            return root.equivalent(that.root);
+            return this.equivalent(that);
         } else if (other instanceof ReadOnlySet) {
             @SuppressWarnings("unchecked")
             ReadOnlySet<E> that = (ReadOnlySet<E>) other;
@@ -226,7 +225,7 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
 
     @Override
     public Iterator<E> iterator() {
-        return new PersistentTrieSetHelper.TrieIterator<>(root);
+        return new PersistentTrieSetHelper.TrieIterator<>(this);
     }
 
     @Override
@@ -243,5 +242,10 @@ public class PersistentTrieSet<E> extends AbstractReadOnlySet<E> implements Pers
      */
     private @NonNull TrieSet<E> toTransient() {
         return new TrieSet<>(this);
+    }
+
+    @Override
+    public @NonNull String toString() {
+        return AbstractReadOnlyCollection.iterableToString(this);
     }
 }

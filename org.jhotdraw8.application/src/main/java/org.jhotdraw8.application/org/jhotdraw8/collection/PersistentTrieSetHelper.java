@@ -45,9 +45,9 @@ class PersistentTrieSetHelper {
 
     static class BitmapIndexedNode<K> extends Node<K> {
         private final static long serialVersionUID = 0L;
-        private final @NonNull Object[] nodes;
-        private final int nodeMap;
-        private final int dataMap;
+        final @NonNull Object[] nodes;
+        final int nodeMap;
+        final int dataMap;
 
         BitmapIndexedNode(final int nodeMap,
                           final int dataMap, final @NonNull Object[] nodes) {

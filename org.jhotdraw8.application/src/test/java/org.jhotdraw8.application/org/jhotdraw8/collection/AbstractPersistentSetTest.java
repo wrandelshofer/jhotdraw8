@@ -5,9 +5,18 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 abstract class AbstractPersistentSetTest {
@@ -20,6 +29,9 @@ abstract class AbstractPersistentSetTest {
         assertEquals(expected.size(), actual.size(), "equal size");
         assertEquals(expected, actual.asSet(), "expected.equals(actual.asSet)");
         assertEquals(expected.isEmpty(), actual.isEmpty(), "equal emptyness");
+        if (expected.size() <= 1) {
+            assertEquals(expected.toString(), actual.toString(), "equal toString");
+        }
         assertEquals(actual, of(actual.toArray(new HashCollider[0])), "equal to reconstructed from array");
         assertFalse(actual.toString().isEmpty(), "always has a string");
         //noinspection EqualsBetweenInconvertibleTypes

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -55,8 +57,12 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
         return h;
     }
 
-    final public String toString() {
-        Iterator<Map.Entry<K, V>> i = entries();
+    final public @NonNull String toString() {
+        return mapToString(this);
+    }
+
+    public static <K, V> @NonNull String mapToString(final ReadOnlyMap<K, V> map) {
+        Iterator<Map.Entry<K, V>> i = map.entries();
         if (!i.hasNext()) {
             return "{}";
         }
@@ -67,9 +73,9 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
             Map.Entry<K, V> e = i.next();
             K key = e.getKey();
             V value = e.getValue();
-            sb.append(key == this ? "(this Map)" : key);
+            sb.append(key == map ? "(this Map)" : key);
             sb.append('=');
-            sb.append(value == this ? "(this Map)" : value);
+            sb.append(value == map ? "(this Map)" : value);
             if (!i.hasNext()) {
                 return sb.append('}').toString();
             }
