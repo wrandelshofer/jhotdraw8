@@ -97,7 +97,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
 
         for (Integer v : expected.getVertices()) {
             assertEquals(expected.getNextCount(v), actual.getNextCount(v));
-            assertEquals(expected.getNextVertices(v), actual.getNextVertices(v));
+            assertEquals(new LinkedHashSet<>(expected.getNextVertices(v)),
+                    new LinkedHashSet<>(actual.getNextVertices(v)));
             assertEquals(expected.getPrevCount(v), actual.getPrevCount(v));
             assertEquals(expected.getPrevVertices(v), actual.getPrevVertices(v));
             for (Integer u : expected.getVertices()) {

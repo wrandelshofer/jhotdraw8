@@ -19,10 +19,10 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
+public class ChunkedMutableIndexedBidiGraph16BitTest extends AbstractMutableIndexedBidiGraphTest {
     @Override
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
-        return new ChunkedMutableIndexedBidiGraph(4, 1);
+        return new ChunkedMutableIndexedBidiGraph16Bit(4, 1);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
     }
 
     public void testGraphRemoveAll(int vertexCount, int maxArity) throws IOException {
-        ChunkedMutableIndexedBidiGraph instance = (ChunkedMutableIndexedBidiGraph) newInstance(maxArity);
+        ChunkedMutableIndexedBidiGraph16Bit instance = (ChunkedMutableIndexedBidiGraph16Bit) newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
         IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
 
@@ -93,16 +93,16 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
     @Override
     protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
         super.assertEqualSortedGraphInt(expected, actual);
-        ChunkedMutableIndexedBidiGraph a = (ChunkedMutableIndexedBidiGraph) actual;
+        ChunkedMutableIndexedBidiGraph16Bit a = (ChunkedMutableIndexedBidiGraph16Bit) actual;
         for (Integer v : expected.getVertices()) {
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getNextVertices, v), false).collect(Collectors.toCollection(LinkedHashSet::new));
-                Set<Integer> actualBfs = StreamSupport.stream(a.searchNextVertexData(v, false, new DenseIntSet8Bit(a.getVertexCount())), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> actualBfs = StreamSupport.stream(a.searchNextVertexData(v, false, new DenseIntSet8Bit(expected.getVertexCount())), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getPrevVertices, v), false).collect(Collectors.toCollection(LinkedHashSet::new));
-                Set<Integer> actualBfs = StreamSupport.stream(a.searchPrevVertexData(v, false, new DenseIntSet8Bit(a.getVertexCount())), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> actualBfs = StreamSupport.stream(a.searchPrevVertexData(v, false, new DenseIntSet8Bit(expected.getVertexCount())), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
         }
