@@ -136,18 +136,11 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     /**
-     * Clears list in O(1).
+     * Clears the list in O(1).
      */
     public void clear() {
         // Performance: do not fill array with 0 values
         size = 0;
-    }
-
-    /**
-     * Trims the capacity of the list its current size.
-     */
-    public void trimToSize() {
-        items = ListHelper.trimToSize(size, 1, items);
     }
 
     /**
@@ -248,7 +241,7 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     /**
-     * Returns the first index of the item, or -1 if this list does not contain
+     * Returns the last index of the item, or -1 if this list does not contain
      * the item.
      *
      * @param item the item
@@ -260,6 +253,19 @@ public class LongArrayList extends AbstractList<Long> {
 
     public int indexOfAsLong(long item, int start) {
         for (int i = start; i < size; i++) {
+            if (items[i] == item) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOfAsLong(long item) {
+        return lastIndexOfAsLong(item, size - 1);
+    }
+
+    public int lastIndexOfAsLong(long item, int start) {
+        for (int i = start; i >= 0; i--) {
             if (items[i] == item) {
                 return i;
             }
@@ -336,6 +342,13 @@ public class LongArrayList extends AbstractList<Long> {
      */
     public int size() {
         return size;
+    }
+
+    /**
+     * Trims the capacity of the list its current size.
+     */
+    public void trimToSize() {
+        items = ListHelper.trimToSize(size, 1, items);
     }
 
     /**

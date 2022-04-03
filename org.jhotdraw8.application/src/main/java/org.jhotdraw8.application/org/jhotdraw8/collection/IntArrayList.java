@@ -403,7 +403,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
 
     @Override
     public boolean add(Integer integer) {
-        addAsInt((int) integer);
+        addAsInt(integer);
         return true;
     }
 

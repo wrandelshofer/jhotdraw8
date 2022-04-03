@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private PersistentTrieHelper.UniqueIdentity mutator;
+    private UniqueIdentity mutator;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int size;
     private int modCount;
@@ -38,7 +38,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieSetHelper.emptyNode();
     }
 
@@ -56,15 +56,15 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     public TrieSet(PersistentTrieSet<E> trieSet) {
         this.root = trieSet;
         this.size = trieSet.size;
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
     }
 
     public TrieSet(TrieSet<E> trieSet) {
         this.root = trieSet.root;
         this.size = trieSet.size;
         this.modCount = 0;
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
-        trieSet.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
+        trieSet.mutator = new UniqueIdentity();
     }
 
     public boolean add(final @Nullable E key) {
@@ -180,7 +180,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * @return a persistent trie set
      */
     public PersistentTrieSet<E> toPersistent() {
-        mutator = new PersistentTrieHelper.UniqueIdentity();
+        mutator = new UniqueIdentity();
         return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, size);
     }
 
@@ -240,8 +240,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     protected TrieSet<E> clone() {
         try {
             @SuppressWarnings("unchecked") final TrieSet<E> that = (TrieSet<E>) super.clone();
-            that.mutator = new PersistentTrieHelper.UniqueIdentity();
-            this.mutator = new PersistentTrieHelper.UniqueIdentity();
+            that.mutator = new UniqueIdentity();
+            this.mutator = new UniqueIdentity();
             return that;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

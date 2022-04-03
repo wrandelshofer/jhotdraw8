@@ -31,37 +31,37 @@ import java.util.Set;
 
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private PersistentTrieHelper.UniqueIdentity mutator;
+    private UniqueIdentity mutator;
     private PersistentTrieMapHelper.BitmapIndexedNode<K, V> root;
     private int size;
     private int modCount;
 
     public TrieMap() {
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
         this.putAll(m);
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
         this.putAll(m.asMap());
     }
 
     public TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
         this.root = trieMap;
         this.size = trieMap.size;
     }
 
     public TrieMap(@NonNull TrieMap<K, V> trieMap) {
-        this.mutator = new PersistentTrieHelper.UniqueIdentity();
-        trieMap.mutator = new PersistentTrieHelper.UniqueIdentity();
+        this.mutator = new UniqueIdentity();
+        trieMap.mutator = new UniqueIdentity();
         this.root = trieMap.root;
         this.size = trieMap.size;
         this.modCount = 0;
@@ -188,7 +188,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         if (size == 0) {
             return PersistentTrieMap.of();
         }
-        mutator = new PersistentTrieHelper.UniqueIdentity();
+        mutator = new UniqueIdentity();
         return new PersistentTrieMap<>(root, size);
     }
 
@@ -257,8 +257,8 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     protected TrieMap<K, V> clone() {
         try {
             @SuppressWarnings("unchecked") final TrieMap<K, V> that = (TrieMap<K, V>) super.clone();
-            that.mutator = new PersistentTrieHelper.UniqueIdentity();
-            this.mutator = new PersistentTrieHelper.UniqueIdentity();
+            that.mutator = new UniqueIdentity();
+            this.mutator = new UniqueIdentity();
             return that;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

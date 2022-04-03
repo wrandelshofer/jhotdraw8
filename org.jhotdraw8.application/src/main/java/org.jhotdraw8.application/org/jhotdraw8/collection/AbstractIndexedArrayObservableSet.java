@@ -6,14 +6,12 @@ package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -40,7 +38,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  */
 public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableListBase<E>
-        implements Set<E>, Deque<E>, ReadOnlySet<E> {
+        implements Set<E>, ReadOnlySequencedCollection<E>, ReadOnlySet<E> {
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
     /**
@@ -336,31 +334,6 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         return doAdd(size(), e);
     }
 
-    public @NonNull Iterator<E> descendingIterator(int index) {
-        return new ObservableDescendingIterator(index);
-    }
-
-    @Override
-    public @NonNull Iterator<E> descendingIterator() {
-        return descendingIterator(size());
-    }
-
-    public @NonNull Iterable<E> descending() {
-        return descending(size());
-    }
-
-    public @NonNull Iterable<E> descending(int index) {
-        return () -> descendingIterator(index);
-    }
-
-    public @NonNull Iterable<E> ascending() {
-        return ascending(size());
-    }
-
-    public @NonNull Iterable<E> ascending(int index) {
-        return () -> listIterator(index);
-    }
-
     @Override
     public @NonNull ListIterator<E> listIterator(int index) {
         return new ObservableListIterator(index);
@@ -583,26 +556,6 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public final void addFirst(E e) {
-        add(0, e);
-    }
-
-    @Override
-    public final void addLast(E e) {
-        add(size(), e);
-    }
-
-    @Override
-    public final E removeFirst() {
-        return remove(0);
-    }
-
-    @Override
-    public final E removeLast() {
-        return remove(size() - 1);
-    }
-
-    @Override
     public final E getFirst() {
         return doGet(0);
     }
@@ -610,81 +563,6 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     @Override
     public E getLast() {
         return doGet(size - 1);
-    }
-
-    @Override
-    public final boolean offerFirst(E e) {
-        return doAdd(0, e);
-    }
-
-    @Override
-    public final boolean offerLast(E e) {
-        return doAdd(size(), e);
-    }
-
-    @Override
-    public final @Nullable E pollFirst() {
-        return isEmpty() ? null : removeFirst();
-    }
-
-    @Override
-    public final @Nullable E pollLast() {
-        return isEmpty() ? null : removeLast();
-    }
-
-    @Override
-    public final @Nullable E peekFirst() {
-        return isEmpty() ? null : getFirst();
-    }
-
-    @Override
-    public final @Nullable E peekLast() {
-        return isEmpty() ? null : getLast();
-    }
-
-    @Override
-    public final boolean removeFirstOccurrence(Object o) {
-        return remove(o);
-    }
-
-    @Override
-    public final boolean removeLastOccurrence(Object o) {
-        return remove(o);
-    }
-
-    @Override
-    public final boolean offer(E e) {
-        return offerLast(e);
-    }
-
-    @Override
-    public final E remove() {
-        return removeFirst();
-    }
-
-    @Override
-    public final @Nullable E poll() {
-        return pollFirst();
-    }
-
-    @Override
-    public final E element() {
-        return getFirst();
-    }
-
-    @Override
-    public final @Nullable E peek() {
-        return peekFirst();
-    }
-
-    @Override
-    public final void push(E e) {
-        addFirst(e);
-    }
-
-    @Override
-    public final E pop() {
-        return removeFirst();
     }
 
     private class SubObservableList implements List<E> {
