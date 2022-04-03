@@ -31,7 +31,7 @@ import java.util.Set;
 
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private UniqueIdentity mutator;
+    private volatile UniqueIdentity mutator;
     private PersistentTrieMapHelper.BitmapIndexedNode<K, V> root;
     private int size;
     private int modCount;

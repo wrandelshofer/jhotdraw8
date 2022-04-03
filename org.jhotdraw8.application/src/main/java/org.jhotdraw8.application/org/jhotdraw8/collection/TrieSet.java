@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private UniqueIdentity mutator;
+    private volatile UniqueIdentity mutator;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int size;
     private int modCount;
