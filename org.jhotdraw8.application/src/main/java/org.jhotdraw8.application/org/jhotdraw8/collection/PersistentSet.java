@@ -14,13 +14,13 @@ import java.util.Collection;
  * proportional to the differences between the newly created persistent set to
  * the original persistent set.
  */
-public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<E> {
+public interface PersistentSet<E> extends ImmutableSet<E> {
     /**
      * Returns a copy of this set that is empty.
      *
      * @param element an element
-     * @return this set if it is already empty, or a different set
-     * that is empty.
+     * @return this set instance if it is already empty, or a different set
+     * instance that is empty.
      */
     @NonNull PersistentSet<E> copyClear(@NonNull E element);
 
@@ -29,19 +29,19 @@ public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<
      * of this set and also the specified element.
      *
      * @param element an element
-     * @return this set if it already contains the element, or
-     * a different set with the element added
+     * @return this set instance if it already contains the element, or
+     * a different set instance with the element added
      */
     @NonNull PersistentSet<E> copyAdd(@NonNull E element);
 
     /**
-     * Returns  a copy of this set that contains all elements
+     * Returns a copy of this set that contains all elements
      * of this set and also all elements of the specified
      * collection.
      *
      * @param c a collection to be added to this set
-     * @return this set if it already contains the elements, or
-     * a different set with the elements added
+     * @return this set instance if it already contains the elements, or
+     * a different set instance with the elements added
      */
     @NonNull PersistentSet<E> copyAddAll(@NonNull Iterable<? extends E> c);
 
@@ -50,8 +50,8 @@ public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<
      * of this set except the specified element.
      *
      * @param element an element
-     * @return this set if it already does not contain the element, or
-     * a different set with the element removed
+     * @return this set instance if it already does not contain the element, or
+     * a different set instance with the element removed
      */
     @NonNull PersistentSet<E> copyRemove(@NonNull E element);
 
@@ -61,8 +61,8 @@ public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<
      * collection.
      *
      * @param c a collection with elements to be removed from this set
-     * @return this set if it already does not contain the elements, or
-     * a different set with the elements removed
+     * @return this set instance if it already does not contain the elements, or
+     * a different set instance with the elements removed
      */
     @NonNull PersistentSet<E> copyRemoveAll(@NonNull Iterable<? extends E> c);
 
@@ -71,8 +71,8 @@ public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<
      * that are in this set and in the specified collection.
      *
      * @param c a collection with elements to be retained in this set
-     * @return this set if it has not changed, or
-     * a different set with elements removed
+     * @return this set instance if it has not changed, or
+     * a different set instance with elements removed
      */
     @NonNull PersistentSet<E> copyRetainAll(@NonNull Collection<? extends E> c);
 
@@ -81,8 +81,8 @@ public interface PersistentSet<E> extends ImmutableSet<E>, AddOnlyPersistentSet<
      * that are in this set and in the specified collection.
      *
      * @param c a collection with elements to be retained in this set
-     * @return this set if it has not changed, or
-     * a different set with elements removed
+     * @return this set instance if it has not changed, or
+     * a different set instance with elements removed
      */
     default @NonNull PersistentSet<E> copyRetainAll(final @NonNull ReadOnlyCollection<? extends E> c) {
         if (c == this) {

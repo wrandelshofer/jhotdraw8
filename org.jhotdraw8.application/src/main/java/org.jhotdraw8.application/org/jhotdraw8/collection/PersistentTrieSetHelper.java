@@ -289,7 +289,7 @@ class PersistentTrieSetHelper {
             final int nodeIndex = nodeIndex(bitpos);
             final int idx = this.nodes.length - 1 - nodeIndex;
 
-            if (isAllowedToEdit(getMutator(), mutator)) {
+            if (isAllowedToEdit(mutator)) {
                 // no copying if already editable
                 this.nodes[idx] = newNode;
                 return this;
@@ -545,7 +545,7 @@ class PersistentTrieSetHelper {
         }
 
 
-        protected UniqueIdentity getMutator() {
+        protected @Nullable UniqueIdentity getMutator() {
             return null;
         }
 
@@ -580,8 +580,9 @@ class PersistentTrieSetHelper {
             return Integer.bitCount(bitmap & (bitpos - 1));
         }
 
-        static boolean isAllowedToEdit(UniqueIdentity x, UniqueIdentity y) {
-            return x != null && (x == y);
+        boolean isAllowedToEdit(@Nullable UniqueIdentity y) {
+            UniqueIdentity x = getMutator();
+            return x != null && x == y;
         }
 
         /**
@@ -809,7 +810,7 @@ class PersistentTrieSetHelper {
                     } else {
                         // copy 'this.keys' and remove 1 element(s) at position 'idx'
                         final K[] keysNew = ArrayHelper.copyRemove(this.keys, idx);
-                        if (isAllowedToEdit(getMutator(), mutator)) {
+                        if (isAllowedToEdit(mutator)) {
                             this.keys = keysNew;
                         } else {
                             return newHashCollisionNode(mutator, keyHash, keysNew);
@@ -837,7 +838,7 @@ class PersistentTrieSetHelper {
             final K[] keysNew = Arrays.copyOf(keys, keys.length + 1);
             keysNew[keys.length] = key;
             changeEvent.isModified = true;
-            if (isAllowedToEdit(getMutator(), mutator)) {
+            if (isAllowedToEdit(mutator)) {
                 this.keys = keysNew;
                 return this;
             }

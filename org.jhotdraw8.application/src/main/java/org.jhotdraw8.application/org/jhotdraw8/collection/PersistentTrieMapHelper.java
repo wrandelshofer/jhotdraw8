@@ -59,8 +59,9 @@ class PersistentTrieMapHelper {
             return 1 << mask;
         }
 
-        static boolean isAllowedToEdit(UniqueIdentity x, UniqueIdentity y) {
-            return x != null && (x == y);
+        boolean isAllowedToEdit(@Nullable UniqueIdentity y) {
+            UniqueIdentity x = getMutator();
+            return x != null && x == y;
         }
 
         static int mask(final int keyHash, final int shift) {
@@ -222,7 +223,7 @@ class PersistentTrieMapHelper {
 
             final int idx = this.nodes.length - 1 - nodeIndex(bitpos);
 
-            if (isAllowedToEdit(getMutator(), mutator)) {
+            if (isAllowedToEdit(mutator)) {
                 // no copying if already editable
                 this.nodes[idx] = node;
                 return this;
@@ -237,7 +238,7 @@ class PersistentTrieMapHelper {
                                                 final V val) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos) + 1;
 
-            if (isAllowedToEdit(getMutator(), mutator)) {
+            if (isAllowedToEdit(mutator)) {
                 // no copying if already editable
                 this.nodes[idx] = val;
                 return this;
@@ -637,7 +638,7 @@ class PersistentTrieMapHelper {
                         // copy keys and vals and remove 1 element at position idx
                         final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.entries, idx * 2, 2);
 
-                        if (isAllowedToEdit(getMutator(), mutator)) {
+                        if (isAllowedToEdit(mutator)) {
                             this.entries = entriesNew;
                             return this;
                         }
@@ -678,7 +679,7 @@ class PersistentTrieMapHelper {
             entriesNew[this.entries.length] = key;
             entriesNew[this.entries.length + 1] = val;
             details.modified();
-            if (isAllowedToEdit(getMutator(), mutator)) {
+            if (isAllowedToEdit(mutator)) {
                 this.entries = entriesNew;
                 return this;
             } else {

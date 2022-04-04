@@ -100,18 +100,18 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         }
 
         if ((c instanceof TrieSet) || (c instanceof PersistentTrieSet)) {
-            PersistentTrieSetHelper.Node<E> root;
+            PersistentTrieSetHelper.Node<E> thatRoot;
             PersistentTrieSetHelper.BulkChangeEvent bulkChange = new PersistentTrieSetHelper.BulkChangeEvent();
             if (c instanceof TrieSet) {
                 TrieSet<? extends E> trieSet = (TrieSet<? extends E>) c;
-                root = (PersistentTrieSetHelper.Node<E>) trieSet.root;
+                thatRoot = (PersistentTrieSetHelper.Node<E>) trieSet.root;
                 bulkChange.sizeChange = trieSet.size;
             } else {
                 PersistentTrieSet<? extends E> trieSet = (PersistentTrieSet<? extends E>) c;
                 bulkChange.sizeChange = trieSet.size;
-                root = (PersistentTrieSetHelper.Node<E>) trieSet;
+                thatRoot = (PersistentTrieSetHelper.Node<E>) trieSet;
             }
-            PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.root.copyAddAll(root, 0, bulkChange);
+            PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.root.copyAddAll(thatRoot, 0, bulkChange);
             if (newNode == this.root) {
                 return false;
             }

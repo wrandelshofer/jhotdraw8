@@ -23,8 +23,8 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      *
      * @param key   the key of the entry
      * @param value the value of the entry
-     * @return this map if it already contains the same entry, or
-     * a different map with the entry added or updated
+     * @return this map instance if it already contains the same entry, or
+     * a different map instance with the entry added or updated
      */
     @NonNull PersistentMap<K, V> copyPut(@NonNull K key, @Nullable V value);
 
@@ -33,8 +33,8 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * of this map with entries from the specified map added or updated.
      *
      * @param m another map
-     * @return this map if it already contains the same entries, or
-     * a different map with the entries added or updated
+     * @return this map instance if it already contains the same entries, or
+     * a different map instance with the entries added or updated
      */
     @NonNull PersistentMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m);
 
@@ -43,8 +43,8 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * of this map with the specified entry removed.
      *
      * @param key the key of the entry
-     * @return this map if it already does not contain the entry, or
-     * a different map with the entry removed
+     * @return this map instance if it already does not contain the entry, or
+     * a different map instance with the entry removed
      */
     @NonNull PersistentMap<K, V> copyRemove(@NonNull K key);
 
@@ -54,8 +54,8 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * collection.
      *
      * @param c a collection with keys of entries to be removed from this map
-     * @return this map if it already does not contain the entries, or
-     * a different map with the entries removed
+     * @return this map instance if it already does not contain the entries, or
+     * a different map instance with the entries removed
      */
     @NonNull PersistentMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c);
 
@@ -64,8 +64,8 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * that are in this map and in the specified collection.
      *
      * @param c a collection with keys of entries to be retained in this map
-     * @return this map if it has not changed, or
-     * a different map with entries removed
+     * @return this map instance if it has not changed, or
+     * a different map instance with entries removed
      */
     @NonNull PersistentMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c);
 
