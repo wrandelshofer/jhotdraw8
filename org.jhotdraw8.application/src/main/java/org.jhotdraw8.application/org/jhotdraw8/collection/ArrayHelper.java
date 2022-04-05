@@ -86,6 +86,21 @@ class ArrayHelper {
     }
 
     /**
+     * Copies 'src' and inserts 'values' at position 'index'.
+     *
+     * @param src    an array
+     * @param index  an index
+     * @param values the values
+     * @param <T>    the array type
+     * @return a new array
+     */
+    public static <T> @NonNull T[] copyAddAll(@NonNull T[] src, int index, @NonNull T[] values) {
+        final T[] dst = copyComponentAdd(src, index, values.length);
+        System.arraycopy(values, 0, dst, index, values.length);
+        return dst;
+    }
+
+    /**
      * Copies 'src' and inserts 'numComponents' at position 'index'.
      * <p>
      * The new components will have a null value.

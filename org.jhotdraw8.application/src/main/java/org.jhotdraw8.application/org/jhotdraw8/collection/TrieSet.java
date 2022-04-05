@@ -175,7 +175,12 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     /**
      * Returns a copy of this set that is persistent.
      * <p>
-     * This operation is performed in O(1).
+     * This operation is performed in O(1) because the persistent set shares
+     * the underlying trie nodes with this set.
+     * <p>
+     * This set loses exclusive ownership of all trie nodes. Therefore, the
+     * first few updates that it performs, are copy-on-write operations, until
+     * it exclusively owns some trie nodes that it can update.
      *
      * @return a persistent trie set
      */

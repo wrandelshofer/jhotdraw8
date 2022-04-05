@@ -101,7 +101,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
             return copyAddAllFromTrieSet(((TrieSet<E>) set).toPersistent());
         }
 
-        final TrieSet<E> t = this.toTransient();
+        final TrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             modified |= t.add(key);
@@ -153,7 +153,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
         if (set == this) {
             return of();
         }
-        final TrieSet<E> t = this.toTransient();
+        final TrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             if (t.remove(key)) {
@@ -175,7 +175,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
             return of();
         }
 
-        final TrieSet<E> t = this.toTransient();
+        final TrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {
@@ -232,13 +232,19 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
     }
 
     /**
-     * Returns a copy of this set that is transient.
+     * Returns a copy of this set that is mutable.
      * <p>
-     * This operation is performed in O(1).
+     * This operation is performed in O(1) because the mutable set shares
+     * the underlying trie nodes with this set.
+     * <p>
+     * Initially, the returned mutable set hasn't exclusive ownership of any
+     * trie node. Therefore, the first few updates that it performs, are
+     * copy-on-write operations, until it exclusively owns some trie nodes that
+     * it can update.
      *
-     * @return a transient trie set
+     * @return a mutable trie set
      */
-    private @NonNull TrieSet<E> toTransient() {
+    private @NonNull TrieSet<E> toMutable() {
         return new TrieSet<>(this);
     }
 

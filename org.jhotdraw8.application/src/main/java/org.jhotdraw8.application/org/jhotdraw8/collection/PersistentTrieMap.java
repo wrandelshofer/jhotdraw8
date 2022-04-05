@@ -67,7 +67,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
 
     @SafeVarargs
     public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Map.Entry<K, V>... entries) {
-        TrieMap<K, V> result = PersistentTrieMap.<K, V>of().asTransient();
+        TrieMap<K, V> result = PersistentTrieMap.<K, V>of().toMutable();
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             result.putAndGiveDetails(entry.getKey(), entry.getValue());
         }
@@ -75,14 +75,27 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
     }
 
     public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        TrieMap<K, V> result = PersistentTrieMap.<K, V>of().asTransient();
+        TrieMap<K, V> result = PersistentTrieMap.<K, V>of().toMutable();
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             result.putAndGiveDetails(entry.getKey(), entry.getValue());
         }
         return result.toPersistent();
     }
 
-    private TrieMap<K, V> asTransient() {
+    /**
+     * Returns a copy of this set that is mutable.
+     * <p>
+     * This operation is performed in O(1) because the mutable map shares
+     * the underlying trie nodes with this set.
+     * <p>
+     * Initially, the returned mutable map hasn't exclusive ownership of any
+     * trie node. Therefore, the first few updates that it performs, are
+     * copy-on-write operations, until it exclusively owns some trie nodes that
+     * it can update.
+     *
+     * @return a mutable trie set
+     */
+    private TrieMap<K, V> toMutable() {
         return new TrieMap<>(this);
     }
 
@@ -192,7 +205,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
     }
 
     public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
-        final TrieMap<K, V> t = this.asTransient();
+        final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
             PersistentTrieMapHelper.ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
@@ -217,7 +230,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
 
     @Override
     public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
-        final TrieMap<K, V> t = this.asTransient();
+        final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
             PersistentTrieMapHelper.ChangeEvent<V> details = t.removeAndGiveDetails(key);
@@ -228,7 +241,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
 
     @Override
     public @NonNull PersistentTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
-        final TrieMap<K, V> t = this.asTransient();
+        final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : this.readOnlyKeySet()) {
             if (!c.contains(key)) {

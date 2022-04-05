@@ -184,6 +184,18 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return details;
     }
 
+    /**
+     * Returns a copy of this map that is persistent.
+     * <p>
+     * This operation is performed in O(1) because the persistent map shares
+     * the underlying trie nodes with this map.
+     * <p>
+     * This map loses exclusive ownership of all trie nodes. Therefore, the
+     * first few updates that it performs, are copy-on-write operations, until
+     * it exclusively owns some trie nodes that it can update.
+     *
+     * @return a persistent trie set
+     */
     public PersistentTrieMap<K, V> toPersistent() {
         if (size == 0) {
             return PersistentTrieMap.of();
