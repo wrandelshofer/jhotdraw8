@@ -639,7 +639,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                     peekc = c;
                     // rlw
                     if (('-' & CT_ALPHA) != 0) {
-                        unread(c);
+                        //unread(c);  XXX We must not unread here!
                         c = '-';
                         break digit;
                     } else {
@@ -1149,13 +1149,11 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
             ret = "NOTHING";
             break;
         default: {
-            char[] s = new char[3];
-            s[0] = s[2] = '\'';
-            s[1] = (char) ttype;
+            char[] s = new char[]{(char) ttype};
             ret = new String(s);
             break;
         }
         }
-        return "CssToken[" + ret + "], line " + lineno;
+        return "`" + ret + "`, line " + lineno;
     }
 }

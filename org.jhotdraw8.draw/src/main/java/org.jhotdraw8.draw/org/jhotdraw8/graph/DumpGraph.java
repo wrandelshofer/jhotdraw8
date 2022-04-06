@@ -82,8 +82,8 @@ public class DumpGraph {
     }
 
     /**
-     * Dumps the graph graph into a String which can be rendered with the "dot"
-     * tool.
+     * Dumps the graph graph into a String which can be rendered with the
+     * graphviz "dot" tool.
      *
      * @param <V>   the vertex data type
      * @param <A>   the arrow data type
@@ -101,8 +101,8 @@ public class DumpGraph {
     }
 
     /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
+     * Dumps a directed graph into a String which can be rendered with the
+     * graphviz "dot" tool.
      *
      * @param <V>   the vertex data type
      * @param <A>   the arrow data type
@@ -115,8 +115,8 @@ public class DumpGraph {
     }
 
     /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
+     * Dumps a directed graph into a String which can be rendered with the
+     * graphviz "dot" tool.
      *
      * @param <V>            the vertex data type
      * @param <A>            the arrow data type
@@ -132,8 +132,8 @@ public class DumpGraph {
     }
 
     /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
+     * Dumps a directed graph into a String which can be rendered with the
+     * graphviz "dot" tool.
      *
      * @param <V>              the vertex data type
      * @param <A>              the arrow data type
@@ -160,8 +160,8 @@ public class DumpGraph {
     }
 
     /**
-     * Dumps a directed graph into a String which can be rendered with the "dot"
-     * tool.
+     * Dumps a directed graph into a String which can be rendered with the
+     * graphviz "dot" tool.
      *
      * @param <V>              the vertex data type
      * @param <A>              the arrow data type
