@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private volatile UniqueIdentity mutator;
+    private transient UniqueIdentity mutator;
     private PersistentTrieSetHelper.BitmapIndexedNode<E> root;
     private int size;
     private int modCount;
@@ -38,7 +38,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieSetHelper.emptyNode();
     }
 
@@ -56,22 +55,21 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     public TrieSet(PersistentTrieSet<E> trieSet) {
         this.root = trieSet;
         this.size = trieSet.size;
-        this.mutator = new UniqueIdentity();
     }
 
     public TrieSet(TrieSet<E> trieSet) {
         this.root = trieSet.root;
         this.size = trieSet.size;
         this.modCount = 0;
-        this.mutator = new UniqueIdentity();
-        trieSet.mutator = new UniqueIdentity();
+        this.mutator = null;
+        trieSet.mutator = null;
     }
 
     public boolean add(final @Nullable E key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
         final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode =
-                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(this.mutator, key, keyHash, 0, changeEvent);
+                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.updated(getOrCreateMutator(), key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
             size += 1;
@@ -79,6 +77,13 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             return true;
         }
         return false;
+    }
+
+    private @NonNull UniqueIdentity getOrCreateMutator() {
+        if (mutator == null) {
+            mutator = new UniqueIdentity();
+        }
+        return mutator;
     }
 
     /**
@@ -143,7 +148,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
         final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode =
-                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(this.mutator, key, keyHash, 0, changeEvent);
+                (PersistentTrieSetHelper.BitmapIndexedNode<E>) root.removed(getOrCreateMutator(), key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRootNode;
             size = size - 1;
@@ -185,7 +190,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * @return a persistent trie set
      */
     public PersistentTrieSet<E> toPersistent() {
-        mutator = new UniqueIdentity();
+        mutator = null;
         return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, size);
     }
 
@@ -245,8 +250,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     protected TrieSet<E> clone() {
         try {
             @SuppressWarnings("unchecked") final TrieSet<E> that = (TrieSet<E>) super.clone();
-            that.mutator = new UniqueIdentity();
-            this.mutator = new UniqueIdentity();
+            that.mutator = null;
+            this.mutator = null;
             return that;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

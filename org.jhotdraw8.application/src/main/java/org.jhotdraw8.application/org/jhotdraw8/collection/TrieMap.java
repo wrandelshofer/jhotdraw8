@@ -31,37 +31,33 @@ import java.util.Set;
 
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private volatile UniqueIdentity mutator;
+    private transient UniqueIdentity mutator;
     private PersistentTrieMapHelper.BitmapIndexedNode<K, V> root;
     private int size;
     private int modCount;
 
     public TrieMap() {
-        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
         this.putAll(m);
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        this.mutator = new UniqueIdentity();
         this.root = PersistentTrieMapHelper.emptyNode();
         this.putAll(m.asMap());
     }
 
     public TrieMap(@NonNull PersistentTrieMap<K, V> trieMap) {
-        this.mutator = new UniqueIdentity();
         this.root = trieMap;
         this.size = trieMap.size;
     }
 
     public TrieMap(@NonNull TrieMap<K, V> trieMap) {
-        this.mutator = new UniqueIdentity();
-        trieMap.mutator = new UniqueIdentity();
+        this.mutator = null;
+        trieMap.mutator = null;
         this.root = trieMap.root;
         this.size = trieMap.size;
         this.modCount = 0;
@@ -86,7 +82,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
             @Override
             public boolean add(Entry<K, V> kvEntry) {
                 PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-                root.updated(mutator, kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
+                root.updated(getOrCreateMutator(), kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
                 return details.isModified();
             }
 
@@ -140,6 +136,14 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return root.findByKey(key, Objects.hashCode(key), 0).orElse(null);
     }
 
+    private @NonNull UniqueIdentity getOrCreateMutator() {
+        if (mutator == null) {
+            mutator = new UniqueIdentity();
+        }
+        return mutator;
+    }
+
+
     @Override
     public V put(K key, V value) {
         return putAndGiveDetails(key, value).getOldValue();
@@ -149,7 +153,8 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
 
-        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode = root.updated(mutator, key, val, keyHash, 0, details);
+        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
+                root.updated(getOrCreateMutator(), key, val, keyHash, 0, details);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -174,7 +179,8 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     @NonNull PersistentTrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
         final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode = (PersistentTrieMapHelper.BitmapIndexedNode<K, V>) root.removed(mutator, key, keyHash, 0, details);
+        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
+                (PersistentTrieMapHelper.BitmapIndexedNode<K, V>) root.removed(getOrCreateMutator(), key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -200,7 +206,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         if (size == 0) {
             return PersistentTrieMap.of();
         }
-        mutator = new UniqueIdentity();
+        mutator = null;
         return new PersistentTrieMap<>(root, size);
     }
 
@@ -269,8 +275,8 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     protected TrieMap<K, V> clone() {
         try {
             @SuppressWarnings("unchecked") final TrieMap<K, V> that = (TrieMap<K, V>) super.clone();
-            that.mutator = new UniqueIdentity();
-            this.mutator = new UniqueIdentity();
+            that.mutator = null;
+            this.mutator = null;
             return that;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
