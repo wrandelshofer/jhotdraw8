@@ -275,6 +275,6 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
     public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
-        return new IntArrayEnumerator(offset, nextOffset, this.next);
+        return new IntArrayEnumerator(this.next, offset, nextOffset);
     }
 }

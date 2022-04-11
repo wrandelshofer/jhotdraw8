@@ -1,7 +1,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.graph.iterator.BreadthFirstSpliterator;
+import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.junit.jupiter.api.DynamicTest;
 
 import java.util.Collections;
@@ -33,13 +33,13 @@ public class MutableIntAttributed16BitIndexedBidiGraphTest extends AbstractMutab
         MutableIntAttributed16BitIndexedBidiGraph a = (MutableIntAttributed16BitIndexedBidiGraph) actual;
         for (Integer v : expected.getVertices()) {
             {
-                List<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getNextVertices, v), false).collect(Collectors.toList());
-                List<Integer> actualBfs = StreamSupport.stream(a.breadthFirstIntSpliterator(v), false).collect(Collectors.toList());
+                List<Integer> expectedBfs = StreamSupport.stream(new VertexEnumerator<Integer>(expected::getNextVertices, v, false), false).collect(Collectors.toList());
+                List<Integer> actualBfs = StreamSupport.stream(a.seachNextVerticesAsInt(v, false), false).collect(Collectors.toList());
                 assertEquals(expectedBfs, actualBfs);
             }
             {
-                List<Integer> expectedBfs = StreamSupport.stream(new BreadthFirstSpliterator<Integer>(expected::getPrevVertices, v), false).collect(Collectors.toList());
-                List<Integer> actualBfs = StreamSupport.stream(a.backwardBreadthFirstIntSpliterator(v), false).collect(Collectors.toList());
+                List<Integer> expectedBfs = StreamSupport.stream(new VertexEnumerator<Integer>(expected::getPrevVertices, v, false), false).collect(Collectors.toList());
+                List<Integer> actualBfs = StreamSupport.stream(a.searchPrevVerticesAsInt(v, false), false).collect(Collectors.toList());
                 assertEquals(expectedBfs, actualBfs);
             }
         }

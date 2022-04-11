@@ -14,7 +14,8 @@ import java.util.function.IntConsumer;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractIntEnumerator extends Spliterators.AbstractIntSpliterator
+public abstract class AbstractIntEnumerator
+        extends Spliterators.AbstractIntSpliterator
         implements IntEnumerator {
     protected int current;
 
@@ -32,6 +33,9 @@ public abstract class AbstractIntEnumerator extends Spliterators.AbstractIntSpli
         super(est, additionalCharacteristics);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final boolean tryAdvance(@NonNull IntConsumer action) {
         if (moveNext()) {
@@ -42,13 +46,10 @@ public abstract class AbstractIntEnumerator extends Spliterators.AbstractIntSpli
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public final int currentAsInt() {
         return current;
     }
 
-    @Override
-    public final @NonNull Integer current() {
-        return current;
-    }
 }

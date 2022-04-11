@@ -387,6 +387,15 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     /**
+     * Returns a spliterator for this list.
+     *
+     * @return a spliterator over the elements of this list
+     */
+    public @NonNull LongEnumerator enumerator() {
+        return new LongArrayEnumerator(items, 0, size);
+    }
+
+    /**
      * Returns a stream for processing the items of this list.
      *
      * @return a stream

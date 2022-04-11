@@ -15,7 +15,7 @@ import java.util.Arrays;
  * <dl>
  *     <dt>Phil Bagwell, Tiark Rompf. (2012). RRB-Trees: Efficient Immutable Vectors</dt>
  *     <dd><a href="https://infoscience.epfl.ch/record/169879/files/RMTrees.pdf">epfl.ch</a></dd>
- *
+ * 0
  *     <dt>Jean Niklas L'orange. (2014). Improving RRB-Tree Performance through
  *     Transience</dt>
  *     <dd><a href="https://hypirion.com/thesis.pdf">hypirion.com</a></dd>
@@ -27,8 +27,9 @@ import java.util.Arrays;
  */
 class PersistentTrieListHelper {
     final static LeafNode<?> EMPTY_LEAF = new LeafNode<>(new Object[0]);
-    static final int BIT_PARTITION_SIZE = 5;
-    static final int M = 32;
+    static final int BIT_PARTITION_SIZE = 2;
+    static final int BIT_MASK = (1 << BIT_PARTITION_SIZE) - 1;
+    static final int M = 1 << BIT_PARTITION_SIZE;
 
     static <E> @NonNull LeafNode<E> merge(@Nullable UniqueIdentity mutator, @NonNull LeafNode<E> left, @NonNull LeafNode<E> right) {
         E[] leftData = left.data;
@@ -89,10 +90,12 @@ class PersistentTrieListHelper {
      *     <li>The children of an inner node are inner nodes or leaf nodes.</li>
      *     <li>The children of a leaf node are data element.</li>
      *     <li>All leaf nodes are at the same depth in the tree.</li>
-     *     <li>All nodes except the root have between {@code m - epsilon - 1}
+     *     <li>All nodes except the root have between {@code m - 1}
      *     and {@code m} children.</li>
      *     <li>The root node has between {@code 1} and {@code m} children.</li>
      *     <li>The tail has between {@code 0} and {@code m} data elements</li>
+     *     <li>A tree of height {@code h} has between {@code (m-1)^h + |tail|}
+     *     and {@code m^h + |tail|} elements.</li>
      * </ul>
      *
      * @param <E>
@@ -273,4 +276,64 @@ class PersistentTrieListHelper {
     }
 
 
+    abstract static class TrieNode<E> {
+        abstract E get(int index, int shift);
+
+        abstract void set(int index, int shift, E e);
+    }
+
+    static class InnerTrieNode<E> extends TrieNode<E> {
+        private final TrieNode<E>[] children;
+
+        @SuppressWarnings("unchecked")
+        InnerTrieNode(int size, int shift) {
+            int nodeCapacity = M << (shift);
+            int childShift = shift - BIT_PARTITION_SIZE;
+            int childCapacity = M << childShift;
+            this.children = (TrieNode<E>[]) new TrieNode[(size + childCapacity - 1) / childCapacity];
+            for (int i = 0; i < children.length; i++) {
+                int childSize = Math.min(size - i * childCapacity, childCapacity);
+                if (childShift == 0) {
+                    children[i] = new LeafTrieNode<>(childSize);
+                } else {
+                    children[i] = new InnerTrieNode<>(childSize, childShift);
+                }
+            }
+        }
+
+        InnerTrieNode(TrieNode<E>[] children) {
+            this.children = children;
+        }
+
+
+        @Override
+        E get(int index, int shift) {
+            return children[(index >>> shift) & BIT_MASK].get(index, shift - BIT_PARTITION_SIZE);
+        }
+
+        @Override
+        void set(int index, int shift, E e) {
+            TrieNode<E> child = children[(index >>> shift) & BIT_MASK];
+            child.set(index, shift - BIT_PARTITION_SIZE, e);
+        }
+    }
+
+    static class LeafTrieNode<E> extends TrieNode<E> {
+        private final E[] elements;
+
+        @SuppressWarnings("unchecked")
+        LeafTrieNode(int size) {
+            this.elements = (E[]) new Object[size];
+        }
+
+        @Override
+        E get(int index, int shift) {
+            return elements[index & BIT_PARTITION_SIZE];
+        }
+
+        @Override
+        void set(int index, int shift, E e) {
+            elements[index & BIT_PARTITION_SIZE] = e;
+        }
+    }
 }

@@ -381,26 +381,29 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         vertexCount--;
     }
 
-    private static class BreadthFirstSpliteratorOfShort extends AbstractIntEnumerator {
+    private static class VertexEnumeratorOfShort extends AbstractIntEnumerator {
 
         private final short[] array;
         private final int stride;
         private final int offset;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
+        private final boolean dfs;
 
         /**
          * @param array  the array
          * @param stride the stride
          * @param offset
+         * @param dfs
          */
-        protected BreadthFirstSpliteratorOfShort(final int root, final short[] array, final int stride,
-                                                 final int offset, @NonNull final AddToIntSet visited) {
+        protected VertexEnumeratorOfShort(final int root, final short[] array, final int stride,
+                                          final int offset, @NonNull final AddToIntSet visited, boolean dfs) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.array = array;
             this.stride = stride;
             this.offset = offset;
             this.visited = visited;
+            this.dfs = dfs;
             if (visited.addAsInt(root)) {
                 deque.addFirstAsInt(root);
             }
@@ -412,42 +415,42 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
                 return false;
             }
 
-            current = deque.removeFirst();
+            current = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
             final int currentOffset = current * stride + offset;
             final int size = array[currentOffset] & 0xffff;
             for (int i = currentOffset + 1, end = currentOffset + size + 1; i < end; i++) {
                 final int vidx = array[i] & 0xffff;
                 if (visited.addAsInt(vidx)) {
                     deque.addLastAsInt(vidx);
-                    if (deque.isEmpty()) {
-                        System.err.println("HEY!!!");
-                    }
                 }
             }
             return true;
         }
     }
 
-    private static class BreadthFirstSpliteratorOfLongShort extends AbstractLongEnumerator {
+    private static class VertexEnumeratorOfLongShort extends AbstractLongEnumerator {
 
         private final short[] array;
         private final int stride;
         private final int offset;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
+        private final boolean dfs;
 
         /**
          * @param array  the array
          * @param stride the stride
-         * @param offset
+         * @param offset the offset
+         * @param dfs
          */
-        protected BreadthFirstSpliteratorOfLongShort(final int root, final short[] array, final int stride,
-                                                     final int offset, @NonNull final AddToIntSet visited) {
+        protected VertexEnumeratorOfLongShort(final int root, final short[] array, final int stride,
+                                              final int offset, @NonNull final AddToIntSet visited, boolean dfs) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.array = array;
             this.stride = stride;
             this.offset = offset;
             this.visited = visited;
+            this.dfs = dfs;
             if (visited.addAsInt(root)) {
                 deque.addFirstAsInt(root);
             }
@@ -458,7 +461,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
             if (deque.isEmpty()) {
                 return false;
             }
-            final int currentIdx = deque.removeFirst();
+            final int currentIdx = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
             final int currentDataOffset = currentIdx * stride;
             current = ((long) array[currentDataOffset] << 48) | ((long) array[currentDataOffset] << 32) | currentIdx & 0xffff_ffffL;
             final int currentOffset = currentDataOffset + offset;
@@ -514,15 +517,16 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * Returns a breadth first spliterator that starts at the specified vertex.
      *
      * @param vidx the index of the vertex
+     * @param dfs  whether to search depth-first instead of breadth-first
      * @return the spliterator
      */
-    public IntEnumerator breadthFirstIntSpliterator(final int vidx) {
-        return breadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
+    public IntEnumerator seachNextVerticesAsInt(final int vidx, boolean dfs) {
+        return seachNextVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public IntEnumerator breadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
-        return new BreadthFirstSpliteratorOfShort(vidx, next, stride,
-                VERTEX_DATA_SIZE, visited);
+    public IntEnumerator seachNextVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+        return new VertexEnumeratorOfShort(vidx, next, stride,
+                VERTEX_DATA_SIZE, visited, dfs);
     }
 
     /**
@@ -530,31 +534,33 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * vertex.
      *
      * @param vidx the index of the vertex
+     * @param dfs
      * @return the spliterator
      */
-    public IntEnumerator backwardBreadthFirstIntSpliterator(final int vidx) {
-        return backwardBreadthFirstIntSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
+    public IntEnumerator searchPrevVerticesAsInt(final int vidx, boolean dfs) {
+        return searchPrevVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public IntEnumerator backwardBreadthFirstIntSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
-        return new BreadthFirstSpliteratorOfShort(vidx, prev, stride,
-                VERTEX_DATA_SIZE, visited);
+    public IntEnumerator searchPrevVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+        return new VertexEnumeratorOfShort(vidx, prev, stride,
+                VERTEX_DATA_SIZE, visited, dfs);
     }
 
     /**
      * Returns a breadth first spliterator that starts at the specified vertex.
      *
      * @param vidx the index of the vertex
+     * @param dfs
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public LongEnumerator breadthFirstLongSpliterator(final int vidx) {
-        return breadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
+    public LongEnumerator searchNextVerticesWithVertexData(final int vidx, boolean dfs) {
+        return searchNextVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public LongEnumerator breadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
-        return new BreadthFirstSpliteratorOfLongShort(vidx, next, stride,
-                0, visited);
+    public LongEnumerator searchNextVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+        return new VertexEnumeratorOfLongShort(vidx, next, stride,
+                0, visited, dfs);
     }
 
     /**
@@ -562,15 +568,16 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * vertex.
      *
      * @param vidx the index of the vertex
+     * @param dfs
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public LongEnumerator backwardBreadthFirstLongSpliterator(final int vidx) {
-        return backwardBreadthFirstLongSpliterator(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt);
+    public LongEnumerator searchPrevVerticesWithVertexData(final int vidx, boolean dfs) {
+        return searchPrevVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public LongEnumerator backwardBreadthFirstLongSpliterator(final int vidx, @NonNull final AddToIntSet visited) {
-        return new BreadthFirstSpliteratorOfLongShort(vidx, prev, stride,
-                0, visited);
+    public LongEnumerator searchPrevVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+        return new VertexEnumeratorOfLongShort(vidx, prev, stride,
+                0, visited, dfs);
     }
 }

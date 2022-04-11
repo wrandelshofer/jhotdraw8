@@ -3,7 +3,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * An integer enumerator/spliterator over an unsigned short array.
+ * An integer enumerator over an unsigned short array.
  */
 public class IntUShortArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;

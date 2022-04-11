@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -21,13 +23,10 @@ import java.util.function.LongConsumer;
 public interface LongEnumerator extends Enumerator<Long>, Spliterator.OfLong {
 
     /**
-     * @return current
-     * @see Enumerator#current()
+     * {@inheritDoc}
      */
-    long currentAsLong();
-
     @Override
-    default boolean tryAdvance(LongConsumer action) {
+    default boolean tryAdvance(@NonNull LongConsumer action) {
         if (moveNext()) {
             action.accept(currentAsLong());
             return true;
@@ -35,9 +34,28 @@ public interface LongEnumerator extends Enumerator<Long>, Spliterator.OfLong {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    default boolean tryAdvance(Consumer<? super Long> action) {
+    default boolean tryAdvance(@NonNull Consumer<? super Long> action) {
         return Enumerator.super.tryAdvance(action);
+    }
+
+    /**
+     * Returns the current value.
+     *
+     * @return current
+     * @see Enumerator#current()
+     */
+    long currentAsLong();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default @NonNull Long current() {
+        return currentAsLong();
     }
 
 }

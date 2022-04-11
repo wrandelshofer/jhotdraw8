@@ -22,20 +22,22 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class DepthFirstArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>> {
+public class ArcEnumerator<V, A> extends AbstractEnumerator<Arc<V, A>> {
 
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextFunction;
     private final @NonNull Deque<Arc<V, A>> deque;
     private final @NonNull AddToSet<Arc<V, A>> visited;
+    private final boolean dfs;
 
     /**
      * Creates a new instance.
      *
      * @param nextArcsFunction the nextFunction
      * @param root             the root vertex
+     * @param dfs
      */
-    public DepthFirstArcSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root) {
-        this(nextArcsFunction, root, new HashSet<>()::add);
+    public ArcEnumerator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
+        this(nextArcsFunction, root, new HashSet<>()::add, dfs);
     }
 
 
@@ -45,10 +47,11 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>
      * @param nextFunction the function that returns the next vertices of a given vertex
      * @param root         the root vertex
      * @param visited      a predicate with side effect. The predicate returns true
-     *                     if the specified vertex has been visited, and marks the specified vertex
+     * @param dfs
      */
-    public DepthFirstArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited) {
+    public ArcEnumerator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+        this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");
         Objects.requireNonNull(root, "root");
         Objects.requireNonNull(visited, "visited");
@@ -64,7 +67,7 @@ public class DepthFirstArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>
 
     @Override
     public boolean moveNext() {
-        current = deque.pollLast();
+        current = dfs ? deque.removeLast() : deque.removeFirst();
         if (current == null) {
             return false;
         }

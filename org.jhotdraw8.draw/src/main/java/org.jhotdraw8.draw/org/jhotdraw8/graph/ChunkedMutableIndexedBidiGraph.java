@@ -308,7 +308,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         Preconditions.checkIndex(v, vertexCount);
         final GraphChunk chunk = getNextChunk(v);
         final int from = chunk.getSiblingsFromOffset(v);
-        final int to = chunk.getSiblingCount(v) + from;
+        int siblingCount = chunk.getSiblingCount(v);
+        final int to = siblingCount + from;
         int[] a = chunk.getSiblingsArray();
         int[] next = new int[to - from];
         System.arraycopy(a, from, next, 0, next.length);
@@ -318,6 +319,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             prevChunk.tryRemoveArrow(u, v);
         }
         chunk.removeAllArrows(v);
+        arrowCount -= siblingCount;
     }
 
     @Override
@@ -326,7 +328,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         final GraphChunk chunk = getPrevChunk(v);
         final int from = chunk.getSiblingsFromOffset(v);
         int[] a = chunk.getSiblingsArray();
-        final int to = chunk.getSiblingCount(v) + from;
+        int siblingCount = chunk.getSiblingCount(v);
+        final int to = siblingCount + from;
         int[] next = new int[to - from];
         System.arraycopy(a, from, next, 0, next.length);
         for (int i = next.length - 1; i >= 0; i--) {
@@ -335,6 +338,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             nextChunk.tryRemoveArrow(u, v);
         }
         chunk.removeAllArrows(v);
+        arrowCount -= siblingCount;
     }
 
     @Override
@@ -386,7 +390,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             if (deque.isEmpty()) {
                 return false;
             }
-            final int v = deque.removeFirstAsInt();
+            final int v = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
             final GraphChunk chunk = getOrCreateChunk(chunks, v);
             current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
             final int from = chunk.getSiblingsFromOffset(v);
@@ -395,8 +399,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             for (int i = from; i < to; i++) {
                 final int u = a[i];
                 if (visited.addAsInt(u)) {
-                    if (dfs) deque.addFirstAsInt(u);
-                    else deque.addLastAsInt(u);
+                    deque.addLastAsInt(u);
                 }
             }
             return true;
@@ -425,7 +428,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             if (deque.isEmpty()) {
                 return false;
             }
-            final int v = deque.removeFirstAsInt();
+            final int v = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
             final GraphChunk chunk = getOrCreateChunk(chunks, v);
             current = v;
             final int from = chunk.getSiblingsFromOffset(v);
@@ -435,8 +438,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
             for (int i = from; i < to; i++) {
                 final int u = a[i];
                 if (visited.addAsInt(u)) {
-                    if (dfs) deque.addFirstAsInt(u);
-                    else deque.addLastAsInt(u);
+                    deque.addLastAsInt(u);
                 }
             }
             return true;

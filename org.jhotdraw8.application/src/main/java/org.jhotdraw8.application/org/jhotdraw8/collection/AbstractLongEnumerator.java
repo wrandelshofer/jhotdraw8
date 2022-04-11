@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-
 import java.util.Spliterators;
 
 /**
@@ -15,6 +13,7 @@ import java.util.Spliterators;
  */
 public abstract class AbstractLongEnumerator extends Spliterators.AbstractLongSpliterator
         implements LongEnumerator {
+
     protected long current;
 
     /**
@@ -31,13 +30,10 @@ public abstract class AbstractLongEnumerator extends Spliterators.AbstractLongSp
         super(est, additionalCharacteristics);
     }
 
+
     @Override
     public final long currentAsLong() {
         return current;
     }
 
-    @Override
-    public final @NonNull Long current() {
-        return current;
-    }
 }

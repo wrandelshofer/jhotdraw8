@@ -1,15 +1,10 @@
 package org.jhotdraw8.graph.io;
 
 import org.jhotdraw8.graph.MutableDirectedGraph;
-import org.jhotdraw8.graph.algo.StronglyConnectedComponentsAlgo;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.ToIntFunction;
 
 class GraphvizReaderTest {
 
@@ -20,9 +15,9 @@ class GraphvizReaderTest {
         final MutableDirectedGraph<String, String> g = new GraphvizReader().read(file);
         System.out.println("#vertex:" + g.getVertexCount());
         System.out.println("#arrow:" + g.getArrowCount());
+        /*
         final StronglyConnectedComponentsAlgo sccAlgo = new StronglyConnectedComponentsAlgo();
         final List<List<String>> sccList = sccAlgo.findStronglyConnectedComponents(g);
-        /*
         System.out.println("#scc:"+sccList.size());
         for (List<String> scc : sccList) {
             if (scc.size()>1||g.isNext(scc.get(0),scc.get(0))){
@@ -30,6 +25,8 @@ class GraphvizReaderTest {
                 System.out.println("  "+scc.stream().collect(Collectors.joining("\",\n  \"","\"","\"")));
             }
         }*/
+
+        /*
         List<String> list = new ArrayList<>(g.getVertices());
         final ToIntFunction<String> extractGroup = str -> Integer.parseInt(str.substring(1 + str.lastIndexOf(" ")));
         list.sort(Comparator.comparingInt(extractGroup));
@@ -44,6 +41,8 @@ class GraphvizReaderTest {
             prev = group;
         }
         System.out.println("}");
+
+         */
 
     }
 }

@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.graph.iterator.DepthFirstSpliterator;
+import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class DepthFirstSpliteratorTest {
      */
     static void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        DepthFirstSpliterator<Integer> instance = new DepthFirstSpliterator<>(graph::getNextVertices, start);
+        VertexEnumerator<Integer> instance = new VertexEnumerator<>(graph::getNextVertices, start, true);
         List<Integer> result = new ArrayList<>();
         Iterator<Integer> iter = Spliterators.iterator(instance);
         while (iter.hasNext()) {

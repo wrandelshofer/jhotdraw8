@@ -389,7 +389,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
             if (deque.isEmpty()) {
                 return false;
             }
-            final int v = deque.removeFirstAsInt();
+            final int v = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
             final GraphChunk16Bit chunk = getOrCreateChunk(chunks, v);
             current = ((long) chunk.getVertexData(v)) << 32 | (v & 0xffff_ffffL);
             final int from = chunk.getSiblingsFromOffset(v);
@@ -398,11 +398,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
             for (int i = from; i < to; i++) {
                 final int u = a[i];
                 if (visited.addAsInt(u)) {
-                    if (dfs) {
-                        deque.addFirstAsInt(u);
-                    } else {
                         deque.addLastAsInt(u);
-                    }
                 }
             }
             return true;
@@ -431,7 +427,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
             if (deque.isEmpty()) {
                 return false;
             }
-            final int v = deque.removeFirstAsInt();
+            final int v = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
             final GraphChunk16Bit chunk = getOrCreateChunk(chunks, v);
             current = v;
             final int from = chunk.getSiblingsFromOffset(v);
@@ -441,11 +437,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
             for (int i = from; i < to; i++) {
                 final int u = a[i];
                 if (visited.addAsInt(u)) {
-                    if (dfs) {
-                        deque.addFirstAsInt(u);
-                    } else {
-                        deque.addLastAsInt(u);
-                    }
+                    deque.addLastAsInt(u);
                 }
             }
             return true;

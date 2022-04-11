@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -21,13 +23,10 @@ import java.util.function.IntConsumer;
 public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
 
     /**
-     * @return current
-     * @see Enumerator#current()
+     * {@inheritDoc}
      */
-    int currentAsInt();
-
     @Override
-    default boolean tryAdvance(IntConsumer action) {
+    default boolean tryAdvance(@NonNull IntConsumer action) {
         if (moveNext()) {
             action.accept(currentAsInt());
             return true;
@@ -35,9 +34,29 @@ public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    default boolean tryAdvance(Consumer<? super Integer> action) {
+    default boolean tryAdvance(@NonNull Consumer<? super Integer> action) {
         return Enumerator.super.tryAdvance(action);
+    }
+
+    /**
+     * Returns the current value.
+     *
+     * @return current
+     * @see Enumerator#current()
+     */
+    int currentAsInt();
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default @NonNull Integer current() {
+        return currentAsInt();
     }
 
 }

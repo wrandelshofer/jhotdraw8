@@ -44,6 +44,9 @@ public abstract class AbstractEnumerator<E> extends Spliterators.AbstractSpliter
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final E current() {
         return current;

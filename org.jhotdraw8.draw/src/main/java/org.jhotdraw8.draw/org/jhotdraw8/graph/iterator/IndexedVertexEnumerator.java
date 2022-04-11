@@ -19,11 +19,12 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class IndexedBreadthFirstSpliterator extends AbstractIntEnumerator {
+public class IndexedVertexEnumerator extends AbstractIntEnumerator {
 
     private final @NonNull Function<Integer, IntEnumerator> nextFunction;
     private final @NonNull IntArrayDeque deque;
     private final @NonNull AddToIntSet visited;
+    private final boolean dfs;
 
     /**
      * Creates a new instance.
@@ -31,11 +32,12 @@ public class IndexedBreadthFirstSpliterator extends AbstractIntEnumerator {
      * @param nextFunction the nextFunction
      * @param root         the root vertex
      * @param vertexCount  the vertex count
+     * @param dfs
      */
-    public IndexedBreadthFirstSpliterator(@NonNull Function<Integer, IntEnumerator> nextFunction,
-                                          int root,
-                                          int vertexCount) {
-        this(nextFunction, root, new DenseIntSet8Bit(vertexCount)::addAsInt);
+    public IndexedVertexEnumerator(@NonNull Function<Integer, IntEnumerator> nextFunction,
+                                   int root,
+                                   int vertexCount, boolean dfs) {
+        this(nextFunction, root, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
     /**
@@ -43,9 +45,11 @@ public class IndexedBreadthFirstSpliterator extends AbstractIntEnumerator {
      *
      * @param nextFunction the nextFunction
      * @param root         the root vertex
+     * @param dfs
      */
-    public IndexedBreadthFirstSpliterator(@NonNull Function<Integer, IntEnumerator> nextFunction, int root, @NonNull AddToIntSet visited) {
+    public IndexedVertexEnumerator(@NonNull Function<Integer, IntEnumerator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+        this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");
         this.nextFunction = nextFunction;
         deque = new IntArrayDeque(16);
@@ -60,7 +64,7 @@ public class IndexedBreadthFirstSpliterator extends AbstractIntEnumerator {
         if (deque.isEmpty()) {
             return false;
         }
-        current = deque.removeFirstAsInt();
+        current = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
         for (IntEnumerator it = nextFunction.apply(current); it.moveNext(); ) {
             int next = it.currentAsInt();
             if (visited.addAsInt(next)) {
