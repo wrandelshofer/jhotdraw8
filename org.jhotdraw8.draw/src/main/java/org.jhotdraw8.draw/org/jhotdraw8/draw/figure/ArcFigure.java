@@ -1,6 +1,6 @@
 /*
  * @(#)ArcFigure.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -18,8 +18,8 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * Renders a {@code javafx.scene.shape.Arc}.

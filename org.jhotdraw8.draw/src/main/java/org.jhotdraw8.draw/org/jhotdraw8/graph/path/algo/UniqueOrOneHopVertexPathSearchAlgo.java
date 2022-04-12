@@ -1,6 +1,6 @@
 /*
- * @(#)UniqueOrOneHopPathBuilder.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * @(#)UniqueOrOneHopVertexPathSearchAlgo.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph.path.algo;
 
@@ -9,7 +9,11 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 import org.jhotdraw8.util.function.AddToSet;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;

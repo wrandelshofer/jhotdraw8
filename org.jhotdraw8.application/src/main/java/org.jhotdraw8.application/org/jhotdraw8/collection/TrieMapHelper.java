@@ -1,3 +1,8 @@
+/*
+ * @(#)TrieMapHelper.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -15,13 +20,13 @@ import java.util.Objects;
  * Package private class with code for {@link PersistentTrieMap}
  * and {@link TrieMap}.
  */
-class PersistentTrieMapHelper {
+class TrieMapHelper {
     static final BitmapIndexedNode<?, ?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private PersistentTrieMapHelper() {
+    private TrieMapHelper() {
     }
 
     static final int TUPLE_LENGTH = 2;
@@ -413,22 +418,22 @@ class PersistentTrieMapHelper {
                 }
 
                 switch (subNodeNew.sizePredicate()) {
-                    case SIZE_EMPTY: {
-                        throw new IllegalStateException("Sub-node must have at least one element.");
+                case SIZE_EMPTY: {
+                    throw new IllegalStateException("Sub-node must have at least one element.");
+                }
+                case SIZE_ONE: {
+                    if (this.payloadArity() == 0 && this.nodeArity() == 1) {
+                        // escalate (singleton or empty) result
+                        return subNodeNew;
+                    } else {
+                        // inline value (move to front)
+                        return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew);
                     }
-                    case SIZE_ONE: {
-                        if (this.payloadArity() == 0 && this.nodeArity() == 1) {
-                            // escalate (singleton or empty) result
-                            return subNodeNew;
-                        } else {
-                            // inline value (move to front)
-                            return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew);
-                        }
-                    }
-                    default: {
-                        // modify current node (set replacement node)
-                        return copyAndSetNode(mutator, bitpos, subNodeNew);
-                    }
+                }
+                default: {
+                    // modify current node (set replacement node)
+                    return copyAndSetNode(mutator, bitpos, subNodeNew);
+                }
                 }
             }
 
@@ -631,7 +636,7 @@ class PersistentTrieMapHelper {
                         // returned, or b) unwrapped and inlined.
                         final K theOtherKey = (K) ((idx == 0) ? entries[2] : entries[0]);
                         final V theOtherVal = (V) ((idx == 0) ? entries[3] : entries[1]);
-                        return PersistentTrieMapHelper.<K, V>emptyNode().updated(mutator, theOtherKey, theOtherVal,
+                        return TrieMapHelper.<K, V>emptyNode().updated(mutator, theOtherKey, theOtherVal,
                                 keyHash, 0, details);
                     } else {
 
@@ -916,8 +921,8 @@ class PersistentTrieMapHelper {
     }
 
     @SuppressWarnings("unchecked")
-    static <K, V> PersistentTrieMapHelper.BitmapIndexedNode<K, V> emptyNode() {
-        return (PersistentTrieMapHelper.BitmapIndexedNode<K, V>) PersistentTrieMapHelper.EMPTY_NODE;
+    static <K, V> TrieMapHelper.BitmapIndexedNode<K, V> emptyNode() {
+        return (TrieMapHelper.BitmapIndexedNode<K, V>) TrieMapHelper.EMPTY_NODE;
     }
 
     private static final class MutableHashCollisionNode<K, V> extends HashCollisionNode<K, V> {

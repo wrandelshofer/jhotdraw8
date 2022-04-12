@@ -1,5 +1,6 @@
-/* @(#)AnyPathBuilderTest.java
- * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)GloballyUniqueOnDagVertexPathSearchAlgoTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.graph.path.algo;
@@ -20,7 +21,9 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**

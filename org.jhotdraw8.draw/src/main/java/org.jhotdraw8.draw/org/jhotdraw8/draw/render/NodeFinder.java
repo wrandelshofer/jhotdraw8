@@ -1,3 +1,8 @@
+/*
+ * @(#)NodeFinder.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.draw.render;
 
 import javafx.collections.ObservableList;
@@ -16,7 +21,7 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Geom;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 
 /**
  * Provides methods for finding JavaFX nodes within a radius around a point.

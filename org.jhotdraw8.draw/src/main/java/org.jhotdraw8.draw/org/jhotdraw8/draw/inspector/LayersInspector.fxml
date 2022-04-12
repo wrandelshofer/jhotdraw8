@@ -2,7 +2,7 @@
 
 <!--
   ~ @(#)LayersInspector.fxml
-  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
 
 <?import javafx.geometry.Insets?><?import javafx.scene.control.Button?><?import javafx.scene.control.ListView?><?import javafx.scene.control.Tooltip?><?import javafx.scene.layout.BorderPane?><?import javafx.scene.layout.HBox?><?import java.lang.String?>

@@ -1,6 +1,6 @@
 /*
  * @(#)FillRulableFigure.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -9,8 +9,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.render.RenderContext;
 
 /**
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can have

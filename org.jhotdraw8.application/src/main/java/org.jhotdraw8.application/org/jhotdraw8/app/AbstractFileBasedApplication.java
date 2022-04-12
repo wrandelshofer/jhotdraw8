@@ -1,6 +1,6 @@
 /*
  * @(#)AbstractFileBasedApplication.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.app;
 
@@ -17,7 +17,12 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
@@ -34,8 +39,17 @@ import org.jhotdraw8.app.action.Actions;
 import org.jhotdraw8.app.action.ScreenMenuBarProxyAction;
 import org.jhotdraw8.app.action.app.AboutAction;
 import org.jhotdraw8.app.action.app.ExitAction;
-import org.jhotdraw8.app.action.edit.*;
-import org.jhotdraw8.app.action.file.*;
+import org.jhotdraw8.app.action.edit.ClearSelectionAction;
+import org.jhotdraw8.app.action.edit.CopyAction;
+import org.jhotdraw8.app.action.edit.CutAction;
+import org.jhotdraw8.app.action.edit.DeleteAction;
+import org.jhotdraw8.app.action.edit.PasteAction;
+import org.jhotdraw8.app.action.edit.SelectAllAction;
+import org.jhotdraw8.app.action.file.ClearRecentFilesMenuAction;
+import org.jhotdraw8.app.action.file.CloseFileAction;
+import org.jhotdraw8.app.action.file.NewFileAction;
+import org.jhotdraw8.app.action.file.OpenFileAction;
+import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.SimpleNullableKey;
@@ -51,7 +65,18 @@ import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;

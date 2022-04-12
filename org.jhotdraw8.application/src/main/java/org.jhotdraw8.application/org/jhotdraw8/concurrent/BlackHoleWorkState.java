@@ -1,6 +1,17 @@
+/*
+ * @(#)BlackHoleWorkState.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.concurrent;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 

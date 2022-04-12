@@ -1,5 +1,6 @@
-/* @(#)TreeTraversalTest.java
- *  Copyright © The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)TreeTraversalTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.tree;

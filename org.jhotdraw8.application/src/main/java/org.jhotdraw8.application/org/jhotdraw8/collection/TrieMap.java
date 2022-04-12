@@ -1,3 +1,8 @@
+/*
+ * @(#)TrieMap.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -11,42 +16,24 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Implements the {@link Map} interface with a
- * Compressed Hash-Array Mapped Prefix-trie (CHAMP).
- * <p>
- * Creating a persistent copy is performed in O(1).
- * <p>
- * References:
- * <dl>
- *     <dt>This class has been derived from "The Capsule Hash Trie Collections Library".</dt>
- *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
- *         BSD 2-Clause License.
- *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
-
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private transient UniqueIdentity mutator;
-    private PersistentTrieMapHelper.BitmapIndexedNode<K, V> root;
+    private TrieMapHelper.BitmapIndexedNode<K, V> root;
     private int size;
     private int modCount;
 
     public TrieMap() {
-        this.root = PersistentTrieMapHelper.emptyNode();
+        this.root = TrieMapHelper.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.root = PersistentTrieMapHelper.emptyNode();
+        this.root = TrieMapHelper.emptyNode();
         this.putAll(m);
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        this.root = PersistentTrieMapHelper.emptyNode();
+        this.root = TrieMapHelper.emptyNode();
         this.putAll(m.asMap());
     }
 
@@ -65,7 +52,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
     @Override
     public void clear() {
-        this.root = PersistentTrieMapHelper.emptyNode();
+        this.root = TrieMapHelper.emptyNode();
         this.size = 0;
     }
 
@@ -81,7 +68,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return new AbstractSet<Entry<K, V>>() {
             @Override
             public boolean add(Entry<K, V> kvEntry) {
-                PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
+                TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
                 root.updated(getOrCreateMutator(), kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
                 return details.isModified();
             }
@@ -97,7 +84,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    PersistentTrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                    TrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
                     return result.keyExists() && Objects.equals(result.get(), entry.getValue());
                 }
                 return false;
@@ -114,7 +101,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    PersistentTrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                    TrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
                     if (result.keyExists() && Objects.equals(result.get(), entry.getValue())) {
                         removeAndGiveDetails(key);
                         return true;
@@ -149,11 +136,11 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return putAndGiveDetails(key, value).getOldValue();
     }
 
-    @NonNull PersistentTrieMapHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
+    @NonNull TrieMapHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
+        final TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
 
-        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
+        final TrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
                 root.updated(getOrCreateMutator(), key, val, keyHash, 0, details);
 
         if (details.isModified()) {
@@ -176,11 +163,11 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return removeAndGiveDetails(key).getOldValue();
     }
 
-    @NonNull PersistentTrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
+    @NonNull TrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
-                (PersistentTrieMapHelper.BitmapIndexedNode<K, V>) root.removed(getOrCreateMutator(), key, keyHash, 0, details);
+        final TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
+        final TrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
+                (TrieMapHelper.BitmapIndexedNode<K, V>) root.removed(getOrCreateMutator(), key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -210,7 +197,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return new PersistentTrieMap<>(root, size);
     }
 
-    static abstract class AbstractTransientMapEntryIterator<K, V> extends PersistentTrieMapHelper.AbstractMapIterator<K, V> {
+    static abstract class AbstractTransientMapEntryIterator<K, V> extends TrieMapHelper.AbstractMapIterator<K, V> {
         private final @NonNull TrieMap<K, V> map;
         private int expectedModCount;
 

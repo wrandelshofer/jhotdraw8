@@ -1,6 +1,6 @@
 /*
- * @(#)DepthFirstArcSpliterator.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ArcEnumerator.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph.iterator;
 

@@ -1,6 +1,6 @@
 /*
- * @(#)Shapes.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * @(#)FXShapes.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
 

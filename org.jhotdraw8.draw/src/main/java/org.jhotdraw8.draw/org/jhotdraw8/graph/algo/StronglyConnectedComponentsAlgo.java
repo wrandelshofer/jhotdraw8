@@ -1,6 +1,6 @@
 /*
  * @(#)StronglyConnectedComponentsAlgo.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph.algo;
 
@@ -10,7 +10,13 @@ import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IteratorEnumerator;
 import org.jhotdraw8.graph.DirectedGraph;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static java.lang.Math.min;

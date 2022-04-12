@@ -1,9 +1,21 @@
+/*
+ * @(#)DisjointSetsAlgo.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.DirectedGraph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class DisjointSetsAlgo {

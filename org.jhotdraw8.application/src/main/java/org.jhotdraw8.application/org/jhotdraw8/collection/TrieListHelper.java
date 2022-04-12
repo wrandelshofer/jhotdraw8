@@ -1,3 +1,8 @@
+/*
+ * @(#)TrieListHelper.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -5,27 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 
-/**
- * Package private class with code for {@code PersistentTreeList}
- * and {@code TreeList}.
- * <p>
- * This is an extremely naïve implementation of a Relaxed Radix Balanced Tree (RRB Tree).
- * <p>
- * References:
- * <dl>
- *     <dt>Phil Bagwell, Tiark Rompf. (2012). RRB-Trees: Efficient Immutable Vectors</dt>
- *     <dd><a href="https://infoscience.epfl.ch/record/169879/files/RMTrees.pdf">epfl.ch</a></dd>
- * 0
- *     <dt>Jean Niklas L'orange. (2014). Improving RRB-Tree Performance through
- *     Transience</dt>
- *     <dd><a href="https://hypirion.com/thesis.pdf">hypirion.com</a></dd>
- *
- *     <dt>"c-rrb" library</dt>
- *     <dd>Copyright (c) Jean Niklas L'orange . MIT License.
- *         <a href="https://github.com/hypirion/c-rrb">github.com</a></dd>
- * </dl>
- */
-class PersistentTrieListHelper {
+class TrieListHelper {
     final static LeafNode<?> EMPTY_LEAF = new LeafNode<>(new Object[0]);
     static final int BIT_PARTITION_SIZE = 2;
     static final int BIT_MASK = (1 << BIT_PARTITION_SIZE) - 1;

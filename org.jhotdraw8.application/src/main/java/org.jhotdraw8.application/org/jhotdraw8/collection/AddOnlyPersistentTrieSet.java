@@ -1,6 +1,6 @@
 /*
- * @(#)PersistentTrieSet.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * @(#)AddOnlyPersistentTrieSet.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
@@ -10,20 +10,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 
-/**
- * An add-only persistent set implemented with a Compressed Hash-Array Mapped
- * Prefix-tree (CHAMP).
- * <p>
- * References:
- * <dl>
- *     <dt>This class has been derived from "The Capsule Hash Trie Collections Library".</dt>
- *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
- *         BSD 2-Clause License.
- *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
- * </dl>
- *
- * @param <E> the element type
- */
 public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSet<E> {
     private static final int TUPLE_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;

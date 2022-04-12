@@ -1,3 +1,8 @@
+/*
+ * @(#)EmptyPathIterator.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.geom;
 
 import java.awt.geom.PathIterator;

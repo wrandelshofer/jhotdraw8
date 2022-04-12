@@ -1,3 +1,8 @@
+/*
+ * @(#)DrawingModelUndoEventEmitter.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.draw.model;
 
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,28 +32,29 @@ public class DrawingModelUndoEventEmitter {
         @Override
         public void handle(DrawingModelEvent event) {
             switch (event.getEventType()) {
-                case PROPERTY_VALUE_CHANGED:
-                    fire(new AbstractUndoableEdit() {
-                        private final static long serialVersionUID = 0L;
-                        @Override
-                        public void undo() throws CannotUndoException {
-                            super.undo();
-                            event.getSource().set(event.getNode(), event.getKey(), event.getOldValue());
-                        }
+            case PROPERTY_VALUE_CHANGED:
+                fire(new AbstractUndoableEdit() {
+                    private final static long serialVersionUID = 0L;
 
-                        @Override
-                        public void redo() throws CannotRedoException {
-                            super.redo();
-                            event.getSource().set(event.getNode(), event.getKey(), event.getNewValue());
-                        }
-                    });
-                    break;
-                case LAYOUT_CHANGED:
-                    break;
-                case STYLE_CHANGED:
-                    break;
-                case TRANSFORM_CHANGED:
-                    break;
+                    @Override
+                    public void undo() throws CannotUndoException {
+                        super.undo();
+                        event.getSource().set(event.getNode(), event.getKey(), event.getOldValue());
+                    }
+
+                    @Override
+                    public void redo() throws CannotRedoException {
+                        super.redo();
+                        event.getSource().set(event.getNode(), event.getKey(), event.getNewValue());
+                    }
+                });
+                break;
+            case LAYOUT_CHANGED:
+                break;
+            case STYLE_CHANGED:
+                break;
+            case TRANSFORM_CHANGED:
+                break;
             }
         }
     }
@@ -59,35 +65,35 @@ public class DrawingModelUndoEventEmitter {
         @Override
         public void handle(TreeModelEvent<Figure> event) {
             switch (event.getEventType()) {
-                case ROOT_CHANGED:
-                    fire(new AbstractUndoableEdit() {
-                        private final static long serialVersionUID = 0L;
+            case ROOT_CHANGED:
+                fire(new AbstractUndoableEdit() {
+                    private final static long serialVersionUID = 0L;
 
-                        @Override
-                        public void undo() throws CannotUndoException {
-                            super.undo();
-                            event.getSource().setRoot(event.getParent());
-                        }
+                    @Override
+                    public void undo() throws CannotUndoException {
+                        super.undo();
+                        event.getSource().setRoot(event.getParent());
+                    }
 
-                        @Override
-                        public void redo() throws CannotRedoException {
-                            super.redo();
-                            event.getSource().setRoot(event.getRoot());
-                        }
-                    });
-                    break;
-                case SUBTREE_NODES_CHANGED:
-                case NODE_ADDED_TO_PARENT:
-                case NODE_REMOVED_FROM_PARENT:
-                case NODE_ADDED_TO_TREE:
-                case NODE_REMOVED_FROM_TREE:
-                    fire(new AbstractUndoableEdit() {
-                        private final static long serialVersionUID = 0L;
-                        // can not undo/redo yet
-                    });
-                    break;
-                case NODE_CHANGED:
-                    break;
+                    @Override
+                    public void redo() throws CannotRedoException {
+                        super.redo();
+                        event.getSource().setRoot(event.getRoot());
+                    }
+                });
+                break;
+            case SUBTREE_NODES_CHANGED:
+            case NODE_ADDED_TO_PARENT:
+            case NODE_REMOVED_FROM_PARENT:
+            case NODE_ADDED_TO_TREE:
+            case NODE_REMOVED_FROM_TREE:
+                fire(new AbstractUndoableEdit() {
+                    private final static long serialVersionUID = 0L;
+                    // can not undo/redo yet
+                });
+                break;
+            case NODE_CHANGED:
+                break;
             }
 
         }

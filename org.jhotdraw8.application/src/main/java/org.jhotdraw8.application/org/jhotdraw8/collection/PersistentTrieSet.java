@@ -1,12 +1,16 @@
 /*
  * @(#)PersistentTrieSet.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.TrieSetHelper.BitmapIndexedNode;
+import org.jhotdraw8.collection.TrieSetHelper.BulkChangeEvent;
+import org.jhotdraw8.collection.TrieSetHelper.ChangeEvent;
+import org.jhotdraw8.collection.TrieSetHelper.TrieIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -14,34 +18,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
-import static org.jhotdraw8.collection.PersistentTrieSetHelper.EMPTY_NODE;
+import static org.jhotdraw8.collection.TrieSetHelper.EMPTY_NODE;
 
 
-/**
- * Implements the {@link PersistentSet} interface with a
- * Compressed Hash-Array Mapped Prefix-trie (CHAMP).
- * <p>
- * Creating a new copy with a single element added or removed
- * is performed in {@code O(1)} time and space.
- * <p>
- * References:
- * <dl>
- *     <dt>This class has been derived from "The Capsule Hash Trie Collections Library".</dt>
- *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
- *         BSD 2-Clause License.
- *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
- * </dl>
- *
- * @param <E> the element type
- */
-public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedNode<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
+public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
 
     private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0);
 
     final int size;
 
-    PersistentTrieSet(PersistentTrieSetHelper.BitmapIndexedNode<E> root, int size) {
+    PersistentTrieSet(BitmapIndexedNode<E> root, int size) {
         super(root.nodeMap, root.dataMap, root.nodes);
         this.size = size;
     }
@@ -77,9 +64,8 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
 
     public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
-        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) updated(null, key,
-                keyHash, 0, changeEvent);
+        final ChangeEvent changeEvent = new ChangeEvent();
+        final BitmapIndexedNode<E> newRootNode = updated(null, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size + 1);
         }
@@ -116,9 +102,9 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
         if (this.isEmpty()) {
             return that;
         }
-        PersistentTrieSetHelper.BulkChangeEvent bulkChange = new PersistentTrieSetHelper.BulkChangeEvent();
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
         bulkChange.sizeChange = that.size;
-        PersistentTrieSetHelper.BitmapIndexedNode<E> newNode = this.copyAddAll(that, 0, bulkChange);
+        BitmapIndexedNode<E> newNode = copyAddAll(that, 0, bulkChange, new UniqueIdentity());
         if (newNode != this) {
             return new PersistentTrieSet<>(newNode,
                     this.size + bulkChange.sizeChange
@@ -134,8 +120,8 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
 
     public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieSetHelper.ChangeEvent changeEvent = new PersistentTrieSetHelper.ChangeEvent();
-        final PersistentTrieSetHelper.BitmapIndexedNode<E> newRootNode = (PersistentTrieSetHelper.BitmapIndexedNode<E>) removed(null, key,
+        final ChangeEvent changeEvent = new ChangeEvent();
+        final BitmapIndexedNode<E> newRootNode = (BitmapIndexedNode<E>) removed(null, key,
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size - 1);
@@ -223,7 +209,7 @@ public class PersistentTrieSet<E> extends PersistentTrieSetHelper.BitmapIndexedN
 
     @Override
     public Iterator<E> iterator() {
-        return new PersistentTrieSetHelper.TrieIterator<>(this);
+        return new TrieIterator<>(this);
     }
 
     @Override

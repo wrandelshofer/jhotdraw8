@@ -1,3 +1,8 @@
+/*
+ * @(#)TrieArrayTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -7,7 +12,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.jhotdraw8.collection.PersistentTrieListHelper.M;
+import static org.jhotdraw8.collection.TrieListHelper.M;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 

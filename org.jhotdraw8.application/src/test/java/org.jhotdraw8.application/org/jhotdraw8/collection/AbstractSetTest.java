@@ -1,9 +1,15 @@
+/*
+ * @(#)AbstractSetTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -13,6 +19,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
@@ -39,8 +47,8 @@ public abstract class AbstractSetTest {
     }
 
 
-    @SuppressWarnings("SlowAbstractSetRemoveAll")
-    public void doTestAddAndRemove(int mask, int... elements) {
+    @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked"})
+    public void doTestAddAndRemove(int mask, int... elements) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         List<HashCollider> list = new ArrayList<>(elements.length);
         for (int e : elements) {
             list.add(new HashCollider(e, mask));
@@ -70,10 +78,37 @@ public abstract class AbstractSetTest {
         assertEquals(expected.addAll(list), instance.addAll(list));
         assertEquals(expected.containsAll(list), instance.containsAll(list));
 
-        // WHEN: Element is bulk-removed to instance
+        // WHEN is cloned
+        // THEN Instance must be equal to expected
+        Set<HashCollider> actualClone = (Set<HashCollider>) instance.getClass().getMethod("clone").invoke(instance);
+        assertEquals(expected, actualClone);
+
+        // WHEN: Elements are bulk-removed from instance
         // THEN Instance must be equal to expected
         assertEquals(expected.removeAll(list), instance.removeAll(list));
         assertEquals(expected.containsAll(list), instance.containsAll(list));
+
+        // WHEN: Elements are bulk-added to cloned instance
+        // THEN Instance must be equal to expected
+        expected.addAll(list);
+        assertTrue(instance.addAll(actualClone));
+        assertEquals(expected, instance);
+
+        // WHEN: Elements are bulk-added again to cloned instance
+        // THEN Instance must be equal to expected
+        assertFalse(instance.addAll(actualClone));
+        assertEquals(expected, instance);
+
+        // WHEN: Elements are bulk-removed from cloned instance
+        // THEN Instance must be equal to expected
+        expected.removeAll(list);
+        instance.removeAll(actualClone);
+        assertEquals(expected, instance);
+
+        // WHEN: Elements are bulk-removed again from cloned instance
+        // THEN Instance must be equal to expected
+        assertFalse(instance.removeAll(actualClone));
+        assertEquals(expected, instance);
 
         // WHEN: Element is iterator-removed to instance
         // THEN Instance must be equal to expected

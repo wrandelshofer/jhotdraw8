@@ -1,6 +1,6 @@
 /*
  * @(#)BezierFigure.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -21,7 +21,13 @@ import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
+import org.jhotdraw8.draw.handle.BezierPathEditHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;

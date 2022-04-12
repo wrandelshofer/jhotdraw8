@@ -1,6 +1,6 @@
 /*
  * @(#)PolyArcPath.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.contour;
 
@@ -16,33 +16,6 @@ import java.util.function.BiPredicate;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
 
-/**
- * A {@code PolyArcPath} is defined by a sequence of vertexes and a bool
- * indicating whether the path is closed or open.
- * <p>
- * Each vertex has a 2D position ({@code x} and {@code y}) as well as a
- * {@code bulge} value.
- * <p>
- * Bulge is used to define arcs, where {@code bulge = tan(theta/4)}.
- * {@code theta} is the arc sweep angle from the starting
- * vertex position to the next vertex position.
- * <p>
- * If the polyline is closed then
- * the last vertex connects to the first vertex, otherwise it does not
- * (and the last vertex bulge value is unused).
- * <p>
- * See {@link BulgeConversionFunctions} for more details regarding bulge
- * calculations.
- * <p>
- * This code has been derived from Cavalier Contours [1].
- * <p>
- * References:
- * <dl>
- *     <dt>[1] Cavalier Contours</dt>
- *     <dd>Cavalier Contours, Copyright (c) 2019 Jedidiah Buck McCready, MIT License.
- *     <a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
- * </dl>
- */
 public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     private static final long serialVersionUID = 1L;
 

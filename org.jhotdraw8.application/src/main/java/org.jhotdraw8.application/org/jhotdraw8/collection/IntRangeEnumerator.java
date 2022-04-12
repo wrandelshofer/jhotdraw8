@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.function.IntToIntFunction;
 
 /**
@@ -12,38 +14,43 @@ import org.jhotdraw8.util.function.IntToIntFunction;
 public class IntRangeEnumerator extends AbstractIntEnumerator {
     private int next;
     private final int to;
-    private final IntToIntFunction f;
+    private final @NonNull IntToIntFunction f;
 
     /**
      * Enumerates from 0 to {@code toExclusive}.
      *
-     * @param to the end of the range + 1
+     * @param endExclusive the end of the range + 1
      */
-    public IntRangeEnumerator(int to) {
-        this(i -> i, 0, to);
+    public IntRangeEnumerator(int endExclusive) {
+        this(i -> i, 0, endExclusive);
     }
 
     /**
      * Enumerates from {@code fromInclusive}. to {@code toExclusive}.
      *
-     * @param from the start of the range
-     * @param to   the end of the range + 1
+     * @param startInclusive the start of the range
+     * @param endExclusive   the end of the range + 1
      */
-    public IntRangeEnumerator(int from, int to) {
-        this(i -> i, from, to);
+    public IntRangeEnumerator(int startInclusive, int endExclusive) {
+        this(i -> i, startInclusive, endExclusive);
     }
 
     /**
      * Enumerates from {@code fromInclusive}. to {@code toExclusive}.
      *
-     * @param from the start of the range
-     * @param to   the end of the range + 1
+     * @param startInclusive the start of the range
+     * @param endExclusive   the end of the range + 1
      */
-    public IntRangeEnumerator(IntToIntFunction f, int from, int to) {
-        super(to - from, ORDERED | SIZED | SUBSIZED);
+    public IntRangeEnumerator(@NonNull IntToIntFunction f, int startInclusive, int endExclusive) {
+        super(endExclusive - startInclusive, ORDERED | SIZED | SUBSIZED);
         this.f = f;
-        this.next = from;
-        this.to = to;
+        this.next = startInclusive;
+        this.to = endExclusive;
+    }
+
+    @Override
+    public long estimateSize() {
+        return to - next;
     }
 
     @Override
@@ -57,9 +64,9 @@ public class IntRangeEnumerator extends AbstractIntEnumerator {
     }
 
     @Override
-    public OfInt trySplit() {
+    public @Nullable IntRangeEnumerator trySplit() {
         int lo = next, mid = (lo + to) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new IntRangeEnumerator(lo, next = mid);
+                new IntRangeEnumerator(f, lo, next = mid);
     }
 }

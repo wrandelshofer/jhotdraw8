@@ -1,5 +1,6 @@
-/* @(#)AnyPathBuilderTest.java
- * Copyright (c) 2017 The authors and contributors of JHotDraw. MIT License.
+/*
+ * @(#)ShortestUniqueArcPathSearchAlgoTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.graph.path.algo;

@@ -1,11 +1,16 @@
+/*
+ * @(#)TrieArray.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.collection.PersistentTrieListHelper.InnerTrieNode;
-import org.jhotdraw8.collection.PersistentTrieListHelper.LeafTrieNode;
-import org.jhotdraw8.collection.PersistentTrieListHelper.TrieNode;
+import org.jhotdraw8.collection.TrieListHelper.InnerTrieNode;
+import org.jhotdraw8.collection.TrieListHelper.LeafTrieNode;
+import org.jhotdraw8.collection.TrieListHelper.TrieNode;
 
-import static org.jhotdraw8.collection.PersistentTrieListHelper.BIT_PARTITION_SIZE;
-import static org.jhotdraw8.collection.PersistentTrieListHelper.M;
+import static org.jhotdraw8.collection.TrieListHelper.BIT_PARTITION_SIZE;
+import static org.jhotdraw8.collection.TrieListHelper.M;
 
 /**
  * A mutable array with a fixed number of elements.

@@ -1,23 +1,11 @@
 /*
  * @(#)IntersectionPointEx.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.intersect;
 
 import java.awt.geom.Point2D;
 
-/**
- * Describes an intersection point of two parametric functions 'a' and 'b'.
- * <p>
- * The code of this class has been derived from intersection.js [1].
- * <p>
- * References:
- * <dl>
- *     <dt>[1] intersection.js</dt>
- *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
- *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
- * </dl>
- */
 public class IntersectionPointEx extends IntersectionPoint {
     private static final long serialVersionUID = 0L;
 

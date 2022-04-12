@@ -1,6 +1,6 @@
 /*
  * @(#)SimpleDrawingModel.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.model;
 
@@ -27,7 +27,15 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 /**

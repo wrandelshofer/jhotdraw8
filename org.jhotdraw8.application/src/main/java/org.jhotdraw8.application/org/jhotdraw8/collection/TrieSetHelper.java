@@ -1,3 +1,8 @@
+/*
+ * @(#)TrieSetHelper.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -16,7 +21,7 @@ import java.util.Objects;
  * Package private class with code for {@link PersistentTrieSet}
  * and {@link TrieSet}.
  */
-class PersistentTrieSetHelper {
+class TrieSetHelper {
     static final int TUPLE_LENGTH = 1;
     static final int HASH_CODE_LENGTH = 32;
     static final int BIT_PARTITION_SIZE = 5;
@@ -26,7 +31,7 @@ class PersistentTrieSetHelper {
     /**
      * Don't let anyone instantiate this class.
      */
-    private PersistentTrieSetHelper() {
+    private TrieSetHelper() {
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +80,7 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        @NonNull BitmapIndexedNode<K> copyAddAll(@NonNull Node<K> o, int shift, BulkChangeEvent bulkChange) {
+        @NonNull BitmapIndexedNode<K> copyAddAll(@NonNull Node<K> o, int shift, @NonNull BulkChangeEvent bulkChange, @Nullable UniqueIdentity mutator) {
             // Given the same bit-position in this and that:
             // case                   this.dataMap this.nodeMap that.dataMap  that.nodeMap
             // ---------------------------------------------------------------------------
@@ -132,14 +137,14 @@ class PersistentTrieSetHelper {
                     if (Objects.equals(thisKey, thatKey)) {
                         // case 5.1:
                         nodesNew[dataIndex++] = thisKey;
-                        bulkChange.sizeChange--;
                     } else {
                         // case 5.2:
                         dataMapNew ^= bitpos;
                         nodeMapNew |= bitpos;
                         int thatKeyHash = Objects.hashCode(thatKey);
-                        Node<K> subNodeNew = mergeTwoKeyValPairs(getMutator(), thisKey, Objects.hashCode(thisKey), thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE);
+                        Node<K> subNodeNew = mergeTwoKeyValPairs(mutator, thisKey, Objects.hashCode(thisKey), thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
+                        bulkChange.sizeChange++;
                         changed = true;
                     }
                 } else if (thisHasData) {
@@ -152,10 +157,10 @@ class PersistentTrieSetHelper {
                         int thisKeyHash = Objects.hashCode(thisKey);
                         changeEvent.isModified = false;
                         Node<K> subNode = that.nodeAt(bitpos);
-                        Node<K> subNodeNew = subNode.updated(getMutator(), thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
+                        Node<K> subNodeNew = subNode.updated(mutator, thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                        if (!changeEvent.isModified) {
-                            bulkChange.sizeChange--;
+                        if (changeEvent.isModified) {
+                            bulkChange.sizeChange++;
                         }
                         changed = true;
                     } else {
@@ -173,12 +178,11 @@ class PersistentTrieSetHelper {
                         thisNodeMapToDo ^= bitpos;
                         changeEvent.isModified = false;
                         Node<K> subNode = this.getNode(index(this.nodeMap, bitpos));
-                        Node<K> subNodeNew = subNode.updated(getMutator(), thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
+                        Node<K> subNodeNew = subNode.updated(mutator, thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
                         if (changeEvent.isModified) {
                             changed = true;
                             nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                        } else {
-                            bulkChange.sizeChange--;
+                            bulkChange.sizeChange++;
                         }
                     } else {
                         // case 4:
@@ -200,7 +204,7 @@ class PersistentTrieSetHelper {
                     //cases 10.1 and 10.2
                     Node<K> thisSubNode = this.getNode(index(this.nodeMap, bitpos));
                     Node<K> thatSubNode = that.getNode(index(that.nodeMap, bitpos));
-                    Node<K> subNodeNew = thisSubNode.copyAddAll(thatSubNode, shift + BIT_PARTITION_SIZE, bulkChange);
+                    Node<K> subNodeNew = thisSubNode.copyAddAll(thatSubNode, shift + BIT_PARTITION_SIZE, bulkChange, mutator);
                     changed |= subNodeNew != thisSubNode;
                     nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
 
@@ -220,14 +224,14 @@ class PersistentTrieSetHelper {
             // Step 3: create new node if it has changed
             // ------
             if (changed) {
-                return newBitmapIndexedNode(getMutator(), nodeMapNew, dataMapNew, nodesNew);
+                return newBitmapIndexedNode(mutator, nodeMapNew, dataMapNew, nodesNew);
             }
 
             return this;
         }
 
-        private Node<K> copyAndInsertValue(final UniqueIdentity mutator, final int bitpos,
-                                           final K key) {
+        private BitmapIndexedNode<K> copyAndInsertValue(final UniqueIdentity mutator, final int bitpos,
+                                                        final K key) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and insert 1 element(s) at position 'idx'
@@ -236,8 +240,8 @@ class PersistentTrieSetHelper {
 
         }
 
-        private Node<K> copyAndMigrateFromInlineToNode(final UniqueIdentity mutator,
-                                                       final int bitpos, final Node<K> node) {
+        private BitmapIndexedNode<K> copyAndMigrateFromInlineToNode(final UniqueIdentity mutator,
+                                                                    final int bitpos, final Node<K> node) {
 
             final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
@@ -256,8 +260,8 @@ class PersistentTrieSetHelper {
 
         }
 
-        private Node<K> copyAndMigrateFromNodeToInline(final UniqueIdentity mutator,
-                                                       final int bitpos, final Node<K> node) {
+        private BitmapIndexedNode<K> copyAndMigrateFromNodeToInline(final UniqueIdentity mutator,
+                                                                    final int bitpos, final Node<K> node) {
 
             final int idxOld = this.nodes.length - 1 - nodeIndex(bitpos);
             final int idxNew = TUPLE_LENGTH * dataIndex(bitpos);
@@ -275,7 +279,7 @@ class PersistentTrieSetHelper {
             return newBitmapIndexedNode(mutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst);
         }
 
-        private Node<K> copyAndRemoveValue(final UniqueIdentity mutator, final int bitpos) {
+        private BitmapIndexedNode<K> copyAndRemoveValue(final UniqueIdentity mutator, final int bitpos) {
             final int idx = TUPLE_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and remove 1 element(s) at position 'idx'
@@ -283,8 +287,8 @@ class PersistentTrieSetHelper {
             return newBitmapIndexedNode(mutator, nodeMap(), dataMap() ^ bitpos, dst);
         }
 
-        private Node<K> copyAndSetNode(final UniqueIdentity mutator, final int bitpos,
-                                       final Node<K> newNode) {
+        private BitmapIndexedNode<K> copyAndSetNode(final UniqueIdentity mutator, final int bitpos,
+                                                    final Node<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
             final int idx = this.nodes.length - 1 - nodeIndex;
@@ -423,8 +427,8 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        Node<K> removed(final UniqueIdentity mutator, final K key, final int keyHash,
-                        final int shift, final ChangeEvent changeEvent) {
+        BitmapIndexedNode<K> removed(final UniqueIdentity mutator, final K key, final int keyHash,
+                                     final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -462,19 +466,19 @@ class PersistentTrieSetHelper {
                 }
 
                 switch (subNodeNew.sizePredicate()) {
-                    case SIZE_EMPTY:
-                        throw new IllegalStateException("Sub-node must have at least one element.");
-                    case SIZE_ONE:
-                        if (this.payloadArity() == 0 && this.nodeArity() == 1) {
-                            // escalate (singleton or empty) result
-                            return subNodeNew;
-                        } else {
-                            // inline value (move to front)
-                            return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew);
-                        }
-                    default:
-                        // modify current node (set replacement node)
-                        return copyAndSetNode(mutator, bitpos, subNodeNew);
+                case SIZE_EMPTY:
+                    throw new IllegalStateException("Sub-node must have at least one element.");
+                case SIZE_ONE:
+                    if (this.payloadArity() == 0 && this.nodeArity() == 1) {
+                        // escalate (singleton or empty) result
+                        return (BitmapIndexedNode<K>) subNodeNew;
+                    } else {
+                        // inline value (move to front)
+                        return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew);
+                    }
+                default:
+                    // modify current node (set replacement node)
+                    return copyAndSetNode(mutator, bitpos, subNodeNew);
                 }
             }
 
@@ -498,8 +502,8 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        Node<K> updated(final UniqueIdentity mutator, final K key,
-                        final int keyHash, final int shift, final ChangeEvent changeEvent) {
+        BitmapIndexedNode<K> updated(final UniqueIdentity mutator, final K key,
+                                     final int keyHash, final int shift, final ChangeEvent changeEvent) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -602,7 +606,7 @@ class PersistentTrieSetHelper {
 
         abstract boolean contains(final K key, final int keyHash, final int shift);
 
-        abstract @NonNull Node<K> copyAddAll(@NonNull Node<K> that, final int shift, BulkChangeEvent bulkChange);
+        abstract @NonNull Node<K> copyAddAll(@NonNull Node<K> that, final int shift, BulkChangeEvent bulkChange, UniqueIdentity mutator);
 
         abstract boolean equivalent(final @NonNull Node<?> other);
 
@@ -672,7 +676,7 @@ class PersistentTrieSetHelper {
         }
 
         @Override
-        @NonNull Node<K> copyAddAll(@NonNull Node<K> o, int shift, BulkChangeEvent bulkChange) {
+        @NonNull Node<K> copyAddAll(@NonNull Node<K> o, int shift, BulkChangeEvent bulkChange, UniqueIdentity mutator) {
             if (o == this) {
                 return this;
             }
@@ -706,7 +710,7 @@ class PersistentTrieSetHelper {
 
             if (list.size() > this.keys.length) {
                 @SuppressWarnings("unchecked")
-                HashCollisionNode<K> unchecked = newHashCollisionNode(getMutator(), hash, (K[]) list.toArray());
+                HashCollisionNode<K> unchecked = newHashCollisionNode(mutator, hash, (K[]) list.toArray());
                 return unchecked;
             }
 
@@ -884,14 +888,15 @@ class PersistentTrieSetHelper {
     static class TrieIterator<K> implements Iterator<K> {
 
         private static final int MAX_DEPTH = 7;
-        private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
+        private final @NonNull int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
         protected int nextValueCursor;
         protected int nextValueLength;
-        protected Node<K> nextValueNode;
+        protected @Nullable Node<K> nextValueNode;
         private int nextStackLevel = -1;
-        protected K current;
+        protected @Nullable K current;
+        boolean canRemove = false;
 
-        @SuppressWarnings({"rawtypes", "unchecked"})
+        @SuppressWarnings({"unchecked"})
         Node<K>[] nodes = new Node[MAX_DEPTH];
 
         TrieIterator(Node<K> rootNode) {
@@ -919,29 +924,27 @@ class PersistentTrieSetHelper {
         }
 
         /**
-         * Moves the iterator so that it stands before the specified
-         * element.
+         * Moves the iterator so that it stands before the specified element.
          *
          * @param k        an element
          * @param rootNode the root node of the set
          */
         protected void moveTo(final @Nullable K k, final @NonNull Node<K> rootNode) {
-            int keyHash = Objects.hashCode(k);
-            int shift = 0;
+            int hash = Objects.hashCode(k);
             Node<K> node = rootNode;
 
+            int shift = 0;
             nextStackLevel = -1;
             nextValueNode = null;
             nextValueCursor = 0;
             nextValueLength = 0;
             Arrays.fill(nodes, null);
             Arrays.fill(nodeCursorsAndLengths, 0);
-            current = null;
 
             for (int depth = 0; depth < MAX_DEPTH; depth++) {
                 nodes[depth] = node;
 
-                int nodeIndex = node.nodeIndex(keyHash, shift);
+                int nodeIndex = node.nodeIndex(hash, shift);
                 if (nodeIndex != -1) {
                     final int nextCursorIndex = depth * 2;
                     final int nextLengthIndex = nextCursorIndex + 1;
@@ -949,7 +952,7 @@ class PersistentTrieSetHelper {
                     nodeCursorsAndLengths[nextLengthIndex] = node.nodeArity();
                     node = node.getNode(nodeIndex);
                 } else {
-                    int payloadIndex = node.payloadIndex(k, keyHash, shift);
+                    int payloadIndex = node.payloadIndex(k, hash, shift);
                     if (payloadIndex != -1) {
                         nextValueNode = node;
                         nextValueCursor = payloadIndex;
@@ -968,6 +971,7 @@ class PersistentTrieSetHelper {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             } else {
+                canRemove = true;
                 return current = nextValueNode.getKey(nextValueCursor++);
             }
         }

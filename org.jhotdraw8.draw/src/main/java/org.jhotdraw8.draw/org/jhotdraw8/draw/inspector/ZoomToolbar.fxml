@@ -3,13 +3,10 @@
 
 <!--
   ~ @(#)ZoomToolbar.fxml
-  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?><?import javafx.scene.control.Button?><?import javafx.scene.control.Slider?><?import javafx.scene.layout.HBox?>
 <HBox alignment="CENTER" spacing="4.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <Slider fx:id="zoomSlider" blockIncrement="1.0" majorTickUnit="5.0" max="10.0" min="-10.0" minorTickCount="4"

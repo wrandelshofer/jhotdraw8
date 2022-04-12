@@ -1,6 +1,6 @@
 /*
  * @(#)HierarchyInspector.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.inspector;
 
@@ -13,7 +13,14 @@ import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableCell;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
@@ -24,7 +31,11 @@ import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ImmutableSets;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.HideableFigure;
+import org.jhotdraw8.draw.figure.LockableFigure;
+import org.jhotdraw8.draw.figure.SimpleDrawing;
+import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
@@ -42,7 +53,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**

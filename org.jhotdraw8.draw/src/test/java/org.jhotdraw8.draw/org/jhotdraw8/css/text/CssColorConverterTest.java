@@ -1,6 +1,6 @@
-/* @(#)CssColorConverterTest.java
- * Copyright (c) 2016 The authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/*
+ * @(#)CssColorConverterTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 

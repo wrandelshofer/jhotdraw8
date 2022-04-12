@@ -1,3 +1,8 @@
+/*
+ * @(#)CompletableWorker.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.concurrent;
 
 import javafx.concurrent.Worker;

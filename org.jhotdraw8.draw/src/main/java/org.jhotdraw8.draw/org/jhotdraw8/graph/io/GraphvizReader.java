@@ -1,3 +1,8 @@
+/*
+ * @(#)GraphvizReader.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.graph.io;
 
 import org.jhotdraw8.collection.OrderedPair;
@@ -9,7 +14,12 @@ import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**

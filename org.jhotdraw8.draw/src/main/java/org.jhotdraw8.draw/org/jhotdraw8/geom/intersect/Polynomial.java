@@ -1,6 +1,6 @@
 /*
  * @(#)Polynomial.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.intersect;
 
@@ -22,18 +22,6 @@ import static java.lang.Math.max;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
-/**
- * Represents a polynomial.
- * <p>
- * The code of this class has been derived from intersection.js [1].
- * <p>
- * References:
- * <dl>
- *     <dt>[1] intersection.js</dt>
- *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
- *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
- * </dl>
- */
 public class Polynomial implements ToDoubleFunction<Double> {
 
     private static final double ACCURACY = 6;

@@ -1,10 +1,15 @@
+/*
+ * @(#)TrieList.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import java.util.AbstractList;
 import java.util.stream.Stream;
 
 public class TrieList<E> extends AbstractList<E> implements ReadOnlySequencedCollection<E> {
-    private PersistentTrieListHelper.RrbTree<E> tree = new PersistentTrieListHelper.RrbTree<>();
+    private TrieListHelper.RrbTree<E> tree = new TrieListHelper.RrbTree<>();
 
     @Override
     public boolean add(E e) {

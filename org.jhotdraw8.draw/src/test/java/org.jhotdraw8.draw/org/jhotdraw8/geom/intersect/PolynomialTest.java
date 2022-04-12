@@ -1,6 +1,6 @@
-/* @(#)PolynomialTest.java
- * Copyright (c) 2017 The authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/*
+ * @(#)PolynomialTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.intersect;
 

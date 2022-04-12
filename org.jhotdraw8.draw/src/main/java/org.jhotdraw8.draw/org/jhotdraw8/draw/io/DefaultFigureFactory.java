@@ -1,6 +1,6 @@
 /*
  * @(#)DefaultFigureFactory.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.io;
 
@@ -38,9 +38,9 @@ import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.css.text.CssDimension2DConverter;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssEffectConverter;
-import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
 import org.jhotdraw8.css.text.CssFontConverter;
 import org.jhotdraw8.css.text.CssInsetsConverter;
+import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssPaintConverter;
 import org.jhotdraw8.css.text.CssPaintableConverter;

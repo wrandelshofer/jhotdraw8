@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ @(#)Book.xml
-  ~ Copyright © The authors and contributors of JHotDraw. MIT License.
+  ~ @(#)Handbook.xml
+  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
 
 <book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"

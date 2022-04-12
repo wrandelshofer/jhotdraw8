@@ -1,8 +1,6 @@
 /*
- * <Project / Product>
- * Copyright (c) 2021 Siemens Mobility AG.
- * All rights reserved
- * confidential
+ * @(#)ListHelper.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.collection;

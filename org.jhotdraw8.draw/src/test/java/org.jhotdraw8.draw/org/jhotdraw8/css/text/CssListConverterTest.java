@@ -1,6 +1,6 @@
-/* @(#)CssListConverterTest.java
- * Copyright (c) 2016 by the authors and contributors ofCollection JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/*
+ * @(#)CssListConverterTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.css.text;

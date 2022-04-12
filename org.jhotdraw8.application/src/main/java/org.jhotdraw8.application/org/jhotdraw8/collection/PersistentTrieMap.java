@@ -1,6 +1,6 @@
 /*
  * @(#)PersistentTrieMap.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
@@ -13,32 +13,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Implements the {@link PersistentMap} interface with a
- * Compressed Hash-Array Mapped Prefix-trie (CHAMP).
- * <p>
- * Creating a new copy with a single element added, removed or updated
- * is performed in {@code O(1)} time and space.
- * <p>
- * References:
- * <dl>
- *     <dt>This class has been derived from "The Capsule Hash Trie Collections Library".</dt>
- *     <dd>Copyright (c) Michael Steindorfer, Centrum Wiskunde & Informatica, and Contributors.
- *         BSD 2-Clause License.
- *         <a href="https://github.com/usethesource/capsule">github.com</a>.</dd>
- * </dl>
- *
- * @param <K> the key type
- * @param <V> the value type
- */
-public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
+public class PersistentTrieMap<K, V> extends TrieMapHelper.BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
 
-    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(PersistentTrieMapHelper.EMPTY_NODE, 0);
+    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(TrieMapHelper.EMPTY_NODE, 0);
 
     final int size;
 
-    PersistentTrieMap(@NonNull PersistentTrieMapHelper.BitmapIndexedNode<K, V> root, int size) {
+    PersistentTrieMap(@NonNull TrieMapHelper.BitmapIndexedNode<K, V> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.nodes);
         this.size = size;
     }
@@ -111,7 +93,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
     }
 
     public Iterator<Map.Entry<K, V>> entryIterator() {
-        return new PersistentTrieMapHelper.MapEntryIterator<>(this);
+        return new TrieMapHelper.MapEntryIterator<>(this);
     }
 
     @Override
@@ -136,7 +118,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
             }
             for (Map.Entry<?, ?> entry : that.entrySet()) {
                 @SuppressWarnings("unchecked") final K key = (K) entry.getKey();
-                final PersistentTrieMapHelper.SearchResult<V> result = findByKey(key, Objects.hashCode(key), 0);
+                final TrieMapHelper.SearchResult<V> result = findByKey(key, Objects.hashCode(key), 0);
 
                 if (!result.keyExists()) {
                     return false;
@@ -155,7 +137,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
     @Override
     public V get(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        final PersistentTrieMapHelper.SearchResult<V> result = findByKey(key, Objects.hashCode(key), 0);
+        final TrieMapHelper.SearchResult<V> result = findByKey(key, Objects.hashCode(key), 0);
         return result.orElse(null);
     }
 
@@ -170,7 +152,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
     }
 
     public Iterator<K> keyIterator() {
-        return new PersistentTrieMapHelper.MapKeyIterator<>(this);
+        return new TrieMapHelper.MapKeyIterator<>(this);
     }
 
     @Override
@@ -185,9 +167,9 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
 
     public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
+        final TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
 
-        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode = updated(null, key, value,
+        final TrieMapHelper.BitmapIndexedNode<K, V> newRootNode = updated(null, key, value,
                 keyHash, 0, details);
 
         if (details.isModified()) {
@@ -208,7 +190,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
         final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
-            PersistentTrieMapHelper.ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            TrieMapHelper.ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
             modified |= details.isModified;
         }
         return modified ? t.toPersistent() : this;
@@ -216,8 +198,8 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
 
     public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = Objects.hashCode(key);
-        final PersistentTrieMapHelper.ChangeEvent<V> details = new PersistentTrieMapHelper.ChangeEvent<>();
-        final PersistentTrieMapHelper.BitmapIndexedNode<K, V> newRootNode = (PersistentTrieMapHelper.BitmapIndexedNode<K, V>)
+        final TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
+        final TrieMapHelper.BitmapIndexedNode<K, V> newRootNode = (TrieMapHelper.BitmapIndexedNode<K, V>)
                 removed(null, key, keyHash, 0, details);
         if (details.isModified()) {
             assert details.hasReplacedValue();
@@ -233,7 +215,7 @@ public class PersistentTrieMap<K, V> extends PersistentTrieMapHelper.BitmapIndex
         final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
-            PersistentTrieMapHelper.ChangeEvent<V> details = t.removeAndGiveDetails(key);
+            TrieMapHelper.ChangeEvent<V> details = t.removeAndGiveDetails(key);
             modified |= details.isModified;
         }
         return modified ? t.toPersistent() : this;

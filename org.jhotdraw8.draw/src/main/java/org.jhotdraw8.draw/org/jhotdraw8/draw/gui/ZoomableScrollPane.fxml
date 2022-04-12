@@ -2,16 +2,10 @@
 
 <!--
   ~ @(#)ZoomableScrollPane.fxml
-  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.SubScene?>
+<?import javafx.scene.control.ScrollBar?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.Region?><?import javafx.scene.layout.RowConstraints?><?import javafx.scene.layout.StackPane?><?import javafx.scene.SubScene?>
 <fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="GridPane"
          xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>

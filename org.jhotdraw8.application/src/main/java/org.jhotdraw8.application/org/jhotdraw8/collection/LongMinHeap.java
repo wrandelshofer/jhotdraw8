@@ -1,8 +1,6 @@
 /*
- * systransis AdmiRail
- * Copyright (c) 2022 Siemens Mobility AG.
- * All rights reserved
- * confidential
+ * @(#)LongMinHeap.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.collection;
@@ -15,18 +13,6 @@ import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-/**
- * This code has been derived from "Min Heap in Java".
- * <p>
- * References:
- * <dl>
- *     <dt>Min Heap in Java.
- *     Copyright Geeks for Geeks. MIT License.</dt>
- *     <dd><a href="https://www.geeksforgeeks.org/min-heap-in-java/">geeksforgeeks.org</dd>
- *
- * </dl>
- * </p>
- */
 public class LongMinHeap implements LongQueue {
 
     // Member variables of this class

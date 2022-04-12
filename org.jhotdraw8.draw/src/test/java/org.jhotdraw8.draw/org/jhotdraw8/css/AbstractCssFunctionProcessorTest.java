@@ -1,3 +1,8 @@
+/*
+ * @(#)AbstractCssFunctionProcessorTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.Nullable;

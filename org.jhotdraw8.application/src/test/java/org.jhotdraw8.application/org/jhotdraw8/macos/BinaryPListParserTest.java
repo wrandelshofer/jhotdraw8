@@ -1,3 +1,8 @@
+/*
+ * @(#)BinaryPListParserTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.macos;
 
 import org.jhotdraw8.annotation.NonNull;

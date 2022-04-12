@@ -1,6 +1,6 @@
-/* @(#)CssRegexConverterTest.java
- * Copyright (c) 2015 The authors and contributors of JHotDraw.
- * You may only use this file in compliance with the accompanying license terms.
+/*
+ * @(#)CssRegexConverterTest.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.css.text;
 

@@ -2,15 +2,10 @@
 
 <!--
   ~ @(#)DrawingExportOptionsPane.fxml
-  ~ Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.CheckBox?><?import javafx.scene.control.Label?><?import javafx.scene.control.TextField?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.RowConstraints?>
 <fx:root hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          type="GridPane" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>

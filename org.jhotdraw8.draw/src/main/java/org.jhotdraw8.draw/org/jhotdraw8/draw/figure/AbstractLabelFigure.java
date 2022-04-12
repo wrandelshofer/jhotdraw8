@@ -1,10 +1,15 @@
 /*
  * @(#)AbstractLabelFigure.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.*;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -15,10 +20,22 @@ import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.css.*;
+import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.css.CssDimension2D;
+import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.Paintable;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
+import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPreciseRotate;

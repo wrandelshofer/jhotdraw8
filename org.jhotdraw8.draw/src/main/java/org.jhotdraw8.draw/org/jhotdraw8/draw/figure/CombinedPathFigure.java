@@ -1,6 +1,6 @@
 /*
  * @(#)CombinedPathFigure.java
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -17,9 +17,13 @@ import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AwtPathBuilder;
+import org.jhotdraw8.geom.ConcatenatedPathIterator;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.SvgPaths;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
