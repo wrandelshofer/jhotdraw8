@@ -1,5 +1,5 @@
 /*
- * @(#)GraphvizReader.java
+ * @(#)GraphvizWriter.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph.io;
@@ -73,7 +73,7 @@ public class GraphvizWriter {
      */
     public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph,
                              @NonNull Function<V, String> vertexToString) throws IOException {
-        write(w, graph, vertexToString, null, null, null);
+        write(w, graph, vertexToString, null, null, "G");
     }
 
     /**
@@ -97,7 +97,7 @@ public class GraphvizWriter {
                                @NonNull Function<A, String> arrowAttributes) {
         StringWriter w = new StringWriter();
         try {
-            write(w, graph, vertexToString, vertexAttributes, arrowAttributes, null);
+            write(w, graph, vertexToString, vertexAttributes, arrowAttributes, "G");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -131,7 +131,7 @@ public class GraphvizWriter {
         if (graphId != null) {
             w.append(" ").append(graphId);
         }
-        w.append(" G {\n");
+        w.append(" {\n");
 
         // dump vertices
         for (V v : graph.getVertices()) {

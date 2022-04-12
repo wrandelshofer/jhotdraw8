@@ -8,20 +8,24 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+/**
+ * Defines an API for a mutable directed graph.
+ *
+ * @param <V> the vertex type
+ * @param <A> the arrow data type
+ */
 public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
     /**
-     * Adds a vertex to the graph.
+     * Adds a vertex to the graph if it is not already in the graph.
      *
      * @param v vertex data
-     * @throws IllegalStateException if the vertex is already in the graph
      */
     void addVertex(@NonNull V v);
 
     /**
-     * Removes a vertex from the graph.
+     * Removes a vertex from the graph if it is in the graph.
      *
      * @param v vertex data
-     * @throws IllegalStateException if the vertex is not in the graph
      */
     void removeVertex(@NonNull V v);
 

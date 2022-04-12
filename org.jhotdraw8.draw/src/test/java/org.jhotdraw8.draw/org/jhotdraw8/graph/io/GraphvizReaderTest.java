@@ -17,7 +17,7 @@ class GraphvizReaderTest {
     @Disabled
     void read() throws Exception {
         Path file = Path.of("….dot");
-        final MutableDirectedGraph<String, String> g = new GraphvizReader().read(file);
+        final MutableDirectedGraph<String, String> g = GraphvizReader.newInstance().read(file);
         System.out.println("#vertex:" + g.getVertexCount());
         System.out.println("#arrow:" + g.getArrowCount());
         /*

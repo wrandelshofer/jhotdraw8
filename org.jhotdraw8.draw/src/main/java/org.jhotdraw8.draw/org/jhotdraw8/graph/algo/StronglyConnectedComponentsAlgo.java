@@ -99,12 +99,12 @@ public class StronglyConnectedComponentsAlgo {
                     vdata.low = pre++;
                     stack.push(v);
                     // Level down:
-                    minStack.push(vdata.low);
+                    minStack.pushAsInt(vdata.low);
                     enumeratorStack.push(enumerator);
                     enumerator = new IteratorEnumerator<>(nextNodeFunction.apply(v).iterator());
                 } else {
                     if (!minStack.isEmpty()) {
-                        minStack.push(min(vdata.low, minStack.pop()));
+                        minStack.pushAsInt(min(vdata.low, minStack.popAsInt()));
                     }
                 }
             } else {
@@ -115,7 +115,7 @@ public class StronglyConnectedComponentsAlgo {
 
                 enumerator = enumeratorStack.pop();
                 V v = enumerator.current();
-                int min = minStack.pop();
+                int min = minStack.popAsInt();
                 NodeData vdata = nodeMap.get(v);
                 if (min < vdata.low) {
                     vdata.low = min;
@@ -132,7 +132,7 @@ public class StronglyConnectedComponentsAlgo {
                 }
 
                 if (!minStack.isEmpty()) {
-                    minStack.push(min(vdata.low, minStack.pop()));
+                    minStack.pushAsInt(min(vdata.low, minStack.popAsInt()));
                 }
             }
         }

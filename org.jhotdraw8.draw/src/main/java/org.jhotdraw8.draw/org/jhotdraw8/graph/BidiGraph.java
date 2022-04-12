@@ -5,9 +5,14 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.graph.iterator.VertexEnumerator;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Adds convenience methods to the API defined in {@link BareBidiGraph}.
@@ -87,6 +92,30 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      */
     default boolean isPrev(final V v, final @NonNull V u) {
         return findIndexOfPrev(v, u) >= 0;
+    }
+
+    /**
+     * Searches for vertices starting at the provided vertex.
+     *
+     * @param start the start vertex
+     * @param dfs   whether to search depth-first instead of breadth-first
+     * @return breadth first search
+     */
+    default @NonNull Enumerator<V> searchPrevVertices(final V start, final boolean dfs) {
+        final Set<V> visited = new HashSet<>();
+        return searchPrevVertices(start, visited::add, dfs);
+    }
+
+    /**
+     * Searches for vertices starting at the provided vertex.
+     *
+     * @param start   the start vertex
+     * @param visited the add method of the visited set, see {@link Set#add}.
+     * @param dfs     whether to search depth-first instead of breadth-first
+     * @return breadth first search
+     */
+    default @NonNull Enumerator<V> searchPrevVertices(final V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+        return new VertexEnumerator<V>(this::getPrevVertices, start, visited, dfs);
     }
 
 }

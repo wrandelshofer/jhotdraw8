@@ -1,3 +1,7 @@
+/*
+ * @(#)AdjacencyListWriter.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
 package org.jhotdraw8.graph.io;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -7,6 +11,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.function.Function;
 
+/**
+ * Writes a graph as an adjacency list.
+ */
 public class AdjacencyListWriter {
     /**
      * Dumps the graph for debugging purposes.

@@ -72,7 +72,6 @@ import java.util.Set;
  *
  * @author Werner Randelshofer
  */
-
 public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
     private final Map<V, Node<V, A>> nodeMap;
@@ -116,7 +115,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     @Override
     public void addVertex(@NonNull V v) {
         if (nodeMap.containsKey(v)) {
-            throw new IllegalStateException("v=" + v + " is already in graph");
+            return;
         }
         nodeMap.put(v, new Node<>(v));
         cachedVertices = null;
@@ -126,7 +125,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     public void removeVertex(@NonNull V v) {
         Node<V, A> node = nodeMap.remove(v);
         if (node == null) {
-            throw new IllegalStateException("v=" + v + " is not in graph");
+            return;
         }
         int oldArrowCount = arrowCount;
         // Unlink node from its "next" nodes
@@ -210,7 +209,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public @NonNull A getNextArrow(@NonNull V v, int index) {
+    public @Nullable A getNextArrow(@NonNull V v, int index) {
         Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.getArrow(index);
     }
@@ -233,6 +232,11 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     @Override
     public @NonNull Set<V> getVertices() {
         return Collections.unmodifiableSet(nodeMap.keySet());
+    }
+
+    @Override
+    public int getVertexCount() {
+        return nodeMap.size();
     }
 
     @Override

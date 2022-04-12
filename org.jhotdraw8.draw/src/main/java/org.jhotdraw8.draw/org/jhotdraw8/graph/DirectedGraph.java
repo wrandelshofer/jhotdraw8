@@ -6,12 +6,17 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.Enumerator;
 import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.graph.iterator.VertexEnumerator;
+import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
@@ -165,4 +170,27 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      */
     V getVertex(int index);
 
+    /**
+     * Searches for vertices starting at the provided vertex.
+     *
+     * @param start the start vertex
+     * @param dfs   whether to search depth-first instead of breadth-first
+     * @return breadth first search
+     */
+    default @NonNull Enumerator<V> searchNextVertices(final V start, final boolean dfs) {
+        final Set<V> visited = new HashSet<>();
+        return searchNextVertices(start, visited::add, dfs);
+    }
+
+    /**
+     * Searches for vertices starting at the provided vertex.
+     *
+     * @param start   the start vertex
+     * @param visited the add method of the visited set, see {@link Set#add}.
+     * @param dfs     whether to search depth-first instead of breadth-first
+     * @return breadth first search
+     */
+    default @NonNull Enumerator<V> searchNextVertices(final V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+        return new VertexEnumerator<V>(this::getNextVertices, start, visited, dfs);
+    }
 }
