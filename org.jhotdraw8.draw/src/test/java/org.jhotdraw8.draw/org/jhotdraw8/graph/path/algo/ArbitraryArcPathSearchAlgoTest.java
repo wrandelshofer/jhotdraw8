@@ -10,8 +10,8 @@ import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
-import org.jhotdraw8.graph.DumpGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
+import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedAllWalksFinder;
@@ -83,7 +83,7 @@ public class ArbitraryArcPathSearchAlgoTest {
                 + "5 -> 6.\n"
                 + "6 -> 1, 5.";
 
-        final String actual = DumpGraph.dumpAsAdjacencyList(graph);
+        final String actual = new AdjacencyListWriter().write(graph);
 
         assertEquals(expected, actual);
     }

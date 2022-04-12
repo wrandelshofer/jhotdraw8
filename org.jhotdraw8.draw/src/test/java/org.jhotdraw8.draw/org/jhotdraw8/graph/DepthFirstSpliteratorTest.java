@@ -11,6 +11,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.junit.jupiter.api.Test;
 
@@ -84,7 +85,7 @@ public class DepthFirstSpliteratorTest {
                 + "5 -> 6.\n"
                 + "6 -> 1, 5.";
 
-        final String actual = DumpGraph.dumpAsAdjacencyList(graph);
+        final String actual = new AdjacencyListWriter().write(graph);
 
         assertEquals(expected, actual);
     }

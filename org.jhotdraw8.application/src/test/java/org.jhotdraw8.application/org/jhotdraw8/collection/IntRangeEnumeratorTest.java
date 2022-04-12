@@ -105,10 +105,10 @@ public class IntRangeEnumeratorTest {
         int[] actual = new int[a.length];
         int i = 0;
         while (prefix.moveNext()) {
-            actual[i++] = prefix.current;
+            actual[i++] = prefix.current();
         }
         while (instance.moveNext()) {
-            actual[i++] = instance.current;
+            actual[i++] = instance.current();
         }
 
         assertArrayEquals(a, actual);
@@ -130,10 +130,10 @@ public class IntRangeEnumeratorTest {
         int[] actual = new int[a.length];
         int i = 0;
         while (prefix.moveNext()) {
-            actual[i++] = prefix.current;
+            actual[i++] = prefix.current();
         }
         while (instance.moveNext()) {
-            actual[i++] = instance.current;
+            actual[i++] = instance.current();
         }
 
         assertArrayEquals(a, actual);
@@ -169,7 +169,7 @@ public class IntRangeEnumeratorTest {
         while (!stack.isEmpty()) {
             it = stack.pop();
             while (it.moveNext()) {
-                actual[i++] = it.current;
+                actual[i++] = it.current();
             }
         }
 

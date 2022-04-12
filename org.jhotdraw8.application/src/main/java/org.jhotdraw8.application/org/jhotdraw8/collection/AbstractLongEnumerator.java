@@ -31,6 +31,9 @@ public abstract class AbstractLongEnumerator extends Spliterators.AbstractLongSp
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final long currentAsLong() {
         return current;

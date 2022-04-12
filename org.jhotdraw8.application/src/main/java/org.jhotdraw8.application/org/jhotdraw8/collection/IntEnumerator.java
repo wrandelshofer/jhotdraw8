@@ -26,6 +26,22 @@ public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
      * {@inheritDoc}
      */
     @Override
+    default @NonNull Integer current() {
+        return currentAsInt();
+    }
+
+    /**
+     * Returns the current value.
+     *
+     * @return current
+     * @see Enumerator#current()
+     */
+    int currentAsInt();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     default boolean tryAdvance(@NonNull IntConsumer action) {
         if (moveNext()) {
             action.accept(currentAsInt());
@@ -40,23 +56,6 @@ public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
     @Override
     default boolean tryAdvance(@NonNull Consumer<? super Integer> action) {
         return Enumerator.super.tryAdvance(action);
-    }
-
-    /**
-     * Returns the current value.
-     *
-     * @return current
-     * @see Enumerator#current()
-     */
-    int currentAsInt();
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    default @NonNull Integer current() {
-        return currentAsInt();
     }
 
 }

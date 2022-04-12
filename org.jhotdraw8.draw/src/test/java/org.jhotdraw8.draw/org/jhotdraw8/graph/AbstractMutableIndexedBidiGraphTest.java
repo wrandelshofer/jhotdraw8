@@ -6,6 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.graph.io.GraphvizWriter;
 import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -26,9 +27,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public abstract class AbstractMutableIndexedBidiGraphTest {
-    protected abstract MutableIndexedBidiGraph newInstance(int maxArity);
+    protected abstract @NonNull MutableIndexedBidiGraph newInstance(int maxArity);
 
-    protected void assertEqualGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
+    protected void assertEqualGraphInt(@NonNull BidiGraph<Integer, Integer> expected,
+                                       @NonNull IndexedBidiGraph actual) {
         for (Integer v : expected.getVertices()) {
             List<Integer> actualNextList =
                     StreamSupport.stream(actual.nextVerticesEnumerator(v), false).collect(Collectors.toList());
@@ -40,7 +42,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
+    protected void assertEqualSortedGraphInt(@NonNull BidiGraph<Integer, Integer> expected, @NonNull IndexedBidiGraph actual) {
         for (Integer v : expected.getVertices()) {
             Set<Integer> actualNextList =
                     StreamSupport.stream(actual.nextVerticesEnumerator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -52,16 +54,16 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    protected void assertEqualGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
+    protected void assertEqualGraph(@NonNull BidiGraph<Integer, Integer> expected, @NonNull BidiGraph<Integer, Integer> actual) throws IOException {
         assertEquals(expected.getVertexCount(), actual.getVertexCount());
         assertEquals(expected.getVertices(), actual.getVertices());
         assertEquals(expected.getArrowCount(), actual.getArrowCount());
 
 
         StringWriter expectedW = new StringWriter();
-        DumpGraph.dumpAsDot(expectedW, expected);
+        new GraphvizWriter().write(expectedW, expected);
         StringWriter actualW = new StringWriter();
-        DumpGraph.dumpAsDot(actualW, actual);
+        new GraphvizWriter().write(actualW, actual);
         String[] expectedSplit = expectedW.toString().split("\n");
         String[] actualSplit = actualW.toString().split("\n");
         Arrays.sort(expectedSplit);
@@ -85,15 +87,16 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    private void assertEqualSortedGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
+    private void assertEqualSortedGraph(@NonNull BidiGraph<Integer, Integer> expected,
+                                        @NonNull BidiGraph<Integer, Integer> actual) throws IOException {
         assertEquals(expected.getVertexCount(), actual.getVertexCount());
         assertEquals(expected.getVertices(), actual.getVertices());
         assertEquals(expected.getArrowCount(), actual.getArrowCount());
 
         StringWriter expectedW = new StringWriter();
-        DumpGraph.dumpAsDot(expectedW, expected);
+        new GraphvizWriter().write(expectedW, expected);
         StringWriter actualW = new StringWriter();
-        DumpGraph.dumpAsDot(actualW, actual);
+        new GraphvizWriter().write(actualW, actual);
         String[] expectedSplit = expectedW.toString().split("\n");
         String[] actualSplit = actualW.toString().split("\n");
         Arrays.sort(expectedSplit);
@@ -267,7 +270,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    private int findSortedIndex(Collection<Integer> vertices, int v) {
+    private int findSortedIndex(@NonNull Collection<Integer> vertices, int v) {
         final Integer[] a = vertices.toArray(new Integer[0]);
         Arrays.sort(a);
         return Arrays.binarySearch(a, v);

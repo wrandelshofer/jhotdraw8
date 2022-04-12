@@ -8,6 +8,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.collection.MappedList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.algo.MinimumSpanningTreeAlgo;
+import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class MinimumSpanningTreeAlgoTest extends AbstractGraphAlgoTest {
         DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
         DirectedGraph<String, Integer> expectedMst = createMSTGraph();
         SimpleMutableDirectedGraph<String, Integer> actualMst = new MinimumSpanningTreeAlgo().findMinimumSpanningTreeGraph(nonMst, Function.identity());
-        assertEquals(DumpGraph.dumpAsAdjacencyList(expectedMst), DumpGraph.dumpAsAdjacencyList(actualMst));
+        assertEquals(new AdjacencyListWriter().write(expectedMst), new AdjacencyListWriter().write(actualMst));
     }
 
     @Test
@@ -34,7 +35,7 @@ public class MinimumSpanningTreeAlgoTest extends AbstractGraphAlgoTest {
         DirectedGraph<String, Integer> expectedMst = createMSTGraph();
         SimpleMutableDirectedGraph<String, Integer> actualMst = new MinimumSpanningTreeAlgo().findMinimumSpanningTreeGraph(
                 nonMst, (va, vb, a) -> a);
-        assertEquals(DumpGraph.dumpAsAdjacencyList(expectedMst), DumpGraph.dumpAsAdjacencyList(actualMst));
+        assertEquals(new AdjacencyListWriter().write(expectedMst), new AdjacencyListWriter().write(actualMst));
     }
 
     @Test
@@ -53,7 +54,7 @@ public class MinimumSpanningTreeAlgoTest extends AbstractGraphAlgoTest {
                 new MappedList<>(
                         arcs, a -> new OrderedPair<String, String>(a.getStart(), a.getEnd())),
                 includedList, rejectedList);
-        assertEquals(DumpGraph.dumpAsAdjacencyList(expectedMst), DumpGraph.dumpAsAdjacencyList(actualMst));
+        assertEquals(new AdjacencyListWriter().write(expectedMst), new AdjacencyListWriter().write(actualMst));
     }
 
 

@@ -26,20 +26,8 @@ public interface LongEnumerator extends Enumerator<Long>, Spliterator.OfLong {
      * {@inheritDoc}
      */
     @Override
-    default boolean tryAdvance(@NonNull LongConsumer action) {
-        if (moveNext()) {
-            action.accept(currentAsLong());
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    default boolean tryAdvance(@NonNull Consumer<? super Long> action) {
-        return Enumerator.super.tryAdvance(action);
+    default @NonNull Long current() {
+        return currentAsLong();
     }
 
     /**
@@ -54,8 +42,20 @@ public interface LongEnumerator extends Enumerator<Long>, Spliterator.OfLong {
      * {@inheritDoc}
      */
     @Override
-    default @NonNull Long current() {
-        return currentAsLong();
+    default boolean tryAdvance(@NonNull LongConsumer action) {
+        if (moveNext()) {
+            action.accept(currentAsLong());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default boolean tryAdvance(@NonNull Consumer<? super Long> action) {
+        return Enumerator.super.tryAdvance(action);
     }
 
 }
