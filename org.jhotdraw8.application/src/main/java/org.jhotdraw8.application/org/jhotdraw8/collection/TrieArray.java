@@ -20,19 +20,19 @@ import static org.jhotdraw8.collection.TrieListHelper.M;
  * <p>
  * Invariants:
  * <ul>
- *     <li>The data structure consists of a trie.</li>
+ *     <li>The data structure consists of a left-wise dense trie.</li>
  *
  *     <li>The trie consists of inner nodes and leaf nodes.</li>
  *     <li>The children of an inner node are inner nodes or leaf nodes.</li>
  *
  *     <li>The children of a leaf node are data elements.</li>
  *     <li>All leaf nodes are at the same depth in the trie.</li>
- *     <li>All nodes except the root have {@code m} children.</li>
- *     <li>The root node has between {@code 1} and {@code m} children.</li>
+ *     <li>All nodes except the right-most have {@code m} children.</li>
+ *     <li>The right-most nodes have between {@code 1} and {@code m} children.</li>
  *     <li>A Trie Array with a trie of height {@code h} has
  *     {@code m^h + |tail|} elements.</li>
  *     <li>{@code m} must be a power of 2</li>
- *     <li>A leaf has a shift of {@code 0}</li>
+ *     <li>A leaf nodes have a shift of {@code 0}</li>
  *     <li>The trie has {@code ⌊size / m⌋} leaf nodes.</li>
  *     <li>The trie has height {@code h = ⌈log(size - 1)/log(m)⌉}</li>
  *     <li>The root node has {@code ⌈size / h^m⌉ children}</li>
