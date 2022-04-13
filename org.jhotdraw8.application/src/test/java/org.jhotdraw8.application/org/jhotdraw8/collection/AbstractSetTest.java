@@ -80,35 +80,39 @@ public abstract class AbstractSetTest {
 
         // WHEN is cloned
         // THEN Instance must be equal to expected
-        Set<HashCollider> actualClone = (Set<HashCollider>) instance.getClass().getMethod("clone").invoke(instance);
-        assertEquals(expected, actualClone);
+        try {
+            Set<HashCollider> actualClone = (Set<HashCollider>) instance.getClass().getMethod("clone").invoke(instance);
+            assertEquals(expected, actualClone);
 
-        // WHEN: Elements are bulk-removed from instance
-        // THEN Instance must be equal to expected
-        assertEquals(expected.removeAll(list), instance.removeAll(list));
-        assertEquals(expected.containsAll(list), instance.containsAll(list));
+            // WHEN: Elements are bulk-removed from instance
+            // THEN Instance must be equal to expected
+            assertEquals(expected.removeAll(list), instance.removeAll(list));
+            assertEquals(expected.containsAll(list), instance.containsAll(list));
 
-        // WHEN: Elements are bulk-added to cloned instance
-        // THEN Instance must be equal to expected
-        expected.addAll(list);
-        assertTrue(instance.addAll(actualClone));
-        assertEquals(expected, instance);
+            // WHEN: Elements are bulk-added to cloned instance
+            // THEN Instance must be equal to expected
+            expected.addAll(list);
+            assertTrue(instance.addAll(actualClone));
+            assertEquals(expected, instance);
 
-        // WHEN: Elements are bulk-added again to cloned instance
-        // THEN Instance must be equal to expected
-        assertFalse(instance.addAll(actualClone));
-        assertEquals(expected, instance);
+            // WHEN: Elements are bulk-added again to cloned instance
+            // THEN Instance must be equal to expected
+            assertFalse(instance.addAll(actualClone));
+            assertEquals(expected, instance);
 
-        // WHEN: Elements are bulk-removed from cloned instance
-        // THEN Instance must be equal to expected
-        expected.removeAll(list);
-        instance.removeAll(actualClone);
-        assertEquals(expected, instance);
+            // WHEN: Elements are bulk-removed from cloned instance
+            // THEN Instance must be equal to expected
+            expected.removeAll(list);
+            instance.removeAll(actualClone);
+            assertEquals(expected, instance);
 
-        // WHEN: Elements are bulk-removed again from cloned instance
-        // THEN Instance must be equal to expected
-        assertFalse(instance.removeAll(actualClone));
-        assertEquals(expected, instance);
+            // WHEN: Elements are bulk-removed again from cloned instance
+            // THEN Instance must be equal to expected
+            assertFalse(instance.removeAll(actualClone));
+            assertEquals(expected, instance);
+        } catch (NoSuchMethodException e) {
+            // its okay, we can not clone this set
+        }
 
         // WHEN: Element is iterator-removed to instance
         // THEN Instance must be equal to expected

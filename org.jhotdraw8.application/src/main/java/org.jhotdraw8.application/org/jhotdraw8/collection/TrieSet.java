@@ -8,7 +8,6 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.TrieSetHelper.BitmapIndexedNode;
-import org.jhotdraw8.collection.TrieSetHelper.BulkChangeEvent;
 import org.jhotdraw8.collection.TrieSetHelper.ChangeEvent;
 import org.jhotdraw8.collection.TrieSetHelper.TrieIterator;
 
@@ -94,12 +93,14 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             return false;
         }
 
+        /*
         if (c instanceof TrieSet<?>) {
             c = ((TrieSet<? extends E>) c).toPersistent();
         }
         if (c instanceof PersistentTrieSet<?>) {
             PersistentTrieSet<E> that = (PersistentTrieSet<E>) c;
             BulkChangeEvent bulkChange = new BulkChangeEvent();
+            bulkChange.sizeChange=that.size;
             root = root.copyAddAll(that, 0, bulkChange, getOrCreateMutator());
             if (bulkChange.sizeChange != 0) {
                 this.size += bulkChange.sizeChange;
@@ -108,13 +109,13 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             } else {
                 return false;
             }
-        } else {
+        } else {*/
             boolean modified = false;
             for (E e : c) {
                 modified |= add(e);
             }
             return modified;
-        }
+        //}
     }
 
     /**

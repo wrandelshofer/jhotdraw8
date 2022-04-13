@@ -259,7 +259,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     @Override
-    protected TrieMap<K, V> clone() {
+    public TrieMap<K, V> clone() {
         try {
             @SuppressWarnings("unchecked") final TrieMap<K, V> that = (TrieMap<K, V>) super.clone();
             that.mutator = null;

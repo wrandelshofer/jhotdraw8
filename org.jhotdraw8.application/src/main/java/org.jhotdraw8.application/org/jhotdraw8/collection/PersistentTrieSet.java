@@ -81,11 +81,12 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
             return this;
         }
 
+        /*
         if (set instanceof PersistentTrieSet) {
             return copyAddAllFromTrieSet((PersistentTrieSet<E>) set);
         } else if (set instanceof TrieSet) {
             return copyAddAllFromTrieSet(((TrieSet<E>) set).toPersistent());
-        }
+        }*/
 
         final TrieSet<E> t = this.toMutable();
         boolean modified = false;

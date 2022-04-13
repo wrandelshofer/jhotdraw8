@@ -79,6 +79,18 @@ class TrieSetHelper {
             return false;
         }
 
+        /**
+         * Creates a copy of this trie with all elements of the specified
+         * trie added to it.
+         * <p>
+         *
+         * @param o          the trie to be added to this trie
+         * @param shift      the shift for both tries
+         * @param bulkChange The field {@code sizeChange} must be set to the
+         *                   size of trie {@code o}
+         * @param mutator    the mutator
+         * @return
+         */
         @Override
         @NonNull BitmapIndexedNode<K> copyAddAll(@NonNull Node<K> o, int shift, @NonNull BulkChangeEvent bulkChange, @Nullable UniqueIdentity mutator) {
             // Given the same bit-position in this and that:
@@ -137,6 +149,7 @@ class TrieSetHelper {
                     if (Objects.equals(thisKey, thatKey)) {
                         // case 5.1:
                         nodesNew[dataIndex++] = thisKey;
+                        bulkChange.sizeChange--;
                     } else {
                         // case 5.2:
                         dataMapNew ^= bitpos;
@@ -144,7 +157,6 @@ class TrieSetHelper {
                         int thatKeyHash = Objects.hashCode(thatKey);
                         Node<K> subNodeNew = mergeTwoKeyValPairs(mutator, thisKey, Objects.hashCode(thisKey), thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                        bulkChange.sizeChange++;
                         changed = true;
                     }
                 } else if (thisHasData) {
@@ -159,9 +171,6 @@ class TrieSetHelper {
                         Node<K> subNode = that.nodeAt(bitpos);
                         Node<K> subNodeNew = subNode.updated(mutator, thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                        if (changeEvent.isModified) {
-                            bulkChange.sizeChange++;
-                        }
                         changed = true;
                     } else {
                         // case 1:
@@ -182,7 +191,6 @@ class TrieSetHelper {
                         if (changeEvent.isModified) {
                             changed = true;
                             nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
-                            bulkChange.sizeChange++;
                         }
                     } else {
                         // case 4:
