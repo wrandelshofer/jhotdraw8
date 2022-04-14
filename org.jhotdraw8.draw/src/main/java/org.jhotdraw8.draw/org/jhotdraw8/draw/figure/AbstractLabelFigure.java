@@ -306,7 +306,13 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        set(ORIGIN, new CssPoint2D(x.getConvertedValue(), y.getConvertedValue()));
+        CssRectangle2D layoutBounds = getCssLayoutBounds();
+        CssSize dx = x.subtract(layoutBounds.getMinX());
+        CssSize dy = y.subtract(layoutBounds.getMinY());
+        CssPoint2D p = getNonNull(ORIGIN);
+        set(ORIGIN_X, p.getX().add(dx));
+        set(ORIGIN_Y, p.getY().add(dy));
+
     }
 
     @Override
