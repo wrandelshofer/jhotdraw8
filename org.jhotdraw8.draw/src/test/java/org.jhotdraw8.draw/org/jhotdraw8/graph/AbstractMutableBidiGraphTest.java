@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-abstract class AbstractMutableBidiGraphTest
+public abstract class AbstractMutableBidiGraphTest
         extends AbstractMutableDirectedGraphTest {
     protected abstract MutableBidiGraph<Integer, Character> newInstance();
 

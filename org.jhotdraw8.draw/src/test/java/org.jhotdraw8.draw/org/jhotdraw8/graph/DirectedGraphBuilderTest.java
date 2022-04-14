@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.graph;
 
-class DirectedGraphBuilderTest extends AbstractMutableDirectedGraphTest {
+public class DirectedGraphBuilderTest extends AbstractMutableDirectedGraphTest {
     @Override
     protected MutableDirectedGraph<Integer, Character> newInstance() {
         return new SimpleMutableDirectedGraph<>(0, 0);

@@ -67,7 +67,7 @@ public class ArcEnumerator<V, A> extends AbstractEnumerator<Arc<V, A>> {
 
     @Override
     public boolean moveNext() {
-        current = dfs ? deque.removeLast() : deque.removeFirst();
+        current = dfs ? deque.pollLast() : deque.pollFirst();
         if (current == null) {
             return false;
         }

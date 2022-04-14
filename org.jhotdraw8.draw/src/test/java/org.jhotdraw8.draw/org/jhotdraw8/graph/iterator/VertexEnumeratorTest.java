@@ -97,10 +97,10 @@ public class VertexEnumeratorTest {
         assertEquals(expected, actual);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testIterateWithAnyPathProvider() throws Exception {
         for (final Object[] args : anyPathProvider()) {
-            //noinspection unchecked
             testIterate((DirectedGraph<Integer, Double>) args[0], (Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
         }
     }

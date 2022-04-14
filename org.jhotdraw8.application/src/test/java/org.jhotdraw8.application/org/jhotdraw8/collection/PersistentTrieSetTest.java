@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-class PersistentTrieSetTest extends AbstractPersistentSetTest {
+public class PersistentTrieSetTest extends AbstractPersistentSetTest {
 
     @Override
     protected PersistentSet<HashCollider> of() {

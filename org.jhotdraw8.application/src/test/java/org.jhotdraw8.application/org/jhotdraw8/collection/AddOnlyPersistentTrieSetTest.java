@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-class AddOnlyPersistentTrieSetTest {
+public class AddOnlyPersistentTrieSetTest {
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {

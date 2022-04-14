@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-abstract class AbstractPersistentMapTest {
+public abstract class AbstractPersistentMapTest {
     protected abstract @NonNull PersistentMap<HashCollider, HashCollider> of();
 
     @SuppressWarnings("unchecked")

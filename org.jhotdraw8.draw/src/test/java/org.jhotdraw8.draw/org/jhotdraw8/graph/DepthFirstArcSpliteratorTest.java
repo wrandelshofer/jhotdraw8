@@ -63,7 +63,7 @@ public class DepthFirstArcSpliteratorTest {
         Set<Integer> goals = new HashSet<>(waypoints);
         StringBuilder buf = new StringBuilder();
         for (Integer root : waypoints) {
-            ArcEnumerator<Integer, Integer> itr = new ArcEnumerator<>(graph::getNextArcs, root, false);
+            ArcEnumerator<Integer, Integer> itr = new ArcEnumerator<>(graph::getNextArcs, root, true);
             while (itr.moveNext()) {
                 Arc<Integer, Integer> current = itr.current();
                 if (buf.length() > 0) {
@@ -91,7 +91,7 @@ public class DepthFirstArcSpliteratorTest {
         List<ImmutableList<Integer>> paths = new ArrayList<>();
         List<Integer> path = null;
         for (Integer root : waypoints) {
-            ArcEnumerator<Integer, Integer> itr = new ArcEnumerator<>(graph::getNextArcs, root, false);
+            ArcEnumerator<Integer, Integer> itr = new ArcEnumerator<>(graph::getNextArcs, root, true);
             while (itr.moveNext()) {
                 Arc<Integer, Integer> current = itr.current();
                 if (path == null) {

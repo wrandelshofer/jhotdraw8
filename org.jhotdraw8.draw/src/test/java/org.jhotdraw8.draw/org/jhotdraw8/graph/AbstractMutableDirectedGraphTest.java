@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-abstract class AbstractMutableDirectedGraphTest {
+public abstract class AbstractMutableDirectedGraphTest {
     protected abstract MutableDirectedGraph<Integer, Character> newInstance();
 
     protected abstract MutableDirectedGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g);

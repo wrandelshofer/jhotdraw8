@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TreeNodeTest {
+public class TreeNodeTest {
     static class Node implements TreeNode<Node> {
         private final @NonNull List<Node> children = new ArrayList<>();
         private @Nullable Node parent;
