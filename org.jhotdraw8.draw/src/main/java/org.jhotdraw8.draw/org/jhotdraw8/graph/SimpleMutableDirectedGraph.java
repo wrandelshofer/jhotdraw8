@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 
 /**
- * DirectedGraphBuilder.
+ * SimpleMutableDirectedGraph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

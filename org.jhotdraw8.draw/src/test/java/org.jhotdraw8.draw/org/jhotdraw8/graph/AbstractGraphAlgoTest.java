@@ -7,6 +7,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
+/**
+ * Base class for graph algorithm tests.
+ */
 public abstract class AbstractGraphAlgoTest {
     /**
      * <pre>

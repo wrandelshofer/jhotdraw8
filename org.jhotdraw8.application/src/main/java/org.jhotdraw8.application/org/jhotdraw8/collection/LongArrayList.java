@@ -211,7 +211,7 @@ public class LongArrayList extends AbstractList<Long> {
     /**
      * Sets the size of this list. If the new size is greater than the current
      * size, new {@code 0} items are added to the end of the list. If the new
-     * size is is less than the current size, all items at indices greater or
+     * size is less than the current size, all items at indices greater or
      * equal {@code newSize} are discarded.
      *
      * @param newSize the new size
@@ -405,19 +405,19 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     /**
-     * Returns a new array containing all of the elements in this collection.
+     * Returns a new array containing all the elements in this collection.
      *
      * @return array
      */
-    public @NonNull long[] toLongArray() {
+    public long @NonNull [] toLongArray() {
         long[] result = new long[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
     }
 
     //@Override
-    public boolean add(Long integer) {
-        addAsLong((long) integer);
+    public boolean add(Long e) {
+        addAsLong(e);
         return true;
     }
 
@@ -456,7 +456,7 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     /**
-     * Removes all of the elements of this collection that satisfy the given
+     * Removes all the elements of this collection that satisfy the given
      * predicate.
      *
      * @param filter a predicate which returns {@code true} for elements to be

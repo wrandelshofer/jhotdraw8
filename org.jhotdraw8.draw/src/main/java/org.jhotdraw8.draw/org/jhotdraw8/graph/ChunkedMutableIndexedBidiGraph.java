@@ -158,8 +158,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         if (v < vertexCount) {
             throw new UnsupportedOperationException();
         }
-        grow(vertexCount + 1);
-        vertexCount++;
+        grow(v + 1);
+        vertexCount = v + 1;
     }
 
     /**

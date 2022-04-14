@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.IntList;
 import org.jhotdraw8.graph.algo.IndexedStronglyConnectedComponentsAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -17,6 +17,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+/**
+ * Tests class {@link IndexedStronglyConnectedComponentsAlgo}.
+ */
 public class IndexedStronglyConnectedComponentsAlgoTest extends AbstractGraphAlgoTest {
 
 
@@ -32,7 +35,7 @@ public class IndexedStronglyConnectedComponentsAlgoTest extends AbstractGraphAlg
 
         ImmutableAttributed16BitIndexedDirectedGraph<String, Integer> intGraph = new ImmutableAttributed16BitIndexedDirectedGraph<>(graph);
 
-        List<IntArrayList> actualSets = new IndexedStronglyConnectedComponentsAlgo().findStronglyConnectedComponents(intGraph);
+        List<IntList> actualSets = new IndexedStronglyConnectedComponentsAlgo().findStronglyConnectedComponents(intGraph);
 
         assertEquals(expectedSetCount, actualSets.size());
     }

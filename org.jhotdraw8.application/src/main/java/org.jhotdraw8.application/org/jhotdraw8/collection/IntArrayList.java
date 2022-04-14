@@ -68,7 +68,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         }
     }
 
-    private IntArrayList(@NonNull int[] items) {
+    private IntArrayList(int @NonNull [] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -80,7 +80,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull IntArrayList of(@NonNull int... items) {
+    public static @NonNull IntArrayList of(int @NonNull ... items) {
         return new IntArrayList(items);
     }
 
@@ -149,7 +149,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(@NonNull int[] a, int offset) {
+    public void copyInto(int @NonNull [] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -211,7 +211,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     /**
      * Sets the size of this list. If the new size is greater than the current
      * size, new {@code 0} items are added to the end of the list. If the new
-     * size is is less than the current size, all items at indices greater or
+     * size is less than the current size, all items at indices greater or
      * equal {@code newSize} are discarded.
      *
      * @param newSize the new size
@@ -391,11 +391,11 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     /**
-     * Returns a new array containing all of the elements in this collection.
+     * Returns a new array containing all the elements in this collection.
      *
      * @return array
      */
-    public @NonNull int[] toIntArray() {
+    public int @NonNull [] toIntArray() {
         int[] result = new int[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
@@ -442,7 +442,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     /**
-     * Removes all of the elements of this collection that satisfy the given
+     * Removes all the elements of this collection that satisfy the given
      * predicate.
      *
      * @param filter a predicate which returns {@code true} for elements to be

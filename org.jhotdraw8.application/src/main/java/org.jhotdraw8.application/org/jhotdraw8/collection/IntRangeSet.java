@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 /**
  * Represents a set of integers in a given range.
  */
-public class IntRangeReadOnlySet extends AbstractReadOnlySet<Integer> {
+public class IntRangeSet extends AbstractReadOnlySet<Integer> {
     private final int from;
     private final int to;
 
@@ -23,7 +23,7 @@ public class IntRangeReadOnlySet extends AbstractReadOnlySet<Integer> {
      * @param from from inclusive
      * @param to   exclusive
      */
-    public IntRangeReadOnlySet(int from, int to) {
+    public IntRangeSet(int from, int to) {
         Preconditions.checkIndex(from, to);
         this.from = from;
         this.to = to;

@@ -8,11 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Tests {@link IntArrayDeque}.
+ * Tests {@link IntArrayList}.
  */
-public class IntArrayDequeTest extends AbstractIntSequencedCollectionTest {
+public class IntArrayListTest extends AbstractIntSequencedCollectionTest {
     @Override
     protected @NonNull IntSequencedCollection newInstance() {
-        return new IntArrayDeque();
+        return new IntArrayList();
     }
 }

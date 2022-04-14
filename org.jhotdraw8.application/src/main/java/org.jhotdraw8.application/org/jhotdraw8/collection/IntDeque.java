@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 /**
  * Interface for a {@link Deque} with a primitive integer data elements.
  */
-public interface IntDeque extends Deque<Integer> {
+public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     @Override
     default boolean add(Integer integer) {
         addLastAsInt(integer);

@@ -7,7 +7,9 @@ package org.jhotdraw8.graph.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IntArrayDeque;
 import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.IntDeque;
 import org.jhotdraw8.collection.IntEnumerator;
+import org.jhotdraw8.collection.IntList;
 import org.jhotdraw8.collection.IntRangeEnumerator;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
@@ -35,7 +37,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
 
     }
 
-    public @NonNull List<IntArrayList> findStronglyConnectedComponents(
+    public @NonNull List<IntList> findStronglyConnectedComponents(
             final @NonNull IndexedDirectedGraph graph) {
         return findStronglyConnectedComponents(graph.getVertexCount(), graph::nextVerticesEnumerator);
     }
@@ -48,20 +50,20 @@ public class IndexedStronglyConnectedComponentsAlgo {
      * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
-    public @NonNull List<IntArrayList> findStronglyConnectedComponents(
+    public @NonNull List<IntList> findStronglyConnectedComponents(
             int vertexCount, Function<Integer, IntEnumerator> nextNodeFunction) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from
         // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
 
-        final List<IntArrayList> sccs = new ArrayList<>(vertexCount);
+        final List<IntList> sccs = new ArrayList<>(vertexCount);
         final int[] lows = new int[vertexCount];
         Arrays.fill(lows, -1);
 
         int pre = 0;
-        IntArrayDeque stack = new IntArrayDeque();
+        IntDeque stack = new IntArrayDeque();
 
-        IntArrayDeque minStack = new IntArrayDeque();
+        IntDeque minStack = new IntArrayDeque();
         Deque<IntEnumerator> enumeratorStack = new ArrayDeque<>();
         IntEnumerator enumerator = new IntRangeEnumerator(vertexCount);
 
@@ -95,7 +97,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
                 if (min < low) {
                     lows[v] = low = min;
                 } else {
-                    IntArrayList component = new IntArrayList();
+                    IntList component = new IntArrayList();
                     int w;
                     do {
                         w = stack.popAsInt();

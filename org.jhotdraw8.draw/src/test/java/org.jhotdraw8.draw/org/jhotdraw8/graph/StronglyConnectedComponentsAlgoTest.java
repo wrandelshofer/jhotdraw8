@@ -16,6 +16,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+/**
+ * Tests class {@link StronglyConnectedComponentsAlgo}.
+ */
 public class StronglyConnectedComponentsAlgoTest extends AbstractGraphAlgoTest {
 
 

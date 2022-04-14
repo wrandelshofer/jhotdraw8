@@ -5,12 +5,15 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Interface for a {@link List} with a primitive integer data elements.
  */
-public interface IntList extends List<Integer> {
+public interface IntList extends List<Integer>, IntSequencedCollection {
     @Override
     default boolean add(Integer integer) {
         addAsInt(integer);
@@ -43,12 +46,58 @@ public interface IntList extends List<Integer> {
     void addAsInt(int e);
 
     /**
-     * @see ReadOnlySequencedCollection#getFirst()
+     * @see List#add(int, Object)
      */
-    int getFirstAsInt();
+    void addAsInt(int index, int e);
 
     /**
-     * @see ReadOnlySequencedCollection#getLast()
+     * @see List#get(int)
      */
-    int getLastAsInt();
+    int getAsInt(int index);
+
+    @Override
+    default void addFirstAsInt(int e) {
+        addAsInt(0, e);
+    }
+
+    @Override
+    default void addLastAsInt(int e) {
+        addAsInt(size(), e);
+    }
+
+    /**
+     * Removes the item at the specified index from this list.
+     *
+     * @param index an index
+     * @return the removed item
+     */
+    int removeAtAsInt(int index);
+
+    @Override
+    default int removeFirstAsInt() {
+        final int e = getAsInt(0);
+        removeAtAsInt(0);
+        return e;
+    }
+
+
+    @Override
+    default boolean isEmpty() {
+        return IntSequencedCollection.super.isEmpty();
+    }
+
+    @Override
+    default <T> T[] toArray(T @NonNull [] a) {
+        return IntSequencedCollection.super.<T>toArray(a);
+    }
+
+    @Override
+    default Object[] toArray() {
+        return IntSequencedCollection.super.toArray();
+    }
+
+    @Override
+    default Stream<Integer> stream() {
+        return IntSequencedCollection.super.stream();
+    }
 }
