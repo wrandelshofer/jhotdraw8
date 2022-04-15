@@ -1,28 +1,17 @@
 /*
  * @(#)ReadOnlyListIterator.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright Â© 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-/**
- * {@link Enumerator}, {@link Spliterator}, {@link ListIterator},
- * {@link Iterator} for a {@link ReadOnlyList}.
- * <p>
- * Does not perform modification checks of the list.
- *
- * @param <E> the element type of the list
- */
-public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
-        Enumerator<E>, Consumer<E> {
+public class ReadOnlyListIterator<E> extends AbstractIterator<E>{
     private final ReadOnlyList<E> list;
     private int index;
     private final int size;
@@ -73,26 +62,6 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
     }
 
     @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void forEachRemaining(Consumer<? super E> action) {
-        Enumerator.super.forEachRemaining(action);
-    }
-
-    @Override
-    public void set(E e) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void add(E e) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
         Objects.requireNonNull(action, "action");
         if (index >= 0 && index < getSize()) {
@@ -113,11 +82,6 @@ public class ReadOnlyListIterator<E> implements Iterator<E>, ListIterator<E>,
     @Override
     public long estimateSize() {
         return getSize() - index;
-    }
-
-    @Override
-    public int characteristics() {
-        return Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
     }
 
     @Override

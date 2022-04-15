@@ -1,19 +1,17 @@
 /*
  * @(#)ArrayIterator.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright Â© 2021 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Enumerator<E>, Consumer<E> {
+public class ArrayIterator<E> extends AbstractIterator<E>{
     private final Object[] list;
     private int index;
     final int size;
@@ -66,26 +64,6 @@ public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Enumerato
         return index - 1;
     }
 
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void forEachRemaining(Consumer<? super E> action) {
-        Enumerator.super.forEachRemaining(action);
-    }
-
-    @Override
-    public void set(E e) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void add(E e) {
-        throw new UnsupportedOperationException();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
@@ -108,11 +86,6 @@ public class ArrayIterator<E> implements Iterator<E>, ListIterator<E>, Enumerato
     @Override
     public long estimateSize() {
         return getSize() - index;
-    }
-
-    @Override
-    public int characteristics() {
-        return Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
     }
 
     @Override
