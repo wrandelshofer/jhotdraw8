@@ -14,10 +14,13 @@ import java.util.BitSet;
  * <p>
  * Setting a boolean at an index is O(1).
  * <p>
- * Clearing the set is O(1) amortized. Every 255 times it takes O(n) time to
- * clear the set.
+ * Clearing the set is O(1) amortized. Every {@code 2^16 - 1} times it takes
+ * O(n) time to clear the set.
  * <p>
- * Storage space is one byte per boolean.
+ * Storage space is one char per boolean.
+ * <p>
+ * This set has a fixed capacity. Attempting to access an element outside of the
+ * capacity range results in an {@link ArrayIndexOutOfBoundsException}.
  */
 public class DenseIntSet16Bit implements IntSet {
 	/**
@@ -43,6 +46,14 @@ public class DenseIntSet16Bit implements IntSet {
 		a = new char[capacity];
 	}
 
+	/**
+	 * Adds an element to the set.
+	 *
+	 * @param element the element
+	 * @return true if the element was added, false if it was already in the set.
+	 * @throws ArrayIndexOutOfBoundsException if element is outside of the
+	 *                                        capacity range.
+	 */
 	@Override
 	public boolean addAsInt(final int element) {
 		if (a[element] != mark) {
@@ -52,15 +63,31 @@ public class DenseIntSet16Bit implements IntSet {
 		return false;
 	}
 
+	/**
+	 * Removes the specified element from the set.
+	 *
+	 * @param element an element
+	 * @return true if the element was in the set, false otherwise
+	 * @throws ArrayIndexOutOfBoundsException if element is outside of the
+	 *                                        capacity range.
+	 */
 	@Override
-	public boolean removeAsInt(final int index) {
-		if (a[index] == mark) {
-			a[index] = 0;
+	public boolean removeAsInt(final int element) {
+		if (a[element] == mark) {
+			a[element] = 0;
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Checks if the set contains the specified element.
+	 *
+	 * @param e the element
+	 * @return true if the element is in the set.
+	 * @throws ArrayIndexOutOfBoundsException if element is outside of the
+	 *                                        capacity range.
+	 */
 	@Override
 	public boolean containsAsInt(final int e) {
 		return a[e] == mark;

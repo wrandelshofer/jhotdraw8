@@ -18,6 +18,9 @@ import java.util.BitSet;
  * clear the set.
  * <p>
  * Storage space is one byte per boolean.
+ * <p>
+ * This set has a fixed capacity. Attempting to access an element outside of the
+ * capacity range results in an {@link ArrayIndexOutOfBoundsException}.
  */
 public class DenseIntSet8Bit implements IntSet {
     private byte[] a;
@@ -37,6 +40,14 @@ public class DenseIntSet8Bit implements IntSet {
         a = new byte[capacity];
     }
 
+    /**
+     * Adds an element to the set.
+     *
+     * @param element the element
+     * @return true if the element was added, false if it was already in the set.
+     * @throws ArrayIndexOutOfBoundsException if element is outside of the
+     *                                        capacity range.
+     */
     @Override
     public boolean addAsInt(int element) {
         if (a[element] != mark) {
@@ -46,15 +57,31 @@ public class DenseIntSet8Bit implements IntSet {
         return false;
     }
 
+    /**
+     * Removes the specified element from the set.
+     *
+     * @param element an element
+     * @return true if the element was in the set, false otherwise
+     * @throws ArrayIndexOutOfBoundsException if element is outside of the
+     *                                        capacity range.
+     */
     @Override
-    public boolean removeAsInt(int index) {
-        if (a[index] == mark) {
-            a[index] = 0;
+    public boolean removeAsInt(int element) {
+        if (a[element] == mark) {
+            a[element] = 0;
             return true;
         }
         return false;
     }
 
+    /**
+     * Checks if the set contains the specified element.
+     *
+     * @param e an element
+     * @return true if the element is in the set.
+     * @throws ArrayIndexOutOfBoundsException if element is outside of the
+     *                                        capacity range.
+     */
     @Override
     public boolean containsAsInt(int e) {
         return a[e] == mark;
