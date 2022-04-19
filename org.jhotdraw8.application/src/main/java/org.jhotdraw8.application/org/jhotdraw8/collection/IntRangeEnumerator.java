@@ -42,7 +42,7 @@ public class IntRangeEnumerator extends AbstractIntEnumerator {
      * @param endExclusive   the end of the range + 1
      */
     public IntRangeEnumerator(@NonNull IntToIntFunction f, int startInclusive, int endExclusive) {
-        super(endExclusive - startInclusive, ORDERED | SIZED | SUBSIZED);
+        super(endExclusive - startInclusive, NONNULL | DISTINCT | ORDERED | SIZED | SUBSIZED);
         this.f = f;
         this.next = startInclusive;
         this.to = endExclusive;

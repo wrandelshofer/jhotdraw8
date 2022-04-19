@@ -121,7 +121,7 @@ public class DenseIntSet16Bit implements IntSet {
 	}
 
 	/**
-	 * Returns a new long array containing all the bits in this bit set.
+	 * Returns a new long array containing all the bits in this int set.
 	 *
 	 * @return a new long array.
 	 */

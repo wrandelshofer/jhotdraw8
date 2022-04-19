@@ -48,7 +48,7 @@ public class IndexedVertexEnumerator extends AbstractIntEnumerator {
      * @param dfs
      */
     public IndexedVertexEnumerator(@NonNull Function<Integer, IntEnumerator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
-        super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
+        super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");
         this.nextFunction = nextFunction;
