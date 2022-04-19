@@ -17,7 +17,7 @@ public class IntRangeEnumerator extends AbstractIntEnumerator {
     private final @NonNull IntToIntFunction f;
 
     /**
-     * Enumerates from 0 to {@code toExclusive}.
+     * Enumerates from 0 to {@code endExclusive}.
      *
      * @param endExclusive the end of the range + 1
      */
@@ -26,7 +26,7 @@ public class IntRangeEnumerator extends AbstractIntEnumerator {
     }
 
     /**
-     * Enumerates from {@code fromInclusive}. to {@code toExclusive}.
+     * Enumerates from {@code startInclusive} to {@code endExclusive}.
      *
      * @param startInclusive the start of the range
      * @param endExclusive   the end of the range + 1
@@ -36,7 +36,7 @@ public class IntRangeEnumerator extends AbstractIntEnumerator {
     }
 
     /**
-     * Enumerates from {@code fromInclusive}. to {@code toExclusive}.
+     * Enumerates from {@code startInclusive} to {@code endExclusive}.
      *
      * @param startInclusive the start of the range
      * @param endExclusive   the end of the range + 1
