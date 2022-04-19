@@ -4,10 +4,7 @@
  */
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-
 import java.util.Spliterators;
-import java.util.function.IntConsumer;
 
 /**
  * AbstractIntEnumerator.
@@ -33,18 +30,6 @@ public abstract class AbstractIntEnumerator
         super(est, additionalCharacteristics);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final boolean tryAdvance(@NonNull IntConsumer action) {
-        if (moveNext()) {
-            action.accept(current);
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     /** {@inheritDoc} */
     @Override
