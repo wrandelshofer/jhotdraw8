@@ -15,7 +15,8 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * BreadthFirstSpliterator.
+ * Enumerates vertices in a graph starting from a root vertex in
+ * breadth-first-order or in depth-first-order.
  *
  * @param <V> the vertex data type
  * @author Werner Randelshofer
@@ -32,7 +33,7 @@ public class VertexEnumerator<V> extends AbstractEnumerator<V> {
      *
      * @param nextFunction the nextFunction
      * @param root         the root vertex
-     * @param dfs
+     * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
     public VertexEnumerator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, boolean dfs) {
         this(nextFunction, root, new HashSet<>()::add, dfs);
@@ -43,7 +44,7 @@ public class VertexEnumerator<V> extends AbstractEnumerator<V> {
      *
      * @param nextFunction the nextFunction
      * @param root         the root vertex
-     * @param dfs
+     * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
     public VertexEnumerator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
