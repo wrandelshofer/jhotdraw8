@@ -37,7 +37,6 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @param v vertex data v
      * @param u vertex data u
      * @param a arrow data
-     * @throws IllegalStateException if v or u is not in the graph
      */
     void addArrow(@NonNull V v, @NonNull V u, @Nullable A a);
 
@@ -48,7 +47,6 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @param v    vertex data v
      * @param u    vertex data u
      * @param a arrow data
-     * @throws IllegalStateException if the arrow is not in the graph
      */
     void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a);
 
@@ -57,7 +55,6 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      *
      * @param v vertex data v
      * @param u vertex data u
-     * @throws IllegalStateException if the arrow is not in the graph
      */
     void removeArrow(@NonNull V v, @NonNull V u);
 
@@ -66,8 +63,6 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      *
      * @param v vertex data v
      * @param k index of arrow to be removed
-     * @throws IllegalStateException     if the arrow is not in the graph
-     * @throws IndexOutOfBoundsException if the index is out of bounds
      */
     void removeNext(@NonNull V v, int k);
 }

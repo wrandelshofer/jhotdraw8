@@ -63,11 +63,11 @@ import java.util.Set;
  *
  *  vertex#    nodes
  *
- *    0        Node.next{1,3}
- *    1        Node.next{2,4}.prev{0}
- *    2        Node.prev{1}
- *    3        Node.prev{0}.prev{4}
- *    4        Node.next{3}.prev{1}
+ *    0:    next={1, 3};  prev={}
+ *    1:    next={2, 4};  prev={0}
+ *    2:    next={};      prev={1}
+ *    3:    next={};      prev={0,4}
+ *    4:    next={3};     prev={1}
  * </pre>
  *
  * @author Werner Randelshofer
@@ -89,7 +89,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
      * Creates a new instance.
      *
      * @param initialVertexCapacity the initial vertex capacity
-     * @param initialArrowCapacity  the initial arrow capacity
+     * @param initialArrowCapacity  the initial arrow capacity (ignored)
      */
     public SimpleMutableBidiGraph(final int initialVertexCapacity, final int initialArrowCapacity) {
         nodeMap = new LinkedHashMap<>(initialVertexCapacity * 2);

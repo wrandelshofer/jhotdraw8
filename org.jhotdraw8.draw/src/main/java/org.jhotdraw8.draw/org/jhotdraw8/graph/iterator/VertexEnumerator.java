@@ -31,7 +31,7 @@ public class VertexEnumerator<V> extends AbstractEnumerator<V> {
     /**
      * Creates a new instance.
      *
-     * @param nextFunction the nextFunction
+     * @param nextFunction a function that returns the next vertices for a given vertex
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
@@ -42,7 +42,7 @@ public class VertexEnumerator<V> extends AbstractEnumerator<V> {
     /**
      * Creates a new instance.
      *
-     * @param nextFunction the nextFunction
+     * @param nextFunction  a function that returns the next vertices for a given vertex
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */

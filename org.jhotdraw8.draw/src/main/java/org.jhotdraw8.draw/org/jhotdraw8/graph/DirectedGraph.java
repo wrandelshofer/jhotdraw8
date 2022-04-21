@@ -168,7 +168,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return vertex data
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
-    V getVertex(int index);
+    @NonNull V getVertex(int index);
 
     /**
      * Searches for vertices starting at the provided vertex.
@@ -177,7 +177,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param dfs   whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchNextVertices(final V start, final boolean dfs) {
+    default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchNextVertices(start, visited::add, dfs);
     }
@@ -190,7 +190,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param dfs     whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchNextVertices(final V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+    default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
         return new VertexEnumerator<V>(this::getNextVertices, start, visited, dfs);
     }
 }

@@ -5,6 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 /**
  * Provides a minimal read-only API for a directed graph.
@@ -35,7 +36,7 @@ public interface BareDirectedGraph<V, A> extends BareDirectedVertexGraph<V> {
      * @return the next arrow data
      * @see #getNextCount
      */
-    @NonNull
+    @Nullable
     A getNextArrow(@NonNull V v, int index);
 
 }

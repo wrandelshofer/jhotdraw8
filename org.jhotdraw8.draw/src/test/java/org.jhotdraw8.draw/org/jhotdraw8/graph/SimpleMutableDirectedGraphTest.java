@@ -1,5 +1,5 @@
 /*
- * @(#)SimpleMutableBidiGraphTest.java
+ * @(#)DirectedGraphBuilderTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -9,17 +9,17 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * Tests {@link SimpleMutableBidiGraph}.
+ * Tests {@link SimpleMutableDirectedGraph}.
  */
-public class SimpleMutableBidiGraphTest extends AbstractMutableBidiGraphTest<Integer, Character> {
+public class SimpleMutableDirectedGraphTest extends AbstractMutableDirectedGraphTest<Integer, Character> {
     @Override
-    protected MutableBidiGraph<Integer, Character> newInstance() {
-        return new SimpleMutableBidiGraph<>();
+    protected MutableDirectedGraph<Integer, Character> newInstance() {
+        return new SimpleMutableDirectedGraph<>(0, 0);
     }
 
     @Override
-    protected MutableBidiGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g) {
-        return new SimpleMutableBidiGraph<>(g);
+    protected MutableDirectedGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g) {
+        return new SimpleMutableDirectedGraph<>(g);
     }
 
     @Override

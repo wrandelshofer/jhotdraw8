@@ -73,7 +73,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param u a vertex
      * @return index of vertex {@code u} or a value {@literal < 0}
      */
-    default int findIndexOfPrev(final V v, final @NonNull V u) {
+    default int findIndexOfPrev(final @NonNull V v, final @NonNull V u) {
         for (int i = 0, n = getPrevCount(v); i < n; i++) {
             if (u.equals(getPrev(v, i))) {
                 return i;
@@ -90,7 +90,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param u a vertex
      * @return true if {@code u} is previous of {@code v}
      */
-    default boolean isPrev(final V v, final @NonNull V u) {
+    default boolean isPrev(final @NonNull V v, final @NonNull V u) {
         return findIndexOfPrev(v, u) >= 0;
     }
 
@@ -101,7 +101,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param dfs   whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchPrevVertices(final V start, final boolean dfs) {
+    default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchPrevVertices(start, visited::add, dfs);
     }
@@ -114,7 +114,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param dfs     whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchPrevVertices(final V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+    default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
         return new VertexEnumerator<V>(this::getPrevVertices, start, visited, dfs);
     }
 

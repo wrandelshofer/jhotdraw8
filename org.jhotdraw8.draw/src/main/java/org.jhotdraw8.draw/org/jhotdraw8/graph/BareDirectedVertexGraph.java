@@ -26,8 +26,7 @@ public interface BareDirectedVertexGraph<V> {
      * @return the next vertex
      * @see #getNextCount
      */
-    @NonNull
-    V getNext(@NonNull V v, int index);
+    @NonNull V getNext(@NonNull V v, int index);
 
     /**
      * Returns the number of next vertices at the specified vertex.
@@ -45,7 +44,6 @@ public interface BareDirectedVertexGraph<V> {
      *
      * @return a set view on all vertices
      */
-    @NonNull
-    Set<V> getVertices();
+    @NonNull Set<V> getVertices();
 
 }

@@ -6,6 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -17,11 +18,23 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public abstract class AbstractMutableDirectedGraphTest {
-    protected abstract MutableDirectedGraph<Integer, Character> newInstance();
+public abstract class AbstractMutableDirectedGraphTest<V, A> {
+    protected abstract MutableDirectedGraph<V, A> newInstance();
 
-    protected abstract MutableDirectedGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g);
+    protected abstract MutableDirectedGraph<V, A> newInstance(DirectedGraph<V, A> g);
+
+    protected abstract @NonNull V newVertex(int id);
+
+    protected abstract @NonNull A newArrow(@NonNull V from, @NonNull V to, char id);
+
+    /**
+     * Returns the arrow id. Returns \u0000 if the arrow is null.
+     */
+    protected abstract @NonNull char getArrowId(@Nullable A a);
+
+    protected abstract @NonNull int getVertexId(@NonNull V v);
 
     /**
      * Example graph:
@@ -36,19 +49,24 @@ public abstract class AbstractMutableDirectedGraphTest {
      * </pre>
      */
     @NonNull
-    protected MutableDirectedGraph<Integer, Character> buildGraph() {
-        MutableDirectedGraph<Integer, Character> g = newInstance();
-        g.addVertex(0);
-        g.addVertex(1);
-        g.addVertex(2);
-        g.addVertex(3);
-        g.addVertex(4);
-        g.addArrow(0, 1, 'a');
-        g.addArrow(0, 3, 'b');
-        g.addArrow(1, 1, 'x');
-        g.addArrow(1, 2, 'c');
-        g.addArrow(1, 4, 'd');
-        g.addArrow(4, 3, 'e');
+    protected MutableDirectedGraph<V, A> buildGraph() {
+        MutableDirectedGraph<V, A> g = newInstance();
+        V v0 = newVertex(0);
+        V v1 = newVertex(1);
+        V v2 = newVertex(2);
+        V v3 = newVertex(3);
+        V v4 = newVertex(4);
+        g.addVertex(v0);
+        g.addVertex(v1);
+        g.addVertex(v2);
+        g.addVertex(v3);
+        g.addVertex(v4);
+        g.addArrow(v0, v1, newArrow(v0, v1, 'a'));
+        g.addArrow(v0, v3, newArrow(v0, v3, 'b'));
+        g.addArrow(v1, v1, newArrow(v1, v1, 'x'));
+        g.addArrow(v1, v2, newArrow(v1, v2, 'c'));
+        g.addArrow(v1, v4, newArrow(v1, v4, 'd'));
+        g.addArrow(v4, v3, newArrow(v4, v3, 'e'));
         return g;
     }
 
@@ -57,7 +75,7 @@ public abstract class AbstractMutableDirectedGraphTest {
      */
     @Test
     public void testAddVerticesAndArrows() {
-        MutableDirectedGraph<Integer, Character> g = buildGraph();
+        MutableDirectedGraph<V, A> g = buildGraph();
 
         assertEqualsToInitialGraph(g);
     }
@@ -67,68 +85,81 @@ public abstract class AbstractMutableDirectedGraphTest {
      */
     @Test
     public void testCopy() {
-        MutableDirectedGraph<Integer, Character> g = newInstance(buildGraph());
+        MutableDirectedGraph<V, A> g = newInstance(buildGraph());
 
         assertEqualsToInitialGraph(g);
     }
 
-    private void assertEqualsToInitialGraph(MutableDirectedGraph<Integer, Character> g) {
+    private void assertEqualsToInitialGraph(MutableDirectedGraph<V, A> g) {
         assertEquals(5, g.getVertexCount());
         assertEquals(6, g.getArrowCount());
+        V[] v = getVertices(g);
 
-        assertEquals(2, g.getNextCount(0));
-        assertEquals(3, g.getNextCount(1));
-        assertEquals(0, g.getNextCount(2));
-        assertEquals(0, g.getNextCount(3));
-        assertEquals(1, g.getNextCount(4));
+        assertEquals(2, g.getNextCount(v[0]));
+        assertEquals(3, g.getNextCount(v[1]));
+        assertEquals(0, g.getNextCount(v[2]));
+        assertEquals(0, g.getNextCount(v[3]));
+        assertEquals(1, g.getNextCount(v[4]));
 
-        Set<Integer> actualVertices = new HashSet<>(g.getNextVertices(0));
+        Set<V> actualVertices = new HashSet<>(g.getNextVertices(v[0]));
         assertEquals(Set.of(1, 3), actualVertices);
-        assertEquals(1, g.getNext(1, 0));
-        assertEquals(2, g.getNext(1, 1));
-        assertEquals(4, g.getNext(1, 2));
-        assertEquals(3, g.getNext(4, 0));
+        assertEquals(v[1], g.getNext(v[1], 0));
+        assertEquals(v[2], g.getNext(v[1], 1));
+        assertEquals(v[4], g.getNext(v[1], 2));
+        assertEquals(v[3], g.getNext(v[4], 0));
 
-        actualVertices = new HashSet<>(g.getNextVertices(0));
-        assertEquals(Set.of(1, 3), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(1));
-        assertEquals(Set.of(1, 2, 4), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(2));
+        actualVertices = new HashSet<>(g.getNextVertices(v[0]));
+        assertEquals(Set.of(v[1], v[3]), actualVertices);
+        actualVertices = new HashSet<>(g.getNextVertices(v[1]));
+        assertEquals(Set.of(v[1], v[2], v[4]), actualVertices);
+        actualVertices = new HashSet<>(g.getNextVertices(v[2]));
         assertEquals(Set.of(), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(3));
+        actualVertices = new HashSet<>(g.getNextVertices(v[3]));
         assertEquals(Set.of(), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(4));
-        assertEquals(Set.of(3), actualVertices);
+        actualVertices = new HashSet<>(g.getNextVertices(v[4]));
+        assertEquals(Set.of(v[3]), actualVertices);
 
         if (g instanceof IndexedDirectedGraph) {
             IndexedDirectedGraph ig = (IndexedDirectedGraph) g;
-            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(0), false).boxed().collect(Collectors.toSet());
-            assertEquals(Set.of(1, 3), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(1), false).boxed().collect(Collectors.toSet());
-            assertEquals(Set.of(1, 2, 4), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(2), false).boxed().collect(Collectors.toSet());
-            assertEquals(Set.of(), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(3), false).boxed().collect(Collectors.toSet());
-            assertEquals(Set.of(), actualVertices);
-            actualVertices = StreamSupport.intStream(ig.nextVerticesEnumerator(4), false).boxed().collect(Collectors.toSet());
-            assertEquals(Set.of(3), actualVertices);
+            Set<Integer> actualIndices;
+            actualIndices = StreamSupport.intStream(ig.nextVerticesEnumerator(0), false).boxed().collect(Collectors.toSet());
+            assertEquals(Set.of(1, 3), actualIndices);
+            actualIndices = StreamSupport.intStream(ig.nextVerticesEnumerator(1), false).boxed().collect(Collectors.toSet());
+            assertEquals(Set.of(1, 2, 4), actualIndices);
+            actualIndices = StreamSupport.intStream(ig.nextVerticesEnumerator(2), false).boxed().collect(Collectors.toSet());
+            assertEquals(Set.of(), actualIndices);
+            actualIndices = StreamSupport.intStream(ig.nextVerticesEnumerator(3), false).boxed().collect(Collectors.toSet());
+            assertEquals(Set.of(), actualIndices);
+            actualIndices = StreamSupport.intStream(ig.nextVerticesEnumerator(4), false).boxed().collect(Collectors.toSet());
+            assertEquals(Set.of(3), actualIndices);
         }
 
-        Set<Character> actualArrows = new HashSet<>(g.getNextArrows(0));
-        assertEquals(Set.of('a', 'b'), actualArrows);
-        assertEquals('x', g.getNextArrow(1, 0));
-        assertEquals('c', g.getNextArrow(1, 1));
-        assertEquals('d', g.getNextArrow(1, 2));
-        assertEquals('e', g.getNextArrow(4, 0));
 
-        assertEquals(Set.of(0, 1, 2, 3, 4), g.getVertices());
-        assertEquals(Set.of('a', 'b', 'x', 'c', 'd', 'e'), new LinkedHashSet<>(g.getArrows()));
+        Set<Character> actualArrows = new HashSet<>(g.getNextArrows(v[0])).stream().map(this::getArrowId).collect(Collectors.toSet());
+        assertEquals(Set.of('a', 'b'), actualArrows);
+        assertEquals('x', getArrowId(g.getNextArrow(v[1], 0)));
+        assertEquals('c', getArrowId(g.getNextArrow(v[1], 1)));
+        assertEquals('d', getArrowId(g.getNextArrow(v[1], 2)));
+        assertEquals('e', getArrowId(g.getNextArrow(v[4], 0)));
+
+        assertEquals(Set.of(v[0], v[1], v[2], v[3], v[4]), g.getVertices());
+        assertEquals(Set.of('a', 'b', 'x', 'c', 'd', 'e'), new LinkedHashSet<>(g.getArrows()).stream().map(this::getArrowId).collect(Collectors.toSet()));
 
         actualVertices.clear();
         for (int i = 0, n = g.getVertexCount(); i < n; i++) {
             actualVertices.add(g.getVertex(i));
         }
-        assertEquals(Set.of(0, 1, 2, 3, 4), actualVertices);
+        assertEquals(Set.of(v[0], v[1], v[2], v[3], v[4]), actualVertices);
+    }
+
+    private V[] getVertices(MutableDirectedGraph<V, A> g) {
+        @SuppressWarnings("unchecked")
+        V[] vertices = (V[]) new Object[g.getVertexCount()];
+        for (V v : g.getVertices()) {
+            assertNull(vertices[getVertexId(v)]);
+            vertices[getVertexId(v)] = v;
+        }
+        return vertices;
     }
 
     /**
@@ -136,9 +167,13 @@ public abstract class AbstractMutableDirectedGraphTest {
      */
     @Test
     public void testRemoveArrow() {
-        MutableDirectedGraph<Integer, Character> g = buildGraph();
+        MutableDirectedGraph<V, A> g = buildGraph();
+        V[] v = getVertices(g);
+        Collection<A> arrows = g.getArrows(v[0], v[1]);
+        assertEquals(1, arrows.size());
 
-        g.removeArrow(0, 1, 'a');
+        A a = arrows.iterator().next();
+        g.removeArrow(v[0], v[1], a);
 
         continueTestRemoveArrow(g);
     }
@@ -148,40 +183,43 @@ public abstract class AbstractMutableDirectedGraphTest {
      */
     @Test
     public void testRemoveArrowWithoutData() {
-        MutableDirectedGraph<Integer, Character> g = buildGraph();
+        MutableDirectedGraph<V, A> g = buildGraph();
+        V[] v = getVertices(g);
 
-        g.removeArrow(0, 1);
+        g.removeArrow(v[0], v[1]);
 
         continueTestRemoveArrow(g);
     }
 
-    private void continueTestRemoveArrow(MutableDirectedGraph<Integer, Character> g) {
+    private void continueTestRemoveArrow(MutableDirectedGraph<V, A> g) {
+        V[] v = getVertices(g);
+
         assertEquals(5, g.getVertexCount());
         assertEquals(5, g.getArrowCount());
 
-        assertEquals(1, g.getNextCount(0));
-        assertEquals(3, g.getNextCount(1));
-        assertEquals(0, g.getNextCount(2));
-        assertEquals(0, g.getNextCount(3));
-        assertEquals(1, g.getNextCount(4));
+        assertEquals(1, g.getNextCount(v[0]));
+        assertEquals(3, g.getNextCount(v[1]));
+        assertEquals(0, g.getNextCount(v[2]));
+        assertEquals(0, g.getNextCount(v[3]));
+        assertEquals(1, g.getNextCount(v[4]));
 
-        assertEquals(3, g.getNext(0, 0));
-        assertEquals(1, g.getNext(1, 0));
-        assertEquals(2, g.getNext(1, 1));
-        assertEquals(4, g.getNext(1, 2));
-        assertEquals(3, g.getNext(4, 0));
+        assertEquals(v[3], g.getNext(v[0], 0));
+        assertEquals(v[1], g.getNext(v[1], 0));
+        assertEquals(v[2], g.getNext(v[1], 1));
+        assertEquals(v[4], g.getNext(v[1], 2));
+        assertEquals(v[3], g.getNext(v[4], 0));
 
-        assertEquals('b', g.getNextArrow(0, 0));
-        assertEquals('x', g.getNextArrow(1, 0));
-        assertEquals('c', g.getNextArrow(1, 1));
-        assertEquals('d', g.getNextArrow(1, 2));
-        assertEquals('e', g.getNextArrow(4, 0));
+        assertEquals('b', getArrowId(g.getNextArrow(v[0], 0)));
+        assertEquals('x', getArrowId(g.getNextArrow(v[1], 0)));
+        assertEquals('c', getArrowId(g.getNextArrow(v[1], 1)));
+        assertEquals('d', getArrowId(g.getNextArrow(v[1], 2)));
+        assertEquals('e', getArrowId(g.getNextArrow(v[4], 0)));
 
-        assertEquals(Set.of(0, 1, 2, 3, 4), g.getVertices());
-        Collection<Character> actualArrows = g.getArrows();
+        assertEquals(Set.of(v[0], v[1], v[2], v[3], v[4]), g.getVertices());
+        Collection<Character> actualArrows = g.getArrows().stream().map(this::getArrowId).collect(Collectors.toList());
         assertEquals(List.of('b', 'x', 'c', 'd', 'e'), actualArrows);
 
-        g.addArrow(0, 1, 'a');
+        g.addArrow(v[0], v[1], newArrow(v[0], v[1], 'a'));
         assertEqualsToInitialGraph(g);
     }
 
@@ -190,13 +228,14 @@ public abstract class AbstractMutableDirectedGraphTest {
      */
     @Test
     public void testRemoveArrowAt() {
-        MutableDirectedGraph<Integer, Character> g = buildGraph();
-        g.removeNext(0, 0);
+        MutableDirectedGraph<V, A> g = buildGraph();
+        V[] v = getVertices(g);
+        g.removeNext(v[0], 0);
         continueTestRemoveArrow(g);
     }
 
     /**
-     * Test remove vertex 1.
+     * Test remove vertex 1. Vertex 1 has a self-loop.
      * <p>
      * Example graph after removal of 1:
      * <pre>
@@ -207,37 +246,38 @@ public abstract class AbstractMutableDirectedGraphTest {
      * </pre>
      */
     @Test
-    public void testRemoveVertex() {
-        MutableDirectedGraph<Integer, Character> g = buildGraph();
+    public void testRemoveVertexWithSelfLoop() {
+        MutableDirectedGraph<V, A> g = buildGraph();
+        V[] v = getVertices(g);
 
-        g.removeVertex(1);
+        g.removeVertex(v[1]);
 
         assertEquals(4, g.getVertexCount());
         assertEquals(2, g.getArrowCount());
 
-        assertEquals(1, g.getNextCount(0));
-        assertEquals(0, g.getNextCount(2));
-        assertEquals(0, g.getNextCount(3));
-        assertEquals(1, g.getNextCount(4));
+        assertEquals(1, g.getNextCount(v[0]));
+        assertEquals(0, g.getNextCount(v[2]));
+        assertEquals(0, g.getNextCount(v[3]));
+        assertEquals(1, g.getNextCount(v[4]));
 
-        assertEquals(3, g.getNext(0, 0));
-        assertEquals(3, g.getNext(4, 0));
+        assertEquals(v[3], g.getNext(v[0], 0));
+        assertEquals(v[3], g.getNext(v[4], 0));
 
-        assertEquals('b', g.getNextArrow(0, 0));
-        assertEquals('e', g.getNextArrow(4, 0));
+        assertEquals('b', getArrowId(g.getNextArrow(v[0], 0)));
+        assertEquals('e', getArrowId(g.getNextArrow(v[4], 0)));
 
-        assertEquals(Set.of(0, 2, 3, 4), g.getVertices());
-        assertEquals(List.of('b', 'e'), g.getArrows());
+        assertEquals(Set.of(v[0], v[2], v[3], v[4]), g.getVertices());
+        assertEquals(List.of('b', 'e'), g.getArrows().stream().map(this::getArrowId).collect(Collectors.toList()));
 
         if (g instanceof SimpleMutableDirectedGraph) {
-            ((SimpleMutableDirectedGraph<Integer, Character>) g).addVertex(1, 1);
+            ((SimpleMutableDirectedGraph<V, A>) g).addVertex(v[1], 1);
         } else {
-            g.addVertex(1);
+            g.addVertex(v[1]);
         }
-        g.addArrow(0, 1, 'a');
-        g.addArrow(1, 1, 'x');
-        g.addArrow(1, 2, 'c');
-        g.addArrow(1, 4, 'd');
+        g.addArrow(v[0], v[1], newArrow(v[0], v[1], 'a'));
+        g.addArrow(v[1], v[1], newArrow(v[1], v[1], 'x'));
+        g.addArrow(v[1], v[2], newArrow(v[1], v[2], 'c'));
+        g.addArrow(v[1], v[4], newArrow(v[1], v[4], 'd'));
         assertEqualsToInitialGraph(g);
 
     }
