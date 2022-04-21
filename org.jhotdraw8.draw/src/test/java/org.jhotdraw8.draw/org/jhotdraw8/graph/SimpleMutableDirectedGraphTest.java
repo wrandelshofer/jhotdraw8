@@ -28,7 +28,7 @@ public class SimpleMutableDirectedGraphTest extends AbstractMutableDirectedGraph
     }
 
     @Override
-    protected @NonNull Character newArrow(@NonNull Integer from, @NonNull Integer to, char id) {
+    protected @NonNull Character newArrow(@NonNull Integer start, @NonNull Integer end, char id) {
         return id;
     }
 

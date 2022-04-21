@@ -34,7 +34,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
 
     protected abstract @NonNull V newVertex(int id);
 
-    protected abstract @NonNull A newArrow(@NonNull V from, @NonNull V to, char id);
+    protected abstract @NonNull A newArrow(@NonNull V start, @NonNull V end, char id);
 
     /**
      * Returns the arrow id. Returns \u0000 if the arrow is null.
@@ -97,7 +97,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEqualsToInitialGraph(g);
     }
 
-    private void assertEqualsToInitialGraph(MutableDirectedGraph<V, A> g) {
+    private void assertEqualsToInitialGraph(@NonNull MutableDirectedGraph<V, A> g) {
         assertEquals(5, g.getVertexCount());
         assertEquals(6, g.getArrowCount());
         V[] v = getVertices(g);
@@ -108,22 +108,22 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEquals(0, g.getNextCount(v[3]));
         assertEquals(1, g.getNextCount(v[4]));
 
-        Set<V> actualVertices = new HashSet<>(g.getNextVertices(v[0]));
-        assertEquals(Set.of(1, 3), actualVertices);
+        Set<V> actualVertices = new LinkedHashSet<>(g.getNextVertices(v[0]));
+        assertEquals(Set.of(v[1], v[3]), actualVertices);
         assertEquals(v[1], g.getNext(v[1], 0));
         assertEquals(v[2], g.getNext(v[1], 1));
         assertEquals(v[4], g.getNext(v[1], 2));
         assertEquals(v[3], g.getNext(v[4], 0));
 
-        actualVertices = new HashSet<>(g.getNextVertices(v[0]));
+        actualVertices = new LinkedHashSet<>(g.getNextVertices(v[0]));
         assertEquals(Set.of(v[1], v[3]), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(v[1]));
+        actualVertices = new LinkedHashSet<>(g.getNextVertices(v[1]));
         assertEquals(Set.of(v[1], v[2], v[4]), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(v[2]));
+        actualVertices = new LinkedHashSet<>(g.getNextVertices(v[2]));
         assertEquals(Set.of(), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(v[3]));
+        actualVertices = new LinkedHashSet<>(g.getNextVertices(v[3]));
         assertEquals(Set.of(), actualVertices);
-        actualVertices = new HashSet<>(g.getNextVertices(v[4]));
+        actualVertices = new LinkedHashSet<>(g.getNextVertices(v[4]));
         assertEquals(Set.of(v[3]), actualVertices);
 
         if (g instanceof IndexedDirectedGraph) {
@@ -152,14 +152,10 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEquals(Set.of(v[0], v[1], v[2], v[3], v[4]), g.getVertices());
         assertEquals(Set.of('a', 'b', 'x', 'c', 'd', 'e'), new LinkedHashSet<>(g.getArrows()).stream().map(this::getArrowId).collect(Collectors.toSet()));
 
-        actualVertices.clear();
-        for (int i = 0, n = g.getVertexCount(); i < n; i++) {
-            actualVertices.add(g.getVertex(i));
-        }
-        assertEquals(Set.of(v[0], v[1], v[2], v[3], v[4]), actualVertices);
+        assertEquals(Set.of(v[0], v[1], v[2], v[3], v[4]), g.getVertices());
     }
 
-    private V[] getVertices(MutableDirectedGraph<V, A> g) {
+    protected V[] getVertices(MutableDirectedGraph<V, A> g) {
         @SuppressWarnings("unchecked")
         V[] vertices = (V[]) new Object[g.getVertexCount()];
         for (V v : g.getVertices()) {

@@ -38,7 +38,7 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
      * </pre>
      */
     @Test
-    public void testAddVerticesAndArrowsBidi() {
+    public void testAddVerticesAndArrows() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
         assertEqualsInitialGraph(g);
     }
@@ -50,34 +50,30 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
         assertEqualsInitialGraph(g);
     }
 
-    private void assertEqualsInitialGraph(MutableBidiGraph<V, A> g) {
+    private void assertEqualsInitialGraph(@NonNull MutableBidiGraph<V, A> g) {
         assertEquals(5, g.getVertexCount());
         assertEquals(6, g.getArrowCount());
-        V v0 = newVertex(0);
-        V v1 = newVertex(1);
-        V v2 = newVertex(2);
-        V v3 = newVertex(3);
-        V v4 = newVertex(4);
+        V[] v = getVertices(g);
 
-        assertEquals(0, g.getPrevCount(v0));
-        assertEquals(2, g.getPrevCount(v1));
-        assertEquals(1, g.getPrevCount(v2));
-        assertEquals(2, g.getPrevCount(v3));
-        assertEquals(1, g.getPrevCount(v4));
+        assertEquals(0, g.getPrevCount(v[0]));
+        assertEquals(2, g.getPrevCount(v[1]));
+        assertEquals(1, g.getPrevCount(v[2]));
+        assertEquals(2, g.getPrevCount(v[3]));
+        assertEquals(1, g.getPrevCount(v[4]));
 
-        assertEquals(v0, g.getPrev(v1, 0));
-        assertEquals(v1, g.getPrev(v1, 1));
-        assertEquals(v1, g.getPrev(v2, 0));
-        assertEquals(v0, g.getPrev(v3, 0));
-        assertEquals(v4, g.getPrev(v3, 1));
-        assertEquals(v1, g.getPrev(v4, 0));
+        assertEquals(v[0], g.getPrev(v[1], 0));
+        assertEquals(v[1], g.getPrev(v[1], 1));
+        assertEquals(v[1], g.getPrev(v[2], 0));
+        assertEquals(v[0], g.getPrev(v[3], 0));
+        assertEquals(v[4], g.getPrev(v[3], 1));
+        assertEquals(v[1], g.getPrev(v[4], 0));
 
-        assertEquals('a', getArrowId(g.getPrevArrow(v1, 0)));
-        assertEquals('x', getArrowId(g.getPrevArrow(v1, 1)));
-        assertEquals('c', getArrowId(g.getPrevArrow(v2, 0)));
-        assertEquals('b', getArrowId(g.getPrevArrow(v3, 0)));
-        assertEquals('e', getArrowId(g.getPrevArrow(v3, 1)));
-        assertEquals('d', getArrowId(g.getPrevArrow(v4, 0)));
+        assertEquals('a', getArrowId(g.getPrevArrow(v[1], 0)));
+        assertEquals('x', getArrowId(g.getPrevArrow(v[1], 1)));
+        assertEquals('c', getArrowId(g.getPrevArrow(v[2], 0)));
+        assertEquals('b', getArrowId(g.getPrevArrow(v[3], 0)));
+        assertEquals('e', getArrowId(g.getPrevArrow(v[3], 1)));
+        assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
     /**
@@ -92,34 +88,30 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     @Test
     public void testRemoveArrowBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
-        V v0 = newVertex(0);
-        V v1 = newVertex(1);
-        V v2 = newVertex(2);
-        V v3 = newVertex(3);
-        V v4 = newVertex(4);
+        V[] v = getVertices(g);
 
-        g.removeArrow(v0, v1);
+        g.removeArrow(v[0], v[1]);
 
         assertEquals(5, g.getVertexCount());
         assertEquals(5, g.getArrowCount());
 
-        assertEquals(0, g.getPrevCount(v0));
-        assertEquals(1, g.getPrevCount(v1));
-        assertEquals(1, g.getPrevCount(v2));
-        assertEquals(2, g.getPrevCount(v3));
-        assertEquals(1, g.getPrevCount(v4));
+        assertEquals(0, g.getPrevCount(v[0]));
+        assertEquals(1, g.getPrevCount(v[1]));
+        assertEquals(1, g.getPrevCount(v[2]));
+        assertEquals(2, g.getPrevCount(v[3]));
+        assertEquals(1, g.getPrevCount(v[4]));
 
-        assertEquals(1, g.getPrev(v1, 0));
-        assertEquals(1, g.getPrev(v2, 0));
-        assertEquals(0, g.getPrev(v3, 0));
-        assertEquals(4, g.getPrev(v3, 1));
-        assertEquals(1, g.getPrev(v4, 0));
+        assertEquals(v[1], g.getPrev(v[1], 0));
+        assertEquals(v[1], g.getPrev(v[2], 0));
+        assertEquals(v[0], g.getPrev(v[3], 0));
+        assertEquals(v[4], g.getPrev(v[3], 1));
+        assertEquals(v[1], g.getPrev(v[4], 0));
 
-        assertEquals('x', g.getPrevArrow(v1, 0));
-        assertEquals('c', g.getPrevArrow(v2, 0));
-        assertEquals('b', g.getPrevArrow(v3, 0));
-        assertEquals('e', g.getPrevArrow(v3, 1));
-        assertEquals('d', g.getPrevArrow(v4, 0));
+        assertEquals('x', getArrowId(g.getPrevArrow(v[1], 0)));
+        assertEquals('c', getArrowId(g.getPrevArrow(v[2], 0)));
+        assertEquals('b', getArrowId(g.getPrevArrow(v[3], 0)));
+        assertEquals('e', getArrowId(g.getPrevArrow(v[3], 1)));
+        assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
     /**
@@ -135,36 +127,32 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     @Test
     public void testRemoveArrowAtBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
-        V v0 = newVertex(0);
-        V v1 = newVertex(1);
-        V v2 = newVertex(2);
-        V v3 = newVertex(3);
-        V v4 = newVertex(4);
+        V[] v = getVertices(g);
 
-        assertEquals(v1, g.getNext(v0, 0));
-        g.removeNext(v0, 0);
+        assertEquals(v[1], g.getNext(v[0], 0));
+        g.removeNext(v[0], 0);
 
         assertEquals(5, g.getVertexCount());
         assertEquals(5, g.getArrowCount());
 
-        assertEquals(0, g.getPrevCount(v0));
-        assertEquals(1, g.getPrevCount(v1));
-        assertEquals(1, g.getPrevCount(v2));
-        assertEquals(2, g.getPrevCount(v3));
-        assertEquals(1, g.getPrevCount(v4));
+        assertEquals(0, g.getPrevCount(v[0]));
+        assertEquals(1, g.getPrevCount(v[1]));
+        assertEquals(1, g.getPrevCount(v[2]));
+        assertEquals(2, g.getPrevCount(v[3]));
+        assertEquals(1, g.getPrevCount(v[4]));
 
-        assertEquals(v1, g.getPrev(v1, 0));
-        assertEquals(v1, g.getPrev(v2, 0));
-        assertEquals(v0, g.getPrev(v3, 0));
-        assertEquals(v4, g.getPrev(v3, 1));
-        assertEquals(v1, g.getPrev(v4, 0));
+        assertEquals(v[1], g.getPrev(v[1], 0));
+        assertEquals(v[1], g.getPrev(v[2], 0));
+        assertEquals(v[0], g.getPrev(v[3], 0));
+        assertEquals(v[4], g.getPrev(v[3], 1));
+        assertEquals(v[1], g.getPrev(v[4], 0));
 
 
-        assertEquals('x', getArrowId(g.getPrevArrow(v1, 0)));
-        assertEquals('c', getArrowId(g.getPrevArrow(v2, 0)));
-        assertEquals('b', getArrowId(g.getPrevArrow(v3, 0)));
-        assertEquals('e', getArrowId(g.getPrevArrow(v3, 1)));
-        assertEquals('d', getArrowId(g.getPrevArrow(v4, 0)));
+        assertEquals('x', getArrowId(g.getPrevArrow(v[1], 0)));
+        assertEquals('c', getArrowId(g.getPrevArrow(v[2], 0)));
+        assertEquals('b', getArrowId(g.getPrevArrow(v[3], 0)));
+        assertEquals('e', getArrowId(g.getPrevArrow(v[3], 1)));
+        assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
     /**
@@ -180,36 +168,32 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     @Test
     public void testRemoveArrowAtBidiWithSelfLoop() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
-        V v0 = newVertex(0);
-        V v1 = newVertex(1);
-        V v2 = newVertex(2);
-        V v3 = newVertex(3);
-        V v4 = newVertex(4);
+        V[] v = getVertices(g);
 
-        assertEquals(v1, g.getNext(v1, 0));
-        g.removeNext(v1, 0);
+        assertEquals(v[1], g.getNext(v[1], 0));
+        g.removeNext(v[1], 0);
 
         assertEquals(5, g.getVertexCount());
         assertEquals(5, g.getArrowCount());
 
-        assertEquals(0, g.getPrevCount(v0));
-        assertEquals(1, g.getPrevCount(v1));
-        assertEquals(1, g.getPrevCount(v2));
-        assertEquals(2, g.getPrevCount(v3));
-        assertEquals(1, g.getPrevCount(v4));
+        assertEquals(0, g.getPrevCount(v[0]));
+        assertEquals(1, g.getPrevCount(v[1]));
+        assertEquals(1, g.getPrevCount(v[2]));
+        assertEquals(2, g.getPrevCount(v[3]));
+        assertEquals(1, g.getPrevCount(v[4]));
 
-        assertEquals(v0, g.getPrev(v1, 0));
-        assertEquals(v1, g.getPrev(v2, 0));
-        assertEquals(v0, g.getPrev(v3, 0));
-        assertEquals(v4, g.getPrev(v3, 1));
-        assertEquals(v1, g.getPrev(v4, 0));
+        assertEquals(v[0], g.getPrev(v[1], 0));
+        assertEquals(v[1], g.getPrev(v[2], 0));
+        assertEquals(v[0], g.getPrev(v[3], 0));
+        assertEquals(v[4], g.getPrev(v[3], 1));
+        assertEquals(v[1], g.getPrev(v[4], 0));
 
 
-        assertEquals('a', getArrowId(g.getPrevArrow(v1, 0)));
-        assertEquals('c', getArrowId(g.getPrevArrow(v2, 0)));
-        assertEquals('b', getArrowId(g.getPrevArrow(v3, 0)));
-        assertEquals('e', getArrowId(g.getPrevArrow(v3, 1)));
-        assertEquals('d', getArrowId(g.getPrevArrow(v4, 0)));
+        assertEquals('a', getArrowId(g.getPrevArrow(v[1], 0)));
+        assertEquals('c', getArrowId(g.getPrevArrow(v[2], 0)));
+        assertEquals('b', getArrowId(g.getPrevArrow(v[3], 0)));
+        assertEquals('e', getArrowId(g.getPrevArrow(v[3], 1)));
+        assertEquals('d', getArrowId(g.getPrevArrow(v[4], 0)));
     }
 
     /**
@@ -226,26 +210,22 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
     @Test
     public void testRemoveVertexBidi() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
-        V v0 = newVertex(0);
-        V v1 = newVertex(1);
-        V v2 = newVertex(2);
-        V v3 = newVertex(3);
-        V v4 = newVertex(4);
+        V[] v = getVertices(g);
 
-        g.removeVertex(v1);
+        g.removeVertex(v[1]);
 
         assertEquals(4, g.getVertexCount());
         assertEquals(2, g.getArrowCount());
 
-        assertEquals(0, g.getPrevCount(v0));
-        assertEquals(0, g.getPrevCount(v2));
-        assertEquals(2, g.getPrevCount(v3));
-        assertEquals(0, g.getPrevCount(v4));
+        assertEquals(0, g.getPrevCount(v[0]));
+        assertEquals(0, g.getPrevCount(v[2]));
+        assertEquals(2, g.getPrevCount(v[3]));
+        assertEquals(0, g.getPrevCount(v[4]));
 
-        assertEquals(0, g.getPrev(v3, 0));
-        assertEquals(4, g.getPrev(v3, 1));
+        assertEquals(v[0], g.getPrev(v[3], 0));
+        assertEquals(v[4], g.getPrev(v[3], 1));
 
-        assertEquals('b', getArrowId(g.getPrevArrow(v3, 0)));
-        assertEquals('e', getArrowId(g.getPrevArrow(v3, 1)));
+        assertEquals('b', getArrowId(g.getPrevArrow(v[3], 0)));
+        assertEquals('e', getArrowId(g.getPrevArrow(v[3], 1)));
     }
 }
