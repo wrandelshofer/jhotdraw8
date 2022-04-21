@@ -59,14 +59,12 @@ import java.util.Set;
  * </pre>
  * Then the internal representation is as follows:
  * <pre>
- *     vertexCount: 5
- *
- *  vertex#    nodes
+ * vertex#  next- and prev-arrows
  *
  *    0:    next={1, 3};  prev={}
  *    1:    next={2, 4};  prev={0}
  *    2:    next={};      prev={1}
- *    3:    next={};      prev={0,4}
+ *    3:    next={};      prev={0, 4}
  *    4:    next={3};     prev={1}
  * </pre>
  *
@@ -365,7 +363,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
         private Enumerator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8
-            return new AbstractEnumerator<Node<V, A>>(size, 0) {
+            return new AbstractEnumerator<>(size, 0) {
                 int index = 0;
 
                 @Override
@@ -378,23 +376,6 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
                 }
             };
         }
-
-        private Enumerator<A> arrowEnumerator() {
-            // We must use explicit type arguments in Java 8
-            return new AbstractEnumerator<A>(size, 0) {
-                int index = 0;
-
-                @Override
-                public boolean moveNext() {
-                    if (index < size) {
-                        current = getArrow(index++);
-                        return true;
-                    }
-                    return false;
-                }
-            };
-        }
-
 
         private void rangeCheck(int index, int maxExclusive) throws IllegalArgumentException {
             if (index < 0 || index >= maxExclusive) {
