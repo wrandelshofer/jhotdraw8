@@ -13,12 +13,12 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class SimpleMutableBidiGraphTest extends AbstractMutableBidiGraphTest<Integer, Character> {
     @Override
-    protected MutableBidiGraph<Integer, Character> newInstance() {
+    protected @NonNull MutableBidiGraph<Integer, Character> newInstance() {
         return new SimpleMutableBidiGraph<>();
     }
 
     @Override
-    protected MutableBidiGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g) {
+    protected @NonNull MutableBidiGraph<Integer, Character> newInstance(@NonNull DirectedGraph<Integer, Character> g) {
         return new SimpleMutableBidiGraph<>(g);
     }
 

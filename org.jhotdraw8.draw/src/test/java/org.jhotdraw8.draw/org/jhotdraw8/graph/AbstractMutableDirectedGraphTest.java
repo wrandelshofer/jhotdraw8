@@ -20,6 +20,13 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * Base class for tests that test implementations of the {@link MutableDirectedGraph}
+ * interface.
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ */
 public abstract class AbstractMutableDirectedGraphTest<V, A> {
     protected abstract MutableDirectedGraph<V, A> newInstance();
 
@@ -32,9 +39,9 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
     /**
      * Returns the arrow id. Returns \u0000 if the arrow is null.
      */
-    protected abstract @NonNull char getArrowId(@Nullable A a);
+    protected abstract char getArrowId(@Nullable A a);
 
-    protected abstract @NonNull int getVertexId(@NonNull V v);
+    protected abstract int getVertexId(@NonNull V v);
 
     /**
      * Example graph:

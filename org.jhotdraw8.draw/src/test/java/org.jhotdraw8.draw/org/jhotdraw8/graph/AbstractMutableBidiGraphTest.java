@@ -5,15 +5,23 @@
 
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Base class for tests that test implementations of the {@link MutableBidiGraph}
+ * interface.
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
+ */
 public abstract class AbstractMutableBidiGraphTest<V, A>
         extends AbstractMutableDirectedGraphTest<V, A> {
-    protected abstract MutableBidiGraph<V, A> newInstance();
+    protected abstract @NonNull MutableBidiGraph<V, A> newInstance();
 
-    protected abstract MutableBidiGraph<V, A> newInstance(DirectedGraph<V, A> g);
+    protected abstract @NonNull MutableBidiGraph<V, A> newInstance(@NonNull DirectedGraph<V, A> g);
 
     /**
      * Test getters.
