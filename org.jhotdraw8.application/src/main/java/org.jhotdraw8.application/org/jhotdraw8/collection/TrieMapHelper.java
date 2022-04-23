@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * Package private class with code for {@link PersistentTrieMap}
@@ -109,7 +110,7 @@ class TrieMapHelper {
 
         abstract K getKey(final int index);
 
-        abstract Map.Entry<K, V> getKeyValueEntry(final int index);
+        abstract Map.Entry<K, V> getKeyValueEntry(final int index, @NonNull BiFunction<K, V, Map.Entry<K, V>> factory);
 
         abstract Node<K, V> getNode(final int index);
 
@@ -312,8 +313,8 @@ class TrieMapHelper {
 
         @Override
         @SuppressWarnings("unchecked")
-        Map.Entry<K, V> getKeyValueEntry(final int index) {
-            return new AbstractMap.SimpleImmutableEntry<>((K) nodes[TUPLE_LENGTH * index], (V) nodes[TUPLE_LENGTH * index + 1]);
+        Map.Entry<K, V> getKeyValueEntry(final int index, BiFunction<K, V, Map.Entry<K, V>> factory) {
+            return factory.apply((K) nodes[TUPLE_LENGTH * index], (V) nodes[TUPLE_LENGTH * index + 1]);
         }
 
         @Override
@@ -570,8 +571,8 @@ class TrieMapHelper {
 
         @SuppressWarnings("unchecked")
         @Override
-        Map.Entry<K, V> getKeyValueEntry(final int index) {
-            return new AbstractMap.SimpleImmutableEntry<>((K) entries[index * 2], (V) entries[index * 2 + 1]);
+        Map.Entry<K, V> getKeyValueEntry(final int index, BiFunction<K, V, Map.Entry<K, V>> factory) {
+            return factory.apply((K) entries[index * 2], (V) entries[index * 2 + 1]);
         }
 
         @Override
@@ -733,11 +734,11 @@ class TrieMapHelper {
             }
         }
 
-        protected Map.Entry<K, V> nextEntry() {
+        protected Map.Entry<K, V> nextEntry(@NonNull BiFunction<K, V, Map.Entry<K, V>> factory) {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             } else {
-                return current = nextValueNode.getKeyValueEntry(nextValueCursor++);
+                return current = nextValueNode.getKeyValueEntry(nextValueCursor++, factory);
             }
         }
 
@@ -841,7 +842,7 @@ class TrieMapHelper {
 
         @Override
         public K next() {
-            return nextEntry().getKey();
+            return nextEntry(AbstractMap.SimpleImmutableEntry::new).getKey();
         }
     }
 
@@ -854,7 +855,7 @@ class TrieMapHelper {
 
         @Override
         public Map.Entry<K, V> next() {
-            return nextEntry();
+            return nextEntry(AbstractMap.SimpleImmutableEntry::new);
         }
     }
 

@@ -29,8 +29,8 @@ import static org.jhotdraw8.collection.TrieListHelper.M;
  *     <li>All leaf nodes are at the same depth in the trie.</li>
  *     <li>All nodes except the right-most have {@code m} children.</li>
  *     <li>The right-most nodes have between {@code 1} and {@code m} children.</li>
- *     <li>A Trie Array with a trie of height {@code h} has
- *     {@code m^h + |tail|} elements.</li>
+ *     <li>A Trie Array with a trie of height {@code h} has at most
+ *     {@code m^h} elements.</li>
  *     <li>{@code m} must be a power of 2</li>
  *     <li>A leaf nodes have a shift of {@code 0}</li>
  *     <li>The trie has {@code ⌊size / m⌋} leaf nodes.</li>

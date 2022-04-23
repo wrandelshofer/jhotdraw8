@@ -6,15 +6,18 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
+import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
@@ -30,6 +33,14 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
         this.root = TrieMapHelper.emptyNode();
         this.putAll(m);
+    }
+
+    public TrieMap(@NonNull Collection<? extends Entry<? extends K, ? extends V>> m) {
+        this.root = TrieMapHelper.emptyNode();
+        for (Entry<? extends K, ? extends V> e : m) {
+            this.put(e.getKey(), e.getValue());
+        }
+
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
@@ -52,8 +63,21 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
     @Override
     public void clear() {
-        this.root = TrieMapHelper.emptyNode();
-        this.size = 0;
+        root = TrieMapHelper.emptyNode();
+        size = 0;
+        modCount++;
+    }
+
+    @Override
+    public TrieMap<K, V> clone() {
+        try {
+            @SuppressWarnings("unchecked") final TrieMap<K, V> that = (TrieMap<K, V>) super.clone();
+            that.mutator = null;
+            this.mutator = null;
+            return that;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError(e);
+        }
     }
 
     @Override
@@ -66,13 +90,6 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     public Set<Entry<K, V>> entrySet() {
         // Type arguments are needed for Java 8!
         return new AbstractSet<Entry<K, V>>() {
-            @Override
-            public boolean add(Entry<K, V> kvEntry) {
-                TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
-                root.updated(getOrCreateMutator(), kvEntry.getKey(), kvEntry.getValue(), Objects.hashCode(kvEntry.getKey()), 0, details);
-                return details.isModified();
-            }
-
             @Override
             public void clear() {
                 TrieMap.this.clear();
@@ -92,7 +109,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
             @Override
             public Iterator<Entry<K, V>> iterator() {
-                return new TransientMapEntryIterator<K, V>(TrieMap.this);
+                return new MutableMapEntryIterator<K, V>(TrieMap.this);
             }
 
             @Override
@@ -129,7 +146,6 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         }
         return mutator;
     }
-
 
     @Override
     public V put(K key, V value) {
@@ -198,8 +214,8 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     static abstract class AbstractTransientMapEntryIterator<K, V> extends TrieMapHelper.AbstractMapIterator<K, V> {
-        private final @NonNull TrieMap<K, V> map;
-        private int expectedModCount;
+        protected final @NonNull TrieMap<K, V> map;
+        protected int expectedModCount;
 
         public AbstractTransientMapEntryIterator(@NonNull TrieMap<K, V> map) {
             super(map.root);
@@ -215,11 +231,12 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
             return super.hasNext();
         }
 
-        public Map.Entry<K, V> nextEntry() {
+        @Override
+        public Map.Entry<K, V> nextEntry(@NonNull BiFunction<K, V, Entry<K, V>> factory) {
             if (expectedModCount != map.modCount) {
                 throw new ConcurrentModificationException();
             }
-            return super.nextEntry();
+            return super.nextEntry(factory);
         }
 
 
@@ -233,7 +250,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
             Map.Entry<K, V> toRemove = current;
 
             if (hasNext()) {
-                Map.Entry<K, V> next = nextEntry();
+                Map.Entry<K, V> next = nextEntry(AbstractMap.SimpleImmutableEntry::new);
                 map.remove(toRemove.getKey());
                 expectedModCount = map.modCount;
                 moveTo(next.getKey(), map.root);
@@ -246,27 +263,37 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         }
     }
 
-    private static class TransientMapEntryIterator<K, V> extends AbstractTransientMapEntryIterator<K, V> implements Iterator<Entry<K, V>> {
+    private static class MutableMapEntryIterator<K, V> extends AbstractTransientMapEntryIterator<K, V> implements Iterator<Entry<K, V>> {
 
-        public TransientMapEntryIterator(@NonNull TrieMap<K, V> map) {
+        public MutableMapEntryIterator(@NonNull TrieMap<K, V> map) {
             super(map);
         }
 
         @Override
         public Entry<K, V> next() {
-            return nextEntry();
+            Entry<K, V> kvEntry = nextEntry(MutableMapEntry::new);
+            ((MutableMapEntry<K, V>) kvEntry).iterator = this;
+            return kvEntry;
         }
     }
 
-    @Override
-    public TrieMap<K, V> clone() {
-        try {
-            @SuppressWarnings("unchecked") final TrieMap<K, V> that = (TrieMap<K, V>) super.clone();
-            that.mutator = null;
-            this.mutator = null;
-            return that;
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e);
+    private static class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
+        private @Nullable MutableMapEntryIterator<K, V> iterator;
+
+        public MutableMapEntry(K key, V value) {
+            super(key, value);
+        }
+
+        @Override
+        public V setValue(V value) {
+            V oldValue = super.setValue(value);
+            if (iterator != null) {
+                iterator.map.put(getKey(), value);
+                iterator.expectedModCount = iterator.map.modCount;
+            } else {
+                throw new UnsupportedOperationException();
+            }
+            return oldValue;
         }
     }
 }

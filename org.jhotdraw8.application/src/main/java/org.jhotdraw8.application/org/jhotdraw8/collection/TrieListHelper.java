@@ -75,11 +75,11 @@ class TrieListHelper {
      *     <li>The children of an inner node are inner nodes or leaf nodes.</li>
      *     <li>The children of a leaf node are data element.</li>
      *     <li>All leaf nodes are at the same depth in the tree.</li>
-     *     <li>All nodes except the root have between {@code m - 1}
+     *     <li>All nodes except the right-most have between {@code m - 2}
      *     and {@code m} children.</li>
      *     <li>The root node has between {@code 1} and {@code m} children.</li>
      *     <li>The tail has between {@code 0} and {@code m} data elements</li>
-     *     <li>A tree of height {@code h} has between {@code (m-1)^h + |tail|}
+     *     <li>A tree of height {@code h} has between {@code (m-2)^h + |tail|}
      *     and {@code m^h + |tail|} elements.</li>
      * </ul>
      *

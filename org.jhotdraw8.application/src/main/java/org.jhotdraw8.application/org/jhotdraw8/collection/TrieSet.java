@@ -123,8 +123,9 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public void clear() {
-        this.root = TrieSetHelper.emptyNode();
-        this.size = 0;
+        root = TrieSetHelper.emptyNode();
+        size = 0;
+        modCount++;
     }
 
     /**
