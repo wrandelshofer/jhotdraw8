@@ -19,6 +19,51 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+/**
+ * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
+ * (CHAMP).
+ * <p>
+ * This map performs read and write operations of single elements in O(1) time,
+ * and in O(1) space.
+ * <p>
+ * The CHAMP tree contains nodes that may be shared with other map, and nodes
+ * that are exclusively owned by this map.
+ * <p>
+ * If a write operation is performed on an exclusively owned node, then this
+ * map is allowed to mutate the node (mutate-on-write).
+ * If a write operation is performed on a potentially shared node, then this
+ * map is forced to create an exclusive copy of the node and of all not (yet)
+ * exclusively owned parent nodes up to the root (copy-path-on-write).
+ * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
+ * case.
+ * <p>
+ * This map can create a persistent copy of itself in O(1) time and O(0) space
+ * using method {@link #toPersistent()}. This map loses exclusive ownership of
+ * all its tree nodes.
+ * Thus, creating a persistent copy increases the constant cost of
+ * subsequent writes, until all shared nodes have been gradually replaced by
+ * exclusively owned nodes again.
+ * <p>
+ * <strong>Note that this implementation is not synchronized.</strong>
+ * If multiple threads access this map concurrently, and at least
+ * one of the threads modifies the map, it <em>must</em> be synchronized
+ * externally. This is typically accomplished by synchronizing on some
+ * object that naturally encapsulates the map.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private transient UniqueIdentity mutator;

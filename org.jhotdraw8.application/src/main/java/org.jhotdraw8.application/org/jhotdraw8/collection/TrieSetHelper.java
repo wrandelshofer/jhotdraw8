@@ -18,8 +18,19 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * Package private class with code for {@link PersistentTrieSet}
- * and {@link TrieSet}.
+ * This is a package private class that provides shared code for
+ * {@link PersistentTrieSet} and {@link TrieSet}.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
  */
 class TrieSetHelper {
     static final int TUPLE_LENGTH = 1;

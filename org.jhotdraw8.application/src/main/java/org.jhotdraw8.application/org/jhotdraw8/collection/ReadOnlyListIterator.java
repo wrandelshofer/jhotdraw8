@@ -1,16 +1,25 @@
 /*
  * @(#)ReadOnlyListIterator.java
- * Copyright Â© 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
+/**
+ * A {@link ListIterator}, {@link Enumerator}, and {@link Spliterator} for a
+ * {@link ReadOnlyList}.
+ * <p>
+ * Does not perform modification checks.
+ *
+ * @param <E> the element type
+ */
 public class ReadOnlyListIterator<E> extends AbstractIterator<E>{
     private final ReadOnlyList<E> list;
     private int index;

@@ -1,16 +1,25 @@
 /*
  * @(#)ArrayIterator.java
- * Copyright Â© 2021 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
+/**
+ * A {@link ListIterator} over an unmodifiable object array.
+ * <p>
+ * Does not perform modification checks.
+ *
+ * @param <E> the element type
+ * @author Adrien Grzechowiak
+ */
 public class ArrayIterator<E> extends AbstractIterator<E>{
     private final Object[] list;
     private int index;

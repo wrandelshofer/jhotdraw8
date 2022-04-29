@@ -13,6 +13,41 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Implements a persistent map using a Compressed Hash-Array Mapped Prefix-tree
+ * (CHAMP).
+ * <p>
+ * This map performs read and write operations of single elements in O(1) time,
+ * and in O(1) space.
+ * <p>
+ * The CHAMP tree contains nodes that may be shared with other map.
+ * <p>
+ * If a write operation is performed on a node, then this map creates a
+ * copy of the node and of all parent nodes up to the root (copy-path-on-write).
+ * Since the CHAMP tree has a fixed maximal height, the cost is O(1).
+ * <p>
+ * This map can create a mutable copy of itself in O(1) time and O(0) space
+ * using method {@link #toMutable()}}. The mutable copy shares its nodes
+ * with this map, until it has gradually replaced the nodes with exclusively
+ * owned nodes.
+ * <p>
+ * All operations on this set can be performed concurrently, without a need for
+ * synchronisation.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public class PersistentTrieMap<K, V> extends TrieMapHelper.BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
 

@@ -18,8 +18,19 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
- * Package private class with code for {@link PersistentTrieMap}
- * and {@link TrieMap}.
+ * This is a package private class that provides shared code for
+ * {@link PersistentTrieMap} and {@link TrieMap}.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
  */
 class TrieMapHelper {
     static final BitmapIndexedNode<?, ?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});

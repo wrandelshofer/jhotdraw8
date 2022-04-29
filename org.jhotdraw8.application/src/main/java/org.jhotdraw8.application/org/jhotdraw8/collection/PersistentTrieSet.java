@@ -20,7 +20,41 @@ import java.util.Objects;
 
 import static org.jhotdraw8.collection.TrieSetHelper.EMPTY_NODE;
 
-
+/**
+ * Implements a persistent set using a Compressed Hash-Array Mapped Prefix-tree
+ * (CHAMP).
+ * <p>
+ * This set performs read and write operations of single elements in O(1) time,
+ * and in O(1) space.
+ * <p>
+ * The CHAMP tree contains nodes that may be shared with other sets.
+ * <p>
+ * If a write operation is performed on a node, then this set creates a
+ * copy of the node and of all parent nodes up to the root (copy-path-on-write).
+ * Since the CHAMP tree has a fixed maximal height, the cost is O(1).
+ * <p>
+ * This set can create a mutable copy of itself in O(1) time and O(0) space
+ * using method {@link #toMutable()}}. The mutable copy shares its nodes
+ * with this set, until it has gradually replaced the nodes with exclusively
+ * owned nodes.
+ * <p>
+ * All operations on this set can be performed concurrently, without a need for
+ * synchronisation.
+ * <p>
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
+ *
+ * @param <E> the element type
+ */
 public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
 

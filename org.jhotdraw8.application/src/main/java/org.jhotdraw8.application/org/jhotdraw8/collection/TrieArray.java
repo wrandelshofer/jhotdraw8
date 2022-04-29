@@ -50,8 +50,6 @@ public class TrieArray<E> {
     private final int shift;
     private final TrieNode<E> root;
 
-
-    @SuppressWarnings({"unchecked"})
     public TrieArray(int size) {
         this.size = size;
 
@@ -65,10 +63,6 @@ public class TrieArray<E> {
             int log2M = 31 - Integer.numberOfLeadingZeros(m);
             int h = (log2Size) / log2M;
             shift = BIT_PARTITION_SIZE * h;
-            System.out.println("h.float:" + Math.log(size - 1) / Math.log(m));
-            System.out.println("log2Size:" + log2Size + " log2M:" + log2M);
-            System.out.println("size:" + size + " h:" + h + " nodeCapacity:" + (m << shift));
-
             root = h == 0 ? new LeafTrieNode<>(size) : new InnerTrieNode<>(size, shift);
         }
     }

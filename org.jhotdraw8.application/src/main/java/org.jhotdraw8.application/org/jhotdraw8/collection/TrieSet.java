@@ -18,6 +18,50 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
 
+/**
+ * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
+ * (CHAMP).
+ * <p>
+ * This set performs read and write operations of single elements in O(1) time,
+ * and in O(1) space.
+ * <p>
+ * The CHAMP tree contains nodes that may be shared with other sets, and nodes
+ * that are exclusively owned by this set.
+ * <p>
+ * If a write operation is performed on an exclusively owned node, then this
+ * set is allowed to mutate the node (mutate-on-write).
+ * If a write operation is performed on a potentially shared node, then this
+ * set is forced to create an exclusive copy of the node and of all not (yet)
+ * exclusively owned parent nodes up to the root (copy-path-on-write).
+ * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
+ * case.
+ * <p>
+ * This set can create a persistent copy of itself in O(1) time and O(0) space
+ * using method {@link #toPersistent()}. This set loses exclusive ownership of
+ * all its tree nodes.
+ * Thus, creating a persistent copy increases the constant cost of
+ * subsequent writes, until all shared nodes have been gradually replaced by
+ * exclusively owned nodes again.
+ * <p>
+ * <strong>Note that this implementation is not synchronized.</strong>
+ * If multiple threads access this set concurrently, and at least
+ * one of the threads modifies the set, it <em>must</em> be synchronized
+ * externally.  This is typically accomplished by synchronizing on some
+ * object that naturally encapsulates the set.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
+ *
+ * @param <E> the element type
+ */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private transient UniqueIdentity mutator;
@@ -110,11 +154,11 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
                 return false;
             }
         } else {*/
-            boolean modified = false;
-            for (E e : c) {
-                modified |= add(e);
-            }
-            return modified;
+        boolean modified = false;
+        for (E e : c) {
+            modified |= add(e);
+        }
+        return modified;
         //}
     }
 

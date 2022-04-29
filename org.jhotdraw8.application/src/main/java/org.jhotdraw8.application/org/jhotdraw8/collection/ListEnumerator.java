@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Spliterator;
 
 /**
- * {@link Enumerator} and {@link Spliterator} for a {@link List}.
+ * An {@link Enumerator} and {@link Spliterator} for a {@link List}.
  * <p>
- * Does not perform modification checks of the list.
+ * Does not perform modification checks.
  *
- * @param <T> the element type of the list
+ * @param <T> the element type
  */
 public class ListEnumerator<T> extends AbstractEnumerator<T> {
     private int index;
-    private int endIndex;
+    private final int endIndex;
     private final List<T> list;
 
     public ListEnumerator(List<T> list) {
