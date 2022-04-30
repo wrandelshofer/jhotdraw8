@@ -7,20 +7,42 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.TrieSetHelper.BitmapIndexedNode;
-import org.jhotdraw8.collection.TrieSetHelper.ChangeEvent;
-import org.jhotdraw8.collection.TrieSetHelper.TrieIterator;
+import org.jhotdraw8.collection.ChampTrieHelper.BitmapIndexedNode;
+import org.jhotdraw8.collection.ChampTrieHelper.ChangeEvent;
+import org.jhotdraw8.collection.ChampTrieHelper.KeyIterator;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP).
+ * <p>
+ * Features:
+ * <ul>
+ *     <li>allows null elements</li>
+ *     <li>is mutable</li>
+ *     <li>is not thread-safe</li>
+ *     <li>does not guarantee a specific iteration order</li>
+ * </ul>
+ * <p>
+ * Performance characteristics:
+ * <ul>
+ *     <li>add: O(1)</li>
+ *     <li>remove: O(1)</li>
+ *     <li>contains: O(1)</li>
+ *     <li>toPersistent: O(log n) distributed across subsequent updates</li>
+ *     <li>clone: O(log n) distributed across subsequent updates</li>
+ *     <li>iterator.next(): O(1)</li>
+ * </ul>
+ * <p>
+ * Implementation details:
  * <p>
  * This set performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
@@ -64,16 +86,18 @@ import java.util.Objects;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
+    private final static int TUPLE_LENGTH = 1;
     private transient UniqueIdentity mutator;
-    private BitmapIndexedNode<E> root;
+    private BitmapIndexedNode<E, Void> root;
     private int size;
     private int modCount;
+    private final static ToIntFunction<Object> hashFunction = Objects::hashCode;
 
     /**
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.root = TrieSetHelper.emptyNode();
+        this.root = ChampTrieHelper.emptyNode();
     }
 
     /**
@@ -91,7 +115,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             this.root = that;
             this.size = that.size;
         } else {
-            this.root = TrieSetHelper.emptyNode();
+            this.root = ChampTrieHelper.emptyNode();
             addAll(c);
         }
     }
@@ -100,11 +124,12 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * Adds the specified element if it is not already in this set.
      *
      * @param e an element
-     * @returns {@code true} if this set changed
+     * @return {@code true} if this set changed
      */
     public boolean add(final @Nullable E e) {
-        final ChangeEvent changeEvent = new ChangeEvent();
-        final BitmapIndexedNode<E> newRoot = root.updated(getOrCreateMutator(), e, Objects.hashCode(e), 0, changeEvent);
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRoot = root.updated(getOrCreateMutator(), e, null, hash(e), 0, changeEvent, TUPLE_LENGTH,
+                this::hash, ChampTrieHelper.TUPLE_VALUE);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -115,10 +140,20 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     }
 
     /**
+     * Computes a hash code for the specified object.
+     *
+     * @param e an object
+     * @return hash code
+     */
+    private int hash(@Nullable E e) {
+        return hashFunction.applyAsInt(e);
+    }
+
+    /**
      * Adds all specified elements that are not already in this set.
      *
      * @param c a collection of elements
-     * @returns {@code true} if this set changed
+     * @return {@code true} if this set changed
      */
     @Override
     public boolean addAll(@NonNull Collection<? extends E> c) {
@@ -129,37 +164,18 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * Adds all specified elements that are not already in this set.
      *
      * @param c an iterable of elements
-     * @returns {@code true} if this set changed
+     * @return {@code true} if this set changed
      */
-    @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Iterable<? extends E> c) {
         if (c == this) {
             return false;
         }
 
-        /*
-        if (c instanceof TrieSet<?>) {
-            c = ((TrieSet<? extends E>) c).toPersistent();
-        }
-        if (c instanceof PersistentTrieSet<?>) {
-            PersistentTrieSet<E> that = (PersistentTrieSet<E>) c;
-            BulkChangeEvent bulkChange = new BulkChangeEvent();
-            bulkChange.sizeChange=that.size;
-            root = root.copyAddAll(that, 0, bulkChange, getOrCreateMutator());
-            if (bulkChange.sizeChange != 0) {
-                this.size += bulkChange.sizeChange;
-                modCount++;
-                return true;
-            } else {
-                return false;
-            }
-        } else {*/
         boolean modified = false;
         for (E e : c) {
             modified |= add(e);
         }
         return modified;
-        //}
     }
 
     /**
@@ -167,7 +183,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public void clear() {
-        root = TrieSetHelper.emptyNode();
+        root = ChampTrieHelper.emptyNode();
         size = 0;
         modCount++;
     }
@@ -193,7 +209,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.contains(key, Objects.hashCode(key), 0);
+        return root.containsKey(key, hash(key), 0, TUPLE_LENGTH);
     }
 
     private @NonNull UniqueIdentity getOrCreateMutator() {
@@ -216,20 +232,20 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public Iterator<E> iterator() {
-        return new MutableTrieIterator<>(this);
+        return new MutableTrieIterator<>(this, TUPLE_LENGTH, this::hash);
     }
 
     /**
      * Removes the specified element if it is in this set.
      *
      * @param o an element
-     * @returns {@code true} if this set changed
+     * @return {@code true} if this set changed
      */
     public boolean remove(final Object o) {
         @SuppressWarnings("unchecked")
         E key = (E) o;
-        final ChangeEvent changeEvent = new ChangeEvent();
-        final BitmapIndexedNode<E> newRoot = root.removed(getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent);
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRoot = root.removed(getOrCreateMutator(), key, hash(key), 0, changeEvent, TUPLE_LENGTH, this::hash);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -240,10 +256,34 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     }
 
     /**
+     * Gets an element from this set. Throws an exception if the set is empty.
+     *
+     * @return an element
+     * @throws java.util.NoSuchElementException if this set is empty
+     */
+    public E element() {
+        return iterator().next();
+    }
+
+    /**
+     * Removes an element from this set and returns it.
+     * Throws an exception if the set is empty.
+     *
+     * @return an element
+     * @throws java.util.NoSuchElementException if this set is empty
+     */
+    public E remove() {
+        Iterator<E> iterator = iterator();
+        E e = iterator.next();
+        iterator.remove();
+        return e;
+    }
+
+    /**
      * Removes all specified elements that are in this set.
      *
      * @param c a collection of elements
-     * @returns {@code true} if this set changed
+     * @return {@code true} if this set changed
      */
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
@@ -254,7 +294,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * Removes all specified elements that are in this set.
      *
      * @param c an iterable of elements
-     * @returns {@code true} if this set changed
+     * @return {@code true} if this set changed
      */
     public boolean removeAll(@NonNull Iterable<?> c) {
         if (isEmpty()) {
@@ -280,6 +320,21 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     }
 
     /**
+     * Dumps the internal structure of this set in the Graphviz DOT Language.
+     *
+     * @return a dump of the internal structure
+     */
+    public String dump() {
+        StringBuilder w = new StringBuilder();
+        try {
+            ChampTrieHelper.dumpTreeAsGraphviz(w, root, TUPLE_LENGTH, this::hash);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return w.toString();
+    }
+
+    /**
      * Returns a persistent copy of this set.
      *
      * @return a persistent trie set
@@ -289,12 +344,12 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, size);
     }
 
-    static class MutableTrieIterator<E> extends TrieIterator<E> {
+    static class MutableTrieIterator<E> extends KeyIterator<E, Void> {
         private final @NonNull TrieSet<E> set;
         private int expectedModCount;
 
-        MutableTrieIterator(@NonNull TrieSet<E> set) {
-            super(set.root);
+        MutableTrieIterator(@NonNull TrieSet<E> set, int tupleLength, ToIntFunction<E> hashFunction) {
+            super(set.root, tupleLength, hashFunction);
             this.set = set;
             this.expectedModCount = set.modCount;
         }
@@ -309,25 +364,14 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
 
         @Override
         public void remove() {
-            if (!canRemove) {
-                throw new IllegalStateException();
-            }
             if (expectedModCount != set.modCount) {
                 throw new ConcurrentModificationException();
             }
-
-            E toRemove = current;
-            if (hasNext()) {
-                E next = next();
-                set.remove(toRemove);
-                moveTo(next, set.root);
-            } else {
-                set.remove(toRemove);
-            }
-
+            removeEntry(k -> {
+                set.remove(k);
+                return set.root;
+            });
             expectedModCount = set.modCount;
-            canRemove = false;
-            current = null;
         }
     }
 }

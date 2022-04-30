@@ -59,7 +59,6 @@ public class IntSetTest {
                 assertEquals(actualChanged, actual2Changed, "index=" + index + " must have changed");
 
             }
-            System.out.println(expected);
             assertEquals(expected.toString(), actual.toString());
             assertEquals(expected.toString(), actual2.toString());
             assertArrayEquals(expected.toLongArray(), actual.toLongArray());

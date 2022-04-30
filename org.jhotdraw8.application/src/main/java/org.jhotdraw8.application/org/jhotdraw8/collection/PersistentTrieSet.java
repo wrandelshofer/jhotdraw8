@@ -7,22 +7,43 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.TrieSetHelper.BitmapIndexedNode;
-import org.jhotdraw8.collection.TrieSetHelper.BulkChangeEvent;
-import org.jhotdraw8.collection.TrieSetHelper.ChangeEvent;
-import org.jhotdraw8.collection.TrieSetHelper.TrieIterator;
+import org.jhotdraw8.collection.ChampTrieHelper.BitmapIndexedNode;
+import org.jhotdraw8.collection.ChampTrieHelper.BulkChangeEvent;
+import org.jhotdraw8.collection.ChampTrieHelper.ChangeEvent;
+import org.jhotdraw8.collection.ChampTrieHelper.KeyIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.TrieSetHelper.EMPTY_NODE;
+import static org.jhotdraw8.collection.ChampTrieHelper.EMPTY_NODE;
 
 /**
  * Implements a persistent set using a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP).
+ * <p>
+ * Features:
+ * <ul>
+ *     <li>allows null elements</li>
+ *     <li>is immutable</li>
+ *     <li>is thread-safe</li>
+ *     <li>does not guarantee a specific iteration order</li>
+ * </ul>
+ * <p>
+ * Performance characteristics:
+ * <ul>
+ *     <li>copyAdd: O(1)</li>
+ *     <li>copyRemove: O(1)</li>
+ *     <li>contains: O(1)</li>
+ *     <li>toMutable: O(log n) distributed across subsequent updates</li>
+ *     <li>clone: O(1)</li>
+ *     <li>iterator.next(): O(1)</li>
+ * </ul>
+ * <p>
+ * Implementation details:
  * <p>
  * This set performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
@@ -38,10 +59,6 @@ import static org.jhotdraw8.collection.TrieSetHelper.EMPTY_NODE;
  * with this set, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>
- * All operations on this set can be performed concurrently, without a need for
- * synchronisation.
- * <p>
- * <p>
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
@@ -55,15 +72,17 @@ import static org.jhotdraw8.collection.TrieSetHelper.EMPTY_NODE;
  *
  * @param <E> the element type
  */
-public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
+public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-
-    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(EMPTY_NODE, 0);
+    private final static int TUPLE_LENGTH = 1;
+    @SuppressWarnings("unchecked")
+    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>((BitmapIndexedNode<Object, Void>) EMPTY_NODE, 0);
 
     final int size;
+    private final ToIntFunction<E> hashFunction = Objects::hashCode;
 
-    PersistentTrieSet(BitmapIndexedNode<E> root, int size) {
-        super(root.nodeMap, root.dataMap, root.nodes);
+    PersistentTrieSet(BitmapIndexedNode<E, Void> root, int size) {
+        super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
         this.size = size;
     }
 
@@ -93,13 +112,13 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return contains(key, Objects.hashCode(key), 0);
+        return containsKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
     }
 
     public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent changeEvent = new ChangeEvent();
-        final BitmapIndexedNode<E> newRootNode = updated(null, key, keyHash, 0, changeEvent);
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRootNode = updated(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction, ChampTrieHelper.TUPLE_VALUE);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size + 1);
         }
@@ -107,7 +126,6 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     public @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         if (set == this
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
@@ -130,6 +148,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
         return modified ? t.toPersistent() : this;
     }
 
+    // FIXME fix counting of merged values
     private @NonNull PersistentTrieSet<E> copyAddAllFromTrieSet(final @NonNull PersistentTrieSet<E> that) {
         if (that.isEmpty()) {
             return this;
@@ -138,11 +157,10 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
             return that;
         }
         BulkChangeEvent bulkChange = new BulkChangeEvent();
-        bulkChange.sizeChange = that.size;
-        BitmapIndexedNode<E> newNode = copyAddAll(that, 0, bulkChange, new UniqueIdentity());
+        BitmapIndexedNode<E, Void> newNode = copyAddAll(that, 0, bulkChange, new UniqueIdentity(), TUPLE_LENGTH, hashFunction);
         if (newNode != this) {
             return new PersistentTrieSet<>(newNode,
-                    this.size + bulkChange.sizeChange
+                    this.size + that.size - bulkChange.numInBothCollections
             );
         }
         return this;
@@ -154,10 +172,10 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
     }
 
     public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent changeEvent = new ChangeEvent();
-        final BitmapIndexedNode<E> newRootNode = (BitmapIndexedNode<E>) removed(null, key,
-                keyHash, 0, changeEvent);
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRootNode = (BitmapIndexedNode<E, Void>) removed(null, key,
+                keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size - 1);
         }
@@ -224,7 +242,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that);
+            return this.equivalent(that, TUPLE_LENGTH);
         } else if (other instanceof ReadOnlySet) {
             @SuppressWarnings("unchecked")
             ReadOnlySet<E> that = (ReadOnlySet<E>) other;
@@ -244,7 +262,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E> implements Persis
 
     @Override
     public Iterator<E> iterator() {
-        return new TrieIterator<>(this);
+        return new KeyIterator<>(this, TUPLE_LENGTH, hashFunction);
     }
 
     @Override

@@ -62,6 +62,7 @@ public abstract class AbstractSetTest {
             assertEquals(expected.contains(e), instance.contains(e));
             assertEquals(expected.add(e), instance.add(e));
             assertEquals(expected.contains(e), instance.contains(e));
+            assertEquals(expected, instance);
         }
 
         // WHEN: Element is removed from instance

@@ -8,6 +8,8 @@ package org.jhotdraw8.collection;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class LongMinHeapTest {
 
     @Test
@@ -31,11 +33,10 @@ public class LongMinHeapTest {
         minHeap.addAsLong(9);
 
         // Print all elements of the heap
-        minHeap.print();
+        // minHeap.print();
 
         // Removing minimum value from above heap
-        // and printing it
-        System.out.println("The Min val is "
-                + minHeap.removeAsLong());
+        long removed = minHeap.removeAsLong();
+        assertEquals(3, removed);
     }
 }

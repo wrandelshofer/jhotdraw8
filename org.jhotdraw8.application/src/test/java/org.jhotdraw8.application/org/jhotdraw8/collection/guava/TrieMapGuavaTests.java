@@ -25,11 +25,11 @@ public class TrieMapGuavaTests {
 
     public Test allTests() {
         TestSuite suite = new TestSuite("TrieMap");
-        suite.addTest(testsForRobinHoodHashMap());
+        suite.addTest(testsForTrieMap());
         return suite;
     }
 
-    public Test testsForRobinHoodHashMap() {
+    public Test testsForTrieMap() {
         return MapTestSuiteBuilder.using(
                         new TestStringMapGenerator() {
                             @Override

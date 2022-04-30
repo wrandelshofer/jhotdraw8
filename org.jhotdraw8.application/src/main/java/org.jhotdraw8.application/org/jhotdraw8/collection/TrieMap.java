@@ -18,10 +18,31 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.ToIntFunction;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP).
+ * <p>
+ * Features:
+ * <ul>
+ *     <li>allows null keys and null values</li>
+ *     <li>is mutable</li>
+ *     <li>is not thread-safe</li>
+ *     <li>does not guarantee a specific iteration order</li>
+ * </ul>
+ * <p>
+ * Performance characteristics:
+ * <ul>
+ *     <li>put: O(1)</li>
+ *     <li>remove: O(1)</li>
+ *     <li>containsKey: O(1)</li>
+ *     <li>toPersistent: O(log n) distributed across subsequent updates</li>
+ *     <li>clone: O(log n) distributed across subsequent updates</li>
+ *     <li>iterator.next(): O(1)</li>
+ * </ul>
+ * <p>
+ * Implementation details:
  * <p>
  * This map performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
@@ -44,12 +65,6 @@ import java.util.function.BiFunction;
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
  * <p>
- * <strong>Note that this implementation is not synchronized.</strong>
- * If multiple threads access this map concurrently, and at least
- * one of the threads modifies the map, it <em>must</em> be synchronized
- * externally. This is typically accomplished by synchronizing on some
- * object that naturally encapsulates the map.
- * <p>
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
@@ -67,21 +82,24 @@ import java.util.function.BiFunction;
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private transient UniqueIdentity mutator;
-    private TrieMapHelper.BitmapIndexedNode<K, V> root;
+    private ChampTrieHelper.BitmapIndexedNode<K, V> root;
     private int size;
     private int modCount;
+    private K first, last;
+    private final static int TUPLE_LENGTH = 2;
+    private final static ToIntFunction<Object> hashFunction = Objects::hashCode;
 
     public TrieMap() {
-        this.root = TrieMapHelper.emptyNode();
+        this.root = ChampTrieHelper.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.root = TrieMapHelper.emptyNode();
+        this.root = ChampTrieHelper.emptyNode();
         this.putAll(m);
     }
 
     public TrieMap(@NonNull Collection<? extends Entry<? extends K, ? extends V>> m) {
-        this.root = TrieMapHelper.emptyNode();
+        this.root = ChampTrieHelper.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
         }
@@ -89,7 +107,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        this.root = TrieMapHelper.emptyNode();
+        this.root = ChampTrieHelper.emptyNode();
         this.putAll(m.asMap());
     }
 
@@ -108,7 +126,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
     @Override
     public void clear() {
-        root = TrieMapHelper.emptyNode();
+        root = ChampTrieHelper.emptyNode();
         size = 0;
         modCount++;
     }
@@ -128,7 +146,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     @Override
     public boolean containsKey(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0).keyExists();
+        return root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH).keyExists();
     }
 
     @Override
@@ -146,7 +164,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    TrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                    ChampTrieHelper.SearchResult<V> result = root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
                     return result.keyExists() && Objects.equals(result.get(), entry.getValue());
                 }
                 return false;
@@ -154,7 +172,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
             @Override
             public Iterator<Entry<K, V>> iterator() {
-                return new MutableMapEntryIterator<K, V>(TrieMap.this);
+                return new TrieMap.MutableMapEntryIterator<K, V>(TrieMap.this, TrieMap.this::hash);
             }
 
             @Override
@@ -163,7 +181,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    TrieMapHelper.SearchResult<V> result = root.findByKey(key, Objects.hashCode(key), 0);
+                    ChampTrieHelper.SearchResult<V> result = root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
                     if (result.keyExists() && Objects.equals(result.get(), entry.getValue())) {
                         removeAndGiveDetails(key);
                         return true;
@@ -182,7 +200,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     @Override
     public V get(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0).orElse(null);
+        return root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH).orElse(null);
     }
 
     private @NonNull UniqueIdentity getOrCreateMutator() {
@@ -197,16 +215,15 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return putAndGiveDetails(key, value).getOldValue();
     }
 
-    @NonNull TrieMapHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
-        final int keyHash = Objects.hashCode(key);
-        final TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
+    @NonNull ChampTrieHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChampTrieHelper.ChangeEvent<V> details = new ChampTrieHelper.ChangeEvent<>();
 
-        final TrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
-                root.updated(getOrCreateMutator(), key, val, keyHash, 0, details);
+        final ChampTrieHelper.BitmapIndexedNode<K, V> newRootNode =
+                root.updated(getOrCreateMutator(), key, val, keyHash, 0, details, TUPLE_LENGTH, this::hash, ChampTrieHelper.TUPLE_VALUE);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                final V old = details.getOldValue();
                 root = newRootNode;
             } else {
                 root = newRootNode;
@@ -224,11 +241,11 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return removeAndGiveDetails(key).getOldValue();
     }
 
-    @NonNull TrieMapHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
-        final int keyHash = Objects.hashCode(key);
-        final TrieMapHelper.ChangeEvent<V> details = new TrieMapHelper.ChangeEvent<>();
-        final TrieMapHelper.BitmapIndexedNode<K, V> newRootNode =
-                (TrieMapHelper.BitmapIndexedNode<K, V>) root.removed(getOrCreateMutator(), key, keyHash, 0, details);
+    @NonNull ChampTrieHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChampTrieHelper.ChangeEvent<V> details = new ChampTrieHelper.ChangeEvent<>();
+        final ChampTrieHelper.BitmapIndexedNode<K, V> newRootNode =
+                (ChampTrieHelper.BitmapIndexedNode<K, V>) root.removed(getOrCreateMutator(), key, keyHash, 0, details, TUPLE_LENGTH, this::hash);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -258,14 +275,16 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return new PersistentTrieMap<>(root, size);
     }
 
-    static abstract class AbstractTransientMapEntryIterator<K, V> extends TrieMapHelper.AbstractMapIterator<K, V> {
+    static abstract class AbstractTransientMapEntryIterator<K, V> extends ChampTrieHelper.AbstractTrieIterator<K, V> {
         protected final @NonNull TrieMap<K, V> map;
         protected int expectedModCount;
+        private final ToIntFunction<K> hashFunction;
 
-        public AbstractTransientMapEntryIterator(@NonNull TrieMap<K, V> map) {
-            super(map.root);
+        public AbstractTransientMapEntryIterator(@NonNull TrieMap<K, V> map, ToIntFunction<K> hashFunction) {
+            super(map.root, TUPLE_LENGTH, hashFunction);
             this.map = map;
             this.expectedModCount = map.modCount;
+            this.hashFunction = hashFunction;
         }
 
         @Override
@@ -277,7 +296,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         }
 
         @Override
-        public Map.Entry<K, V> nextEntry(@NonNull BiFunction<K, V, Entry<K, V>> factory) {
+        public Entry<K, V> nextEntry(@NonNull BiFunction<K, V, Entry<K, V>> factory) {
             if (expectedModCount != map.modCount) {
                 throw new ConcurrentModificationException();
             }
@@ -292,13 +311,13 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
             if (expectedModCount != map.modCount) {
                 throw new ConcurrentModificationException();
             }
-            Map.Entry<K, V> toRemove = current;
+            Entry<K, V> toRemove = current;
 
             if (hasNext()) {
-                Map.Entry<K, V> next = nextEntry(AbstractMap.SimpleImmutableEntry::new);
+                Entry<K, V> next = nextEntry(SimpleImmutableEntry::new);
                 map.remove(toRemove.getKey());
                 expectedModCount = map.modCount;
-                moveTo(next.getKey(), map.root);
+                moveTo(next.getKey(), map.root, TUPLE_LENGTH, hashFunction);
             } else {
                 map.remove(toRemove.getKey());
                 expectedModCount = map.modCount;
@@ -308,22 +327,22 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         }
     }
 
-    private static class MutableMapEntryIterator<K, V> extends AbstractTransientMapEntryIterator<K, V> implements Iterator<Entry<K, V>> {
+    private static class MutableMapEntryIterator<K, V> extends TrieMap.AbstractTransientMapEntryIterator<K, V> implements Iterator<Entry<K, V>> {
 
-        public MutableMapEntryIterator(@NonNull TrieMap<K, V> map) {
-            super(map);
+        public MutableMapEntryIterator(@NonNull TrieMap<K, V> map, final ToIntFunction<K> hashFunction) {
+            super(map, hashFunction);
         }
 
         @Override
         public Entry<K, V> next() {
-            Entry<K, V> kvEntry = nextEntry(MutableMapEntry::new);
-            ((MutableMapEntry<K, V>) kvEntry).iterator = this;
+            Entry<K, V> kvEntry = nextEntry(TrieMap.MutableMapEntry::new);
+            ((TrieMap.MutableMapEntry<K, V>) kvEntry).iterator = this;
             return kvEntry;
         }
     }
 
-    private static class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
-        private @Nullable MutableMapEntryIterator<K, V> iterator;
+    private static class MutableMapEntry<K, V> extends SimpleEntry<K, V> {
+        private @Nullable TrieMap.MutableMapEntryIterator<K, V> iterator;
 
         public MutableMapEntry(K key, V value) {
             super(key, value);
@@ -340,6 +359,16 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
             }
             return oldValue;
         }
+    }
+
+    /**
+     * Computes a hash code for the specified object.
+     *
+     * @param e an object
+     * @return hash code
+     */
+    private int hash(@Nullable K e) {
+        return hashFunction.applyAsInt(e);
     }
 }
 

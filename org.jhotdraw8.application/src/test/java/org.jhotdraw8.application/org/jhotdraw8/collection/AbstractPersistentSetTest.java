@@ -458,17 +458,5 @@ public abstract class AbstractPersistentSetTest {
         IDENTICAL_SET = PersistentTrieSet.of(DATA_SET_ARRAY);
     }
 
-    @Test
-    public void measureCopyAddAllOfAlmostEmptySet() throws InterruptedException {
-        PersistentTrieSet<HashCollider> set = PersistentTrieSet.<HashCollider>of(DATA_SET_ARRAY[0]);
-        long start1 = System.nanoTime();
-        PersistentTrieSet<HashCollider> set2 = set.copyAddAll(IDENTICAL_SET);
-        long start2 = System.nanoTime();
-        PersistentTrieSet<HashCollider> set3 = set.copyAddAll(IDENTICAL_SET);
-        long start3 = System.nanoTime();
-        System.out.println(set.size());
-        System.out.println((start2 - start1) / 1_000 + "  " + (start3 - start2) / 1_000);
-    }
-
 
 }
