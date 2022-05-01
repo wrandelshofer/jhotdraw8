@@ -11,11 +11,9 @@ import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractMap;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1472,7 +1470,7 @@ class ChampTrie {
 
 
     /**
-     * Dumps a tree in the Graphviz DOT language.
+     * Dumps a CHAMP Trie in the Graphviz DOT language.
      * <p>
      * References:
      * <dl>
@@ -1481,83 +1479,17 @@ class ChampTrie {
      * </dl>
      *
      * @param a            an {@link Appendable}
-     * @param root         the root node of the tree
+     * @param root         the root node of the trie
      * @param tupleLength  the tuple length
      * @param hashFunction the hash function
      * @param <K>          the key type
      * @param <V>          the value type
-     * @return a Graphviz representation of the tree
+     * @return a Graphviz representation of the trie
      */
     static <K, V> void dumpTrieAsGraphviz(Appendable a, Node<K, V> root, int tupleLength, ToIntFunction<K> hashFunction) throws IOException {
         a.append("digraph ChampTrie {\n");
         a.append("node [shape=record];\n");
         root.dumpAsGraphviz(a, 0, tupleLength, 0, hashFunction);
         a.append("}\n");
-    }
-
-    static class NodeCursor<K, V> {
-        int end;
-        int index;
-        Node<K, V> node;
-
-        public NodeCursor(Node<K, V> node, int tupleLength) {
-            this.node = node;
-            end = node.payloadArity(tupleLength) + node.nodeArity();
-            index = 0;
-        }
-    }
-
-
-    static class PreorderTrieIterator<K, V> implements Iterator<K> {
-        private final Deque<NodeCursor<K, V>> stack = new ArrayDeque<>();
-        private final int tupleLength;
-
-        public PreorderTrieIterator(Node<K, V> root, int tupleLength, ToIntFunction<K> hashFunction) {
-            this.tupleLength = tupleLength;
-            stack.push(new NodeCursor<>(root, tupleLength));
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !stack.isEmpty();
-        }
-
-        @Override
-        public K next() {
-            do {
-                NodeCursor<K, V> cursor = stack.element();
-                Node<K, V> node = cursor.node;
-                int end = cursor.end;
-                int index = cursor.index++;
-                if (cursor.index == end) {
-                    stack.pop();
-                }
-
-                if (node instanceof BitmapIndexedNode) {
-                    BitmapIndexedNode<K, V> n = (BitmapIndexedNode<K, V>) node;
-                    int nodeMap = n.nodeMap;
-                    int combinedMap = nodeMap | n.dataMap;
-                    assert end == Integer.bitCount(combinedMap);
-                    int mask = 0;
-                    int shiftedMap = combinedMap;
-                    for (int i = 0; i <= index; i++) {
-                        int trailingZeros = Integer.numberOfTrailingZeros(shiftedMap);
-                        mask += 1 + trailingZeros;
-                        shiftedMap = shiftedMap >>> (1 + trailingZeros);
-                    }
-                    mask--;
-                    if ((nodeMap & (1 << mask)) != 0) {
-                        int idx = n.nodeIndex(1 << mask);
-                        stack.push(new NodeCursor<>(n.getNode(idx, tupleLength), tupleLength));
-                    } else {
-                        int idx = n.payloadIndex(1 << mask);
-                        return (n.getKey(idx, tupleLength));
-                    }
-
-                } else {
-                    HashCollisionNode<K, V> n = (HashCollisionNode<K, V>) node;
-                }
-            } while (true);
-        }
     }
 }

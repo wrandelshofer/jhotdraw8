@@ -230,17 +230,17 @@ public abstract class AbstractPersistentMapTest {
             assertEquality(expected, actual);
         }
 
-        // WHEN: value1 is already in set, then withPut must yield the same map
+        // WHEN: value1 is already in set, then copyPut must yield the same map
         newActual = actual.copyPut(firstValue1.getKey(), firstValue1.getValue());
         assertSame(newActual, actual);
 
-        // WHEN: value1 is updated in set, then withPut must yield a new map
+        // WHEN: value1 is updated in set, then copyPut must yield a new map
         HashCollider newValue1 = new HashCollider(firstValue1.getValue() == null ? -1 : firstValue1.getValue().getValue() + 1, hashBitMask);
         newActual = actual.copyPut(firstValue1.getKey(), newValue1);
         assertNotSame(newActual, actual);
         actual = newActual;
 
-        // WHEN: value2 is not yet in set, then withPut must yield a new map
+        // WHEN: value2 is not yet in set, then copyPut must yield a new map
         newActual = actual.copyPut(firstValue2.getKey(), firstValue2.getValue());
         assertNotSame(newActual, actual);
         actual = newActual;
@@ -260,11 +260,11 @@ public abstract class AbstractPersistentMapTest {
         assertNotSame(newActual, actual);
         actual = newActual;
 
-        // WHEN: values1 are already in set, then withPutAll must yield the same map
+        // WHEN: values1 are already in set, then copyPutAll must yield the same map
         newActual = actual.copyPutAll(values1);
         assertSame(newActual, actual);
 
-        // WHEN: values1 are updated in set, then withPutAll must yield a new map
+        // WHEN: values1 are updated in set, then copyPutAll must yield a new map
         LinkedHashMap<HashCollider, HashCollider> values1WithDifferentValues = new LinkedHashMap<>();
         for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
             values1WithDifferentValues.put(entry.getKey(),
@@ -274,7 +274,7 @@ public abstract class AbstractPersistentMapTest {
         assertNotSame(newActual, actual);
 
 
-        // WHEN: values2 are not yet in set, then withPutAll must yield a new map
+        // WHEN: values2 are not yet in set, then copyPutAll must yield a new map
         newActual = actual.copyPutAll(values2);
         assertNotSame(newActual, actual);
         actual = newActual;
