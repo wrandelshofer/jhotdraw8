@@ -7,9 +7,9 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ChampTrieHelper.BitmapIndexedNode;
-import org.jhotdraw8.collection.ChampTrieHelper.ChangeEvent;
-import org.jhotdraw8.collection.ChampTrieHelper.KeyIterator;
+import org.jhotdraw8.collection.ChampTrie.BitmapIndexedNode;
+import org.jhotdraw8.collection.ChampTrie.ChangeEvent;
+import org.jhotdraw8.collection.ChampTrie.KeyIterator;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -91,13 +91,45 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     private BitmapIndexedNode<E, Void> root;
     private int size;
     private int modCount;
-    private final static ToIntFunction<Object> hashFunction = Objects::hashCode;
+    private final static ToIntFunction<Object> hashFunction0 = Object::hashCode;
+    /**
+     * Orders the trie by hash-code when the bit partition size is equal to 4.
+     * <p>
+     * If the trie has this bit partition size, and the iterator of the set would
+     * traverse the trie in pre-order sequence,
+     * then iteration sequence would be ordered by the unsigned value of the
+     * hash code.
+     */
+    private final static ToIntFunction<Object> hashFunction4 = o -> {
+        int h = Objects.hashCode(o);
+        h = (h & 0xf0f0f0f0) >>> 4 | (h & 0x0f0f0f0f) << 4;
+        h = (h & 0xff00ff00) >>> 8 | (h & 0x00ff00ff) << 8;
+        h = (h & 0xffff0000) >>> 16 | (h & 0x0000ffff) << 16;
+        return h;
+    };
+    /**
+     * Orders the trie by hash-code with bit partition size 5.
+     * <p>
+     * If the trie has this bit partition size, and the iterator of the set would
+     * traverse the trie in pre-order sequence,
+     * then iteration sequence would be ordered by the unsigned value of the
+     * hash code.
+     */
+    private final static ToIntFunction<Object> hashFunction = o -> {
+        long h = Objects.hashCode(o);
+        long lsb = h & 0b11;
+        h = h >>> 2;
+        h = (h & 0b11111000_00111110000011111000001111100000L) >>> 5 | (h & 0b00000111_11000001111100000111110000011111L) << 5;
+        h = (h & 0b11111111_11000000000011111111110000000000L) >>> 10 | (h & 0b00000000_00111111111100000000001111111111L) << 10;
+        h = (h & 0b11111111_11111111111100000000000000000000L) >>> 20 | (h & 0b00000000_00000000000011111111111111111111L) << 20;
+        return (int) ((h >>> 10) | (lsb << 30));
+    };
 
     /**
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.root = ChampTrieHelper.emptyNode();
+        this.root = ChampTrie.emptyNode();
     }
 
     /**
@@ -115,7 +147,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             this.root = that;
             this.size = that.size;
         } else {
-            this.root = ChampTrieHelper.emptyNode();
+            this.root = ChampTrie.emptyNode();
             addAll(c);
         }
     }
@@ -128,8 +160,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     public boolean add(final @Nullable E e) {
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.updated(getOrCreateMutator(), e, null, hash(e), 0, changeEvent, TUPLE_LENGTH,
-                this::hash, ChampTrieHelper.TUPLE_VALUE);
+        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, hash(e), 0, changeEvent, TUPLE_LENGTH,
+                this::hash, ChampTrie.TUPLE_VALUE);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -183,7 +215,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public void clear() {
-        root = ChampTrieHelper.emptyNode();
+        root = ChampTrie.emptyNode();
         size = 0;
         modCount++;
     }
@@ -232,7 +264,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public Iterator<E> iterator() {
-        return new MutableTrieIterator<>(this, TUPLE_LENGTH, this::hash);
+        //return new MutableTrieIterator<>(this, TUPLE_LENGTH, this::hash);
+        return new ChampTrie.PreorderTrieIterator<E, Void>(this.root, TUPLE_LENGTH, this::hash);
     }
 
     /**
@@ -245,7 +278,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         @SuppressWarnings("unchecked")
         E key = (E) o;
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.removed(getOrCreateMutator(), key, hash(key), 0, changeEvent, TUPLE_LENGTH, this::hash);
+        final BitmapIndexedNode<E, Void> newRoot = root.remove(getOrCreateMutator(), key, hash(key), 0, changeEvent, TUPLE_LENGTH, this::hash);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -327,7 +360,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     public String dump() {
         StringBuilder w = new StringBuilder();
         try {
-            ChampTrieHelper.dumpTreeAsGraphviz(w, root, TUPLE_LENGTH, this::hash);
+            ChampTrie.dumpTrieAsGraphviz(w, root, TUPLE_LENGTH, this::hash);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

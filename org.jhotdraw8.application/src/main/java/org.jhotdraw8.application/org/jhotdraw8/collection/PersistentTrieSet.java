@@ -7,10 +7,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ChampTrieHelper.BitmapIndexedNode;
-import org.jhotdraw8.collection.ChampTrieHelper.BulkChangeEvent;
-import org.jhotdraw8.collection.ChampTrieHelper.ChangeEvent;
-import org.jhotdraw8.collection.ChampTrieHelper.KeyIterator;
+import org.jhotdraw8.collection.ChampTrie.BitmapIndexedNode;
+import org.jhotdraw8.collection.ChampTrie.BulkChangeEvent;
+import org.jhotdraw8.collection.ChampTrie.ChangeEvent;
+import org.jhotdraw8.collection.ChampTrie.KeyIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.ChampTrieHelper.EMPTY_NODE;
+import static org.jhotdraw8.collection.ChampTrie.EMPTY_NODE;
 
 /**
  * Implements a persistent set using a Compressed Hash-Array Mapped Prefix-tree
@@ -118,7 +118,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = updated(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction, ChampTrieHelper.TUPLE_VALUE);
+        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction, ChampTrie.TUPLE_VALUE);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size + 1);
         }
@@ -174,7 +174,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = (BitmapIndexedNode<E, Void>) removed(null, key,
+        final BitmapIndexedNode<E, Void> newRootNode = (BitmapIndexedNode<E, Void>) remove(null, key,
                 keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size - 1);

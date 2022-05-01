@@ -11,9 +11,11 @@ import org.jhotdraw8.annotation.Nullable;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,8 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
+
+import static java.lang.Math.min;
 
 /**
  * This is a package private class that provides the data structures for a
@@ -38,14 +42,14 @@ import java.util.function.ToIntFunction;
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
  * </dl>
  */
-class ChampTrieHelper {
+class ChampTrie {
     static final BitmapIndexedNode<?, ?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{}, 1);
     public static final int TUPLE_VALUE = 1;
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private ChampTrieHelper() {
+    private ChampTrie() {
     }
 
     static final int HASH_CODE_LENGTH = 32;
@@ -59,6 +63,8 @@ class ChampTrieHelper {
     static final int BIT_PARTITION_SIZE = 5;
 
     static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
+
+    private static final int TUPLE_KEY = 0;
 
     static abstract class Node<K, V> implements Serializable {
         private final static long serialVersionUID = 0L;
@@ -114,22 +120,18 @@ class ChampTrieHelper {
         }
 
         static <K, V> Node<K, V> mergeTwoKeyValTuples(UniqueIdentity mutator,
-                                                      final int index0,
                                                       final Object[] tuple0,
-                                                      final K key0, final V val0,
                                                       final int keyHash0,
-                                                      final int index1,
                                                       final Object[] tuple1,
-                                                      final K key1, final V val1,
                                                       final int keyHash1,
                                                       final int shift,
                                                       final int tupleLength) {
-            assert !(key0.equals(key1));
+            assert !(tuple0[TUPLE_KEY].equals(tuple1[TUPLE_KEY]));
 
             if (shift >= HASH_CODE_LENGTH) {
                 Object[] entries = new Object[tupleLength * 2];
-                System.arraycopy(tuple0, index0, entries, 0, tupleLength);
-                System.arraycopy(tuple1, index1, entries, tupleLength, tupleLength);
+                System.arraycopy(tuple0, 0, entries, 0, tupleLength);
+                System.arraycopy(tuple1, 0, entries, tupleLength, tupleLength);
                 return newHashCollisionNode(mutator, keyHash0, entries, tupleLength);
             }
 
@@ -142,19 +144,19 @@ class ChampTrieHelper {
 
                 if (mask0 < mask1) {
                     Object[] entries = new Object[tupleLength * 2];
-                    System.arraycopy(tuple0, index0, entries, 0, tupleLength);
-                    System.arraycopy(tuple1, index1, entries, tupleLength, tupleLength);
+                    System.arraycopy(tuple0, 0, entries, 0, tupleLength);
+                    System.arraycopy(tuple1, 0, entries, tupleLength, tupleLength);
                     return newBitmapIndexedNode(mutator, (0), dataMap, entries, tupleLength);
                 } else {
                     Object[] entries = new Object[tupleLength * 2];
-                    System.arraycopy(tuple1, index1, entries, 0, tupleLength);
-                    System.arraycopy(tuple0, index0, entries, tupleLength, tupleLength);
+                    System.arraycopy(tuple1, 0, entries, 0, tupleLength);
+                    System.arraycopy(tuple0, 0, entries, tupleLength, tupleLength);
                     return newBitmapIndexedNode(mutator, (0), dataMap, entries, tupleLength);
                 }
             } else {
                 final Node<K, V> node = mergeTwoKeyValTuples(mutator,
-                        index0, tuple0, key0, val0, keyHash0,
-                        index1, tuple1, key1, val1, keyHash1,
+                        tuple0, keyHash0,
+                        tuple1, keyHash1,
                         shift + BIT_PARTITION_SIZE,
                         tupleLength);
                 // values fit on next level
@@ -219,20 +221,18 @@ class ChampTrieHelper {
          * Returns the payload index for the given keyHash and shift, or -1.
          *
          * @param key
-         * @param keyHash the key hash
-         * @param shift   the shift
+         * @param keyHash     the key hash
+         * @param shift       the shift
          * @param tupleLength the tuple length
          * @return the payload index or -1
          */
         abstract int payloadIndex(@Nullable K key, final int keyHash, final int shift, final int tupleLength);
 
-        abstract public Node<K, V> removed(final @Nullable UniqueIdentity mutator, final K key,
-                                           final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction);
+        abstract public Node<K, V> remove(final @Nullable UniqueIdentity mutator, final K key,
+                                          final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction);
 
-        abstract SizeClass sizePredicate(int tupleLength);
-
-        abstract public Node<K, V> updated(final UniqueIdentity mutator, final K key, final V val,
-                                           final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction, int tupleElementIndex);
+        abstract public Node<K, V> update(final UniqueIdentity mutator, final K key, final V val,
+                                          final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction, int tupleElementIndex);
     }
 
     static String toGraphvizNodeId(int keyHash, int shift) {
@@ -242,6 +242,16 @@ class ChampTrieHelper {
         String id = Integer.toBinaryString(keyHash);
         StringBuilder buf = new StringBuilder();
         for (int i = id.length(); i < shift; i++) buf.append('0');
+        buf.append(id);
+        return buf.toString();
+    }
+
+    static String toGraphvizArrowId(int keyHash, int shift) {
+
+        String id = Integer.toBinaryString((keyHash) & BIT_PARTITION_MASK);
+        StringBuilder buf = new StringBuilder();
+        for (int i = id.length(); i < min(32 - shift, BIT_PARTITION_SIZE); i++)
+            buf.append('0');
         buf.append(id);
         return buf.toString();
     }
@@ -279,12 +289,12 @@ class ChampTrieHelper {
                         a.append('|');
                     }
                     a.append("<f");
-                    a.append("" + mask);
+                    a.append(Integer.toString(mask));
                     a.append('>');
                     if ((dataMap & bitpos) != 0) {
-                        a.append("" + getKey(index(dataMap, bitpos), tupleLength));
+                        a.append(Objects.toString(getKey(index(dataMap, bitpos), tupleLength)));
                     } else {
-                        a.append(".");
+                        a.append("·");
                     }
                 }
             }
@@ -303,11 +313,11 @@ class ChampTrieHelper {
                     a.append('n');
                     a.append(id);
                     a.append(":f");
-                    a.append("" + mask);
+                    a.append(Integer.toString(mask));
                     a.append(" -> n");
                     a.append(toGraphvizNodeId(subNodeKeyHash, shift + BIT_PARTITION_SIZE));
                     a.append(" [label=\"");
-                    a.append(toGraphvizNodeId(mask, BIT_PARTITION_SIZE));
+                    a.append(toGraphvizArrowId(subNodeKeyHash, shift));
                     a.append("\"];\n");
                 }
             }
@@ -406,7 +416,7 @@ class ChampTrieHelper {
                         int thisKeyHash = hashFunction.applyAsInt(thisKey);
                         changeEvent.isModified = false;
                         Node<K, V> subNode = that.nodeAt(bitpos, tupleLength);
-                        Node<K, V> subNodeNew = subNode.updated(mutator, thisKey, null, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent, tupleLength, hashFunction, 1);
+                        Node<K, V> subNodeNew = subNode.update(mutator, thisKey, null, thisKeyHash, shift + BIT_PARTITION_SIZE, changeEvent, tupleLength, hashFunction, 1);
                         nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
                         changed = true;
                     } else {
@@ -424,7 +434,7 @@ class ChampTrieHelper {
                         thisNodeMapToDo ^= bitpos;
                         changeEvent.isModified = false;
                         Node<K, V> subNode = this.getNode(index(this.nodeMap, bitpos), tupleLength);
-                        Node<K, V> subNodeNew = subNode.updated(mutator, thatKey, null, thatKeyHash, shift + BIT_PARTITION_SIZE, changeEvent, tupleLength, hashFunction, 1);
+                        Node<K, V> subNodeNew = subNode.update(mutator, thatKey, null, thatKeyHash, shift + BIT_PARTITION_SIZE, changeEvent, tupleLength, hashFunction, 1);
                         if (changeEvent.isModified) {
                             changed = true;
                             nodesNew[nodeIndexAt(nodesNew, nodeMapNew, bitpos)] = subNodeNew;
@@ -485,7 +495,7 @@ class ChampTrieHelper {
 
             if (shift >= HASH_CODE_LENGTH) {
                 @SuppressWarnings("unchecked")
-                HashCollisionNode<K, V> unchecked = newHashCollisionNode(mutator, keyHash0, (K[]) new Object[]{key0, key1}, tupleLength);
+                HashCollisionNode<K, V> unchecked = newHashCollisionNode(mutator, keyHash0, new Object[]{key0, key1}, tupleLength);
                 return unchecked;
             }
 
@@ -518,7 +528,7 @@ class ChampTrieHelper {
             if (tupleLength > 1) {
                 dst[idx + 1] = val;
             }
-            return newBitmapIndexedNode(mutator, nodeMap(), dataMap() | bitpos, dst, tupleLength);
+            return newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst, tupleLength);
         }
 
         BitmapIndexedNode<K, V> copyAndMigrateFromInlineToNode(final UniqueIdentity mutator,
@@ -537,7 +547,7 @@ class ChampTrieHelper {
             System.arraycopy(src, idxNew + tupleLength, dst, idxNew + 1, src.length - idxNew - tupleLength);
             dst[idxNew] = node;
 
-            return newBitmapIndexedNode(mutator, nodeMap() | bitpos, dataMap() ^ bitpos, dst, tupleLength);
+            return newBitmapIndexedNode(mutator, nodeMap | bitpos, dataMap ^ bitpos, dst, tupleLength);
         }
 
         BitmapIndexedNode<K, V> copyAndMigrateFromNodeToInline(final UniqueIdentity mutator,
@@ -557,16 +567,7 @@ class ChampTrieHelper {
             Object[] tuple = node.getTuple(0, tupleLength);
             System.arraycopy(tuple, 0, dst, idxNew, tupleLength);
 
-            return newBitmapIndexedNode(mutator, nodeMap() ^ bitpos, dataMap() | bitpos, dst, tupleLength);
-        }
-
-        BitmapIndexedNode<K, V> copyAndRemoveValue(final UniqueIdentity mutator,
-                                                   final int bitpos, int tupleLength) {
-            final int idx = tupleLength * dataIndex(bitpos);
-
-            // copy 'src' and remove tupleLength element(s) at position 'idx'
-            final Object[] dst = ArrayHelper.copyComponentRemove(this.nodes, idx, tupleLength);
-            return newBitmapIndexedNode(mutator, nodeMap(), dataMap() ^ bitpos, dst, tupleLength);
+            return newBitmapIndexedNode(mutator, nodeMap ^ bitpos, dataMap | bitpos, dst, tupleLength);
         }
 
         BitmapIndexedNode<K, V> copyAndSetNode(final UniqueIdentity mutator, final int bitpos,
@@ -581,7 +582,7 @@ class ChampTrieHelper {
             } else {
                 // copy 'src' and set 1 element(s) at position 'idx'
                 final Object[] dst = ArrayHelper.copySet(this.nodes, idx, node);
-                return newBitmapIndexedNode(mutator, nodeMap(), dataMap(), dst, tupleLength);
+                return newBitmapIndexedNode(mutator, nodeMap, dataMap, dst, tupleLength);
             }
         }
 
@@ -600,12 +601,12 @@ class ChampTrieHelper {
             } else {
                 // copy 'src' and set 1 element(s) at position 'idx'
                 final Object[] dst = ArrayHelper.copySet(this.nodes, idx, val);
-                return newBitmapIndexedNode(mutator, nodeMap(), dataMap(), dst, tupleLength);
+                return newBitmapIndexedNode(mutator, nodeMap, dataMap, dst, tupleLength);
             }
         }
 
         int dataIndex(final int bitpos) {
-            return Integer.bitCount(dataMap() & (bitpos - 1));
+            return Integer.bitCount(dataMap & (bitpos - 1));
         }
 
         public int dataMap() {
@@ -639,7 +640,6 @@ class ChampTrieHelper {
                 return Objects.equals(getKey(index, tupleLength), key);
             }
 
-            final int nodeMap = nodeMap();
             if ((nodeMap & bitpos) != 0) {
                 final int index = index(nodeMap, bitpos);
                 return getNode(index, tupleLength).containsKey(key, keyHash, shift + BIT_PARTITION_SIZE, tupleLength);
@@ -653,7 +653,7 @@ class ChampTrieHelper {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
-            if ((dataMap() & bitpos) != 0) { // inplace value
+            if ((dataMap & bitpos) != 0) { // inplace value
                 final int index = dataIndex(bitpos);
                 if (Objects.equals(getKey(index, tupleLength), key)) {
                     final Object[] tuple = getTuple(index, tupleLength);
@@ -663,7 +663,7 @@ class ChampTrieHelper {
                 return new SearchResult<>(null, false);
             }
 
-            if ((nodeMap() & bitpos) != 0) { // node (not value)
+            if ((nodeMap & bitpos) != 0) { // node (not value)
                 final Node<K, V> subNode = nodeAt(bitpos, tupleLength);
 
                 return subNode.findByKey(key, keyHash, shift + BIT_PARTITION_SIZE, tupleLength);
@@ -705,25 +705,30 @@ class ChampTrieHelper {
 
         @Override
         boolean hasNodes() {
-            return nodeMap() != 0;
+            return nodeMap != 0;
         }
 
         @Override
         boolean hasPayload() {
-            return dataMap() != 0;
+            return dataMap != 0;
         }
 
         @Override
         int nodeArity() {
-            return Integer.bitCount(nodeMap());
+            return Integer.bitCount(nodeMap);
         }
 
+        @SuppressWarnings("unchecked")
         Node<K, V> nodeAt(final int bitpos, int tupleLength) {
-            return getNode(nodeIndex(bitpos), tupleLength);
+            return (Node<K, V>) nodes[nodes.length - 1 - nodeIndex(bitpos)];
         }
 
         int nodeIndex(final int bitpos) {
-            return Integer.bitCount(nodeMap() & (bitpos - 1));
+            return Integer.bitCount(nodeMap & (bitpos - 1));
+        }
+
+        int payloadIndex(final int bitpos) {
+            return Integer.bitCount(dataMap & (bitpos - 1));
         }
 
         @Override
@@ -745,7 +750,7 @@ class ChampTrieHelper {
 
         @Override
         int payloadArity(int tupleLength) {
-            return Integer.bitCount(dataMap());
+            return Integer.bitCount(dataMap);
         }
 
         @Override
@@ -758,100 +763,87 @@ class ChampTrieHelper {
         }
 
         @Override
-        public BitmapIndexedNode<K, V> removed(final @Nullable UniqueIdentity mutator, final K key,
-                                               final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction) {
+        public BitmapIndexedNode<K, V> remove(final @Nullable UniqueIdentity mutator, final K key,
+                                              final int keyHash, final int shift,
+                                              final @NonNull ChangeEvent<V> details, int tupleLength,
+                                              final @NonNull ToIntFunction<K> hashFunction) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
-            if ((dataMap() & bitpos) != 0) { // inplace value
-                final int dataIndex = dataIndex(bitpos);
-
-                if (Objects.equals(getKey(dataIndex, tupleLength), key)) {
-                    final Object[] currentVal = getTuple(dataIndex, tupleLength);
-                    details.updated(currentVal);
-
-                    if (this.payloadArity(tupleLength) == 2 && this.nodeArity() == 0) {
-                        // Create new node with remaining pair. The new node will a) either become the new root
-                        // returned, or b) unwrapped and inlined during returning.
-                        final int newDataMap =
-                                (shift == 0) ? (dataMap() ^ bitpos) : bitpos(mask(keyHash, 0));
-
-                        if (dataIndex == 0) {
-                            Object[] nodes = getTuple(1, tupleLength);
-                            return newBitmapIndexedNode(mutator, (0), newDataMap, nodes, tupleLength);
-                        } else {
-                            Object[] nodes = getTuple(0, tupleLength);
-                            return newBitmapIndexedNode(mutator, (0), newDataMap, nodes, tupleLength);
-                        }
-                    } else {
-                        return copyAndRemoveValue(mutator, bitpos, tupleLength);
-                    }
-                } else {
-                    return this;
-                }
-            } else if ((nodeMap() & bitpos) != 0) { // node (not value)
-                final Node<K, V> subNode = nodeAt(bitpos, tupleLength);
-                final Node<K, V> subNodeNew =
-                        subNode.removed(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, tupleLength, hashFunction);
-
-                if (!details.isModified()) {
-                    return this;
-                }
-
-                switch (subNodeNew.sizePredicate(tupleLength)) {
-                case SIZE_EMPTY: {
-                    throw new IllegalStateException("Sub-node must have at least one element.");
-                }
-                case SIZE_ONE: {
-                    if (this.payloadArity(tupleLength) == 0 && this.nodeArity() == 1) {
-                        // escalate (singleton or empty) result
-                        return (BitmapIndexedNode<K, V>) subNodeNew;
-                    } else {
-                        // inline value (move to front)
-                        return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew, tupleLength);
-                    }
-                }
-                default: {
-                    // modify current node (set replacement node)
-                    return copyAndSetNode(mutator, bitpos, subNodeNew, tupleLength);
-                }
-                }
+            if ((dataMap & bitpos) != 0) {
+                return removePayload(mutator, key, keyHash, shift, details, tupleLength, bitpos);
+            } else if ((nodeMap & bitpos) != 0) {
+                return removeSubNode(mutator, key, keyHash, shift, details, tupleLength, hashFunction, bitpos);
             }
 
             return this;
         }
 
-        @Override
-        public SizeClass sizePredicate(int tupleLength) {
-            if (this.nodeArity() == 0) {
-                switch (this.payloadArity(tupleLength)) {
-                case 0:
-                    return SizeClass.SIZE_EMPTY;
-                case 1:
-                    return SizeClass.SIZE_ONE;
-                default:
-                    return SizeClass.SIZE_MORE_THAN_ONE;
+        private BitmapIndexedNode<K, V> removeSubNode(@Nullable UniqueIdentity mutator, K key, int keyHash, int shift,
+                                                      @NonNull ChangeEvent<V> details, int tupleLength,
+                                                      @NonNull ToIntFunction<K> hashFunction, int bitpos) {
+            final Node<K, V> subNode = nodeAt(bitpos, tupleLength);
+            final Node<K, V> subNodeNew =
+                    subNode.remove(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, tupleLength, hashFunction);
+
+            if (subNode == subNodeNew) {
+                return this;
+            }
+
+            if (!subNodeNew.hasNodes() && subNodeNew.payloadArity(tupleLength) == 1) {
+                if (!hasPayload() && nodeArity() == 1) {
+                    // escalate (singleton or empty) result
+                    return (BitmapIndexedNode<K, V>) subNodeNew;
+                } else {
+                    // inline value (move to front)
+                    return copyAndMigrateFromNodeToInline(mutator, bitpos, subNodeNew, tupleLength);
                 }
+            }
+            return copyAndSetNode(mutator, bitpos, subNodeNew, tupleLength);
+        }
+
+        private BitmapIndexedNode<K, V> removePayload(@Nullable UniqueIdentity mutator, K key, int keyHash, int shift, ChangeEvent<V> details, int tupleLength, int bitpos) {
+            final int dataIndex = dataIndex(bitpos);
+
+            if (!Objects.equals(getKey(dataIndex, tupleLength), key)) {
+                return this;
+            }
+
+            final Object[] currentVal = getTuple(dataIndex, tupleLength);
+            details.updated(currentVal);
+
+            if (payloadArity(tupleLength) == 2 && !hasNodes()) {
+                // Create new node with remaining tuple. The new node will
+                // a) either become the new root returned, or
+                // b) unwrapped and inlined during returning.
+                final int newDataMap =
+                        (shift == 0) ? (dataMap ^ bitpos) : bitpos(mask(keyHash, 0));
+
+                Object[] nodes = getTuple(dataIndex ^ 1, tupleLength);
+                return newBitmapIndexedNode(mutator, 0, newDataMap, nodes, tupleLength);
             } else {
-                return SizeClass.SIZE_MORE_THAN_ONE;
+                // copy 'src' and remove tupleLength element(s) at position 'idx'
+                int idx = dataIndex * tupleLength;
+                final Object[] dst = ArrayHelper.copyComponentRemove(this.nodes, idx, tupleLength);
+                return newBitmapIndexedNode(mutator, nodeMap, dataMap ^ bitpos, dst, tupleLength);
             }
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        public BitmapIndexedNode<K, V> updated(final UniqueIdentity mutator,
-                                               final K key, final V val,
-                                               final int keyHash, final int shift,
-                                               final ChangeEvent<V> details, int tupleLength,
-                                               ToIntFunction<K> hashFunction, int tupleElementIndex) {
+        public BitmapIndexedNode<K, V> update(final UniqueIdentity mutator,
+                                              final K key, final V val,
+                                              final int keyHash, final int shift,
+                                              final ChangeEvent<V> details, int tupleLength,
+                                              ToIntFunction<K> hashFunction, int tupleElementIndex) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
-            if ((dataMap() & bitpos) != 0) { // inplace value
+            if ((dataMap & bitpos) != 0) { // inplace value
                 final int dataIndex = dataIndex(bitpos);
-                final K currentKey = getKey(dataIndex, tupleLength);
-                final V currentVal = getValue(dataIndex, tupleLength);
                 Object[] currentTuple = getTuple(dataIndex, tupleLength);
-                Object[] newTuple = newTuple(key, val, currentTuple, tupleLength, tupleElementIndex);
+                final K currentKey = (K) currentTuple[TUPLE_KEY];
+                final V currentVal = tupleLength > 1 ? (V) currentTuple[TUPLE_VALUE] : null;
                 if (Objects.equals(currentKey, key)) {
                     if (tupleElementIndex == TUPLE_VALUE && Objects.equals(currentVal, val)) {
                         details.found(currentTuple);
@@ -861,19 +853,20 @@ class ChampTrieHelper {
                     details.updated(currentTuple);
                     return copyAndSetValue(mutator, bitpos, val, tupleLength, tupleElementIndex);
                 } else {
+                    Object[] newTuple = newTuple(key, val, currentTuple, tupleLength, tupleElementIndex);
                     final Node<K, V> subNodeNew =
                             mergeTwoKeyValTuples(mutator,
-                                    0, currentTuple, currentKey, currentVal, hashFunction.applyAsInt(currentKey),
-                                    0, newTuple, key, val, keyHash, shift + BIT_PARTITION_SIZE,
+                                    currentTuple, hashFunction.applyAsInt(currentKey),
+                                    newTuple, keyHash, shift + BIT_PARTITION_SIZE,
                                     tupleLength);
 
                     details.modified();
                     return copyAndMigrateFromInlineToNode(mutator, bitpos, subNodeNew, tupleLength);
                 }
-            } else if ((nodeMap() & bitpos) != 0) { // node (not value)
+            } else if ((nodeMap & bitpos) != 0) { // node (not value)
                 final Node<K, V> subNode = nodeAt(bitpos, tupleLength);
                 final Node<K, V> subNodeNew =
-                        subNode.updated(mutator, key, val, keyHash, shift + BIT_PARTITION_SIZE, details, tupleLength, hashFunction, tupleElementIndex);
+                        subNode.update(mutator, key, val, keyHash, shift + BIT_PARTITION_SIZE, details, tupleLength, hashFunction, tupleElementIndex);
 
                 if (details.isModified()) {
                     return copyAndSetNode(mutator, bitpos, subNodeNew, tupleLength);
@@ -912,8 +905,8 @@ class ChampTrieHelper {
         @Override
         public void dumpAsGraphviz(Appendable a, int shift, int tupleLength, int keyHash, ToIntFunction<K> hashFunction) throws IOException {
             // Print the node as a record
-            a.append(toGraphvizNodeId(keyHash, shift));
-            a.append(" [label=\"");
+            a.append("n" + toGraphvizNodeId(keyHash, shift));
+            a.append(" [color=red;label=\"");
             boolean first = true;
 
             for (int i = 0, n = payloadArity(tupleLength); i < n; i++) {
@@ -966,7 +959,7 @@ class ChampTrieHelper {
 
             if (list.size() > this.nodes.length) {
                 @SuppressWarnings("unchecked")
-                HashCollisionNode<K, V> unchecked = newHashCollisionNode(mutator, hash, (K[]) list.toArray(), tupleLength);
+                HashCollisionNode<K, V> unchecked = newHashCollisionNode(mutator, hash, list.toArray(), tupleLength);
                 return unchecked;
             }
 
@@ -1055,7 +1048,7 @@ class ChampTrieHelper {
         @SuppressWarnings("unchecked")
         @Override
         V getValue(final int index, int tupleLength) {
-            return tupleLength > 1 ? (V) nodes[index * tupleLength + 1]:null;
+            return tupleLength > 1 ? (V) nodes[index * tupleLength + 1] : null;
         }
 
         @Override
@@ -1075,7 +1068,7 @@ class ChampTrieHelper {
 
         @Override
         int payloadArity(int tupleLength) {
-            return nodes.length /tupleLength;
+            return nodes.length / tupleLength;
         }
 
         @Override
@@ -1094,8 +1087,9 @@ class ChampTrieHelper {
 
         @SuppressWarnings("unchecked")
         @Override
-        public Node<K, V> removed(final @Nullable UniqueIdentity mutator, final K key,
-                                  final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction) {
+        public Node<K, V> remove(final @Nullable UniqueIdentity mutator, final K key,
+                                 final int keyHash, final int shift, final ChangeEvent<V> details,
+                                 int tupleLength, ToIntFunction<K> hashFunction) {
             for (int idx = 0, n = payloadArity(tupleLength); idx < n; idx++) {
                 if (Objects.equals(getKey(idx, tupleLength), key)) {
                     final Object[] currentVal = getTuple(idx, tupleLength);
@@ -1108,12 +1102,8 @@ class ChampTrieHelper {
                         // Create root node with singleton element.
                         // This node will be a) either be the new root
                         // returned, or b) unwrapped and inlined.
-                        final K theOtherKey = (K) ((idx == 0) ? nodes[tupleLength] : nodes[0]);
-                        final V theOtherVal = tupleLength > 1 ? (V) ((idx == 0) ? nodes[tupleLength + 1] : nodes[1]) : null;
-                        //final Object[] theOtherTuple=getTuple(idx,tupleLength);
-                        //TODO set all tuple values on updated!
-                        return ChampTrieHelper.<K, V>emptyNode().updated(mutator, theOtherKey, theOtherVal,
-                                keyHash, 0, details, tupleLength, hashFunction, 1);
+                        final Object[] theOtherTuple = getTuple(idx ^ 1, tupleLength);
+                        return newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)), theOtherTuple, tupleLength);
                     } else {
 
                         // copy keys and vals and remove tupleLength elements at position idx
@@ -1131,13 +1121,8 @@ class ChampTrieHelper {
         }
 
         @Override
-        public SizeClass sizePredicate(int tupleLength) {
-            return SizeClass.SIZE_MORE_THAN_ONE;
-        }
-
-        @Override
-        public Node<K, V> updated(final UniqueIdentity mutator, final K key, final V val,
-                                  final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction, int tupleElementIndex) {
+        public Node<K, V> update(final UniqueIdentity mutator, final K key, final V val,
+                                 final int keyHash, final int shift, final ChangeEvent<V> details, int tupleLength, ToIntFunction<K> hashFunction, int tupleElementIndex) {
             assert this.hash == keyHash;
 
             for (int idx = 0, n = payloadArity(tupleLength); idx < n; idx++) {
@@ -1406,7 +1391,7 @@ class ChampTrieHelper {
 
         @SuppressWarnings("unchecked")
         public V getOldValue() {
-            return oldValue==null?null: (V) oldValue[1];
+            return oldValue == null ? null : (V) oldValue[1];
         }
 
         public boolean hasReplacedValue() {
@@ -1438,34 +1423,34 @@ class ChampTrieHelper {
     }
 
     @SuppressWarnings("unchecked")
-    static <K, V> ChampTrieHelper.BitmapIndexedNode<K, V> emptyNode() {
-        return (ChampTrieHelper.BitmapIndexedNode<K, V>) ChampTrieHelper.EMPTY_NODE;
+    static <K, V> ChampTrie.BitmapIndexedNode<K, V> emptyNode() {
+        return (ChampTrie.BitmapIndexedNode<K, V>) ChampTrie.EMPTY_NODE;
     }
 
     private static final class MutableHashCollisionNode<K, V> extends HashCollisionNode<K, V> {
         private final static long serialVersionUID = 0L;
-        transient final @Nullable UniqueIdentity mutator;
+        transient final @NonNull UniqueIdentity mutator;
 
         MutableHashCollisionNode(@NonNull UniqueIdentity mutator, int hash, Object[] entries, int tupleLength) {
             super(hash, entries, tupleLength);
             this.mutator = mutator;
         }
 
-        protected UniqueIdentity getMutator() {
+        protected @NonNull UniqueIdentity getMutator() {
             return mutator;
         }
     }
 
     private static final class MutableBitmapIndexedNode<K, V> extends BitmapIndexedNode<K, V> {
         private final static long serialVersionUID = 0L;
-        transient final @Nullable UniqueIdentity mutator;
+        transient final @NonNull UniqueIdentity mutator;
 
         private MutableBitmapIndexedNode(@NonNull UniqueIdentity mutator, int nodeMap, int dataMap, @NonNull Object[] nodes, int tupleLength) {
             super(nodeMap, dataMap, nodes, tupleLength);
             this.mutator = mutator;
         }
 
-        protected UniqueIdentity getMutator() {
+        protected @NonNull UniqueIdentity getMutator() {
             return mutator;
         }
     }
@@ -1503,11 +1488,76 @@ class ChampTrieHelper {
      * @param <V>          the value type
      * @return a Graphviz representation of the tree
      */
-    static <K, V> void dumpTreeAsGraphviz(Appendable a, Node<K, V> root, int tupleLength, ToIntFunction<K> hashFunction) throws IOException {
+    static <K, V> void dumpTrieAsGraphviz(Appendable a, Node<K, V> root, int tupleLength, ToIntFunction<K> hashFunction) throws IOException {
         a.append("digraph ChampTrie {\n");
         a.append("node [shape=record];\n");
         root.dumpAsGraphviz(a, 0, tupleLength, 0, hashFunction);
         a.append("}\n");
     }
 
+    static class NodeCursor<K, V> {
+        int end;
+        int index;
+        Node<K, V> node;
+
+        public NodeCursor(Node<K, V> node, int tupleLength) {
+            this.node = node;
+            end = node.payloadArity(tupleLength) + node.nodeArity();
+            index = 0;
+        }
+    }
+
+
+    static class PreorderTrieIterator<K, V> implements Iterator<K> {
+        private final Deque<NodeCursor<K, V>> stack = new ArrayDeque<>();
+        private final int tupleLength;
+
+        public PreorderTrieIterator(Node<K, V> root, int tupleLength, ToIntFunction<K> hashFunction) {
+            this.tupleLength = tupleLength;
+            stack.push(new NodeCursor<>(root, tupleLength));
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public K next() {
+            do {
+                NodeCursor<K, V> cursor = stack.element();
+                Node<K, V> node = cursor.node;
+                int end = cursor.end;
+                int index = cursor.index++;
+                if (cursor.index == end) {
+                    stack.pop();
+                }
+
+                if (node instanceof BitmapIndexedNode) {
+                    BitmapIndexedNode<K, V> n = (BitmapIndexedNode<K, V>) node;
+                    int nodeMap = n.nodeMap;
+                    int combinedMap = nodeMap | n.dataMap;
+                    assert end == Integer.bitCount(combinedMap);
+                    int mask = 0;
+                    int shiftedMap = combinedMap;
+                    for (int i = 0; i <= index; i++) {
+                        int trailingZeros = Integer.numberOfTrailingZeros(shiftedMap);
+                        mask += 1 + trailingZeros;
+                        shiftedMap = shiftedMap >>> (1 + trailingZeros);
+                    }
+                    mask--;
+                    if ((nodeMap & (1 << mask)) != 0) {
+                        int idx = n.nodeIndex(1 << mask);
+                        stack.push(new NodeCursor<>(n.getNode(idx, tupleLength), tupleLength));
+                    } else {
+                        int idx = n.payloadIndex(1 << mask);
+                        return (n.getKey(idx, tupleLength));
+                    }
+
+                } else {
+                    HashCollisionNode<K, V> n = (HashCollisionNode<K, V>) node;
+                }
+            } while (true);
+        }
+    }
 }

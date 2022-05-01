@@ -82,7 +82,7 @@ import java.util.function.ToIntFunction;
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private transient UniqueIdentity mutator;
-    private ChampTrieHelper.BitmapIndexedNode<K, V> root;
+    private ChampTrie.BitmapIndexedNode<K, V> root;
     private int size;
     private int modCount;
     private K first, last;
@@ -90,16 +90,16 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     private final static ToIntFunction<Object> hashFunction = Objects::hashCode;
 
     public TrieMap() {
-        this.root = ChampTrieHelper.emptyNode();
+        this.root = ChampTrie.emptyNode();
     }
 
     public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        this.root = ChampTrieHelper.emptyNode();
+        this.root = ChampTrie.emptyNode();
         this.putAll(m);
     }
 
     public TrieMap(@NonNull Collection<? extends Entry<? extends K, ? extends V>> m) {
-        this.root = ChampTrieHelper.emptyNode();
+        this.root = ChampTrie.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
         }
@@ -107,7 +107,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        this.root = ChampTrieHelper.emptyNode();
+        this.root = ChampTrie.emptyNode();
         this.putAll(m.asMap());
     }
 
@@ -126,7 +126,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
     @Override
     public void clear() {
-        root = ChampTrieHelper.emptyNode();
+        root = ChampTrie.emptyNode();
         size = 0;
         modCount++;
     }
@@ -164,7 +164,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    ChampTrieHelper.SearchResult<V> result = root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+                    ChampTrie.SearchResult<V> result = root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
                     return result.keyExists() && Objects.equals(result.get(), entry.getValue());
                 }
                 return false;
@@ -181,7 +181,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
                     @SuppressWarnings("unchecked")
                     Entry<K, V> entry = (Entry<K, V>) o;
                     K key = entry.getKey();
-                    ChampTrieHelper.SearchResult<V> result = root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+                    ChampTrie.SearchResult<V> result = root.findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
                     if (result.keyExists() && Objects.equals(result.get(), entry.getValue())) {
                         removeAndGiveDetails(key);
                         return true;
@@ -215,12 +215,12 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return putAndGiveDetails(key, value).getOldValue();
     }
 
-    @NonNull ChampTrieHelper.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
+    @NonNull ChampTrie.ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
         final int keyHash = hashFunction.applyAsInt(key);
-        final ChampTrieHelper.ChangeEvent<V> details = new ChampTrieHelper.ChangeEvent<>();
+        final ChampTrie.ChangeEvent<V> details = new ChampTrie.ChangeEvent<>();
 
-        final ChampTrieHelper.BitmapIndexedNode<K, V> newRootNode =
-                root.updated(getOrCreateMutator(), key, val, keyHash, 0, details, TUPLE_LENGTH, this::hash, ChampTrieHelper.TUPLE_VALUE);
+        final ChampTrie.BitmapIndexedNode<K, V> newRootNode =
+                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, TUPLE_LENGTH, this::hash, ChampTrie.TUPLE_VALUE);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -241,11 +241,11 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return removeAndGiveDetails(key).getOldValue();
     }
 
-    @NonNull ChampTrieHelper.ChangeEvent<V> removeAndGiveDetails(final K key) {
+    @NonNull ChampTrie.ChangeEvent<V> removeAndGiveDetails(final K key) {
         final int keyHash = hashFunction.applyAsInt(key);
-        final ChampTrieHelper.ChangeEvent<V> details = new ChampTrieHelper.ChangeEvent<>();
-        final ChampTrieHelper.BitmapIndexedNode<K, V> newRootNode =
-                (ChampTrieHelper.BitmapIndexedNode<K, V>) root.removed(getOrCreateMutator(), key, keyHash, 0, details, TUPLE_LENGTH, this::hash);
+        final ChampTrie.ChangeEvent<V> details = new ChampTrie.ChangeEvent<>();
+        final ChampTrie.BitmapIndexedNode<K, V> newRootNode =
+                (ChampTrie.BitmapIndexedNode<K, V>) root.remove(getOrCreateMutator(), key, keyHash, 0, details, TUPLE_LENGTH, this::hash);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -275,7 +275,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         return new PersistentTrieMap<>(root, size);
     }
 
-    static abstract class AbstractTransientMapEntryIterator<K, V> extends ChampTrieHelper.AbstractTrieIterator<K, V> {
+    static abstract class AbstractTransientMapEntryIterator<K, V> extends ChampTrie.AbstractTrieIterator<K, V> {
         protected final @NonNull TrieMap<K, V> map;
         protected int expectedModCount;
         private final ToIntFunction<K> hashFunction;
