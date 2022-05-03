@@ -8,8 +8,8 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.ArcReachabilityAlgo;
-import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.AddToSet;
+import org.jhotdraw8.util.function.TriFunction;
 
 import java.util.Collections;
 import java.util.function.BiFunction;

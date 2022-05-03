@@ -1,18 +1,18 @@
 /*
- * @(#)ToIntTriFunction.java
+ * @(#)ToLongTriFunction.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.util;
+package org.jhotdraw8.util.function;
 
 import org.jhotdraw8.annotation.NonNull;
 
 @FunctionalInterface
-public interface ToIntTriFunction<T, U, V> extends TriFunction<T, U, V, Integer> {
+public interface ToLongTriFunction<T, U, V> extends TriFunction<T, U, V, Long> {
 
     @Override
     @NonNull
-    default Integer apply(T t, U u, V v) {
-        return applyAsInt(t, u, v);
+    default Long apply(T t, U u, V v) {
+        return applyAsLong(t, u, v);
     }
 
     /**
@@ -23,5 +23,5 @@ public interface ToIntTriFunction<T, U, V> extends TriFunction<T, U, V, Integer>
      * @param v the third function argument
      * @return the function result
      */
-    int applyAsInt(T t, U u, V v);
+    long applyAsLong(T t, U u, V v);
 }

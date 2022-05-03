@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.collection.SetViewOverList;
-import org.jhotdraw8.util.TriFunction;
+import org.jhotdraw8.util.function.TriFunction;
 
 import java.util.ArrayList;
 import java.util.HashMap;

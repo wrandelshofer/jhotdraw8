@@ -7,18 +7,19 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ChampTrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.ChampTrie.ChangeEvent;
-import org.jhotdraw8.collection.ChampTrie.KeyIterator;
+import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
+import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champtrie.ChangeEvent;
+import org.jhotdraw8.collection.champtrie.KeyIterator;
+import org.jhotdraw8.collection.champtrie.Node;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.function.ToIntFunction;
+import java.util.Set;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -88,16 +89,15 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     private final static long serialVersionUID = 0L;
     private final static int TUPLE_LENGTH = 1;
     private transient UniqueIdentity mutator;
-    private BitmapIndexedNode<E, Void> root;
-    private int size;
-    private int modCount;
-    private final static ToIntFunction<Object> hashFunction = Objects::hashCode;
+    private transient BitmapIndexedNode<E, Void> root;
+    private transient int size;
+    private transient int modCount;
 
     /**
      * Constructs an empty set.
      */
     public TrieSet() {
-        this.root = ChampTrie.emptyNode();
+        this.root = BitmapIndexedNode.emptyNode();
     }
 
     /**
@@ -115,7 +115,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             this.root = that;
             this.size = that.size;
         } else {
-            this.root = ChampTrie.emptyNode();
+            this.root = BitmapIndexedNode.emptyNode();
             addAll(c);
         }
     }
@@ -128,8 +128,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     public boolean add(final @Nullable E e) {
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, hash(e), 0, changeEvent, TUPLE_LENGTH,
-                this::hash, ChampTrie.TUPLE_VALUE);
+        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, TUPLE_LENGTH,
+                Node.NO_SEQUENCE_NUMBER);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -137,16 +137,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
             return true;
         }
         return false;
-    }
-
-    /**
-     * Computes a hash code for the specified object.
-     *
-     * @param e an object
-     * @return hash code
-     */
-    private int hash(@Nullable E e) {
-        return hashFunction.applyAsInt(e);
     }
 
     /**
@@ -183,7 +173,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public void clear() {
-        root = ChampTrie.emptyNode();
+        root = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
     }
@@ -209,7 +199,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.containsKey(key, hash(key), 0, TUPLE_LENGTH);
+        return root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
     }
 
     private @NonNull UniqueIdentity getOrCreateMutator() {
@@ -232,7 +222,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public Iterator<E> iterator() {
-        return new MutableTrieIterator<>(this, TUPLE_LENGTH, this::hash);
+        return new MutableTrieIterator(TUPLE_LENGTH);
     }
 
     /**
@@ -245,7 +235,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         @SuppressWarnings("unchecked")
         E key = (E) o;
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.remove(getOrCreateMutator(), key, hash(key), 0, changeEvent, TUPLE_LENGTH, this::hash);
+        final BitmapIndexedNode<E, Void> newRoot = root.remove(getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent, TUPLE_LENGTH);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -325,15 +315,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * @return a dump of the internal structure
      */
     public String dump() {
-        StringBuilder w = new StringBuilder();
-        try {
-            ChampTrie.dumpTrieAsGraphviz(w, root, TUPLE_LENGTH, this::hash);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return w.toString();
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, TUPLE_LENGTH, false, false);
     }
-
     /**
      * Returns a persistent copy of this set.
      *
@@ -344,19 +327,17 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, size);
     }
 
-    static class MutableTrieIterator<E> extends KeyIterator<E, Void> {
-        private final @NonNull TrieSet<E> set;
+    class MutableTrieIterator extends KeyIterator<E, Void> {
         private int expectedModCount;
 
-        MutableTrieIterator(@NonNull TrieSet<E> set, int tupleLength, ToIntFunction<E> hashFunction) {
-            super(set.root, tupleLength, hashFunction);
-            this.set = set;
-            this.expectedModCount = set.modCount;
+        MutableTrieIterator(int tupleLength) {
+            super(TrieSet.this.root, tupleLength);
+            this.expectedModCount = TrieSet.this.modCount;
         }
 
         @Override
         public E next() {
-            if (expectedModCount != set.modCount) {
+            if (expectedModCount != TrieSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.next();
@@ -364,14 +345,29 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
 
         @Override
         public void remove() {
-            if (expectedModCount != set.modCount) {
+            if (expectedModCount != TrieSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                set.remove(k);
-                return set.root;
+                TrieSet.this.remove(k);
+                return TrieSet.this.root;
             });
-            expectedModCount = set.modCount;
+            expectedModCount = TrieSet.this.modCount;
         }
+    }
+
+    private static class SerializationProxy<E> extends SetSerializationProxy<E> {
+
+        protected SerializationProxy(Set<E> target) {
+            super(target);
+        }
+
+        protected Object readResolve() {
+            return new TrieSet<>(deserialized);
+        }
+    }
+
+    private Object writeReplace() {
+        return new SerializationProxy<E>(this);
     }
 }

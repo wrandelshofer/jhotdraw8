@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.SpliteratorIterable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.AllWalksSpliterator;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
-import org.jhotdraw8.util.TriFunction;
+import org.jhotdraw8.util.function.TriFunction;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

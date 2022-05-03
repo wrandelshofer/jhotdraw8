@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.UnorderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.util.TriFunction;
+import org.jhotdraw8.util.function.TriFunction;
 
 import java.util.ArrayList;
 import java.util.Collection;

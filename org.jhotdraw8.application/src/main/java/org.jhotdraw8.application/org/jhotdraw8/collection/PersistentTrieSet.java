@@ -7,19 +7,18 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ChampTrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.ChampTrie.BulkChangeEvent;
-import org.jhotdraw8.collection.ChampTrie.ChangeEvent;
-import org.jhotdraw8.collection.ChampTrie.KeyIterator;
+import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
+import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champtrie.ChangeEvent;
+import org.jhotdraw8.collection.champtrie.KeyIterator;
+import org.jhotdraw8.collection.champtrie.Node;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.ChampTrie.EMPTY_NODE;
 
 /**
  * Implements a persistent set using a Compressed Hash-Array Mapped Prefix-tree
@@ -76,10 +75,9 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     private final static long serialVersionUID = 0L;
     private final static int TUPLE_LENGTH = 1;
     @SuppressWarnings("unchecked")
-    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>((BitmapIndexedNode<Object, Void>) EMPTY_NODE, 0);
+    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(BitmapIndexedNode.emptyNode(), 0);
 
     final int size;
-    private final ToIntFunction<E> hashFunction = Objects::hashCode;
 
     PersistentTrieSet(BitmapIndexedNode<E, Void> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
@@ -112,13 +110,13 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return containsKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+        return findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
     }
 
     public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
-        final int keyHash = hashFunction.applyAsInt(key);
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction, ChampTrie.TUPLE_VALUE);
+        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, Node.NO_SEQUENCE_NUMBER);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size + 1);
         }
@@ -133,13 +131,6 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
             return this;
         }
 
-        /*
-        if (set instanceof PersistentTrieSet) {
-            return copyAddAllFromTrieSet((PersistentTrieSet<E>) set);
-        } else if (set instanceof TrieSet) {
-            return copyAddAllFromTrieSet(((TrieSet<E>) set).toPersistent());
-        }*/
-
         final TrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
@@ -148,34 +139,16 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         return modified ? t.toPersistent() : this;
     }
 
-    // FIXME fix counting of merged values
-    private @NonNull PersistentTrieSet<E> copyAddAllFromTrieSet(final @NonNull PersistentTrieSet<E> that) {
-        if (that.isEmpty()) {
-            return this;
-        }
-        if (this.isEmpty()) {
-            return that;
-        }
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode<E, Void> newNode = copyAddAll(that, 0, bulkChange, new UniqueIdentity(), TUPLE_LENGTH, hashFunction);
-        if (newNode != this) {
-            return new PersistentTrieSet<>(newNode,
-                    this.size + that.size - bulkChange.numInBothCollections
-            );
-        }
-        return this;
-    }
-
     @Override
     public @NonNull PersistentSet<E> copyClear(@NonNull E element) {
         return isEmpty() ? this : of();
     }
 
     public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
-        final int keyHash = hashFunction.applyAsInt(key);
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = (BitmapIndexedNode<E, Void>) remove(null, key,
-                keyHash, 0, changeEvent, TUPLE_LENGTH, hashFunction);
+        final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
+                keyHash, 0, changeEvent, TUPLE_LENGTH);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size - 1);
         }
@@ -242,7 +215,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, TUPLE_LENGTH);
+            return this.equivalent(that, TUPLE_LENGTH, false);
         } else if (other instanceof ReadOnlySet) {
             @SuppressWarnings("unchecked")
             ReadOnlySet<E> that = (ReadOnlySet<E>) other;
@@ -262,7 +235,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
 
     @Override
     public Iterator<E> iterator() {
-        return new KeyIterator<>(this, TUPLE_LENGTH, hashFunction);
+        return new KeyIterator<>(this, TUPLE_LENGTH);
     }
 
     @Override
@@ -290,5 +263,14 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);
+    }
+
+    /**
+     * Dumps the internal structure of this set in the Graphviz DOT Language.
+     *
+     * @return a dump of the internal structure
+     */
+    public String dump() {
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, TUPLE_LENGTH, false, false);
     }
 }

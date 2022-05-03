@@ -132,7 +132,7 @@ public abstract class AbstractSetTest {
                     break;
                 }
             }
-            assertEquals(expected, instance);
+            assertEquals(expected, instance, "element " + e + " was removed from the iterator");
         }
 
         // WHEN: Element is bulk-retained to instance

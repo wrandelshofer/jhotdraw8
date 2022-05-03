@@ -8,32 +8,41 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.IntSupplier;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
- * Wraps a {@link Set} in the {@link ReadOnlySet} API.
- * <p>
- * The underlying Set is referenced - not copied. This allows to pass a
- * set to a client while preventing that the client can modify the set directly.
+ * Wraps {@code ReadOnlySet} functions into the {@link ReadOnlySet} API.
  *
  * @author Werner Randelshofer
  */
 public final class ReadOnlySetWrapper<E> extends AbstractReadOnlySet<E> {
 
-    private final Set<? extends E> backingSet;
+    private final Supplier<Iterator<E>> iteratorFunction;
+    private final IntSupplier sizeFunction;
+    private final Predicate<Object> containsFunction;
 
-    public ReadOnlySetWrapper(Set<? extends E> backingSet) {
-        this.backingSet = backingSet;
+    public ReadOnlySetWrapper(Set<E> backingSet) {
+        this.iteratorFunction = backingSet::iterator;
+        this.sizeFunction = backingSet::size;
+        this.containsFunction = backingSet::contains;
+    }
+
+    @Override
+    public int size() {
+        return sizeFunction.getAsInt();
     }
 
     @Override
     public boolean contains(Object o) {
-        return backingSet.contains(o);
+        return containsFunction.test(o);
     }
 
     @Override
     public @NonNull Iterator<E> iterator() {
         return new Iterator<E>() {
-            private final Iterator<? extends E> i = backingSet.iterator();
+            private final Iterator<? extends E> i = iteratorFunction.get();
 
             @Override
             public boolean hasNext() {
@@ -51,17 +60,4 @@ public final class ReadOnlySetWrapper<E> extends AbstractReadOnlySet<E> {
             }
         };
     }
-
-    @Override
-    public int size() {
-        return backingSet.size();
-    }
-
-    public void copyInto(Object[] out, int offset) {
-        int i = offset;
-        for (E e : this) {
-            out[i++] = e;
-        }
-    }
-
 }

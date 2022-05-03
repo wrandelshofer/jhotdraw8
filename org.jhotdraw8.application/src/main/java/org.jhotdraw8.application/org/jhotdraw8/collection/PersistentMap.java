@@ -45,6 +45,18 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
 
     /**
      * Returns a copy of this map that contains all entries
+     * of this map with entries from the specified map added or updated.
+     *
+     * @param m another map
+     * @return this map instance if it already contains the same entries, or
+     * a different map instance with the entries added or updated
+     */
+    default @NonNull PersistentMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        return copyPutAll(m.asMap());
+    }
+
+    /**
+     * Returns a copy of this map that contains all entries
      * of this map with the specified entry removed.
      *
      * @param key the key of the entry
@@ -73,5 +85,20 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * a different map instance with entries removed
      */
     @NonNull PersistentMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c);
+
+    /**
+     * Returns a copy of this map that contains only entries
+     * that are in this map and in the specified collection.
+     *
+     * @param c a collection with keys of entries to be retained in this map
+     * @return this map instance if it has not changed, or
+     * a different map instance with entries removed
+     */
+    default @NonNull PersistentMap<K, V> copyRetainAll(@NonNull ReadOnlyCollection<? extends K> c) {
+        if (c == this) {
+            return this;
+        }
+        return copyRetainAll(c.asCollection());
+    }
 
 }

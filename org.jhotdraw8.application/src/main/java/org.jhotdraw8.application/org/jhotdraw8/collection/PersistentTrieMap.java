@@ -6,8 +6,16 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.champtrie.BaseTrieIterator;
+import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
+import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champtrie.ChangeEvent;
+import org.jhotdraw8.collection.champtrie.KeyIterator;
+import org.jhotdraw8.collection.champtrie.Node;
 
+import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -69,16 +77,17 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
+public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
+        implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int TUPLE_LENGTH = 2;
 
-    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(ChampTrie.EMPTY_NODE, 0);
+    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
 
-    final int size;
-    private final ToIntFunction<K> hashFunction = Objects::hashCode;
+    final transient int size;
+    private final transient ToIntFunction<K> hashFunction = Objects::hashCode;
 
-    PersistentTrieMap(@NonNull ChampTrie.BitmapIndexedNode<K, V> root, int size) {
+    PersistentTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
         this.size = size;
     }
@@ -135,23 +144,19 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
      *
      * @return a mutable trie set
      */
-    private TrieMap<K, V> toMutable() {
+    public TrieMap<K, V> toMutable() {
         return new TrieMap<>(this);
     }
 
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH).keyExists();
+        return findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
     }
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> entries() {
-        return entryIterator();
-    }
-
-    public Iterator<Map.Entry<K, V>> entryIterator() {
-        return new ChampTrie.MapEntryIterator<>(this, TUPLE_LENGTH, hashFunction);
+        return new EntryIterator<>(this, TUPLE_LENGTH);
     }
 
     @Override
@@ -168,7 +173,7 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, TUPLE_LENGTH);
+            return this.equivalent(that, TUPLE_LENGTH, false);
         } else if (other instanceof Map) {
             Map<?, ?> that = (Map<?, ?>) other;
             if (this.size() != that.size()) {
@@ -176,15 +181,11 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
             }
             for (Map.Entry<?, ?> entry : that.entrySet()) {
                 @SuppressWarnings("unchecked") final K key = (K) entry.getKey();
-                final ChampTrie.SearchResult<V> result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+                final Object result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
 
-                if (!result.keyExists()) {
+                @SuppressWarnings("unchecked") final V val = (V) entry.getValue();
+                if (!Objects.equals(result, val)) {
                     return false;
-                } else {
-                    @SuppressWarnings("unchecked") final V val = (V) entry.getValue();
-                    if (!Objects.equals(result.get(), val)) {
-                        return false;
-                    }
                 }
             }
             return true;
@@ -193,10 +194,11 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
-        final ChampTrie.SearchResult<V> result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
-        return result.orElse(null);
+        K key = (K) o;
+        Object result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+        return result == Node.NO_VALUE ? null : (V) result;
     }
 
     @Override
@@ -211,7 +213,7 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
 
     @Override
     public @NonNull Iterator<K> keys() {
-        return new ChampTrie.KeyIterator<>(this, TUPLE_LENGTH, hashFunction);
+        return new KeyIterator<>(this, TUPLE_LENGTH);
     }
 
     @Override
@@ -221,10 +223,10 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
 
     public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = hashFunction.applyAsInt(key);
-        final ChampTrie.ChangeEvent<V> details = new ChampTrie.ChangeEvent<>();
+        final ChangeEvent<V> details = new ChangeEvent<>();
 
-        final ChampTrie.BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details, TUPLE_LENGTH, hashFunction, ChampTrie.TUPLE_VALUE);
+        final BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
+                keyHash, 0, details, TUPLE_LENGTH, Node.NO_SEQUENCE_NUMBER);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -242,7 +244,22 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
         final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
-            ChampTrie.ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            modified |= details.isModified;
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        if (this.isEmpty() && (map instanceof PersistentTrieMap<?, ?>)) {
+            return (PersistentTrieMap<K, V>) map;
+        }
+        final TrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (Iterator<? extends Map.Entry<? extends K, ? extends V>> it = map.entries(); it.hasNext(); ) {
+            Map.Entry<? extends K, ? extends V> entry = it.next();
+            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
             modified |= details.isModified;
         }
         return modified ? t.toPersistent() : this;
@@ -250,9 +267,9 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
 
     public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = hashFunction.applyAsInt(key);
-        final ChampTrie.ChangeEvent<V> details = new ChampTrie.ChangeEvent<>();
-        final ChampTrie.BitmapIndexedNode<K, V> newRootNode =
-                remove(null, key, keyHash, 0, details, TUPLE_LENGTH, hashFunction);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+        final BitmapIndexedNode<K, V> newRootNode =
+                remove(null, key, keyHash, 0, details, TUPLE_LENGTH);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             return new PersistentTrieMap<>(newRootNode, size - 1);
@@ -262,10 +279,14 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
 
     @Override
     public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+        if (this.isEmpty()) {
+            return this;
+        }
+
         final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
-            ChampTrie.ChangeEvent<V> details = t.removeAndGiveDetails(key);
+            ChangeEvent<V> details = t.removeAndGiveDetails(key);
             modified |= details.isModified;
         }
         return modified ? t.toPersistent() : this;
@@ -288,4 +309,44 @@ public class PersistentTrieMap<K, V> extends ChampTrie.BitmapIndexedNode<K, V> i
     public String toString() {
         return ReadOnlyMap.mapToString(this);
     }
+
+    /**
+     * Dumps the internal structure of this set in the Graphviz DOT Language.
+     *
+     * @return a dump of the internal structure
+     */
+    public String dump() {
+        return new ChampTrieGraphviz<K, V>().dumpTrie(this, TUPLE_LENGTH, true, true);
+    }
+
+
+    private Object writeReplace() throws ObjectStreamException {
+        return new SerializationProxy<>(this.toMutable());
+    }
+
+    private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+
+        protected SerializationProxy(Map<K, V> target) {
+            super(target);
+        }
+
+        protected Object readResolve() {
+            return PersistentTrieMap.ofEntries(deserialized);
+        }
+    }
+
+    static class EntryIterator<K, V> extends BaseTrieIterator<K, V>
+            implements Iterator<Map.Entry<K, V>> {
+
+        public EntryIterator(Node<K, V> rootNode, int entryLength) {
+            super(rootNode, entryLength);
+        }
+
+        @Override
+        public Map.Entry<K, V> next() {
+            return nextEntry(AbstractMap.SimpleImmutableEntry::new);
+        }
+    }
+
+
 }

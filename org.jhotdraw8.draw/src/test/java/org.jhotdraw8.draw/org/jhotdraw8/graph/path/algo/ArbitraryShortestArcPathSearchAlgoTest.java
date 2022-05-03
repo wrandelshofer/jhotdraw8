@@ -14,7 +14,7 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
-import org.jhotdraw8.util.TriFunction;
+import org.jhotdraw8.util.function.TriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;

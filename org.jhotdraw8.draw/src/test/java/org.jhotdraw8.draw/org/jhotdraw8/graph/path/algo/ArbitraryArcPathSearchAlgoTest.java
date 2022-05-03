@@ -16,7 +16,7 @@ import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedAllWalksFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
-import org.jhotdraw8.util.ToIntTriFunction;
+import org.jhotdraw8.util.function.ToIntTriFunction;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;

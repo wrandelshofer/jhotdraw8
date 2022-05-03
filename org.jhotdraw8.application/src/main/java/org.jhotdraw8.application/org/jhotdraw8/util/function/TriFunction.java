@@ -2,7 +2,7 @@
  * @(#)TriFunction.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.util;
+package org.jhotdraw8.util.function;
 
 import org.jhotdraw8.annotation.NonNull;
 

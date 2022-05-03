@@ -11,8 +11,8 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
-import org.jhotdraw8.util.TriFunction;
 import org.jhotdraw8.util.function.AddToSet;
+import org.jhotdraw8.util.function.TriFunction;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
