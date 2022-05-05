@@ -115,12 +115,12 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         }
     }
 
-    private List<URI> getList(Key<ImmutableList<URI>> key) {
+    private List<URI> getList(Key<? extends ImmutableList<URI>> key) {
         ImmutableList<URI> list = get(key);
         return list == null ? Collections.emptyList() : list.asList();
     }
 
-    private List<String> getStringList(Key<ImmutableList<String>> key) {
+    private List<String> getStringList(Key<? extends ImmutableList<String>> key) {
         ImmutableList<String> list = get(key);
         return list == null ? Collections.emptyList() : list.asList();
     }

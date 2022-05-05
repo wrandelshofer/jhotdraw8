@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class PersistentTrieSetTest extends AbstractPersistentSetTest {
@@ -19,12 +20,12 @@ public class PersistentTrieSetTest extends AbstractPersistentSetTest {
 
     @Override
     protected PersistentSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return PersistentTrieSet.of(keys);
+        return PersistentTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
     }
 
     @Override
     protected PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return PersistentTrieSet.copyOf(set);
+        return PersistentTrieSet.<HashCollider>of().copyAddAll(set);
     }
 
     @Test

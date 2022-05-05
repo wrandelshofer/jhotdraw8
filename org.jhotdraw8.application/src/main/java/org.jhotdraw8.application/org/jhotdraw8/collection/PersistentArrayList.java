@@ -16,57 +16,75 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
-public class WrappedPersistentList<E> extends AbstractReadOnlyList<E> implements PersistentList<E> {
-    public static final WrappedPersistentList<Object> EMPTY = new WrappedPersistentList<>(new ArrayList<>(), s -> (List<Object>) ((ArrayList<Object>) s).clone());
+public class PersistentArrayList<E> extends AbstractReadOnlyList<E> implements PersistentList<E> {
+    public static final PersistentArrayList<Object> EMPTY = new PersistentArrayList<>(new ArrayList<>(), ArrayList::new);
     private final @NonNull List<E> list;
     private final @NonNull Function<List<E>, List<E>> cloneFunction;
 
-    public WrappedPersistentList(@NonNull List<E> list, @NonNull Function<List<E>, List<E>> cloneFunction) {
+    public PersistentArrayList(@NonNull List<E> list, @NonNull Function<List<E>, List<E>> cloneFunction) {
         this.list = list;
         this.cloneFunction = cloneFunction;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <E> PersistentList<E> emptyList() {
-        return (PersistentList<E>) EMPTY;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <E> PersistentList<E> of(@NonNull E... keys) {
-        return new WrappedPersistentList<>(new ArrayList<>(Arrays.asList(keys)), s -> (List<E>) ((ArrayList<E>) s).clone());
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <E> PersistentList<E> copyOf(@NonNull Iterable<? extends E> list) {
-        if (list instanceof WrappedPersistentList) {
-            return (PersistentList<E>) list;
-        }
-        ArrayList<E> ss = new ArrayList<>();
+    public PersistentArrayList(@NonNull Iterable<E> list) {
+        this.list = new ArrayList<>();
         for (E e : list) {
-            ss.add(e);
+            this.list.add(e);
         }
+        this.cloneFunction = ArrayList::new;
+    }
 
-        return new WrappedPersistentList<>(ss, s -> (List<E>) ((ArrayList<E>) s).clone());
+
+    @SuppressWarnings("unchecked")
+    public static <E> PersistentArrayList<E> of() {
+        return (PersistentArrayList<E>) EMPTY;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> PersistentArrayList<E> of(E... elements) {
+        if (elements.length == 0) {
+            return (PersistentArrayList<E>) EMPTY;
+        } else {
+            return new PersistentArrayList<E>(Arrays.asList(elements));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> PersistentArrayList<E> copyOf(Iterable<? extends E> list) {
+        if (list instanceof PersistentArrayList<?>) {
+            return (PersistentArrayList<E>) list;
+        }
+        if (list instanceof ReadOnlyCollection<?>) {
+            ReadOnlyCollection<E> c = (ReadOnlyCollection<E>) list;
+            return c.isEmpty() ? (PersistentArrayList<E>) EMPTY : new PersistentArrayList<E>(c.asCollection());
+        }
+        if (list instanceof Collection<?>) {
+            Collection<E> c = (Collection<E>) list;
+            return c.isEmpty() ? (PersistentArrayList<E>) EMPTY : new PersistentArrayList<E>(c);
+        }
+        ArrayList<E> a = new ArrayList<>();
+        list.forEach(a::add);
+        return copyOf(a);
     }
 
     @Override
-    public @NonNull WrappedPersistentList<E> copyClear() {
+    public @NonNull PersistentArrayList<E> copyClear() {
         if (list.isEmpty()) {
             return this;
         }
         List<E> c = cloneFunction.apply(list);
         c.clear();
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
     }
 
     @Override
-    public @NonNull WrappedPersistentList<E> copyAdd(@NonNull E element) {
+    public @NonNull PersistentArrayList<E> copyAdd(@NonNull E element) {
         if (list.contains(element)) {
             return this;
         }
         List<E> c = cloneFunction.apply(list);
         c.add(element);
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
     }
 
     @Override
@@ -75,13 +93,13 @@ public class WrappedPersistentList<E> extends AbstractReadOnlyList<E> implements
     }
 
     @Override
-    public @NonNull WrappedPersistentList<E> copyAddAll(@NonNull Iterable<? extends E> s) {
+    public @NonNull PersistentArrayList<E> copyAddAll(@NonNull Iterable<? extends E> s) {
         List<E> c = cloneFunction.apply(list);
         boolean changed = false;
         for (E e : s) {
             changed |= c.add(e);
         }
-        return changed ? new WrappedPersistentList<>(c, cloneFunction) : this;
+        return changed ? new PersistentArrayList<>(c, cloneFunction) : this;
     }
 
     @Override
@@ -90,13 +108,13 @@ public class WrappedPersistentList<E> extends AbstractReadOnlyList<E> implements
     }
 
     @Override
-    public @NonNull WrappedPersistentList<E> copyRemove(@NonNull E element) {
+    public @NonNull PersistentArrayList<E> copyRemove(@NonNull E element) {
         if (!list.contains(element)) {
             return this;
         }
         List<E> c = cloneFunction.apply(list);
         c.remove(element);
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
 
     }
 
@@ -104,28 +122,28 @@ public class WrappedPersistentList<E> extends AbstractReadOnlyList<E> implements
     public @NonNull PersistentList<E> copyRemoveAt(int index) {
         List<E> c = cloneFunction.apply(list);
         c.remove(index);
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
     }
 
     @Override
     public @NonNull PersistentList<E> copyRemoveRange(int fromIndex, int toIndex) {
         List<E> c = cloneFunction.apply(list);
         c.subList(fromIndex, toIndex).clear();
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
     }
 
     @Override
-    public @NonNull WrappedPersistentList<E> copyRemoveAll(@NonNull Iterable<? extends E> s) {
+    public @NonNull PersistentArrayList<E> copyRemoveAll(@NonNull Iterable<? extends E> s) {
         List<E> c = cloneFunction.apply(list);
         boolean changed = false;
         for (E e : s) {
             changed |= c.remove(e);
         }
-        return changed ? new WrappedPersistentList<>(c, cloneFunction) : this;
+        return changed ? new PersistentArrayList<>(c, cloneFunction) : this;
     }
 
     @Override
-    public @NonNull WrappedPersistentList<E> copyRetainAll(@NonNull Collection<? extends E> s) {
+    public @NonNull PersistentArrayList<E> copyRetainAll(@NonNull Collection<? extends E> s) {
         List<E> c = cloneFunction.apply(list);
         boolean changed = false;
         for (Iterator<E> iterator = c.iterator(); iterator.hasNext(); ) {
@@ -135,20 +153,20 @@ public class WrappedPersistentList<E> extends AbstractReadOnlyList<E> implements
                 iterator.remove();
             }
         }
-        return changed ? new WrappedPersistentList<>(c, cloneFunction) : this;
+        return changed ? new PersistentArrayList<>(c, cloneFunction) : this;
     }
 
     @Override
     public @NonNull PersistentList<E> copySet(int index, @NonNull E element) {
         List<E> c = cloneFunction.apply(list);
         c.set(index, element);
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
     }
 
     @Override
     public @NonNull PersistentList<E> copySubList(int fromIndex, int toIndex) {
         List<E> c = cloneFunction.apply(list.subList(fromIndex, toIndex));
-        return new WrappedPersistentList<>(c, cloneFunction);
+        return new PersistentArrayList<>(c, cloneFunction);
     }
 
     @Override
@@ -162,8 +180,8 @@ public class WrappedPersistentList<E> extends AbstractReadOnlyList<E> implements
     }
 
     @Override
-    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new WrappedReadOnlyList<>(list.subList(fromIndex, toIndex));
+    public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
+        return new ImmutableArrayList<E>(list.subList(fromIndex, toIndex));
     }
 
     @Override

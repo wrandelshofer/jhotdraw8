@@ -9,9 +9,9 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -327,7 +327,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
                         ImmutableList<URI> listOrNull = drawing.get(figureFactory.getStylesheetsKey());
                         List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                         stylesheets.add(uri);
-                        drawing.set(figureFactory.getStylesheetsKey(), ImmutableArrayList.copyOf(stylesheets));
+                        drawing.set(figureFactory.getStylesheetsKey(), PersistentArrayList.copyOf(stylesheets));
                     }
                 });
             }

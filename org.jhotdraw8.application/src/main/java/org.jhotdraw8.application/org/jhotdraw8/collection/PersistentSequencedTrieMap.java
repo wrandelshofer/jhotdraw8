@@ -92,7 +92,8 @@ import java.util.function.ToIntFunction;
 public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
-
+    private static final PersistentSequencedTrieMap<?, ?> EMPTY = new PersistentSequencedTrieMap<>(BitmapIndexedNode.emptyNode(), 0, 0);
+    final transient int size;
     /**
      * Counter for the sequence number of the last entry.
      * The counter is incremented when a new entry is added to the end of the
@@ -105,10 +106,6 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
      * {@code size}.
      */
     private transient final int lastSequenceNumber;
-
-    private static final PersistentSequencedTrieMap<?, ?> EMPTY_MAP = new PersistentSequencedTrieMap<>(BitmapIndexedNode.emptyNode(), 0, 0);
-
-    final transient int size;
     private transient final ToIntFunction<K> hashFunction = Objects::hashCode;
 
     PersistentSequencedTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size,
@@ -118,66 +115,119 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         this.lastSequenceNumber = lastSequenceNumber;
     }
 
-    public static <K, V> PersistentSequencedTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        if (map instanceof PersistentSequencedTrieMap) {
-            @SuppressWarnings("unchecked")
-            PersistentSequencedTrieMap<K, V> unchecked = (PersistentSequencedTrieMap<K, V>) map;
-            return unchecked;
-        }
-        SequencedTrieMap<K, V> tr = new SequencedTrieMap<>(of());
-        for (final Map.Entry<? extends K, ? extends V> entry : map.readOnlyEntrySet()) {
-            tr.putAndGiveDetails(entry.getKey(), entry.getValue());
-        }
-        return tr.toPersistent();
-    }
-
-    public static <K, V> PersistentSequencedTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ofEntries(map.entrySet());
+    @SuppressWarnings("unchecked")
+    public static <K, V> @NonNull PersistentSequencedTrieMap<K, V> of(K k, V v, Object... kv) {
+        return (PersistentSequencedTrieMap<K, V>) ((PersistentSequencedTrieMap<K, V>) PersistentSequencedTrieMap.EMPTY)
+                .copyPut(k, v).copyPutKeyValues(kv);
     }
 
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull PersistentSequencedTrieMap<K, V> of() {
-        return (PersistentSequencedTrieMap<K, V>) PersistentSequencedTrieMap.EMPTY_MAP;
+        return (PersistentSequencedTrieMap<K, V>) PersistentSequencedTrieMap.EMPTY;
     }
 
-    @SafeVarargs
-    public static <K, V> @NonNull PersistentSequencedTrieMap<K, V> ofEntries(@NonNull Map.Entry<K, V>... entries) {
-        SequencedTrieMap<K, V> result = PersistentSequencedTrieMap.<K, V>of().toMutable();
-        for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            result.putAndGiveDetails(entry.getKey(), entry.getValue());
-        }
-        return result.toPersistent();
+    @SuppressWarnings("unchecked")
+    public static <K, V> PersistentSequencedTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (PersistentSequencedTrieMap<K, V>) ((PersistentSequencedTrieMap<K, V>) PersistentSequencedTrieMap.EMPTY).copyPutAll(map);
     }
 
-    public static <K, V> @NonNull PersistentSequencedTrieMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        SequencedTrieMap<K, V> result = PersistentSequencedTrieMap.<K, V>of().toMutable();
-        for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            result.putAndGiveDetails(entry.getKey(), entry.getValue());
-        }
-        return result.toPersistent();
-    }
-
-    /**
-     * Returns a copy of this set that is mutable.
-     * <p>
-     * This operation is performed in O(1) because the mutable map shares
-     * the underlying trie nodes with this set.
-     * <p>
-     * Initially, the returned mutable map hasn't exclusive ownership of any
-     * trie node. Therefore, the first few updates that it performs, are
-     * copy-on-write operations, until it exclusively owns some trie nodes that
-     * it can update.
-     *
-     * @return a mutable trie set
-     */
-    public SequencedTrieMap<K, V> toMutable() {
-        return new SequencedTrieMap<>(this);
+    @SuppressWarnings("unchecked")
+    public static <K, V> PersistentSequencedTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return (PersistentSequencedTrieMap<K, V>) ((PersistentSequencedTrieMap<K, V>) PersistentSequencedTrieMap.EMPTY).copyPutAll(map);
     }
 
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
+    }
+
+    @Override
+    public @NonNull PersistentSequencedTrieMap<K, V> copyClear() {
+        return isEmpty() ? this : of();
+    }
+
+    public @NonNull PersistentSequencedTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+        BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
+                keyHash, 0, details, ENTRY_LENGTH, lastSequenceNumber + 1, ENTRY_LENGTH - 1);
+        if (details.isModified()) {
+            if (details.hasReplacedValue()) {
+                return new PersistentSequencedTrieMap<>(newRootNode, size, lastSequenceNumber + 1);
+            }
+            if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
+                return renumber(newRootNode);
+            } else {
+                return new PersistentSequencedTrieMap<>(newRootNode, size + 1, lastSequenceNumber + 1);
+            }
+        }
+        return this;
+    }
+
+    public @NonNull PersistentSequencedTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        final SequencedTrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        while (entries.hasNext()) {
+            Map.Entry<? extends K, ? extends V> entry = entries.next();
+            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            modified |= details.isModified;
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    public @NonNull PersistentSequencedTrieMap<K, V> copyRemove(@NonNull K key) {
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+        final BitmapIndexedNode<K, V> newRootNode =
+                remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        if (details.isModified()) {
+            assert details.hasReplacedValue();
+            return new PersistentSequencedTrieMap<>(newRootNode, size - 1, lastSequenceNumber + 1);
+        }
+        return this;
+    }
+
+    @Override
+    public @NonNull PersistentSequencedTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+        if (this.isEmpty()) {
+            return this;
+        }
+        final SequencedTrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (K key : c) {
+            ChangeEvent<V> details = t.removeAndGiveDetails(key);
+            modified |= details.isModified;
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    @Override
+    public @NonNull PersistentSequencedTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+        if (isEmpty()) {
+            return this;
+        }
+        if (c.isEmpty()) {
+            return of();
+        }
+        final SequencedTrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (K key : this.readOnlyKeySet()) {
+            if (!c.contains(key)) {
+                t.removeAndGiveDetails(key);
+                modified = true;
+            }
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    /**
+     * Dumps the internal structure of this map in the Graphviz DOT Language.
+     *
+     * @return a dump of the internal structure
+     */
+    public String dump() {
+        return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, true);
     }
 
     @Override
@@ -193,7 +243,6 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         if (other == null) {
             return false;
         }
-
         if (other instanceof PersistentSequencedTrieMap) {
             PersistentSequencedTrieMap<?, ?> that = (PersistentSequencedTrieMap<?, ?>) other;
             if (this.size != that.size) {
@@ -228,102 +277,32 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         return new KeyIterator<>(size, this, ENTRY_LENGTH);
     }
 
-    @Override
-    public int size() {
-        return size;
-    }
-
-    public @NonNull PersistentSequencedTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
-        final int keyHash = hashFunction.applyAsInt(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-
-        BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details, ENTRY_LENGTH, lastSequenceNumber + 1, ENTRY_LENGTH - 1);
-
-        if (details.isModified()) {
-            if (details.hasReplacedValue()) {
-                return new PersistentSequencedTrieMap<>(newRootNode, size, lastSequenceNumber + 1);
-            }
-
-            if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
-                return renumber(newRootNode);
-            } else {
-                return new PersistentSequencedTrieMap<>(newRootNode, size + 1, lastSequenceNumber + 1);
-            }
-        }
-
-        return this;
-    }
-
     @NonNull
     private PersistentSequencedTrieMap<K, V> renumber(BitmapIndexedNode<K, V> newRootNode) {
         newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
         return new PersistentSequencedTrieMap<>(newRootNode, size + 1, size);
     }
 
-    public @NonNull PersistentSequencedTrieMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
-        final SequencedTrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
-            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
-            modified |= details.isModified;
-        }
-        return modified ? t.toPersistent() : this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public @NonNull PersistentSequencedTrieMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        if (this.isEmpty() && (map instanceof PersistentSequencedTrieMap<?, ?>)) {
-            return (PersistentSequencedTrieMap<K, V>) map;
-        }
-        final SequencedTrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (Iterator<? extends Map.Entry<? extends K, ? extends V>> it = map.entries(); it.hasNext(); ) {
-            Map.Entry<? extends K, ? extends V> entry = it.next();
-            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
-            modified |= details.isModified;
-        }
-        return modified ? t.toPersistent() : this;
-    }
-
-    public @NonNull PersistentSequencedTrieMap<K, V> copyRemove(@NonNull K key) {
-        final int keyHash = hashFunction.applyAsInt(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-        final BitmapIndexedNode<K, V> newRootNode =
-                remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH - 1);
-        if (details.isModified()) {
-            assert details.hasReplacedValue();
-            return new PersistentSequencedTrieMap<>(newRootNode, size - 1, lastSequenceNumber + 1);
-        }
-        return this;
-    }
-
     @Override
-    public @NonNull PersistentSequencedTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
-        if (this.isEmpty()) {
-            return this;
-        }
-
-        final SequencedTrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (K key : c) {
-            ChangeEvent<V> details = t.removeAndGiveDetails(key);
-            modified |= details.isModified;
-        }
-        return modified ? t.toPersistent() : this;
+    public int size() {
+        return size;
     }
 
-    @Override
-    public @NonNull PersistentSequencedTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
-        final SequencedTrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (K key : this.readOnlyKeySet()) {
-            if (!c.contains(key)) {
-                t.removeAndGiveDetails(key);
-                modified = true;
-            }
-        }
-        return modified ? t.toPersistent() : this;
+    /**
+     * Returns a copy of this set that is mutable.
+     * <p>
+     * This operation is performed in O(1) because the mutable map shares
+     * the underlying trie nodes with this set.
+     * <p>
+     * Initially, the returned mutable map hasn't exclusive ownership of any
+     * trie node. Therefore, the first few updates that it performs, are
+     * copy-on-write operations, until it exclusively owns some trie nodes that
+     * it can update.
+     *
+     * @return a mutable trie set
+     */
+    public SequencedTrieMap<K, V> toMutable() {
+        return new SequencedTrieMap<>(this);
     }
 
     @Override
@@ -331,15 +310,9 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         return ReadOnlyMap.mapToString(this);
     }
 
-    /**
-     * Dumps the internal structure of this map in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, true);
+    private Object writeReplace() throws ObjectStreamException {
+        return new SerializationProxy<>(this.toMutable());
     }
-
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
         private final static long serialVersionUID = 0L;
@@ -349,12 +322,8 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         }
 
         protected Object readResolve() {
-            return PersistentSequencedTrieMap.ofEntries(deserialized);
+            return PersistentSequencedTrieMap.of().copyPutAll(deserialized.iterator());
         }
-    }
-
-    private Object writeReplace() throws ObjectStreamException {
-        return new SerializationProxy<>(this.toMutable());
     }
 
     static class EntryIterator<K, V> extends SequencedTrieIterator<K, V>
@@ -382,10 +351,4 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
             return nextEntry().getKey();
         }
     }
-
-    @Override
-    public @NonNull PersistentSequencedTrieMap<K, V> copyClear() {
-        return isEmpty() ? this : of();
-    }
-
 }

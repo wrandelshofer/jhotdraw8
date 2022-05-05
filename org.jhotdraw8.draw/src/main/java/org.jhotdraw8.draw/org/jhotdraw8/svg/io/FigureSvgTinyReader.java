@@ -7,11 +7,11 @@ package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableLinkedHashMap;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.Maps;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullKey;
 import org.jhotdraw8.concurrent.CheckedRunnable;
 import org.jhotdraw8.css.CssColor;
@@ -117,19 +117,19 @@ public class FigureSvgTinyReader {
 
     {
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
-                ImmutableLinkedHashMap.entry("svg", SvgDrawing.class),
-                ImmutableLinkedHashMap.entry("g", SvgGFigure.class),
-                ImmutableLinkedHashMap.entry("rect", SvgRectFigure.class),
-                ImmutableLinkedHashMap.entry("defs", SvgDefsFigure.class),
-                ImmutableLinkedHashMap.entry("circle", SvgCircleFigure.class),
-                ImmutableLinkedHashMap.entry("ellipse", SvgEllipseFigure.class),
-                ImmutableLinkedHashMap.entry("line", SvgLineFigure.class),
-                ImmutableLinkedHashMap.entry("path", SvgPathFigure.class),
-                ImmutableLinkedHashMap.entry("polygon", SvgPolygonFigure.class),
-                ImmutableLinkedHashMap.entry("polyline", SvgPolylineFigure.class),
-                ImmutableLinkedHashMap.entry("text", SvgTextFigure.class),
-                ImmutableLinkedHashMap.entry("linearGradient", SvgLinearGradientFigure.class),
-                ImmutableLinkedHashMap.entry("radialGradient", SvgRadialGradientFigure.class)
+                Maps.entry("svg", SvgDrawing.class),
+                Maps.entry("g", SvgGFigure.class),
+                Maps.entry("rect", SvgRectFigure.class),
+                Maps.entry("defs", SvgDefsFigure.class),
+                Maps.entry("circle", SvgCircleFigure.class),
+                Maps.entry("ellipse", SvgEllipseFigure.class),
+                Maps.entry("line", SvgLineFigure.class),
+                Maps.entry("path", SvgPathFigure.class),
+                Maps.entry("polygon", SvgPolygonFigure.class),
+                Maps.entry("polyline", SvgPolylineFigure.class),
+                Maps.entry("text", SvgTextFigure.class),
+                Maps.entry("linearGradient", SvgLinearGradientFigure.class),
+                Maps.entry("radialGradient", SvgRadialGradientFigure.class)
         )) {
             String elem = e.getKey();
             Class<? extends Figure> figureClass = e.getValue();
@@ -287,7 +287,7 @@ public class FigureSvgTinyReader {
                 secondPass.run();
             }
 
-            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableArrayList.copyOf(ctx.stylesheets));
+            root.set(SvgDrawing.INLINE_STYLESHEETS, PersistentArrayList.copyOf(ctx.stylesheets));
 
 
             if (!(root instanceof SvgDrawing)) {

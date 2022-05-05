@@ -15,8 +15,8 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.SimpleNonNullKey;
 import org.jhotdraw8.css.CssPoint2D;
@@ -104,7 +104,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     @NonNull
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     @NonNull
-    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", WrappedPersistentList.emptyList());
+    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", PersistentArrayList.of());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -186,7 +186,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, WrappedPersistentList.of(p2l));
+            set(TRANSFORMS, PersistentArrayList.of(p2l));
         }
     }
 
@@ -361,7 +361,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             PersistentList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
-                set(TRANSFORMS, WrappedPersistentList.of(transform));
+                set(TRANSFORMS, PersistentArrayList.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = FXTransforms.concat(ts.get(last), transform);
@@ -388,7 +388,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         } else {
             // FIXME we do not want to reshape!
             Transform combined = FXTransforms.concat(transform, getTransform());
-            set(TRANSFORMS, WrappedPersistentList.of(combined));
+            set(TRANSFORMS, PersistentArrayList.of(combined));
         }
     }
 
@@ -400,9 +400,9 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      */
     default void setTransforms(@NonNull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, WrappedPersistentList.emptyList());
+            set(TRANSFORMS, PersistentArrayList.of());
         } else {
-            set(TRANSFORMS, WrappedPersistentList.of(transforms));
+            set(TRANSFORMS, PersistentArrayList.of(transforms));
         }
     }
 
@@ -411,7 +411,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         flattenTransforms();
         PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
-            set(TRANSFORMS, WrappedPersistentList.of(t));
+            set(TRANSFORMS, PersistentArrayList.of(t));
         } else {
             set(TRANSFORMS, transforms.copyAdd(t));
         }
@@ -436,7 +436,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             flattenTransforms();
             PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
-                set(TRANSFORMS, WrappedPersistentList.of(t));
+                set(TRANSFORMS, PersistentArrayList.of(t));
             } else {
                 set(TRANSFORMS, transforms.copySet(0, t));
             }

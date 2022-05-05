@@ -48,7 +48,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
             }
         } while (tt.next() == CssTokenType.TT_COMMA || tt.current() == CssTokenType.TT_S);
         tt.pushBack();
-        return ImmutableLinkedHashSet.copyOf(list);
+        return new ImmutableLinkedHashSet<>(list);
     }
 
     @Override

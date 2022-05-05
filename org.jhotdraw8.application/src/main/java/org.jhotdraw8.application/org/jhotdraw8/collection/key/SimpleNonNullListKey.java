@@ -5,8 +5,8 @@
 package org.jhotdraw8.collection.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.reflect.TypeToken;
 
 /**
@@ -14,15 +14,15 @@ import org.jhotdraw8.reflect.TypeToken;
  *
  * @author Werner Randelshofer
  */
-public class SimpleNonNullListKey<E> extends SimpleNonNullKey<ImmutableList<E>> {
+public class SimpleNonNullListKey<E> extends SimpleNonNullKey<PersistentList<E>> {
 
     private static final long serialVersionUID = 1L;
 
-    public SimpleNonNullListKey(String key, TypeToken<ImmutableList<E>> type) {
-        super(key, type, ImmutableArrayList.emptyList());
+    public SimpleNonNullListKey(String key, TypeToken<PersistentList<E>> type) {
+        super(key, type, PersistentArrayList.of());
     }
 
-    public SimpleNonNullListKey(String key, TypeToken<ImmutableList<E>> type, @NonNull ImmutableList<E> defaultValue) {
+    public SimpleNonNullListKey(String key, TypeToken<PersistentList<E>> type, @NonNull PersistentList<E> defaultValue) {
         super(key, type, defaultValue);
     }
 }

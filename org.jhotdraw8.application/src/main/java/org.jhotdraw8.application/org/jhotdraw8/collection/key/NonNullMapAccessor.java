@@ -5,7 +5,6 @@
 package org.jhotdraw8.collection.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyMap;
 
 import java.util.Map;

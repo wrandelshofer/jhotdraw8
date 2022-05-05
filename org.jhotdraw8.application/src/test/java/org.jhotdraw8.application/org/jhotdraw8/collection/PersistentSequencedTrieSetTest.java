@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class PersistentSequencedTrieSetTest extends AbstractPersistentSequencedSetTest {
@@ -25,7 +26,7 @@ public class PersistentSequencedTrieSetTest extends AbstractPersistentSequencedS
 
     @Override
     protected PersistentSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return PersistentSequencedTrieSet.of(keys);
+        return PersistentSequencedTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
     }
 
 

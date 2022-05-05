@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.geom.BezierNode;
@@ -34,7 +34,7 @@ public class BezierNodeListStyleableKey
      * @param name The name of the key.
      */
     public BezierNodeListStyleableKey(@NonNull String name) {
-        this(name, WrappedPersistentList.emptyList());
+        this(name, PersistentArrayList.of());
     }
 
     /**

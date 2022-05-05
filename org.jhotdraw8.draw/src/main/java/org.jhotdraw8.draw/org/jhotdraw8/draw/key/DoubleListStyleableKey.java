@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.reflect.TypeToken;
@@ -17,11 +17,11 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
+public class DoubleListStyleableKey extends AbstractStyleableKey<PersistentList<Double>> implements WritableStyleableMapAccessor<PersistentList<Double>> {
 
     private static final long serialVersionUID = 1L;
 
-    private Converter<ImmutableList<Double>> converter;
+    private Converter<PersistentList<Double>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -39,15 +39,15 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableKey(@NonNull String name, ImmutableList<Double> defaultValue) {
-        super(name, new TypeToken<ImmutableList<Double>>() {
+    public DoubleListStyleableKey(@NonNull String name, PersistentList<Double> defaultValue) {
+        super(name, new TypeToken<PersistentList<Double>>() {
         }, defaultValue);
 
         converter = new CssListConverter<>(new CssDoubleConverter(false));
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<Double>> getCssConverter() {
+    public @NonNull Converter<PersistentList<Double>> getCssConverter() {
         return converter;
     }
 

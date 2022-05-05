@@ -36,6 +36,7 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.PointAndTangent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -176,7 +177,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? ImmutableLinkedHashSet.of() : ImmutableLinkedHashSet.of(labelTarget);
+        return labelTarget == null ? ImmutableLinkedHashSet.of() : new ImmutableLinkedHashSet<>(Collections.singletonList(labelTarget));
     }
 
     public boolean isConnected() {

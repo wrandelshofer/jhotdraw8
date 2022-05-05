@@ -9,9 +9,9 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -49,7 +49,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 int segment = intersectionPointEx.getSegmentA();
                 path.getNodes().add(segment, new BezierNode(
                         pointInLocal));
-                view.getModel().set(owner, pointKey, WrappedPersistentList.copyOf(path.getNodes()));
+                view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
                 view.recreateHandles();
             }
         });

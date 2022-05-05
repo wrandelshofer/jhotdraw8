@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -20,12 +20,11 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< ImmutableList<T>>
-        implements WritableStyleableMapAccessor< ImmutableList<T>>,
-        NonNullMapAccessor< ImmutableList<T>> {
+public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentList<T>>
+        implements WritableStyleableMapAccessor<PersistentList<T>>,
+        NonNullMapAccessor<PersistentList<T>> {
 
     private static final long serialVersionUID = 1L;
-
 
 
     /**
@@ -36,8 +35,8 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< Immutable
      * @param type      the class of the type
      * @param converter String converter for a list element
      */
-    public ListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableList<T>> converter) {
-        super(name, type, converter, ImmutableArrayList.emptyList());
+    public ListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<PersistentList<T>> converter) {
+        super(name, type, converter, PersistentArrayList.of());
     }
 
     /**
@@ -48,8 +47,8 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< Immutable
      * @param type      the class of the type
      * @param converter String converter for a list element
      */
-    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
-        super(name, type.getType(), new CssListConverter<>(converter), ImmutableArrayList.emptyList());
+    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<PersistentList<T>> type, @NonNull CssConverter<T> converter) {
+        super(name, type.getType(), new CssListConverter<>(converter), PersistentArrayList.of());
     }
 
     /**
@@ -60,11 +59,11 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< Immutable
      * @param converter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
+    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<PersistentList<T>> type, @NonNull CssConverter<T> converter, @NonNull PersistentList<T> defaultValue) {
         super(name, type.getType(), new CssListConverter<>(converter), defaultValue);
     }
 
-    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
+    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<PersistentList<T>> type, @NonNull CssConverter<T> converter, @NonNull PersistentList<T> defaultValue) {
         super(xmlName, cssName, type.getType(), new CssListConverter<>(converter), defaultValue);
     }
 

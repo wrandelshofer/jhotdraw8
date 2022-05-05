@@ -13,8 +13,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
@@ -96,7 +96,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (p2l == null || p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, WrappedPersistentList.of(p2l));
+            set(TRANSFORMS, PersistentArrayList.of(p2l));
         }
     }
 
@@ -265,9 +265,9 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
      */
     default void setTransforms(@NonNull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, WrappedPersistentList.emptyList());
+            set(TRANSFORMS, PersistentArrayList.of());
         } else {
-            set(TRANSFORMS, WrappedPersistentList.of(transforms));
+            set(TRANSFORMS, PersistentArrayList.of(transforms));
         }
     }
 

@@ -9,7 +9,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -89,7 +89,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                     new CssPoint2D(createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1))))).getConvertedValue();
             points.add(c);
         }
-        dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
+        dm.set(createdFigure, key, PersistentArrayList.copyOf(points));
 
         event.consume();
     }
@@ -115,7 +115,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                     createdFigure.worldToParent(dv.viewToWorld(x2, y2)))).getConvertedValue();
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
-            dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
+            dm.set(createdFigure, key, PersistentArrayList.copyOf(points));
         }
         event.consume();
     }
@@ -133,7 +133,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
+                    dm.set(createdFigure, key, PersistentArrayList.copyOf(points));
                     dv.getSelectedFigures().clear();
                     dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);

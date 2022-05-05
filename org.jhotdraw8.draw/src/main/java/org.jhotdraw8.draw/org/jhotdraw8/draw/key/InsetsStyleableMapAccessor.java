@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Insets;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.text.InsetsConverter;
 import org.jhotdraw8.text.Converter;
 

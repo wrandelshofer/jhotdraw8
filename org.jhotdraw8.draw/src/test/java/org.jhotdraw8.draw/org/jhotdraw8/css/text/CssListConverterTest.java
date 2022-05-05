@@ -7,8 +7,8 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.io.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -38,7 +38,7 @@ public class CssListConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), " ");
-        instance.toString(out, idFactory, value == null ? null : ImmutableArrayList.copyOf(value));
+        instance.toString(out, idFactory, value == null ? null : PersistentArrayList.copyOf(value));
         String actual = out.toString();
         assertEquals(actual, expected);
     }

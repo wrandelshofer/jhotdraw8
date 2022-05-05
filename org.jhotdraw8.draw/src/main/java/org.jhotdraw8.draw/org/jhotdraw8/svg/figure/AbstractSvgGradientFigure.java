@@ -13,8 +13,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableLinkedHashMap;
 import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.collection.key.NonNullKey;
 import org.jhotdraw8.collection.key.SimpleNonNullKey;
 import org.jhotdraw8.css.CssColor;
@@ -77,7 +77,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
 
     public static final @NonNull NonNullKey<PersistentList<SvgStop>> STOPS = new SimpleNonNullKey<PersistentList<SvgStop>>("stops",
             new TypeToken<PersistentList<SvgStop>>() {
-            }, WrappedPersistentList.emptyList());
+            }, PersistentArrayList.of());
 
     public AbstractSvgGradientFigure() {
         set(VISIBLE, false);

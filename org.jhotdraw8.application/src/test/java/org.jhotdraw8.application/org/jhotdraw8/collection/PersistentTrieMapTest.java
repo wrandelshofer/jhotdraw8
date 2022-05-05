@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
@@ -19,23 +20,23 @@ public class PersistentTrieMapTest extends AbstractPersistentMapTest {
 
     @Override
     @SafeVarargs
-    protected final @NonNull PersistentTrieMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
-        return PersistentTrieMap.ofEntries(entries);
+    protected final @NonNull PersistentMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
+        return PersistentTrieMap.<HashCollider, HashCollider>of().copyPutAll(Arrays.asList(entries));
     }
 
     @Override
-    protected @NonNull PersistentTrieMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map) {
-        return PersistentTrieMap.copyOf(map);
+    protected @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map) {
+        return PersistentTrieMap.<HashCollider, HashCollider>of().copyPutAll(map);
     }
 
     @Override
-    protected @NonNull PersistentTrieMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map) {
-        return PersistentTrieMap.copyOf(map);
+    protected @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map) {
+        return PersistentTrieMap.<HashCollider, HashCollider>of().copyPutAll(map);
     }
 
     @Override
-    protected @NonNull PersistentTrieMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries) {
-        return PersistentTrieMap.ofEntries(entries);
+    protected @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries) {
+        return PersistentTrieMap.<HashCollider, HashCollider>of().copyPutAll(entries);
     }
 
     @Test

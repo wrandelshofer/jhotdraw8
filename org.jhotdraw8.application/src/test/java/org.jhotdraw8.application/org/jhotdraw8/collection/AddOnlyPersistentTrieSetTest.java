@@ -76,7 +76,7 @@ public class AddOnlyPersistentTrieSetTest {
     private void testCopyAddAndOfWith1Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
-        AddOnlyPersistentTrieSet<HashCollider> actual = AddOnlyPersistentTrieSet.of(firstValue1);
+        AddOnlyPersistentTrieSet<HashCollider> actual = AddOnlyPersistentTrieSet.<HashCollider>of().copyAdd(firstValue1);
         AddOnlyPersistentTrieSet<HashCollider> newActual;
 
         // GIVEN: a set with values1

@@ -64,14 +64,16 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull AddOnlyPersistentTrieSet<K> of() {
-        return (AddOnlyPersistentTrieSet<K>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull AddOnlyPersistentTrieSet<E> of() {
+        return (AddOnlyPersistentTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
     }
 
-    public static <K> @NonNull AddOnlyPersistentTrieSet<K> of(@NonNull K key0) {
-        final int keyHash0 = key0.hashCode();
-        final char dataMap = AddOnlyPersistentTrieSet.bitpos(AddOnlyPersistentTrieSet.mask(keyHash0, 0));
-        return new BitmapIndexedNode<>((char) 0, dataMap, key0);
+    @SuppressWarnings("unchecked")
+    public static <E> @NonNull AddOnlyPersistentTrieSet<E> of(E... elements) {
+        AddOnlyPersistentTrieSet<E> set = (AddOnlyPersistentTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
+        for (E e : elements)
+            set = set.copyAdd(e);
+        return set;
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -106,11 +107,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(ImmutableLinkedHashSet.of("one", "two").asSet(), instance1.keySet());
+        assertEquals(Sets.addAll(new LinkedHashSet<>(), "one", "two"), instance1.keySet());
 
         // THEN instance 2 must contain zero entries
         assertEquals(0, instance2.keySet().size());
-        assertEquals(ImmutableLinkedHashSet.of().asSet(), instance2.keySet());
+        assertEquals(new LinkedHashSet<>(), instance2.keySet());
 
         // WHEN
         instance2.put("two", 22);
@@ -118,11 +119,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(ImmutableLinkedHashSet.of("one", "two").asSet(), instance1.keySet());
+        assertEquals(Sets.addAll(new LinkedHashSet<>(), "one", "two"), instance1.keySet());
 
         // THEN instance 2 must contain two entries
         assertEquals(2, instance2.keySet().size());
-        assertEquals(ImmutableLinkedHashSet.of("two", "three").asSet(), instance2.keySet());
+        assertEquals(Sets.addAll(new LinkedHashSet<>(), "two", "three"), instance2.keySet());
 
     }
 

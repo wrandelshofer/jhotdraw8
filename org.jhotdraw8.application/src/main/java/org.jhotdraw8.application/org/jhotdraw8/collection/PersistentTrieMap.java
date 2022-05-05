@@ -82,7 +82,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
 
-    private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final PersistentTrieMap<?, ?> EMPTY = new PersistentTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
 
     final transient int size;
     private final transient ToIntFunction<K> hashFunction = Objects::hashCode;
@@ -92,66 +92,120 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         this.size = size;
     }
 
+    @SuppressWarnings("unchecked")
     public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        if (map instanceof PersistentTrieMap) {
-            @SuppressWarnings("unchecked")
-            PersistentTrieMap<K, V> unchecked = (PersistentTrieMap<K, V>) map;
-            return unchecked;
-        }
-        TrieMap<K, V> tr = new TrieMap<>(of());
-        for (final Map.Entry<? extends K, ? extends V> entry : map.readOnlyEntrySet()) {
-            tr.putAndGiveDetails(entry.getKey(), entry.getValue());
-        }
-        return tr.toPersistent();
+        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY).copyPutAll(map);
     }
 
+    @SuppressWarnings("unchecked")
     public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ofEntries(map.entrySet());
+        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY).copyPutAll(map);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K, V> @NonNull PersistentTrieMap<K, V> of(K k, V v, Object... kv) {
+        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY).copyPut(k, v).copyPutKeyValues(kv);
     }
 
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull PersistentTrieMap<K, V> of() {
-        return (PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY_MAP;
-    }
-
-    @SafeVarargs
-    public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Map.Entry<K, V>... entries) {
-        TrieMap<K, V> result = PersistentTrieMap.<K, V>of().toMutable();
-        for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            result.putAndGiveDetails(entry.getKey(), entry.getValue());
-        }
-        return result.toPersistent();
-    }
-
-    public static <K, V> @NonNull PersistentTrieMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        TrieMap<K, V> result = PersistentTrieMap.<K, V>of().toMutable();
-        for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            result.putAndGiveDetails(entry.getKey(), entry.getValue());
-        }
-        return result.toPersistent();
-    }
-
-    /**
-     * Returns a copy of this set that is mutable.
-     * <p>
-     * This operation is performed in O(1) because the mutable map shares
-     * the underlying trie nodes with this set.
-     * <p>
-     * Initially, the returned mutable map hasn't exclusive ownership of any
-     * trie node. Therefore, the first few updates that it performs, are
-     * copy-on-write operations, until it exclusively owns some trie nodes that
-     * it can update.
-     *
-     * @return a mutable trie set
-     */
-    public TrieMap<K, V> toMutable() {
-        return new TrieMap<>(this);
+        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY);
     }
 
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
+    }
+
+    @Override
+    public @NonNull PersistentMap<K, V> copyClear() {
+        return isEmpty() ? this : of();
+    }
+
+    public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+
+        final BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
+                keyHash, 0, details, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
+
+        if (details.isModified()) {
+            if (details.hasReplacedValue()) {
+                return new PersistentTrieMap<>(newRootNode,
+                        size);
+            }
+
+            return new PersistentTrieMap<>(newRootNode, size + 1);
+        }
+
+        return this;
+    }
+
+    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        final TrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        while (entries.hasNext()) {
+            Map.Entry<? extends K, ? extends V> entry = entries.next();
+            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            modified |= details.isModified;
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
+        final int keyHash = hashFunction.applyAsInt(key);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+        final BitmapIndexedNode<K, V> newRootNode =
+                remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH);
+        if (details.isModified()) {
+            assert details.hasReplacedValue();
+            return new PersistentTrieMap<>(newRootNode, size - 1);
+        }
+        return this;
+    }
+
+    @Override
+    public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+        if (this.isEmpty()) {
+            return this;
+        }
+
+        final TrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (K key : c) {
+            ChangeEvent<V> details = t.removeAndGiveDetails(key);
+            modified |= details.isModified;
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    @Override
+    public @NonNull PersistentTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+        if (isEmpty()) {
+            return this;
+        }
+        if (c.isEmpty()) {
+            return of();
+        }
+        final TrieMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (K key : this.readOnlyKeySet()) {
+            if (!c.contains(key)) {
+                t.removeAndGiveDetails(key);
+                modified = true;
+            }
+        }
+        return modified ? t.toPersistent() : this;
+    }
+
+    /**
+     * Dumps the internal structure of this set in the Graphviz DOT Language.
+     *
+     * @return a dump of the internal structure
+     */
+    public String dump() {
+        return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, false);
     }
 
     @Override
@@ -207,109 +261,27 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return size;
     }
 
-    @Override
-    public @NonNull PersistentMap<K, V> copyClear() {
-        return isEmpty() ? this : of();
-    }
-
-    public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
-        final int keyHash = hashFunction.applyAsInt(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-
-        final BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
-
-        if (details.isModified()) {
-            if (details.hasReplacedValue()) {
-                return new PersistentTrieMap<>(newRootNode,
-                        size);
-            }
-
-            return new PersistentTrieMap<>(newRootNode, size + 1);
-        }
-
-        return this;
-    }
-
-    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> map) {
-        final TrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (Map.Entry<? extends K, ? extends V> entry : map.entrySet()) {
-            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
-            modified |= details.isModified;
-        }
-        return modified ? t.toPersistent() : this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        if (this.isEmpty() && (map instanceof PersistentTrieMap<?, ?>)) {
-            return (PersistentTrieMap<K, V>) map;
-        }
-        final TrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (Iterator<? extends Map.Entry<? extends K, ? extends V>> it = map.entries(); it.hasNext(); ) {
-            Map.Entry<? extends K, ? extends V> entry = it.next();
-            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
-            modified |= details.isModified;
-        }
-        return modified ? t.toPersistent() : this;
-    }
-
-    public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
-        final int keyHash = hashFunction.applyAsInt(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-        final BitmapIndexedNode<K, V> newRootNode =
-                remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH);
-        if (details.isModified()) {
-            assert details.hasReplacedValue();
-            return new PersistentTrieMap<>(newRootNode, size - 1);
-        }
-        return this;
-    }
-
-    @Override
-    public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
-        if (this.isEmpty()) {
-            return this;
-        }
-
-        final TrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (K key : c) {
-            ChangeEvent<V> details = t.removeAndGiveDetails(key);
-            modified |= details.isModified;
-        }
-        return modified ? t.toPersistent() : this;
-    }
-
-    @Override
-    public @NonNull PersistentTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
-        final TrieMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (K key : this.readOnlyKeySet()) {
-            if (!c.contains(key)) {
-                t.removeAndGiveDetails(key);
-                modified = true;
-            }
-        }
-        return modified ? t.toPersistent() : this;
+    /**
+     * Returns a copy of this set that is mutable.
+     * <p>
+     * This operation is performed in O(1) because the mutable map shares
+     * the underlying trie nodes with this set.
+     * <p>
+     * Initially, the returned mutable map hasn't exclusive ownership of any
+     * trie node. Therefore, the first few updates that it performs, are
+     * copy-on-write operations, until it exclusively owns some trie nodes that
+     * it can update.
+     *
+     * @return a mutable trie set
+     */
+    public TrieMap<K, V> toMutable() {
+        return new TrieMap<>(this);
     }
 
     @Override
     public String toString() {
         return ReadOnlyMap.mapToString(this);
     }
-
-    /**
-     * Dumps the internal structure of this set in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, false);
-    }
-
 
     private Object writeReplace() throws ObjectStreamException {
         return new SerializationProxy<>(this.toMutable());
@@ -323,7 +295,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         }
 
         protected Object readResolve() {
-            return PersistentTrieMap.ofEntries(deserialized);
+            return PersistentTrieMap.of().copyPutAll(deserialized.iterator());
         }
     }
 
@@ -339,6 +311,4 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
             return nextEntry(AbstractMap.SimpleImmutableEntry::new);
         }
     }
-
-
 }

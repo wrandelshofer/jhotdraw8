@@ -50,7 +50,7 @@ public abstract class AbstractDockable implements Dockable {
 
     @Override
     public @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
-        return ImmutableArrayList.emptyList();
+        return ImmutableArrayList.of();
     }
 
 }

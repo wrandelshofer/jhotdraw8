@@ -9,8 +9,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssToken;
@@ -23,6 +23,7 @@ import org.jhotdraw8.io.IdSupplier;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -68,7 +69,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
         CssSize miterLimit = CssSize.from(4);
         CssSize dashOffset = CssSize.from(0);
-        ImmutableList<CssSize> dashArray = ImmutableArrayList.emptyList();
+        PersistentList<CssSize> dashArray = PersistentArrayList.of();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -168,7 +169,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         return type;
     }
 
-    private @NonNull ImmutableList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    private @NonNull PersistentList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩: Function " + DASHARRAY + "() expected.", tt.getStartPosition());
         }
@@ -183,7 +184,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩: ⟨" + DASHARRAY + "⟩ right bracket expected.");
-        return ImmutableArrayList.copyOf(list);
+        return new PersistentArrayList<>(list);
     }
 
     private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
@@ -227,13 +228,13 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    public @NonNull ImmutableList<String> getExamples() {
-        return ImmutableArrayList.of(
+    public @NonNull PersistentList<String> getExamples() {
+        return new PersistentArrayList<>(Arrays.asList(
                 "type(inside)",
                 "type(centered)",
                 "type(outside)",
                 "linecap(round) linejoin(round)",
-                "dashoffset(2) dasharray(5 10)"
+                "dashoffset(2) dasharray(5 10)")
         );
     }
 
@@ -308,7 +309,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         }
 
-        ImmutableList<CssSize> dashArray = value.getDashArray();
+        PersistentList<CssSize> dashArray = value.getDashArray();
         if (printAllValues || !dashArray.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASHARRAY));

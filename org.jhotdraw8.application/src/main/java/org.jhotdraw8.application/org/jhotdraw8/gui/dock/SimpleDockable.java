@@ -34,7 +34,7 @@ public class SimpleDockable extends AbstractDockable {
 
     @Override
     public @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
-        return ImmutableArrayList.emptyList();
+        return ImmutableArrayList.of();
     }
 
     @Override

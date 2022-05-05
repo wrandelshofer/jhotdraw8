@@ -16,6 +16,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -103,7 +104,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
             return ImmutableLinkedHashSet.of();
         }
         String[] clazzes = value.split(" +");
-        return ImmutableLinkedHashSet.of(clazzes);
+        return new ImmutableLinkedHashSet<>(Arrays.asList(clazzes));
     }
 
     @Override

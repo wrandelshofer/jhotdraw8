@@ -15,7 +15,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -54,7 +54,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     public static final BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
 
-    public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", WrappedPersistentList.emptyList());
+    public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", PersistentArrayList.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -156,7 +156,7 @@ public class BezierFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).transform(transform));
         }
-        set(PATH, WrappedPersistentList.copyOf(newP));
+        set(PATH, PersistentArrayList.copyOf(newP));
     }
 
     @Override

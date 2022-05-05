@@ -28,9 +28,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawLabels;
@@ -295,25 +295,25 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(false).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, WrappedPersistentList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         collinearRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(true).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, WrappedPersistentList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         equidistantRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(false).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, WrappedPersistentList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(true).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, WrappedPersistentList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 

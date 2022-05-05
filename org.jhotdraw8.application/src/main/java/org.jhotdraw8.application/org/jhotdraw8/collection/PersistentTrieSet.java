@@ -75,7 +75,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 1;
     @SuppressWarnings("unchecked")
-    private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final PersistentTrieSet<?> EMPTY = new PersistentTrieSet<>(BitmapIndexedNode.emptyNode(), 0);
 
     final int size;
 
@@ -85,26 +85,18 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull PersistentTrieSet<K> copyOf(@NonNull Iterable<? extends K> set) {
-        if (set instanceof PersistentTrieSet) {
-            return (PersistentTrieSet<K>) set;
-        } else if (set instanceof TrieSet) {
-            return ((TrieSet<K>) set).toPersistent();
-        }
-        TrieSet<K> tr = new TrieSet<>(of());
-        tr.addAll(set);
-        return tr.toPersistent();
-    }
-
-
-    @SafeVarargs
-    public static <K> @NonNull PersistentTrieSet<K> of(@NonNull K... keys) {
-        return PersistentTrieSet.<K>of().copyAddAll(Arrays.asList(keys));
+    public static <E> @NonNull PersistentTrieSet<E> of() {
+        return ((PersistentTrieSet<E>) PersistentTrieSet.EMPTY);
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull PersistentTrieSet<K> of() {
-        return (PersistentTrieSet<K>) PersistentTrieSet.EMPTY_SET;
+    public static <E> @NonNull PersistentTrieSet<E> of(E... elements) {
+        return ((PersistentTrieSet<E>) PersistentTrieSet.EMPTY).copyAddAll(Arrays.asList(elements));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> PersistentTrieSet<E> copyOf(Iterable<? extends E> list) {
+        return ((PersistentTrieSet<E>) PersistentTrieSet.EMPTY).copyAddAll(list);
     }
 
     @Override
@@ -124,13 +116,11 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         return this;
     }
 
+    @SuppressWarnings({"unchecked"})
     public @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
-        if (set == this
-                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
-            return this;
+        if (set == this || isEmpty() && (set instanceof PersistentTrieSet<?>)) {
+            return (PersistentTrieSet<E>) set;
         }
-
         final TrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {

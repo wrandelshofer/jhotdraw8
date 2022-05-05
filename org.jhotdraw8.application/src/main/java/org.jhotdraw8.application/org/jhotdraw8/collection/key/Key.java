@@ -14,7 +14,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyMap;
 
 import java.lang.reflect.ParameterizedType;

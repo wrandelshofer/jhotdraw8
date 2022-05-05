@@ -15,9 +15,10 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableLinkedHashMap;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.Maps;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
@@ -110,11 +111,11 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <p>
      * <a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a>
      */
-    DefaultableStyleableKey<ImmutableList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
-            new TypeToken<CssDefaultableValue<ImmutableList<String>>>() {
+    DefaultableStyleableKey<PersistentList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
+            new TypeToken<CssDefaultableValue<PersistentList<String>>>() {
             }, new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
-            ImmutableArrayList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+            PersistentArrayList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
 
     /**
@@ -151,10 +152,10 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * stroke-dasharray.
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDasharrayProperty">link</a>
      */
-    DefaultableStyleableKey<ImmutableList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
-            new TypeToken<CssDefaultableValue<ImmutableList<Double>>>() {
+    DefaultableStyleableKey<PersistentList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
+            new TypeToken<CssDefaultableValue<PersistentList<Double>>>() {
             }, new CssListConverter<Double>(new CssDoubleConverter(false), ", "),
-            new CssDefaultableValue<ImmutableList<Double>>(CssDefaulting.INHERIT, null), null);
+            new CssDefaultableValue<PersistentList<Double>>(CssDefaulting.INHERIT, null), null);
     /**
      * stroke-dashoffset.
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDashoffsetProperty">link</a>
@@ -284,22 +285,22 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             },
             new CssMappedConverter<BlendMode>("mix-blend-mode",
                     ImmutableLinkedHashMap.ofEntries(
-                            ImmutableLinkedHashMap.entry("normal", BlendMode.SRC_OVER),
-                            ImmutableLinkedHashMap.entry("mulitply", BlendMode.MULTIPLY),
-                            ImmutableLinkedHashMap.entry("screen", BlendMode.SCREEN),
-                            ImmutableLinkedHashMap.entry("overlay", BlendMode.OVERLAY),
-                            ImmutableLinkedHashMap.entry("darken", BlendMode.DARKEN),
-                            ImmutableLinkedHashMap.entry("lighten", BlendMode.LIGHTEN),
-                            ImmutableLinkedHashMap.entry("color-dodge", BlendMode.COLOR_DODGE),
-                            ImmutableLinkedHashMap.entry("color-burn", BlendMode.COLOR_BURN),
-                            ImmutableLinkedHashMap.entry("hard-light", BlendMode.HARD_LIGHT),
-                            ImmutableLinkedHashMap.entry("soft-light", BlendMode.SOFT_LIGHT),
-                            ImmutableLinkedHashMap.entry("difference", BlendMode.DIFFERENCE),
-                            ImmutableLinkedHashMap.entry("exclusion", BlendMode.EXCLUSION),
-                            ImmutableLinkedHashMap.entry("hue", BlendMode.SRC_OVER),//FIXME
-                            ImmutableLinkedHashMap.entry("saturation", BlendMode.SRC_OVER),//FIXME
-                            ImmutableLinkedHashMap.entry("color", BlendMode.SRC_OVER),//FIXME
-                            ImmutableLinkedHashMap.entry("luminosity", BlendMode.SRC_OVER)// FIXME
+                            Maps.entry("normal", BlendMode.SRC_OVER),
+                            Maps.entry("mulitply", BlendMode.MULTIPLY),
+                            Maps.entry("screen", BlendMode.SCREEN),
+                            Maps.entry("overlay", BlendMode.OVERLAY),
+                            Maps.entry("darken", BlendMode.DARKEN),
+                            Maps.entry("lighten", BlendMode.LIGHTEN),
+                            Maps.entry("color-dodge", BlendMode.COLOR_DODGE),
+                            Maps.entry("color-burn", BlendMode.COLOR_BURN),
+                            Maps.entry("hard-light", BlendMode.HARD_LIGHT),
+                            Maps.entry("soft-light", BlendMode.SOFT_LIGHT),
+                            Maps.entry("difference", BlendMode.DIFFERENCE),
+                            Maps.entry("exclusion", BlendMode.EXCLUSION),
+                            Maps.entry("hue", BlendMode.SRC_OVER),//FIXME
+                            Maps.entry("saturation", BlendMode.SRC_OVER),//FIXME
+                            Maps.entry("color", BlendMode.SRC_OVER),//FIXME
+                            Maps.entry("luminosity", BlendMode.SRC_OVER)// FIXME
                     ).asMap()),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), BlendMode.SRC_OVER);
 
@@ -398,7 +399,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
         shape.setStrokeLineJoin(getDefaultableStyledNonNull(STROKE_LINEJOIN_KEY));
         shape.setStrokeMiterLimit(getDefaultableStyledNonNull(STROKE_MITERLIMIT_KEY));
         shape.setStrokeDashOffset(getDefaultableStyledNonNull(STROKE_DASHOFFSET_KEY));
-        ImmutableList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
+        PersistentList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
         if (dasharray == null) {
             shape.getStrokeDashArray().clear();
         } else {

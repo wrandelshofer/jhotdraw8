@@ -6,10 +6,10 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssPersistentListConverter;
+import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
@@ -34,7 +34,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Persi
      * @param name The name of the key.
      */
     public Point2DListStyleableKey(@NonNull String name) {
-        this(name, WrappedPersistentList.emptyList());
+        this(name, PersistentArrayList.of());
     }
 
     /**
@@ -47,7 +47,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Persi
         super(name, new TypeToken<PersistentList<Point2D>>() {
         }, defaultValue);
 
-        this.converter = new CssPersistentListConverter<>(
+        this.converter = new CssListConverter<>(
                 new Point2DConverter(false, false), ", ");
     }
 

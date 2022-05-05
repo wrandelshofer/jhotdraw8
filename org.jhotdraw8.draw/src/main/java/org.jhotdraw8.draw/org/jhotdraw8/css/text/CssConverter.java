@@ -154,7 +154,7 @@ public interface CssConverter<T> extends Converter<T> {
     @Nullable String getHelpText();
 
     default @NonNull ImmutableList<String> getExamples() {
-        return ImmutableArrayList.emptyList();
+        return ImmutableArrayList.of();
     }
 
     boolean isNullable();

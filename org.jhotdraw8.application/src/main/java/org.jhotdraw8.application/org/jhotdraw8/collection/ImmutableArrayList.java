@@ -28,11 +28,11 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
 
     private final Object[] array;
 
-    public ImmutableArrayList(@Nullable Collection<? extends E> copyItems) {
-        this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
-    }
+   protected ImmutableArrayList(@Nullable Collection<? extends E> copyItems) {
+       this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
+   }
 
-    public ImmutableArrayList(@Nullable ReadOnlyCollection<? extends E> copyItems) {
+    protected ImmutableArrayList(@Nullable ReadOnlyCollection<? extends E> copyItems) {
         this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
     }
 
@@ -48,7 +48,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     ImmutableArrayList(Object[] array) {
-        this.array = array;
+        this.array = array.clone();
     }
 
 
@@ -114,46 +114,35 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableList<E> emptyList() {
-        return (ImmutableList<E>) EMPTY;
+    public static <E> ImmutableArrayList<E> of() {
+        return (ImmutableArrayList<E>) EMPTY;
     }
 
-
-    @SafeVarargs
-    @SuppressWarnings("varargs")
-    public static @NonNull <T> ImmutableList<T> of(@NonNull T... items) {
-        return items.length == 0 ? emptyList() : new ImmutableArrayList<>(items.clone());
-    }
-
-    public static @NonNull <T> ImmutableList<T> copyOf(Iterable<? extends T> iterable) {
-        if (iterable instanceof ImmutableList) {
-            @SuppressWarnings("unchecked")
-            ImmutableList<T> unchecked = (ImmutableList<T>) iterable;
-            return unchecked;
-        } else if (iterable instanceof Collection) {
-            @SuppressWarnings("unchecked")
-            Collection<T> unchecked = (Collection<T>) iterable;
-            return new ImmutableArrayList<>(unchecked);
-        } else if (iterable instanceof ReadOnlyCollection) {
-            @SuppressWarnings("unchecked")
-            ReadOnlyCollection<T> unchecked = (ReadOnlyCollection<T>) iterable;
-            return copyOf(unchecked);
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableArrayList<E> of(E... elements) {
+        if (elements.length == 0) {
+            return (ImmutableArrayList<E>) EMPTY;
+        } else {
+            return new ImmutableArrayList<E>(elements);
         }
-        ArrayList<T> list = new ArrayList<>();
-        for (T t : iterable) {
-            list.add(t);
-        }
-        return list.isEmpty() ? emptyList() : new ImmutableArrayList<>(list);
     }
 
-    public static @NonNull <T> ImmutableList<T> copyOf(ReadOnlyCollection<? extends T> collection) {
-        if (collection instanceof ImmutableList) {
-            @SuppressWarnings("unchecked")
-            ImmutableList<T> unchecked = (ImmutableList<T>) collection;
-            return unchecked;
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableArrayList<E> copyOf(Iterable<? extends E> list) {
+        if (list instanceof ImmutableArrayList<?>) {
+            return (ImmutableArrayList<E>) list;
         }
-        return collection.isEmpty() ? emptyList() : new ImmutableArrayList<>(collection.asCollection());
+        if (list instanceof ReadOnlyCollection<?>) {
+            ReadOnlyCollection<E> c = (ReadOnlyCollection<E>) list;
+            return c.isEmpty() ? (ImmutableArrayList<E>) EMPTY : new ImmutableArrayList<E>(c.asCollection());
+        }
+        if (list instanceof Collection<?>) {
+            Collection<E> c = (Collection<E>) list;
+            return c.isEmpty() ? (ImmutableArrayList<E>) EMPTY : new ImmutableArrayList<E>(c);
+        }
+        ArrayList<E> a = new ArrayList<>();
+        list.forEach(a::add);
+        return copyOf(a);
     }
-
 
 }

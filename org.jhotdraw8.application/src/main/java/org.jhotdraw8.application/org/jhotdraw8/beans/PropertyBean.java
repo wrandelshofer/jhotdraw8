@@ -10,9 +10,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.MapEntryProperty;
 import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
 
 import java.util.Objects;

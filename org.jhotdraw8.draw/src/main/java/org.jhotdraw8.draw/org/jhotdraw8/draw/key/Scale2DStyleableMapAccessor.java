@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.text.CssScale2DConverter;
 import org.jhotdraw8.text.Converter;
 

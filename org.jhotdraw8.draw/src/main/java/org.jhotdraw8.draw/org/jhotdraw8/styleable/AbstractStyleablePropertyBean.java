@@ -9,8 +9,8 @@ import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.MapAccessor;
 
 import java.util.IdentityHashMap;
 import java.util.Map;

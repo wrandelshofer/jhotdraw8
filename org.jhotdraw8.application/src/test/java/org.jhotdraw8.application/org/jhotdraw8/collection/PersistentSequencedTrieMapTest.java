@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
@@ -22,22 +23,22 @@ public class PersistentSequencedTrieMapTest extends AbstractPersistentSequencedM
 
     @Override
     protected @NonNull PersistentMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
-        return PersistentSequencedTrieMap.ofEntries(entries);
+        return PersistentSequencedTrieMap.<HashCollider, HashCollider>of().copyPutAll(Arrays.asList(entries));
     }
 
     @Override
     protected @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map) {
-        return PersistentSequencedTrieMap.copyOf(map);
+        return PersistentSequencedTrieMap.<HashCollider, HashCollider>of().copyPutAll(map);
     }
 
     @Override
     protected @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map) {
-        return PersistentSequencedTrieMap.copyOf(map);
+        return PersistentSequencedTrieMap.<HashCollider, HashCollider>of().copyPutAll(map);
     }
 
     @Override
     protected @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries) {
-        return PersistentSequencedTrieMap.ofEntries(entries);
+        return PersistentSequencedTrieMap.<HashCollider, HashCollider>of().copyPutAll(entries);
     }
 
     @Test

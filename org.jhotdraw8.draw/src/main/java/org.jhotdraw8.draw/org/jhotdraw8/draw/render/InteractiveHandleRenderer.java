@@ -152,7 +152,7 @@ public class InteractiveHandleRenderer {
             return null;
         }
         final double tolerance = getEditor().getTolerance();
-        for (Map.Entry<Node, Handle> e : new ReversedList<>(nodeToHandleMap.entrySet())) {
+        for (Map.Entry<Node, Handle> e : new ReversedList<>(new ArrayList<>(nodeToHandleMap.entrySet()))) {
             final Handle handle = e.getValue();
             if (!handle.isSelectable()) {
                 continue;

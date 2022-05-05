@@ -49,23 +49,23 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
 
     public boolean isExportDrawing() {
-        return EXPORT_DRAWING_KEY.get(getOptions());
+        return EXPORT_DRAWING_KEY.getNonNull(getOptions());
     }
 
     public boolean isExportPages() {
-        return EXPORT_PAGES_KEY.get(getOptions());
+        return EXPORT_PAGES_KEY.getNonNull(getOptions());
     }
 
     public boolean isExportSlices() {
-        return EXPORT_SLICES_KEY.get(getOptions());
+        return EXPORT_SLICES_KEY.getNonNull(getOptions());
     }
 
     public boolean isExportSlices2x() {
-        return EXPORT_SLICES_RESOLUTION_2X_KEY.get(getOptions());
+        return EXPORT_SLICES_RESOLUTION_2X_KEY.getNonNull(getOptions());
     }
 
     public boolean isExportSlices3x() {
-        return EXPORT_SLICES_RESOLUTION_3X_KEY.get(getOptions());
+        return EXPORT_SLICES_RESOLUTION_3X_KEY.getNonNull(getOptions());
     }
 
     protected abstract boolean isResolutionIndependent();

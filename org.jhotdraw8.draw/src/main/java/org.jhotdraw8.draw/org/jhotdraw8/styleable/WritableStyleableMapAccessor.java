@@ -30,7 +30,7 @@ public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAcc
         if (cssConverter instanceof CssConverter<?>) {
             return ((CssConverter<?>) cssConverter).getExamples();
         }
-        return ImmutableArrayList.emptyList();
+        return ImmutableArrayList.of();
     }
 
 

@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -50,7 +51,9 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    @NonNull PersistentMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m);
+    default @NonNull PersistentMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+        return copyPutAll(m.entrySet().iterator());
+    }
 
     /**
      * Returns a copy of this map that contains all entries
@@ -60,8 +63,51 @@ public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    default @NonNull PersistentMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        return copyPutAll(m.asMap());
+    @NonNull PersistentMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> m);
+
+    /**
+     * Returns a copy of this map that contains all entries
+     * of this map with entries from the specified map added or updated.
+     *
+     * @param m another map
+     * @return this map instance if it already contains the same entries, or
+     * a different map instance with the entries added or updated
+     */
+    default @NonNull PersistentMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
+        return copyPutAll(m.iterator());
+    }
+
+    /**
+     * Returns a copy of this map that contains all entries
+     * of this map with entries from the specified map added or updated.
+     *
+     * @param kv a list of alternating keys and values
+     * @return this map instance if it already contains the same entries, or
+     * a different map instance with the entries added or updated
+     */
+    @SuppressWarnings("unchecked")
+    default @NonNull PersistentMap<K, V> copyPutKeyValues(@NonNull Object... kv) {
+        PersistentMap<K, V> that = this;
+        for (int i = 0; i < kv.length; i += 2) {
+            that = that.copyPut((K) kv[i], (V) kv[i + 1]);
+        }
+        return that;
+    }
+
+    /**
+     * Returns a copy of this map that contains all entries
+     * of this map with entries from the specified map added or updated.
+     *
+     * @param m another map
+     * @return this map instance if it already contains the same entries, or
+     * a different map instance with the entries added or updated
+     */
+    @SuppressWarnings("unchecked")
+    default @NonNull PersistentMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        if (this.isEmpty() && getClass().isInstance(map)) {
+            return getClass().cast(map);
+        }
+        return copyPutAll(map.entries());
     }
 
     /**

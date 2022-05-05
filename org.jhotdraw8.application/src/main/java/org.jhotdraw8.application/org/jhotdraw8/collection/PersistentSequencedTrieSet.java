@@ -112,26 +112,30 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull PersistentSequencedTrieSet<K> copyOf(@NonNull Iterable<? extends K> set) {
+    public static <E> @NonNull PersistentSequencedTrieSet<E> copyOf(@NonNull Iterable<? extends E> set) {
         if (set instanceof PersistentSequencedTrieSet) {
-            return (PersistentSequencedTrieSet<K>) set;
+            return (PersistentSequencedTrieSet<E>) set;
         } else if (set instanceof SequencedTrieSet) {
-            return ((SequencedTrieSet<K>) set).toPersistent();
+            return ((SequencedTrieSet<E>) set).toPersistent();
         }
-        SequencedTrieSet<K> tr = new SequencedTrieSet<>(of());
+        SequencedTrieSet<E> tr = new SequencedTrieSet<>(of());
         tr.addAll(set);
         return tr.toPersistent();
     }
 
 
-    @SafeVarargs
-    public static <K> @NonNull PersistentSequencedTrieSet<K> of(@NonNull K... keys) {
-        return PersistentSequencedTrieSet.<K>of().copyAddAll(Arrays.asList(keys));
+    @SuppressWarnings("unchecked")
+    public static <E> @NonNull PersistentSequencedTrieSet<E> of() {
+        return ((PersistentSequencedTrieSet<E>) PersistentSequencedTrieSet.EMPTY_SET);
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull PersistentSequencedTrieSet<K> of() {
-        return (PersistentSequencedTrieSet<K>) PersistentSequencedTrieSet.EMPTY_SET;
+    public static <E> @NonNull PersistentSequencedTrieSet<E> of(E... elements) {
+        if (elements.length == 0) {
+            return (PersistentSequencedTrieSet<E>) PersistentSequencedTrieSet.EMPTY_SET;
+        } else {
+            return ((PersistentSequencedTrieSet<E>) PersistentSequencedTrieSet.EMPTY_SET).copyAddAll(Arrays.asList(elements));
+        }
     }
 
     @NonNull
@@ -152,9 +156,8 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
         final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent,
                 ENTRY_LENGTH, lastSequenceNumber, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
-            if (lastSequenceNumber + 1 == lastSequenceNumber) {
+            if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
                 return new PersistentSequencedTrieSet<>(renumber(newRootNode), size + 1, size + 1);
-
             } else {
                 return new PersistentSequencedTrieSet<>(newRootNode, size + 1, lastSequenceNumber + 1);
             }
@@ -163,13 +166,11 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public @NonNull PersistentSequencedTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
-        if (set == this
-                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
-            return this;
+        if (set == this || isEmpty() && (set instanceof PersistentSequencedTrieSet<?>)) {
+            return (PersistentSequencedTrieSet<E>) set;
         }
-
         final SequencedTrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {

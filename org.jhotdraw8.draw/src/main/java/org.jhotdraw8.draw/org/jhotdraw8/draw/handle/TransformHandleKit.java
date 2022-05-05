@@ -21,8 +21,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -223,7 +223,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            PersistentList<Transform> oldTransforms = startTransforms == null ? WrappedPersistentList.emptyList() : startTransforms;
+            PersistentList<Transform> oldTransforms = startTransforms == null ? PersistentArrayList.of() : startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();
@@ -237,7 +237,7 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
             case 0:
-                model.set(owner, TRANSFORMS, WrappedPersistentList.of(transform));
+                model.set(owner, TRANSFORMS, PersistentArrayList.of(transform));
                 break;
             default:
                 int last = oldTransforms.size() - 1;

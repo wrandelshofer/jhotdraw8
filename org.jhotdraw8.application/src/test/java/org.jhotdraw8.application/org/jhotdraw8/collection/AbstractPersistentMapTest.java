@@ -163,9 +163,9 @@ public abstract class AbstractPersistentMapTest {
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                ImmutableLinkedHashMap.of(firstValue1.getKey(), firstValue1.getValue(),
+                new ImmutableLinkedHashMap<>(Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
-                        firstValue1.getKey(), firstValue1.getValue()).readOnlyEntrySet());
+                        firstValue1.getKey(), firstValue1.getValue())));
         //
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(firstValue1.getKey(), firstValue1.getValue());
@@ -398,7 +398,7 @@ public abstract class AbstractPersistentMapTest {
     }
 
     public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        @SuppressWarnings("unchecked") PersistentMap<HashCollider, HashCollider> set = of(ImmutableLinkedHashMap.entry(key, value));
+        @SuppressWarnings("unchecked") PersistentMap<HashCollider, HashCollider> set = copyOf(Maps.putAll(new LinkedHashMap<>(), key, value));
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(key, value);
         assertTrue(set.containsKey(key));

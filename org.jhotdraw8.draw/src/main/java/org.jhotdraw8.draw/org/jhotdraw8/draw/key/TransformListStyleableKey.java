@@ -6,10 +6,10 @@ package org.jhotdraw8.draw.key;
 
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssPersistentListConverter;
+import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
@@ -34,7 +34,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<PersistentLi
      * @param name The name of the key.
      */
     public TransformListStyleableKey(@NonNull String name) {
-        this(name, WrappedPersistentList.emptyList());
+        this(name, PersistentArrayList.of());
     }
 
     /**
@@ -46,7 +46,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<PersistentLi
     public TransformListStyleableKey(@NonNull String name, PersistentList<Transform> defaultValue) {
         super(name, new TypeToken<PersistentList<Transform>>() {
         }, defaultValue);
-        converter = new CssPersistentListConverter<>(new CssTransformConverter());
+        converter = new CssListConverter<>(new CssTransformConverter());
     }
 
     @Override

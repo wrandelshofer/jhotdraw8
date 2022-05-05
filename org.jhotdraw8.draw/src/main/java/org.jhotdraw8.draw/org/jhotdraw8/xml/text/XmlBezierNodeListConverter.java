@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.PersistentArrayList;
 import org.jhotdraw8.collection.PersistentList;
-import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
@@ -79,6 +79,6 @@ public class XmlBezierNodeListConverter implements Converter<PersistentList<Bezi
 
     @Override
     public PersistentList<BezierNode> getDefaultValue() {
-        return nullable ? null : WrappedPersistentList.emptyList();
+        return nullable ? null : PersistentArrayList.of();
     }
 }

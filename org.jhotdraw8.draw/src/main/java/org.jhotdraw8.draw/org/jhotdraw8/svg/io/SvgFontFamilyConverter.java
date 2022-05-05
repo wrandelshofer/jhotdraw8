@@ -7,8 +7,8 @@ package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -46,7 +46,7 @@ import java.util.function.Consumer;
  *     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">w3.org</a></dd>
  * </dl>
  */
-public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String>> {
+public class SvgFontFamilyConverter implements CssConverter<PersistentList<String>> {
 
     public static final String GENERIC_FONT_FAMILY_SERIF = "serif";
     public static final String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
@@ -58,7 +58,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public @Nullable ImmutableList<String> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable PersistentList<String> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<String> list = new ArrayList<>();
         StringBuffer buf = new StringBuffer();
         Loop:
@@ -91,11 +91,11 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
             throw tt.createParseException("<font-family>: <font-family> or <generic-family> expected.");
         }
         tt.requireNextToken(CssTokenType.TT_EOF, "<font-family>: EOF expected.");
-        return ImmutableArrayList.copyOf(list);
+        return PersistentArrayList.copyOf(list);
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public <TT extends PersistentList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
         boolean first = true;
         for (String s : value) {
             if (first) {
@@ -120,8 +120,8 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public @Nullable ImmutableList<String> getDefaultValue() {
-        return ImmutableArrayList.of("serif");
+    public @Nullable PersistentList<String> getDefaultValue() {
+        return PersistentArrayList.of("serif");
     }
 
     @Override

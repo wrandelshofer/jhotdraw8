@@ -11,8 +11,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
@@ -133,9 +133,9 @@ public interface SecondStrokableFigure extends Figure {
      * </dl>
      */
     ListStyleableKey<CssSize> SECOND_STROKE_DASH_ARRAY = new ListStyleableKey<>("second-stroke-dasharray",
-            new TypeToken<ImmutableList<CssSize>>() {
+            new TypeToken<PersistentList<CssSize>>() {
             },
-            new CssSizeConverter(false), ImmutableArrayList.emptyList());
+            new CssSizeConverter(false), PersistentArrayList.of());
 
     /**
      * Combined map accessor for all stroke style properties.
@@ -167,7 +167,7 @@ public interface SecondStrokableFigure extends Figure {
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<CssSize> dashArray = getStyledNonNull(SECOND_STROKE_DASH_ARRAY);
+        PersistentList<CssSize> dashArray = getStyledNonNull(SECOND_STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {

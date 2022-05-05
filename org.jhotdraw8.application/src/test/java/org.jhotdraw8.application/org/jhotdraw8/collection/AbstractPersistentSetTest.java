@@ -462,7 +462,7 @@ public abstract class AbstractPersistentSetTest {
         for (int i = 0; i < DATA_SET_ARRAY.length; i++) {
             DATA_SET_ARRAY[i] = new HashCollider(rng.nextInt(), -1);
         }
-        IDENTICAL_SET = PersistentTrieSet.of(DATA_SET_ARRAY);
+        IDENTICAL_SET = PersistentTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(DATA_SET_ARRAY));
     }
 
 

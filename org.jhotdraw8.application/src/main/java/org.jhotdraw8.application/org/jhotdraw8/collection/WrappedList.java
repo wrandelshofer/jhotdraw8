@@ -14,6 +14,7 @@ import java.util.function.IntSupplier;
 /**
  * Wraps list functions in the {@link List} API.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class WrappedList<E> extends AbstractList<E> {
@@ -21,6 +22,11 @@ public class WrappedList<E> extends AbstractList<E> {
     private final @NonNull IntFunction<E> getFunction;
 
     public WrappedList(@NonNull ReadOnlyList<E> backingList) {
+        this.sizeFunction = backingList::size;
+        this.getFunction = backingList::get;
+    }
+
+    public WrappedList(@NonNull List<E> backingList) {
         this.sizeFunction = backingList::size;
         this.getFunction = backingList::get;
     }

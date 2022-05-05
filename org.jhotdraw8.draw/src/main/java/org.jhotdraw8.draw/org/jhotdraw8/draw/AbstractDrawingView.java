@@ -17,7 +17,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
-import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
