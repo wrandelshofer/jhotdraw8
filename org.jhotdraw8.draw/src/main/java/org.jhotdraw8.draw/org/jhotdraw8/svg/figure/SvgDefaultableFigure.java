@@ -15,9 +15,9 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableLinkedHashMap;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
@@ -99,7 +99,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<FillRule>>() {
                     },
                     new CssMappedConverter<>("fill-rule",
-                            ImmutableMaps.of("nonzero", FillRule.NON_ZERO,
+                            ImmutableLinkedHashMap.of("nonzero", FillRule.NON_ZERO,
                                     "evenodd", FillRule.EVEN_ODD
                             )),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), FillRule.NON_ZERO
@@ -114,7 +114,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<ImmutableList<String>>>() {
             }, new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
-            ImmutableLists.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+            ImmutableArrayList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
 
     /**
@@ -209,7 +209,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<SvgShapeRendering>>() {
                     },
                     new CssMappedConverter<>("shape-rendering",
-                            ImmutableMaps.of("auto", SvgShapeRendering.AUTO,
+                            ImmutableLinkedHashMap.of("auto", SvgShapeRendering.AUTO,
                                     "optimizeSpeed", SvgShapeRendering.OPTIMIZE_SPEED,
                                     "crispEdges", SvgShapeRendering.CRISP_EDGES,
                                     "geometricPrecision", SvgShapeRendering.GEOMETRIC_PRECISION)),
@@ -235,7 +235,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<StrokeLineCap>>() {
             },
             new CssMappedConverter<>("stroke-linecap",
-                    ImmutableMaps.of("butt", StrokeLineCap.BUTT,
+                    ImmutableLinkedHashMap.of("butt", StrokeLineCap.BUTT,
                             "round", StrokeLineCap.ROUND,
                             "square", StrokeLineCap.SQUARE)),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
@@ -248,7 +248,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<StrokeLineJoin>>() {
             },
             new CssMappedConverter<>("stroke-linejoin",
-                    ImmutableMaps.of("miter", StrokeLineJoin.MITER,
+                    ImmutableLinkedHashMap.of("miter", StrokeLineJoin.MITER,
                             "round", StrokeLineJoin.ROUND,
                             "bevel", StrokeLineJoin.BEVEL)),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
@@ -271,7 +271,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<SvgVisibility>>() {
             },
             new CssMappedConverter<SvgVisibility>("visiblity",
-                    ImmutableMaps.of("visible", SvgVisibility.VISIBLE,
+                    ImmutableLinkedHashMap.of("visible", SvgVisibility.VISIBLE,
                             "hidden", SvgVisibility.HIDDEN,
                             "collapse", SvgVisibility.COLLAPSE).asMap()),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgVisibility.VISIBLE);
@@ -283,23 +283,23 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<BlendMode>>() {
             },
             new CssMappedConverter<BlendMode>("mix-blend-mode",
-                    ImmutableMaps.ofEntries(
-                            ImmutableMaps.entry("normal", BlendMode.SRC_OVER),
-                            ImmutableMaps.entry("mulitply", BlendMode.MULTIPLY),
-                            ImmutableMaps.entry("screen", BlendMode.SCREEN),
-                            ImmutableMaps.entry("overlay", BlendMode.OVERLAY),
-                            ImmutableMaps.entry("darken", BlendMode.DARKEN),
-                            ImmutableMaps.entry("lighten", BlendMode.LIGHTEN),
-                            ImmutableMaps.entry("color-dodge", BlendMode.COLOR_DODGE),
-                            ImmutableMaps.entry("color-burn", BlendMode.COLOR_BURN),
-                            ImmutableMaps.entry("hard-light", BlendMode.HARD_LIGHT),
-                            ImmutableMaps.entry("soft-light", BlendMode.SOFT_LIGHT),
-                            ImmutableMaps.entry("difference", BlendMode.DIFFERENCE),
-                            ImmutableMaps.entry("exclusion", BlendMode.EXCLUSION),
-                            ImmutableMaps.entry("hue", BlendMode.SRC_OVER),//FIXME
-                            ImmutableMaps.entry("saturation", BlendMode.SRC_OVER),//FIXME
-                            ImmutableMaps.entry("color", BlendMode.SRC_OVER),//FIXME
-                            ImmutableMaps.entry("luminosity", BlendMode.SRC_OVER)// FIXME
+                    ImmutableLinkedHashMap.ofEntries(
+                            ImmutableLinkedHashMap.entry("normal", BlendMode.SRC_OVER),
+                            ImmutableLinkedHashMap.entry("mulitply", BlendMode.MULTIPLY),
+                            ImmutableLinkedHashMap.entry("screen", BlendMode.SCREEN),
+                            ImmutableLinkedHashMap.entry("overlay", BlendMode.OVERLAY),
+                            ImmutableLinkedHashMap.entry("darken", BlendMode.DARKEN),
+                            ImmutableLinkedHashMap.entry("lighten", BlendMode.LIGHTEN),
+                            ImmutableLinkedHashMap.entry("color-dodge", BlendMode.COLOR_DODGE),
+                            ImmutableLinkedHashMap.entry("color-burn", BlendMode.COLOR_BURN),
+                            ImmutableLinkedHashMap.entry("hard-light", BlendMode.HARD_LIGHT),
+                            ImmutableLinkedHashMap.entry("soft-light", BlendMode.SOFT_LIGHT),
+                            ImmutableLinkedHashMap.entry("difference", BlendMode.DIFFERENCE),
+                            ImmutableLinkedHashMap.entry("exclusion", BlendMode.EXCLUSION),
+                            ImmutableLinkedHashMap.entry("hue", BlendMode.SRC_OVER),//FIXME
+                            ImmutableLinkedHashMap.entry("saturation", BlendMode.SRC_OVER),//FIXME
+                            ImmutableLinkedHashMap.entry("color", BlendMode.SRC_OVER),//FIXME
+                            ImmutableLinkedHashMap.entry("luminosity", BlendMode.SRC_OVER)// FIXME
                     ).asMap()),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), BlendMode.SRC_OVER);
 
@@ -316,7 +316,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<SvgDisplay>>() {
             },
             new CssMappedConverter<SvgDisplay>("display",
-                    ImmutableMaps.of("inline", SvgDisplay.INLINE).asMap(), true),
+                    ImmutableLinkedHashMap.of("inline", SvgDisplay.INLINE).asMap(), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!
             SvgDisplay.INLINE);
     /**

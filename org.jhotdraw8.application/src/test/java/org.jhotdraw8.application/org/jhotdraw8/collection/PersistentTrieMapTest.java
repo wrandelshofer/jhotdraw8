@@ -6,8 +6,10 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Random;
 
 public class PersistentTrieMapTest extends AbstractPersistentMapTest {
     @Override
@@ -34,5 +36,18 @@ public class PersistentTrieMapTest extends AbstractPersistentMapTest {
     @Override
     protected @NonNull PersistentTrieMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries) {
         return PersistentTrieMap.ofEntries(entries);
+    }
+
+    @Test
+    public void testDumpStructure() {
+        PersistentTrieMap<Integer, String> instance = PersistentTrieMap.of();
+        Random rng = new Random(0);
+        for (int i = 0; i < 5; i++) {
+            int key = rng.nextInt(10_000);
+            char value = (char) (rng.nextInt(26) + 'a');
+            instance = instance.copyPut(key, Character.toString(value));
+        }
+
+        System.out.println(instance.dump());
     }
 }

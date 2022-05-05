@@ -6,10 +6,10 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssListConverter;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.key.NonNullMapAccessor;
+import org.jhotdraw8.css.text.CssPersistentListConverter;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
@@ -20,12 +20,12 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull ImmutableList<@NonNull Point2D>>
-        implements WritableStyleableMapAccessor<@NonNull ImmutableList<@NonNull Point2D>>, NonNullMapAccessor<ImmutableList<@NonNull Point2D>> {
+public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull PersistentList<@NonNull Point2D>>
+        implements WritableStyleableMapAccessor<@NonNull PersistentList<@NonNull Point2D>>, NonNullMapAccessor<PersistentList<@NonNull Point2D>> {
 
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull Converter<ImmutableList<@NonNull Point2D>> converter;
+    private final @NonNull Converter<PersistentList<@NonNull Point2D>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -34,7 +34,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
      * @param name The name of the key.
      */
     public Point2DListStyleableKey(@NonNull String name) {
-        this(name, ImmutableLists.emptyList());
+        this(name, WrappedPersistentList.emptyList());
     }
 
     /**
@@ -43,16 +43,16 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableKey(@NonNull String name, @NonNull ImmutableList<@NonNull Point2D> defaultValue) {
-        super(name, new TypeToken<ImmutableList<Point2D>>() {
+    public Point2DListStyleableKey(@NonNull String name, @NonNull PersistentList<@NonNull Point2D> defaultValue) {
+        super(name, new TypeToken<PersistentList<Point2D>>() {
         }, defaultValue);
 
-        this.converter = new CssListConverter<>(
+        this.converter = new CssPersistentListConverter<>(
                 new Point2DConverter(false, false), ", ");
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<Point2D>> getCssConverter() {
+    public @NonNull Converter<PersistentList<Point2D>> getCssConverter() {
         return converter;
     }
 

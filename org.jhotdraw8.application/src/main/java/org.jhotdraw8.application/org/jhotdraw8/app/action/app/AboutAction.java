@@ -22,7 +22,6 @@ import static org.jhotdraw8.app.Application.VERSION_KEY;
 
 /**
  * Displays a dialog showing information about the application.
- * <p>
  *
  * @author Werner Randelshofer
  */

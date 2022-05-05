@@ -100,7 +100,7 @@ import java.util.stream.StreamSupport;
  * that subclasses can use this inspector on different subject
  * types.
  *
- * @param <E>
+ * @param <E> the element type
  */
 public abstract class AbstractStyleAttributesInspector<E> {
     /**

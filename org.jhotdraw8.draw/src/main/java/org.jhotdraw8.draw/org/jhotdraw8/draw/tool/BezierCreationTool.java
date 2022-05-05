@@ -11,7 +11,7 @@ import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -94,7 +94,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, ImmutableLists.copyOf(points));
+                    dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
                     dv.getSelectedFigures().clear();
                     dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
@@ -119,7 +119,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             } else {
                 points.add(new BezierNode(c2));
             }
-            dm.set(createdFigure, key, ImmutableLists.copyOf(points));
+            dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
         }
         event.consume();
     }
@@ -176,7 +176,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
                 createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
         points.add(new BezierNode(c.getConvertedValue()));
-        dm.set(createdFigure, key, ImmutableLists.copyOf(points));
+        dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
 
         rubberBand.setVisible(false);
         dragStartIndex = -1;
@@ -213,7 +213,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             points = newList;
 
             DrawingModel dm = dv.getModel();
-            dm.set(createdFigure, key, ImmutableLists.copyOf(points));
+            dm.set(createdFigure, key, WrappedPersistentList.copyOf(points));
             dragStartIndex = -1;
         }
     }

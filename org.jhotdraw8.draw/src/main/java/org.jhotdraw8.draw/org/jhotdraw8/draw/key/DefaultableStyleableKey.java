@@ -64,9 +64,9 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      * We intentionally do <b>not</b> use the definition from SVG
      * initial value:
      * <p>
-     * <strike>"The initial value of an attribute or property is
+     * <s>"The initial value of an attribute or property is
      * the value used when that attribute or property is not
-     * specified, or when it has an invalid value."</strike>
+     * specified, or when it has an invalid value."</s>
      * <p>
      * References:
      * <dl>
@@ -74,7 +74,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      *     <dd><a href="https://www.w3.org/TR/css-cascade-4/#initial-values">w3.org</a></dd>
      *
      *     <dt>SVG, Chapter 4: Basic Data Types and Interfaces, 4.1 Definitions, Initial Value</dt>
-     *     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dt>
+     *     <dd><a href="https://www.w3.org/TR/SVG/types.html#definitions">w3.org</a></dd>
      * </dl>
      *
      * @return the initial value.

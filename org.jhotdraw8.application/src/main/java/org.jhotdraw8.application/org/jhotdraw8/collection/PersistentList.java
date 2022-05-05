@@ -19,7 +19,7 @@ import java.util.Collection;
  * proportional to the differences between the newly created persistent list to
  * the original persistent list.
  */
-public interface PersistentList<E> extends ReadOnlyList<E> {
+public interface PersistentList<E> extends ReadOnlyList<E>, ImmutableList<E> {
     /**
      * Returns a copy of this list that is empty.
      *
@@ -27,7 +27,7 @@ public interface PersistentList<E> extends ReadOnlyList<E> {
      * @return this list instance if it is already empty, or a different list
      * instance that is empty.
      */
-    @NonNull PersistentSet<E> copyClear(@NonNull E element);
+    @NonNull PersistentList<E> copyClear();
 
     /**
      * Returns a copy of this list that contains all elements
@@ -58,7 +58,7 @@ public interface PersistentList<E> extends ReadOnlyList<E> {
      * @param c a collection to be added to this list
      * @return a different list instance with the elements added
      */
-    @NonNull PersistentSet<E> copyAddAll(@NonNull Iterable<? extends E> c);
+    @NonNull PersistentList<E> copyAddAll(@NonNull Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -69,7 +69,7 @@ public interface PersistentList<E> extends ReadOnlyList<E> {
      * @param c     a collection to be added to this list
      * @return a different list instance with the elements added
      */
-    @NonNull PersistentSet<E> copyAddAll(int index, @NonNull Iterable<? extends E> c);
+    @NonNull PersistentList<E> copyAddAll(int index, @NonNull Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains all elements

@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Provides query methods to a map. The state of the map may change.
+ * Read-only interface for a map.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
  * convention in JavaFX for APIs that provide read methods but no write methods.
  *
- * @param <K> the key type of the map
- * @param <V> the value type of the map
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public interface ReadOnlyMap<K, V> {
     boolean isEmpty();
@@ -113,7 +113,7 @@ public interface ReadOnlyMap<K, V> {
      * @return the wrapped map
      */
     default @NonNull Map<K, V> asMap() {
-        return new MapWrapper<>(this);
+        return new WrappedMap<>(this);
     }
 
     static <K, V> @NonNull String mapToString(final ReadOnlyMap<K, V> map) {
@@ -138,6 +138,40 @@ public interface ReadOnlyMap<K, V> {
         }
     }
 
+    static <K, V> boolean mapEquals(ReadOnlyMap<K, V> map, Object o) {
+        if (o == map) {
+            return true;
+        }
+
+        if (!(o instanceof ReadOnlyMap)) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        ReadOnlyMap<K, V> that = (ReadOnlyMap<K, V>) o;
+        if (that.size() != map.size()) {
+            return false;
+        }
+
+        try {
+            for (Map.Entry<K, V> e : map.readOnlyEntrySet()) {
+                K key = e.getKey();
+                V value = e.getValue();
+                if (value == null) {
+                    if (!(that.get(key) == null && that.containsKey(key))) {
+                        return false;
+                    }
+                } else {
+                    if (!value.equals(that.get(key))) {
+                        return false;
+                    }
+                }
+            }
+        } catch (ClassCastException | NullPointerException unused) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Returns the hash code of the provided iterable, assuming that
      * the iterable is an entry set of a map.

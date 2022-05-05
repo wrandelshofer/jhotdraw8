@@ -10,9 +10,9 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableHashMap;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ImmutableLinkedHashMap;
 import org.jhotdraw8.collection.ReadOnlyMap;
+import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -40,7 +40,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private @NonNull ReadOnlyMap<Key<?>, Object> options = new ImmutableHashMap<>();
+    private @NonNull ReadOnlyMap<Key<?>, Object> options = ImmutableLinkedHashMap.of();
 
     public AbstractExportOutputFormat() {
     }

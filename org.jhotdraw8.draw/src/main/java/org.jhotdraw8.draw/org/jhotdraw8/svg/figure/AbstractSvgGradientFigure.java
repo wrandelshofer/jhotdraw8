@@ -11,11 +11,12 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableLinkedHashMap;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ImmutableMaps;
-import org.jhotdraw8.collection.NonNullKey;
-import org.jhotdraw8.collection.SimpleNonNullKey;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.key.NonNullKey;
+import org.jhotdraw8.collection.key.SimpleNonNullKey;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssSize;
@@ -53,7 +54,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull SimpleNonNullStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
             new SimpleNonNullStyleableKey<>("gradientUnits", SvgGradientUnits.class,
-                    new MappedConverter<SvgGradientUnits>(ImmutableMaps.of(
+                    new MappedConverter<SvgGradientUnits>(ImmutableLinkedHashMap.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
                             "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
                     ).asMap()),
@@ -65,18 +66,18 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull SimpleNonNullStyleableKey<CycleMethod> SPREAD_METHOD =
             new SimpleNonNullStyleableKey<>("spreadMethod", CycleMethod.class,
-                    new MappedConverter<CycleMethod>(ImmutableMaps.of(
+                    new MappedConverter<CycleMethod>(ImmutableLinkedHashMap.of(
                             "pad", CycleMethod.NO_CYCLE,
                             "reflect", CycleMethod.REFLECT,
                             "repeat", CycleMethod.REPEAT
-                   ).asMap()),
+                    ).asMap()),
                     CycleMethod.NO_CYCLE
             );
 
 
-    public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new SimpleNonNullKey<ImmutableList<SvgStop>>("stops",
-            new TypeToken<ImmutableList<SvgStop>>() {
-            }, ImmutableLists.emptyList());
+    public static final @NonNull NonNullKey<PersistentList<SvgStop>> STOPS = new SimpleNonNullKey<PersistentList<SvgStop>>("stops",
+            new TypeToken<PersistentList<SvgStop>>() {
+            }, WrappedPersistentList.emptyList());
 
     public AbstractSvgGradientFigure() {
         set(VISIBLE, false);

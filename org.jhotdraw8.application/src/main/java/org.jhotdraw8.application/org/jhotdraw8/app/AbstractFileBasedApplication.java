@@ -51,8 +51,9 @@ import org.jhotdraw8.app.action.file.NewFileAction;
 import org.jhotdraw8.app.action.file.OpenFileAction;
 import org.jhotdraw8.app.action.file.OpenRecentFileAction;
 import org.jhotdraw8.binding.CustomBinding;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.collection.WrappedReadOnlyMap;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.SimpleNullableKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.reflect.TypeToken;
@@ -591,7 +592,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             getActivities().add(v);
             v.addDisabler(this);
             v.read(uri, null,
-                    new org.jhotdraw8.collection.ReadOnlyMapWrapper<Key<?>, Object>(new LinkedHashMap<>()),
+                    new WrappedReadOnlyMap<Key<?>, Object>(new LinkedHashMap<>()),
                     false, new SimpleWorkState<Void>()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();

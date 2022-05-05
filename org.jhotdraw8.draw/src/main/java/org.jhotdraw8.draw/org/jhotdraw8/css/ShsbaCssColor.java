@@ -13,7 +13,7 @@ import static org.jhotdraw8.geom.Geom.clamp;
 
 /**
  * sHSBA color encoded with numbers and/or percentages.
- * <p>
+ *
  * <pre>ISO EBNF 14977:
  *
  * sRGBA = "hsb(" hue , [ "," ] , saturation , [ "," ] , brightness ,

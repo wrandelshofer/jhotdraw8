@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssPoint2DConverter;

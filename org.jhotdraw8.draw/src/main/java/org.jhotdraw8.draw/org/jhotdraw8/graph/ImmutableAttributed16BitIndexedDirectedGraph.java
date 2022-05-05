@@ -20,7 +20,7 @@ import java.util.Set;
  * <p>
  * Uses a representation that is similar to a compressed row storage for
  * matrices (CRS). A directed graph is represented with 4 arrays:
- * {@code nextOffset}, {@code next}, {@code nextArrows}, {@cde vertices}
+ * {@code nextOffset}, {@code next}, {@code nextArrows}, {@code vertices}
  * <dl>
  *     <dt>{@code nextOffset}</dt>
  *     <dd>Holds for each vertex  {@code v}, the offset into the arrays

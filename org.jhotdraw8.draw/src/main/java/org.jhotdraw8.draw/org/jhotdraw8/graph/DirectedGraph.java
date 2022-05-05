@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.ListWrapper;
+import org.jhotdraw8.collection.WrappedList;
 import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.jhotdraw8.util.function.AddToSet;
 
@@ -64,7 +64,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return a collection view on the direct successor vertices of vertex
      */
     default @NonNull Collection<V> getNextVertices(@NonNull V v) {
-        return new ListWrapper<>(() -> this.getNextCount(v), i -> getNext(v, i));
+        return new WrappedList<>(() -> this.getNextCount(v), i -> getNext(v, i));
     }
 
     /**
@@ -86,7 +86,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return a collection view on the arrow data
      */
     default @NonNull Collection<A> getNextArrows(@NonNull V v) {
-        return new ListWrapper<>(() -> this.getNextCount(v), i -> getNextArrow(v, i));
+        return new WrappedList<>(() -> this.getNextCount(v), i -> getNextArrow(v, i));
     }
 
     /**
@@ -96,7 +96,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return a collection view on the arc data
      */
     default @NonNull Collection<Arc<V, A>> getNextArcs(@NonNull V v) {
-        return new ListWrapper<>(() -> this.getNextCount(v), i -> getNextArc(v, i));
+        return new WrappedList<>(() -> this.getNextCount(v), i -> getNextArc(v, i));
     }
 
     /**

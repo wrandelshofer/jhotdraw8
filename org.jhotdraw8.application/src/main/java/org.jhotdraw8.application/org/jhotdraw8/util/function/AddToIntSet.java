@@ -22,6 +22,7 @@ import java.util.BitSet;
  *     <li>The set can be a marker bit in a {@link BitSet}.
  *     <pre>
  *        {@literal AddToIntSet=AddToIntSet.addToBitSet(new BitSet());}
+ *        </pre>
  *     </li>
  * </ul>
  * @author Werner Randelshofer

@@ -25,8 +25,8 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -226,7 +226,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             // The drawing is currently being replaced by a new one. Don't fire events.
             return;
         }
-        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableLists.copyOf(listView.getItems()));
+        getModel().set(getDrawing(), Drawing.AUTHOR_STYLESHEETS, ImmutableArrayList.copyOf(listView.getItems()));
         updateAllFigures();
     }
 

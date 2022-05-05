@@ -15,7 +15,6 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * Clears (empties) the contents of the active view.
- * <p>
  *
  * @author Werner Randelshofer
  */

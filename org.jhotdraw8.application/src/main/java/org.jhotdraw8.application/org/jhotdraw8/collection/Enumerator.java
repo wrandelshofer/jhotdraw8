@@ -9,7 +9,7 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * An object for enumerating elements of a collection.
+ * Interface for enumerating elements of a collection.
  * <p>
  * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
  * {@link Iterator}, and avoids the inherent race involved in having separate methods for

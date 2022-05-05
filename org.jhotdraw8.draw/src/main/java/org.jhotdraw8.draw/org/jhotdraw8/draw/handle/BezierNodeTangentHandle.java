@@ -16,8 +16,8 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -40,9 +40,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final MapAccessor<PersistentList<BezierNode>> pointKey;
 
-    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeTangentHandle(Figure figure, MapAccessor<PersistentList<BezierNode>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -57,7 +57,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableList<BezierNode> list = owner.get(pointKey);
+        PersistentList<BezierNode> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -92,7 +92,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableList<BezierNode> list = f.get(pointKey);
+        PersistentList<BezierNode> list = f.get(pointKey);
         if (list == null || pointIndex >= list.size()) {
             return;
         }

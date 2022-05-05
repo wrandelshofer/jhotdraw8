@@ -8,8 +8,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 
 /**
- * Base classes for {@link Enumerator}s that also want to fulfill the
- * {@link Spliterator} interface.
+ * Abstract base classes for {@link Enumerator}s.
  * <p>
  * Subclasses should only implement the {@link Enumerator#moveNext()}
  * method and the {@link Spliterator#trySplit()} method:
@@ -23,7 +22,7 @@ import java.util.Spliterators;
  *     }
  * </pre>
  *
- * @param <E>
+ * @param <E> the element type
  */
 public abstract class AbstractEnumerator<E> extends Spliterators.AbstractSpliterator<E>
         implements Enumerator<E> {

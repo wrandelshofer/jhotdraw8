@@ -7,8 +7,8 @@ package org.jhotdraw8.xml.text;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
@@ -38,7 +38,7 @@ public class XmlFXSvgPathConverter implements Converter<ImmutableList<PathElemen
         if ("none".equals(string)) {
             return null;
         }
-        return ImmutableLists.copyOf(FXSvgPaths.pathElementsFromSvgString(string));
+        return ImmutableArrayList.copyOf(FXSvgPaths.pathElementsFromSvgString(string));
     }
 
     @Override
@@ -49,6 +49,6 @@ public class XmlFXSvgPathConverter implements Converter<ImmutableList<PathElemen
 
     @Override
     public @NonNull ImmutableList<PathElement> getDefaultValue() {
-        return ImmutableLists.emptyList();
+        return ImmutableArrayList.emptyList();
     }
 }

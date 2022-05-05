@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * This ObservableSet implementation provides overridable fire methods, saving one
- * level of indirection.
+ * Abstract base class for {@link ObservableSet}s. This implementation provides
+ * overridable fire methods, saving one level of indirection.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

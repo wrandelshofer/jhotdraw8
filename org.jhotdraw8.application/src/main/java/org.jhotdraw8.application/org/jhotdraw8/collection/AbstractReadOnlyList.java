@@ -6,6 +6,11 @@ package org.jhotdraw8.collection;
 
 import java.util.Iterator;
 
+/**
+ * Abstract base class for {@link ReadOnlyList}s.
+ *
+ * @param <E> the element type
+ */
 public abstract class AbstractReadOnlyList<E> extends AbstractReadOnlyCollection<E> implements ReadOnlyList<E> {
 
     public AbstractReadOnlyList() {

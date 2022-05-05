@@ -6,7 +6,7 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableList<BezierNode>> {
+public class CssBezierNodeListConverter extends AbstractCssConverter<PersistentList<BezierNode>> {
 
     public CssBezierNodeListConverter(boolean nullable) {
         super(nullable);
@@ -36,7 +36,7 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
 
 
     @Override
-    public @NonNull ImmutableList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull PersistentList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
         }
@@ -46,7 +46,7 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
     }
 
     @Override
-    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends PersistentList<BezierNode>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {

@@ -14,8 +14,8 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.DrawingView;
@@ -35,10 +35,10 @@ public class BezierPathOutlineHandle extends AbstractHandle {
     private final @NonNull Path path2;
     private final @NonNull Path path1;
 
-    private final MapAccessor<ImmutableList<BezierNode>> bezierNodeListKey;
+    private final MapAccessor<PersistentList<BezierNode>> bezierNodeListKey;
     private final boolean selectable;
 
-    public BezierPathOutlineHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, boolean selectable) {
+    public BezierPathOutlineHandle(Figure figure, MapAccessor<PersistentList<BezierNode>> pointKey, boolean selectable) {
         super(figure);
         this.bezierNodeListKey = pointKey;
         node = new Group();
@@ -55,7 +55,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
-        final ImmutableList<BezierNode> bezierNodes = getOwner().get(bezierNodeListKey);
+        final PersistentList<BezierNode> bezierNodes = getOwner().get(bezierNodeListKey);
         if (bezierNodes != null) {
             final Point2D p = drawingView.viewToWorld(x, y);
             return new BezierNodePath(bezierNodes).contains(p.getX(), p.getY(), tolerance);
@@ -79,7 +79,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        final ImmutableList<BezierNode> bezierNodes = f.get(bezierNodeListKey);
+        final PersistentList<BezierNode> bezierNodes = f.get(bezierNodeListKey);
         if (bezierNodes == null) {
             path1.getElements().clear();
             path2.getElements().clear();

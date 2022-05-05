@@ -14,7 +14,6 @@ import org.jhotdraw8.util.Resources;
 
 /**
  * Redoes the last user action on the active view.
- * <p>
  *
  * @author Werner Randelshofer
  */

@@ -36,7 +36,8 @@ import java.util.function.Predicate;
  * <dl>
  *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
  *     <dd>Algorithms, 4th Edition. Chapter 4. Breadth-First Search.
- *          <a href="https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/enumerate.pdf">math.cmu.edu</dd>
+ *          <a href="https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/enumerate.pdf">math.cmu.edu</a>
+ *     </dd>
  * </dl>
  *
  * @param <V> the vertex data type

@@ -8,7 +8,6 @@ import org.jhotdraw8.app.Application;
 
 /**
  * Creates a new view.
- * <p>
  *
  * @author Werner Randelshofer
  */

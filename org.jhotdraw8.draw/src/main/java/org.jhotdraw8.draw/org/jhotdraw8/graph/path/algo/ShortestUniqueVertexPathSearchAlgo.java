@@ -38,7 +38,7 @@ public class ShortestUniqueVertexPathSearchAlgo<V, C extends Number & Comparable
      *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
      * @param costLimit        the maximal cost (inclusive) of a path.
-     *                         Must be {@literal >= zero).
+     *                         Must be {@literal >= zero}.
      * @param costFunction     the cost function<br>
      *                         The cost must be {@literal > 0} if the graph
      *                         has cycles.<br>

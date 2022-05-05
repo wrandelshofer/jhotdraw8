@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  * References:
  * <dl>
  *     <dt>CSS Syntax Module Level 3, 4. Token Railroad Diagrams, Number Token Diagram</dt>
- *     <dd><a href="">w3.org</a>https://www.w3.org/TR/css-syntax-3/#number-token-diagram</dd>
+ *     <dd><a href="https://www.w3.org/TR/css-syntax-3/#number-token-diagram">w3.org</a></dd>
  * </dl>
  *
  * @author Werner Randelshofer

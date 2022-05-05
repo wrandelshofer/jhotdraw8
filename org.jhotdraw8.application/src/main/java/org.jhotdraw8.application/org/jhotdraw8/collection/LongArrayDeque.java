@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * LongArrayDeque.
+ * A {@code long}-valued deque backed by a primitive array.
  *
  * @author Werner Randelshofer
  */

@@ -6,12 +6,12 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrie;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.Node;
-import org.jhotdraw8.collection.champtrie.SequencedTrieIterator;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrie;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedTrieIterator;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -91,7 +91,7 @@ import java.util.function.ToIntFunction;
  */
 public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 3;
+    private final static int ENTRY_LENGTH = 3;
 
     /**
      * Counter for the sequence number of the last entry.
@@ -106,14 +106,14 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
      */
     private transient final int lastSequenceNumber;
 
-    private static final PersistentSequencedTrieMap<?, ?> EMPTY_MAP = new PersistentSequencedTrieMap<>(BitmapIndexedNode.emptyNode(), 0, Integer.MIN_VALUE);
+    private static final PersistentSequencedTrieMap<?, ?> EMPTY_MAP = new PersistentSequencedTrieMap<>(BitmapIndexedNode.emptyNode(), 0, 0);
 
     final transient int size;
     private transient final ToIntFunction<K> hashFunction = Objects::hashCode;
 
     PersistentSequencedTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size,
                                int lastSequenceNumber) {
-        super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
+        super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
         this.lastSequenceNumber = lastSequenceNumber;
     }
@@ -177,12 +177,12 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
     }
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> entries() {
-        return new EntryIterator<>(size, this, TUPLE_LENGTH);
+        return new EntryIterator<>(size, this, ENTRY_LENGTH);
     }
 
     @Override
@@ -199,31 +199,17 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, TUPLE_LENGTH, true);
-        } else if (other instanceof Map) {
-            Map<?, ?> that = (Map<?, ?>) other;
-            if (this.size() != that.size()) {
-                return false;
-            }
-            for (Map.Entry<?, ?> entry : that.entrySet()) {
-                @SuppressWarnings("unchecked") final K key = (K) entry.getKey();
-                final Object result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
-
-                @SuppressWarnings("unchecked") final V val = (V) entry.getValue();
-                if (!Objects.equals(result, val)) {
-                    return false;
-                }
-            }
-            return true;
+            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        } else {
+            return ReadOnlyMap.mapEquals(this, other);
         }
-        return false;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
         K key = (K) o;
-        Object result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+        Object result = findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         return result == Node.NO_VALUE ? null : (V) result;
     }
 
@@ -239,7 +225,7 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
 
     @Override
     public @NonNull Iterator<K> keys() {
-        return new KeyIterator<>(size, this, TUPLE_LENGTH);
+        return new KeyIterator<>(size, this, ENTRY_LENGTH);
     }
 
     @Override
@@ -252,7 +238,7 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         final ChangeEvent<V> details = new ChangeEvent<>();
 
         BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details, TUPLE_LENGTH, lastSequenceNumber + 1);
+                keyHash, 0, details, ENTRY_LENGTH, lastSequenceNumber + 1, ENTRY_LENGTH - 1);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -271,7 +257,7 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
 
     @NonNull
     private PersistentSequencedTrieMap<K, V> renumber(BitmapIndexedNode<K, V> newRootNode) {
-        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueIdentity(), TUPLE_LENGTH);
+        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
         return new PersistentSequencedTrieMap<>(newRootNode, size + 1, size);
     }
 
@@ -304,7 +290,7 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
-                remove(null, key, keyHash, 0, details, TUPLE_LENGTH);
+                remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             return new PersistentSequencedTrieMap<>(newRootNode, size - 1, lastSequenceNumber + 1);
@@ -351,11 +337,12 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(this, TUPLE_LENGTH, true, true);
+        return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, true);
     }
 
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        private final static long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);
@@ -395,4 +382,10 @@ public class PersistentSequencedTrieMap<K, V> extends BitmapIndexedNode<K, V> im
             return nextEntry().getKey();
         }
     }
+
+    @Override
+    public @NonNull PersistentSequencedTrieMap<K, V> copyClear() {
+        return isEmpty() ? this : of();
+    }
+
 }

@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.WrappedPersistentList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<BezierNode>> {
+public class BezierNodePathBuilder extends AbstractPathBuilder<PersistentList<BezierNode>> {
 
     private @NonNull List<BezierNode> nodes = new ArrayList<>();
 
@@ -86,8 +86,8 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
         nodes.set(nodes.size() - 1, newValue);
     }
 
-    public @NonNull ImmutableList<BezierNode> build() {
-        return ImmutableLists.copyOf(nodes);
+    public @NonNull PersistentList<BezierNode> build() {
+        return WrappedPersistentList.copyOf(nodes);
     }
 
     @Override

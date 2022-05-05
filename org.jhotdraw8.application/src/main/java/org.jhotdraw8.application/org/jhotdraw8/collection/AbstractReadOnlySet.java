@@ -4,29 +4,18 @@
  */
 package org.jhotdraw8.collection;
 
+/**
+ * Abstract base class for {@link ReadOnlySet}s.
+ *
+ * @param <E> the element type
+ */
 public abstract class AbstractReadOnlySet<E> extends AbstractReadOnlyCollection<E> implements ReadOnlySet<E> {
     public AbstractReadOnlySet() {
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof ReadOnlySet)) {
-            return false;
-        }
-
-        @SuppressWarnings("unchecked")
-        ReadOnlyCollection<E> c = (ReadOnlyCollection<E>) o;
-        if (c.size() != size()) {
-            return false;
-        }
-        try {
-            return containsAll(c);
-        } catch (ClassCastException | NullPointerException unused) {
-            return false;
-        }
+        return ReadOnlySet.setEquals(this,o);
     }
 
     @Override

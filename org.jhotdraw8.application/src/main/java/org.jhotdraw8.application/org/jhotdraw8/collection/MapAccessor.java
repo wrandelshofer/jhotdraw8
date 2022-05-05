@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.key.Key;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;

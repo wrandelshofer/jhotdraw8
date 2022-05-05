@@ -12,7 +12,6 @@ import org.jhotdraw8.app.EditableComponent;
 
 /**
  * Deletes the region at (or after) the caret position.
- * <p>
  *
  * @author Werner Randelshofer
  */

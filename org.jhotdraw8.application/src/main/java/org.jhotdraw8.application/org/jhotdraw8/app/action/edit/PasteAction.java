@@ -13,7 +13,6 @@ import org.jhotdraw8.app.EditableComponent;
 
 /**
  * Pastes the contents of the system clipboard at the caret position.
- * <p>
  *
  * @author Werner Randelshofer
  */

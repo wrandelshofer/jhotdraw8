@@ -5,9 +5,9 @@
 package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.NonNullObjectKey;
 import org.jhotdraw8.collection.ReadOnlyMap;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.NonNullObjectKey;
 
 /**
  * ExportOutputFormat.

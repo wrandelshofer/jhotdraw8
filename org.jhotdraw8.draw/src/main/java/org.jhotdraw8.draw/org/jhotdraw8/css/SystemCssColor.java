@@ -9,8 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableLinkedHashMap;
 import org.jhotdraw8.collection.ImmutableMap;
-import org.jhotdraw8.collection.ImmutableMaps;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.util.LinkedHashMap;
@@ -127,7 +127,7 @@ public class SystemCssColor extends CssColor {
         m.put(WINDOW_FRAME.getName(), WINDOW_FRAME);
         m.put(WINDOW_TEXT.getName(), WINDOW_TEXT);
 
-        SYSTEM_COLORS = ImmutableMaps.copyOf(m);
+        SYSTEM_COLORS = ImmutableLinkedHashMap.copyOf(m);
     }
 
     /**

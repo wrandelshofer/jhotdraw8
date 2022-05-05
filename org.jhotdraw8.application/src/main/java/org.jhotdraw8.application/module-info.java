@@ -47,6 +47,7 @@ module org.jhotdraw8.application {
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
+    exports org.jhotdraw8.collection.key;
 
     uses NodeReaderProvider;
     provides NodeReaderProvider with org.jhotdraw8.app.spi.FxmlNodeReaderProvider, org.jhotdraw8.app.spi.ImageNodeReaderProvider;

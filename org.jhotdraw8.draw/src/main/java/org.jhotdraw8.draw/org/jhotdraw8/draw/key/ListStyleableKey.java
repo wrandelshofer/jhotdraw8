@@ -5,9 +5,9 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.reflect.TypeToken;
@@ -37,7 +37,7 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< Immutable
      * @param converter String converter for a list element
      */
     public ListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableList<T>> converter) {
-        super(name, type, converter, ImmutableLists.emptyList());
+        super(name, type, converter, ImmutableArrayList.emptyList());
     }
 
     /**
@@ -49,7 +49,7 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey< Immutable
      * @param converter String converter for a list element
      */
     public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
-        super(name, type.getType(), new CssListConverter<>(converter), ImmutableLists.emptyList());
+        super(name, type.getType(), new CssListConverter<>(converter), ImmutableArrayList.emptyList());
     }
 
     /**

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class SetSerializationProxy<E> implements Serializable {
+abstract class SetSerializationProxy<E> implements Serializable {
+    private final static long serialVersionUID = 0L;
     private transient Set<E> serialized;
     protected transient List<E> deserialized;
 

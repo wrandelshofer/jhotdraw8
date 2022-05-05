@@ -8,9 +8,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.NonNullMapAccessor;
 
 import java.util.LinkedHashMap;
 

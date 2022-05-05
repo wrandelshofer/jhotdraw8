@@ -1079,23 +1079,14 @@
   <target depends="init" name="do-javadoc">
     <mkdir dir="${build.javadoc}"/>
     <javadoc destdir="${build.javadoc}"
-             footer="&lt;font size=-2&gt;${copyright}&lt;/font&gt;"
              header="${ant.project.name} ${version}"
-             windowtitle="${ant.project.name} ${version}"
-             maxmemory="256M"
-             charset="UTF-8"
-             encoding="UTF-8"
-             executable="${jdk.documentation}/bin/javadoc"
-             additionalparam="-html5"
-    >
+             windowtitle="${ant.project.name} ${version}" maxmemory="256M" charset="UTF-8" encoding="UTF-8" executable="${jdk.documentation}/bin/javadoc" additionalparam="-html5">
 
       <module name="org.jhotdraw8.application"/>
       <module name="org.jhotdraw8.draw"/>
 
-      <taglet name="org.jhotdraw8.javadoc.DesignPatternTaglet" path="${build.doc.classes}"/>
-      <taglet name="org.jhotdraw8.javadoc.DesignOverviewTaglet" path="${build.doc.classes}"/>
-
-      <modulesourcepath path="src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.application/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.draw/src/main/java"/>
       <modulepath>
         <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
       </modulepath>
@@ -1341,9 +1332,7 @@
   <target name="jar-modules" depends="compile-modules,do-jar-modules"
           description="bundles the class files into a jar file">
   </target>
-  <target name="javadoc" depends="clean,compile-classes,do-docbook.compile,do-javadoc"
-          description="generates api documentation">
-  </target>
+  <target name="javadoc" depends="clean,compile-modules,do-javadoc" description="generates api documentation"></target>
   <target name="docbook" depends="clean,javadoc,do-docbook"
           description="generates specification and user documentation">
   </target>

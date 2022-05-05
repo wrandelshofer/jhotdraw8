@@ -14,10 +14,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Wraps a {@link Set} in a {@link Set} of a different type.
+ * Wraps a {@link Set} in a {@link Set} of a different element type.
  * <p>
  * The underlying Set is referenced - not copied.
  *
+ * @param <E> the mapped element type
+ * @param <F> the original element type
  * @author Werner Randelshofer
  */
 public final class MappedSet<E, F> extends AbstractSet<E> {

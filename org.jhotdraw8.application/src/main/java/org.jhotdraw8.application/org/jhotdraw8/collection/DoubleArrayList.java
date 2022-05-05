@@ -20,7 +20,7 @@ import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
 /**
- * A lightweight double array list implementation for performance critical code.
+ * A {@code double}-valued list backed by a primitive array.
  *
  * @author Werner Randelshofer
  */

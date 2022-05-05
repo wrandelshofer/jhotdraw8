@@ -13,6 +13,20 @@ import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
+/**
+ * A {@code long}-valued min heap backed by a primitive array.
+ * <p>
+ * The signed long-value is used as the key.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Geeks for Geeks. Min Heap in Java. CC-By-SA</dt>
+ *      <dd>
+ *      Original code: <a href=https://www.geeksforgeeks.org/min-heap-in-java/">geeksforgeeks.org</a>
+ *      <br>License: <a href="https://www.geeksforgeeks.org/copyright-information/">geeksforgeeks.org</a>
+ *      </dd>
+ * </dl>
+ */
 public class LongMinHeap implements LongQueue {
 
     // Member variables of this class

@@ -14,7 +14,6 @@ import org.jhotdraw8.app.EditableComponent;
 
 /**
  * Duplicates the selected region.
- * <p>
  *
  * @author Werner Randelshofer.
  */

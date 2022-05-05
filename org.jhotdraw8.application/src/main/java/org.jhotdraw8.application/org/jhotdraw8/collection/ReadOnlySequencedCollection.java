@@ -6,7 +6,7 @@
 package org.jhotdraw8.collection;
 
 /**
- * A collection with a well-defined linear ordering of its elements.
+ * Read-only interface for a collection with a well-defined linear ordering of its elements.
  *
  * @param <E> the element type
  */

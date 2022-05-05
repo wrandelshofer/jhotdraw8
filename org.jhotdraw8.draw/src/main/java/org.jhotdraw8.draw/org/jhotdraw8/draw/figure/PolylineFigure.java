@@ -12,8 +12,8 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.NonNullMapAccessor;
+import org.jhotdraw8.collection.WrappedPersistentList;
+import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
@@ -42,7 +42,7 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", ImmutableLists.emptyList());
+    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", WrappedPersistentList.emptyList());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -53,12 +53,12 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     public PolylineFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, ImmutableLists.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, WrappedPersistentList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
         set(FILL, null);
     }
 
     public PolylineFigure(Point2D... points) {
-        set(POINTS, ImmutableLists.of(points));
+        set(POINTS, WrappedPersistentList.of(points));
         set(FILL, null);
     }
 
@@ -124,7 +124,7 @@ public class PolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, FXTransforms.transform(transform, newP.get(i)));
         }
-        set(POINTS, ImmutableLists.copyOf(newP));
+        set(POINTS, WrappedPersistentList.copyOf(newP));
     }
 
     @Override
@@ -133,7 +133,7 @@ public class PolylineFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
-        set(POINTS, ImmutableLists.copyOf(newP));
+        set(POINTS, WrappedPersistentList.copyOf(newP));
     }
 
 
@@ -156,7 +156,7 @@ public class PolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    public static @NonNull double[] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<ImmutableList<Point2D>> key) {
+    public static @NonNull double[] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<? extends ImmutableList<Point2D>> key) {
         ImmutableList<Point2D> points = f.getNonNull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {

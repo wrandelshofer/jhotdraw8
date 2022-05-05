@@ -11,11 +11,11 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Provides query methods to a set. The state of the set may change.
+ * Read-only interface for a set. The state of the set may change.
  * <p>
  * Note: To compare a ReadOnlySet to a {@link Set}, you must either
- * wrap the ReadOnlySet into a Set using {@link SetWrapper},
- * or wrap the Set into a ReadOnlySet using {@link ReadOnlySetWrapper}.
+ * wrap the ReadOnlySet into a Set using {@link WrappedSet},
+ * or wrap the Set into a ReadOnlySet using {@link WrappedReadOnlySet}.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
@@ -30,7 +30,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * @return the wrapped set
      */
     default @NonNull Set<E> asSet() {
-        return new SetWrapper<>(this);
+        return new WrappedSet<>(this);
     }
 
     /**
@@ -39,9 +39,28 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * @return the wrapped set
      */
     default @NonNull ObservableSet<E> asObservableSet() {
-        return new ObservableSetWrapper<>(this);
+        return new WrappedObservableSet<>(this);
     }
 
+    static <E> boolean setEquals(ReadOnlySet<E> set, Object o) {
+        if (o == set) {
+            return true;
+        }
+        if (!(o instanceof ReadOnlySet)) {
+            return false;
+        }
+
+        @SuppressWarnings("unchecked")
+        ReadOnlyCollection<E> that = (ReadOnlyCollection<E>) o;
+        if (that.size() != set.size()) {
+            return false;
+        }
+        try {
+            return set.containsAll(that);
+        } catch (ClassCastException | NullPointerException unused) {
+            return false;
+        }
+    }
     /**
      * Returns the hash code of the provided iterator, assuming that
      * the iterator is from a set.

@@ -38,7 +38,7 @@ public class ShortestArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
      *                             Must be {@literal >= 0}.
      * @param zero                 the zero cost value
      * @param costLimit            the maximal cost (inclusive) of a path.
-     *                             Must be {@literal >= zero).
+     *                             Must be {@literal >= zero}.
      * @param costFunction         the cost function
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null

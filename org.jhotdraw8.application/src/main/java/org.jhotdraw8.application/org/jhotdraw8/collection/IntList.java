@@ -31,12 +31,12 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
     }
 
     /**
-     * @See List#lastIndexOf(Object)
+     * @see List#lastIndexOf(Object)
      */
     int lastIndexOfAsInt(int o);
 
     /**
-     * @See List#indexOf(Object)
+     * @see List#indexOf(Object)
      */
     int indexOfAsInt(int o);
 

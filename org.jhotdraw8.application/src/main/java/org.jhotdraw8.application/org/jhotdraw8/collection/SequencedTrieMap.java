@@ -7,12 +7,12 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrie;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.Node;
-import org.jhotdraw8.collection.champtrie.SequencedTrieIterator;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrie;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedTrieIterator;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -96,8 +96,8 @@ import java.util.Set;
  */
 public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 3;
-    private transient UniqueIdentity mutator;
+    private final static int ENTRY_LENGTH = 3;
+    private transient UniqueId mutator;
     private transient BitmapIndexedNode<K, V> root;
     private transient int size;
     private transient int modCount;
@@ -184,7 +184,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
     @Override
     public boolean containsKey(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
     }
 
     /**
@@ -193,12 +193,12 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(root, TUPLE_LENGTH, true, true);
+        return new ChampTrieGraphviz<K, V>().dumpTrie(root, ENTRY_LENGTH, true, true);
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return new SetWrapper<>(
+        return new WrappedSet<>(
                 SequencedTrieMap.EntryIterator::new,
                 SequencedTrieMap.this::size,
                 SequencedTrieMap.this::containsEntry,
@@ -211,13 +211,13 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
     @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
         final K key = (K) o;
-        Object result = root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH);
+        Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         return result == Node.NO_VALUE ? null : (V) result;
     }
 
-    private @NonNull UniqueIdentity getOrCreateMutator() {
+    private @NonNull UniqueId getOrCreateMutator() {
         if (mutator == null) {
-            mutator = new UniqueIdentity();
+            mutator = new UniqueId();
         }
         return mutator;
     }
@@ -232,7 +232,8 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
         final ChangeEvent<V> details = new ChangeEvent<>();
 
         final BitmapIndexedNode<K, V> newRootNode =
-                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, TUPLE_LENGTH, lastSequenceNumber);
+                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, lastSequenceNumber,
+                        ENTRY_LENGTH - 1);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -274,7 +275,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
-                (BitmapIndexedNode<K, V>) root.remove(getOrCreateMutator(), key, keyHash, 0, details, TUPLE_LENGTH);
+                root.remove(getOrCreateMutator(), key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -292,7 +293,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
             @SuppressWarnings("unchecked")
             Entry<K, V> entry = (Entry<K, V>) o;
             K key = entry.getKey();
-            Object result = root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH);
+            Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
             if (Objects.equals(result, entry.getValue())) {
                 removeAndGiveDetails(key);
                 return true;
@@ -302,7 +303,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
     }
 
     private void renumberSequenceNumbers() {
-        root = ChampTrie.renumber(size, root, getOrCreateMutator(), TUPLE_LENGTH);
+        root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
         lastSequenceNumber = size;
     }
 
@@ -335,7 +336,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
         protected int expectedModCount;
 
         public AbstractMapIterator() {
-            super(SequencedTrieMap.this.size, SequencedTrieMap.this.root, TUPLE_LENGTH);
+            super(SequencedTrieMap.this.size, SequencedTrieMap.this.root, ENTRY_LENGTH);
             this.expectedModCount = SequencedTrieMap.this.modCount;
         }
 
@@ -377,6 +378,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        private final static long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);

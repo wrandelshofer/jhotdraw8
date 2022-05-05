@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
@@ -41,7 +41,7 @@ import java.util.TreeSet;
  *
  * @author Werner Randelshofer
  */
-public class XmlWordListConverter implements Converter<ImmutableList<String>> {
+public class XmlWordListConverter implements Converter<PersistentList<String>> {
 
     public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
@@ -50,7 +50,7 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends PersistentList<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
@@ -69,18 +69,15 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        if (buf == null) {
-            return ImmutableLists.emptyList();
-        }
+    public PersistentList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return ImmutableLists.copyOf(tree);
+        return WrappedPersistentList.copyOf(tree);
     }
 
     @Override
-    public ImmutableList<String> getDefaultValue() {
-        return ImmutableLists.emptyList();
+    public PersistentList<String> getDefaultValue() {
+        return WrappedPersistentList.emptyList();
     }
 }

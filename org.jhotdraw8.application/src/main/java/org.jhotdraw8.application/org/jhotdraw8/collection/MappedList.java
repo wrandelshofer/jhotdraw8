@@ -14,10 +14,12 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Wraps a {@link List} in a {@link List} of a different type.
+ * Wraps a {@link List} in a {@link List} of a different element type.
  * <p>
  * The underlying List is referenced - not copied.
  *
+ * @param <E> the mapped element type
+ * @param <F> the original element type
  * @author Werner Randelshofer
  */
 public final class MappedList<E, F> extends AbstractList<E> {

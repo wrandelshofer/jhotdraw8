@@ -7,11 +7,11 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BaseTrieIterator;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.Node;
+import org.jhotdraw8.collection.champ.BaseTrieIterator;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -83,8 +83,8 @@ import java.util.function.BiFunction;
  */
 public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 2;
-    private transient UniqueIdentity mutator;
+    private final static int ENTRY_LENGTH = 2;
+    private transient UniqueId mutator;
     private transient BitmapIndexedNode<K, V> root;
     private transient int size;
     private transient int modCount;
@@ -160,7 +160,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     @Override
     public boolean containsKey(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
     /**
@@ -169,12 +169,12 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(root, TUPLE_LENGTH, true, false);
+        return new ChampTrieGraphviz<K, V>().dumpTrie(root, ENTRY_LENGTH, true, false);
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return new SetWrapper<>(
+        return new WrappedSet<>(
                 EntryIterator::new,
                 TrieMap.this::size,
                 TrieMap.this::containsEntry,
@@ -187,13 +187,13 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
         final K key = (K) o;
-        Object result = root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH);
+        Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH);
         return result == Node.NO_VALUE ? null : (V) result;
     }
 
-    private @NonNull UniqueIdentity getOrCreateMutator() {
+    private @NonNull UniqueId getOrCreateMutator() {
         if (mutator == null) {
-            mutator = new UniqueIdentity();
+            mutator = new UniqueId();
         }
         return mutator;
     }
@@ -208,7 +208,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         final ChangeEvent<V> details = new ChangeEvent<>();
 
         final BitmapIndexedNode<K, V> newRootNode = root
-                .update(getOrCreateMutator(), key, val, keyHash, 0, details, TUPLE_LENGTH, Node.NO_SEQUENCE_NUMBER);
+                .update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -246,7 +246,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
-                (BitmapIndexedNode<K, V>) root.remove(getOrCreateMutator(), key, keyHash, 0, details, TUPLE_LENGTH);
+                root.remove(getOrCreateMutator(), key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -295,7 +295,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         protected int expectedModCount;
 
         public AbstractMapIterator() {
-            super(TrieMap.this.root, TUPLE_LENGTH);
+            super(TrieMap.this.root, ENTRY_LENGTH);
             this.expectedModCount = TrieMap.this.modCount;
         }
 
@@ -338,6 +338,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        private final static long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);

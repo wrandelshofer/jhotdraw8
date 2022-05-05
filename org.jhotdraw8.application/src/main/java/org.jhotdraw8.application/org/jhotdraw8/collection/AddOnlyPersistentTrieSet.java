@@ -9,9 +9,13 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Arrays;
 import java.util.Objects;
 
-
+/**
+ * A persistent trie set that only provides a {@code copyAdd} method.
+ *
+ * @param <E> the element type
+ */
 public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSet<E> {
-    private static final int TUPLE_LENGTH = 1;
+    private static final int ENTRY_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;
     private static final int BIT_PARTITION_SIZE = 4;
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
@@ -33,6 +37,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
         assert !(key0.equals(key1));
 
         if (shift >= HASH_CODE_LENGTH) {
+            @SuppressWarnings({"unchecked"})
             HashCollisionNode<K> unchecked = new HashCollisionNode<>(keyHash0, key0, key1);
             return unchecked;
         }
@@ -97,7 +102,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
         @NonNull AddOnlyPersistentTrieSet<K> copyAndInsertValue(final int bitpos,
                                                                 final @NonNull K key) {
-            final int idx = TUPLE_LENGTH * dataIndex(bitpos);
+            final int idx = ENTRY_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and insert 1 element(s) at position 'idx'
             final Object[] src = this.nodes;
@@ -111,8 +116,8 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
         @NonNull AddOnlyPersistentTrieSet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull AddOnlyPersistentTrieSet<K> node) {
 
-            final int idxOld = TUPLE_LENGTH * dataIndex(bitpos);
-            final int idxNew = this.nodes.length - TUPLE_LENGTH - nodeIndex(bitpos);
+            final int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
+            final int idxNew = this.nodes.length - ENTRY_LENGTH - nodeIndex(bitpos);
             assert idxOld <= idxNew;
 
             // copy 'src' and remove 1 element(s) at position 'idxOld' and
@@ -148,7 +153,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
         @SuppressWarnings("unchecked")
         @NonNull K getKey(final int index) {
-            return (K) nodes[TUPLE_LENGTH * index];
+            return (K) nodes[ENTRY_LENGTH * index];
         }
 
         @SuppressWarnings("unchecked")

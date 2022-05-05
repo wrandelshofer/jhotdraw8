@@ -8,7 +8,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ReadOnlyList;
-import org.jhotdraw8.collection.ReadOnlyListWrapper;
+import org.jhotdraw8.collection.WrappedReadOnlyList;
 
 /**
  * A DockParent provides screen space for one or more {@link DockChild}ren.
@@ -28,7 +28,7 @@ public interface DockParent extends DockChild {
 
     @Override
     default @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
-        return new ReadOnlyListWrapper<>(getDockChildren());
+        return new WrappedReadOnlyList<>(getDockChildren());
     }
 
     /**

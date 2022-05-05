@@ -13,7 +13,6 @@ import org.jhotdraw8.app.EditableComponent;
 
 /**
  * Cuts the selected region and places its contents into the system clipboard.
- * <p>
  *
  * @author Werner Randelshofer
  */

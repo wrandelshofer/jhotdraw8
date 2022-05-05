@@ -6,8 +6,8 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 
 import java.util.List;
@@ -26,11 +26,11 @@ public class ListCssTokenizer implements CssTokenizer {
     private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
     public ListCssTokenizer(@NonNull List<CssToken> in) {
-        this(ImmutableLists.copyOf(in));
+        this(ImmutableArrayList.copyOf(in));
     }
 
     public ListCssTokenizer(@NonNull ReadOnlyList<CssToken> in) {
-        this.in = ImmutableLists.copyOf(in);
+        this.in = ImmutableArrayList.copyOf(in);
         current = in.isEmpty() ? EOF : in.get(0);
     }
 

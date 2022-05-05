@@ -9,8 +9,8 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.FileBasedActivity;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.SimpleNullableKey;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.reflect.TypeToken;
@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 /**
  * Presents a file chooser to the user and then exports the contents of the
  * active view to the chosen file.
- * <p>
  *
  * @author Werner Randelshofer
  */

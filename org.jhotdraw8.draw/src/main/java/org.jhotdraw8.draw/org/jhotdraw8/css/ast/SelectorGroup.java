@@ -6,7 +6,7 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -27,11 +27,11 @@ public class SelectorGroup extends Selector {
     private final @NonNull ReadOnlyList<Selector> selectors;
 
     public SelectorGroup(@NonNull Selector selector) {
-        this.selectors = ImmutableLists.of(selector);
+        this.selectors = ImmutableArrayList.of(selector);
     }
 
     public SelectorGroup(@NonNull List<Selector> selectors) {
-        this.selectors = ImmutableLists.copyOf(selectors);
+        this.selectors = ImmutableArrayList.copyOf(selectors);
     }
 
     @Override

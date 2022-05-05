@@ -8,8 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Provides an API for a persistent set that supports the addition
- * of an element.
+ * Interface for a persistent set that only provides a {@code copyAdd} method.
  *
  * @param <E> the element type
  */

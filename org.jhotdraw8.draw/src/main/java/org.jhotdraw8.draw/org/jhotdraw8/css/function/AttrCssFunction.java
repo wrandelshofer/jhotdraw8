@@ -40,11 +40,9 @@ import java.util.function.Consumer;
  * <p>
  * References:
  * <dl>
- *     <dd></dd>attr() function<dt>
- *         <a href="https://drafts.csswg.org/css-values-4/#attr-notation">csswg.org</a></a>
- *     </dt>
+ *     <dt>attr() function</dt>
+ *     <dd><a href="https://drafts.csswg.org/css-values-4/#attr-notation">csswg.org</a></dd>
  * </dl>
- * </p>
  */
 public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     /**

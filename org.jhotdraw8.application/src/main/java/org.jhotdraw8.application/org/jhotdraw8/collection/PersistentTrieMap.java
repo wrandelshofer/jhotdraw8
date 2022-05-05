@@ -6,12 +6,12 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BaseTrieIterator;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.KeyIterator;
-import org.jhotdraw8.collection.champtrie.Node;
+import org.jhotdraw8.collection.champ.BaseTrieIterator;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -80,7 +80,7 @@ import java.util.function.ToIntFunction;
 public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 2;
+    private final static int ENTRY_LENGTH = 2;
 
     private static final PersistentTrieMap<?, ?> EMPTY_MAP = new PersistentTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
 
@@ -88,7 +88,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
     private final transient ToIntFunction<K> hashFunction = Objects::hashCode;
 
     PersistentTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
-        super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
+        super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
     }
 
@@ -151,12 +151,12 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> entries() {
-        return new EntryIterator<>(this, TUPLE_LENGTH);
+        return new EntryIterator<>(this, ENTRY_LENGTH);
     }
 
     @Override
@@ -173,31 +173,17 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, TUPLE_LENGTH, false);
-        } else if (other instanceof Map) {
-            Map<?, ?> that = (Map<?, ?>) other;
-            if (this.size() != that.size()) {
-                return false;
-            }
-            for (Map.Entry<?, ?> entry : that.entrySet()) {
-                @SuppressWarnings("unchecked") final K key = (K) entry.getKey();
-                final Object result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
-
-                @SuppressWarnings("unchecked") final V val = (V) entry.getValue();
-                if (!Objects.equals(result, val)) {
-                    return false;
-                }
-            }
-            return true;
+            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH);
+        } else {
+            return ReadOnlyMap.mapEquals(this, other);
         }
-        return false;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
         K key = (K) o;
-        Object result = findByKey(key, hashFunction.applyAsInt(key), 0, TUPLE_LENGTH);
+        Object result = findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH);
         return result == Node.NO_VALUE ? null : (V) result;
     }
 
@@ -213,7 +199,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
 
     @Override
     public @NonNull Iterator<K> keys() {
-        return new KeyIterator<>(this, TUPLE_LENGTH);
+        return new KeyIterator<>(this, ENTRY_LENGTH);
     }
 
     @Override
@@ -221,12 +207,17 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return size;
     }
 
+    @Override
+    public @NonNull PersistentMap<K, V> copyClear() {
+        return isEmpty() ? this : of();
+    }
+
     public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
 
         final BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details, TUPLE_LENGTH, Node.NO_SEQUENCE_NUMBER);
+                keyHash, 0, details, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -269,7 +260,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
-                remove(null, key, keyHash, 0, details, TUPLE_LENGTH);
+                remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH);
         if (details.isModified()) {
             assert details.hasReplacedValue();
             return new PersistentTrieMap<>(newRootNode, size - 1);
@@ -316,7 +307,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(this, TUPLE_LENGTH, true, true);
+        return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, false);
     }
 
 
@@ -325,6 +316,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        private final static long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);

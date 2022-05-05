@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Provides query methods to a collection. The state
+ * Read-only interface for a collection. The state
  * of the collection may change.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
@@ -113,15 +113,15 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @return the wrapped collection
      */
     default @NonNull Collection<E> asCollection() {
-        return new CollectionWrapper<>(this);
+        return new WrappedCollection<>(this);
     }
 
     /**
      * Returns a string representation of the provided iterable.  The string
      * representation consists of a list of the iterable's elements in the
      * order they are returned, enclosed in square brackets
-     * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-     * <tt>", "</tt> (comma and space).  Elements are converted to strings as
+     * ({@code "[]"}).  Adjacent elements are separated by the characters
+     * {@code ", "} (comma and space).  Elements are converted to strings as
      * by {@link String#valueOf(Object)}.
      *
      * @param c an iterable
@@ -144,5 +144,4 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
             sb.append(',').append(' ');
         }
     }
-
 }

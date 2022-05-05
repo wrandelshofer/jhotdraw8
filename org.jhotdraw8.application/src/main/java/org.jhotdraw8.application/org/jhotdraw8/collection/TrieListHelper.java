@@ -16,7 +16,7 @@ class TrieListHelper {
     static final int BIT_MASK = (1 << BIT_PARTITION_SIZE) - 1;
     static final int M = 1 << BIT_PARTITION_SIZE;
 
-    static <E> @NonNull LeafNode<E> merge(@Nullable UniqueIdentity mutator, @NonNull LeafNode<E> left, @NonNull LeafNode<E> right) {
+    static <E> @NonNull LeafNode<E> merge(@Nullable UniqueId mutator, @NonNull LeafNode<E> left, @NonNull LeafNode<E> right) {
         E[] leftData = left.data;
         E[] rightData = right.data;
         E[] mergedData = Arrays.copyOf(leftData, leftData.length + rightData.length);
@@ -24,13 +24,13 @@ class TrieListHelper {
         return newLeafNode(mutator, mergedData);
     }
 
-    static <E> @NonNull InternalNode<E> newAbove(@Nullable UniqueIdentity mutator, @Nullable InternalNode<E> left, @Nullable InternalNode<E> centre, @Nullable InternalNode<E> right) {
+    static <E> @NonNull InternalNode<E> newAbove(@Nullable UniqueId mutator, @Nullable InternalNode<E> left, @Nullable InternalNode<E> centre, @Nullable InternalNode<E> right) {
         int leftLen = left == null ? 0 : left.children.length - 1;
         int centreLen = centre == null ? 0 : centre.children.length;
         int rightLen = right == null ? 0 : right.children.length - 1;
 
         int[] mergedSizes = new int[leftLen + centreLen + rightLen];
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "rawtypes"})
         Node<E>[] mergedChildren = (Node<E>[]) new Node[leftLen + centreLen + rightLen];
         if (left != null) {
             System.arraycopy(left.sizes, 0, mergedSizes, 0, leftLen);
@@ -47,18 +47,18 @@ class TrieListHelper {
         return newInternalNode(mutator, mergedSizes, mergedChildren);
     }
 
-    static <E> @NonNull InternalNode<E> newAbove1(@Nullable UniqueIdentity mutator, @NonNull Node<E> child) {
+    static <E> @NonNull InternalNode<E> newAbove1(@Nullable UniqueId mutator, @NonNull Node<E> child) {
         int[] sizes = new int[]{child.getLength()};
-        @SuppressWarnings("unchecked") Node<E>[] children = new Node[]{child};
+        @SuppressWarnings({"unchecked", "rawtypes"}) Node<E>[] children = new Node[]{child};
         return newInternalNode(mutator, sizes, children);
     }
 
-    static <E> @NonNull InternalNode<E> newInternalNode(@Nullable UniqueIdentity mutator,
+    static <E> @NonNull InternalNode<E> newInternalNode(@Nullable UniqueId mutator,
                                                         @NonNull int[] sizes, @NonNull Node<E>[] children) {
         return mutator == null ? new InternalNode<E>(sizes, children) : new MutableInternalNode<E>(mutator, sizes, children);
     }
 
-    static <E> @NonNull LeafNode<E> newLeafNode(@Nullable UniqueIdentity mutator, @NonNull E[] data) {
+    static <E> @NonNull LeafNode<E> newLeafNode(@Nullable UniqueId mutator, @NonNull E[] data) {
         return mutator == null ? new LeafNode<E>(data) : new MutableLeafNode<E>(mutator, data);
     }
 
@@ -91,9 +91,9 @@ class TrieListHelper {
         private LeafNode<E> head;
         private LeafNode<E> tail;
         private InternalNode<E> root;
-        private UniqueIdentity mutator = new UniqueIdentity();
+        private UniqueId mutator = new UniqueId();
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "rawtypes"})
         public RrbTree() {
             head = tail = (LeafNode<E>) EMPTY_LEAF;
             root = newInternalNode(mutator, new int[]{0}, new LeafNode[]{EMPTY_LEAF});
@@ -119,17 +119,16 @@ class TrieListHelper {
     static abstract class Node<E> {
         protected abstract int getLength();
 
-        @Nullable UniqueIdentity getMutator() {
+        @Nullable UniqueId getMutator() {
             return null;
         }
 
-        boolean isAllowedToEdit(@Nullable UniqueIdentity y) {
-            UniqueIdentity x = getMutator();
+        boolean isAllowedToEdit(@Nullable UniqueId y) {
+            UniqueId x = getMutator();
             return x != null && x == y;
         }
 
-        @SuppressWarnings("unchecked")
-        protected abstract @NonNull Node<E>[] insert(@Nullable UniqueIdentity mutator,
+        protected abstract @NonNull Node<E>[] insert(@Nullable UniqueId mutator,
                                                      @Nullable E[] elements,
                                                      int index,
                                                      int shift);
@@ -143,7 +142,7 @@ class TrieListHelper {
             this.data = newData;
         }
 
-        LeafNode<E> dec(@Nullable UniqueIdentity mutator) {
+        LeafNode<E> dec(@Nullable UniqueId mutator) {
             E[] newData = Arrays.copyOf(data, data.length - 1);
             if (isAllowedToEdit(mutator)) {
                 data = newData;
@@ -158,8 +157,8 @@ class TrieListHelper {
             return data.length;
         }
 
-        @SuppressWarnings("unchecked")
-        protected @NonNull Node<E>[] insert(@Nullable UniqueIdentity mutator,
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        protected @NonNull Node<E>[] insert(@Nullable UniqueId mutator,
                                             @Nullable E[] elements,
                                             int index,
                                             int shift) {
@@ -172,7 +171,7 @@ class TrieListHelper {
             }
         }
 
-        LeafNode<E> inc(@Nullable UniqueIdentity mutator) {
+        LeafNode<E> inc(@Nullable UniqueId mutator) {
             E[] newData = Arrays.copyOf(data, data.length + 1);
             if (isAllowedToEdit(mutator)) {
                 data = newData;
@@ -193,8 +192,8 @@ class TrieListHelper {
             this.children = children;
         }
 
-        @SuppressWarnings("unchecked")
-        protected @NonNull Node<E>[] insert(@Nullable UniqueIdentity mutator,
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        protected @NonNull Node<E>[] insert(@Nullable UniqueId mutator,
                                             @Nullable E[] elements,
                                             int index,
                                             int shift) {
@@ -235,27 +234,27 @@ class TrieListHelper {
     }
 
     static class MutableLeafNode<E> extends LeafNode<E> {
-        private final @NonNull UniqueIdentity mutator;
+        private final @NonNull UniqueId mutator;
 
-        MutableLeafNode(@NonNull UniqueIdentity mutator, @NonNull E[] data) {
+        MutableLeafNode(@NonNull UniqueId mutator, @NonNull E[] data) {
             super(data);
             this.mutator = mutator;
         }
 
-        @NonNull UniqueIdentity getMutator() {
+        @NonNull UniqueId getMutator() {
             return mutator;
         }
     }
 
     static class MutableInternalNode<E> extends InternalNode<E> {
-        private final @NonNull UniqueIdentity mutator;
+        private final @NonNull UniqueId mutator;
 
-        MutableInternalNode(@NonNull UniqueIdentity mutator, @NonNull int[] sizes, @NonNull Node<E>[] children) {
+        MutableInternalNode(@NonNull UniqueId mutator, @NonNull int[] sizes, @NonNull Node<E>[] children) {
             super(sizes, children);
             this.mutator = mutator;
         }
 
-        @NonNull UniqueIdentity getMutator() {
+        @NonNull UniqueId getMutator() {
             return mutator;
         }
     }
@@ -270,7 +269,7 @@ class TrieListHelper {
     static class InnerTrieNode<E> extends TrieNode<E> {
         private final TrieNode<E>[] children;
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({"unchecked", "rawtypes"})
         InnerTrieNode(int size, int shift) {
             int nodeCapacity = M << (shift);
             int childShift = shift - BIT_PARTITION_SIZE;

@@ -8,7 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 /**
- * A collection of integer elements that contains no duplicates.
+ * Interface for a collection of int-valued elements that contains no duplicates.
  */
 public interface IntSet extends AddToIntSet {
 

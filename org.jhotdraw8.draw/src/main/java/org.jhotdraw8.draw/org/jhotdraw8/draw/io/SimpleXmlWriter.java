@@ -10,10 +10,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
 import org.jhotdraw8.collection.ReadOnlyMap;
-import org.jhotdraw8.collection.ReadOnlyMapWrapper;
+import org.jhotdraw8.collection.WrappedReadOnlyMap;
+import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.ClippingFigure;
@@ -72,7 +72,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    private @NonNull ReadOnlyMap<Key<?>, Object> options = new ReadOnlyMapWrapper<>(new LinkedHashMap<>());
+    private @NonNull ReadOnlyMap<Key<?>, Object> options = new WrappedReadOnlyMap<>(new LinkedHashMap<>());
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);

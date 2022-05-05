@@ -11,6 +11,7 @@ import java.util.AbstractMap;
 import java.util.function.BiConsumer;
 
 class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
+    private final static long serialVersionUID = 0L;
     private final @NonNull BiConsumer<K, V> putFunction;
 
     public MutableMapEntry(@NonNull BiConsumer<K, V> putFunction, K key, V value) {

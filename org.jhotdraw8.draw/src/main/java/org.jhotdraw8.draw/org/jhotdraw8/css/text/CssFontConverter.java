@@ -34,7 +34,6 @@ import java.util.function.Consumer;
  * FontSize := Size;
  * FontFamily := Word|Quoted;
  * </pre>
- * <p>
  *
  * @author Werner Randelshofer
  */

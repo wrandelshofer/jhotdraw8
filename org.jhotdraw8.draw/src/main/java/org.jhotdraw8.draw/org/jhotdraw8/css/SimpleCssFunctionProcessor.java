@@ -5,8 +5,8 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.css.function.CssFunction;
 
@@ -87,7 +87,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 out.add(t);
             }
         }
-        return ImmutableLists.copyOf(out);
+        return ImmutableArrayList.copyOf(out);
     }
 
     @Override

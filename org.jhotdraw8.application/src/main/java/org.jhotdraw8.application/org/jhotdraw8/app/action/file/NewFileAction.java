@@ -13,7 +13,6 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 /**
  * Creates a new view.
- * <p>
  *
  * @author Werner Randelshofer
  */

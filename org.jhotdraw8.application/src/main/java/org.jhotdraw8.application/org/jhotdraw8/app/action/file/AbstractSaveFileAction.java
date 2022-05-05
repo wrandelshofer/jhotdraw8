@@ -17,9 +17,9 @@ import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractActivityAction;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.ReadOnlyMapWrapper;
-import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.collection.WrappedReadOnlyMap;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -38,7 +38,6 @@ import java.util.function.Supplier;
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
  * {@code URIChooser} is presented.
- * <p>
  *
  * @author Werner Randelshofer
  */
@@ -167,7 +166,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     }
 
     protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, @NonNull Map<Key<?>, Object> options, WorkState<Void> workState) {
-        view.write(uri, format, new ReadOnlyMapWrapper<>(options), workState).handle((result, exception) -> {
+        view.write(uri, format, new WrappedReadOnlyMap<>(options), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
                 if (oldFocusOwner != null) {

@@ -29,7 +29,7 @@ public interface ViewBoxableDrawing extends Drawing, Figure {
     /**
      * Defines the view-box of the drawing.
      * <p>
-     * See <a href="https://www.w3.org/TR/SVG11/coords.html#ViewBoxAttribute>w3.org</a>.
+     * See <a href="https://www.w3.org/TR/SVG11/coords.html#ViewBoxAttribute">w3.org</a>.
      * <p>
      * FIXME This is currently a mix-up of the width and height of the bounds=(0,0,width,height)
      * with x- and y-coordinates of the viewBox=(viewbox-x,viewbox-y,viewbox-width,viewbox-height).

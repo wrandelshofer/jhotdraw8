@@ -20,7 +20,7 @@ import org.jhotdraw8.app.Activity;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
-import org.jhotdraw8.collection.ReadOnlyMapWrapper;
+import org.jhotdraw8.collection.WrappedReadOnlyMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -203,7 +203,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     protected void saveViewToURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState<Void> workState) {
-        v.write(uri, dataFormat, new ReadOnlyMapWrapper<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
+        v.write(uri, dataFormat, new WrappedReadOnlyMap<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

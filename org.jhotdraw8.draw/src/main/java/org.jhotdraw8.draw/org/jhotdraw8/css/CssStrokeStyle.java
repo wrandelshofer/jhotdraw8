@@ -9,8 +9,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 
 import java.util.Objects;
 
@@ -24,7 +24,7 @@ public class CssStrokeStyle {
 
     public CssStrokeStyle() {
         this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.from(4.0),
-                CssSize.ZERO, ImmutableLists.emptyList());
+                CssSize.ZERO, ImmutableArrayList.emptyList());
     }
 
     public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,

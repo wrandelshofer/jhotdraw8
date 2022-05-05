@@ -5,8 +5,8 @@
 package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.text.Converter;
 
@@ -30,7 +30,7 @@ public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAcc
         if (cssConverter instanceof CssConverter<?>) {
             return ((CssConverter<?>) cssConverter).getExamples();
         }
-        return ImmutableLists.emptyList();
+        return ImmutableArrayList.emptyList();
     }
 
 

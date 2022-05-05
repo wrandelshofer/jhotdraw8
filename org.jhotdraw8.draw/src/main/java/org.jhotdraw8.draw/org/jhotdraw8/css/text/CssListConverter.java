@@ -6,8 +6,8 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -101,9 +101,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                             @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = ImmutableLists.ofIterable(delimiter);
-        this.prefix = ImmutableLists.ofIterable(prefix);
-        this.suffix = ImmutableLists.ofIterable(suffix);
+        this.delimiter = ImmutableArrayList.copyOf(delimiter);
+        this.prefix = ImmutableArrayList.copyOf(prefix);
+        this.suffix = ImmutableArrayList.copyOf(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
@@ -117,7 +117,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     @Override
     public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return ImmutableLists.emptyList();
+            return ImmutableArrayList.emptyList();
         } else {
             tt.pushBack();
         }
@@ -153,7 +153,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return ImmutableLists.copyOf(list);
+        return ImmutableArrayList.copyOf(list);
     }
 
     @Override
@@ -194,7 +194,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
     @Override
     public @Nullable ImmutableList<T> getDefaultValue() {
-        return ImmutableLists.emptyList();
+        return ImmutableArrayList.emptyList();
     }
 
     @Override

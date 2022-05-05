@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.render;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.SimpleNullableKey;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.SimpleNullableKey;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**

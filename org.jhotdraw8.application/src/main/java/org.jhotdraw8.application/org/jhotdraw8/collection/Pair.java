@@ -6,7 +6,7 @@ package org.jhotdraw8.collection;
 
 
 /**
- * This interface defines a read-only API for a pair of values -
+ * Read-only interface for a pair of values -
  * the pair can be ordered or unordered.
  *
  * @param <U> the type of the first element

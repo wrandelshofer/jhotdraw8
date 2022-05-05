@@ -10,8 +10,8 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -46,7 +46,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
 
         try {
             final List<PathElement> pathElements = FXSvgPaths.pathElementsFromSvgString(svgPathString);
-            return ImmutableLists.copyOf(pathElements);
+            return ImmutableArrayList.copyOf(pathElements);
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
             p.add(new MoveTo(0, 0));
@@ -54,7 +54,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
             p.add(new LineTo(10, 10));
             p.add(new LineTo(0, 10));
             p.add(new ClosePath());
-            return ImmutableLists.copyOf(p);
+            return ImmutableArrayList.copyOf(p);
         }
     }
 
@@ -79,7 +79,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
 
     @Override
     public @Nullable ImmutableList<PathElement> getDefaultValue() {
-        return isNullable() ? null : ImmutableLists.emptyList();
+        return isNullable() ? null : ImmutableArrayList.emptyList();
     }
 
 

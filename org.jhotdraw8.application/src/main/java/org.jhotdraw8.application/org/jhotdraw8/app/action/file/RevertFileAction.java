@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractActivityAction;
-import org.jhotdraw8.collection.ReadOnlyMapWrapper;
+import org.jhotdraw8.collection.WrappedReadOnlyMap;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 
@@ -25,7 +25,6 @@ import java.util.function.BiFunction;
 /**
  * Lets the user write unsaved changes of the active view, then presents an
  * {@code URIChooser} and loads the selected URI into the active view.
- * <p>
  *
  * @author Werner Randelshofer
  */
@@ -82,7 +81,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
         if (uri == null) {
             view.clear().handle((ignored, throwable) -> handler.apply(null, throwable));
         } else {
-            view.read(uri, dataFormat, new ReadOnlyMapWrapper<>(new LinkedHashMap<>()), false, workState).handle(handler);
+            view.read(uri, dataFormat, new WrappedReadOnlyMap<>(new LinkedHashMap<>()), false, workState).handle(handler);
         }
     }
 

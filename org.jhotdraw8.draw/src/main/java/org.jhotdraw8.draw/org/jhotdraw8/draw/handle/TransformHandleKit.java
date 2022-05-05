@@ -21,8 +21,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -205,7 +205,7 @@ public class TransformHandleKit {
 
     private abstract static class AbstractTransformHandle extends AbstractResizeTransformHandle {
 
-        @Nullable ImmutableList<Transform> startTransforms;
+        @Nullable PersistentList<Transform> startTransforms;
 
         public AbstractTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
             super(owner, locator, shape, bg, border);
@@ -223,7 +223,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            ImmutableList<Transform> oldTransforms = startTransforms;
+            PersistentList<Transform> oldTransforms = startTransforms == null ? WrappedPersistentList.emptyList() : startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();
@@ -237,11 +237,11 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
             case 0:
-                model.set(owner, TRANSFORMS, ImmutableLists.of(transform));
+                model.set(owner, TRANSFORMS, WrappedPersistentList.of(transform));
                 break;
             default:
                 int last = oldTransforms.size() - 1;
-                model.set(owner, TRANSFORMS, ImmutableLists.set(oldTransforms, last, FXTransforms.concat(oldTransforms.get(last), transform)));
+                model.set(owner, TRANSFORMS, oldTransforms.copySet(last, FXTransforms.concat(oldTransforms.get(last), transform)));
                 break;
             }
         }

@@ -9,8 +9,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssToken;
@@ -68,7 +68,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
         CssSize miterLimit = CssSize.from(4);
         CssSize dashOffset = CssSize.from(0);
-        ImmutableList<CssSize> dashArray = ImmutableLists.emptyList();
+        ImmutableList<CssSize> dashArray = ImmutableArrayList.emptyList();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -183,7 +183,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩: ⟨" + DASHARRAY + "⟩ right bracket expected.");
-        return ImmutableLists.copyOf(list);
+        return ImmutableArrayList.copyOf(list);
     }
 
     private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
@@ -228,7 +228,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
 
     @Override
     public @NonNull ImmutableList<String> getExamples() {
-        return ImmutableLists.of(
+        return ImmutableArrayList.of(
                 "type(inside)",
                 "type(centered)",
                 "type(outside)",

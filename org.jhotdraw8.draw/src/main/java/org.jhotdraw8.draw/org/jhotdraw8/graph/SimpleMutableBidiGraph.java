@@ -362,8 +362,8 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         }
 
         private Enumerator<Node<V, A>> nodesEnumerator() {
-            // We must use explicit type arguments in Java 8
-            return new AbstractEnumerator<>(size, 0) {
+            // We must use explicit type arguments in Java 8!
+            return new AbstractEnumerator<Node<V, A>>(size, 0) {
                 int index = 0;
 
                 @Override

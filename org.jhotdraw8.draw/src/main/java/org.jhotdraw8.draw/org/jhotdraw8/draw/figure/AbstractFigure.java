@@ -9,13 +9,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSets;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ImmutableLinkedHashSet;
 import org.jhotdraw8.collection.KeyMap;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonNullMapAccessor;
 import org.jhotdraw8.collection.ReadOnlySet;
-import org.jhotdraw8.collection.ReadOnlySetWrapper;
+import org.jhotdraw8.collection.WrappedReadOnlySet;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -115,9 +115,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     @Override
     public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
-            return ImmutableSets.of();
+            return ImmutableLinkedHashSet.of();
         }
-        return new ReadOnlySetWrapper<>(layoutObservers);
+        return new WrappedReadOnlySet<>(layoutObservers);
     }
 
     @Override

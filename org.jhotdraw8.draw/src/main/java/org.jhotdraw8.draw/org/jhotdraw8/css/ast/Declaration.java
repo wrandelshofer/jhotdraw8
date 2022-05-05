@@ -6,8 +6,8 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssToken;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class Declaration extends AbstractSyntaxTree {
     public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
         this.namespace = namespace;
         this.propertyName = propertyName;
-        this.terms = ImmutableLists.copyOf(terms);
+        this.terms = ImmutableArrayList.copyOf(terms);
         this.startPos = startPos;
         this.endPos = endPos;
     }

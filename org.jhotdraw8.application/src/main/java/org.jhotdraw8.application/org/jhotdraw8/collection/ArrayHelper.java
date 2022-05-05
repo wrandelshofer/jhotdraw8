@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
- * Provides helper methods for arrays that are not available in Java SE 8.
+ * Provides static helper methods for arrays.
  */
 public class ArrayHelper {
     /**

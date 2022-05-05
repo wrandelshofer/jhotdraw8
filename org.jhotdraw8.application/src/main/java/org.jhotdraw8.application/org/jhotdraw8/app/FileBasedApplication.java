@@ -5,8 +5,8 @@
 package org.jhotdraw8.app;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.NonNullKey;
-import org.jhotdraw8.collection.SimpleNonNullKey;
+import org.jhotdraw8.collection.key.NonNullKey;
+import org.jhotdraw8.collection.key.SimpleNonNullKey;
 
 public interface FileBasedApplication extends Application {
     @NonNull

@@ -7,7 +7,7 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.text.CssRectangle2DConverter;
 import org.jhotdraw8.css.text.CssStringConverter;

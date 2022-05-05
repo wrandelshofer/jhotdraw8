@@ -9,10 +9,10 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.Key;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.text.CssStrokeStyleConverter;
@@ -113,7 +113,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStrokeStyle value) {
         if (value == null) {
             dashOffsetKey.put(a, CssSize.ZERO);
-            dashArrayKey.put(a, ImmutableLists.emptyList());
+            dashArrayKey.put(a, ImmutableArrayList.emptyList());
             typeKey.put(a, StrokeType.CENTERED);
             lineJoinKey.put(a, StrokeLineJoin.MITER);
             lineCapKey.put(a, StrokeLineCap.SQUARE);

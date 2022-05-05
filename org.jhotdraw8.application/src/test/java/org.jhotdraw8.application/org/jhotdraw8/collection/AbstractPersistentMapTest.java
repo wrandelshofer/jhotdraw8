@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public abstract class AbstractPersistentMapTest {
 
     private void assertMapEquality(LinkedHashMap<HashCollider, HashCollider> expected, PersistentMap<HashCollider, HashCollider> actual) {
         //noinspection EqualsBetweenInconvertibleTypes
-        assertTrue(actual.equals(expected));
+        assertTrue(actual.equals(new WrappedReadOnlyMap<>(expected)));
         assertEquals(actual, actual);
         //noinspection ConstantConditions
         assertFalse(actual.equals(null));
@@ -88,7 +89,7 @@ public abstract class AbstractPersistentMapTest {
         assertMapEquality(expected, actual);
 
         // WHEN: a set is created with copyOf a ImmutableMap
-        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableMaps.copyOf(expected);
+        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableLinkedHashMap.copyOf(expected);
         actual = copyOf(immutableExpected);
         assertEquals(immutableExpected, actual);
 
@@ -101,7 +102,7 @@ public abstract class AbstractPersistentMapTest {
         assertMapEquality(expected, actual);
     }
 
-    private void testEqualsHashCode(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
+    private void testEqualsHashCode(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask, String message) {
         assertTrue(values1.size() > 0);
         assertEquals(values1.size(), values2.size());
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
@@ -128,7 +129,7 @@ public abstract class AbstractPersistentMapTest {
         // some assertions may not make sense, but they are needed for test coverage
 
         //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(actual1a, expected1);
+        assertMapEquality(expected1, actual1a);
         assertEquals(expected1, actual1a.asMap());
         assertNotEquals(actual1a, actual2a);
         assertNotEquals(actual1a, actual2b);
@@ -162,7 +163,7 @@ public abstract class AbstractPersistentMapTest {
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                ImmutableMaps.of(firstValue1.getKey(), firstValue1.getValue(),
+                ImmutableLinkedHashMap.of(firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue()).readOnlyEntrySet());
         //
@@ -213,7 +214,7 @@ public abstract class AbstractPersistentMapTest {
             testContains(values1, values2);
             testOfEntries(values1, values2);
             testCopyOf(values1, values2);
-            testEqualsHashCode(values1, values2, hashBitMask);
+            testEqualsHashCode(values1, values2, hashBitMask, "" + i);
             testSerialization(values1, values2, hashBitMask);
         }
     }
@@ -221,6 +222,10 @@ public abstract class AbstractPersistentMapTest {
     private void testSerialization(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
         PersistentMap<HashCollider, HashCollider> actual = of();
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
+
+        if (!(actual instanceof Serializable)) {
+            return;
+        }
 
         // WHEN: empty map is re-serialized
         actual = reserialize(actual);
@@ -393,7 +398,7 @@ public abstract class AbstractPersistentMapTest {
     }
 
     public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        @SuppressWarnings("unchecked") PersistentMap<HashCollider, HashCollider> set = of(ImmutableMaps.entry(key, value));
+        @SuppressWarnings("unchecked") PersistentMap<HashCollider, HashCollider> set = of(ImmutableLinkedHashMap.entry(key, value));
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(key, value);
         assertTrue(set.containsKey(key));

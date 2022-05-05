@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
- * A collection with a well-defined linear ordering of its elements.
+ * Interface for a collection with a well-defined linear ordering of its elements.
  *
  * @param <E> the element type
  */

@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.ImmutableSets;
+import org.jhotdraw8.collection.PersistentSet;
+import org.jhotdraw8.collection.PersistentTrieSet;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
@@ -21,7 +21,7 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 /**
- * WordListConverter converts an ImmutableSet of Strings into a
+ * WordListConverter converts an PersistentSet of Strings into a
  * String.
  * <p>
  * The word list is actually a "set ofCollection space separated tokens", as specified in
@@ -41,7 +41,7 @@ import java.util.TreeSet;
  *
  * @author Werner Randelshofer
  */
-public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
+public class XmlWordSetConverter implements Converter<PersistentSet<String>> {
 
     public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
@@ -50,7 +50,7 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends PersistentSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
@@ -69,18 +69,18 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public PersistentSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (buf == null) {
-            return ImmutableSets.of();
+            return PersistentTrieSet.of();
         }
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return ImmutableSets.copyOf(tree);
+        return PersistentTrieSet.copyOf(tree);
     }
 
     @Override
-    public ImmutableSet<String> getDefaultValue() {
-        return ImmutableSets.of();
+    public PersistentSet<String> getDefaultValue() {
+        return PersistentTrieSet.of();
     }
 }

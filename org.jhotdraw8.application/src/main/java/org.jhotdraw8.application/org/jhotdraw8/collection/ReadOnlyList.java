@@ -17,12 +17,12 @@ import java.util.Objects;
 import java.util.Spliterator;
 
 /**
- * Provides query methods to a list. The state of the
+ * Read-only interface for a list. The state of the
  * list may change.
  * <p>
  * Note: To compare a ReadOnlyList to a {@link List}, you must either
- * wrap the ReadOnlyList into a List using {@link ListWrapper},
- * or wrap the List into a ReadOnlyList using {@link ReadOnlyListWrapper}.
+ * wrap the ReadOnlyList into a List using {@link WrappedList},
+ * or wrap the List into a ReadOnlyList using {@link WrappedReadOnlyList}.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
@@ -168,7 +168,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return the wrapped list
      */
     default @NonNull List<E> asList() {
-        return new ListWrapper<>(this);
+        return new WrappedList<>(this);
     }
 
     /**
@@ -177,12 +177,12 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return the wrapped list
      */
     default @NonNull ObservableList<E> asObservableList() {
-        return new ObservableListWrapper<>(this);
+        return new WrappedObservableList<>(this);
     }
 
     /**
      * Returns a view of the portion of this list between the specified
-     * * <tt>fromIndex</tt>, inclusive, and <tt>toIndex</tt>, exclusive.
+     * * {@code fromIndex}, inclusive, and {@code toIndex}, exclusive.
      *
      * @param fromIndex the from index
      * @param toIndex   the to index (exclusive)
@@ -217,6 +217,26 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
         return -1;
     }
 
+    static <E> boolean listEquals(ReadOnlyList<E> list, Object o) {
+        if (o == list) {
+            return true;
+        }
+        if (!(o instanceof ReadOnlyList)) {
+            return false;
+        }
+
+        @SuppressWarnings("unchecked")
+        ReadOnlyCollection<E> that = (ReadOnlyCollection<E>) o;
+        if (that.size() != list.size()) {
+            return false;
+        }
+        for (Iterator<E> i = that.iterator(), j = list.iterator(); j.hasNext(); ) {
+            if (!Objects.equals(i.next(), j.next())) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Returns the hash code of the provided iterable, assuming that

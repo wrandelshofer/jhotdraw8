@@ -26,14 +26,14 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * A {@code Set} that provides precise control where each element is inserted.
+ * Abstract base class for {@link Set}s that provide precise control where each
+ * element is inserted.
  * <p>
  * The set is backed by an array. Insertion and removal is in {@code O(n)}
  * and contains check is {@code O(n)}, where {@code n} is the number of elements.
  * <p>
  * This class is useful as a base class for sub-classes that can provide
  * a faster means of the contains check, typically in {@code O(1)}.
- * <p>
  *
  * @author Werner Randelshofer
  */

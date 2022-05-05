@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 /**
- * An object for enumerating elements of a collection.
+ * An object for enumerating primitive int-valued elements of a collection.
  * <p>
  * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
  * {@link Iterator}, and avoids the inherent race involved in having separate methods for

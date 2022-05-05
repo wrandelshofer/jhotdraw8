@@ -7,8 +7,8 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.util.function.AddToSet;
 
@@ -163,7 +163,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
             int maxDepth,
             @NonNull C costLimit,
             @NonNull AddToSet<V> visited) {
-        return findVertexSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit, visited);
+        return findVertexSequence(ImmutableArrayList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
     /**
@@ -182,7 +182,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
             @NonNull V goal,
             int maxDepth,
             @NonNull C costLimit) {
-        return findVertexSequence(ImmutableLists.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
+        return findVertexSequence(ImmutableArrayList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
     /**
@@ -198,7 +198,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             @NonNull C costLimit) {
-        return findVertexSequence(ImmutableLists.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
+        return findVertexSequence(ImmutableArrayList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
     /**
@@ -289,9 +289,9 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
 
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new OrderedPair<>(ImmutableLists.of(prev), zero);
+            return new OrderedPair<>(ImmutableArrayList.of(prev), zero);
         }
 
-        return new OrderedPair<>(ImmutableLists.copyOf(sequence), sum);
+        return new OrderedPair<>(ImmutableArrayList.copyOf(sequence), sum);
     }
 }

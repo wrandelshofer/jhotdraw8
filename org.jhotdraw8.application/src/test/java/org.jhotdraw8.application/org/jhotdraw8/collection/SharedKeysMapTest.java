@@ -106,11 +106,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(ImmutableSets.of("one", "two").asSet(), instance1.keySet());
+        assertEquals(ImmutableLinkedHashSet.of("one", "two").asSet(), instance1.keySet());
 
         // THEN instance 2 must contain zero entries
         assertEquals(0, instance2.keySet().size());
-        assertEquals(ImmutableSets.of().asSet(), instance2.keySet());
+        assertEquals(ImmutableLinkedHashSet.of().asSet(), instance2.keySet());
 
         // WHEN
         instance2.put("two", 22);
@@ -118,11 +118,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(ImmutableSets.of("one", "two").asSet(), instance1.keySet());
+        assertEquals(ImmutableLinkedHashSet.of("one", "two").asSet(), instance1.keySet());
 
         // THEN instance 2 must contain two entries
         assertEquals(2, instance2.keySet().size());
-        assertEquals(ImmutableSets.of("two", "three").asSet(), instance2.keySet());
+        assertEquals(ImmutableLinkedHashSet.of("two", "three").asSet(), instance2.keySet());
 
     }
 

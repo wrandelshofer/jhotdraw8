@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Collection;
 
 /**
- * Provides an API for a persistent set.
+ * Interface for a persistent set.
  * <p>
  * A persistent set provides methods for creating a new persistent set with
  * added or removed elements, without changing the original persistent set.
@@ -23,11 +23,10 @@ public interface PersistentSet<E> extends ImmutableSet<E> {
     /**
      * Returns a copy of this set that is empty.
      *
-     * @param element an element
      * @return this set instance if it is already empty, or a different set
      * instance that is empty.
      */
-    @NonNull PersistentSet<E> copyClear(@NonNull E element);
+    @NonNull PersistentSet<E> copyClear();
 
     /**
      * Returns a copy of this set that contains all elements
@@ -37,7 +36,7 @@ public interface PersistentSet<E> extends ImmutableSet<E> {
      * @return this set instance if it already contains the element, or
      * a different set instance with the element added
      */
-    @NonNull PersistentSet<E> copyAdd(@NonNull E element);
+    @NonNull PersistentSet<E> copyAdd(E element);
 
     /**
      * Returns a copy of this set that contains all elements
@@ -58,7 +57,7 @@ public interface PersistentSet<E> extends ImmutableSet<E> {
      * @return this set instance if it already does not contain the element, or
      * a different set instance with the element removed
      */
-    @NonNull PersistentSet<E> copyRemove(@NonNull E element);
+    @NonNull PersistentSet<E> copyRemove(E element);
 
     /**
      * Returns a copy of this set that contains all elements

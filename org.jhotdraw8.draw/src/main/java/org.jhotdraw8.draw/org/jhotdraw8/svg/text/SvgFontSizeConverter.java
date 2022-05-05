@@ -6,7 +6,8 @@ package org.jhotdraw8.svg.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableMaps;
+import org.jhotdraw8.collection.ImmutableLinkedHashMap;
+import org.jhotdraw8.collection.WrappedPersistentMap;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -33,16 +34,16 @@ import java.util.function.Consumer;
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
     private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
-            new MappedConverter<SvgFontSize.SizeKeyword>(ImmutableMaps.ofEntries(
-                    ImmutableMaps.entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
-                    ImmutableMaps.entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
-                    ImmutableMaps.entry("small", SvgFontSize.SizeKeyword.SMALL),
-                    ImmutableMaps.entry("medium", SvgFontSize.SizeKeyword.MEDIUM),
-                    ImmutableMaps.entry("large", SvgFontSize.SizeKeyword.LARGE),
-                    ImmutableMaps.entry("x-large", SvgFontSize.SizeKeyword.X_LARGE),
-                    ImmutableMaps.entry("xx-large", SvgFontSize.SizeKeyword.XX_LARGE),
-                    ImmutableMaps.entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
-                    ImmutableMaps.entry("larger", SvgFontSize.SizeKeyword.LARGER)
+            new MappedConverter<SvgFontSize.SizeKeyword>(WrappedPersistentMap.ofEntries(
+                    ImmutableLinkedHashMap.entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
+                    ImmutableLinkedHashMap.entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
+                    ImmutableLinkedHashMap.entry("small", SvgFontSize.SizeKeyword.SMALL),
+                    ImmutableLinkedHashMap.entry("medium", SvgFontSize.SizeKeyword.MEDIUM),
+                    ImmutableLinkedHashMap.entry("large", SvgFontSize.SizeKeyword.LARGE),
+                    ImmutableLinkedHashMap.entry("x-large", SvgFontSize.SizeKeyword.X_LARGE),
+                    ImmutableLinkedHashMap.entry("xx-large", SvgFontSize.SizeKeyword.XX_LARGE),
+                    ImmutableLinkedHashMap.entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
+                    ImmutableLinkedHashMap.entry("larger", SvgFontSize.SizeKeyword.LARGER)
             ).asMap());
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
 

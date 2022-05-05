@@ -22,7 +22,7 @@ import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 /**
- * A lightweight int array list implementation for performance critical code.
+ * A {@code int}-valued list backed by a primitive array.
  *
  * @author Werner Randelshofer
  */

@@ -19,8 +19,8 @@ import javafx.scene.effect.Shadow;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -90,7 +90,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements CssConverter<Effect> {
-    private final static ImmutableList<String> examples = ImmutableLists.of(
+    private final static ImmutableList<String> examples = ImmutableArrayList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",

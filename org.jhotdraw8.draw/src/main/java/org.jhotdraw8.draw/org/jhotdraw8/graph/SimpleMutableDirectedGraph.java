@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IntEnumerator;
-import org.jhotdraw8.collection.SetViewOverList;
+import org.jhotdraw8.collection.WrappedSet;
 import org.jhotdraw8.util.function.TriFunction;
 
 import java.util.ArrayList;
@@ -332,6 +332,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public @NonNull Set<V> getVertices() {
-        return new SetViewOverList<>(vertices);
+        return new WrappedSet<V>(vertices::iterator, vertices::size, vertices::contains, null, null);
     }
 }

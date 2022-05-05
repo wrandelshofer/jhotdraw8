@@ -6,6 +6,8 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.key.AbstractKey;
+import org.jhotdraw8.collection.key.NullableKey;
 
 import java.lang.reflect.Type;
 

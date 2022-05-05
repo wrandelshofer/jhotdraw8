@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -104,11 +105,55 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
 
     @Override
     public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new ImmutableArraySubList<E>(this.array, fromIndex, toIndex);
+        return new ImmutableArrayList<E>(this.array, fromIndex, toIndex - fromIndex);
     }
 
     @Override
     public Object[] toArray() {
         return array.clone();
     }
+
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableList<E> emptyList() {
+        return (ImmutableList<E>) EMPTY;
+    }
+
+
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    public static @NonNull <T> ImmutableList<T> of(@NonNull T... items) {
+        return items.length == 0 ? emptyList() : new ImmutableArrayList<>(items.clone());
+    }
+
+    public static @NonNull <T> ImmutableList<T> copyOf(Iterable<? extends T> iterable) {
+        if (iterable instanceof ImmutableList) {
+            @SuppressWarnings("unchecked")
+            ImmutableList<T> unchecked = (ImmutableList<T>) iterable;
+            return unchecked;
+        } else if (iterable instanceof Collection) {
+            @SuppressWarnings("unchecked")
+            Collection<T> unchecked = (Collection<T>) iterable;
+            return new ImmutableArrayList<>(unchecked);
+        } else if (iterable instanceof ReadOnlyCollection) {
+            @SuppressWarnings("unchecked")
+            ReadOnlyCollection<T> unchecked = (ReadOnlyCollection<T>) iterable;
+            return copyOf(unchecked);
+        }
+        ArrayList<T> list = new ArrayList<>();
+        for (T t : iterable) {
+            list.add(t);
+        }
+        return list.isEmpty() ? emptyList() : new ImmutableArrayList<>(list);
+    }
+
+    public static @NonNull <T> ImmutableList<T> copyOf(ReadOnlyCollection<? extends T> collection) {
+        if (collection instanceof ImmutableList) {
+            @SuppressWarnings("unchecked")
+            ImmutableList<T> unchecked = (ImmutableList<T>) collection;
+            return unchecked;
+        }
+        return collection.isEmpty() ? emptyList() : new ImmutableArrayList<>(collection.asCollection());
+    }
+
+
 }

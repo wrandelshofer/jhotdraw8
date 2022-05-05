@@ -20,8 +20,8 @@ import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.ImmutableSets;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.PersistentTrieSet;
+import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
@@ -108,7 +108,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getModel().set(f, tagsKey, ImmutableSets.copyOf(newTags));
+                        getModel().set(f, tagsKey, PersistentTrieSet.copyOf(newTags));
                     }
                 }
                 updateList();
@@ -187,7 +187,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getModel().set(f, tagsKey, ImmutableSets.copyOf(newTags));
+                        getModel().set(f, tagsKey, PersistentTrieSet.copyOf(newTags));
                     }
                 }
                 updateList();

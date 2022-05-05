@@ -12,8 +12,8 @@ import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Key;
-import org.jhotdraw8.collection.KeyMapEntryProperty;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.KeyMapEntryProperty;
 
 /**
  * KeyMapEntryStyleableProperty.

@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.collection.key.Key;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;

@@ -40,7 +40,7 @@ public abstract class AbstractPersistentSetTest {
         assertEquals(actual, of(actual.toArray(new HashCollider[0])), "equal to reconstructed from array");
         assertFalse(actual.toString().isEmpty(), "always has a string");
         //noinspection EqualsBetweenInconvertibleTypes
-        assertTrue(actual.equals(new ReadOnlySetWrapper<>(expected)), "actual to read-only wrapped expected");
+        assertTrue(actual.equals(new WrappedReadOnlySet<>(expected)), "actual to read-only wrapped expected");
     }
 
     protected abstract PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set);
@@ -82,9 +82,16 @@ public abstract class AbstractPersistentSetTest {
 
         // GIVEN: a set with entries1
         for (HashCollider e : entries1) {
+            PersistentSet<HashCollider> previous = actual;
             actual = actual.copyAdd(e);
-            expected.add(e);
+            boolean added = expected.add(e);
             assertEquality(expected, actual);
+            if (added) {
+                assertNotEquals(previous, actual);
+            } else {
+                assertEquals(previous, actual);
+                assertSame(previous, actual);
+            }
         }
 
         // WHEN: entry1 is already in set, then withAdd must yield the same set

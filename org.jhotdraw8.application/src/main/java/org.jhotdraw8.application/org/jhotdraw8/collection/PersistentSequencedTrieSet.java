@@ -7,12 +7,12 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrie;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.Node;
-import org.jhotdraw8.collection.champtrie.SequencedTrieIterator;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrie;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedTrieIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -87,7 +87,7 @@ import java.util.Objects;
  */
 public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 2;
+    private final static int ENTRY_LENGTH = 2;
     @SuppressWarnings("unchecked")
     private static final PersistentSequencedTrieSet<?> EMPTY_SET = new PersistentSequencedTrieSet<>(BitmapIndexedNode.emptyNode(), 0, 0);
 
@@ -106,7 +106,7 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
     private int lastSequenceNumber;
 
     PersistentSequencedTrieSet(BitmapIndexedNode<E, Void> root, int size, int lastSequenceNumber) {
-        super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
+        super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
         this.lastSequenceNumber = lastSequenceNumber;
     }
@@ -136,20 +136,21 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
 
     @NonNull
     private PersistentSequencedTrieSet<E> renumber(BitmapIndexedNode<E, Void> newRootNode) {
-        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueIdentity(), TUPLE_LENGTH);
+        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
         return new PersistentSequencedTrieSet<E>(newRootNode, size + 1, size);
     }
 
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
     public @NonNull PersistentSequencedTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, lastSequenceNumber);
+        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent,
+                ENTRY_LENGTH, lastSequenceNumber, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
             if (lastSequenceNumber + 1 == lastSequenceNumber) {
                 return new PersistentSequencedTrieSet<>(renumber(newRootNode), size + 1, size + 1);
@@ -178,7 +179,7 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
     }
 
     @Override
-    public @NonNull PersistentSet<E> copyClear(@NonNull E element) {
+    public @NonNull PersistentSet<E> copyClear() {
         return isEmpty() ? this : of();
     }
 
@@ -186,7 +187,7 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
-                keyHash, 0, changeEvent, TUPLE_LENGTH);
+                keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
             return new PersistentSequencedTrieSet<>(newRootNode, size - 1, lastSequenceNumber);
         }
@@ -253,17 +254,10 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, TUPLE_LENGTH, true);
-        } else if (other instanceof ReadOnlySet) {
-            @SuppressWarnings("unchecked")
-            ReadOnlySet<E> that = (ReadOnlySet<E>) other;
-            if (this.size() != that.size()) {
-                return false;
-            }
-            return containsAll(that);
+            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        } else {
+            return ReadOnlySet.setEquals(this, other);
         }
-
-        return false;
     }
 
     @Override
@@ -273,7 +267,7 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
 
     @Override
     public Iterator<E> iterator() {
-        return new ElementIterator<E>(size, this, TUPLE_LENGTH);
+        return new ElementIterator<E>(size, this, ENTRY_LENGTH);
     }
 
     @Override
@@ -309,7 +303,7 @@ public class PersistentSequencedTrieSet<E> extends BitmapIndexedNode<E, Void> im
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, TUPLE_LENGTH, false, true);
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, true);
     }
 
     static class ElementIterator<E> extends SequencedTrieIterator<E, Void>

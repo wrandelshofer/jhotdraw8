@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.BitSet;
 
 /**
- * A dense set of integer values.
+ * A dense set of int-values which can be cleared in O(1);
+ * needs 8-bits storage space for each int-value.
  * <p>
  * This set is optimised for frequent setting and clearing.
  * <p>

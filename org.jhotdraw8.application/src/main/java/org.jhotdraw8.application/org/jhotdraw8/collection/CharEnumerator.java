@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 import java.util.Iterator;
 
 /**
- * An object for enumerating elements of a collection.
+ * Interface for enumerating primitive char-valued elements of a collection.
  * <p>
  * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
  * {@link Iterator}, and avoids the inherent race involved in having separate methods for

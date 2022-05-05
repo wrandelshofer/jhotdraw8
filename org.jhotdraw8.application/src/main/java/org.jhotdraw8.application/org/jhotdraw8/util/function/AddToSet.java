@@ -26,6 +26,7 @@ package org.jhotdraw8.util.function;
  *             }
  *         }
  *        {@literal AddToSet<Element>=Element::mark;}
+ *        </pre>
  *     </li>
  * </ul>
  *

@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 import java.util.Spliterators;
 
 /**
- * AbstractLongEnumerator.
+ * Abstract base class for {@link LongEnumerator}s.
  *
  * @author Werner Randelshofer
  */

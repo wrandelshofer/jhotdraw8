@@ -61,7 +61,7 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
      * @param <VV>         the vertex data type
      * @param <AA>         the arrow data type
      * @param <CC>         the cost number type
-     * @return the converted {@link ArcBackLinkWithCost
+     * @return the converted {@link ArcBackLinkWithCost}
      */
     public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLinkWithAncestorSet<VV, AA> node,
                                                                                                                                @NonNull CC zero,

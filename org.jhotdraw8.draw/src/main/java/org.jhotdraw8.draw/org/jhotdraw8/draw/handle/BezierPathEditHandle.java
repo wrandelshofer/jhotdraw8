@@ -9,9 +9,9 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.collection.MapAccessor;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.WrappedPersistentList;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -21,9 +21,9 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
-    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final MapAccessor<PersistentList<BezierNode>> pointKey;
 
-    public BezierPathEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey) {
+    public BezierPathEditHandle(Figure figure, MapAccessor<PersistentList<BezierNode>> pointKey) {
         super(figure, pointKey, true);
         this.pointKey = pointKey;
     }
@@ -40,7 +40,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
 
         addPoint.setOnAction(actionEvent -> {
-            final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+            final PersistentList<BezierNode> nodes = owner.get(pointKey);
             BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
             Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
             IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
@@ -49,7 +49,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 int segment = intersectionPointEx.getSegmentA();
                 path.getNodes().add(segment, new BezierNode(
                         pointInLocal));
-                view.getModel().set(owner, pointKey, ImmutableLists.copyOf(path.getNodes()));
+                view.getModel().set(owner, pointKey, WrappedPersistentList.copyOf(path.getNodes()));
                 view.recreateHandles();
             }
         });

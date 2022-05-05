@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Provides an API for a persistent map.
+ * Interface for a persistent map.
  * <p>
  * A persistent map provides methods for creating a new persistent map with
  * put or removed entries, without changing the original persistent map.
@@ -22,6 +22,15 @@ import java.util.Map;
  * the original persistent amp.
  */
 public interface PersistentMap<K, V> extends ImmutableMap<K, V> {
+
+    /**
+     * Returns a copy of this map that is empty.
+     *
+     * @return this set instance if it is already empty, or a different set
+     * instance that is empty.
+     */
+    @NonNull PersistentMap<K, V> copyClear();
+
     /**
      * Returns a copy of this map that contains all entries
      * of this map with the specified entry added or updated.

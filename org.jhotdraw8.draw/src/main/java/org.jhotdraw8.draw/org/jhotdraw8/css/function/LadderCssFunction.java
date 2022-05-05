@@ -34,7 +34,7 @@ import java.util.function.Consumer;
  * </pre>
  * The ladder function interpolates between colors.
  * The effect is as if a gradient is created using the stops provided, and then
- * the brightness of the provided <color> is used to index a color value within
+ * the brightness of the provided {@code color} is used to index a color value within
  * that gradient. At 0% brightness, the color at the 0.0 end of the gradient is
  * used; at 100% brightness, the color at the 1.0 end of the gradient is used;
  * and at 50% brightness, the color at 0.5, the midway point of the gradient,
@@ -47,7 +47,7 @@ import java.util.function.Consumer;
  * <dd><a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
  * </dl>
  *
- * @param <T>
+ * @param <T> the element type of the DOM
  */
 public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
     public static final String NAME = "ladder";

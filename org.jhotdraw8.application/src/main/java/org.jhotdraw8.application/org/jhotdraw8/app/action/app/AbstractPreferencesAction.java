@@ -10,7 +10,6 @@ import org.jhotdraw8.app.action.AbstractApplicationAction;
 
 /**
  * Displays a preferences dialog for the application.
- * <p>
  *
  * @author Werner Randelshofer
  */

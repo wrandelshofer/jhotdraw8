@@ -46,7 +46,7 @@ import java.util.function.Predicate;
  *   <dt>Sampath Kannan, Sanjeef Khanna, Sudeepa Roy. (2008)</dt>
  *   <dd>STCON in Directed Unique-Path Graphs.
  *        Chapter 2.1 Properties of Unique-Path Graphs.
- *        <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</dd>
+ *        <a href="https://www.cis.upenn.edu/~sanjeev/papers/fsttcs08_stcon.pdf">cis.upenn.edu</a></dd>
  * </dl>
  *
  * @param <V> the vertex data type
@@ -67,7 +67,7 @@ public class ShortestUniqueArcPathSearchAlgo<V, A, C extends Number & Comparable
      *                         Must be {@literal >= 0}.
      * @param zero             the zero cost value
      * @param costLimit        the maximal cost (inclusive) of a path.
-     *                         Must be {@literal >= zero).
+     *                         Must be {@literal >= zero}.
      * @param costFunction     the cost function.<br>
      *                         The cost must be {@literal > 0} if the graph
      *                         has cycles.<br>

@@ -8,6 +8,11 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Abstract base class for {@link ReadOnlyCollection}s.
+ *
+ * @param <E> the element type
+ */
 public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollection<E> {
     public AbstractReadOnlyCollection() {
     }
@@ -16,8 +21,8 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
      * Returns a string representation of this collection.  The string
      * representation consists of a list of the collection's elements in the
      * order they are returned by its iterator, enclosed in square brackets
-     * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
-     * <tt>", "</tt> (comma and space).  Elements are converted to strings as
+     * ({@code "[]"}).  Adjacent elements are separated by the characters
+     * {@code ", "} (comma and space).  Elements are converted to strings as
      * by {@link String#valueOf(Object)}.
      *
      * @return a string representation of this collection

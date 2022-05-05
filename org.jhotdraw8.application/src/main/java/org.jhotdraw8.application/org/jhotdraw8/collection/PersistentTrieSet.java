@@ -7,11 +7,11 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.KeyIterator;
-import org.jhotdraw8.collection.champtrie.Node;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -73,14 +73,14 @@ import java.util.Objects;
  */
 public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 1;
+    private final static int ENTRY_LENGTH = 1;
     @SuppressWarnings("unchecked")
     private static final PersistentTrieSet<?> EMPTY_SET = new PersistentTrieSet<>(BitmapIndexedNode.emptyNode(), 0);
 
     final int size;
 
     PersistentTrieSet(BitmapIndexedNode<E, Void> root, int size) {
-        super(root.nodeMap(), root.dataMap(), root.nodes, TUPLE_LENGTH);
+        super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
     }
 
@@ -110,13 +110,13 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
     public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, TUPLE_LENGTH, Node.NO_SEQUENCE_NUMBER);
+        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size + 1);
         }
@@ -140,7 +140,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
     }
 
     @Override
-    public @NonNull PersistentSet<E> copyClear(@NonNull E element) {
+    public @NonNull PersistentSet<E> copyClear() {
         return isEmpty() ? this : of();
     }
 
@@ -148,7 +148,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
-                keyHash, 0, changeEvent, TUPLE_LENGTH);
+                keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
             return new PersistentTrieSet<>(newRootNode, size - 1);
         }
@@ -209,23 +209,14 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         if (other == null) {
             return false;
         }
-
         if (other instanceof PersistentTrieSet) {
             PersistentTrieSet<?> that = (PersistentTrieSet<?>) other;
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, TUPLE_LENGTH, false);
-        } else if (other instanceof ReadOnlySet) {
-            @SuppressWarnings("unchecked")
-            ReadOnlySet<E> that = (ReadOnlySet<E>) other;
-            if (this.size() != that.size()) {
-                return false;
-            }
-            return containsAll(that);
+            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH);
         }
-
-        return false;
+        return ReadOnlySet.setEquals(this, other);
     }
 
     @Override
@@ -235,7 +226,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
 
     @Override
     public Iterator<E> iterator() {
-        return new KeyIterator<>(this, TUPLE_LENGTH);
+        return new KeyIterator<>(this, ENTRY_LENGTH);
     }
 
     @Override
@@ -271,6 +262,6 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, TUPLE_LENGTH, false, false);
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, false);
     }
 }

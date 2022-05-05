@@ -22,7 +22,7 @@ import java.util.function.LongPredicate;
 import java.util.stream.LongStream;
 
 /**
- * A lightweight long array list implementation for performance critical code.
+ * A {@code long}-valued list backed by a primitive array.
  *
  * @author Werner Randelshofer
  */

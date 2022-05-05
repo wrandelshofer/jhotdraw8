@@ -7,11 +7,11 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champtrie.BitmapIndexedNode;
-import org.jhotdraw8.collection.champtrie.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champtrie.ChangeEvent;
-import org.jhotdraw8.collection.champtrie.KeyIterator;
-import org.jhotdraw8.collection.champtrie.Node;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
@@ -87,8 +87,8 @@ import java.util.Set;
  */
 public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private final static int TUPLE_LENGTH = 1;
-    private transient UniqueIdentity mutator;
+    private final static int ENTRY_LENGTH = 1;
+    private transient UniqueId mutator;
     private transient BitmapIndexedNode<E, Void> root;
     private transient int size;
     private transient int modCount;
@@ -128,8 +128,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     public boolean add(final @Nullable E e) {
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, TUPLE_LENGTH,
-                Node.NO_SEQUENCE_NUMBER);
+        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
+                Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -199,12 +199,12 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, TUPLE_LENGTH) != Node.NO_VALUE;
+        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
-    private @NonNull UniqueIdentity getOrCreateMutator() {
+    private @NonNull UniqueId getOrCreateMutator() {
         if (mutator == null) {
-            mutator = new UniqueIdentity();
+            mutator = new UniqueId();
         }
         return mutator;
     }
@@ -222,7 +222,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      */
     @Override
     public Iterator<E> iterator() {
-        return new MutableTrieIterator(TUPLE_LENGTH);
+        return new MutableTrieIterator(ENTRY_LENGTH);
     }
 
     /**
@@ -235,7 +235,8 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         @SuppressWarnings("unchecked")
         E key = (E) o;
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.remove(getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent, TUPLE_LENGTH);
+        final BitmapIndexedNode<E, Void> newRoot = root.remove(getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent,
+                ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -301,9 +302,6 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         return modified;
     }
 
-    /**
-     * {@inheritDoc
-     */
     @Override
     public int size() {
         return size;
@@ -315,7 +313,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, TUPLE_LENGTH, false, false);
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
     }
     /**
      * Returns a persistent copy of this set.
@@ -357,6 +355,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
+        private final static long serialVersionUID = 0L;
 
         protected SerializationProxy(Set<E> target) {
             super(target);

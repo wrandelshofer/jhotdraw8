@@ -7,12 +7,12 @@ package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
-import org.jhotdraw8.collection.ImmutableMaps;
-import org.jhotdraw8.collection.Key;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableLinkedHashMap;
 import org.jhotdraw8.collection.MapAccessor;
-import org.jhotdraw8.collection.NonNullKey;
+import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.key.NonNullKey;
 import org.jhotdraw8.concurrent.CheckedRunnable;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
@@ -117,19 +117,19 @@ public class FigureSvgTinyReader {
 
     {
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
-                ImmutableMaps.entry("svg", SvgDrawing.class),
-                ImmutableMaps.entry("g", SvgGFigure.class),
-                ImmutableMaps.entry("rect", SvgRectFigure.class),
-                ImmutableMaps.entry("defs", SvgDefsFigure.class),
-                ImmutableMaps.entry("circle", SvgCircleFigure.class),
-                ImmutableMaps.entry("ellipse", SvgEllipseFigure.class),
-                ImmutableMaps.entry("line", SvgLineFigure.class),
-                ImmutableMaps.entry("path", SvgPathFigure.class),
-                ImmutableMaps.entry("polygon", SvgPolygonFigure.class),
-                ImmutableMaps.entry("polyline", SvgPolylineFigure.class),
-                ImmutableMaps.entry("text", SvgTextFigure.class),
-                ImmutableMaps.entry("linearGradient", SvgLinearGradientFigure.class),
-                ImmutableMaps.entry("radialGradient", SvgRadialGradientFigure.class)
+                ImmutableLinkedHashMap.entry("svg", SvgDrawing.class),
+                ImmutableLinkedHashMap.entry("g", SvgGFigure.class),
+                ImmutableLinkedHashMap.entry("rect", SvgRectFigure.class),
+                ImmutableLinkedHashMap.entry("defs", SvgDefsFigure.class),
+                ImmutableLinkedHashMap.entry("circle", SvgCircleFigure.class),
+                ImmutableLinkedHashMap.entry("ellipse", SvgEllipseFigure.class),
+                ImmutableLinkedHashMap.entry("line", SvgLineFigure.class),
+                ImmutableLinkedHashMap.entry("path", SvgPathFigure.class),
+                ImmutableLinkedHashMap.entry("polygon", SvgPolygonFigure.class),
+                ImmutableLinkedHashMap.entry("polyline", SvgPolylineFigure.class),
+                ImmutableLinkedHashMap.entry("text", SvgTextFigure.class),
+                ImmutableLinkedHashMap.entry("linearGradient", SvgLinearGradientFigure.class),
+                ImmutableLinkedHashMap.entry("radialGradient", SvgRadialGradientFigure.class)
         )) {
             String elem = e.getKey();
             Class<? extends Figure> figureClass = e.getValue();
@@ -287,7 +287,7 @@ public class FigureSvgTinyReader {
                 secondPass.run();
             }
 
-            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableLists.copyOf(ctx.stylesheets));
+            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableArrayList.copyOf(ctx.stylesheets));
 
 
             if (!(root instanceof SvgDrawing)) {
@@ -470,13 +470,13 @@ public class FigureSvgTinyReader {
                 handleError(r, "stop: Cannot add stop to parent element " + parent.getTypeSelector());
             } else {
                 SvgStop stop = new SvgStop(offset.getConvertedValue(), stopColor, stopOpacity);
-                parent.put(stopsKey, ImmutableLists.add(parent.get(stopsKey), stop));
+                parent.put(stopsKey, parent.getNonNull(stopsKey).copyAdd(stop));
             }
         }
         skipElement(r, ctx);
     }
 
-    private NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private NonNullKey<PersistentList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;

@@ -63,7 +63,7 @@ public class TrieMapTest extends AbstractMapTest {
     public void testDumpStructure() {
         TrieMap<Integer, String> instance = new TrieMap<>();
         Random rng = new Random(0);
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 5; i++) {
             int key = rng.nextInt(10_000);
             char value = (char) (rng.nextInt(26) + 'a');
             instance.put(key, Character.toString(value));

@@ -48,8 +48,8 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.AbstractPropertyBean;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableLists;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.text.CssDoubleConverter;
 import org.jhotdraw8.css.text.CssListConverter;
@@ -1279,7 +1279,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
         }
         if (!shape.getStrokeDashArray().isEmpty()) {
-            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.copyOf(shape.getStrokeDashArray())));
+            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableArrayList.copyOf(shape.getStrokeDashArray())));
         }
         if (shape.getStrokeDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
@@ -1343,7 +1343,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
         }
         if (!style.getDashArray().isEmpty()) {
-            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableLists.copyOf(style.getDashArray())));
+            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableArrayList.copyOf(style.getDashArray())));
         }
         if (style.getDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
@@ -1491,7 +1491,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull List<Transform> txs) throws XMLStreamException {
 
         if (txs.size() > 0) {
-            String value = tx.toString(ImmutableLists.copyOf(txs));
+            String value = tx.toString(ImmutableArrayList.copyOf(txs));
             if (!value.isEmpty()) {
                 w.writeAttribute("transform", value);
             }

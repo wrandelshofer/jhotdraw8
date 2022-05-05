@@ -153,7 +153,7 @@ public abstract class AbstractMapTest {
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                ImmutableMaps.of(firstValue1.getKey(), firstValue1.getValue(),
+                ImmutableLinkedHashMap.of(firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue()).readOnlyEntrySet().asSet());
         //

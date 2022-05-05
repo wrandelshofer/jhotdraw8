@@ -6,7 +6,6 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -20,7 +19,7 @@ public class SequencedTrieSetTest extends AbstractSequencedSetTest {
     }
 
     @Test
-    @Ignore("manual test")
+
     public void testDumpStructure() {
         SequencedTrieSet<HashCollider> instance = new SequencedTrieSet<>();
         Random rng = new Random(0);
