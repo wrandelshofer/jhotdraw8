@@ -98,7 +98,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * Returns a copy of this map that contains all entries
      * of this map with entries from the specified map added or updated.
      *
-     * @param m another map
+     * @param map another map
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */

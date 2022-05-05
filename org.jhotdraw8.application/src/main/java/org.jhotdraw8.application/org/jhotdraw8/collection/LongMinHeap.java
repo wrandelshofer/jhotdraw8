@@ -22,7 +22,7 @@ import java.util.Spliterators;
  * <dl>
  *      <dt>Geeks for Geeks. Min Heap in Java. CC-By-SA</dt>
  *      <dd>
- *      Original code: <a href=https://www.geeksforgeeks.org/min-heap-in-java/">geeksforgeeks.org</a>
+ *      Original code: <a href="https://www.geeksforgeeks.org/min-heap-in-java/">geeksforgeeks.org</a>
  *      <br>License: <a href="https://www.geeksforgeeks.org/copyright-information/">geeksforgeeks.org</a>
  *      </dd>
  * </dl>

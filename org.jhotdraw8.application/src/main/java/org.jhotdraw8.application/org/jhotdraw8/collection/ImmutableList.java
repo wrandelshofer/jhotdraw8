@@ -23,7 +23,6 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
     /**
      * Returns a copy of this list that is empty.
      *
-     * @param element an element
      * @return this list instance if it is already empty, or a different list
      * instance that is empty.
      */
