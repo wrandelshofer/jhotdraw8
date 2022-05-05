@@ -18,7 +18,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.Paintable;
@@ -47,17 +47,17 @@ import java.awt.geom.PathIterator;
 public class PolylineOutlineHandle extends AbstractHandle {
 
     private boolean editable;
-    private final NonNullMapAccessor<PersistentList<Point2D>> key;
+    private final NonNullMapAccessor<ImmutableList<Point2D>> key;
 
     private Group node;
     private Polyline poly1;
     private Polyline poly2;
 
-    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<PersistentList<Point2D>> key) {
+    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key) {
         this(figure, key, true);
     }
 
-    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<PersistentList<Point2D>> key, boolean editable) {
+    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key, boolean editable) {
         super(figure);
         this.key = key;
         node = new Group();
@@ -125,7 +125,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
-        PersistentList<Point2D> points = owner.get(key);
+        ImmutableList<Point2D> points = owner.get(key);
 
         Point2D pInDrawing = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         Point2D pInLocal = owner.worldToLocal(pInDrawing);

@@ -60,10 +60,10 @@ import java.util.Set;
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
- * This set can create a persistent copy of itself in O(1) time and O(0) space
- * using method {@link #toPersistent()}. This set loses exclusive ownership of
+ * This set can create an immutable copy of itself in O(1) time and O(0) space
+ * using method {@link #toImmutable()}. This set loses exclusive ownership of
  * all its tree nodes.
- * Thus, creating a persistent copy increases the constant cost of
+ * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
  * <p>
@@ -99,7 +99,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
+public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     private transient UniqueId mutator;
@@ -122,7 +122,7 @@ public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable,
     /**
      * Constructs an empty set.
      */
-    public SequencedTrieSet() {
+    public SeqTrieSet() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
@@ -132,12 +132,12 @@ public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable,
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public SequencedTrieSet(Iterable<? extends E> c) {
-        if (c instanceof SequencedTrieSet<?>) {
-            c = ((SequencedTrieSet<? extends E>) c).toPersistent();
+    public SeqTrieSet(Iterable<? extends E> c) {
+        if (c instanceof SeqTrieSet<?>) {
+            c = ((SeqTrieSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof PersistentSequencedTrieSet<?>) {
-            PersistentSequencedTrieSet<E> that = (PersistentSequencedTrieSet<E>) c;
+        if (c instanceof ImmutableSeqTrieSet<?>) {
+            ImmutableSeqTrieSet<E> that = (ImmutableSeqTrieSet<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -218,9 +218,9 @@ public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable,
      * Returns a shallow copy of this set.
      */
     @Override
-    public SequencedTrieSet<E> clone() {
+    public SeqTrieSet<E> clone() {
         try {
-            @SuppressWarnings("unchecked") final SequencedTrieSet<E> that = (SequencedTrieSet<E>) super.clone();
+            @SuppressWarnings("unchecked") final SeqTrieSet<E> that = (SeqTrieSet<E>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -353,26 +353,26 @@ public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable,
     }
 
     /**
-     * Returns a persistent copy of this set.
+     * Returns an immutable copy of this set.
      *
-     * @return a persistent trie set
+     * @return an immutable trie set
      */
-    public PersistentSequencedTrieSet<E> toPersistent() {
+    public ImmutableSeqTrieSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? PersistentSequencedTrieSet.of() : new PersistentSequencedTrieSet<>(root, size, lastSequenceNumber);
+        return size == 0 ? ImmutableSeqTrieSet.of() : new ImmutableSeqTrieSet<>(root, size, lastSequenceNumber);
     }
 
     class MutableTrieIterator extends SequencedKeyIterator<E, Void> {
         private int expectedModCount;
 
         MutableTrieIterator(int tupleLength) {
-            super(SequencedTrieSet.this.size, SequencedTrieSet.this.root, tupleLength);
-            this.expectedModCount = SequencedTrieSet.this.modCount;
+            super(SeqTrieSet.this.size, SeqTrieSet.this.root, tupleLength);
+            this.expectedModCount = SeqTrieSet.this.modCount;
         }
 
         @Override
         public E next() {
-            if (expectedModCount != SequencedTrieSet.this.modCount) {
+            if (expectedModCount != SeqTrieSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.next();
@@ -380,14 +380,14 @@ public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable,
 
         @Override
         public void remove() {
-            if (expectedModCount != SequencedTrieSet.this.modCount) {
+            if (expectedModCount != SeqTrieSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                SequencedTrieSet.this.remove(k);
-                return SequencedTrieSet.this.root;
+                SeqTrieSet.this.remove(k);
+                return SeqTrieSet.this.root;
             });
-            expectedModCount = SequencedTrieSet.this.modCount;
+            expectedModCount = SeqTrieSet.this.modCount;
         }
     }
 
@@ -399,7 +399,7 @@ public class SequencedTrieSet<E> extends AbstractSet<E> implements Serializable,
         }
 
         protected Object readResolve() {
-            return new SequencedTrieSet<>(deserialized);
+            return new SeqTrieSet<>(deserialized);
         }
     }
 

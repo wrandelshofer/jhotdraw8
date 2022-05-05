@@ -8,11 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Interface for a persistent set that only provides a {@code copyAdd} method.
+ * Interface for an immutable set that only provides a {@code copyAdd} method.
  *
  * @param <E> the element type
  */
-public interface AddOnlyPersistentSet<E> {
+public interface ImmutableAddOnlySet<E> {
     /**
      * Returns a copy of this set that contains all elements
      * of this set and also the specified element.
@@ -21,6 +21,6 @@ public interface AddOnlyPersistentSet<E> {
      * @return this set if it already contains the element, or
      * a different set with the element added
      */
-    @NonNull AddOnlyPersistentSet<E> copyAdd(@NonNull E element);
+    @NonNull ImmutableAddOnlySet<E> copyAdd(@NonNull E element);
 
 }

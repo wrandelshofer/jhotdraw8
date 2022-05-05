@@ -7,9 +7,9 @@ package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.Maps;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullKey;
@@ -287,7 +287,7 @@ public class FigureSvgTinyReader {
                 secondPass.run();
             }
 
-            root.set(SvgDrawing.INLINE_STYLESHEETS, PersistentArrayList.copyOf(ctx.stylesheets));
+            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableArrayList.copyOf(ctx.stylesheets));
 
 
             if (!(root instanceof SvgDrawing)) {
@@ -476,7 +476,7 @@ public class FigureSvgTinyReader {
         skipElement(r, ctx);
     }
 
-    private NonNullKey<PersistentList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;

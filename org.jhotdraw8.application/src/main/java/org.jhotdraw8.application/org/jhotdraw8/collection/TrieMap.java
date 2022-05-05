@@ -60,10 +60,10 @@ import java.util.function.BiFunction;
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
- * This map can create a persistent copy of itself in O(1) time and O(0) space
- * using method {@link #toPersistent()}. This map loses exclusive ownership of
+ * This map can create an immutable copy of itself in O(1) time and O(0) space
+ * using method {@link #toImmutable()}. This map loses exclusive ownership of
  * all its tree nodes.
- * Thus, creating a persistent copy increases the constant cost of
+ * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
  * <p>
@@ -117,9 +117,9 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof PersistentTrieMap) {
+        if (m instanceof ImmutableTrieMap) {
             @SuppressWarnings("unchecked")
-            PersistentTrieMap<K, V> trieMap = (PersistentTrieMap<K, V>) m;
+            ImmutableTrieMap<K, V> trieMap = (ImmutableTrieMap<K, V>) m;
             this.root = trieMap;
             this.size = trieMap.size;
         } else {
@@ -281,14 +281,14 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
      * first few updates that it performs, are copy-on-write operations, until
      * it exclusively owns some trie nodes that it can update.
      *
-     * @return a persistent trie set
+     * @return an immutable trie set
      */
-    public PersistentTrieMap<K, V> toPersistent() {
+    public ImmutableTrieMap<K, V> toImmutable() {
         if (size == 0) {
-            return PersistentTrieMap.of();
+            return ImmutableTrieMap.of();
         }
         mutator = null;
-        return new PersistentTrieMap<>(root, size);
+        return new ImmutableTrieMap<>(root, size);
     }
 
     private class AbstractMapIterator extends BaseTrieIterator<K, V> {

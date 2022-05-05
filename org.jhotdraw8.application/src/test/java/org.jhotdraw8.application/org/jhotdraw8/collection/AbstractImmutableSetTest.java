@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public abstract class AbstractPersistentSetTest {
+public abstract class AbstractImmutableSetTest {
 
-    private void assertEquality(LinkedHashSet<HashCollider> expected, PersistentSet<HashCollider> actual) {
+    private void assertEquality(LinkedHashSet<HashCollider> expected, ImmutableSet<HashCollider> actual) {
         assertEquals(expected.hashCode(), actual.hashCode(), "hashCode");
         assertEquals(actual, actual, "equal to itself");
         //noinspection ConstantConditions
@@ -43,7 +43,7 @@ public abstract class AbstractPersistentSetTest {
         assertTrue(actual.equals(new WrappedReadOnlySet<>(expected)), "actual to read-only wrapped expected");
     }
 
-    protected abstract PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set);
+    protected abstract ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set);
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {
@@ -54,12 +54,12 @@ public abstract class AbstractPersistentSetTest {
         );
     }
 
-    protected abstract PersistentSet<HashCollider> of();
+    protected abstract ImmutableSet<HashCollider> of();
 
-    protected abstract PersistentSet<HashCollider> of(@NonNull HashCollider... keys);
+    protected abstract ImmutableSet<HashCollider> of(@NonNull HashCollider... keys);
 
     private void testContains(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        PersistentSet<HashCollider> actual = of();
+        ImmutableSet<HashCollider> actual = of();
         HashCollider firstValue1 = entries1.iterator().next();
         HashCollider firstValue2 = entries2.iterator().next();
 
@@ -76,13 +76,13 @@ public abstract class AbstractPersistentSetTest {
     private void testCopyAdd(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         HashCollider firstValue1 = entries1.iterator().next();
         HashCollider firstValue2 = entries2.iterator().next();
-        PersistentSet<HashCollider> actual = of();
-        PersistentSet<HashCollider> newActual;
+        ImmutableSet<HashCollider> actual = of();
+        ImmutableSet<HashCollider> newActual;
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
 
         // GIVEN: a set with entries1
         for (HashCollider e : entries1) {
-            PersistentSet<HashCollider> previous = actual;
+            ImmutableSet<HashCollider> previous = actual;
             actual = actual.copyAdd(e);
             boolean added = expected.add(e);
             assertEquality(expected, actual);
@@ -109,8 +109,8 @@ public abstract class AbstractPersistentSetTest {
     }
 
     private void testCopyAddAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        PersistentSet<HashCollider> actual = of();
-        PersistentSet<HashCollider> newActual;
+        ImmutableSet<HashCollider> actual = of();
+        ImmutableSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
         newActual = actual.copyAddAll(entries1);
@@ -134,8 +134,8 @@ public abstract class AbstractPersistentSetTest {
     }
 
     private void testCopyOf(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        PersistentSet<HashCollider> actual;
-        PersistentSet<HashCollider> newActual;
+        ImmutableSet<HashCollider> actual;
+        ImmutableSet<HashCollider> newActual;
 
         // WHEN: a set is created with copyOf
         actual = copyOf(entries1);
@@ -155,8 +155,8 @@ public abstract class AbstractPersistentSetTest {
     private void testCopyRemove(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         HashCollider firstValue1 = entries1.iterator().next();
         HashCollider firstValue2 = entries2.iterator().next();
-        PersistentSet<HashCollider> actual = of();
-        PersistentSet<HashCollider> newActual;
+        ImmutableSet<HashCollider> actual = of();
+        ImmutableSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
         newActual = actual.copyAddAll(entries1);
@@ -186,8 +186,8 @@ public abstract class AbstractPersistentSetTest {
     }
 
     private void testCopyRemoveAll(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
-        PersistentSet<HashCollider> actual = of();
-        PersistentSet<HashCollider> newActual;
+        ImmutableSet<HashCollider> actual = of();
+        ImmutableSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
         newActual = actual.copyAddAll(values1);
@@ -210,8 +210,8 @@ public abstract class AbstractPersistentSetTest {
     }
 
     private void testCopyRetainAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        PersistentSet<HashCollider> actual = of();
-        PersistentSet<HashCollider> newActual;
+        ImmutableSet<HashCollider> actual = of();
+        ImmutableSet<HashCollider> newActual;
 
         // GIVEN: a set with entries1
         newActual = actual.copyAddAll(entries1);
@@ -238,20 +238,20 @@ public abstract class AbstractPersistentSetTest {
         HashCollider firstValue1 = entries1.iterator().next();
         HashCollider firstValue2 = entries2.iterator().next();
 
-        PersistentSet<HashCollider> actual1a = copyOf(entries1);
+        ImmutableSet<HashCollider> actual1a = copyOf(entries1);
         assertEquals(actual1a, actual1a);//equals of itself
 
-        PersistentSet<HashCollider> actual1b = copyOf(entries1);
+        ImmutableSet<HashCollider> actual1b = copyOf(entries1);
         assertEquals(actual1a, actual1b);//equals of a new set that does not share trie nodes
 
-        PersistentSet<HashCollider> actual1c = actual1a;
+        ImmutableSet<HashCollider> actual1c = actual1a;
         actual1c = actual1c.copyRemove(firstValue1);
         actual1c = actual1c.copyAdd(firstValue1);
         assertEquals(actual1a, actual1c);// equals of a new set that shares many trie nodes
 
 
-        PersistentSet<HashCollider> actual2a = copyOf(entries2);
-        PersistentSet<HashCollider> actual2b = actual2a.copyRemove(firstValue2);
+        ImmutableSet<HashCollider> actual2a = copyOf(entries2);
+        ImmutableSet<HashCollider> actual2b = actual2a.copyRemove(firstValue2);
         HashCollider zero = new HashCollider(0, 0);
         LinkedHashSet<HashCollider> expected1 = new LinkedHashSet<>(entries1);
         LinkedHashSet<HashCollider> expected1plusZero = new LinkedHashSet<>(entries1);
@@ -272,7 +272,7 @@ public abstract class AbstractPersistentSetTest {
 
     @Test
     public void testNullValue() {
-        PersistentSet<HashCollider> set = of(new HashCollider[]{null});
+        ImmutableSet<HashCollider> set = of(new HashCollider[]{null});
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
         expected.add(null);
         assertTrue(set.contains(null));
@@ -286,7 +286,7 @@ public abstract class AbstractPersistentSetTest {
 
     private void testOf(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
         HashCollider firstValue1 = entries1.iterator().next();
-        PersistentSet<HashCollider> actual;
+        ImmutableSet<HashCollider> actual;
 
         // WHEN: a set is created with identical values
         actual = of(firstValue1, firstValue1, firstValue1);
@@ -344,10 +344,10 @@ public abstract class AbstractPersistentSetTest {
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(values1);
         expected.addAll(values2);
 
-        PersistentSet<HashCollider> actualValues1 = copyOf(values1);
-        PersistentSet<HashCollider> actualValues2 = copyOf(values2);
+        ImmutableSet<HashCollider> actualValues1 = copyOf(values1);
+        ImmutableSet<HashCollider> actualValues2 = copyOf(values2);
 
-        PersistentSet<HashCollider> actual = actualValues1.copyAddAll(actualValues2);
+        ImmutableSet<HashCollider> actual = actualValues1.copyAddAll(actualValues2);
 
         if (values1.equals(expected)) {
             assertSame(actualValues1, actual);
@@ -455,14 +455,14 @@ public abstract class AbstractPersistentSetTest {
     }
 
     private static HashCollider[] DATA_SET_ARRAY = new HashCollider[10_000];
-    private static PersistentTrieSet<HashCollider> IDENTICAL_SET;
+    private static ImmutableTrieSet<HashCollider> IDENTICAL_SET;
 
     static {
         Random rng = new Random(0);
         for (int i = 0; i < DATA_SET_ARRAY.length; i++) {
             DATA_SET_ARRAY[i] = new HashCollider(rng.nextInt(), -1);
         }
-        IDENTICAL_SET = PersistentTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(DATA_SET_ARRAY));
+        IDENTICAL_SET = ImmutableTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(DATA_SET_ARRAY));
     }
 
 

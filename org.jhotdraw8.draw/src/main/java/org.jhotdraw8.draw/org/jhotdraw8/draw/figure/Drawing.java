@@ -7,9 +7,9 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.NonNullKey;
 import org.jhotdraw8.collection.key.SimpleNonNullListKey;
@@ -65,8 +65,8 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<PersistentList<URI>> AUTHOR_STYLESHEETS = new SimpleNonNullListKey<URI>("authorStylesheets",
-            new TypeToken<PersistentList<URI>>() {
+    @NonNull NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new SimpleNonNullListKey<URI>("authorStylesheets",
+            new TypeToken<ImmutableList<URI>>() {
             });
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
@@ -79,7 +79,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<PersistentList<URI>> USER_AGENT_STYLESHEETS = new SimpleNonNullListKey<URI>("userAgentStylesheets", new TypeToken<PersistentList<URI>>() {
+    @NonNull NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new SimpleNonNullListKey<URI>("userAgentStylesheets", new TypeToken<ImmutableList<URI>>() {
     });
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
@@ -87,7 +87,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<PersistentList<String>> INLINE_STYLESHEETS = new SimpleNonNullListKey<String>("inlineStylesheets", new TypeToken<PersistentList<String>>() {
+    @NonNull NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new SimpleNonNullListKey<String>("inlineStylesheets", new TypeToken<ImmutableList<String>>() {
     });
 
 

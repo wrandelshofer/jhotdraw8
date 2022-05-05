@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssListConverter;
 import org.jhotdraw8.css.text.CssTransformConverter;
@@ -20,12 +20,12 @@ import org.jhotdraw8.text.Converter;
  *
  * @author Werner Randelshofer
  */
-public class TransformListStyleableKey extends AbstractStyleableKey<PersistentList<Transform>>
-        implements WritableStyleableMapAccessor<PersistentList<Transform>>, NonNullMapAccessor<PersistentList<Transform>> {
+public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
+        implements WritableStyleableMapAccessor<ImmutableList<Transform>>, NonNullMapAccessor<ImmutableList<Transform>> {
 
     private static final long serialVersionUID = 1L;
 
-    private Converter<PersistentList<Transform>> converter;
+    private Converter<ImmutableList<Transform>> converter;
 
     /**
      * Creates a new instance with the specified name and with an empty list as the
@@ -34,7 +34,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<PersistentLi
      * @param name The name of the key.
      */
     public TransformListStyleableKey(@NonNull String name) {
-        this(name, PersistentArrayList.of());
+        this(name, ImmutableArrayList.of());
     }
 
     /**
@@ -43,14 +43,14 @@ public class TransformListStyleableKey extends AbstractStyleableKey<PersistentLi
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableKey(@NonNull String name, PersistentList<Transform> defaultValue) {
-        super(name, new TypeToken<PersistentList<Transform>>() {
+    public TransformListStyleableKey(@NonNull String name, ImmutableList<Transform> defaultValue) {
+        super(name, new TypeToken<ImmutableList<Transform>>() {
         }, defaultValue);
         converter = new CssListConverter<>(new CssTransformConverter());
     }
 
     @Override
-    public @NonNull Converter<PersistentList<Transform>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<Transform>> getCssConverter() {
         return converter;
     }
 

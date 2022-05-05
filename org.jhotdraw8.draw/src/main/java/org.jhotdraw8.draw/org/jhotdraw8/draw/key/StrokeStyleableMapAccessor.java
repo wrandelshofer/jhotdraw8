@@ -9,8 +9,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.CssSize;
@@ -31,7 +31,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
 
 
     private final @NonNull MapAccessor<CssSize> dashOffsetKey;
-    private final @NonNull MapAccessor<PersistentList<CssSize>> dashArrayKey;
+    private final @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey;
     private final @NonNull MapAccessor<StrokeType> typeKey;
     private final @NonNull MapAccessor<StrokeLineJoin> lineJoinKey;
     private final @NonNull MapAccessor<StrokeLineCap> lineCapKey;
@@ -44,7 +44,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
                                       @NonNull MapAccessor<StrokeLineJoin> lineJoinKey,
                                       @NonNull MapAccessor<CssSize> miterLimitKey,
                                       @NonNull MapAccessor<CssSize> dashOffsetKey,
-                                      @NonNull MapAccessor<PersistentList<CssSize>> dashArrayKey
+                                      @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey
     ) {
         super(name, CssStrokeStyle.class, new MapAccessor<?>[]{
                         typeKey,
@@ -113,7 +113,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStrokeStyle value) {
         if (value == null) {
             dashOffsetKey.put(a, CssSize.ZERO);
-            dashArrayKey.put(a, PersistentArrayList.of());
+            dashArrayKey.put(a, ImmutableArrayList.of());
             typeKey.put(a, StrokeType.CENTERED);
             lineJoinKey.put(a, StrokeLineJoin.MITER);
             lineCapKey.put(a, StrokeLineCap.SQUARE);

@@ -13,8 +13,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
@@ -96,13 +96,13 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (p2l == null || p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, PersistentArrayList.of(p2l));
+            set(TRANSFORMS, ImmutableArrayList.of(p2l));
         }
     }
 
 
     default @Nullable Transform getInverseTransform() {
-        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
+        ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave null
@@ -129,7 +129,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
-            PersistentList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             if (t != null && !t.isEmpty()) {
                 l2p = FXTransforms.concat(l2p, getTransform());
             }
@@ -148,7 +148,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
 
         Point2D center = getCenterInLocal();
 
-        PersistentList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
+        ImmutableList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
         if (!t.isEmpty()) {
             list.addAll(t.asList());
         }
@@ -164,7 +164,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            PersistentList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
 
             if (t != null && !t.isEmpty()) {
                 p2l = getInverseTransform();
@@ -177,7 +177,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     default @Nullable Transform getTransform() {
-        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
+        ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave empty
@@ -201,7 +201,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     @Override
     default void reshapeInLocal(Transform transform) {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
-            PersistentList<Transform> ts = getNonNull(TRANSFORMS);
+            ImmutableList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
                 set(TRANSFORMS, ts.copyAdd(transform));
             } else {
@@ -238,7 +238,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                             : parentToLocal.deltaTransform(translate.getTx(), translate.getTy());
                     reshapeInLocal(new Translate(p.getX(), p.getY()));
                 } else {
-                    PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
+                    ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
                     Transform lastTransform = transforms.get(transforms.size() - 1);
                     if (lastTransform instanceof Translate) {
                         set(TRANSFORMS, transforms.copySet(transforms.size() - 1,
@@ -249,7 +249,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                 }
             } else {
                 flattenTransforms();
-                PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
+                ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
                 set(TRANSFORMS, transforms.copyAdd(0, transform));
             }
         } else {
@@ -265,16 +265,16 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
      */
     default void setTransforms(@NonNull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, PersistentArrayList.of());
+            set(TRANSFORMS, ImmutableArrayList.of());
         } else {
-            set(TRANSFORMS, PersistentArrayList.of(transforms));
+            set(TRANSFORMS, ImmutableArrayList.of(transforms));
         }
     }
 
     @Override
     default void transformInLocal(@NonNull Transform t) {
         flattenTransforms();
-        PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
+        ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
         set(TRANSFORMS, transforms.copyAdd(t));
     }
 
@@ -286,7 +286,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (t instanceof Translate) {
             Translate tr = (Translate) t;
             flattenTransforms();
-            PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
+            ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
                 translateInLocal(new CssPoint2D(tr.getTx(), tr.getTy()));
             } else {
@@ -300,7 +300,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
             }
         } else {
             flattenTransforms();
-            PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
+            ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
             set(TRANSFORMS, transforms.copyAdd(0, t));
         }
     }

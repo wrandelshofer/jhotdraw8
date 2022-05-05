@@ -26,21 +26,21 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public abstract class AbstractPersistentMapTest {
-    protected abstract @NonNull PersistentMap<HashCollider, HashCollider> of();
+public abstract class AbstractImmutableMapTest {
+    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> of();
 
     @SuppressWarnings("unchecked")
-    protected abstract @NonNull PersistentMap<HashCollider, HashCollider> of(@NonNull Map.Entry<HashCollider, HashCollider>... entries);
+    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> of(@NonNull Map.Entry<HashCollider, HashCollider>... entries);
 
-    protected abstract @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map);
+    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map);
 
-    protected abstract @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map);
-
-
-    protected abstract @NonNull PersistentMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries);
+    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map);
 
 
-    private void assertMapEquality(LinkedHashMap<HashCollider, HashCollider> expected, PersistentMap<HashCollider, HashCollider> actual) {
+    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries);
+
+
+    private void assertMapEquality(LinkedHashMap<HashCollider, HashCollider> expected, ImmutableMap<HashCollider, HashCollider> actual) {
         //noinspection EqualsBetweenInconvertibleTypes
         assertTrue(actual.equals(new WrappedReadOnlyMap<>(expected)));
         assertEquals(actual, actual);
@@ -65,7 +65,7 @@ public abstract class AbstractPersistentMapTest {
     }
 
     private void testContains(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        PersistentMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> actual = of();
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
 
@@ -80,8 +80,8 @@ public abstract class AbstractPersistentMapTest {
     }
 
     private void testCopyOf(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        PersistentMap<HashCollider, HashCollider> actual;
-        PersistentMap<HashCollider, HashCollider> newActual;
+        ImmutableMap<HashCollider, HashCollider> actual;
+        ImmutableMap<HashCollider, HashCollider> newActual;
 
         // WHEN: a set is created with copyOf a java.util.Map
         actual = copyOf(values1);
@@ -89,7 +89,7 @@ public abstract class AbstractPersistentMapTest {
         assertMapEquality(expected, actual);
 
         // WHEN: a set is created with copyOf a ImmutableMap
-        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableLinkedHashMap.copyOf(expected);
+        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableSeqTrieMap.copyOf(expected);
         actual = copyOf(immutableExpected);
         assertEquals(immutableExpected, actual);
 
@@ -108,19 +108,19 @@ public abstract class AbstractPersistentMapTest {
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
 
-        PersistentMap<HashCollider, HashCollider> actual1a = copyOf(values1);
+        ImmutableMap<HashCollider, HashCollider> actual1a = copyOf(values1);
         assertEquals(actual1a, actual1a);// equals of itself
 
-        PersistentMap<HashCollider, HashCollider> actual1b = copyOf(values1);
+        ImmutableMap<HashCollider, HashCollider> actual1b = copyOf(values1);
         assertEquals(actual1a, actual1b);// equals of a new map that does not share trie nodes
 
-        PersistentMap<HashCollider, HashCollider> actual1c = actual1a;
+        ImmutableMap<HashCollider, HashCollider> actual1c = actual1a;
         actual1c = actual1c.copyRemove(firstValue1.getKey());
         actual1c = actual1c.copyPut(firstValue1.getKey(), firstValue1.getValue());
         assertEquals(actual1a, actual1c);// equals of a new map that shares many trie nodes
 
-        PersistentMap<HashCollider, HashCollider> actual2a = copyOf(values2);
-        PersistentMap<HashCollider, HashCollider> actual2b = actual2a.copyRemove(firstValue2.getKey());
+        ImmutableMap<HashCollider, HashCollider> actual2a = copyOf(values2);
+        ImmutableMap<HashCollider, HashCollider> actual2b = actual2a.copyRemove(firstValue2.getKey());
         HashCollider zero = new HashCollider(0, 0);
         LinkedHashMap<HashCollider, HashCollider> expected1 = new LinkedHashMap<>(values1);
         LinkedHashMap<HashCollider, HashCollider> expected1plusZero = new LinkedHashMap<>(values1);
@@ -150,7 +150,7 @@ public abstract class AbstractPersistentMapTest {
                     (entry.getValue() == null) ? new HashCollider(-1, hashBitMask) :
                             new HashCollider(entry.getValue().getValue() + 1, hashBitMask));
         }
-        PersistentMap<HashCollider, HashCollider> actual1WithDifferentValues = copyOf(values1WithDifferentValues);
+        ImmutableMap<HashCollider, HashCollider> actual1WithDifferentValues = copyOf(values1WithDifferentValues);
         assertNotEquals(actual1a, actual1WithDifferentValues);
         assertNotEquals(actual1a, values1WithDifferentValues);
         assertNotEquals(actual1a, values2WithDifferentValues);
@@ -159,11 +159,11 @@ public abstract class AbstractPersistentMapTest {
     @SuppressWarnings("unchecked")
     private void testOfEntries(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        PersistentMap<HashCollider, HashCollider> actual;
+        ImmutableMap<HashCollider, HashCollider> actual;
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                new ImmutableLinkedHashMap<>(Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
+                ImmutableSeqTrieMap.copyOf(Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue())));
         //
@@ -220,7 +220,7 @@ public abstract class AbstractPersistentMapTest {
     }
 
     private void testSerialization(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        PersistentMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> actual = of();
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
 
         if (!(actual instanceof Serializable)) {
@@ -249,8 +249,8 @@ public abstract class AbstractPersistentMapTest {
     private void testCopyPut(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
-        PersistentMap<HashCollider, HashCollider> actual = of();
-        PersistentMap<HashCollider, HashCollider> newActual;
+        ImmutableMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> newActual;
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
 
         // GIVEN: a set with values1
@@ -282,8 +282,8 @@ public abstract class AbstractPersistentMapTest {
     }
 
     private void testCopyPutAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        PersistentMap<HashCollider, HashCollider> actual = of();
-        PersistentMap<HashCollider, HashCollider> newActual;
+        ImmutableMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
         newActual = actual.copyPutAll(values1);
@@ -319,8 +319,8 @@ public abstract class AbstractPersistentMapTest {
     private void testCopyRemove(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
         Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
         Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
-        PersistentMap<HashCollider, HashCollider> actual = of();
-        PersistentMap<HashCollider, HashCollider> newActual;
+        ImmutableMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
         newActual = actual.copyPutAll(values1);
@@ -343,8 +343,8 @@ public abstract class AbstractPersistentMapTest {
     }
 
     private void testCopyRemoveAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        PersistentMap<HashCollider, HashCollider> actual = of();
-        PersistentMap<HashCollider, HashCollider> newActual;
+        ImmutableMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
         newActual = actual.copyPutAll(values1);
@@ -366,8 +366,8 @@ public abstract class AbstractPersistentMapTest {
     }
 
     private void testCopyRetainAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        PersistentMap<HashCollider, HashCollider> actual = of();
-        PersistentMap<HashCollider, HashCollider> newActual;
+        ImmutableMap<HashCollider, HashCollider> actual = of();
+        ImmutableMap<HashCollider, HashCollider> newActual;
 
         // GIVEN: a set with values1
         newActual = actual.copyPutAll(values1);
@@ -398,7 +398,7 @@ public abstract class AbstractPersistentMapTest {
     }
 
     public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        @SuppressWarnings("unchecked") PersistentMap<HashCollider, HashCollider> set = copyOf(Maps.putAll(new LinkedHashMap<>(), key, value));
+        @SuppressWarnings("unchecked") ImmutableMap<HashCollider, HashCollider> set = copyOf(Maps.putAll(new LinkedHashMap<>(), key, value));
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(key, value);
         assertTrue(set.containsKey(key));

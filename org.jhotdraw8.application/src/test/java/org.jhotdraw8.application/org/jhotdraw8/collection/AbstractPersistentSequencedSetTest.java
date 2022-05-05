@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public abstract class AbstractPersistentSequencedSetTest extends AbstractPersistentSetTest {
+public abstract class AbstractPersistentSequencedSetTest extends AbstractImmutableSetTest {
     @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "SuspiciousMethodCalls"})
     public void doTestIterationSequence(int mask, int... elements) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
@@ -27,8 +27,8 @@ public abstract class AbstractPersistentSequencedSetTest extends AbstractPersist
             HashCollider e1 = new HashCollider(e, mask);
             list.add(e1);
         }
-        PersistentSet<HashCollider> instance = copyOf(list);
-        System.out.println(((PersistentSequencedTrieSet<HashCollider>) instance).dump());
+        ImmutableSet<HashCollider> instance = copyOf(list);
+        System.out.println(((ImmutableSeqTrieSet<HashCollider>) instance).dump());
         assertEquals(list, new ArrayList<>(instance.asCollection()));
 
         // Remove one element in the middle

@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;
@@ -16,10 +16,10 @@ import org.jhotdraw8.xml.text.XmlWordListConverter;
  *
  * @author Werner Randelshofer
  */
-public class WordListStyleableKey extends AbstractStyleableKey<PersistentList<String>> implements WritableStyleableMapAccessor<PersistentList<String>> {
+public class WordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WritableStyleableMapAccessor<ImmutableList<String>> {
 
     private static final long serialVersionUID = 1L;
-    private Converter<PersistentList<String>> converter = new XmlWordListConverter();
+    private Converter<ImmutableList<String>> converter = new XmlWordListConverter();
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -37,13 +37,13 @@ public class WordListStyleableKey extends AbstractStyleableKey<PersistentList<St
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public WordListStyleableKey(@NonNull String name, PersistentList<String> defaultValue) {
-        super(name, new TypeToken<PersistentList<String>>() {
+    public WordListStyleableKey(@NonNull String name, ImmutableList<String> defaultValue) {
+        super(name, new TypeToken<ImmutableList<String>>() {
         }, defaultValue);
     }
 
     @Override
-    public @NonNull Converter<PersistentList<String>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<String>> getCssConverter() {
         return converter;
     }
 

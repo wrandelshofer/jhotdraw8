@@ -12,28 +12,28 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-public class PersistentSequencedTrieSetTest extends AbstractPersistentSequencedSetTest {
+public class ImmutableSeqTrieSetTest extends AbstractPersistentSequencedSetTest {
 
     @Override
-    protected PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return PersistentSequencedTrieSet.copyOf(set);
+    protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
+        return ImmutableSeqTrieSet.copyOf(set);
     }
 
     @Override
-    protected PersistentSet<HashCollider> of() {
-        return PersistentSequencedTrieSet.of();
+    protected ImmutableSet<HashCollider> of() {
+        return ImmutableSeqTrieSet.of();
     }
 
     @Override
-    protected PersistentSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return PersistentSequencedTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
+    protected ImmutableSet<HashCollider> of(@NonNull HashCollider... keys) {
+        return ImmutableSeqTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
     }
 
 
     @Test
     @Ignore("manual test")
     public void testDumpStructure() {
-        PersistentSequencedTrieSet<HashCollider> instance = PersistentSequencedTrieSet.of();
+        ImmutableSeqTrieSet<HashCollider> instance = ImmutableSeqTrieSet.of();
         Random rng = new Random(0);
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);

@@ -9,8 +9,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssToken;
@@ -69,7 +69,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
         CssSize miterLimit = CssSize.from(4);
         CssSize dashOffset = CssSize.from(0);
-        PersistentList<CssSize> dashArray = PersistentArrayList.of();
+        ImmutableList<CssSize> dashArray = ImmutableArrayList.of();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -169,7 +169,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         return type;
     }
 
-    private @NonNull PersistentList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    private @NonNull ImmutableList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩: Function " + DASHARRAY + "() expected.", tt.getStartPosition());
         }
@@ -184,7 +184,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩: ⟨" + DASHARRAY + "⟩ right bracket expected.");
-        return new PersistentArrayList<>(list);
+        return new ImmutableArrayList<>(list);
     }
 
     private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
@@ -228,8 +228,8 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    public @NonNull PersistentList<String> getExamples() {
-        return new PersistentArrayList<>(Arrays.asList(
+    public @NonNull ImmutableList<String> getExamples() {
+        return new ImmutableArrayList<>(Arrays.asList(
                 "type(inside)",
                 "type(centered)",
                 "type(outside)",
@@ -309,7 +309,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         }
 
-        PersistentList<CssSize> dashArray = value.getDashArray();
+        ImmutableList<CssSize> dashArray = value.getDashArray();
         if (printAllValues || !dashArray.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASHARRAY));

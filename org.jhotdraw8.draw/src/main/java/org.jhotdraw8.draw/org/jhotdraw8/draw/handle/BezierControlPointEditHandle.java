@@ -28,8 +28,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -88,9 +88,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     private final @NonNull Region node;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<PersistentList<BezierNode>> pointKey;
+    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
 
-    public BezierControlPointEditHandle(Figure figure, MapAccessor<PersistentList<BezierNode>> pointKey, int pointIndex, int controlPointMask) {
+    public BezierControlPointEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex, int controlPointMask) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -115,7 +115,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        PersistentList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -154,7 +154,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
-                    PersistentList<BezierNode> list = owner.get(pointKey);
+                    ImmutableList<BezierNode> list = owner.get(pointKey);
                     BezierNode bn = list.get(pointIndex);
 
                     BezierNode newbn;
@@ -184,7 +184,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(f, new CssPoint2D(newPoint)).getConvertedValue();
         }
 
-        PersistentList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         if (pointIndex >= list.size()) {
             return;
         }
@@ -277,7 +277,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         RadioMenuItem equidistantRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.equidistantConstraint.text"));
         RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierControlPoint.collinearAndEquidistantConstraint.text"));
 
-        final PersistentList<BezierNode> nodes = owner.get(pointKey);
+        final ImmutableList<BezierNode> nodes = owner.get(pointKey);
         if (nodes == null) {
             return;
         }
@@ -295,25 +295,25 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(false).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         collinearRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(true).setEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         equidistantRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(false).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setCollinear(true).setEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 
@@ -339,7 +339,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        PersistentList<BezierNode> list = f.get(pointKey);
+        ImmutableList<BezierNode> list = f.get(pointKey);
         if (list == null || pointIndex >= list.size()) {
             node.setVisible(false);
             return;

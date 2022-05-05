@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.geom.BezierNode;
@@ -30,7 +30,7 @@ import java.text.ParseException;
  *
  * @author Werner Randelshofer
  */
-public class XmlBezierNodeListConverter implements Converter<PersistentList<BezierNode>> {
+public class XmlBezierNodeListConverter implements Converter<ImmutableList<BezierNode>> {
 
     private final boolean nullable;
 
@@ -39,11 +39,11 @@ public class XmlBezierNodeListConverter implements Converter<PersistentList<Bezi
     }
 
     @Override
-    public @Nullable PersistentList<BezierNode> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable ImmutableList<BezierNode> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String input = buf.toString();
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
 
-        PersistentList<BezierNode> p = null;
+        ImmutableList<BezierNode> p = null;
         if (tt.next() == CssTokenType.TT_IDENT) {
             if (!nullable) {
                 throw new ParseException("String expected. " + tt.current(), buf.position());
@@ -63,8 +63,8 @@ public class XmlBezierNodeListConverter implements Converter<PersistentList<Bezi
     }
 
     @Override
-    public <TT extends PersistentList<BezierNode>> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier,
-                                                                 @Nullable TT value) throws IOException {
+    public <TT extends ImmutableList<BezierNode>> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier,
+                                                                @Nullable TT value) throws IOException {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("value");
@@ -78,7 +78,7 @@ public class XmlBezierNodeListConverter implements Converter<PersistentList<Bezi
     }
 
     @Override
-    public PersistentList<BezierNode> getDefaultValue() {
-        return nullable ? null : PersistentArrayList.of();
+    public ImmutableList<BezierNode> getDefaultValue() {
+        return nullable ? null : ImmutableArrayList.of();
     }
 }

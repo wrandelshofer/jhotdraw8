@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentSet;
-import org.jhotdraw8.collection.PersistentTrieSet;
+import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.ImmutableTrieSet;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
@@ -41,7 +41,7 @@ import java.util.TreeSet;
  *
  * @author Werner Randelshofer
  */
-public class XmlWordSetConverter implements Converter<PersistentSet<String>> {
+public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
     public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
@@ -50,7 +50,7 @@ public class XmlWordSetConverter implements Converter<PersistentSet<String>> {
     }
 
     @Override
-    public <TT extends PersistentSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
@@ -69,18 +69,18 @@ public class XmlWordSetConverter implements Converter<PersistentSet<String>> {
     }
 
     @Override
-    public PersistentSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (buf == null) {
-            return PersistentTrieSet.of();
+            return ImmutableTrieSet.of();
         }
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return PersistentTrieSet.copyOf(tree);
+        return ImmutableTrieSet.copyOf(tree);
     }
 
     @Override
-    public PersistentSet<String> getDefaultValue() {
-        return PersistentTrieSet.of();
+    public ImmutableSet<String> getDefaultValue() {
+        return ImmutableTrieSet.of();
     }
 }

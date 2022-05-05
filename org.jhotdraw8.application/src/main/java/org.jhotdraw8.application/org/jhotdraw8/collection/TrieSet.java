@@ -59,10 +59,10 @@ import java.util.Set;
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
- * This set can create a persistent copy of itself in O(1) time and O(0) space
- * using method {@link #toPersistent()}. This set loses exclusive ownership of
+ * This set can create an immutable copy of itself in O(1) time and O(0) space
+ * using method {@link #toImmutable()}. This set loses exclusive ownership of
  * all its tree nodes.
- * Thus, creating a persistent copy increases the constant cost of
+ * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
  * <p>
@@ -108,10 +108,10 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     @SuppressWarnings("unchecked")
     public TrieSet(Iterable<? extends E> c) {
         if (c instanceof TrieSet<?>) {
-            c = ((TrieSet<? extends E>) c).toPersistent();
+            c = ((TrieSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof PersistentTrieSet<?>) {
-            PersistentTrieSet<E> that = (PersistentTrieSet<E>) c;
+        if (c instanceof ImmutableTrieSet<?>) {
+            ImmutableTrieSet<E> that = (ImmutableTrieSet<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -315,14 +315,15 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     public String dump() {
         return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
     }
+
     /**
-     * Returns a persistent copy of this set.
+     * Returns an immutable copy of this set.
      *
-     * @return a persistent trie set
+     * @return an immutable trie set
      */
-    public PersistentTrieSet<E> toPersistent() {
+    public ImmutableTrieSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? PersistentTrieSet.of() : new PersistentTrieSet<>(root, size);
+        return size == 0 ? ImmutableTrieSet.of() : new ImmutableTrieSet<>(root, size);
     }
 
     class MutableTrieIterator extends KeyIterator<E, Void> {

@@ -22,8 +22,8 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -328,7 +328,7 @@ public class PageFigure extends AbstractCompositeFigure
     public void layout(@NonNull RenderContext ctx) {
         int currentPage = 0;
         final Transform pageTransform = getPageTransform(currentPage);
-        PersistentList<Transform> transforms = PersistentArrayList.of();
+        ImmutableList<Transform> transforms = ImmutableArrayList.of();
         if (!pageTransform.isIdentity()) {
             transforms = transforms.copyAdd(pageTransform);
         }

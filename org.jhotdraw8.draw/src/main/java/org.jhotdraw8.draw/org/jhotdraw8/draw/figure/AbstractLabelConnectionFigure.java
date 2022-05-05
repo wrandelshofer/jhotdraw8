@@ -12,7 +12,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableLinkedHashSet;
+import org.jhotdraw8.collection.ImmutableSeqTrieSet;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.css.CssPoint2D;
@@ -36,7 +36,6 @@ import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.PointAndTangent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -177,7 +176,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? ImmutableLinkedHashSet.of() : new ImmutableLinkedHashSet<>(Collections.singletonList(labelTarget));
+        return labelTarget == null ? ImmutableSeqTrieSet.of() : ImmutableSeqTrieSet.of(labelTarget);
     }
 
     public boolean isConnected() {

@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -51,9 +51,9 @@ public class PolyPointMoveHandle extends AbstractHandle {
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<PersistentList<Point2D>> pointKey;
+    private final MapAccessor<ImmutableList<Point2D>> pointKey;
 
-    public PolyPointMoveHandle(Figure figure, MapAccessor<PersistentList<Point2D>> pointKey, int pointIndex) {
+    public PolyPointMoveHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -77,7 +77,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     private Point2D getLocation() {
-        PersistentList<Point2D> list = owner.get(pointKey);
+        ImmutableList<Point2D> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }

@@ -16,6 +16,7 @@ import org.jhotdraw8.collection.champ.Node;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +24,7 @@ import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 /**
- * Implements a persistent map using a Compressed Hash-Array Mapped Prefix-tree
+ * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP).
  * <p>
  * Features:
@@ -77,39 +78,45 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
-        implements PersistentMap<K, V>, ImmutableMap<K, V>, Serializable {
+public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
+        implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
 
-    private static final PersistentTrieMap<?, ?> EMPTY = new PersistentTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ImmutableTrieMap<?, ?> EMPTY = new ImmutableTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
 
     final transient int size;
     private final transient ToIntFunction<K> hashFunction = Objects::hashCode;
 
-    PersistentTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
+    ImmutableTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY).copyPutAll(map);
+    public static <K, V> ImmutableTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(map);
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> PersistentTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY).copyPutAll(map);
+    public static <K, V> ImmutableTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(map);
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull PersistentTrieMap<K, V> of(K k, V v, Object... kv) {
-        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY).copyPut(k, v).copyPutKeyValues(kv);
+    public static <K, V> @NonNull ImmutableTrieMap<K, V> of(K k, V v, Object... kv) {
+        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPut(k, v).copyPutKeyValues(kv);
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull PersistentTrieMap<K, V> of() {
-        return (PersistentTrieMap<K, V>) ((PersistentTrieMap<K, V>) PersistentTrieMap.EMPTY);
+    public static <K, V> @NonNull ImmutableTrieMap<K, V> of() {
+        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public static <K, V> @NonNull ImmutableTrieMap<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
+        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(Arrays.asList(entries));
     }
 
     @Override
@@ -119,11 +126,11 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public @NonNull PersistentMap<K, V> copyClear() {
+    public @NonNull ImmutableMap<K, V> copyClear() {
         return isEmpty() ? this : of();
     }
 
-    public @NonNull PersistentTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+    public @NonNull ImmutableTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
 
@@ -132,17 +139,17 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                return new PersistentTrieMap<>(newRootNode,
+                return new ImmutableTrieMap<>(newRootNode,
                         size);
             }
 
-            return new PersistentTrieMap<>(newRootNode, size + 1);
+            return new ImmutableTrieMap<>(newRootNode, size + 1);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
+    public @NonNull ImmutableTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
         while (entries.hasNext()) {
@@ -150,23 +157,23 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
             ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
             modified |= details.isModified;
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull PersistentTrieMap<K, V> copyRemove(@NonNull K key) {
+    public @NonNull ImmutableTrieMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
                 remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH);
         if (details.isModified()) {
             assert details.hasReplacedValue();
-            return new PersistentTrieMap<>(newRootNode, size - 1);
+            return new ImmutableTrieMap<>(newRootNode, size - 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull PersistentTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ImmutableTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
         if (this.isEmpty()) {
             return this;
         }
@@ -177,11 +184,11 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
             ChangeEvent<V> details = t.removeAndGiveDetails(key);
             modified |= details.isModified;
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? t.toImmutable() : this;
     }
 
     @Override
-    public @NonNull PersistentTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull ImmutableTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -196,7 +203,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
                 modified = true;
             }
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? t.toImmutable() : this;
     }
 
     /**
@@ -222,8 +229,8 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
             return false;
         }
 
-        if (other instanceof PersistentTrieMap) {
-            PersistentTrieMap<?, ?> that = (PersistentTrieMap<?, ?>) other;
+        if (other instanceof ImmutableTrieMap) {
+            ImmutableTrieMap<?, ?> that = (ImmutableTrieMap<?, ?>) other;
             if (this.size != that.size) {
                 return false;
             }
@@ -295,7 +302,7 @@ public class PersistentTrieMap<K, V> extends BitmapIndexedNode<K, V>
         }
 
         protected Object readResolve() {
-            return PersistentTrieMap.of().copyPutAll(deserialized.iterator());
+            return ImmutableTrieMap.of().copyPutAll(deserialized.iterator());
         }
     }
 

@@ -25,7 +25,7 @@ import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.app.action.file.ExportFileAction;
 import org.jhotdraw8.app.action.file.PrintFileAction;
 import org.jhotdraw8.app.action.view.ToggleBooleanAction;
-import org.jhotdraw8.collection.PersistentArrayList;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.concurrent.FXWorker;
@@ -514,7 +514,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private void applyUserAgentStylesheet(final @NonNull Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
-                    PersistentArrayList.of(
+                    ImmutableArrayList.of(
                             GrapherActivity.class.getResource("user-agent.css").toURI()));
             d.updateStyleManager();
             final SimpleRenderContext ctx = new SimpleRenderContext();

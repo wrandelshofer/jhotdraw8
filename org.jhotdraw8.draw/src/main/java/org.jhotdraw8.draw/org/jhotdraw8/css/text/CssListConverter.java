@@ -6,8 +6,8 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
@@ -41,16 +41,16 @@ import java.util.function.Consumer;
  *
  * @param <T> the element type
  */
-public class CssListConverter<T> implements CssConverter<PersistentList<T>> {
+public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     /**
      * When nonnull this comparator is used to sort the list.
      */
     private final @Nullable Comparator<T> comparatorForSorting;
 
     private final CssConverter<T> elementConverter;
-    private final @NonNull PersistentList<CssToken> delimiter;
-    private final @NonNull PersistentList<CssToken> prefix;
-    private final @NonNull PersistentList<CssToken> suffix;
+    private final @NonNull ImmutableList<CssToken> delimiter;
+    private final @NonNull ImmutableList<CssToken> prefix;
+    private final @NonNull ImmutableList<CssToken> suffix;
     private final @NonNull Set<Integer> delimiterChars;
 
     public CssListConverter(CssConverter<T> elementConverter) {
@@ -101,9 +101,9 @@ public class CssListConverter<T> implements CssConverter<PersistentList<T>> {
                             @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = new PersistentArrayList<>(delimiter);
-        this.prefix = new PersistentArrayList<>(prefix);
-        this.suffix = new PersistentArrayList<>(suffix);
+        this.delimiter = new ImmutableArrayList<>(delimiter);
+        this.prefix = new ImmutableArrayList<>(prefix);
+        this.suffix = new ImmutableArrayList<>(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
@@ -115,9 +115,9 @@ public class CssListConverter<T> implements CssConverter<PersistentList<T>> {
 
 
     @Override
-    public PersistentList<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return PersistentArrayList.of();
+            return ImmutableArrayList.of();
         } else {
             tt.pushBack();
         }
@@ -153,11 +153,11 @@ public class CssListConverter<T> implements CssConverter<PersistentList<T>> {
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return new PersistentArrayList<>(list);
+        return new ImmutableArrayList<>(list);
     }
 
     @Override
-    public <TT extends PersistentList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
@@ -193,8 +193,8 @@ public class CssListConverter<T> implements CssConverter<PersistentList<T>> {
     }
 
     @Override
-    public @Nullable PersistentList<T> getDefaultValue() {
-        return PersistentArrayList.of();
+    public @Nullable ImmutableList<T> getDefaultValue() {
+        return ImmutableArrayList.of();
     }
 
     @Override

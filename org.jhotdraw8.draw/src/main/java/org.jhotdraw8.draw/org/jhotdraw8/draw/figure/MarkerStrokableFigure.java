@@ -11,9 +11,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.text.CssSizeConverter;
@@ -135,9 +134,9 @@ public interface MarkerStrokableFigure extends Figure {
      * </dl>
      */
     ListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableKey<>("marker-stroke-dasharray",
-            new TypeToken<PersistentList<CssSize>>() {
+            new TypeToken<ImmutableList<CssSize>>() {
             },
-            new CssSizeConverter(false), PersistentArrayList.of());
+            new CssSizeConverter(false), ImmutableArrayList.of());
 
     /**
      * Combined map accessor for all stroke style properties.

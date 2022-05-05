@@ -8,7 +8,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.SequencedTrieSet;
+import org.jhotdraw8.collection.SeqTrieSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -18,9 +18,9 @@ import java.util.Set;
 /**
  * Tests TrieSet with the Guava test suite.
  */
-public class SequencedTrieSetGuavaTests {
+public class SeqTrieSetGuavaTests {
     public static Test suite() {
-        return new SequencedTrieSetGuavaTests().allTests();
+        return new SeqTrieSetGuavaTests().allTests();
     }
 
     public Test allTests() {
@@ -34,7 +34,7 @@ public class SequencedTrieSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new SequencedTrieSet<>(MinimalCollection.of(elements));
+                                return new SeqTrieSet<>(MinimalCollection.of(elements));
                             }
                         })
                 .named("SequencedTrieSet")

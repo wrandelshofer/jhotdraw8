@@ -19,7 +19,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public abstract class AbstractPersistentSequencedMapTest extends AbstractPersistentMapTest {
+public abstract class AbstractPersistentSequencedMapTest extends AbstractImmutableMapTest {
     @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "SuspiciousMethodCalls"})
     public void doTestIterationSequence(int mask, int... elements) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
@@ -31,9 +31,9 @@ public abstract class AbstractPersistentSequencedMapTest extends AbstractPersist
             list.add(e1);
             expected.put(e1, e1);
         }
-        PersistentMap<HashCollider, HashCollider> instance = copyOf(expected);
+        ImmutableMap<HashCollider, HashCollider> instance = copyOf(expected);
 
-        System.out.println((((PersistentSequencedTrieMap) instance).dump()));
+        System.out.println((((ImmutableSeqTrieMap) instance).dump()));
 
         assertEqualSequence(expected, instance.asMap(), "after adding all");
 

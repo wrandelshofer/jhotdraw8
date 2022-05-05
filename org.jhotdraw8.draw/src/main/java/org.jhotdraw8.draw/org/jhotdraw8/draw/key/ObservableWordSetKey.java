@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.PersistentSet;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.key.SimpleNonNullKey;
 import org.jhotdraw8.reflect.TypeToken;
 
@@ -14,7 +14,7 @@ import org.jhotdraw8.reflect.TypeToken;
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull PersistentSet<String>> {
+public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,8 +34,8 @@ public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull PersistentSe
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public ObservableWordSetKey(@NonNull String name, @NonNull PersistentSet<String> defaultValue) {
-        super(name, new TypeToken<PersistentSet<String>>() {
+    public ObservableWordSetKey(@NonNull String name, @NonNull ImmutableSet<String> defaultValue) {
+        super(name, new TypeToken<ImmutableSet<String>>() {
         }, defaultValue);
     }
 }

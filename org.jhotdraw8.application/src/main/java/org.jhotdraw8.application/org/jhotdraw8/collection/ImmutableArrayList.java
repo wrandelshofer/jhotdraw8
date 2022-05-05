@@ -1,7 +1,8 @@
 /*
- * @(#)ImmutableArrayList.java
+ * @(#)PersistentListWrapper.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -10,108 +11,29 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.RandomAccess;
-import java.util.Spliterator;
+import java.util.List;
+import java.util.function.Function;
 
-/**
- * An immutable list.
- *
- * @param <E> element type
- * @author Werner Randelshofer
- */
-public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E>, RandomAccess {
+public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
+    public static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(new ArrayList<>(), ArrayList::new);
+    private final @NonNull List<E> list;
+    private final @NonNull Function<List<E>, List<E>> cloneFunction;
 
-    static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(new Object[0]);
-
-    private static final Object[] EMPTY_ARRAY = new Object[0];
-
-    private final Object[] array;
-
-   protected ImmutableArrayList(@Nullable Collection<? extends E> copyItems) {
-       this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
-   }
-
-    protected ImmutableArrayList(@Nullable ReadOnlyCollection<? extends E> copyItems) {
-        this.array = copyItems == null || copyItems.isEmpty() ? EMPTY_ARRAY : copyItems.toArray();
+    public ImmutableArrayList(@NonNull List<? extends E> list, @NonNull Function<List<E>, List<E>> cloneFunction) {
+        this.list = new ArrayList<>(list);
+        this.cloneFunction = cloneFunction;
     }
 
-    ImmutableArrayList(@NonNull Object[] a, int offset, int length) {
-        if (offset < 0) {
-            throw new IndexOutOfBoundsException("offset = " + offset);
+    public ImmutableArrayList(@NonNull Iterable<? extends E> list) {
+        this.list = new ArrayList<>();
+        for (E e : list) {
+            this.list.add(e);
         }
-        if (length > a.length) {
-            throw new IndexOutOfBoundsException("length = " + length);
-        }
-        this.array = length == 0 ? EMPTY_ARRAY : new Object[length];
-        System.arraycopy(a, offset, array, 0, length);
+        this.cloneFunction = ArrayList::new;
     }
 
-    ImmutableArrayList(Object[] array) {
-        this.array = array.clone();
-    }
-
-
-    public void copyInto(@NonNull Object[] out, int offset) {
-        System.arraycopy(array, 0, out, offset, array.length);
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        for (int i = 0, n = array.length; i < n; i++) {
-            if (array[i].equals(o)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public @NonNull E get(int index) {
-        @SuppressWarnings("unchecked")
-        E value = (E) array[index];
-        return value;
-    }
-
-    public int size() {
-        return array.length;
-    }
-
-    public @NonNull <T> T[] toArray(@NonNull T[] a) {
-        int size = size();
-        if (a.length < size) {
-            @SuppressWarnings("unchecked")
-            T[] t = (T[]) Arrays.copyOf(array, size, a.getClass());
-            return t;
-        }
-        System.arraycopy(array, 0, a, 0, size);
-        if (a.length > size) {
-            a[size] = null;
-        }
-        return a;
-    }
-
-    @Override
-    public @NonNull Iterator<E> iterator() {
-        return new ArrayIterator<>(array);
-    }
-
-    public @NonNull Spliterator<E> spliterator() {
-        return new ArrayIterator<>(array);
-    }
-
-    public @NonNull Enumerator<E> enumerator() {
-        return new ArrayIterator<>(array);
-    }
-
-    @Override
-    public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new ImmutableArrayList<E>(this.array, fromIndex, toIndex - fromIndex);
-    }
-
-    @Override
-    public Object[] toArray() {
-        return array.clone();
-    }
 
     @SuppressWarnings("unchecked")
     public static <E> ImmutableArrayList<E> of() {
@@ -123,7 +45,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         if (elements.length == 0) {
             return (ImmutableArrayList<E>) EMPTY;
         } else {
-            return new ImmutableArrayList<E>(elements);
+            return new ImmutableArrayList<E>(Arrays.asList(elements));
         }
     }
 
@@ -145,4 +67,138 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         return copyOf(a);
     }
 
+    @Override
+    public @NonNull ImmutableArrayList<E> copyClear() {
+        if (list.isEmpty()) {
+            return this;
+        }
+        List<E> c = cloneFunction.apply(list);
+        c.clear();
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public @NonNull ImmutableArrayList<E> copyAdd(@NonNull E element) {
+        List<E> c = cloneFunction.apply(list);
+        c.add(element);
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public @NonNull ImmutableList<E> copyAdd(int index, @NonNull E element) {
+        List<E> c = cloneFunction.apply(list);
+        c.add(index, element);
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public @NonNull ImmutableArrayList<E> copyAddAll(@NonNull Iterable<? extends E> s) {
+        List<E> c = cloneFunction.apply(list);
+        boolean changed = false;
+        for (E e : s) {
+            changed |= c.add(e);
+        }
+        return changed ? new ImmutableArrayList<>(c, cloneFunction) : this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NonNull ImmutableList<E> copyAddAll(int index, @NonNull Iterable<? extends E> it) {
+        List<E> c = cloneFunction.apply(list);
+        if (it instanceof Collection<?>) {
+            c.addAll(index, ((Collection<E>) it));
+        } else {
+            for (E e : it) {
+                c.add(index++, e);
+            }
+        }
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public @NonNull ImmutableArrayList<E> copyRemove(@NonNull E element) {
+        if (!list.contains(element)) {
+            return this;
+        }
+        List<E> c = cloneFunction.apply(list);
+        c.remove(element);
+        return new ImmutableArrayList<>(c, cloneFunction);
+
+    }
+
+    @Override
+    public @NonNull ImmutableList<E> copyRemoveAt(int index) {
+        List<E> c = cloneFunction.apply(list);
+        c.remove(index);
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public @NonNull ImmutableList<E> copyRemoveRange(int fromIndex, int toIndex) {
+        List<E> c = cloneFunction.apply(list);
+        c.subList(fromIndex, toIndex).clear();
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public @NonNull ImmutableArrayList<E> copyRemoveAll(@NonNull Iterable<? extends E> s) {
+        List<E> c = cloneFunction.apply(list);
+        boolean changed = false;
+        for (E e : s) {
+            changed |= c.remove(e);
+        }
+        return changed ? new ImmutableArrayList<>(c, cloneFunction) : this;
+    }
+
+    @Override
+    public @NonNull ImmutableArrayList<E> copyRetainAll(@NonNull Collection<? extends E> s) {
+        List<E> c = cloneFunction.apply(list);
+        boolean changed = false;
+        for (Iterator<E> iterator = c.iterator(); iterator.hasNext(); ) {
+            E e = iterator.next();
+            if (!s.contains(e)) {
+                changed = true;
+                iterator.remove();
+            }
+        }
+        return changed ? new ImmutableArrayList<>(c, cloneFunction) : this;
+    }
+
+    @Override
+    public @NonNull ImmutableList<E> copySet(int index, @NonNull E element) {
+        List<E> c = cloneFunction.apply(list);
+        c.set(index, element);
+        return new ImmutableArrayList<>(c, cloneFunction);
+    }
+
+    @Override
+    public E get(int index) {
+        return list.get(index);
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return Collections.unmodifiableList(list).iterator();
+    }
+
+    @Override
+    public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
+        return new ImmutableArrayList<E>(list.subList(fromIndex, toIndex));
+    }
+
+    @Override
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public boolean contains(@Nullable Object e) {
+        return list.contains(e);
+    }
+
+
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
 }

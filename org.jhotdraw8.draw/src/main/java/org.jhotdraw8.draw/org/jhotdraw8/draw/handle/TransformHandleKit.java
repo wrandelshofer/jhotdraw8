@@ -21,8 +21,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -205,7 +205,7 @@ public class TransformHandleKit {
 
     private abstract static class AbstractTransformHandle extends AbstractResizeTransformHandle {
 
-        @Nullable PersistentList<Transform> startTransforms;
+        @Nullable ImmutableList<Transform> startTransforms;
 
         public AbstractTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
             super(owner, locator, shape, bg, border);
@@ -223,7 +223,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            PersistentList<Transform> oldTransforms = startTransforms == null ? PersistentArrayList.of() : startTransforms;
+            ImmutableList<Transform> oldTransforms = startTransforms == null ? ImmutableArrayList.of() : startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();
@@ -237,7 +237,7 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
             case 0:
-                model.set(owner, TRANSFORMS, PersistentArrayList.of(transform));
+                model.set(owner, TRANSFORMS, ImmutableArrayList.of(transform));
                 break;
             default:
                 int last = oldTransforms.size() - 1;

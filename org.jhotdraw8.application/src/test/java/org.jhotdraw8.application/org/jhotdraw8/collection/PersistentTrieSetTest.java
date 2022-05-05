@@ -11,26 +11,26 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-public class PersistentTrieSetTest extends AbstractPersistentSetTest {
+public class PersistentTrieSetTest extends AbstractImmutableSetTest {
 
     @Override
-    protected PersistentSet<HashCollider> of() {
-        return PersistentTrieSet.of();
+    protected ImmutableSet<HashCollider> of() {
+        return ImmutableTrieSet.of();
     }
 
     @Override
-    protected PersistentSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return PersistentTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
+    protected ImmutableSet<HashCollider> of(@NonNull HashCollider... keys) {
+        return ImmutableTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
     }
 
     @Override
-    protected PersistentSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return PersistentTrieSet.<HashCollider>of().copyAddAll(set);
+    protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
+        return ImmutableTrieSet.<HashCollider>of().copyAddAll(set);
     }
 
     @Test
     public void testDumpStructure() {
-        PersistentTrieSet<Integer> instance = PersistentTrieSet.of();
+        ImmutableTrieSet<Integer> instance = ImmutableTrieSet.of();
         Random rng = new Random(0);
         for (int i = 0; i < 5; i++) {
             int key = rng.nextInt(10_000);

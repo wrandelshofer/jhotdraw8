@@ -13,28 +13,28 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
-public class SequencedTrieMapTest extends AbstractSequencedMapTest {
+public class SeqTrieMapTest extends AbstractSequencedMapTest {
 
 
     @Override
     protected @NonNull Map<HashCollider, HashCollider> of() {
-        return new SequencedTrieMap<>();
+        return new SeqTrieMap<>();
     }
 
     @Override
     protected @NonNull Map<HashCollider, HashCollider> copyOf(@NonNull Map<HashCollider, HashCollider> map) {
-        return new SequencedTrieMap<>(map);
+        return new SeqTrieMap<>(map);
     }
 
     @Override
     protected @NonNull Map<HashCollider, HashCollider> copyOf(@NonNull Collection<Map.Entry<HashCollider, HashCollider>> map) {
-        return new SequencedTrieMap<>(map);
+        return new SeqTrieMap<>(map);
     }
 
     @Test
     @Ignore("manual test")
     public void testDumpStructure() {
-        SequencedTrieMap<HashCollider, String> instance = new SequencedTrieMap<>();
+        SeqTrieMap<HashCollider, String> instance = new SeqTrieMap<>();
         Random rng = new Random(0);
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);

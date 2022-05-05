@@ -18,9 +18,9 @@ import java.util.Map;
 /**
  * Tests TrieMap with the Guava test suite.
  */
-public class SequencedTrieMapGuavaTests {
+public class SeqTrieMapGuavaTests {
     public static Test suite() {
-        return new SequencedTrieMapGuavaTests().allTests();
+        return new SeqTrieMapGuavaTests().allTests();
     }
 
     public Test allTests() {

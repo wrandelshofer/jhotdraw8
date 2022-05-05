@@ -60,10 +60,10 @@ import java.util.Set;
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
- * This map can create a persistent copy of itself in O(1) time and O(0) space
- * using method {@link #toPersistent()}. This map loses exclusive ownership of
+ * This map can create an immutable copy of itself in O(1) time and O(0) space
+ * using method {@link #toImmutable()}. This map loses exclusive ownership of
  * all its tree nodes.
- * Thus, creating a persistent copy increases the constant cost of
+ * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
  * <p>
@@ -94,7 +94,7 @@ import java.util.Set;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
+public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
     private transient UniqueId mutator;
@@ -113,14 +113,14 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
      */
     private transient int lastSequenceNumber = 0;
 
-    public SequencedTrieMap() {
+    public SeqTrieMap() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
-    public SequencedTrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof SequencedTrieMap) {
+    public SeqTrieMap(@NonNull Map<? extends K, ? extends V> m) {
+        if (m instanceof SeqTrieMap) {
             @SuppressWarnings("unchecked")
-            SequencedTrieMap<K, V> trieMap = (SequencedTrieMap<K, V>) m;
+            SeqTrieMap<K, V> trieMap = (SeqTrieMap<K, V>) m;
             this.mutator = null;
             trieMap.mutator = null;
             this.root = trieMap.root;
@@ -132,7 +132,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
         }
     }
 
-    public SequencedTrieMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public SeqTrieMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
@@ -140,10 +140,10 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
 
     }
 
-    public SequencedTrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof PersistentSequencedTrieMap) {
+    public SeqTrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        if (m instanceof ImmutableSeqTrieMap) {
             @SuppressWarnings("unchecked")
-            PersistentSequencedTrieMap<K, V> trieMap = (PersistentSequencedTrieMap<K, V>) m;
+            ImmutableSeqTrieMap<K, V> trieMap = (ImmutableSeqTrieMap<K, V>) m;
             this.root = trieMap;
             this.size = trieMap.size;
         } else {
@@ -161,9 +161,9 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
     }
 
     @Override
-    public SequencedTrieMap<K, V> clone() {
+    public SeqTrieMap<K, V> clone() {
         try {
-            @SuppressWarnings("unchecked") final SequencedTrieMap<K, V> that = (SequencedTrieMap<K, V>) super.clone();
+            @SuppressWarnings("unchecked") final SeqTrieMap<K, V> that = (SeqTrieMap<K, V>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -199,11 +199,11 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
     @Override
     public Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
-                SequencedTrieMap.EntryIterator::new,
-                SequencedTrieMap.this::size,
-                SequencedTrieMap.this::containsEntry,
-                SequencedTrieMap.this::clear,
-                SequencedTrieMap.this::removeEntry
+                SeqTrieMap.EntryIterator::new,
+                SeqTrieMap.this::size,
+                SeqTrieMap.this::containsEntry,
+                SeqTrieMap.this::clear,
+                SeqTrieMap.this::removeEntry
         );
     }
 
@@ -322,27 +322,27 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
      * first few updates that it performs, are copy-on-write operations, until
      * it exclusively owns some trie nodes that it can update.
      *
-     * @return a persistent trie set
+     * @return an immutable trie set
      */
-    public PersistentSequencedTrieMap<K, V> toPersistent() {
+    public ImmutableSeqTrieMap<K, V> toImmutable() {
         if (size == 0) {
-            return PersistentSequencedTrieMap.of();
+            return ImmutableSeqTrieMap.of();
         }
         mutator = null;
-        return new PersistentSequencedTrieMap<>(root, size, lastSequenceNumber);
+        return new ImmutableSeqTrieMap<>(root, size, lastSequenceNumber);
     }
 
     private abstract class AbstractMapIterator extends SequencedTrieIterator<K, V> implements Iterator<Entry<K, V>> {
         protected int expectedModCount;
 
         public AbstractMapIterator() {
-            super(SequencedTrieMap.this.size, SequencedTrieMap.this.root, ENTRY_LENGTH);
-            this.expectedModCount = SequencedTrieMap.this.modCount;
+            super(SeqTrieMap.this.size, SeqTrieMap.this.root, ENTRY_LENGTH);
+            this.expectedModCount = SeqTrieMap.this.modCount;
         }
 
         @Override
         public boolean hasNext() {
-            if (expectedModCount != SequencedTrieMap.this.modCount) {
+            if (expectedModCount != SeqTrieMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.hasNext();
@@ -350,7 +350,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
 
         @Override
         public Entry<K, V> nextEntry() {
-            if (expectedModCount != SequencedTrieMap.this.modCount) {
+            if (expectedModCount != SeqTrieMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.nextEntry();
@@ -358,13 +358,13 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
 
 
         public void remove() {
-            if (expectedModCount != SequencedTrieMap.this.modCount) {
+            if (expectedModCount != SeqTrieMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                SequencedTrieMap.this.remove(k);
-                expectedModCount = SequencedTrieMap.this.modCount;
-                return SequencedTrieMap.this.root;
+                SeqTrieMap.this.remove(k);
+                expectedModCount = SeqTrieMap.this.modCount;
+                return SeqTrieMap.this.root;
             });
         }
     }
@@ -385,7 +385,7 @@ public class SequencedTrieMap<K, V> extends AbstractMap<K, V> implements Seriali
         }
 
         protected Object readResolve() {
-            return new SequencedTrieMap<>(deserialized);
+            return new SeqTrieMap<>(deserialized);
         }
     }
 

@@ -14,14 +14,14 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSet<E> {
+public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<E> {
     private static final int ENTRY_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;
     private static final int BIT_PARTITION_SIZE = 4;
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
 
-    public AddOnlyPersistentTrieSet() {
+    public ImmutableAddOnlyTrieSet() {
     }
 
     private static char bitpos(final int mask) {
@@ -32,8 +32,8 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    private static <K> @NonNull AddOnlyPersistentTrieSet<K> mergeTwoKeyValPairs(final @NonNull K key0, final int keyHash0,
-                                                                                final @NonNull K key1, final int keyHash1, final int shift) {
+    private static <K> @NonNull ImmutableAddOnlyTrieSet<K> mergeTwoKeyValPairs(final @NonNull K key0, final int keyHash0,
+                                                                               final @NonNull K key1, final int keyHash1, final int shift) {
         assert !(key0.equals(key1));
 
         if (shift >= HASH_CODE_LENGTH) {
@@ -55,7 +55,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
                 return new BitmapIndexedNode<>((char) 0, dataMap, key1, key0);
             }
         } else {
-            final AddOnlyPersistentTrieSet<K> node =
+            final ImmutableAddOnlyTrieSet<K> node =
                     mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
             // values fit on next level
             final char nodeMap = bitpos(mask0);
@@ -64,27 +64,27 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull AddOnlyPersistentTrieSet<E> of() {
-        return (AddOnlyPersistentTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull ImmutableAddOnlyTrieSet<E> of() {
+        return (ImmutableAddOnlyTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull AddOnlyPersistentTrieSet<E> of(E... elements) {
-        AddOnlyPersistentTrieSet<E> set = (AddOnlyPersistentTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull ImmutableAddOnlyTrieSet<E> of(E... elements) {
+        ImmutableAddOnlyTrieSet<E> set = (ImmutableAddOnlyTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
         for (E e : elements)
             set = set.copyAdd(e);
         return set;
     }
 
     @Override
-    public @NonNull AddOnlyPersistentTrieSet<E> copyAdd(@NonNull E key) {
+    public @NonNull ImmutableAddOnlyTrieSet<E> copyAdd(@NonNull E key) {
         return updated(key, key.hashCode(), 0);
     }
 
-    abstract @NonNull AddOnlyPersistentTrieSet<E> updated(final @NonNull E key, final int keyHash, final int shift);
+    abstract @NonNull ImmutableAddOnlyTrieSet<E> updated(final @NonNull E key, final int keyHash, final int shift);
 
-    private static final class BitmapIndexedNode<K> extends AddOnlyPersistentTrieSet<K> {
-        private static final @NonNull AddOnlyPersistentTrieSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
+    private static final class BitmapIndexedNode<K> extends ImmutableAddOnlyTrieSet<K> {
+        private static final @NonNull ImmutableAddOnlyTrieSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
         final @NonNull Object[] nodes;
         /**
          * We use char as an unsigned short.
@@ -102,8 +102,8 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
             this.nodes = nodes;
         }
 
-        @NonNull AddOnlyPersistentTrieSet<K> copyAndInsertValue(final int bitpos,
-                                                                final @NonNull K key) {
+        @NonNull ImmutableAddOnlyTrieSet<K> copyAndInsertValue(final int bitpos,
+                                                               final @NonNull K key) {
             final int idx = ENTRY_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and insert 1 element(s) at position 'idx'
@@ -113,10 +113,10 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
             System.arraycopy(src, idx, dst, idx + 1, src.length - idx);
             dst[idx] = key;
 
-            return new BitmapIndexedNode<>(nodeMap, (char)(dataMap | bitpos), dst);
+            return new BitmapIndexedNode<>(nodeMap, (char) (dataMap | bitpos), dst);
         }
 
-        @NonNull AddOnlyPersistentTrieSet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull AddOnlyPersistentTrieSet<K> node) {
+        @NonNull ImmutableAddOnlyTrieSet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull ImmutableAddOnlyTrieSet<K> node) {
 
             final int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - ENTRY_LENGTH - nodeIndex(bitpos);
@@ -131,11 +131,11 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
             System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
             dst[idxNew] = node;
 
-            return new BitmapIndexedNode<>((char) (nodeMap | bitpos),(char)( dataMap ^ bitpos), dst);
+            return new BitmapIndexedNode<>((char) (nodeMap | bitpos), (char) (dataMap ^ bitpos), dst);
         }
 
-        @NonNull AddOnlyPersistentTrieSet<K> copyAndSetNode(final int bitpos,
-                                                            final @NonNull AddOnlyPersistentTrieSet<K> newNode) {
+        @NonNull ImmutableAddOnlyTrieSet<K> copyAndSetNode(final int bitpos,
+                                                           final @NonNull ImmutableAddOnlyTrieSet<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
             final int idx = this.nodes.length - 1 - nodeIndex;
@@ -159,11 +159,11 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
         }
 
         @SuppressWarnings("unchecked")
-        @NonNull AddOnlyPersistentTrieSet<K> getNode(final int index) {
-            return (AddOnlyPersistentTrieSet<K>) nodes[nodes.length - 1 - index];
+        @NonNull ImmutableAddOnlyTrieSet<K> getNode(final int index) {
+            return (ImmutableAddOnlyTrieSet<K>) nodes[nodes.length - 1 - index];
         }
 
-        @NonNull AddOnlyPersistentTrieSet<K> nodeAt(final int bitpos) {
+        @NonNull ImmutableAddOnlyTrieSet<K> nodeAt(final int bitpos) {
             return getNode(nodeIndex(bitpos));
         }
 
@@ -172,8 +172,8 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
         }
 
         @Override
-        @NonNull AddOnlyPersistentTrieSet<K> updated(final @NonNull K key, final int keyHash,
-                                                     final int shift) {
+        @NonNull ImmutableAddOnlyTrieSet<K> updated(final @NonNull K key, final int keyHash,
+                                                    final int shift) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -184,13 +184,13 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
                 if (Objects.equals(currentKey, key)) {
                     return this;
                 } else {
-                    final AddOnlyPersistentTrieSet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
+                    final ImmutableAddOnlyTrieSet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
                             currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
                     return copyAndMigrateFromInlineToNode(bitpos, subNodeNew);
                 }
             } else if ((nodeMap & bitpos) != 0) { // node (not value)
-                final AddOnlyPersistentTrieSet<K> subNode = nodeAt(bitpos);
-                final AddOnlyPersistentTrieSet<K> subNodeNew =
+                final ImmutableAddOnlyTrieSet<K> subNode = nodeAt(bitpos);
+                final ImmutableAddOnlyTrieSet<K> subNodeNew =
                         subNode.updated(key, keyHash, shift + BIT_PARTITION_SIZE);
 
                 if (subNode != subNodeNew) {
@@ -206,7 +206,7 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
     }
 
-    private static final class HashCollisionNode<K> extends AddOnlyPersistentTrieSet<K> {
+    private static final class HashCollisionNode<K> extends ImmutableAddOnlyTrieSet<K> {
         private final @NonNull K[] keys;
         private final int hash;
 
@@ -218,8 +218,8 @@ public abstract class AddOnlyPersistentTrieSet<E> implements AddOnlyPersistentSe
 
         @Override
         @NonNull
-        AddOnlyPersistentTrieSet<K> updated(final @NonNull K key,
-                                            final int keyHash, final int shift) {
+        ImmutableAddOnlyTrieSet<K> updated(final @NonNull K key,
+                                           final int keyHash, final int shift) {
             assert this.hash == keyHash;
 
             for (K k : keys) {

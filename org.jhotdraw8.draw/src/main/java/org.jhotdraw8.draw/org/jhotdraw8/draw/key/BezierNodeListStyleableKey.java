@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
 import org.jhotdraw8.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.geom.BezierNode;
@@ -20,9 +20,9 @@ import org.jhotdraw8.text.Converter;
  * @author Werner Randelshofer
  */
 public class BezierNodeListStyleableKey
-        extends AbstractStyleableKey<@NonNull PersistentList<BezierNode>>
-        implements WritableStyleableMapAccessor<@NonNull PersistentList<BezierNode>>,
-        NonNullMapAccessor<@NonNull PersistentList<BezierNode>> {
+        extends AbstractStyleableKey<@NonNull ImmutableList<BezierNode>>
+        implements WritableStyleableMapAccessor<@NonNull ImmutableList<BezierNode>>,
+        NonNullMapAccessor<@NonNull ImmutableList<BezierNode>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class BezierNodeListStyleableKey
      * @param name The name of the key.
      */
     public BezierNodeListStyleableKey(@NonNull String name) {
-        this(name, PersistentArrayList.of());
+        this(name, ImmutableArrayList.of());
     }
 
     /**
@@ -43,16 +43,16 @@ public class BezierNodeListStyleableKey
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public BezierNodeListStyleableKey(@NonNull String name, @NonNull PersistentList<BezierNode> defaultValue) {
-        super(name, new TypeToken<PersistentList<BezierNode>>() {
+    public BezierNodeListStyleableKey(@NonNull String name, @NonNull ImmutableList<BezierNode> defaultValue) {
+        super(name, new TypeToken<ImmutableList<BezierNode>>() {
         }, defaultValue);
 
     }
 
-    private final Converter<PersistentList<BezierNode>> converter = new CssBezierNodeListConverter(false);
+    private final Converter<ImmutableList<BezierNode>> converter = new CssBezierNodeListConverter(false);
 
     @Override
-    public @NonNull Converter<PersistentList<BezierNode>> getCssConverter() {
+    public @NonNull Converter<ImmutableList<BezierNode>> getCssConverter() {
         return converter;
     }
 

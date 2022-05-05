@@ -15,10 +15,10 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableLinkedHashMap;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.ImmutableSeqTrieMap;
 import org.jhotdraw8.collection.Maps;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
@@ -100,7 +100,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<FillRule>>() {
                     },
                     new CssMappedConverter<>("fill-rule",
-                            ImmutableLinkedHashMap.of("nonzero", FillRule.NON_ZERO,
+                            ImmutableSeqTrieMap.of("nonzero", FillRule.NON_ZERO,
                                     "evenodd", FillRule.EVEN_ODD
                             )),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), FillRule.NON_ZERO
@@ -111,11 +111,11 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <p>
      * <a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a>
      */
-    DefaultableStyleableKey<PersistentList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
-            new TypeToken<CssDefaultableValue<PersistentList<String>>>() {
+    DefaultableStyleableKey<ImmutableList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
+            new TypeToken<CssDefaultableValue<ImmutableList<String>>>() {
             }, new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
-            PersistentArrayList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+            ImmutableArrayList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
 
     /**
@@ -152,10 +152,10 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * stroke-dasharray.
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDasharrayProperty">link</a>
      */
-    DefaultableStyleableKey<PersistentList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
-            new TypeToken<CssDefaultableValue<PersistentList<Double>>>() {
+    DefaultableStyleableKey<ImmutableList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
+            new TypeToken<CssDefaultableValue<ImmutableList<Double>>>() {
             }, new CssListConverter<Double>(new CssDoubleConverter(false), ", "),
-            new CssDefaultableValue<PersistentList<Double>>(CssDefaulting.INHERIT, null), null);
+            new CssDefaultableValue<ImmutableList<Double>>(CssDefaulting.INHERIT, null), null);
     /**
      * stroke-dashoffset.
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDashoffsetProperty">link</a>
@@ -210,7 +210,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<SvgShapeRendering>>() {
                     },
                     new CssMappedConverter<>("shape-rendering",
-                            ImmutableLinkedHashMap.of("auto", SvgShapeRendering.AUTO,
+                            ImmutableSeqTrieMap.of("auto", SvgShapeRendering.AUTO,
                                     "optimizeSpeed", SvgShapeRendering.OPTIMIZE_SPEED,
                                     "crispEdges", SvgShapeRendering.CRISP_EDGES,
                                     "geometricPrecision", SvgShapeRendering.GEOMETRIC_PRECISION)),
@@ -236,7 +236,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<StrokeLineCap>>() {
             },
             new CssMappedConverter<>("stroke-linecap",
-                    ImmutableLinkedHashMap.of("butt", StrokeLineCap.BUTT,
+                    ImmutableSeqTrieMap.of("butt", StrokeLineCap.BUTT,
                             "round", StrokeLineCap.ROUND,
                             "square", StrokeLineCap.SQUARE)),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
@@ -249,7 +249,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<StrokeLineJoin>>() {
             },
             new CssMappedConverter<>("stroke-linejoin",
-                    ImmutableLinkedHashMap.of("miter", StrokeLineJoin.MITER,
+                    ImmutableSeqTrieMap.of("miter", StrokeLineJoin.MITER,
                             "round", StrokeLineJoin.ROUND,
                             "bevel", StrokeLineJoin.BEVEL)),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
@@ -272,7 +272,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<SvgVisibility>>() {
             },
             new CssMappedConverter<SvgVisibility>("visiblity",
-                    ImmutableLinkedHashMap.of("visible", SvgVisibility.VISIBLE,
+                    ImmutableSeqTrieMap.of("visible", SvgVisibility.VISIBLE,
                             "hidden", SvgVisibility.HIDDEN,
                             "collapse", SvgVisibility.COLLAPSE).asMap()),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgVisibility.VISIBLE);
@@ -284,7 +284,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<BlendMode>>() {
             },
             new CssMappedConverter<BlendMode>("mix-blend-mode",
-                    ImmutableLinkedHashMap.ofEntries(
+                    ImmutableSeqTrieMap.ofEntries(
                             Maps.entry("normal", BlendMode.SRC_OVER),
                             Maps.entry("mulitply", BlendMode.MULTIPLY),
                             Maps.entry("screen", BlendMode.SCREEN),
@@ -317,7 +317,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<SvgDisplay>>() {
             },
             new CssMappedConverter<SvgDisplay>("display",
-                    ImmutableLinkedHashMap.of("inline", SvgDisplay.INLINE).asMap(), true),
+                    ImmutableSeqTrieMap.of("inline", SvgDisplay.INLINE).asMap(), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!
             SvgDisplay.INLINE);
     /**
@@ -399,7 +399,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
         shape.setStrokeLineJoin(getDefaultableStyledNonNull(STROKE_LINEJOIN_KEY));
         shape.setStrokeMiterLimit(getDefaultableStyledNonNull(STROKE_MITERLIMIT_KEY));
         shape.setStrokeDashOffset(getDefaultableStyledNonNull(STROKE_DASHOFFSET_KEY));
-        PersistentList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
+        ImmutableList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
         if (dasharray == null) {
             shape.getStrokeDashArray().clear();
         } else {

@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.CompositeMapAccessor;
-import org.jhotdraw8.collection.PersistentSet;
+import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ReadOnlyMap;
 
 import java.util.Collections;
@@ -22,13 +22,13 @@ import java.util.Set;
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     private static final long serialVersionUID = 1L;
-    private final @NonNull MapAccessor<PersistentSet<E>> setAccessor;
+    private final @NonNull MapAccessor<ImmutableSet<E>> setAccessor;
     private final @Nullable E value;
     private boolean defaultValue;
     private final @NonNull String name;
     private final boolean isTransient;
 
-    public SetValueMapAccessor(@NonNull String name, boolean isTransient, @NonNull MapAccessor<PersistentSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
+    public SetValueMapAccessor(@NonNull String name, boolean isTransient, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
         Objects.requireNonNull(value, "value");
         this.setAccessor = setAccessor;
         this.value = value;
@@ -37,19 +37,19 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         this.isTransient = isTransient;
     }
 
-    public SetValueMapAccessor(@NonNull String name, @NonNull MapAccessor<PersistentSet<E>> setAccessor, E value) {
+    public SetValueMapAccessor(@NonNull String name, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, E value) {
         this(name, false, setAccessor, value, false);
     }
 
     @Override
     public Boolean get(@NonNull Map<? super Key<?>, Object> a) {
-        PersistentSet<E> es = setAccessor.get(a);
+        ImmutableSet<E> es = setAccessor.get(a);
         return es != null && es.contains(value);
     }
 
     @Override
     public Boolean get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
-        PersistentSet<E> es = setAccessor.get(a);
+        ImmutableSet<E> es = setAccessor.get(a);
         return es != null && es.contains(value);
     }
 
@@ -80,7 +80,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 
     @Override
     public Boolean put(@NonNull Map<? super Key<?>, Object> a, @Nullable Boolean value) {
-        PersistentSet<E> set = setAccessor.get(a);
+        ImmutableSet<E> set = setAccessor.get(a);
         assert set != null;
         boolean oldValue = set.contains(this.value);
         if (value != null && value) {

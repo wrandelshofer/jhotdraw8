@@ -14,7 +14,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableLinkedHashSet;
+import org.jhotdraw8.collection.ImmutableSeqTrieSet;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
@@ -743,7 +743,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return a list of layout subjects
      */
     default @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
-        return ImmutableLinkedHashSet.of();
+        return ImmutableSeqTrieSet.of();
     }
 
     /**

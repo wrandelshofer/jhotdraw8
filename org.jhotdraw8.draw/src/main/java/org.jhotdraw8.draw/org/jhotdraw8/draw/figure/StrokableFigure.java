@@ -13,8 +13,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.Paintable;
@@ -124,9 +124,9 @@ public interface StrokableFigure extends Figure {
      * </dl>
      */
     @NonNull ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray",
-            new TypeToken<PersistentList<CssSize>>() {
+            new TypeToken<ImmutableList<CssSize>>() {
             },
-            new CssSizeConverter(false), PersistentArrayList.of());
+            new CssSizeConverter(false), ImmutableArrayList.of());
 
     /**
      * Combined map accessor for all stroke style properties.
@@ -157,7 +157,7 @@ public interface StrokableFigure extends Figure {
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        PersistentList<CssSize> dashArray = getStyledNonNull(STROKE_DASH_ARRAY);
+        ImmutableList<CssSize> dashArray = getStyledNonNull(STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {
@@ -225,7 +225,7 @@ public interface StrokableFigure extends Figure {
             basicCap = BasicStroke.CAP_SQUARE;
             break;
         }
-        final PersistentList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
+        final ImmutableList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
         float[] dasharray;
         if (dashlist.isEmpty()) {
             dasharray = null;

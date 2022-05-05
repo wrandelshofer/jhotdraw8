@@ -29,8 +29,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.PersistentArrayList;
-import org.jhotdraw8.collection.PersistentList;
+import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssPoint2D;
@@ -81,10 +81,10 @@ public class BezierNodeEditHandle extends AbstractHandle {
     private final @NonNull Region node;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<PersistentList<BezierNode>> pointKey;
+    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
 
 
-    public BezierNodeEditHandle(Figure figure, MapAccessor<PersistentList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -105,7 +105,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        PersistentList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -146,7 +146,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         if (pointKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
-                    final PersistentList<BezierNode> nodes = owner.get(pointKey);
+                    final ImmutableList<BezierNode> nodes = owner.get(pointKey);
                     if (nodes == null) return;
                     BezierNodePath path = new BezierNodePath(nodes);
                     BezierNode node = path.getNodes().get(pointIndex);
@@ -168,7 +168,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
                         break;
                     }
                     path.getNodes().set(pointIndex, node);
-                    dv.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+                    dv.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
                     dv.recreateHandles();
                 }
             } else if (event.getClickCount() == 2) {
@@ -183,7 +183,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         if (owner.get(pointKey).size() > 2) {
             BezierNodePath path = new BezierNodePath(owner.get(pointKey));
             path.join(pointIndex, 1.0);
-            dv.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            dv.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             dv.recreateHandles();
         }
     }
@@ -197,7 +197,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), new CssPoint2D(newPoint)).getConvertedValue();
         }
 
-        PersistentList<BezierNode> list = owner.get(pointKey);
+        ImmutableList<BezierNode> list = owner.get(pointKey);
         if (pointIndex >= list.size()) {
             return;
         }
@@ -245,25 +245,25 @@ public class BezierNodeEditHandle extends AbstractHandle {
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         inRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C1_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         outRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C2_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C1C2_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, PersistentArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 
@@ -289,7 +289,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        PersistentList<BezierNode> list = f.get(pointKey);
+        ImmutableList<BezierNode> list = f.get(pointKey);
         if (list == null || pointIndex >= list.size()) {
             node.setVisible(false);
             return;

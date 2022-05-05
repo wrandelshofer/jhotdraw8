@@ -6,7 +6,7 @@ package org.jhotdraw8.svg.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableLinkedHashMap;
+import org.jhotdraw8.collection.ImmutableSeqTrieMap;
 import org.jhotdraw8.collection.Maps;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
     private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
-            new MappedConverter<SvgFontSize.SizeKeyword>(ImmutableLinkedHashMap.ofEntries(
+            new MappedConverter<SvgFontSize.SizeKeyword>(ImmutableSeqTrieMap.ofEntries(
                     Maps.entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
                     Maps.entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
                     Maps.entry("small", SvgFontSize.SizeKeyword.SMALL),

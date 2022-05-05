@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AddOnlyPersistentTrieSet;
+import org.jhotdraw8.collection.ImmutableAddOnlyTrieSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -28,7 +28,7 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
      * This set is only needed for backlinks that are in the search frontier.
      * Once they leave the search frontier, the set is removed.
      */
-    private @Nullable AddOnlyPersistentTrieSet<V> ancestors;
+    private @Nullable ImmutableAddOnlyTrieSet<V> ancestors;
 
     /**
      * Creates a new instance.
@@ -39,7 +39,7 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
     public VertexBackLinkWithAncestorSet(
             @NonNull V vertex,
             @Nullable VertexBackLinkWithAncestorSet<V> parent,
-            @NonNull AddOnlyPersistentTrieSet<V> ancestors) {
+            @NonNull ImmutableAddOnlyTrieSet<V> ancestors) {
         super(parent);
         this.vertex = vertex;
         this.ancestors = ancestors;
@@ -83,11 +83,11 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
         return newNode;
     }
 
-    public @NonNull AddOnlyPersistentTrieSet<V> removeAncestors() {
+    public @NonNull ImmutableAddOnlyTrieSet<V> removeAncestors() {
         if (ancestors == null) {
             throw new IllegalStateException("ancestors already removed");
         }
-        AddOnlyPersistentTrieSet<V> ancestors = this.ancestors;
+        ImmutableAddOnlyTrieSet<V> ancestors = this.ancestors;
         this.ancestors = null;
         return ancestors;
     }

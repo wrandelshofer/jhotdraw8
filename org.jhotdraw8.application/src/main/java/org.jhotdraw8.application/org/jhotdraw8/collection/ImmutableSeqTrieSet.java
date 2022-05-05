@@ -8,10 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChampTrie;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.KeyIterator;
 import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedTrieIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ import java.util.Objects;
 
 
 /**
- * Implements a persistent set using a Compressed Hash-Array Mapped Prefix-tree
+ * Implements an immutable set using a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP).
  * <p>
  * Features:
@@ -29,17 +30,17 @@ import java.util.Objects;
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
- *     <li>does not guarantee a specific iteration order</li>
+ *     <li>iterates in the order, in which elements were inserted</li>
  * </ul>
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyAdd: O(1)</li>
+ *     <li>copyAdd: O(1) amortized</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>contains: O(1)</li>
  *     <li>toMutable: O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(1)</li>
+ *     <li>iterator.next(): O(log n)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -58,6 +59,19 @@ import java.util.Objects;
  * with this set, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>
+ * Insertion Order:
+ * <p>
+ * This set uses a counter to keep track of the insertion order.
+ * It stores the current value of the counter in the sequence number
+ * field of each data entry. If the counter wraps around, it must renumber all
+ * sequence numbers.
+ * <p>
+ * The renumbering is why the {@code add} is O(1) only in an amortized sense.
+ * <p>
+ * The iterator of the set is a priority queue, that orders the entries by
+ * their stored insertion counter value. This is why {@code iterator.next()}
+ * is O(log n).
+ * <p>
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
@@ -71,32 +85,63 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements PersistentSet<E>, ImmutableSet<E>, Serializable {
+public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int ENTRY_LENGTH = 1;
+    private final static int ENTRY_LENGTH = 2;
     @SuppressWarnings("unchecked")
-    private static final PersistentTrieSet<?> EMPTY = new PersistentTrieSet<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ImmutableSeqTrieSet<?> EMPTY_SET = new ImmutableSeqTrieSet<>(BitmapIndexedNode.emptyNode(), 0, 0);
 
     final int size;
 
-    PersistentTrieSet(BitmapIndexedNode<E, Void> root, int size) {
+    /**
+     * Counter for the sequence number of the last element. The counter is
+     * incremented when a new entry is added to the end of the sequence.
+     * <p>
+     * The counter is in the range from {@code 0} to
+     * {@link Integer#MAX_VALUE} - 1.
+     * When the counter reaches {@link Integer#MAX_VALUE}, all
+     * sequence numbers are renumbered, and the counter is reset to
+     * {@code size}.
+     */
+    private int lastSequenceNumber;
+
+    ImmutableSeqTrieSet(BitmapIndexedNode<E, Void> root, int size, int lastSequenceNumber) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
+        this.lastSequenceNumber = lastSequenceNumber;
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull PersistentTrieSet<E> of() {
-        return ((PersistentTrieSet<E>) PersistentTrieSet.EMPTY);
+    public static <E> @NonNull ImmutableSeqTrieSet<E> copyOf(@NonNull Iterable<? extends E> set) {
+        if (set instanceof ImmutableSeqTrieSet) {
+            return (ImmutableSeqTrieSet<E>) set;
+        } else if (set instanceof SeqTrieSet) {
+            return ((SeqTrieSet<E>) set).toImmutable();
+        }
+        SeqTrieSet<E> tr = new SeqTrieSet<>(of());
+        tr.addAll(set);
+        return tr.toImmutable();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static <E> @NonNull ImmutableSeqTrieSet<E> of() {
+        return ((ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET);
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull PersistentTrieSet<E> of(E... elements) {
-        return ((PersistentTrieSet<E>) PersistentTrieSet.EMPTY).copyAddAll(Arrays.asList(elements));
+    public static <E> @NonNull ImmutableSeqTrieSet<E> of(E... elements) {
+        if (elements.length == 0) {
+            return (ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET;
+        } else {
+            return ((ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET).copyAddAll(Arrays.asList(elements));
+        }
     }
 
-    @SuppressWarnings("unchecked")
-    public static <E> PersistentTrieSet<E> copyOf(Iterable<? extends E> list) {
-        return ((PersistentTrieSet<E>) PersistentTrieSet.EMPTY).copyAddAll(list);
+    @NonNull
+    private ImmutableSeqTrieSet<E> renumber(BitmapIndexedNode<E, Void> newRootNode) {
+        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
+        return new ImmutableSeqTrieSet<E>(newRootNode, size + 1, size);
     }
 
     @Override
@@ -105,48 +150,53 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
-    public @NonNull PersistentTrieSet<E> copyAdd(final @NonNull E key) {
+    public @NonNull ImmutableSeqTrieSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
+        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent,
+                ENTRY_LENGTH, lastSequenceNumber, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
-            return new PersistentTrieSet<>(newRootNode, size + 1);
+            if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
+                return new ImmutableSeqTrieSet<>(renumber(newRootNode), size + 1, size + 1);
+            } else {
+                return new ImmutableSeqTrieSet<>(newRootNode, size + 1, lastSequenceNumber + 1);
+            }
         }
 
         return this;
     }
 
-    @SuppressWarnings({"unchecked"})
-    public @NonNull PersistentTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof PersistentTrieSet<?>)) {
-            return (PersistentTrieSet<E>) set;
+    @SuppressWarnings("unchecked")
+    public @NonNull ImmutableSeqTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+        if (set == this || isEmpty() && (set instanceof ImmutableSeqTrieSet<?>)) {
+            return (ImmutableSeqTrieSet<E>) set;
         }
-        final TrieSet<E> t = this.toMutable();
+        final SeqTrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             modified |= t.add(key);
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? t.toImmutable() : this;
     }
 
     @Override
-    public @NonNull PersistentSet<E> copyClear() {
+    public @NonNull ImmutableSet<E> copyClear() {
         return isEmpty() ? this : of();
     }
 
-    public @NonNull PersistentTrieSet<E> copyRemove(final @NonNull E key) {
+    public @NonNull ImmutableSeqTrieSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
                 keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
-            return new PersistentTrieSet<>(newRootNode, size - 1);
+            return new ImmutableSeqTrieSet<>(newRootNode, size - 1, lastSequenceNumber);
         }
 
         return this;
     }
 
-    public @NonNull PersistentTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull ImmutableSeqTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -155,7 +205,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         if (set == this) {
             return of();
         }
-        final TrieSet<E> t = this.toMutable();
+        final SeqTrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             if (t.remove(key)) {
@@ -166,10 +216,10 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
             }
 
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull PersistentTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
+    public @NonNull ImmutableSeqTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         if (this.isEmpty()) {
             return this;
         }
@@ -177,7 +227,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
             return of();
         }
 
-        final TrieSet<E> t = this.toMutable();
+        final SeqTrieSet<E> t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {
@@ -188,7 +238,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
                 }
             }
         }
-        return modified ? t.toPersistent() : this;
+        return modified ? t.toImmutable() : this;
     }
 
     @Override
@@ -199,14 +249,16 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
         if (other == null) {
             return false;
         }
-        if (other instanceof PersistentTrieSet) {
-            PersistentTrieSet<?> that = (PersistentTrieSet<?>) other;
+
+        if (other instanceof ImmutableSeqTrieSet) {
+            ImmutableSeqTrieSet<?> that = (ImmutableSeqTrieSet<?>) other;
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH);
+            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        } else {
+            return ReadOnlySet.setEquals(this, other);
         }
-        return ReadOnlySet.setEquals(this, other);
     }
 
     @Override
@@ -216,7 +268,7 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
 
     @Override
     public Iterator<E> iterator() {
-        return new KeyIterator<>(this, ENTRY_LENGTH);
+        return new ElementIterator<E>(size, this, ENTRY_LENGTH);
     }
 
     @Override
@@ -237,8 +289,8 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
      *
      * @return a mutable trie set
      */
-    private @NonNull TrieSet<E> toMutable() {
-        return new TrieSet<>(this);
+    private @NonNull SeqTrieSet<E> toMutable() {
+        return new SeqTrieSet<>(this);
     }
 
     @Override
@@ -252,6 +304,19 @@ public class PersistentTrieSet<E> extends BitmapIndexedNode<E, Void> implements 
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, false);
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, true);
+    }
+
+    static class ElementIterator<E> extends SequencedTrieIterator<E, Void>
+            implements Iterator<E> {
+
+        public ElementIterator(int size, Node<E, Void> rootNode, int entryLength) {
+            super(size, rootNode, entryLength);
+        }
+
+        @Override
+        public E next() {
+            return nextEntry().getKey();
+        }
     }
 }
