@@ -85,7 +85,7 @@ public interface LongQueue extends Queue<Long> {
 
     @Override
     default boolean remove(Object e) {
-        return (e instanceof Long) ? removeAsLong((Long) e) : false;
+        return e instanceof Long && removeAsLong((Long) e);
     }
 
     @Override

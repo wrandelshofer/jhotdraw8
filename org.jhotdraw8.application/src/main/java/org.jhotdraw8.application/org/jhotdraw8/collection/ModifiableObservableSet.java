@@ -61,12 +61,12 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
 
     @Override
     protected boolean backingSetContains(Object o) {
-        return backingSet == null ? false : backingSet.contains(o);
+        return backingSet != null && backingSet.contains(o);
     }
 
     @Override
     protected boolean backingSetContainsAll(Collection<?> c) {
-        return backingSet == null ? false : backingSet.containsAll(c);
+        return backingSet != null && backingSet.containsAll(c);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
 
     @Override
     protected boolean backingSetRemove(Object o) {
-        return backingSet == null ? false : backingSet.remove(o);
+        return backingSet != null && backingSet.remove(o);
     }
 
     @Override

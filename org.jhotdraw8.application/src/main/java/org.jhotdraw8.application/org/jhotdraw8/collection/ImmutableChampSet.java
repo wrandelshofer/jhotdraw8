@@ -158,6 +158,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
         return isEmpty() ? this : of();
     }
 
+    @Override
     public @NonNull ImmutableChampSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
@@ -170,6 +171,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
         return this;
     }
 
+    @Override
     public @NonNull ImmutableChampSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
@@ -193,6 +195,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
         return modified ? t.toImmutable() : this;
     }
 
+    @Override
     public @NonNull ImmutableChampSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         if (this.isEmpty()) {
             return this;

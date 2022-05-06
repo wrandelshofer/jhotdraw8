@@ -30,9 +30,9 @@ import java.util.Spliterators;
 public class LongMinHeap implements LongQueue {
 
     // Member variables of this class
-    private long[] heap;
+    private final long[] heap;
     private int size;
-    private int maxsize;
+    private final int maxsize;
 
     /**
      * Initializing front as static with unity.

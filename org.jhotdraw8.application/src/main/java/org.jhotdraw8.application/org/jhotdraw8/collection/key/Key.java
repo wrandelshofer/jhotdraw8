@@ -256,7 +256,7 @@ public interface Key<T> extends MapAccessor<T> {
      */
     int ordinal();
 
-    static AtomicInteger nextOrdinal = new AtomicInteger();
+    AtomicInteger nextOrdinal = new AtomicInteger();
 
     static int createNextOrdinal() {
         return nextOrdinal.getAndIncrement();

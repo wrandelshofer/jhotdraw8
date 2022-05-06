@@ -37,7 +37,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private final @NonNull Map<K, Integer> keyMap;
     private int size;
 
-    private Object[] values;
+    private final Object[] values;
 
     /**
      * Creates a new instance.

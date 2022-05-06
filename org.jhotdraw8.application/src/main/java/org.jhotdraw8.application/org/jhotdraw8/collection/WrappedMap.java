@@ -57,7 +57,6 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
         this.putFunction = putFunction == null ? (k, v) -> {
             throw new UnsupportedOperationException();
         } : putFunction;
-        ;
     }
 
     @Override

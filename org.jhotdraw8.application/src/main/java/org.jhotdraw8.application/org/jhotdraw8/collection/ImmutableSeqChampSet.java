@@ -103,7 +103,7 @@ public class ImmutableSeqChampSet<E> extends BitmapIndexedNode<E, Void> implemen
      * sequence numbers are renumbered, and the counter is reset to
      * {@code size}.
      */
-    private int lastSequenceNumber;
+    private final int lastSequenceNumber;
 
     ImmutableSeqChampSet(BitmapIndexedNode<E, Void> root, int size, int lastSequenceNumber) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);

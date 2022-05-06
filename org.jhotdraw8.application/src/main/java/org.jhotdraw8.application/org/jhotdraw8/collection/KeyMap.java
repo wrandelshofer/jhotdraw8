@@ -61,7 +61,7 @@ public class KeyMap implements Map<Key<?>, Integer> {
 
     @Override
     public Integer put(Key<?> key, Integer value) {
-        int index = ((Key) key).ordinal();
+        int index = key.ordinal();
         if (index >= table.length) {
             resize(index + 1);
         }

@@ -88,7 +88,7 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
 
     @Override
     default <T> T[] toArray(T @NonNull [] a) {
-        return IntSequencedCollection.super.<T>toArray(a);
+        return IntSequencedCollection.super.toArray(a);
     }
 
     @Override

@@ -86,12 +86,12 @@ class TrieListHelper {
      * @param <E>
      */
     static class RrbTree<E> {
-        private int size;
-        private int shift;
-        private LeafNode<E> head;
-        private LeafNode<E> tail;
+        private final int size;
+        private final int shift;
+        private final LeafNode<E> head;
+        private final LeafNode<E> tail;
         private InternalNode<E> root;
-        private UniqueId mutator = new UniqueId();
+        private final UniqueId mutator = new UniqueId();
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         public RrbTree() {

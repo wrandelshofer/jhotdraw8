@@ -23,7 +23,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     private static final long serialVersionUID = 1L;
     private final @NonNull MapAccessor<ImmutableSet<E>> setAccessor;
     private final @Nullable E value;
-    private boolean defaultValue;
+    private final boolean defaultValue;
     private final @NonNull String name;
     private final boolean isTransient;
 

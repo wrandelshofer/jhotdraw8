@@ -235,6 +235,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
         return modified ? t.toImmutable() : this;
     }
 
+    @Override
     public @NonNull ImmutableSeqChampMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
@@ -351,19 +352,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
         return size;
     }
 
-    /**
-     * Returns a copy of this set that is mutable.
-     * <p>
-     * This operation is performed in O(1) because the mutable map shares
-     * the underlying trie nodes with this set.
-     * <p>
-     * Initially, the returned mutable map hasn't exclusive ownership of any
-     * trie node. Therefore, the first few updates that it performs, are
-     * copy-on-write operations, until it exclusively owns some trie nodes that
-     * it can update.
-     *
-     * @return a mutable trie set
-     */
+    @Override
     public SeqChampMap<K, V> toMutable() {
         return new SeqChampMap<>(this);
     }

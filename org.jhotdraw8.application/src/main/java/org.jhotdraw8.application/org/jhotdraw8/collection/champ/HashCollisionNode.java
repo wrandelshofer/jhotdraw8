@@ -99,7 +99,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
                 return entryLength > 1 ? entries[i + 1] : null;
             }
         }
-        return (V) NO_VALUE;
+        return NO_VALUE;
     }
 
     @Override
