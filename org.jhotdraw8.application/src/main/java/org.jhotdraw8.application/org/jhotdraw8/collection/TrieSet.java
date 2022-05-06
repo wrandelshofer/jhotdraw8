@@ -319,7 +319,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     /**
      * Returns an immutable copy of this set.
      *
-     * @return an immutable trie set
+     * @return an immutable copy
      */
     public ImmutableTrieSet<E> toImmutable() {
         mutator = null;

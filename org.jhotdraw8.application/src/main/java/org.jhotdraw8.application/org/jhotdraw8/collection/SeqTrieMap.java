@@ -314,16 +314,9 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
     }
 
     /**
-     * Returns a copy of this map that is persistent.
-     * <p>
-     * This operation is performed in O(1) because the persistent map shares
-     * the underlying trie nodes with this map.
-     * <p>
-     * This map loses exclusive ownership of all trie nodes. Therefore, the
-     * first few updates that it performs, are copy-on-write operations, until
-     * it exclusively owns some trie nodes that it can update.
+     * Returns an immutable copy of this map.
      *
-     * @return an immutable trie set
+     * @return an immutable copy
      */
     public ImmutableSeqTrieMap<K, V> toImmutable() {
         if (size == 0) {
