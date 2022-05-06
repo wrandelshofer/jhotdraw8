@@ -291,7 +291,7 @@ public class ImmutableSeqChampSet<E> extends BitmapIndexedNode<E, Void> implemen
 
     @Override
     public Iterator<E> iterator() {
-        return new ElementIterator<E>(size, this, ENTRY_LENGTH);
+        return new ElementIterator<E>(size, this, ENTRY_LENGTH, false);
     }
 
     @Override
@@ -321,8 +321,8 @@ public class ImmutableSeqChampSet<E> extends BitmapIndexedNode<E, Void> implemen
     static class ElementIterator<E> extends SequencedTrieIterator<E, Void>
             implements Iterator<E> {
 
-        public ElementIterator(int size, Node<E, Void> rootNode, int entryLength) {
-            super(size, rootNode, entryLength);
+        public ElementIterator(int size, Node<E, Void> rootNode, int entryLength, boolean reversed) {
+            super(size, rootNode, entryLength, reversed);
         }
 
         @Override

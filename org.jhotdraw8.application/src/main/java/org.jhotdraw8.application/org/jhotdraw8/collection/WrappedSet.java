@@ -24,7 +24,7 @@ public class WrappedSet<E> extends AbstractSet<E> {
     private final @NonNull IntSupplier sizeFunction;
     private final @NonNull Predicate<Object> containsFunction;
     private final @NonNull Runnable clearFunction;
-    private final @NonNull Predicate<Object> removeFunction;
+    protected final @NonNull Predicate<Object> removeFunction;
 
     public WrappedSet(ReadOnlySet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,

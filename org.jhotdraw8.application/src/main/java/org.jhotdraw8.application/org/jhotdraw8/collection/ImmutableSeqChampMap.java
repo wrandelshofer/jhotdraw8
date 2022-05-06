@@ -229,7 +229,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
         boolean modified = false;
         while (entries.hasNext()) {
             Map.Entry<? extends K, ? extends V> entry = entries.next();
-            ChangeEvent<V> details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            ChangeEvent<V> details = t.putLastAndGiveDetails(entry.getKey(), entry.getValue());
             modified |= details.isModified;
         }
         return modified ? t.toImmutable() : this;
@@ -291,7 +291,11 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> entries() {
-        return new EntryIterator<>(size, this, ENTRY_LENGTH);
+        return entries(false);
+    }
+
+    public @NonNull Iterator<Map.Entry<K, V>> entries(boolean reversed) {
+        return new EntryIterator<>(size, this, ENTRY_LENGTH, reversed);
     }
 
     @Override
@@ -333,7 +337,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
 
     @Override
     public @NonNull Iterator<K> keys() {
-        return new KeyIterator<>(size, this, ENTRY_LENGTH);
+        return new KeyIterator<>(size, this, ENTRY_LENGTH, false);
     }
 
     @NonNull
@@ -389,8 +393,8 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
     static class EntryIterator<K, V> extends SequencedTrieIterator<K, V>
             implements Iterator<Map.Entry<K, V>> {
 
-        public EntryIterator(int size, Node<K, V> rootNode, int entryLength) {
-            super(size, rootNode, entryLength);
+        public EntryIterator(int size, Node<K, V> rootNode, int entryLength, boolean reversed) {
+            super(size, rootNode, entryLength, reversed);
         }
 
         @Override
@@ -402,8 +406,8 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
     static class KeyIterator<K, V> extends SequencedTrieIterator<K, V>
             implements Iterator<K> {
 
-        public KeyIterator(int size, Node<K, V> rootNode, int entryLength) {
-            super(size, rootNode, entryLength);
+        public KeyIterator(int size, Node<K, V> rootNode, int entryLength, boolean reversed) {
+            super(size, rootNode, entryLength, reversed);
         }
 
         @Override

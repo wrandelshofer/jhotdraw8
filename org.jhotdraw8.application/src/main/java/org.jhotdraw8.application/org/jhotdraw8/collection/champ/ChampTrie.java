@@ -55,7 +55,7 @@ public class ChampTrie {
         BitmapIndexedNode<K, V> newRoot = root;
         ChangeEvent<V> details = new ChangeEvent<>();
         int count = Integer.MIN_VALUE;
-        for (SequencedTrieIterator<K, V> i = new SequencedTrieIterator<>(size, root, entryLength); i.hasNext(); ) {
+        for (SequencedTrieIterator<K, V> i = new SequencedTrieIterator<>(size, root, entryLength, false); i.hasNext(); ) {
             Map.Entry<K, V> entry = i.nextEntry();
             newRoot = newRoot.update(mutator,
                     entry.getKey(), entry.getValue(),

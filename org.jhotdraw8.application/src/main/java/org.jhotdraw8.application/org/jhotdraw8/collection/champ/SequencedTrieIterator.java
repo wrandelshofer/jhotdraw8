@@ -17,8 +17,9 @@ public class SequencedTrieIterator<K, V> {
     boolean canRemove;
 
     @SuppressWarnings("unchecked")
-    public SequencedTrieIterator(int size, Node<K, V> rootNode, int entryLength) {
-        queue = new PriorityQueue<>(Math.max(1, size), Comparator.comparingInt(SequencedMapEntry::getSequenceNumber));
+    public SequencedTrieIterator(int size, Node<K, V> rootNode, int entryLength, boolean reversed) {
+        Comparator<SequencedMapEntry<K, V>> comparator = Comparator.comparingInt(SequencedMapEntry::getSequenceNumber);
+        queue = new PriorityQueue<>(Math.max(1, size), reversed ? comparator.reversed() : comparator);
         for (BaseTrieIterator<K, V> it = new BaseTrieIterator<>(rootNode, entryLength); it.hasNext(); ) {
             queue.add(it.nextValueNode.getKeyValueSeqEntry(it.nextValueCursor++, SequencedMapEntry::new, entryLength));
         }

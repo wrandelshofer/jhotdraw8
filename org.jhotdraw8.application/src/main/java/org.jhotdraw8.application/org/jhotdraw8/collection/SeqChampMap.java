@@ -20,7 +20,6 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -94,7 +93,7 @@ import java.util.Set;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
+public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable, SequencedMap<K, V> {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
     private transient UniqueId mutator;
@@ -112,6 +111,18 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
      * {@code size}.
      */
     private transient int lastSequenceNumber = 0;
+
+    /**
+     * Counter for the sequence number of the first element. The counter is
+     * decrement before a new entry is added to the start of the sequence.
+     * <p>
+     * The counter is in the range from {@code 0} to
+     * {@link Integer#MIN_VALUE}.
+     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
+     * sequence numbers are renumbered, and the counter is reset to
+     * {@code 0}.
+     */
+    private int firstSequenceNumber = 0;
 
     public SeqChampMap() {
         this.root = BitmapIndexedNode.emptyNode();
@@ -197,38 +208,27 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Set<Entry<K, V>> entrySet() {
-        return new WrappedSet<>(
-                SeqChampMap.EntryIterator::new,
-                SeqChampMap.this::size,
-                SeqChampMap.this::containsEntry,
-                SeqChampMap.this::clear,
-                SeqChampMap.this::removeEntry
-        );
+    public Entry<K, V> firstEntry() {
+        return new EntryIterator(false).nextEntry();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public V get(final @NonNull Object o) {
-        final K key = (K) o;
-        Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
-        return result == Node.NO_VALUE ? null : (V) result;
-    }
-
-    private @NonNull UniqueId getOrCreateMutator() {
-        if (mutator == null) {
-            mutator = new UniqueId();
-        }
-        return mutator;
+    public Entry<K, V> lastEntry() {
+        return new EntryIterator(true).nextEntry();
     }
 
     @Override
-    public V put(K key, V value) {
-        return putAndGiveDetails(key, value).getOldValue();
+    public V putFirst(K key, V value) {
+        return putFirstAndGiveDetails(key, value).getOldValue();
     }
 
-    @NonNull ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
+
+    @Override
+    public V putLast(K key, V value) {
+        return putLastAndGiveDetails(key, value).getOldValue();
+    }
+
+    @NonNull ChangeEvent<V> putLastAndGiveDetails(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
 
@@ -251,6 +251,100 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
         }
 
         return details;
+    }
+
+    @NonNull ChangeEvent<V> putFirstAndGiveDetails(final K key, final V val) {
+        final int keyHash = Objects.hashCode(key);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+
+        final BitmapIndexedNode<K, V> newRootNode =
+                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, firstSequenceNumber - 1,
+                        ENTRY_LENGTH - 1);
+
+        if (details.isModified()) {
+            if (details.hasReplacedValue()) {
+                root = newRootNode;
+            } else {
+                root = newRootNode;
+                size += 1;
+                firstSequenceNumber--;
+                if (firstSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
+                    renumberSequenceNumbers();
+                }
+                modCount++;
+            }
+        }
+
+        return details;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public SequencedSet<K> keySet() {
+        return new WrappedSequencedSet<>(
+                SeqChampMap.KeyIterator::new,
+                SeqChampMap.this::size,
+                SeqChampMap.this::containsKey,
+                SeqChampMap.this::clear,
+                SeqChampMap.this::removeKey,
+                SeqChampMap.this::firstKey,
+                SeqChampMap.this::lastKey
+        );
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public SequencedSet<Entry<K, V>> entrySet() {
+        return new WrappedSequencedSet<>(
+                SeqChampMap.EntryIterator::new,
+                SeqChampMap.this::size,
+                SeqChampMap.this::containsEntry,
+                SeqChampMap.this::clear,
+                SeqChampMap.this::removeEntry,
+                SeqChampMap.this::firstEntry,
+                SeqChampMap.this::lastEntry
+        );
+    }
+
+    @Override
+    public SequencedCollection<V> values() {
+        return new WrappedSequencedCollection<>(
+                SeqChampMap.ValueIterator::new,
+                SeqChampMap.this::size,
+                SeqChampMap.this::containsValue,
+                SeqChampMap.this::clear,
+                SeqChampMap.this::removeValue,
+                SeqChampMap.this::firstValue,
+                SeqChampMap.this::lastValue
+        );
+    }
+
+    V firstValue() {
+        return firstEntry().getValue();
+    }
+
+    V lastValue() {
+        return lastEntry().getValue();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public V get(final @NonNull Object o) {
+        final K key = (K) o;
+        Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        return result == Node.NO_VALUE ? null : (V) result;
+    }
+
+    private @NonNull UniqueId getOrCreateMutator() {
+        if (mutator == null) {
+            mutator = new UniqueId();
+        }
+        return mutator;
+    }
+
+    @Override
+    public V put(K key, V value) {
+        return putLast(key, value);
     }
 
     /**
@@ -303,9 +397,25 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
         return false;
     }
 
+    boolean removeKey(final @Nullable Object o) {
+        @SuppressWarnings("unchecked") K key = (K) o;
+        return removeAndGiveDetails(key).isModified();
+    }
+
+    boolean removeValue(final @Nullable Object o) {
+        for (Entry<K, V> entry : entrySet()) {
+            if (Objects.equals(entry.getValue(), o)) {
+                remove(entry.getKey());
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void renumberSequenceNumbers() {
         root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
         lastSequenceNumber = size;
+        firstSequenceNumber = 0;
     }
 
     @Override
@@ -326,11 +436,11 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
         return new ImmutableSeqChampMap<>(root, size, lastSequenceNumber);
     }
 
-    private abstract class AbstractMapIterator extends SequencedTrieIterator<K, V> implements Iterator<Entry<K, V>> {
+    private abstract class AbstractMapIterator extends SequencedTrieIterator<K, V> {
         protected int expectedModCount;
 
-        public AbstractMapIterator() {
-            super(SeqChampMap.this.size, SeqChampMap.this.root, ENTRY_LENGTH);
+        public AbstractMapIterator(boolean reversed) {
+            super(SeqChampMap.this.size, SeqChampMap.this.root, ENTRY_LENGTH, reversed);
             this.expectedModCount = SeqChampMap.this.modCount;
         }
 
@@ -364,10 +474,49 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
     }
 
     private class EntryIterator extends AbstractMapIterator implements Iterator<Entry<K, V>> {
+        public EntryIterator() {
+            super(false);
+        }
+
+        public EntryIterator(boolean reversed) {
+            super(reversed);
+        }
+
         @Override
         public Entry<K, V> next() {
             //FIXME support mutable map entry
             return nextEntry();
+        }
+    }
+
+    private class ValueIterator extends AbstractMapIterator implements Iterator<V> {
+        public ValueIterator() {
+            super(false);
+        }
+
+        public ValueIterator(boolean reversed) {
+            super(reversed);
+        }
+
+        @Override
+        public V next() {
+            //FIXME support mutable map entry
+            return nextEntry().getValue();
+        }
+    }
+
+    private class KeyIterator extends AbstractMapIterator implements Iterator<K> {
+        public KeyIterator() {
+            super(false);
+        }
+
+        public KeyIterator(boolean reversed) {
+            super(reversed);
+        }
+
+        @Override
+        public K next() {
+            return nextEntry().getKey();
         }
     }
 

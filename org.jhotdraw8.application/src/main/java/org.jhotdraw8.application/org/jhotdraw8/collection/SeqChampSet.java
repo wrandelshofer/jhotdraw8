@@ -99,7 +99,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
+public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E> {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     private transient UniqueId mutator;
@@ -109,7 +109,7 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
 
     /**
      * Counter for the sequence number of the last element. The counter is
-     * incremented when a new entry is added to the end of the sequence.
+     * incremented after a new entry is added to the end of the sequence.
      * <p>
      * The counter is in the range from {@code 0} to
      * {@link Integer#MAX_VALUE} - 1.
@@ -118,6 +118,17 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
      * {@code size}.
      */
     private int lastSequenceNumber = 0;
+    /**
+     * Counter for the sequence number of the first element. The counter is
+     * decrement before a new entry is added to the start of the sequence.
+     * <p>
+     * The counter is in the range from {@code 0} to
+     * {@link Integer#MIN_VALUE}.
+     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
+     * sequence numbers are renumbered, and the counter is reset to
+     * {@code 0}.
+     */
+    private int firstSequenceNumber = 0;
 
     /**
      * Constructs an empty set.
@@ -147,32 +158,36 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
     }
 
     /**
-     * Adds the specified element if it is not already in this set.
+     * Adds the specified element at the end of the set, if it is not already
+     * contained in the set.
      *
      * @param e an element
-     * @return {@code true} if this set changed
+     * @return true, if the element was added to the set
      */
     public boolean add(final @Nullable E e) {
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
-                lastSequenceNumber, ENTRY_LENGTH - 1);
-        if (changeEvent.isModified) {
-            root = newRoot;
-            size++;
-            modCount++;
-            lastSequenceNumber++;
-            if (lastSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
-                renumberSequenceNumbers();
-            }
+        return addLast(e);
+    }
 
-            return true;
-        }
-        return false;
+    @Override
+    public E getFirst() {
+        Iterator<E> iterator = iterator(false);
+        E first = iterator.next();
+        iterator.remove();
+        return first;
+    }
+
+    @Override
+    public E getLast() {
+        Iterator<E> iterator = iterator(true);
+        E last = iterator.next();
+        iterator.remove();
+        return last;
     }
 
     private void renumberSequenceNumbers() {
         root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
         lastSequenceNumber = size;
+        firstSequenceNumber = 0;
     }
 
     /**
@@ -246,6 +261,68 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
     }
 
     /**
+     * Adds the specified element to the front of the set, if it is not already
+     * contained in the set.
+     *
+     * @param e an element
+     * @return true, if the element was added to the set
+     */
+    @Override
+    public boolean addFirst(E e) {
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
+                firstSequenceNumber - 1, ENTRY_LENGTH - 1);
+        if (changeEvent.isModified) {
+            root = newRoot;
+            size++;
+            modCount++;
+            firstSequenceNumber--;
+            if (firstSequenceNumber == Node.NO_SEQUENCE_NUMBER - 1) {
+                renumberSequenceNumbers();
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Adds the specified element to the end of the set, if it is not already
+     * contained in the set.
+     *
+     * @param e an element
+     * @return true, if the element was added to the set
+     */
+    @Override
+    public boolean addLast(E e) {
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
+                lastSequenceNumber, ENTRY_LENGTH - 1);
+        if (changeEvent.isModified) {
+            root = newRoot;
+            size++;
+            modCount++;
+            lastSequenceNumber++;
+            if (lastSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
+                renumberSequenceNumbers();
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public E removeFirst() {
+        return null;
+    }
+
+    @Override
+    public E removeLast() {
+        return null;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -253,12 +330,20 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         return size == 0;
     }
 
-    /**
-     * Returns an iterator over the elements of this set.
-     */
     @Override
     public Iterator<E> iterator() {
-        return new MutableTrieIterator(ENTRY_LENGTH);
+        return iterator(false);
+    }
+
+    /**
+     * Returns an iterator over the elements of this set, that optionally
+     * iterates in reversed direction.
+     *
+     * @param reversed whether to iterate in reverse direction
+     * @return an iterator
+     */
+    public Iterator<E> iterator(boolean reversed) {
+        return new MutableTrieIterator(ENTRY_LENGTH, reversed);
     }
 
     /**
@@ -365,8 +450,8 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
     class MutableTrieIterator extends SequencedKeyIterator<E, Void> {
         private int expectedModCount;
 
-        MutableTrieIterator(int tupleLength) {
-            super(SeqChampSet.this.size, SeqChampSet.this.root, tupleLength);
+        MutableTrieIterator(int tupleLength, boolean reversed) {
+            super(SeqChampSet.this.size, SeqChampSet.this.root, tupleLength, reversed);
             this.expectedModCount = SeqChampSet.this.modCount;
         }
 

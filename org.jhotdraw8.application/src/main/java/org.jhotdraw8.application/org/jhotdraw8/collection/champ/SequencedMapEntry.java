@@ -21,6 +21,6 @@ class SequencedMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
     }
 
     public String toString() {
-        return getKey() + "=" + getValue() + "#" + ((long) sequenceNumber - Integer.MIN_VALUE);
+        return getKey() + "=" + getValue();
     }
 }

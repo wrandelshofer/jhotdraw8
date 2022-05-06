@@ -5,35 +5,81 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractCollection;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.function.IntSupplier;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
- * CollectionWrapper.
+ * Wraps {@code Collection} functions into the {@link Collection} API.
  *
  * @author Werner Randelshofer
  */
 public class WrappedCollection<E> extends AbstractCollection<E> {
-    private final ReadOnlyCollection<E> backingCollection;
+    private final @NonNull Supplier<Iterator<E>> iteratorFunction;
+    private final @NonNull IntSupplier sizeFunction;
+    private final @NonNull Predicate<Object> containsFunction;
+    private final @NonNull Runnable clearFunction;
+    protected final @NonNull Predicate<Object> removeFunction;
 
     public WrappedCollection(ReadOnlyCollection<E> backingCollection) {
-        this.backingCollection = backingCollection;
+        this(backingCollection::iterator, backingCollection::size,
+                backingCollection::contains, null, null);
+    }
+
+    public WrappedCollection(Collection<E> backingCollection) {
+        this(backingCollection::iterator, backingCollection::size,
+                backingCollection::contains, backingCollection::clear, backingCollection::remove);
+    }
+
+    public WrappedCollection(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                             @NonNull IntSupplier sizeFunction,
+                             @NonNull Predicate<Object> containsFunction) {
+        this(iteratorFunction, sizeFunction, containsFunction, null, null);
+    }
+
+    public WrappedCollection(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                             @NonNull IntSupplier sizeFunction,
+                             @NonNull Predicate<Object> containsFunction,
+                             @Nullable Runnable clearFunction,
+                             @Nullable Predicate<Object> removeFunction) {
+        this.iteratorFunction = iteratorFunction;
+        this.sizeFunction = sizeFunction;
+        this.containsFunction = containsFunction;
+        this.clearFunction = clearFunction == null ? () -> {
+            throw new UnsupportedOperationException();
+        } : clearFunction;
+        this.removeFunction = removeFunction == null ? o -> {
+            throw new UnsupportedOperationException();
+        } : removeFunction;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return removeFunction.test(o);
+    }
+
+    @Override
+    public void clear() {
+        clearFunction.run();
     }
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return backingCollection.iterator();
+        return iteratorFunction.get();
     }
 
     @Override
     public int size() {
-        return backingCollection.size();
+        return sizeFunction.getAsInt();
     }
 
     @Override
     public boolean contains(Object o) {
-        @SuppressWarnings("unchecked") E e = (E) o;
-        return backingCollection.contains(e);
+        return containsFunction.test(o);
     }
 }

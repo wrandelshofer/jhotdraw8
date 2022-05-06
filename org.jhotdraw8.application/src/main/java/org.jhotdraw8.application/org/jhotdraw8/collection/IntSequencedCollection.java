@@ -24,12 +24,10 @@ public interface IntSequencedCollection extends SequencedCollection<Integer> {
 
     int removeLastAsInt();
 
-    @Override
     default void addFirst(Integer e) {
         addFirstAsInt(e);
     }
 
-    @Override
     default void addLast(Integer e) {
         addLastAsInt(e);
     }
@@ -44,12 +42,10 @@ public interface IntSequencedCollection extends SequencedCollection<Integer> {
         return getLastAsInt();
     }
 
-    @Override
     default Integer removeFirst() {
         return removeFirstAsInt();
     }
 
-    @Override
     default Integer removeLast() {
         return removeLastAsInt();
     }

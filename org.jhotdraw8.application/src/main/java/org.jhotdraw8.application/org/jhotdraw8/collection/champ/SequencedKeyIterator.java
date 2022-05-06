@@ -11,8 +11,8 @@ public class SequencedKeyIterator<K, V> extends SequencedTrieIterator<K, V>
         implements Iterator<K> {
 
 
-    public SequencedKeyIterator(int size, Node<K, V> rootNode, int entryLength) {
-        super(size, rootNode, entryLength);
+    public SequencedKeyIterator(int size, Node<K, V> rootNode, int entryLength, boolean reversed) {
+        super(size, rootNode, entryLength, reversed);
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.ChampMap;
+import org.jhotdraw8.collection.SeqChampMap;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public class SeqChampMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return toHashMap(entries);
+                                return new SeqChampMap<String, String>(Arrays.asList(entries));
                             }
                         })
                 .named("SequencedTrieMap")
@@ -62,7 +62,4 @@ public class SeqChampMapGuavaTests {
     }
 
 
-    private static Map<String, String> toHashMap(Map.Entry<String, String>[] entries) {
-        return new ChampMap<String, String>(Arrays.asList(entries));
-    }
 }

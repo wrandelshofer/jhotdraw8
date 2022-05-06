@@ -12,17 +12,16 @@ import java.util.stream.Stream;
 
 /**
  * Interface for a collection with a well-defined linear ordering of its elements.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>JEP draft: Sequenced Collections</dt>
+ *     <dd><a href="https://openjdk.java.net/jeps/8280836">java.ne</a></dd>
+ * </dl>
  *
  * @param <E> the element type
  */
 public interface SequencedCollection<E> extends Collection<E>, ReadOnlySequencedCollection<E> {
-    void addFirst(E e);
-
-    void addLast(E e);
-
-    E removeFirst();
-
-    E removeLast();
 
     @Override
     default boolean isEmpty() {

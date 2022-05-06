@@ -23,9 +23,9 @@ import java.util.Map;
 /**
  * Tests TrieMap with the Guava test suite.
  */
-public class TrieMapGuavaTests {
+public class ChampMapGuavaTests {
     public static Test suite() {
-        return new TrieMapGuavaTests().allTests();
+        return new ChampMapGuavaTests().allTests();
     }
 
     public Test allTests() {
@@ -39,7 +39,7 @@ public class TrieMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return toHashMap(entries);
+                                return new ChampMap<String, String>(Arrays.asList(entries));
                             }
                         })
                 .named("TrieMap")
@@ -61,7 +61,4 @@ public class TrieMapGuavaTests {
     }
 
 
-    private static Map<String, String> toHashMap(Map.Entry<String, String>[] entries) {
-        return new ChampMap<String, String>(Arrays.asList(entries));
-    }
 }
