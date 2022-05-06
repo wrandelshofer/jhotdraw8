@@ -96,11 +96,11 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     public ChampMap(@NonNull Map<? extends K, ? extends V> m) {
         if (m instanceof ChampMap) {
             @SuppressWarnings("unchecked")
-            ChampMap<K, V> champMap = (ChampMap<K, V>) m;
+            ChampMap<K, V> that = (ChampMap<K, V>) m;
             this.mutator = null;
-            champMap.mutator = null;
-            this.root = champMap.root;
-            this.size = champMap.size;
+            that.mutator = null;
+            this.root = that.root;
+            this.size = that.size;
             this.modCount = 0;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
@@ -119,9 +119,9 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     public ChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
         if (m instanceof ImmutableChampMap) {
             @SuppressWarnings("unchecked")
-            ImmutableChampMap<K, V> trieMap = (ImmutableChampMap<K, V>) m;
-            this.root = trieMap;
-            this.size = trieMap.size;
+            ImmutableChampMap<K, V> that = (ImmutableChampMap<K, V>) m;
+            this.root = that;
+            this.size = that.size;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
             this.putAll(m.asMap());

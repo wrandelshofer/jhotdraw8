@@ -131,11 +131,11 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
     public SeqChampMap(@NonNull Map<? extends K, ? extends V> m) {
         if (m instanceof SeqChampMap) {
             @SuppressWarnings("unchecked")
-            SeqChampMap<K, V> trieMap = (SeqChampMap<K, V>) m;
+            SeqChampMap<K, V> that = (SeqChampMap<K, V>) m;
             this.mutator = null;
-            trieMap.mutator = null;
-            this.root = trieMap.root;
-            this.size = trieMap.size;
+            that.mutator = null;
+            this.root = that.root;
+            this.size = that.size;
             this.modCount = 0;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
@@ -154,9 +154,9 @@ public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable
     public SeqChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
         if (m instanceof ImmutableSeqChampMap) {
             @SuppressWarnings("unchecked")
-            ImmutableSeqChampMap<K, V> trieMap = (ImmutableSeqChampMap<K, V>) m;
-            this.root = trieMap;
-            this.size = trieMap.size;
+            ImmutableSeqChampMap<K, V> that = (ImmutableSeqChampMap<K, V>) m;
+            this.root = that;
+            this.size = that.size;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
             this.putAll(m.asMap());
