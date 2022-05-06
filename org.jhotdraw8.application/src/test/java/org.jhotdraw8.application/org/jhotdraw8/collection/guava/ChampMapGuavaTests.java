@@ -1,5 +1,5 @@
 /*
- * @(#)TrieMapGuavaTests.java
+ * @(#)ChampMapGuavaTests.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
