@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractPersistentSetTest.java
+ * @(#)AbstractImmutableSetTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 

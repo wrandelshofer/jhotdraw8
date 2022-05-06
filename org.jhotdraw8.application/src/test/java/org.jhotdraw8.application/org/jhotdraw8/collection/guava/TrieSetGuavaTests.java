@@ -1,3 +1,8 @@
+/*
+ * @(#)TrieSetGuavaTests.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection.guava;
 
 import com.google.common.collect.testing.MinimalCollection;
