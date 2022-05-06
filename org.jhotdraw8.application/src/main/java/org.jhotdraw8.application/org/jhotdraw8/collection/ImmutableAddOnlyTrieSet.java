@@ -68,7 +68,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
         return (ImmutableAddOnlyTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "varargs"})
+    @SafeVarargs
     public static <E> @NonNull ImmutableAddOnlyTrieSet<E> of(E... elements) {
         ImmutableAddOnlyTrieSet<E> set = (ImmutableAddOnlyTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
         for (E e : elements)
@@ -210,6 +211,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
         private final @NonNull K[] keys;
         private final int hash;
 
+
+        @SuppressWarnings("varargs")
         @SafeVarargs
         HashCollisionNode(final int hash, @NonNull final K... keys) {
             this.keys = keys;

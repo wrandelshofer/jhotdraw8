@@ -39,7 +39,7 @@ import java.util.function.ToIntFunction;
  *     <li>copyPut: O(1) amortized</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toMutable: O(log n) distributed across subsequent updates</li>
+ *     <li>toMutable: O(1) + O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
@@ -116,29 +116,70 @@ public class ImmutableSeqTrieMap<K, V> extends BitmapIndexedNode<K, V> implement
         this.lastSequenceNumber = lastSequenceNumber;
     }
 
+    /**
+     * Returns an immutable map that contains the provided entries.
+     *
+     * @param k1  the key of the first entry
+     * @param v1  the value of the first entry
+     * @param kv  additional entries k2,v2, k3,v3, k4,v4, ... .
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable map of the provided entries
+     */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableSeqTrieMap<K, V> of(K k, V v, Object... kv) {
+    public static <K, V> @NonNull ImmutableSeqTrieMap<K, V> of(K k1, V v1, Object... kv) {
         return (ImmutableSeqTrieMap<K, V>) ((ImmutableSeqTrieMap<K, V>) ImmutableSeqTrieMap.EMPTY)
-                .copyPut(k, v).copyPutKeyValues(kv);
+                .copyPut(k1, v1).copyPutKeyValues(kv);
     }
 
+    /**
+     * Returns an empty immutable map.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an empty immutable map
+     */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ImmutableSeqTrieMap<K, V> of() {
         return (ImmutableSeqTrieMap<K, V>) ImmutableSeqTrieMap.EMPTY;
     }
 
+    /**
+     * Returns an immutable copy of the provided map.
+     *
+     * @param map a map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable copy
+     */
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableSeqTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
         return (ImmutableSeqTrieMap<K, V>) ((ImmutableSeqTrieMap<K, V>) ImmutableSeqTrieMap.EMPTY).copyPutAll(map);
     }
 
+    /**
+     * Returns an immutable copy of the provided map.
+     *
+     * @param map a map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable copy
+     */
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableSeqTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
         return (ImmutableSeqTrieMap<K, V>) ((ImmutableSeqTrieMap<K, V>) ImmutableSeqTrieMap.EMPTY).copyPutAll(map);
     }
 
+    /**
+     * Returns an immutable map that contains the provided entries.
+     *
+     * @param entries map entries
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @return an immutable map of the provided entries
+     */
     @SafeVarargs
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "varargs"})
     public static <K, V> @NonNull ImmutableSeqTrieMap<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
         return (ImmutableSeqTrieMap<K, V>) ((ImmutableSeqTrieMap<K, V>) ImmutableSeqTrieMap.EMPTY).copyPutAll(Arrays.asList(entries));
     }
@@ -154,6 +195,7 @@ public class ImmutableSeqTrieMap<K, V> extends BitmapIndexedNode<K, V> implement
         return isEmpty() ? this : of();
     }
 
+    @Override
     public @NonNull ImmutableSeqTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
@@ -172,6 +214,16 @@ public class ImmutableSeqTrieMap<K, V> extends BitmapIndexedNode<K, V> implement
         return this;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+        if (isEmpty() && (m instanceof SeqTrieMap)) {
+            return ((SeqTrieMap<K, V>) m).toImmutable();
+        }
+        return copyPutAll(m.entrySet().iterator());
+    }
+
+    @Override
     public @NonNull ImmutableSeqTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final SeqTrieMap<K, V> t = this.toMutable();
         boolean modified = false;
@@ -328,6 +380,7 @@ public class ImmutableSeqTrieMap<K, V> extends BitmapIndexedNode<K, V> implement
             super(target);
         }
 
+        @Override
         protected Object readResolve() {
             return ImmutableSeqTrieMap.of().copyPutAll(deserialized.iterator());
         }

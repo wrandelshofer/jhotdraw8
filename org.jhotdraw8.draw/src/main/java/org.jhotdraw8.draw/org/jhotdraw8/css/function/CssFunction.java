@@ -22,6 +22,15 @@ import java.util.function.Consumer;
 public interface CssFunction<T> {
     /**
      * Processes the function.
+     *
+     * @param element           the DOM element
+     * @param tt                the tokenizer providing the unprocessed tokens
+     * @param model             the selector model
+     * @param functionProcessor the function processor
+     * @param out               the consumer for the processed tokens
+     * @param recursionStack    the recursion stack
+     * @throws IOException    on IO failure
+     * @throws ParseException on parsing failure
      */
     void process(@NonNull T element,
                  @NonNull CssTokenizer tt,
@@ -32,11 +41,13 @@ public interface CssFunction<T> {
 
     /**
      * Gets localized help text about this function.
+     * @return localized help text
      */
     String getHelpText();
 
     /**
      * Returns the function name.
+     * @return the function name
      */
     String getName();
 

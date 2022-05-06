@@ -61,7 +61,7 @@ public interface Connector {
      * Clips the start of the provided line at the bounds of the target figure.
      * The line must be given in world coordinates.
      *
-     * @param ctx
+     * @param ctx        the render context
      * @param connection a connection figure
      * @param target     the target
      * @param sx         x-coordinate at the start of the line
@@ -96,7 +96,7 @@ public interface Connector {
      * Clips the end of the provided line at the bounds of the target figure.
      * The line must be given in world coordinates.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param connection a connection figure
      * @param target     the target
      * @param start      the start of the line
@@ -111,7 +111,7 @@ public interface Connector {
      * Returns the intersection of the line going from start to end with the
      * target figure. The line must be given in world coordinates.
      *
-     * @param ctx
+     * @param ctx the render context
      * @param connection the connection figure
      * @param target     the target figure
      * @param start      the start point of the line in world coordinates, should be

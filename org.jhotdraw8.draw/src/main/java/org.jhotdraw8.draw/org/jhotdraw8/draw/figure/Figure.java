@@ -403,6 +403,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * property has been changed.
      * <p>
      * The default implementation of this method is empty.
+     *
+     * @param key      the key
+     * @param oldValue the old value
+     * @param newValue the new value
+     * @param <T>      the value type
      */
     default <T> void propertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
     }
@@ -489,6 +494,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * The bounds that should be used for clipping and intersection tests
      * of this figure.
+     *
+     * @return the visual bounds
      */
     default @NonNull Bounds getVisualBounds() {
         return getLayoutBounds();
@@ -1230,7 +1237,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * This figure does not keep track of changes that require CSS updates. Use
      * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
      *
-     * @param ctx
+     * @param ctx the render context
      */
     void updateCss(RenderContext ctx);
 

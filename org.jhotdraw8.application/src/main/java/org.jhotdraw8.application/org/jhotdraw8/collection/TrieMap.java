@@ -39,7 +39,7 @@ import java.util.function.BiFunction;
  *     <li>put: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toPersistent: O(log n) distributed across subsequent updates</li>
+ *     <li>toImmutable: O(1) + O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(log n) distributed across subsequent updates</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>

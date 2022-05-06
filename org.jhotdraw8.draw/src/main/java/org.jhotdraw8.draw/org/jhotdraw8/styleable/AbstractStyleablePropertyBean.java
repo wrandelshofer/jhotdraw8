@@ -51,6 +51,8 @@ public abstract class AbstractStyleablePropertyBean
      * <p>
      * This implementation creates one key map for this class, and shares
      * it with all instances of this class.
+     *
+     * @return a new map
      */
     protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {

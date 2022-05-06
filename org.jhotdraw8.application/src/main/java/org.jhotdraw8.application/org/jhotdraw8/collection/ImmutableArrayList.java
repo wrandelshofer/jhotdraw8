@@ -1,5 +1,5 @@
 /*
- * @(#)PersistentListWrapper.java
+ * @(#)ImmutableArrayList.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -16,6 +16,30 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * Implements an immutable list using an {@link ArrayList}.
+ * <p>
+ * Features:
+ * <ul>
+ *     <li>allows null elements</li>
+ *     <li>is immutable</li>
+ *     <li>is thread-safe</li>
+ *     <li>iterates in the order of the list</li>
+ * </ul>
+ * <p>
+ * Performance characteristics:
+ * <ul>
+ *     <li>copyAdd: O(n)</li>
+ *     <li>copySet: O(n)</li>
+ *     <li>copyRemove: O(n)</li>
+ *     <li>contains: O(1)</li>
+ *     <li>toMutable: O(n)</li>
+ *     <li>clone: O(n)</li>
+ *     <li>iterator.next(): O(1)</li>
+ * </ul>
+ *
+ * @param <E> the element type
+ */
 public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements ImmutableList<E> {
     public static final ImmutableArrayList<Object> EMPTY = new ImmutableArrayList<>(new ArrayList<>(), ArrayList::new);
     private final @NonNull List<E> list;
@@ -34,36 +58,56 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         this.cloneFunction = ArrayList::new;
     }
 
-
+    /**
+     * Returns an empty immutable list.
+     *
+     * @param <E> the element type
+     * @return an empty immutable list
+     */
     @SuppressWarnings("unchecked")
     public static <E> ImmutableArrayList<E> of() {
         return (ImmutableArrayList<E>) EMPTY;
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Returns an immutable list that contains the provided elements.
+     *
+     * @param elements elements
+     * @param <E>      the element type
+     * @return an immutable list of the provided elements
+     */
+    @SuppressWarnings({"unchecked", "varargs"})
+    @SafeVarargs
     public static <E> ImmutableArrayList<E> of(E... elements) {
         if (elements.length == 0) {
             return (ImmutableArrayList<E>) EMPTY;
         } else {
-            return new ImmutableArrayList<E>(Arrays.asList(elements));
+            return new ImmutableArrayList<>(Arrays.asList(elements));
         }
     }
 
+    /**
+     * Returns an immutable list that contains the provided elements.
+     *
+     * @param iterable an iterable
+     * @param <E>      the element type
+     * @return an immutable list of the provided elements
+     */
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableArrayList<E> copyOf(Iterable<? extends E> list) {
-        if (list instanceof ImmutableArrayList<?>) {
-            return (ImmutableArrayList<E>) list;
+    public static <E> ImmutableArrayList<E> copyOf(Iterable<? extends E> iterable) {
+        if (iterable instanceof ImmutableArrayList<?>) {
+            return (ImmutableArrayList<E>) iterable;
         }
-        if (list instanceof ReadOnlyCollection<?>) {
-            ReadOnlyCollection<E> c = (ReadOnlyCollection<E>) list;
-            return c.isEmpty() ? (ImmutableArrayList<E>) EMPTY : new ImmutableArrayList<E>(c.asCollection());
+        if (iterable instanceof ReadOnlyCollection<?>) {
+            ReadOnlyCollection<E> c = (ReadOnlyCollection<E>) iterable;
+            return c.isEmpty() ? (ImmutableArrayList<E>) EMPTY : new ImmutableArrayList<>(c.asCollection());
         }
-        if (list instanceof Collection<?>) {
-            Collection<E> c = (Collection<E>) list;
-            return c.isEmpty() ? (ImmutableArrayList<E>) EMPTY : new ImmutableArrayList<E>(c);
+        if (iterable instanceof Collection<?>) {
+            Collection<E> c = (Collection<E>) iterable;
+            return c.isEmpty() ? (ImmutableArrayList<E>) EMPTY : new ImmutableArrayList<>(c);
         }
         ArrayList<E> a = new ArrayList<>();
-        list.forEach(a::add);
+        iterable.forEach(a::add);
         return copyOf(a);
     }
 
@@ -183,7 +227,12 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
 
     @Override
     public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new ImmutableArrayList<E>(list.subList(fromIndex, toIndex));
+        return new ImmutableArrayList<>(list.subList(fromIndex, toIndex));
+    }
+
+    @Override
+    public @NonNull List<E> toMutable() {
+        return new ArrayList<>(list);
     }
 
     @Override

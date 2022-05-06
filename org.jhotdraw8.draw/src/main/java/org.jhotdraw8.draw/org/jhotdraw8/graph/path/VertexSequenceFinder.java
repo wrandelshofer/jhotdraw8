@@ -157,6 +157,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
+    @SuppressWarnings("unchecked")
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
             @NonNull V start,
             @NonNull V goal,
@@ -177,6 +178,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
+    @SuppressWarnings("unchecked")
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
             @NonNull V start,
             @NonNull V goal,
@@ -194,6 +196,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
+    @SuppressWarnings("unchecked")
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
             @NonNull V start,
             @NonNull V goal,
@@ -263,6 +266,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair with the combined sequence
      */
 
+    @SuppressWarnings("unchecked")
     static <VV, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<VV>, CC> findVertexSequenceOverWaypoints(
             @NonNull Iterable<VV> waypoints,
             @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<VV>, CC>> findVertexSequenceFunction,

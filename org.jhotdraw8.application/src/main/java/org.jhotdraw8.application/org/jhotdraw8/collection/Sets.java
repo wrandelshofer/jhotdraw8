@@ -13,6 +13,8 @@ public class Sets {
     private Sets() {
     }
 
+    @SuppressWarnings({"varargs", "unchecked"})
+    @SafeVarargs
     public static <E> Set<E> addAll(@NonNull Set<E> set, E... elements) {
         set.addAll(Arrays.asList(elements));
         return set;

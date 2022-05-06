@@ -10,6 +10,9 @@ package org.jhotdraw8.collection;
  * the size of the set is not known.
  */
 public class GrowableIntSet8Bit extends DenseIntSet8Bit {
+    public GrowableIntSet8Bit() {
+    }
+
     /**
      * Adds an element to the set.
      * <p>

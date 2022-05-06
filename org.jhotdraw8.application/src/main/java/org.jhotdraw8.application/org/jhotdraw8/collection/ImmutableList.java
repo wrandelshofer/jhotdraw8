@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Provides an API for an immutable list.
@@ -157,5 +158,10 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
     @Override
     @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex);
 
-
+    /**
+     * Returns a mutable copy of this list.
+     *
+     * @return a mutable copy.
+     */
+    @NonNull List<E> toMutable();
 }

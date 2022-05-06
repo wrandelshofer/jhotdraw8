@@ -38,7 +38,7 @@ import java.util.Objects;
  *     <li>copyAdd: O(1) amortized</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toMutable: O(log n) distributed across subsequent updates</li>
+ *     <li>toMutable: O(1) + O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
@@ -111,25 +111,45 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
         this.lastSequenceNumber = lastSequenceNumber;
     }
 
+    /**
+     * Returns an immutable set that contains the provided elements.
+     *
+     * @param iterable an iterable
+     * @param <E>      the element type
+     * @return an immutable set of the provided elements
+     */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableSeqTrieSet<E> copyOf(@NonNull Iterable<? extends E> set) {
-        if (set instanceof ImmutableSeqTrieSet) {
-            return (ImmutableSeqTrieSet<E>) set;
-        } else if (set instanceof SeqTrieSet) {
-            return ((SeqTrieSet<E>) set).toImmutable();
+    public static <E> @NonNull ImmutableSeqTrieSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        if (iterable instanceof ImmutableSeqTrieSet) {
+            return (ImmutableSeqTrieSet<E>) iterable;
+        } else if (iterable instanceof SeqTrieSet) {
+            return ((SeqTrieSet<E>) iterable).toImmutable();
         }
         SeqTrieSet<E> tr = new SeqTrieSet<>(of());
-        tr.addAll(set);
+        tr.addAll(iterable);
         return tr.toImmutable();
     }
 
-
+    /**
+     * Returns an empty immutable set.
+     *
+     * @param <E> the element type
+     * @return an empty immutable set
+     */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull ImmutableSeqTrieSet<E> of() {
         return ((ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET);
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Returns an immutable set that contains the provided elements.
+     *
+     * @param elements elements
+     * @param <E>      the element type
+     * @return an immutable set of the provided elements
+     */
+    @SuppressWarnings({"unchecked", "varargs"})
+    @SafeVarargs
     public static <E> @NonNull ImmutableSeqTrieSet<E> of(E... elements) {
         if (elements.length == 0) {
             return (ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET;
@@ -170,6 +190,9 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
     public @NonNull ImmutableSeqTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ImmutableSeqTrieSet<?>)) {
             return (ImmutableSeqTrieSet<E>) set;
+        }
+        if (isEmpty() && (set instanceof SeqTrieSet)) {
+            return ((SeqTrieSet<E>) set).toImmutable();
         }
         final SeqTrieSet<E> t = this.toMutable();
         boolean modified = false;
@@ -289,7 +312,7 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
      *
      * @return a mutable trie set
      */
-    private @NonNull SeqTrieSet<E> toMutable() {
+    public @NonNull SeqTrieSet<E> toMutable() {
         return new SeqTrieSet<>(this);
     }
 

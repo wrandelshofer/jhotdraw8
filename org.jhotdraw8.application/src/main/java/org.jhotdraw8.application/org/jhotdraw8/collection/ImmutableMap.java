@@ -156,4 +156,11 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
         return copyRetainAll(c.asCollection());
     }
 
+    /**
+     * Returns a mutable copy of this map.
+     *
+     * @return a mutable copy.
+     */
+    @NonNull Map<K, V> toMutable();
+
 }

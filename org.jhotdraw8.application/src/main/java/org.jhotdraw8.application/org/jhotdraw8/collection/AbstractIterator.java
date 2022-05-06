@@ -21,7 +21,8 @@ import java.util.function.Consumer;
  * @author Adrien Grzechowiak
  */
 public abstract class AbstractIterator<E> implements ListIterator<E>, Enumerator<E>, Consumer<E> {
-
+    public AbstractIterator() {
+    }
 
     @Override
     public void remove() {

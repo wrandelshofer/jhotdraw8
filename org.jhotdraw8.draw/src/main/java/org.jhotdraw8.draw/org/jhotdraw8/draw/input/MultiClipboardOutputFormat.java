@@ -26,6 +26,7 @@ public class MultiClipboardOutputFormat implements ClipboardOutputFormat {
     private ClipboardOutputFormat[] formats;
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public MultiClipboardOutputFormat(@NonNull Supplier<ClipboardOutputFormat>... formatSuppliers) {
         this.formatSuppliers = formatSuppliers;
     }

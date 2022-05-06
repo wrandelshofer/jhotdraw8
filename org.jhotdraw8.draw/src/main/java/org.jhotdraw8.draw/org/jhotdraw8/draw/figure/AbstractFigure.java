@@ -70,7 +70,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     /**
      * This method calls {@link #doAddedToDrawing}.
      *
-     * @param drawing
+     * @param drawing the drawing
      */
     @Override
     public final void addedToDrawing(@NonNull Drawing drawing) {

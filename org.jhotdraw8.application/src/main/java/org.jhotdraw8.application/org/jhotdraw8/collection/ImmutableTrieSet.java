@@ -37,7 +37,7 @@ import java.util.Objects;
  *     <li>copyAdd: O(1)</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toMutable: O(log n) distributed across subsequent updates</li>
+ *     <li>toMutable: O(1) + O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
@@ -84,19 +84,40 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         this.size = size;
     }
 
+    /**
+     * Returns an empty immutable set.
+     *
+     * @param <E> the element type
+     * @return an empty immutable set
+     */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull ImmutableTrieSet<E> of() {
         return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY);
     }
 
+    /**
+     * Returns an immutable set that contains the provided elements.
+     *
+     * @param elements elements
+     * @param <E>      the element type
+     * @return an immutable set of the provided elements
+     */
     @SuppressWarnings("unchecked")
+    @SafeVarargs
     public static <E> @NonNull ImmutableTrieSet<E> of(E... elements) {
         return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY).copyAddAll(Arrays.asList(elements));
     }
 
+    /**
+     * Returns an immutable set that contains the provided elements.
+     *
+     * @param iterable an iterable
+     * @param <E>      the element type
+     * @return an immutable set of the provided elements
+     */
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableTrieSet<E> copyOf(Iterable<? extends E> list) {
-        return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY).copyAddAll(list);
+    public static <E> ImmutableTrieSet<E> copyOf(Iterable<? extends E> iterable) {
+        return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY).copyAddAll(iterable);
     }
 
     @Override
@@ -120,6 +141,9 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
     public @NonNull ImmutableTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ImmutableTrieSet<?>)) {
             return (ImmutableTrieSet<E>) set;
+        }
+        if (isEmpty() && (set instanceof TrieSet)) {
+            return ((TrieSet<E>) set).toImmutable();
         }
         final TrieSet<E> t = this.toMutable();
         boolean modified = false;
@@ -237,7 +261,7 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
      *
      * @return a mutable trie set
      */
-    private @NonNull TrieSet<E> toMutable() {
+    public @NonNull TrieSet<E> toMutable() {
         return new TrieSet<>(this);
     }
 

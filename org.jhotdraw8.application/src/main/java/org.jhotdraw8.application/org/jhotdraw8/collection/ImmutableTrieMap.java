@@ -40,7 +40,7 @@ import java.util.function.ToIntFunction;
  *     <li>copyPut: O(1)</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toMutable: O(log n) distributed across subsequent updates</li>
+ *     <li>toMutable: O(1) + O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
@@ -93,28 +93,70 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
         this.size = size;
     }
 
+
+    /**
+     * Returns an immutable copy of the provided map.
+     *
+     * @param map a map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable copy
+     */
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
         return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(map);
     }
 
+    /**
+     * Returns an immutable copy of the provided map.
+     *
+     * @param map a map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable copy
+     */
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
         return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(map);
     }
 
+    /**
+     * Returns an immutable map that contains the provided entries.
+     *
+     * @param k1  the key of the first entry
+     * @param v1  the value of the first entry
+     * @param kv  additional entries k2,v2, k3,v3, k4,v4, ... .
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable map of the provided entries
+     */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableTrieMap<K, V> of(K k, V v, Object... kv) {
-        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPut(k, v).copyPutKeyValues(kv);
+    public static <K, V> @NonNull ImmutableTrieMap<K, V> of(K k1, V v1, Object... kv) {
+        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPut(k1, v1).copyPutKeyValues(kv);
     }
 
+    /**
+     * Returns an empty immutable map.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an empty immutable map
+     */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ImmutableTrieMap<K, V> of() {
-        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY);
+        return (ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY;
     }
 
+    /**
+     * Returns an immutable map that contains the provided entries.
+     *
+     * @param entries map entries
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @return an immutable map of the provided entries
+     */
     @SafeVarargs
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "varargs"})
     public static <K, V> @NonNull ImmutableTrieMap<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
         return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(Arrays.asList(entries));
     }
@@ -130,6 +172,7 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return isEmpty() ? this : of();
     }
 
+    @Override
     public @NonNull ImmutableTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
@@ -149,6 +192,17 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return this;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+        if (isEmpty() && (m instanceof TrieMap)) {
+            return ((TrieMap<K, V>) m).toImmutable();
+        }
+        return copyPutAll(m.entrySet().iterator());
+    }
+
+
+    @Override
     public @NonNull ImmutableTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final TrieMap<K, V> t = this.toMutable();
         boolean modified = false;
@@ -160,6 +214,7 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return modified ? t.toImmutable() : this;
     }
 
+    @Override
     public @NonNull ImmutableTrieMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
@@ -268,19 +323,7 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return size;
     }
 
-    /**
-     * Returns a copy of this set that is mutable.
-     * <p>
-     * This operation is performed in O(1) because the mutable map shares
-     * the underlying trie nodes with this set.
-     * <p>
-     * Initially, the returned mutable map hasn't exclusive ownership of any
-     * trie node. Therefore, the first few updates that it performs, are
-     * copy-on-write operations, until it exclusively owns some trie nodes that
-     * it can update.
-     *
-     * @return a mutable trie set
-     */
+    @Override
     public TrieMap<K, V> toMutable() {
         return new TrieMap<>(this);
     }
@@ -294,13 +337,14 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
         return new SerializationProxy<>(this.toMutable());
     }
 
-    private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+    static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
         private final static long serialVersionUID = 0L;
 
-        protected SerializationProxy(Map<K, V> target) {
+        SerializationProxy(Map<K, V> target) {
             super(target);
         }
 
+        @Override
         protected Object readResolve() {
             return ImmutableTrieMap.of().copyPutAll(deserialized.iterator());
         }

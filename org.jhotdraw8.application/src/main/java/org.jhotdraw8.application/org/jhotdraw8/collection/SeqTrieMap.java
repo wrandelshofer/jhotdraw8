@@ -39,7 +39,7 @@ import java.util.Set;
  *     <li>put: O(1) amortized</li>
  *     <li>remove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toPersistent: O(log n) distributed across subsequent updates</li>
+ *     <li>toImmutable: O(1) + O(log n) distributed across subsequent updates</li>
  *     <li>clone: O(log n) distributed across subsequent updates</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
@@ -197,6 +197,7 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
                 SeqTrieMap.EntryIterator::new,

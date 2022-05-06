@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Interface for an immutable set.
@@ -95,5 +96,11 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
         return copyRetainAll(c.asCollection());
     }
 
+    /**
+     * Returns a mutable copy of this set.
+     *
+     * @return a mutable copy.
+     */
+    @NonNull Set<E> toMutable();
 
 }

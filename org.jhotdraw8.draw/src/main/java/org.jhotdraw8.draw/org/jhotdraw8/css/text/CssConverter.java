@@ -69,6 +69,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @param value      the value
      * @param idSupplier the id factory
      * @param out        the consumer for the tokens
+     * @throws IOException on IO exception
      */
     <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException;
 

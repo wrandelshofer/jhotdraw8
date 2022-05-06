@@ -12,4 +12,7 @@ import java.io.Serializable;
  */
 public class UniqueId implements Serializable {
     private final static long serialVersionUID = 0L;
+
+    public UniqueId() {
+    }
 }

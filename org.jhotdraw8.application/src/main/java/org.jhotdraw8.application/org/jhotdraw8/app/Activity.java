@@ -124,6 +124,8 @@ public interface Activity extends Disableable, PropertyBean {
 
     /**
      * Returns a JavaFX node that provides a user interface for the activity.
+     *
+     * @return the node
      */
     Node getNode();
 
