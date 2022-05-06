@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.ImmutableChampSet;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.ImmutableTrieSet;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;
@@ -71,16 +71,16 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
     @Override
     public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (buf == null) {
-            return ImmutableTrieSet.of();
+            return ImmutableChampSet.of();
         }
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return ImmutableTrieSet.copyOf(tree);
+        return ImmutableChampSet.copyOf(tree);
     }
 
     @Override
     public ImmutableSet<String> getDefaultValue() {
-        return ImmutableTrieSet.of();
+        return ImmutableChampSet.of();
     }
 }

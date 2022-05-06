@@ -11,26 +11,26 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-public class PersistentTrieSetTest extends AbstractImmutableSetTest {
+public class PersistentChampSetTest extends AbstractImmutableSetTest {
 
     @Override
     protected ImmutableSet<HashCollider> of() {
-        return ImmutableTrieSet.of();
+        return ImmutableChampSet.of();
     }
 
     @Override
     protected ImmutableSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return ImmutableTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
+        return ImmutableChampSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
     }
 
     @Override
     protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return ImmutableTrieSet.<HashCollider>of().copyAddAll(set);
+        return ImmutableChampSet.<HashCollider>of().copyAddAll(set);
     }
 
     @Test
     public void testDumpStructure() {
-        ImmutableTrieSet<Integer> instance = ImmutableTrieSet.of();
+        ImmutableChampSet<Integer> instance = ImmutableChampSet.of();
         Random rng = new Random(0);
         for (int i = 0; i < 5; i++) {
             int key = rng.nextInt(10_000);

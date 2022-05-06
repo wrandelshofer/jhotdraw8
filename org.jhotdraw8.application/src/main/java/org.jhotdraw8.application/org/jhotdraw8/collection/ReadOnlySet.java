@@ -42,6 +42,15 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
         return new WrappedObservableSet<>(this);
     }
 
+    /**
+     * Compares a read-only set with an object for equality.  Returns
+     * {@code true} if the given object is also a read-only set and the two sets
+     * contain the same elements.
+     *
+     * @param set a set
+     * @param o   an object
+     * @return {@code true} if the object is equal to the set
+     */
     static <E> boolean setEquals(ReadOnlySet<E> set, Object o) {
         if (o == set) {
             return true;
@@ -61,12 +70,13 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
             return false;
         }
     }
+
     /**
-     * Returns the hash code of the provided iterator, assuming that
-     * the iterator is from a set.
+     * Returns the sum of the hash codes of all elements in the provided
+     * iterator.
      *
-     * @param iterator an iterator over a set
-     * @return the sum of the hash codes of the elements in the set
+     * @param iterator an iterator
+     * @return the sum of the hash codes of the elements
      * @see Set#hashCode()
      */
     static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
@@ -79,4 +89,24 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
         }
         return h;
     }
+
+    /**
+     * Compares the specified object with this set for equality.
+     * <p>
+     * Returns {@code true} if the given object is also a read-only set and the
+     * two sets contain the same elements, ignoring the sequence of the elements.
+     *
+     * @param o an object
+     * @return {@code true} if the object is equal to this map
+     */
+    boolean equals(Object o);
+
+    /**
+     * Returns the hash code value for this set. The hash code
+     * is the sum of the hash code of its elements.
+     *
+     * @return the hash code value for this set
+     * @see Set#hashCode()
+     */
+    int hashCode();
 }

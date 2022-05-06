@@ -81,7 +81,7 @@ import java.util.function.BiFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
+public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     private transient UniqueId mutator;
@@ -89,18 +89,18 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     private transient int size;
     private transient int modCount;
 
-    public TrieMap() {
+    public ChampMap() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
-    public TrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof TrieMap) {
+    public ChampMap(@NonNull Map<? extends K, ? extends V> m) {
+        if (m instanceof ChampMap) {
             @SuppressWarnings("unchecked")
-            TrieMap<K, V> trieMap = (TrieMap<K, V>) m;
+            ChampMap<K, V> champMap = (ChampMap<K, V>) m;
             this.mutator = null;
-            trieMap.mutator = null;
-            this.root = trieMap.root;
-            this.size = trieMap.size;
+            champMap.mutator = null;
+            this.root = champMap.root;
+            this.size = champMap.size;
             this.modCount = 0;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
@@ -108,7 +108,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         }
     }
 
-    public TrieMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public ChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
@@ -116,10 +116,10 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
     }
 
-    public TrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof ImmutableTrieMap) {
+    public ChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        if (m instanceof ImmutableChampMap) {
             @SuppressWarnings("unchecked")
-            ImmutableTrieMap<K, V> trieMap = (ImmutableTrieMap<K, V>) m;
+            ImmutableChampMap<K, V> trieMap = (ImmutableChampMap<K, V>) m;
             this.root = trieMap;
             this.size = trieMap.size;
         } else {
@@ -136,9 +136,9 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     }
 
     @Override
-    public TrieMap<K, V> clone() {
+    public ChampMap<K, V> clone() {
         try {
-            @SuppressWarnings("unchecked") final TrieMap<K, V> that = (TrieMap<K, V>) super.clone();
+            @SuppressWarnings("unchecked") final ChampMap<K, V> that = (ChampMap<K, V>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -176,10 +176,10 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
     public Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
                 EntryIterator::new,
-                TrieMap.this::size,
-                TrieMap.this::containsEntry,
-                TrieMap.this::clear,
-                TrieMap.this::removeEntry
+                ChampMap.this::size,
+                ChampMap.this::containsEntry,
+                ChampMap.this::clear,
+                ChampMap.this::removeEntry
         );
     }
 
@@ -276,25 +276,25 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
      *
      * @return an immutable copy
      */
-    public ImmutableTrieMap<K, V> toImmutable() {
+    public ImmutableChampMap<K, V> toImmutable() {
         if (size == 0) {
-            return ImmutableTrieMap.of();
+            return ImmutableChampMap.of();
         }
         mutator = null;
-        return new ImmutableTrieMap<>(root, size);
+        return new ImmutableChampMap<>(root, size);
     }
 
     private class AbstractMapIterator extends BaseTrieIterator<K, V> {
         protected int expectedModCount;
 
         public AbstractMapIterator() {
-            super(TrieMap.this.root, ENTRY_LENGTH);
-            this.expectedModCount = TrieMap.this.modCount;
+            super(ChampMap.this.root, ENTRY_LENGTH);
+            this.expectedModCount = ChampMap.this.modCount;
         }
 
         @Override
         public boolean hasNext() {
-            if (expectedModCount != TrieMap.this.modCount) {
+            if (expectedModCount != ChampMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.hasNext();
@@ -302,21 +302,21 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
 
         @Override
         public Entry<K, V> nextEntry(@NonNull BiFunction<K, V, Entry<K, V>> factory) {
-            if (expectedModCount != TrieMap.this.modCount) {
+            if (expectedModCount != ChampMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.nextEntry(factory);
         }
 
         public void remove() {
-            if (expectedModCount != TrieMap.this.modCount) {
+            if (expectedModCount != ChampMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                TrieMap.this.remove(k);
-                return TrieMap.this.root;
+                ChampMap.this.remove(k);
+                return ChampMap.this.root;
             });
-            expectedModCount = TrieMap.this.modCount;
+            expectedModCount = ChampMap.this.modCount;
         }
     }
 
@@ -326,7 +326,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         @Override
         public Entry<K, V> next() {
             return nextEntry((k, v) -> new MutableMapEntry<>(
-                    TrieMap.this::putIfPresent, k, v));
+                    ChampMap.this::putIfPresent, k, v));
         }
     }
 
@@ -338,7 +338,7 @@ public class TrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cl
         }
 
         protected Object readResolve() {
-            return new TrieMap<>(deserialized);
+            return new ChampMap<>(deserialized);
         }
     }
 

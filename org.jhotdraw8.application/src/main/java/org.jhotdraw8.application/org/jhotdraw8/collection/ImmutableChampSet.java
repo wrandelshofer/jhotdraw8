@@ -71,15 +71,15 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
+public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 1;
     @SuppressWarnings("unchecked")
-    private static final ImmutableTrieSet<?> EMPTY = new ImmutableTrieSet<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ImmutableChampSet<?> EMPTY = new ImmutableChampSet<>(BitmapIndexedNode.emptyNode(), 0);
 
     final int size;
 
-    ImmutableTrieSet(BitmapIndexedNode<E, Void> root, int size) {
+    ImmutableChampSet(BitmapIndexedNode<E, Void> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
     }
@@ -91,8 +91,8 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
      * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableTrieSet<E> of() {
-        return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY);
+    public static <E> @NonNull ImmutableChampSet<E> of() {
+        return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY);
     }
 
     /**
@@ -104,8 +104,8 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
      */
     @SuppressWarnings("unchecked")
     @SafeVarargs
-    public static <E> @NonNull ImmutableTrieSet<E> of(E... elements) {
-        return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY).copyAddAll(Arrays.asList(elements));
+    public static <E> @NonNull ImmutableChampSet<E> of(E... elements) {
+        return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY).copyAddAll(Arrays.asList(elements));
     }
 
     /**
@@ -116,8 +116,8 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableTrieSet<E> copyOf(Iterable<? extends E> iterable) {
-        return ((ImmutableTrieSet<E>) ImmutableTrieSet.EMPTY).copyAddAll(iterable);
+    public static <E> ImmutableChampSet<E> copyOf(Iterable<? extends E> iterable) {
+        return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY).copyAddAll(iterable);
     }
 
     @Override
@@ -126,26 +126,26 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
-    public @NonNull ImmutableTrieSet<E> copyAdd(final @NonNull E key) {
+    public @NonNull ImmutableChampSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
         if (changeEvent.isModified) {
-            return new ImmutableTrieSet<>(newRootNode, size + 1);
+            return new ImmutableChampSet<>(newRootNode, size + 1);
         }
 
         return this;
     }
 
     @SuppressWarnings({"unchecked"})
-    public @NonNull ImmutableTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof ImmutableTrieSet<?>)) {
-            return (ImmutableTrieSet<E>) set;
+    public @NonNull ImmutableChampSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+        if (set == this || isEmpty() && (set instanceof ImmutableChampSet<?>)) {
+            return (ImmutableChampSet<E>) set;
         }
-        if (isEmpty() && (set instanceof TrieSet)) {
-            return ((TrieSet<E>) set).toImmutable();
+        if (isEmpty() && (set instanceof ChampSet)) {
+            return ((ChampSet<E>) set).toImmutable();
         }
-        final TrieSet<E> t = this.toMutable();
+        final ChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             modified |= t.add(key);
@@ -158,19 +158,19 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         return isEmpty() ? this : of();
     }
 
-    public @NonNull ImmutableTrieSet<E> copyRemove(final @NonNull E key) {
+    public @NonNull ImmutableChampSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
                 keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
-            return new ImmutableTrieSet<>(newRootNode, size - 1);
+            return new ImmutableChampSet<>(newRootNode, size - 1);
         }
 
         return this;
     }
 
-    public @NonNull ImmutableTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull ImmutableChampSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -179,7 +179,7 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         if (set == this) {
             return of();
         }
-        final TrieSet<E> t = this.toMutable();
+        final ChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             if (t.remove(key)) {
@@ -193,7 +193,7 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull ImmutableTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
+    public @NonNull ImmutableChampSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         if (this.isEmpty()) {
             return this;
         }
@@ -201,7 +201,7 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
             return of();
         }
 
-        final TrieSet<E> t = this.toMutable();
+        final ChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {
@@ -223,8 +223,8 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         if (other == null) {
             return false;
         }
-        if (other instanceof ImmutableTrieSet) {
-            ImmutableTrieSet<?> that = (ImmutableTrieSet<?>) other;
+        if (other instanceof ImmutableChampSet) {
+            ImmutableChampSet<?> that = (ImmutableChampSet<?>) other;
             if (this.size != that.size) {
                 return false;
             }
@@ -248,21 +248,9 @@ public class ImmutableTrieSet<E> extends BitmapIndexedNode<E, Void> implements I
         return size;
     }
 
-    /**
-     * Returns a copy of this set that is mutable.
-     * <p>
-     * This operation is performed in O(1) because the mutable set shares
-     * the underlying trie nodes with this set.
-     * <p>
-     * Initially, the returned mutable set hasn't exclusive ownership of any
-     * trie node. Therefore, the first few updates that it performs, are
-     * copy-on-write operations, until it exclusively owns some trie nodes that
-     * it can update.
-     *
-     * @return a mutable trie set
-     */
-    public @NonNull TrieSet<E> toMutable() {
-        return new TrieSet<>(this);
+    @Override
+    public @NonNull ChampSet<E> toMutable() {
+        return new ChampSet<>(this);
     }
 
     @Override

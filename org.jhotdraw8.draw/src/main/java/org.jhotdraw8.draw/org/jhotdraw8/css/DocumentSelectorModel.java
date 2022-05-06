@@ -7,7 +7,7 @@ package org.jhotdraw8.css;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSeqTrieSet;
+import org.jhotdraw8.collection.ImmutableSeqChampSet;
 import org.jhotdraw8.collection.ReadOnlyList;
 import org.jhotdraw8.collection.ReadOnlySet;
 import org.w3c.dom.Element;
@@ -101,15 +101,15 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
-            return ImmutableSeqTrieSet.of();
+            return ImmutableSeqChampSet.of();
         }
         String[] clazzes = value.split(" +");
-        return ImmutableSeqTrieSet.copyOf(Arrays.asList(clazzes));
+        return ImmutableSeqChampSet.copyOf(Arrays.asList(clazzes));
     }
 
     @Override
     public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Element elem) {
-        return ImmutableSeqTrieSet.of();
+        return ImmutableSeqChampSet.of();
     }
 
     /**

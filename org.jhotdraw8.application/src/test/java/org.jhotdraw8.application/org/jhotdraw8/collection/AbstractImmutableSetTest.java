@@ -455,14 +455,14 @@ public abstract class AbstractImmutableSetTest {
     }
 
     private static HashCollider[] DATA_SET_ARRAY = new HashCollider[10_000];
-    private static ImmutableTrieSet<HashCollider> IDENTICAL_SET;
+    private static ImmutableChampSet<HashCollider> IDENTICAL_SET;
 
     static {
         Random rng = new Random(0);
         for (int i = 0; i < DATA_SET_ARRAY.length; i++) {
             DATA_SET_ARRAY[i] = new HashCollider(rng.nextInt(), -1);
         }
-        IDENTICAL_SET = ImmutableTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(DATA_SET_ARRAY));
+        IDENTICAL_SET = ImmutableChampSet.<HashCollider>of().copyAddAll(Arrays.asList(DATA_SET_ARRAY));
     }
 
 

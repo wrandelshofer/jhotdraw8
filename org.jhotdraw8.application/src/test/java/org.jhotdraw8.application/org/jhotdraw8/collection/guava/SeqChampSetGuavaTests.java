@@ -1,5 +1,5 @@
 /*
- * @(#)TrieSetGuavaTests.java
+ * @(#)SeqTrieSetGuavaTests.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.TrieSet;
+import org.jhotdraw8.collection.SeqChampSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -23,13 +23,13 @@ import java.util.Set;
 /**
  * Tests TrieSet with the Guava test suite.
  */
-public class TrieSetGuavaTests {
+public class SeqChampSetGuavaTests {
     public static Test suite() {
-        return new TrieSetGuavaTests().allTests();
+        return new SeqChampSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite("TrieSet");
+        TestSuite suite = new TestSuite("SequencedTrieSet");
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -39,12 +39,13 @@ public class TrieSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new TrieSet<>(MinimalCollection.of(elements));
+                                return new SeqChampSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named("TrieSet")
+                .named("SequencedTrieSet")
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
+                        CollectionFeature.KNOWN_ORDER,
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.SERIALIZABLE,

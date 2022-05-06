@@ -85,11 +85,11 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
+public class ImmutableSeqChampSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     @SuppressWarnings("unchecked")
-    private static final ImmutableSeqTrieSet<?> EMPTY_SET = new ImmutableSeqTrieSet<>(BitmapIndexedNode.emptyNode(), 0, 0);
+    private static final ImmutableSeqChampSet<?> EMPTY_SET = new ImmutableSeqChampSet<>(BitmapIndexedNode.emptyNode(), 0, 0);
 
     final int size;
 
@@ -105,7 +105,7 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
      */
     private int lastSequenceNumber;
 
-    ImmutableSeqTrieSet(BitmapIndexedNode<E, Void> root, int size, int lastSequenceNumber) {
+    ImmutableSeqChampSet(BitmapIndexedNode<E, Void> root, int size, int lastSequenceNumber) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
         this.lastSequenceNumber = lastSequenceNumber;
@@ -119,13 +119,13 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableSeqTrieSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        if (iterable instanceof ImmutableSeqTrieSet) {
-            return (ImmutableSeqTrieSet<E>) iterable;
-        } else if (iterable instanceof SeqTrieSet) {
-            return ((SeqTrieSet<E>) iterable).toImmutable();
+    public static <E> @NonNull ImmutableSeqChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        if (iterable instanceof ImmutableSeqChampSet) {
+            return (ImmutableSeqChampSet<E>) iterable;
+        } else if (iterable instanceof SeqChampSet) {
+            return ((SeqChampSet<E>) iterable).toImmutable();
         }
-        SeqTrieSet<E> tr = new SeqTrieSet<>(of());
+        SeqChampSet<E> tr = new SeqChampSet<>(of());
         tr.addAll(iterable);
         return tr.toImmutable();
     }
@@ -137,8 +137,8 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
      * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableSeqTrieSet<E> of() {
-        return ((ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET);
+    public static <E> @NonNull ImmutableSeqChampSet<E> of() {
+        return ((ImmutableSeqChampSet<E>) ImmutableSeqChampSet.EMPTY_SET);
     }
 
     /**
@@ -150,18 +150,18 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableSeqTrieSet<E> of(E... elements) {
+    public static <E> @NonNull ImmutableSeqChampSet<E> of(E... elements) {
         if (elements.length == 0) {
-            return (ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET;
+            return (ImmutableSeqChampSet<E>) ImmutableSeqChampSet.EMPTY_SET;
         } else {
-            return ((ImmutableSeqTrieSet<E>) ImmutableSeqTrieSet.EMPTY_SET).copyAddAll(Arrays.asList(elements));
+            return ((ImmutableSeqChampSet<E>) ImmutableSeqChampSet.EMPTY_SET).copyAddAll(Arrays.asList(elements));
         }
     }
 
     @NonNull
-    private ImmutableSeqTrieSet<E> renumber(BitmapIndexedNode<E, Void> newRootNode) {
+    private ImmutableSeqChampSet<E> renumber(BitmapIndexedNode<E, Void> newRootNode) {
         newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
-        return new ImmutableSeqTrieSet<E>(newRootNode, size + 1, size);
+        return new ImmutableSeqChampSet<E>(newRootNode, size + 1, size);
     }
 
     @Override
@@ -170,16 +170,16 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
         return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
-    public @NonNull ImmutableSeqTrieSet<E> copyAdd(final @NonNull E key) {
+    public @NonNull ImmutableSeqChampSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent,
                 ENTRY_LENGTH, lastSequenceNumber, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
             if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
-                return new ImmutableSeqTrieSet<>(renumber(newRootNode), size + 1, size + 1);
+                return new ImmutableSeqChampSet<>(renumber(newRootNode), size + 1, size + 1);
             } else {
-                return new ImmutableSeqTrieSet<>(newRootNode, size + 1, lastSequenceNumber + 1);
+                return new ImmutableSeqChampSet<>(newRootNode, size + 1, lastSequenceNumber + 1);
             }
         }
 
@@ -187,14 +187,14 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
     }
 
     @SuppressWarnings("unchecked")
-    public @NonNull ImmutableSeqTrieSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof ImmutableSeqTrieSet<?>)) {
-            return (ImmutableSeqTrieSet<E>) set;
+    public @NonNull ImmutableSeqChampSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+        if (set == this || isEmpty() && (set instanceof ImmutableSeqChampSet<?>)) {
+            return (ImmutableSeqChampSet<E>) set;
         }
-        if (isEmpty() && (set instanceof SeqTrieSet)) {
-            return ((SeqTrieSet<E>) set).toImmutable();
+        if (isEmpty() && (set instanceof SeqChampSet)) {
+            return ((SeqChampSet<E>) set).toImmutable();
         }
-        final SeqTrieSet<E> t = this.toMutable();
+        final SeqChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             modified |= t.add(key);
@@ -207,19 +207,19 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
         return isEmpty() ? this : of();
     }
 
-    public @NonNull ImmutableSeqTrieSet<E> copyRemove(final @NonNull E key) {
+    public @NonNull ImmutableSeqChampSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
                 keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
-            return new ImmutableSeqTrieSet<>(newRootNode, size - 1, lastSequenceNumber);
+            return new ImmutableSeqChampSet<>(newRootNode, size - 1, lastSequenceNumber);
         }
 
         return this;
     }
 
-    public @NonNull ImmutableSeqTrieSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull ImmutableSeqChampSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -228,7 +228,7 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
         if (set == this) {
             return of();
         }
-        final SeqTrieSet<E> t = this.toMutable();
+        final SeqChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             if (t.remove(key)) {
@@ -242,7 +242,7 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
         return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull ImmutableSeqTrieSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
+    public @NonNull ImmutableSeqChampSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         if (this.isEmpty()) {
             return this;
         }
@@ -250,7 +250,7 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
             return of();
         }
 
-        final SeqTrieSet<E> t = this.toMutable();
+        final SeqChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {
@@ -273,8 +273,8 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
             return false;
         }
 
-        if (other instanceof ImmutableSeqTrieSet) {
-            ImmutableSeqTrieSet<?> that = (ImmutableSeqTrieSet<?>) other;
+        if (other instanceof ImmutableSeqChampSet) {
+            ImmutableSeqChampSet<?> that = (ImmutableSeqChampSet<?>) other;
             if (this.size != that.size) {
                 return false;
             }
@@ -299,21 +299,9 @@ public class ImmutableSeqTrieSet<E> extends BitmapIndexedNode<E, Void> implement
         return size;
     }
 
-    /**
-     * Returns a copy of this set that is mutable.
-     * <p>
-     * This operation is performed in O(1) because the mutable set shares
-     * the underlying trie nodes with this set.
-     * <p>
-     * Initially, the returned mutable set hasn't exclusive ownership of any
-     * trie node. Therefore, the first few updates that it performs, are
-     * copy-on-write operations, until it exclusively owns some trie nodes that
-     * it can update.
-     *
-     * @return a mutable trie set
-     */
-    public @NonNull SeqTrieSet<E> toMutable() {
-        return new SeqTrieSet<>(this);
+    @Override
+    public @NonNull SeqChampSet<E> toMutable() {
+        return new SeqChampSet<>(this);
     }
 
     @Override

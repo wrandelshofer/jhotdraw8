@@ -255,4 +255,23 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
         return h;
     }
 
+    /**
+     * Compares the specified object with this list for equality.
+     * <p>
+     * Returns {@code true} if the given object is also a read-only list and the
+     * two lists contain the same elements in the same sequence.
+     *
+     * @param o an object
+     * @return {@code true} if the object is equal to this list
+     */
+    boolean equals(Object o);
+
+    /**
+     * Returns the hash code value for this list. The hash code
+     * is the result of the calculation described in {@link List#hashCode()}.
+     *
+     * @return the hash code value for this set
+     */
+    int hashCode();
+
 }

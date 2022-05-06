@@ -14,7 +14,7 @@ import java.util.Objects;
 import static java.lang.Math.min;
 
 /**
- * Dumps a CHAMP Trie in the Graphviz DOT language.
+ * Dumps a CHAMP trie in the Graphviz DOT language.
  * <p>
  * References:
  * <dl>

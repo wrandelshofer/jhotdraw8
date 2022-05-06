@@ -12,7 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.TrieMap;
+import org.jhotdraw8.collection.ChampMap;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -62,6 +62,6 @@ public class TrieMapGuavaTests {
 
 
     private static Map<String, String> toHashMap(Map.Entry<String, String>[] entries) {
-        return new TrieMap<String, String>(Arrays.asList(entries));
+        return new ChampMap<String, String>(Arrays.asList(entries));
     }
 }

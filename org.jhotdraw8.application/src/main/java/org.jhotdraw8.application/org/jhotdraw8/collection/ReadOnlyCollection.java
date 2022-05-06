@@ -5,7 +5,6 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -90,7 +89,22 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
         }
     }
 
-    boolean contains(@Nullable Object e);
+    /**
+     * Returns {@code true} if this collection contains the specified object.
+     *
+     * @param o an object
+     * @return {@code true} if this collection contains the specified
+     * object
+     */
+    boolean contains(Object o);
+
+    /**
+     * Returns an iterator over the elements in this collection.
+     *
+     * @return an iterator
+     */
+    @Override
+    Iterator<E> iterator();
 
     /**
      * Returns true if this collection contains all elements of that collection.
@@ -144,4 +158,6 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
             sb.append(',').append(' ');
         }
     }
+
+
 }

@@ -12,28 +12,28 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-public class ImmutableSeqTrieSetTest extends AbstractPersistentSequencedSetTest {
+public class ImmutableSeqChampSetTest extends AbstractPersistentSequencedSetTest {
 
     @Override
     protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return ImmutableSeqTrieSet.copyOf(set);
+        return ImmutableSeqChampSet.copyOf(set);
     }
 
     @Override
     protected ImmutableSet<HashCollider> of() {
-        return ImmutableSeqTrieSet.of();
+        return ImmutableSeqChampSet.of();
     }
 
     @Override
     protected ImmutableSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return ImmutableSeqTrieSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
+        return ImmutableSeqChampSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
     }
 
 
     @Test
     @Ignore("manual test")
     public void testDumpStructure() {
-        ImmutableSeqTrieSet<HashCollider> instance = ImmutableSeqTrieSet.of();
+        ImmutableSeqChampSet<HashCollider> instance = ImmutableSeqChampSet.of();
         Random rng = new Random(0);
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);

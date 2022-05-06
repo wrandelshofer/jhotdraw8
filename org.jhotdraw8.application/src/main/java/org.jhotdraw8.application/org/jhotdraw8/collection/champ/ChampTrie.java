@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Provides utility methods for ChampTries.
+ * Provides static utility methods for CHAMP tries.
  */
 public class ChampTrie {
 

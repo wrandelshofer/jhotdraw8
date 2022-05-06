@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.ToIntFunction;
 
-public class TrieMapTest extends AbstractMapTest {
+public class ChampMapTest extends AbstractMapTest {
     /**
      * Orders the trie by hash-code with bit partition size 5.
      * <p>
@@ -46,22 +46,22 @@ public class TrieMapTest extends AbstractMapTest {
 
     @Override
     protected @NonNull Map<HashCollider, HashCollider> of() {
-        return new TrieMap<>();
+        return new ChampMap<>();
     }
 
     @Override
     protected @NonNull Map<HashCollider, HashCollider> copyOf(@NonNull Map<HashCollider, HashCollider> map) {
-        return new TrieMap<>(map);
+        return new ChampMap<>(map);
     }
 
     @Override
     protected @NonNull Map<HashCollider, HashCollider> copyOf(@NonNull Collection<Map.Entry<HashCollider, HashCollider>> map) {
-        return new TrieMap<>(map);
+        return new ChampMap<>(map);
     }
 
     @Test
     public void testDumpStructure() {
-        TrieMap<Integer, String> instance = new TrieMap<>();
+        ChampMap<Integer, String> instance = new ChampMap<>();
         Random rng = new Random(0);
         for (int i = 0; i < 5; i++) {
             int key = rng.nextInt(10_000);
@@ -75,7 +75,7 @@ public class TrieMapTest extends AbstractMapTest {
 
     @Test
     public void testCopyAddAll() {
-        TrieMap<Integer, String> instance = new TrieMap<>();
+        ChampMap<Integer, String> instance = new ChampMap<>();
         //  Random rng=new Random(0);
         //  for (int i=0;i<30;i++){
         //      int key = rng.nextInt(10_000);

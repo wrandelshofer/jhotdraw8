@@ -78,17 +78,17 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
+public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
 
-    private static final ImmutableTrieMap<?, ?> EMPTY = new ImmutableTrieMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ImmutableChampMap<?, ?> EMPTY = new ImmutableChampMap<>(BitmapIndexedNode.emptyNode(), 0);
 
     final transient int size;
     private final transient ToIntFunction<K> hashFunction = Objects::hashCode;
 
-    ImmutableTrieMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
+    ImmutableChampMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
     }
@@ -103,8 +103,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> ImmutableTrieMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(map);
+    public static <K, V> ImmutableChampMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
     }
 
     /**
@@ -116,8 +116,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> ImmutableTrieMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(map);
+    public static <K, V> ImmutableChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
     }
 
     /**
@@ -131,8 +131,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an immutable map of the provided entries
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableTrieMap<K, V> of(K k1, V v1, Object... kv) {
-        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPut(k1, v1).copyPutKeyValues(kv);
+    public static <K, V> @NonNull ImmutableChampMap<K, V> of(K k1, V v1, Object... kv) {
+        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPut(k1, v1).copyPutKeyValues(kv);
     }
 
     /**
@@ -143,8 +143,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an empty immutable map
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableTrieMap<K, V> of() {
-        return (ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY;
+    public static <K, V> @NonNull ImmutableChampMap<K, V> of() {
+        return (ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY;
     }
 
     /**
@@ -157,8 +157,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
      */
     @SafeVarargs
     @SuppressWarnings({"unchecked", "varargs"})
-    public static <K, V> @NonNull ImmutableTrieMap<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
-        return (ImmutableTrieMap<K, V>) ((ImmutableTrieMap<K, V>) ImmutableTrieMap.EMPTY).copyPutAll(Arrays.asList(entries));
+    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
+        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(Arrays.asList(entries));
     }
 
     @Override
@@ -173,7 +173,7 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public @NonNull ImmutableTrieMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+    public @NonNull ImmutableChampMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
 
@@ -182,11 +182,11 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                return new ImmutableTrieMap<>(newRootNode,
+                return new ImmutableChampMap<>(newRootNode,
                         size);
             }
 
-            return new ImmutableTrieMap<>(newRootNode, size + 1);
+            return new ImmutableChampMap<>(newRootNode, size + 1);
         }
 
         return this;
@@ -195,16 +195,16 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
     @Override
     @SuppressWarnings("unchecked")
     public @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
-        if (isEmpty() && (m instanceof TrieMap)) {
-            return ((TrieMap<K, V>) m).toImmutable();
+        if (isEmpty() && (m instanceof ChampMap)) {
+            return ((ChampMap<K, V>) m).toImmutable();
         }
         return copyPutAll(m.entrySet().iterator());
     }
 
 
     @Override
-    public @NonNull ImmutableTrieMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        final TrieMap<K, V> t = this.toMutable();
+    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         while (entries.hasNext()) {
             Map.Entry<? extends K, ? extends V> entry = entries.next();
@@ -215,25 +215,25 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public @NonNull ImmutableTrieMap<K, V> copyRemove(@NonNull K key) {
+    public @NonNull ImmutableChampMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
                 remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH);
         if (details.isModified()) {
             assert details.hasReplacedValue();
-            return new ImmutableTrieMap<>(newRootNode, size - 1);
+            return new ImmutableChampMap<>(newRootNode, size - 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull ImmutableTrieMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ImmutableChampMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
         if (this.isEmpty()) {
             return this;
         }
 
-        final TrieMap<K, V> t = this.toMutable();
+        final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<V> details = t.removeAndGiveDetails(key);
@@ -243,14 +243,14 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public @NonNull ImmutableTrieMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull ImmutableChampMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
         if (c.isEmpty()) {
             return of();
         }
-        final TrieMap<K, V> t = this.toMutable();
+        final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : this.readOnlyKeySet()) {
             if (!c.contains(key)) {
@@ -284,8 +284,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
             return false;
         }
 
-        if (other instanceof ImmutableTrieMap) {
-            ImmutableTrieMap<?, ?> that = (ImmutableTrieMap<?, ?>) other;
+        if (other instanceof ImmutableChampMap) {
+            ImmutableChampMap<?, ?> that = (ImmutableChampMap<?, ?>) other;
             if (this.size != that.size) {
                 return false;
             }
@@ -324,8 +324,8 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public TrieMap<K, V> toMutable() {
-        return new TrieMap<>(this);
+    public ChampMap<K, V> toMutable() {
+        return new ChampMap<>(this);
     }
 
     @Override
@@ -346,7 +346,7 @@ public class ImmutableTrieMap<K, V> extends BitmapIndexedNode<K, V>
 
         @Override
         protected Object readResolve() {
-            return ImmutableTrieMap.of().copyPutAll(deserialized.iterator());
+            return ImmutableChampMap.of().copyPutAll(deserialized.iterator());
         }
     }
 

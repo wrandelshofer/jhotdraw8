@@ -89,7 +89,7 @@ public abstract class AbstractImmutableMapTest {
         assertMapEquality(expected, actual);
 
         // WHEN: a set is created with copyOf a ImmutableMap
-        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableSeqTrieMap.copyOf(expected);
+        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableSeqChampMap.copyOf(expected);
         actual = copyOf(immutableExpected);
         assertEquals(immutableExpected, actual);
 
@@ -163,7 +163,7 @@ public abstract class AbstractImmutableMapTest {
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                ImmutableSeqTrieMap.copyOf(Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
+                ImmutableSeqChampMap.copyOf(Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue())));
         //

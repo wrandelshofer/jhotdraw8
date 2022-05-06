@@ -99,7 +99,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
+public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     private transient UniqueId mutator;
@@ -122,7 +122,7 @@ public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Clone
     /**
      * Constructs an empty set.
      */
-    public SeqTrieSet() {
+    public SeqChampSet() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
@@ -132,12 +132,12 @@ public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Clone
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public SeqTrieSet(Iterable<? extends E> c) {
-        if (c instanceof SeqTrieSet<?>) {
-            c = ((SeqTrieSet<? extends E>) c).toImmutable();
+    public SeqChampSet(Iterable<? extends E> c) {
+        if (c instanceof SeqChampSet<?>) {
+            c = ((SeqChampSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof ImmutableSeqTrieSet<?>) {
-            ImmutableSeqTrieSet<E> that = (ImmutableSeqTrieSet<E>) c;
+        if (c instanceof ImmutableSeqChampSet<?>) {
+            ImmutableSeqChampSet<E> that = (ImmutableSeqChampSet<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -218,9 +218,9 @@ public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Clone
      * Returns a shallow copy of this set.
      */
     @Override
-    public SeqTrieSet<E> clone() {
+    public SeqChampSet<E> clone() {
         try {
-            @SuppressWarnings("unchecked") final SeqTrieSet<E> that = (SeqTrieSet<E>) super.clone();
+            @SuppressWarnings("unchecked") final SeqChampSet<E> that = (SeqChampSet<E>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -357,22 +357,22 @@ public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Clone
      *
      * @return an immutable copy
      */
-    public ImmutableSeqTrieSet<E> toImmutable() {
+    public ImmutableSeqChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableSeqTrieSet.of() : new ImmutableSeqTrieSet<>(root, size, lastSequenceNumber);
+        return size == 0 ? ImmutableSeqChampSet.of() : new ImmutableSeqChampSet<>(root, size, lastSequenceNumber);
     }
 
     class MutableTrieIterator extends SequencedKeyIterator<E, Void> {
         private int expectedModCount;
 
         MutableTrieIterator(int tupleLength) {
-            super(SeqTrieSet.this.size, SeqTrieSet.this.root, tupleLength);
-            this.expectedModCount = SeqTrieSet.this.modCount;
+            super(SeqChampSet.this.size, SeqChampSet.this.root, tupleLength);
+            this.expectedModCount = SeqChampSet.this.modCount;
         }
 
         @Override
         public E next() {
-            if (expectedModCount != SeqTrieSet.this.modCount) {
+            if (expectedModCount != SeqChampSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.next();
@@ -380,14 +380,14 @@ public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Clone
 
         @Override
         public void remove() {
-            if (expectedModCount != SeqTrieSet.this.modCount) {
+            if (expectedModCount != SeqChampSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                SeqTrieSet.this.remove(k);
-                return SeqTrieSet.this.root;
+                SeqChampSet.this.remove(k);
+                return SeqChampSet.this.root;
             });
-            expectedModCount = SeqTrieSet.this.modCount;
+            expectedModCount = SeqChampSet.this.modCount;
         }
     }
 
@@ -399,7 +399,7 @@ public class SeqTrieSet<E> extends AbstractSet<E> implements Serializable, Clone
         }
 
         protected Object readResolve() {
-            return new SeqTrieSet<>(deserialized);
+            return new SeqChampSet<>(deserialized);
         }
     }
 

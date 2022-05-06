@@ -138,6 +138,15 @@ public interface ReadOnlyMap<K, V> {
         }
     }
 
+    /**
+     * Compares a read-only map with an object for equality.  Returns
+     * {@code true} if the given object is also a read-only map and the two maps
+     * represent the same mappings.
+     *
+     * @param map a map
+     * @param o   an object
+     * @return {@code true} if the object is equal to the map
+     */
     static <K, V> boolean mapEquals(ReadOnlyMap<K, V> map, Object o) {
         if (o == map) {
             return true;
@@ -172,9 +181,10 @@ public interface ReadOnlyMap<K, V> {
 
         return true;
     }
+
     /**
-     * Returns the hash code of the provided iterable, assuming that
-     * the iterable is an entry set of a map.
+     * Returns the hash code of the provided iterable. The hash code
+     * is the sum of the hash code of the entries.
      *
      * @param entries an iterable that is an entry set
      * @return the sum of the hash codes of the elements in the set
@@ -183,4 +193,25 @@ public interface ReadOnlyMap<K, V> {
     static <K, V> int iterableToHashCode(@NonNull Iterator<Map.Entry<K, V>> entries) {
         return ReadOnlySet.iteratorToHashCode(entries);
     }
+
+    /**
+     * Compares the specified object with this map for equality.
+     * <p>
+     * Returns {@code true} if the given object is also a read-only map and the
+     * two maps represent the same mappings, ignorig the sequence of the
+     * map entries.
+     *
+     * @param o an object
+     * @return {@code true} if the object is equal to this map
+     */
+    boolean equals(Object o);
+
+    /**
+     * Returns the hash code value for this map. The hash code
+     * is the sum of the hash code of its entries.
+     *
+     * @return the hash code value for this map
+     * @see Map#hashCode()
+     */
+    int hashCode();
 }

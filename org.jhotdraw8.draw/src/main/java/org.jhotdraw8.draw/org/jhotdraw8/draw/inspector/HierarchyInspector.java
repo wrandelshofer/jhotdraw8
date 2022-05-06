@@ -27,8 +27,8 @@ import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
+import org.jhotdraw8.collection.ImmutableChampSet;
 import org.jhotdraw8.collection.ImmutableSet;
-import org.jhotdraw8.collection.ImmutableTrieSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -202,7 +202,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
                         Figure f = figure.get();
-                        return f == null ? null : ImmutableTrieSet.copyOf(f.getStyleClasses());
+                        return f == null ? null : ImmutableChampSet.copyOf(f.getStyleClasses());
                     }
                 }
         );
@@ -212,7 +212,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
                         Figure f = figure.get();
-                        return f == null ? null : ImmutableTrieSet.copyOf(f.getPseudoClassStates());
+                        return f == null ? null : ImmutableChampSet.copyOf(f.getPseudoClassStates());
                     }
                 }
         );
@@ -315,7 +315,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes!
                             if (figure != null) {
-                                setText(wordSetConverter.toString(ImmutableTrieSet.copyOf(figure.getStyleClasses())));
+                                setText(wordSetConverter.toString(ImmutableChampSet.copyOf(figure.getStyleClasses())));
                             }
                         }
                         if (isEditable) {

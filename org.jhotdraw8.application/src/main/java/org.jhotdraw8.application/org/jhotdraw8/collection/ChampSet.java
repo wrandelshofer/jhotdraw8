@@ -85,7 +85,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
+public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 1;
     private transient UniqueId mutator;
@@ -96,7 +96,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
     /**
      * Constructs an empty set.
      */
-    public TrieSet() {
+    public ChampSet() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
@@ -106,12 +106,12 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public TrieSet(Iterable<? extends E> c) {
-        if (c instanceof TrieSet<?>) {
-            c = ((TrieSet<? extends E>) c).toImmutable();
+    public ChampSet(Iterable<? extends E> c) {
+        if (c instanceof ChampSet<?>) {
+            c = ((ChampSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof ImmutableTrieSet<?>) {
-            ImmutableTrieSet<E> that = (ImmutableTrieSet<E>) c;
+        if (c instanceof ImmutableChampSet<?>) {
+            ImmutableChampSet<E> that = (ImmutableChampSet<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -182,9 +182,9 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      * Returns a shallow copy of this set.
      */
     @Override
-    public TrieSet<E> clone() {
+    public ChampSet<E> clone() {
         try {
-            @SuppressWarnings("unchecked") final TrieSet<E> that = (TrieSet<E>) super.clone();
+            @SuppressWarnings("unchecked") final ChampSet<E> that = (ChampSet<E>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -321,22 +321,22 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
      *
      * @return an immutable copy
      */
-    public ImmutableTrieSet<E> toImmutable() {
+    public ImmutableChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableTrieSet.of() : new ImmutableTrieSet<>(root, size);
+        return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
     }
 
     class MutableTrieIterator extends KeyIterator<E, Void> {
         private int expectedModCount;
 
         MutableTrieIterator(int tupleLength) {
-            super(TrieSet.this.root, tupleLength);
-            this.expectedModCount = TrieSet.this.modCount;
+            super(ChampSet.this.root, tupleLength);
+            this.expectedModCount = ChampSet.this.modCount;
         }
 
         @Override
         public E next() {
-            if (expectedModCount != TrieSet.this.modCount) {
+            if (expectedModCount != ChampSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.next();
@@ -344,14 +344,14 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
 
         @Override
         public void remove() {
-            if (expectedModCount != TrieSet.this.modCount) {
+            if (expectedModCount != ChampSet.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                TrieSet.this.remove(k);
-                return TrieSet.this.root;
+                ChampSet.this.remove(k);
+                return ChampSet.this.root;
             });
-            expectedModCount = TrieSet.this.modCount;
+            expectedModCount = ChampSet.this.modCount;
         }
     }
 
@@ -363,7 +363,7 @@ public class TrieSet<E> extends AbstractSet<E> implements Serializable, Cloneabl
         }
 
         protected Object readResolve() {
-            return new TrieSet<>(deserialized);
+            return new ChampSet<>(deserialized);
         }
     }
 

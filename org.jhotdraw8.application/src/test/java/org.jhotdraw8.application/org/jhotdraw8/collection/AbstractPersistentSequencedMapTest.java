@@ -33,7 +33,7 @@ public abstract class AbstractPersistentSequencedMapTest extends AbstractImmutab
         }
         ImmutableMap<HashCollider, HashCollider> instance = copyOf(expected);
 
-        System.out.println((((ImmutableSeqTrieMap) instance).dump()));
+        System.out.println((((ImmutableSeqChampMap) instance).dump()));
 
         assertEqualSequence(expected, instance.asMap(), "after adding all");
 

@@ -17,7 +17,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ImmutableSeqTrieMap;
+import org.jhotdraw8.collection.ImmutableSeqChampMap;
 import org.jhotdraw8.collection.Maps;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
@@ -100,7 +100,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<FillRule>>() {
                     },
                     new CssMappedConverter<>("fill-rule",
-                            ImmutableSeqTrieMap.of("nonzero", FillRule.NON_ZERO,
+                            ImmutableSeqChampMap.of("nonzero", FillRule.NON_ZERO,
                                     "evenodd", FillRule.EVEN_ODD
                             )),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), FillRule.NON_ZERO
@@ -210,7 +210,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
                     new TypeToken<CssDefaultableValue<SvgShapeRendering>>() {
                     },
                     new CssMappedConverter<>("shape-rendering",
-                            ImmutableSeqTrieMap.of("auto", SvgShapeRendering.AUTO,
+                            ImmutableSeqChampMap.of("auto", SvgShapeRendering.AUTO,
                                     "optimizeSpeed", SvgShapeRendering.OPTIMIZE_SPEED,
                                     "crispEdges", SvgShapeRendering.CRISP_EDGES,
                                     "geometricPrecision", SvgShapeRendering.GEOMETRIC_PRECISION)),
@@ -236,7 +236,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<StrokeLineCap>>() {
             },
             new CssMappedConverter<>("stroke-linecap",
-                    ImmutableSeqTrieMap.of("butt", StrokeLineCap.BUTT,
+                    ImmutableSeqChampMap.of("butt", StrokeLineCap.BUTT,
                             "round", StrokeLineCap.ROUND,
                             "square", StrokeLineCap.SQUARE)),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
@@ -249,7 +249,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<StrokeLineJoin>>() {
             },
             new CssMappedConverter<>("stroke-linejoin",
-                    ImmutableSeqTrieMap.of("miter", StrokeLineJoin.MITER,
+                    ImmutableSeqChampMap.of("miter", StrokeLineJoin.MITER,
                             "round", StrokeLineJoin.ROUND,
                             "bevel", StrokeLineJoin.BEVEL)),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
@@ -272,7 +272,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<SvgVisibility>>() {
             },
             new CssMappedConverter<SvgVisibility>("visiblity",
-                    ImmutableSeqTrieMap.of("visible", SvgVisibility.VISIBLE,
+                    ImmutableSeqChampMap.of("visible", SvgVisibility.VISIBLE,
                             "hidden", SvgVisibility.HIDDEN,
                             "collapse", SvgVisibility.COLLAPSE).asMap()),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgVisibility.VISIBLE);
@@ -284,7 +284,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<BlendMode>>() {
             },
             new CssMappedConverter<BlendMode>("mix-blend-mode",
-                    ImmutableSeqTrieMap.ofEntries(
+                    ImmutableSeqChampMap.ofEntries(
                             Maps.entry("normal", BlendMode.SRC_OVER),
                             Maps.entry("mulitply", BlendMode.MULTIPLY),
                             Maps.entry("screen", BlendMode.SCREEN),
@@ -317,7 +317,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<SvgDisplay>>() {
             },
             new CssMappedConverter<SvgDisplay>("display",
-                    ImmutableSeqTrieMap.of("inline", SvgDisplay.INLINE).asMap(), true),
+                    ImmutableSeqChampMap.of("inline", SvgDisplay.INLINE).asMap(), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!
             SvgDisplay.INLINE);
     /**

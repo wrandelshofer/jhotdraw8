@@ -11,17 +11,17 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 import java.util.Set;
 
-public class SeqTrieSetTest extends AbstractSequencedSetTest {
+public class SeqChampSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected @NonNull <T> Set<T> create(int expectedMaxSize, float maxLoadFactor) {
-        return new SeqTrieSet<>();
+        return new SeqChampSet<>();
     }
 
     @Test
 
     public void testDumpStructure() {
-        SeqTrieSet<HashCollider> instance = new SeqTrieSet<>();
+        SeqChampSet<HashCollider> instance = new SeqChampSet<>();
         Random rng = new Random(0);
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);

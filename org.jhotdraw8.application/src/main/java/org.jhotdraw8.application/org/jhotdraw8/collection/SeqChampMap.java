@@ -94,7 +94,7 @@ import java.util.Set;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
+public class SeqChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
     private transient UniqueId mutator;
@@ -113,14 +113,14 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
      */
     private transient int lastSequenceNumber = 0;
 
-    public SeqTrieMap() {
+    public SeqChampMap() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
-    public SeqTrieMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof SeqTrieMap) {
+    public SeqChampMap(@NonNull Map<? extends K, ? extends V> m) {
+        if (m instanceof SeqChampMap) {
             @SuppressWarnings("unchecked")
-            SeqTrieMap<K, V> trieMap = (SeqTrieMap<K, V>) m;
+            SeqChampMap<K, V> trieMap = (SeqChampMap<K, V>) m;
             this.mutator = null;
             trieMap.mutator = null;
             this.root = trieMap.root;
@@ -132,7 +132,7 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
         }
     }
 
-    public SeqTrieMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public SeqChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
@@ -140,10 +140,10 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
 
     }
 
-    public SeqTrieMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof ImmutableSeqTrieMap) {
+    public SeqChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        if (m instanceof ImmutableSeqChampMap) {
             @SuppressWarnings("unchecked")
-            ImmutableSeqTrieMap<K, V> trieMap = (ImmutableSeqTrieMap<K, V>) m;
+            ImmutableSeqChampMap<K, V> trieMap = (ImmutableSeqChampMap<K, V>) m;
             this.root = trieMap;
             this.size = trieMap.size;
         } else {
@@ -161,9 +161,9 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
     }
 
     @Override
-    public SeqTrieMap<K, V> clone() {
+    public SeqChampMap<K, V> clone() {
         try {
-            @SuppressWarnings("unchecked") final SeqTrieMap<K, V> that = (SeqTrieMap<K, V>) super.clone();
+            @SuppressWarnings("unchecked") final SeqChampMap<K, V> that = (SeqChampMap<K, V>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -200,11 +200,11 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
     @SuppressWarnings("unchecked")
     public Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
-                SeqTrieMap.EntryIterator::new,
-                SeqTrieMap.this::size,
-                SeqTrieMap.this::containsEntry,
-                SeqTrieMap.this::clear,
-                SeqTrieMap.this::removeEntry
+                SeqChampMap.EntryIterator::new,
+                SeqChampMap.this::size,
+                SeqChampMap.this::containsEntry,
+                SeqChampMap.this::clear,
+                SeqChampMap.this::removeEntry
         );
     }
 
@@ -318,25 +318,25 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
      *
      * @return an immutable copy
      */
-    public ImmutableSeqTrieMap<K, V> toImmutable() {
+    public ImmutableSeqChampMap<K, V> toImmutable() {
         if (size == 0) {
-            return ImmutableSeqTrieMap.of();
+            return ImmutableSeqChampMap.of();
         }
         mutator = null;
-        return new ImmutableSeqTrieMap<>(root, size, lastSequenceNumber);
+        return new ImmutableSeqChampMap<>(root, size, lastSequenceNumber);
     }
 
     private abstract class AbstractMapIterator extends SequencedTrieIterator<K, V> implements Iterator<Entry<K, V>> {
         protected int expectedModCount;
 
         public AbstractMapIterator() {
-            super(SeqTrieMap.this.size, SeqTrieMap.this.root, ENTRY_LENGTH);
-            this.expectedModCount = SeqTrieMap.this.modCount;
+            super(SeqChampMap.this.size, SeqChampMap.this.root, ENTRY_LENGTH);
+            this.expectedModCount = SeqChampMap.this.modCount;
         }
 
         @Override
         public boolean hasNext() {
-            if (expectedModCount != SeqTrieMap.this.modCount) {
+            if (expectedModCount != SeqChampMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.hasNext();
@@ -344,7 +344,7 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
 
         @Override
         public Entry<K, V> nextEntry() {
-            if (expectedModCount != SeqTrieMap.this.modCount) {
+            if (expectedModCount != SeqChampMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             return super.nextEntry();
@@ -352,13 +352,13 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
 
 
         public void remove() {
-            if (expectedModCount != SeqTrieMap.this.modCount) {
+            if (expectedModCount != SeqChampMap.this.modCount) {
                 throw new ConcurrentModificationException();
             }
             removeEntry(k -> {
-                SeqTrieMap.this.remove(k);
-                expectedModCount = SeqTrieMap.this.modCount;
-                return SeqTrieMap.this.root;
+                SeqChampMap.this.remove(k);
+                expectedModCount = SeqChampMap.this.modCount;
+                return SeqChampMap.this.root;
             });
         }
     }
@@ -379,7 +379,7 @@ public class SeqTrieMap<K, V> extends AbstractMap<K, V> implements Serializable,
         }
 
         protected Object readResolve() {
-            return new SeqTrieMap<>(deserialized);
+            return new SeqChampMap<>(deserialized);
         }
     }
 
