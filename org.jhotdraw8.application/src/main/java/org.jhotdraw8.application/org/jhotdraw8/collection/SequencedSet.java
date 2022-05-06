@@ -14,6 +14,18 @@ import java.util.Set;
  * @param <E> the element type
  */
 public interface SequencedSet<E> extends Set<E>, SequencedCollection<E> {
+    /**
+     * The addFirst and addLast methods of SequencedSet have special case
+     * semantics for externally ordered collections such as LinkedHashSet.
+     * If the element is already present in the set, it is also moved into
+     * the appropriate position. If the element is not present, it is simply
+     * added at the appropriate position.
+     * This remedies a long-standing deficiency in LinkedHashSet, the inability
+     * to reposition elements that are already in the collection.
+     *
+     * @param e
+     * @return
+     */
     boolean addFirst(E e);
 
     boolean addLast(E e);

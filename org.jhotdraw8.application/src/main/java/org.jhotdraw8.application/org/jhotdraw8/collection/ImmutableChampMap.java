@@ -50,7 +50,7 @@ import java.util.function.ToIntFunction;
  * This map performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
  * <p>
- * The CHAMP tree contains nodes that may be shared with other map.
+ * The CHAMP tree contains nodes that may be shared with other maps.
  * <p>
  * If a write operation is performed on a node, then this map creates a
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).

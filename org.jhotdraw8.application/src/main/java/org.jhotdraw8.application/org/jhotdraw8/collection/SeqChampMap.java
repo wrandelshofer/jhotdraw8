@@ -48,7 +48,7 @@ import java.util.Objects;
  * This map performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
  * <p>
- * The CHAMP tree contains nodes that may be shared with other map, and nodes
+ * The CHAMP tree contains nodes that may be shared with other maps, and nodes
  * that are exclusively owned by this map.
  * <p>
  * If a write operation is performed on an exclusively owned node, then this
