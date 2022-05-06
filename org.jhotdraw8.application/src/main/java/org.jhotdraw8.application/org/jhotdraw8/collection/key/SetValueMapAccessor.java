@@ -6,7 +6,6 @@ package org.jhotdraw8.collection.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.CompositeMapAccessor;
 import org.jhotdraw8.collection.ImmutableSet;
 import org.jhotdraw8.collection.ReadOnlyMap;
 

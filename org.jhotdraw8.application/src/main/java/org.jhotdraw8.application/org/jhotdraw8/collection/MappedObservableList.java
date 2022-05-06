@@ -15,17 +15,18 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * ObservableListProxy.
+ * Maps an {@link ObservableList} in an {@link ObservableList} of a different
+ * element type.
  *
  * @author Werner Randelshofer
  */
-public class ObservableListProxy<A, B> extends TransformationList<A, B> {
+public class MappedObservableList<A, B> extends TransformationList<A, B> {
 
     private final Function<A, B> toB;
     private final Function<B, A> toA;
 
-    public ObservableListProxy(@NonNull ObservableList<B> source,
-                               Function<A, B> toB, Function<B, A> toA) {
+    public MappedObservableList(@NonNull ObservableList<B> source,
+                                Function<A, B> toB, Function<B, A> toA) {
         super(source);
         this.toB = toB;
         this.toA = toA;

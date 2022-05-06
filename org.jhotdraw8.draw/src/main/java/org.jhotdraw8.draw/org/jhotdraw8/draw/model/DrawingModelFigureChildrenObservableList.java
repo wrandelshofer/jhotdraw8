@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.model;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.TransformationList;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ObservableListProxy;
+import org.jhotdraw8.collection.MappedObservableList;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.event.SimpleWeakListener;
@@ -90,7 +90,7 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
 
     @Override
     protected void sourceChanged(ListChangeListener.Change<? extends Figure> c) {
-        fireChange(new ObservableListProxy.ChangeProxy<>(this, c, Function.identity()));
+        fireChange(new MappedObservableList.ChangeProxy<>(this, c, Function.identity()));
     }
 
     @Override

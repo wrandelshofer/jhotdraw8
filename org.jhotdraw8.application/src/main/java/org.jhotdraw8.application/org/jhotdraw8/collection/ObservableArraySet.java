@@ -10,6 +10,11 @@ import javafx.collections.SetChangeListener;
 
 import java.util.ArrayList;
 
+/**
+ * An observable set that is backed by an array list
+ *
+ * @param <E> the element type
+ */
 public class ObservableArraySet<E> extends ArrayList<E> implements ObservableSet<E> {
     private static final long serialVersionUID = 1L;
 

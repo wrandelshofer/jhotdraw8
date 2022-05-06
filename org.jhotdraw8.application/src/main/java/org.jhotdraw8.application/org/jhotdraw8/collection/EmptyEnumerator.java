@@ -7,8 +7,13 @@ package org.jhotdraw8.collection;
 
 import java.util.Spliterator;
 
+/**
+ * An enumerator over an empty sequence.
+ *
+ * @param <E> the element type
+ */
 public class EmptyEnumerator<E> implements Enumerator<E> {
-    private static EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
+    private static final EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
 
     @SuppressWarnings("unchecked")
     public static <T> Enumerator<T> emptyEnumerator() {

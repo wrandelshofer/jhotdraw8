@@ -2,11 +2,9 @@
  * @(#)CompositeMapAccessor.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection;
+package org.jhotdraw8.collection.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.Key;
-import org.jhotdraw8.collection.key.MapAccessor;
 
 import java.util.Collection;
 import java.util.Map;

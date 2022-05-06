@@ -7,6 +7,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+/**
+ * Interface for collection of {@code int}-values with a well-defined linear
+ * ordering of its elements.
+ */
 public interface IntSequencedCollection extends SequencedCollection<Integer> {
     void addFirstAsInt(int e);
 

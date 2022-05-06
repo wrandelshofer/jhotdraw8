@@ -5,6 +5,9 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+ * Static utility methods for sets.
+ */
 public class Sets {
 
     /**
