@@ -10,7 +10,7 @@ import java.util.Deque;
 import java.util.NoSuchElementException;
 
 /**
- * Interface for a {@link Deque} with a primitive long data elements.
+ * Interface for a {@link Deque} with a primitive {@code long} data elements.
  */
 public interface LongDeque extends Deque<Long> {
     @Override

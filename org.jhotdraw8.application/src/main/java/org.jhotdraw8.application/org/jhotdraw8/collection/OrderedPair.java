@@ -10,9 +10,9 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * OrderedPair.
+ * An ordered pair.
  * <p>
- * This is a value type.
+ * This is a value-type.
  *
  * @author Werner Randelshofer
  */

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Spliterator;
 
 /**
- * An {@link Enumerator} and {@link Spliterator} for a {@link List}.
+ * An {@link Enumerator} over a {@link List}.
  * <p>
  * Does not perform modification checks.
  *

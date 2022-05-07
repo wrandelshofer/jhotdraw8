@@ -10,6 +10,15 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Iterator;
 import java.util.function.Function;
 
+/**
+ * Maps an {@link Iterator} in an {@link Iterator} of a different element type.
+ * <p>
+ * The underlying iterator is referenced - not copied.
+ *
+ * @param <E> the mapped element type
+ * @param <F> the original element type
+ * @author Werner Randelshofer
+ */
 public class MappedIterator<E, F> implements Iterator<E> {
     private final @NonNull Iterator<F> i;
 

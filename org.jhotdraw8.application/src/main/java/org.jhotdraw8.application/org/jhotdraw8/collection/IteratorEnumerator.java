@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.Spliterator;
 
 /**
- * Enumerator wrapper for Iterator.
+ * Wraps an {@link Iterator} into the {@link Enumerator} interface.
  *
  * @author Werner Randelshofer
  */

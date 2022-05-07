@@ -20,14 +20,13 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
         return ReadOnlyMap.mapEquals(this,o);
     }
 
-
+    @Override
     public int hashCode() {
         return ReadOnlyMap.iterableToHashCode(entries());
     }
 
+    @Override
     final public @NonNull String toString() {
         return ReadOnlyMap.mapToString(this);
     }
-
-
 }

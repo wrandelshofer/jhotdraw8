@@ -7,11 +7,16 @@ package org.jhotdraw8.collection;
 
 import java.util.Spliterators;
 
-public class SingletonEnumerator<T> extends Spliterators.AbstractSpliterator<T> implements Enumerator<T> {
-    private final T current;
+/**
+ * An enumerator over a single element.
+ *
+ * @param <E> the element type
+ */
+public class SingletonEnumerator<E> extends Spliterators.AbstractSpliterator<E> implements Enumerator<E> {
+    private final E current;
     private boolean canMove = true;
 
-    public SingletonEnumerator(T singleton) {
+    public SingletonEnumerator(E singleton) {
         super(1L, 0);
         current = singleton;
     }
@@ -24,7 +29,7 @@ public class SingletonEnumerator<T> extends Spliterators.AbstractSpliterator<T> 
     }
 
     @Override
-    public T current() {
+    public E current() {
         return current;
     }
 

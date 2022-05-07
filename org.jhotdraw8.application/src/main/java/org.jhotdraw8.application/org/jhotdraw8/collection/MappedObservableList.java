@@ -98,7 +98,14 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
         src.remove(from, to);
     }
 
-    public static class ChangeProxy<A, B> extends ListChangeListener.Change<A> {
+    /**
+     * Maps a {@link ListChangeListener.Change} in a {@link ListChangeListener.Change}
+     * of a different element type.
+     *
+     * @param <A> the new element type
+     * @param <B> the original element type
+     */
+    public static class ChangeProxy<B, A> extends ListChangeListener.Change<A> {
 
         private final ListChangeListener.Change<? extends B> change;
         private final Function<B, A> toA;

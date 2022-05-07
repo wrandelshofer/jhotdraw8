@@ -12,7 +12,7 @@ import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
 /**
- * Wraps list functions in the {@link ReadOnlyList} API.
+ * Wraps list functions in the {@link ReadOnlyList} interface.
  *
  * @author Werner Randelshofer
  */

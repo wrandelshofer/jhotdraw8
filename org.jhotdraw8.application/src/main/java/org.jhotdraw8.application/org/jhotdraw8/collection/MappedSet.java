@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Wraps a {@link Set} in a {@link Set} of a different element type.
+ * Maps a {@link Set} in a {@link Set} of a different element type.
  * <p>
  * The underlying Set is referenced - not copied.
  *

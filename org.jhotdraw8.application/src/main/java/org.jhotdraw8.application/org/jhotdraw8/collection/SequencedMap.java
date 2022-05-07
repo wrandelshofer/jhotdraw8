@@ -16,7 +16,8 @@ import java.util.Map;
  *     <dd><a href="https://openjdk.java.net/jeps/8280836">java.ne</a></dd>
  * </dl>
  *
- * @param <E> the element type
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public interface SequencedMap<K, V> extends Map<K, V> {
     /**

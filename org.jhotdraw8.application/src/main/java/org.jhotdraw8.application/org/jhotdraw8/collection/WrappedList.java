@@ -12,7 +12,7 @@ import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
 /**
- * Wraps list functions in the {@link List} API.
+ * Wraps list functions in the {@link List} interface.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

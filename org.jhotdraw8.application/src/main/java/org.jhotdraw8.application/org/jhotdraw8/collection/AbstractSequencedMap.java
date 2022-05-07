@@ -10,6 +10,12 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.AbstractMap;
 import java.util.Objects;
 
+/**
+ * Abstract base class for {@link SequencedMap}s.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V> {
 
     boolean removeKey(final @Nullable Object o) {

@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Set} functions into the {@link Set} API.
+ * Wraps {@code Set} functions into the {@link Set} interface.
  *
  * @author Werner Randelshofer
  */

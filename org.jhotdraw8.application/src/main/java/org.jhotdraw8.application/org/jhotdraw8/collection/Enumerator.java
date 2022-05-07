@@ -49,9 +49,6 @@ public interface Enumerator<E> extends Spliterator<E> {
      */
     E current();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     default boolean tryAdvance(Consumer<? super E> action) {
         if (moveNext()) {

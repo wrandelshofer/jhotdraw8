@@ -9,7 +9,7 @@ import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
 /**
- * Wraps a {@link ReadOnlySet} in the {@link ObservableSet} API.
+ * Wraps a {@link ReadOnlySet} in the {@link ObservableSet} interface.
  * <p>
  * The underlying ReadOnlySet is referenced - not copied. This allows to pass a
  * ReadOnlySet to a client who does not understand the ReadOnlySet APi.

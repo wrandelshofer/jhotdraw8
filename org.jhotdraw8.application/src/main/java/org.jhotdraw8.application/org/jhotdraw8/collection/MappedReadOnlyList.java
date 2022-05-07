@@ -11,7 +11,7 @@ import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
- * Wraps a {@link ReadOnlyList} in {@link ReadOnlyList} of a different element type.
+ * Maps a {@link ReadOnlyList} in {@link ReadOnlyList} of a different element type.
  * <p>
  * The underlying List is referenced - not copied.
  *

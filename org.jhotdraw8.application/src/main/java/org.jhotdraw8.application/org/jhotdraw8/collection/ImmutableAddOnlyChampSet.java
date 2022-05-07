@@ -1,5 +1,5 @@
 /*
- * @(#)ImmutableAddOnlyTrieSet.java
+ * @(#)ImmutableAddOnlyChampSet.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -10,18 +10,29 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * A persistent trie set that only provides a {@code copyAdd} method.
+ * A persistent CHAMP set that only provides a {@code copyAdd} method.
+ * <p>
+ * References:
+ * <dl>
+ *      <dt>Michael J. Steindorfer (2017).
+ *      Efficient Immutable Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
  *
  * @param <E> the element type
  */
-public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<E> {
+public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
     private static final int ENTRY_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;
     private static final int BIT_PARTITION_SIZE = 4;
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
 
-    public ImmutableAddOnlyTrieSet() {
+    public ImmutableAddOnlyChampSet() {
     }
 
     private static char bitpos(final int mask) {
@@ -32,8 +43,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    private static <K> @NonNull ImmutableAddOnlyTrieSet<K> mergeTwoKeyValPairs(final @NonNull K key0, final int keyHash0,
-                                                                               final @NonNull K key1, final int keyHash1, final int shift) {
+    private static <K> @NonNull ImmutableAddOnlyChampSet<K> mergeTwoKeyValPairs(final @NonNull K key0, final int keyHash0,
+                                                                                final @NonNull K key1, final int keyHash1, final int shift) {
         assert !(key0.equals(key1));
 
         if (shift >= HASH_CODE_LENGTH) {
@@ -55,7 +66,7 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
                 return new BitmapIndexedNode<>((char) 0, dataMap, key1, key0);
             }
         } else {
-            final ImmutableAddOnlyTrieSet<K> node =
+            final ImmutableAddOnlyChampSet<K> node =
                     mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
             // values fit on next level
             final char nodeMap = bitpos(mask0);
@@ -64,28 +75,28 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableAddOnlyTrieSet<E> of() {
-        return (ImmutableAddOnlyTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull ImmutableAddOnlyChampSet<E> of() {
+        return (ImmutableAddOnlyChampSet<E>) BitmapIndexedNode.EMPTY_NODE;
     }
 
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableAddOnlyTrieSet<E> of(E... elements) {
-        ImmutableAddOnlyTrieSet<E> set = (ImmutableAddOnlyTrieSet<E>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull ImmutableAddOnlyChampSet<E> of(E... elements) {
+        ImmutableAddOnlyChampSet<E> set = (ImmutableAddOnlyChampSet<E>) BitmapIndexedNode.EMPTY_NODE;
         for (E e : elements)
             set = set.copyAdd(e);
         return set;
     }
 
     @Override
-    public @NonNull ImmutableAddOnlyTrieSet<E> copyAdd(@NonNull E key) {
+    public @NonNull ImmutableAddOnlyChampSet<E> copyAdd(@NonNull E key) {
         return updated(key, key.hashCode(), 0);
     }
 
-    abstract @NonNull ImmutableAddOnlyTrieSet<E> updated(final @NonNull E key, final int keyHash, final int shift);
+    abstract @NonNull ImmutableAddOnlyChampSet<E> updated(final @NonNull E key, final int keyHash, final int shift);
 
-    private static final class BitmapIndexedNode<K> extends ImmutableAddOnlyTrieSet<K> {
-        private static final @NonNull ImmutableAddOnlyTrieSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
+    private static final class BitmapIndexedNode<K> extends ImmutableAddOnlyChampSet<K> {
+        private static final @NonNull ImmutableAddOnlyChampSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
         final @NonNull Object[] nodes;
         /**
          * We use char as an unsigned short.
@@ -103,8 +114,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
             this.nodes = nodes;
         }
 
-        @NonNull ImmutableAddOnlyTrieSet<K> copyAndInsertValue(final int bitpos,
-                                                               final @NonNull K key) {
+        @NonNull ImmutableAddOnlyChampSet<K> copyAndInsertValue(final int bitpos,
+                                                                final @NonNull K key) {
             final int idx = ENTRY_LENGTH * dataIndex(bitpos);
 
             // copy 'src' and insert 1 element(s) at position 'idx'
@@ -117,7 +128,7 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
             return new BitmapIndexedNode<>(nodeMap, (char) (dataMap | bitpos), dst);
         }
 
-        @NonNull ImmutableAddOnlyTrieSet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull ImmutableAddOnlyTrieSet<K> node) {
+        @NonNull ImmutableAddOnlyChampSet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull ImmutableAddOnlyChampSet<K> node) {
 
             final int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - ENTRY_LENGTH - nodeIndex(bitpos);
@@ -135,8 +146,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
             return new BitmapIndexedNode<>((char) (nodeMap | bitpos), (char) (dataMap ^ bitpos), dst);
         }
 
-        @NonNull ImmutableAddOnlyTrieSet<K> copyAndSetNode(final int bitpos,
-                                                           final @NonNull ImmutableAddOnlyTrieSet<K> newNode) {
+        @NonNull ImmutableAddOnlyChampSet<K> copyAndSetNode(final int bitpos,
+                                                            final @NonNull ImmutableAddOnlyChampSet<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
             final int idx = this.nodes.length - 1 - nodeIndex;
@@ -160,11 +171,11 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
         }
 
         @SuppressWarnings("unchecked")
-        @NonNull ImmutableAddOnlyTrieSet<K> getNode(final int index) {
-            return (ImmutableAddOnlyTrieSet<K>) nodes[nodes.length - 1 - index];
+        @NonNull ImmutableAddOnlyChampSet<K> getNode(final int index) {
+            return (ImmutableAddOnlyChampSet<K>) nodes[nodes.length - 1 - index];
         }
 
-        @NonNull ImmutableAddOnlyTrieSet<K> nodeAt(final int bitpos) {
+        @NonNull ImmutableAddOnlyChampSet<K> nodeAt(final int bitpos) {
             return getNode(nodeIndex(bitpos));
         }
 
@@ -173,8 +184,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
         }
 
         @Override
-        @NonNull ImmutableAddOnlyTrieSet<K> updated(final @NonNull K key, final int keyHash,
-                                                    final int shift) {
+        @NonNull ImmutableAddOnlyChampSet<K> updated(final @NonNull K key, final int keyHash,
+                                                     final int shift) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
 
@@ -185,13 +196,13 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
                 if (Objects.equals(currentKey, key)) {
                     return this;
                 } else {
-                    final ImmutableAddOnlyTrieSet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
+                    final ImmutableAddOnlyChampSet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
                             currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
                     return copyAndMigrateFromInlineToNode(bitpos, subNodeNew);
                 }
             } else if ((nodeMap & bitpos) != 0) { // node (not value)
-                final ImmutableAddOnlyTrieSet<K> subNode = nodeAt(bitpos);
-                final ImmutableAddOnlyTrieSet<K> subNodeNew =
+                final ImmutableAddOnlyChampSet<K> subNode = nodeAt(bitpos);
+                final ImmutableAddOnlyChampSet<K> subNodeNew =
                         subNode.updated(key, keyHash, shift + BIT_PARTITION_SIZE);
 
                 if (subNode != subNodeNew) {
@@ -207,7 +218,7 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
 
     }
 
-    private static final class HashCollisionNode<K> extends ImmutableAddOnlyTrieSet<K> {
+    private static final class HashCollisionNode<K> extends ImmutableAddOnlyChampSet<K> {
         private final @NonNull K[] keys;
         private final int hash;
 
@@ -221,8 +232,8 @@ public abstract class ImmutableAddOnlyTrieSet<E> implements ImmutableAddOnlySet<
 
         @Override
         @NonNull
-        ImmutableAddOnlyTrieSet<K> updated(final @NonNull K key,
-                                           final int keyHash, final int shift) {
+        ImmutableAddOnlyChampSet<K> updated(final @NonNull K key,
+                                            final int keyHash, final int shift) {
             assert this.hash == keyHash;
 
             for (K k : keys) {

@@ -8,7 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * LongIntArrayEnumeratorSpliterator.
+ * A {@link LongEnumerator} over a {@code long}-array.
  *
  * @author Werner Randelshofer
  */

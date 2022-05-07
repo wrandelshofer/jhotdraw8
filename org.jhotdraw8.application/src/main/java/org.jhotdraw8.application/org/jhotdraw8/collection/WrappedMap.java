@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps map functions into the {@link java.util.Map} API.
+ * Wraps map functions into the {@link java.util.Map} interface.
  *
  * @author Werner Randelshofer
  */

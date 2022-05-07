@@ -8,7 +8,8 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * LongIntArrayEnumeratorSpliterator.
+ * A {@link LongEnumerator} over a {@code int}-array.
+ * Supports shifting and masking of the {@code int}-values.
  *
  * @author Werner Randelshofer
  */

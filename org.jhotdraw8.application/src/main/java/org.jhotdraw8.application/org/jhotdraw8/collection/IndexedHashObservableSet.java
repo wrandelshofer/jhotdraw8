@@ -11,9 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A set that provides precise control where each element is inserted.
- * <p>
- * The set is backed by an array and a hash set.
+ * A set that provides precise control where each element is inserted;
+ * this set is backed by an array and a hash set.
  *
  * @author Werner Randelshofer
  */

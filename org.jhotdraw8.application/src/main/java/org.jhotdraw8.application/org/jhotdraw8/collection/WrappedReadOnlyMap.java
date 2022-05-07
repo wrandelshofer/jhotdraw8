@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Wraps map functions in the {@link ReadOnlyMap} API.
+ * Wraps map functions in the {@link ReadOnlyMap} interface.
  *
  * @author Werner Randelshofer
  */

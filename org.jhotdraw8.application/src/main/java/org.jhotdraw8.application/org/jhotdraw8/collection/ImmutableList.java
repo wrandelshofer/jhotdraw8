@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Provides an API for an immutable list.
+ * Interface for an immutable list.
  * <p>
  * A persistent list provides methods for creating a new persistent list with
  * added or removed elements, without changing the original persistent list.

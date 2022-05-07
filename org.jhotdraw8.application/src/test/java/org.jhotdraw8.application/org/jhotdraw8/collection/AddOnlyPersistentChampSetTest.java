@@ -56,8 +56,8 @@ public class AddOnlyPersistentChampSetTest {
     private void testCopyAddAndOfWith0Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
-        ImmutableAddOnlyTrieSet<HashCollider> actual = ImmutableAddOnlyTrieSet.of();
-        ImmutableAddOnlyTrieSet<HashCollider> newActual;
+        ImmutableAddOnlyChampSet<HashCollider> actual = ImmutableAddOnlyChampSet.of();
+        ImmutableAddOnlyChampSet<HashCollider> newActual;
 
         // GIVEN: a set with values1
         for (HashCollider v : values1) {
@@ -76,8 +76,8 @@ public class AddOnlyPersistentChampSetTest {
     private void testCopyAddAndOfWith1Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
-        ImmutableAddOnlyTrieSet<HashCollider> actual = ImmutableAddOnlyTrieSet.<HashCollider>of().copyAdd(firstValue1);
-        ImmutableAddOnlyTrieSet<HashCollider> newActual;
+        ImmutableAddOnlyChampSet<HashCollider> actual = ImmutableAddOnlyChampSet.<HashCollider>of().copyAdd(firstValue1);
+        ImmutableAddOnlyChampSet<HashCollider> newActual;
 
         // GIVEN: a set with values1
         for (HashCollider v : values1) {

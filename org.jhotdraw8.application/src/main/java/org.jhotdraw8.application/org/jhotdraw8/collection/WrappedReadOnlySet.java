@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps set functions into the {@link ReadOnlySet} API.
+ * Wraps set functions into the {@link ReadOnlySet} interface.
  *
  * @author Werner Randelshofer
  */

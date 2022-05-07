@@ -10,9 +10,9 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * UnorderedPair.
+ * An unordered pair.
  * <p>
- * This is a value type.
+ * This is a value-type.
  *
  * @param <V> the type of the items that form the pair
  * @author Werner Randelshofer

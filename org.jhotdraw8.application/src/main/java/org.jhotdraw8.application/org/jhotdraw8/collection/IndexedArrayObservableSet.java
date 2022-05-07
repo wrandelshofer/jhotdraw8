@@ -9,6 +9,12 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 
+/**
+ * A set that provides precise control where each element is inserted;
+ * this set is backed by an array.
+ *
+ * @author Werner Randelshofer
+ */
 public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservableSet<E> {
     public IndexedArrayObservableSet() {
     }

@@ -11,7 +11,7 @@ import javafx.collections.ObservableList;
 import java.util.Collection;
 
 /**
- * Wraps a {@link ReadOnlyList} in the {@link ObservableList} API.
+ * Wraps a {@link ReadOnlyList} in the {@link ObservableList} interface.
  * <p>
  * The underlying ReadOnlyList is referenced - not copied. This allows to pass a
  * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
