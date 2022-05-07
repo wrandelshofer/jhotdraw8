@@ -26,7 +26,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     private final @NonNull MapAccessor<Double> rightKey;
     private final @NonNull MapAccessor<Double> bottomKey;
     private final @NonNull MapAccessor<Double> leftKey;
-    private Converter<Insets> converter = new InsetsConverter(false);
+    private final @NonNull Converter<Insets> converter = new InsetsConverter(false);
 
     /**
      * Creates a new instance with the specified name.

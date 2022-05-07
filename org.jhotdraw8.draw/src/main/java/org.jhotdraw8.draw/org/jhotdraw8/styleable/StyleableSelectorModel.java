@@ -82,12 +82,12 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
     @Override
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Styleable element) {
-        return ImmutableSeqChampSet.<String>copyOf(element.getStyleClass());
+        return ImmutableSeqChampSet.copyOf(element.getStyleClass());
     }
 
     @Override
     public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Styleable element) {
-        return ImmutableSeqChampSet.<String>copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
+        return ImmutableSeqChampSet.copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
                 .collect(Collectors.toList()));
     }
 

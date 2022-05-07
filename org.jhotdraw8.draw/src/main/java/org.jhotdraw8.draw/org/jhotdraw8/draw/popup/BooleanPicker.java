@@ -20,7 +20,7 @@ import java.util.function.BiConsumer;
 public class BooleanPicker extends AbstractPicker<Boolean> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
-    private boolean nullable;
+    private final boolean nullable;
 
     public BooleanPicker(boolean nullable) {
         this.nullable = nullable;

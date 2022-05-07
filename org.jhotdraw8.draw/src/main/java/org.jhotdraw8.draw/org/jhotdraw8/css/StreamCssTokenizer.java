@@ -139,7 +139,7 @@ import static org.jhotdraw8.css.CssTokenType.TT_URL;
  */
 public class StreamCssTokenizer implements CssTokenizer {
 
-    private CssScanner in;
+    private final CssScanner in;
 
     private boolean pushBack;
 

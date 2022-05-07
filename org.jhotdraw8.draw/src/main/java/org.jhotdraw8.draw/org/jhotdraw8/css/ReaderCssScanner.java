@@ -14,7 +14,7 @@ public class ReaderCssScanner extends AbstractCssScanner {
     /**
      * The underlying reader.
      */
-    private Reader in;
+    private final Reader in;
 
 
     /**

@@ -8,7 +8,6 @@ package org.jhotdraw8.binding;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.Property;
-import javafx.beans.value.ObservableValue;
 
 import java.util.Objects;
 
@@ -102,8 +101,8 @@ public class StrongBidirectionalBinding<T> implements InvalidationListener {
 
     public static <T> void unbind(Property<T> property1, Property<T> property2) {
         final StrongBidirectionalBinding<T> binding = new StrongBidirectionalBinding<T>(property1, property2);
-        ((ObservableValue<?>) property1).removeListener(binding);
-        ((ObservableValue<?>) property2).removeListener(binding);
+        property1.removeListener(binding);
+        property2.removeListener(binding);
     }
 
     public static <T> StrongBidirectionalBinding<T> bind(Property<T> property1, Property<T> property2) {

@@ -43,7 +43,7 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private boolean saveAs;
+    private final boolean saveAs;
     private Node oldFocusOwner;
     public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new SimpleNullableKey<>("saveChooser", URIChooser.class);
     public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("saveChooserFactory",

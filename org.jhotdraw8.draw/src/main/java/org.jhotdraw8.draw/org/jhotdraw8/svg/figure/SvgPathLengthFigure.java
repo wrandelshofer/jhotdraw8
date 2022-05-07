@@ -14,6 +14,6 @@ public interface SvgPathLengthFigure extends Figure {
      * pathLength.
      * <a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/paths.html#PathLengthAttribute">link</a>.
      */
-    public static final @NonNull NullableDoubleStyleableKey PATH_LENGTH = new NullableDoubleStyleableKey("pathLength", null);
+    @NonNull NullableDoubleStyleableKey PATH_LENGTH = new NullableDoubleStyleableKey("pathLength", null);
 
 }

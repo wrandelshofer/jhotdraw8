@@ -107,7 +107,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     private static final @NonNull Key<Stage> STAGE_KEY = new SimpleNullableKey<>("stage", Stage.class);
     public static final @NonNull String WINDOW_MENU_ID = "window";
     public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
-    private Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
+    private final Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
 
     /**
      * @param args the command line arguments
@@ -127,7 +127,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     private boolean isSystemMenuSupported;
 
 
-    private @NonNull ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
+    private @NonNull
+    final ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
     {

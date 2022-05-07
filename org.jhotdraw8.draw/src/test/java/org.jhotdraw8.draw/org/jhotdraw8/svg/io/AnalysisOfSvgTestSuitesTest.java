@@ -199,8 +199,8 @@ public class AnalysisOfSvgTestSuitesTest {
     }
 
     protected @NonNull String getLastTwoPathElements(Path p) {
-        return p.getName(p.getNameCount() - 2).toString()
-                + "/" + p.getName(p.getNameCount() - 1).toString();
+        return p.getName(p.getNameCount() - 2)
+                + "/" + p.getName(p.getNameCount() - 1);
     }
 
     private void testW3CSvg12Tiny(Path testFile, Path referenceFile) throws Exception {

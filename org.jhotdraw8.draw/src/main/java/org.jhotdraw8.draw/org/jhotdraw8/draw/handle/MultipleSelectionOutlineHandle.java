@@ -25,8 +25,8 @@ import org.jhotdraw8.geom.FXGeom;
  */
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
-    private Polygon node;
-    private double[] points;
+    private final Polygon node;
+    private final double[] points;
 
     public MultipleSelectionOutlineHandle() {
         super(null);

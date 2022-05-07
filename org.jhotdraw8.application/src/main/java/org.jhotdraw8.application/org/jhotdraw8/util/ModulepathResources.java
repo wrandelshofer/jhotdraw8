@@ -101,7 +101,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     /**
      * The wrapped resource bundle.
      */
-    private transient ResourceBundle resource;
+    private final transient ResourceBundle resource;
     /**
      * The module from which the resource bundle was instantiated
      * and which we use to load resources (i.e. images) from.

@@ -24,7 +24,7 @@ import java.util.Map;
 public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssDimension2D> {
 
     private static final long serialVersionUID = 1L;
-    private Converter<CssDimension2D> converter = new CssPaperSizeConverter();
+    private final Converter<CssDimension2D> converter = new CssPaperSizeConverter();
 
     private final @NonNull NonNullMapAccessor<CssSize> widthKey;
     private final @NonNull NonNullMapAccessor<CssSize> heightKey;

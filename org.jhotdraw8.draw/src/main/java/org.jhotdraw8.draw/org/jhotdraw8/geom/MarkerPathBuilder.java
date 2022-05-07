@@ -21,7 +21,7 @@ public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
     private final Path2D.Double startMarker;
     private final Path2D.Double endMarker;
     private final Path2D.Double midMarker;// FIXME support midMarker
-    private PathBuilder<T> out;
+    private final PathBuilder<T> out;
     private boolean needsStartMarker;
     private boolean needsEndMarker;
     private double tangentX, tangentY;

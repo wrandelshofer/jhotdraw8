@@ -22,7 +22,7 @@ import java.text.ParseException;
  */
 public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
 
-    private Converter<T> converter;
+    private final Converter<T> converter;
 
     public StyleConverterAdapter(Converter<T> converter) {
         this.converter = converter;

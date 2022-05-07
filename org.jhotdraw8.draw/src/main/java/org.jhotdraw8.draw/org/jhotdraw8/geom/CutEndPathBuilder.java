@@ -21,14 +21,13 @@ import java.awt.geom.PathIterator;
  */
 public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
 
-    private PathBuilder<T> out;
+    private final @NonNull PathBuilder<T> out;
     private final double radius;
     private double cx;
     private double cy;
+    private final @NonNull PathIteratorPathBuilder path;
 
-    private @NonNull PathIteratorPathBuilder path;
-
-    public CutEndPathBuilder(PathBuilder<T> out, double radius) {
+    public CutEndPathBuilder(@NonNull PathBuilder<T> out, double radius) {
         this.out = out;
         this.radius = radius;
         path = new PathIteratorPathBuilder();

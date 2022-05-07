@@ -12,6 +12,7 @@ import java.awt.geom.PathIterator;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Concatenates multiple path iterators.
@@ -21,7 +22,7 @@ import java.util.List;
 public class ConcatenatedPathIterator implements PathIterator {
 
     private @Nullable PathIterator current;
-    private Deque<PathIterator> iterators;
+    private final @NonNull Deque<PathIterator> iterators;
     private final int windingRule;
 
     public ConcatenatedPathIterator(FillRule fillRule, @NonNull List<PathIterator> iteratorList) {
@@ -36,11 +37,17 @@ public class ConcatenatedPathIterator implements PathIterator {
 
     @Override
     public int currentSegment(float[] coords) {
+        if (current == null) {
+            throw new NoSuchElementException();
+        }
         return current.currentSegment(coords);
     }
 
     @Override
     public int currentSegment(double[] coords) {
+        if (current == null) {
+            throw new NoSuchElementException();
+        }
         return current.currentSegment(coords);
     }
 
@@ -59,7 +66,7 @@ public class ConcatenatedPathIterator implements PathIterator {
 
     @Override
     public void next() {
-        if (!isDone()) {
+        if (!isDone() && current != null) {
             current.next();
         }
     }

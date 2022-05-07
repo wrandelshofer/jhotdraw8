@@ -52,7 +52,7 @@ public class LayerCell extends ListCell<Figure> {
     @FXML
     private Label selectionLabel;
 
-    private WeakReference<DrawingModel> drawingModel;
+    private final WeakReference<DrawingModel> drawingModel;
 
     private boolean isUpdating;
 
@@ -124,7 +124,7 @@ public class LayerCell extends ListCell<Figure> {
             }
             setGraphic(node);
             Integer count = inspector.getSelectionCount((Layer) item);
-            selectionLabel.setText(count == null ? "" : "(" + count.toString() + ")");
+            selectionLabel.setText(count == null ? "" : "(" + count + ")");
 
             visibleCheckBox.setSelected(item.get(HideableFigure.VISIBLE));
             lockedCheckBox.setSelected(item.get(LockableFigure.LOCKED));

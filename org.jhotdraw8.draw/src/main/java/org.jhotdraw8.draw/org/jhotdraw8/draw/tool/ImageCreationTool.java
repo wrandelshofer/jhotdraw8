@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  */
 public class ImageCreationTool extends CreationTool {
 
-    private @NonNull MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
+    private final @NonNull MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
     private URIChooser uriChooser;
     private @Nullable URI uri;
     private Future<Dimension2D> dimensionFuture;

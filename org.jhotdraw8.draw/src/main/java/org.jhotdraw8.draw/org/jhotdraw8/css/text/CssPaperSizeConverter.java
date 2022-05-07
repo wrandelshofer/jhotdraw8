@@ -133,6 +133,6 @@ public class CssPaperSizeConverter implements Converter<CssDimension2D> {
             buf.append(s);
         }
         return "Format of ⟨PageSize⟩: " + "⟨width⟩mm ⟨height⟩mm｜⟨PaperFormat⟩ landscape｜⟨PaperFormat⟩ portrait"
-                + "\nFormat of ⟨PaperFormat⟩: " + buf.toString();
+                + "\nFormat of ⟨PaperFormat⟩: " + buf;
     }
 }

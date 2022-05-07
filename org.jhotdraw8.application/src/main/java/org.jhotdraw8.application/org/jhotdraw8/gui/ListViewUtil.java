@@ -45,7 +45,7 @@ public class ListViewUtil {
         private final ListView<T> listView;
         private int draggedCellIndex = -1;
         private final ClipboardIO<T> io;
-        private boolean reorderingOnly;
+        private final boolean reorderingOnly;
 
         public DnDSupport(ListView<T> listView, ClipboardIO<T> io, boolean reorderingOnly) {
             this.listView = listView;
@@ -53,7 +53,7 @@ public class ListViewUtil {
             this.reorderingOnly = reorderingOnly;
         }
 
-        private @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
+        private final @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
             @Override
             public void handle(@NonNull DragEvent event) {
                 if (event.isConsumed()) {
@@ -153,7 +153,8 @@ public class ListViewUtil {
             }
         };
 
-        private @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private @NonNull
+        final EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {

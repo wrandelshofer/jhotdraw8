@@ -29,7 +29,7 @@ import static org.jhotdraw8.css.text.CssSizeConverter.parseSize;
 public class CssSymmetricCssPoint2DConverter extends AbstractCssConverter<CssPoint2D> {
 
     private final boolean withSpace;
-    private boolean withComma;
+    private final boolean withComma;
 
     public CssSymmetricCssPoint2DConverter() {
         this(false, true, false);

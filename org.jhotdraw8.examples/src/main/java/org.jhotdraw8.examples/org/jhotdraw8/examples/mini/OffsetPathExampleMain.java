@@ -44,18 +44,18 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class OffsetPathExampleMain extends Application {
-    private javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
+    private final javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
             110, 200,
             160, 180,
             210, 120,
             260, 180,
             310, 200);
-    private Path offsetPath1 = new Path();
-    private Path offsetPath2 = new Path();
-    private Path offsetPath3 = new Path();
+    private final Path offsetPath1 = new Path();
+    private final Path offsetPath2 = new Path();
+    private final Path offsetPath3 = new Path();
     StackPane canvas = new StackPane();
-    private DoubleProperty offset = new SimpleDoubleProperty(0.0);
-    private BooleanProperty closed = new SimpleBooleanProperty();
+    private final DoubleProperty offset = new SimpleDoubleProperty(0.0);
+    private final BooleanProperty closed = new SimpleBooleanProperty();
 
     @Override
     public void start(@NonNull Stage primaryStage) {
@@ -156,7 +156,7 @@ public class OffsetPathExampleMain extends Application {
     }
 
     private Integer activePolypoint = null;
-    private double grid = 10.0;
+    private final double grid = 10.0;
 
     private void onMouseDragged(MouseEvent mouseEvent) {
         if (activePolypoint != null) {

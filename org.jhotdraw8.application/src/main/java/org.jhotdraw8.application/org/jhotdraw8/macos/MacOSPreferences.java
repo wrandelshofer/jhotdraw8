@@ -83,7 +83,7 @@ public class MacOSPreferences {
                 for (Object o : (List) plist) {
                     if (o instanceof Map) {
                         @SuppressWarnings("unchecked")
-                        Map<String, Object> m = (Map<String, Object>) (Map<?, ?>) o;
+                        Map<String, Object> m = (Map<String, Object>) o;
                         for (int i = 0, n = split.length; i < n; i++) {
                             String subkey = split[i];
                             Object value;
@@ -91,7 +91,7 @@ public class MacOSPreferences {
                                 value = m.get(subkey);
                                 if (i < n - 1 && (value instanceof Map)) {
                                     @SuppressWarnings("unchecked")
-                                    Map<String, Object> unchecked = (Map<String, Object>) (Map<?, ?>) value;
+                                    Map<String, Object> unchecked = (Map<String, Object>) value;
                                     m = unchecked;
                                 } else if (i == n - 1) {
                                     return value;

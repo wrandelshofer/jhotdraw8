@@ -36,16 +36,16 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class BiArcApproExampleMain extends Application {
-    private javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
+    private final javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
             110, 200,
             160, 180,
             210, 120,
             260, 180
     );
-    private Path bezierPath = new Path();
-    private Path approxPath = new Path();
-    private Path inflectionPointsPath = new Path();
-    private Path inflectionPointsPath2 = new Path();
+    private final Path bezierPath = new Path();
+    private final Path approxPath = new Path();
+    private final Path inflectionPointsPath = new Path();
+    private final Path inflectionPointsPath2 = new Path();
     StackPane canvas = new StackPane();
 
     @Override
@@ -83,7 +83,7 @@ public class BiArcApproExampleMain extends Application {
 
 
     private Integer activePolypoint = null;
-    private double grid = 10.0;
+    private final double grid = 10.0;
 
     private void onMouseDragged(MouseEvent mouseEvent) {
         if (activePolypoint != null) {

@@ -136,7 +136,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
             parent = null;
             for (Figure f : getDrawing().getChildren()) {
                 if (f.isEditable() && (f instanceof Layer)) {
-                    parent = (Layer) f;
+                    parent = f;
                 }
             }
             if (parent == null) {

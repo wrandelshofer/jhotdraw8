@@ -59,9 +59,9 @@ import java.util.concurrent.CancellationException;
 public class OpenRecentFileAction extends AbstractApplicationAction {
 
     public static final String ID = "file.openRecent";
-    private URI uri;
-    private DataFormat format;
-    private boolean reuseEmptyViews = true;
+    private final URI uri;
+    private final DataFormat format;
+    private final boolean reuseEmptyViews = true;
 
     /**
      * Creates a new instance.

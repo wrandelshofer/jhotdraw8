@@ -47,7 +47,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         this.heightKey = heightKey;
     }
 
-    private Converter<BoundingBox> converter = new CssBoundingBoxConverter(false);
+    private final @NonNull Converter<BoundingBox> converter = new CssBoundingBoxConverter(false);
 
     @Override
     public @NonNull Converter<BoundingBox> getCssConverter() {

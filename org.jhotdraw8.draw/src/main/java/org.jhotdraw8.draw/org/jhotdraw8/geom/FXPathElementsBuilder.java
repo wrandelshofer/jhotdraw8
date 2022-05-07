@@ -23,21 +23,25 @@ import java.util.List;
  */
 public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>> {
     public static final ClosePath CLOSE_PATH = new ClosePath();
+    private final @NonNull List<PathElement> elements;
 
     public FXPathElementsBuilder() {
         this(new ArrayList<>());
     }
 
-    public FXPathElementsBuilder(List<PathElement> elements) {
+    public FXPathElementsBuilder(@NonNull List<PathElement> elements) {
         this.elements = elements;
+    }
+
+    public @NonNull List<PathElement> build() {
+        pathDone();
+        return elements;
     }
 
     @Override
     protected void doArcTo(double rx, double ry, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         elements.add(new ArcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag));
     }
-
-    private List<PathElement> elements;
 
     @Override
     protected void doClosePath() {
@@ -60,17 +64,12 @@ public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>
     }
 
     @Override
-    protected void doQuadTo(double x, double y, double x0, double y0) {
-        elements.add(new QuadCurveTo(x, y, x0, y0));
-    }
-
-    @Override
     protected void doPathDone() {
         // empty
     }
 
-    public @NonNull List<PathElement> build() {
-        pathDone();
-        return elements;
+    @Override
+    protected void doQuadTo(double x, double y, double x0, double y0) {
+        elements.add(new QuadCurveTo(x, y, x0, y0));
     }
 }

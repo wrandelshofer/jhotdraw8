@@ -138,7 +138,7 @@ public class ContourBuilderTest {
         return p;
     }
 
-    private void testOffsetPath(PolyArcPath input, double offset, List<PolyArcPath> expected) throws Exception, InterruptedException {
+    private void testOffsetPath(PolyArcPath input, double offset, List<PolyArcPath> expected) throws Exception {
         final ContourBuilder pap = new ContourBuilder();
         //final Polyline raw = pap.createRawOffsetPline(input, offset);
         //final StringBuilder b = new StringBuilder();
@@ -229,7 +229,7 @@ public class ContourBuilderTest {
 
     }
 
-    private void testOffsetLine(PolyArcPath input, boolean closed, double offset, PolyArcPath expected) throws Exception, InterruptedException {
+    private void testOffsetLine(PolyArcPath input, boolean closed, double offset, PolyArcPath expected) throws Exception {
         input.isClosed(closed);
         SwingUtilities.invokeAndWait(() -> {
             JDialog f = new JDialog();

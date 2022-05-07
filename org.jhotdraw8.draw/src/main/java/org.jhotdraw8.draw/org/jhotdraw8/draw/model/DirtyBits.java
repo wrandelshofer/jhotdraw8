@@ -73,7 +73,7 @@ public enum DirtyBits {
      */
     TRANSFORM_NOTIFY;
 
-    private int mask;
+    private final int mask;
 
     DirtyBits() {
         mask = 1 << ordinal();

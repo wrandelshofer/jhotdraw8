@@ -74,12 +74,12 @@ public class SelectionTool extends AbstractTool {
     /**
      * Whether to update the cursor on mouse movements.
      */
-    private boolean updateCursor = true;
+    private final boolean updateCursor = true;
 
     private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
     private boolean mouseDragged;
     private @Nullable Figure pressedFigure;
-    private HandleType handleType;
+    private final HandleType handleType;
     private HandleType leadHandleType;
     private HandleType anchorHandleType;
 

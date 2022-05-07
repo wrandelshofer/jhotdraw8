@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<BezierNode>> {
 
-    private @NonNull List<BezierNode> nodes = new ArrayList<>();
+    private final @NonNull List<BezierNode> nodes = new ArrayList<>();
 
     public BezierNodePathBuilder() {
     }

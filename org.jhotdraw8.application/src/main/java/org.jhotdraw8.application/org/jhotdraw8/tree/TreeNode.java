@@ -257,9 +257,10 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     default @NonNull Enumerator<T> preorderEnumerator() {
-        @SuppressWarnings("unchecked") T t = (T) this;
-        return new PreorderEnumerator<T>(TreeNode<T>::getChildEnumerator, t);
+        T t = (T) this;
+        return new PreorderEnumerator<T>(TreeNode::getChildEnumerator, t);
     }
 
     /**
@@ -268,9 +269,10 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     default @NonNull PreorderSpliterator<T> preorderSpliterator() {
-        @SuppressWarnings("unchecked") T t = (T) this;
-        return new PreorderSpliterator<>(TreeNode<T>::getChildren, t);
+        T t = (T) this;
+        return new PreorderSpliterator<>(TreeNode::getChildren, t);
     }
 
     /**

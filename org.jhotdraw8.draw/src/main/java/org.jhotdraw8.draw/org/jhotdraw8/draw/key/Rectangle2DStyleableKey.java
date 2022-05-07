@@ -18,7 +18,7 @@ import org.jhotdraw8.text.Converter;
 public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> implements WritableStyleableMapAccessor<Rectangle2D> {
 
     private static final long serialVersionUID = 1L;
-    private Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
+    private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the

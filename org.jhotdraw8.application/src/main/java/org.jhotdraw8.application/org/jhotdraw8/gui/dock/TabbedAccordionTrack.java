@@ -96,7 +96,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         if (c instanceof Dockable) {
             Dockable k = (Dockable) c;
             TabPaneTrack.MyTab tab = new TabPaneTrack.MyTab(c, k.getText(), k.getNode());
-            tab.graphicProperty().bind(CustomBinding.<Node>compute(k::getGraphic, k.graphicProperty(), editableProperty()));
+            tab.graphicProperty().bind(CustomBinding.compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;
         } else {
             return new TabPaneTrack.MyTab(c, "-", c.getNode());

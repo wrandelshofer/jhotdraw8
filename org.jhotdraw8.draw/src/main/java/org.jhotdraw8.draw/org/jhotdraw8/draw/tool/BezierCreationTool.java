@@ -53,7 +53,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     /**
      * The rubber band shows where the next point will be added.
      */
-    private @NonNull Line rubberBand = new Line();
+    private final @NonNull Line rubberBand = new Line();
 
     public BezierCreationTool(String name, Resources rsrc, BezierNodeListStyleableKey key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
@@ -167,7 +167,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                 return;
             }
             points = new ArrayList<>();
-            view.setActiveParent((Layer) parent);
+            view.setActiveParent(parent);
 
             dm.addChildTo(createdFigure, parent);
 

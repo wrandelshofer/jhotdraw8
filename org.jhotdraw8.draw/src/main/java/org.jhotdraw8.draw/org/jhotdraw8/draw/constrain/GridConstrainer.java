@@ -87,7 +87,7 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    private @NonNull ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,40%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
+    private final @NonNull ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,40%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
         @Override
         public void invalidated() {
             fireInvalidated();
@@ -212,12 +212,12 @@ public class GridConstrainer extends AbstractConstrainer {
         return angle;
     }
 
-    public @NonNull BooleanProperty drawGridProperty() {
-        return drawGrid;
+    private boolean canSnapToGrid() {
+        return snapToGrid.get() && getWidth().getValue() > 0 && getHeight().getValue() > 0;
     }
 
-    public CssSize getHeight() {
-        return height.get();
+    public @NonNull BooleanProperty drawGridProperty() {
+        return drawGrid;
     }
 
     public CssColor getGridColor() {
@@ -226,6 +226,10 @@ public class GridConstrainer extends AbstractConstrainer {
 
     public void setGridColor(CssColor newValue) {
         gridColorProperty.setValue(newValue);
+    }
+
+    public CssSize getHeight() {
+        return height.get();
     }
 
     public int getMajorX() {
@@ -253,12 +257,12 @@ public class GridConstrainer extends AbstractConstrainer {
         return y.get();
     }
 
-    public @NonNull ObjectProperty<CssSize> heightProperty() {
-        return height;
-    }
-
     public @NonNull Property<CssColor> gridColorProperty() {
         return gridColorProperty;
+    }
+
+    public @NonNull ObjectProperty<CssSize> heightProperty() {
+        return height;
     }
 
     public @NonNull IntegerProperty majorXProperty() {
@@ -268,7 +272,6 @@ public class GridConstrainer extends AbstractConstrainer {
     public @NonNull IntegerProperty majorYProperty() {
         return majorY;
     }
-
 
     public @NonNull BooleanProperty snapToGridProperty() {
         return snapToGrid;
@@ -298,10 +301,6 @@ public class GridConstrainer extends AbstractConstrainer {
 
         double result = (ta * cAngle) % 360;
         return result < 0 ? 360 + result : result;
-    }
-
-    private boolean canSnapToGrid() {
-        return snapToGrid.get() && getWidth().getValue() > 0 && getHeight().getValue() > 0;
     }
 
     @Override

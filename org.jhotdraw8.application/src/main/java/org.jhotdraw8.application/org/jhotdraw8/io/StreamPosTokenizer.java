@@ -37,7 +37,8 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Start and end position of the current token. rlw
      */
     private int startpos = -1, endpos = -1;
-    private @NonNull IntArrayList unread = new IntArrayList();
+    private @NonNull
+    final IntArrayList unread = new IntArrayList();
 
     private @NonNull char[] buf = new char[20];
 
@@ -69,7 +70,8 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private @NonNull char[] slashStar = new char[]{'/', '*'};
     private @NonNull char[] starSlash = new char[]{'*', '/'};
 
-    private @NonNull byte[] ctype = new byte[256];
+    private @NonNull
+    final byte[] ctype = new byte[256];
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
     private static final byte CT_ALPHA = 4;

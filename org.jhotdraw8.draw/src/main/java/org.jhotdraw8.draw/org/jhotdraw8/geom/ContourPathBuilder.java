@@ -14,7 +14,7 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     private final double offset;
 
     private final @NonNull PathBuilder<T> consumer;
-    private @NonNull PolyArcPathBuilder papb = new PolyArcPathBuilder();
+    private final @NonNull PolyArcPathBuilder papb = new PolyArcPathBuilder();
 
     public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset) {
         this.offset = offset;

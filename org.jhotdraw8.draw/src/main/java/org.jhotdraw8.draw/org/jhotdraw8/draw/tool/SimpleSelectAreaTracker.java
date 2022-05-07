@@ -61,7 +61,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
     /**
      * The rubberband.
      */
-    private @NonNull Rectangle rubberband = new Rectangle();
+    private final @NonNull Rectangle rubberband = new Rectangle();
 
     double x;
     double y;

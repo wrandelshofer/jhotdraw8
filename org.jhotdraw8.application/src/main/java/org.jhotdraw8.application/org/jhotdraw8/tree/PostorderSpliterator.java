@@ -23,7 +23,7 @@ public class PostorderSpliterator<T> extends AbstractSpliterator<T> {
     private final @NonNull Function<T, Iterable<T>> getChildrenFunction;
     private @Nullable T root;
     private Spliterator<T> subtree;
-    private Iterator<T> children;
+    private final Iterator<T> children;
 
     public PostorderSpliterator(@NonNull Function<T, Iterable<T>> getChildrenFunction, T root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);

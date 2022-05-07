@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.binding.CustomBinding;
 
 public class HBoxTrack extends AbstractDockParent implements Track {
-    private ScrollPane scrollPane = new ScrollPane();
+    private final ScrollPane scrollPane = new ScrollPane();
     private final HBox hbox = new HBox();
 
     public HBoxTrack() {

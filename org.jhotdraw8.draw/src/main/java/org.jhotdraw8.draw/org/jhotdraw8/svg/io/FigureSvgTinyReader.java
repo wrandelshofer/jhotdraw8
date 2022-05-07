@@ -85,35 +85,35 @@ import java.util.stream.Collectors;
  * </dl>
  */
 public class FigureSvgTinyReader {
-    public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-    public static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
+    public static final @NonNull String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+    public static final @NonNull String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
     /**
      * Maps from an attribute name to an accessor.
      */
-    private final Map<String, Map<String, MapAccessor<?>>> accessorMap = new LinkedHashMap<>();
+    private final @NonNull Map<String, Map<String, MapAccessor<?>>> accessorMap = new LinkedHashMap<>();
     /**
      * Maps from an element name to a figure factory.
      */
-    private final Map<QName, Supplier<Figure>> figureMap = new LinkedHashMap<>();
+    private final @NonNull Map<QName, Supplier<Figure>> figureMap = new LinkedHashMap<>();
 
     /**
      * Converts a CSS size string into a CssSize value.
      * <p>
      * FIXME we must use XmlSizeConverter and not CssSizeConverter!
      */
-    private final CssSizeConverter sizeConverter = new CssSizeConverter(true);
-    private final CssDefaultableValueConverter<CssSize> defaultableSizeConverter = new CssDefaultableValueConverter<>(new CssSizeConverter(false));
+    private final @NonNull CssSizeConverter sizeConverter = new CssSizeConverter(true);
+    private final @NonNull CssDefaultableValueConverter<CssSize> defaultableSizeConverter = new CssDefaultableValueConverter<>(new CssSizeConverter(false));
 
     /**
      * Converts a CSS color string into a CssColor value.
      * <p>
      * FIXME we must use XmlColorConverter and not CssColorConverter!
      */
-    private final SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new CssColorConverter(true));
+    private final @NonNull SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new CssColorConverter(true));
     /**
      * Maps from a type to a converter.
      */
-    private final Map<Type, Converter<?>> converterMap = new LinkedHashMap<>();
+    private final @NonNull Map<Type, Converter<?>> converterMap = new LinkedHashMap<>();
 
     {
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
@@ -295,7 +295,7 @@ public class FigureSvgTinyReader {
                 svgDrawing.addChild(root);
                 root = svgDrawing;
             }
-            ((SvgDrawing) root).set(SvgDrawing.BACKGROUND, NamedCssColor.TRANSPARENT);
+            root.set(SvgDrawing.BACKGROUND, NamedCssColor.TRANSPARENT);
             ((SvgDrawing) root).updateAllCss(new SimpleRenderContext());
 
             setSizeOfDrawing(root);
@@ -476,7 +476,7 @@ public class FigureSvgTinyReader {
         skipElement(r, ctx);
     }
 
-    private NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private final NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;

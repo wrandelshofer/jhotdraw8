@@ -57,7 +57,7 @@ public class OffsetPathBuilderTest {
         return p;
     }
 
-    private void testOffsetPath(Polyline input, double offset, Polyline expected) throws Exception, InterruptedException {
+    private void testOffsetPath(Polyline input, double offset, Polyline expected) throws Exception {
         AwtPathBuilder ab = new AwtPathBuilder();
         OffsetPathBuilder<Path2D.Double> instance = new OffsetPathBuilder<>(ab, offset);
         SvgPaths.buildFromPathIterator(instance, FXShapes.awtShapeFromFX(input).getPathIterator(null));

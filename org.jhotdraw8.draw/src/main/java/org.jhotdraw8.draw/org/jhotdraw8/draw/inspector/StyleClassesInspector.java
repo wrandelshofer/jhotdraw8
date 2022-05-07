@@ -61,7 +61,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
             }
         }
     };
-    private Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
+    private final Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
     @FXML
     private ListView<StyleClassItem> listView;
     private final @Nullable ChangeListener<DrawingModel> modelListener = (o, oldv, newv) -> {
@@ -78,7 +78,8 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private Button removeButton;
 
     @SuppressWarnings("unchecked")
-    private @NonNull ObservableWordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
+    private @NonNull
+    final ObservableWordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;

@@ -18,7 +18,7 @@ import org.jhotdraw8.text.Converter;
 public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> implements WritableStyleableMapAccessor<BlendMode> {
 
     static final long serialVersionUID = 1L;
-
+    private final @NonNull Converter<BlendMode> converter = new CssKebabCaseEnumConverter<>(BlendMode.class, false);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -39,9 +39,6 @@ public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> imple
     public BlendModeStyleableKey(@NonNull String name, BlendMode defaultValue) {
         super(name, BlendMode.class, defaultValue);
     }
-
-    private Converter<BlendMode> converter = new CssKebabCaseEnumConverter<>(BlendMode.class, false);
-    ;
 
     @Override
     public @NonNull Converter<BlendMode> getCssConverter() {

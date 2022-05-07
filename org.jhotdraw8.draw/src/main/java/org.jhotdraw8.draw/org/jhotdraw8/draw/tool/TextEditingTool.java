@@ -32,7 +32,7 @@ public class TextEditingTool extends AbstractTool {
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
-    private @NonNull TextArea textArea = new TextArea();
+    private final @NonNull TextArea textArea = new TextArea();
     private @Nullable TextEditableFigure.TextEditorData editorData;
 
     /**
@@ -43,7 +43,7 @@ public class TextEditingTool extends AbstractTool {
     /**
      * The minimum size of a created figure (in view coordinates.
      */
-    private double minSize = 2;
+    private final double minSize = 2;
 
     public TextEditingTool(String id, Resources labels) {
         super(id, labels);

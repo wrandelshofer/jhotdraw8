@@ -95,6 +95,79 @@ public class FXShapes {
         }
     }
 
+    public static PathIterator awtPathIteratorFromFXPathElements(List<PathElement> pathElements, int windingRule, AffineTransform tx) {
+        final PathIteratorPathBuilder b = new PathIteratorPathBuilder(windingRule);
+        FXSvgPaths.buildFromPathElements(b, pathElements);
+        return b.build();
+    }
+
+    public static @NonNull PathIterator awtPathIteratorFromFxPoint2Ds(@NonNull List<javafx.geometry.Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
+        return new PathIterator() {
+            final float @NonNull [] srcf = new float[2];
+            final double @NonNull [] srcd = new double[2];
+            private final int size = points.size();
+            int index = 0;
+
+            @Override
+            public int currentSegment(float[] coords) {
+                if (index < size) {
+                    javafx.geometry.Point2D p = points.get(index);
+                    if (tx == null) {
+                        coords[0] = (float) p.getX();
+                        coords[1] = (float) p.getY();
+                    } else {
+                        srcf[0] = (float) p.getX();
+                        srcf[1] = (float) p.getY();
+                        tx.transform(srcf, 0, coords, 0, 1);
+                    }
+                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
+                } else if (index == size && closed) {
+                    return PathIterator.SEG_CLOSE;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+
+            @Override
+            public int currentSegment(double[] coords) {
+                if (index < size) {
+                    javafx.geometry.Point2D p = points.get(index);
+                    if (tx == null) {
+                        coords[0] = p.getX();
+                        coords[1] = p.getY();
+                    } else {
+                        srcd[0] = p.getX();
+                        srcd[1] = p.getY();
+                        tx.transform(srcd, 0, coords, 0, 1);
+                    }
+                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
+                } else if (index == size && closed) {
+                    return PathIterator.SEG_CLOSE;
+                } else {
+                    throw new IndexOutOfBoundsException();
+                }
+            }
+
+            @Override
+            public int getWindingRule() {
+                return windingRule;
+            }
+
+            @Override
+            public boolean isDone() {
+                return index >= size + (closed ? 1 : 0);
+            }
+
+            @Override
+            public void next() {
+                if (index < size + (closed ? 1 : 0)) {
+                    index++;
+                }
+            }
+
+        };
+    }
+
     /**
      * Converts a JavaFX shape to a AWT shape.
      * <p>
@@ -175,6 +248,15 @@ public class FXShapes {
             p.closePath();
         }
         return p;
+    }
+
+    public static @NonNull Shape awtShapeFromFXBounds(@NonNull Bounds node) {
+        return new Rectangle2D.Double(
+                node.getMinX(),
+                node.getMinY(),
+                node.getWidth(),
+                node.getHeight()
+        );
     }
 
     private static @NonNull Shape awtShapeFromFXCircle(@NonNull Circle node) {
@@ -390,7 +472,6 @@ public class FXShapes {
         return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
     }
 
-
     /**
      * Converts a Java Path iterator to a JavaFX shape.
      *
@@ -477,89 +558,5 @@ public class FXShapes {
         fxpath.getElements().addAll(fxPathElementsFromAwt(iter));
 
         return fxpath;
-    }
-
-    public static @NonNull PathIterator awtPathIteratorFromFxPoint2Ds(@NonNull List<javafx.geometry.Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
-        return new PathIterator() {
-            private final int size = points.size();
-            int index = 0;
-            @NonNull
-            float[] srcf = new float[2];
-            @NonNull
-            double[] srcd = new double[2];
-
-            @Override
-            public int currentSegment(float[] coords) {
-                if (index < size) {
-                    javafx.geometry.Point2D p = points.get(index);
-                    if (tx == null) {
-                        coords[0] = (float) p.getX();
-                        coords[1] = (float) p.getY();
-                    } else {
-                        srcf[0] = (float) p.getX();
-                        srcf[1] = (float) p.getY();
-                        tx.transform(srcf, 0, coords, 0, 1);
-                    }
-                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
-                } else if (index == size && closed) {
-                    return PathIterator.SEG_CLOSE;
-                } else {
-                    throw new IndexOutOfBoundsException();
-                }
-            }
-
-            @Override
-            public int currentSegment(double[] coords) {
-                if (index < size) {
-                    javafx.geometry.Point2D p = points.get(index);
-                    if (tx == null) {
-                        coords[0] = p.getX();
-                        coords[1] = p.getY();
-                    } else {
-                        srcd[0] = p.getX();
-                        srcd[1] = p.getY();
-                        tx.transform(srcd, 0, coords, 0, 1);
-                    }
-                    return index == 0 ? PathIterator.SEG_MOVETO : PathIterator.SEG_LINETO;
-                } else if (index == size && closed) {
-                    return PathIterator.SEG_CLOSE;
-                } else {
-                    throw new IndexOutOfBoundsException();
-                }
-            }
-
-            @Override
-            public int getWindingRule() {
-                return windingRule;
-            }
-
-            @Override
-            public boolean isDone() {
-                return index >= size + (closed ? 1 : 0);
-            }
-
-            @Override
-            public void next() {
-                if (index < size + (closed ? 1 : 0)) {
-                    index++;
-                }
-            }
-
-        };
-    }
-
-    public static @NonNull Shape awtShapeFromFXBounds(@NonNull Bounds node) {
-        return new Rectangle2D.Double(
-                node.getMinX(),
-                node.getMinY(),
-                node.getWidth(),
-                node.getHeight()
-        );
-    }
-
-    public static PathIterator awtPathIteratorFromFXPathElements(List<PathElement> pathElements, int windingRule, AffineTransform tx) {
-        final PathIteratorPathBuilder b = new PathIteratorPathBuilder(windingRule);
-        FXSvgPaths.buildFromPathElements(b, pathElements);
-        return b.build();
     }
 }

@@ -26,7 +26,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
         implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
     private static final long serialVersionUID = 1L;
-    private @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricCssPoint2DConverter();
+    private final @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricCssPoint2DConverter();
 
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> xKey;
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> yKey;

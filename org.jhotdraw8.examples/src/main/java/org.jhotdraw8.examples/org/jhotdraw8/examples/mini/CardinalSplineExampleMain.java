@@ -40,16 +40,16 @@ import java.util.ArrayList;
  * @author Werner Randelshofer
  */
 public class CardinalSplineExampleMain extends Application {
-    private Polyline polyline = new Polyline(
+    private final Polyline polyline = new Polyline(
             10, 100,
             60, 80,
             110, 20,
             160, 80,
             210, 100);
-    private Path path = new Path();
-    StackPane canvas = new StackPane();
-    private DoubleProperty tension = new SimpleDoubleProperty(0.5);
-    private BooleanProperty closed = new SimpleBooleanProperty();
+    private final @NonNull Path path = new Path();
+    @NonNull StackPane canvas = new StackPane();
+    private final @NonNull DoubleProperty tension = new SimpleDoubleProperty(0.5);
+    private final @NonNull BooleanProperty closed = new SimpleBooleanProperty();
 
     @Override
     public void start(@NonNull Stage primaryStage) {

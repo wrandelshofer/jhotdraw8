@@ -454,8 +454,8 @@ public abstract class AbstractImmutableSetTest {
         );
     }
 
-    private static HashCollider[] DATA_SET_ARRAY = new HashCollider[10_000];
-    private static ImmutableChampSet<HashCollider> IDENTICAL_SET;
+    private static final HashCollider[] DATA_SET_ARRAY = new HashCollider[10_000];
+    private static final ImmutableChampSet<HashCollider> IDENTICAL_SET;
 
     static {
         Random rng = new Random(0);

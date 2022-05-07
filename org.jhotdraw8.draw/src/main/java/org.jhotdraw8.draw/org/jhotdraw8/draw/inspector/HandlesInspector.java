@@ -33,29 +33,55 @@ import java.util.ResourceBundle;
 
 public class HandlesInspector extends AbstractDrawingViewInspector {
 
+    private final @NonNull NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", NamedCssColor.BLUE);
+    private final @NonNull IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
+    private final @NonNull IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
-
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
-
     @FXML // fx:id="handleColorField"
     private TextField handleColorField; // Value injected by FXMLLoader
-
     @FXML // fx:id="handleColorPicker"
     private ColorPicker handleColorPicker; // Value injected by FXMLLoader
-
     @FXML // fx:id="handleSizeField"
     private TextField handleSizeField; // Value injected by FXMLLoader
-
     @FXML // fx:id="handleSizeSlider"
     private Slider handleSizeSlider; // Value injected by FXMLLoader
-
     @FXML
     private TextField handleStrokeWidthField;
-
     @FXML
     private Slider handleStrokeWidthSlider;
+    private Node node;
+
+    public HandlesInspector() {
+        this(GridInspector.class.getResource("HandlesInspector.fxml"));
+    }
+
+    public HandlesInspector(@NonNull URL fxmlUrl) {
+        init(fxmlUrl);
+    }
+
+    @Override
+    public Node getNode() {
+        return node;
+    }
+
+    private void init(@NonNull URL fxmlUrl) {
+        // We must use invoke and wait here, because we instantiate Tooltips
+        // which immediately instanciate a Window and a Scene.
+        PlatformUtil.invokeAndWait(() -> {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setResources(InspectorLabels.getResources().asResourceBundle());
+            loader.setController(this);
+
+            try (InputStream in = fxmlUrl.openStream()) {
+                node = loader.load(in);
+            } catch (IOException ex) {
+                throw new InternalError(ex);
+            }
+        });
+    }
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
@@ -89,44 +115,6 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 handleStrokeWidthField.textProperty(),
                 handleStrokeWidthProperty,
                 new NumberStringConverter());
-    }
-
-    private @NonNull NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", NamedCssColor.BLUE);
-
-    private @NonNull IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
-
-    private @NonNull IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
-
-    private Node node;
-
-    public HandlesInspector() {
-        this(GridInspector.class.getResource("HandlesInspector.fxml"));
-    }
-
-    public HandlesInspector(@NonNull URL fxmlUrl) {
-        init(fxmlUrl);
-    }
-
-
-    private void init(@NonNull URL fxmlUrl) {
-        // We must use invoke and wait here, because we instantiate Tooltips
-        // which immediately instanciate a Window and a Scene.
-        PlatformUtil.invokeAndWait(() -> {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setResources(InspectorLabels.getResources().asResourceBundle());
-            loader.setController(this);
-
-            try (InputStream in = fxmlUrl.openStream()) {
-                node = loader.load(in);
-            } catch (IOException ex) {
-                throw new InternalError(ex);
-            }
-        });
-    }
-
-    @Override
-    public Node getNode() {
-        return node;
     }
 
     @Override

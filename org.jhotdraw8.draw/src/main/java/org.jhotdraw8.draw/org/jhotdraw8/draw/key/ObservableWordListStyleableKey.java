@@ -19,7 +19,7 @@ import org.jhotdraw8.xml.text.XmlWordListConverter;
 public class ObservableWordListStyleableKey extends AbstractStyleableKey<ImmutableList<String>> implements WritableStyleableMapAccessor<ImmutableList<String>> {
 
     private static final long serialVersionUID = 1L;
-    private Converter<ImmutableList<String>> converter = new XmlWordListConverter();
+    private final Converter<ImmutableList<String>> converter = new XmlWordListConverter();
 
     /**
      * Creates a new instance with the specified name and with null as the

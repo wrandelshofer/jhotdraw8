@@ -22,7 +22,7 @@ public class BezierNodePathIterator implements PathIterator {
     private int index;
     private final AffineTransform affine;
     private final int size;
-    private int windingRule;
+    private final int windingRule;
 
     private final BezierNode CLOSE_PATH = new BezierNode(0, 0);
 
@@ -82,7 +82,7 @@ public class BezierNodePathIterator implements PathIterator {
         }
     }
 
-    private @NonNull double[] temp_double = new double[6];
+    private final double @NonNull [] temp_double = new double[6];
 
     /**
      * Returns the coordinates and type of the current path segment in the

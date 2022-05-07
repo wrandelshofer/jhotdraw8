@@ -84,7 +84,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         elements.add(new ClosePath());
     }
 
-    private int controlPointMask;
+    private final int controlPointMask;
     private final @NonNull Region node;
     private Point2D pickLocation;
     private final int pointIndex;

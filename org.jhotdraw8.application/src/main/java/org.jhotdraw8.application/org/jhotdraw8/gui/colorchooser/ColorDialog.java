@@ -17,12 +17,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 public class ColorDialog extends HBox {
-    private final Stage dialog = new Stage();
+    private final @NonNull Stage dialog = new Stage();
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
-    private @NonNull ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
-    private @NonNull ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
+    private final @NonNull ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
+    private final @NonNull ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
 
     public ColorDialog() {
     }

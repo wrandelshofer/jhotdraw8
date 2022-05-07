@@ -43,7 +43,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     /**
      * The minimum size of a created figure (in view coordinates.
      */
-    private double minSize = 2;
+    private final double minSize = 2;
 
     public CreationTool(String name, Resources rsrc, Supplier<Figure> factory) {
         this(name, rsrc, factory, LayerFigure::new);

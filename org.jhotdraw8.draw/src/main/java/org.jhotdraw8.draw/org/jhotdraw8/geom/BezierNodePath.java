@@ -30,9 +30,9 @@ import java.util.List;
  */
 public class BezierNodePath implements Shape {
 
-    private boolean closed;
+    private final boolean closed;
     private List<BezierNode> nodes;
-    private int windingRule;
+    private final int windingRule;
 
     public BezierNodePath() {
         this(new ArrayList<>(), false, PathIterator.WIND_EVEN_ODD);

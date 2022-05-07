@@ -14,7 +14,7 @@ import java.io.Reader;
  */
 public class CharSequenceReader extends Reader {
 
-    private CharSequence buf;
+    private final CharSequence buf;
     private int pos;
 
     public CharSequenceReader(CharSequence buf) {

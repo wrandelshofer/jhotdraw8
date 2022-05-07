@@ -74,13 +74,14 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private @Nullable ReversedObservableList<Figure> layers;
 
-    private Supplier<Layer> layerFactory;
+    private final Supplier<Layer> layerFactory;
 
     private Node node;
 
-    private @NonNull HashMap<Layer, Integer> selectionCount = new HashMap<>();
+    private final @NonNull HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
-    private @Nullable ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
+    private @Nullable
+    final ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
         int changedRecursion = 0;
 
         @Override
@@ -93,7 +94,8 @@ public class LayersInspector extends AbstractDrawingInspector {
             changedRecursion--;
         }
     };
-    private @Nullable Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
+    private @Nullable
+    final Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
         @Override
         public void handle(@NonNull TreeModelEvent<Figure> event) {
             boolean fire = false;
@@ -129,7 +131,8 @@ public class LayersInspector extends AbstractDrawingInspector {
     };
 
 
-    private @NonNull InvalidationListener selectionInvalidationListener = new InvalidationListener() {
+    private @NonNull
+    final InvalidationListener selectionInvalidationListener = new InvalidationListener() {
         @Override
         public void invalidated(Observable observable) {
             onSelectionChanged();
@@ -361,7 +364,8 @@ public class LayersInspector extends AbstractDrawingInspector {
             this.io = io;
         }
 
-        private @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private @NonNull
+        final EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {

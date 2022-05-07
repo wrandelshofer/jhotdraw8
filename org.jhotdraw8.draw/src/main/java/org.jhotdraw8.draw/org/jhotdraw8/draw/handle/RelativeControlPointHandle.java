@@ -45,16 +45,6 @@ public class RelativeControlPointHandle extends AbstractHandle {
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
     private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
     private final @NonNull Region node;
-    /**
-     * Relative origin.
-     * <ul>
-     * <li>0,0=top left</li>
-     * <li>1,0=top right</li>
-     * <li>0,1=bottom left</li>
-     * <li>1,1=bottom right</li>
-     * </ul>
-     */
-    private @NonNull Point2D origin = new Point2D(0, 0);
     private Point2D pickLocation;
     private final MapAccessor<Point2D> pointKey;
     private final MapAccessor<Point2D> controlPointKey;

@@ -52,15 +52,15 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  */
 public class HitTestExampleMain extends Application {
-    private DoubleProperty width = new SimpleDoubleProperty(0.5);
-    private DoubleProperty miterLimit = new SimpleDoubleProperty(10);
-    private ObjectProperty<StrokeLineJoin> lineJoin = new SimpleObjectProperty<>(StrokeLineJoin.MITER);
+    private final @NonNull DoubleProperty width = new SimpleDoubleProperty(0.5);
+    private final @NonNull DoubleProperty miterLimit = new SimpleDoubleProperty(10);
+    private final @NonNull ObjectProperty<StrokeLineJoin> lineJoin = new SimpleObjectProperty<>(StrokeLineJoin.MITER);
     private Shape path = null;
-    private ImageView iview = new ImageView();
+    private final @NonNull ImageView iview = new ImageView();
     private StackPane canvas;
     private WritableImage image;
-    private Circle mouse = new Circle(0, 0, 4);
-    private DoubleProperty epsilon = mouse.radiusProperty();
+    private final @NonNull Circle mouse = new Circle(0, 0, 4);
+    private final @NonNull DoubleProperty epsilon = mouse.radiusProperty();
     private String ch = "H";
 
     @Override

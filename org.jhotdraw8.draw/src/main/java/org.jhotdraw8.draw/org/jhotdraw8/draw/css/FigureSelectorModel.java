@@ -54,14 +54,14 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     /**
      * Maps an attribute name to a key.
      */
-    private @NonNull Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
-    private @NonNull Map<Class<?>, Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
+    private final @NonNull Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
+    private final @NonNull Map<Class<?>, Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
     /**
      * Maps a key to an attribute name.
      */
-    private @NonNull ConcurrentHashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new ConcurrentHashMap<>();
-    private @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
+    private final @NonNull ConcurrentHashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new ConcurrentHashMap<>();
+    private final @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
 
     public FigureSelectorModel() {
     }
@@ -321,14 +321,14 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     for (CssToken t : cssTokens) {
                         switch (t.getType()) {
                         case CssTokenType.TT_NUMBER:
-                            buf.append(t.getNumericValueNonNull().toString());
+                            buf.append(t.getNumericValueNonNull());
                             break;
                         case CssTokenType.TT_PERCENTAGE:
-                            buf.append(t.getNumericValueNonNull().toString());
+                            buf.append(t.getNumericValueNonNull());
                             buf.append('%');
                             break;
                         case CssTokenType.TT_DIMENSION:
-                            buf.append(t.getNumericValueNonNull().toString());
+                            buf.append(t.getNumericValueNonNull());
                             if (t.getStringValue() != null) {
                                 buf.append(t.getStringValue());
                             }

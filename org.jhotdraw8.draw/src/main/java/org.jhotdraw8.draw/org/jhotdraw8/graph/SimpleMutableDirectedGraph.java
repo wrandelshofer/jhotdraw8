@@ -228,7 +228,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         if (vidxBox == null) {
             return;
         }
-        int vidx = (int) vidxBox;
+        int vidx = vidxBox;
         // Remove all outgoing vertices
         for (int i = getNextCount(vidx) - 1; i >= 0; i--) {
             int indexOfRemovedArrow = buildRemoveArrowAt(vidx, i);

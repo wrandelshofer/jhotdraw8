@@ -12,4 +12,4 @@ class SplitResult {
 
     SplitResult() {
     }
-};
+}

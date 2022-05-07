@@ -21,7 +21,7 @@ import java.util.Map;
 public class OpenFileAction extends AbstractOpenFileAction {
 
     public static final String ID = "file.open";
-    private boolean reuseEmptyViews = true;
+    private final boolean reuseEmptyViews = true;
 
     /**
      * Creates a new instance.

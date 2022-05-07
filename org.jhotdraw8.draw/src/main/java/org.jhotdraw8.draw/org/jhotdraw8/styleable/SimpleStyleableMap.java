@@ -49,7 +49,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private @Nullable CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
 
     private @Nullable CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
-    private @NonNull Map<K, Integer> keyMap;
+    private final @NonNull Map<K, Integer> keyMap;
     private final @NonNull StyleOrigin origin;
     private final int originOrdinal;
     private final @NonNull int[] sizes;
@@ -567,7 +567,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         @Override
         public @NonNull Iterator<Entry<K, V>> iterator() {
             return new Iterator<Entry<K, V>>() {
-                private @NonNull Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
+                private final @NonNull Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K lastKey;
@@ -659,7 +659,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         @Override
         public @NonNull Iterator<K> iterator() {
             return new Iterator<K>() {
-                private @NonNull Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
+                private @NonNull
+                final Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K lastKey;
@@ -799,7 +800,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         public @NonNull Iterator<V> iterator() {
             return new Iterator<V>() {
 
-                private @NonNull Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
+                private @NonNull
+                final Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K lastKey;

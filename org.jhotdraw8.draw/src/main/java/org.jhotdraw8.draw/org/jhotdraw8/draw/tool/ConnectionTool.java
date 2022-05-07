@@ -40,12 +40,12 @@ public class ConnectionTool extends AbstractTool {
     private @Nullable ConnectingFigure figure;
 
     private Supplier<ConnectingFigure> figureFactory;
-    private Supplier<Layer> layerFactory;
+    private final Supplier<Layer> layerFactory;
 
     /**
      * The minimum size of a created figure (in view coordinates.
      */
-    private double minSize = 2;
+    private final double minSize = 2;
 
     private @Nullable HandleType handleType = null;
 

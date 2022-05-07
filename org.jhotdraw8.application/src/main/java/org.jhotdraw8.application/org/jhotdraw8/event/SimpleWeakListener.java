@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public final class SimpleWeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {
 
     private final @NonNull WeakReference<Listener<E>> ref;
-    private Consumer<Listener<E>> removeListener;
+    private final Consumer<Listener<E>> removeListener;
 
     public SimpleWeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
         Objects.requireNonNull(listener, "listener");

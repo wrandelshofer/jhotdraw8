@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SimpleRenderContext implements WritableRenderContext {
-    private @NonNull Map<Figure, Node> nodeMap = new HashMap<>();
-    private @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    private final @NonNull Map<Figure, Node> nodeMap = new HashMap<>();
+    private final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
     public SimpleRenderContext() {
     }

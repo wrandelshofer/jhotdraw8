@@ -26,7 +26,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     /**
      * The base class
      */
-    private Class<?> baseClass = getClass();
+    private final Class<?> baseClass = getClass();
     /**
      * The base name of the resource bundle.
      */
@@ -44,7 +44,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     /**
      * The wrapped resource bundle.
      */
-    private transient ResourceBundle resource;
+    private final transient ResourceBundle resource;
 
     /**
      * Creates a new ClasspathResources object which wraps the provided resource bundle.

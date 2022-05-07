@@ -20,7 +20,7 @@ import org.jhotdraw8.util.Resources;
 public class RedoAction extends AbstractActivityAction<Activity> {
 
     public static final String ID = "edit.redo";
-    private Resources labels = ApplicationLabels.getResources();
+    private final Resources labels = ApplicationLabels.getResources();
 
     /*
     private PropertyChangeListener redoActionPropertyListener = new PropertyChangeListener() {

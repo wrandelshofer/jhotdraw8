@@ -39,8 +39,6 @@ public class FXGeom {
     private FXGeom() {
     }
 
-    ;
-
     /**
      * Gets the bounds of the specified shape.
      *

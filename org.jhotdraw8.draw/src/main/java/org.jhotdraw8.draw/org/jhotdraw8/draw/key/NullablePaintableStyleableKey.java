@@ -19,7 +19,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
 
     private static final long serialVersionUID = 1L;
 
-    private Converter<Paintable> converter;
+    private final Converter<Paintable> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the

@@ -102,7 +102,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
      * @param <E>      the element type
      * @return an immutable set of the provided elements
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> @NonNull ImmutableChampSet<E> of(E... elements) {
         return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY).copyAddAll(Arrays.asList(elements));

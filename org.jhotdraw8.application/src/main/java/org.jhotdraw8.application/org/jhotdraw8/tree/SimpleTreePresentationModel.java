@@ -91,7 +91,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         this.items = mapFactory.get();
     }
 
-    private boolean reversed = true;
+    private final boolean reversed = true;
     private final TreeItem<N> root = new LazyTreeItem<>(null);
 
     protected int updating;

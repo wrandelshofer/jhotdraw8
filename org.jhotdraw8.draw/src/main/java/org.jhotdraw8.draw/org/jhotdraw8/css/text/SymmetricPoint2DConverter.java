@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 public class SymmetricPoint2DConverter extends AbstractCssConverter<Point2D> {
 
     private final boolean withSpace;
-    private boolean withComma;
+    private final boolean withComma;
 
     public SymmetricPoint2DConverter() {
         this(false, true, false);

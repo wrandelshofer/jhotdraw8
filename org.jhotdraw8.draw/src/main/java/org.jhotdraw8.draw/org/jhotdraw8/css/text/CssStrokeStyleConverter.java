@@ -56,7 +56,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
     public static final String DASHOFFSET = "dashoffset";
     public static final String DASHARRAY = "dasharray";
     public static final String MITERLIMIT = "miterlimit";
-    private boolean printAllValues = true;
+    private final boolean printAllValues = true;
 
     public CssStrokeStyleConverter(boolean nullable) {
         super(nullable);

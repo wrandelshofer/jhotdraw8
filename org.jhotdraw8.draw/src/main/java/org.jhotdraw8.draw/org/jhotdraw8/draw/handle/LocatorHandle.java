@@ -20,7 +20,7 @@ import org.jhotdraw8.geom.Geom;
  */
 public abstract class LocatorHandle extends AbstractHandle {
 
-    private Locator locator;
+    private final Locator locator;
 
     /**
      * Initializes the LocatorHandle with the given Locator.

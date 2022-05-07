@@ -163,7 +163,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     /**
      * Counter for incrementing layer names.
      */
-    private @NonNull Map<String, Integer> counters = new HashMap<>();
+    private final @NonNull Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
     @FXML

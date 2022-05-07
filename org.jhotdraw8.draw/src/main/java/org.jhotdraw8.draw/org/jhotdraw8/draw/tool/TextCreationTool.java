@@ -42,7 +42,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
-    private @NonNull TextArea textArea = new TextArea();
+    private final @NonNull TextArea textArea = new TextArea();
     private @Nullable TextEditableFigure.TextEditorData editorData;
 
     /**
@@ -53,7 +53,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     /**
      * The minimum size of a created figure (in view coordinates.
      */
-    private double minSize = 2;
+    private final double minSize = 2;
 
     public TextCreationTool(String name, Resources rsrc, Supplier<TextEditableFigure> factory) {
         this(name, rsrc, factory, LayerFigure::new);

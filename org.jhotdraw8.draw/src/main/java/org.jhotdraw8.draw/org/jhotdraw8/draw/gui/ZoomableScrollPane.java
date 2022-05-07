@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.gui;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -17,7 +16,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.WritableValue;
 import javafx.collections.ObservableList;
 import javafx.css.CssMetaData;
 import javafx.css.PseudoClass;
@@ -306,7 +304,7 @@ public class ZoomableScrollPane extends GridPane {
 
                     @Override
                     public StyleableProperty<ScrollPane.ScrollBarPolicy> getStyleableProperty(ZoomableScrollPane n) {
-                        return (StyleableProperty<ScrollPane.ScrollBarPolicy>) (WritableValue<ScrollPane.ScrollBarPolicy>) n.hbarPolicyProperty();
+                        return (StyleableProperty<ScrollPane.ScrollBarPolicy>) n.hbarPolicyProperty();
                     }
                 };
 
@@ -323,7 +321,7 @@ public class ZoomableScrollPane extends GridPane {
 
                     @Override
                     public StyleableProperty<ScrollPane.ScrollBarPolicy> getStyleableProperty(ZoomableScrollPane n) {
-                        return (StyleableProperty<ScrollPane.ScrollBarPolicy>) (WritableValue<ScrollPane.ScrollBarPolicy>) n.vbarPolicyProperty();
+                        return (StyleableProperty<ScrollPane.ScrollBarPolicy>) n.vbarPolicyProperty();
                     }
                 };
 
@@ -338,7 +336,7 @@ public class ZoomableScrollPane extends GridPane {
 
                     @Override
                     public StyleableProperty<Boolean> getStyleableProperty(ZoomableScrollPane n) {
-                        return (StyleableProperty<Boolean>) (WritableValue<Boolean>) n.pannableProperty();
+                        return (StyleableProperty<Boolean>) n.pannableProperty();
                     }
                 };
 
@@ -720,17 +718,17 @@ public class ZoomableScrollPane extends GridPane {
      * then {@link #pannableProperty pannable} is consulted to determine if the events should be
      * used for panning.
      */
-    private BooleanProperty pannable;
+    private StyleableBooleanProperty pannable;
 
     public final void setPannable(boolean value) {
         pannableProperty().set(value);
     }
 
     public final boolean isPannable() {
-        return pannable == null ? false : pannable.get();
+        return pannable != null && pannable.get();
     }
 
-    public final BooleanProperty pannableProperty() {
+    public final StyleableBooleanProperty pannableProperty() {
         if (pannable == null) {
             pannable = new StyleableBooleanProperty(false) {
                 @Override

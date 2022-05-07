@@ -42,8 +42,8 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     private final @NonNull Region node;
     private Point2D oldPoint;
     private @Nullable Point2D pickLocation;
-    private double relativeX;
-    private double relativeY;
+    private final double relativeX;
+    private final double relativeY;
 
     public MultipleSelectionMoveHandle(double relativeX, double relativeY) {
         super(null);

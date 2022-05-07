@@ -16,10 +16,10 @@ public interface LabelConnectionFigure extends Figure {
      * layout observer relationship between the label and the target
      * figure.
      */
-    public static final @NonNull SimpleNullableKey<Figure> LABEL_TARGET = new SimpleNullableKey<>("labelTarget", Figure.class, null);
+    @NonNull SimpleNullableKey<Figure> LABEL_TARGET = new SimpleNullableKey<>("labelTarget", Figure.class, null);
     /**
      * The connector.
      */
-    public static final @NonNull SimpleNullableKey<Connector> LABEL_CONNECTOR = new SimpleNullableKey<>("labelConnector", Connector.class, null);
+    @NonNull SimpleNullableKey<Connector> LABEL_CONNECTOR = new SimpleNullableKey<>("labelConnector", Connector.class, null);
 
 }

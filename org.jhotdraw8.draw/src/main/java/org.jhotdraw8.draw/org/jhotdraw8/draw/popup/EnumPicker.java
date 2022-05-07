@@ -23,7 +23,7 @@ public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
     private BiConsumer<Boolean, T> callback;
-    private @NonNull Converter<T> converter;
+    private final @NonNull Converter<T> converter;
     private final @NonNull Class<T> enumClazz;
 
     public EnumPicker(@NonNull Class<T> enumClazz, @NonNull Converter<T> converter) {

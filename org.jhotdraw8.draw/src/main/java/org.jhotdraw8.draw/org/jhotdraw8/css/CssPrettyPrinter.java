@@ -16,10 +16,10 @@ public class CssPrettyPrinter implements Appendable {
         STYLESHEET, SELECTOR, DECLARATION_KEY, DECLARATION_VALUE, ROUND_BLOCK, SQUARE_BLOCK, CURLY_BLOCK
     }
 
-    private @NonNull Deque<Syntax> stack = new ArrayDeque<>();
+    private final @NonNull Deque<Syntax> stack = new ArrayDeque<>();
     int indentation = 0;
     private String indenter = "\t";
-    private Appendable w;
+    private final Appendable w;
     private boolean mustIndent = false;
 
     public CssPrettyPrinter(Appendable w) {

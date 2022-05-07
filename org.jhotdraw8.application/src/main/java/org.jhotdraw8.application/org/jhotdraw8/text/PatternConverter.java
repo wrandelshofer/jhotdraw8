@@ -705,7 +705,7 @@ public class PatternConverter implements Converter<Object[]> {
                 throw new IOException("RegexCharclass character expected @"
                         + (tt.getStartPosition() + offset));
             case '\'':
-                regex.chars += (tt.sval.isEmpty()) ? "\'" : tt.sval;
+                regex.chars += (tt.sval.isEmpty()) ? "'" : tt.sval;
                 break;
             default:
                 regex.chars += (char) tt.ttype;
@@ -762,7 +762,7 @@ public class PatternConverter implements Converter<Object[]> {
 
                 switch (tt.ttype) {
                 case '\'':
-                    type.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    type.append((tt.sval.isEmpty()) ? "'" : tt.sval);
                     break;
                 default:
                     type.append((char) tt.ttype);
@@ -799,7 +799,7 @@ public class PatternConverter implements Converter<Object[]> {
 
             switch (tt.ttype) {
             case '\'':
-                style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                style.append((tt.sval.isEmpty()) ? "'" : tt.sval);
                 break;
             case '{':
                 style.append('{');
@@ -841,7 +841,7 @@ public class PatternConverter implements Converter<Object[]> {
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
                 case '\'':
-                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    style.append((tt.sval.isEmpty()) ? "'" : tt.sval);
                     break;
                 default:
                     style.append((char) tt.ttype);
@@ -866,7 +866,7 @@ public class PatternConverter implements Converter<Object[]> {
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
                 case '\'':
-                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    style.append((tt.sval.isEmpty()) ? "'" : tt.sval);
                     break;
                 case '{':
                     style.append('{');
@@ -915,7 +915,7 @@ public class PatternConverter implements Converter<Object[]> {
                     && tt.ttype != StreamPosTokenizer.TT_EOF) {
                 switch (tt.ttype) {
                 case '\'':
-                    style.append((tt.sval.isEmpty()) ? "\'" : tt.sval);
+                    style.append((tt.sval.isEmpty()) ? "'" : tt.sval);
                     break;
                 case '{':
                     style.append('{');

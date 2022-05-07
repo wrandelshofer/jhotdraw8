@@ -107,29 +107,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
      * The name of the {@link #showingProperty}.
      */
     public static final String SHOWING_PROPERTY = "showing";
-
-    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
-
-    {
-        showing.addListener((o, oldv, newv) -> {
-            if (newv) {
-                Platform.runLater(this::validateTextArea);
-            }
-        });
-    }
-
-    public @NonNull BooleanProperty showingProperty() {
-        return showing;
-    }
-
-    public boolean isShowing() {
-        return showingProperty().get();
-    }
-
-    public void setShowing(boolean newValue) {
-        showingProperty().set(newValue);
-    }
-
     /**
      * This placeholder is displayed to indicate that no value has
      * been specified for this property.
@@ -141,7 +118,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
      * {@link CssTokenType#IDENT_REVERT},
      * {@link CssTokenType#IDENT_UNSET},
      */
-    public static final String UNSPECIFIED_VALUE_PLACEHOLDER = "  ";//"/* unspecified value */";
+    public static final @NonNull String UNSPECIFIED_VALUE_PLACEHOLDER = "  ";//"/* unspecified value */";
     /**
      * This placeholder is displayed to indicate that multiple values have
      * been specified for this property.
@@ -149,30 +126,14 @@ public abstract class AbstractStyleAttributesInspector<E> {
      * The placeholder should be a comment, e.g. "/* multiple values * /",
      * or white space, e.g. "  ".
      */
-    public static final String MULTIPLE_VALUES_PLACEHOLDER = "/* multiple values */";
-    private final ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
-
-    private final ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
-    private @NonNull SetProperty<E> selection = new SimpleSetProperty<>();
-
-    {
-        SetChangeListener<E> listener = change -> {
-            invalidateTextArea(selection);
-        };
-        selection.addListener((o, oldv, newv) -> {
-            if (oldv != null) {
-                oldv.removeListener(listener);
-            }
-            if (newv != null) {
-                newv.addListener(listener);
-                invalidateTextArea(selection);
-            }
-        });
-    }
-
-    private Node node;
+    public static final @NonNull String MULTIPLE_VALUES_PLACEHOLDER = "/* multiple values */";
+    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
+    private final @NonNull ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
+    private final @NonNull ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
+    private final @NonNull SetProperty<E> selection = new SimpleSetProperty<>();
     private final @NonNull Map<QualifiedName, String> helpTexts = new HashMap<>();
     private final @NonNull List<LookupEntry> lookupTable = new ArrayList<>();
+    private Node node;
     @FXML
     private Button applyButton;
     @FXML
@@ -196,6 +157,30 @@ public abstract class AbstractStyleAttributesInspector<E> {
     @FXML
     private RadioButton showAppliedValues;
     private boolean textAreaValid = true;
+    private boolean isApplying;
+
+    {
+        showing.addListener((o, oldv, newv) -> {
+            if (newv) {
+                Platform.runLater(this::validateTextArea);
+            }
+        });
+    }
+
+    {
+        SetChangeListener<E> listener = change -> {
+            invalidateTextArea(selection);
+        };
+        selection.addListener((o, oldv, newv) -> {
+            if (oldv != null) {
+                oldv.removeListener(listener);
+            }
+            if (newv != null) {
+                newv.addListener(listener);
+                invalidateTextArea(selection);
+            }
+        });
+    }
 
     public AbstractStyleAttributesInspector() {
         this(StyleAttributesInspector.class.getResource("StyleAttributesInspector.fxml"));
@@ -252,8 +237,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
         isApplying = false;
     }
 
-    protected abstract void recreateHandles();
-
     /**
      * Attribute filter can be used to show only a specific set
      * of attributes in the inspector.
@@ -264,8 +247,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return attributeFilter;
     }
 
-    protected abstract @NonNull Iterable<E> getEntities();
-
     private @Nullable String buildString(@Nullable List<CssToken> attribute) {
         if (attribute == null) {
             return null;
@@ -275,6 +256,54 @@ public abstract class AbstractStyleAttributesInspector<E> {
             buf.append(t.fromToken());
         }
         return buf.toString();
+    }
+
+    private @NonNull Map<QualifiedName, String> collectAttributeValues(boolean decompose, @NonNull List<E> matchedFigures, @NonNull SelectorModel<E> selectorModel) {
+        final StyleOrigin origin;
+        if (showAttributeValues.isSelected()) {
+            origin = StyleOrigin.USER;
+        } else if (showStylesheetValues.isSelected()) {
+            origin = StyleOrigin.AUTHOR;
+        } else if (showUserAgentValues.isSelected()) {
+            origin = StyleOrigin.USER_AGENT;
+        } else {
+            origin = null;
+        }
+        Map<QualifiedName, String> attr = new TreeMap<>();
+        Predicate<QualifiedName> filter = getAttributeFilter();
+        boolean first = true;
+        for (E f : matchedFigures) {
+            selectorModel.getAttributeNames(f);
+
+            if (first) {
+                first = false;
+                for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
+                    if (!filter.test(qname)) {
+                        continue;
+                    }
+                    String attribute = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
+                    attr.put(qname, attribute == null ? UNSPECIFIED_VALUE_PLACEHOLDER : attribute);
+                }
+            } else {
+                attr.keySet().retainAll(selectorModel.getAttributeNames(f));
+                for (QualifiedName qname : attr.keySet()) {
+                    if (!filter.test(qname)) {
+                        continue;
+                    }
+                    String oldAttrValue = attr.get(qname);
+                    if (oldAttrValue != null) {
+                        String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
+                        if (newAttrValue == null) {
+                            newAttrValue = UNSPECIFIED_VALUE_PLACEHOLDER;
+                        }
+                        if (!oldAttrValue.equals(newAttrValue)) {
+                            attr.put(qname, MULTIPLE_VALUES_PLACEHOLDER);
+                        }
+                    }
+                }
+            }
+        }
+        return attr;
     }
 
     protected void collectHelpTexts(@NonNull Collection<E> figures) {
@@ -351,6 +380,48 @@ public abstract class AbstractStyleAttributesInspector<E> {
         return pseudoStyles;
     }
 
+    private @NonNull SelectorGroup createSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
+        String id = null;
+        QualifiedName type = null;
+        Set<String> styleClasses = new TreeSet<>();
+        boolean first = true;
+        for (E f : selection) {
+            if (first) {
+                id = selectorModel.getId(f);
+                type = selectorModel.getType(f);
+                first = false;
+                styleClasses.addAll(selectorModel.getStyleClasses(f).asCollection());
+            } else {
+                id = null;
+                type = Objects.equals(selectorModel.getType(f), type) ? type : null;
+                styleClasses.retainAll(selectorModel.getStyleClasses(f).asCollection());
+            }
+        }
+
+        List<SimpleSelector> selectors = new ArrayList<>();
+        if (type != null && !type.getName().isEmpty()) {
+            selectors.add(new TypeSelector(SelectorModel.ANY_NAMESPACE, type.getName()));
+        }
+        if (id != null && id.length() > 0) {
+            selectors.add(new IdSelector(id));
+        }
+        for (String clazz : styleClasses) {
+            selectors.add(new ClassSelector(clazz));
+        }
+        selectors.add(new SimplePseudoClassSelector("selected"));
+
+        Selector prev = null;
+        Collections.reverse(selectors);
+        for (SimpleSelector s : selectors) {
+            if (prev != null) {
+                prev = new AndCombinator(s, prev);
+            } else {
+                prev = s;
+            }
+        }
+        return new SelectorGroup(Arrays.asList(prev));
+    }
+
     /**
      * This method is invoked when this inspector has changed properties of
      * the specified element.
@@ -376,6 +447,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     protected abstract @Nullable Converter<?> getConverter(SelectorModel<E> selectorModel, E f, String namespace, String name);
+
+    protected abstract @NonNull Iterable<E> getEntities();
 
     private @Nullable LookupEntry getLookupEntryAt(@NonNull int caretPosition) {
         int insertionPoint = Collections.binarySearch(lookupTable, new LookupEntry(caretPosition, null, null));
@@ -407,35 +480,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     protected TextArea getTextArea() {
         return textArea;
-    }
-
-    protected void onCaretPositionChanged(Observable o, Number oldv, @NonNull Number newv) {
-        LookupEntry entry = getLookupEntryAt(newv.intValue());
-        Declaration d = entry == null ? null : entry.declaration;
-        String helpText = null;
-        if (d != null) {
-            helpText = helpTexts.get(new QualifiedName(d.getNamespace(), d.getPropertyName()));
-        }
-
-        StylesheetsManager<E> sm = getStyleManager();
-
-        String smHelpText = sm.getHelpText();
-        if (helpText == null) {
-            helpText = smHelpText;
-        } else if (smHelpText == null || !smHelpText.isEmpty()) {
-            helpText = helpText + "\n\n" + smHelpText;
-        }
-
-
-        setHelpText(helpText);
-    }
-
-    private void onTextAreaClicked(@NonNull MouseEvent mouseEvent) {
-        if (mouseEvent.getClickCount() == 2 && mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
-            mouseEvent.consume();
-            int caretPosition = getTextArea().getCaretPosition();
-            showPicker(caretPosition, mouseEvent.getScreenX(), mouseEvent.getScreenY());
-        }
     }
 
     protected void init(@NonNull URL fxmlUrl) {
@@ -527,6 +571,72 @@ public abstract class AbstractStyleAttributesInspector<E> {
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
         textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
     }
+
+    protected void invalidateTextArea(Observable observable) {
+        if (!isApplying && textAreaValid && updateContentsCheckBox.isSelected()) {
+            textAreaValid = false;
+            if (isShowing()) {
+                Platform.runLater(this::validateTextArea);
+            }
+        }
+    }
+
+    public boolean isShowing() {
+        return showingProperty().get();
+    }
+
+    public void setShowing(boolean newValue) {
+        showingProperty().set(newValue);
+    }
+
+    protected void onCaretPositionChanged(Observable o, Number oldv, @NonNull Number newv) {
+        LookupEntry entry = getLookupEntryAt(newv.intValue());
+        Declaration d = entry == null ? null : entry.declaration;
+        String helpText = null;
+        if (d != null) {
+            helpText = helpTexts.get(new QualifiedName(d.getNamespace(), d.getPropertyName()));
+        }
+
+        StylesheetsManager<E> sm = getStyleManager();
+
+        String smHelpText = sm.getHelpText();
+        if (helpText == null) {
+            helpText = smHelpText;
+        } else if (smHelpText == null || !smHelpText.isEmpty()) {
+            helpText = helpText + "\n\n" + smHelpText;
+        }
+
+
+        setHelpText(helpText);
+    }
+
+    private void onTextAreaClicked(@NonNull MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2 && mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
+            mouseEvent.consume();
+            int caretPosition = getTextArea().getCaretPosition();
+            showPicker(caretPosition, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+        }
+    }
+
+    private SelectorGroup parseSelector() {
+        CssParser parser = new CssParser();
+        try {
+            Stylesheet s = parser.parseStylesheet(textArea.getText(), null);
+            if (!parser.getParseExceptions().isEmpty()) {
+                System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
+                return new SelectorGroup(Collections.emptyList());
+            }
+            for (StyleRule styleRule : s.getStyleRules()) {
+                return styleRule.getSelectorGroup();
+            }
+
+            return new SelectorGroup(Collections.emptyList());
+        } catch (IOException e) {
+            return new SelectorGroup(Collections.emptyList());
+        }
+    }
+
+    protected abstract void recreateHandles();
 
     protected abstract void remove(E f, WritableStyleableMapAccessor<Object> finalSelectedAccessor);
 
@@ -632,8 +742,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     }
 
-    private boolean isApplying;
-
     /**
      * This method shows the selection in the drawing view, by scrolling
      * the selected elements into the view and "jiggling" the handles.
@@ -642,22 +750,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
      */
     protected abstract void showSelection();
 
-    protected void invalidateTextArea(Observable observable) {
-        if (!isApplying && textAreaValid && updateContentsCheckBox.isSelected()) {
-            textAreaValid = false;
-            if (isShowing()) {
-                Platform.runLater(this::validateTextArea);
-            }
-        }
-    }
-
-    private void validateTextArea() {
-        if (!textAreaValid) {
-            if (updateContentsCheckBox.isSelected()) {
-                updateTextArea();
-            }
-            textAreaValid = true;
-        }
+    public @NonNull BooleanProperty showingProperty() {
+        return showing;
     }
 
     protected void updateLookupTable(Observable o) {
@@ -672,6 +766,14 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private SelectorGroup updateSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
+        if (updateSelectorCheckBox.isSelected()) {
+            return createSelector(selection, selectorModel);
+        } else {
+            return parseSelector();
         }
     }
 
@@ -690,63 +792,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
         prefs.put("shownValues", origin);
 
         invalidateTextArea(null);
-    }
-
-    protected void updateTextArea() {
-        final boolean decompose = !composeAttributesCheckBox.isSelected();
-
-        // handling of emptyness must be consistent with code in apply() method
-        Set<E> selectedOrRoot = new LinkedHashSet<>(getSelection());
-        if (selectedOrRoot.isEmpty()) {
-            selectedOrRoot.add(getRoot());
-        }
-
-        StylesheetsManager<E> styleManager = getStyleManager();
-        ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
-        Set<E> fs = new LinkedHashSet<>(selectedOrRoot);
-        pseudoStyles.put("selected", fs);
-        StylesheetsManager<E> sm = getStyleManager();
-        if (sm == null) {
-            return;
-        }
-        SelectorModel<E> selectorModel = sm.getSelectorModel();
-        selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-        SelectorGroup selector = updateSelector(selectedOrRoot, selectorModel);
-
-        List<E> matchedFigures;
-        if (updateSelectorCheckBox.isSelected()) {
-            matchedFigures = new ArrayList<>(getSelection());
-        } else {
-            matchedFigures =
-                    StreamSupport.stream(getEntities().spliterator(), true).filter(entity ->
-                            selector.matches(selectorModel, entity)).collect(Collectors.toList());
-        }
-
-
-        collectHelpTexts(selectedOrRoot);
-        Map<QualifiedName, String> attr = collectAttributeValues(decompose, matchedFigures, selectorModel);
-
-        StringBuilder buf = new StringBuilder();
-        CssPrettyPrinter pp = new CssPrettyPrinter(buf);
-        selector.produceTokens(t -> pp.append(t.fromToken()));
-        pp.append(" {");
-        for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
-            pp.append("\n  ").append(a.getKey().getName()).append(": ");
-            pp.append(a.getValue());
-            pp.append(";");
-        }
-        pp.append("\n}");
-
-        updateStylesheetInfo(pp, matchedFigures, styleManager);
-
-        textArea.setText(buf.toString());
-        int rows = 1;
-        for (int i = 0; i < buf.length(); i++) {
-            if (buf.charAt(i) == '\n') {
-                rows++;
-            }
-        }
-        textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
     private void updateStylesheetInfo(CssPrettyPrinter pp, List<E> matchedFigures, StylesheetsManager<E> styleManager) {
@@ -806,120 +851,70 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    private @NonNull Map<QualifiedName, String> collectAttributeValues(boolean decompose, @NonNull List<E> matchedFigures, @NonNull SelectorModel<E> selectorModel) {
-        final StyleOrigin origin;
-        if (showAttributeValues.isSelected()) {
-            origin = StyleOrigin.USER;
-        } else if (showStylesheetValues.isSelected()) {
-            origin = StyleOrigin.AUTHOR;
-        } else if (showUserAgentValues.isSelected()) {
-            origin = StyleOrigin.USER_AGENT;
-        } else {
-            origin = null;
-        }
-        Map<QualifiedName, String> attr = new TreeMap<>();
-        Predicate<QualifiedName> filter = getAttributeFilter();
-        boolean first = true;
-        for (E f : matchedFigures) {
-            selectorModel.getAttributeNames(f);
+    protected void updateTextArea() {
+        final boolean decompose = !composeAttributesCheckBox.isSelected();
 
-            if (first) {
-                first = false;
-                for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
-                    if (!filter.test(qname)) {
-                        continue;
-                    }
-                    String attribute = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
-                    attr.put(qname, attribute == null ? UNSPECIFIED_VALUE_PLACEHOLDER : attribute);
-                }
-            } else {
-                attr.keySet().retainAll(selectorModel.getAttributeNames(f));
-                for (QualifiedName qname : attr.keySet()) {
-                    if (!filter.test(qname)) {
-                        continue;
-                    }
-                    String oldAttrValue = attr.get(qname);
-                    if (oldAttrValue != null) {
-                        String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
-                        if (newAttrValue == null) {
-                            newAttrValue = UNSPECIFIED_VALUE_PLACEHOLDER;
-                        }
-                        if (!oldAttrValue.equals(newAttrValue)) {
-                            attr.put(qname, MULTIPLE_VALUES_PLACEHOLDER);
-                        }
-                    }
-                }
-            }
+        // handling of emptyness must be consistent with code in apply() method
+        Set<E> selectedOrRoot = new LinkedHashSet<>(getSelection());
+        if (selectedOrRoot.isEmpty()) {
+            selectedOrRoot.add(getRoot());
         }
-        return attr;
-    }
 
-    private SelectorGroup updateSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
+        StylesheetsManager<E> styleManager = getStyleManager();
+        ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
+        Set<E> fs = new LinkedHashSet<>(selectedOrRoot);
+        pseudoStyles.put("selected", fs);
+        StylesheetsManager<E> sm = getStyleManager();
+        if (sm == null) {
+            return;
+        }
+        SelectorModel<E> selectorModel = sm.getSelectorModel();
+        selectorModel.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
+        SelectorGroup selector = updateSelector(selectedOrRoot, selectorModel);
+
+        List<E> matchedFigures;
         if (updateSelectorCheckBox.isSelected()) {
-            return createSelector(selection, selectorModel);
+            matchedFigures = new ArrayList<>(getSelection());
         } else {
-            return parseSelector();
+            matchedFigures =
+                    StreamSupport.stream(getEntities().spliterator(), true).filter(entity ->
+                            selector.matches(selectorModel, entity)).collect(Collectors.toList());
         }
+
+
+        collectHelpTexts(selectedOrRoot);
+        Map<QualifiedName, String> attr = collectAttributeValues(decompose, matchedFigures, selectorModel);
+
+        StringBuilder buf = new StringBuilder();
+        CssPrettyPrinter pp = new CssPrettyPrinter(buf);
+        selector.produceTokens(t -> pp.append(t.fromToken()));
+        pp.append(" {");
+        for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
+            pp.append("\n  ").append(a.getKey().getName()).append(": ");
+            pp.append(a.getValue());
+            pp.append(";");
+        }
+        pp.append("\n}");
+
+        updateStylesheetInfo(pp, matchedFigures, styleManager);
+
+        textArea.setText(buf.toString());
+        int rows = 1;
+        for (int i = 0; i < buf.length(); i++) {
+            if (buf.charAt(i) == '\n') {
+                rows++;
+            }
+        }
+        textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
-    private SelectorGroup parseSelector() {
-        CssParser parser = new CssParser();
-        try {
-            Stylesheet s = parser.parseStylesheet(textArea.getText(), null);
-            if (!parser.getParseExceptions().isEmpty()) {
-                System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
-                return new SelectorGroup(Collections.emptyList());
+    private void validateTextArea() {
+        if (!textAreaValid) {
+            if (updateContentsCheckBox.isSelected()) {
+                updateTextArea();
             }
-            for (StyleRule styleRule : s.getStyleRules()) {
-                return styleRule.getSelectorGroup();
-            }
-
-            return new SelectorGroup(Collections.emptyList());
-        } catch (IOException e) {
-            return new SelectorGroup(Collections.emptyList());
+            textAreaValid = true;
         }
-    }
-
-    private @NonNull SelectorGroup createSelector(@NonNull Set<E> selection, @NonNull SelectorModel<E> selectorModel) {
-        String id = null;
-        QualifiedName type = null;
-        Set<String> styleClasses = new TreeSet<>();
-        boolean first = true;
-        for (E f : selection) {
-            if (first) {
-                id = selectorModel.getId(f);
-                type = selectorModel.getType(f);
-                first = false;
-                styleClasses.addAll(selectorModel.getStyleClasses(f).asCollection());
-            } else {
-                id = null;
-                type = Objects.equals(selectorModel.getType(f), type) ? type : null;
-                styleClasses.retainAll(selectorModel.getStyleClasses(f).asCollection());
-            }
-        }
-
-        List<SimpleSelector> selectors = new ArrayList<>();
-        if (type != null && !type.getName().isEmpty()) {
-            selectors.add(new TypeSelector(SelectorModel.ANY_NAMESPACE, type.getName()));
-        }
-        if (id != null && id.length() > 0) {
-            selectors.add(new IdSelector(id));
-        }
-        for (String clazz : styleClasses) {
-            selectors.add(new ClassSelector(clazz));
-        }
-        selectors.add(new SimplePseudoClassSelector("selected"));
-
-        Selector prev = null;
-        Collections.reverse(selectors);
-        for (SimpleSelector s : selectors) {
-            if (prev != null) {
-                prev = new AndCombinator(s, prev);
-            } else {
-                prev = s;
-            }
-        }
-        return new SelectorGroup(Arrays.asList(prev));
     }
 
     private static class LookupEntry implements Comparable<LookupEntry> {

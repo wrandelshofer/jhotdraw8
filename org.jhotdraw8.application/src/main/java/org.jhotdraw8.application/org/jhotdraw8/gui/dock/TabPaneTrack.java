@@ -23,7 +23,7 @@ import org.jhotdraw8.binding.CustomBinding;
 public class TabPaneTrack extends AbstractDockParent implements Track {
 
     private final TabPane tabPane = new TabPane();
-    private @NonNull ResizePane resizePane = new ResizePane();
+    private final @NonNull ResizePane resizePane = new ResizePane();
 
     static class MyTab extends Tab {
         private final DockableDragHandler dockableDragHandler;
@@ -85,7 +85,7 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
         if (c instanceof Dockable) {
             Dockable k = (Dockable) c;
             MyTab tab = new MyTab(k, k.getText(), k.getNode());
-            tab.graphicProperty().bind(CustomBinding.<Node>compute(k::getGraphic, k.graphicProperty(), editableProperty()));
+            tab.graphicProperty().bind(CustomBinding.compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;
         } else {
             return new MyTab(c, "-", c.getNode());

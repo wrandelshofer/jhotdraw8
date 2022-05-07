@@ -28,10 +28,10 @@ import org.jhotdraw8.geom.FXTransforms;
  * @author Werner Randelshofer
  */
 public class LineOutlineHandle extends AbstractHandle {
-    private Group node;
-    private Polyline polyline2;
-    private Polyline polyline1;
-    private double[] points;
+    private final Group node;
+    private final Polyline polyline2;
+    private final Polyline polyline1;
+    private final double[] points;
 
     public LineOutlineHandle(Figure figure) {
         super(figure);

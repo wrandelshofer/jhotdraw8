@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class CssColorDialog {
+    private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
+    private final @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(NamedCssColor.TRANSPARENT);
     @Nullable ButtonType chooseButtonType;
     @Nullable ButtonType cancelButtonType;
     private CssColorChooserController controller;
@@ -59,8 +61,6 @@ public class CssColorDialog {
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
-    private @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
-    private @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(NamedCssColor.TRANSPARENT);
 
     public CssColorDialog(Window owner) {
         final Resources labels = ApplicationLabels.getGuiResources();

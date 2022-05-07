@@ -42,10 +42,10 @@ import java.util.function.Function;
  */
 public class XmlConnectorConverter implements Converter<Connector> {
 
-    private @NonNull CssLocatorConverter locatorConverter = new CssLocatorConverter();
+    private final @NonNull CssLocatorConverter locatorConverter = new CssLocatorConverter();
 
-    private static final HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
-    private static final HashMap<Class<? extends Connector>, String> connectorToChoiceMap = new HashMap<>();
+    private static final @NonNull HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
+    private static final @NonNull HashMap<Class<? extends Connector>, String> connectorToChoiceMap = new HashMap<>();
 
     static {
         connectorToChoiceMap.put(PathConnector.class, "path");
@@ -81,7 +81,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
         c = parseConnector(tt, idResolver);
 
         if (!buf.toString().trim().isEmpty()) {
-            throw new ParseException("Locator: End expected, found:" + buf.toString(), buf.position());
+            throw new ParseException("Locator: End expected, found:" + buf, buf.position());
         }
         return c;
     }

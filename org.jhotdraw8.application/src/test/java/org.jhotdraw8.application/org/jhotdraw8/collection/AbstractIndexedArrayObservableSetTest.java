@@ -123,7 +123,8 @@ public abstract class AbstractIndexedArrayObservableSetTest {
 
     private static class ChangeRecorder implements ListChangeListener<Character> {
 
-        private @NonNull StringBuilder buf = new StringBuilder();
+        private @NonNull
+        final StringBuilder buf = new StringBuilder();
 
         @Override
         public void onChanged(@NonNull ListChangeListener.Change<? extends Character> c) {

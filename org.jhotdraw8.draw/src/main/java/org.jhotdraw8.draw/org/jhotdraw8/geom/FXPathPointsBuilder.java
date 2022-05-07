@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> {
 
+    private final @NonNull List<PathElement> elements;
     private boolean needsSquareAtLastPoint;
     private double squareSize = 5;
 
@@ -27,21 +28,36 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
         this(5, new ArrayList<>());
     }
 
-    public FXPathPointsBuilder(List<PathElement> elements) {
+    public FXPathPointsBuilder(@NonNull List<PathElement> elements) {
         this(5, elements);
     }
 
-    public FXPathPointsBuilder(double squareSize, List<PathElement> elements) {
+    public FXPathPointsBuilder(double squareSize, @NonNull List<PathElement> elements) {
         this.elements = elements;
         this.squareSize = squareSize;
+    }
+
+    private void addSquare(double x, double y) {
+        double halfSize = squareSize * 0.5;
+        elements.add(new MoveTo(x - halfSize, y - halfSize));
+        elements.add(new LineTo(x + halfSize, y - halfSize));
+        elements.add(new LineTo(x + halfSize, y + halfSize));
+        elements.add(new LineTo(x - halfSize, y + halfSize));
+        elements.add(new ClosePath());
+    }
+
+    public @NonNull List<PathElement> build() {
+        if (needsSquareAtLastPoint) {
+            addSquare(getLastX(), getLastY());
+            needsSquareAtLastPoint = false;
+        }
+        return elements;
     }
 
     @Override
     protected void doArcTo(double rx, double ry, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         needsSquareAtLastPoint = true;
     }
-
-    private List<PathElement> elements;
 
     @Override
     protected void doClosePath() {
@@ -71,16 +87,13 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
     }
 
     @Override
-    protected void doQuadTo(double x, double y, double x0, double y0) {
-        needsSquareAtLastPoint = true;
+    protected void doPathDone() {
+// empty
     }
 
-    public @NonNull List<PathElement> build() {
-        if (needsSquareAtLastPoint) {
-            addSquare(getLastX(), getLastY());
-            needsSquareAtLastPoint = false;
-        }
-        return elements;
+    @Override
+    protected void doQuadTo(double x, double y, double x0, double y0) {
+        needsSquareAtLastPoint = true;
     }
 
     public List<PathElement> getElements() {
@@ -89,20 +102,6 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
             needsSquareAtLastPoint = false;
         }
         return elements;
-    }
-
-    private void addSquare(double x, double y) {
-        double halfSize = squareSize * 0.5;
-        elements.add(new MoveTo(x - halfSize, y - halfSize));
-        elements.add(new LineTo(x + halfSize, y - halfSize));
-        elements.add(new LineTo(x + halfSize, y + halfSize));
-        elements.add(new LineTo(x - halfSize, y + halfSize));
-        elements.add(new ClosePath());
-    }
-
-    @Override
-    protected void doPathDone() {
-// empty
     }
 
 }

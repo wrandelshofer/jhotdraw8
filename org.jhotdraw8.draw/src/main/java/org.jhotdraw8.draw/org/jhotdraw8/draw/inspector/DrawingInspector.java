@@ -44,11 +44,11 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private ColorPicker backgroundColorPicker;
 
-    private @NonNull Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
+    private final @NonNull Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
     private @Nullable Property<CssColor> boundBackgroundProperty;
 
-    private @NonNull ChangeListener<CssSize> sizeCommitHandler = (o, oldv, newv) -> commitEdits();
-    private @NonNull ChangeListener<CssColor> colorCommitHandler = (o, oldv, newv) -> commitEdits();
+    private final @NonNull ChangeListener<CssSize> sizeCommitHandler = (o, oldv, newv) -> commitEdits();
+    private final @NonNull ChangeListener<CssColor> colorCommitHandler = (o, oldv, newv) -> commitEdits();
     @FXML
     private TextField xField;
     @FXML
@@ -155,7 +155,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
             widthProperty.addListener(sizeCommitHandler);
             heightProperty.addListener(sizeCommitHandler);
             myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
-            myBackgroundProperty.addListener((ChangeListener<? super CssColor>) colorCommitHandler);
+            myBackgroundProperty.addListener(colorCommitHandler);
 
             xField.textProperty().bindBidirectional(xProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
             yField.textProperty().bindBidirectional(yProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));

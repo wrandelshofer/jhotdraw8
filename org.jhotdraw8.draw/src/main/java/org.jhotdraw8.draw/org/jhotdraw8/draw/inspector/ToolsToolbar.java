@@ -47,7 +47,7 @@ public class ToolsToolbar extends GridPane {
     private final @NonNull ChangeListener<Tool> activeToolHandler = (o, oldValue, newValue) -> {
 
         for (Toggle button : group.getToggles()) {
-            if (((Tool) button.getUserData()) == newValue) {
+            if (button.getUserData() == newValue) {
                 button.setSelected(true);
                 break;
             }

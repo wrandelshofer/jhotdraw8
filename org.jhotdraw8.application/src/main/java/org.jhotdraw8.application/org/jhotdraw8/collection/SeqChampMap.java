@@ -390,8 +390,6 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
         return new ImmutableSeqChampMap<>(root, size, lastSequenceNumber);
     }
 
-    ;
-
     private Object writeReplace() {
         return new SerializationProxy<K, V>(this);
     }

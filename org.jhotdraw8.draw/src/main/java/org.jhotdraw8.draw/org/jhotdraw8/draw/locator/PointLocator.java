@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.figure.Figure;
 public class PointLocator extends AbstractLocator {
 
     private static final long serialVersionUID = 1L;
-    private NonNullMapAccessor<CssPoint2D> key;
+    private final NonNullMapAccessor<CssPoint2D> key;
 
     public PointLocator(NonNullMapAccessor<CssPoint2D> key) {
         this.key = key;

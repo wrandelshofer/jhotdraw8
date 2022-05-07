@@ -66,7 +66,6 @@ public interface SystemColorConverter {
      * Disabled text. (Often, but not necessarily, gray.)
      */
     String GRAY_TEXT = "graytext";
-    ;
 
     /**
      * Converts the specified value from input unit to a Color value.

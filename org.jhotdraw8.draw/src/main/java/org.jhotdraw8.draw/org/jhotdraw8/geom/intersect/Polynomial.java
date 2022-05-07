@@ -44,7 +44,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * Holds the coefficients from lowest to highest degree, that is
      * {@literal coefs[i]*x^i}.
      */
-    private double[] coefs;
+    private final double[] coefs;
 
     /**
      * Creates a new polynomial.
