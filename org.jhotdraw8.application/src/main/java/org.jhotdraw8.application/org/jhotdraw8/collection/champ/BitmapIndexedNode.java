@@ -15,6 +15,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
+/**
+ * Represents a bitmap-indexed node in a CHAMP trie.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public class BitmapIndexedNode<K, V> extends Node<K, V> {
     static final BitmapIndexedNode<?, ?> EMPTY_NODE = ChampTrie.newBitmapIndexedNode(null, (0), (0), new Object[]{}, 1);
 

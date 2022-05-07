@@ -14,6 +14,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
+/**
+ * Represents a node in a CHAMP trie.
+ * <p>
+ * A node can store entries which have a key, a value (optionally) and a
+ * sequence number (optionally).
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public abstract class Node<K, V> {
     static final int HASH_CODE_LENGTH = 32;
     /**
@@ -37,6 +46,8 @@ public abstract class Node<K, V> {
 
     /**
      * Represents no value.
+     * We can not use {@code null}, because we allow storing null-keys and
+     * null-values in the trie.
      */
     public static final Object NO_VALUE = new Object();
     /**

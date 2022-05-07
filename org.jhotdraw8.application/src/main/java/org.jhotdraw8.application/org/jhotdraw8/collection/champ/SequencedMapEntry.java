@@ -7,6 +7,12 @@ package org.jhotdraw8.collection.champ;
 
 import java.util.AbstractMap;
 
+/**
+ * A map entry that also contains a sequence number.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 class SequencedMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
     private final static long serialVersionUID = 0L;
     private final int sequenceNumber;
