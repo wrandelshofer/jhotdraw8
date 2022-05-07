@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for APIs that provide read methods but no write methods.
+ * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <E> the element type
  */
@@ -122,7 +122,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
     }
 
     /**
-     * Wraps this collection in the Collection API - without copying.
+     * Wraps this collection in the Collection interface - without copying.
      *
      * @return the wrapped collection
      */

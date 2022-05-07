@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Adds convenience methods to the API defined in {@link BareBidiGraph}.
+ * Adds convenience methods to the interface defined in {@link BareBidiGraph}.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

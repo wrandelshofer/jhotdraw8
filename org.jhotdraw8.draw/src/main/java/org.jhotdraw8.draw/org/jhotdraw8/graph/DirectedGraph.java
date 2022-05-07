@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Adds convenience methods to the API defined in {@link BareDirectedGraph}.
+ * Adds convenience methods to the interface defined in {@link BareDirectedGraph}.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

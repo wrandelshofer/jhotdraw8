@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * Defines an API for a mutable directed graph.
+ * Interface for a mutable directed graph.
  *
  * @param <V> the vertex type
  * @param <A> the arrow data type

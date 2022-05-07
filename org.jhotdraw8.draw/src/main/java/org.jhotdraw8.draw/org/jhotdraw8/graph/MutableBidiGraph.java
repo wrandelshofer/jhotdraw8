@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * Defines an API for a mutable directed graph that allows to follow arrows in
+ * Interface for a mutable directed graph that allows to follow arrows in
  * backward direction.
  *
  * @param <V> the vertex type

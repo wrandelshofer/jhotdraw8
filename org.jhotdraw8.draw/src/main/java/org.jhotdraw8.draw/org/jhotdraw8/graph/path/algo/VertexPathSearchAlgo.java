@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for a vertex path search algorithm.
+ * Interface for a vertex path search algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type

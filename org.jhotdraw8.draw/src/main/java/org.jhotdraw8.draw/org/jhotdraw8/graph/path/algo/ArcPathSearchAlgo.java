@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for an arc path search algorithm over a directed graph.
+ * Interface for an arc path search algorithm over a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

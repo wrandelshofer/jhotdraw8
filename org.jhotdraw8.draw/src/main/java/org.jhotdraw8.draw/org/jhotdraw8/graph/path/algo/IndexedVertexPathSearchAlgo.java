@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.function.IntPredicate;
 
 /**
- * Defines an API for a vertex path search algorithm over an indexed directed
+ * Interface for a vertex path search algorithm over an indexed directed
  * graph.
  *
  * @param <C> the cost number type

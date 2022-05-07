@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Defines an API for finding {@link Arc} sequences up to (inclusive)
+ * Interface for finding {@link Arc} sequences up to (inclusive)
  * a maximal cost in a directed graph.
  *
  * @param <V> the vertex data type

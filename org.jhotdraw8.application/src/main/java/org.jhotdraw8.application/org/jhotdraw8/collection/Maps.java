@@ -48,7 +48,7 @@ public class Maps {
      * @return the map
      */
     public static <K, V> @NonNull Map<K, V> putAll(@NonNull Map<K, V> map, @NonNull ReadOnlyMap<? extends K, ? extends V> entries) {
-        for (@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> it = entries.entries(); it.hasNext(); ) {
+        for (@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> it = entries.iterator(); it.hasNext(); ) {
             Map.Entry<? extends K, ? extends V> entry = it.next();
             map.put(entry.getKey(), entry.getValue());
         }

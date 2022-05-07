@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * API for inspectors.
+ * Interface for inspectors.
  *
  * @author Werner Randelshofer
  */

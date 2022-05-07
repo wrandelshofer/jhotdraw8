@@ -16,12 +16,12 @@ import java.util.Objects;
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for APIs that provide read methods but no write methods.
+ * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <K> the key type
  * @param <V> the value type
  */
-public interface ReadOnlyMap<K, V> {
+public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     boolean isEmpty();
 
     int size();
@@ -35,18 +35,14 @@ public interface ReadOnlyMap<K, V> {
                 : defaultValue;
     }
 
-    @NonNull Iterator<Map.Entry<K, V>> entries();
-
-
     default @NonNull Iterator<K> keys() {
-        return new MappedIterator<>(entries(), Map.Entry::getKey);
+        return new MappedIterator<>(iterator(), Map.Entry::getKey);
     }
-
 
     boolean containsKey(@Nullable Object key);
 
     default boolean containsValue(@Nullable Object value) {
-        for (Iterator<Map.Entry<K, V>> i = entries(); i.hasNext(); ) {
+        for (Iterator<Map.Entry<K, V>> i = iterator(); i.hasNext(); ) {
             Map.Entry<K, V> entry = i.next();
             if (Objects.equals(value, entry.getValue())) {
                 return true;
@@ -60,7 +56,7 @@ public interface ReadOnlyMap<K, V> {
 
             @Override
             public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-                return ReadOnlyMap.this.entries();
+                return ReadOnlyMap.this.iterator();
             }
 
             @Override
@@ -112,7 +108,7 @@ public interface ReadOnlyMap<K, V> {
     }
 
     /**
-     * Wraps this map in the Map API - without copying.
+     * Wraps this map in the Map interface - without copying.
      *
      * @return the wrapped map
      */
@@ -121,7 +117,7 @@ public interface ReadOnlyMap<K, V> {
     }
 
     static <K, V> @NonNull String mapToString(final ReadOnlyMap<K, V> map) {
-        Iterator<Map.Entry<K, V>> i = map.entries();
+        Iterator<Map.Entry<K, V>> i = map.iterator();
         if (!i.hasNext()) {
             return "{}";
         }

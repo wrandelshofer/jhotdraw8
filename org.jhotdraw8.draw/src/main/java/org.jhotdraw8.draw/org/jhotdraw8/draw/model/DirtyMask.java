@@ -37,7 +37,7 @@ public class DirtyMask {
     }
 
     /**
-     * API for DirtyBits.
+     * Interface for DirtyBits.
      */
     final int getMask() {
         return bitmask;

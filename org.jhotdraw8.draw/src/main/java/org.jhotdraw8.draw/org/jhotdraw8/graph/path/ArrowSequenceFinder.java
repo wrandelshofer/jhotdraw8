@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Defines an API for finding arrow sequences up to (inclusive) a maximal cost
+ * Interface for finding arrow sequences up to (inclusive) a maximal cost
  * in a directed graph.
  *
  * @param <V> the vertex data type

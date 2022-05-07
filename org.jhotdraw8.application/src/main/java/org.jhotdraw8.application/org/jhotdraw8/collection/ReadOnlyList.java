@@ -26,7 +26,7 @@ import java.util.Spliterator;
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for APIs that provide read methods but no write methods.
+ * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <E> the element type
  */
@@ -163,7 +163,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
     }
 
     /**
-     * Wraps this list in the List API - without copying.
+     * Wraps this list in the List interface - without copying.
      *
      * @return the wrapped list
      */
@@ -172,7 +172,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
     }
 
     /**
-     * Wraps this list in the ObservableList API - without copying.
+     * Wraps this list in the ObservableList interface - without copying.
      *
      * @return the wrapped list
      */

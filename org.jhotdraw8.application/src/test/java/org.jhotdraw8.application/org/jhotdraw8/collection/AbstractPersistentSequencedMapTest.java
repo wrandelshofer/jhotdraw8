@@ -60,7 +60,7 @@ public abstract class AbstractPersistentSequencedMapTest extends AbstractImmutab
 
         // Get the first element:
         HashCollider firstKey1 = instance.keys().next();
-        HashCollider firstKey2 = instance.entries().next().getKey();
+        HashCollider firstKey2 = instance.iterator().next().getKey();
         assertEquals(list.get(0), firstKey1);
         assertEquals(list.get(0), firstKey2);
     }

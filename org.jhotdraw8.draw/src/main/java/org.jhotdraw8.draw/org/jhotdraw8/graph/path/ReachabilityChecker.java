@@ -11,7 +11,7 @@ import org.jhotdraw8.util.function.AddToSet;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for checking if there is a vertex sequence
+ * Interface for checking if there is a vertex sequence
  * up to (inclusive) a maximal cost in a directed graph.
  *
  * @param <V> the vertex data type

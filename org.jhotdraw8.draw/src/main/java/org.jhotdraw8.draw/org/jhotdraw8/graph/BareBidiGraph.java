@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * Adds methods to the API defined in {@link BareDirectedGraph}
+ * Adds methods to the interface defined in {@link BareDirectedGraph}
  * that allow to follow arrows in backward direction.
  *
  * @param <V> the vertex data type

@@ -39,7 +39,7 @@ public class WrappedReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> entries() {
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return target.entrySet().iterator();
     }
 

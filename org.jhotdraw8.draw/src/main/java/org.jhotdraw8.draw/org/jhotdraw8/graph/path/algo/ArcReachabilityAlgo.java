@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Defines an API for a reachability checker algorithm over a directed graph.
+ * Interface for a reachability checker algorithm over a directed graph.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

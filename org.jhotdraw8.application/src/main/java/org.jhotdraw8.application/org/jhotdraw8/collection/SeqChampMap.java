@@ -36,8 +36,8 @@ import java.util.Objects;
  *     <li>put: O(1) amortized due to renumbering</li>
  *     <li>remove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toImmutable: O(1) + O(1) distributed across subsequent updates</li>
- *     <li>clone: O(1) + O(1) distributed across subsequent updates</li>
+ *     <li>toImmutable: O(1) + a cost distributed across subsequent updates</li>
+ *     <li>clone: O(1) + a cost distributed across subsequent updates</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
  * <p>

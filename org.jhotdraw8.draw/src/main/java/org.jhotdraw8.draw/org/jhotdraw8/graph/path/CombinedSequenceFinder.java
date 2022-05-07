@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path;
 
 /**
- * Defines an API for finding arc-, arrow- and vertex-sequences
+ * Interface for finding arc-, arrow- and vertex-sequences
  * up to (inclusive) a maximal cost in a directed graph.
  *
  * @param <V> the vertex data type

@@ -39,7 +39,7 @@ import java.util.function.ToIntFunction;
  *     <li>copyPut: O(1) amortized</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toMutable: O(1) + O(1) distributed across subsequent updates in the mutable copy</li>
+ *     <li>toMutable: O(1) + a cost distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
@@ -291,7 +291,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
     }
 
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> entries() {
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return entries(false);
     }
 
@@ -328,7 +328,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iterableToHashCode(entries());
+        return ReadOnlyMap.iterableToHashCode(iterator());
     }
 
     @Override

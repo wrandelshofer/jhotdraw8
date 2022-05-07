@@ -107,7 +107,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
         if (this.isEmpty() && getClass().isInstance(map)) {
             return getClass().cast(map);
         }
-        return copyPutAll(map.entries());
+        return copyPutAll(map.iterator());
     }
 
     /**

@@ -80,7 +80,7 @@ public enum DirtyBits {
     }
 
     /**
-     * API for DirtyMask.
+     * Interface for DirtyMask.
      */
     final int getMask() {
         return mask;

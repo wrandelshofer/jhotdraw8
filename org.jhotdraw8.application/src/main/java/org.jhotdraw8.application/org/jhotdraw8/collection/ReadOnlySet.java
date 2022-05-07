@@ -19,13 +19,13 @@ import java.util.Set;
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for APIs that provide read methods but no write methods.
+ * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <E> the element type
  */
 public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
     /**
-     * Wraps this set in the Set API - without copying.
+     * Wraps this set in the Set interface - without copying.
      *
      * @return the wrapped set
      */
@@ -34,7 +34,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
     }
 
     /**
-     * Wraps this set in the ObservableSet API - without copying.
+     * Wraps this set in the ObservableSet interface - without copying.
      *
      * @return the wrapped set
      */

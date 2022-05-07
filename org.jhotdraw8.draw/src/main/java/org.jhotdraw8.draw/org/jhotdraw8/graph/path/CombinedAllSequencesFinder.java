@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path;
 
 /**
- * Defines an API for finding all sequences between a set of source
+ * Interface for finding all sequences between a set of source
  * vertices and goal vertices up to a maximal depth in a directed graph.
  *
  * @param <V> the vertex data type

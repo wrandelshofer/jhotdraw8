@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP).
+ * (CHAMP), with predictable iteration order.
  * <p>
  * Features:
  * <ul>
@@ -39,8 +39,8 @@ import java.util.Set;
  *     <li>add: O(1) amortized due to renumbering</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(1) distributed across subsequent updates</li>
- *     <li>clone: O(1) + O(1) distributed across subsequent updates</li>
+ *     <li>toImmutable: O(1) + a constant cost distributed across subsequent updates</li>
+ *     <li>clone: O(1) + a constant cost distributed across subsequent updates</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
  * <p>
@@ -66,6 +66,11 @@ import java.util.Set;
  * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
+ * Calculation of the constant cost that is distributed over subsequent
+ * updates: Assuming that there are no hash collisions, and the trie is fully
+ * populated with {@code 2^32} elements, then there are
+ * {@code ((32^7)−1)÷(32-1) = 1,108,378,657} nodes, that need to be owned again.
+ *
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access this set concurrently, and at least

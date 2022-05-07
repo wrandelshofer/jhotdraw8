@@ -11,6 +11,12 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.function.IntSupplier;
 
+/**
+ * An iterator that fails fast if a modification counter does not have an
+ * expected value.
+ *
+ * @param <E> the element type
+ */
 public class FailFastIterator<E> implements Iterator<E> {
     private final @NonNull Iterator<? extends E> i;
     private int expectedModCount;

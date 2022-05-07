@@ -34,7 +34,7 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
 
 
     public WrappedMap(ReadOnlyMap<K, V> m) {
-        this(m::entries, m::size, m::containsKey, m::get, null, null, null);
+        this(m::iterator, m::size, m::containsKey, m::get, null, null, null);
     }
 
     public WrappedMap(@NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,

@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Set;
 
 /**
- * Provides a minimal read-only API for a directed graph.
+ * Provides a minimal read-only interface for a directed graph.
  * <p>
  * A directed graph is a tuple {@code G = (V, A)} where {@code V} is a set of
  * vertices and {@code A} is a set or bag of arrows.
