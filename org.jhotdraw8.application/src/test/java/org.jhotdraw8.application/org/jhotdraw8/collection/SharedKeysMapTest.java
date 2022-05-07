@@ -107,7 +107,7 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(Sets.addAll(new LinkedHashSet<>(), "one", "two"), instance1.keySet());
+        assertEquals(new LinkedHashSet<>(Arrays.asList("one", "two")), instance1.keySet());
 
         // THEN instance 2 must contain zero entries
         assertEquals(0, instance2.keySet().size());
@@ -119,11 +119,11 @@ public class SharedKeysMapTest {
 
         // THEN instance 1 must contain two entries
         assertEquals(2, instance1.keySet().size());
-        assertEquals(Sets.addAll(new LinkedHashSet<>(), "one", "two"), instance1.keySet());
+        assertEquals(new LinkedHashSet<>(Arrays.asList("one", "two")), instance1.keySet());
 
         // THEN instance 2 must contain two entries
         assertEquals(2, instance2.keySet().size());
-        assertEquals(Sets.addAll(new LinkedHashSet<>(), "two", "three"), instance2.keySet());
+        assertEquals(new LinkedHashSet<>(Arrays.asList("two", "three")), instance2.keySet());
 
     }
 
