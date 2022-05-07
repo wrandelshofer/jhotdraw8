@@ -11,8 +11,8 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrie;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.MutableSequencedTrieIterator;
 import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedEntryIterator;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -206,9 +206,9 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
     }
 
     Iterator<Entry<K, V>> entryIterator(boolean reversed) {
-        return new MutableSequencedTrieIterator<>(
-                size, root, ENTRY_LENGTH, reversed,
-                () -> this.modCount, this::remove);
+        return new FailFastIterator<>(new SequencedEntryIterator<>(
+                size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
+                this::persistentRemove, this::persistentPutIfPresent), () -> this.modCount);
 
     }
 
@@ -286,17 +286,16 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
         return details;
     }
 
-    /**
-     * If the specified key is present, associates it with the
-     * given value.
-     *
-     * @param k a key
-     * @param v a value
-     */
-    public void putIfPresent(K k, V v) {
+    private void persistentPutIfPresent(K k, V v) {
         if (containsKey(k)) {
+            mutator = null;
             put(k, v);
         }
+    }
+
+    private void persistentRemove(K key) {
+        mutator = null;
+        remove(key);
     }
 
     @Override

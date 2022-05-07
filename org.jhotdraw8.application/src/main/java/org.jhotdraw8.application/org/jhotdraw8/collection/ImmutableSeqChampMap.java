@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.champ.ChampTrie;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.Node;
-import org.jhotdraw8.collection.champ.SequencedTrieIterator;
+import org.jhotdraw8.collection.champ.SequencedEntryIterator;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -296,7 +296,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
     }
 
     public @NonNull Iterator<Map.Entry<K, V>> entries(boolean reversed) {
-        return new EntryIterator<>(size, this, ENTRY_LENGTH, reversed);
+        return new SequencedEntryIterator<K, V>(size, this, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed, null, null);
     }
 
     @Override
@@ -336,11 +336,6 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
         return size == 0;
     }
 
-    @Override
-    public @NonNull Iterator<K> keys() {
-        return new KeyIterator<>(size, this, ENTRY_LENGTH, false);
-    }
-
     @NonNull
     private ImmutableSeqChampMap<K, V> renumber(BitmapIndexedNode<K, V> newRootNode) {
         newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
@@ -353,7 +348,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
     }
 
     @Override
-    public SeqChampMap<K, V> toMutable() {
+    public @NonNull SeqChampMap<K, V> toMutable() {
         return new SeqChampMap<>(this);
     }
 
@@ -376,32 +371,6 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
         @Override
         protected Object readResolve() {
             return ImmutableSeqChampMap.of().copyPutAll(deserialized.iterator());
-        }
-    }
-
-    static class EntryIterator<K, V> extends SequencedTrieIterator<K, V>
-            implements Iterator<Map.Entry<K, V>> {
-
-        public EntryIterator(int size, Node<K, V> rootNode, int entryLength, boolean reversed) {
-            super(size, rootNode, entryLength, reversed);
-        }
-
-        @Override
-        public Map.Entry<K, V> next() {
-            return nextEntry();
-        }
-    }
-
-    static class KeyIterator<K, V> extends SequencedTrieIterator<K, V>
-            implements Iterator<K> {
-
-        public KeyIterator(int size, Node<K, V> rootNode, int entryLength, boolean reversed) {
-            super(size, rootNode, entryLength, reversed);
-        }
-
-        @Override
-        public K next() {
-            return nextEntry().getKey();
         }
     }
 }

@@ -6,16 +6,14 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.BaseTrieIterator;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.EntryIterator;
 import org.jhotdraw8.collection.champ.Node;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -272,7 +270,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> entries() {
-        return new EntryIterator<>(this, ENTRY_LENGTH);
+        return new EntryIterator<K, V>(this, ENTRY_LENGTH, ENTRY_LENGTH, null, null);
     }
 
     @Override
@@ -313,10 +311,6 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         return size == 0;
     }
 
-    @Override
-    public @NonNull Iterator<K> keys() {
-        return new KeyIterator<>(this, ENTRY_LENGTH);
-    }
 
     @Override
     public int size() {
@@ -347,19 +341,6 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         @Override
         protected Object readResolve() {
             return ImmutableChampMap.of().copyPutAll(deserialized.iterator());
-        }
-    }
-
-    static class EntryIterator<K, V> extends BaseTrieIterator<K, V>
-            implements Iterator<Map.Entry<K, V>> {
-
-        public EntryIterator(Node<K, V> rootNode, int entryLength) {
-            super(rootNode, entryLength);
-        }
-
-        @Override
-        public Map.Entry<K, V> next() {
-            return nextEntry(AbstractMap.SimpleImmutableEntry::new);
         }
     }
 }

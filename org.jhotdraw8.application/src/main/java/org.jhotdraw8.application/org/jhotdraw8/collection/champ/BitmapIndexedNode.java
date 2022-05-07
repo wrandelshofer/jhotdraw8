@@ -9,11 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ArrayHelper;
 import org.jhotdraw8.collection.UniqueId;
-import org.jhotdraw8.util.function.TriFunction;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
@@ -204,17 +201,11 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    Map.Entry<K, V> getKeyValueEntry(final int index, @NonNull BiFunction<K, V, Map.Entry<K, V>> factory, int entryLength) {
-        return factory.apply((K) mixed[entryLength * index], entryLength > 1 ? (V) mixed[entryLength * index + 1] : null);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, @NonNull TriFunction<K, V, Integer, SequencedMapEntry<K, V>> factory, int entryLength) {
-        return factory.apply(
+    SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields) {
+        return new SequencedMapEntry<>(
                 (K) mixed[entryLength * index],
-                entryLength > 1 ? (V) mixed[entryLength * index + 1] : null,
-                (Integer) mixed[entryLength * index + entryLength - 1]
+                numFields > 1 ? (V) mixed[entryLength * index + 1] : null,
+                numFields < entryLength ? (Integer) mixed[entryLength * index + entryLength - 1] : 0
         );
     }
 

@@ -12,12 +12,13 @@ import org.jhotdraw8.collection.champ.ChampTrie;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.Node;
-import org.jhotdraw8.collection.champ.SequencedTrieIterator;
+import org.jhotdraw8.collection.champ.SequencedEntryIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -291,7 +292,7 @@ public class ImmutableSeqChampSet<E> extends BitmapIndexedNode<E, Void> implemen
 
     @Override
     public Iterator<E> iterator() {
-        return new ElementIterator<E>(size, this, ENTRY_LENGTH, false);
+        return new MappedIterator<>(new SequencedEntryIterator<E, Void>(size, this, ENTRY_LENGTH, ENTRY_LENGTH - 1, false, null, null), Map.Entry::getKey);
     }
 
     @Override
@@ -318,16 +319,4 @@ public class ImmutableSeqChampSet<E> extends BitmapIndexedNode<E, Void> implemen
         return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, true);
     }
 
-    static class ElementIterator<E> extends SequencedTrieIterator<E, Void>
-            implements Iterator<E> {
-
-        public ElementIterator(int size, Node<E, Void> rootNode, int entryLength, boolean reversed) {
-            super(size, rootNode, entryLength, reversed);
-        }
-
-        @Override
-        public E next() {
-            return nextEntry().getKey();
-        }
-    }
 }

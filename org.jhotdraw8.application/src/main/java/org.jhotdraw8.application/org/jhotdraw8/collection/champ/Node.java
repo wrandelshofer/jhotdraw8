@@ -8,11 +8,8 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.UniqueId;
-import org.jhotdraw8.util.function.TriFunction;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 /**
  * Represents a node in a CHAMP trie.
@@ -204,9 +201,9 @@ public abstract class Node<K, V> {
 
     abstract Object[] getDataEntry(final int index, int entryLength);
 
-    abstract Map.Entry<K, V> getKeyValueEntry(final int index, @NonNull BiFunction<K, V, Map.Entry<K, V>> factory, int entryLength);
+    abstract K getKey(final int index, int entryLength);
 
-    abstract SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, @NonNull TriFunction<K, V, Integer, SequencedMapEntry<K, V>> factory, int entryLength);
+    abstract SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields);
 
     UniqueId getMutator() {
         return null;

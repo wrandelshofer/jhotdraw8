@@ -10,13 +10,14 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.EntryIterator;
 import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -243,7 +244,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
 
     @Override
     public Iterator<E> iterator() {
-        return new KeyIterator<>(this, ENTRY_LENGTH);
+        return new MappedIterator<>(new EntryIterator<E, Void>(this, ENTRY_LENGTH, ENTRY_LENGTH, null, null), Map.Entry::getKey);
     }
 
     @Override

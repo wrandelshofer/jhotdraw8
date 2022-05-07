@@ -44,11 +44,6 @@ public class WrappedReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public @NonNull Iterator<K> keys() {
-        return target.keySet().iterator();
-    }
-
-    @Override
     public boolean containsKey(@Nullable Object key) {
         return target.containsKey(key);
     }

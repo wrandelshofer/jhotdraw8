@@ -11,8 +11,8 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrie;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.MutableSequencedTrieIterator;
 import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedEntryIterator;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
@@ -337,10 +337,15 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
      * @return an iterator
      */
     public Iterator<E> iterator(boolean reversed) {
-        return new MappedIterator<>(new MutableSequencedTrieIterator<>(
-                size, root, ENTRY_LENGTH, reversed,
-                () -> SeqChampSet.this.modCount, this::remove),
-                Map.Entry::getKey);
+        return new FailFastIterator<>(new MappedIterator<>(new SequencedEntryIterator<>(
+                size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
+                this::persistentRemove, null),
+                Map.Entry::getKey), () -> SeqChampSet.this.modCount);
+    }
+
+    private void persistentRemove(E e) {
+        mutator = null;
+        remove(e);
     }
 
     /**

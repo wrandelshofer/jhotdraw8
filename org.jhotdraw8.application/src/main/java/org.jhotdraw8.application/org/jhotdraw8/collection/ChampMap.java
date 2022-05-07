@@ -7,20 +7,17 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.BaseTrieIterator;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.EntryIterator;
 import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -175,12 +172,19 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     @Override
     public Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
-                EntryIterator::new,
+                () -> new FailFastIterator<>(new EntryIterator<K, V>(root, ENTRY_LENGTH, ENTRY_LENGTH,
+                        this::persistentRemove, this::persistentPutIfPresent),
+                        () -> this.modCount),
                 ChampMap.this::size,
                 ChampMap.this::containsEntry,
                 ChampMap.this::clear,
                 ChampMap.this::removeEntry
         );
+    }
+
+    private void persistentRemove(K key) {
+        mutator = null;
+        remove(key);
     }
 
     @Override
@@ -223,15 +227,9 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return details;
     }
 
-    /**
-     * If the specified key is present, associates it with the
-     * given value.
-     *
-     * @param k a key
-     * @param v a value
-     */
-    public void putIfPresent(K k, V v) {
+    private void persistentPutIfPresent(K k, V v) {
         if (containsKey(k)) {
+            mutator = null;
             put(k, v);
         }
     }
@@ -284,52 +282,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return new ImmutableChampMap<>(root, size);
     }
 
-    private class AbstractMapIterator extends BaseTrieIterator<K, V> {
-        protected int expectedModCount;
-
-        public AbstractMapIterator() {
-            super(ChampMap.this.root, ENTRY_LENGTH);
-            this.expectedModCount = ChampMap.this.modCount;
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (expectedModCount != ChampMap.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            return super.hasNext();
-        }
-
-        @Override
-        public Entry<K, V> nextEntry(@NonNull BiFunction<K, V, Entry<K, V>> factory) {
-            if (expectedModCount != ChampMap.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            return super.nextEntry(factory);
-        }
-
-        public void remove() {
-            if (expectedModCount != ChampMap.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            removeEntry(k -> {
-                ChampMap.this.remove(k);
-                return ChampMap.this.root;
-            });
-            expectedModCount = ChampMap.this.modCount;
-        }
-    }
-
-    private class EntryIterator extends AbstractMapIterator implements Iterator<Entry<K, V>> {
-
-
-        @Override
-        public Entry<K, V> next() {
-            return nextEntry((k, v) -> new MutableMapEntry<>(
-                    ChampMap.this::putIfPresent, k, v));
-        }
-    }
-
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
         private final static long serialVersionUID = 0L;
 
@@ -346,5 +298,3 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return new SerializationProxy<K, V>(this);
     }
 }
-
-

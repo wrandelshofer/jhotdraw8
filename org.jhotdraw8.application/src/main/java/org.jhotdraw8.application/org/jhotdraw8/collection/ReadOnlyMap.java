@@ -37,7 +37,11 @@ public interface ReadOnlyMap<K, V> {
 
     @NonNull Iterator<Map.Entry<K, V>> entries();
 
-    @NonNull Iterator<K> keys();
+
+    default @NonNull Iterator<K> keys() {
+        return new MappedIterator<>(entries(), Map.Entry::getKey);
+    }
+
 
     boolean containsKey(@Nullable Object key);
 

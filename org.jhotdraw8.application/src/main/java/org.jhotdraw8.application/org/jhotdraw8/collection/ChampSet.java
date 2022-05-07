@@ -10,14 +10,14 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.EntryIterator;
 import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -215,7 +215,15 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      */
     @Override
     public Iterator<E> iterator() {
-        return new MutableTrieIterator(ENTRY_LENGTH);
+        return new FailFastIterator<>(new MappedIterator<>(
+                new EntryIterator<E, Void>(root, ENTRY_LENGTH, ENTRY_LENGTH,
+                        this::persistentRemove, null),
+                Map.Entry::getKey), () -> this.modCount);
+    }
+
+    private void persistentRemove(E e) {
+        mutator = null;
+        remove(e);
     }
 
     /**
@@ -319,34 +327,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
     }
 
-    class MutableTrieIterator extends KeyIterator<E, Void> {
-        private int expectedModCount;
 
-        MutableTrieIterator(int tupleLength) {
-            super(ChampSet.this.root, tupleLength);
-            this.expectedModCount = ChampSet.this.modCount;
-        }
-
-        @Override
-        public E next() {
-            if (expectedModCount != ChampSet.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            return super.next();
-        }
-
-        @Override
-        public void remove() {
-            if (expectedModCount != ChampSet.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            removeEntry(k -> {
-                ChampSet.this.remove(k);
-                return ChampSet.this.root;
-            });
-            expectedModCount = ChampSet.this.modCount;
-        }
-    }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
         private final static long serialVersionUID = 0L;

@@ -9,11 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ArrayHelper;
 import org.jhotdraw8.collection.UniqueId;
-import org.jhotdraw8.util.function.TriFunction;
 
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -122,17 +119,11 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @SuppressWarnings("unchecked")
     @Override
-    Map.Entry<K, V> getKeyValueEntry(final int index, @NonNull BiFunction<K, V, Map.Entry<K, V>> factory, int entryLength) {
-        return factory.apply((K) entries[index * entryLength], entryLength > 1 ? (V) entries[index * entryLength + 1] : null);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, @NonNull TriFunction<K, V, Integer, SequencedMapEntry<K, V>> factory, int entryLength) {
-        return factory.apply(
+    SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields) {
+        return new SequencedMapEntry<K, V>(
                 (K) entries[index * entryLength],
-                entryLength > 1 ? (V) entries[index * entryLength + 1] : null,
-                (Integer) entries[index * entryLength + entryLength - 1]
+                numFields > 1 ? (V) entries[index * entryLength + 1] : null,
+                numFields < entryLength ? (Integer) entries[index * entryLength + entryLength - 1] : 0
         );
     }
 
