@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -20,23 +21,39 @@ import java.util.Set;
  */
 public interface SequencedSet<E> extends Set<E>, SequencedCollection<E> {
     /**
-     * The addFirst and addLast methods of SequencedSet have special case
-     * semantics for externally ordered collections such as LinkedHashSet.
-     * If the element is already present in the set, it is also moved into
-     * the appropriate position. If the element is not present, it is simply
-     * added at the appropriate position.
-     * This remedies a long-standing deficiency in LinkedHashSet, the inability
-     * to reposition elements that are already in the collection.
+     * Adds the specified element to the front of the set if it is not already
+     * present. If this set already contains the element, moves it to the front.
      *
-     * @param e
-     * @return
+     * @param e an element
+     * @return {@code true} if this set did not already contain the specified
+     * element
      */
     boolean addFirst(E e);
 
+    /**
+     * Adds the specified element to the tail of the set if it is not already
+     * present. If this set already contains the element, moves it to the tail.
+     *
+     * @param e an element
+     * @return {@code true} if this set did not already contain the specified
+     * element
+     */
     boolean addLast(E e);
 
+    /**
+     * Removes the element at the front of the set.
+     *
+     * @return the front element
+     * @throws NoSuchElementException if this set is empty
+     */
     E removeFirst();
 
+    /**
+     * Removes the element at the tail of the set.
+     *
+     * @return the tail element
+     * @throws NoSuchElementException if this set is empty
+     */
     E removeLast();
 
     @Override

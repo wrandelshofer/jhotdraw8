@@ -9,7 +9,6 @@ package org.jhotdraw8.collection.champ;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.function.Function;
 
 public class SequencedTrieIterator<K, V> {
     final PriorityQueue<SequencedMapEntry<K, V>> queue;
@@ -33,17 +32,5 @@ public class SequencedTrieIterator<K, V> {
         current = queue.remove();
         canRemove = true;
         return current;
-    }
-
-    protected void removeEntry(Function<K, Node<K, V>> removeFunction) {
-        if (!canRemove) {
-            throw new IllegalStateException();
-        }
-
-        Map.Entry<K, V> toRemove = current;
-        removeFunction.apply(toRemove.getKey());
-
-        canRemove = false;
-        current = null;
     }
 }

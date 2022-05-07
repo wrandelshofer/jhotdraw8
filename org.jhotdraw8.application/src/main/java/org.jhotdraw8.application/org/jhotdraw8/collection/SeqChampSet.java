@@ -11,14 +11,14 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChampTrie;
 import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.MutableSequencedTrieIterator;
 import org.jhotdraw8.collection.champ.Node;
-import org.jhotdraw8.collection.champ.SequencedKeyIterator;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -157,37 +157,8 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         }
     }
 
-    /**
-     * Adds the specified element at the end of the set, if it is not already
-     * contained in the set.
-     *
-     * @param e an element
-     * @return true, if the element was added to the set
-     */
     public boolean add(final @Nullable E e) {
-        return addLast(e);
-    }
-
-    @Override
-    public E getFirst() {
-        Iterator<E> iterator = iterator(false);
-        E first = iterator.next();
-        iterator.remove();
-        return first;
-    }
-
-    @Override
-    public E getLast() {
-        Iterator<E> iterator = iterator(true);
-        E last = iterator.next();
-        iterator.remove();
-        return last;
-    }
-
-    private void renumberSequenceNumbers() {
-        root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
-        lastSequenceNumber = size;
-        firstSequenceNumber = 0;
+        return addLastIfAbsent(e);
     }
 
     /**
@@ -217,6 +188,63 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
             modified |= add(e);
         }
         return modified;
+    }
+
+    @Override
+    public boolean addFirst(E e) {
+        boolean isPresent = contains(e);
+        if (isPresent) {
+            remove(e);
+        }
+        addFirstIfAbsent(e);
+        return !isPresent;
+    }
+
+    private boolean addFirstIfAbsent(E e) {
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
+                firstSequenceNumber - 1, ENTRY_LENGTH - 1);
+        if (changeEvent.isModified) {
+            root = newRoot;
+            size++;
+            modCount++;
+            firstSequenceNumber--;
+            if (firstSequenceNumber == Node.NO_SEQUENCE_NUMBER - 1) {
+                renumberSequenceNumbers();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addLast(E e) {
+        boolean isPresent = contains(e);
+        if (isPresent) {
+            remove(e);
+        }
+        add(e);
+        return !isPresent;
+    }
+
+    private boolean addLastIfAbsent(final @Nullable E e) {
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRoot = root.update(
+                getOrCreateMutator(), e, null, Objects.hashCode(e), 0,
+                changeEvent, ENTRY_LENGTH,
+                lastSequenceNumber, ENTRY_LENGTH - 1);
+        if (changeEvent.isModified) {
+            root = newRoot;
+            size++;
+            modCount++;
+            lastSequenceNumber++;
+            if (lastSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
+                renumberSequenceNumbers();
+            }
+
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -250,7 +278,43 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
+        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH,
+                ENTRY_LENGTH - 1) != Node.NO_VALUE;
+    }
+
+    /**
+     * Dumps the internal structure of this set in the Graphviz DOT Language.
+     *
+     * @return a dump of the internal structure
+     */
+    public String dump() {
+        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
+    }
+
+    /**
+     * Gets an element from this set. Throws an exception if the set is empty.
+     *
+     * @return an element
+     * @throws java.util.NoSuchElementException if this set is empty
+     */
+    public E element() {
+        return iterator().next();
+    }
+
+    @Override
+    public E getFirst() {
+        Iterator<E> iterator = iterator(false);
+        E first = iterator.next();
+        iterator.remove();
+        return first;
+    }
+
+    @Override
+    public E getLast() {
+        Iterator<E> iterator = iterator(true);
+        E last = iterator.next();
+        iterator.remove();
+        return last;
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -258,76 +322,6 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
             mutator = new UniqueId();
         }
         return mutator;
-    }
-
-    /**
-     * Adds the specified element to the front of the set, if it is not already
-     * contained in the set.
-     *
-     * @param e an element
-     * @return true, if the element was added to the set
-     */
-    @Override
-    public boolean addFirst(E e) {
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
-                firstSequenceNumber - 1, ENTRY_LENGTH - 1);
-        if (changeEvent.isModified) {
-            root = newRoot;
-            size++;
-            modCount++;
-            firstSequenceNumber--;
-            if (firstSequenceNumber == Node.NO_SEQUENCE_NUMBER - 1) {
-                renumberSequenceNumbers();
-            }
-
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Adds the specified element to the end of the set, if it is not already
-     * contained in the set.
-     *
-     * @param e an element
-     * @return true, if the element was added to the set
-     */
-    @Override
-    public boolean addLast(E e) {
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
-                lastSequenceNumber, ENTRY_LENGTH - 1);
-        if (changeEvent.isModified) {
-            root = newRoot;
-            size++;
-            modCount++;
-            lastSequenceNumber++;
-            if (lastSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
-                renumberSequenceNumbers();
-            }
-
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public E removeFirst() {
-        return null;
-    }
-
-    @Override
-    public E removeLast() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     @Override
@@ -343,7 +337,10 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
      * @return an iterator
      */
     public Iterator<E> iterator(boolean reversed) {
-        return new MutableTrieIterator(ENTRY_LENGTH, reversed);
+        return new MappedIterator<>(new MutableSequencedTrieIterator<>(
+                size, root, ENTRY_LENGTH, reversed,
+                () -> SeqChampSet.this.modCount, this::remove),
+                Map.Entry::getKey);
     }
 
     /**
@@ -357,7 +354,8 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         E key = (E) o;
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRoot = root.remove(
-                getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+                getOrCreateMutator(), key, Objects.hashCode(key), 0,
+                changeEvent, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -365,16 +363,6 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
             return true;
         }
         return false;
-    }
-
-    /**
-     * Gets an element from this set. Throws an exception if the set is empty.
-     *
-     * @return an element
-     * @throws java.util.NoSuchElementException if this set is empty
-     */
-    public E element() {
-        return iterator().next();
     }
 
     /**
@@ -424,17 +412,30 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
     }
 
     @Override
-    public int size() {
-        return size;
+    public E removeFirst() {
+        Iterator<E> iterator = iterator(false);
+        E e = iterator.next();
+        iterator.remove();
+        return e;
     }
 
-    /**
-     * Dumps the internal structure of this set in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
+    @Override
+    public E removeLast() {
+        Iterator<E> iterator = iterator(true);
+        E e = iterator.next();
+        iterator.remove();
+        return e;
+    }
+
+    private void renumberSequenceNumbers() {
+        root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
+        lastSequenceNumber = size;
+        firstSequenceNumber = 0;
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 
     /**
@@ -447,33 +448,8 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         return size == 0 ? ImmutableSeqChampSet.of() : new ImmutableSeqChampSet<>(root, size, lastSequenceNumber);
     }
 
-    class MutableTrieIterator extends SequencedKeyIterator<E, Void> {
-        private int expectedModCount;
-
-        MutableTrieIterator(int tupleLength, boolean reversed) {
-            super(SeqChampSet.this.size, SeqChampSet.this.root, tupleLength, reversed);
-            this.expectedModCount = SeqChampSet.this.modCount;
-        }
-
-        @Override
-        public E next() {
-            if (expectedModCount != SeqChampSet.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            return super.next();
-        }
-
-        @Override
-        public void remove() {
-            if (expectedModCount != SeqChampSet.this.modCount) {
-                throw new ConcurrentModificationException();
-            }
-            removeEntry(k -> {
-                SeqChampSet.this.remove(k);
-                return SeqChampSet.this.root;
-            });
-            expectedModCount = SeqChampSet.this.modCount;
-        }
+    private Object writeReplace() {
+        return new SerializationProxy<E>(this);
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
@@ -486,9 +462,5 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         protected Object readResolve() {
             return new SeqChampSet<>(deserialized);
         }
-    }
-
-    private Object writeReplace() {
-        return new SerializationProxy<E>(this);
     }
 }

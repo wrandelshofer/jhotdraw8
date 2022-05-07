@@ -209,13 +209,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         return mutator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
 
     /**
      * Returns an iterator over the elements of this set.
