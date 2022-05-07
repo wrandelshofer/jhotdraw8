@@ -38,8 +38,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     boolean containsKey(@Nullable Object key);
 
     default boolean containsValue(@Nullable Object value) {
-        for (Iterator<Map.Entry<K, V>> i = iterator(); i.hasNext(); ) {
-            Map.Entry<K, V> entry = i.next();
+        for (Map.Entry<K, V> entry : this) {
             if (Objects.equals(value, entry.getValue())) {
                 return true;
             }
@@ -112,12 +111,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
 
             @Override
             public boolean contains(Object o) {
-                for (V v : this) {
-                    if (Objects.equals(v, o)) {
-                        return true;
-                    }
-                }
-                return false;
+                return containsValue(o);
             }
         };
     }
