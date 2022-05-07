@@ -160,7 +160,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         if (c == this) {
             return false;
         }
-
         boolean modified = false;
         for (E e : c) {
             modified |= add(e);
@@ -209,7 +208,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         return mutator;
     }
 
-
     /**
      * Returns an iterator over the elements of this set.
      */
@@ -236,7 +234,8 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         @SuppressWarnings("unchecked")
         E key = (E) o;
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.remove(getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent,
+        final BitmapIndexedNode<E, Void> newRoot = root.remove(
+                getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent,
                 ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
             root = newRoot;
@@ -314,7 +313,8 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * @return a dump of the internal structure
      */
     public String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
+        return new ChampTrieGraphviz<E, Void>()
+                .dumpTrie(root, ENTRY_LENGTH, false, false);
     }
 
     /**
@@ -326,7 +326,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         mutator = null;
         return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
     }
-
 
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {

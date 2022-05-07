@@ -215,7 +215,7 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
     @Override
     @SuppressWarnings("unchecked")
     public SequencedSet<Entry<K, V>> entrySet() {
-        return new WrappedSequencedSet<Entry<K, V>>(
+        return new WrappedSequencedSet<>(
                 () -> entryIterator(false),
                 this::size,
                 this::containsEntry,
@@ -390,7 +390,7 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
     }
 
     private Object writeReplace() {
-        return new SerializationProxy<K, V>(this);
+        return new SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {

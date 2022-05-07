@@ -240,16 +240,6 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return nodeMap != 0;
     }
 
-    boolean isValueEqual(final int index, int entryLength, Object[] other, int numFields) {
-        int offset = entryLength * index;
-        for (int i = 1; i < numFields; i++) {
-            if (!Objects.equals(mixed[offset + i], other)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     int nodeArity() {
         return Integer.bitCount(nodeMap);

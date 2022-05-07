@@ -17,6 +17,8 @@ import java.util.Objects;
  * @param <V> the value type
  */
 public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V> {
+    public AbstractSequencedMap() {
+    }
 
     boolean removeKey(final @Nullable Object o) {
         if (containsKey(o)) {

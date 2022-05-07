@@ -59,12 +59,10 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         this.persistentPutIfPresentFunction = persistentPutIfPresentFunction;
         if (rootNode.hasNodes()) {
             nextStackLevel = 0;
-
             nodes[0] = rootNode;
             nodeCursorsAndLengths[0] = 0;
             nodeCursorsAndLengths[1] = rootNode.nodeArity();
         }
-
         if (rootNode.hasData()) {
             nextValueNode = rootNode;
             nextValueCursor = 0;
@@ -98,20 +96,16 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         while (nextStackLevel >= 0) {
             final int currentCursorIndex = nextStackLevel * 2;
             final int currentLengthIndex = currentCursorIndex + 1;
-
             final int nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
             final int nodeLength = nodeCursorsAndLengths[currentLengthIndex];
-
             if (nodeCursor < nodeLength) {
                 final Node<K, V> nextNode = nodes[nextStackLevel].getNode(nodeCursor, entryLength);
                 nodeCursorsAndLengths[currentCursorIndex]++;
-
                 if (nextNode.hasNodes()) {
                     // put node on next stack level for depth-first traversal
                     final int nextStackLevel = ++this.nextStackLevel;
                     final int nextCursorIndex = nextStackLevel * 2;
                     final int nextLengthIndex = nextCursorIndex + 1;
-
                     nodes[nextStackLevel] = nextNode;
                     nodeCursorsAndLengths[nextCursorIndex] = 0;
                     nodeCursorsAndLengths[nextLengthIndex] = nextNode.nodeArity();
@@ -128,7 +122,6 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
                 nextStackLevel--;
             }
         }
-
         return false;
     }
 
