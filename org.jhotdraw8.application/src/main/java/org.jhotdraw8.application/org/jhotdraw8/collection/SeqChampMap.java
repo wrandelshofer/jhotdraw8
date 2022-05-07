@@ -33,11 +33,11 @@ import java.util.Objects;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>put: O(1) amortized</li>
+ *     <li>put: O(1) amortized due to renumbering</li>
  *     <li>remove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toImmutable: O(1) + O(log n) distributed across subsequent updates</li>
- *     <li>clone: O(log n) distributed across subsequent updates</li>
+ *     <li>toImmutable: O(1) + O(1) distributed across subsequent updates</li>
+ *     <li>clone: O(1) + O(1) distributed across subsequent updates</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
  * <p>

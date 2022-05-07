@@ -38,7 +38,7 @@ import java.util.Objects;
  *     <li>copyAdd: O(1) amortized</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toMutable: O(1) + O(log n) distributed across subsequent updates</li>
+ *     <li>toMutable: O(1) + O(1) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log n)</li>
  * </ul>
