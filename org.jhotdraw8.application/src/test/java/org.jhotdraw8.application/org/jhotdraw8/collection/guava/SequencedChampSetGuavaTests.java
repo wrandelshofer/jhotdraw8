@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.SeqChampSet;
+import org.jhotdraw8.collection.SequencedChampSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -21,15 +21,15 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Tests TrieSet with the Guava test suite.
+ * Tests {@link SequencedChampSet} with the Guava test suite.
  */
-public class SeqChampSetGuavaTests {
+public class SequencedChampSetGuavaTests {
     public static Test suite() {
-        return new SeqChampSetGuavaTests().allTests();
+        return new SequencedChampSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite("SequencedTrieSet");
+        TestSuite suite = new TestSuite(SequencedChampSet.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -39,10 +39,10 @@ public class SeqChampSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new SeqChampSet<>(MinimalCollection.of(elements));
+                                return new SequencedChampSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named("SequencedTrieSet")
+                .named(SequencedChampSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.KNOWN_ORDER,

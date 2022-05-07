@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Tests TrieSet with the Guava test suite.
+ * Tests {@link ChampSet} with the Guava test suite.
  */
 public class ChampSetGuavaTests {
     public static Test suite() {
@@ -29,7 +29,7 @@ public class ChampSetGuavaTests {
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite("TrieSet");
+        TestSuite suite = new TestSuite(ChampSet.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -42,7 +42,7 @@ public class ChampSetGuavaTests {
                                 return new ChampSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named("TrieSet")
+                .named(ChampSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.ALLOWS_NULL_VALUES,

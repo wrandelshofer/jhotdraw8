@@ -153,9 +153,9 @@ public abstract class AbstractMapTest {
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
+                MapEntries.linkedHashMap(MapEntries.of(firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
-                        firstValue1.getKey(), firstValue1.getValue()));
+                        firstValue1.getKey(), firstValue1.getValue())));
         //
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(firstValue1.getKey(), firstValue1.getValue());

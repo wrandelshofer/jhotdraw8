@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.Maps;
+import org.jhotdraw8.collection.MapEntries;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullKey;
@@ -117,19 +117,19 @@ public class FigureSvgTinyReader {
 
     {
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
-                Maps.entry("svg", SvgDrawing.class),
-                Maps.entry("g", SvgGFigure.class),
-                Maps.entry("rect", SvgRectFigure.class),
-                Maps.entry("defs", SvgDefsFigure.class),
-                Maps.entry("circle", SvgCircleFigure.class),
-                Maps.entry("ellipse", SvgEllipseFigure.class),
-                Maps.entry("line", SvgLineFigure.class),
-                Maps.entry("path", SvgPathFigure.class),
-                Maps.entry("polygon", SvgPolygonFigure.class),
-                Maps.entry("polyline", SvgPolylineFigure.class),
-                Maps.entry("text", SvgTextFigure.class),
-                Maps.entry("linearGradient", SvgLinearGradientFigure.class),
-                Maps.entry("radialGradient", SvgRadialGradientFigure.class)
+                MapEntries.entry("svg", SvgDrawing.class),
+                MapEntries.entry("g", SvgGFigure.class),
+                MapEntries.entry("rect", SvgRectFigure.class),
+                MapEntries.entry("defs", SvgDefsFigure.class),
+                MapEntries.entry("circle", SvgCircleFigure.class),
+                MapEntries.entry("ellipse", SvgEllipseFigure.class),
+                MapEntries.entry("line", SvgLineFigure.class),
+                MapEntries.entry("path", SvgPathFigure.class),
+                MapEntries.entry("polygon", SvgPolygonFigure.class),
+                MapEntries.entry("polyline", SvgPolylineFigure.class),
+                MapEntries.entry("text", SvgTextFigure.class),
+                MapEntries.entry("linearGradient", SvgLinearGradientFigure.class),
+                MapEntries.entry("radialGradient", SvgRadialGradientFigure.class)
         )) {
             String elem = e.getKey();
             Class<? extends Figure> figureClass = e.getValue();

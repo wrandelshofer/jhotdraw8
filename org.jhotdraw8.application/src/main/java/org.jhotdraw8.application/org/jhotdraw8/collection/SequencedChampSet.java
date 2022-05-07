@@ -104,7 +104,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E> {
+public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E> {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     private transient UniqueId mutator;
@@ -138,7 +138,7 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
     /**
      * Constructs an empty set.
      */
-    public SeqChampSet() {
+    public SequencedChampSet() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
@@ -148,12 +148,12 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public SeqChampSet(Iterable<? extends E> c) {
-        if (c instanceof SeqChampSet<?>) {
-            c = ((SeqChampSet<? extends E>) c).toImmutable();
+    public SequencedChampSet(Iterable<? extends E> c) {
+        if (c instanceof SequencedChampSet<?>) {
+            c = ((SequencedChampSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof ImmutableSeqChampSet<?>) {
-            ImmutableSeqChampSet<E> that = (ImmutableSeqChampSet<E>) c;
+        if (c instanceof ImmutableSequencedChampSet<?>) {
+            ImmutableSequencedChampSet<E> that = (ImmutableSequencedChampSet<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -266,9 +266,9 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
      * Returns a shallow copy of this set.
      */
     @Override
-    public SeqChampSet<E> clone() {
+    public SequencedChampSet<E> clone() {
         try {
-            @SuppressWarnings("unchecked") final SeqChampSet<E> that = (SeqChampSet<E>) super.clone();
+            @SuppressWarnings("unchecked") final SequencedChampSet<E> that = (SequencedChampSet<E>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -345,7 +345,7 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         return new FailFastIterator<>(new MappedIterator<>(new SequencedEntryIterator<>(
                 size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
                 this::persistentRemove, null),
-                Map.Entry::getKey), () -> SeqChampSet.this.modCount);
+                Map.Entry::getKey), () -> SequencedChampSet.this.modCount);
     }
 
     private void persistentRemove(E e) {
@@ -453,9 +453,9 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
      *
      * @return an immutable copy
      */
-    public ImmutableSeqChampSet<E> toImmutable() {
+    public ImmutableSequencedChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableSeqChampSet.of() : new ImmutableSeqChampSet<>(root, size, lastSequenceNumber);
+        return size == 0 ? ImmutableSequencedChampSet.of() : new ImmutableSequencedChampSet<>(root, size, lastSequenceNumber);
     }
 
     private Object writeReplace() {
@@ -470,7 +470,7 @@ public class SeqChampSet<E> extends AbstractSet<E> implements Serializable, Clon
         }
 
         protected Object readResolve() {
-            return new SeqChampSet<>(deserialized);
+            return new SequencedChampSet<>(deserialized);
         }
     }
 }

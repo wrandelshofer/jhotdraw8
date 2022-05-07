@@ -91,7 +91,7 @@ import java.util.Objects;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Serializable, Cloneable {
+public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
     private transient UniqueId mutator;
@@ -122,14 +122,14 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
      */
     private int firstSequenceNumber = 0;
 
-    public SeqChampMap() {
+    public SequencedChampMap() {
         this.root = BitmapIndexedNode.emptyNode();
     }
 
-    public SeqChampMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof SeqChampMap) {
+    public SequencedChampMap(@NonNull Map<? extends K, ? extends V> m) {
+        if (m instanceof SequencedChampMap) {
             @SuppressWarnings("unchecked")
-            SeqChampMap<K, V> that = (SeqChampMap<K, V>) m;
+            SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) m;
             this.mutator = null;
             that.mutator = null;
             this.root = that.root;
@@ -141,7 +141,7 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
         }
     }
 
-    public SeqChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public SequencedChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
@@ -149,10 +149,10 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
 
     }
 
-    public SeqChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof ImmutableSeqChampMap) {
+    public SequencedChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        if (m instanceof ImmutableSequencedChampMap) {
             @SuppressWarnings("unchecked")
-            ImmutableSeqChampMap<K, V> that = (ImmutableSeqChampMap<K, V>) m;
+            ImmutableSequencedChampMap<K, V> that = (ImmutableSequencedChampMap<K, V>) m;
             this.root = that;
             this.size = that.size;
         } else {
@@ -170,9 +170,9 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
     }
 
     @Override
-    public SeqChampMap<K, V> clone() {
+    public SequencedChampMap<K, V> clone() {
         try {
-            @SuppressWarnings("unchecked") final SeqChampMap<K, V> that = (SeqChampMap<K, V>) super.clone();
+            @SuppressWarnings("unchecked") final SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) super.clone();
             that.mutator = null;
             this.mutator = null;
             return that;
@@ -381,12 +381,12 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
      *
      * @return an immutable copy
      */
-    public ImmutableSeqChampMap<K, V> toImmutable() {
+    public ImmutableSequencedChampMap<K, V> toImmutable() {
         if (size == 0) {
-            return ImmutableSeqChampMap.of();
+            return ImmutableSequencedChampMap.of();
         }
         mutator = null;
-        return new ImmutableSeqChampMap<>(root, size, lastSequenceNumber);
+        return new ImmutableSequencedChampMap<>(root, size, lastSequenceNumber);
     }
 
     private Object writeReplace() {
@@ -401,7 +401,7 @@ public class SeqChampMap<K, V> extends AbstractSequencedMap<K, V> implements Ser
         }
 
         protected Object readResolve() {
-            return new SeqChampMap<>(deserialized);
+            return new SequencedChampMap<>(deserialized);
         }
     }
 }

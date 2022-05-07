@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableMap;
-import org.jhotdraw8.collection.ImmutableSeqChampMap;
+import org.jhotdraw8.collection.ImmutableSequencedChampMap;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -355,7 +355,7 @@ public class NamedCssColor extends CssColor {
         m.put(YELLOWGREEN.getName(), YELLOWGREEN);
 
         //FIXME move code below with Java SE 11
-        NAMED_COLORS = ImmutableSeqChampMap.copyOf(m);
+        NAMED_COLORS = ImmutableSequencedChampMap.copyOf(m);
         //NAMED_COLORS = new ImmutableHashMap<>(m, Map::copyOf);
     }
 

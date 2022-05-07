@@ -10,7 +10,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSeqChampMap;
+import org.jhotdraw8.collection.ImmutableSequencedChampMap;
 import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -40,7 +40,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private @NonNull ReadOnlyMap<Key<?>, Object> options = ImmutableSeqChampMap.of();
+    private @NonNull ReadOnlyMap<Key<?>, Object> options = ImmutableSequencedChampMap.of();
 
     public AbstractExportOutputFormat() {
     }

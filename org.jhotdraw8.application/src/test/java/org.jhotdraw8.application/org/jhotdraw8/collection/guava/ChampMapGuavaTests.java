@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Tests TrieMap with the Guava test suite.
+ * Tests {@link ChampMap} with the Guava test suite.
  */
 public class ChampMapGuavaTests {
     public static Test suite() {
@@ -29,7 +29,7 @@ public class ChampMapGuavaTests {
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite("TrieMap");
+        TestSuite suite = new TestSuite(ChampMap.class.getSimpleName());
         suite.addTest(testsForTrieMap());
         return suite;
     }
@@ -42,7 +42,7 @@ public class ChampMapGuavaTests {
                                 return new ChampMap<String, String>(Arrays.asList(entries));
                             }
                         })
-                .named("TrieMap")
+                .named(ChampMap.class.getSimpleName())
                 .withFeatures(
                         MapFeature.GENERAL_PURPOSE,
                         MapFeature.ALLOWS_NULL_KEYS,

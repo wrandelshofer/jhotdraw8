@@ -89,7 +89,7 @@ public abstract class AbstractImmutableMapTest {
         assertMapEquality(expected, actual);
 
         // WHEN: a set is created with copyOf a ImmutableMap
-        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableSeqChampMap.copyOf(expected);
+        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableSequencedChampMap.copyOf(expected);
         actual = copyOf(immutableExpected);
         assertEquals(immutableExpected, actual);
 
@@ -163,7 +163,7 @@ public abstract class AbstractImmutableMapTest {
 
         // WHEN: a set is created with identical values
         actual = copyOf(
-                ImmutableSeqChampMap.copyOf(Maps.putAll(new LinkedHashMap<>(), firstValue1.getKey(), firstValue1.getValue(),
+                MapEntries.linkedHashMap(MapEntries.of(firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue(),
                         firstValue1.getKey(), firstValue1.getValue())));
         //
@@ -398,7 +398,7 @@ public abstract class AbstractImmutableMapTest {
     }
 
     public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        @SuppressWarnings("unchecked") ImmutableMap<HashCollider, HashCollider> set = copyOf(Maps.putAll(new LinkedHashMap<>(), key, value));
+        @SuppressWarnings("unchecked") ImmutableMap<HashCollider, HashCollider> set = copyOf(MapEntries.linkedHashMap(MapEntries.of(key, value)));
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
         expected.put(key, value);
         assertTrue(set.containsKey(key));

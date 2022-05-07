@@ -14,7 +14,6 @@ import org.jhotdraw8.collection.champ.Node;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -119,21 +118,6 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     /**
-     * Returns an immutable map that contains the provided entries.
-     *
-     * @param k1  the key of the first entry
-     * @param v1  the value of the first entry
-     * @param kv  additional entries k2,v2, k3,v3, k4,v4, ... .
-     * @param <K> the key type
-     * @param <V> the value type
-     * @return an immutable map of the provided entries
-     */
-    @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> of(K k1, V v1, Object... kv) {
-        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPut(k1, v1).copyPutKeyValues(kv);
-    }
-
-    /**
      * Returns an empty immutable map.
      *
      * @param <K> the key type
@@ -153,10 +137,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      * @param <V>     the value type
      * @return an immutable map of the provided entries
      */
-    @SafeVarargs
-    @SuppressWarnings({"unchecked", "varargs"})
-    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
-        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(Arrays.asList(entries));
+    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        return (ImmutableChampMap<K, V>) of().copyPutAll(entries);
     }
 
     @Override

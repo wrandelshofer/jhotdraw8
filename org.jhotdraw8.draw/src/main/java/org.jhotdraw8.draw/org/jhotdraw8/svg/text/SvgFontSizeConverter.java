@@ -6,8 +6,6 @@ package org.jhotdraw8.svg.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSeqChampMap;
-import org.jhotdraw8.collection.Maps;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -22,6 +20,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
+import static org.jhotdraw8.collection.MapEntries.entry;
+import static org.jhotdraw8.collection.MapEntries.linkedHashMap;
+import static org.jhotdraw8.collection.MapEntries.ofEntries;
+
 /**
  * Converts SVG font-size.
  * <p>
@@ -34,17 +36,17 @@ import java.util.function.Consumer;
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
     private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
-            new MappedConverter<SvgFontSize.SizeKeyword>(ImmutableSeqChampMap.ofEntries(
-                    Maps.entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
-                    Maps.entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
-                    Maps.entry("small", SvgFontSize.SizeKeyword.SMALL),
-                    Maps.entry("medium", SvgFontSize.SizeKeyword.MEDIUM),
-                    Maps.entry("large", SvgFontSize.SizeKeyword.LARGE),
-                    Maps.entry("x-large", SvgFontSize.SizeKeyword.X_LARGE),
-                    Maps.entry("xx-large", SvgFontSize.SizeKeyword.XX_LARGE),
-                    Maps.entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
-                    Maps.entry("larger", SvgFontSize.SizeKeyword.LARGER)
-            ).asMap());
+            new MappedConverter<SvgFontSize.SizeKeyword>(linkedHashMap(ofEntries(
+                    entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
+                    entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
+                    entry("small", SvgFontSize.SizeKeyword.SMALL),
+                    entry("medium", SvgFontSize.SizeKeyword.MEDIUM),
+                    entry("large", SvgFontSize.SizeKeyword.LARGE),
+                    entry("x-large", SvgFontSize.SizeKeyword.X_LARGE),
+                    entry("xx-large", SvgFontSize.SizeKeyword.XX_LARGE),
+                    entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
+                    entry("larger", SvgFontSize.SizeKeyword.LARGER)
+            )));
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
 
     public SvgFontSizeConverter() {

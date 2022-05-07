@@ -28,7 +28,7 @@ public abstract class AbstractPersistentSequencedSetTest extends AbstractImmutab
             list.add(e1);
         }
         ImmutableSet<HashCollider> instance = copyOf(list);
-        System.out.println(((ImmutableSeqChampSet<HashCollider>) instance).dump());
+        System.out.println(((ImmutableSequencedChampSet<HashCollider>) instance).dump());
         assertEquals(list, new ArrayList<>(instance.asCollection()));
 
         // Remove one element in the middle

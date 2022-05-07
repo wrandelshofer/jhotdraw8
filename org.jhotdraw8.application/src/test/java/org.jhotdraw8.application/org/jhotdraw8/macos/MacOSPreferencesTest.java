@@ -6,7 +6,7 @@
 package org.jhotdraw8.macos;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Maps;
+import org.jhotdraw8.collection.MapEntries;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -33,7 +32,7 @@ public class MacOSPreferencesTest {
             list.addAll(Arrays.asList(
                     dynamicTest("nonexistent key", () -> testPreferences(file, "key", null)),
                     dynamicTest("array", () -> testPreferences(file, "a array", Arrays.asList("the item 0 value", "the item 1 value"))),
-                    dynamicTest("dict", () -> testPreferences(file, "a dict", Maps.putAll(new LinkedHashMap<>(), "a child 1", "the child 1 value", "a child 2", "the child 2 value"))),
+                    dynamicTest("dict", () -> testPreferences(file, "a dict", MapEntries.linkedHashMap(MapEntries.of("a child 1", "the child 1 value", "a child 2", "the child 2 value")))),
                     dynamicTest("sub-dict access", () -> testPreferences(file, "a dict\ta child 2", "the child 2 value")),
 
                     dynamicTest("boolean false", () -> testPreferences(file, "a boolean false", false)),
