@@ -35,10 +35,6 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
                 : defaultValue;
     }
 
-    default @NonNull Iterator<K> keys() {
-        return new MappedIterator<>(iterator(), Map.Entry::getKey);
-    }
-
     boolean containsKey(@Nullable Object key);
 
     default boolean containsValue(@Nullable Object value) {
@@ -86,7 +82,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
 
             @Override
             public @NonNull Iterator<K> iterator() {
-                return ReadOnlyMap.this.keys();
+                return new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getKey);
             }
 
             @Override
@@ -96,16 +92,36 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
 
             @Override
             public boolean contains(Object o) {
-                if (!(o instanceof Map.Entry)) {
-                    return false;
-                }
-                Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
-                @SuppressWarnings("unchecked") K key = (K) e.getKey();
-                V value = ReadOnlyMap.this.get(key);
-                return Objects.equals(value, e.getValue());
+                return containsKey(o);
             }
         };
     }
+
+    default @NonNull ReadOnlyCollection<V> readOnlyValues() {
+        return new ReadOnlyCollection<V>() {
+
+            @Override
+            public @NonNull Iterator<V> iterator() {
+                return new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getValue);
+            }
+
+            @Override
+            public int size() {
+                return ReadOnlyMap.this.size();
+            }
+
+            @Override
+            public boolean contains(Object o) {
+                for (V v : this) {
+                    if (Objects.equals(v, o)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
+
 
     /**
      * Wraps this map in the Map interface - without copying.
@@ -162,7 +178,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         }
 
         try {
-            for (Map.Entry<K, V> e : map.readOnlyEntrySet()) {
+            for (Map.Entry<K, V> e : map) {
                 K key = e.getKey();
                 V value = e.getValue();
                 if (value == null) {

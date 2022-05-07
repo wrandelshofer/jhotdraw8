@@ -51,7 +51,7 @@ public abstract class AbstractImmutableMapTest {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
         //noinspection unchecked
-        assertEquals(actual, copyOf(actual.readOnlyEntrySet()));
+        assertEquals(actual, copyOf((Iterable<Map.Entry<HashCollider, HashCollider>>) actual));
         assertFalse(actual.toString().isEmpty());
     }
 

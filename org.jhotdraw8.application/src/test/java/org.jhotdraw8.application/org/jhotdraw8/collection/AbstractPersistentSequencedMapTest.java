@@ -59,7 +59,7 @@ public abstract class AbstractPersistentSequencedMapTest extends AbstractImmutab
         assertEqualSequence(expected, instance.asMap(), "after adding " + middle + " which is already in the map");
 
         // Get the first element:
-        HashCollider firstKey1 = instance.keys().next();
+        HashCollider firstKey1 = instance.readOnlyKeySet().iterator().next();
         HashCollider firstKey2 = instance.iterator().next().getKey();
         assertEquals(list.get(0), firstKey1);
         assertEquals(list.get(0), firstKey2);

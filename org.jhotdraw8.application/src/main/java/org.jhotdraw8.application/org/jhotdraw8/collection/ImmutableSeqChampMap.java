@@ -272,7 +272,7 @@ public class ImmutableSeqChampMap<K, V> extends BitmapIndexedNode<K, V> implemen
         }
         final SeqChampMap<K, V> t = this.toMutable();
         boolean modified = false;
-        for (K key : this.readOnlyKeySet()) {
+        for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {
                 t.removeAndGiveDetails(key);
                 modified = true;

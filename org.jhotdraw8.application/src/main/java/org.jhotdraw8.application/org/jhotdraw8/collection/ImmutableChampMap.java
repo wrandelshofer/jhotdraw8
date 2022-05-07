@@ -250,7 +250,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         }
         final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
-        for (K key : this.readOnlyKeySet()) {
+        for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {
                 t.removeAndGiveDetails(key);
                 modified = true;
@@ -270,7 +270,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return new EntryIterator<K, V>(this, ENTRY_LENGTH, ENTRY_LENGTH, null, null);
+        return new EntryIterator<>(this, ENTRY_LENGTH, ENTRY_LENGTH, null, null);
     }
 
     @Override
