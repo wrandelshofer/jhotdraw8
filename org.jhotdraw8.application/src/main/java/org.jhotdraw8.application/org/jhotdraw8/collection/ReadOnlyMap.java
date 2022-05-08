@@ -46,76 +46,44 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return false;
     }
 
+    /**
+     * Returns true if this map contains the specified entry.
+     *
+     * @param o an entry
+     * @return true if this map contains the entry
+     */
+    default boolean containsEntry(Object o) {
+        if (o instanceof Map.Entry) {
+            @SuppressWarnings("unchecked") Map.Entry<K, V> entry = (Map.Entry<K, V>) o;
+            return containsKey(entry.getKey())
+                    && Objects.equals(entry.getValue(), get(entry.getKey()));
+        }
+        return false;
+    }
+
     default @NonNull ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
-        return new ReadOnlySet<Map.Entry<K, V>>() {
-
-            @Override
-            public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-                return ReadOnlyMap.this.iterator();
-            }
-
-            @Override
-            public int size() {
-                return ReadOnlyMap.this.size();
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                if (!(o instanceof Map.Entry<?, ?>)) {
-                    return false;
-                }
-                @SuppressWarnings("unchecked") Map.Entry<K, V> e = (Map.Entry<K, V>) o;
-                K key = e.getKey();
-                V value = ReadOnlyMap.this.get(key);
-
-                // The value returned by get(key) can be null, because the value
-                // is null, or because the map does not contain the key.
-                return Objects.equals(value, e.getValue())
-                        && (value != null || ReadOnlyMap.this.containsKey(key));
-            }
-        };
+        return new WrappedReadOnlySet<>(
+                this::iterator,
+                this::size,
+                this::containsEntry
+        );
     }
 
     default @NonNull ReadOnlySet<K> readOnlyKeySet() {
-        return new ReadOnlySet<K>() {
-
-            @Override
-            public @NonNull Iterator<K> iterator() {
-                return new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getKey);
-            }
-
-            @Override
-            public int size() {
-                return ReadOnlyMap.this.size();
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return containsKey(o);
-            }
-        };
+        return new WrappedReadOnlySet<>(
+                () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getKey),
+                this::size,
+                this::containsKey
+        );
     }
 
     default @NonNull ReadOnlyCollection<V> readOnlyValues() {
-        return new ReadOnlyCollection<V>() {
-
-            @Override
-            public @NonNull Iterator<V> iterator() {
-                return new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getValue);
-            }
-
-            @Override
-            public int size() {
-                return ReadOnlyMap.this.size();
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return containsValue(o);
-            }
-        };
+        return new WrappedReadOnlyCollection<>(
+                () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getValue),
+                this::size,
+                this::containsValue
+        );
     }
-
 
     /**
      * Wraps this map in the Map interface - without copying.

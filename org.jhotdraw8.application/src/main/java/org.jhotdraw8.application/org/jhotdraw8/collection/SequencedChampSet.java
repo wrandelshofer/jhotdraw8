@@ -122,7 +122,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * sequence numbers are renumbered, and the counter is reset to
      * {@code size}.
      */
-    private int lastSequenceNumber = 0;
+    private int last = 0;
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
@@ -133,7 +133,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * sequence numbers are renumbered, and the counter is reset to
      * {@code 0}.
      */
-    private int firstSequenceNumber = 0;
+    private int first = 0;
 
     /**
      * Constructs an empty set.
@@ -197,10 +197,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public boolean addFirst(E e) {
-        boolean isPresent = contains(e);
-        if (isPresent) {
-            remove(e);
-        }
+        boolean isPresent = remove(e);
         addFirstIfAbsent(e);
         return !isPresent;
     }
@@ -208,13 +205,13 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     private boolean addFirstIfAbsent(E e) {
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
-                firstSequenceNumber - 1, ENTRY_LENGTH - 1);
+                first - 1, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
             modCount++;
-            firstSequenceNumber--;
-            if (firstSequenceNumber == Node.NO_SEQUENCE_NUMBER - 1) {
+            first--;
+            if (first == Node.NO_SEQUENCE_NUMBER - 1) {
                 renumberSequenceNumbers();
             }
             return true;
@@ -224,11 +221,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public boolean addLast(E e) {
-        boolean isPresent = contains(e);
-        if (isPresent) {
-            remove(e);
-        }
-        add(e);
+        boolean isPresent = remove(e);
         return !isPresent;
     }
 
@@ -237,13 +230,13 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         final BitmapIndexedNode<E, Void> newRoot = root.update(
                 getOrCreateMutator(), e, null, Objects.hashCode(e), 0,
                 changeEvent, ENTRY_LENGTH,
-                lastSequenceNumber, ENTRY_LENGTH - 1);
+                last, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
             modCount++;
-            lastSequenceNumber++;
-            if (lastSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
+            last++;
+            if (last == Node.NO_SEQUENCE_NUMBER) {
                 renumberSequenceNumbers();
             }
 
@@ -439,8 +432,8 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     private void renumberSequenceNumbers() {
         root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
-        lastSequenceNumber = size;
-        firstSequenceNumber = 0;
+        last = size;
+        first = 0;
     }
 
     @Override
@@ -455,7 +448,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      */
     public ImmutableSequencedChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableSequencedChampSet.of() : new ImmutableSequencedChampSet<>(root, size, lastSequenceNumber);
+        return size == 0 ? ImmutableSequencedChampSet.of() : new ImmutableSequencedChampSet<>(root, size, first, last);
     }
 
     private Object writeReplace() {

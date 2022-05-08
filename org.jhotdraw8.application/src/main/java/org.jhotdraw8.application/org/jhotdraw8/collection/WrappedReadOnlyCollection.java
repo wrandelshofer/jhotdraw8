@@ -6,32 +6,28 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps set functions into the {@link ReadOnlySet} interface.
+ * Wraps collection functions into the {@link ReadOnlyCollection} interface.
  *
  * @author Werner Randelshofer
  */
-public class WrappedReadOnlySet<E> extends AbstractReadOnlySet<E> {
+public class WrappedReadOnlyCollection<E> extends AbstractReadOnlyCollection<E> {
 
     private final Supplier<Iterator<E>> iteratorFunction;
     private final IntSupplier sizeFunction;
     private final Predicate<Object> containsFunction;
 
-    public WrappedReadOnlySet(ReadOnlyCollection<E> backingSet) {
+    public WrappedReadOnlyCollection(Set<E> backingSet) {
         this(backingSet::iterator, backingSet::size, backingSet::contains);
     }
 
-    public WrappedReadOnlySet(Collection<E> backingSet) {
-        this(backingSet::iterator, backingSet::size, backingSet::contains);
-    }
-
-    public WrappedReadOnlySet(Supplier<Iterator<E>> iteratorFunction, IntSupplier sizeFunction, Predicate<Object> containsFunction) {
+    public WrappedReadOnlyCollection(Supplier<Iterator<E>> iteratorFunction, IntSupplier sizeFunction, Predicate<Object> containsFunction) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsFunction = containsFunction;
@@ -71,7 +67,7 @@ public class WrappedReadOnlySet<E> extends AbstractReadOnlySet<E> {
 
     @Override
     public boolean equals(Object o) {
-        return ReadOnlySet.setEquals(this, o);
+        return ReadOnlySet.setEquals(new WrappedReadOnlySet<>(this), o);
     }
 
     @Override

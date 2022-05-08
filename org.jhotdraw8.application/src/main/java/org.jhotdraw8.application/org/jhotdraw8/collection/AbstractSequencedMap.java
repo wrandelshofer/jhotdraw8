@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractMap;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -63,5 +64,10 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                 () -> firstEntry().getValue(),
                 () -> lastEntry().getValue()
         );
+    }
+
+    @Override
+    public Iterator<Entry<K, V>> iterator() {
+        return entrySet().iterator();
     }
 }

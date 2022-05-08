@@ -137,6 +137,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      * @param <V>     the value type
      * @return an immutable map of the provided entries
      */
+    @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         return (ImmutableChampMap<K, V>) of().copyPutAll(entries);
     }

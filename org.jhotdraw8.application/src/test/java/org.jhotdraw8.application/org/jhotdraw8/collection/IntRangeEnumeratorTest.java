@@ -34,6 +34,28 @@ public class IntRangeEnumeratorTest {
      * {@link IntRangeEnumerator#currentAsInt()}.
      */
     @Test
+    public void testMoveNextWithRangeFrom0() {
+        int[] a = {0, 1, 2, 3, 4, 5};
+        final IntRangeEnumerator instance = new IntRangeEnumerator(6);
+        assertEquals(a.length, instance.estimateSize());
+        for (int i = 0; i < a.length; i++) {
+            assertTrue(instance.moveNext());
+            assertEquals(a[i], instance.current());
+            assertEquals(a[i], instance.currentAsInt());
+        }
+        assertFalse(instance.moveNext());
+    }
+
+    /**
+     * Tests if it is possible to iterate over a given array
+     * using the {@link IntRangeEnumerator#moveNext()} method.
+     * <p>
+     * Tests methods: {@link IntRangeEnumerator#estimateSize()} ,
+     * {@link IntRangeEnumerator#moveNext()},
+     * {@link IntRangeEnumerator#current()},
+     * {@link IntRangeEnumerator#currentAsInt()}.
+     */
+    @Test
     public void testMoveNext() {
         int[] a = {1, 2, 3, 4, 5};
         final IntRangeEnumerator instance = new IntRangeEnumerator(1, 6);

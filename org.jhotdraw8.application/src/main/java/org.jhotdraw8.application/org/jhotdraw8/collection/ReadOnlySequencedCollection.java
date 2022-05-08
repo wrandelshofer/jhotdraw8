@@ -17,7 +17,9 @@ public interface ReadOnlySequencedCollection<E> extends ReadOnlyCollection<E> {
      * @return an element
      * @throws java.util.NoSuchElementException if the collection is empty
      */
-    E getFirst();
+    default E getFirst() {
+        return iterator().next();
+    }
 
     /**
      * Gets the last element.

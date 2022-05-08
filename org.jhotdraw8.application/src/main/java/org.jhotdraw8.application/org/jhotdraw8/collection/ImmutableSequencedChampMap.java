@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.ToIntFunction;
 
 /**
  * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -92,7 +91,7 @@ import java.util.function.ToIntFunction;
 public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
-    private static final ImmutableSequencedChampMap<?, ?> EMPTY = new ImmutableSequencedChampMap<>(BitmapIndexedNode.emptyNode(), 0, 0);
+    private static final ImmutableSequencedChampMap<?, ?> EMPTY = new ImmutableSequencedChampMap<>(BitmapIndexedNode.emptyNode(), 0, 0, 0);
     final transient int size;
     /**
      * Counter for the sequence number of the last entry.
@@ -105,14 +104,25 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
      * sequence numbers are renumbered, and the counter is reset to
      * {@code size}.
      */
-    private transient final int lastSequenceNumber;
-    private transient final ToIntFunction<K> hashFunction = Objects::hashCode;
+    private transient final int last;
+
+    /**
+     * Counter for the sequence number of the first element. The counter is
+     * decrement before a new entry is added to the start of the sequence.
+     * <p>
+     * The counter is in the range from {@code 0} to
+     * {@link Integer#MIN_VALUE}.
+     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
+     * sequence numbers are renumbered, and the counter is reset to
+     * {@code 0}.
+     */
+    private int first = 0;
 
     ImmutableSequencedChampMap(@NonNull BitmapIndexedNode<K, V> root, int size,
-                               int lastSequenceNumber) {
+                               int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
-        this.lastSequenceNumber = lastSequenceNumber;
+        this.last = last;
     }
 
     /**
@@ -161,6 +171,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
      * @param <V>     the value type
      * @return an immutable map of the provided entries
      */
+    @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         return (ImmutableChampMap<K, V>) of().copyPutAll(entries);
     }
@@ -168,7 +179,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
+        return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
     }
 
     @Override
@@ -178,18 +189,51 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
 
     @Override
     public @NonNull ImmutableSequencedChampMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
-        final int keyHash = hashFunction.applyAsInt(key);
+        return putLastWithoutMoveToLast(key, value);
+    }
+
+    //@Override
+    public @NonNull ImmutableSequencedChampMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value) {
+        return copyRemove(key).putFirstWithoutMoveToFirst(key, value);
+    }
+
+    public @NonNull ImmutableSequencedChampMap<K, V> copyPutLast(@NonNull K key, @Nullable V value) {
+        return copyRemove(key).putLastWithoutMoveToLast(key, value);
+    }
+
+    @NonNull
+    private ImmutableSequencedChampMap<K, V> putLastWithoutMoveToLast(@NonNull K key, @Nullable V value) {
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details, ENTRY_LENGTH, lastSequenceNumber + 1, ENTRY_LENGTH - 1);
+                keyHash, 0, details, ENTRY_LENGTH, last + 1, ENTRY_LENGTH - 1);
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
-                return new ImmutableSequencedChampMap<>(newRootNode, size, lastSequenceNumber + 1);
+                return new ImmutableSequencedChampMap<>(newRootNode, size, first, last + 1);
             }
-            if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
+            if (last + 1 == Node.NO_SEQUENCE_NUMBER) {
                 return renumber(newRootNode);
             } else {
-                return new ImmutableSequencedChampMap<>(newRootNode, size + 1, lastSequenceNumber + 1);
+                return new ImmutableSequencedChampMap<>(newRootNode, size + 1, first, last + 1);
+            }
+        }
+        return this;
+    }
+
+    @NonNull
+    private ImmutableSequencedChampMap<K, V> putFirstWithoutMoveToFirst(@NonNull K key, @Nullable V value) {
+        final int keyHash = Objects.hashCode(key);
+        final ChangeEvent<V> details = new ChangeEvent<>();
+        BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
+                keyHash, 0, details, ENTRY_LENGTH, first, ENTRY_LENGTH - 1);
+        if (details.isModified()) {
+            if (details.hasReplacedValue()) {
+                return new ImmutableSequencedChampMap<>(newRootNode, size, first - 1, last);
+            }
+            if (first - 1 == Node.NO_SEQUENCE_NUMBER) {
+                return renumber(newRootNode);
+            } else {
+                return new ImmutableSequencedChampMap<>(newRootNode, size + 1, first - 1, last);
             }
         }
         return this;
@@ -210,7 +254,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
         boolean modified = false;
         while (entries.hasNext()) {
             Map.Entry<? extends K, ? extends V> entry = entries.next();
-            ChangeEvent<V> details = t.putLastAndGiveDetails(entry.getKey(), entry.getValue());
+            ChangeEvent<V> details = t.putLastWithoutMoveToLast(entry.getKey(), entry.getValue());
             modified |= details.isModified;
         }
         return modified ? t.toImmutable() : this;
@@ -218,13 +262,13 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
 
     @Override
     public @NonNull ImmutableSequencedChampMap<K, V> copyRemove(@NonNull K key) {
-        final int keyHash = hashFunction.applyAsInt(key);
+        final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
                 remove(null, key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         if (details.isModified()) {
             assert details.hasReplacedValue();
-            return new ImmutableSequencedChampMap<>(newRootNode, size - 1, lastSequenceNumber + 1);
+            return new ImmutableSequencedChampMap<>(newRootNode, size - 1, first, last + 1);
         }
         return this;
     }
@@ -303,7 +347,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
     @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
         K key = (K) o;
-        Object result = findByKey(key, hashFunction.applyAsInt(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        Object result = findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
         return result == Node.NO_VALUE ? null : (V) result;
     }
 
@@ -320,7 +364,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
     @NonNull
     private ImmutableSequencedChampMap<K, V> renumber(BitmapIndexedNode<K, V> newRootNode) {
         newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
-        return new ImmutableSequencedChampMap<>(newRootNode, size + 1, size);
+        return new ImmutableSequencedChampMap<>(newRootNode, size + 1, 0, size);
     }
 
     @Override

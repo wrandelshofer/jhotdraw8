@@ -19,42 +19,8 @@ import java.util.Map;
  * @param <K> the key type
  * @param <V> the value type
  */
-public interface SequencedMap<K, V> extends Map<K, V> {
-    /**
-     * Gets the first entry.
-     *
-     * @return an entry
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    Entry<K, V> firstEntry();
+public interface SequencedMap<K, V> extends Map<K, V>, ReadOnlySequencedMap<K, V> {
 
-    /**
-     * Gets the last entry.
-     *
-     * @return an entry
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    Entry<K, V> lastEntry();
-
-    /**
-     * Gets the first key.
-     *
-     * @return a key
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    default K firstKey() {
-        return firstEntry().getKey();
-    }
-
-    /**
-     * Gets the last key.
-     *
-     * @return a key
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    default K lastKey() {
-        return lastEntry().getKey();
-    }
 
     /**
      * Creates an entry for the specified key and value and adds it to the front
@@ -88,4 +54,14 @@ public interface SequencedMap<K, V> extends Map<K, V> {
 
     @Override
     SequencedSet<Entry<K, V>> entrySet();
+
+    @Override
+    default V getOrDefault(Object key, V defaultValue) {
+        return Map.super.getOrDefault(key, defaultValue);
+    }
+
+    @Override
+    default boolean containsValue(Object value) {
+        return ReadOnlySequencedMap.super.containsValue(value);
+    }
 }

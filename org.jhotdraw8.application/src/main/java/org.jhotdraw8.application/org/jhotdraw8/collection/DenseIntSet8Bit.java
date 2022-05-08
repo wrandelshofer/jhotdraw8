@@ -28,13 +28,6 @@ public class DenseIntSet8Bit implements IntSet {
     private byte mark = 1;
 
     /**
-     * Creates an empty set.
-     */
-    public DenseIntSet8Bit() {
-        this(0);
-    }
-
-    /**
      * Creates a set with the specified capacity.
      */
     public DenseIntSet8Bit(int capacity) {

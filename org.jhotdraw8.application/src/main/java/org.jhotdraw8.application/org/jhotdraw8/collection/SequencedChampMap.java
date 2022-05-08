@@ -108,7 +108,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      * sequence numbers are renumbered, and the counter is reset to
      * {@code size}.
      */
-    private transient int lastSequenceNumber = 0;
+    private transient int last = 0;
 
     /**
      * Counter for the sequence number of the first element. The counter is
@@ -120,7 +120,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      * sequence numbers are renumbered, and the counter is reset to
      * {@code 0}.
      */
-    private int firstSequenceNumber = 0;
+    private int first = 0;
 
     public SequencedChampMap() {
         this.root = BitmapIndexedNode.emptyNode();
@@ -166,7 +166,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         root = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
-        lastSequenceNumber = 0;
+        last = 0;
     }
 
     @Override
@@ -179,15 +179,6 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
-    }
-
-    boolean containsEntry(final @Nullable Object o) {
-        if (o instanceof Entry) {
-            @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;
-            return containsKey(entry.getKey())
-                    && Objects.equals(entry.getValue(), get(entry.getKey()));
-        }
-        return false;
     }
 
     @Override
@@ -253,36 +244,35 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public V put(K key, V value) {
-        return putLast(key, value);
+        return putLastWithoutMoveToLast(key, value).getOldValue();
     }
 
     @Override
     public V putFirst(K key, V value) {
-        return putFirstAndGiveDetails(key, value).getOldValue();
+        V oldValue = remove(key);
+        putFirstWithoutMoveToFirst(key, value);
+        return oldValue;
     }
 
-    @NonNull ChangeEvent<V> putFirstAndGiveDetails(final K key, final V val) {
+    private @NonNull ChangeEvent<V> putFirstWithoutMoveToFirst(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
-
         final BitmapIndexedNode<K, V> newRootNode =
-                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, firstSequenceNumber - 1,
+                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, first,
                         ENTRY_LENGTH - 1);
-
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;
                 size += 1;
-                firstSequenceNumber--;
-                if (firstSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
+                first--;
+                if (first == Node.NO_SEQUENCE_NUMBER) {
                     renumberSequenceNumbers();
                 }
                 modCount++;
             }
         }
-
         return details;
     }
 
@@ -300,15 +290,16 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public V putLast(K key, V value) {
-        return putLastAndGiveDetails(key, value).getOldValue();
+        V oldValue = remove(key);
+        putLastWithoutMoveToLast(key, value);
+        return oldValue;
     }
 
-    @NonNull ChangeEvent<V> putLastAndGiveDetails(final K key, final V val) {
+    @NonNull ChangeEvent<V> putLastWithoutMoveToLast(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
-
         final BitmapIndexedNode<K, V> newRootNode =
-                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, lastSequenceNumber,
+                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, last,
                         ENTRY_LENGTH - 1);
 
         if (details.isModified()) {
@@ -317,14 +308,13 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
             } else {
                 root = newRootNode;
                 size += 1;
-                lastSequenceNumber++;
-                if (lastSequenceNumber == Node.NO_SEQUENCE_NUMBER) {
+                last++;
+                if (last == Node.NO_SEQUENCE_NUMBER) {
                     renumberSequenceNumbers();
                 }
                 modCount++;
             }
         }
-
         return details;
     }
 
@@ -345,7 +335,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
             size = size - 1;
             modCount++;
             if (size == 0) {
-                lastSequenceNumber = Integer.MIN_VALUE;
+                last = Integer.MIN_VALUE;
             }
         }
         return details;
@@ -367,8 +357,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     private void renumberSequenceNumbers() {
         root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
-        lastSequenceNumber = size;
-        firstSequenceNumber = 0;
+        last = size;
+        first = 0;
     }
 
     @Override
@@ -386,7 +376,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
             return ImmutableSequencedChampMap.of();
         }
         mutator = null;
-        return new ImmutableSequencedChampMap<>(root, size, lastSequenceNumber);
+        return new ImmutableSequencedChampMap<>(root, size, first, last);
     }
 
     private Object writeReplace() {

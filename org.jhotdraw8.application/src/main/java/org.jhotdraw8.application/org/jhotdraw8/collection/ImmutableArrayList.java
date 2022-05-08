@@ -37,6 +37,8 @@ import java.util.function.Function;
  *     <li>clone: O(n)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
+ * <p>
+ * XXX Replace this class, it is too inefficient.
  *
  * @param <E> the element type
  */

@@ -11,6 +11,7 @@ package org.jhotdraw8.collection;
  */
 public class GrowableIntSet8Bit extends DenseIntSet8Bit {
     public GrowableIntSet8Bit() {
+        super(0);
     }
 
     /**

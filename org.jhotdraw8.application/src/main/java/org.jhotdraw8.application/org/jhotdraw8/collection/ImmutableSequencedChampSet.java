@@ -90,7 +90,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     @SuppressWarnings("unchecked")
-    private static final ImmutableSequencedChampSet<?> EMPTY_SET = new ImmutableSequencedChampSet<>(BitmapIndexedNode.emptyNode(), 0, 0);
+    private static final ImmutableSequencedChampSet<?> EMPTY_SET = new ImmutableSequencedChampSet<>(BitmapIndexedNode.emptyNode(), 0, 0, 0);
 
     final int size;
 
@@ -104,12 +104,25 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
      * sequence numbers are renumbered, and the counter is reset to
      * {@code size}.
      */
-    private final int lastSequenceNumber;
+    private final int last;
 
-    ImmutableSequencedChampSet(BitmapIndexedNode<E, Void> root, int size, int lastSequenceNumber) {
+
+    /**
+     * Counter for the sequence number of the first element. The counter is
+     * decrement before a new entry is added to the start of the sequence.
+     * <p>
+     * The counter is in the range from {@code 0} to
+     * {@link Integer#MIN_VALUE}.
+     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
+     * sequence numbers are renumbered, and the counter is reset to
+     * {@code 0}.
+     */
+    private int first = 0;
+
+    ImmutableSequencedChampSet(BitmapIndexedNode<E, Void> root, int size, int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
-        this.lastSequenceNumber = lastSequenceNumber;
+        this.last = last;
     }
 
     /**
@@ -162,7 +175,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
     @NonNull
     private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<E, Void> newRootNode) {
         newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), ENTRY_LENGTH);
-        return new ImmutableSequencedChampSet<E>(newRootNode, size + 1, size);
+        return new ImmutableSequencedChampSet<E>(newRootNode, size + 1, first, size);
     }
 
     @Override
@@ -172,15 +185,43 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
     }
 
     public @NonNull ImmutableSequencedChampSet<E> copyAdd(final @NonNull E key) {
+        return copyAddLastIfAbsent(key);
+    }
+
+    public @NonNull ImmutableSequencedChampSet<E> copyAddFirst(final @NonNull E key) {
+        return copyRemove(key).copyAddFirstIfAbsent(key);
+    }
+
+    public @NonNull ImmutableSequencedChampSet<E> copyAddLast(final @NonNull E key) {
+        return copyRemove(key).copyAddLastIfAbsent(key);
+    }
+
+    private @NonNull ImmutableSequencedChampSet<E> copyAddLastIfAbsent(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent,
-                ENTRY_LENGTH, lastSequenceNumber, ENTRY_LENGTH - 1);
+                ENTRY_LENGTH, last, ENTRY_LENGTH - 1);
         if (changeEvent.isModified) {
-            if (lastSequenceNumber + 1 == Node.NO_SEQUENCE_NUMBER) {
-                return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, size + 1);
+            if (last + 1 == Node.NO_SEQUENCE_NUMBER) {
+                return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
             } else {
-                return new ImmutableSequencedChampSet<>(newRootNode, size + 1, lastSequenceNumber + 1);
+                return new ImmutableSequencedChampSet<>(newRootNode, size + 1, first, last + 1);
+            }
+        }
+
+        return this;
+    }
+
+    private @NonNull ImmutableSequencedChampSet<E> copyAddFirstIfAbsent(final @NonNull E key) {
+        final int keyHash = Objects.hashCode(key);
+        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent,
+                ENTRY_LENGTH, last, ENTRY_LENGTH - 1);
+        if (changeEvent.isModified) {
+            if (last + 1 == Node.NO_SEQUENCE_NUMBER) {
+                return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
+            } else {
+                return new ImmutableSequencedChampSet<>(newRootNode, size + 1, first - 1, last);
             }
         }
 
@@ -214,7 +255,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
         final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
                 keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
         if (changeEvent.isModified) {
-            return new ImmutableSequencedChampSet<>(newRootNode, size - 1, lastSequenceNumber);
+            return new ImmutableSequencedChampSet<>(newRootNode, size - 1, first, last);
         }
 
         return this;

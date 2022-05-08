@@ -24,13 +24,13 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class WrappedMap<K, V> extends AbstractMap<K, V> {
-    private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
-    private final @NonNull IntSupplier sizeFunction;
-    private final @NonNull Predicate<Object> containsKeyFunction;
-    private final @NonNull Runnable clearFunction;
-    private final @NonNull Predicate<Object> removeFunction;
-    private final @NonNull Function<K, V> getFunction;
-    private final @NonNull BiFunction<K, V, V> putFunction;
+    protected final @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
+    protected final @NonNull IntSupplier sizeFunction;
+    protected final @NonNull Predicate<Object> containsKeyFunction;
+    protected final @NonNull Runnable clearFunction;
+    protected final @NonNull Predicate<Object> removeFunction;
+    protected final @NonNull Function<K, V> getFunction;
+    protected final @NonNull BiFunction<K, V, V> putFunction;
 
 
     public WrappedMap(ReadOnlyMap<K, V> m) {
@@ -75,7 +75,7 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
         return sizeFunction.getAsInt();
     }
 
-    boolean containsEntry(final @Nullable Object o) {
+    public boolean containsEntry(final @Nullable Object o) {
         if (o instanceof Entry) {
             @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;
             K key = entry.getKey();
@@ -102,7 +102,6 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
                 this::containsEntry,
                 clearFunction,
                 this::removeEntry
-
         );
     }
 }
