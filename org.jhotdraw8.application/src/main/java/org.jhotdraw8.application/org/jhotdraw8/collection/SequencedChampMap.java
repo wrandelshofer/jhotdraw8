@@ -268,7 +268,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 size += 1;
                 first--;
                 if (first == Node.NO_SEQUENCE_NUMBER) {
-                    renumberSequenceNumbers();
+                    renumber();
                 }
                 modCount++;
             }
@@ -310,7 +310,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 size += 1;
                 last++;
                 if (last == Node.NO_SEQUENCE_NUMBER) {
-                    renumberSequenceNumbers();
+                    renumber();
                 }
                 modCount++;
             }
@@ -355,7 +355,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return false;
     }
 
-    private void renumberSequenceNumbers() {
+    private void renumber() {
         root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
         last = size;
         first = 0;

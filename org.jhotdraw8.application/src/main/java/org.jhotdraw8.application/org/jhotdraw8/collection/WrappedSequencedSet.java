@@ -66,13 +66,6 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
     }
 
     @Override
-    public E removeFirst() {
-        E e = getFirstFunction.get();
-        removeFunction.test(e);
-        return e;
-    }
-
-    @Override
     public E removeLast() {
         E e = getLastFunction.get();
         removeFunction.test(e);

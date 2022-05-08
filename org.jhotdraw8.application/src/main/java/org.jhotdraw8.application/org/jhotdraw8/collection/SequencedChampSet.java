@@ -212,7 +212,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             modCount++;
             first--;
             if (first == Node.NO_SEQUENCE_NUMBER - 1) {
-                renumberSequenceNumbers();
+                renumber();
             }
             return true;
         }
@@ -237,7 +237,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             modCount++;
             last++;
             if (last == Node.NO_SEQUENCE_NUMBER) {
-                renumberSequenceNumbers();
+                renumber();
             }
 
             return true;
@@ -300,19 +300,8 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
-    public E getFirst() {
-        Iterator<E> iterator = iterator(false);
-        E first = iterator.next();
-        iterator.remove();
-        return first;
-    }
-
-    @Override
     public E getLast() {
-        Iterator<E> iterator = iterator(true);
-        E last = iterator.next();
-        iterator.remove();
-        return last;
+        return iterator(true).next();
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -415,14 +404,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
-    public E removeFirst() {
-        Iterator<E> iterator = iterator(false);
-        E e = iterator.next();
-        iterator.remove();
-        return e;
-    }
-
-    @Override
     public E removeLast() {
         Iterator<E> iterator = iterator(true);
         E e = iterator.next();
@@ -430,7 +411,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         return e;
     }
 
-    private void renumberSequenceNumbers() {
+    private void renumber() {
         root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
         last = size;
         first = 0;

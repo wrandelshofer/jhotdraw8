@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -46,7 +47,12 @@ public interface SequencedSet<E> extends Set<E>, SequencedCollection<E> {
      * @return the front element
      * @throws NoSuchElementException if this set is empty
      */
-    E removeFirst();
+    default E removeFirst() {
+        Iterator<E> iterator = iterator();
+        E e = iterator.next();
+        iterator.remove();
+        return e;
+    }
 
     /**
      * Removes the element at the tail of the set.
