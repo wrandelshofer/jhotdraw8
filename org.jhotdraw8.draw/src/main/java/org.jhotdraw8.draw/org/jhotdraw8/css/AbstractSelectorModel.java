@@ -17,6 +17,7 @@ public abstract class AbstractSelectorModel<E> implements SelectorModel<E> {
     public AbstractSelectorModel() {
     }
 
+    @Override
     public @NonNull MapProperty<String, Set<E>> additionalPseudoClassStatesProperty() {
         return additionalPseudoClassStates;
     }

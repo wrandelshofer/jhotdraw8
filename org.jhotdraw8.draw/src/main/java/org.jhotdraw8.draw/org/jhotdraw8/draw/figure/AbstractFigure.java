@@ -51,6 +51,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     public AbstractFigure() {
     }
 
+    @Override
     protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;

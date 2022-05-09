@@ -168,6 +168,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     }
 
+    @Override
     public void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         if (isExportDrawing()) {
             OutputFormat.super.write(file, drawing, workState);
@@ -222,6 +223,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
+    @Override
     protected boolean writeSlice(@NonNull Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
         WritableImage image = renderImageOnApplicationThread(slice, dpi, node, slice.getLayoutBounds());
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {

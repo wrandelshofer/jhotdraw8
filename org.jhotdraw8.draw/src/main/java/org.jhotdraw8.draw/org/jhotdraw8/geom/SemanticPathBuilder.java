@@ -106,6 +106,7 @@ public class SemanticPathBuilder<S> extends AbstractPathBuilder<Path2D.Double> {
         path.quadTo(x1, y1, x, y);
     }
 
+    @Override
     public Path2D.Double build() {
         pathDone();
         //XXX this method is only available since Java SE 11

@@ -116,6 +116,7 @@ public class SvgDoublePathBuilder implements PathBuilder<String> {
         PathBuilder.super.smoothQuadTo(x, y); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public @NonNull String build() {
         return buf.toString();
     }

@@ -46,6 +46,7 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
         elements.add(new ClosePath());
     }
 
+    @Override
     public @NonNull List<PathElement> build() {
         if (needsSquareAtLastPoint) {
             addSquare(getLastX(), getLastY());

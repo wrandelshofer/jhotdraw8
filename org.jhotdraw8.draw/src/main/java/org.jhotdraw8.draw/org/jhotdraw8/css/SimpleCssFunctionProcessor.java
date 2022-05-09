@@ -63,14 +63,17 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return model;
     }
 
+    @Override
     public void setModel(SelectorModel<T> model) {
         this.model = model;
     }
 
+    @Override
     public Map<String, ImmutableList<CssToken>> getCustomProperties() {
         return customProperties;
     }
 
+    @Override
     public void setCustomProperties(Map<String, ImmutableList<CssToken>> customProperties) {
         this.customProperties = customProperties;
     }
@@ -102,6 +105,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         return buf.toString();
     }
 
+    @Override
     public final void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             tt.pushBack();
@@ -109,6 +113,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         }
     }
 
+    @Override
     public final void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         doProcessToken(element, tt, out, recursionStack);
     }

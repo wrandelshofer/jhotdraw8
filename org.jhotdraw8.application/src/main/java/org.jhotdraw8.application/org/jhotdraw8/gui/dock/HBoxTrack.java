@@ -32,6 +32,7 @@ public class HBoxTrack extends AbstractDockParent implements Track {
         return TrackAxis.X;
     }
 
+    @Override
     public boolean isResizesDockChildren() {
         return false;
     }

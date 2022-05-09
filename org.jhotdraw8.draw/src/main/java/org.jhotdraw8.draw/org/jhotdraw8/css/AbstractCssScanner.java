@@ -30,16 +30,19 @@ public abstract class AbstractCssScanner implements CssScanner {
     public AbstractCssScanner() {
     }
 
+    @Override
     public int currentChar() {
         return currentChar;
     }
 
+    @Override
     public long getLineNumber() {
         return lineNumber;
     }
 
     protected abstract int read() throws IOException;
 
+    @Override
     public int nextChar() throws IOException {
         currentChar = read();
         if (skipLF && currentChar == '\n') {
@@ -72,6 +75,7 @@ public abstract class AbstractCssScanner implements CssScanner {
         return currentChar;
     }
 
+    @Override
     public long getPosition() {
         return position;
     }

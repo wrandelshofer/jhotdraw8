@@ -26,10 +26,12 @@ public class OrderedPairNonNull<U, V> implements Pair<U, V> {
         this.b = b;
     }
 
+    @Override
     public @NonNull U first() {
         return a;
     }
 
+    @Override
     public @NonNull V second() {
         return b;
     }

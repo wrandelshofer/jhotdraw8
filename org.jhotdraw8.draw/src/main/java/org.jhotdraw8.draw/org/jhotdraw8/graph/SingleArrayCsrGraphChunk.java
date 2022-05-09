@@ -88,6 +88,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
      * @param u index of vertex u
      * @return the index of u or (-index -1) if u is not in the index list.
      */
+    @Override
     public int indexOf(final int v, final int u) {
         final int from = getSiblingsFromOffset(v);
         final int to = from + getSiblingCount(v);
@@ -96,10 +97,12 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         return result < 0 ? result + from : result - from;
     }
 
+    @Override
     public int[] getSiblingsArray() {
         return chunk;
     }
 
+    @Override
     public int getSiblingCount(final int v) {
         final int vIndex = v & (vertexCount - 1);
         final int sizesOffset = getSizesOffset();
@@ -108,20 +111,24 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
                 : chunk[sizesOffset + vIndex] - chunk[sizesOffset + vIndex - 1];
     }
 
+    @Override
     public int getVertexData(final int v) {
         final int vIndex = v & (vertexCount - 1);
         return chunk[vIndex];
     }
 
+    @Override
     public void setVertexData(final int v, final int data) {
         final int vIndex = v & (vertexCount - 1);
         chunk[vIndex] = data;
     }
 
+    @Override
     public int getArrow(final int v, final int k) {
         return chunk[getArrowsFromOffset(v) + k];
     }
 
+    @Override
     public int getSiblingsFromOffset(final int v) {
         final int vIndex = v & (vertexCount - 1);
         final int siblingsOffset = getSiblingsFromOffset();
@@ -142,6 +149,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
         return vertexCount * 2;
     }
 
+    @Override
     public int getSibling(final int v, final int k) {
         return chunk[getSiblingsFromOffset(v) + k];
     }
@@ -184,6 +192,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
      * @param updateIfPresent sets the data if the arrow is present
      * @return true if a new arrow was added
      */
+    @Override
     public boolean tryAddArrow(final int v, final int u, final int data, final boolean updateIfPresent) {
         final int result = indexOf(v, u);
         if (result >= 0) {
@@ -232,6 +241,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
      * @param u index of vertex u
      * @return true on success
      */
+    @Override
     public boolean tryRemoveArrow(final int v, final int u) {
         final int result = indexOf(v, u);
         if (result < 0) {
@@ -246,6 +256,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
      *
      * @param v index of vertex v
      */
+    @Override
     public void removeAllArrows(final int v) {
         final int vIndex = v & (vertexCount - 1);
         final int size = getSiblingCount(vIndex);
@@ -311,6 +322,7 @@ public class SingleArrayCsrGraphChunk implements GraphChunk {
      * @param removalIndex index of vertex u
      * @return returns the removed arrow u
      */
+    @Override
     public int removeArrowAt(final int v, final int removalIndex) {
         final int siblingsFrom = getSiblingsFromOffset(v);
         final int siblingsTo = getSiblingCount(v) + siblingsFrom;

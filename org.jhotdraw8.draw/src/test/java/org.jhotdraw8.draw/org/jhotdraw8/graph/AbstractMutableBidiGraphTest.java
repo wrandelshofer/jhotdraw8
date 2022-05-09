@@ -19,8 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public abstract class AbstractMutableBidiGraphTest<V, A>
         extends AbstractMutableDirectedGraphTest<V, A> {
+    @Override
     protected abstract @NonNull MutableBidiGraph<V, A> newInstance();
 
+    @Override
     protected abstract @NonNull MutableBidiGraph<V, A> newInstance(@NonNull DirectedGraph<V, A> g);
 
     /**
@@ -37,12 +39,14 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
      * </pre>
      * </pre>
      */
+    @Override
     @Test
     public void testAddVerticesAndArrows() {
         MutableBidiGraph<V, A> g = (MutableBidiGraph<V, A>) buildGraph();
         assertEqualsInitialGraph(g);
     }
 
+    @Override
     @Test
     public void testCopy() {
         MutableBidiGraph<V, A> g = newInstance(buildGraph());

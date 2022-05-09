@@ -36,6 +36,7 @@ public class VBoxTrack extends AbstractDockParent implements Track {
         return TrackAxis.Y;
     }
 
+    @Override
     public boolean isResizesDockChildren() {
         return false;
     }

@@ -84,6 +84,7 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
         doPathDone();
     }
 
+    @Override
     public @NonNull Point2D.Double getLastPoint() {
         return new Point2D.Double(lastX, lastY);
     }
@@ -185,6 +186,7 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
         this.lastCY = lastCY;
     }
 
+    @Override
     public boolean needsMoveTo() {
         return numCommands == 0;
     }

@@ -54,6 +54,7 @@ public class HelpTextInspector extends AbstractDrawingViewInspector {
         });
     }
 
+    @Override
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
         if (oldValue != null) {

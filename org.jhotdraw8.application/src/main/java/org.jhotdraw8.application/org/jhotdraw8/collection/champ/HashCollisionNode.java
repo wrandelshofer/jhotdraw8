@@ -112,6 +112,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
         return entry;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     K getKey(final int index, int entryLength) {
         return (K) entries[index * entryLength];

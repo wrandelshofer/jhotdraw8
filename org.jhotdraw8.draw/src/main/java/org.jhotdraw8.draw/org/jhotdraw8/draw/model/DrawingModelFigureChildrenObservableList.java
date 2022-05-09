@@ -100,6 +100,7 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
 
     // XXX supertype method is only available since Java 9
     //@Override
+    @Override
     public int getViewIndex(int index) {
         return index;
     }

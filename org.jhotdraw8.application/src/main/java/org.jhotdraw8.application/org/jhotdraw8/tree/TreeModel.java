@@ -38,6 +38,7 @@ public interface TreeModel<N> extends ObservableMixin {
      *
      * @return a list of drawing model listeners
      */
+    @Override
     @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     /**

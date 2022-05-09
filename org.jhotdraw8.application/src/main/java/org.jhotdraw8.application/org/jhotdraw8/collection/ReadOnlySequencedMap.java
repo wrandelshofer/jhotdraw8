@@ -41,6 +41,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
         return lastEntry().getKey();
     }
 
+    @Override
     default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new WrappedReadOnlySequencedSet<>(
                 this::iterator,
@@ -51,6 +52,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
         );
     }
 
+    @Override
     default @NonNull ReadOnlySequencedSet<K> readOnlyKeySet() {
         return new WrappedReadOnlySequencedSet<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getKey),
@@ -61,6 +63,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
         );
     }
 
+    @Override
     default @NonNull ReadOnlySequencedCollection<V> readOnlyValues() {
         return new WrappedReadOnlySequencedSet<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getValue),

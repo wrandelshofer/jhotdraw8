@@ -11,6 +11,7 @@ public abstract class AbstractCssFunction<T> implements CssFunction<T> {
         this.name = name;
     }
 
+    @Override
     public String getName() {
         return name;
     }

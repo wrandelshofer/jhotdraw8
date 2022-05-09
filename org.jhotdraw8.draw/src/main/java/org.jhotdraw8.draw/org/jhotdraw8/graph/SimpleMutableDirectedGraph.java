@@ -130,6 +130,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param vb    vertex b
      * @param arrow the arrow
      */
+    @Override
     public void addArrow(@NonNull V va, @NonNull V vb, @Nullable A arrow) {
         Objects.requireNonNull(va, "va");
         Objects.requireNonNull(vb, "vb");
@@ -198,6 +199,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      *
      * @param v vertex
      */
+    @Override
     public void addVertex(@NonNull V v) {
         Objects.requireNonNull(v, "v");
         vertexMap.computeIfAbsent(v, addVertexIfAbsent);
@@ -305,6 +307,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         return index;
     }
 
+    @Override
     public A getArrow(int index) {
         // This has quadratic performance!
         int i = index;

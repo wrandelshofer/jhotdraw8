@@ -27,6 +27,7 @@ public class FontChooserController extends FontFamilyChooserController {
     }
 
 
+    @Override
     @FXML
     void initialize() {
         super.initialize();

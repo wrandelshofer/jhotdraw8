@@ -132,6 +132,7 @@ public class LongMinHeap implements LongQueue {
      * @throws IllegalStateException if the element cannot be added
      *                               at this time due to capacity restrictions.
      */
+    @Override
     public boolean offerAsLong(final long element) {
         if (size < maxsize) {
             return addAsLong(element);
@@ -139,6 +140,7 @@ public class LongMinHeap implements LongQueue {
         return false;
     }
 
+    @Override
     public boolean addAsLong(final long element) {
         if (size >= maxsize) {
             throw new IllegalStateException("maxsize reached: " + maxsize);
@@ -177,6 +179,7 @@ public class LongMinHeap implements LongQueue {
      *
      * @throws java.util.NoSuchElementException if the heap is empty
      */
+    @Override
     public long removeAsLong() {
         if (size == 0) {
             throw new NoSuchElementException();
@@ -227,14 +230,17 @@ public class LongMinHeap implements LongQueue {
         return false;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public @NonNull Spliterator.OfLong spliterator() {
         return Spliterators.spliterator(heap, 1, size + 1, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
+    @Override
     public @NonNull Iterator<Long> iterator() {
         return Spliterators.iterator(spliterator());
     }
@@ -248,6 +254,7 @@ public class LongMinHeap implements LongQueue {
         return objects;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         final int size = this.size;

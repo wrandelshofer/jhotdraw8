@@ -86,6 +86,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
         nodes.set(nodes.size() - 1, newValue);
     }
 
+    @Override
     public @NonNull ImmutableList<BezierNode> build() {
         return ImmutableArrayList.copyOf(nodes);
     }

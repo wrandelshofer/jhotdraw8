@@ -44,6 +44,7 @@ public class IntArrayEnumerator extends AbstractIntEnumerator {
         return limit - index;
     }
 
+    @Override
     public @Nullable IntArrayEnumerator trySplit() {
         // divide range in half unless too small
         int lo = index, mid = (lo + limit) >>> 1;

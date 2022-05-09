@@ -242,5 +242,6 @@ public interface FileBasedActivity extends Activity {
      *
      * @return the title of the activity
      */
+    @Override
     @NonNull StringProperty titleProperty();
 }

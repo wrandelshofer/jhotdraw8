@@ -188,6 +188,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
 
+    @Override
     public Class<?> getBaseClass() {
         return baseClass;
     }
@@ -208,6 +209,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * @param arguments the arguments
      * @return formatted String
      */
+    @Override
     public @NonNull String getFormatted(@NonNull String key, Object... arguments) {
         return MessageFormat.format(getString(key), arguments);
     }
@@ -226,6 +228,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return obj;
     }
 
+    @Override
     public @Nullable Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {
@@ -243,6 +246,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         return "ModulepathResources" + "[" + baseName + "]";
     }
 
+    @Override
     public Module getModule() {
         return module;
     }

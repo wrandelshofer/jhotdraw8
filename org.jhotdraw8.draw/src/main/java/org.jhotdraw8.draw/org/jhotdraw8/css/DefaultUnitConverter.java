@@ -43,10 +43,12 @@ public class DefaultUnitConverter implements UnitConverter {
         this(96.0);
     }
 
+    @Override
     public double getDpi() {
         return dpi;
     }
 
+    @Override
     public double getPercentageFactor() {
         return percentageFactor;
     }

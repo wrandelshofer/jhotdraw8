@@ -120,6 +120,7 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return isTransient;
     }
@@ -133,6 +134,7 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
     }
 
+    @Override
     public int ordinal() {
         return ordinal;
     }

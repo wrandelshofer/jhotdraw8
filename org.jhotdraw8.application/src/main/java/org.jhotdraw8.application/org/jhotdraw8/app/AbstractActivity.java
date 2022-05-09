@@ -118,6 +118,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     public void start() {
     }
 
+    @Override
     public void init() {
         initView();
         initTitle();

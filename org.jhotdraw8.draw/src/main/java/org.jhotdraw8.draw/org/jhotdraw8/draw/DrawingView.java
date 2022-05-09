@@ -249,6 +249,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param f The figure
      * @return The node associated to the figure
      */
+    @Override
     @Nullable Node getNode(Figure f);
 
     /**

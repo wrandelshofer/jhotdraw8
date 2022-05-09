@@ -118,6 +118,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         addArrowAsInt(v, u, 0);
     }
 
+    @Override
     public void addArrowAsInt(final int v, final int u, final int arrowData) {
         Preconditions.checkIndex(v, getVertexCount());
         Preconditions.checkIndex(u, getVertexCount());
@@ -499,6 +500,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return prevArrow[v * maxArity + i];
     }
 
+    @Override
     public int getVertexDataAsInt(final int vidx) {
         return getVertexDataFromNextAsInt(vidx);
     }

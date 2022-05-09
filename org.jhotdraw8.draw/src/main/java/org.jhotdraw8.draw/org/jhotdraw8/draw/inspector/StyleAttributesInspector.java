@@ -38,6 +38,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     public StyleAttributesInspector() {
     }
 
+    @Override
     public @NonNull ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }

@@ -38,6 +38,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     public AbstractTreePresentationModel() {
     }
 
+    @Override
     public @Nullable NonNullObjectProperty<TreeModel<N>> treeModelProperty() {
         return treeModel;
     }

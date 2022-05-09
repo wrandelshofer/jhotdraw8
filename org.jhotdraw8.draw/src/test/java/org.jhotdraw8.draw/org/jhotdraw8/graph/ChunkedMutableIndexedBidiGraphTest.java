@@ -35,11 +35,13 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
         return List.of();
     }
 
+    @Override
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsRandomMultiGraph() {
         return Collections.emptyList();
     }
 
+    @Override
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
         return Collections.emptyList();

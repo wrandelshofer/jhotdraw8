@@ -290,6 +290,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return getAttributeAsString(element, StyleOrigin.USER, namespacePattern, attributeName);
     }
 
+    @Override
     public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
         ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
@@ -356,6 +357,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return buf.toString();
     }
 
+    @Override
     public @Nullable List<CssToken> getAttribute(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
         ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {

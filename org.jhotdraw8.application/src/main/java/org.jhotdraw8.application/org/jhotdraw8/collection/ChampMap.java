@@ -289,6 +289,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
             super(target);
         }
 
+        @Override
         protected Object readResolve() {
             return new ChampMap<>(deserialized);
         }

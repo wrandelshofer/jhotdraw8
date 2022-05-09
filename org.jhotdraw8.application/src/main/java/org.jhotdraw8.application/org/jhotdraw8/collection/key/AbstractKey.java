@@ -142,6 +142,7 @@ public abstract class AbstractKey<T> implements Key<T> {
         return isNullable;
     }
 
+    @Override
     public boolean isTransient() {
         return isTransient;
     }
@@ -155,6 +156,7 @@ public abstract class AbstractKey<T> implements Key<T> {
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
     }
 
+    @Override
     public int ordinal() {
         return ordinal;
     }

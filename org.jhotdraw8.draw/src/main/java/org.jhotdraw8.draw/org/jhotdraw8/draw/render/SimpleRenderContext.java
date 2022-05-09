@@ -34,6 +34,7 @@ public class SimpleRenderContext implements WritableRenderContext {
         return properties;
     }
 
+    @Override
     public <T> void set(@NonNull MapAccessor<T> key, @Nullable T value) {
         key.set(properties, value);
     }

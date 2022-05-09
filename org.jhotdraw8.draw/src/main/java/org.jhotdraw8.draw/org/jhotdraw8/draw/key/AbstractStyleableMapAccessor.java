@@ -147,6 +147,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         return false;
     }
 
+    @Override
     public @NonNull String getCssName() {
         return cssName;
     }

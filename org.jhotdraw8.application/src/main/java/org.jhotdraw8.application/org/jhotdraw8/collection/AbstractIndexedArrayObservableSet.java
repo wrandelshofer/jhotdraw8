@@ -532,6 +532,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     }
 
+    @Override
     public int indexOf(Object o) {
         @SuppressWarnings("unchecked") final E element = (E) o;
         if (Boolean.FALSE.equals(onContains(element))) {

@@ -122,65 +122,77 @@ public interface WorkState<V> extends Worker<V> {
     /**
      * @see Worker#getValue()
      */
+    @Override
     @Nullable V getValue();
 
     /**
      * @see Worker#valueProperty()
      */
+    @Override
     @NonNull ReadOnlyObjectProperty<V> valueProperty();
 
 
     /**
      * @see Worker#getWorkDone()
      */
+    @Override
     double getWorkDone();
 
     /**
      * @see Worker#workDoneProperty()
      */
+    @Override
     @NonNull ReadOnlyDoubleProperty workDoneProperty();
 
 
     /**
      * @see Worker#getTotalWork()
      */
+    @Override
     double getTotalWork();
 
 
     /**
      * @see Worker#totalWorkProperty()
      */
+    @Override
     @NonNull ReadOnlyDoubleProperty totalWorkProperty();
 
 
     /**
      * @see Worker#getProgress()
      */
+    @Override
     double getProgress();
 
     /**
      * @see Worker#progressProperty()
      */
+    @Override
     @NonNull ReadOnlyDoubleProperty progressProperty();
 
     /**
      * @see Worker#getMessage()
      */
+    @Override
     @Nullable String getMessage();
 
     /**
      * @see Worker#messageProperty()
      */
+    @Override
     @NonNull ReadOnlyStringProperty messageProperty();
 
     /**
      * @see Worker#getTitle()
      */
+    @Override
     @Nullable String getTitle();
 
     /**
      * @see Worker#titleProperty()
      */
+    @Override
     @NonNull ReadOnlyStringProperty titleProperty();
 
 }

@@ -410,6 +410,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         this.ordered = ordered;
     }
 
+    @Override
     public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
         if (ordered) {
             return getNextVerticesOrdered(v);
@@ -487,6 +488,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
                 return false;
             }
 
+            @Override
             public @Nullable MySpliterator trySplit() {
                 int hi = limit, lo = index, mid = (lo + hi) >>> 1;
                 return (lo >= mid) ? null : // divide range in half unless too small

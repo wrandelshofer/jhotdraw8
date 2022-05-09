@@ -180,6 +180,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     protected abstract void onToolChanged(Observable observable, Tool oldValue, Tool newValue);
 
+    @Override
     public <T> void set(@NonNull MapAccessor<T> key, @Nullable T value) {
         key.set(properties, value);
     }

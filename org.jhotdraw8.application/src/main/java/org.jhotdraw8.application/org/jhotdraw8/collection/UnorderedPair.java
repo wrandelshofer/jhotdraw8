@@ -31,10 +31,12 @@ public class UnorderedPair<V> implements Pair<V, V> {
         this.b = b;
     }
 
+    @Override
     public V first() {
         return a;
     }
 
+    @Override
     public V second() {
         return b;
     }

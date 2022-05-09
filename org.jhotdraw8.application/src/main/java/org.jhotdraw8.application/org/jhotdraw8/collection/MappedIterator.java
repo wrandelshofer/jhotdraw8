@@ -39,6 +39,7 @@ public class MappedIterator<E, F> implements Iterator<E> {
         return mappingFunction.apply(i.next());
     }
 
+    @Override
     public void remove() {
         i.remove();
     }

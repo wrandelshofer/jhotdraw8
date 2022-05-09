@@ -311,6 +311,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return an iterator over the elements of this list
      */
+    @Override
     public @NonNull PrimitiveIterator.OfDouble iterator() {
         return new PrimitiveIterator.OfDouble() {
             private int index = 0;
@@ -337,6 +338,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return a spliterator over the elements of this list
      */
+    @Override
     public @NonNull Spliterator.OfDouble spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

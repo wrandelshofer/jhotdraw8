@@ -89,6 +89,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *
      * @param newItem the new item
      */
+    @Override
     public void addAsInt(int newItem) {
         grow(size + 1);
         items[size++] = newItem;
@@ -100,6 +101,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @param index   the index
      * @param newItem the new item
      */
+    @Override
     public void addAsInt(int index, int newItem) {
         Preconditions.checkIndex(index, size + 1);
         grow(size + 1);
@@ -138,6 +140,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     /**
      * Clears the list in O(1).
      */
+    @Override
     public void clear() {
         // Performance: do not fill array with 0 values
         size = 0;
@@ -183,6 +186,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @param index an index
      * @return the item at the index
      */
+    @Override
     public int getAsInt(int index) {
         Preconditions.checkIndex(index, size);
         return items[index];
@@ -200,10 +204,12 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return items[index];
     }
 
+    @Override
     public int getLastAsInt() {
         return getAsInt(size - 1);
     }
 
+    @Override
     public int getFirstAsInt() {
         return getAsInt(0);
     }
@@ -273,6 +279,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *
      * @return true if empty
      */
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
@@ -292,6 +299,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @param index an index
      * @return the removed item
      */
+    @Override
     public int removeAtAsInt(int index) {
         Preconditions.checkIndex(index, size);
         int removedItem = items[index];
@@ -309,6 +317,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @return the removed item
      * @throws NoSuchElementException if the list is empty
      */
+    @Override
     public int removeLastAsInt() {
         if (isEmpty()) {
             throw new NoSuchElementException("List is empty.");
@@ -335,6 +344,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *
      * @return the size
      */
+    @Override
     public int size() {
         return size;
     }
@@ -351,6 +361,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *
      * @return an iterator over the elements of this list
      */
+    @Override
     public @NonNull PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int index = 0;
@@ -377,6 +388,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *
      * @return a spliterator over the elements of this list
      */
+    @Override
     public @NonNull Spliterator.OfInt spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -470,6 +482,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      *          A {@code null} value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used.
      */
+    @Override
     public void sort(@Nullable Comparator<? super Integer> c) {
         if (size > 1) {
             if (c == null) {

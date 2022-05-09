@@ -106,6 +106,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
         coords[numCoords++] = y;
     }
 
+    @Override
     public @NonNull PathIterator build() {
         return new MyPathIterator(windingRule, numCommands, numCoords, commands, coords);
     }

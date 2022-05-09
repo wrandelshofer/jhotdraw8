@@ -932,6 +932,7 @@ public class StreamCssTokenizer implements CssTokenizer {
      * @return the start position of the token if a token has been pushed back,
      * the end position of the token otherwise
      */
+    @Override
     public int getNextPosition() {
         return pushBack ? startPosition : endPosition;
     }

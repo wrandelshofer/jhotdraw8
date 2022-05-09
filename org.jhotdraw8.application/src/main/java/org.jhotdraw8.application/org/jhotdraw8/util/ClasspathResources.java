@@ -130,6 +130,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         return obj;
     }
 
+    @Override
     public @Nullable Object handleGetObjectRecursively(@NonNull String key) {
         Object obj = null;
         try {

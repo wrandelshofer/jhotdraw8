@@ -102,6 +102,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         return (ConnectingFigure) super.getOwner();
     }
 
+    @Override
     public boolean isEditable() {
         return editable;
     }

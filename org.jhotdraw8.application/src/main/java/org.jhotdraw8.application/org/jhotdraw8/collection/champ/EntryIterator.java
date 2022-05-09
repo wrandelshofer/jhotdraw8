@@ -70,6 +70,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         }
     }
 
+    @Override
     public boolean hasNext() {
         if (nextValueCursor < nextValueLength) {
             return true;
@@ -78,6 +79,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         }
     }
 
+    @Override
     public SequencedMapEntry<K, V> next() {
         if (!hasNext()) {
             throw new NoSuchElementException();

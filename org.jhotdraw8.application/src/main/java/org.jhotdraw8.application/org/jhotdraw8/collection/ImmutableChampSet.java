@@ -127,6 +127,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
         return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
+    @Override
     public @NonNull ImmutableChampSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
@@ -138,6 +139,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
         return this;
     }
 
+    @Override
     @SuppressWarnings({"unchecked"})
     public @NonNull ImmutableChampSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ImmutableChampSet<?>)) {

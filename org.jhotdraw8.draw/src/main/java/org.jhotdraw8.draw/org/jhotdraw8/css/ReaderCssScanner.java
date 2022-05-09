@@ -41,6 +41,7 @@ public class ReaderCssScanner extends AbstractCssScanner {
         return ch;
     }
 
+    @Override
     public void pushBack(int ch) {
         if (ch != -1) {
             position--;
@@ -51,6 +52,7 @@ public class ReaderCssScanner extends AbstractCssScanner {
         }
     }
 
+    @Override
     public long getPosition() {
         return position;
     }

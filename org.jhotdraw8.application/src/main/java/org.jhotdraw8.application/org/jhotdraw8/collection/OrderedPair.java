@@ -30,10 +30,12 @@ public class OrderedPair<U, V> implements Pair<U, V> {
         this.b = b;
     }
 
+    @Override
     public U first() {
         return a;
     }
 
+    @Override
     public V second() {
         return b;
     }

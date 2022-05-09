@@ -20,6 +20,7 @@ public class AbstractObservable implements ObservableMixin {
     public AbstractObservable() {
     }
 
+    @Override
     public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         if (invalidationListeners == null) {
             invalidationListeners = new CopyOnWriteArrayList<>();
@@ -34,6 +35,7 @@ public class AbstractObservable implements ObservableMixin {
      * <p>
      * The default implementation is empty.
      */
+    @Override
     public void invalidated() {
     }
 

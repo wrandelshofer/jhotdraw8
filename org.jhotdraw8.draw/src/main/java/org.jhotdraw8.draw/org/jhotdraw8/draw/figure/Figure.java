@@ -901,6 +901,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param newParent The new parent figure.
      * @return true if {@code newParent} is an acceptable parent
      */
+    @Override
     boolean isSuitableParent(@NonNull Figure newParent);
 
     /**
@@ -910,6 +911,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param newChild The new child figure.
      * @return true if {@code newChild} is an acceptable child
      */
+    @Override
     boolean isSuitableChild(@NonNull Figure newChild);
 
     /**

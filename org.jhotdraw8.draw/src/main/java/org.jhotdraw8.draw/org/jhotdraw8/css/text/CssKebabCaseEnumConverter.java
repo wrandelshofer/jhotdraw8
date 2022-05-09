@@ -42,6 +42,7 @@ public class CssKebabCaseEnumConverter<E extends Enum<E>> implements CssConverte
     }
 
 
+    @Override
     public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException(name + ": identifier expected", tt.getStartPosition());

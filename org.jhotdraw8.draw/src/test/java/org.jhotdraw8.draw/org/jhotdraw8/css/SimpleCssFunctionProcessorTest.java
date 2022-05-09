@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class SimpleCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
+    @Override
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         List<CssFunction<Element>> functions = new ArrayList<>();
         functions.add(new AttrCssFunction<>());

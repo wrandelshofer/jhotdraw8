@@ -86,6 +86,7 @@ public interface CssConverter<T> extends Converter<T> {
      * @param <TT>  the value type
      * @return a String
      */
+    @Override
     default @NonNull <TT extends T> String toString(@Nullable TT value) {
         return toString(value, null);
     }
@@ -125,6 +126,7 @@ public interface CssConverter<T> extends Converter<T> {
         }
     }
 
+    @Override
     default T fromString(@NonNull CharSequence buf, @Nullable IdResolver idResolver) throws ParseException {
         try {
             StreamCssTokenizer tt = new StreamCssTokenizer(buf);
@@ -134,6 +136,7 @@ public interface CssConverter<T> extends Converter<T> {
         }
     }
 
+    @Override
     default T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         try {
             int startPos = buf.position();
@@ -152,6 +155,7 @@ public interface CssConverter<T> extends Converter<T> {
      *
      * @return a help text.
      */
+    @Override
     @Nullable String getHelpText();
 
     default @NonNull ImmutableList<String> getExamples() {

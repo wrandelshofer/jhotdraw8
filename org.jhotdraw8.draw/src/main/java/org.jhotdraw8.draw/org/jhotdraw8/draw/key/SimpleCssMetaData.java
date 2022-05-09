@@ -42,6 +42,7 @@ public class SimpleCssMetaData<S extends Styleable, V> extends CssMetaData<S, V>
 
     private final Function<S, StyleableProperty<V>> function;
 
+    @Override
     public final boolean isSettable(S styleable) {
         final StyleableProperty<V> prop = getStyleableProperty(styleable);
         if (prop instanceof Property) {

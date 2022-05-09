@@ -64,6 +64,7 @@ public class SelectorGroup extends Selector {
      * @param element the element
      * @return true on match
      */
+    @Override
     public <T> boolean matches(SelectorModel<T> model, T element) {
         return match(model, element) != null;
     }

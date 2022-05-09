@@ -56,24 +56,30 @@ public class FigureTest {
 
     public class FigureImpl extends AbstractStyleablePropertyBean implements Figure {
 
+        @Override
         public void removeLayoutSubject(Figure targetFigure) {
         }
 
+        @Override
         public void removeAllLayoutSubjects() {
         }
 
+        @Override
         public @NonNull ObjectProperty<Figure> parentProperty() {
             return null;
         }
 
+        @Override
         public @NonNull Bounds getLayoutBounds() {
             return null;
         }
 
+        @Override
         public @NonNull CssRectangle2D getCssLayoutBounds() {
             return new CssRectangle2D(getLayoutBounds());
         }
 
+        @Override
         public void reshapeInLocal(Transform transform) {
         }
 
@@ -82,17 +88,21 @@ public class FigureTest {
             // empty
         }
 
+        @Override
         public @NonNull Node createNode(@NonNull RenderContext ctx) {
             return null;
         }
 
+        @Override
         public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         }
 
+        @Override
         public boolean isAllowsChildren() {
             return false;
         }
 
+        @Override
         public boolean isSuitableParent(@NonNull Figure newParent) {
             return false;
         }
@@ -102,14 +112,17 @@ public class FigureTest {
             return false;
         }
 
+        @Override
         public boolean isSelectable() {
             return false;
         }
 
+        @Override
         public boolean isDeletable() {
             return false;
         }
 
+        @Override
         public boolean isEditable() {
             return false;
         }
@@ -118,19 +131,24 @@ public class FigureTest {
             return null;
         }
 
+        @Override
         public void updateCss(RenderContext ctx) {
         }
 
+        @Override
         public void addedToDrawing(@NonNull Drawing drawing) {
         }
 
+        @Override
         public void removedFromDrawing(Drawing drawing) {
         }
 
+        @Override
         public @NonNull ObservableList<Figure> getChildren() {
             return FXCollections.emptyObservableList();
         }
 
+        @Override
         public @NonNull Set<Figure> getLayoutObservers() {
             return Collections.emptySet();
         }
@@ -140,6 +158,7 @@ public class FigureTest {
             return ImmutableChampSet.of();
         }
 
+        @Override
         public @NonNull Transform getParentToLocal() {
             return FXTransforms.IDENTITY;
         }
@@ -149,34 +168,42 @@ public class FigureTest {
             return getLayoutBounds();
         }
 
+        @Override
         public @NonNull Transform getLocalToParent() {
             return FXTransforms.IDENTITY;
         }
 
+        @Override
         public @NonNull Transform getWorldToLocal() {
             return FXTransforms.IDENTITY;
         }
 
+        @Override
         public @NonNull Transform getWorldToParent() {
             return FXTransforms.IDENTITY;
         }
 
+        @Override
         public @NonNull Transform getLocalToWorld() {
             return FXTransforms.IDENTITY;
         }
 
+        @Override
         public @NonNull Transform getParentToWorld() {
             return FXTransforms.IDENTITY;
         }
 
+        @Override
         public void invalidateTransforms() {
 
         }
 
+        @Override
         public @Nullable CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> getPropertyChangeListeners() {
             return null;
         }
 
+        @Override
         public boolean hasPropertyChangeListeners() {
             return false;
         }

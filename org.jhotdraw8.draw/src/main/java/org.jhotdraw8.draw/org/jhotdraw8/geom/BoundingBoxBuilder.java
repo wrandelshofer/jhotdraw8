@@ -69,6 +69,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
+    @Override
     public @NonNull BoundingBox build() {
         if (Double.isNaN(minx)) {
             return new BoundingBox(0, 0, 0, 0);

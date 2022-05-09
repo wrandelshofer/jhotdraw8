@@ -270,18 +270,21 @@ public class SelectionTool extends AbstractTool {
         }
     }
 
+    @Override
     protected void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyPressed(event, view);
         }
     }
 
+    @Override
     protected void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyReleased(event, view);
         }
     }
 
+    @Override
     protected void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyTyped(event, view);
@@ -397,14 +400,17 @@ public class SelectionTool extends AbstractTool {
 
     double zoomFactor = 1.0;
 
+    @Override
     protected void onZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
         dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
     }
 
+    @Override
     protected void onZoomStarted(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
     }
 
+    @Override
     protected void onZoomFinished(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
     }
 

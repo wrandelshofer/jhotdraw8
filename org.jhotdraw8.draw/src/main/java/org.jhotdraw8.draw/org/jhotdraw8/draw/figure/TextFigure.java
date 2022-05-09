@@ -83,6 +83,7 @@ public class TextFigure extends AbstractLeafFigure
         updateNode(ctx, textNode);
     }
 
+    @Override
     public @NonNull CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }

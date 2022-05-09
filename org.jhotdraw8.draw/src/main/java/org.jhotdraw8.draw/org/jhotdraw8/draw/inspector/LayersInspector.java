@@ -287,6 +287,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         return new LayerCell(getModel(), this);
     }
 
+    @Override
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
         super.onDrawingViewChanged(observable, oldValue, newValue);
         if (oldValue != null) {

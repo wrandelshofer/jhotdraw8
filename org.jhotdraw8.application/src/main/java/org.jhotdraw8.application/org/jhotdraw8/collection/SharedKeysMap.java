@@ -85,6 +85,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
     }
 
+    @Override
     public void clear() {
         Arrays.fill(values, null);
         size = 0;

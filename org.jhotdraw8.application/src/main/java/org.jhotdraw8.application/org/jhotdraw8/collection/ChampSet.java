@@ -126,6 +126,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * @param e an element
      * @return {@code true} if this set changed
      */
+    @Override
     public boolean add(final @Nullable E e) {
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
@@ -230,6 +231,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * @param o an element
      * @return {@code true} if this set changed
      */
+    @Override
     public boolean remove(final Object o) {
         @SuppressWarnings("unchecked")
         E key = (E) o;
@@ -335,6 +337,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
             super(target);
         }
 
+        @Override
         protected Object readResolve() {
             return new ChampSet<>(deserialized);
         }

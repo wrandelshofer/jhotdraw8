@@ -75,6 +75,7 @@ public class XmlObjectReferenceConverter<T> implements ResolvingConverter<T> {
         return null;
     }
 
+    @Override
     public boolean needsIdResolver() {
         return true;
     }

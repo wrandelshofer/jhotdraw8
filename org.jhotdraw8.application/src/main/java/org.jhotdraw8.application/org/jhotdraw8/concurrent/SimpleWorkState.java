@@ -66,14 +66,17 @@ public class SimpleWorkState<V> implements WorkState<V> {
      *
      * @param newValue the new value
      */
+    @Override
     public void updateValue(@Nullable V newValue) {
         update(newValue, value, valueUpdate);
     }
 
+    @Override
     public @Nullable V getValue() {
         return value.get();
     }
 
+    @Override
     public @NonNull ReadOnlyObjectProperty<V> valueProperty() {
         return value;
     }
@@ -87,10 +90,12 @@ public class SimpleWorkState<V> implements WorkState<V> {
         update(newValue, workDone, workDoneUpdate);
     }
 
+    @Override
     public double getWorkDone() {
         return workDone.get();
     }
 
+    @Override
     public @NonNull ReadOnlyDoubleProperty workDoneProperty() {
         return workDone.getReadOnlyProperty();
     }
@@ -104,11 +109,13 @@ public class SimpleWorkState<V> implements WorkState<V> {
         update(newValue, totalWork, totalWorkUpdate);
     }
 
+    @Override
     public double getTotalWork() {
         return totalWork.get();
     }
 
 
+    @Override
     public @NonNull ReadOnlyDoubleProperty totalWorkProperty() {
         return totalWork.getReadOnlyProperty();
     }
@@ -118,30 +125,37 @@ public class SimpleWorkState<V> implements WorkState<V> {
      *
      * @param newValue the new value
      */
+    @Override
     public void updateProgress(double newValue) {
         update(newValue, progress, progressUpdate);
     }
 
+    @Override
     public double getProgress() {
         return progress.get();
     }
 
+    @Override
     public @NonNull ReadOnlyDoubleProperty progressProperty() {
         return progress.getReadOnlyProperty();
     }
 
+    @Override
     public @Nullable String getMessage() {
         return message.get();
     }
 
+    @Override
     public @NonNull ReadOnlyStringProperty messageProperty() {
         return message.getReadOnlyProperty();
     }
 
+    @Override
     public @Nullable String getTitle() {
         return title.get();
     }
 
+    @Override
     public @NonNull ReadOnlyStringProperty titleProperty() {
         return title.getReadOnlyProperty();
     }
@@ -176,6 +190,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
         return isCancelled;
     }
 
+    @Override
     public boolean cancel() {
         isCancelled = true;
         return true;

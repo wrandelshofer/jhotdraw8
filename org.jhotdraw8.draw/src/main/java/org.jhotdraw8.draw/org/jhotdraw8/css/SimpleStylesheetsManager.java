@@ -608,10 +608,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             return uri;
         }
 
+        @Override
         public @NonNull StyleOrigin getOrigin() {
             return origin;
         }
 
+        @Override
         public @Nullable Stylesheet getStylesheet() {
             if (future != null) {
                 try {

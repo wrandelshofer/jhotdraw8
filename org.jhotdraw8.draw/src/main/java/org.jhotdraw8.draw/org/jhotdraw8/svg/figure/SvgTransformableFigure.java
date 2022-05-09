@@ -155,6 +155,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         return list;
     }
 
+    @Override
     default @NonNull Transform getParentToLocal() {
         return getParentToLocal(true);
     }

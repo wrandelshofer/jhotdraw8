@@ -17,6 +17,7 @@ public interface IntAttributedIndexedDirectedGraph extends IndexedDirectedGraph 
      * @param i index of next vertex
      * @return the arrow data
      */
+    @Override
     int getNextArrowAsInt(int v, int i);
 
     /**

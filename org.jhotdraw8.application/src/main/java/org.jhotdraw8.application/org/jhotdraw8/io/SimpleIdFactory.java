@@ -45,6 +45,7 @@ public class SimpleIdFactory implements IdFactory {
 
     private @Nullable URI documentHome;
 
+    @Override
     public void setDocumentHome(@Nullable URI documentHome) {
         this.documentHome = documentHome;
     }
@@ -64,6 +65,7 @@ public class SimpleIdFactory implements IdFactory {
         return documentHome == null ? uri : uriResolver.absolutize(documentHome, uri);
     }
 
+    @Override
     public Object putIdAndObject(String id, Object object) {
         String oldId = objectToId.put(object, id);
         if (oldId != null) {
@@ -76,6 +78,7 @@ public class SimpleIdFactory implements IdFactory {
         return oldObject;
     }
 
+    @Override
     public Object putIdToObject(String id, Object object) {
         Object oldObject = idToObject.put(id, object);
         if (oldObject != null) {
@@ -84,6 +87,7 @@ public class SimpleIdFactory implements IdFactory {
         return oldObject;
     }
 
+    @Override
     public String createId(Object object, @Nullable String prefix) {
         String id = objectToId.get(object);
         if (id == null) {
@@ -99,6 +103,7 @@ public class SimpleIdFactory implements IdFactory {
         return id;
     }
 
+    @Override
     public @Nullable String createId(Object object, @Nullable String prefix, @Nullable String suggestedId) {
         String existingId = objectToId.get(object);
         if (existingId == null) {

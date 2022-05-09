@@ -41,6 +41,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
         super(imageUriKey, skipKey);
     }
 
+    @Override
     protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
                                                           w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException {
         w.writeAttribute("version", getSvgVersion());
@@ -51,10 +52,12 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
         }
     }
 
+    @Override
     protected String getSvgVersion() {
         return SVG_VERSION;
     }
 
+    @Override
     protected String getSvgBaseProfile() {
         return SVG_BASE_PROFILE;
     }
@@ -90,6 +93,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
         }
     }
 
+    @Override
     protected void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
             node) throws XMLStreamException {
         if (node.getOpacity() != 1.0) {

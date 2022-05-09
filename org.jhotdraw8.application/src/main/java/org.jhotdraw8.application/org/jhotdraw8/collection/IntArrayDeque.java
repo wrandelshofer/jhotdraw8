@@ -65,10 +65,12 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
+    @Override
     public void addLastAllAsInt(int[] array) {
         addLastAllAsInt(array, 0, array.length);
     }
 
+    @Override
     public void addLastAllAsInt(int[] array, int offset, int length) {
         grow(length + size());
 
@@ -107,6 +109,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         tail = size;
     }
 
+    @Override
     public void addLastAsInt(int e) {
         elements[tail] = e;
         tail = (tail + 1) & (elements.length - 1);
@@ -118,6 +121,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     /**
      * Clears the deque in O(1).
      */
+    @Override
     public void clear() {
         // Performance: Do not fill the array with zeros.
         this.head = this.tail = 0;
@@ -182,6 +186,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
 
+    @Override
     public int getFirstAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
@@ -190,6 +195,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
 
+    @Override
     public int getLastAsInt() {
         if (head == tail) {
             throw new NoSuchElementException();
@@ -229,10 +235,12 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
      *
      * @return {@code true} if this deque contains no elements
      */
+    @Override
     public boolean isEmpty() {
         return head == tail;
     }
 
+    @Override
     public @NonNull Iterator<Integer> iterator() {
         return new DeqIterator();
     }
@@ -381,10 +389,12 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
          */
         private int cursor = head;
 
+        @Override
         public boolean hasNext() {
             return cursor != fence;
         }
 
+        @Override
         public Integer next() {
             if (cursor == fence) {
                 throw new NoSuchElementException();

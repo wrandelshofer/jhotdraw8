@@ -32,6 +32,7 @@ public class CssSizeWithUnits extends CssSize {
         this.units = units;
     }
 
+    @Override
     public @NonNull String getUnits() {
         return units;
     }

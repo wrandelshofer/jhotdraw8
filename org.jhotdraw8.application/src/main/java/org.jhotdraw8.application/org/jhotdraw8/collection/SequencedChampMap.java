@@ -390,6 +390,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
             super(target);
         }
 
+        @Override
         protected Object readResolve() {
             return new SequencedChampMap<>(deserialized);
         }

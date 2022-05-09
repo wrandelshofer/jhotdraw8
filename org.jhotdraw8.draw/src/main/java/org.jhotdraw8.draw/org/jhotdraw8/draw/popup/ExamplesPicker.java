@@ -72,6 +72,7 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
         }
     }
 
+    @Override
     public void show(Node anchor, double screenX, double screenY,
                      T initialValue, BiConsumer<Boolean, T> callback) {
         update(initialValue);

@@ -42,6 +42,7 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
     public AbstractFileBasedActivity() {
     }
 
+    @Override
     protected void initTitle() {
         titleProperty().bind(CustomBinding.convert(uri, uri ->
                 uri == null ?

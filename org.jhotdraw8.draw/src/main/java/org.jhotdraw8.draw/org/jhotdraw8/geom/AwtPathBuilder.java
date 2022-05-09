@@ -54,6 +54,7 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
         path.quadTo(x, y, x0, y0);
     }
 
+    @Override
     public @NonNull Path2D.Double build() {
         pathDone();
         //XXX this method is only available since Java SE 11

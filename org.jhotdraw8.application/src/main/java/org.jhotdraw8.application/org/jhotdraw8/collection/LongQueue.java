@@ -108,6 +108,7 @@ public interface LongQueue extends Queue<Long> {
         return isEmpty() ? null : elementAsLong();
     }
 
+    @Override
     default boolean isEmpty() {
         return size() == 0;
     }

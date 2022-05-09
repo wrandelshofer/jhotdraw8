@@ -26,6 +26,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     /**
      * @see Deque#addFirst(Object)
      */
+    @Override
     void addFirstAsInt(int e);
 
     @Override
@@ -36,6 +37,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     /**
      * @see Deque#addLast(Object)
      */
+    @Override
     void addLastAsInt(int e);
 
 
@@ -55,6 +57,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     /**
      * @see Deque#getFirst()
      */
+    @Override
     int getFirstAsInt();
 
     @Override
@@ -65,6 +68,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     /**
      * @see Deque#getLast()
      */
+    @Override
     int getLastAsInt();
 
     @Override
@@ -178,6 +182,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     /**
      * @see Deque#removeFirst()
      */
+    @Override
     int removeFirstAsInt();
 
     @Override
@@ -201,6 +206,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     /**
      * @see Deque#removeLast()
      */
+    @Override
     int removeLastAsInt();
 
     @Override

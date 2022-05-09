@@ -31,6 +31,7 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
         return ReadOnlyCollection.iterableToString(this);
     }
 
+    @Override
     public boolean contains(Object o) {
         for (E e : this) {
             if (Objects.equals(o, e)) {

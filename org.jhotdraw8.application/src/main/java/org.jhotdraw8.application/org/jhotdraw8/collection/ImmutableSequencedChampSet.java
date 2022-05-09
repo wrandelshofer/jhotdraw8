@@ -184,6 +184,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
         return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
+    @Override
     public @NonNull ImmutableSequencedChampSet<E> copyAdd(final @NonNull E key) {
         return copyAddLastIfAbsent(key);
     }
@@ -228,6 +229,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
         return this;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public @NonNull ImmutableSequencedChampSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ImmutableSequencedChampSet<?>)) {
@@ -249,6 +251,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
         return isEmpty() ? this : of();
     }
 
+    @Override
     public @NonNull ImmutableSequencedChampSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
@@ -261,6 +264,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
         return this;
     }
 
+    @Override
     public @NonNull ImmutableSequencedChampSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
@@ -284,6 +288,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
         return modified ? t.toImmutable() : this;
     }
 
+    @Override
     public @NonNull ImmutableSequencedChampSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
         if (this.isEmpty()) {
             return this;

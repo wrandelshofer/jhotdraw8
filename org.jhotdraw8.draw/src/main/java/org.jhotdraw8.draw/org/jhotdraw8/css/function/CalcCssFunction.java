@@ -52,6 +52,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
         super(name);
     }
 
+    @Override
     public void process(@NonNull T element,
                         @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model,

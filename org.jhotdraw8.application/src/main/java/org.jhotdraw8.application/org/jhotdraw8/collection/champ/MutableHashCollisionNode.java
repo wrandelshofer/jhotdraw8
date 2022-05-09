@@ -17,6 +17,7 @@ final class MutableHashCollisionNode<K, V> extends HashCollisionNode<K, V> {
         this.mutator = mutator;
     }
 
+    @Override
     protected @NonNull UniqueId getMutator() {
         return mutator;
     }

@@ -65,6 +65,7 @@ public interface DockRoot extends DockParent {
         dockablePredicateProperty().set(value);
     }
 
+    @Override
     @NonNull
     Parent getNode();
 }

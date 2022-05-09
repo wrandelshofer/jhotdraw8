@@ -285,6 +285,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
 
+    @Override
     default @NonNull Transform getParentToLocal() {
         return getParentToLocal(true);
     }

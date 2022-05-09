@@ -36,6 +36,7 @@ public class IntCharArrayEnumerator extends AbstractIntEnumerator {
         return limit - index;
     }
 
+    @Override
     public @Nullable IntCharArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small

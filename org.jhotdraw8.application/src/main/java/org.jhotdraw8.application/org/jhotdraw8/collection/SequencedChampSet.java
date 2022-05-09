@@ -162,6 +162,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         }
     }
 
+    @Override
     public boolean add(final @Nullable E e) {
         return addLastIfAbsent(e);
     }
@@ -341,6 +342,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * @param o an element
      * @return {@code true} if this set changed
      */
+    @Override
     public boolean remove(final Object o) {
         @SuppressWarnings("unchecked")
         E key = (E) o;
@@ -443,6 +445,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             super(target);
         }
 
+        @Override
         protected Object readResolve() {
             return new SequencedChampSet<>(deserialized);
         }

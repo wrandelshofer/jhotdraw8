@@ -91,6 +91,7 @@ public class MultiArrayCsrGraphChunk implements GraphChunk {
      * @param u index of vertex u
      * @return the index of u or (-index -1) if u is not in the index list.
      */
+    @Override
     public int indexOf(final int v, final int u) {
         final int from = getSiblingsFromOffset(v);
         final int to = from + getSiblingCount(v);
@@ -127,6 +128,7 @@ public class MultiArrayCsrGraphChunk implements GraphChunk {
         return arrows[getArrowsFromOffset(v) + k];
     }
 
+    @Override
     public int getSiblingsFromOffset(final int v) {
         final int vIndex = v & (vertexCount - 1);
         return vIndex == 0

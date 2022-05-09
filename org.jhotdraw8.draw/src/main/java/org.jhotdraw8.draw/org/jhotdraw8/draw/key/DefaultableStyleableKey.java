@@ -79,6 +79,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      *
      * @return the initial value.
      */
+    @Override
     public T getInitialValue() {
         return initialValue;
     }

@@ -47,14 +47,17 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
         super(imageUriKey, skipKey);
     }
 
+    @Override
     protected String getSvgVersion() {
         return SVG_VERSION;
     }
 
+    @Override
     protected String getSvgBaseProfile() {
         return SVG_BASE_PROFILE;
     }
 
+    @Override
     protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
                                                           w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException {
         w.writeAttribute("version", getSvgVersion());
@@ -76,6 +79,7 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
         // do not write clip node defs
     }
 
+    @Override
     protected void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
             node) {
         // do not write compositing attributes

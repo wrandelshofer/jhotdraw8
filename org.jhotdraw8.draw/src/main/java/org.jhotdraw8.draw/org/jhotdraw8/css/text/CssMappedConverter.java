@@ -55,6 +55,7 @@ public class CssMappedConverter<E> implements CssConverter<E> {
         this(name, fromStringMap.asMap(), nullable);
     }
 
+    @Override
     public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException("identifier expected", tt.getStartPosition());

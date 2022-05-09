@@ -119,6 +119,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
         return false;
     }
 
+    @Override
     public @Nullable List<CssToken> getAttribute(@NonNull Styleable element, StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
         List<CssMetaData<? extends Styleable, ?>> list = element.getCssMetaData();
         // XXX linear time!

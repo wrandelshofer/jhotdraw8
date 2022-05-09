@@ -34,6 +34,7 @@ public class LongArrayEnumerator extends AbstractLongEnumerator {
         return false;
     }
 
+    @Override
     public @Nullable LongArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small

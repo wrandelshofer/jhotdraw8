@@ -22,6 +22,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class LadderCssFunctionTest extends AbstractCssFunctionProcessorTest {
+    @Override
     protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         List<CssFunction<Element>> functions = new ArrayList<>();
         functions.add(new LadderCssFunction<>());

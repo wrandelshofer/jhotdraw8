@@ -157,6 +157,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         clipboard.put(SVG_FORMAT, out.toString());
     }
 
+    @Override
     public void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         idFactory.reset();
         idFactory.setDocumentHome(null);

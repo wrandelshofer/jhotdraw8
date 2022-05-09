@@ -27,6 +27,7 @@ public class CssPrettyPrinter implements Appendable {
         stack.push(Syntax.STYLESHEET);
     }
 
+    @Override
     public @NonNull CssPrettyPrinter append(CharSequence str) {
         try {
             print(str);

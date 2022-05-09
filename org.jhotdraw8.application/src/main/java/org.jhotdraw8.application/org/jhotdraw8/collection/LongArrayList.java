@@ -138,6 +138,7 @@ public class LongArrayList extends AbstractList<Long> {
     /**
      * Clears the list in O(1).
      */
+    @Override
     public void clear() {
         // Performance: do not fill array with 0 values
         size = 0;
@@ -278,11 +279,13 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return true if empty
      */
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
     //@Override
+    @Override
     public boolean contains(Object o) {
         if (o instanceof Long) {
             int e = (int) o;
@@ -340,6 +343,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return the size
      */
+    @Override
     public int size() {
         return size;
     }
@@ -356,6 +360,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return an iterator over the elements of this list
      */
+    @Override
     public @NonNull PrimitiveIterator.OfLong iterator() {
         return new PrimitiveIterator.OfLong() {
             private int index = 0;
@@ -382,6 +387,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return a spliterator over the elements of this list
      */
+    @Override
     public @NonNull Spliterator.OfLong spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -416,6 +422,7 @@ public class LongArrayList extends AbstractList<Long> {
     }
 
     //@Override
+    @Override
     public boolean add(Long e) {
         addAsLong(e);
         return true;
@@ -423,6 +430,7 @@ public class LongArrayList extends AbstractList<Long> {
 
 
     //@Override
+    @Override
     public boolean remove(Object o) {
         if (o instanceof Long) {
             int index = indexOfAsLong((int) o);
@@ -484,6 +492,7 @@ public class LongArrayList extends AbstractList<Long> {
      *          A {@code null} value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used.
      */
+    @Override
     public void sort(@Nullable Comparator<? super Long> c) {
         if (size > 1) {
             if (c == null) {

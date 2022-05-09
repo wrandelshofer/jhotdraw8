@@ -37,10 +37,12 @@ public class SequencedEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         }
     }
 
+    @Override
     public boolean hasNext() {
         return !queue.isEmpty();
     }
 
+    @Override
     public Map.Entry<K, V> next() {
         current = queue.remove();
         canRemove = true;

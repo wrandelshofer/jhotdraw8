@@ -42,6 +42,7 @@ public class LongIntArrayEnumerator extends AbstractIntEnumerator {
         return false;
     }
 
+    @Override
     public @Nullable LongIntArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small

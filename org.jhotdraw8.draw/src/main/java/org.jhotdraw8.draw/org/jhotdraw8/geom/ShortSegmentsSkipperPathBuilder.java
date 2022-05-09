@@ -28,37 +28,44 @@ public class ShortSegmentsSkipperPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
 
+    @Override
     protected void doArcTo(double radiusX, double radiusY, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         if (shouldntSkip(x, y)) {
             consumer.arcTo(radiusX, radiusY, xAxisRotation, x, y, largeArcFlag, sweepFlag);
         }
     }
 
+    @Override
     protected void doClosePath() {
         consumer.closePath();
     }
 
+    @Override
     protected void doPathDone() {
         consumer.pathDone();
 
     }
 
+    @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         if (shouldntSkip(x, y)) {
             consumer.curveTo(x1, y1, x2, y2, x, y);
         }
     }
 
+    @Override
     protected void doLineTo(double x, double y) {
         if (shouldntSkip(x, y)) {
             consumer.lineTo(x, y);
         }
     }
 
+    @Override
     protected void doMoveTo(double x, double y) {
         consumer.moveTo(x, y);
     }
 
+    @Override
     protected void doQuadTo(double x1, double y1, double x, double y) {
         if (shouldntSkip(x, y)) {
             consumer.quadTo(x1, y1, x, y);

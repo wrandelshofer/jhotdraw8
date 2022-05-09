@@ -156,6 +156,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         }
     }
 
+    @Override
     public void translateInLocal(@NonNull CssPoint2D t) {
         set(START, getNonNull(START).add(t));
         set(END, getNonNull(END).add(t));

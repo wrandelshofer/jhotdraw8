@@ -155,6 +155,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         printSlice(page.get(PageFigure.PAPER_SIZE), page, pageBounds, node, EXPORT_PAGES_DPI_KEY.get(getOptions()) * factor);
     }
 
+    @Override
     protected boolean writeSlice(Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
         printSlice(null, slice, slice.getLayoutBounds(), node, dpi);
         return false;

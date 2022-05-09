@@ -23,10 +23,12 @@ public abstract class AbstractInspector<S> implements Inspector<S> {
     public AbstractInspector() {
     }
 
+    @Override
     public @NonNull ObjectProperty<S> subjectProperty() {
         return subject;
     }
 
+    @Override
     public @NonNull BooleanProperty showingProperty() {
         return showing;
     }

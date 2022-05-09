@@ -44,6 +44,7 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
         }
     }
 
+    @Override
     public abstract @NonNull T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
     protected abstract <TT extends T> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException;
@@ -53,6 +54,7 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
         return null;
     }
 
+    @Override
     public boolean isNullable() {
         return nullable;
     }

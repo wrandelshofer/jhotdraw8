@@ -45,6 +45,7 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
 
     // XXX mark as override in Java 9
     //@Override
+    @Override
     public int getViewIndex(int index) {
         return index;
     }

@@ -70,6 +70,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @return a list of drawing model listeners
      */
+    @Override
     @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners();
 
     /**
@@ -132,6 +133,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure the figure.
      * @return the getChildren.
      */
+    @Override
     default List<Figure> getChildren(@NonNull Figure figure) {
         return figure.getChildren();
     }
@@ -142,6 +144,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param figure the parent.
      * @return the number of getChildren
      */
+    @Override
     default int getChildCount(@NonNull Figure figure) {
         return getChildren(figure).size();
     }
@@ -153,6 +156,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param index  the index.
      * @return the child
      */
+    @Override
     default Figure getChild(@NonNull Figure parent, int index) {
         return getChildren(parent).get(index);
     }
@@ -163,6 +167,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param child the figure
      */
+    @Override
     void removeFromParent(Figure child);
 
     /**
@@ -182,6 +187,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param parent the parent.
      * @param index  the index
      */
+    @Override
     void insertChildAt(Figure child, Figure parent, int index);
 
     /**
@@ -191,6 +197,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param child  the new child
      * @param parent the parent.
      */
+    @Override
     default void addChildTo(Figure child, @NonNull Figure parent) {
         insertChildAt(child, parent, getChildCount(parent));
     }
@@ -336,6 +343,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param f the figure
      */
+    @Override
     default void fireNodeInvalidated(Figure f) {
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }

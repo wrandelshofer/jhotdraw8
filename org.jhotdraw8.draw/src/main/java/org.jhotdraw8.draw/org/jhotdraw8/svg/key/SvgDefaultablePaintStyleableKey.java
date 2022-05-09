@@ -81,6 +81,7 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
      *
      * @return the initial value.
      */
+    @Override
     public T getInitialValue() {
         return initialValue;
     }
