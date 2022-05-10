@@ -23,12 +23,12 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
 
-    public WrappedSequencedSet(ReadOnlySet<E> backingSet) {
+    public WrappedSequencedSet(@NonNull ReadOnlySet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
                 backingSet::contains, null, null, null, null);
     }
 
-    public WrappedSequencedSet(Set<E> backingSet) {
+    public WrappedSequencedSet(@NonNull Set<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
                 backingSet::contains, backingSet::clear, backingSet::remove, null, null);
     }

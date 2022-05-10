@@ -26,12 +26,12 @@ public class WrappedSet<E> extends AbstractSet<E> {
     private final @NonNull Runnable clearFunction;
     protected final @NonNull Predicate<Object> removeFunction;
 
-    public WrappedSet(ReadOnlySet<E> backingSet) {
+    public WrappedSet(@NonNull ReadOnlySet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
                 backingSet::contains, null, null);
     }
 
-    public WrappedSet(Set<E> backingSet) {
+    public WrappedSet(@NonNull Set<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
                 backingSet::contains, backingSet::clear, backingSet::remove);
     }

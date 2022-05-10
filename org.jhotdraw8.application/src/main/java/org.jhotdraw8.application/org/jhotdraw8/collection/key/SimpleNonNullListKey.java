@@ -18,11 +18,11 @@ public class SimpleNonNullListKey<E> extends SimpleNonNullKey<ImmutableList<E>> 
 
     private static final long serialVersionUID = 1L;
 
-    public SimpleNonNullListKey(String key, TypeToken<ImmutableList<E>> type) {
+    public SimpleNonNullListKey(@NonNull String key, @NonNull TypeToken<ImmutableList<E>> type) {
         super(key, type, ImmutableArrayList.of());
     }
 
-    public SimpleNonNullListKey(String key, TypeToken<ImmutableList<E>> type, @NonNull ImmutableList<E> defaultValue) {
+    public SimpleNonNullListKey(@NonNull String key, @NonNull TypeToken<ImmutableList<E>> type, @NonNull ImmutableList<E> defaultValue) {
         super(key, type, defaultValue);
     }
 }

@@ -107,8 +107,8 @@ import java.util.Set;
 public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E> {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
-    private transient UniqueId mutator;
-    private transient BitmapIndexedNode<E, Void> root;
+    private transient @Nullable UniqueId mutator;
+    private transient @Nullable BitmapIndexedNode<E, Void> root;
     private transient int size;
     private transient int modCount;
 
@@ -260,7 +260,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * Returns a shallow copy of this set.
      */
     @Override
-    public SequencedChampSet<E> clone() {
+    public @NonNull SequencedChampSet<E> clone() {
         try {
             @SuppressWarnings("unchecked") final SequencedChampSet<E> that = (SequencedChampSet<E>) super.clone();
             that.mutator = null;
@@ -286,7 +286,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
     }
 
@@ -313,7 +313,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return iterator(false);
     }
 
@@ -324,7 +324,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * @param reversed whether to iterate in reverse direction
      * @return an iterator
      */
-    public Iterator<E> iterator(boolean reversed) {
+    public @Nullable Iterator<E> iterator(boolean reversed) {
         return new FailFastIterator<>(new MappedIterator<>(new SequencedEntryIterator<>(
                 size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
                 this::persistentRemove, null),
@@ -429,12 +429,12 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      *
      * @return an immutable copy
      */
-    public ImmutableSequencedChampSet<E> toImmutable() {
+    public @Nullable ImmutableSequencedChampSet<E> toImmutable() {
         mutator = null;
         return size == 0 ? ImmutableSequencedChampSet.of() : new ImmutableSequencedChampSet<>(root, size, first, last);
     }
 
-    private Object writeReplace() {
+    private @NonNull Object writeReplace() {
         return new SerializationProxy<E>(this);
     }
 
@@ -446,7 +446,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         }
 
         @Override
-        protected Object readResolve() {
+        protected @NonNull Object readResolve() {
             return new SequencedChampSet<>(deserialized);
         }
     }

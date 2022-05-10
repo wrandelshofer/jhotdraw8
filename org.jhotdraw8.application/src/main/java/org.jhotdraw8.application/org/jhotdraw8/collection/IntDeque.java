@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Deque;
 import java.util.NoSuchElementException;
 
@@ -90,7 +92,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     }
 
     @Override
-    default Integer peek() {
+    default @Nullable Integer peek() {
         if (isEmpty()) {
             return null;
         }
@@ -98,7 +100,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     }
 
     @Override
-    default Integer peekFirst() {
+    default @Nullable Integer peekFirst() {
         if (isEmpty()) {
             return null;
         }
@@ -106,7 +108,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     }
 
     @Override
-    default Integer peekLast() {
+    default @Nullable Integer peekLast() {
         if (isEmpty()) {
             return null;
         }
@@ -114,7 +116,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     }
 
     @Override
-    default Integer poll() {
+    default @Nullable Integer poll() {
         if (isEmpty()) {
             return null;
         }
@@ -122,7 +124,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     }
 
     @Override
-    default Integer pollFirst() {
+    default @Nullable Integer pollFirst() {
         if (isEmpty()) {
             return null;
         }
@@ -130,7 +132,7 @@ public interface IntDeque extends Deque<Integer>, IntSequencedCollection {
     }
 
     @Override
-    default Integer pollLast() {
+    default @Nullable Integer pollLast() {
         if (isEmpty()) {
             return null;
         }

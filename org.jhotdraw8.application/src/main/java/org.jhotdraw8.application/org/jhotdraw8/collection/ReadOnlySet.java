@@ -51,7 +51,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * @param o   an object
      * @return {@code true} if the object is equal to the set
      */
-    static <E> boolean setEquals(ReadOnlySet<E> set, Object o) {
+    static <E> boolean setEquals(@NonNull ReadOnlySet<E> set, Object o) {
         if (o == set) {
             return true;
         }
@@ -66,7 +66,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
         }
         try {
             return set.containsAll(that);
-        } catch (ClassCastException | NullPointerException unused) {
+        } catch (@NonNull ClassCastException | NullPointerException unused) {
             return false;
         }
     }

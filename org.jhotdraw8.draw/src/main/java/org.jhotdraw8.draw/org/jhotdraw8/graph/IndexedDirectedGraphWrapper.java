@@ -26,7 +26,7 @@ public class IndexedDirectedGraphWrapper implements DirectedGraph<Integer, Integ
     }
 
     @Override
-    public Integer getVertex(int index) {
+    public @NonNull Integer getVertex(int index) {
         return index;
     }
 

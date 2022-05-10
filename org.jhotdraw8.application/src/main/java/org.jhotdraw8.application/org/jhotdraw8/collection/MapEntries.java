@@ -362,7 +362,7 @@ public class MapEntries {
      */
     @SafeVarargs
     @SuppressWarnings({"varargs", "unchecked"})
-    public static <K, V> List<Map.Entry<K, V>> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
+    public static <K, V> @NonNull List<Map.Entry<K, V>> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
         return (List<Map.Entry<K, V>>) (List<?>) Arrays.asList(entries);
     }
 
@@ -405,7 +405,7 @@ public class MapEntries {
      * @param <V> the value type
      * @return
      */
-    public static <K, V> Map.Entry<K, V> entry(K k, V v) {
+    public static <K, V> Map.@NonNull Entry<K, V> entry(K k, V v) {
         return new AbstractMap.SimpleEntry<>(k, v);
     }
 }

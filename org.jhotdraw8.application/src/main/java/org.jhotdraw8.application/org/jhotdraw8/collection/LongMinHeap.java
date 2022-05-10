@@ -30,7 +30,7 @@ import java.util.Spliterators;
 public class LongMinHeap implements LongQueue {
 
     // Member variables of this class
-    private final long[] heap;
+    private final long @NonNull [] heap;
     private int size;
     private final int maxsize;
 
@@ -246,7 +246,7 @@ public class LongMinHeap implements LongQueue {
     }
 
     @Override
-    public Object[] toArray() {
+    public Object @NonNull [] toArray() {
         final Object[] objects = new Object[size];
         for (int i = FRONT; i <= size; i++) {
             objects[i - 1] = heap[i];
@@ -256,7 +256,7 @@ public class LongMinHeap implements LongQueue {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T[] toArray(T[] a) {
+    public <T> T @NonNull [] toArray(T @NonNull [] a) {
         final int size = this.size;
         if (a.length < size) {
             a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);

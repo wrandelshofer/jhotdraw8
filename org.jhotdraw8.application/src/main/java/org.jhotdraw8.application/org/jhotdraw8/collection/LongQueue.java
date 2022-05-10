@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.Queue;
@@ -89,7 +90,7 @@ public interface LongQueue extends Queue<Long> {
     }
 
     @Override
-    default Long poll() {
+    default @Nullable Long poll() {
         return isEmpty() ? null : removeAsLong();
     }
 
@@ -104,7 +105,7 @@ public interface LongQueue extends Queue<Long> {
     long elementAsLong();
 
     @Override
-    default Long peek() {
+    default @Nullable Long peek() {
         return isEmpty() ? null : elementAsLong();
     }
 

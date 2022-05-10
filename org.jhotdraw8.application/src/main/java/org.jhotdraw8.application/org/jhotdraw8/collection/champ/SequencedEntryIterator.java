@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection.champ;
 
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Comparator;
@@ -22,13 +23,13 @@ import java.util.function.Consumer;
  * @param <V> the value type
  */
 public class SequencedEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
-    private final PriorityQueue<SequencedMapEntry<K, V>> queue;
+    private final @NonNull PriorityQueue<SequencedMapEntry<K, V>> queue;
     private SequencedMapEntry<K, V> current;
     private boolean canRemove;
     private final @Nullable Consumer<K> persistentRemoveFunction;
 
     @SuppressWarnings("unchecked")
-    public SequencedEntryIterator(int size, Node<K, V> rootNode, int entryLength, int numFields, boolean reversed, @Nullable Consumer<K> persistentRemoveFunction, BiConsumer<K, V> persistentPutIfPresentFunction) {
+    public SequencedEntryIterator(int size, @NonNull Node<K, V> rootNode, int entryLength, int numFields, boolean reversed, @Nullable Consumer<K> persistentRemoveFunction, BiConsumer<K, V> persistentPutIfPresentFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
         Comparator<SequencedMapEntry<K, V>> comparator = Comparator.comparingInt(SequencedMapEntry::getSequenceNumber);
         queue = new PriorityQueue<>(Math.max(1, size), reversed ? comparator.reversed() : comparator);

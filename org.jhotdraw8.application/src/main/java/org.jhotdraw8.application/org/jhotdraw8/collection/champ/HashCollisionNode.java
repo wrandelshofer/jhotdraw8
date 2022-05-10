@@ -22,7 +22,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     private final int hash;
     @NonNull Object[] entries;
 
-    HashCollisionNode(final int hash, final Object[] entries, int entryLength) {
+    HashCollisionNode(final int hash, final Object @NonNull [] entries, int entryLength) {
         this.entries = entries;
         this.hash = hash;
 
@@ -96,6 +96,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @SuppressWarnings("unchecked")
     @Override
+    @Nullable
     Object findByKey(final K key, final int keyHash, final int shift, int entryLength, int numFields) {
         for (int i = 0; i < entries.length; i += entryLength) {
             if (Objects.equals(key, entries[i])) {
@@ -106,7 +107,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    Object[] getDataEntry(int index, int entryLength) {
+    Object @NonNull [] getDataEntry(int index, int entryLength) {
         Object[] entry = new Object[entryLength];
         System.arraycopy(entries, entryLength * index, entry, 0, entryLength);
         return entry;
@@ -114,12 +115,14 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @SuppressWarnings("unchecked")
+    @NonNull
     K getKey(final int index, int entryLength) {
         return (K) entries[index * entryLength];
     }
 
     @SuppressWarnings("unchecked")
     @Override
+    @NonNull
     SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields) {
         return new SequencedMapEntry<K, V>(
                 (K) entries[index * entryLength],
@@ -129,12 +132,14 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
+    @NonNull
     Node<K, V> getNode(int index, int entryLength) {
         throw new IllegalStateException("Is leaf node.");
     }
 
     @SuppressWarnings("unchecked")
     @Override
+    @Nullable
     V getValue(final int index, int entryLength, int numFields) {
         return entryLength > 1 ? (V) entries[index * entryLength + 1] : null;
     }
@@ -160,8 +165,9 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
+    @Nullable
     Node<K, V> remove(final @Nullable UniqueId mutator, final K key,
-                      final int keyHash, final int shift, final ChangeEvent<V> details,
+                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details,
                       int entryLength, int numFields) {
         for (int idx = 0, i = 0; i < entries.length; i += entryLength, idx++) {
             if (Objects.equals(entries[i], key)) {
@@ -191,8 +197,9 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
+    @Nullable
     Node<K, V> update(final UniqueId mutator, final K key, final V val,
-                      final int keyHash, final int shift, final ChangeEvent<V> details, int entryLength, int sequenceNumber, int numFields) {
+                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details, int entryLength, int sequenceNumber, int numFields) {
         assert this.hash == keyHash;
 
         for (int idx = 0, i = 0; i < entries.length; i += entryLength, idx++) {

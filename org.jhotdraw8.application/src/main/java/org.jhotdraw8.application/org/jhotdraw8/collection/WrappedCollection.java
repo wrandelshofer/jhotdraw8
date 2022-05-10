@@ -26,12 +26,12 @@ public class WrappedCollection<E> extends AbstractCollection<E> {
     private final @NonNull Runnable clearFunction;
     protected final @NonNull Predicate<Object> removeFunction;
 
-    public WrappedCollection(ReadOnlyCollection<E> backingCollection) {
+    public WrappedCollection(@NonNull ReadOnlyCollection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::size,
                 backingCollection::contains, null, null);
     }
 
-    public WrappedCollection(Collection<E> backingCollection) {
+    public WrappedCollection(@NonNull Collection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::size,
                 backingCollection::contains, backingCollection::clear, backingCollection::remove);
     }

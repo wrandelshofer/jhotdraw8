@@ -107,7 +107,7 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "ArcBackLink{" +
                 "depth=" + depth +
                 ", vertex=" + vertex +

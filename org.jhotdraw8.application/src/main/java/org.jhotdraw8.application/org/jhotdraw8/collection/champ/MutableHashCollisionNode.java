@@ -12,7 +12,7 @@ final class MutableHashCollisionNode<K, V> extends HashCollisionNode<K, V> {
     private final static long serialVersionUID = 0L;
     private final @NonNull UniqueId mutator;
 
-    MutableHashCollisionNode(@NonNull UniqueId mutator, int hash, Object[] entries, int entryLength) {
+    MutableHashCollisionNode(@NonNull UniqueId mutator, int hash, Object @NonNull [] entries, int entryLength) {
         super(hash, entries, entryLength);
         this.mutator = mutator;
     }

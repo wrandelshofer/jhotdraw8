@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection.champ;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
@@ -32,12 +33,12 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     private int nextValueLength;
     private int nextStackLevel = -1;
     Node<K, V> nextValueNode;
-    SequencedMapEntry<K, V> current;
+    @Nullable SequencedMapEntry<K, V> current;
     private boolean canRemove = false;
     private final @Nullable Consumer<K> persistentRemoveFunction;
     private final @Nullable BiConsumer<K, V> persistentPutIfPresentFunction;
     @SuppressWarnings({"unchecked", "rawtypes"})
-    Node<K, V>[] nodes = new Node[Node.MAX_DEPTH];
+    Node<K, V> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Creates a new instance.
@@ -52,7 +53,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
      *                                       the function must not change the trie that was passed
      *                                       to this iterator
      */
-    public EntryIterator(Node<K, V> rootNode, int entryLength, int numFields, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
+    public EntryIterator(@NonNull Node<K, V> rootNode, int entryLength, int numFields, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
         this.entryLength = entryLength;
         this.numFields = numFields;
         this.persistentRemoveFunction = persistentRemoveFunction;
@@ -80,7 +81,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     }
 
     @Override
-    public SequencedMapEntry<K, V> next() {
+    public @Nullable SequencedMapEntry<K, V> next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         } else {

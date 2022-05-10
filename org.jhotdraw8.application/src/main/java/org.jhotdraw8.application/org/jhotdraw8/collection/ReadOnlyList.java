@@ -217,7 +217,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
         return -1;
     }
 
-    static <E> boolean listEquals(ReadOnlyList<E> list, Object o) {
+    static <E> boolean listEquals(@NonNull ReadOnlyList<E> list, Object o) {
         if (o == list) {
             return true;
         }

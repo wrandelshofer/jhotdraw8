@@ -55,7 +55,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
     }
 
     @Override
-    protected Object[] backingSetToArray() {
+    protected Object @NonNull [] backingSetToArray() {
         return backingSet == null ? new Object[0] : backingSet.toArray();
     }
 
@@ -65,7 +65,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
     }
 
     @Override
-    protected boolean backingSetContainsAll(Collection<?> c) {
+    protected boolean backingSetContainsAll(@NonNull Collection<?> c) {
         return backingSet != null && backingSet.containsAll(c);
     }
 
@@ -75,7 +75,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
     }
 
     @Override
-    protected Iterator<E> backingSetIterator() {
+    protected @NonNull Iterator<E> backingSetIterator() {
         return backingSet == null ? Collections.emptyIterator() : backingSet.iterator();
     }
 

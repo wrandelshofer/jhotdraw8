@@ -5,6 +5,9 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.List;
 import java.util.Spliterator;
 
@@ -20,7 +23,7 @@ public class ListEnumerator<T> extends AbstractEnumerator<T> {
     private final int endIndex;
     private final List<T> list;
 
-    public ListEnumerator(List<T> list) {
+    public ListEnumerator(@NonNull List<T> list) {
         this(list, 0, list.size());
     }
 
@@ -41,7 +44,7 @@ public class ListEnumerator<T> extends AbstractEnumerator<T> {
     }
 
     @Override
-    public Spliterator<T> trySplit() {
+    public @Nullable Spliterator<T> trySplit() {
         int hi = endIndex, lo = index, mid = (lo + hi) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
                 new ListEnumerator<>(list, lo, index = mid);

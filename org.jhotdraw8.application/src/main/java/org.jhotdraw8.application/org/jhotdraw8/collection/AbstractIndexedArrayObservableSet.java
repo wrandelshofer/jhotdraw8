@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     /**
      * The underlying list.
      */
-    private Object[] data = EMPTY_ARRAY;
+    private Object @NonNull [] data = EMPTY_ARRAY;
     private int size;
 
     /**
@@ -116,7 +117,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public void add(int index, E element) {
+    public void add(int index, @NonNull E element) {
         doAdd(index, element);
     }
 
@@ -148,18 +149,19 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @SuppressWarnings("unchecked")
+    @NonNull
     E elementData(int index) {
         return (E) data[index];
     }
 
-    private E doSet(int index, E newValue) {
+    private @NonNull E doSet(int index, E newValue) {
         Preconditions.checkIndex(index, size);
         E oldValue = elementData(index);
         data[index] = newValue;
         return oldValue;
     }
 
-    protected boolean doAdd(int index, E element) {
+    protected boolean doAdd(int index, @NonNull E element) {
         if (!mayBeAdded(element)) {
             return false;
         }
@@ -243,7 +245,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
     }
 
-    private E arrayDoRemove(int index) {
+    private @NonNull E arrayDoRemove(int index) {
         Preconditions.checkIndex(index, size);
         E oldValue = elementData(index);
         System.arraycopy(data, index + 1, data, index, size - index - 1);
@@ -252,7 +254,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @SuppressWarnings("unchecked")
-    private List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
+    private @NonNull List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
         Preconditions.checkFromToIndex(fromIndex, toIndex, size);
         int removedCount = toIndex - fromIndex;
         ArrayList<E> removed = new ArrayList<>(removedCount);
@@ -288,7 +290,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public E remove(int index) {
+    public @NonNull E remove(int index) {
         E old = arrayDoRemove(index);
         beginChange();
         nextRemove(index, old);
@@ -315,11 +317,11 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public E get(int index) {
+    public @NonNull E get(int index) {
         return doGet(index);
     }
 
-    private E doGet(int index) {
+    private @NonNull E doGet(int index) {
         Preconditions.checkIndex(index, size);
         return elementData(index);
     }
@@ -330,7 +332,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(@NonNull E e) {
         return doAdd(size(), e);
     }
 
@@ -372,11 +374,11 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
      * null if it is not known whether the object is a member
      * of the set or not
      */
-    protected abstract Boolean onContains(E e);
+    protected abstract @Nullable Boolean onContains(E e);
 
     private class ObservableDescendingIterator implements ListIterator<E> {
 
-        private final ObservableListIterator iter;
+        private final @NonNull ObservableListIterator iter;
 
         public ObservableDescendingIterator(int index) {
             this.iter = new ObservableListIterator(index);
@@ -423,7 +425,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public void add(E e) {
+        public void add(@NonNull E e) {
             iter.add(e);
         }
 
@@ -479,7 +481,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             return lastReturned;
         }
 
-        private E iterGet(int index) {
+        private @NonNull E iterGet(int index) {
             checkModCount();
             if (index < from || index >= to) {
                 throw new NoSuchElementException("index out of bounds:" + index);
@@ -519,7 +521,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public void add(E e) {
+        public void add(@NonNull E e) {
             checkModCount();
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
@@ -533,7 +535,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(@Nullable Object o) {
         @SuppressWarnings("unchecked") final E element = (E) o;
         if (Boolean.FALSE.equals(onContains(element))) {
             return -1;
@@ -557,12 +559,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public final E getFirst() {
+    public final @NonNull E getFirst() {
         return doGet(0);
     }
 
     @Override
-    public E getLast() {
+    public @NonNull E getLast() {
         return doGet(size - 1);
     }
 
@@ -595,12 +597,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public @NonNull Object[] toArray() {
+        public @NonNull Object @NonNull [] toArray() {
             return sublist.toArray();
         }
 
         @Override
-        public @NonNull <T> T[] toArray(@NonNull T[] a) {
+        public @NonNull <T> T @NonNull [] toArray(@NonNull T @NonNull [] a) {
             return sublist.toArray(a);
         }
 

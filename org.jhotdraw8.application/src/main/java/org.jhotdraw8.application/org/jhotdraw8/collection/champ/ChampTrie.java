@@ -23,7 +23,7 @@ public class ChampTrie {
     private ChampTrie() {
     }
 
-    static <K, V> BitmapIndexedNode<K, V> newBitmapIndexedNode(
+    static <K, V> @Nullable BitmapIndexedNode<K, V> newBitmapIndexedNode(
             @Nullable UniqueId mutator, final int nodeMap,
             final int dataMap, final @NonNull Object[] nodes, int entryLength) {
         return mutator == null
@@ -31,8 +31,8 @@ public class ChampTrie {
                 : new MutableBitmapIndexedNode<>(mutator, nodeMap, dataMap, nodes, entryLength);
     }
 
-    static <K, V> HashCollisionNode<K, V> newHashCollisionNode(
-            @Nullable UniqueId mutator, int hash, @NonNull Object[] entries, int entryLength) {
+    static <K, V> @Nullable HashCollisionNode<K, V> newHashCollisionNode(
+            @Nullable UniqueId mutator, int hash, @NonNull Object @NonNull [] entries, int entryLength) {
         return mutator == null
                 ? new HashCollisionNode<>(hash, entries, entryLength)
                 : new MutableHashCollisionNode<>(mutator, hash, entries, entryLength);

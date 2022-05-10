@@ -76,7 +76,7 @@ public class GraphvizReader<V, A> {
         this.graphFactory = graphFactory;
     }
 
-    public static GraphvizReader<String, String> newInstance() {
+    public static @NonNull GraphvizReader<String, String> newInstance() {
         return new GraphvizReader<>(
                 (id, map) -> id,
                 Object::toString,
@@ -246,7 +246,7 @@ public class GraphvizReader<V, A> {
 
     }
 
-    private Map<String, String> parseAttrList(StreamTokenizer tt, MutableDirectedGraph<V, A> g) throws IOException {
+    private @NonNull Map<String, String> parseAttrList(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g) throws IOException {
         Map<String, String> attrList = new LinkedHashMap<>();
         if (tt.nextToken() != '[') {
             throwException(tt, "attr_list: expected `[`");

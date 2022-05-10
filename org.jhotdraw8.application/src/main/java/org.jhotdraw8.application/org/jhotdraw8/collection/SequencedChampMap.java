@@ -94,8 +94,8 @@ import java.util.Objects;
 public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
-    private transient UniqueId mutator;
-    private transient BitmapIndexedNode<K, V> root;
+    private transient @Nullable UniqueId mutator;
+    private transient @Nullable BitmapIndexedNode<K, V> root;
     private transient int size;
     private transient int modCount;
     /**
@@ -170,7 +170,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
-    public SequencedChampMap<K, V> clone() {
+    public @NonNull SequencedChampMap<K, V> clone() {
         try {
             @SuppressWarnings("unchecked") final SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) super.clone();
             that.mutator = null;
@@ -192,11 +192,11 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<K, V>().dumpTrie(root, ENTRY_LENGTH, true, true);
     }
 
-    Iterator<Entry<K, V>> entryIterator(boolean reversed) {
+    @Nullable Iterator<Entry<K, V>> entryIterator(boolean reversed) {
         return new FailFastIterator<>(new SequencedEntryIterator<>(
                 size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
                 this::persistentRemove, this::persistentPutIfPresent), () -> this.modCount);
@@ -205,7 +205,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     @SuppressWarnings("unchecked")
-    public SequencedSet<Entry<K, V>> entrySet() {
+    public @NonNull SequencedSet<Entry<K, V>> entrySet() {
         return new WrappedSequencedSet<>(
                 () -> entryIterator(false),
                 this::size,
@@ -276,7 +276,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return details;
     }
 
-    private void persistentPutIfPresent(K k, V v) {
+    private void persistentPutIfPresent(@NonNull K k, V v) {
         if (containsKey(k)) {
             mutator = null;
             put(k, v);
@@ -371,7 +371,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      *
      * @return an immutable copy
      */
-    public ImmutableSequencedChampMap<K, V> toImmutable() {
+    public @Nullable ImmutableSequencedChampMap<K, V> toImmutable() {
         if (size == 0) {
             return ImmutableSequencedChampMap.of();
         }
@@ -379,7 +379,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return new ImmutableSequencedChampMap<>(root, size, first, last);
     }
 
-    private Object writeReplace() {
+    private @NonNull Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
@@ -391,7 +391,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         }
 
         @Override
-        protected Object readResolve() {
+        protected @NonNull Object readResolve() {
             return new SequencedChampMap<>(deserialized);
         }
     }

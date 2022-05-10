@@ -102,8 +102,8 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param <AA>         the arrow data type of the graph
      */
     public <VV, AA> SimpleMutableDirectedGraph(@NonNull DirectedGraph<VV, AA> graph,
-                                               Function<VV, V> vertexMapper,
-                                               TriFunction<VV, VV, AA, A> arrowMapper) {
+                                               @NonNull Function<VV, V> vertexMapper,
+                                               @NonNull TriFunction<VV, VV, AA, A> arrowMapper) {
         super(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);
@@ -189,7 +189,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param vb    vertex b
      * @param arrow the arrow
      */
-    public void addBidiArrow(V va, V vb, A arrow) {
+    public void addBidiArrow(@NonNull V va, @NonNull V vb, A arrow) {
         addArrow(va, vb, arrow);
         addArrow(vb, va, arrow);
     }
@@ -294,7 +294,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public V getVertex(int vi) {
+    public @NonNull V getVertex(int vi) {
         if (vertices.get(vi) == null) {
             System.err.println("DIrectedGraphBuilder is broken");
         }
@@ -308,7 +308,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public A getArrow(int index) {
+    public @NonNull A getArrow(int index) {
         // This has quadratic performance!
         int i = index;
         int vidx = 0;
@@ -323,7 +323,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     @SuppressWarnings("unchecked")
-    public A getNextArrow(int v, int index) {
+    public @NonNull A getNextArrow(int v, int index) {
         int arrowId = getNextArrowIndex(v, index);
         return (A) arrows.get(arrowId);
     }

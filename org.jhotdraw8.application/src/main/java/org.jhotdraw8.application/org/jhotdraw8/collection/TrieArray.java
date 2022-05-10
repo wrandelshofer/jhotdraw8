@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.TrieListHelper.InnerTrieNode;
 import org.jhotdraw8.collection.TrieListHelper.LeafTrieNode;
 import org.jhotdraw8.collection.TrieListHelper.TrieNode;
@@ -48,7 +49,7 @@ import static org.jhotdraw8.collection.TrieListHelper.M;
 public class TrieArray<E> {
     private final int size;
     private final int shift;
-    private final TrieNode<E> root;
+    private final @Nullable TrieNode<E> root;
 
     public TrieArray(int size) {
         this.size = size;

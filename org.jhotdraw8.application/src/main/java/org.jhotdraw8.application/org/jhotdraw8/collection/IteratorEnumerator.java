@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -39,7 +40,7 @@ public class IteratorEnumerator<E> implements Enumerator<E> {
     }
 
     @Override
-    public Spliterator<E> trySplit() {
+    public @Nullable Spliterator<E> trySplit() {
         return null;
     }
 

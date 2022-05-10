@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  * @param <E> the element type
  */
 public class ReadOnlyListIterator<E> extends AbstractIterator<E>{
-    private final ReadOnlyList<E> list;
+    private final @NonNull ReadOnlyList<E> list;
     private int index;
     private final int size;
     private E current;

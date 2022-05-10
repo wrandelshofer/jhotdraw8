@@ -101,7 +101,7 @@ public class DirectedGraphBuilder {
      * @param <VV>   the vertex type of the source graph
      * @param <AA>   the arrow type of the target graph
      */
-    public <V, A, VV, AA> void addAll(final DirectedGraph<VV, AA> source, final @NonNull MutableDirectedGraph<V, A> target,
+    public <V, A, VV, AA> void addAll(final @NonNull DirectedGraph<VV, AA> source, final @NonNull MutableDirectedGraph<V, A> target,
                                       @NonNull final Function<VV, V> vertexMapper, @NonNull final Function<AA, A> arrowMapper) {
         LinkedHashMap<VV, V> vertexMap = new LinkedHashMap<>(2 * target.getVertexCount());
         for (final VV vv : source.getVertices()) {

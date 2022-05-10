@@ -522,11 +522,11 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @param dfs  whether to search depth-first instead of breadth-first
      * @return the spliterator
      */
-    public IntEnumerator seachNextVerticesAsInt(final int vidx, boolean dfs) {
+    public @NonNull IntEnumerator seachNextVerticesAsInt(final int vidx, boolean dfs) {
         return seachNextVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public IntEnumerator seachNextVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public @NonNull IntEnumerator seachNextVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
         return new VertexEnumeratorOfShort(vidx, next, stride,
                 VERTEX_DATA_SIZE, visited, dfs);
     }
@@ -539,11 +539,11 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @param dfs
      * @return the spliterator
      */
-    public IntEnumerator searchPrevVerticesAsInt(final int vidx, boolean dfs) {
+    public @NonNull IntEnumerator searchPrevVerticesAsInt(final int vidx, boolean dfs) {
         return searchPrevVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public IntEnumerator searchPrevVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public @NonNull IntEnumerator searchPrevVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
         return new VertexEnumeratorOfShort(vidx, prev, stride,
                 VERTEX_DATA_SIZE, visited, dfs);
     }
@@ -556,11 +556,11 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public LongEnumerator searchNextVerticesWithVertexData(final int vidx, boolean dfs) {
+    public @NonNull LongEnumerator searchNextVerticesWithVertexData(final int vidx, boolean dfs) {
         return searchNextVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public LongEnumerator searchNextVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public @NonNull LongEnumerator searchNextVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
         return new VertexEnumeratorOfLongShort(vidx, next, stride,
                 0, visited, dfs);
     }
@@ -574,11 +574,11 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * @return the spliterator contains the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public LongEnumerator searchPrevVerticesWithVertexData(final int vidx, boolean dfs) {
+    public @NonNull LongEnumerator searchPrevVerticesWithVertexData(final int vidx, boolean dfs) {
         return searchPrevVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public LongEnumerator searchPrevVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public @NonNull LongEnumerator searchPrevVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
         return new VertexEnumeratorOfLongShort(vidx, prev, stride,
                 0, visited, dfs);
     }

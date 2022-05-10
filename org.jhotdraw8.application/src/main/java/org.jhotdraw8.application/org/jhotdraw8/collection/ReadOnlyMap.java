@@ -28,7 +28,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
 
     @Nullable V get(@NonNull Object key);
 
-    default V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
+    default @Nullable V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
         V v;
         return (((v = get(key)) != null) || containsKey(key))
                 ? v
@@ -94,7 +94,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return new WrappedMap<>(this);
     }
 
-    static <K, V> @NonNull String mapToString(final ReadOnlyMap<K, V> map) {
+    static <K, V> @NonNull String mapToString(final @NonNull ReadOnlyMap<K, V> map) {
         Iterator<Map.Entry<K, V>> i = map.iterator();
         if (!i.hasNext()) {
             return "{}";
@@ -125,7 +125,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @param o   an object
      * @return {@code true} if the object is equal to the map
      */
-    static <K, V> boolean mapEquals(ReadOnlyMap<K, V> map, Object o) {
+    static <K, V> boolean mapEquals(@NonNull ReadOnlyMap<K, V> map, Object o) {
         if (o == map) {
             return true;
         }
@@ -153,7 +153,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
                     }
                 }
             }
-        } catch (ClassCastException | NullPointerException unused) {
+        } catch (@NonNull ClassCastException | NullPointerException unused) {
             return false;
         }
 

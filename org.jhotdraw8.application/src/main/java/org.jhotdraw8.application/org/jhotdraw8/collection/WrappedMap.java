@@ -33,7 +33,7 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
     protected final @NonNull BiFunction<K, V, V> putFunction;
 
 
-    public WrappedMap(ReadOnlyMap<K, V> m) {
+    public WrappedMap(@NonNull ReadOnlyMap<K, V> m) {
         this(m::iterator, m::size, m::containsKey, m::get, null, null, null);
     }
 

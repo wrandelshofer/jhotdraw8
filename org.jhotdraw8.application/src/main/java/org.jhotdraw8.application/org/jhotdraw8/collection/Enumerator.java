@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -50,7 +52,7 @@ public interface Enumerator<E> extends Spliterator<E> {
     E current();
 
     @Override
-    default boolean tryAdvance(Consumer<? super E> action) {
+    default boolean tryAdvance(@NonNull Consumer<? super E> action) {
         if (moveNext()) {
             action.accept(current());
             return true;

@@ -56,7 +56,7 @@ import java.util.Arrays;
  */
 
 public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGraph {
-    private Node[] nodes = new Node[0];
+    private Node @NonNull [] nodes = new Node[0];
     private int vertexCount;
     private int arrowCount;
 

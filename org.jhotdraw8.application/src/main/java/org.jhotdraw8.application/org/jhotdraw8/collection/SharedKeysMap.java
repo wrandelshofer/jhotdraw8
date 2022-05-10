@@ -37,7 +37,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     private final @NonNull Map<K, Integer> keyMap;
     private int size;
 
-    private final Object[] values;
+    private final Object @NonNull [] values;
 
     /**
      * Creates a new instance.
@@ -102,7 +102,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(@Nullable Object value) {
         if (value == null) {
             for (int i = 0, n = values.length; i < n; i++) {
                 if (values[i] == NULL_VALUE) {

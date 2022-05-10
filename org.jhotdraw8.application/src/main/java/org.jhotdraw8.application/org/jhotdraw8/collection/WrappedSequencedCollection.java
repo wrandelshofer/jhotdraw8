@@ -23,12 +23,12 @@ public class WrappedSequencedCollection<E> extends WrappedCollection<E> implemen
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
 
-    public WrappedSequencedCollection(ReadOnlyCollection<E> backingCollection) {
+    public WrappedSequencedCollection(@NonNull ReadOnlyCollection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::size,
                 backingCollection::contains, null, null, null, null);
     }
 
-    public WrappedSequencedCollection(Collection<E> backingCollection) {
+    public WrappedSequencedCollection(@NonNull Collection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::size,
                 backingCollection::contains, backingCollection::clear, backingCollection::remove, null, null);
     }

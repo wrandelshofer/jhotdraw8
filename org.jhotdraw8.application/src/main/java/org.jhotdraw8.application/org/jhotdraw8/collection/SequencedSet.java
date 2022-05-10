@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -63,12 +65,12 @@ public interface SequencedSet<E> extends Set<E>, SequencedCollection<E> {
     E removeLast();
 
     @Override
-    default Object[] toArray() {
+    default Object @NonNull [] toArray() {
         return SequencedCollection.super.toArray();
     }
 
     @Override
-    default <T> T[] toArray(T[] a) {
+    default <T> T @NonNull [] toArray(T @NonNull [] a) {
         return SequencedCollection.super.toArray(a);
     }
 

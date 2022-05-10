@@ -81,8 +81,8 @@ import java.util.Set;
 public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
-    private transient UniqueId mutator;
-    private transient BitmapIndexedNode<K, V> root;
+    private transient @Nullable UniqueId mutator;
+    private transient @Nullable BitmapIndexedNode<K, V> root;
     private transient int size;
     private transient int modCount;
 
@@ -133,7 +133,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     }
 
     @Override
-    public ChampMap<K, V> clone() {
+    public @NonNull ChampMap<K, V> clone() {
         try {
             @SuppressWarnings("unchecked") final ChampMap<K, V> that = (ChampMap<K, V>) super.clone();
             that.mutator = null;
@@ -165,12 +165,12 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<K, V>().dumpTrie(root, ENTRY_LENGTH, true, false);
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @NonNull Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
                 () -> new FailFastIterator<>(new EntryIterator<K, V>(root, ENTRY_LENGTH, ENTRY_LENGTH,
                         this::persistentRemove, this::persistentPutIfPresent),
@@ -189,7 +189,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(final @NonNull Object o) {
+    public @Nullable V get(final @NonNull Object o) {
         final K key = (K) o;
         Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH);
         return result == Node.NO_VALUE ? null : (V) result;
@@ -227,7 +227,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return details;
     }
 
-    private void persistentPutIfPresent(K k, V v) {
+    private void persistentPutIfPresent(@NonNull K k, V v) {
         if (containsKey(k)) {
             mutator = null;
             put(k, v);
@@ -274,7 +274,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
      *
      * @return an immutable copy
      */
-    public ImmutableChampMap<K, V> toImmutable() {
+    public @Nullable ImmutableChampMap<K, V> toImmutable() {
         if (size == 0) {
             return ImmutableChampMap.of();
         }
@@ -290,12 +290,12 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         }
 
         @Override
-        protected Object readResolve() {
+        protected @NonNull Object readResolve() {
             return new ChampMap<>(deserialized);
         }
     }
 
-    private Object writeReplace() {
+    private @NonNull Object writeReplace() {
         return new SerializationProxy<K, V>(this);
     }
 }

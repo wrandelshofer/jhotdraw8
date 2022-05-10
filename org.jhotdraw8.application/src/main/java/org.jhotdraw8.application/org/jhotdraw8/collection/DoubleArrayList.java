@@ -27,7 +27,7 @@ import java.util.stream.DoubleStream;
 public class DoubleArrayList implements Iterable<Double> {
     private final static double[] EMPTY_LIST = new double[0];
 
-    private double[] items = EMPTY_LIST;
+    private double @NonNull [] items = EMPTY_LIST;
     /**
      * Holds the size of the list. Invariant: size >= 0.
      */
@@ -64,7 +64,7 @@ public class DoubleArrayList implements Iterable<Double> {
         }
     }
 
-    private DoubleArrayList(@NonNull double[] items) {
+    private DoubleArrayList(@NonNull double @NonNull [] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -76,7 +76,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull DoubleArrayList of(@NonNull double... items) {
+    public static @NonNull DoubleArrayList of(@NonNull double @NonNull ... items) {
         return new DoubleArrayList(items);
     }
 
@@ -146,7 +146,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(@NonNull double[] a, int offset) {
+    public void copyInto(@NonNull double @NonNull [] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -357,7 +357,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return array
      */
-    public @NonNull double[] toArray() {
+    public @NonNull double @NonNull [] toArray() {
         double[] result = new double[size];
         if (size > 0) {
             System.arraycopy(items, 0, result, 0, size);
@@ -408,7 +408,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *          A {@code null} value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used.
      */
-    public void sort(Comparator<? super Double> c) {
+    public void sort(@Nullable Comparator<? super Double> c) {
         if (size > 1) {
             if (c == null) {
                 Arrays.sort(items, 0, size);

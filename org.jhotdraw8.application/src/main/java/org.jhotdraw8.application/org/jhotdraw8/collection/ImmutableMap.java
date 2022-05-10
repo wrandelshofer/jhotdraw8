@@ -86,7 +86,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with the entries added or updated
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> copyPutKeyValues(@NonNull Object... kv) {
+    default @NonNull ImmutableMap<K, V> copyPutKeyValues(@NonNull Object @NonNull ... kv) {
         ImmutableMap<K, V> that = this;
         for (int i = 0; i < kv.length; i += 2) {
             that = that.copyPut((K) kv[i], (V) kv[i + 1]);

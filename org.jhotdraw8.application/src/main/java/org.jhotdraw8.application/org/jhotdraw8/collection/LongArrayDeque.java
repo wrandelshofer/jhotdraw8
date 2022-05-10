@@ -69,11 +69,11 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    public void addLastAllAsLong(long[] array) {
+    public void addLastAllAsLong(long @NonNull [] array) {
         addLastAllAsLong(array, 0, array.length);
     }
 
-    public void addLastAllAsLong(long[] array, int offset, int length) {
+    public void addLastAllAsLong(long @NonNull [] array, int offset, int length) {
         grow(length + size());
 
         int firstPart = elements.length - tail;
@@ -115,7 +115,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
     }
 
     @Override
-    public Iterator<Long> descendingIterator() {
+    public @NonNull Iterator<Long> descendingIterator() {
         throw new UnsupportedOperationException();
     }
 

@@ -88,8 +88,8 @@ class TrieListHelper {
     static class RrbTree<E> {
         private final int size;
         private final int shift;
-        private final LeafNode<E> head;
-        private final LeafNode<E> tail;
+        private final @NonNull LeafNode<E> head;
+        private final @NonNull LeafNode<E> tail;
         private InternalNode<E> root;
         private final UniqueId mutator = new UniqueId();
 
@@ -101,7 +101,7 @@ class TrieListHelper {
             shift = 0;
         }
 
-        public E get(int index) {
+        public @NonNull E get(int index) {
             throw new UnsupportedOperationException();
         }
 
@@ -128,10 +128,10 @@ class TrieListHelper {
             return x != null && x == y;
         }
 
-        protected abstract @NonNull Node<E>[] insert(@Nullable UniqueId mutator,
-                                                     @Nullable E[] elements,
-                                                     int index,
-                                                     int shift);
+        protected abstract @NonNull Node<E> @NonNull [] insert(@Nullable UniqueId mutator,
+                                                               @Nullable E[] elements,
+                                                               int index,
+                                                               int shift);
 
     }
 
@@ -142,7 +142,7 @@ class TrieListHelper {
             this.data = newData;
         }
 
-        LeafNode<E> dec(@Nullable UniqueId mutator) {
+        @NonNull LeafNode<E> dec(@Nullable UniqueId mutator) {
             E[] newData = Arrays.copyOf(data, data.length - 1);
             if (isAllowedToEdit(mutator)) {
                 data = newData;
@@ -159,10 +159,10 @@ class TrieListHelper {
 
         @Override
         @SuppressWarnings({"unchecked", "rawtypes"})
-        protected @NonNull Node<E>[] insert(@Nullable UniqueId mutator,
-                                            @Nullable E[] elements,
-                                            int index,
-                                            int shift) {
+        protected @NonNull Node<E> @NonNull [] insert(@Nullable UniqueId mutator,
+                                                      E @NonNull [] elements,
+                                                      int index,
+                                                      int shift) {
             E[] newData = ArrayHelper.copyAddAll(data, index, elements);
             if (isAllowedToEdit(mutator)) {
                 this.data = newData;
@@ -172,7 +172,7 @@ class TrieListHelper {
             }
         }
 
-        LeafNode<E> inc(@Nullable UniqueId mutator) {
+        @NonNull LeafNode<E> inc(@Nullable UniqueId mutator) {
             E[] newData = Arrays.copyOf(data, data.length + 1);
             if (isAllowedToEdit(mutator)) {
                 data = newData;
@@ -195,10 +195,10 @@ class TrieListHelper {
 
         @Override
         @SuppressWarnings({"unchecked", "rawtypes"})
-        protected @NonNull Node<E>[] insert(@Nullable UniqueId mutator,
-                                            @Nullable E[] elements,
-                                            int index,
-                                            int shift) {
+        protected @NonNull Node<E> @NonNull [] insert(@Nullable UniqueId mutator,
+                                                      E @NonNull [] elements,
+                                                      int index,
+                                                      int shift) {
             int i = Arrays.binarySearch(sizes, index);
             if (i < 0) {
                 i = ~i;
@@ -307,7 +307,7 @@ class TrieListHelper {
     }
 
     static class LeafTrieNode<E> extends TrieNode<E> {
-        private final E[] elements;
+        private final E @NonNull [] elements;
 
         @SuppressWarnings("unchecked")
         LeafTrieNode(int size) {

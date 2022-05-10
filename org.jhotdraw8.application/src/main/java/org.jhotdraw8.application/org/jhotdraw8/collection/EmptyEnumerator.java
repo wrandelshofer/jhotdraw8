@@ -5,6 +5,9 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Spliterator;
 
 /**
@@ -16,7 +19,7 @@ public class EmptyEnumerator<E> implements Enumerator<E> {
     private static final EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> Enumerator<T> emptyEnumerator() {
+    public static <T> @NonNull Enumerator<T> emptyEnumerator() {
         return (Enumerator<T>) singleton;
     }
 
@@ -30,12 +33,12 @@ public class EmptyEnumerator<E> implements Enumerator<E> {
     }
 
     @Override
-    public E current() {
+    public @Nullable E current() {
         return null;
     }
 
     @Override
-    public Spliterator<E> trySplit() {
+    public @Nullable Spliterator<E> trySplit() {
         return null;
     }
 

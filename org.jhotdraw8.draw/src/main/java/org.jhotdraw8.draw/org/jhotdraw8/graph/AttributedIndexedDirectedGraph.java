@@ -45,7 +45,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
      * @param index index of vertex
      * @return vertex data
      */
-    V getVertex(int index);
+    @NonNull V getVertex(int index);
 
     /**
      * Returns the index of the vertex.

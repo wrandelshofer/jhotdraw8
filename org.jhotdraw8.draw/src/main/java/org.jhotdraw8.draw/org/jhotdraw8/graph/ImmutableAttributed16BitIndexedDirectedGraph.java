@@ -60,7 +60,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final @NonNull short[] next;
+    protected final @NonNull short @NonNull [] next;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -78,7 +78,7 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final @NonNull short[] nextOffset;
+    protected final @NonNull short @NonNull [] nextOffset;
 
     /**
      * Holds the arrow objects.
@@ -88,14 +88,14 @@ public class ImmutableAttributed16BitIndexedDirectedGraph<V, A> implements Attri
      * <p>
      * See {@link #next}.
      */
-    protected final @NonNull A[] nextArrows;
+    protected final @NonNull A @NonNull [] nextArrows;
     /**
      * Holds the vertex objects.
      * <p>
      * Given vertex index {@code vi},<br>
      * {@code vertices[vi|} yields the vertex {@code v}.
      */
-    protected final @NonNull V[] vertices;
+    protected final @NonNull V @NonNull [] vertices;
     /**
      * Maps vertices the vertex indices.
      * <p>

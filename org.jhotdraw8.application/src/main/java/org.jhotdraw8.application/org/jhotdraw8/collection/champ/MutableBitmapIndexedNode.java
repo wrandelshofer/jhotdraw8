@@ -12,7 +12,7 @@ final class MutableBitmapIndexedNode<K, V> extends BitmapIndexedNode<K, V> {
     private final static long serialVersionUID = 0L;
     private final @NonNull UniqueId mutator;
 
-    MutableBitmapIndexedNode(@NonNull UniqueId mutator, int nodeMap, int dataMap, @NonNull Object[] nodes, int entryLength) {
+    MutableBitmapIndexedNode(@NonNull UniqueId mutator, int nodeMap, int dataMap, @NonNull Object @NonNull [] nodes, int entryLength) {
         super(nodeMap, dataMap, nodes, entryLength);
         this.mutator = mutator;
     }

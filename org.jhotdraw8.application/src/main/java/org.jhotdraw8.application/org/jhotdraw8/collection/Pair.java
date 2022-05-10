@@ -5,6 +5,8 @@
 package org.jhotdraw8.collection;
 
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * Read-only interface for a pair of values -
  * the pair can be ordered or unordered.
@@ -15,7 +17,7 @@ package org.jhotdraw8.collection;
  */
 public interface Pair<U, V> {
 
-    U first();
+    @Nullable U first();
 
-    V second();
+    @Nullable V second();
 }

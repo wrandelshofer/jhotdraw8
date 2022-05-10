@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -19,7 +20,7 @@ public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservable
     public IndexedArrayObservableSet() {
     }
 
-    public IndexedArrayObservableSet(Collection<? extends E> col) {
+    public IndexedArrayObservableSet(@NonNull Collection<? extends E> col) {
         super(col);
     }
 
@@ -34,7 +35,7 @@ public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservable
     }
 
     @Override
-    protected Boolean onContains(E e) {
+    protected @Nullable Boolean onContains(E e) {
         // we do not have a fast implementation
         return null;
     }

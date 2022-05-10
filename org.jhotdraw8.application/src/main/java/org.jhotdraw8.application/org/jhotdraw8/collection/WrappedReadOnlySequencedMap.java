@@ -20,7 +20,7 @@ public class WrappedReadOnlySequencedMap<K, V> extends WrappedReadOnlyMap<K, V>
     private final @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction;
     private final @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction;
 
-    public WrappedReadOnlySequencedMap(SequencedMap<K, V> target) {
+    public WrappedReadOnlySequencedMap(@NonNull SequencedMap<K, V> target) {
         super(target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;

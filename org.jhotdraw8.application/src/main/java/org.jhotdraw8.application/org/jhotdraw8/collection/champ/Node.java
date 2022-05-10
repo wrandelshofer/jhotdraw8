@@ -93,10 +93,10 @@ public abstract class Node<K, V> {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    static <K, V> Node<K, V> mergeTwoDataEntrysIntoNode(UniqueId mutator,
-                                                        final K k0, final V v0, int seq0, final int keyHash0,
-                                                        final K k1, final V v1, int seq1, final int keyHash1,
-                                                        final int shift, final int entryLength) {
+    static <K, V> @NonNull Node<K, V> mergeTwoDataEntrysIntoNode(UniqueId mutator,
+                                                                 final K k0, final V v0, int seq0, final int keyHash0,
+                                                                 final K k1, final V v1, int seq1, final int keyHash1,
+                                                                 final int shift, final int entryLength) {
         assert !Objects.equals(k0, k1);
 
         if (shift >= HASH_CODE_LENGTH) {
@@ -205,7 +205,7 @@ public abstract class Node<K, V> {
 
     abstract SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields);
 
-    UniqueId getMutator() {
+    @Nullable UniqueId getMutator() {
         return null;
     }
 
@@ -222,7 +222,7 @@ public abstract class Node<K, V> {
         return x != null && x == y;
     }
 
-    Object[] newEntry(K key, V value, int entryLength) {
+    Object @NonNull [] newEntry(K key, V value, int entryLength) {
         Object[] newEntry = new Object[entryLength];
         newEntry[0] = key;
         if (entryLength > 1) {

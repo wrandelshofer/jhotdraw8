@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Arrays;
 
 /**
@@ -42,13 +44,13 @@ public class MultiArrayCsrGraphChunk implements GraphChunk {
      * Stores the vertex data for each vertex.
      * There are {@link #vertexCount} vertices in this array.
      */
-    private final int[] vertices;
+    private final int @NonNull [] vertices;
     /**
      * Stores the number of siblings for each vertex.
      * There are {@link #vertexCount} vertices in this array
      * Sizes are cumulated. size[i] = sizes[i] - sizes[i - 1]
      */
-    private final int[] sizes;
+    private final int @NonNull [] sizes;
     /**
      * Stores the siblings of the vertices.
      * There are {@link #capacity} vertices in this array.

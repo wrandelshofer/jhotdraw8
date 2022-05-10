@@ -55,11 +55,11 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
     /**
      * Array of chunks for arrows to next vertices.
      */
-    private @NonNull GraphChunk16Bit[] nextChunks = new GraphChunk16Bit[0];
+    private @NonNull GraphChunk16Bit @NonNull [] nextChunks = new GraphChunk16Bit[0];
     /**
      * Array of chunks for arrows to previous vertices.
      */
-    private @NonNull GraphChunk16Bit[] prevChunks = new GraphChunk16Bit[0];
+    private @NonNull GraphChunk16Bit @NonNull [] prevChunks = new GraphChunk16Bit[0];
 
     /**
      * Factory for creating new chunks.
@@ -250,7 +250,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
         return getNextChunk(v).getSibling(v, i);
     }
 
-    private GraphChunk16Bit getNextChunk(final int v) {
+    private @NonNull GraphChunk16Bit getNextChunk(final int v) {
         return getOrCreateChunk(nextChunks, v);
     }
 
@@ -259,7 +259,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
         return getNextChunk(v).getSiblingCount(v);
     }
 
-    GraphChunk16Bit getOrCreateChunk(final GraphChunk16Bit[] chunks, final int v) {
+    @NonNull GraphChunk16Bit getOrCreateChunk(final GraphChunk16Bit[] chunks, final int v) {
         @NonNull GraphChunk16Bit chunk = chunks[v >>> chunkShift];
         if (chunk == null) {
             chunk = chunkFactory.apply(chunkSize, initialArityCapacity);
@@ -278,7 +278,7 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
         return getPrevChunk(v).getSibling(v, k);
     }
 
-    private GraphChunk16Bit getPrevChunk(final int v) {
+    private @NonNull GraphChunk16Bit getPrevChunk(final int v) {
         return getOrCreateChunk(prevChunks, v);
     }
 

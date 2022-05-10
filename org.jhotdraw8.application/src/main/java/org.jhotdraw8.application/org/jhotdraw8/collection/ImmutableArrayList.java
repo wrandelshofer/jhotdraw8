@@ -67,7 +67,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
      * @return an empty immutable list
      */
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableArrayList<E> of() {
+    public static <E> @NonNull ImmutableArrayList<E> of() {
         return (ImmutableArrayList<E>) EMPTY;
     }
 
@@ -80,7 +80,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> ImmutableArrayList<E> of(E... elements) {
+    public static <E> @NonNull ImmutableArrayList<E> of(E @NonNull ... elements) {
         if (elements.length == 0) {
             return (ImmutableArrayList<E>) EMPTY;
         } else {
@@ -96,7 +96,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
      * @return an immutable list of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableArrayList<E> copyOf(Iterable<? extends E> iterable) {
+    public static <E> @NonNull ImmutableArrayList<E> copyOf(Iterable<? extends E> iterable) {
         if (iterable instanceof ImmutableArrayList<?>) {
             return (ImmutableArrayList<E>) iterable;
         }
@@ -223,7 +223,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return Collections.unmodifiableList(list).iterator();
     }
 

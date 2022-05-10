@@ -72,8 +72,8 @@ import java.util.Set;
  */
 public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
-    private final Map<V, Node<V, A>> nodeMap;
-    private List<V> cachedVertices = null;
+    private final @NonNull Map<V, Node<V, A>> nodeMap;
+    private @Nullable List<V> cachedVertices = null;
     private int arrowCount = 0;
 
     /**
@@ -219,7 +219,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public V getVertex(int index) {
+    public @NonNull V getVertex(int index) {
         if (cachedVertices == null) {
             cachedVertices = Collections.unmodifiableList(new ArrayList<>(nodeMap.keySet()));
         }
@@ -335,7 +335,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
          * @param index an index
          * @return the node at the index
          */
-        public Node<V, A> getNode(int index) {
+        public @NonNull Node<V, A> getNode(int index) {
             rangeCheck(index, size);
 
             @SuppressWarnings("unchecked")
@@ -353,7 +353,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
          * @param index an index
          * @return the node at the index
          */
-        public A getArrow(int index) {
+        public @NonNull A getArrow(int index) {
             rangeCheck(index, size);
 
             @SuppressWarnings("unchecked")
@@ -361,7 +361,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return unchecked;
         }
 
-        private Enumerator<Node<V, A>> nodesEnumerator() {
+        private @NonNull Enumerator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8!
             return new AbstractEnumerator<Node<V, A>>(size, 0) {
                 int index = 0;

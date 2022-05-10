@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Wraps a {@link ReadOnlySet} in the {@link ObservableSet} interface.
@@ -17,7 +18,7 @@ import javafx.collections.SetChangeListener;
  * @author Werner Randelshofer
  */
 public class WrappedObservableSet<E> extends WrappedSet<E> implements ObservableSet<E> {
-    public WrappedObservableSet(ReadOnlySet<E> backingSet) {
+    public WrappedObservableSet(@NonNull ReadOnlySet<E> backingSet) {
         super(backingSet);
     }
 

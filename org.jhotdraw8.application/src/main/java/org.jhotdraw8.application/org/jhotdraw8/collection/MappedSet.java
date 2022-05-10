@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -70,12 +71,12 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
             }
 
             @Override
-            public boolean tryAdvance(Consumer<? super E> action) {
+            public boolean tryAdvance(@NonNull Consumer<? super E> action) {
                 return i.tryAdvance(f -> action.accept(mapf.apply(f)));
             }
 
             @Override
-            public Spliterator<E> trySplit() {
+            public @Nullable Spliterator<E> trySplit() {
                 Spliterator<F> fSpliterator = i.trySplit();
                 return fSpliterator == null ? null : new MappingSpliterator(fSpliterator);
             }

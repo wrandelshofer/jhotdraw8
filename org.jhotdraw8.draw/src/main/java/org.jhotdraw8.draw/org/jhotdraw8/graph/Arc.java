@@ -45,7 +45,7 @@ public class Arc<V, A> {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "Arc{" +
                 "" + start +
                 "->" + end +

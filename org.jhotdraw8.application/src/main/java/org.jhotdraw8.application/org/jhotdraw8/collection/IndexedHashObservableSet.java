@@ -25,7 +25,7 @@ public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableS
     public IndexedHashObservableSet() {
     }
 
-    public IndexedHashObservableSet(Collection<? extends E> col) {
+    public IndexedHashObservableSet(@NonNull Collection<? extends E> col) {
         setAll(col);
     }
 

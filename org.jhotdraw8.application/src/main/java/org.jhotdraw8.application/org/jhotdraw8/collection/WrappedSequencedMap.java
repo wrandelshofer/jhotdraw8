@@ -22,7 +22,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
     private final @NonNull BiFunction<K, V, V> putFirstFunction;
     private final @NonNull BiFunction<K, V, V> putLastFunction;
 
-    public WrappedSequencedMap(ReadOnlySequencedMap<K, V> m) {
+    public WrappedSequencedMap(@NonNull ReadOnlySequencedMap<K, V> m) {
         super(m);
         this.firstEntryFunction = m::firstEntry;
         this.lastEntryFunction = m::lastEntry;
@@ -34,7 +34,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
         };
     }
 
-    public WrappedSequencedMap(SequencedMap<K, V> m) {
+    public WrappedSequencedMap(@NonNull SequencedMap<K, V> m) {
         super(m);
         this.firstEntryFunction = m::firstEntry;
         this.lastEntryFunction = m::lastEntry;
@@ -84,7 +84,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
+    public @NonNull Iterator<Entry<K, V>> iterator() {
         return iteratorFunction.get();
     }
 

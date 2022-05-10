@@ -109,7 +109,7 @@ public interface MapAccessor<T> extends Serializable {
      *
      * @return the default value
      */
-    T getDefaultValue();
+    @Nullable T getDefaultValue();
 
     /**
      * Whether the value needs to be made persistent.

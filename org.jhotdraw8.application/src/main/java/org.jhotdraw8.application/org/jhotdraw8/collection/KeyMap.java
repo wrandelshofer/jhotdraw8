@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.key.Key;
 
 import java.util.Arrays;
@@ -23,8 +25,8 @@ public class KeyMap implements Map<Key<?>, Integer> {
      * Stores stuffed values which are value + 1,
      * so that we can initialize the table with 0.
      */
-    private int[] table = new int[0];
-    private final Map<Key<?>, Integer> backingMap;
+    private int @NonNull [] table = new int[0];
+    private final @NonNull Map<Key<?>, Integer> backingMap;
 
     public KeyMap(int initialCapacity) {
         this.table = new int[initialCapacity];
@@ -43,7 +45,7 @@ public class KeyMap implements Map<Key<?>, Integer> {
     }
 
     @Override
-    public boolean containsKey(Object key) {
+    public boolean containsKey(@NonNull Object key) {
         return table[((Key) key).ordinal()] != 0;
     }
 
@@ -53,14 +55,14 @@ public class KeyMap implements Map<Key<?>, Integer> {
     }
 
     @Override
-    public Integer get(Object key) {
+    public @Nullable Integer get(@NonNull Object key) {
         int index = ((Key) key).ordinal();
         int stuffedValue = index >= table.length ? 0 : table[index];
         return stuffedValue == 0 ? null : stuffedValue - 1;
     }
 
     @Override
-    public Integer put(Key<?> key, Integer value) {
+    public Integer put(@NonNull Key<?> key, @Nullable Integer value) {
         int index = key.ordinal();
         if (index >= table.length) {
             resize(index + 1);
@@ -89,7 +91,7 @@ public class KeyMap implements Map<Key<?>, Integer> {
     }
 
     @Override
-    public Integer remove(Object key) {
+    public @Nullable Integer remove(@NonNull Object key) {
         int index = ((Key) key).ordinal();
         int oldStuffedValue = table[index];
         table[index] = 0;
@@ -100,7 +102,7 @@ public class KeyMap implements Map<Key<?>, Integer> {
     }
 
     @Override
-    public void putAll(Map<? extends Key<?>, ? extends Integer> m) {
+    public void putAll(@NonNull Map<? extends Key<?>, ? extends Integer> m) {
         for (Entry<? extends Key<?>, ? extends Integer> entry : m.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
@@ -113,17 +115,17 @@ public class KeyMap implements Map<Key<?>, Integer> {
     }
 
     @Override
-    public Set<Key<?>> keySet() {
+    public @NonNull Set<Key<?>> keySet() {
         return backingMap.keySet();
     }
 
     @Override
-    public Collection<Integer> values() {
+    public @NonNull Collection<Integer> values() {
         return backingMap.values();
     }
 
     @Override
-    public Set<Entry<Key<?>, Integer>> entrySet() {
+    public @NonNull Set<Entry<Key<?>, Integer>> entrySet() {
         return backingMap.entrySet();
     }
 }

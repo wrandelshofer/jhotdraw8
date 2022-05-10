@@ -41,7 +41,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
         return size() == 0;
     }
 
-    default Object[] toArray() {
+    default Object @NonNull [] toArray() {
         return toArray(new Object[size()]);
     }
 
@@ -52,7 +52,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param a   a template array
      * @return an array
      */
-    default @NonNull <T> T[] toArray(@NonNull T[] a) {
+    default @NonNull <T> T @NonNull [] toArray(@NonNull T @NonNull [] a) {
         // Estimate size of array; be prepared to see more or fewer elements
         int size = size();
         @SuppressWarnings("unchecked")
@@ -104,6 +104,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @return an iterator
      */
     @Override
+    @NonNull
     Iterator<E> iterator();
 
     /**

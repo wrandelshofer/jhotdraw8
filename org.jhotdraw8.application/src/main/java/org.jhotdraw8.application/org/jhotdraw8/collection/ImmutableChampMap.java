@@ -100,7 +100,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> ImmutableChampMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+    public static <K, V> @NonNull ImmutableChampMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
         return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
     }
 
@@ -113,7 +113,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> ImmutableChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+    public static <K, V> @NonNull ImmutableChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
         return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
     }
 
@@ -138,7 +138,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      * @return an immutable map of the provided entries
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         return (ImmutableChampMap<K, V>) of().copyPutAll(entries);
     }
 
@@ -247,7 +247,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<K, V>().dumpTrie(this, ENTRY_LENGTH, true, false);
     }
 
@@ -257,7 +257,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(final @Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -301,16 +301,16 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
     }
 
     @Override
-    public ChampMap<K, V> toMutable() {
+    public @NonNull ChampMap<K, V> toMutable() {
         return new ChampMap<>(this);
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return ReadOnlyMap.mapToString(this);
     }
 
-    private Object writeReplace() throws ObjectStreamException {
+    private @NonNull Object writeReplace() throws ObjectStreamException {
         return new SerializationProxy<>(this.toMutable());
     }
 
@@ -322,7 +322,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         }
 
         @Override
-        protected Object readResolve() {
+        protected @NonNull Object readResolve() {
             return ImmutableChampMap.of().copyPutAll(deserialized.iterator());
         }
     }

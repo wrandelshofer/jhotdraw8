@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -62,7 +64,7 @@ abstract class MapSerializationProxy<K, V> implements Serializable {
         this.serialized = serialized;
     }
 
-    private void writeObject(java.io.ObjectOutputStream s)
+    private void writeObject(java.io.@NonNull ObjectOutputStream s)
             throws IOException {
         s.writeInt(serialized.size());
         for (Map.Entry<K, V> entry : serialized.entrySet()) {
@@ -71,7 +73,7 @@ abstract class MapSerializationProxy<K, V> implements Serializable {
         }
     }
 
-    private void readObject(java.io.ObjectInputStream s)
+    private void readObject(java.io.@NonNull ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         int n = s.readInt();
         deserialized = new ArrayList<>(n);
@@ -84,5 +86,5 @@ abstract class MapSerializationProxy<K, V> implements Serializable {
         }
     }
 
-    protected abstract Object readResolve();
+    protected abstract @NonNull Object readResolve();
 }

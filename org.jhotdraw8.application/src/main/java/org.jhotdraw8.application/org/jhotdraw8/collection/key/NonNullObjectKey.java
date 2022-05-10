@@ -60,7 +60,7 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public NonNullObjectKey(@NonNull String name, Class<T> type, @NonNull T defaultValue) {
+    public NonNullObjectKey(@NonNull String name, @NonNull Class<T> type, @NonNull T defaultValue) {
         this(name, type, null, defaultValue);
     }
 

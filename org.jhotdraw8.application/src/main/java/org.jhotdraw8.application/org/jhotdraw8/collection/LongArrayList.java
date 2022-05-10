@@ -68,7 +68,7 @@ public class LongArrayList extends AbstractList<Long> {
         }
     }
 
-    private LongArrayList(@NonNull long[] items) {
+    private LongArrayList(@NonNull long @NonNull [] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -80,7 +80,7 @@ public class LongArrayList extends AbstractList<Long> {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull LongArrayList of(@NonNull long... items) {
+    public static @NonNull LongArrayList of(@NonNull long @NonNull ... items) {
         return new LongArrayList(items);
     }
 
@@ -150,7 +150,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(@NonNull long[] a, int offset) {
+    public void copyInto(@NonNull long @NonNull [] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 

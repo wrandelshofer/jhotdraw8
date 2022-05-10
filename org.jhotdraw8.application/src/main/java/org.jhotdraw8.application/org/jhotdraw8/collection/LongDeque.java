@@ -6,6 +6,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Deque;
 import java.util.NoSuchElementException;
 
@@ -106,7 +108,7 @@ public interface LongDeque extends Deque<Long> {
     }
 
     @Override
-    default Long peek() {
+    default @Nullable Long peek() {
         if (isEmpty()) {
             return null;
         }
@@ -114,7 +116,7 @@ public interface LongDeque extends Deque<Long> {
     }
 
     @Override
-    default Long peekFirst() {
+    default @Nullable Long peekFirst() {
         if (isEmpty()) {
             return null;
         }
@@ -122,7 +124,7 @@ public interface LongDeque extends Deque<Long> {
     }
 
     @Override
-    default Long peekLast() {
+    default @Nullable Long peekLast() {
         if (isEmpty()) {
             return null;
         }
@@ -130,7 +132,7 @@ public interface LongDeque extends Deque<Long> {
     }
 
     @Override
-    default Long poll() {
+    default @Nullable Long poll() {
         if (isEmpty()) {
             return null;
         }
@@ -138,7 +140,7 @@ public interface LongDeque extends Deque<Long> {
     }
 
     @Override
-    default Long pollFirst() {
+    default @Nullable Long pollFirst() {
         if (isEmpty()) {
             return null;
         }
@@ -146,7 +148,7 @@ public interface LongDeque extends Deque<Long> {
     }
 
     @Override
-    default Long pollLast() {
+    default @Nullable Long pollLast() {
         if (isEmpty()) {
             return null;
         }

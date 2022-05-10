@@ -29,12 +29,12 @@ public interface SequencedCollection<E> extends Collection<E>, ReadOnlySequenced
     }
 
     @Override
-    default <T> T[] toArray(T @NonNull [] a) {
+    default <T> T @NonNull [] toArray(T @NonNull [] a) {
         return ReadOnlySequencedCollection.super.toArray(a);
     }
 
     @Override
-    default Object[] toArray() {
+    default Object @NonNull [] toArray() {
         return ReadOnlySequencedCollection.super.toArray();
     }
 

@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Map;
 
 /**
@@ -47,12 +49,15 @@ public interface SequencedMap<K, V> extends Map<K, V>, ReadOnlySequencedMap<K, V
     V putLast(K k, V v);
 
     @Override
+    @NonNull
     SequencedSet<K> keySet();
 
     @Override
+    @NonNull
     SequencedCollection<V> values();
 
     @Override
+    @NonNull
     SequencedSet<Entry<K, V>> entrySet();
 
     @Override

@@ -22,12 +22,12 @@ public class WrappedReadOnlySequencedSet<E> extends WrappedReadOnlySet<E>
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
 
-    public WrappedReadOnlySequencedSet(ReadOnlySequencedSet<E> backingSet) {
+    public WrappedReadOnlySequencedSet(@NonNull ReadOnlySequencedSet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public WrappedReadOnlySequencedSet(SequencedSet<E> backingSet) {
+    public WrappedReadOnlySequencedSet(@NonNull SequencedSet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }

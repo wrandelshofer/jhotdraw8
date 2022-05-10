@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 
@@ -19,7 +20,7 @@ import java.util.Collection;
  * @author Werner Randelshofer
  */
 public class WrappedObservableList<E> extends WrappedList<E> implements ObservableList<E> {
-    public WrappedObservableList(ReadOnlyList<E> backingList) {
+    public WrappedObservableList(@NonNull ReadOnlyList<E> backingList) {
         super(backingList);
     }
 

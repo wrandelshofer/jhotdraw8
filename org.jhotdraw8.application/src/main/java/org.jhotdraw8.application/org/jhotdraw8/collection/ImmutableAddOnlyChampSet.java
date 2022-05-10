@@ -81,7 +81,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
 
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableAddOnlyChampSet<E> of(E... elements) {
+    public static <E> @NonNull ImmutableAddOnlyChampSet<E> of(E @NonNull ... elements) {
         ImmutableAddOnlyChampSet<E> set = (ImmutableAddOnlyChampSet<E>) BitmapIndexedNode.EMPTY_NODE;
         for (E e : elements)
             set = set.copyAdd(e);

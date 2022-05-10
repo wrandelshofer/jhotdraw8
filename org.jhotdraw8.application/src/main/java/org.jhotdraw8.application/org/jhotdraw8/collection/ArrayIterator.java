@@ -27,7 +27,7 @@ public class ArrayIterator<E> extends AbstractIterator<E>{
 
     private E current;
 
-    public ArrayIterator(@NonNull Object[] list) {
+    public ArrayIterator(@NonNull Object @NonNull [] list) {
         this(list, 0, list.length);
     }
 
@@ -48,7 +48,7 @@ public class ArrayIterator<E> extends AbstractIterator<E>{
 
     @SuppressWarnings("unchecked")
     @Override
-    public E next() {
+    public @NonNull E next() {
         return current = (E) list[index++];
     }
 
@@ -59,7 +59,7 @@ public class ArrayIterator<E> extends AbstractIterator<E>{
 
     @SuppressWarnings("unchecked")
     @Override
-    public E previous() {
+    public @NonNull E previous() {
         return current = (E) list[--index];
     }
 

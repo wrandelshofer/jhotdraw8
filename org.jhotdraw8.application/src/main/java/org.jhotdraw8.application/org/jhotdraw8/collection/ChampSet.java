@@ -88,8 +88,8 @@ import java.util.Set;
 public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 1;
-    private transient UniqueId mutator;
-    private transient BitmapIndexedNode<E, Void> root;
+    private transient @Nullable UniqueId mutator;
+    private transient @Nullable BitmapIndexedNode<E, Void> root;
     private transient int size;
     private transient int modCount;
 
@@ -182,7 +182,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * Returns a shallow copy of this set.
      */
     @Override
-    public ChampSet<E> clone() {
+    public @NonNull ChampSet<E> clone() {
         try {
             @SuppressWarnings("unchecked") final ChampSet<E> that = (ChampSet<E>) super.clone();
             that.mutator = null;
@@ -213,7 +213,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * Returns an iterator over the elements of this set.
      */
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(new MappedIterator<>(
                 new EntryIterator<E, Void>(root, ENTRY_LENGTH, ENTRY_LENGTH,
                         this::persistentRemove, null),
@@ -314,7 +314,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<E, Void>()
                 .dumpTrie(root, ENTRY_LENGTH, false, false);
     }
@@ -324,7 +324,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      *
      * @return an immutable copy
      */
-    public ImmutableChampSet<E> toImmutable() {
+    public @Nullable ImmutableChampSet<E> toImmutable() {
         mutator = null;
         return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
     }
@@ -338,12 +338,12 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         }
 
         @Override
-        protected Object readResolve() {
+        protected @NonNull Object readResolve() {
             return new ChampSet<>(deserialized);
         }
     }
 
-    private Object writeReplace() {
+    private @NonNull Object writeReplace() {
         return new SerializationProxy<E>(this);
     }
 }

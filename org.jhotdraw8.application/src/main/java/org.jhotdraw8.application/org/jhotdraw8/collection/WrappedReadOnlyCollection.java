@@ -23,7 +23,7 @@ public class WrappedReadOnlyCollection<E> extends AbstractReadOnlyCollection<E> 
     private final IntSupplier sizeFunction;
     private final Predicate<Object> containsFunction;
 
-    public WrappedReadOnlyCollection(Set<E> backingSet) {
+    public WrappedReadOnlyCollection(@NonNull Set<E> backingSet) {
         this(backingSet::iterator, backingSet::size, backingSet::contains);
     }
 

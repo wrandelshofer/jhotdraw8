@@ -46,7 +46,7 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "ArcBackLink{" +
                 "depth=" + depth +
                 ", vertex=" + vertex +

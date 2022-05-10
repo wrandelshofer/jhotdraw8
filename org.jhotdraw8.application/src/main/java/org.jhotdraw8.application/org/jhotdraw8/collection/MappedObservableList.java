@@ -110,7 +110,7 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
 
         private final ListChangeListener.Change<? extends B> change;
         private final Function<B, A> toA;
-        private @Nullable int[] perm;
+        private @Nullable int @Nullable [] perm;
 
         public ChangeProxy(ObservableList<A> list, ListChangeListener.Change<? extends B> change, Function<B, A> toA) {
             super(list);
@@ -156,7 +156,7 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
         }
 
         @Override
-        protected @Nullable int[] getPermutation() {
+        protected @Nullable int @Nullable [] getPermutation() {
             if (perm == null) {
                 if (change.wasPermutated()) {
                     final int from = change.getFrom();

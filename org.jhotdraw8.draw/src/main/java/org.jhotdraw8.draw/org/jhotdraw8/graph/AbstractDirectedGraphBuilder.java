@@ -180,7 +180,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      * @param lastArrow  the array of last arrows
      * @param arrowHeads the array of arrow heads
      */
-    protected int doAddArrow(int a, int b, int[] arrowHeads, int[] lastArrow) {
+    protected int doAddArrow(int a, int b, int @NonNull [] arrowHeads, int @NonNull [] lastArrow) {
         int arrowCountOfA = lastArrow_getCount(lastArrow, a);
         int lastArrowPointer = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
 
@@ -252,7 +252,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      * @param arrowHeads the array of arrow heads
      * @param arrowCount the number of arrows
      */
-    protected int buildRemoveArrowAt(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
+    protected int buildRemoveArrowAt(int vidx, int i, int @NonNull [] lastArrow, int @NonNull [] arrowHeads, int arrowCount) {
         if (vidx < 0 || vidx >= getVertexCount()) {
             throw new IllegalArgumentException("vidx:" + i);
         }
@@ -366,7 +366,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         return getArrowIndex(vi, i, nextLastArrow, nextArrowHeads);
     }
 
-    protected int getArrowIndex(int vi, int i, int[] lastArrow, int[] arrowHeads) {
+    protected int getArrowIndex(int vi, int i, int @NonNull [] lastArrow, int @NonNull [] arrowHeads) {
         int arrowPointer = lastArrow_getLast(lastArrow, vi);
         int nextCount = lastArrow_getCount(lastArrow, vi);
         for (int j = nextCount - 1; j > i; j--) {
@@ -449,7 +449,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
             private int index;
             private final int limit;
             private final int vidx;
-            private final int[] arrows;
+            private final int @Nullable [] arrows;
 
             public MySpliterator(int vidx, int lo, int hi) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);

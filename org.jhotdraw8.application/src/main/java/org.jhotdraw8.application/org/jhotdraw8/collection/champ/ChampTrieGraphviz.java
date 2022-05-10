@@ -27,7 +27,7 @@ import static java.lang.Math.min;
  */
 public class ChampTrieGraphviz<K, V> {
 
-    private void dumpBitmapIndexedNodeSubTree(Appendable a, BitmapIndexedNode<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
+    private void dumpBitmapIndexedNodeSubTree(@NonNull Appendable a, @NonNull BitmapIndexedNode<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
 
         // Print the node as a record with a compartment for each child element (node or data)
         String id = toNodeId(keyHash, shift);
@@ -97,7 +97,7 @@ public class ChampTrieGraphviz<K, V> {
         }
     }
 
-    private void dumpHashCollisionNodeSubTree(Appendable a, HashCollisionNode<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
+    private void dumpHashCollisionNodeSubTree(@NonNull Appendable a, @NonNull HashCollisionNode<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
         // Print the node as a record
         a.append("n").append(toNodeId(keyHash, shift));
         a.append(" [color=red;label=\"");
@@ -126,7 +126,7 @@ public class ChampTrieGraphviz<K, V> {
         a.append("\"];\n");
     }
 
-    private void dumpSubTrie(Appendable a, Node<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
+    private void dumpSubTrie(@NonNull Appendable a, Node<K, V> node, int entryLength, boolean printValue, boolean printSequenceNumber, int shift, int keyHash) throws IOException {
         if (node instanceof BitmapIndexedNode) {
             dumpBitmapIndexedNodeSubTree(a, (BitmapIndexedNode<K, V>) node,
                     entryLength, printValue, printSequenceNumber, shift, keyHash);
@@ -147,7 +147,7 @@ public class ChampTrieGraphviz<K, V> {
      * @param printValue          whether to print the value of an entry
      * @param printSequenceNumber whether to print the sequence number of an entry
      */
-    public void dumpTrie(Appendable a, Node<K, V> root, int entryLength, boolean printValue, boolean printSequenceNumber) throws IOException {
+    public void dumpTrie(@NonNull Appendable a, Node<K, V> root, int entryLength, boolean printValue, boolean printSequenceNumber) throws IOException {
         a.append("digraph ChampTrie {\n");
         a.append("node [shape=record];\n");
         dumpSubTrie(a, root, entryLength, printValue, printSequenceNumber, 0, 0);
@@ -163,7 +163,7 @@ public class ChampTrieGraphviz<K, V> {
      * @param printSequenceNumber whether to print the sequence number of an entry
      * @return the dumped trie
      */
-    public String dumpTrie(Node<K, V> root, int entryLength, boolean printValue, boolean printSequenceNumber) {
+    public @NonNull String dumpTrie(Node<K, V> root, int entryLength, boolean printValue, boolean printSequenceNumber) {
         StringBuilder a = new StringBuilder();
         try {
             dumpTrie(a, root, entryLength, printValue, printSequenceNumber);
@@ -173,7 +173,7 @@ public class ChampTrieGraphviz<K, V> {
         return a.toString();
     }
 
-    private String toArrowId(int mask, int shift) {
+    private @NonNull String toArrowId(int mask, int shift) {
         String id = Integer.toBinaryString((mask) & Node.BIT_PARTITION_MASK);
         StringBuilder buf = new StringBuilder();
         //noinspection StringRepeatCanBeUsed
@@ -184,7 +184,7 @@ public class ChampTrieGraphviz<K, V> {
         return buf.toString();
     }
 
-    private String toNodeId(int keyHash, int shift) {
+    private @NonNull String toNodeId(int keyHash, int shift) {
         if (shift == 0) {
             return "root";
         }

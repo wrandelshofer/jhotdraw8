@@ -51,7 +51,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
      * @return set of strongly connected components (sets of vertices).
      */
     public @NonNull List<IntList> findStronglyConnectedComponents(
-            int vertexCount, Function<Integer, IntEnumerator> nextNodeFunction) {
+            int vertexCount, @NonNull Function<Integer, IntEnumerator> nextNodeFunction) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from
         // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm

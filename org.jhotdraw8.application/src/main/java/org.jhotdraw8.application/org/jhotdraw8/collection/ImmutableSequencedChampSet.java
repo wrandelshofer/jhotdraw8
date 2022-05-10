@@ -119,7 +119,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
      */
     private int first = 0;
 
-    ImmutableSequencedChampSet(BitmapIndexedNode<E, Void> root, int size, int first, int last) {
+    ImmutableSequencedChampSet(@NonNull BitmapIndexedNode<E, Void> root, int size, int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
         this.last = last;
@@ -164,7 +164,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableSequencedChampSet<E> of(E... elements) {
+    public static <E> @NonNull ImmutableSequencedChampSet<E> of(E @NonNull ... elements) {
         if (elements.length == 0) {
             return (ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY_SET;
         } else {
@@ -312,7 +312,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(final @Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -337,7 +337,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new MappedIterator<>(new SequencedEntryIterator<E, Void>(size, this, ENTRY_LENGTH, ENTRY_LENGTH - 1, false, null, null), Map.Entry::getKey);
     }
 
@@ -361,7 +361,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> im
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, true);
     }
 

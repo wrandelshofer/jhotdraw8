@@ -80,7 +80,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
 
     final int size;
 
-    ImmutableChampSet(BitmapIndexedNode<E, Void> root, int size) {
+    ImmutableChampSet(@NonNull BitmapIndexedNode<E, Void> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
         this.size = size;
     }
@@ -117,7 +117,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> ImmutableChampSet<E> copyOf(Iterable<? extends E> iterable) {
+    public static <E> @NonNull ImmutableChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
         return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY).copyAddAll(iterable);
     }
 
@@ -222,7 +222,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
     }
 
     @Override
-    public boolean equals(final Object other) {
+    public boolean equals(final @Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -245,7 +245,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return new MappedIterator<>(new EntryIterator<E, Void>(this, ENTRY_LENGTH, ENTRY_LENGTH, null, null), Map.Entry::getKey);
     }
 
@@ -269,7 +269,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
      *
      * @return a dump of the internal structure
      */
-    public String dump() {
+    public @NonNull String dump() {
         return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, false);
     }
 }

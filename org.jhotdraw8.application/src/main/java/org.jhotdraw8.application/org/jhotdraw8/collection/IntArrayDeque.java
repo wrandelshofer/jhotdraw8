@@ -66,12 +66,12 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public void addLastAllAsInt(int[] array) {
+    public void addLastAllAsInt(int @NonNull [] array) {
         addLastAllAsInt(array, 0, array.length);
     }
 
     @Override
-    public void addLastAllAsInt(int[] array, int offset, int length) {
+    public void addLastAllAsInt(int @NonNull [] array, int offset, int length) {
         grow(length + size());
 
 
@@ -128,7 +128,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public Iterator<Integer> descendingIterator() {
+    public @NonNull Iterator<Integer> descendingIterator() {
         throw new UnsupportedOperationException();
     }
 

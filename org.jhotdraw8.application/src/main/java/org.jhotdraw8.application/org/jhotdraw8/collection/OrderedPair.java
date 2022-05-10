@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -69,7 +70,7 @@ public class OrderedPair<U, V> implements Pair<U, V> {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "OrderedPair{"
                 + a +
                 ", " + b +

@@ -41,7 +41,7 @@ public class IndexedBidiGraphWrapper implements BidiGraph<Integer, Integer> {
     }
 
     @Override
-    public Integer getVertex(int index) {
+    public @NonNull Integer getVertex(int index) {
         return index;
     }
 

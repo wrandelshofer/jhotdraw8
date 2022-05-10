@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractMap;
@@ -41,7 +42,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     @Override
     @SuppressWarnings("unchecked")
-    public SequencedSet<K> keySet() {
+    public @NonNull SequencedSet<K> keySet() {
         return new WrappedSequencedSet<>(
                 () -> new MappedIterator<>(entrySet().iterator(), Entry::getKey),
                 AbstractSequencedMap.this::size,
@@ -54,7 +55,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    public SequencedCollection<V> values() {
+    public @NonNull SequencedCollection<V> values() {
         return new WrappedSequencedCollection<>(
                 () -> new MappedIterator<>(entrySet().iterator(), Entry::getValue),
                 AbstractSequencedMap.this::size,
@@ -67,7 +68,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
+    public @NonNull Iterator<Entry<K, V>> iterator() {
         return entrySet().iterator();
     }
 }
