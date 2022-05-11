@@ -50,8 +50,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         if (capacity < 0) {
             throw new IllegalArgumentException("capacity=" + capacity);
         }
-        int size = Integer.highestOneBit(capacity + capacity - 1);
-        elements = new int[Math.max(size, 0)];
+        elements = new int[Math.max(Integer.highestOneBit(capacity + capacity - 1), 0)];
     }
 
 

@@ -5,17 +5,17 @@
 package org.jhotdraw8.util.function;
 
 /**
- * Represents a function that adds an element to a set if not already present.
+ * A function that adds an element to a set if not already present.
  * <p>
  * The set can be implemented in various ways. For example:
  * <ul>
  *     <li>The set can be an implementation of one of the collection classes
  *     provided by the Java API.
  *          <pre>
- *         {@literal AddToSet<E>=new HashSet<>()::add;}
+ *         {@literal AddToSet<E> = new HashSet<>()::add;}
  *         </pre>
  *     </li>
- *     <li>The set can be a marker bit on the element object.
+ *     <li>The set can be a marker bit on an element object.
  *     <pre>
  *         class Element {
  *             private boolean marked;
@@ -25,7 +25,7 @@ package org.jhotdraw8.util.function;
  *                 return wasMarked;
  *             }
  *         }
- *        {@literal AddToSet<Element>=Element::mark;}
+ *        {@literal AddToSet<Element> = Element::mark;}
  *        </pre>
  *     </li>
  * </ul>

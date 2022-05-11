@@ -258,14 +258,14 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
 
 
     private void grow(final int capacity) {
-        final short[] temp = ListHelper.grow(vertexCount, capacity, stride, next);
+        final short[] temp = ListHelper.grow(capacity, stride, next);
         if (temp.length < capacity * stride) {
             throw new IllegalStateException("too much capacity requested:" + capacity);
         }
         next = temp;
-        prev = ListHelper.grow(vertexCount, capacity, stride, prev);
-        nextArrow = ListHelper.grow(vertexCount, capacity, maxArity, nextArrow);
-        prevArrow = ListHelper.grow(vertexCount, capacity, maxArity, prevArrow);
+        prev = ListHelper.grow(capacity, stride, prev);
+        nextArrow = ListHelper.grow(capacity, maxArity, nextArrow);
+        prevArrow = ListHelper.grow(capacity, maxArity, prevArrow);
     }
 
     @Override

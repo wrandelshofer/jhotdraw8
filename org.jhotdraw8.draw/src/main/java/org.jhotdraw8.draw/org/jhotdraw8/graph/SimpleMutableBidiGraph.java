@@ -419,7 +419,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         }
 
         private void grow(int targetCapacity) {
-            items = ListHelper.grow(size, targetCapacity, ITEM_SIZE, items);
+            items = ListHelper.grow(targetCapacity, ITEM_SIZE, items);
         }
 
         /**

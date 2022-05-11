@@ -299,8 +299,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     private void grow(final int capacity) {
         final int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
-        nextChunks = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
-        prevChunks = (GraphChunk[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
+        nextChunks = (GraphChunk[]) ListHelper.grow(chunkedCapacity, 1, nextChunks);
+        prevChunks = (GraphChunk[]) ListHelper.grow(chunkedCapacity, 1, prevChunks);
     }
 
     @Override

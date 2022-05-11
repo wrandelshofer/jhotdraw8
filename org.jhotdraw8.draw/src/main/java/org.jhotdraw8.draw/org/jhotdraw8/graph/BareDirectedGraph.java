@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * Provides a minimal read-only interface for a directed graph.
+ * A minimalistic read-only interface for a directed graph.
  * <p>
  * A directed graph is a tuple {@code G = (V, A)} where {@code V} is a set of
  * vertices and {@code A} is a set or bag of arrows.

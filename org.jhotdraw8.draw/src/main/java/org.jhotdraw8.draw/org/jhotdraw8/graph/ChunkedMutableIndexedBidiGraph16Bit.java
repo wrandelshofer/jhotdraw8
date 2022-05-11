@@ -302,8 +302,8 @@ public class ChunkedMutableIndexedBidiGraph16Bit implements MutableIndexedBidiGr
             throw new IllegalArgumentException("too many vertices");
         }
         final int chunkedCapacity = (capacity + chunkSize - 1) >>> chunkShift;
-        nextChunks = (GraphChunk16Bit[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, nextChunks);
-        prevChunks = (GraphChunk16Bit[]) ListHelper.grow(vertexCount, chunkedCapacity, 1, prevChunks);
+        nextChunks = (GraphChunk16Bit[]) ListHelper.grow(chunkedCapacity, 1, nextChunks);
+        prevChunks = (GraphChunk16Bit[]) ListHelper.grow(chunkedCapacity, 1, prevChunks);
     }
 
     @Override

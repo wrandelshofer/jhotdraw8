@@ -17,7 +17,7 @@ import java.util.function.Function;
  * Writes a graph into a graphviz "dot" file.
  * <p>
  * Writes the following productions. <b>Does not write subgraphs!</b>
- * <pre>
+ * <pre>{@literal
  * graph        : digrap [ ID ] '{' stmt_list '}'
  * stmt_list    : [ stmt [ ';' ] stmt_list ]
  * stmt         : node_stmt
@@ -35,12 +35,12 @@ import java.util.function.Function;
  * subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
  * compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
  * edgeop       : -> | --
- * </pre>
+ * }</pre>
  * <p>
  * References:
  * <dl>
  *     <dt>Graphviz. DOT Language.</dt>
- *     <dd><a href="">https://graphviz.org/doc/info/lang.html</a>graphviz.org</dd>
+ *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
  * </dl>
  */
 public class GraphvizWriter {
@@ -118,7 +118,7 @@ public class GraphvizWriter {
      *                         use as vertex attributes
      * @param arrowAttributes  a function that converts an arrow to a String for
      *                         use as arrow attributes
-     * @param graphId
+     * @param graphId   the id of the graph
      * @throws java.io.IOException if writing fails
      */
     public <V, A> void write(final @NonNull Appendable w,

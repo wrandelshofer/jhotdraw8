@@ -242,7 +242,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
 
     private void grow(int capacity) {
         if (items.length < capacity) {
-            items = ListHelper.grow(size, Math.max(1, items.length * 2), 1, items);
+            items = ListHelper.grow(Math.max(1, items.length * 2), 1, items);
         }
     }
 

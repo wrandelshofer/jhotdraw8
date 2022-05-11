@@ -211,7 +211,7 @@ public class DoubleArrayList implements Iterable<Double> {
     }
 
     private void grow(int capacity) {
-        items = ListHelper.grow(size, capacity, 1, items);
+        items = ListHelper.grow(capacity, 1, items);
     }
 
     /**

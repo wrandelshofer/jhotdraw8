@@ -29,7 +29,7 @@ import java.util.function.Supplier;
  * Reads a graph from a graphviz "dot" file.
  * <p>
  * Parses the following productions. <b>Does not support subgraphs!</b>
- * <pre>
+ * <pre>{@literal
  * graph        : [ strict ] (graph | digraph) [ ID ] '{' stmt_list '}'
  * stmt_list    : [ stmt [ ';' ] stmt_list ]
  * stmt         : node_stmt
@@ -47,12 +47,12 @@ import java.util.function.Supplier;
  * subgraph     : [ subgraph [ ID ] ] '{' stmt_list '}'
  * compass_pt   : (n | ne | e | se | s | sw | w | nw | c | _)
  * edgeop       : -> | --
- * </pre>
+ * }</pre>
  * <p>
  * References:
  * <dl>
  *     <dt>Graphviz. DOT Language.</dt>
- *     <dd><a href="">https://graphviz.org/doc/info/lang.html</a>graphviz.org</dd>
+ *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
  * </dl>
  */
 public class GraphvizReader<V, A> {
