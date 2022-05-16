@@ -20,8 +20,8 @@ package org.jhotdraw8.util.function;
  *         class Element {
  *             private boolean marked;
  *             public boolean mark() {
- *                 boolean wasMarked=false;
- *                 marked=true;
+ *                 boolean wasMarked = false;
+ *                 marked = true;
  *                 return wasMarked;
  *             }
  *         }
