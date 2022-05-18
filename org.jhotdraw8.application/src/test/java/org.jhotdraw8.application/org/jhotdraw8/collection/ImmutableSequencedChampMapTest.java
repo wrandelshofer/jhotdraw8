@@ -22,7 +22,8 @@ public class ImmutableSequencedChampMapTest extends AbstractPersistentSequencedM
     }
 
     @Override
-    protected @NonNull ImmutableMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
+    @SafeVarargs
+    protected final @NonNull ImmutableMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
         return ImmutableSequencedChampMap.<HashCollider, HashCollider>of().copyPutAll(Arrays.asList(entries));
     }
 

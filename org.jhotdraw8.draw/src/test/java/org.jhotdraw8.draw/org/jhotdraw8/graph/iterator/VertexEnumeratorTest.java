@@ -10,12 +10,7 @@ import org.jhotdraw8.graph.io.GraphvizReader;
 import org.jhotdraw8.graph.io.GraphvizWriter;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,9 +122,9 @@ public class VertexEnumeratorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testForEachRemainingWithAnyPathProvider() throws Exception {
         for (final Object[] args : anyPathProvider()) {
-            //noinspection unchecked
             testTryAdvance((DirectedGraph<Integer, Double>) args[0], (Integer) args[1], (Integer) args[2], (List<Integer>) args[3]);
         }
     }
