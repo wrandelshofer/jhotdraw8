@@ -16,6 +16,12 @@ import java.util.function.Function;
  */
 public class AdjacencyListWriter {
     /**
+     * Creates a new instance.
+     */
+    public AdjacencyListWriter() {
+    }
+
+    /**
      * Dumps the graph for debugging purposes.
      *
      * @param <V>   the vertex data type

@@ -44,6 +44,11 @@ import java.util.function.Function;
  * </dl>
  */
 public class GraphvizWriter {
+    /**
+     * Creates a new instance.
+     */
+    public GraphvizWriter() {
+    }
 
     /**
      * Dumps a directed graph into a String which can be rendered with the
