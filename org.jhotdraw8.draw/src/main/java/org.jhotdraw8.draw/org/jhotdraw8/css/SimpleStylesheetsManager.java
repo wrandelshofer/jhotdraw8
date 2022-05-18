@@ -545,7 +545,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             // This may happen extremely often!
             logger.accept(Level.WARNING, stylesheet == null
                     ? "error preprocessing token from stylesheet"
-                    : "error preprocessing token from stylesheet" + stylesheet.getUri(), e);
+                    : "error preprocessing token from stylesheet, uri=" + stylesheet.getUri(), e);
             return terms;
         }
     }
