@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.intersect.IntersectLineLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
@@ -83,7 +84,7 @@ import java.util.List;
 public class OffsetPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private boolean needsMoveTo = true;
-    private final PathBuilder<T> target;
+    private final @NonNull PathBuilder<T> target;
     private final double offset;
     private double moveX, moveY;
     /**
@@ -99,7 +100,7 @@ public class OffsetPathBuilder<T> extends AbstractPathBuilder<T> {
      */
     private final ArrayList<double[]> segments = new ArrayList<>();
 
-    public OffsetPathBuilder(PathBuilder<T> target, double offset) {
+    public OffsetPathBuilder(@NonNull PathBuilder<T> target, double offset) {
         this.target = target;
         this.offset = offset;
     }
