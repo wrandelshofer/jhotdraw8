@@ -18,6 +18,8 @@ import java.util.function.Consumer;
 /**
  * Interface for CSS macro functions. A CSS macro function processes
  * CssTokens.
+ *
+ * @param <T> the element type of the DOM
  */
 public interface CssFunction<T> {
     /**

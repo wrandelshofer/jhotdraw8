@@ -4,6 +4,11 @@
  */
 package org.jhotdraw8.css.function;
 
+/**
+ * Abstract base class for CSS functions.
+ *
+ * @param <T> the element type of the DOM
+ */
 public abstract class AbstractCssFunction<T> implements CssFunction<T> {
     private final String name;
 
