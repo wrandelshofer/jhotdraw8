@@ -85,15 +85,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         this.functions = functions;
     }
 
-    private void doSetAttribute(@NonNull SelectorModel<E> selectorModel1, @NonNull E elem, @NonNull StyleOrigin styleOrigin,
-                                @Nullable String namespace, @NonNull String name, @Nullable ImmutableList<CssToken> value,
-                                Map<String, ImmutableList<CssToken>> customProperties,
-                                @Nullable CssFunctionProcessor<E> functionProcessor) throws ParseException {
+    private void doSetAttribute(
+            @Nullable Stylesheet stylesheet,
+            @NonNull SelectorModel<E> selectorModel1, @NonNull E elem, @NonNull StyleOrigin styleOrigin,
+            @Nullable String namespace, @NonNull String name, @Nullable ImmutableList<CssToken> value,
+            Map<String, ImmutableList<CssToken>> customProperties,
+            @Nullable CssFunctionProcessor<E> functionProcessor) throws ParseException {
         if (value == null) {
             selectorModel1.setAttribute(elem, styleOrigin, namespace, name, null);
         } else {
             if (functionProcessor != null) {
-                ImmutableList<CssToken> processed = preprocessTerms(elem, functionProcessor, value);
+                ImmutableList<CssToken> processed = preprocessTerms(stylesheet, elem, functionProcessor, value);
                 selectorModel1.setAttribute(elem, styleOrigin, namespace, name, processed);
             } else {
                 selectorModel1.setAttribute(elem, styleOrigin, namespace, name, value);
@@ -122,11 +124,11 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     /**
      * Sets the logger.
      * <p>
-     * Per default this class does not log anything.
+     * By default, this class does not log anything.
      * <p>
      * A good logger value would be:
      * <pre>
-     * (s,t)->Logger.getLogger(SimpleStylesheetsManager.class.getName()).log(Level.INFO,s,t);
+     * (s,t)->Logger.getLogger(SimpleStylesheetsManager.class.getName()).log(Level.WARNING,s,t);
      * </pre>
      *
      * @param logger a logger
@@ -175,30 +177,30 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private LinkedHashMap<Object, StylesheetEntry> getMap(@NonNull StyleOrigin origin) {
         switch (origin) {
-        case AUTHOR:
-            return authorList;
-        case USER_AGENT:
-            return userAgentList;
-        case INLINE:
-            return inlineList;
-        default:
-            throw new IllegalArgumentException("illegal origin:" + origin);
+            case AUTHOR:
+                return authorList;
+            case USER_AGENT:
+                return userAgentList;
+            case INLINE:
+                return inlineList;
+            default:
+                throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
     private void setMap(@NonNull StyleOrigin origin, LinkedHashMap<Object, StylesheetEntry> newValue) {
         switch (origin) {
-        case AUTHOR:
-            authorList = newValue;
-            break;
-        case USER_AGENT:
-            userAgentList = newValue;
-            break;
-        case INLINE:
-            inlineList = newValue;
-            break;
-        default:
-            throw new IllegalArgumentException("illegal origin:" + origin);
+            case AUTHOR:
+                authorList = newValue;
+                break;
+            case USER_AGENT:
+                userAgentList = newValue;
+                break;
+            case INLINE:
+                inlineList = newValue;
+                break;
+            default:
+                throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
@@ -267,7 +269,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
                         try {
                             Declaration d = entry.getDeclaration();
-                            doSetAttribute(selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
+                            doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             logger.accept("applyStylesheetsTo", e);
                         }
@@ -280,7 +282,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
                         try {
                             Declaration d = entry.getDeclaration();
-                            doSetAttribute(selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
+                            doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             logger.accept("applyStylesheetsTo", e);
                         }
@@ -290,7 +292,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
                         try {
                             Declaration d = entry.getDeclaration();
-                            doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
+                            doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             logger.accept("applyStylesheetsTo", e);
                         }
@@ -319,7 +321,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         Map<String, ImmutableList<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
                         for (Map.Entry<QualifiedName, ImmutableList<CssToken>> entry : inlineDeclarations.entrySet()) {
                             try {
-                                doSetAttribute(selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
+                                doSetAttribute(null, selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
                             } catch (ParseException e) {
                                 logger.accept("error applying inline style attribute. style=" + styleValue, e);
                             }
@@ -384,16 +386,20 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private static class ApplicableDeclaration {
         private final int specificity;
-        private final Stylesheet stylesheet;
-        private final Declaration declaration;
+        private final @NonNull Stylesheet stylesheet;
+        private final @NonNull Declaration declaration;
 
-        public ApplicableDeclaration(int specificity, Stylesheet stylesheet, Declaration declaration) {
+        public ApplicableDeclaration(int specificity, @NonNull Stylesheet stylesheet, @NonNull Declaration declaration) {
             this.specificity = specificity;
             this.stylesheet = stylesheet;
             this.declaration = declaration;
         }
 
-        public Declaration getDeclaration() {
+        public @NonNull Stylesheet getStylesheet() {
+            return stylesheet;
+        }
+
+        public @NonNull Declaration getDeclaration() {
             return declaration;
         }
 
@@ -459,19 +465,19 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
         for (ApplicableDeclaration entry : applicableDeclarations) {
             Declaration d = entry.getDeclaration();
-            ImmutableList<CssToken> value = preprocessTerms(elem, processor, d.getTerms());
+            ImmutableList<CssToken> value = preprocessTerms(s, elem, processor, d.getTerms());
             try {
 
                 ReadOnlyList<CssToken> appliedValue;
                 CssToken first = value.size() == 0 ? null : value.getFirst();
                 if (first != null && first.getType() == CssTokenType.TT_IDENT) {
                     switch (first.getStringValueNonNull()) {
-                    case CssTokenType.IDENT_UNSET:
-                        appliedValue = null;
-                        break;
-                    default:
-                        appliedValue = value;
-                        break;
+                        case CssTokenType.IDENT_UNSET:
+                            appliedValue = null;
+                            break;
+                        default:
+                            appliedValue = value;
+                            break;
                     }
                 } else {
                     appliedValue = value;
@@ -543,12 +549,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
     }
 
-    private @NonNull ImmutableList<CssToken> preprocessTerms(E elem, @NonNull CssFunctionProcessor<E> processor, @NonNull ImmutableList<CssToken> terms) {
+    private @NonNull ImmutableList<CssToken> preprocessTerms(
+            @Nullable Stylesheet stylesheet,
+            @NonNull E elem,
+            @NonNull CssFunctionProcessor<E> processor, @NonNull ImmutableList<CssToken> terms) {
         try {
             return processor.process(elem, terms);
         } catch (ParseException e) {
-            // This may happen extremely often - do not log!
-            //logger.accept("error preprocessing token", e);
+            // This may happen extremely often!
+            logger.accept(stylesheet == null
+                    ? "error preprocessing token from inline stylesheet"
+                    : "error preprocessing token from stylesheet" + stylesheet, e);
             return terms;
         }
     }

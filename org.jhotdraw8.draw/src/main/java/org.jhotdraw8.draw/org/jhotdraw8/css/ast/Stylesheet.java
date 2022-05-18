@@ -5,30 +5,46 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ImmutableArrayList;
 import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.ReadOnlyList;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * A stylesheet is a list of rules.
+ * <p>
+ * A stylesheet is identified by a {@link URI}.
  *
  * @author Werner Randelshofer
  */
 public class Stylesheet extends AbstractSyntaxTree {
 
+
+    private final @Nullable URI uri;
     private final @NonNull ImmutableList<Rule> rules;
     private final @NonNull ImmutableList<StyleRule> styleRules;
 
-    public Stylesheet(@NonNull List<Rule> rules) {
+    public Stylesheet(@Nullable URI uri, @NonNull List<Rule> rules) {
+        this.uri = uri;
         this.rules = ImmutableArrayList.copyOf(rules);
         this.styleRules = ImmutableArrayList.copyOf(
                 rules.stream()
                         .filter(r -> r instanceof StyleRule)
                         .map(r -> (StyleRule) r)
                         .collect(Collectors.toList()));
+    }
+
+    /**
+     * Gets the URI that identifies this stylesheet.
+     *
+     * @return an URI
+     */
+    public @Nullable URI getUri() {
+        return uri;
     }
 
     /**

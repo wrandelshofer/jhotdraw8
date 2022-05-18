@@ -821,7 +821,7 @@ public class CssParser {
                 exceptions.add(e);
             }
         }
-        return new Stylesheet(rules);
+        return new Stylesheet(getDocumentHome(), rules);
     }
 
     private @NonNull List<CssToken> parseTerms(@NonNull CssTokenizer tt) throws IOException, ParseException {
@@ -908,11 +908,11 @@ public class CssParser {
         }
     }
 
-    public URI getDocumentHome() {
+    public @NonNull URI getDocumentHome() {
         return documentHome;
     }
 
-    public void setDocumentHome(URI documentHome) {
+    public void setDocumentHome(@NonNull URI documentHome) {
         this.documentHome = documentHome;
     }
 
