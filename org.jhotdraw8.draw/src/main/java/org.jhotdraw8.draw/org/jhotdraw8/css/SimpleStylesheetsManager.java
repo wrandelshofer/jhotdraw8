@@ -18,6 +18,7 @@ import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.io.UriResolver;
+import org.jhotdraw8.util.function.TriConsumer;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,8 +37,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -73,7 +74,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private @Nullable Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
     private @Nullable Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
 
-    private @NonNull BiConsumer<String, Throwable> logger = (s, t) -> {
+    private @NonNull TriConsumer<Level, String, Throwable> logger = (l, s, t) -> {
     };
 
     public SimpleStylesheetsManager(@NonNull SelectorModel<E> selectorModel) {
@@ -112,28 +113,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return selectorModel;
     }
 
-    /**
-     * @return the logger
-     * @see #setLogger(BiConsumer)
-     */
-    @NonNull
-    public BiConsumer<String, Throwable> getLogger() {
+    @Override
+    public @NonNull TriConsumer<Level, String, Throwable> getLogger() {
         return logger;
     }
 
-    /**
-     * Sets the logger.
-     * <p>
-     * By default, this class does not log anything.
-     * <p>
-     * A good logger value would be:
-     * <pre>
-     * (s,t)->Logger.getLogger(SimpleStylesheetsManager.class.getName()).log(Level.WARNING,s,t);
-     * </pre>
-     *
-     * @param logger a logger
-     */
-    public void setLogger(@NonNull BiConsumer<String, Throwable> logger) {
+    @Override
+    public void setLogger(@NonNull TriConsumer<Level, String, Throwable> logger) {
         this.logger = logger;
     }
 
@@ -271,7 +257,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             Declaration d = entry.getDeclaration();
                             doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
-                            logger.accept("applyStylesheetsTo", e);
+                            logger.accept(Level.FINE, "applyStylesheetsTo", e);
                         }
                     }
 
@@ -284,7 +270,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             Declaration d = entry.getDeclaration();
                             doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
-                            logger.accept("applyStylesheetsTo", e);
+                            logger.accept(Level.FINE, "applyStylesheetsTo", e);
                         }
                     }
 
@@ -294,7 +280,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             Declaration d = entry.getDeclaration();
                             doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
-                            logger.accept("applyStylesheetsTo", e);
+                            logger.accept(Level.FINE, "applyStylesheetsTo", e);
                         }
                     }
 
@@ -314,7 +300,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                                     inlineDeclarations.put(new QualifiedName(d.getNamespace(), d.getPropertyName()), d.getTerms());
                                 }
                             } catch (IOException ex) {
-                                logger.accept("invalid style attribute on element. style=" + styleValue, null);
+                                logger.accept(Level.WARNING, "invalid inline style attribute on element. style=" + styleValue, null);
                                 ex.printStackTrace();
                             }
                         }
@@ -323,7 +309,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                             try {
                                 doSetAttribute(null, selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
                             } catch (ParseException e) {
-                                logger.accept("error applying inline style attribute. style=" + styleValue, e);
+                                logger.accept(Level.WARNING, "error applying inline style attribute. style=" + styleValue, e);
                             }
                         }
                         inlineDeclarations.clear();
@@ -486,7 +472,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         appliedValue);
             } catch (ParseException e) {
                 if (suppressParseException) {
-                    logger.accept("error parsing stylesheet", e);
+                    logger.accept(Level.WARNING, "error parsing stylesheet, uri=" + s.getUri(), e);
                 } else {
                     throw e;
                 }
@@ -557,9 +543,9 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             return processor.process(elem, terms);
         } catch (ParseException e) {
             // This may happen extremely often!
-            logger.accept(stylesheet == null
-                    ? "error preprocessing token from inline stylesheet"
-                    : "error preprocessing token from stylesheet" + stylesheet, e);
+            logger.accept(Level.WARNING, stylesheet == null
+                    ? "error preprocessing token from stylesheet"
+                    : "error preprocessing token from stylesheet" + stylesheet.getUri(), e);
             return terms;
         }
     }
@@ -570,19 +556,19 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         private final @NonNull StyleOrigin origin;
         private @Nullable FutureTask<Stylesheet> future;
         private @Nullable Stylesheet stylesheet;
-        private final @NonNull BiConsumer<String, Throwable> logger;
+        private final @NonNull TriConsumer<Level, String, Throwable> logger;
 
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri, @NonNull BiConsumer<String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri, @NonNull TriConsumer<Level, String, Throwable> logger) {
             this.origin = origin;
             this.uri = uri;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
                 Stylesheet s = p.parseStylesheet(uri);
-                logger.accept("Parsed " + uri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size(), null);
+                logger.accept(Level.FINE, "Parsed " + uri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    logger.accept("Parsed " + uri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
+                    logger.accept(Level.FINE, "Parsed " + uri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
                 }
                 return s;
             });
@@ -590,24 +576,24 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet, @NonNull BiConsumer<String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet, @NonNull TriConsumer<Level, String, Throwable> logger) {
             this.logger = logger;
             this.uri = null;
             this.origin = origin;
             this.stylesheet = stylesheet;
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome, @NonNull BiConsumer<String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome, @NonNull TriConsumer<Level, String, Throwable> logger) {
             this.logger = logger;
             this.uri = null;
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = parserFactory.get();
                 Stylesheet s = p.parseStylesheet(str, documentHome);
-                logger.accept("Parsed " + str + "\nRules: " + s.getStyleRules(), null);
+                logger.accept(Level.FINE, "Parsed " + str + "\nRules: " + s.getStyleRules(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    logger.accept("Parsed " + str + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
+                    logger.accept(Level.FINE, "Parsed " + str + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
                 }
                 return s;
             });
@@ -633,7 +619,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 } catch (InterruptedException ex) {
                     // retry later
                 } catch (ExecutionException ex) {
-                    logger.accept("failed to get stylesheet", ex);
+                    logger.accept(Level.WARNING, "failed to get stylesheet", ex);
                     ex.printStackTrace();
                     stylesheet = null;
                     future = null;

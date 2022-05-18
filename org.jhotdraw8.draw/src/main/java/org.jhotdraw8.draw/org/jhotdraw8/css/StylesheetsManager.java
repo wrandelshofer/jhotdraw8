@@ -9,11 +9,13 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
+import org.jhotdraw8.util.function.TriConsumer;
 
 import java.net.URI;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -153,6 +155,28 @@ public interface StylesheetsManager<E> {
 
         return matchingRules;
     }
+
+    /**
+     * Returns the logger.
+     *
+     * @return the logger
+     * @see #setLogger(TriConsumer)
+     */
+    @NonNull TriConsumer<Level, String, Throwable> getLogger();
+
+    /**
+     * Sets the logger.
+     * <p>
+     * By default, this class does not log anything.
+     * <p>
+     * A good logger value would be:
+     * <pre>
+     * (l, s,t)->Logger.getLogger(SimpleStylesheetsManager.class.getName()).log(l,s,t);
+     * </pre>
+     *
+     * @param logger a logger
+     */
+    void setLogger(@NonNull TriConsumer<Level, String, Throwable> logger);
 
     /**
      * Returns a localized help text.
