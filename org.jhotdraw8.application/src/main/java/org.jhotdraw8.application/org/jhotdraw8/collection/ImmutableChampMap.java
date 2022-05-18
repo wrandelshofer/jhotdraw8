@@ -75,6 +75,7 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
+@SuppressWarnings("exports")
 public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
