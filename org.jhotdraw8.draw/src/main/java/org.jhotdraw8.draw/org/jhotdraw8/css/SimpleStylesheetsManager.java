@@ -564,7 +564,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.uri = stylesheetUri;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
-                Stylesheet s = p.parseStylesheet(stylesheetUri, documentHome);
+                final URI stylesheetHome = uriResolver.getParent(stylesheetUri);
+                Stylesheet s = p.parseStylesheet(stylesheetUri, stylesheetHome);
                 logger.accept(Level.FINE, "Parsed " + stylesheetUri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {

@@ -183,7 +183,7 @@ public class CssParser {
     }
 
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
-    private @Nullable URI documentHome;
+    private @Nullable URI stylesheetHome;
     private @Nullable URI stylesheetUri;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
     /**
@@ -734,57 +734,57 @@ public class CssParser {
     /**
      * Parses a given stylesheet from the specified URI.
      *
-     * @param stylesheetUri the URI of the stylesheet (must be known)
-     * @param documentHome  base URI (if it exists)
+     * @param stylesheetUri  the URI of the stylesheet (must be known)
+     * @param stylesheetHome base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull URI stylesheetUri, @Nullable URI documentHome) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         try (Reader in = new BufferedReader(new InputStreamReader(stylesheetUri.toURL().openConnection().getInputStream(), StandardCharsets.UTF_8))) {
-            return parseStylesheet(in, this.stylesheetUri, documentHome);
+            return parseStylesheet(in, stylesheetUri, stylesheetHome);
         }
     }
 
     /**
      * Parses a given stylesheet from the specified String and document home.
      *
-     * @param css           the uri of the stylesheet file
-     * @param stylesheetUri the URI of the stylesheet (if known)
-     * @param documentHome  base URI (if it exists)
+     * @param css            the uri of the stylesheet file
+     * @param stylesheetUri  the URI of the stylesheet (if known)
+     * @param stylesheetHome base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull String css, @Nullable URI stylesheetUri, @Nullable URI documentHome) throws IOException {
-        return parseStylesheet(new StringReader(css), stylesheetUri, documentHome);
+    public @NonNull Stylesheet parseStylesheet(@NonNull String css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
+        return parseStylesheet(new StringReader(css), stylesheetUri, stylesheetHome);
     }
 
     /**
      * Parses a given stylesheet from the specified String and document home.
      *
-     * @param css           the uri of the stylesheet file
-     * @param stylesheetUri the URI of the stylesheet (if known)
-     * @param documentHome  base URI (if it exists)
+     * @param css            the uri of the stylesheet file
+     * @param stylesheetUri  the URI of the stylesheet (if known)
+     * @param stylesheetHome base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI documentHome) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css);
-        return parseStylesheet(tt, stylesheetUri, documentHome);
+        return parseStylesheet(tt, stylesheetUri, stylesheetHome);
     }
 
     /**
      * Parses a given stylesheet from the specified String and document home.
      *
-     * @param tt            the tokenier
-     * @param stylesheetUri the URI of the stylesheet (if known)
-     * @param documentHome  base URI (if it exists)
+     * @param tt             the tokenier
+     * @param stylesheetUri  the URI of the stylesheet (if known)
+     * @param stylesheetHome base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt, @Nullable URI stylesheetUri, @Nullable URI documentHome) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         setStylesheetUri(stylesheetUri);
-        setDocumentHome(documentHome);
+        setStylesheetHome(stylesheetHome);
         List<Rule> rules = new ArrayList<>();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             try {
@@ -814,7 +814,7 @@ public class CssParser {
                 exceptions.add(e);
             }
         }
-        return new Stylesheet(getDocumentHome(), rules);
+        return new Stylesheet(getStylesheetHome(), rules);
     }
 
     private @NonNull List<CssToken> parseTerms(@NonNull CssTokenizer tt) throws IOException, ParseException {
@@ -861,11 +861,11 @@ public class CssParser {
      */
     @NonNull
     private String absolutizeUri(@NonNull String relativeUri) {
-        if (documentHome == null) {
+        if (stylesheetHome == null) {
             return relativeUri;
         }
         try {
-            return uriResolver.absolutize(documentHome, new URI(relativeUri)).toString();
+            return uriResolver.absolutize(stylesheetHome, new URI(relativeUri)).toString();
         } catch (URISyntaxException e) {
             return relativeUri;
         }
@@ -909,12 +909,12 @@ public class CssParser {
         this.stylesheetUri = stylesheetUri;
     }
 
-    public @Nullable URI getDocumentHome() {
-        return documentHome;
+    public @Nullable URI getStylesheetHome() {
+        return stylesheetHome;
     }
 
-    public void setDocumentHome(@Nullable URI documentHome) {
-        this.documentHome = documentHome;
+    public void setStylesheetHome(@Nullable URI stylesheetHome) {
+        this.stylesheetHome = stylesheetHome;
     }
 
     public @NonNull UriResolver getUriResolver() {
