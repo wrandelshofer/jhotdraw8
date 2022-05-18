@@ -814,7 +814,7 @@ public class CssParser {
                 exceptions.add(e);
             }
         }
-        return new Stylesheet(getStylesheetHome(), rules);
+        return new Stylesheet(getStylesheetUri(), rules);
     }
 
     private @NonNull List<CssToken> parseTerms(@NonNull CssTokenizer tt) throws IOException, ParseException {
