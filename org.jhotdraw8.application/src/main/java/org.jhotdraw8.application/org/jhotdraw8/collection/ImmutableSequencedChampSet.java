@@ -86,6 +86,7 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
+@SuppressWarnings("exports")
 public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
