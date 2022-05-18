@@ -48,12 +48,12 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
                         @NonNull CssFunctionProcessor<T> functionProcessor,
                         @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
 
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈var〉: function var() expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "(): function var() expected.");
         if (!getName().equals(tt.currentString())) {
-            throw tt.createParseException("〈var〉: function var() expected.");
+            throw tt.createParseException(getName() + "(): function var() expected.");
         }
 
-        tt.requireNextToken(CssTokenType.TT_IDENT, "〈var〉: function custom-property-name expected.");
+        tt.requireNextToken(CssTokenType.TT_IDENT, getName() + "(): function custom-property-name expected.");
 
         String customPropertyName = tt.currentStringNonNull();
         List<CssToken> attrFallback = new ArrayList<>();
@@ -63,11 +63,11 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
             }
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw tt.createParseException("〈attr〉: right bracket expected.");
+            throw tt.createParseException(getName() + "(): right bracket expected.");
         }
 
         if (!customPropertyName.startsWith("--")) {
-            throw tt.createParseException("〈var〉: custom-property-name starting with two dashes \"--\" expected.");
+            throw tt.createParseException(getName() + "(): custom-property-name starting with two dashes \"--\" expected.");
         }
         ReadOnlyList<CssToken> customValue = functionProcessor.getCustomProperties().get(customPropertyName);
         recursionStack.push(this);
@@ -76,7 +76,7 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
                 // We have not been able to substitute the value.
                 // The value is "invalid at computed-value-time".
                 // https://drafts.csswg.org/css-variables/#using-variables
-                throw tt.createParseException("〈var〉: Could not find a custom property with this name: \"" + customPropertyName + "\".");
+                throw new ParseException(getName() + "(): Could not find a custom property with this name: \"" + customPropertyName + "\".", tt.getStartPosition());
             } else {
                 functionProcessor.process(element, new ListCssTokenizer(attrFallback), out, recursionStack);
             }

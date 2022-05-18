@@ -63,9 +63,9 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                         @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor,
                         @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: function " + getName() + "() expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
-            throw tt.createParseException("〈" + getName() + "〉: function " + getName() + "() expected.");
+            throw tt.createParseException(getName() + "():  function " + getName() + "() expected.");
         }
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
@@ -95,7 +95,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
             }
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw new ParseException("〈attr〉: right bracket expected. " + tt.current(), tt.getStartPosition());
+            throw new ParseException(getName() + "():  right bracket expected. " + tt.current(), tt.getStartPosition());
         }
         int end = tt.getEndPosition();
 
@@ -362,7 +362,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         if (tt.next() == CssTokenType.TT_IDENT) {
             name = tt.currentString();
         } else {
-            throw new ParseException("attr-name expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "(): attr-name expected.", tt.getStartPosition());
         }
         return new QualifiedName(null, name);// FIXME parse namespace
     }

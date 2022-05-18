@@ -41,7 +41,7 @@ public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T>
                 List<CssToken> list = new ArrayList<>();
                 functionProcessor.processToken(element, tt, list::add, new ArrayDeque<>());
                 if (list.isEmpty()) {
-                    throw new ParseException("〈color-value〉: function " + name + "() must return a value.", tt.getStartPosition());
+                    throw new ParseException(getName() + "(): function " + name + "() must return a value.", tt.getStartPosition());
                 }
                 color = parseResolvedColorValue(element, new ListCssTokenizer(list), functionProcessor);
                 break;

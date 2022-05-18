@@ -52,11 +52,11 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
                     count++;
                     break;
                 default:
-                    throw new ParseException("〈" + expressionName + "〉: String, Number, Dimension, Percentage or URL expected.", t.getStartPos());
+                    throw new ParseException(getName() + "(): String, Number, Dimension, Percentage or URL expected.", t.getStartPos());
             }
         }
         if (count == 0) {
-            throw new ParseException("〈" + expressionName + "〉: String, Number, Dimension, Percentage or URL expected.", 0);
+            throw new ParseException(getName() + "(): String, Number, Dimension, Percentage or URL expected.", 0);
         }
 
         return buf.toString();

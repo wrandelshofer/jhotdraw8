@@ -45,12 +45,12 @@ public class RoundCssFunction<T> extends CalcCssFunction<T> {
                         @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: " + getName() + "() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  " + getName() + "() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
-            throw new ParseException("〈" + getName() + "〉: " + getName() + "() function expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "():  " + getName() + "() function expected.", tt.getStartPosition());
         }
         CssSize dim = parseCalcValue(element, tt, functionProcessor);
-        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈" + getName() + "〉: right bracket \")\" expected.");
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, getName() + "():  right bracket \")\" expected.");
         int end = tt.getEndPosition();
 
         CssSize rounded = CssSize.from(Math.round(dim.getValue()), dim.getUnits());

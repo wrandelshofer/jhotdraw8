@@ -48,9 +48,9 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
     @Override
     public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈concat〉: concat() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  concat() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
-            throw new ParseException("〈concat〉: concat() function expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "():  concat() function expected.", tt.getStartPosition());
         }
 
         int line = tt.getLineNumber();
@@ -75,7 +75,7 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
             first = false;
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw new ParseException("〈concat〉: right bracket ')' expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "():  right bracket ')' expected.", tt.getStartPosition());
         }
         int end = tt.getEndPosition();
         out.accept(new CssToken(CssTokenType.TT_STRING, buf.toString(), null, line, start, end));

@@ -66,12 +66,12 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
     }
 
     private @Nullable CssSize parseCalcFunction(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: " + getName() + "() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "(): " + getName() + "() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
-            throw new ParseException("〈" + getName() + "〉: " + getName() + "() function expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "(): " + getName() + "() function expected.", tt.getStartPosition());
         }
         CssSize dim = parseCalcSum(element, tt, functionProcessor);
-        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈" + getName() + "〉: right bracket \")\" expected.");
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, getName() + "():  right bracket \")\" expected.");
         return dim;
     }
 
@@ -163,7 +163,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
             return CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
         case '(':
             CssSize dim = parseCalcSum(element, tt, functionProcessor);
-            tt.requireNextToken(')', "〈calc-value〉: right bracket ')' expected.");
+            tt.requireNextToken(')', getName() + "(): right bracket ')' expected.");
             return dim;
         case CssTokenType.TT_FUNCTION:
             String name = tt.currentString();
@@ -171,7 +171,7 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
             List<CssToken> list = new ArrayList<>();
             functionProcessor.processToken(element, tt, list::add, new ArrayDeque<>());
             if (list.size() != 1) {
-                throw new ParseException("〈calc-value〉: function " + name + "() must return single value.", tt.getStartPosition());
+                throw new ParseException(getName() + "(): function " + name + "() must return single value.", tt.getStartPosition());
             }
             CssToken token = list.get(0);
             switch (token.getType()) {
@@ -182,10 +182,10 @@ public class CalcCssFunction<T> extends AbstractCssFunction<T> {
             case CssTokenType.TT_DIMENSION:
                 return CssSize.from(token.getNumericValue().doubleValue(), token.getStringValue());
             default:
-                throw new ParseException("〈calc-value〉: function " + name + "() must return numeric value.", tt.getStartPosition());
+                throw new ParseException(getName() + "(): function " + name + "() must return numeric value.", tt.getStartPosition());
             }
         default:
-            throw tt.createParseException("〈calc-value〉: number, percentage, dimension or (sum) expected.");
+            throw tt.createParseException(getName() + "(): number, percentage, dimension or (sum) expected.");
         }
     }
 

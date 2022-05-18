@@ -44,9 +44,9 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     public void process(@NonNull T element, @NonNull CssTokenizer tt,
                         @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor,
                         @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + NAME + "〉: " + NAME + "() function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  " + getName() + "() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
-            throw new ParseException("〈" + NAME + "〉: " + NAME + "() function expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "(): " + getName() + "() function expected.", tt.getStartPosition());
         }
 
         int line = tt.getLineNumber();
@@ -62,7 +62,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
         }
         String repl = evalString(element, tt, getName(), functionProcessor);
         if (tt.next() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw new ParseException("〈" + NAME + "〉: right bracket ')' expected.", tt.getStartPosition());
+            throw new ParseException(getName() + "():  right bracket ')' expected.", tt.getStartPosition());
         }
 
         try {
@@ -70,7 +70,7 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
             int end = tt.getEndPosition();
             out.accept(new CssToken(CssTokenType.TT_STRING, result, null, line, start, end));
         } catch (IllegalArgumentException e) {
-            ParseException ex = new ParseException("〈" + NAME + "〉: " + e.getMessage(), tt.getStartPosition());
+            ParseException ex = new ParseException(getName() + "(): " + e.getMessage(), tt.getStartPosition());
             ex.initCause(e);
             throw ex;
         }

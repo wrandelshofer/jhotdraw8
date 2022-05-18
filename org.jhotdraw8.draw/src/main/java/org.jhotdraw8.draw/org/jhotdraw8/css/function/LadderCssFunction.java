@@ -63,9 +63,9 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
     @Override
     public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
                         @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "〈" + getName() + "〉: function " + getName() + "() expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
-            throw tt.createParseException("〈" + getName() + "〉: function " + getName() + "() expected.");
+            throw tt.createParseException(getName() + "():  function " + getName() + "() expected.");
         }
         final CssColor primaryColor = parseColorValue(element, tt, functionProcessor);
 
@@ -77,7 +77,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
             ladder.computeIfAbsent(percentageValue, k -> new ArrayList<>()).add(ladderColor);
         }
         tt.pushBack();
-        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "〈" + getName() + "〉: ')' expected.");
+        tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, getName() + "():  ')' expected.");
 
         double brightness = primaryColor == null || primaryColor.getColor() == null ? 0.0
                 : primaryColor.getColor().getBrightness();
@@ -117,7 +117,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
             size = CssSize.from(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
             break;
         default:
-            throw tt.createParseException("〈percentage-value〉: percentage value expected.");
+            throw tt.createParseException(getName() + "(): percentage value expected.");
         }
         return size;
 
