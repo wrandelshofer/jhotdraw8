@@ -10,8 +10,10 @@ import org.jhotdraw8.annotation.Nullable;
 import java.awt.geom.Point2D;
 
 /**
- * PathBuilder.
+ * Interface for a builder that builds a product from a sequence of path
+ * operations.
  *
+ * @param <T> the product type
  * @author Werner Randelshofer
  */
 public interface PathBuilder<T> {
