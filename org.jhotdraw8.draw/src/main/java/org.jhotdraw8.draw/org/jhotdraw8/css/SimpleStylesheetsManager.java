@@ -124,10 +124,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public void addStylesheet(@NonNull StyleOrigin origin, @Nullable URI documentHome, @NonNull URI uri) {
-        URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
+    public void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI stylesheetUri, @Nullable URI documentHome) {
+        URI absolutizedUri = uriResolver.absolutize(documentHome, stylesheetUri);
         invalidate();
-        getMap(origin).put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, logger));
+        getMap(origin).put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, documentHome, logger));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     @Override
     public void addStylesheet(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome) {
         invalidate();
-        getMap(origin).put(str, new StylesheetEntry(origin, str, documentHome, logger));
+        getMap(origin).put(str, new StylesheetEntry(origin, str, null, documentHome, logger));
     }
 
     private void invalidate() {
@@ -204,13 +204,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 URI uri = (URI) t;
                 URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
                 StylesheetEntry old = oldMap.get(absolutizedUri);
-                newMap.put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, logger));
+                newMap.put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, documentHome, logger));
             } else if (t instanceof String) {
                 StylesheetEntry old = oldMap.get(t);
                 if (old != null) {
                     newMap.put(t, old);
                 } else {
-                    newMap.put(t, new StylesheetEntry(origin, (String) t, documentHome, logger));
+                    newMap.put(t, new StylesheetEntry(origin, (String) t, null, documentHome, logger));
                 }
             } else {
                 throw new IllegalArgumentException("illegal item " + t);
@@ -559,16 +559,16 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         private final @NonNull TriConsumer<Level, String, Throwable> logger;
 
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI uri, @NonNull TriConsumer<Level, String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI stylesheetUri, @Nullable URI documentHome, @NonNull TriConsumer<Level, String, Throwable> logger) {
             this.origin = origin;
-            this.uri = uri;
+            this.uri = stylesheetUri;
             this.future = new FutureTask<>(() -> {
                 CssParser p = new CssParser();
-                Stylesheet s = p.parseStylesheet(uri);
-                logger.accept(Level.FINE, "Parsed " + uri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size(), null);
+                Stylesheet s = p.parseStylesheet(stylesheetUri, documentHome);
+                logger.accept(Level.FINE, "Parsed " + stylesheetUri + "\n#rules: " + s.getStyleRules().size() + ", #errors: " + p.getParseExceptions().size(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {
-                    logger.accept(Level.FINE, "Parsed " + uri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
+                    logger.accept(Level.FINE, "Parsed " + stylesheetUri + "\nExceptions:\n  " + parseExceptions.stream().map(ParseException::getMessage).collect(Collectors.joining("\n  ")), null);
                 }
                 return s;
             });
@@ -583,13 +583,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             this.stylesheet = stylesheet;
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI documentHome, @NonNull TriConsumer<Level, String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI stylesheetUri, @Nullable URI documentHome, @NonNull TriConsumer<Level, String, Throwable> logger) {
             this.logger = logger;
             this.uri = null;
             this.origin = origin;
             this.future = new FutureTask<>(() -> {
                 CssParser p = parserFactory.get();
-                Stylesheet s = p.parseStylesheet(str, documentHome);
+                Stylesheet s = p.parseStylesheet(str, stylesheetUri, documentHome);
                 logger.accept(Level.FINE, "Parsed " + str + "\nRules: " + s.getStyleRules(), null);
                 List<ParseException> parseExceptions = p.getParseExceptions();
                 if (!parseExceptions.isEmpty()) {

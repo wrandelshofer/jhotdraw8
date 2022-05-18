@@ -199,7 +199,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         CssParser parser = new CssParser();
         TextArea textArea = getTextArea();
         try {
-            Stylesheet stylesheet = parser.parseStylesheet(textArea.getText(), null);
+            Stylesheet stylesheet = parser.parseStylesheet(textArea.getText(), null, null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.out.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
                 ParseException e = parser.getParseExceptions().get(0);
@@ -621,7 +621,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private SelectorGroup parseSelector() {
         CssParser parser = new CssParser();
         try {
-            Stylesheet s = parser.parseStylesheet(textArea.getText(), null);
+            Stylesheet s = parser.parseStylesheet(textArea.getText(), null, null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
                 return new SelectorGroup(Collections.emptyList());
@@ -643,7 +643,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private void select(ActionEvent event) {
         CssParser parser = new CssParser();
         try {
-            Stylesheet s = parser.parseStylesheet(textArea.getText(), null);
+            Stylesheet s = parser.parseStylesheet(textArea.getText(), null, null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
             }
@@ -758,7 +758,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         lookupTable.clear();
         CssParser parser = new CssParser();
         try {
-            Stylesheet s = parser.parseStylesheet(getTextArea().getText(), null);
+            Stylesheet s = parser.parseStylesheet(getTextArea().getText(), null, null);
             for (StyleRule r : s.getStyleRules()) {
                 for (Declaration d : r.getDeclarations()) {
                     lookupTable.add(new LookupEntry(d.getStartPos(), r, d));

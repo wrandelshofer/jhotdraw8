@@ -47,7 +47,7 @@ public class CssParserTest {
     public static void testCssSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet, null);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -255,7 +255,7 @@ public class CssParserTest {
         testCssSyntax(valid, stylesheetStr, before, expectedValue);
 
         CssParser p = new CssParser();
-        Stylesheet stylesheet = p.parseStylesheet(stylesheetStr, null);
+        Stylesheet stylesheet = p.parseStylesheet(stylesheetStr, null, null);
         ReadOnlyList<Rule> rules = stylesheet.getRules();
     }
 
@@ -267,7 +267,7 @@ public class CssParserTest {
     public static void testSelectorSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet, null);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
         //
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();

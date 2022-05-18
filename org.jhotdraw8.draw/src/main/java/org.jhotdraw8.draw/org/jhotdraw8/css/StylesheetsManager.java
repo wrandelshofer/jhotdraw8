@@ -40,11 +40,11 @@ public interface StylesheetsManager<E> {
     /**
      * Adds a stylesheet with the specified origin.
      *
-     * @param origin       the style origin
-     * @param documentHome the document Home url
-     * @param url          the stylesheet url
+     * @param origin        the style origin
+     * @param stylesheetUri the stylesheet url
+     * @param documentHome  the document Home url
      */
-    void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI documentHome, @NonNull URI url);
+    void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI stylesheetUri, @NonNull URI documentHome);
 
     /**
      * Adds a stylesheet with the specified origin.

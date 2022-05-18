@@ -47,7 +47,7 @@ public class CssSelectorTest {
     public static void testSelector(@NonNull String stylesheet, @NonNull String before, @NonNull String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet, null);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
         //
         //---
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -173,7 +173,7 @@ public class CssSelectorTest {
     public static void testSelectorSpecificity(@NonNull String stylesheet, @NonNull String xml, int expectedSpecifity) throws IOException, ParserConfigurationException, SAXException {
         //---
         CssParser p = new CssParser();
-        Stylesheet ast = p.parseStylesheet(stylesheet, null);
+        Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
 
 
         //---

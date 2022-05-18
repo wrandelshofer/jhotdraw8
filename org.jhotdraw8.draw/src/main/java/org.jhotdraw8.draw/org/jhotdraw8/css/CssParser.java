@@ -46,7 +46,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -185,6 +184,7 @@ public class CssParser {
 
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
     private @Nullable URI documentHome;
+    private @Nullable URI stylesheetUri;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
     /**
      * To reduce memory pressure, we deduplicate selectors.
@@ -731,76 +731,69 @@ public class CssParser {
         return new StyleRule(selectorGroup, declarations);
     }
 
-    public @NonNull Stylesheet parseStylesheet(@NonNull URL css) throws IOException {
-        try (Reader in = new BufferedReader(new InputStreamReader(css.openConnection().getInputStream(), StandardCharsets.UTF_8))) {
-            URI documentHome;
-            try {
-                documentHome = uriResolver.getParent(css.toURI());
-            } catch (URISyntaxException e) {
-                documentHome = null;
-            }
-            return parseStylesheet(in, documentHome);
+    /**
+     * Parses a given stylesheet from the specified URI.
+     *
+     * @param stylesheetUri the URI of the stylesheet (must be known)
+     * @param documentHome  base URI (if it exists)
+     * @return the parsed stylesheet
+     * @throws IOException on failure
+     */
+    public @NonNull Stylesheet parseStylesheet(@NonNull URI stylesheetUri, @Nullable URI documentHome) throws IOException {
+        try (Reader in = new BufferedReader(new InputStreamReader(stylesheetUri.toURL().openConnection().getInputStream(), StandardCharsets.UTF_8))) {
+            return parseStylesheet(in, this.stylesheetUri, documentHome);
         }
     }
 
     /**
-     * Parses a given stylesheet from the specified URI and uses this URI as
-     * document base.
+     * Parses a given stylesheet from the specified String and document home.
      *
-     * @param css the uri of the stylesheet file
+     * @param css           the uri of the stylesheet file
+     * @param stylesheetUri the URI of the stylesheet (if known)
+     * @param documentHome  base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull URI css) throws IOException {
-        setDocumentHome(css);
-        return parseStylesheet(css.toURL());
+    public @NonNull Stylesheet parseStylesheet(@NonNull String css, @Nullable URI stylesheetUri, @Nullable URI documentHome) throws IOException {
+        return parseStylesheet(new StringReader(css), stylesheetUri, documentHome);
     }
 
     /**
      * Parses a given stylesheet from the specified String and document home.
      *
-     * @param css          the uri of the stylesheet file
-     * @param documentHome base URI
+     * @param css           the uri of the stylesheet file
+     * @param stylesheetUri the URI of the stylesheet (if known)
+     * @param documentHome  base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull String css, @Nullable URI documentHome) throws IOException {
-        return parseStylesheet(new StringReader(css), documentHome);
-    }
-
-    /**
-     * Parses a given stylesheet from the specified String and document home.
-     *
-     * @param css          the uri of the stylesheet file
-     * @param documentHome base URI
-     * @return the parsed stylesheet
-     * @throws IOException on failure
-     */
-    public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI documentHome) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI documentHome) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css);
-        return parseStylesheet(tt, documentHome);
+        return parseStylesheet(tt, stylesheetUri, documentHome);
     }
 
     /**
      * Parses a given stylesheet from the specified String and document home.
      *
-     * @param tt           the tokenier
-     * @param documentHome base URI
+     * @param tt            the tokenier
+     * @param stylesheetUri the URI of the stylesheet (if known)
+     * @param documentHome  base URI (if it exists)
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt, @Nullable URI documentHome) throws IOException {
+    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt, @Nullable URI stylesheetUri, @Nullable URI documentHome) throws IOException {
+        setStylesheetUri(stylesheetUri);
         setDocumentHome(documentHome);
         List<Rule> rules = new ArrayList<>();
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             try {
                 switch (tt.current()) {
-                case CssTokenType.TT_S:
-                case CssTokenType.TT_CDC:
-                case CssTokenType.TT_CDO:
-                case CssTokenType.TT_COMMENT:
-                    break;
+                    case CssTokenType.TT_S:
+                    case CssTokenType.TT_CDC:
+                    case CssTokenType.TT_CDO:
+                    case CssTokenType.TT_COMMENT:
+                        break;
                 case CssTokenType.TT_AT_KEYWORD: {
                     tt.pushBack();
                     final int startPosition = tt.getStartPosition();
@@ -908,11 +901,19 @@ public class CssParser {
         }
     }
 
-    public @NonNull URI getDocumentHome() {
+    public @Nullable URI getStylesheetUri() {
+        return stylesheetUri;
+    }
+
+    public void setStylesheetUri(@Nullable URI stylesheetUri) {
+        this.stylesheetUri = stylesheetUri;
+    }
+
+    public @Nullable URI getDocumentHome() {
         return documentHome;
     }
 
-    public void setDocumentHome(@NonNull URI documentHome) {
+    public void setDocumentHome(@Nullable URI documentHome) {
         this.documentHome = documentHome;
     }
 
