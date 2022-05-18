@@ -7,11 +7,12 @@ import org.jhotdraw8.app.spi.NodeReaderProvider;
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
 import org.jhotdraw8.draw.spi.SvgImageReaderProvider;
 
+@SuppressWarnings("module")
 module org.jhotdraw8.draw {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
-    requires java.logging;
+    requires transitive java.logging;
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive org.jhotdraw8.application;
