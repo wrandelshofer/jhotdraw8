@@ -5,6 +5,7 @@
 
 import org.jhotdraw8.grapher.spi.GrapherResourceBundleProvider;
 
+@SuppressWarnings("module")
 module org.jhotdraw8.grapher {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;

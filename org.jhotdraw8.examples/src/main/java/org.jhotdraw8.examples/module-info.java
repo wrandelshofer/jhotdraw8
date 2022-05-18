@@ -1,3 +1,4 @@
+@SuppressWarnings("module")
 module org.jhotdraw8.examples {
     requires java.desktop;
     requires org.jhotdraw8.draw;

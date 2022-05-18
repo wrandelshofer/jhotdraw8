@@ -5,6 +5,7 @@
 
 import org.jhotdraw8.samples.teddy.spi.TeddyResourceBundleProvider;
 
+@SuppressWarnings("module")
 module org.jhotdraw8.teddy {
     requires java.desktop;
     requires java.prefs;

@@ -6,6 +6,7 @@
 import org.jhotdraw8.app.spi.ApplicationResourceBundleProvider;
 import org.jhotdraw8.app.spi.NodeReaderProvider;
 
+@SuppressWarnings("module")
 module org.jhotdraw8.application {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
