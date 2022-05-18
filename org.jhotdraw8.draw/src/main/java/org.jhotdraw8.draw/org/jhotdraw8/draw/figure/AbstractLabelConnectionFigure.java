@@ -273,7 +273,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
             }
             setTransforms(transforms.toArray(new Transform[0]));
         }
-        }
+    }
 
     @Override
     public void removeAllLayoutSubjects() {
