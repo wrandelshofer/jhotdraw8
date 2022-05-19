@@ -13,7 +13,7 @@ import java.util.Deque;
 import java.util.function.Function;
 
 /**
- * PreorderSpliterator.
+ * PreorderEnumerator.
  *
  * @author Werner Randelshofer
  */

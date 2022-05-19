@@ -8,22 +8,9 @@ package org.jhotdraw8.draw.gui;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableBooleanProperty;
-import javafx.css.StyleableObjectProperty;
-import javafx.css.StyleableProperty;
+import javafx.css.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
@@ -40,11 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
+import javafx.scene.transform.*;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.binding.CustomBinding;
@@ -77,11 +60,17 @@ import java.util.ResourceBundle;
  *     <li>"scroll-bar:vertical" – {@link ScrollBar}</li>
  *     <li>"scroll-bar:horizontal" – {@link ScrollBar}</li>
  *     <li>{@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS} – {@link StackPane}<ul>
- *         <li>{@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS} – {@link StackPane}</li>
- *         <li>{@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS} – {@link SubScene}<ul>
- *            <li>content</li>
+ *         <li>{@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS} – {@link StackPane}<ul>
+ *            <li>background - getBackgroundChildren().add(...)</li>
  *         </ul></li>
- *         <li>{@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS} – {@link StackPane}</li>
+ *         <li>{@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS} – {@link SubScene}<ul>
+ *           <li>{@link StackPane}<ul>
+ *              <li>content - getContentChildren().add(...)</li>
+ *           </ul></li>
+ *         </ul></li>
+ *         <li>{@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS} – {@link StackPane}<ul>
+ *            <li>foreground - getForegroundChildren().add(...)</li>
+ *         </ul></li>
  *     </ul></li>
  *   </ul></li>
  * </ul>
@@ -102,7 +91,7 @@ public class ZoomableScrollPane extends GridPane {
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-subscene-background";
+    public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-subscene";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}.
      */
@@ -389,6 +378,11 @@ public class ZoomableScrollPane extends GridPane {
         background.setBackground(null);
         foreground.setBackground(null);
         content.setBackground(null);
+
+        // - The call to subScene.setRoot() changed the style class of the
+        //   content pane to "root". We do not want this, because then the
+        //   scene stylesheet will assign a background color to it!
+        content.getStyleClass().clear();
     }
 
     private void onScrollEvent(ScrollEvent event, ScrollBar scrollBar, double delta) {

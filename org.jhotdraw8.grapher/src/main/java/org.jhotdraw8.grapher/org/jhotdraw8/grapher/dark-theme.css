@@ -1,34 +1,51 @@
-/*
- * @(#)dark-theme.css
- * Copyright © 2021 The authors and contributors of JHotDraw. MIT License.
- */
-
 .root {
-    -fx-color: #323232;
-    -fx-base: #323232;
+    /* The base color for objects.
+     */
+    -fx-base: rgba(53, 53, 53, 255);
+    -fx-background: -fx-base;
+
+   /* Color for highlighting/accenting objects.
+   */
     -fx-accent: #3f628a;
+
+    /* Used for the inside of text boxes, password boxes, lists, trees, and
+     * tables.  See also -fx-text-inner-color, which should be used as the
+     * -fx-text-fill value for text painted on top of backgrounds colored
+     * with -fx-control-inner-background.
+     */
     -fx-control-inner-background: -fx-base;
 
+    /* One of these colors will be chosen based upon a ladder calculation
+     * that uses the brightness of a background color.  Instead of using these
+     * colors directly as -fx-text-fill values, the sections in this file should
+     * use a derived color to match the background in use.  See also:
+     *
+     * -fx-text-base-color for text on top of -fx-base, -fx-color, and -fx-body-color
+     * -fx-text-background-color for text on top of -fx-background
+     * -fx-text-inner-color for text on top of -fx-control-inner-color
+     * -fx-selection-bar-text for text on top of -fx-selection-bar
+     */
     -fx-dark-text-color: rgba(0,0,0,.87);
     -fx-mid-text-color: rgba(63,63,63,.87);
     -fx-light-text-color: rgba(255,255,255,.75);
 
+    /* Default buttons color, this is similar to accent but more subtle */
     -fx-default-button: #1763d8;
 
-
-    /* A gradient that goes from a little lighter than -fx-color at the top to
-     * a little darker than -fx-color at the bottom and is used to fill the
-     * body of many controls such as buttons.
-     */
-    -fx-body-color: linear-gradient(to bottom,
-            derive(-fx-color,5%),
-            derive(-fx-color,-5%));
-    -fx-body-color-bottomup: linear-gradient(to top, derive(-fx-color,10%) ,derive(-fx-color,-6%));
-    -fx-body-color-to-right: linear-gradient(to right, derive(-fx-color,10%) ,derive(-fx-color,-6%));
-
+}
+.scroll-bar > .thumb {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-background;
+}
+.scroll-bar:vertical > .thumb {
+    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-background;
 }
 
-.tab-pane > .tab-header-area > .headers-region > .tab:selected {
-    -fx-background-color: -fx-outer-border, -fx-inner-border, derive(-fx-background,5%);
-    -fx-background-insets: 0 1 1 0, 1 2 0 1, 2 3 0 2;
+.dialog-pane:header .header-panel {
+    -fx-background-color: -fx-box-border, -fx-background;
+}
+
+.jhotdraw8-drawing-view-canvas-region {
+    -fx-border-color: rgba(0,0,0,0.0625), rgba(0,0,0,0.125);
+    -fx-border-style: solid outside, solid outside;
+    -fx-border-width: 2, 1;
 }
