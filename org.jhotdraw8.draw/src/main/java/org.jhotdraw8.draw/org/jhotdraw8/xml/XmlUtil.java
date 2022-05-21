@@ -140,11 +140,8 @@ public class XmlUtil {
             builderFactory.setNamespaceAware(namespaceAware);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             // We do not want that the reader creates a socket connection!
-            builder.setEntityResolver((publicId, systemId) -> {
-                return null;
-            });
-            Document doc = builder.parse(inputSource);
-            return doc;
+            builder.setEntityResolver((publicId, systemId) -> null);
+            return builder.parse(inputSource);
         } catch (SAXException | ParserConfigurationException ex) {
             throw new IOException(ex);
         }

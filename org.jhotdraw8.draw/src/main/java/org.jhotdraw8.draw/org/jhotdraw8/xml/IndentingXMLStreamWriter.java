@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeSet;
 
 /**
  * IndentingXMLStreamWriter is a {@link XMLStreamWriter} that supports automatic
@@ -206,8 +207,21 @@ import java.util.Objects;
  *     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition)</dt>
  *     <dd><a href="https://www.w3.org/TR/xml/">w3.org</a></dd>
  * </dl>
+ * <dl>
+ *     <dt>Canonical XML Version 1.1</dt>
+ *     <dd><a href="https://www.w3.org/TR/xml-c14n11/">w3.org</a></dd>
+ * </dl>
+ * <dl>
+ *     <dt>Extensible Markup Language (XML) 1.0 (Fifth Edition),
+ *     2.10 White Space Handling, xml:space='preserve'</dt>
+ *     <dd><a href="https://www.w3.org/TR/xml/#sec-white-space">w3.org</a></dd>
+ * </dl>
+ * <dl>
+ *     <dt>Understanding xml:space</dt>
+ *     <dd><a href="http://www.xmlplease.com/xml/xmlspace/">xmlplease.com</a></dd>
+ * </dl>
  */
-public class IndentingXMLStreamWriter implements XMLStreamWriter {
+public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable {
     public static final String DEFAULT_PREFIX = "";
     public static final String DEFAULT_NAMESPACE = "";
     public static final String START_CHAR_REF = "&#x";
@@ -238,19 +252,31 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     private static final String UTF_8 = "UTF-8";
     private static final String START_ATTRIBUTE_VALUE = "=\"";
     private static final String END_ATTRIBUTE_VALUE = "\"";
-    private static final String XMLNS_ATTRIBUTE = "xmlns";
+    private static final String XMLNS_PREFIX = "xmlns";
+    private static final String XML_PREFIX = "xml";
+    private static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
+    /**
+     * The local name of the special {@code xml:space} attribute.
+     */
+    private static final String XML_SPACE_ATTRIBUTE = "space";
+    /**
+     * The value of the special {@code xml:space="preserve"} attribute.
+     */
+    private static final String XML_SPACE_PRESERVE_VALUE = "preserve";
     private static final String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
-    private static final String INDENTATION = "  ";
+    private String indentation = "  ";
     private static final String LINE_BREAK = "\n";
     private final Writer w;
     /**
      * Invariant: this stack always contains at least the root element.
      */
     private final Deque<Element> stack = new ArrayDeque<>();
-    private final List<Attribute> attributes = new ArrayList<>();
+    private final TreeSet<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName));
     private final CharsetEncoder encoder;
     private boolean isStartTagOpen = false;
     private boolean escapeGreaterThan;
+    private boolean hasContent;
+    private StringBuffer charBuffer = new StringBuffer();
 
     public IndentingXMLStreamWriter(Writer w) {
         this.w = w;
@@ -273,7 +299,24 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
 
     }
 
+    public String getIndentation() {
+        return indentation;
+    }
+
+    public void setEscapeGreaterThan(boolean b) {
+        escapeGreaterThan = b;
+    }
+
+    public boolean isEscapeGreaterThan() {
+        return escapeGreaterThan;
+    }
+
+    public void setIndentation(String indentation) {
+        this.indentation = indentation;
+    }
+
     private void closeStartTagOrCloseEmptyElemTag() throws XMLStreamException {
+        charBuffer.setLength(0);
         if (isStartTagOpen) {
             doWriteAttributes();
             Element peeked = stack.peek();
@@ -289,15 +332,6 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         isStartTagOpen = false;
     }
 
-
-    private void doWriteAttributes() throws XMLStreamException {
-        attributes.sort(Comparator.comparing(Attribute::getSortName));
-        for (Attribute attribute : attributes) {
-            doWriteAttribute(attribute);
-        }
-        attributes.clear();
-    }
-
     private void doWriteAttribute(Attribute attribute) throws XMLStreamException {
         write(" ");
         String prefix = attribute.getPrefix() == null ? getPrefixNonNull(attribute.getNamespace()) : attribute.getPrefix();
@@ -309,6 +343,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         write(START_ATTRIBUTE_VALUE);
         writeXmlContent(attribute.value, true, false);
         write(END_ATTRIBUTE_VALUE);
+    }
+
+    private void doWriteAttributes() throws XMLStreamException {
+        for (Attribute attribute : attributes) {
+            doWriteAttribute(attribute);
+        }
+        attributes.clear();
     }
 
     @Override
@@ -367,12 +408,28 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         throw new IllegalArgumentException("unsupported property: " + name);
     }
 
-    public boolean isEscapeGreaterThan() {
-        return escapeGreaterThan;
+    public boolean hasContent() {
+        return hasContent;
     }
 
-    public void setEscapeGreaterThan(boolean newValue) {
-        this.escapeGreaterThan = newValue;
+    private boolean isBlank(char[] text, int start, int length) {
+        int left = 0;
+        while (left < length) {
+            char ch = text[start + left];
+            if (!Character.isWhitespace(ch)) {
+                break;
+            }
+            left++;
+        }
+        return left == length;
+    }
+
+    public boolean isPreserveSpace() {
+        return stack.getFirst().preserveSpace;
+    }
+
+    public void setPreserveSpace(boolean preserveSpace) {
+        stack.getFirst().setPreserveSpace(preserveSpace);
     }
 
     private void requireStartTagOpened() {
@@ -384,6 +441,10 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     @Override
     public void setDefaultNamespace(String uri) throws XMLStreamException {
         getOrCreateNamespaceContext().setNamespace(uri, DEFAULT_PREFIX);
+    }
+
+    public void setHasContent(boolean hasContent) {
+        this.hasContent = hasContent;
     }
 
     @Override
@@ -418,13 +479,23 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     @Override
     public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
         requireStartTagOpened();
-        attributes.add(new Attribute(prefix, namespaceURI, localName, value));
+        if (!attributes.add(new Attribute(prefix, namespaceURI, localName, value))) {
+            throw new XMLStreamException("Attribute already added: " + localName);
+        }
+        if (XML_NAMESPACE.equals(namespaceURI) && XML_SPACE_ATTRIBUTE.equals(localName)) {
+            setPreserveSpace(XML_SPACE_PRESERVE_VALUE.equals(value));
+        }
     }
 
     @Override
     public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
         requireStartTagOpened();
-        attributes.add(new Attribute(null, namespaceURI, localName, value));
+        if (!attributes.add(new Attribute(DEFAULT_PREFIX, namespaceURI, localName, value))) {
+            throw new XMLStreamException("Attribute already added: " + localName);
+        }
+        if (XML_NAMESPACE.equals(namespaceURI) && XML_SPACE_ATTRIBUTE.equals(localName)) {
+            setPreserveSpace(XML_SPACE_PRESERVE_VALUE.equals(value));
+        }
     }
 
     @Override
@@ -440,14 +511,6 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         write(END_CDATA);
     }
 
-    public void setHasContent(boolean hasContent) {
-        Element peek = stack.peek();
-        if (peek == null) {
-            throw new AssertionError("the stack should never be empty!");
-        }
-        peek.setHasContent(hasContent);
-    }
-
     /**
      * Writes character reference in hex format.
      */
@@ -461,9 +524,17 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     public void writeCharacters(@NonNull String text) throws XMLStreamException {
         Objects.requireNonNull(text, "text");
         closeStartTagOrCloseEmptyElemTag();
-        setHasContent(true);
+        if (!isPreserveSpace() && !hasContent() && text.isBlank()) {
+            charBuffer.append(text);
+            return;
+        } else {
+            setHasContent(true);
+            if (!charBuffer.isEmpty()) {
+                writeXmlContent(charBuffer.toString(), false, false);
+                charBuffer.setLength(0);
+            }
+        }
         writeXmlContent(text, false, false);
-
     }
 
     @Override
@@ -471,25 +542,44 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         Objects.requireNonNull(text, "text");
         Preconditions.checkFromIndexSize(start, len, text.length);
         closeStartTagOrCloseEmptyElemTag();
-        setHasContent(true);
+
+        if (!isPreserveSpace() && !hasContent() && isBlank(text, start, len)) {
+            charBuffer.append(text, start, len);
+            return;
+        } else {
+            setHasContent(true);
+            if (!charBuffer.isEmpty()) {
+                writeXmlContent(charBuffer.toString(), false, false);
+                charBuffer.setLength(0);
+            }
+        }
         writeXmlContent(text, start, len, false, false);
     }
 
     @Override
     public void writeComment(@NonNull String data) throws XMLStreamException {
         Objects.requireNonNull(data, "data");
+
+        // Write line breaks before comment
+        for (int i = 0, n = charBuffer.length(); i < n; i++) {
+            if (charBuffer.charAt(i) == '\n') {
+                write('\n');
+            }
+        }
+        charBuffer.setLength(0);
+
         closeStartTagOrCloseEmptyElemTag();
-        Element element = stack.peek();
-        assert element != null : "the stack is never empty!";
-        if (!element.isHasContent()) {
+        stack.push(new Element(DEFAULT_PREFIX, DEFAULT_NAMESPACE, START_COMMENT, true));
+        if (!hasContent) {
             writeLineBreakAndIndentation();
         }
         write(START_COMMENT);
-        writeLineBreakAndIndentation();
+        //writeLineBreakAndIndentation();
         writeXmlContent(data, false, true);
-        writeLineBreakAndIndentation();
+        // writeLineBreakAndIndentation();
         write(END_COMMENT);
         setHasContent(false);
+        stack.pop();
     }
 
     @Override
@@ -506,7 +596,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             setPrefix(DEFAULT_PREFIX, DEFAULT_NAMESPACE);
         } else {
             setPrefix(DEFAULT_PREFIX, namespaceURI);
-            attributes.add(new Attribute(DEFAULT_PREFIX, XMLNS_NAMESPACE, XMLNS_ATTRIBUTE, namespaceURI));
+            attributes.add(new Attribute(DEFAULT_PREFIX, XMLNS_NAMESPACE, XMLNS_PREFIX, namespaceURI));
         }
     }
 
@@ -532,20 +622,6 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         write(localName);
     }
 
-    private void writeLineBreakAndIndentation() throws XMLStreamException {
-        write(LINE_BREAK);
-        for (int i = stack.size() - 3; i >= 0; i--) {
-            write(INDENTATION);
-        }
-    }
-
-    private void writeEndElementLineBreakAndIndentation() throws XMLStreamException {
-        write(LINE_BREAK);
-        for (int i = stack.size() - 2; i >= 0; i--) {
-            write(INDENTATION);
-        }
-    }
-
     @Override
     public void writeEmptyElement(@NonNull String localName) throws XMLStreamException {
         writeEmptyElement(DEFAULT_PREFIX, localName, DEFAULT_NAMESPACE);
@@ -564,7 +640,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         if (stack.size() <= 1) {
             throw new XMLStreamException("no such element");
         }
-
+        charBuffer.setLength(0);
         Element element = stack.pop();
         if (element.isEmpty()) {
             write(CLOSE_EMPTY_ELEMENT);
@@ -576,7 +652,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             write(CLOSE_EMPTY_ELEMENT);
             isStartTagOpen = false;
         } else {
-            if (!element.isHasContent()) {
+            if (!hasContent) {
                 writeEndElementLineBreakAndIndentation();
             }
             write(OPEN_END_TAG);
@@ -587,6 +663,14 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             }
             write(element.getLocalName());
             write(CLOSE_END_TAG);
+        }
+        hasContent = false;
+    }
+
+    private void writeEndElementLineBreakAndIndentation() throws XMLStreamException {
+        write(LINE_BREAK);
+        for (int i = stack.size() - 2; i >= 0; i--) {
+            write(indentation);
         }
     }
 
@@ -599,13 +683,20 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
         write(END_ENTITY_REF);
     }
 
+    private void writeLineBreakAndIndentation() throws XMLStreamException {
+        write(LINE_BREAK);
+        for (int i = stack.size() - 3; i >= 0; i--) {
+            write(indentation);
+        }
+    }
+
     @Override
     public void writeNamespace(@NonNull String prefix, @NonNull String namespaceURI) throws XMLStreamException {
         Objects.requireNonNull(prefix, "prefix");
         Objects.requireNonNull(namespaceURI, "namespaceURI");
         requireStartTagOpened();
-        attributes.add(new Attribute(prefix.isEmpty() ? "" : XMLNS_ATTRIBUTE,
-                XMLNS_NAMESPACE, prefix.isEmpty() ? XMLNS_ATTRIBUTE : prefix, namespaceURI));
+        attributes.add(new Attribute(prefix.isEmpty() ? "" : XMLNS_PREFIX,
+                XMLNS_NAMESPACE, prefix.isEmpty() ? XMLNS_PREFIX : prefix, namespaceURI));
     }
 
     @Override
@@ -666,16 +757,20 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     public void writeStartElement(@NonNull String prefix, @NonNull String localName, @NonNull String namespaceURI) throws XMLStreamException {
         closeStartTagOrCloseEmptyElemTag();
         Element e = new Element(prefix, namespaceURI, localName, false);
+        e.setPreserveSpace(stack.getFirst().preserveSpace);
         stack.push(e);
         isStartTagOpen = true;
         setPrefix(prefix, namespaceURI);
-        writeLineBreakAndIndentation();
+        if (!isPreserveSpace() && !hasContent) {
+            writeLineBreakAndIndentation();
+        }
         write(OPEN_START_TAG);
         if (!prefix.equals(DEFAULT_PREFIX)) {
             write(prefix);
             write(PREFIX_SEPARATOR);
         }
         write(localName);
+        hasContent = false;
     }
 
     private void writeXmlContent(char[] data, int start, int len, boolean escapeDoubleQuotes, boolean escapeDoubleDashes) throws XMLStreamException {
@@ -683,6 +778,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     }
 
     private void writeXmlContent(String content, boolean escapeDoubleQuotesAndNonPrintables, boolean escapeDoubleDashes) throws XMLStreamException {
+
+
         for (int index = 0, end = content.length(); index < end; index++) {
             char ch = content.charAt(index);
 
@@ -696,11 +793,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
                 continue;
             }
             if (escapeDoubleQuotesAndNonPrintables &&
-                    (Character.isWhitespace(ch) && ch != ' ')
-                    || Character.isISOControl(ch)
-                    || index != end - 1
-                    && Character.isSurrogatePair(ch, content.charAt(index + 1))
-                    && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1)))
+                    ((Character.isWhitespace(ch) && ch != ' ')
+                            || Character.isISOControl(ch)
+                            || index != end - 1
+                            && Character.isSurrogatePair(ch, content.charAt(index + 1))
+                            && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1))))
             ) {
                 writeCharRef(ch);
                 continue;
@@ -725,7 +822,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
                 }
                 break;
             case '>':
-                write("&gt;");
+                if (escapeGreaterThan && escapeDoubleQuotesAndNonPrintables) {
+                    write("&gt;");
+                } else {
+                    write('>');
+                }
                 break;
             case '"':
                 if (escapeDoubleQuotesAndNonPrintables) {
@@ -778,12 +879,12 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
     }
 
     private static class Element {
-        private final String localName;
-        private final String namespaceUri;
-        private final String prefix;
+        private final @NonNull String localName;
+        private final @NonNull String namespaceUri;
+        private final @NonNull String prefix;
         private final boolean isEmpty;
         private NamespaceContext namespaceContext = new MyNamespaceContext();
-        private boolean hasContent;
+        private boolean preserveSpace;
 
         public Element(@NonNull String prefix, @NonNull String namespaceUri, @NonNull String localName, boolean isEmpty) {
             this.prefix = prefix;
@@ -804,38 +905,31 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             return isEmpty;
         }
 
-        public boolean isHasContent() {
-            return hasContent;
+        public boolean isPreserveSpace() {
+            return preserveSpace;
         }
 
-        public void setHasContent(boolean hasContent) {
-            this.hasContent = hasContent;
+        public void setPreserveSpace(boolean preserveSpace) {
+            this.preserveSpace = preserveSpace;
         }
     }
 
+    /**
+     * In a valid XML there can only be one attribute with the same local name
+     * in the same name space.
+     */
     private static class Attribute {
-        private final String localName;
-        private final String value;
+        private final @NonNull String localName;
+        private final @NonNull String value;
 
-        private final String namespace;
-        private final String prefix;
+        private final @NonNull String namespace;
+        private final @NonNull String prefix;
 
-        private final String sortName;
-
-        public Attribute(@Nullable String prefix, @NonNull String namespace, @NonNull String localName, @NonNull String value) {
+        public Attribute(@NonNull String prefix, @NonNull String namespace, @NonNull String localName, @NonNull String value) {
             this.localName = localName;
             this.value = value;
             this.namespace = namespace;
             this.prefix = prefix;
-            if (XMLNS_NAMESPACE.equals(namespace)) {
-                if (prefix == null || prefix.isEmpty()) {
-                    sortName = "  " + localName;// xmlns="..." comes first
-                } else {
-                    sortName = " " + prefix;// xlmns:...="..." come second
-                }
-            } else {
-                sortName = localName;// then we sort by local name
-            }
         }
 
         public String getLocalName() {
@@ -846,16 +940,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter {
             return namespace;
         }
 
-        public @Nullable String getPrefix() {
+        public @NonNull String getPrefix() {
             return prefix;
         }
 
-        public String getSortName() {
-            return sortName;
-        }
-
-
-        public String getValue() {
+        public @NonNull String getValue() {
             return value;
         }
 
