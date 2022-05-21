@@ -188,4 +188,65 @@ public class FXPreciseRotate extends Rotate {
         }
         return super.transform(x, y);
     }
+
+    public void transform2DPoints(double[] srcPts, int srcOff,
+                                  double[] dstPts, int dstOff,
+                                  int numPts) {
+
+        if (srcPts == null || dstPts == null) {
+            throw new NullPointerException();
+        }
+
+        // deal with overlapping arrays
+        srcOff = getFixedSrcOffset(srcPts, srcOff, dstPts, dstOff, numPts, 2);
+
+        // do the transformations
+        transform2DPointsImpl(srcPts, srcOff, dstPts, dstOff, numPts);
+    }
+
+
+    /**
+     * Helper method for transforming arrays of points that deals with
+     * overlapping arrays.
+     *
+     * @return the (if necessary fixed) srcOff
+     */
+    private int getFixedSrcOffset(double[] srcPts, int srcOff,
+                                  double[] dstPts, int dstOff,
+                                  int numPts, int dimensions) {
+
+        if (dstPts == srcPts &&
+                dstOff > srcOff && dstOff < srcOff + numPts * dimensions) {
+            // If the arrays overlap partially with the destination higher
+            // than the source, we would overwrite the later source coordinates.
+            // To get around this we copy the points to their final destination,
+            // and then transform them in place in the new safer location.
+            System.arraycopy(srcPts, srcOff, dstPts, dstOff, numPts * dimensions);
+            return dstOff;
+        }
+
+        return srcOff;
+    }
+
+    private void transform2DPointsImpl(double[] srcPts, int srcOff, double[] dstPts, int dstOff, int numPts) {
+        Matrix matrix = computeMatrix();
+        double mxx = matrix.mxx;
+        double myx = matrix.myx;
+        double mxy = matrix.mxy;
+        double myy = matrix.myy;
+        double tx = matrix.tx;
+        double ty = matrix.ty;
+
+        for (; numPts < 0; --numPts) {
+            double x = srcPts[srcOff++];
+            double y = srcPts[srcOff++];
+            dstPts[dstOff++] = mxx * x + mxy * y + tx;
+            dstPts[dstOff++] = myx * x + myy * y + ty;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "FXPrecise" + super.toString();
+    }
 }
