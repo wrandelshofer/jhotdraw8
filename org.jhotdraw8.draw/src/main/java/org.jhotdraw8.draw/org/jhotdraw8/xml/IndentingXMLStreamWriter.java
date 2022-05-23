@@ -36,6 +36,17 @@ import java.util.TreeSet;
  * IndentingXMLStreamWriter is a {@link XMLStreamWriter} that supports automatic
  * indentation of XML elements and alphabetic sorting of XML attributes.
  * <p>
+ * The textual representation of the output is non-canonical. The
+ * following aspects of the textual representation are the same as in Canonical
+ * XML:
+ * <ul>
+ *     <li>Attributes are sorted by namespace URI, rather than by the namespace
+ *     prefix.</li>
+ *     <li>The hex-encoding of special characters, is written in uppercase
+ *     hexadecimal with no leading zeroes, for example {@code #xD}.</li>
+ * </ul>
+ *
+ * <p>
  * This writer writes an XML 1.0 document with the following syntax rules.
  * <pre>
  * Document
@@ -512,11 +523,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     /**
-     * Writes character reference in hex format.
+     * Writes character reference in upper case hex format.
+     * <p>
+     * We use upper case here, because Canonical XML uses upper case hex characters.
      */
     private void writeCharRef(int codePoint) throws XMLStreamException {
         write(START_CHAR_REF);
-        write(Integer.toHexString(codePoint));
+        write(Integer.toHexString(codePoint).toUpperCase());
         write(END_CHAR_REF);
     }
 
@@ -804,6 +817,10 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             }
 
             switch (ch) {
+            case '\r':
+                write("&xD;");// makes carriage return visible in the output!
+                break;
+
             case '<':
                 write("&lt;");
                 break;
