@@ -26,13 +26,13 @@
         <module name="org.jhotdraw8.grapher" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="16">
-      <module name="org.jhotdraw8" target="1.5" />
-      <module name="org.jhotdraw8.application" target="11" />
-      <module name="org.jhotdraw8.draw" target="11" />
-      <module name="org.jhotdraw8.examples" target="11" />
-      <module name="org.jhotdraw8.grapher" target="11" />
-      <module name="org.jhotdraw8.teddy" target="11" />
+    <bytecodeTargetLevel target="17">
+      <module name="org.jhotdraw8" target="17" />
+      <module name="org.jhotdraw8.application" target="17" />
+      <module name="org.jhotdraw8.draw" target="17" />
+      <module name="org.jhotdraw8.examples" target="17" />
+      <module name="org.jhotdraw8.grapher" target="17" />
+      <module name="org.jhotdraw8.teddy" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
