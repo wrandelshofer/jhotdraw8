@@ -28,17 +28,17 @@ public class FXSvgTinyWriterTest {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToWriter(new Rectangle(10, 20, 100, 200),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
+                                "<svg baseProfile=\"tiny\" version=\"1.2\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                                 "  <rect fill=\"#000000\" height=\"200\" width=\"100\" x=\"10\" y=\"20\"/>\n" +
                                 "</svg>")),
                 dynamicTest("text", () -> testExportToWriter(new Text(10, 20, "Hello"),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
+                                "<svg baseProfile=\"tiny\" version=\"1.2\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\" x=\"10\" y=\"20\">Hello</text>\n" +
                                 "</svg>")),
                 dynamicTest("text escape", () -> testExportToWriter(new Text(10, 20, "&<>\""),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
+                                "<svg baseProfile=\"tiny\" version=\"1.2\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\" x=\"10\" y=\"20\">&amp;&lt;&gt;\"</text>\n" +
                                 "</svg>"))
         );
@@ -59,7 +59,7 @@ public class FXSvgTinyWriterTest {
                                 "</svg>\n")),
                 dynamicTest("text escape", () -> testExportToWriter(new Text(10, 20, "&<>\""),
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                                "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" baseProfile=\"tiny\" version=\"1.2\">\n" +
+                                "<svg baseProfile=\"tiny\" version=\"1.2\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                                 "  <text fill=\"#000000\" font-family=\"'System Regular', 'System'\" font-size=\"13\" x=\"10\" y=\"20\">&amp;&lt;&gt;\"</text>\n" +
                                 "</svg>"))
         );
