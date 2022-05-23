@@ -419,7 +419,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         throw new IllegalArgumentException("unsupported property: " + name);
     }
 
-    public boolean hasContent() {
+    private boolean hasContent() {
         return hasContent;
     }
 
@@ -537,12 +537,12 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     public void writeCharacters(@NonNull String text) throws XMLStreamException {
         Objects.requireNonNull(text, "text");
         closeStartTagOrCloseEmptyElemTag();
-        if (!isPreserveSpace() && !hasContent() && text.isBlank()) {
+        if (!isPreserveSpace() && !hasContent() && text.trim().isEmpty()) {
             charBuffer.append(text);
             return;
         } else {
             setHasContent(true);
-            if (!charBuffer.isEmpty()) {
+            if (charBuffer.length() > 0) {
                 writeXmlContent(charBuffer.toString(), false, false);
                 charBuffer.setLength(0);
             }
@@ -561,7 +561,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             return;
         } else {
             setHasContent(true);
-            if (!charBuffer.isEmpty()) {
+            if (charBuffer.length() > 0) {
                 writeXmlContent(charBuffer.toString(), false, false);
                 charBuffer.setLength(0);
             }
