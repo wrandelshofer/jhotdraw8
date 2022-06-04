@@ -516,8 +516,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         composeAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("composeAttributes", newValue));
         showUnspecifiedAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
-                -> prefs.putBoolean("showUnsetAttributes", newValue));
-        showUnspecifiedAttributesCheckBox.setSelected(prefs.getBoolean("showUnsetAttributes", false));
+                -> prefs.putBoolean("showUnspecifiedAttributes", newValue));
+        showUnspecifiedAttributesCheckBox.setSelected(prefs.getBoolean("showUnspecifiedAttributes", true));
 
         // XXX Use weak references because of memory leak in JavaFX
         // https://bugs.openjdk.java.net/browse/JDK-8274022
