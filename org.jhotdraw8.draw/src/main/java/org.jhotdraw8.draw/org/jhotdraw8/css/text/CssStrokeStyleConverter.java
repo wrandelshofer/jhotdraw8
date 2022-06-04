@@ -216,8 +216,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨StrokeStyle⟩: ［⟨width⟩］⟨Paint⟩［⟨Type⟩］［⟨Linecap⟩］［⟨Linejoin⟩］［⟨Miterlimit⟩］［⟨Dashoffset⟩］［⟨Dasharray⟩］"
-                + "\n  with ⟨width⟩: size"
+        return "Format of ⟨StrokeStyle⟩: [⟨Type⟩］［⟨Linecap⟩］［⟨Linejoin⟩］［⟨Miterlimit⟩］［⟨Dashoffset⟩］［⟨Dasharray⟩］"
                 + "\n  with ⟨Type⟩: " + TYPE + "(inside｜outside｜centered)"
                 + "\n  with ⟨Linecap⟩: " + LINECAP + "(square｜butt｜round)"
                 + "\n  with ⟨Linejoin⟩: " + LINEJOIN + "(miter｜bevel｜round)"
