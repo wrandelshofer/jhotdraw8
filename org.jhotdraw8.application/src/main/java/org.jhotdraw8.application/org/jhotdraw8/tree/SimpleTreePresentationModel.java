@@ -110,9 +110,12 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         return item.getValue();
     }
 
-    protected void onNodeAdded(N node, N parentE, int index) {
+    protected void onNodeAdded(@NonNull N node, @NonNull N parentE, int index) {
         TreeItem<N> item = items.computeIfAbsent(node, TreeItem::new);
         TreeItem<N> parentItem = items.get(parentE);
+        if (parentItem == null) {
+            return;
+        }
         if (reversed) {
             parentItem.getChildren().add(parentItem.getChildren().size() - index, item);
         } else {

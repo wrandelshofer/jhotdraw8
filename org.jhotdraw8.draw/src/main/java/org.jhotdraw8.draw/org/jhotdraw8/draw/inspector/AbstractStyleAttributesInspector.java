@@ -81,6 +81,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -138,6 +139,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private Button applyButton;
     @FXML
     private Button selectButton;
+    @FXML
+    private CheckBox showUnspecifiedAttributesCheckBox;
     @FXML
     private CheckBox updateContentsCheckBox;
     @FXML
@@ -269,12 +272,12 @@ public abstract class AbstractStyleAttributesInspector<E> {
         } else {
             origin = null;
         }
+
+        // Collect attributes that are contained in all matched figures
         Map<QualifiedName, String> attr = new TreeMap<>();
         Predicate<QualifiedName> filter = getAttributeFilter();
         boolean first = true;
         for (E f : matchedFigures) {
-            selectorModel.getAttributeNames(f);
-
             if (first) {
                 first = false;
                 for (QualifiedName qname : decompose ? selectorModel.getDecomposedAttributeNames(f) : selectorModel.getComposedAttributeNames(f)) {
@@ -285,24 +288,30 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     attr.put(qname, attribute == null ? UNSPECIFIED_VALUE_PLACEHOLDER : attribute);
                 }
             } else {
-                attr.keySet().retainAll(selectorModel.getAttributeNames(f));
-                for (QualifiedName qname : attr.keySet()) {
-                    if (!filter.test(qname)) {
+                for (Iterator<QualifiedName> i = attr.keySet().iterator(); i.hasNext(); ) {
+                    QualifiedName qname = i.next();
+                    if (!selectorModel.hasAttribute(f, qname.getNamespace(), qname.getName())) {
+                        i.remove();
                         continue;
                     }
                     String oldAttrValue = attr.get(qname);
-                    if (oldAttrValue != null) {
-                        String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
-                        if (newAttrValue == null) {
-                            newAttrValue = UNSPECIFIED_VALUE_PLACEHOLDER;
-                        }
-                        if (!oldAttrValue.equals(newAttrValue)) {
-                            attr.put(qname, MULTIPLE_VALUES_PLACEHOLDER);
-                        }
+                    String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
+                    if (newAttrValue == null) {
+                        newAttrValue = UNSPECIFIED_VALUE_PLACEHOLDER;
                     }
+                    if (!Objects.equals(oldAttrValue, newAttrValue)) {
+                        attr.put(qname, MULTIPLE_VALUES_PLACEHOLDER);
+                    }
+
                 }
             }
         }
+
+        if (!showUnspecifiedAttributesCheckBox.isSelected()) {
+            attr.entrySet().removeIf(entry -> UNSPECIFIED_VALUE_PLACEHOLDER.equals(entry.getValue()));
+        }
+
+
         return attr;
     }
 
@@ -506,6 +515,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
         composeAttributesCheckBox.setSelected(prefs.getBoolean("composeAttributes", true));
         composeAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("composeAttributes", newValue));
+        showUnspecifiedAttributesCheckBox.selectedProperty().addListener((o, oldValue, newValue)
+                -> prefs.putBoolean("showUnsetAttributes", newValue));
+        showUnspecifiedAttributesCheckBox.setSelected(prefs.getBoolean("showUnsetAttributes", false));
 
         // XXX Use weak references because of memory leak in JavaFX
         // https://bugs.openjdk.java.net/browse/JDK-8274022
@@ -522,12 +534,15 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 inspector.select(event1);
             }
         });
-        composeAttributesCheckBox.setOnAction(event -> {
+        EventHandler<ActionEvent> invalidateTextAreaAction = event -> {
             AbstractStyleAttributesInspector<E> inspector = r.get();
             if (inspector != null) {
                 inspector.invalidateTextArea(null);
             }
-        });
+        };
+        showUnspecifiedAttributesCheckBox.setOnAction(invalidateTextAreaAction);
+        composeAttributesCheckBox.setOnAction(invalidateTextAreaAction);
+
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
         EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
@@ -558,8 +573,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
             showAppliedValues.setSelected(true);
             break;
         }
-
-
         shownValues.selectedToggleProperty().addListener(o -> {
             AbstractStyleAttributesInspector<E> inspector = r.get();
             if (inspector != null) {
@@ -715,28 +728,28 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
 
                 Object initialValue = null;
-                    @SuppressWarnings("unchecked")
-                    WritableStyleableMapAccessor<Object> finalSelectedAccessor
-                            = (WritableStyleableMapAccessor<Object>) selectedAccessor;
-                    for (E f : selectedF) {
-                        initialValue = get(f, finalSelectedAccessor);
-                        break;
-                    }
-                    BiConsumer<Boolean, Object> lambda = (b, o) -> {
-                        if (b) {
-                            for (E f : selectedF) {
-                                AbstractStyleAttributesInspector.this.set(f, finalSelectedAccessor, o);
-                            }
-                        } else {
-                            for (E f : selectedF) {
-                                AbstractStyleAttributesInspector.this.remove(f, finalSelectedAccessor);
-                            }
-                        }
-                        invalidateTextArea(null);
-                    };
-                    picker.show(getTextArea(), screenX, screenY,
-                            initialValue, lambda);
+                @SuppressWarnings("unchecked")
+                WritableStyleableMapAccessor<Object> finalSelectedAccessor
+                        = (WritableStyleableMapAccessor<Object>) selectedAccessor;
+                for (E f : selectedF) {
+                    initialValue = get(f, finalSelectedAccessor);
+                    break;
                 }
+                BiConsumer<Boolean, Object> lambda = (b, o) -> {
+                    if (b) {
+                        for (E f : selectedF) {
+                            AbstractStyleAttributesInspector.this.set(f, finalSelectedAccessor, o);
+                        }
+                    } else {
+                        for (E f : selectedF) {
+                            AbstractStyleAttributesInspector.this.remove(f, finalSelectedAccessor);
+                        }
+                    }
+                    invalidateTextArea(null);
+                };
+                picker.show(getTextArea(), screenX, screenY,
+                        initialValue, lambda);
+            }
 
         }
 

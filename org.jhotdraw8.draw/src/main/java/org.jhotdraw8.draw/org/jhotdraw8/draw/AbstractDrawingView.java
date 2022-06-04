@@ -132,7 +132,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
     public void paste() {
         // Only paste if there is an editable parent.
         Figure parent = getActiveParent();
-        if (parent == null || !parent.isEditable()) {
+        if (parent == null || !parent.isEditable() || parent.getDrawing() != getDrawing()) {
             parent = null;
             for (Figure f : getDrawing().getChildren()) {
                 if (f.isEditable() && (f instanceof Layer)) {

@@ -7,7 +7,13 @@ package org.jhotdraw8.draw;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -37,7 +43,13 @@ import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.tree.TreeModelEvent;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
@@ -249,6 +261,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         zoomableScrollPane.contentToViewProperty().addListener(this::onContentToViewChanged);
         CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
         CustomBinding.bind(focused, toolProperty(), Tool::focusedProperty);
+        activeParent.addListener((o, oldv, newv) -> System.out.println("activeParent " + newv));
     }
 
     private void onContentToViewChanged(Observable observable) {

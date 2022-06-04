@@ -189,13 +189,20 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
         if (content instanceof String) {
             Set<Figure> figures = new LinkedHashSet<>();
             Figure newDrawing = read(new StringReader((String) content), null, null, new SimpleWorkState<>());
+            if (newDrawing == null) {
+                return figures;
+            }
             idFactory.reset();
             idFactory.setDocumentHome(null);
             for (Figure f : drawing.preorderIterable()) {
                 idFactory.createId(f);
             }
-            // FIXME use current layer in drawingView!
-            Layer layer = layerFactory.get();
+            if (parent == null) {
+                parent = layerFactory.get();
+            }
+            if (parent.getDrawing() != drawing) {
+                model.addChildTo(parent, drawing);
+            }
             for (Figure f : new ArrayList<>(newDrawing.getChildren())) {
                 figures.add(f);
                 newDrawing.removeChild(f);
@@ -204,10 +211,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
                 if (f instanceof Layer) {
                     model.addChildTo(f, drawing);
                 } else {
-                    if (layer.getParent() == null) {
-                        model.addChildTo(layer, drawing);
-                    }
-                    model.addChildTo(f, layer);
+                    model.addChildTo(f, parent);
                 }
             }
             return figures;
