@@ -261,7 +261,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         zoomableScrollPane.contentToViewProperty().addListener(this::onContentToViewChanged);
         CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
         CustomBinding.bind(focused, toolProperty(), Tool::focusedProperty);
-        activeParent.addListener((o, oldv, newv) -> System.out.println("activeParent " + newv));
     }
 
     private void onContentToViewChanged(Observable observable) {
