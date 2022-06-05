@@ -22,6 +22,7 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.app.action.file;
     exports org.jhotdraw8.app.action.view;
     exports org.jhotdraw8.app.spi;
+    exports org.jhotdraw8.app.undo;
     exports org.jhotdraw8.collection;
     exports org.jhotdraw8.concurrent;
     exports org.jhotdraw8.net;

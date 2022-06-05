@@ -6,6 +6,7 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.event.Event;
 
 /**
@@ -66,15 +67,15 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
 
     private final E node;
 
-    private final E parent;
+    private final E parentOrOldRoot;
     private final E root;
     private final int index;
     private final TreeModelEvent.EventType eventType;
 
-    private TreeModelEvent(@NonNull TreeModel<E> source, EventType eventType, E node, E parent, E root, int index) {
+    private TreeModelEvent(@NonNull TreeModel<E> source, EventType eventType, E node, E parentOrOldRoot, E root, int index) {
         super(source);
         this.node = node;
-        this.parent = parent;
+        this.parentOrOldRoot = parentOrOldRoot;
         this.root = root;
         this.index = index;
         this.eventType = eventType;
@@ -104,8 +105,28 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         return new TreeModelEvent<>(source, EventType.NODE_CHANGED, node, null, null, -1);
     }
 
-    public static @NonNull <E> TreeModelEvent<E> rootChanged(@NonNull TreeModel<E> source, E oldRoot, E newRoot) {
+    public static @NonNull <E> TreeModelEvent<E> rootChanged(@NonNull TreeModel<E> source, @Nullable E oldRoot, @Nullable E newRoot) {
         return new TreeModelEvent<>(source, EventType.ROOT_CHANGED, newRoot, oldRoot, newRoot, -1);
+    }
+
+    /**
+     * If the root has changed, returns the old root.
+     */
+    public @Nullable E getOldRoot() {
+        if (EventType.ROOT_CHANGED != eventType) {
+            throw new IllegalStateException();
+        }
+        return parentOrOldRoot;
+    }
+
+    /**
+     * If the root has changed, returns the new root.
+     */
+    public @Nullable E getNewRoot() {
+        if (EventType.ROOT_CHANGED != eventType) {
+            throw new IllegalStateException();
+        }
+        return root;
     }
 
     /**
@@ -123,7 +144,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
      * @return the parent
      */
     public E getParent() {
-        return parent;
+        return parentOrOldRoot;
     }
 
     /**
@@ -166,7 +187,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     public @NonNull String toString() {
         return "TreeModelEvent{"
                 + "node=" + node
-                + ", parent=" + parent
+                + ", parent=" + parentOrOldRoot
                 + ", index=" + index + ", eventType="
                 + eventType + ", source=" + source + '}';
     }

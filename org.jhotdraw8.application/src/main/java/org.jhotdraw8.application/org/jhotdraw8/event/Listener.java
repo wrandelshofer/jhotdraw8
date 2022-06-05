@@ -4,15 +4,13 @@
  */
 package org.jhotdraw8.event;
 
-import java.util.EventObject;
-
 /**
  * Functional listener interface.
  *
  * @author Werner Randelshofer
  */
 @FunctionalInterface
-public interface Listener<E extends EventObject> {
+public interface Listener<E> {
 
     /**
      * Handles an event.
