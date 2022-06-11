@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -22,21 +23,23 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
 
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
+    final @NonNull Consumer<E> addFirstFunction;
+    final @NonNull Consumer<E> addLastFunction;
 
     public WrappedSequencedSet(@NonNull ReadOnlySet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
-                backingSet::contains, null, null, null, null);
+                backingSet::contains, null, null, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull Set<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
-                backingSet::contains, backingSet::clear, backingSet::remove, null, null);
+                backingSet::contains, backingSet::clear, backingSet::remove, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
                                @NonNull IntSupplier sizeFunction,
                                @NonNull Predicate<Object> containsFunction) {
-        this(iteratorFunction, sizeFunction, containsFunction, null, null, null, null);
+        this(iteratorFunction, sizeFunction, containsFunction, null, null, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
@@ -45,7 +48,9 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
                                @Nullable Runnable clearFunction,
                                @Nullable Predicate<Object> removeFunction,
                                @Nullable Supplier<E> getFirstFunction,
-                               @Nullable Supplier<E> getLastFunction) {
+                               @Nullable Supplier<E> getLastFunction,
+                               @Nullable Consumer<E> addFirstFunction,
+                               @Nullable Consumer<E> addLastFunction) {
         super(iteratorFunction, sizeFunction, containsFunction, clearFunction, removeFunction);
         this.getFirstFunction = getFirstFunction == null ? () -> {
             throw new UnsupportedOperationException();
@@ -53,16 +58,22 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
         this.getLastFunction = getLastFunction == null ? () -> {
             throw new UnsupportedOperationException();
         } : getLastFunction;
+        this.addFirstFunction = addFirstFunction == null ? e -> {
+            throw new UnsupportedOperationException();
+        } : addFirstFunction;
+        this.addLastFunction = addLastFunction == null ? e -> {
+            throw new UnsupportedOperationException();
+        } : addLastFunction;
     }
 
     @Override
-    public boolean addFirst(E e) {
-        throw new UnsupportedOperationException();
+    public void addFirst(E e) {
+        addFirstFunction.accept(e);
     }
 
     @Override
-    public boolean addLast(E e) {
-        throw new UnsupportedOperationException();
+    public void addLast(E e) {
+        addLastFunction.accept(e);
     }
 
     @Override

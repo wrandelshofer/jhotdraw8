@@ -22,6 +22,25 @@ import java.util.stream.Stream;
  * @param <E> the element type
  */
 public interface SequencedCollection<E> extends Collection<E>, ReadOnlySequencedCollection<E> {
+    /**
+     * Adds the specified element to the front of the set if it is not already
+     * present. If this set already contains the element, moves it to the front.
+     *
+     * @param e an element
+     * @return {@code true} if this set did not already contain the specified
+     * element
+     */
+    void addFirst(E e);
+
+    /**
+     * Adds the specified element to the tail of the set if it is not already
+     * present. If this set already contains the element, moves it to the tail.
+     *
+     * @param e an element
+     * @return {@code true} if this set did not already contain the specified
+     * element
+     */
+    void addLast(E e);
 
     @Override
     default boolean isEmpty() {

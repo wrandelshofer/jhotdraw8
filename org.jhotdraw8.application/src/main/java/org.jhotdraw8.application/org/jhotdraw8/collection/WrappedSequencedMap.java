@@ -74,7 +74,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
                 clearFunction,
                 this::removeEntry,
                 firstEntryFunction,
-                lastEntryFunction
+                lastEntryFunction, null, null
         );
     }
 
@@ -97,7 +97,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
                 clearFunction,
                 this::removeEntry,
                 this::firstKey,
-                this::lastKey
+                this::lastKey, null, null
         );
     }
 
@@ -125,7 +125,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
                 clearFunction,
                 this::removeEntry,
                 () -> firstEntry().getValue(),
-                () -> lastEntry().getValue()
+                () -> lastEntry().getValue(), null, null
         );
     }
 }

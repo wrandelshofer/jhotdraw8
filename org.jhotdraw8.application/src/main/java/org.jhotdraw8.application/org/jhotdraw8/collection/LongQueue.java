@@ -82,6 +82,9 @@ public interface LongQueue extends Queue<Long> {
         return removeAsLong();
     }
 
+    /**
+     * @see Queue#remove(Object)
+     */
     boolean removeAsLong(long e);
 
     @Override
@@ -108,6 +111,7 @@ public interface LongQueue extends Queue<Long> {
     default @Nullable Long peek() {
         return isEmpty() ? null : elementAsLong();
     }
+
 
     @Override
     default boolean isEmpty() {

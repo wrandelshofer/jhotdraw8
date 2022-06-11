@@ -69,7 +69,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it already does not contain the elements, or
      * a different set instance with the elements removed
      */
-    @NonNull ImmutableSet<E> copyRemoveAll(@NonNull Iterable<? extends E> c);
+    @NonNull ImmutableSet<E> copyRemoveAll(@NonNull Iterable<?> c);
 
     /**
      * Returns a copy of this set that contains only elements
@@ -79,7 +79,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it has not changed, or
      * a different set instance with elements removed
      */
-    @NonNull ImmutableSet<E> copyRetainAll(@NonNull Collection<? extends E> c);
+    @NonNull ImmutableSet<E> copyRetainAll(@NonNull Collection<?> c);
 
     /**
      * Returns a copy of this set that contains only elements
@@ -89,7 +89,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it has not changed, or
      * a different set instance with elements removed
      */
-    default @NonNull ImmutableSet<E> copyRetainAll(final @NonNull ReadOnlyCollection<? extends E> c) {
+    default @NonNull ImmutableSet<E> copyRetainAll(final @NonNull ReadOnlyCollection<?> c) {
         if (c == this) {
             return this;
         }

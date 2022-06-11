@@ -176,11 +176,20 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
         if (isEmpty() && (m instanceof ChampMap)) {
             return ((ChampMap<K, V>) m).toImmutable();
         }
         return copyPutAll(m.entrySet().iterator());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+        if (isEmpty() && (m instanceof ImmutableChampMap)) {
+            return (ImmutableChampMap<K, V>) m;
+        }
+        return copyPutAll(m.readOnlyEntrySet().iterator());
     }
 
 

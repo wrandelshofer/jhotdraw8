@@ -78,22 +78,35 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     @Override
     public boolean addAll(@NonNull Collection<? extends E> c) {
+        boolean changed = false;
         beginChange();
         try {
-            return super.addAll(c);
+            for (Object o : c.toArray()) {
+                //noinspection unchecked
+                changed |= add((E) o);
+            }
         } finally {
             endChange();
         }
+        return changed;
     }
 
     @Override
     public boolean addAll(int index, @NonNull Collection<? extends E> c) {
+        boolean changed = false;
         beginChange();
         try {
-            return super.addAll(index, c);
+            for (Object o : c.toArray()) {
+                //noinspection unchecked
+                if (!contains(o)) {
+                    changed = true;
+                    add(index++, (E) o);
+                }
+            }
         } finally {
             endChange();
         }
+        return changed;
     }
 
     @Override
@@ -763,4 +776,34 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
      * @return true if the object may be added to this set
      */
     protected abstract boolean mayBeAdded(@NonNull E e);
+
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Set)) {
+            return false;
+        }
+        Collection<?> c = (Collection<?>) o;
+        if (c.size() != size()) {
+            return false;
+        }
+        try {
+            return containsAll(c);
+        } catch (ClassCastException | NullPointerException unused) {
+            return false;
+        }
+    }
+
+
+    public int hashCode() {
+        int h = 0;
+        for (E obj : this) {
+            if (obj != null) {
+                h += obj.hashCode();
+            }
+        }
+        return h;
+    }
 }

@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.champ;
+package org.jhotdraw8.collection.champmap;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -42,7 +42,7 @@ public abstract class Node<K, V> {
      */
     public final static int NO_SEQUENCE_NUMBER = Integer.MAX_VALUE;
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
-
+    static final int ENTRY_LENGTH = 2;
 
     Node() {
 
@@ -83,25 +83,21 @@ public abstract class Node<K, V> {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    <K, V> @NonNull Node<K, V> mergeTwoDataEntriesIntoNode(UniqueId mutator,
-                                                           final K k0, final V v0, int seq0, final int keyHash0,
-                                                           final K k1, final V v1, int seq1, final int keyHash1,
-                                                           final int shift, final int entryLength) {
+    @NonNull Node<K, V> mergeTwoDataEntriesIntoNode(UniqueId mutator,
+                                                    final K k0, final V v0, final int keyHash0,
+                                                    final K k1, final V v1, final int keyHash1,
+                                                    final int shift) {
         assert !Objects.equals(k0, k1);
 
         if (shift >= HASH_CODE_LENGTH) {
-            Object[] entries = new Object[entryLength * 2];
+            Object[] entries = new Object[ENTRY_LENGTH * 2];
             entries[0] = k0;
-            entries[entryLength] = k1;
-            if (entryLength > 1) {
+            entries[ENTRY_LENGTH] = k1;
+            if (ENTRY_LENGTH > 1) {
                 entries[1] = v0;
-                entries[entryLength + 1] = v1;
+                entries[ENTRY_LENGTH + 1] = v1;
             }
-            if (seq1 != NO_SEQUENCE_NUMBER) {
-                entries[entryLength - 1] = seq0;
-                entries[entryLength * 2 - 1] = seq1;
-            }
-            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, entryLength);
+            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, ENTRY_LENGTH);
         }
 
         final int mask0 = mask(keyHash0, shift);
@@ -111,97 +107,83 @@ public abstract class Node<K, V> {
             // both nodes fit on same level
             final int dataMap = bitpos(mask0) | bitpos(mask1);
 
-            Object[] entries = new Object[entryLength * 2];
+            Object[] entries = new Object[ENTRY_LENGTH * 2];
             if (mask0 < mask1) {
                 entries[0] = k0;
-                entries[entryLength] = k1;
-                if (entryLength > 1) {
+                entries[ENTRY_LENGTH] = k1;
+                if (ENTRY_LENGTH > 1) {
                     entries[1] = v0;
-                    entries[entryLength + 1] = v1;
+                    entries[ENTRY_LENGTH + 1] = v1;
                 }
-                if (seq1 != NO_SEQUENCE_NUMBER) {
-                    entries[entryLength - 1] = seq0;
-                    entries[entryLength * 2 - 1] = seq1;
-                }
-                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries, entryLength);
+                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             } else {
                 entries[0] = k1;
-                entries[entryLength] = k0;
-                if (entryLength > 1) {
+                entries[ENTRY_LENGTH] = k0;
+                if (ENTRY_LENGTH > 1) {
                     entries[1] = v1;
-                    entries[entryLength + 1] = v0;
+                    entries[ENTRY_LENGTH + 1] = v0;
                 }
-                if (seq1 != NO_SEQUENCE_NUMBER) {
-                    entries[entryLength * 2 - 1] = seq0;
-                    entries[entryLength - 1] = seq1;
-                }
-                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries, entryLength);
+                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             }
         } else {
             final Node<K, V> node = mergeTwoDataEntriesIntoNode(mutator,
-                    k0, v0, seq0, keyHash0,
-                    k1, v1, seq1, keyHash1,
-                    shift + BIT_PARTITION_SIZE,
-                    entryLength);
+                    k0, v0, keyHash0,
+                    k1, v1, keyHash1,
+                    shift + BIT_PARTITION_SIZE
+            );
             // values fit on next level
 
             final int nodeMap = bitpos(mask0);
-            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node}, entryLength);
+            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node});
         }
     }
 
-    abstract int dataArity(int entryLength);
+    abstract int dataArity();
 
-    abstract boolean hasDataArityOne(int entryLength);
+    abstract boolean hasDataArityOne();
 
     /**
      * Returns the data index for the given keyHash and shift, or -1.
      *
-     * @param key         a key
-     * @param keyHash     the key hash
-     * @param shift       the shift
-     * @param entryLength the entry length
+     * @param key     a key
+     * @param keyHash the key hash
+     * @param shift   the shift
      * @return the data index or -1
      */
-    abstract int dataIndex(@Nullable K key, final int keyHash, final int shift, final int entryLength);
+    abstract int dataIndex(@Nullable K key, final int keyHash, final int shift);
 
     /**
      * Checks if this trie is equivalent to the specified other trie.
      *
-     * @param other       the other trie
-     * @param entryLength the length of an entry in the trie
-     * @param numFields   the number of fields that must be compared
-     *                    (the entryLength - 1 if the entry has a sequence number)
+     * @param other the other trie
      * @return true if equivalent
      */
-    abstract boolean equivalent(final @NonNull Object other, int entryLength, int numFields);
+    abstract boolean equivalent(final @NonNull Object other);
 
     /**
      * Finds a value by a key.
      *
-     * @param key         a key
-     * @param keyHash     the hash code of the key
-     * @param shift       the shift for this node
-     * @param entryLength the entry length
-     * @param numFields   the number of fiels in an entry,
+     * @param key     a key
+     * @param keyHash the hash code of the key
+     * @param shift   the shift for this node
      * @return the value, returns {@link #NO_VALUE} if the value is not present.
      */
-    abstract Object findByKey(final K key, final int keyHash, final int shift, int entryLength, int numFields);
+    abstract Object findByKey(final K key, final int keyHash, final int shift);
 
 
-    abstract Object[] getDataEntry(final int index, int entryLength);
+    abstract Object[] getDataEntry(final int index);
 
-    public abstract K getKey(final int index, int entryLength);
+    public abstract K getKey(final int index);
 
-    abstract SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields);
+    abstract SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index);
 
     @Nullable UniqueId getMutator() {
         return null;
     }
 
-    abstract Node<K, V> getNode(final int index, int entryLength);
+    abstract Node<K, V> getNode(final int index);
 
-    public abstract V getValue(final int index, int entryLength, int numFields);
+    public abstract V getValue(final int index);
 
     abstract boolean hasData();
 
@@ -215,10 +197,10 @@ public abstract class Node<K, V> {
     abstract int nodeArity();
 
     abstract Node<K, V> remove(final @Nullable UniqueId mutator, final K key,
-                               final int keyHash, final int shift, final ChangeEvent<V> details, int entryLength, int numFields);
+                               final int keyHash, final int shift, final ChangeEvent<V> details);
 
     abstract Node<K, V> update(final @Nullable UniqueId mutator, final K key, final V val,
-                               final int keyHash, final int shift, final ChangeEvent<V> details, int entryLength, int sequenceNumber, int numFields);
+                               final int keyHash, final int shift, final ChangeEvent<V> details);
 
 
 }

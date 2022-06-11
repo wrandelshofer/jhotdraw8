@@ -83,8 +83,9 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
     @SafeVarargs
     public static <E> @NonNull ImmutableAddOnlyChampSet<E> of(E @NonNull ... elements) {
         ImmutableAddOnlyChampSet<E> set = (ImmutableAddOnlyChampSet<E>) BitmapIndexedNode.EMPTY_NODE;
-        for (E e : elements)
+        for (E e : elements) {
             set = set.copyAdd(e);
+        }
         return set;
     }
 

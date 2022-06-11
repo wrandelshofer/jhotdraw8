@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.champ;
+package org.jhotdraw8.collection.champmap;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -25,16 +25,16 @@ public class ChampTrie {
 
     static <K, V> @NonNull BitmapIndexedNode<K, V> newBitmapIndexedNode(
             @Nullable UniqueId mutator, final int nodeMap,
-            final int dataMap, final @NonNull Object[] nodes, int entryLength) {
+            final int dataMap, final @NonNull Object[] nodes) {
         return mutator == null
-                ? new BitmapIndexedNode<>(nodeMap, dataMap, nodes, entryLength)
-                : new MutableBitmapIndexedNode<>(mutator, nodeMap, dataMap, nodes, entryLength);
+                ? new BitmapIndexedNode<>(nodeMap, dataMap, nodes)
+                : new MutableBitmapIndexedNode<>(mutator, nodeMap, dataMap, nodes);
     }
 
     static <K, V> @NonNull HashCollisionNode<K, V> newHashCollisionNode(
             @Nullable UniqueId mutator, int hash, @NonNull Object @NonNull [] entries, int entryLength) {
         return mutator == null
-                ? new HashCollisionNode<>(hash, entries, entryLength)
+                ? new HashCollisionNode<>(hash, entries)
                 : new MutableHashCollisionNode<>(mutator, hash, entries, entryLength);
     }
 
@@ -59,8 +59,7 @@ public class ChampTrie {
             Map.Entry<K, V> entry = i.next();
             newRoot = newRoot.update(mutator,
                     entry.getKey(), entry.getValue(),
-                    Objects.hashCode(entry.getKey()), 0, details,
-                    entryLength, count, entryLength - 1
+                    Objects.hashCode(entry.getKey()), 0, details
             );
             count++;
         }

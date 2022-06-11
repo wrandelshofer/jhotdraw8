@@ -63,6 +63,16 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
+    @NonNull ImmutableMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
+
+    /**
+     * Returns a copy of this map that contains all entries
+     * of this map with entries from the specified map added or updated.
+     *
+     * @param m another map
+     * @return this map instance if it already contains the same entries, or
+     * a different map instance with the entries added or updated
+     */
     @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> m);
 
     /**

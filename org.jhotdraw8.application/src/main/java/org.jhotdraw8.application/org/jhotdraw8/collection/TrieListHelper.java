@@ -91,7 +91,7 @@ class TrieListHelper {
         private final @NonNull LeafNode<E> head;
         private final @NonNull LeafNode<E> tail;
         private InternalNode<E> root;
-        private final UniqueId mutator = new UniqueId();
+        private final @Nullable UniqueId mutator = new UniqueId();
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         public RrbTree() {

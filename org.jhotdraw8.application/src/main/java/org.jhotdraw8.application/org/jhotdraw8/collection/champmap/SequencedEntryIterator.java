@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.champ;
+package org.jhotdraw8.collection.champmap;
 
 
 import org.jhotdraw8.annotation.NonNull;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  */
 public class SequencedEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     private final @NonNull PriorityQueue<SequencedMapEntry<K, V>> queue;
-    private @Nullable SequencedMapEntry<K, V> current;
+    private SequencedMapEntry<K, V> current;
     private boolean canRemove;
     private final @Nullable Consumer<K> persistentRemoveFunction;
 

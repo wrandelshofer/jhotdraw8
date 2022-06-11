@@ -213,7 +213,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 this::clear,
                 this::removeEntry,
                 this::firstEntry,
-                this::lastEntry
+                this::lastEntry, null, null
         );
     }
 

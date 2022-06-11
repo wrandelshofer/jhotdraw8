@@ -23,25 +23,6 @@ import java.util.Set;
  * @param <E> the element type
  */
 public interface SequencedSet<E> extends Set<E>, SequencedCollection<E> {
-    /**
-     * Adds the specified element to the front of the set if it is not already
-     * present. If this set already contains the element, moves it to the front.
-     *
-     * @param e an element
-     * @return {@code true} if this set did not already contain the specified
-     * element
-     */
-    boolean addFirst(E e);
-
-    /**
-     * Adds the specified element to the tail of the set if it is not already
-     * present. If this set already contains the element, moves it to the tail.
-     *
-     * @param e an element
-     * @return {@code true} if this set did not already contain the specified
-     * element
-     */
-    boolean addLast(E e);
 
     /**
      * Removes the element at the front of the set.

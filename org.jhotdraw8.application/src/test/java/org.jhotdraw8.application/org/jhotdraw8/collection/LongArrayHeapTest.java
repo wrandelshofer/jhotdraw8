@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class LongMinHeapTest {
+public class LongArrayHeapTest {
 
     @Test
     public void test() {
 
-        // Creating object opf class in main() methodn
-        final LongMinHeap minHeap = new LongMinHeap(15);
+        // Creating object opf class in main() method
+        final LongArrayHeap minHeap = new LongArrayHeap(15);
 
         // Inserting element to minHeap
         // using insert() method

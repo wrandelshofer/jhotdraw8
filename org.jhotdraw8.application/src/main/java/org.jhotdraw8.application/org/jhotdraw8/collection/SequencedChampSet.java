@@ -1,5 +1,5 @@
 /*
- * @(#)SeqChampSet.java
+ * @(#)ChampSet.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -7,41 +7,42 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.champ.ChampTrie;
-import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.Node;
-import org.jhotdraw8.collection.champ.SequencedEntryIterator;
+import org.jhotdraw8.collection.champset.BitmapIndexedNode;
+import org.jhotdraw8.collection.champset.ChampTrie;
+import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champset.ChangeEvent;
+import org.jhotdraw8.collection.champset.Node;
+import org.jhotdraw8.collection.champset.SequencedKey;
+import org.jhotdraw8.collection.champset.SequencedKeyIterator;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP), with predictable iteration order.
+ * (CHAMP).
  * <p>
  * Features:
  * <ul>
  *     <li>allows null elements</li>
  *     <li>is mutable</li>
  *     <li>is not thread-safe</li>
- *     <li>iterates in the order, in which elements were inserted</li>
+ *     <li>does not guarantee a specific iteration order</li>
  * </ul>
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1) amortized due to renumbering</li>
+ *     <li>add: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + a constant cost distributed across subsequent updates</li>
- *     <li>clone: O(1) + a constant cost distributed across subsequent updates</li>
- *     <li>iterator.next(): O(log n)</li>
+ *     <li>toImmutable: O(1) + a cost distributed across subsequent updates</li>
+ *     <li>clone: O(1) + a cost distributed across subsequent updates</li>
+ *     <li>iterator.next(): O(1)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -66,30 +67,12 @@ import java.util.Set;
  * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
- * Calculation of the constant cost that is distributed over subsequent
- * updates: Assuming that there are no hash collisions, and the trie is fully
- * populated with {@code 2^32} elements, then there are
- * {@code ((32^7)−1)÷(32-1) = 1,108,378,657} nodes, that need to be owned again.
- *
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access this set concurrently, and at least
  * one of the threads modifies the set, it <em>must</em> be synchronized
  * externally.  This is typically accomplished by synchronizing on some
  * object that naturally encapsulates the set.
- * <p>
- * Insertion Order:
- * <p>
- * This set uses a counter to keep track of the insertion order.
- * It stores the current value of the counter in the sequence number
- * field of each data entry. If the counter wraps around, it must renumber all
- * sequence numbers.
- * <p>
- * The renumbering is why the {@code add} is O(1) only in an amortized sense.
- * <p>
- * The iterator of the set is a priority queue, that orders the entries by
- * their stored insertion counter value. This is why {@code iterator.next()}
- * is O(log n).
  * <p>
  * References:
  * <dl>
@@ -106,9 +89,8 @@ import java.util.Set;
  */
 public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E> {
     private final static long serialVersionUID = 0L;
-    private final static int ENTRY_LENGTH = 2;
     private transient @Nullable UniqueId mutator;
-    private transient @Nullable BitmapIndexedNode<E, Void> root;
+    private transient @NonNull BitmapIndexedNode<SequencedKey<E>> root;
     private transient int size;
     private transient int modCount;
 
@@ -164,7 +146,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public boolean add(final @Nullable E e) {
-        return addLastIfAbsent(e);
+        return addLast(e, (oldk, newk) -> oldk);
     }
 
     /**
@@ -197,22 +179,21 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
-    public boolean addFirst(E e) {
-        boolean isPresent = remove(e);
-        addFirstIfAbsent(e);
-        return !isPresent;
+    public void addFirst(@Nullable E e) {
+        addFirst(e, (oldk, newk) -> newk);
     }
 
-    private boolean addFirstIfAbsent(E e) {
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
-                first - 1, ENTRY_LENGTH - 1);
+    private boolean addFirst(@Nullable E e,
+                             @NonNull BiFunction<SequencedKey<E>, SequencedKey<E>, SequencedKey<E>> updateFunction) {
+        final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<SequencedKey<E>> newRoot = root.update(getOrCreateMutator(), new SequencedKey<>(e, first - 1),
+                Objects.hashCode(e), 0, changeEvent, updateFunction);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
             modCount++;
             first--;
-            if (first == Node.NO_SEQUENCE_NUMBER - 1) {
+            if (first == SequencedKey.NO_SEQUENCE_NUMBER - 1) {
                 renumber();
             }
             return true;
@@ -221,23 +202,22 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
-    public boolean addLast(E e) {
-        boolean isPresent = remove(e);
-        return !isPresent;
+    public void addLast(@Nullable E e) {
+        addLast(e, (oldk, newk) -> newk);
     }
 
-    private boolean addLastIfAbsent(final @Nullable E e) {
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(
-                getOrCreateMutator(), e, null, Objects.hashCode(e), 0,
-                changeEvent, ENTRY_LENGTH,
-                last, ENTRY_LENGTH - 1);
+    private boolean addLast(final @Nullable E e,
+                            @NonNull BiFunction<SequencedKey<E>, SequencedKey<E>, SequencedKey<E>> updateFunction) {
+        final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<SequencedKey<E>> newRoot = root.update(
+                getOrCreateMutator(), new SequencedKey<>(e, last), Objects.hashCode(e), 0,
+                changeEvent, updateFunction);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
             modCount++;
             last++;
-            if (last == Node.NO_SEQUENCE_NUMBER) {
+            if (last == SequencedKey.NO_SEQUENCE_NUMBER) {
                 renumber();
             }
 
@@ -277,8 +257,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH,
-                ENTRY_LENGTH - 1) != Node.NO_VALUE;
+        return root.findByKey(new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0) != Node.NO_VALUE;
     }
 
     /**
@@ -287,18 +266,9 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * @return a dump of the internal structure
      */
     public @NonNull String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(root, ENTRY_LENGTH, false, false);
+        return new ChampTrieGraphviz<SequencedKey<E>>().dumpTrie(root);
     }
 
-    /**
-     * Gets an element from this set. Throws an exception if the set is empty.
-     *
-     * @return an element
-     * @throws java.util.NoSuchElementException if this set is empty
-     */
-    public E element() {
-        return iterator().next();
-    }
 
     @Override
     public E getLast() {
@@ -324,11 +294,11 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * @param reversed whether to iterate in reverse direction
      * @return an iterator
      */
-    public @Nullable Iterator<E> iterator(boolean reversed) {
-        return new FailFastIterator<>(new MappedIterator<>(new SequencedEntryIterator<>(
-                size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
+    public @NonNull Iterator<E> iterator(boolean reversed) {
+        return new FailFastIterator<>(new SequencedKeyIterator<>(
+                size, root, reversed,
                 this::persistentRemove, null),
-                Map.Entry::getKey), () -> SequencedChampSet.this.modCount);
+                () -> SequencedChampSet.this.modCount);
     }
 
     private void persistentRemove(E e) {
@@ -346,10 +316,10 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     public boolean remove(final Object o) {
         @SuppressWarnings("unchecked")
         E key = (E) o;
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.remove(
-                getOrCreateMutator(), key, Objects.hashCode(key), 0,
-                changeEvent, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<SequencedKey<E>> newRoot = root.remove(
+                getOrCreateMutator(), new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0,
+                changeEvent);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -359,19 +329,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         return false;
     }
 
-    /**
-     * Removes an element from this set and returns it.
-     * Throws an exception if the set is empty.
-     *
-     * @return an element
-     * @throws java.util.NoSuchElementException if this set is empty
-     */
-    public E remove() {
-        Iterator<E> iterator = iterator();
-        E e = iterator.next();
-        iterator.remove();
-        return e;
-    }
 
     /**
      * Removes all specified elements that are in this set.
@@ -414,7 +371,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     private void renumber() {
-        root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
+        root = ChampTrie.renumber(size, root, getOrCreateMutator());
         last = size;
         first = 0;
     }
@@ -424,12 +381,25 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         return size;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof SequencedChampSet<?>) {
+            SequencedChampSet<?> that = (SequencedChampSet<?>) o;
+            return this.root.equivalent(that.root);
+        }
+
+        return super.equals(o);
+    }
+
     /**
      * Returns an immutable copy of this set.
      *
      * @return an immutable copy
      */
-    public @Nullable ImmutableSequencedChampSet<E> toImmutable() {
+    public @NonNull ImmutableSequencedChampSet<E> toImmutable() {
         mutator = null;
         return size == 0 ? ImmutableSequencedChampSet.of() : new ImmutableSequencedChampSet<>(root, size, first, last);
     }

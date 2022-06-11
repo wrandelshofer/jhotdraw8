@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-public class PersistentChampSetTest extends AbstractImmutableSetTest {
+public class ImmutableChampSetTest extends AbstractImmutableSetTest {
 
     @Override
     protected ImmutableSet<HashCollider> of() {

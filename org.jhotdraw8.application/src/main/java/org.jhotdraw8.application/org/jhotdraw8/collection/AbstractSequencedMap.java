@@ -50,7 +50,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                 AbstractSequencedMap.this::clear,
                 AbstractSequencedMap.this::removeKey,
                 AbstractSequencedMap.this::firstKey,
-                AbstractSequencedMap.this::lastKey
+                AbstractSequencedMap.this::lastKey, null, null
         );
     }
 
@@ -63,7 +63,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                 AbstractSequencedMap.this::clear,
                 AbstractSequencedMap.this::removeValue,
                 () -> firstEntry().getValue(),
-                () -> lastEntry().getValue()
+                () -> lastEntry().getValue(), null, null
         );
     }
 

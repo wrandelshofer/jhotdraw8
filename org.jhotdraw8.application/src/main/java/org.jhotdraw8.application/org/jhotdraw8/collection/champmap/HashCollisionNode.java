@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.champ;
+package org.jhotdraw8.collection.champmap;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -22,29 +22,27 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     private final int hash;
     @NonNull Object[] entries;
 
-    HashCollisionNode(final int hash, final Object @NonNull [] entries, int entryLength) {
+    HashCollisionNode(final int hash, final Object @NonNull [] entries) {
         this.entries = entries;
         this.hash = hash;
-
-        assert entries.length % entryLength == 0;
     }
 
     @Override
-    int dataArity(int entryLength) {
-        return entries.length / entryLength;
+    int dataArity() {
+        return entries.length / ENTRY_LENGTH;
     }
 
     @Override
-    boolean hasDataArityOne(int entryLength) {
+    boolean hasDataArityOne() {
         return false;
     }
 
     @Override
-    int dataIndex(K key, final int keyHash, final int shift, int entryLength) {
+    int dataIndex(K key, final int keyHash, final int shift) {
         if (this.hash != keyHash) {
             return -1;
         }
-        for (int i = 0, index = 0; i < entries.length; i += entryLength, index++) {
+        for (int i = 0, index = 0; i < entries.length; i += ENTRY_LENGTH, index++) {
             Object k = entries[i];
             if (Objects.equals(k, key)) {
                 return index;
@@ -54,7 +52,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    boolean equivalent(@NonNull Object other, int entryLength, int numFields) {
+    boolean equivalent(@NonNull Object other) {
         if (this == other) {
             return true;
         }
@@ -69,12 +67,12 @@ class HashCollisionNode<K, V> extends Node<K, V> {
         @NonNull Object[] thatEntriesCloned = thatEntries.clone();
         int remainingLength = thatEntriesCloned.length;
         outerLoop:
-        for (int i = 0; i < entries.length; i += entryLength) {
+        for (int i = 0; i < entries.length; i += ENTRY_LENGTH) {
             final Object key = entries[i];
-            for (int j = 0; j < remainingLength; j += entryLength) {
+            for (int j = 0; j < remainingLength; j += ENTRY_LENGTH) {
                 final Object todoKey = thatEntriesCloned[j];
                 if (Objects.equals(todoKey, key)) {
-                    for (int f = 1; f < numFields; f++) {
+                    for (int f = 1; f < ENTRY_LENGTH; f++) {
                         if (!Objects.equals(thatEntriesCloned[j + f], entries[i + f])) {
                             return false;
                         }
@@ -82,8 +80,8 @@ class HashCollisionNode<K, V> extends Node<K, V> {
                     // We have found an equal entry. We do not need to compare
                     // this entry again. So we replace it with the last entry
                     // from the array and reduce the remaining length.
-                    System.arraycopy(thatEntriesCloned, remainingLength - entryLength, thatEntriesCloned, j, entryLength);
-                    remainingLength -= entryLength;
+                    System.arraycopy(thatEntriesCloned, remainingLength - ENTRY_LENGTH, thatEntriesCloned, j, ENTRY_LENGTH);
+                    remainingLength -= ENTRY_LENGTH;
 
                     continue outerLoop;
                 }
@@ -97,27 +95,27 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Object findByKey(final K key, final int keyHash, final int shift, int entryLength, int numFields) {
-        for (int i = 0; i < entries.length; i += entryLength) {
+    Object findByKey(final K key, final int keyHash, final int shift) {
+        for (int i = 0; i < entries.length; i += ENTRY_LENGTH) {
             if (Objects.equals(key, entries[i])) {
-                return entryLength > 1 ? entries[i + 1] : null;
+                return ENTRY_LENGTH > 1 ? entries[i + 1] : null;
             }
         }
         return NO_VALUE;
     }
 
     @Override
-    Object @NonNull [] getDataEntry(int index, int entryLength) {
-        Object[] entry = new Object[entryLength];
-        System.arraycopy(entries, entryLength * index, entry, 0, entryLength);
+    Object @NonNull [] getDataEntry(int index) {
+        Object[] entry = new Object[ENTRY_LENGTH];
+        System.arraycopy(entries, ENTRY_LENGTH * index, entry, 0, ENTRY_LENGTH);
         return entry;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     @NonNull
-    public K getKey(final int index, int entryLength) {
-        return (K) entries[index * entryLength];
+    public K getKey(final int index) {
+        return (K) entries[index * ENTRY_LENGTH];
     }
 
 
@@ -128,25 +126,25 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields) {
+    SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index) {
         return new SequencedMapEntry<K, V>(
-                (K) entries[index * entryLength],
-                numFields > 1 ? (V) entries[index * entryLength + 1] : null,
-                numFields < entryLength ? (Integer) entries[index * entryLength + entryLength - 1] : 0
+                (K) entries[index * ENTRY_LENGTH],
+                (V) entries[index * ENTRY_LENGTH + 1],
+                0
         );
     }
 
     @Override
     @NonNull
-    Node<K, V> getNode(int index, int entryLength) {
+    Node<K, V> getNode(int index) {
         throw new IllegalStateException("Is leaf node.");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    public V getValue(final int index, int entryLength, int numFields) {
-        return entryLength > 1 ? (V) entries[index * entryLength + 1] : null;
+    public V getValue(final int index) {
+        return (V) entries[index * ENTRY_LENGTH + 1];
     }
 
     @Override
@@ -167,29 +165,28 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @Override
     @Nullable
     Node<K, V> remove(final @Nullable UniqueId mutator, final K key,
-                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details,
-                      int entryLength, int numFields) {
-        for (int idx = 0, i = 0; i < entries.length; i += entryLength, idx++) {
+                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details) {
+        for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {
             if (Objects.equals(entries[i], key)) {
-                @SuppressWarnings("unchecked") final V currentVal = entryLength > 1 ? (V) entries[i + 1] : null;
+                @SuppressWarnings("unchecked") final V currentVal = ENTRY_LENGTH > 1 ? (V) entries[i + 1] : null;
                 details.updated(currentVal);
 
-                if (entries.length == entryLength) {
+                if (entries.length == ENTRY_LENGTH) {
                     return BitmapIndexedNode.emptyNode();
-                } else if (entries.length == entryLength * 2) {
+                } else if (entries.length == ENTRY_LENGTH * 2) {
                     // Create root node with singleton element.
                     // This node will be a) either be the new root
                     // returned, or b) unwrapped and inlined.
-                    final Object[] theOtherEntry = getDataEntry(idx ^ 1, entryLength);
-                    return ChampTrie.newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)), theOtherEntry, entryLength);
+                    final Object[] theOtherEntry = getDataEntry(idx ^ 1);
+                    return ChampTrie.newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)), theOtherEntry);
                 } else {
                     // copy keys and vals and remove entryLength elements at position idx
-                    final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.entries, idx * entryLength, entryLength);
+                    final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.entries, idx * ENTRY_LENGTH, ENTRY_LENGTH);
                     if (isAllowedToEdit(mutator)) {
                         this.entries = entriesNew;
                         return this;
                     }
-                    return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew, entryLength);
+                    return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew, ENTRY_LENGTH);
                 }
             }
         }
@@ -199,12 +196,12 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @Override
     @Nullable
     Node<K, V> update(final @Nullable UniqueId mutator, final K key, final V val,
-                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details, int entryLength, int sequenceNumber, int numFields) {
+                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details) {
         assert this.hash == keyHash;
 
-        for (int idx = 0, i = 0; i < entries.length; i += entryLength, idx++) {
+        for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {
             if (Objects.equals(entries[i], key)) {
-                @SuppressWarnings("unchecked") final V currentVal = numFields == 1 ? null : (V) entries[i + 1];
+                @SuppressWarnings("unchecked") final V currentVal = (V) entries[i + 1];
                 if (Objects.equals(currentVal, val)) {
                     details.found(currentVal);
                     return this;
@@ -215,26 +212,21 @@ class HashCollisionNode<K, V> extends Node<K, V> {
                         return this;
                     }
                     final Object[] dst = ArrayHelper.copySet(this.entries, i + 1, val);
-                    return ChampTrie.newHashCollisionNode(mutator, this.hash, dst, entryLength);
+                    return ChampTrie.newHashCollisionNode(mutator, this.hash, dst, ENTRY_LENGTH);
                 }
             }
         }
 
         // copy entries and add 1 more at the end
-        final Object[] entriesNew = ArrayHelper.copyComponentAdd(this.entries, this.entries.length, entryLength);
+        final Object[] entriesNew = ArrayHelper.copyComponentAdd(this.entries, this.entries.length, ENTRY_LENGTH);
         entriesNew[this.entries.length] = key;
-        if (numFields > 1) {
-            entriesNew[this.entries.length + 1] = val;
-        }
-        if (numFields < entryLength) {
-            entriesNew[this.entries.length + entryLength - 1] = sequenceNumber;
-        }
+        entriesNew[this.entries.length + 1] = val;
         details.modified();
         if (isAllowedToEdit(mutator)) {
             this.entries = entriesNew;
             return this;
         } else {
-            return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew, entryLength);
+            return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew, ENTRY_LENGTH);
         }
     }
 }

@@ -30,25 +30,25 @@ public class FailFastIterator<E> implements Iterator<E> {
 
     @Override
     public boolean hasNext() {
-        if (expectedModCount != modCountSupplier.getAsInt()) {
-            throw new ConcurrentModificationException();
-        }
+        ensureUnmodified();
         return i.hasNext();
     }
 
     @Override
     public E next() {
+        ensureUnmodified();
+        return i.next();
+    }
+
+    protected void ensureUnmodified() {
         if (expectedModCount != modCountSupplier.getAsInt()) {
             throw new ConcurrentModificationException();
         }
-        return i.next();
     }
 
     @Override
     public void remove() {
-        if (expectedModCount != modCountSupplier.getAsInt()) {
-            throw new ConcurrentModificationException();
-        }
+        ensureUnmodified();
         i.remove();
         expectedModCount = modCountSupplier.getAsInt();
     }

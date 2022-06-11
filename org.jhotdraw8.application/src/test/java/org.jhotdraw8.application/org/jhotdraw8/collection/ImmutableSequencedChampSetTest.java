@@ -6,13 +6,15 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champset.SequencedKey;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
 
-public class ImmutableSequencedChampSetTest extends AbstractPersistentSequencedSetTest {
+public class ImmutableSequencedChampSetTest extends AbstractImmutableSequencedSetTest {
 
     @Override
     protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
@@ -40,9 +42,7 @@ public class ImmutableSequencedChampSetTest extends AbstractPersistentSequencedS
             String value = "v" + i;
             instance = instance.copyAdd(key);
         }
-
-        System.out.println(instance.dump());
-
+        System.out.println(new ChampTrieGraphviz<SequencedKey<HashCollider>>().dumpTrie(instance));
     }
 
 }

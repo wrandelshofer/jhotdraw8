@@ -82,7 +82,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 2;
     private transient @Nullable UniqueId mutator;
-    private transient @Nullable BitmapIndexedNode<K, V> root;
+    private transient @NonNull BitmapIndexedNode<K, V> root;
     private transient int size;
     private transient int modCount;
 
@@ -274,7 +274,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
      *
      * @return an immutable copy
      */
-    public @Nullable ImmutableChampMap<K, V> toImmutable() {
+    public @NonNull ImmutableChampMap<K, V> toImmutable() {
         if (size == 0) {
             return ImmutableChampMap.of();
         }

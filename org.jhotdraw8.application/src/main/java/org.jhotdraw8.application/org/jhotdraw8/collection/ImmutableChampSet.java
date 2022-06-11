@@ -7,17 +7,16 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.EntryIterator;
-import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champset.BitmapIndexedNode;
+import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champset.ChangeEvent;
+import org.jhotdraw8.collection.champset.ElementIterator;
+import org.jhotdraw8.collection.champset.Node;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -73,16 +72,15 @@ import java.util.Objects;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements ImmutableSet<E>, Serializable {
+public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int ENTRY_LENGTH = 1;
     @SuppressWarnings("unchecked")
     private static final ImmutableChampSet<?> EMPTY = new ImmutableChampSet<>(BitmapIndexedNode.emptyNode(), 0);
 
     final int size;
 
-    ImmutableChampSet(@NonNull BitmapIndexedNode<E, Void> root, int size) {
-        super(root.nodeMap(), root.dataMap(), root.mixed, ENTRY_LENGTH);
+    ImmutableChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
+        super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
 
@@ -125,14 +123,14 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
+        return findByKey(key, Objects.hashCode(key), 0) != Node.NO_VALUE;
     }
 
     @Override
     public @NonNull ImmutableChampSet<E> copyAdd(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = update(null, key, null, keyHash, 0, changeEvent, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
+        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, (oldk, newk) -> oldk);
         if (changeEvent.isModified) {
             return new ImmutableChampSet<>(newRootNode, size + 1);
         }
@@ -165,9 +163,9 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
     @Override
     public @NonNull ImmutableChampSet<E> copyRemove(final @NonNull E key) {
         final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRootNode = remove(null, key,
-                keyHash, 0, changeEvent, ENTRY_LENGTH, ENTRY_LENGTH);
+        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E> newRootNode = remove(null, key,
+                keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             return new ImmutableChampSet<>(newRootNode, size - 1);
         }
@@ -176,7 +174,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRemoveAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull ImmutableChampSet<E> copyRemoveAll(final @NonNull Iterable<?> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -187,7 +185,8 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
         }
         final ChampSet<E> t = this.toMutable();
         boolean modified = false;
-        for (final E key : set) {
+        for (final Object key : set) {
+            //noinspection SuspiciousMethodCalls
             if (t.remove(key)) {
                 modified = true;
                 if (t.isEmpty()) {
@@ -200,7 +199,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRetainAll(final @NonNull Collection<? extends E> set) {
+    public @NonNull ImmutableChampSet<E> copyRetainAll(final @NonNull Collection<?> set) {
         if (this.isEmpty()) {
             return this;
         }
@@ -210,8 +209,9 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
 
         final ChampSet<E> t = this.toMutable();
         boolean modified = false;
-        for (E key : this) {
+        for (Object key : this) {
             if (!set.contains(key)) {
+                //noinspection SuspiciousMethodCalls
                 t.remove(key);
                 modified = true;
                 if (t.isEmpty()) {
@@ -235,7 +235,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
             if (this.size != that.size) {
                 return false;
             }
-            return this.equivalent(that, ENTRY_LENGTH, ENTRY_LENGTH);
+            return this.equivalent(that);
         }
         return ReadOnlySet.setEquals(this, other);
     }
@@ -247,7 +247,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new MappedIterator<>(new EntryIterator<E, Void>(this, ENTRY_LENGTH, ENTRY_LENGTH, null, null), Map.Entry::getKey);
+        return new ElementIterator<E>(this, null);
     }
 
     @Override
@@ -271,6 +271,6 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E, Void> implements 
      * @return a dump of the internal structure
      */
     public @NonNull String dump() {
-        return new ChampTrieGraphviz<E, Void>().dumpTrie(this, ENTRY_LENGTH, false, false);
+        return new ChampTrieGraphviz<E>().dumpTrie(this);
     }
 }

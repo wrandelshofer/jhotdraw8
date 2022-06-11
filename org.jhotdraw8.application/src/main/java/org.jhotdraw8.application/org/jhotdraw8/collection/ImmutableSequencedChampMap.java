@@ -173,8 +173,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
      * @return an immutable map of the provided entries
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        return (ImmutableChampMap<K, V>) of().copyPutAll(entries);
+    public static <K, V> @NonNull ImmutableSequencedChampMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        return (ImmutableSequencedChampMap<K, V>) of().copyPutAll(entries);
     }
 
     @Override
@@ -242,11 +242,24 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<K, V> im
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
         if (isEmpty() && (m instanceof SequencedChampMap)) {
             return ((SequencedChampMap<K, V>) m).toImmutable();
         }
         return copyPutAll(m.entrySet().iterator());
+    }
+
+    @Override
+    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+        if (m == this) {
+            return this;
+        }
+        return copyPutAll(m.readOnlyEntrySet());
+    }
+
+    @Override
+    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
+        return copyPutAll(m.iterator());
     }
 
     @Override

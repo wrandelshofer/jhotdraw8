@@ -7,17 +7,16 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champ.ChangeEvent;
-import org.jhotdraw8.collection.champ.EntryIterator;
-import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champset.BitmapIndexedNode;
+import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champset.ChangeEvent;
+import org.jhotdraw8.collection.champset.ElementIterator;
+import org.jhotdraw8.collection.champset.Node;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -87,9 +86,8 @@ import java.util.Set;
  */
 public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private final static int ENTRY_LENGTH = 1;
     private transient @Nullable UniqueId mutator;
-    private transient @Nullable BitmapIndexedNode<E, Void> root;
+    private transient @NonNull BitmapIndexedNode<E> root;
     private transient int size;
     private transient int modCount;
 
@@ -106,7 +104,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public ChampSet(Iterable<? extends E> c) {
+    public ChampSet(@NonNull Iterable<? extends E> c) {
         if (c instanceof ChampSet<?>) {
             c = ((ChampSet<? extends E>) c).toImmutable();
         }
@@ -128,9 +126,9 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      */
     @Override
     public boolean add(final @Nullable E e) {
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.update(getOrCreateMutator(), e, null, Objects.hashCode(e), 0, changeEvent, ENTRY_LENGTH,
-                Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
+        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E> newRoot = root.update(getOrCreateMutator(), e, Objects.hashCode(e), 0, changeEvent,
+                (oldk, newk) -> oldk);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -199,7 +197,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
+        return root.findByKey(key, Objects.hashCode(key), 0) != Node.NO_VALUE;
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -214,10 +212,9 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      */
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new FailFastIterator<>(new MappedIterator<>(
-                new EntryIterator<E, Void>(root, ENTRY_LENGTH, ENTRY_LENGTH,
-                        this::persistentRemove, null),
-                Map.Entry::getKey), () -> this.modCount);
+        return new FailFastIterator<>(
+                new ElementIterator<E>(root, this::persistentRemove),
+                () -> this.modCount);
     }
 
     private void persistentRemove(E e) {
@@ -235,10 +232,9 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     public boolean remove(final Object o) {
         @SuppressWarnings("unchecked")
         E key = (E) o;
-        final ChangeEvent<Void> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E, Void> newRoot = root.remove(
-                getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent,
-                ENTRY_LENGTH, ENTRY_LENGTH);
+        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        final BitmapIndexedNode<E> newRoot = root.remove(
+                getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -246,30 +242,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
             return true;
         }
         return false;
-    }
-
-    /**
-     * Gets an element from this set. Throws an exception if the set is empty.
-     *
-     * @return an element
-     * @throws java.util.NoSuchElementException if this set is empty
-     */
-    public E element() {
-        return iterator().next();
-    }
-
-    /**
-     * Removes an element from this set and returns it.
-     * Throws an exception if the set is empty.
-     *
-     * @return an element
-     * @throws java.util.NoSuchElementException if this set is empty
-     */
-    public E remove() {
-        Iterator<E> iterator = iterator();
-        E e = iterator.next();
-        iterator.remove();
-        return e;
     }
 
     /**
@@ -315,8 +287,8 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * @return a dump of the internal structure
      */
     public @NonNull String dump() {
-        return new ChampTrieGraphviz<E, Void>()
-                .dumpTrie(root, ENTRY_LENGTH, false, false);
+        return new ChampTrieGraphviz<E>()
+                .dumpTrie(root);
     }
 
     /**
@@ -324,7 +296,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      *
      * @return an immutable copy
      */
-    public @Nullable ImmutableChampSet<E> toImmutable() {
+    public @NonNull ImmutableChampSet<E> toImmutable() {
         mutator = null;
         return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
     }

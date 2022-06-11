@@ -401,6 +401,7 @@ public abstract class AbstractMapTest {
         expected.put(key, value);
         assertTrue(set.containsKey(key));
         assertEquals(expected.toString(), set.toString());
+        assertEquals(expected.hashCode(), set.hashCode());
         assertEquals(expected, set);
 
         expected.remove(key);
