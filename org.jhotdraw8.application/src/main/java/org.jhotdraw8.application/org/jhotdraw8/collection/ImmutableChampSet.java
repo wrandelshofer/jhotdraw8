@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -232,10 +233,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
         }
         if (other instanceof ImmutableChampSet) {
             ImmutableChampSet<?> that = (ImmutableChampSet<?>) other;
-            if (this.size != that.size) {
-                return false;
-            }
-            return this.equivalent(that);
+            return this.size == that.size && equivalent(that);
         }
         return ReadOnlySet.setEquals(this, other);
     }
@@ -272,5 +270,22 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
      */
     public @NonNull String dump() {
         return new ChampTrieGraphviz<E>().dumpTrie(this);
+    }
+
+    private static class SerializationProxy<E> extends SetSerializationProxy<E> {
+        private final static long serialVersionUID = 0L;
+
+        protected SerializationProxy(Set<E> target) {
+            super(target);
+        }
+
+        @Override
+        protected @NonNull Object readResolve() {
+            return ImmutableChampSet.of(deserialized);
+        }
+    }
+
+    private @NonNull Object writeReplace() {
+        return new SerializationProxy<E>(this.toMutable());
     }
 }

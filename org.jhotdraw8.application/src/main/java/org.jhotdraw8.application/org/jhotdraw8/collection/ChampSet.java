@@ -8,7 +8,6 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champset.BitmapIndexedNode;
-import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champset.ChangeEvent;
 import org.jhotdraw8.collection.champset.KeyIterator;
 import org.jhotdraw8.collection.champset.Node;
@@ -133,9 +132,8 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
             root = newRoot;
             size++;
             modCount++;
-            return true;
         }
-        return false;
+        return changeEvent.isModified;
     }
 
     /**
@@ -166,9 +164,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         return modified;
     }
 
-    /**
-     * Removes all elements from this set.
-     */
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -180,20 +175,16 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
      * Returns a shallow copy of this set.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public @NonNull ChampSet<E> clone() {
         try {
-            @SuppressWarnings("unchecked") final ChampSet<E> that = (ChampSet<E>) super.clone();
-            that.mutator = null;
-            this.mutator = null;
-            return that;
+            mutator = null;
+            return (ChampSet<E>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
@@ -213,7 +204,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     @Override
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new KeyIterator<E>(root, this::persistentRemove),
+                new KeyIterator<>(root, this::persistentRemove),
                 () -> this.modCount);
     }
 
@@ -222,26 +213,17 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         remove(e);
     }
 
-    /**
-     * Removes the specified element if it is in this set.
-     *
-     * @param o an element
-     * @return {@code true} if this set changed
-     */
     @Override
     public boolean remove(final Object o) {
-        @SuppressWarnings("unchecked")
-        E key = (E) o;
         final ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E> newRoot = root.remove(
-                getOrCreateMutator(), key, Objects.hashCode(key), 0, changeEvent);
+        @SuppressWarnings("unchecked") final BitmapIndexedNode<E> newRoot = root.remove(
+                getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
             modCount++;
-            return true;
         }
-        return false;
+        return changeEvent.isModified;
     }
 
     /**
@@ -282,16 +264,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     }
 
     /**
-     * Dumps the internal structure of this set in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public @NonNull String dump() {
-        return new ChampTrieGraphviz<E>()
-                .dumpTrie(root);
-    }
-
-    /**
      * Returns an immutable copy of this set.
      *
      * @return an immutable copy
@@ -301,6 +273,9 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
     }
 
+    private @NonNull Object writeReplace() {
+        return new SerializationProxy<>(this);
+    }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
         private final static long serialVersionUID = 0L;
@@ -313,9 +288,5 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         protected @NonNull Object readResolve() {
             return new ChampSet<>(deserialized);
         }
-    }
-
-    private @NonNull Object writeReplace() {
-        return new SerializationProxy<E>(this);
     }
 }

@@ -55,20 +55,12 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
         if (o == set) {
             return true;
         }
-        if (!(o instanceof ReadOnlySet)) {
-            return false;
+        if (o instanceof ReadOnlySet) {
+            @SuppressWarnings("unchecked")
+            ReadOnlySet<E> that = (ReadOnlySet<E>) o;
+            return set.size() == that.size() && set.containsAll(that);
         }
-
-        @SuppressWarnings("unchecked")
-        ReadOnlyCollection<E> that = (ReadOnlyCollection<E>) o;
-        if (that.size() != set.size()) {
-            return false;
-        }
-        try {
-            return set.containsAll(that);
-        } catch (@NonNull ClassCastException | NullPointerException unused) {
-            return false;
-        }
+        return false;
     }
 
     /**

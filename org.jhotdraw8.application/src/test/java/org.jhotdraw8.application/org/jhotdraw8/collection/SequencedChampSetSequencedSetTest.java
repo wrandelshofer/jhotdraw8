@@ -6,25 +6,11 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 public class SequencedChampSetSequencedSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected @NonNull <T> SequencedSet<T> create(int expectedMaxSize, float maxLoadFactor) {
         return new SequencedChampSet<>();
-    }
-
-    @Test
-    public void testDumpStructure() {
-        SequencedChampSet<HashCollider> instance = new SequencedChampSet<>();
-        Random rng = new Random(0);
-        for (int i = 0; i < 30; i++) {
-            HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);
-            instance.add(key);
-        }
-        System.out.println(instance.dump());
     }
 }

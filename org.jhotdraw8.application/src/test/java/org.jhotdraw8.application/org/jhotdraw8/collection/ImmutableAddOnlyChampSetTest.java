@@ -18,19 +18,19 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class AddOnlyPersistentChampSetTest {
+public class ImmutableAddOnlyChampSetTest {
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {
         return Arrays.asList(
-                dynamicTest("32-bits hash", () -> testPersistentTrieSet(-1)),
-                dynamicTest("3-bits hash", () -> testPersistentTrieSet(7)),
-                dynamicTest("0-bits hash", () -> testPersistentTrieSet(0))
+                dynamicTest("32-bits hash", () -> doTest(-1)),
+                dynamicTest("3-bits hash", () -> doTest(7)),
+                dynamicTest("0-bits hash", () -> doTest(0))
         );
     }
 
 
-    void testPersistentTrieSet(int hashBitMask) {
+    void doTest(int hashBitMask) {
         int bulkSize = 16;
         Random rng = new Random(0);
         for (int i = 0; i < 64; i++) {

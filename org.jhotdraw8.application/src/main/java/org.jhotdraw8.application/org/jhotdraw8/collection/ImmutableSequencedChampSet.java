@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 
@@ -87,8 +88,9 @@ import java.util.function.BiFunction;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKey<E>> implements Serializable,
-        ImmutableSequencedSet<E> {
+public class ImmutableSequencedChampSet<E>
+        extends BitmapIndexedNode<SequencedKey<E>>
+        implements Serializable, ImmutableSequencedSet<E> {
     private final static long serialVersionUID = 0L;
     private static final ImmutableSequencedChampSet<?> EMPTY_SET = new ImmutableSequencedChampSet<>(BitmapIndexedNode.emptyNode(), 0, 0, 0);
 
@@ -96,13 +98,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
 
     /**
      * Counter for the sequence number of the last element. The counter is
-     * incremented when a new entry is added to the end of the sequence.
-     * <p>
-     * The counter is in the range from {@code 0} to
-     * {@link Integer#MAX_VALUE} - 1.
-     * When the counter reaches {@link Integer#MAX_VALUE}, all
-     * sequence numbers are renumbered, and the counter is reset to
-     * {@code size}.
+     * incremented after a new entry has been added to the end of the sequence.
      */
     private final int last;
 
@@ -110,12 +106,6 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
-     * <p>
-     * The counter is in the range from {@code 0} to
-     * {@link Integer#MIN_VALUE}.
-     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
-     * sequence numbers are renumbered, and the counter is reset to
-     * {@code 0}.
      */
     private int first;
 
@@ -342,10 +332,7 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
 
         if (other instanceof ImmutableSequencedChampSet) {
             ImmutableSequencedChampSet<?> that = (ImmutableSequencedChampSet<?>) other;
-            if (this.size != that.size) {
-                return false;
-            }
-            return this.equivalent(that);
+            return size == that.size && equivalent(that);
         } else {
             return ReadOnlySet.setEquals(this, other);
         }
@@ -397,5 +384,22 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
     @Override
     public E getFirst() {
         return SequencedKeyIterator.getFirst(this, first, last).getKey();
+    }
+
+    private static class SerializationProxy<E> extends SetSerializationProxy<E> {
+        private final static long serialVersionUID = 0L;
+
+        protected SerializationProxy(Set<E> target) {
+            super(target);
+        }
+
+        @Override
+        protected @NonNull Object readResolve() {
+            return ImmutableSequencedChampSet.of(deserialized);
+        }
+    }
+
+    private @NonNull Object writeReplace() {
+        return new SerializationProxy<E>(this.toMutable());
     }
 }

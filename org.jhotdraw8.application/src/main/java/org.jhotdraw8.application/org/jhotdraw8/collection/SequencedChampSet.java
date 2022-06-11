@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champset.BitmapIndexedNode;
 import org.jhotdraw8.collection.champset.ChampTrie;
-import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champset.ChangeEvent;
 import org.jhotdraw8.collection.champset.Node;
 import org.jhotdraw8.collection.champset.SequencedKey;
@@ -149,12 +148,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         return addLast(e, (oldk, newk) -> oldk);
     }
 
-    /**
-     * Adds all specified elements that are not already in this set.
-     *
-     * @param c a collection of elements
-     * @return {@code true} if this set changed
-     */
     @Override
     public boolean addAll(@NonNull Collection<? extends E> c) {
         return addAll((Iterable<? extends E>) c);
@@ -170,7 +163,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         if (c == this) {
             return false;
         }
-
         boolean modified = false;
         for (E e : c) {
             modified |= add(e);
@@ -193,12 +185,9 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             size++;
             modCount++;
             first--;
-            if (first == SequencedKey.NO_SEQUENCE_NUMBER - 1) {
-                renumber();
-            }
-            return true;
+            renumber();
         }
-        return false;
+        return changeEvent.isModified;
     }
 
     @Override
@@ -217,18 +206,11 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             size++;
             modCount++;
             last++;
-            if (last == SequencedKey.NO_SEQUENCE_NUMBER) {
-                renumber();
-            }
-
-            return true;
+            renumber();
         }
-        return false;
+        return changeEvent.isModified;
     }
 
-    /**
-     * Removes all elements from this set.
-     */
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -240,44 +222,41 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * Returns a shallow copy of this set.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public @NonNull SequencedChampSet<E> clone() {
         try {
-            @SuppressWarnings("unchecked") final SequencedChampSet<E> that = (SequencedChampSet<E>) super.clone();
-            that.mutator = null;
-            this.mutator = null;
-            return that;
+            mutator = null;
+            return (SequencedChampSet<E>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
         return root.findByKey(new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0) != Node.NO_VALUE;
     }
 
-    /**
-     * Dumps the internal structure of this set in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public @NonNull String dump() {
-        return new ChampTrieGraphviz<SequencedKey<E>>().dumpTrie(root);
-    }
-
-
     @Override
-    public E getLast() {
-        return SequencedKeyIterator.getLast(root, first, last).getKey();
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof SequencedChampSet<?>) {
+            return root.equivalent(((SequencedChampSet<?>) o).root);
+        }
+        return super.equals(o);
     }
 
     @Override
     public E getFirst() {
         return SequencedKeyIterator.getFirst(root, first, last).getKey();
+    }
+
+    @Override
+    public E getLast() {
+        return SequencedKeyIterator.getLast(root, first, last).getKey();
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -311,36 +290,21 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         remove(e);
     }
 
-    /**
-     * Removes the specified element if it is in this set.
-     *
-     * @param o an element
-     * @return {@code true} if this set changed
-     */
     @Override
     public boolean remove(final Object o) {
-        @SuppressWarnings("unchecked")
-        E key = (E) o;
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
+        @SuppressWarnings("unchecked")//
         final BitmapIndexedNode<SequencedKey<E>> newRoot = root.remove(
-                getOrCreateMutator(), new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0,
-                changeEvent);
+                getOrCreateMutator(), new SequencedKey<>((E) o, SequencedKey.NO_SEQUENCE_NUMBER),
+                Objects.hashCode(o), 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
             modCount++;
-            return true;
         }
-        return false;
+        return changeEvent.isModified;
     }
 
-
-    /**
-     * Removes all specified elements that are in this set.
-     *
-     * @param c a collection of elements
-     * @return {@code true} if this set changed
-     */
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
         return removeAll((Iterable<?>) c);
@@ -368,43 +332,33 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
-    public E removeLast() {
-        SequencedKey<E> k = SequencedKeyIterator.getLast(root, first, last);
+    public E removeFirst() {
+        SequencedKey<E> k = SequencedKeyIterator.getFirst(root, first, last);
         remove(k.getKey());
-        this.last = k.getSequenceNumber();
+        first = k.getSequenceNumber() + 1;
         return k.getKey();
     }
 
     @Override
-    public E removeFirst() {
-        SequencedKey<E> k = SequencedKeyIterator.getFirst(root, first, last);
+    public E removeLast() {
+        SequencedKey<E> k = SequencedKeyIterator.getLast(root, first, last);
         remove(k.getKey());
-        this.first = k.getSequenceNumber() + 1;
+        last = k.getSequenceNumber();
         return k.getKey();
     }
 
     private void renumber() {
-        root = ChampTrie.renumber(size, root, getOrCreateMutator());
-        last = size;
-        first = 0;
+        if (first == SequencedKey.NO_SEQUENCE_NUMBER
+                || last == SequencedKey.NO_SEQUENCE_NUMBER) {
+            root = ChampTrie.renumber(size, root, getOrCreateMutator());
+            last = size;
+            first = 0;
+        }
     }
 
     @Override
     public int size() {
         return size;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (o instanceof SequencedChampSet<?>) {
-            SequencedChampSet<?> that = (SequencedChampSet<?>) o;
-            return this.root.equivalent(that.root);
-        }
-
-        return super.equals(o);
     }
 
     /**
@@ -418,7 +372,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     private @NonNull Object writeReplace() {
-        return new SerializationProxy<E>(this);
+        return new SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
