@@ -75,7 +75,6 @@ import java.util.Set;
 @SuppressWarnings("exports")
 public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    @SuppressWarnings("unchecked")
     private static final ImmutableChampSet<?> EMPTY = new ImmutableChampSet<>(BitmapIndexedNode.emptyNode(), 0);
 
     final int size;
@@ -122,35 +121,34 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public boolean contains(@Nullable final Object o) {
-        @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(key, Objects.hashCode(key), 0) != Node.NO_VALUE;
+    @SuppressWarnings("unchecked")
+    public boolean contains(@Nullable Object o) {
+        return findByKey((E) o, Objects.hashCode(o), 0) != Node.NO_VALUE;
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyAdd(final @NonNull E key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, (oldk, newk) -> oldk);
+    public @NonNull ImmutableChampSet<E> copyAdd(@NonNull E key) {
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, (oldk, newk) -> oldk);
         if (changeEvent.isModified) {
             return new ImmutableChampSet<>(newRootNode, size + 1);
         }
-
         return this;
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull ImmutableChampSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull ImmutableChampSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ImmutableChampSet<?>)) {
             return (ImmutableChampSet<E>) set;
         }
         if (isEmpty() && (set instanceof ChampSet)) {
             return ((ChampSet<E>) set).toImmutable();
         }
-        final ChampSet<E> t = this.toMutable();
+        ChampSet<E> t = toMutable();
         boolean modified = false;
-        for (final E key : set) {
+        for (E key : set) {
             modified |= t.add(key);
         }
         return modified ? t.toImmutable() : this;
@@ -162,29 +160,27 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRemove(final @NonNull E key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E> newRootNode = remove(null, key,
-                keyHash, 0, changeEvent);
+    public @NonNull ImmutableChampSet<E> copyRemove(@NonNull E key) {
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
             return new ImmutableChampSet<>(newRootNode, size - 1);
         }
-
         return this;
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRemoveAll(final @NonNull Iterable<?> set) {
-        if (this.isEmpty()
-                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
+    public @NonNull ImmutableChampSet<E> copyRemoveAll(@NonNull Iterable<?> set) {
+        if (isEmpty()
+                || (set instanceof Collection<?>) && ((Collection<?>) set).isEmpty()
+                || (set instanceof ReadOnlyCollection<?>) && ((ReadOnlyCollection<?>) set).isEmpty()) {
             return this;
         }
         if (set == this) {
             return of();
         }
-        final ChampSet<E> t = this.toMutable();
+        final ChampSet<E> t = toMutable();
         boolean modified = false;
         for (final Object key : set) {
             //noinspection SuspiciousMethodCalls
@@ -194,20 +190,18 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
                     break;
                 }
             }
-
         }
         return modified ? t.toImmutable() : this;
     }
 
     @Override
     public @NonNull ImmutableChampSet<E> copyRetainAll(final @NonNull Collection<?> set) {
-        if (this.isEmpty()) {
+        if (isEmpty()) {
             return this;
         }
         if (set.isEmpty()) {
             return of();
         }
-
         final ChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (Object key : this) {
@@ -233,7 +227,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
         }
         if (other instanceof ImmutableChampSet) {
             ImmutableChampSet<?> that = (ImmutableChampSet<?>) other;
-            return this.size == that.size && equivalent(that);
+            return size == that.size && equivalent(that);
         }
         return ReadOnlySet.setEquals(this, other);
     }
@@ -275,7 +269,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
         private final static long serialVersionUID = 0L;
 
-        protected SerializationProxy(Set<E> target) {
+        protected SerializationProxy(@NonNull Set<E> target) {
             super(target);
         }
 

@@ -117,17 +117,11 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         }
     }
 
-    /**
-     * Adds the specified element if it is not already in this set.
-     *
-     * @param e an element
-     * @return {@code true} if this set changed
-     */
     @Override
     public boolean add(final @Nullable E e) {
-        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<E> newRoot = root.update(getOrCreateMutator(), e, Objects.hashCode(e), 0, changeEvent,
-                (oldk, newk) -> oldk);
+        ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        BitmapIndexedNode<E> newRoot = root.update(getOrCreateMutator(),
+                e, Objects.hashCode(e), 0, changeEvent, (oldk, newk) -> oldk);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -136,12 +130,6 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         return changeEvent.isModified;
     }
 
-    /**
-     * Adds all specified elements that are not already in this set.
-     *
-     * @param c a collection of elements
-     * @return {@code true} if this set changed
-     */
     @Override
     public boolean addAll(@NonNull Collection<? extends E> c) {
         return addAll((Iterable<? extends E>) c);
@@ -186,9 +174,9 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(key, Objects.hashCode(key), 0) != Node.NO_VALUE;
+        return root.findByKey((E) o, Objects.hashCode(o), 0) != Node.NO_VALUE;
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -214,9 +202,10 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     }
 
     @Override
-    public boolean remove(final Object o) {
-        final ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        @SuppressWarnings("unchecked") final BitmapIndexedNode<E> newRoot = root.remove(
+    @SuppressWarnings("unchecked")
+    public boolean remove(Object o) {
+        ChangeEvent<E> changeEvent = new ChangeEvent<>();
+        BitmapIndexedNode<E> newRoot = root.remove(
                 getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, changeEvent);
         if (changeEvent.isModified) {
             root = newRoot;
@@ -280,7 +269,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
         private final static long serialVersionUID = 0L;
 
-        protected SerializationProxy(Set<E> target) {
+        protected SerializationProxy(@NonNull Set<E> target) {
             super(target);
         }
 

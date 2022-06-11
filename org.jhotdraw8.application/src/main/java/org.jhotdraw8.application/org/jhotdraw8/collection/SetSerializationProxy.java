@@ -59,7 +59,7 @@ abstract class SetSerializationProxy<E> implements Serializable {
     private final transient Set<E> serialized;
     protected transient List<E> deserialized;
 
-    protected SetSerializationProxy(Set<E> serialized) {
+    protected SetSerializationProxy(@NonNull Set<E> serialized) {
         this.serialized = serialized;
     }
 
