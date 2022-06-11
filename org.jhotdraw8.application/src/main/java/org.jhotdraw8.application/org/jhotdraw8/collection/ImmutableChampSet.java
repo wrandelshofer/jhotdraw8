@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champset.BitmapIndexedNode;
 import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champset.ChangeEvent;
-import org.jhotdraw8.collection.champset.ElementIterator;
+import org.jhotdraw8.collection.champset.KeyIterator;
 import org.jhotdraw8.collection.champset.Node;
 
 import java.io.Serializable;
@@ -247,7 +247,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new ElementIterator<E>(this, null);
+        return new KeyIterator<E>(this, null);
     }
 
     @Override

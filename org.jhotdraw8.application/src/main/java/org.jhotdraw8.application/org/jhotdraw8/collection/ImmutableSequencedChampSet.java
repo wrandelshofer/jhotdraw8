@@ -175,17 +175,14 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
 
     @Override
     public ImmutableSequencedChampSet<E> copyRemoveFirst() {
-        return (ImmutableSequencedChampSet<E>) ImmutableSequencedSet.super.copyRemoveFirst();
+        SequencedKey<E> k = SequencedKeyIterator.getFirst(this, first, last);
+        return copyRemove(k.getKey(), k.getSequenceNumber() + 1, last);
     }
 
     @Override
     public ImmutableSequencedChampSet<E> copyRemoveLast() {
-        return (ImmutableSequencedChampSet<E>) ImmutableSequencedSet.super.copyRemoveLast();
-    }
-
-    @Override
-    public E getLast() {
-        return iterator(true).next();
+        SequencedKey<E> k = SequencedKeyIterator.getLast(this, first, last);
+        return copyRemove(k.getKey(), first, k.getSequenceNumber());
     }
 
     @NonNull
@@ -270,16 +267,19 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampSet<E> copyRemove(final @NonNull E key) {
+    public @NonNull ImmutableSequencedChampSet<E> copyRemove(final @Nullable E key) {
+        return copyRemove(key, first, last);
+    }
+
+    private @NonNull ImmutableSequencedChampSet<E> copyRemove(final @Nullable E key, int newFirst, int newLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedKey<E>> newRootNode = remove(null,
                 new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER),
                 keyHash, 0, changeEvent);
         if (changeEvent.isModified) {
-            return new ImmutableSequencedChampSet<>(newRootNode, size - 1, first, last);
+            return new ImmutableSequencedChampSet<>(newRootNode, size - 1, newFirst, newLast);
         }
-
         return this;
     }
 
@@ -387,5 +387,15 @@ public class ImmutableSequencedChampSet<E> extends BitmapIndexedNode<SequencedKe
     @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);
+    }
+
+    @Override
+    public E getLast() {
+        return SequencedKeyIterator.getLast(this, first, last).getKey();
+    }
+
+    @Override
+    public E getFirst() {
+        return SequencedKeyIterator.getFirst(this, first, last).getKey();
     }
 }

@@ -272,7 +272,12 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public E getLast() {
-        return iterator(true).next();
+        return SequencedKeyIterator.getLast(root, first, last).getKey();
+    }
+
+    @Override
+    public E getFirst() {
+        return SequencedKeyIterator.getFirst(root, first, last).getKey();
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -364,10 +369,18 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public E removeLast() {
-        Iterator<E> iterator = iterator(true);
-        E e = iterator.next();
-        iterator.remove();
-        return e;
+        SequencedKey<E> k = SequencedKeyIterator.getLast(root, first, last);
+        remove(k.getKey());
+        this.last = k.getSequenceNumber();
+        return k.getKey();
+    }
+
+    @Override
+    public E removeFirst() {
+        SequencedKey<E> k = SequencedKeyIterator.getFirst(root, first, last);
+        remove(k.getKey());
+        this.first = k.getSequenceNumber() + 1;
+        return k.getKey();
     }
 
     private void renumber() {

@@ -224,8 +224,8 @@ public class LongArrayHeap extends AbstractCollection<Long>
             }
             buf[i] = l;
         }
-        for (; i >= 0; i--) {
-            addAsLong(buf[i]);
+        for (int j = 0; j < i; j++) {
+            addAsLong(buf[j]);
         }
 
         return removed;

@@ -5,6 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.LongArrayHeap;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -25,7 +26,7 @@ public class SequencedKeyIterator<E> implements Iterator<E> {
         queue = new LongArrayHeap(size);
         array = (SequencedKey<E>[]) new SequencedKey[size];
         int i = 0;
-        for (Iterator<SequencedKey<E>> it = new ElementIterator<>(rootNode, null); it.hasNext(); i++) {
+        for (Iterator<SequencedKey<E>> it = new KeyIterator<>(rootNode, null); it.hasNext(); i++) {
             SequencedKey<E> k = it.next();
             array[i] = k;
             int sequenceNumber = k.getSequenceNumber();
@@ -55,5 +56,46 @@ public class SequencedKeyIterator<E> implements Iterator<E> {
         }
         persistentRemoveFunction.accept(current.getKey());
         canRemove = false;
+    }
+
+
+    public static <E> @NonNull SequencedKey<E> getLast(@NonNull Node<SequencedKey<E>> root, int first, int last) {
+        int maxSeq = first;
+        SequencedKey<E> maxKey = null;
+        for (KeyIterator<SequencedKey<E>> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+            SequencedKey<E> k = i.next();
+            int seq = k.getSequenceNumber();
+            if (seq >= maxSeq) {
+                maxSeq = seq;
+                maxKey = k;
+                if (seq == last) {
+                    break;
+                }
+            }
+        }
+        if (maxKey == null) {
+            throw new NoSuchElementException();
+        }
+        return maxKey;
+    }
+
+    public static <E> @NonNull SequencedKey<E> getFirst(@NonNull Node<SequencedKey<E>> root, int first, int last) {
+        int minSeq = last;
+        SequencedKey<E> minKey = null;
+        for (KeyIterator<SequencedKey<E>> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+            SequencedKey<E> k = i.next();
+            int seq = k.getSequenceNumber();
+            if (seq <= minSeq) {
+                minSeq = seq;
+                minKey = k;
+                if (seq == first) {
+                    break;
+                }
+            }
+        }
+        if (minKey == null) {
+            throw new NoSuchElementException();
+        }
+        return minKey;
     }
 }

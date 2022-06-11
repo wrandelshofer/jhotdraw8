@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champset.BitmapIndexedNode;
 import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champset.ChangeEvent;
-import org.jhotdraw8.collection.champset.ElementIterator;
+import org.jhotdraw8.collection.champset.KeyIterator;
 import org.jhotdraw8.collection.champset.Node;
 
 import java.io.Serializable;
@@ -213,7 +213,7 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     @Override
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new ElementIterator<E>(root, this::persistentRemove),
+                new KeyIterator<E>(root, this::persistentRemove),
                 () -> this.modCount);
     }
 

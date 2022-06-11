@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  * passed to this iterator must not change the trie structure that the iterator
  * currently uses.
  */
-public class ElementIterator<K> implements Iterator<K> {
+public class KeyIterator<K> implements Iterator<K> {
 
     private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
     int nextValueCursor;
@@ -44,7 +44,7 @@ public class ElementIterator<K> implements Iterator<K> {
      *                                 the function must not change the trie that was passed
      *                                 to this iterator
      */
-    public ElementIterator(@NonNull Node<K> rootNode, @Nullable Consumer<K> persistentRemoveFunction) {
+    public KeyIterator(@NonNull Node<K> rootNode, @Nullable Consumer<K> persistentRemoveFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
         if (rootNode.hasNodes()) {
             nextStackLevel = 0;
