@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 
 /**
@@ -76,7 +79,9 @@ import java.util.Set;
 public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
     private static final ImmutableChampSet<?> EMPTY = new ImmutableChampSet<>(BitmapIndexedNode.emptyNode(), 0);
-
+    public static final @NonNull BiFunction<?, ?, ?> UPDATE_FUNCTION = (oldk, newk) -> oldk;
+    public static final @NonNull BiPredicate<?, ?> EQUALS_FUNCTION = Objects::equals;
+    public static final @NonNull ToIntFunction<?> HASH_FUNCTION = Objects::hashCode;
     final int size;
 
     ImmutableChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
@@ -123,14 +128,14 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return findByKey((E) o, Objects.hashCode(o), 0) != Node.NO_VALUE;
+        return findByKey((E) o, Objects.hashCode(o), 0, getEqualsFunction()) != Node.NO_VALUE;
     }
 
     @Override
     public @NonNull ImmutableChampSet<E> copyAdd(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, (oldk, newk) -> oldk);
+        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (changeEvent.isModified) {
             return new ImmutableChampSet<>(newRootNode, size + 1);
         }
@@ -163,7 +168,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     public @NonNull ImmutableChampSet<E> copyRemove(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, changeEvent);
+        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, changeEvent, getEqualsFunction());
         if (changeEvent.isModified) {
             return new ImmutableChampSet<>(newRootNode, size - 1);
         }
@@ -281,5 +286,23 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
 
     private @NonNull Object writeReplace() {
         return new SerializationProxy<E>(this.toMutable());
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private ToIntFunction<E> getHashFunction() {
+        return (ToIntFunction<E>) HASH_FUNCTION;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private BiPredicate<E, E> getEqualsFunction() {
+        return (BiPredicate<E, E>) EQUALS_FUNCTION;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private BiFunction<E, E, E> getUpdateFunction() {
+        return (BiFunction<E, E, E>) UPDATE_FUNCTION;
     }
 }

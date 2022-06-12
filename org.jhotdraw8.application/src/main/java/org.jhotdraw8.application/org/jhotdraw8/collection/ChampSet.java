@@ -18,6 +18,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -85,6 +88,9 @@ import java.util.Set;
  */
 public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
+    public static final @NonNull BiFunction<?, ?, ?> UPDATE_FUNCTION = (oldk, newk) -> oldk;
+    public static final @NonNull BiPredicate<?, ?> EQUALS_FUNCTION = Objects::equals;
+    public static final @NonNull ToIntFunction<?> HASH_FUNCTION = Objects::hashCode;
     private transient @Nullable UniqueId mutator;
     private transient @NonNull BitmapIndexedNode<E> root;
     private transient int size;
@@ -121,13 +127,34 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     public boolean add(final @Nullable E e) {
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRoot = root.update(getOrCreateMutator(),
-                e, Objects.hashCode(e), 0, changeEvent, (oldk, newk) -> oldk);
+                e, Objects.hashCode(e), 0, changeEvent,
+                getUpdateFunction(),
+                getEqualsFunction(),
+                getHashFunction());
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
             modCount++;
         }
         return changeEvent.isModified;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private ToIntFunction<E> getHashFunction() {
+        return (ToIntFunction<E>) HASH_FUNCTION;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private BiPredicate<E, E> getEqualsFunction() {
+        return (BiPredicate<E, E>) EQUALS_FUNCTION;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private BiFunction<E, E, E> getUpdateFunction() {
+        return (BiFunction<E, E, E>) UPDATE_FUNCTION;
     }
 
     @Override
@@ -176,7 +203,8 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return root.findByKey((E) o, Objects.hashCode(o), 0) != Node.NO_VALUE;
+        return root.findByKey((E) o, Objects.hashCode(o), 0,
+                getEqualsFunction()) != Node.NO_VALUE;
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -206,7 +234,8 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     public boolean remove(Object o) {
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRoot = root.remove(
-                getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, changeEvent);
+                getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, changeEvent,
+                getEqualsFunction());
         if (changeEvent.isModified) {
             root = newRoot;
             size--;

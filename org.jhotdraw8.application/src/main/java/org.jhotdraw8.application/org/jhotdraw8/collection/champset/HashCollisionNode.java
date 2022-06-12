@@ -12,6 +12,8 @@ import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -37,6 +39,7 @@ class HashCollisionNode<K> extends Node<K> {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     boolean equivalent(@NonNull Object other) {
         if (this == other) {
@@ -57,7 +60,7 @@ class HashCollisionNode<K> extends Node<K> {
             final Object key = keys[i];
             for (int j = 0; j < remainingLength; j += 1) {
                 final Object todoKey = thatEntriesCloned[j];
-                if (Objects.equals(todoKey, key)) {
+                if (Objects.equals((K) todoKey, (K) key)) {
                     // We have found an equal entry. We do not need to compare
                     // this entry again. So we replace it with the last entry
                     // from the array and reduce the remaining length.
@@ -73,11 +76,12 @@ class HashCollisionNode<K> extends Node<K> {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Object findByKey(final K key, final int keyHash, final int shift) {
+    Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction) {
         for (Object entry : keys) {
-            if (Objects.equals(key, entry)) {
+            if (equalsFunction.test(key, (K) entry)) {
                 return entry;
             }
         }
@@ -114,12 +118,13 @@ class HashCollisionNode<K> extends Node<K> {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     @Nullable
     Node<K> remove(final @Nullable UniqueId mutator, final K key,
-                   final int keyHash, final int shift, final @NonNull ChangeEvent<K> details) {
+                   final int keyHash, final int shift, final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
         for (int idx = 0, i = 0; i < keys.length; i += 1, idx++) {
-            if (Objects.equals(keys[i], key)) {
+            if (equalsFunction.test((K) keys[i], key)) {
                 @SuppressWarnings("unchecked") final K currentVal = (K) keys[i];
                 details.updated(currentVal);
 
@@ -150,19 +155,20 @@ class HashCollisionNode<K> extends Node<K> {
     @Nullable
     Node<K> update(final @Nullable UniqueId mutator, final K key,
                    final int keyHash, final int shift, final @NonNull ChangeEvent<K> details,
-                   final @NonNull BiFunction<K, K, K> updateFunction) {
+                   final @NonNull BiFunction<K, K, K> updateFunction, @NonNull BiPredicate<K, K> equalsFunction,
+                   @NonNull ToIntFunction<K> hashFunction) {
         assert this.hash == keyHash;
 
         for (int i = 0; i < keys.length; i++) {
-            Object currentKey = keys[i];
-            if (Objects.equals(currentKey, key)) {
-                K updatedKey = updateFunction.apply((K) currentKey, key);
-                if (updatedKey == currentKey) {
+            K oldKey = (K) keys[i];
+            if (equalsFunction.test(oldKey, key)) {
+                K updatedKey = updateFunction.apply(oldKey, key);
+                if (updatedKey == oldKey) {
                     details.found(key);
                     return this;
                 } else {
                     // copy entries and replace the entry
-                    details.modified();
+                    details.updated(oldKey);
                     if (isAllowedToEdit(mutator)) {
                         this.keys[i] = updatedKey;
                         return this;

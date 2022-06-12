@@ -29,11 +29,11 @@ public class SequencedEntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     private final @Nullable Consumer<K> persistentRemoveFunction;
 
     @SuppressWarnings("unchecked")
-    public SequencedEntryIterator(int size, @NonNull Node<K, V> rootNode, int entryLength, int numFields, boolean reversed, @Nullable Consumer<K> persistentRemoveFunction, BiConsumer<K, V> persistentPutIfPresentFunction) {
+    public SequencedEntryIterator(int size, @NonNull Node<K, V> rootNode, boolean reversed, @Nullable Consumer<K> persistentRemoveFunction, BiConsumer<K, V> persistentPutIfPresentFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
         Comparator<SequencedMapEntry<K, V>> comparator = Comparator.comparingInt(SequencedMapEntry::getSequenceNumber);
         queue = new PriorityQueue<>(Math.max(1, size), reversed ? comparator.reversed() : comparator);
-        for (EntryIterator<K, V> it = new EntryIterator<>(rootNode, entryLength, numFields, null, persistentPutIfPresentFunction); it.hasNext(); ) {
+        for (EntryIterator<K, V> it = new EntryIterator<>(rootNode, null, persistentPutIfPresentFunction); it.hasNext(); ) {
             queue.add(it.next());
         }
     }

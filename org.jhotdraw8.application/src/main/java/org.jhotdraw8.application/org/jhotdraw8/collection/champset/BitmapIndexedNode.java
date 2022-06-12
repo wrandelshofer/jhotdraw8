@@ -10,8 +10,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ArrayHelper;
 import org.jhotdraw8.collection.UniqueId;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
@@ -123,6 +124,7 @@ public class BitmapIndexedNode<K> extends Node<K> {
         return dataMap;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equivalent(final @NonNull Object other) {
         if (this == other) {
@@ -137,20 +139,20 @@ public class BitmapIndexedNode<K> extends Node<K> {
                 && dataMap() == that.dataMap()
                 && ArrayHelper.equals(mixed, 0, splitAt, thatNodes, 0, splitAt)
                 && ArrayHelper.equals(mixed, splitAt, mixed.length, thatNodes, splitAt, thatNodes.length,
-                (a, b) -> ((Node<?>) a).equivalent(b));
+                (a, b) -> ((Node<K>) a).equivalent(b));
     }
 
 
     @Override
-    public @Nullable Object findByKey(final K key, final int keyHash, final int shift) {
+    public @Nullable Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction) {
         final int bitpos = bitpos(mask(keyHash, shift));
         if ((dataMap & bitpos) != 0) {
             final int index = dataIndex(bitpos);
-            if (Objects.equals(getKey(index), key)) {
+            if (equalsFunction.test(getKey(index), key)) {
                 return getKey(index);
             }
         } else if ((nodeMap & bitpos) != 0) {
-            return nodeAt(bitpos).findByKey(key, keyHash, shift + BIT_PARTITION_SIZE);
+            return nodeAt(bitpos).findByKey(key, keyHash, shift + BIT_PARTITION_SIZE, equalsFunction);
         }
         return NO_VALUE;
     }
@@ -208,23 +210,23 @@ public class BitmapIndexedNode<K> extends Node<K> {
     @Override
     public @NonNull BitmapIndexedNode<K> remove(final @Nullable UniqueId mutator, final K key,
                                                 final int keyHash, final int shift,
-                                                final @NonNull ChangeEvent<K> details) {
+                                                final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
 
         if ((dataMap & bitpos) != 0) {
-            return removeData(mutator, key, keyHash, shift, details, bitpos);
+            return removeData(mutator, key, keyHash, shift, details, bitpos, equalsFunction);
         } else if ((nodeMap & bitpos) != 0) {
-            return removeSubNode(mutator, key, keyHash, shift, details, bitpos);
+            return removeSubNode(mutator, key, keyHash, shift, details, bitpos, equalsFunction);
         }
 
         return this;
     }
 
-    private @NonNull BitmapIndexedNode<K> removeData(@Nullable UniqueId mutator, K key, int keyHash, int shift, @NonNull ChangeEvent<K> details, int bitpos) {
+    private @NonNull BitmapIndexedNode<K> removeData(@Nullable UniqueId mutator, K key, int keyHash, int shift, @NonNull ChangeEvent<K> details, int bitpos, @NonNull BiPredicate<K, K> equalsFunction) {
         final int dataIndex = dataIndex(bitpos);
         int entryLength = 1;
-        if (!Objects.equals(getKey(dataIndex), key)) {
+        if (!equalsFunction.test(getKey(dataIndex), key)) {
             return this;
         }
 
@@ -250,10 +252,10 @@ public class BitmapIndexedNode<K> extends Node<K> {
 
     private @NonNull BitmapIndexedNode<K> removeSubNode(@Nullable UniqueId mutator, K key, int keyHash, int shift,
                                                         @NonNull ChangeEvent<K> details,
-                                                        int bitpos) {
+                                                        int bitpos, @NonNull BiPredicate<K, K> equalsFunction) {
         final Node<K> subNode = nodeAt(bitpos);
         final Node<K> subNodeNew =
-                subNode.remove(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details);
+                subNode.remove(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, equalsFunction);
 
         if (subNode == subNodeNew) {
             return this;
@@ -272,24 +274,27 @@ public class BitmapIndexedNode<K> extends Node<K> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<K> update(final @Nullable UniqueId mutator,
-                                                final @Nullable K key,
-                                                final int keyHash, final int shift,
-                                                final @NonNull ChangeEvent<K> details, @NonNull BiFunction<K, K, K> updateFunction) {
+    public @NonNull BitmapIndexedNode<K> update(@Nullable UniqueId mutator,
+                                                @Nullable K key,
+                                                int keyHash, int shift,
+                                                @NonNull ChangeEvent<K> details,
+                                                @NonNull BiFunction<K, K, K> updateFunction,
+                                                @NonNull BiPredicate<K, K> equalsFunction,
+                                                @NonNull ToIntFunction<K> hashFunction) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
 
         if ((dataMap & bitpos) != 0) { // inplace value
             final int dataIndex = dataIndex(bitpos);
-            final K currentKey = getKey(dataIndex);
-            if (Objects.equals(currentKey, key)) {
-                K updatedKey = updateFunction.apply(currentKey, key);
-                if (updatedKey == currentKey) {
-                    details.found(key);
+            final K oldKey = getKey(dataIndex);
+            if (equalsFunction.test(oldKey, key)) {
+                K updatedKey = updateFunction.apply(oldKey, key);
+                if (updatedKey == oldKey) {
+                    details.found(oldKey);
                     return this;
                 } else {
                     // copy entries and replace the entry
-                    details.modified();
+                    details.updated(oldKey);
                     if (isAllowedToEdit(mutator)) {
                         this.mixed[dataIndex] = updatedKey;
                         return this;
@@ -301,7 +306,7 @@ public class BitmapIndexedNode<K> extends Node<K> {
             } else {
                 final Node<K> subNodeNew =
                         mergeTwoDataEntriesIntoNode(mutator,
-                                currentKey, Objects.hashCode(currentKey),
+                                oldKey, hashFunction.applyAsInt(oldKey),
                                 key, keyHash, shift + BIT_PARTITION_SIZE);
 
                 details.modified();
@@ -310,7 +315,7 @@ public class BitmapIndexedNode<K> extends Node<K> {
         } else if ((nodeMap & bitpos) != 0) { // node (not value)
             final Node<K> subNode = nodeAt(bitpos);
             final Node<K> subNodeNew =
-                    subNode.update(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, updateFunction);
+                    subNode.update(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
 
             if (details.isModified()) {
                 return copyAndSetNode(mutator, bitpos, subNodeNew);

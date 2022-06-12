@@ -26,8 +26,6 @@ import java.util.function.Consumer;
  */
 public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
 
-    final int entryLength;
-    final int numFields;
     private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
     int nextValueCursor;
     private int nextValueLength;
@@ -44,8 +42,6 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
      * Creates a new instance.
      *
      * @param rootNode                       the root node of the trie
-     * @param entryLength                    the length of an entry
-     * @param numFields                      the number of fields in an entry minus the sequence number field
      * @param persistentRemoveFunction       a function that removes an entry from a field;
      *                                       the function must not change the trie that was passed
      *                                       to this iterator
@@ -53,9 +49,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
      *                                       the function must not change the trie that was passed
      *                                       to this iterator
      */
-    public EntryIterator(@NonNull Node<K, V> rootNode, int entryLength, int numFields, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
-        this.entryLength = entryLength;
-        this.numFields = numFields;
+    public EntryIterator(@NonNull Node<K, V> rootNode, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
         this.persistentPutIfPresentFunction = persistentPutIfPresentFunction;
         if (rootNode.hasNodes()) {
@@ -76,7 +70,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         if (nextValueCursor < nextValueLength) {
             return true;
         } else {
-            return searchNextValueNode(entryLength);
+            return searchNextValueNode();
         }
     }
 
@@ -95,7 +89,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     /*
      * Searches for the next node that contains values.
      */
-    private boolean searchNextValueNode(int entryLength) {
+    private boolean searchNextValueNode() {
         while (nextStackLevel >= 0) {
             final int currentCursorIndex = nextStackLevel * 2;
             final int currentLengthIndex = currentCursorIndex + 1;
@@ -133,7 +127,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         if (persistentRemoveFunction == null) {
             throw new UnsupportedOperationException("remove");
         }
-        if (!canRemove) {
+        if (!canRemove || current == null) {
             throw new IllegalStateException();
         }
         Map.Entry<K, V> toRemove = current;

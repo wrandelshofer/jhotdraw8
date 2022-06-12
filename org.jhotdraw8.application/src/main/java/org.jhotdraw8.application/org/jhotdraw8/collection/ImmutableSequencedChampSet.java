@@ -177,14 +177,14 @@ public class ImmutableSequencedChampSet<E>
 
     @NonNull
     private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<SequencedKey<E>> newRootNode) {
-        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId());
+        newRootNode = ChampTrie.renumber(size, newRootNode, new UniqueId(), Objects::hashCode, Objects::equals);
         return new ImmutableSequencedChampSet<>(newRootNode, size + 1, first, size);
     }
 
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0) != Node.NO_VALUE;
+        return findByKey(new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0, Objects::equals) != Node.NO_VALUE;
     }
 
     @Override
@@ -205,7 +205,7 @@ public class ImmutableSequencedChampSet<E>
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedKey<E>> newRootNode = update(null,
-                new SequencedKey<>(key, last), keyHash, 0, changeEvent, updateFunction);
+                new SequencedKey<>(key, last), keyHash, 0, changeEvent, updateFunction, Objects::equals, Objects::hashCode);
         if (changeEvent.isModified) {
             if (last + 1 == SequencedKey.NO_SEQUENCE_NUMBER) {
                 return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
@@ -222,7 +222,7 @@ public class ImmutableSequencedChampSet<E>
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedKey<E>> newRootNode = update(null,
-                new SequencedKey<>(key, first - 1), keyHash, 0, changeEvent, updateFunction);
+                new SequencedKey<>(key, first - 1), keyHash, 0, changeEvent, updateFunction, Objects::equals, Objects::hashCode);
         if (changeEvent.isModified) {
             if (first - 1 == SequencedKey.NO_SEQUENCE_NUMBER - 1) {
                 return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
@@ -266,7 +266,7 @@ public class ImmutableSequencedChampSet<E>
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedKey<E>> newRootNode = remove(null,
                 new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER),
-                keyHash, 0, changeEvent);
+                keyHash, 0, changeEvent, Objects::equals);
         if (changeEvent.isModified) {
             return new ImmutableSequencedChampSet<>(newRootNode, size - 1, newFirst, newLast);
         }

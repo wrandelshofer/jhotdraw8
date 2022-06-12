@@ -10,6 +10,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Objects;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Provides static utility methods for CHAMP tries.
@@ -48,7 +50,9 @@ public class ChampTrie {
      * @param <K>     the key type
      * @return the new root
      */
-    public static <K> BitmapIndexedNode<SequencedKey<K>> renumber(int size, @NonNull BitmapIndexedNode<SequencedKey<K>> root, @NonNull UniqueId mutator) {
+    public static <K> BitmapIndexedNode<SequencedKey<K>> renumber(int size, @NonNull BitmapIndexedNode<SequencedKey<K>> root, @NonNull UniqueId mutator,
+                                                                  @NonNull ToIntFunction<SequencedKey<K>> hashFunction,
+                                                                  @NonNull BiPredicate<SequencedKey<K>, SequencedKey<K>> equalsFunction) {
         BitmapIndexedNode<SequencedKey<K>> newRoot = root;
         ChangeEvent<SequencedKey<K>> details = new ChangeEvent<>();
         int count = Integer.MIN_VALUE;
@@ -58,7 +62,8 @@ public class ChampTrie {
             newRoot = newRoot.update(mutator,
                     newElement,
                     Objects.hashCode(e), 0, details,
-                    (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk);
+                    (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk,
+                    equalsFunction, hashFunction);
             count++;
         }
         return newRoot;

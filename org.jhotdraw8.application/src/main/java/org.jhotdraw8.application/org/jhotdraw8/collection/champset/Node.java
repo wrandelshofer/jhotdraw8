@@ -11,6 +11,8 @@ import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a node in a CHAMP trie.
@@ -137,7 +139,7 @@ public abstract class Node<K> {
      * @param shift   the shift for this node
      * @return the value, returns {@link #NO_VALUE} if the value is not present.
      */
-    abstract Object findByKey(final K key, final int keyHash, final int shift);
+    abstract Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction);
 
     abstract @Nullable K getKey(final int index);
 
@@ -161,7 +163,7 @@ public abstract class Node<K> {
     abstract int nodeArity();
 
     abstract @NonNull Node<K> remove(final @Nullable UniqueId mutator, final K key,
-                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details);
+                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction);
 
     /**
      * Inserts or updates a key in the trie.
@@ -178,5 +180,8 @@ public abstract class Node<K> {
      * @return the updated trie
      */
     abstract @NonNull Node<K> update(final @Nullable UniqueId mutator, final K key,
-                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details, @NonNull BiFunction<K, K, K> updateFunction);
+                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details,
+                                     @NonNull BiFunction<K, K, K> updateFunction,
+                                     @NonNull BiPredicate<K, K> equalsFunction,
+                                     @NonNull ToIntFunction<K> hashFunction);
 }

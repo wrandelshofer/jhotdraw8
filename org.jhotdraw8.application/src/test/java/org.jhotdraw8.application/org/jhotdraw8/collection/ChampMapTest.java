@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.function.ToIntFunction;
 
 public class ChampMapTest extends AbstractMapTest {
@@ -60,20 +59,6 @@ public class ChampMapTest extends AbstractMapTest {
     }
 
     @Test
-    public void testDumpStructure() {
-        ChampMap<Integer, String> instance = new ChampMap<>();
-        Random rng = new Random(0);
-        for (int i = 0; i < 5; i++) {
-            int key = rng.nextInt(10_000);
-            char value = (char) (rng.nextInt(26) + 'a');
-            instance.put(key, Character.toString(value));
-        }
-
-        System.out.println(instance.dump());
-
-    }
-
-    @Test
     public void testCopyAddAll() {
         ChampMap<Integer, String> instance = new ChampMap<>();
         //  Random rng=new Random(0);
@@ -105,7 +90,7 @@ public class ChampMapTest extends AbstractMapTest {
         }
 
 
-        System.out.println(instance.dump());
+        //System.out.println(new ChampTrieGraphviz<>().dumpTrie(instance.root));
 
     }
 }

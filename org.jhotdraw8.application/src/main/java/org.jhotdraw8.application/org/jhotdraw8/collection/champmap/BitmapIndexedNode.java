@@ -21,7 +21,7 @@ import java.util.Objects;
 public class BitmapIndexedNode<K, V> extends Node<K, V> {
     static final @NonNull BitmapIndexedNode<?, ?> EMPTY_NODE = ChampTrie.newBitmapIndexedNode(null, (0), (0), new Object[]{});
 
-    private final Object @NonNull [] mixed;
+    public final Object @NonNull [] mixed;
     private final int nodeMap;
     private final int dataMap;
 

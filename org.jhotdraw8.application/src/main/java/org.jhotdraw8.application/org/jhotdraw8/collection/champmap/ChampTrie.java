@@ -51,11 +51,11 @@ public class ChampTrie {
      * @param <V>     the value type
      * @return the new root
      */
-    public static <K, V> BitmapIndexedNode<K, V> renumber(int size, @NonNull BitmapIndexedNode<K, V> root, @NonNull UniqueId mutator, int entryLength) {
+    public static <K, V> BitmapIndexedNode<K, V> renumber(int size, @NonNull BitmapIndexedNode<K, V> root, @NonNull UniqueId mutator) {
         BitmapIndexedNode<K, V> newRoot = root;
         ChangeEvent<V> details = new ChangeEvent<>();
         int count = Integer.MIN_VALUE;
-        for (SequencedEntryIterator<K, V> i = new SequencedEntryIterator<>(size, root, entryLength, entryLength - 1, false, null, null); i.hasNext(); ) {
+        for (SequencedEntryIterator<K, V> i = new SequencedEntryIterator<>(size, root, false, null, null); i.hasNext(); ) {
             Map.Entry<K, V> entry = i.next();
             newRoot = newRoot.update(mutator,
                     entry.getKey(), entry.getValue(),

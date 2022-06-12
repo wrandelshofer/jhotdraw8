@@ -180,7 +180,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
                              @NonNull BiFunction<SequencedKey<E>, SequencedKey<E>, SequencedKey<E>> updateFunction) {
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedKey<E>> newRoot = root.update(getOrCreateMutator(), new SequencedKey<>(e, first - 1),
-                Objects.hashCode(e), 0, changeEvent, updateFunction);
+                Objects.hashCode(e), 0, changeEvent, updateFunction, Objects::equals, Objects::hashCode);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -201,7 +201,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         final ChangeEvent<SequencedKey<E>> changeEvent = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedKey<E>> newRoot = root.update(
                 getOrCreateMutator(), new SequencedKey<>(e, last), Objects.hashCode(e), 0,
-                changeEvent, updateFunction);
+                changeEvent, updateFunction, Objects::equals, Objects::hashCode);
         if (changeEvent.isModified) {
             root = newRoot;
             size++;
@@ -236,7 +236,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0) != Node.NO_VALUE;
+        return root.findByKey(new SequencedKey<>(key, SequencedKey.NO_SEQUENCE_NUMBER), Objects.hashCode(key), 0, Objects::equals) != Node.NO_VALUE;
     }
 
     @Override
@@ -307,7 +307,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         @SuppressWarnings("unchecked")//
         final BitmapIndexedNode<SequencedKey<E>> newRoot = root.remove(
                 getOrCreateMutator(), new SequencedKey<>((E) o, SequencedKey.NO_SEQUENCE_NUMBER),
-                Objects.hashCode(o), 0, changeEvent);
+                Objects.hashCode(o), 0, changeEvent, Objects::equals);
         if (changeEvent.isModified) {
             root = newRoot;
             size--;
@@ -361,7 +361,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     private void renumber() {
         if (first == SequencedKey.NO_SEQUENCE_NUMBER
                 || last == SequencedKey.NO_SEQUENCE_NUMBER) {
-            root = ChampTrie.renumber(size, root, getOrCreateMutator());
+            root = ChampTrie.renumber(size, root, getOrCreateMutator(), Objects::hashCode, Objects::equals);
             last = size;
             first = 0;
         }
