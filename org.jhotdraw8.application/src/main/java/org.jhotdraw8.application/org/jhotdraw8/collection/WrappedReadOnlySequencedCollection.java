@@ -16,29 +16,30 @@ import java.util.function.Supplier;
  *
  * @author Werner Randelshofer
  */
-public class WrappedReadOnlySequencedSet<E> extends WrappedReadOnlySet<E>
-        implements ReadOnlySequencedSet<E> {
+public class WrappedReadOnlySequencedCollection<E> extends WrappedReadOnlyCollection<E>
+        implements ReadOnlySequencedCollection<E> {
 
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
     final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
 
-    public WrappedReadOnlySequencedSet(@NonNull ReadOnlySequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(), backingSet::size,
+    public WrappedReadOnlySequencedCollection(@NonNull ReadOnlySequencedSet<E> backingSet) {
+        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
+                backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public WrappedReadOnlySequencedSet(@NonNull SequencedSet<E> backingSet) {
+    public WrappedReadOnlySequencedCollection(@NonNull SequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public WrappedReadOnlySequencedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                       @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
-                                       @NonNull IntSupplier sizeFunction,
-                                       @NonNull Predicate<Object> containsFunction,
-                                       @NonNull Supplier<E> getFirstFunction,
-                                       @NonNull Supplier<E> getLastFunction) {
+    public WrappedReadOnlySequencedCollection(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                                              @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
+                                              @NonNull IntSupplier sizeFunction,
+                                              @NonNull Predicate<Object> containsFunction,
+                                              @NonNull Supplier<E> getFirstFunction,
+                                              @NonNull Supplier<E> getLastFunction) {
         super(iteratorFunction, sizeFunction, containsFunction);
         this.getFirstFunction = getFirstFunction;
         this.getLastFunction = getLastFunction;
@@ -57,8 +58,8 @@ public class WrappedReadOnlySequencedSet<E> extends WrappedReadOnlySet<E>
     }
 
     @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new WrappedReadOnlySequencedSet<>(
+    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+        return new WrappedReadOnlySequencedCollection<>(
                 reversedIteratorFunction,
                 iteratorFunction,
                 sizeFunction,

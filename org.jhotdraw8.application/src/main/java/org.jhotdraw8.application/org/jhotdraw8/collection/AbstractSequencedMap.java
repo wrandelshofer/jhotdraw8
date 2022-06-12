@@ -18,7 +18,7 @@ import java.util.Objects;
  * @param <K> the key type
  * @param <V> the value type
  */
-public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V> {
+public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
     public AbstractSequencedMap() {
     }
 
@@ -41,10 +41,31 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
+    public @Nullable Entry<K, V> firstEntry() {
+        return SequencedMap.super.firstEntry();
+    }
+
+    @Override
+    public K firstKey() {
+        return SequencedMap.super.firstKey();
+    }
+
+    @Override
+    public @Nullable Entry<K, V> lastEntry() {
+        return SequencedMap.super.lastEntry();
+    }
+
+    @Override
+    public K lastKey() {
+        return SequencedMap.super.lastKey();
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public @NonNull SequencedSet<K> keySet() {
         return new WrappedSequencedSet<>(
                 () -> new MappedIterator<>(entrySet().iterator(), Entry::getKey),
+                () -> new MappedIterator<>(reversed().entrySet().iterator(), Entry::getKey),
                 AbstractSequencedMap.this::size,
                 AbstractSequencedMap.this::containsKey,
                 AbstractSequencedMap.this::clear,
@@ -58,6 +79,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     public @NonNull SequencedCollection<V> values() {
         return new WrappedSequencedCollection<>(
                 () -> new MappedIterator<>(entrySet().iterator(), Entry::getValue),
+                () -> new MappedIterator<>(reversed().entrySet().iterator(), Entry::getValue),
                 AbstractSequencedMap.this::size,
                 AbstractSequencedMap.this::containsValue,
                 AbstractSequencedMap.this::clear,
@@ -65,6 +87,11 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                 () -> firstEntry().getValue(),
                 () -> lastEntry().getValue(), null, null
         );
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return SequencedMap.super.getOrDefault(key, defaultValue);
     }
 
     @Override

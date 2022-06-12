@@ -228,6 +228,14 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
+    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+        return new WrappedReadOnlyList<>(
+                this::size,
+                i -> get(size() - i)
+        );
+    }
+
+    @Override
     public @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ImmutableArrayList<>(list.subList(fromIndex, toIndex));
     }

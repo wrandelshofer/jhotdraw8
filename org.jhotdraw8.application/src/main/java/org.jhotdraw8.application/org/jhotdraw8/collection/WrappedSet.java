@@ -10,20 +10,23 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Wraps {@code Set} functions into the {@link Set} interface.
  *
  * @author Werner Randelshofer
  */
-public class WrappedSet<E> extends AbstractSet<E> {
-    private final @NonNull Supplier<Iterator<E>> iteratorFunction;
-    private final @NonNull IntSupplier sizeFunction;
-    private final @NonNull Predicate<Object> containsFunction;
-    private final @NonNull Runnable clearFunction;
+public class WrappedSet<E> extends AbstractSet<E> implements ReadOnlySet<E> {
+    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
+    protected final @NonNull IntSupplier sizeFunction;
+    protected final @NonNull Predicate<Object> containsFunction;
+    protected final @NonNull Runnable clearFunction;
     protected final @NonNull Predicate<Object> removeFunction;
 
     public WrappedSet(@NonNull ReadOnlySet<E> backingSet) {
@@ -69,8 +72,23 @@ public class WrappedSet<E> extends AbstractSet<E> {
     }
 
     @Override
+    public Spliterator<E> spliterator() {
+        return super.spliterator();
+    }
+
+    @Override
+    public Stream<E> stream() {
+        return super.stream();
+    }
+
+    @Override
     public @NonNull Iterator<E> iterator() {
         return iteratorFunction.get();
+    }
+
+    @Override
+    public <T> T[] toArray(IntFunction<T[]> generator) {
+        return super.toArray(generator);
     }
 
     @Override

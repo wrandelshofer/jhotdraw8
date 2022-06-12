@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -86,7 +87,7 @@ import java.util.function.BiFunction;
  *
  * @param <E> the element type
  */
-public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E> {
+public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E>, ReadOnlySequencedSet<E> {
     private final static long serialVersionUID = 0L;
     private transient @Nullable UniqueId mutator;
     private transient @NonNull BitmapIndexedNode<SequencedKey<E>> root;
@@ -250,6 +251,11 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
+    public Stream<E> stream() {
+        return super.stream();
+    }
+
+    @Override
     public E getFirst() {
         return SequencedKeyIterator.getFirst(root, first, last).getKey();
     }
@@ -257,6 +263,11 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     @Override
     public E getLast() {
         return SequencedKeyIterator.getLast(root, first, last).getKey();
+    }
+
+    @Override
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new WrappedReadOnlySequencedSet<>(reversed());
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -354,6 +365,22 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             last = size;
             first = 0;
         }
+    }
+
+    @Override
+    public SequencedSet<E> reversed() {
+        return new WrappedSequencedSet<E>(
+                () -> iterator(true),
+                () -> iterator(false),
+                this::size,
+                this::contains,
+                this::clear,
+                this::remove,
+                this::getLast,
+                this::getFirst,
+                this::addLast,
+                this::addFirst
+        );
     }
 
     @Override

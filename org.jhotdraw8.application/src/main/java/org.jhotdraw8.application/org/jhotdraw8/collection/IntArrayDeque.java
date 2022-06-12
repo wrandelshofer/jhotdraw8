@@ -193,6 +193,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return elements[head];
     }
 
+    public int getAsInt(int index) {
+        Preconditions.checkIndex(index, size());
+        return (head + index < elements.length) ? elements[head + index] : elements[head + index - elements.length];
+    }
+
 
     @Override
     public int getLastAsInt() {
@@ -237,6 +242,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     @Override
     public boolean isEmpty() {
         return head == tail;
+    }
+
+    @Override
+    public SequencedCollection<Integer> reversed() {
+        return null;
     }
 
     @Override

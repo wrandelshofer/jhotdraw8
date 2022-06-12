@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Function;
 
@@ -66,6 +67,42 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
         };
     }
 
+    @NonNull Iterator<E> reversedIterator() {
+        return new Iterator<E>() {
+            private int i = size() - 1;
+
+            @Override
+            public boolean hasNext() {
+                return i >= 0;
+            }
+
+            @Override
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return mapf.apply(backingList.get(i--));
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    @Override
+    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+        return new WrappedReadOnlySequencedCollection<>(
+                this::reversedIterator,
+                this::iterator,
+                this::size,
+                this::contains,
+                this::getLast,
+                this::getFirst
+        );
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull Spliterator<E> spliterator() {
@@ -75,14 +112,6 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     @Override
     public int size() {
         return backingList.size();
-    }
-
-    @Override
-    public void copyInto(Object[] out, int offset) {
-        int i = offset;
-        for (E e : this) {
-            out[i++] = e;
-        }
     }
 
     @Override

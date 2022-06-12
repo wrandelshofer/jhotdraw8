@@ -28,7 +28,7 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
     protected final @NonNull IntSupplier sizeFunction;
     protected final @NonNull Predicate<Object> containsKeyFunction;
     protected final @NonNull Runnable clearFunction;
-    protected final @NonNull Predicate<Object> removeFunction;
+    protected final @NonNull Function<Object, V> removeFunction;
     protected final @NonNull Function<K, V> getFunction;
     protected final @NonNull BiFunction<K, V, V> putFunction;
 
@@ -37,12 +37,16 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
         this(m::iterator, m::size, m::containsKey, m::get, null, null, null);
     }
 
+    public WrappedMap(@NonNull Map<K, V> m) {
+        this(() -> m.entrySet().iterator(), m::size, m::containsKey, m::get, null, null, null);
+    }
+
     public WrappedMap(@NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,
                       @NonNull IntSupplier sizeFunction,
                       @NonNull Predicate<Object> containsKeyFunction,
                       @NonNull Function<K, V> getFunction,
                       @Nullable Runnable clearFunction,
-                      @Nullable Predicate<Object> removeFunction,
+                      @Nullable Function<Object, V> removeFunction,
                       @Nullable BiFunction<K, V, V> putFunction) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
@@ -103,5 +107,15 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
                 clearFunction,
                 this::removeEntry
         );
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return super.getOrDefault(key, defaultValue);
+    }
+
+    @Override
+    public V remove(Object key) {
+        return removeFunction.apply(key);
     }
 }

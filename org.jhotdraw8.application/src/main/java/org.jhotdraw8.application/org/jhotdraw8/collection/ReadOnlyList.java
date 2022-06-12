@@ -111,7 +111,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     @Override
     default @NonNull Iterator<E> iterator() {
-        return new ReadOnlyListIterator<>(this);
+        return new ReadOnlyListEnumerator<>(this);
     }
 
     /**
@@ -121,7 +121,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     @Override
     default @NonNull Spliterator<E> spliterator() {
-        return new ReadOnlyListIterator<>(this);
+        return new ReadOnlyListEnumerator<>(this);
     }
 
     /**
@@ -130,7 +130,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return an iterator.
      */
     default @NonNull Enumerator<E> enumerator() {
-        return new ReadOnlyListIterator<>(this);
+        return new ReadOnlyListEnumerator<>(this);
     }
 
     /**
@@ -139,7 +139,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator() {
-        return new ReadOnlyListIterator<>(this);
+        return new ReadOnlyListEnumerator<>(this);
     }
 
     /**
@@ -150,7 +150,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator(int index) {
-        return new ReadOnlyListIterator<>(this, index, size());
+        return new ReadOnlyListEnumerator<>(this, index, size());
     }
 
     /**

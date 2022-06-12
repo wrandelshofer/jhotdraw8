@@ -23,6 +23,16 @@ public class ImmutableSequencedChampSetSequencedSetTest extends AbstractSequence
             }
 
             @Override
+            public SequencedSet<E> reversed() {
+                return new WrappedSequencedSet<E>(
+                        () -> target.readOnlyReversed().iterator(),
+                        target::iterator,
+                        target::size,
+                        target::contains
+                );
+            }
+
+            @Override
             public String toString() {
                 return target.toString();
             }
@@ -80,6 +90,7 @@ public class ImmutableSequencedChampSetSequencedSetTest extends AbstractSequence
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             public boolean remove(Object o) {
                 ImmutableSequencedSet<E> newTarget = target.copyRemove((E) o);
                 boolean modified = newTarget != target;

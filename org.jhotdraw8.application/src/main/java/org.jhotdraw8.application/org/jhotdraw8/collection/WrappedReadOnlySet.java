@@ -19,9 +19,9 @@ import java.util.function.Supplier;
  */
 public class WrappedReadOnlySet<E> extends AbstractReadOnlySet<E> {
 
-    private final Supplier<Iterator<E>> iteratorFunction;
-    private final IntSupplier sizeFunction;
-    private final Predicate<Object> containsFunction;
+    protected final Supplier<Iterator<E>> iteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsFunction;
 
     public WrappedReadOnlySet(@NonNull ReadOnlyCollection<E> backingSet) {
         this(backingSet::iterator, backingSet::size, backingSet::contains);

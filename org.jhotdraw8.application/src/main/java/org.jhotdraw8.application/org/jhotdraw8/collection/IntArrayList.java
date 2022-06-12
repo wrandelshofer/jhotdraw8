@@ -284,6 +284,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return size == 0;
     }
 
+
     @Override
     public boolean contains(Object o) {
         if (o instanceof Integer) {
@@ -495,5 +496,13 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
                 for (int i = 0; i < size; i++) items[i] = objects[i];
             }
         }
+    }
+
+    @Override
+    public SequencedCollection<Integer> reversed() {
+        return new WrappedList<>(
+                this::size,
+                i -> get(size() - i)
+        );
     }
 }

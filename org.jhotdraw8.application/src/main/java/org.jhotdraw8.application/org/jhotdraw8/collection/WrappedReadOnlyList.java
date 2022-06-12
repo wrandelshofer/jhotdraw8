@@ -36,6 +36,14 @@ public class WrappedReadOnlyList<E> extends AbstractReadOnlyList<E> {
     }
 
     @Override
+    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+        return new WrappedReadOnlyList<>(
+                sizeFunction,
+                index -> getFunction.apply(sizeFunction.getAsInt() - index)
+        );
+    }
+
+    @Override
     public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         Preconditions.checkFromToIndex(fromIndex, toIndex, size());
         return new WrappedReadOnlyList<>(

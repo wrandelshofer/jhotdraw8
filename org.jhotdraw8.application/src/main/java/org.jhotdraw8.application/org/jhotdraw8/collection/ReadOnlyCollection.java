@@ -82,13 +82,6 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
         return StreamSupport.stream(spliterator(), false);
     }
 
-    default void copyInto(Object[] out, int offset) {
-        int i = offset;
-        for (E e : this) {
-            out[i++] = e;
-        }
-    }
-
     /**
      * Returns {@code true} if this collection contains the specified object.
      *
@@ -159,6 +152,4 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
             sb.append(',').append(' ');
         }
     }
-
-
 }

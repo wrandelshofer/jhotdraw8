@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 /**
  * Abstract base class for {@link ObservableSet}s. This implementation provides
@@ -24,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E> {
+public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadOnlySet<E> {
 
     private final List<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArrayList<>();
     private final List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
@@ -83,6 +84,11 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
         if (values.length > 0) {
             fireInvalidated();
         }
+    }
+
+    @Override
+    public Stream<E> stream() {
+        return super.stream();
     }
 
     protected abstract void backingSetClear();

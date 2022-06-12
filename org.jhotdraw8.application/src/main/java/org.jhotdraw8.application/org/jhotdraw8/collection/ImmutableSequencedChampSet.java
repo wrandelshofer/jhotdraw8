@@ -348,6 +348,10 @@ public class ImmutableSequencedChampSet<E>
         return iterator(false);
     }
 
+    public @NonNull Iterator<E> reversedIterator() {
+        return iterator(true);
+    }
+
     /**
      * Returns an iterator over the elements of this set, that optionally
      * iterates in reversed direction.
@@ -379,6 +383,18 @@ public class ImmutableSequencedChampSet<E>
     @Override
     public E getLast() {
         return SequencedKeyIterator.getLast(this, first, last).getKey();
+    }
+
+    @Override
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new WrappedReadOnlySequencedSet<>(
+                this::reversedIterator,
+                this::iterator,
+                this::size,
+                this::contains,
+                this::getLast,
+                this::getFirst
+        );
     }
 
     @Override

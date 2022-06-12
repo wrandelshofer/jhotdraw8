@@ -5,10 +5,7 @@
 
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Interface for a {@link List} with a primitive integer data elements.
@@ -83,21 +80,6 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
 
     @Override
     default boolean isEmpty() {
-        return IntSequencedCollection.super.isEmpty();
-    }
-
-    @Override
-    default <T> T @NonNull [] toArray(T @NonNull [] a) {
-        return IntSequencedCollection.super.toArray(a);
-    }
-
-    @Override
-    default Object @NonNull [] toArray() {
-        return IntSequencedCollection.super.toArray();
-    }
-
-    @Override
-    default Stream<Integer> stream() {
-        return IntSequencedCollection.super.stream();
+        return size() == 0;
     }
 }

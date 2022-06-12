@@ -6,8 +6,13 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
+import java.util.Iterator;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.IntSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -19,20 +24,49 @@ public class WrappedReadOnlySequencedMap<K, V> extends WrappedReadOnlyMap<K, V>
         implements ReadOnlySequencedMap<K, V> {
     private final @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction;
     private final @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction;
+    private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> reversedIteratorFunction;
 
     public WrappedReadOnlySequencedMap(@NonNull SequencedMap<K, V> target) {
-        super(target);
+        super((Map<K, V>) target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
+        this.reversedIteratorFunction = () -> target.reversed().entrySet().iterator();
+    }
+
+    public WrappedReadOnlySequencedMap(
+            @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
+            @NonNull Supplier<Iterator<Map.Entry<K, V>>> reversedIteratorFunction,
+            @NonNull IntSupplier sizeFunction,
+            @NonNull Predicate<Object> containsKeyFunction,
+            @NonNull Function<K, V> getFunction,
+            @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction,
+            @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction) {
+        super(iteratorFunction, sizeFunction, containsKeyFunction, getFunction);
+        this.firstEntryFunction = firstEntryFunction;
+        this.lastEntryFunction = lastEntryFunction;
+        this.reversedIteratorFunction = reversedIteratorFunction;
     }
 
     @Override
-    public Map.Entry<K, V> firstEntry() {
+    public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
+        return new WrappedReadOnlySequencedMap<>(
+                reversedIteratorFunction,
+                iteratorFunction,
+                sizeFunction,
+                containsKeyFunction,
+                getFunction,
+                lastEntryFunction,
+                firstEntryFunction
+        );
+    }
+
+    @Override
+    public @Nullable Map.Entry<K, V> firstEntry() {
         return firstEntryFunction.get();
     }
 
     @Override
-    public Map.Entry<K, V> lastEntry() {
+    public @Nullable Map.Entry<K, V> lastEntry() {
         return lastEntryFunction.get();
     }
 }

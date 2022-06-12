@@ -208,12 +208,44 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
         return new WrappedSequencedSet<>(
                 () -> entryIterator(false),
+                () -> entryIterator(true),
                 this::size,
                 this::containsEntry,
                 this::clear,
                 this::removeEntry,
                 this::firstEntry,
                 this::lastEntry, null, null
+        );
+    }
+
+    @Override
+    public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
+        return new WrappedReadOnlySequencedMap<>(
+                () -> entryIterator(true),
+                () -> entryIterator(false),
+                this::size,
+                this::containsKey,
+                this::get,
+                this::lastEntry,
+                this::firstEntry
+        );
+    }
+
+    @Override
+    public @NonNull SequencedMap<K, V> reversed() {
+        return new WrappedSequencedMap<>(
+                () -> entryIterator(true),
+                () -> entryIterator(false),
+                this::size,
+                this::containsKey,
+                this::get,
+                this::clear,
+                this::remove,
+                this::lastEntry,
+                this::firstEntry,
+                this::put,
+                this::putLast,
+                this::putFirst
         );
     }
 

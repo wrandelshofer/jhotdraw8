@@ -5,8 +5,10 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
- * Read-only interface for a collection with a well-defined linear ordering of its elements.
+ * Read-only interface for a collection with a well-defined iteration order.
  *
  * @param <E> the element type
  */
@@ -27,5 +29,16 @@ public interface ReadOnlySequencedCollection<E> extends ReadOnlyCollection<E> {
      * @return an element
      * @throws java.util.NoSuchElementException if the collection is empty
      */
-    E getLast();
+    default E getLast() {
+        return readOnlyReversed().iterator().next();
+    }
+
+
+    /**
+     * Returns a reversed-order view of this collection.
+     * Changes to the underlying collection are visible in the reversed view.
+     *
+     * @return a reversed-order view of this collection
+     */
+    @NonNull ReadOnlySequencedCollection<E> readOnlyReversed();
 }

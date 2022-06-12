@@ -20,31 +20,35 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class WrappedSequencedCollection<E> extends WrappedCollection<E> implements SequencedCollection<E> {
+    private final @NonNull Supplier<E> getFirstFunction;
+    private final @NonNull Supplier<E> getLastFunction;
 
-    final @NonNull Supplier<E> getFirstFunction;
-    final @NonNull Supplier<E> getLastFunction;
+    private final @NonNull Consumer<E> addFirstFunction;
+    private final @NonNull Consumer<E> addLastFunction;
+    private final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
 
-    final @NonNull Consumer<E> addFirstFunction;
-    final @NonNull Consumer<E> addLastFunction;
-
-    public WrappedSequencedCollection(@NonNull ReadOnlyCollection<E> backingCollection) {
-        this((Supplier<Iterator<E>>) backingCollection::iterator, backingCollection::size,
+    public WrappedSequencedCollection(@NonNull ReadOnlyCollection<E> backingCollection,
+                                      @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
+        this(backingCollection::iterator, reversedIteratorFunction, backingCollection::size,
                 backingCollection::contains, null, null, null, null, null, null);
     }
 
-    public WrappedSequencedCollection(@NonNull Collection<E> backingCollection) {
-        this(backingCollection::iterator, backingCollection::size,
+    public WrappedSequencedCollection(@NonNull Collection<E> backingCollection,
+                                      @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
+        this(backingCollection::iterator, reversedIteratorFunction, backingCollection::size,
                 backingCollection::contains, backingCollection::clear, backingCollection::remove,
                 null, null, null, null);
     }
 
     public WrappedSequencedCollection(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                                      @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
                                       @NonNull IntSupplier sizeFunction,
                                       @NonNull Predicate<Object> containsFunction) {
-        this(iteratorFunction, sizeFunction, containsFunction, null, null, null, null, null, null);
+        this(iteratorFunction, reversedIteratorFunction, sizeFunction, containsFunction, null, null, null, null, null, null);
     }
 
     public WrappedSequencedCollection(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                                      @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
                                       @NonNull IntSupplier sizeFunction,
                                       @NonNull Predicate<Object> containsFunction,
                                       @Nullable Runnable clearFunction,
@@ -66,6 +70,7 @@ public class WrappedSequencedCollection<E> extends WrappedCollection<E> implemen
         this.addLastFunction = addLastFunction == null ? e -> {
             throw new UnsupportedOperationException();
         } : addLastFunction;
+        this.reversedIteratorFunction = reversedIteratorFunction;
     }
 
     @Override
@@ -86,5 +91,20 @@ public class WrappedSequencedCollection<E> extends WrappedCollection<E> implemen
     @Override
     public E getLast() {
         return getLastFunction.get();
+    }
+
+    @Override
+    public SequencedCollection<E> reversed() {
+        return new WrappedSequencedCollection<E>(
+                reversedIteratorFunction,
+                iteratorFunction,
+                sizeFunction,
+                containsFunction,
+                clearFunction,
+                removeFunction,
+                getLastFunction,
+                getFirstFunction,
+                addLastFunction,
+                addFirstFunction);
     }
 }

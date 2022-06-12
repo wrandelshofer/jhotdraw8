@@ -13,17 +13,18 @@ import java.util.Iterator;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Wraps {@code Collection} functions into the {@link Collection} interface.
  *
  * @author Werner Randelshofer
  */
-public class WrappedCollection<E> extends AbstractCollection<E> {
-    private final @NonNull Supplier<Iterator<E>> iteratorFunction;
-    private final @NonNull IntSupplier sizeFunction;
-    private final @NonNull Predicate<Object> containsFunction;
-    private final @NonNull Runnable clearFunction;
+public class WrappedCollection<E> extends AbstractCollection<E> implements ReadOnlyCollection<E> {
+    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
+    protected final @NonNull IntSupplier sizeFunction;
+    protected final @NonNull Predicate<Object> containsFunction;
+    protected final @NonNull Runnable clearFunction;
     protected final @NonNull Predicate<Object> removeFunction;
 
     public WrappedCollection(@NonNull ReadOnlyCollection<E> backingCollection) {
@@ -66,6 +67,11 @@ public class WrappedCollection<E> extends AbstractCollection<E> {
     @Override
     public void clear() {
         clearFunction.run();
+    }
+
+    @Override
+    public Stream<E> stream() {
+        return super.stream();
     }
 
     @Override

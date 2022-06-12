@@ -6,11 +6,12 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Map;
 
 /**
- * Interface for a set with a well-defined linear ordering of its elements.
+ * Interface for a map with a well-defined iteration order.
  * <p>
  * References:
  * <dl>
@@ -21,8 +22,74 @@ import java.util.Map;
  * @param <K> the key type
  * @param <V> the value type
  */
-public interface SequencedMap<K, V> extends Map<K, V>, ReadOnlySequencedMap<K, V> {
+public interface SequencedMap<K, V> extends Map<K, V> {
 
+    /**
+     * Gets the first entry in this map or {@code null} if this map is empty.
+     *
+     * @return the first entry or {@code null}
+     * @throws java.util.NoSuchElementException if the map is empty
+     */
+    default @Nullable Map.Entry<K, V> firstEntry() {
+        return isEmpty() ? null : entrySet().iterator().next();
+    }
+
+    /**
+     * Gets the first key in this map.
+     *
+     * @return the first key
+     * @throws java.util.NoSuchElementException if the map is empty
+     */
+    default K firstKey() {
+        return keySet().iterator().next();
+    }
+
+    /**
+     * Gets the last entry in this map or {@code null} if this map is empty.
+     *
+     * @return the last entry or {@code null}
+     * @throws java.util.NoSuchElementException if the map is empty
+     */
+    default @Nullable Map.Entry<K, V> lastEntry() {
+        return isEmpty() ? null : reversed().entrySet().iterator().next();
+    }
+
+    /**
+     * Gets the last key in this map.
+     *
+     * @return the last key
+     * @throws java.util.NoSuchElementException if the map is empty
+     */
+    default K lastKey() {
+        return reversed().keySet().iterator().next();
+    }
+
+    /**
+     * Returns a reversed-order view of this map.
+     * <p>
+     * Modifications write through to the underlying map.
+     * Changes to the underlying map are visible in the reversed view.
+     *
+     * @return a reversed-order view of this map
+     */
+    @NonNull SequencedMap<K, V> reversed();
+
+    /**
+     * Removes and returns the first entry in this map or code {@null}
+     * if the map is empty.
+     *
+     * @return the removed first entry of this map or code {@null}
+     */
+    default Map.Entry<K, V> pollFirstEntry() {
+        var it = entrySet().iterator();
+        if (it.hasNext()) {
+            var entry = it.next();
+            it.remove();
+            return entry;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Creates an entry for the specified key and value and adds it to the front
@@ -30,9 +97,9 @@ public interface SequencedMap<K, V> extends Map<K, V>, ReadOnlySequencedMap<K, V
      * If this map already contains an entry for the specified key, replaces the
      * value and moves the entry to the front.
      *
-     * @param k a key
-     * @param v a value
-     * @return the previous value associated with the key
+     * @param k the key
+     * @param v the value
+     * @return the value previously associated with the key
      */
     V putFirst(K k, V v);
 
@@ -42,8 +109,8 @@ public interface SequencedMap<K, V> extends Map<K, V>, ReadOnlySequencedMap<K, V
      * If this map already contains an entry for the specified key, replaces the
      * value and moves the entry to the tail.
      *
-     * @param k a key
-     * @param v a value
+     * @param k the key
+     * @param v the value
      * @return the previous value associated with the key
      */
     V putLast(K k, V v);
@@ -65,8 +132,4 @@ public interface SequencedMap<K, V> extends Map<K, V>, ReadOnlySequencedMap<K, V
         return Map.super.getOrDefault(key, defaultValue);
     }
 
-    @Override
-    default boolean containsValue(Object value) {
-        return ReadOnlySequencedMap.super.containsValue(value);
-    }
 }

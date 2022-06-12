@@ -11,14 +11,14 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * Abstract base classes for {@link ListIterator}s that also implement
- * the {@link Enumerator} interface.
+ * Abstract base classes for {@link Enumerator}s that also implement
+ * the {@link ListIterator} interface.
  *
  * @param <E> the element type
  * @author Adrien Grzechowiak
  */
-public abstract class AbstractIterator<E> implements ListIterator<E>, Enumerator<E>, Consumer<E> {
-    public AbstractIterator() {
+public abstract class AbstractListEnumerator<E> implements ListIterator<E>, Enumerator<E> {
+    public AbstractListEnumerator() {
     }
 
     @Override

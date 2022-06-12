@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -39,7 +38,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  */
 public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableListBase<E>
-        implements Set<E>, ReadOnlySequencedCollection<E>, ReadOnlySet<E> {
+        implements Set<E>, ReadOnlySequencedSet<E>, ReadOnlySet<E> {
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
     /**
@@ -751,9 +750,10 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public @NonNull Stream<E> stream() {
-        return StreamSupport.stream(spliterator(), false);
+    public Stream<E> stream() {
+        return super.stream();
     }
+
 
     public void fireItemUpdated(int index) {
         beginChange();
@@ -805,5 +805,17 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             }
         }
         return h;
+    }
+
+    @Override
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new WrappedReadOnlySequencedSet<E>(
+                () -> new ReversedListEnumerator<>(this, 0, size),
+                this::iterator,
+                this::size,
+                this::contains,
+                this::getLast,
+                this::getFirst
+        );
     }
 }
