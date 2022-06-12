@@ -8,16 +8,19 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.champ.ChampTrie;
-import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.Node;
-import org.jhotdraw8.collection.champ.SequencedEntryIterator;
+import org.jhotdraw8.collection.champ.Sequenced;
+import org.jhotdraw8.collection.champ.SequencedEntry;
+import org.jhotdraw8.collection.champ.SequencedIterator;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -95,30 +98,18 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     private final static long serialVersionUID = 0L;
     private final static int ENTRY_LENGTH = 3;
     private transient @Nullable UniqueId mutator;
-    private transient @Nullable BitmapIndexedNode<K, V> root;
+    private transient @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root;
     private transient int size;
     private transient int modCount;
     /**
      * Counter for the sequence number of the last element. The counter is
-     * incremented when a new entry is added to the end of the sequence.
-     * <p>
-     * The counter is in the range from {@code 0} to
-     * {@link Integer#MAX_VALUE} - 1.
-     * When the counter reaches {@link Integer#MAX_VALUE}, all
-     * sequence numbers are renumbered, and the counter is reset to
-     * {@code size}.
+     * incremented after a new entry is added to the end of the sequence.
      */
     private transient int last = 0;
 
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
-     * <p>
-     * The counter is in the range from {@code 0} to
-     * {@link Integer#MIN_VALUE}.
-     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
-     * sequence numbers are renumbered, and the counter is reset to
-     * {@code 0}.
      */
     private int first = 0;
 
@@ -166,7 +157,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         root = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
-        last = 0;
+        first = last = 0;
     }
 
     @Override
@@ -184,22 +175,18 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     @Override
     public boolean containsKey(final @NonNull Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1) != Node.NO_VALUE;
+        return root.findByKey(new SequencedEntry<>(key, null, 0),
+                Objects.hashCode(key), 0,
+                getEqualsFunction()) != Node.NO_VALUE;
     }
 
-    /**
-     * Dumps the internal structure of this map in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public @NonNull String dump() {
-        return new ChampTrieGraphviz<K, V>().dumpTrie(root, ENTRY_LENGTH, true, true);
-    }
 
-    @Nullable Iterator<Entry<K, V>> entryIterator(boolean reversed) {
-        return new FailFastIterator<>(new SequencedEntryIterator<>(
-                size, root, ENTRY_LENGTH, ENTRY_LENGTH - 1, reversed,
-                this::persistentRemove, this::persistentPutIfPresent), () -> this.modCount);
+    @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
+        return new FailFastIterator<>(new SequencedIterator<SequencedEntry<K, V>, Entry<K, V>>(
+                size, root, reversed,
+                this::persistentRemove,
+                e -> new MutableMapEntry<>(this::persistentPutIfPresent, e.getKey(), e.getValue())),
+                () -> this.modCount);
 
     }
 
@@ -257,9 +244,10 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     @Override
     @SuppressWarnings("unchecked")
     public V get(final @NonNull Object o) {
-        final K key = (K) o;
-        Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
-        return result == Node.NO_VALUE ? null : (V) result;
+        Object result = root.findByKey(
+                new SequencedEntry<>((K) o),
+                Objects.hashCode(o), 0, getEqualsFunction());
+        return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
     }
 
     private @NonNull UniqueId getOrCreateMutator() {
@@ -276,7 +264,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public V put(K key, V value) {
-        return putLastWithoutMoveToLast(key, value).getOldValue();
+        SequencedEntry<K, V> oldValue = putLastWithoutMoveToLast(key, value).getOldValue();
+        return oldValue == null ? null : oldValue.getValue();
     }
 
     @Override
@@ -286,12 +275,13 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return oldValue;
     }
 
-    private @NonNull ChangeEvent<V> putFirstWithoutMoveToFirst(final K key, final V val) {
+    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirstWithoutMoveToFirst(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-        final BitmapIndexedNode<K, V> newRootNode =
-                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, first,
-                        ENTRY_LENGTH - 1);
+        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
+                root.update(getOrCreateMutator(),
+                        new SequencedEntry<>(key, val, first), keyHash, 0, details,
+                        getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
                 root = newRootNode;
@@ -299,7 +289,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 root = newRootNode;
                 size += 1;
                 first--;
-                if (first == Node.NO_SEQUENCE_NUMBER) {
+                if (first == Sequenced.NO_SEQUENCE_NUMBER) {
                     renumber();
                 }
                 modCount++;
@@ -315,9 +305,9 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         }
     }
 
-    private void persistentRemove(K key) {
+    private void persistentRemove(SequencedEntry<K, V> entry) {
         mutator = null;
-        remove(key);
+        remove(entry.getKey());
     }
 
     @Override
@@ -327,12 +317,13 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return oldValue;
     }
 
-    @NonNull ChangeEvent<V> putLastWithoutMoveToLast(final K key, final V val) {
+    @NonNull ChangeEvent<SequencedEntry<K, V>> putLastWithoutMoveToLast(final K key, final V val) {
         final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-        final BitmapIndexedNode<K, V> newRootNode =
-                root.update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, last,
-                        ENTRY_LENGTH - 1);
+        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
+                root.update(getOrCreateMutator(),
+                        new SequencedEntry<>(key, val, last), keyHash, 0, details,
+                        getUpdateFunction(), getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -341,7 +332,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 root = newRootNode;
                 size += 1;
                 last++;
-                if (last == Node.NO_SEQUENCE_NUMBER) {
+                if (last == Sequenced.NO_SEQUENCE_NUMBER) {
                     renumber();
                 }
                 modCount++;
@@ -353,14 +344,17 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return removeAndGiveDetails(key).getOldValue();
+        SequencedEntry<K, V> oldValue = removeAndGiveDetails(key).getOldValue();
+        return oldValue == null ? null : oldValue.getValue();
     }
 
-    @NonNull ChangeEvent<V> removeAndGiveDetails(final K key) {
+    @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-        final BitmapIndexedNode<K, V> newRootNode =
-                root.remove(getOrCreateMutator(), key, keyHash, 0, details, ENTRY_LENGTH, ENTRY_LENGTH - 1);
+        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
+                root.remove(getOrCreateMutator(),
+                        new SequencedEntry<>(key), keyHash, 0, details,
+                        getEqualsFunction());
         if (details.isModified()) {
             assert details.hasReplacedValue();
             root = newRootNode;
@@ -378,8 +372,11 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
             @SuppressWarnings("unchecked")
             Entry<K, V> entry = (Entry<K, V>) o;
             K key = entry.getKey();
-            Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH - 1);
-            if (Objects.equals(result, entry.getValue())) {
+            Object result = root.findByKey(
+                    new SequencedEntry<>(key), Objects.hashCode(key), 0,
+                    getEqualsFunction());
+            if ((result instanceof SequencedEntry<?, ?>)
+                    && Objects.equals(((SequencedEntry<?, ?>) result).getValue(), entry.getValue())) {
                 removeAndGiveDetails(key);
                 return true;
             }
@@ -388,7 +385,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     private void renumber() {
-        root = ChampTrie.renumber(size, root, getOrCreateMutator(), ENTRY_LENGTH);
+        root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
+                getHashFunction(), getEqualsFunction());
         last = size;
         first = 0;
     }
@@ -403,7 +401,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      *
      * @return an immutable copy
      */
-    public @Nullable ImmutableSequencedChampMap<K, V> toImmutable() {
+    public @NonNull ImmutableSequencedChampMap<K, V> toImmutable() {
         if (size == 0) {
             return ImmutableSequencedChampMap.of();
         }
@@ -426,5 +424,24 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         protected @NonNull Object readResolve() {
             return new SequencedChampMap<>(deserialized);
         }
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private ToIntFunction<SequencedEntry<K, V>> getHashFunction() {
+        return (ToIntFunction<SequencedEntry<K, V>>) (ToIntFunction<?>) SequencedEntry.HASH_FUNCTION;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> getEqualsFunction() {
+        return (BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>>) (BiPredicate<?, ?>) SequencedEntry.EQUALS_FUNCTION;
+    }
+
+    @NonNull
+    @SuppressWarnings("unchecked")
+    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
+        return (BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>>)
+                (BiFunction<?, ?, ?>) SequencedEntry.UPDATE_FUNCTION;
     }
 }

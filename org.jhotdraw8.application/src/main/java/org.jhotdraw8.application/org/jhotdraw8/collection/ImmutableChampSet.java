@@ -7,11 +7,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champset.BitmapIndexedNode;
-import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champset.ChangeEvent;
-import org.jhotdraw8.collection.champset.KeyIterator;
-import org.jhotdraw8.collection.champset.Node;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -260,15 +259,6 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);
-    }
-
-    /**
-     * Dumps the internal structure of this set in the Graphviz DOT Language.
-     *
-     * @return a dump of the internal structure
-     */
-    public @NonNull String dump() {
-        return new ChampTrieGraphviz<E>().dumpTrie(this);
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {

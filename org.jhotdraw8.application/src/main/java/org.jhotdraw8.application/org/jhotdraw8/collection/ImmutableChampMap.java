@@ -6,10 +6,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champset.BitmapIndexedNode;
-import org.jhotdraw8.collection.champset.ChangeEvent;
-import org.jhotdraw8.collection.champset.KeyIterator;
-import org.jhotdraw8.collection.champset.Node;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;

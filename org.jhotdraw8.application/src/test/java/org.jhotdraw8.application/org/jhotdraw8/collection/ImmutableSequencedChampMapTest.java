@@ -6,6 +6,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
+import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.SequencedEntry;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
@@ -53,8 +56,8 @@ public class ImmutableSequencedChampMapTest extends AbstractImmutableSequencedMa
             instance = instance.copyPut(key, value);
         }
 
-        System.out.println(instance.dump());
-
+        System.out.println(new ChampTrieGraphviz().dumpTrie(
+                (Node<SequencedEntry<HashCollider, String>>) instance));
     }
 
 }

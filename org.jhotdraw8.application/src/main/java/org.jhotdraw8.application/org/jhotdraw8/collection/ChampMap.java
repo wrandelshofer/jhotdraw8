@@ -7,10 +7,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champset.BitmapIndexedNode;
-import org.jhotdraw8.collection.champset.ChangeEvent;
-import org.jhotdraw8.collection.champset.KeyIterator;
-import org.jhotdraw8.collection.champset.Node;
+import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.KeyIterator;
+import org.jhotdraw8.collection.champ.Node;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -162,16 +162,17 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@NonNull Object o) {
-        return root.findByKey(new AbstractMap.SimpleImmutableEntry<>((K) o, null), Objects.hashCode(o), 0,
+        return root.findByKey(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
+                Objects.hashCode(o), 0,
                 getEqualsFunction()) != Node.NO_VALUE;
     }
 
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
         return new WrappedSet<>(
-                () -> new MappedIterator<>(new FailFastIterator<>(new KeyIterator<AbstractMap.SimpleImmutableEntry<K, V>>(
+                () -> new MappedIterator<>(new FailFastIterator<>(new KeyIterator<>(
                         root,
-                        this::persistentRemove/*, this::persistentPutIfPresent*/),
+                        this::persistentRemove),
                         () -> this.modCount),
                         e -> new MutableMapEntry<>(this::persistentPutIfPresent, e.getKey(), e.getValue())),
                 ChampMap.this::size,

@@ -10,6 +10,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a node in a CHAMP trie.
@@ -18,9 +21,14 @@ import java.util.Objects;
  * sequence number (optionally).
  *
  * @param <K> the key type
- * @param <V> the value type
  */
-public abstract class Node<K, V> {
+public abstract class Node<K> {
+    /**
+     * Represents no value.
+     * We can not use {@code null}, because we allow storing null-keys and
+     * null-values in the trie.
+     */
+    public static final Object NO_VALUE = new Object();
     static final int HASH_CODE_LENGTH = 32;
     /**
      * Bit partition size in the range [1,5].
@@ -30,22 +38,10 @@ public abstract class Node<K, V> {
      */
     static final int BIT_PARTITION_SIZE = 5;
     static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
-
-    /**
-     * Represents no value.
-     * We can not use {@code null}, because we allow storing null-keys and
-     * null-values in the trie.
-     */
-    public static final Object NO_VALUE = new Object();
-    /**
-     * Indicates that no sequence number must be inserted.
-     */
-    public final static int NO_SEQUENCE_NUMBER = Integer.MAX_VALUE;
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
 
 
     Node() {
-
     }
 
     /**
@@ -83,25 +79,17 @@ public abstract class Node<K, V> {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    <K, V> @NonNull Node<K, V> mergeTwoDataEntriesIntoNode(UniqueId mutator,
-                                                           final K k0, final V v0, int seq0, final int keyHash0,
-                                                           final K k1, final V v1, int seq1, final int keyHash1,
-                                                           final int shift, final int entryLength) {
+    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(UniqueId mutator,
+                                                            final K k0, final int keyHash0,
+                                                            final K k1, final int keyHash1,
+                                                            final int shift) {
         assert !Objects.equals(k0, k1);
 
         if (shift >= HASH_CODE_LENGTH) {
-            Object[] entries = new Object[entryLength * 2];
+            Object[] entries = new Object[2];
             entries[0] = k0;
-            entries[entryLength] = k1;
-            if (entryLength > 1) {
-                entries[1] = v0;
-                entries[entryLength + 1] = v1;
-            }
-            if (seq1 != NO_SEQUENCE_NUMBER) {
-                entries[entryLength - 1] = seq0;
-                entries[entryLength * 2 - 1] = seq1;
-            }
-            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries, entryLength);
+            entries[1] = k1;
+            return ChampTrie.newHashCollisionNode(mutator, keyHash0, entries);
         }
 
         final int mask0 = mask(keyHash0, shift);
@@ -111,99 +99,59 @@ public abstract class Node<K, V> {
             // both nodes fit on same level
             final int dataMap = bitpos(mask0) | bitpos(mask1);
 
-            Object[] entries = new Object[entryLength * 2];
+            Object[] entries = new Object[2];
             if (mask0 < mask1) {
                 entries[0] = k0;
-                entries[entryLength] = k1;
-                if (entryLength > 1) {
-                    entries[1] = v0;
-                    entries[entryLength + 1] = v1;
-                }
-                if (seq1 != NO_SEQUENCE_NUMBER) {
-                    entries[entryLength - 1] = seq0;
-                    entries[entryLength * 2 - 1] = seq1;
-                }
-                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries, entryLength);
+                entries[1] = k1;
+                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             } else {
                 entries[0] = k1;
-                entries[entryLength] = k0;
-                if (entryLength > 1) {
-                    entries[1] = v1;
-                    entries[entryLength + 1] = v0;
-                }
-                if (seq1 != NO_SEQUENCE_NUMBER) {
-                    entries[entryLength * 2 - 1] = seq0;
-                    entries[entryLength - 1] = seq1;
-                }
-                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries, entryLength);
+                entries[1] = k0;
+                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             }
         } else {
-            final Node<K, V> node = mergeTwoDataEntriesIntoNode(mutator,
-                    k0, v0, seq0, keyHash0,
-                    k1, v1, seq1, keyHash1,
-                    shift + BIT_PARTITION_SIZE,
-                    entryLength);
+            final Node<K> node = mergeTwoDataEntriesIntoNode(mutator,
+                    k0, keyHash0,
+                    k1, keyHash1,
+                    shift + BIT_PARTITION_SIZE);
             // values fit on next level
 
             final int nodeMap = bitpos(mask0);
-            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node}, entryLength);
+            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node});
         }
     }
 
-    abstract int dataArity(int entryLength);
-
-    abstract boolean hasDataArityOne(int entryLength);
-
-    /**
-     * Returns the data index for the given keyHash and shift, or -1.
-     *
-     * @param key         a key
-     * @param keyHash     the key hash
-     * @param shift       the shift
-     * @param entryLength the entry length
-     * @return the data index or -1
-     */
-    abstract int dataIndex(@Nullable K key, final int keyHash, final int shift, final int entryLength);
+    abstract int dataArity();
 
     /**
      * Checks if this trie is equivalent to the specified other trie.
      *
-     * @param other       the other trie
-     * @param entryLength the length of an entry in the trie
-     * @param numFields   the number of fields that must be compared
-     *                    (the entryLength - 1 if the entry has a sequence number)
+     * @param other the other trie
      * @return true if equivalent
      */
-    abstract boolean equivalent(final @NonNull Object other, int entryLength, int numFields);
+    abstract boolean equivalent(final @NonNull Object other);
 
     /**
      * Finds a value by a key.
      *
-     * @param key         a key
-     * @param keyHash     the hash code of the key
-     * @param shift       the shift for this node
-     * @param entryLength the entry length
-     * @param numFields   the number of fiels in an entry,
+     * @param key     a key
+     * @param keyHash the hash code of the key
+     * @param shift   the shift for this node
      * @return the value, returns {@link #NO_VALUE} if the value is not present.
      */
-    abstract Object findByKey(final K key, final int keyHash, final int shift, int entryLength, int numFields);
+    abstract Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction);
 
-
-    abstract Object[] getDataEntry(final int index, int entryLength);
-
-    public abstract K getKey(final int index, int entryLength);
-
-    abstract SequencedMapEntry<K, V> getKeyValueSeqEntry(final int index, int entryLength, int numFields);
+    abstract @Nullable K getKey(final int index);
 
     @Nullable UniqueId getMutator() {
         return null;
     }
 
-    abstract Node<K, V> getNode(final int index, int entryLength);
-
-    public abstract V getValue(final int index, int entryLength, int numFields);
+    abstract @NonNull Node<K> getNode(final int index);
 
     abstract boolean hasData();
+
+    abstract boolean hasDataArityOne();
 
     abstract boolean hasNodes();
 
@@ -214,11 +162,26 @@ public abstract class Node<K, V> {
 
     abstract int nodeArity();
 
-    abstract Node<K, V> remove(final @Nullable UniqueId mutator, final K key,
-                               final int keyHash, final int shift, final ChangeEvent<V> details, int entryLength, int numFields);
+    abstract @NonNull Node<K> remove(final @Nullable UniqueId mutator, final K key,
+                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction);
 
-    abstract Node<K, V> update(final @Nullable UniqueId mutator, final K key, final V val,
-                               final int keyHash, final int shift, final ChangeEvent<V> details, int entryLength, int sequenceNumber, int numFields);
-
-
+    /**
+     * Inserts or updates a key in the trie.
+     *
+     * @param mutator        a mutator that uniquely owns mutated nodes
+     * @param key            a key
+     * @param keyHash        the hash-code of the key
+     * @param shift          the shift of the current node
+     * @param details        update details on output
+     * @param updateFunction only used on update:
+     *                       given the existing key (oldk) and the new key (newk),
+     *                       this function decides whether it replaces the old
+     *                       key with the new key
+     * @return the updated trie
+     */
+    abstract @NonNull Node<K> update(final @Nullable UniqueId mutator, final K key,
+                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details,
+                                     @NonNull BiFunction<K, K, K> updateFunction,
+                                     @NonNull BiPredicate<K, K> equalsFunction,
+                                     @NonNull ToIntFunction<K> hashFunction);
 }

@@ -33,8 +33,6 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractImmutabl
         }
         ImmutableMap<HashCollider, HashCollider> instance = copyOf(expected);
 
-        System.out.println((((ImmutableSequencedChampMap) instance).dump()));
-
         assertEqualSequence(expected, instance.asMap(), "after adding all");
 
         // Remove one element in the middle

@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.champmap;
+package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -24,34 +23,29 @@ import java.util.function.Consumer;
  * passed to this iterator must not change the trie structure that the iterator
  * currently uses.
  */
-public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
+public class KeyIterator<K> implements Iterator<K> {
 
     private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
     int nextValueCursor;
     private int nextValueLength;
     private int nextStackLevel = -1;
-    Node<K, V> nextValueNode;
-    @Nullable SequencedMapEntry<K, V> current;
+    Node<K> nextValueNode;
+    @Nullable K current;
     private boolean canRemove = false;
     private final @Nullable Consumer<K> persistentRemoveFunction;
-    private final @Nullable BiConsumer<K, V> persistentPutIfPresentFunction;
     @SuppressWarnings({"unchecked", "rawtypes"})
-    Node<K, V> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
+    Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Creates a new instance.
      *
-     * @param rootNode                       the root node of the trie
-     * @param persistentRemoveFunction       a function that removes an entry from a field;
-     *                                       the function must not change the trie that was passed
-     *                                       to this iterator
-     * @param persistentPutIfPresentFunction a function that replaces the value of an entry;
-     *                                       the function must not change the trie that was passed
-     *                                       to this iterator
+     * @param rootNode                 the root node of the trie
+     * @param persistentRemoveFunction a function that removes an entry from a field;
+     *                                 the function must not change the trie that was passed
+     *                                 to this iterator
      */
-    public EntryIterator(@NonNull Node<K, V> rootNode, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
+    public KeyIterator(@NonNull Node<K> rootNode, @Nullable Consumer<K> persistentRemoveFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
-        this.persistentPutIfPresentFunction = persistentPutIfPresentFunction;
         if (rootNode.hasNodes()) {
             nextStackLevel = 0;
             nodes[0] = rootNode;
@@ -75,13 +69,12 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     }
 
     @Override
-    public @Nullable SequencedMapEntry<K, V> next() {
+    public K next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         } else {
             canRemove = true;
-            current = nextValueNode.getKeyValueSeqEntry(nextValueCursor++);
-            current.setPutIfPresentFunction(persistentPutIfPresentFunction);
+            current = nextValueNode.getKey(nextValueCursor++);
             return current;
         }
     }
@@ -96,7 +89,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
             final int nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
             final int nodeLength = nodeCursorsAndLengths[currentLengthIndex];
             if (nodeCursor < nodeLength) {
-                final Node<K, V> nextNode = nodes[nextStackLevel].getNode(nodeCursor);
+                final Node<K> nextNode = nodes[nextStackLevel].getNode(nodeCursor);
                 nodeCursorsAndLengths[currentCursorIndex]++;
                 if (nextNode.hasNodes()) {
                     // put node on next stack level for depth-first traversal
@@ -127,11 +120,11 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
         if (persistentRemoveFunction == null) {
             throw new UnsupportedOperationException("remove");
         }
-        if (!canRemove || current == null) {
+        if (!canRemove) {
             throw new IllegalStateException();
         }
-        Map.Entry<K, V> toRemove = current;
-        persistentRemoveFunction.accept(toRemove.getKey());
+        K toRemove = current;
+        persistentRemoveFunction.accept(toRemove);
         canRemove = false;
         current = null;
     }

@@ -1,4 +1,4 @@
-package org.jhotdraw8.collection.champset;
+package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -6,28 +6,29 @@ import org.jhotdraw8.collection.LongArrayHeap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class SequencedKeyIterator<E> implements Iterator<E> {
+public class SequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private final @NonNull LongArrayHeap queue;
-    private SequencedKey<E> current;
+    private E current;
     private boolean canRemove;
-    private final SequencedKey<E>[] array;
-
+    private final E[] array;
+    private final @NonNull Function<E, X> mappingFunction;
     private final @Nullable Consumer<E> persistentRemoveFunction;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public SequencedKeyIterator(int size, @NonNull Node<SequencedKey<E>> rootNode,
-                                boolean reversed,
-                                @Nullable Consumer<E> persistentRemoveFunction,
-                                @Nullable BiConsumer<E, E> persistentPutIfPresentFunction) {
+    public SequencedIterator(int size, @NonNull Node<? extends E> rootNode,
+                             boolean reversed,
+                             @Nullable Consumer<E> persistentRemoveFunction,
+                             @NonNull Function<E, X> mappingFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
+        this.mappingFunction = mappingFunction;
         queue = new LongArrayHeap(size);
-        array = (SequencedKey<E>[]) new SequencedKey[size];
+        array = (E[]) new Sequenced[size];
         int i = 0;
-        for (Iterator<SequencedKey<E>> it = new KeyIterator<>(rootNode, null); it.hasNext(); i++) {
-            SequencedKey<E> k = it.next();
+        for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); i++) {
+            E k = it.next();
             array[i] = k;
             int sequenceNumber = k.getSequenceNumber();
             queue.addAsLong(((long) (reversed ? -sequenceNumber : sequenceNumber) << 32) | i);
@@ -40,10 +41,10 @@ public class SequencedKeyIterator<E> implements Iterator<E> {
     }
 
     @Override
-    public E next() {
+    public X next() {
         current = array[(int) queue.removeAsLong()];
         canRemove = true;
-        return current.getKey();
+        return mappingFunction.apply(current);
     }
 
     @Override
@@ -54,16 +55,16 @@ public class SequencedKeyIterator<E> implements Iterator<E> {
         if (!canRemove) {
             throw new IllegalStateException();
         }
-        persistentRemoveFunction.accept(current.getKey());
+        persistentRemoveFunction.accept(current);
         canRemove = false;
     }
 
 
-    public static <E> @NonNull SequencedKey<E> getLast(@NonNull Node<SequencedKey<E>> root, int first, int last) {
+    public static <E extends Sequenced> @NonNull E getLast(@NonNull Node<? extends E> root, int first, int last) {
         int maxSeq = first;
-        SequencedKey<E> maxKey = null;
-        for (KeyIterator<SequencedKey<E>> i = new KeyIterator<>(root, null); i.hasNext(); ) {
-            SequencedKey<E> k = i.next();
+        E maxKey = null;
+        for (KeyIterator<? extends E> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+            E k = i.next();
             int seq = k.getSequenceNumber();
             if (seq >= maxSeq) {
                 maxSeq = seq;
@@ -79,11 +80,11 @@ public class SequencedKeyIterator<E> implements Iterator<E> {
         return maxKey;
     }
 
-    public static <E> @NonNull SequencedKey<E> getFirst(@NonNull Node<SequencedKey<E>> root, int first, int last) {
+    public static <E extends Sequenced> @NonNull E getFirst(@NonNull Node<? extends E> root, int first, int last) {
         int minSeq = last;
-        SequencedKey<E> minKey = null;
-        for (KeyIterator<SequencedKey<E>> i = new KeyIterator<>(root, null); i.hasNext(); ) {
-            SequencedKey<E> k = i.next();
+        E minKey = null;
+        for (KeyIterator<? extends E> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+            E k = i.next();
             int seq = k.getSequenceNumber();
             if (seq <= minSeq) {
                 minSeq = seq;

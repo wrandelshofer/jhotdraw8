@@ -8,12 +8,12 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.UniqueId;
 
-final class MutableHashCollisionNode<K, V> extends HashCollisionNode<K, V> {
+final class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
     private final static long serialVersionUID = 0L;
     private final @NonNull UniqueId mutator;
 
-    MutableHashCollisionNode(@NonNull UniqueId mutator, int hash, Object @NonNull [] entries, int entryLength) {
-        super(hash, entries, entryLength);
+    MutableHashCollisionNode(@NonNull UniqueId mutator, int hash, Object @NonNull [] entries) {
+        super(hash, entries);
         this.mutator = mutator;
     }
 

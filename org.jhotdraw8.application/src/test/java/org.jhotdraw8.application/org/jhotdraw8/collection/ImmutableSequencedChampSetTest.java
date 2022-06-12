@@ -6,8 +6,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.champset.ChampTrieGraphviz;
-import org.jhotdraw8.collection.champset.SequencedKey;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +41,7 @@ public class ImmutableSequencedChampSetTest extends AbstractImmutableSequencedSe
             String value = "v" + i;
             instance = instance.copyAdd(key);
         }
-        System.out.println(new ChampTrieGraphviz<SequencedKey<HashCollider>>().dumpTrie(instance));
+        System.out.println(new ChampTrieGraphviz().dumpTrie(instance));
     }
 
 }

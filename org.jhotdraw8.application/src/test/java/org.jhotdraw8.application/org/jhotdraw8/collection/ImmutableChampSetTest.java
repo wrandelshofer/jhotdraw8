@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class ImmutableChampSetTest extends AbstractImmutableSetTest {
             instance = instance.copyAdd(key);
         }
 
-        System.out.println(instance.dump());
+        System.out.println(new ChampTrieGraphviz().dumpTrie(instance));
     }
 
 }
