@@ -25,21 +25,22 @@ import java.util.Set;
  */
 public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
     /**
-     * Wraps this set in the Set interface - without copying.
+     * Returns the sum of the hash codes of all elements in the provided
+     * iterator.
      *
-     * @return the wrapped set
+     * @param iterator an iterator
+     * @return the sum of the hash codes of the elements
+     * @see Set#hashCode()
      */
-    default @NonNull Set<E> asSet() {
-        return new WrappedSet<>(this);
-    }
-
-    /**
-     * Wraps this set in the ObservableSet interface - without copying.
-     *
-     * @return the wrapped set
-     */
-    default @NonNull ObservableSet<E> asObservableSet() {
-        return new WrappedObservableSet<>(this);
+    static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
+        int h = 0;
+        while (iterator.hasNext()) {
+            E e = iterator.next();
+            if (e != null) {
+                h += e.hashCode();
+            }
+        }
+        return h;
     }
 
     /**
@@ -64,22 +65,21 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
     }
 
     /**
-     * Returns the sum of the hash codes of all elements in the provided
-     * iterator.
+     * Wraps this set in the ObservableSet interface - without copying.
      *
-     * @param iterator an iterator
-     * @return the sum of the hash codes of the elements
-     * @see Set#hashCode()
+     * @return the wrapped set
      */
-    static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
-        int h = 0;
-        while (iterator.hasNext()) {
-            E e = iterator.next();
-            if (e != null) {
-                h += e.hashCode();
-            }
-        }
-        return h;
+    default @NonNull ObservableSet<E> asObservableSet() {
+        return new WrappedObservableSet<>(this);
+    }
+
+    /**
+     * Wraps this set in the Set interface - without copying.
+     *
+     * @return the wrapped set
+     */
+    default @NonNull Set<E> asSet() {
+        return new WrappedSet<>(this);
     }
 
     /**

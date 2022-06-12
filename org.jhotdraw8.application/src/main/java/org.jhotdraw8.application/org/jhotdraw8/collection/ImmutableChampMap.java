@@ -115,7 +115,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
      */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ImmutableChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
+        return ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
     }
 
     /**

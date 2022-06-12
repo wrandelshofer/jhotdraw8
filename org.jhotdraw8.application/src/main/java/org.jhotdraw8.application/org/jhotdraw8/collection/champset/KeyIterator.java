@@ -33,7 +33,7 @@ public class KeyIterator<K> implements Iterator<K> {
     @Nullable K current;
     private boolean canRemove = false;
     private final @Nullable Consumer<K> persistentRemoveFunction;
-    @SuppressWarnings({"unchecked"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**

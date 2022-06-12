@@ -110,7 +110,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
         }
-
     }
 
     public ChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
@@ -133,12 +132,11 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @NonNull ChampMap<K, V> clone() {
         try {
-            @SuppressWarnings("unchecked") final ChampMap<K, V> that = (ChampMap<K, V>) super.clone();
-            that.mutator = null;
-            this.mutator = null;
-            return that;
+            mutator = null;
+            return (ChampMap<K, V>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
@@ -155,9 +153,9 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     }
 
     @Override
-    public boolean containsKey(final @NonNull Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
+    @SuppressWarnings("unchecked")
+    public boolean containsKey(@NonNull Object o) {
+        return root.findByKey((K) o, Objects.hashCode(o), 0, ENTRY_LENGTH, ENTRY_LENGTH) != Node.NO_VALUE;
     }
 
     /**
@@ -189,8 +187,8 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable V get(final @NonNull Object o) {
-        final K key = (K) o;
+    public @Nullable V get(@NonNull Object o) {
+        K key = (K) o;
         Object result = root.findByKey(key, Objects.hashCode(key), 0, ENTRY_LENGTH, ENTRY_LENGTH);
         return result == Node.NO_VALUE ? null : (V) result;
     }
@@ -207,13 +205,11 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return putAndGiveDetails(key, value).getOldValue();
     }
 
-    @NonNull ChangeEvent<V> putAndGiveDetails(final K key, final V val) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<V> details = new ChangeEvent<>();
-
-        final BitmapIndexedNode<K, V> newRootNode = root
+    @NonNull ChangeEvent<V> putAndGiveDetails(@Nullable K key, @Nullable V val) {
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<V> details = new ChangeEvent<>();
+        BitmapIndexedNode<K, V> newRootNode = root
                 .update(getOrCreateMutator(), key, val, keyHash, 0, details, ENTRY_LENGTH, Node.NO_SEQUENCE_NUMBER, ENTRY_LENGTH);
-
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
                 root = newRootNode;
@@ -223,7 +219,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
                 modCount++;
             }
         }
-
         return details;
     }
 
@@ -275,11 +270,8 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
      * @return an immutable copy
      */
     public @NonNull ImmutableChampMap<K, V> toImmutable() {
-        if (size == 0) {
-            return ImmutableChampMap.of();
-        }
         mutator = null;
-        return new ImmutableChampMap<>(root, size);
+        return size == 0 ? ImmutableChampMap.of() : new ImmutableChampMap<>(root, size);
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {

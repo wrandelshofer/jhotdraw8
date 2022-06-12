@@ -77,12 +77,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Collection<? extends E> c) {
         boolean changed = false;
         beginChange();
         try {
             for (Object o : c.toArray()) {
-                //noinspection unchecked
                 changed |= add((E) o);
             }
         } finally {
@@ -92,12 +92,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean addAll(int index, @NonNull Collection<? extends E> c) {
         boolean changed = false;
         beginChange();
         try {
             for (Object o : c.toArray()) {
-                //noinspection unchecked
                 if (!contains(o)) {
                     changed = true;
                     add(index++, (E) o);

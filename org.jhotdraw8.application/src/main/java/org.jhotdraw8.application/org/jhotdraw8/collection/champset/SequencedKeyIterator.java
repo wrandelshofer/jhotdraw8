@@ -17,7 +17,7 @@ public class SequencedKeyIterator<E> implements Iterator<E> {
 
     private final @Nullable Consumer<E> persistentRemoveFunction;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public SequencedKeyIterator(int size, @NonNull Node<SequencedKey<E>> rootNode,
                                 boolean reversed,
                                 @Nullable Consumer<E> persistentRemoveFunction,

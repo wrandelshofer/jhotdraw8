@@ -283,7 +283,7 @@ public class BitmapIndexedNode<K> extends Node<K> {
             final int dataIndex = dataIndex(bitpos);
             final K currentKey = getKey(dataIndex);
             if (Objects.equals(currentKey, key)) {
-                K updatedKey = updateFunction.apply((K) currentKey, key);
+                K updatedKey = updateFunction.apply(currentKey, key);
                 if (updatedKey == currentKey) {
                     details.found(key);
                     return this;
