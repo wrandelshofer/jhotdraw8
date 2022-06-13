@@ -293,11 +293,11 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     public @NonNull Iterator<E> iterator(boolean reversed) {
         return new FailFastIterator<>(new SequencedIterator<SequencedElement<E>, E>(
                 size, root, reversed,
-                this::persistentRemove, SequencedElement::getElement),
+                this::immutableRemove, SequencedElement::getElement),
                 () -> SequencedChampSet.this.modCount);
     }
 
-    private void persistentRemove(SequencedElement<E> e) {
+    private void immutableRemove(SequencedElement<E> e) {
         mutator = null;
         remove(e.getElement());
     }

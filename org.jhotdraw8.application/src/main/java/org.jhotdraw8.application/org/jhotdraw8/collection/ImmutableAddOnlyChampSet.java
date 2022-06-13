@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * A persistent CHAMP set that only provides a {@code copyAdd} method.
+ * An immutable CHAMP set that only provides a {@code copyAdd} method.
  * <p>
  * References:
  * <dl>

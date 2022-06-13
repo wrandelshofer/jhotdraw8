@@ -32,20 +32,20 @@ public class KeyIterator<K> implements Iterator<K> {
     Node<K> nextValueNode;
     @Nullable K current;
     private boolean canRemove = false;
-    private final @Nullable Consumer<K> persistentRemoveFunction;
+    private final @Nullable Consumer<K> immutableRemoveFunction;
     @SuppressWarnings({"unchecked", "rawtypes"})
     Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Creates a new instance.
      *
-     * @param rootNode                 the root node of the trie
-     * @param persistentRemoveFunction a function that removes an entry from a field;
-     *                                 the function must not change the trie that was passed
-     *                                 to this iterator
+     * @param rootNode                the root node of the trie
+     * @param immutableRemoveFunction a function that removes an entry from a field;
+     *                                the function must not change the trie that was passed
+     *                                to this iterator
      */
-    public KeyIterator(@NonNull Node<K> rootNode, @Nullable Consumer<K> persistentRemoveFunction) {
-        this.persistentRemoveFunction = persistentRemoveFunction;
+    public KeyIterator(@NonNull Node<K> rootNode, @Nullable Consumer<K> immutableRemoveFunction) {
+        this.immutableRemoveFunction = immutableRemoveFunction;
         if (rootNode.hasNodes()) {
             nextStackLevel = 0;
             nodes[0] = rootNode;
@@ -117,14 +117,14 @@ public class KeyIterator<K> implements Iterator<K> {
 
     @Override
     public void remove() {
-        if (persistentRemoveFunction == null) {
+        if (immutableRemoveFunction == null) {
             throw new UnsupportedOperationException("remove");
         }
         if (!canRemove) {
             throw new IllegalStateException();
         }
         K toRemove = current;
-        persistentRemoveFunction.accept(toRemove);
+        immutableRemoveFunction.accept(toRemove);
         canRemove = false;
         current = null;
     }

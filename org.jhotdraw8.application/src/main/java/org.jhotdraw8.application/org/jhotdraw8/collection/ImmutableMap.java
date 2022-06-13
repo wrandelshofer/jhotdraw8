@@ -15,12 +15,12 @@ import java.util.Map;
 /**
  * Interface for an immutable map.
  * <p>
- * A persistent map provides methods for creating a new persistent map with
- * put or removed entries, without changing the original persistent map.
+ * An immutable map provides methods for creating a new immutable map with
+ * new, updated or deleted entries, without changing the original immutable map.
  * <p>
  * Implementations are expected to only require time and space that is
- * proportional to the differences between the newly created persistent map to
- * the original persistent amp.
+ * proportional to the differences between the newly created immutable map to
+ * the original immutable amp.
  */
 public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
 

@@ -15,14 +15,14 @@ public class SequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private boolean canRemove;
     private final E[] array;
     private final @NonNull Function<E, X> mappingFunction;
-    private final @Nullable Consumer<E> persistentRemoveFunction;
+    private final @Nullable Consumer<E> immutableRemoveFunction;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public SequencedIterator(int size, @NonNull Node<? extends E> rootNode,
                              boolean reversed,
-                             @Nullable Consumer<E> persistentRemoveFunction,
+                             @Nullable Consumer<E> immutableRemoveFunction,
                              @NonNull Function<E, X> mappingFunction) {
-        this.persistentRemoveFunction = persistentRemoveFunction;
+        this.immutableRemoveFunction = immutableRemoveFunction;
         this.mappingFunction = mappingFunction;
         queue = new LongArrayHeap(size);
         array = (E[]) new Sequenced[size];
@@ -49,13 +49,13 @@ public class SequencedIterator<E extends Sequenced, X> implements Iterator<X> {
 
     @Override
     public void remove() {
-        if (persistentRemoveFunction == null) {
+        if (immutableRemoveFunction == null) {
             throw new UnsupportedOperationException();
         }
         if (!canRemove) {
             throw new IllegalStateException();
         }
-        persistentRemoveFunction.accept(current);
+        immutableRemoveFunction.accept(current);
         canRemove = false;
     }
 

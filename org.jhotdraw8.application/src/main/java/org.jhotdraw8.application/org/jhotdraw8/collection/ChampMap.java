@@ -166,9 +166,9 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return new WrappedSet<>(
                 () -> new MappedIterator<>(new FailFastIterator<>(new KeyIterator<>(
                         root,
-                        this::persistentRemove),
+                        this::immutableRemove),
                         () -> this.modCount),
-                        e -> new MutableMapEntry<>(this::persistentPutIfPresent, e.getKey(), e.getValue())),
+                        e -> new MutableMapEntry<>(this::immutablePutIfPresent, e.getKey(), e.getValue())),
                 ChampMap.this::size,
                 ChampMap.this::containsEntry,
                 ChampMap.this::clear,
@@ -176,7 +176,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         );
     }
 
-    private void persistentRemove(AbstractMap.SimpleImmutableEntry<K, V> entry) {
+    private void immutableRemove(AbstractMap.SimpleImmutableEntry<K, V> entry) {
         mutator = null;
         remove(entry.getKey());
     }
@@ -223,7 +223,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return details;
     }
 
-    private void persistentPutIfPresent(@Nullable K k, @Nullable V v) {
+    private void immutablePutIfPresent(@Nullable K k, @Nullable V v) {
         if (containsKey(k)) {
             mutator = null;
             put(k, v);

@@ -184,8 +184,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
         return new FailFastIterator<>(new SequencedIterator<SequencedEntry<K, V>, Entry<K, V>>(
                 size, root, reversed,
-                this::persistentRemove,
-                e -> new MutableMapEntry<>(this::persistentPutIfPresent, e.getKey(), e.getValue())),
+                this::immutableRemove,
+                e -> new MutableMapEntry<>(this::immutablePutIfPresent, e.getKey(), e.getValue())),
                 () -> this.modCount);
 
     }
@@ -298,14 +298,14 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return details;
     }
 
-    private void persistentPutIfPresent(@NonNull K k, V v) {
+    private void immutablePutIfPresent(@NonNull K k, V v) {
         if (containsKey(k)) {
             mutator = null;
             put(k, v);
         }
     }
 
-    private void persistentRemove(SequencedEntry<K, V> entry) {
+    private void immutableRemove(SequencedEntry<K, V> entry) {
         mutator = null;
         remove(entry.getKey());
     }

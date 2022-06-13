@@ -214,11 +214,11 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     @Override
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new KeyIterator<>(root, this::persistentRemove),
+                new KeyIterator<>(root, this::immutableRemove),
                 () -> this.modCount);
     }
 
-    private void persistentRemove(E e) {
+    private void immutableRemove(E e) {
         mutator = null;
         remove(e);
     }
