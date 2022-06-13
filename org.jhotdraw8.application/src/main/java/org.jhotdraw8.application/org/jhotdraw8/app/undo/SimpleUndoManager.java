@@ -21,6 +21,9 @@ public class SimpleUndoManager implements UndoManager {
 
     private final @NonNull List<UndoableEdit> events = new ArrayList<>();
 
+    public SimpleUndoManager() {
+    }
+
     @Override
     public void handle(UndoableEdit event) {
 

@@ -11,7 +11,6 @@ import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -86,10 +85,11 @@ public class WrappedSet<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         return iteratorFunction.get();
     }
 
-    @Override
+    /*
+    //@Override  since 11
     public <T> T[] toArray(IntFunction<T[]> generator) {
         return super.toArray(generator);
-    }
+    }*/
 
     @Override
     public int size() {

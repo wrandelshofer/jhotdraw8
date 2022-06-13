@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -81,9 +82,9 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the removed first entry of this map or code {@null}
      */
     default Map.Entry<K, V> pollFirstEntry() {
-        var it = entrySet().iterator();
+        Iterator<Entry<K, V>> it = entrySet().iterator();
         if (it.hasNext()) {
-            var entry = it.next();
+            Entry<K, V> entry = it.next();
             it.remove();
             return entry;
         } else {
