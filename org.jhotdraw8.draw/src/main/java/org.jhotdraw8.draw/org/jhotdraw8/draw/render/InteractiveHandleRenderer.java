@@ -11,6 +11,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.ReadOnlySetWrapper;
 import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleSetProperty;
@@ -71,6 +72,13 @@ public class InteractiveHandleRenderer {
      * The set of all handles which were produced by selected figures.
      */
     private final Map<Figure, List<Handle>> handles = new LinkedHashMap<>();
+    private final ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
+
+    /**
+     * Provides a read-only view on the current set of handles.
+     */
+    private final ReadOnlySetWrapper<Handle> handlesProperty = new ReadOnlySetWrapper<>(this, "handles", FXCollections.unmodifiableObservableSet(handlesView));
+
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
@@ -340,6 +348,11 @@ public class InteractiveHandleRenderer {
             dirtyHandles.clear();
 
             createHandles(handles);
+            handlesView.clear();
+            for (List<Handle> value : handles.values()) {
+                handlesView.addAll(value);
+            }
+
             recreateHandles = false;
 
 
@@ -388,5 +401,9 @@ public class InteractiveHandleRenderer {
 
     public void setSelectedFigures(ObservableSet<Figure> selectedFigures) {
         this.selectedFigures.set(selectedFigures);
+    }
+
+    public @NonNull ReadOnlySetProperty<Handle> handlesProperty() {
+        return handlesProperty.getReadOnlyProperty();
     }
 }

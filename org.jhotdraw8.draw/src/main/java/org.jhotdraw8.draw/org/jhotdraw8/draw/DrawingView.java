@@ -202,12 +202,23 @@ public interface DrawingView extends WritableRenderContext {
     /**
      * The selected figures.
      * <p>
-     * Note: The selection is represent by a {@code LinkedHasSet} because the
+     * Note: The selection is represented by a {@code LinkedHasSet} because the
      * sequence of the selection is important.
      *
-     * @return a list of the selected figures
+     * @return the currently selected figures
      */
     @NonNull ReadOnlySetProperty<Figure> selectedFiguresProperty();
+
+    /**
+     * The handles.
+     * <p>
+     * Note: The handles are represented by a {@code LinkedHasSet} because the
+     * sequence of the handles is important.
+     *
+     * @return the handles that are currently being displayed on tihs drawing
+     * view.
+     */
+    @NonNull ReadOnlySetProperty<Handle> handlesProperty();
 
     /**
      * The active handle.
@@ -562,6 +573,10 @@ public interface DrawingView extends WritableRenderContext {
 
     default ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty().get();
+    }
+
+    default ObservableSet<Handle> getHandles() {
+        return handlesProperty().get();
     }
 
     /**

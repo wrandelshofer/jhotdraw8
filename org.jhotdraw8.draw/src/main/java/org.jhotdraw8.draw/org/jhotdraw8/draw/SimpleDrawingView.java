@@ -13,6 +13,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlySetProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
@@ -552,5 +553,10 @@ public class SimpleDrawingView extends AbstractDrawingView {
 
     public void duplicateSelection() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public @NonNull ReadOnlySetProperty<Handle> handlesProperty() {
+        return handleRenderer.handlesProperty();
     }
 }
