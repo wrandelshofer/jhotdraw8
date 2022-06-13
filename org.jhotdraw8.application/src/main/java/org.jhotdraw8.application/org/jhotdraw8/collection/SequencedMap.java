@@ -93,6 +93,23 @@ public interface SequencedMap<K, V> extends Map<K, V> {
     }
 
     /**
+     * Removes and returns the first entry in this map or code {@null}
+     * if the map is empty.
+     *
+     * @return the removed first entry of this map or code {@null}
+     */
+    default Map.Entry<K, V> pollLastEntry() {
+        Iterator<Entry<K, V>> it = reversed().entrySet().iterator();
+        if (it.hasNext()) {
+            Entry<K, V> entry = it.next();
+            it.remove();
+            return entry;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Creates an entry for the specified key and value and adds it to the front
      * of the map if an entry for the specified key is not already present.
      * If this map already contains an entry for the specified key, replaces the

@@ -25,12 +25,26 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     @Override
     @NonNull ImmutableSequencedSet<E> copyRemoveAll(@NonNull Iterable<?> c);
 
+    /**
+     * Returns a copy of this set that contains all elements
+     * of this set except the first.
+     *
+     * @return this set instanceif it is already empty, or
+     * a different set instance with the first element removed
+     */
     default ImmutableSequencedSet<E> copyRemoveFirst() {
-        return copyRemove(getFirst());
+        return isEmpty() ? this : copyRemove(getFirst());
     }
 
+    /**
+     * Returns a copy of this set that contains all elements
+     * of this set except the last.
+     *
+     * @return this set instance if it is already empty, or
+     * a different set instance with the last element removed
+     */
     default ImmutableSequencedSet<E> copyRemoveLast() {
-        return copyRemove(getLast());
+        return isEmpty() ? this : copyRemove(getLast());
     }
 
     @Override

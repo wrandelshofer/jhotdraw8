@@ -36,12 +36,15 @@ import java.util.function.ToIntFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyPut: O(1) amortized</li>
- *     <li>copyRemove: O(1)</li>
+ *     <li>copyPut, copyPutFirst, copyPutLast: O(1) amortized due to
+ *     renumbering</li>
+ *     <li>copyRemove: O(1) amortized due to renumbering</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toMutable: O(1) + a cost distributed across subsequent updates in the mutable copy</li>
+ *     <li>toMutable: O(1) + a cost distributed across subsequent updates in
+ *     the mutable copy</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(log n)</li>
+ *     <li>iterator.next(): O(log N)</li>
+ *     <li>getFirst, getLast: O(N)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -271,13 +274,24 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
 
     @Override
     public @NonNull ImmutableSequencedChampMap<K, V> copyRemove(@NonNull K key) {
+        return copyRemove(key, first, last);
+    }
+
+    private @NonNull ImmutableSequencedChampMap<K, V> copyRemove(@NonNull K key, int newFirst, int newLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
                 remove(null, new SequencedEntry<>(key), keyHash, 0, details, getEqualsFunction());
         if (details.isModified()) {
             assert details.hasReplacedValue();
-            return new ImmutableSequencedChampMap<>(newRootNode, size - 1, first, last + 1);
+            int seq = details.getOldValue().getSequenceNumber();
+            if (seq == newFirst) {
+                newFirst++;
+            }
+            if (seq == newLast) {
+                newLast--;
+            }
+            return new ImmutableSequencedChampMap<>(newRootNode, size - 1, newFirst, newLast);
         }
         return this;
     }

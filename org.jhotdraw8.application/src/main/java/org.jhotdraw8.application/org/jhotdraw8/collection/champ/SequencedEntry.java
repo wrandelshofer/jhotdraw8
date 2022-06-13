@@ -53,7 +53,7 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
             SequencedEntry<K, V> newElement = new SequencedEntry<>(e.getKey(), e.getValue(), seq);
             newRoot = newRoot.update(mutator,
                     newElement,
-                    Objects.hashCode(e), 0, details,
+                    Objects.hashCode(e.getKey()), 0, details,
                     updateFunction,
                     equalsFunction, hashFunction);
             seq++;

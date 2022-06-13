@@ -36,12 +36,15 @@ import java.util.function.ToIntFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>put: O(1) amortized due to renumbering</li>
+ *     <li>put, putFirst, putLast: O(1) amortized due to renumbering</li>
  *     <li>remove: O(1)</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toImmutable: O(1) + a cost distributed across subsequent updates</li>
- *     <li>clone: O(1) + a cost distributed across subsequent updates</li>
- *     <li>iterator.next(): O(log n)</li>
+ *     <li>toImmutable: O(1) + a cost distributed across subsequent updates in
+ *     this mutable map</li>
+ *     <li>clone: O(1) + a cost distributed across subsequent updates in this
+ *     mutable map and in the clone</li>
+ *     <li>iterator.next: O(log N)</li>
+ *     <li>getFirst, getLast: O(N)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -187,7 +190,6 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 this::immutableRemove,
                 e -> new MutableMapEntry<>(this::immutablePutIfPresent, e.getKey(), e.getValue())),
                 () -> this.modCount);
-
     }
 
     @Override
@@ -237,8 +239,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
-    public Entry<K, V> firstEntry() {
-        return entryIterator(false).next();
+    public @Nullable Entry<K, V> firstEntry() {
+        return isEmpty() ? null : SequencedIterator.getFirst(root, first, last);
     }
 
     @Override
@@ -258,8 +260,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
-    public Entry<K, V> lastEntry() {
-        return entryIterator(true).next();
+    public @Nullable Entry<K, V> lastEntry() {
+        return isEmpty() ? null : SequencedIterator.getLast(root, first, last);
     }
 
     @Override
@@ -287,12 +289,10 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 root = newRootNode;
             } else {
                 root = newRootNode;
-                size += 1;
-                first--;
-                if (first == Sequenced.NO_SEQUENCE_NUMBER) {
-                    renumber();
-                }
+                size++;
                 modCount++;
+                first--;
+                renumber();
             }
         }
         return details;
@@ -331,12 +331,10 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 root = newRootNode;
             } else {
                 root = newRootNode;
-                size += 1;
-                last++;
-                if (last == Sequenced.NO_SEQUENCE_NUMBER) {
-                    renumber();
-                }
+                size++;
                 modCount++;
+                last++;
+                renumber();
             }
         }
         return details;
@@ -345,8 +343,38 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        SequencedEntry<K, V> oldValue = removeAndGiveDetails(key).getOldValue();
-        return oldValue == null ? null : oldValue.getValue();
+        ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
+        if (details.isModified) {
+            int seq = details.getOldValue().getSequenceNumber();
+            if (seq == last) {
+                last++;
+            }
+            if (seq == first) {
+                first--;
+            }
+            return details.getOldValue().getValue();
+        }
+        return null;
+    }
+
+    public Map.Entry<K, V> pollFirstEntry() {
+        if (isEmpty()) {
+            return null;
+        }
+        SequencedEntry<K, V> entry = SequencedIterator.getFirst(root, first, last);
+        remove(entry.getKey());
+        first = entry.getSequenceNumber() + 1;
+        return entry;
+    }
+
+    public Map.Entry<K, V> pollLastEntry() {
+        if (isEmpty()) {
+            return null;
+        }
+        SequencedEntry<K, V> entry = SequencedIterator.getLast(root, first, last);
+        remove(entry.getKey());
+        last = entry.getSequenceNumber();
+        return entry;
     }
 
     @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(final K key) {
@@ -385,11 +413,20 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return false;
     }
 
+    /**
+     * Renumbers the sequence numbers if they have overflown,
+     * or if the extent of the sequence numbers is more than
+     * 4 times the size of the set.
+     */
     private void renumber() {
-        root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
-                getHashFunction(), getEqualsFunction());
-        last = size;
-        first = 0;
+        if ((long) last - first > size * 4L
+                || first == Sequenced.NO_SEQUENCE_NUMBER + 1
+                || last == Sequenced.NO_SEQUENCE_NUMBER) {
+            root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
+                    getHashFunction(), getEqualsFunction());
+            last = size;
+            first = 0;
+        }
     }
 
     @Override

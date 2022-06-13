@@ -42,7 +42,8 @@ import java.util.function.BiFunction;
  *     <li>contains: O(1)</li>
  *     <li>toMutable: O(1) + a cost distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(log n)</li>
+ *     <li>iterator.next(): O(log N)</li>
+ *     <li>getFirst(), getLast(): O(N)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -263,11 +264,18 @@ public class ImmutableSequencedChampSet<E>
 
     private @NonNull ImmutableSequencedChampSet<E> copyRemove(final @Nullable E key, int newFirst, int newLast) {
         final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedElement<E>> changeEvent = new ChangeEvent<>();
+        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
                 new SequencedElement<>(key),
-                keyHash, 0, changeEvent, Objects::equals);
-        if (changeEvent.isModified) {
+                keyHash, 0, details, Objects::equals);
+        if (details.isModified) {
+            int seq = details.getOldValue().getSequenceNumber();
+            if (seq == newFirst) {
+                newFirst++;
+            }
+            if (seq == newLast) {
+                newLast--;
+            }
             return new ImmutableSequencedChampSet<>(newRootNode, size - 1, newFirst, newLast);
         }
         return this;

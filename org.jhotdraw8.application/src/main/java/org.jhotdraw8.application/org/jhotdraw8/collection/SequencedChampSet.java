@@ -40,9 +40,12 @@ import java.util.stream.Stream;
  *     <li>add: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + a cost distributed across subsequent updates</li>
- *     <li>clone: O(1) + a cost distributed across subsequent updates</li>
- *     <li>iterator.next(): O(1)</li>
+ *     <li>toImmutable: O(1) + a cost distributed across subsequent updates in
+ *     this set</li>
+ *     <li>clone: O(1) + a cost distributed across subsequent updates in this
+ *     set and in the clone</li>
+ *     <li>iterator.next: O(log N)</li>
+ *     <li>getFirst, getLast: O(N)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -178,17 +181,17 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     private boolean addFirst(@Nullable E e,
                              @NonNull BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> updateFunction) {
-        final ChangeEvent<SequencedElement<E>> changeEvent = new ChangeEvent<>();
+        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
-                Objects.hashCode(e), 0, changeEvent, updateFunction, Objects::equals, Objects::hashCode);
-        if (changeEvent.isModified) {
+                Objects.hashCode(e), 0, details, updateFunction, Objects::equals, Objects::hashCode);
+        if (details.isModified) {
             root = newRoot;
             size++;
             modCount++;
             first--;
             renumber();
         }
-        return changeEvent.isModified;
+        return details.isModified;
     }
 
     @Override
@@ -198,18 +201,18 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     private boolean addLast(final @Nullable E e,
                             @NonNull BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> updateFunction) {
-        final ChangeEvent<SequencedElement<E>> changeEvent = new ChangeEvent<>();
+        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(
                 getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
-                changeEvent, updateFunction, Objects::equals, Objects::hashCode);
-        if (changeEvent.isModified) {
+                details, updateFunction, Objects::equals, Objects::hashCode);
+        if (details.isModified) {
             root = newRoot;
             size++;
             modCount++;
             last++;
             renumber();
         }
-        return changeEvent.isModified;
+        return details.isModified;
     }
 
     @Override
@@ -304,17 +307,24 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public boolean remove(final Object o) {
-        final ChangeEvent<SequencedElement<E>> changeEvent = new ChangeEvent<>();
+        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         @SuppressWarnings("unchecked")//
         final BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(
                 getOrCreateMutator(), new SequencedElement<>((E) o),
-                Objects.hashCode(o), 0, changeEvent, Objects::equals);
-        if (changeEvent.isModified) {
+                Objects.hashCode(o), 0, details, Objects::equals);
+        if (details.isModified) {
             root = newRoot;
             size--;
             modCount++;
+            int seq = details.getOldValue().getSequenceNumber();
+            if (seq == last) {
+                last++;
+            }
+            if (seq == first) {
+                first--;
+            }
         }
-        return changeEvent.isModified;
+        return details.isModified;
     }
 
     @Override
@@ -359,8 +369,14 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         return k.getElement();
     }
 
+    /**
+     * Renumbers the sequence numbers if they have overflown,
+     * or if the extent of the sequence numbers is more than
+     * 4 times the size of the set.
+     */
     private void renumber() {
-        if (first == Sequenced.NO_SEQUENCE_NUMBER
+        if ((long) last - first > size * 4L
+                || first == Sequenced.NO_SEQUENCE_NUMBER + 1
                 || last == Sequenced.NO_SEQUENCE_NUMBER) {
             root = SequencedElement.renumber(size, root, getOrCreateMutator(), Objects::hashCode, Objects::equals);
             last = size;

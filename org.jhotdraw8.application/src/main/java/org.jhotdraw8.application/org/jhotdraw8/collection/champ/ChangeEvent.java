@@ -9,7 +9,7 @@ public class ChangeEvent<V> {
 
     public boolean isModified;
     private V oldValue;
-    private boolean isReplaced;
+    public boolean isReplaced;
 
     public ChangeEvent() {
     }

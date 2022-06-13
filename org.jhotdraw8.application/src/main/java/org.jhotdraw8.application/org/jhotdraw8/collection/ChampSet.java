@@ -39,9 +39,11 @@ import java.util.function.ToIntFunction;
  *     <li>add: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + a cost distributed across subsequent updates</li>
- *     <li>clone: O(1) + a cost distributed across subsequent updates</li>
- *     <li>iterator.next(): O(1)</li>
+ *     <li>toImmutable: O(1) + a cost distributed across subsequent updates in
+ *     this set</li>
+ *     <li>clone: O(1) + a cost distributed across subsequent updates in this
+ *     set and in the clone</li>
+ *     <li>iterator.next: O(1)</li>
  * </ul>
  * <p>
  * Implementation details:
