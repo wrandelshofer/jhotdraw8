@@ -320,6 +320,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         return entries(false);
     }
 
+    @SuppressWarnings("unchecked")//Suppression is required for Java 8
     public @NonNull Iterator<Map.Entry<K, V>> entries(boolean reversed) {
         return new SequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(
                 size, this, reversed, null, Map.Entry.class::cast);
