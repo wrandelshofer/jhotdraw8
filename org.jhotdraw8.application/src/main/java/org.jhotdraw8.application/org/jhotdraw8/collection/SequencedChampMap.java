@@ -264,24 +264,24 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public V put(K key, V value) {
-        SequencedEntry<K, V> oldValue = putLastWithoutMoveToLast(key, value).getOldValue();
+        SequencedEntry<K, V> oldValue = this.putLast(key, value, getUpdateFunction()).getOldValue();
         return oldValue == null ? null : oldValue.getValue();
     }
 
     @Override
     public V putFirst(K key, V value) {
-        V oldValue = remove(key);
-        putFirstWithoutMoveToFirst(key, value);
-        return oldValue;
+        SequencedEntry<K, V> oldValue = putFirst(key, value, (oldk, newk) -> newk).getOldValue();
+        return oldValue == null ? null : oldValue.getValue();
     }
 
-    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirstWithoutMoveToFirst(final K key, final V val) {
+    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(final K key, final V val,
+                                                                @NonNull BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> updateFunction) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
                 root.update(getOrCreateMutator(),
                         new SequencedEntry<>(key, val, first), keyHash, 0, details,
-                        getUpdateFunction(), getEqualsFunction(), getHashFunction());
+                        updateFunction, getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
                 root = newRootNode;
@@ -312,18 +312,19 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public V putLast(K key, V value) {
-        V oldValue = remove(key);
-        putLastWithoutMoveToLast(key, value);
-        return oldValue;
+        SequencedEntry<K, V> oldValue = putLast(key, value, (oldk, newk) -> newk).getOldValue();
+        return oldValue == null ? null : oldValue.getValue();
     }
 
-    @NonNull ChangeEvent<SequencedEntry<K, V>> putLastWithoutMoveToLast(final K key, final V val) {
+    @NonNull ChangeEvent<SequencedEntry<K, V>> putLast(
+            final K key, final V val,
+            @NonNull BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> updateFunction) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
                 root.update(getOrCreateMutator(),
                         new SequencedEntry<>(key, val, last), keyHash, 0, details,
-                        getUpdateFunction(), getEqualsFunction(), getHashFunction());
+                        updateFunction, getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
             if (details.hasReplacedValue()) {
@@ -427,21 +428,17 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private ToIntFunction<SequencedEntry<K, V>> getHashFunction() {
-        return (ToIntFunction<SequencedEntry<K, V>>) (ToIntFunction<?>) SequencedEntry.HASH_FUNCTION;
+        return (a) -> Objects.hashCode(a.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> getEqualsFunction() {
-        return (BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>>) (BiPredicate<?, ?>) SequencedEntry.EQUALS_FUNCTION;
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
-        return (BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>>)
-                (BiFunction<?, ?, ?>) SequencedEntry.UPDATE_FUNCTION;
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }

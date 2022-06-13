@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-public class ChampMapTest extends AbstractMapTest {
+public class ChampMapTestOld extends AbstractMapTestOld {
     /**
      * Orders the trie by hash-code with bit partition size 5.
      * <p>

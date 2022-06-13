@@ -260,9 +260,10 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final SequencedChampMap<K, V> t = this.toMutable();
         boolean modified = false;
+        BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> updateFunction = getUpdateFunction();
         while (entries.hasNext()) {
             Map.Entry<? extends K, ? extends V> entry = entries.next();
-            ChangeEvent<SequencedEntry<K, V>> details = t.putLastWithoutMoveToLast(entry.getKey(), entry.getValue());
+            ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), updateFunction);
             modified |= details.isModified;
         }
         return modified ? t.toImmutable() : this;
@@ -403,21 +404,17 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private ToIntFunction<SequencedEntry<K, V>> getHashFunction() {
-        return (ToIntFunction<SequencedEntry<K, V>>) (ToIntFunction<?>) SequencedEntry.HASH_FUNCTION;
+        return (a) -> Objects.hashCode(a.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> getEqualsFunction() {
-        return (BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>>) (BiPredicate<?, ?>) SequencedEntry.EQUALS_FUNCTION;
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
-        return (BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>>)
-                (BiFunction<?, ?, ?>) SequencedEntry.UPDATE_FUNCTION;
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }

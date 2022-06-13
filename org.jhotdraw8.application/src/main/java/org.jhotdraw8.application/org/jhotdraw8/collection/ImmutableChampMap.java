@@ -81,12 +81,6 @@ import java.util.function.ToIntFunction;
 public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static BiPredicate<AbstractMap.SimpleImmutableEntry<?, ?>, AbstractMap.SimpleImmutableEntry<?, ?>> EQUALS_FUNCTION =
-            (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    private final static ToIntFunction<AbstractMap.SimpleImmutableEntry<?, ?>> HASH_FUNCTION =
-            (a) -> Objects.hashCode(a.getKey());
-    public static final @NonNull BiFunction<AbstractMap.SimpleImmutableEntry<?, ?>, AbstractMap.SimpleImmutableEntry<?, ?>, AbstractMap.SimpleImmutableEntry<?, ?>> UPDATE_FUNCTION =
-            (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     private static final ImmutableChampMap<?, ?> EMPTY = new ImmutableChampMap<>(BitmapIndexedNode.emptyNode(), 0);
     final transient int size;
 
@@ -152,7 +146,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
-                (BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>>) (BiPredicate<?, ?>) EQUALS_FUNCTION) != Node.NO_VALUE;
+                getEqualsFunction()) != Node.NO_VALUE;
     }
 
     @Override
@@ -222,7 +216,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode =
                 remove(null, new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
-                        (BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>>) (BiPredicate<?, ?>) EQUALS_FUNCTION);
+                        getEqualsFunction());
         if (details.isModified()) {
             assert details.hasReplacedValue();
             return new ImmutableChampMap<>(newRootNode, size - 1);
@@ -341,23 +335,18 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
             return ImmutableChampMap.of().copyPutAll(deserialized.iterator());
         }
     }
-
     @NonNull
-    @SuppressWarnings("unchecked")
     private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
-        return (ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>>) (ToIntFunction<?>) HASH_FUNCTION;
+        return (a) -> Objects.hashCode(a.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
-        return (BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>>) (BiPredicate<?, ?>) EQUALS_FUNCTION;
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>>)
-                (BiFunction<?, ?, ?>) UPDATE_FUNCTION;
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }

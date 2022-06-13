@@ -88,9 +88,6 @@ import java.util.function.ToIntFunction;
  */
 public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    public static final @NonNull BiFunction<?, ?, ?> UPDATE_FUNCTION = (oldk, newk) -> oldk;
-    public static final @NonNull BiPredicate<?, ?> EQUALS_FUNCTION = Objects::equals;
-    public static final @NonNull ToIntFunction<?> HASH_FUNCTION = Objects::hashCode;
     private transient @Nullable UniqueId mutator;
     private transient @NonNull BitmapIndexedNode<E> root;
     private transient int size;
@@ -140,21 +137,18 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private ToIntFunction<E> getHashFunction() {
-        return (ToIntFunction<E>) HASH_FUNCTION;
+        return Objects::hashCode;
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiPredicate<E, E> getEqualsFunction() {
-        return (BiPredicate<E, E>) EQUALS_FUNCTION;
+        return Objects::equals;
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiFunction<E, E, E> getUpdateFunction() {
-        return (BiFunction<E, E, E>) UPDATE_FUNCTION;
+        return (oldk, newk) -> oldk;
     }
 
     @Override

@@ -1,413 +1,412 @@
-/*
- * @(#)AbstractMapTest.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.AbstractMap;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public abstract class AbstractMapTest {
-    protected abstract @NonNull Map<HashCollider, HashCollider> of();
+    /**
+     * The test data.
+     */
+    static final class Data {
+        private final String name;
+        private final ReadOnlyMap<HashCollider, HashCollider> a;
+        private final ReadOnlyMap<HashCollider, HashCollider> b;
+        private final ReadOnlyMap<HashCollider, HashCollider> c;
 
-    protected abstract @NonNull Map<HashCollider, HashCollider> copyOf(@NonNull Map<HashCollider, HashCollider> map);
+        /**
+         * Creates a new instance with 3 maps of the same non-empty size.
+         *
+         * @param name the name of the data
+         * @param a    a non-empty map, all values are distinct
+         * @param b    a map with identical keys but different values from a,
+         *             all values are distinct from the values in a
+         *             and from other values in b
+         * @param c    a map with different keys and values from a and b,
+         *             all values are distinct from the values in a and b
+         *             and from other values in c,
+         */
+        Data(String name, ReadOnlyMap<HashCollider, HashCollider> a,
+             ReadOnlyMap<HashCollider, HashCollider> b,
+             ReadOnlyMap<HashCollider, HashCollider> c) {
+            this.name = name;
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
 
-    protected abstract @NonNull Map<HashCollider, HashCollider> copyOf(@NonNull Collection<Map.Entry<HashCollider, HashCollider>> map);
+        @Override
+        public String toString() {
+            return name;
+        }
 
+        public String name() {
+            return name;
+        }
 
-    private void assertMapEquality(Map<HashCollider, HashCollider> expected, Map<HashCollider, HashCollider> actual) {
-        //noinspection EqualsBetweenInconvertibleTypes
-        assertTrue(actual.equals(expected));
-        assertEquals(actual, actual);
-        //noinspection ConstantConditions
-        assertFalse(actual.equals(null));
+        public ReadOnlyMap<HashCollider, HashCollider> a() {
+            return a;
+        }
 
-        assertEquals(expected, actual);
-        assertEquals(expected.hashCode(), actual.hashCode());
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected.isEmpty(), actual.isEmpty());
+        public ReadOnlyMap<HashCollider, HashCollider> b() {
+            return b;
+        }
+
+        public ReadOnlyMap<HashCollider, HashCollider> c() {
+            return c;
+        }
     }
 
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTests() {
-        return Arrays.asList(
-                dynamicTest("32-bits hash", () -> testMap(-1)),
-                dynamicTest("3-bits hash", () -> testMap(7)),
-                dynamicTest("0-bits hash", () -> testMap(0))
+    /**
+     * Creates a new empty instance.
+     */
+    protected abstract Map<HashCollider, HashCollider> newInstance();
+
+    /**
+     * Creates a new instance with the specified expected number of elements
+     * and load factor.
+     */
+    protected abstract Map<HashCollider, HashCollider> newInstance(int numElements, float loadFactor);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract Map<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m);
+
+    protected abstract Map<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m);
+
+    protected abstract ImmutableMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m);
+
+    protected abstract Map<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    abstract Map<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m);
+
+    public static Stream<Data> dataProvider() {
+        return Stream.of(
+                NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
     }
 
-    private void testContains(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map<HashCollider, HashCollider> actual = of();
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
+    private final static Data NO_COLLISION = newData("no collisions", -1, 32, 100_000);
+    private final static Data ALL_COLLISION = newData("all collisions", 0, 32, 100_000);
+    private final static Data SOME_COLLISION = newData("some collisions", 0x55555555, 32, 100_000);
 
-        // GIVEN: a set with values1
-        actual.putAll(values1);
-
-        // WHEN: value1 is in set, then contains must be true
-        assertTrue(actual.entrySet().contains(firstValue1));
-        // WHEN: value2 is not in set, then contains must be false
-        assertFalse(actual.entrySet().contains(firstValue2));
-
+    private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
+        int value;
+        int count = 0;
+        do {
+            value = rng.nextInt(bound);
+            count++;
+            if (count >= bound) {
+                throw new RuntimeException("error in rng");
+            }
+        } while (!usedValues.add(value));
+        return value;
     }
 
-    private void testCopyOf(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map<HashCollider, HashCollider> actual;
-        Map<HashCollider, HashCollider> newActual;
-
-        // WHEN: a set is created with copyOf a java.util.Map
-        actual = copyOf(values1);
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(values1);
-        assertMapEquality(expected, actual);
-
-        // WHEN: a set is created with copyOf from itself
-        newActual = copyOf(actual);
-        assertMapEquality(newActual, actual);
-        actual = newActual;
-        //
-        expected = new LinkedHashMap<>(values1);
-        assertMapEquality(expected, actual);
+    private static Data newData(String name, int hashBitMask, int size, int bound) {
+        Random rng = new Random(0);
+        LinkedHashMap<HashCollider, HashCollider> a = new LinkedHashMap<>(size * 2);
+        LinkedHashMap<HashCollider, HashCollider> b = new LinkedHashMap<>(size * 2);
+        LinkedHashMap<HashCollider, HashCollider> c = new LinkedHashMap<>(size * 2);
+        LinkedHashSet<Integer> usedValues = new LinkedHashSet<>();
+        for (int i = 0; i < size; i++) {
+            int keyAB = createNewValue(rng, usedValues, bound);
+            int keyC = createNewValue(rng, usedValues, bound);
+            int valueA = createNewValue(rng, usedValues, bound);
+            int valueB = createNewValue(rng, usedValues, bound);
+            int valueC = createNewValue(rng, usedValues, bound);
+            a.put(new HashCollider(keyAB, hashBitMask), new HashCollider(valueA, hashBitMask));
+            b.put(new HashCollider(keyAB, hashBitMask), new HashCollider(valueB, hashBitMask));
+            c.put(new HashCollider(keyC, hashBitMask), new HashCollider(valueC, hashBitMask));
+        }
+        return new Data(name,
+                new WrappedReadOnlyMap<>(a),
+                new WrappedReadOnlyMap<>(b),
+                new WrappedReadOnlyMap<>(c));
     }
 
-    private void testEqualsHashCode(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        assertTrue(values1.size() > 0);
-        assertEquals(values1.size(), values2.size());
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
+    protected void assertEqualMap(Map<HashCollider, HashCollider> expected, Map<HashCollider, HashCollider> actual) {
+        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.isEmpty(), actual.isEmpty());
+        assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual);
+        assertEquals(actual, expected);
+        assertEquals(expected.entrySet(), actual.entrySet());
+        assertEquals(expected.keySet(), actual.keySet());
 
-        Map<HashCollider, HashCollider> actual1a = copyOf(values1);
-        assertEquals(actual1a, actual1a);// equals of itself
+        ArrayList<HashCollider> expectedValues = new ArrayList<>(expected.values());
+        ArrayList<HashCollider> actualValues = new ArrayList<>(actual.values());
+        expectedValues.sort(Comparator.comparing(HashCollider::getValue));
+        actualValues.sort(Comparator.comparing(HashCollider::getValue));
+        assertEquals(expectedValues, actualValues);
+    }
 
-        Map<HashCollider, HashCollider> actual1b = copyOf(values1);
-        assertEquals(actual1a, actual1b);// equals of a new map that does not share trie nodes
+    protected void assertNotEqualMap(Map<HashCollider, HashCollider> expected, Map<HashCollider, HashCollider> actual) {
+        assertNotEquals(expected, actual);
+        assertNotEquals(actual, expected);
+        assertNotEquals(expected.entrySet(), actual.entrySet());
+    }
 
-        Map<HashCollider, HashCollider> actual1c = actual1a;
-        actual1c.remove(firstValue1.getKey());
-        actual1c.put(firstValue1.getKey(), firstValue1.getValue());
-        assertEquals(actual1a, actual1c);// equals of a new map that shares many trie nodes
+    @Test
+    public void testNewInstanceNoArgsShouldBeEmpty() {
+        Map<HashCollider, HashCollider> actual = newInstance();
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
+        assertEqualMap(expected, actual);
+    }
 
-        Map<HashCollider, HashCollider> actual2a = copyOf(values2);
-        actual2a.remove(firstValue2.getKey());
-        HashCollider zero = new HashCollider(0, 0);
-        LinkedHashMap<HashCollider, HashCollider> expected1 = new LinkedHashMap<>(values1);
-        LinkedHashMap<HashCollider, HashCollider> expected1plusZero = new LinkedHashMap<>(values1);
-        expected1plusZero.put(zero, null);
+    @Test
+    public void testNewInstanceCapacityArgsShouldBeEmpty() {
+        Map<HashCollider, HashCollider> actual = newInstance(24, 0.75f);
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(24, 0.75f);
+        assertEqualMap(expected, actual);
+    }
 
-        // some assertions may not make sense, but they are needed for test coverage
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceMapArgsShouldBeEqualToMap(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a().asMap());
+        assertEqualMap(data.a().asMap(), actual);
+    }
 
-        //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(actual1a, expected1);
-        assertEquals(expected1, actual1a);
-        assertNotEquals(actual1a, actual2a);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceMapArgsOfSameTypeShouldBeEqualToMap(Data data) {
+        Map<HashCollider, HashCollider> actual1 = newInstance(data.a().asMap());
+        Map<HashCollider, HashCollider> actual = newInstance(actual1);
+        assertEqualMap(data.a().asMap(), actual);
+    }
 
-        assertEquals(expected1.hashCode(), actual1a.hashCode());
-        assertNotEquals(actual1a, expected1plusZero);
-        assertNotEquals(actual1a, new Object());
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlyMapArgsShouldBeEqualToMap(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        assertEqualMap(data.a().asMap(), actual);
+    }
 
-        LinkedHashMap<HashCollider, HashCollider> values1WithDifferentValues = new LinkedHashMap<>();
-        LinkedHashMap<HashCollider, HashCollider> values2WithDifferentValues = new LinkedHashMap<>();
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            values1WithDifferentValues.put(entry.getKey(),
-                    (entry.getValue() == null) ? new HashCollider(-1, hashBitMask) :
-                            new HashCollider(entry.getValue().getValue() + 1, hashBitMask));
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceIterableArgsShouldBeEqualToMap(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a().readOnlyEntrySet());
+        assertEqualMap(data.a().asMap(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlyMapArgsWithImmutableMapArgsOfSameTypeShouldBeEqualToMap(Data data) {
+        Map<HashCollider, HashCollider> actual1 = newInstance(data.a());
+        Map<HashCollider, HashCollider> actual = newInstance(toImmutableInstance(actual1));
+        assertEqualMap(data.a().asMap(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testClearShouldYieldEmptyMap(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        assertNotEqualMap(Collections.emptyMap(), actual);
+        actual.clear();
+        assertEqualMap(Collections.emptyMap(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testClearShouldBeIdempotent(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        assertNotEqualMap(Collections.emptyMap(), actual);
+        actual.clear();
+        assertEqualMap(Collections.emptyMap(), actual);
+        actual.clear();
+        assertEqualMap(Collections.emptyMap(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCloneShouldYieldEqualMap(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        Map<HashCollider, HashCollider> clone = toClonedInstance(actual);
+        assertEqualMap(data.a().asMap(), clone);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testContainsKeyShouldYieldExpectedValue(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        for (HashCollider k : data.a().readOnlyKeySet()) {
+            assertTrue(actual.containsKey(k));
         }
-        for (Map.Entry<HashCollider, HashCollider> entry : values2.entrySet()) {
-            values2WithDifferentValues.put(entry.getKey(),
-                    (entry.getValue() == null) ? new HashCollider(-1, hashBitMask) :
-                            new HashCollider(entry.getValue().getValue() + 1, hashBitMask));
+        for (HashCollider k : data.c().readOnlyKeySet()) {
+            assertFalse(actual.containsKey(k));
         }
-        Map<HashCollider, HashCollider> actual1WithDifferentValues = copyOf(values1WithDifferentValues);
-        assertNotEquals(actual1a, actual1WithDifferentValues);
-        assertNotEquals(actual1a, values1WithDifferentValues);
-        assertNotEquals(actual1a, values2WithDifferentValues);
+        assertFalse(actual.containsKey(new Object()));
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testContainsEntryShouldYieldExpectedValue(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a().readOnlyEntrySet()) {
+            assertTrue(actual.entrySet().contains(e));
+        }
+        for (Map.Entry<HashCollider, HashCollider> e : data.b().readOnlyEntrySet()) {
+            assertFalse(actual.entrySet().contains(e));
+        }
+        for (Map.Entry<HashCollider, HashCollider> e : data.c().readOnlyEntrySet()) {
+            assertFalse(actual.entrySet().contains(e));
+        }
+        assertFalse(actual.entrySet().contains(new Object()));
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testKeyIteratorRemoveShouldRemoveEntry(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        List<HashCollider> toRemove = new ArrayList<>(new HashSet<>(data.a().readOnlyKeySet().asSet()));
+        while (!toRemove.isEmpty() && !expected.isEmpty()) {
+            for (Iterator<HashCollider> i = actual.keySet().iterator(); i.hasNext(); ) {
+                HashCollider k = i.next();
+                if (k.equals(toRemove.get(0))) {
+                    i.remove();
+                    toRemove.remove(0);
+                    expected.remove(k);
+                    assertEqualMap(expected, actual);
+                }
+            }
+        }
+        assertEqualMap(Collections.emptyMap(), actual);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntryIteratorRemoveShouldRemoveEntryAndRemoveIsNotIdempotent(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        List<Map.Entry<HashCollider, HashCollider>> toRemove = new ArrayList<>(new HashSet<>(data.a().readOnlyEntrySet().asSet()));
+        for (int countdown = toRemove.size(); countdown > 0; countdown--) {
+            for (Iterator<Map.Entry<HashCollider, HashCollider>> i = actual.entrySet().iterator(); i.hasNext(); ) {
+                Map.Entry<HashCollider, HashCollider> k = i.next();
+                if (k.equals(toRemove.get(0))) {
+                    i.remove();
+                    toRemove.remove(0);
+                    expected.remove(k.getKey());
+                    assertEqualMap(expected, actual);
+
+                    assertThrows(IllegalStateException.class, i::remove);
+                }
+            }
+        }
+        assertEqualMap(Collections.emptyMap(), actual);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntrySetRemoveShouldRemoveEntryWithSameKeyAndValue(Data data) {
+        Map<HashCollider, HashCollider> actual = newInstance(data.a());
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+
+        for (Map.Entry<HashCollider, HashCollider> e : data.a().readOnlyEntrySet()) {
+            assertTrue(actual.entrySet().remove(e));
+            expected.entrySet().remove(e);
+            assertEqualMap(expected, actual);
+        }
+        assertEqualMap(Collections.emptyMap(), actual);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntrySetRemoveShouldNotRemoveEntryWithSameKeyButDifferentValue(Data data) {
+        Map<HashCollider, HashCollider> instance = newInstance(data.a());
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> e : data.b().readOnlyEntrySet()) {
+            assertFalse(instance.entrySet().remove(e));
+            assertEqualMap(expected, instance);
+        }
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntrySetRemoveShouldNotRemoveEntryWithDifferentKeyAndDifferentValue(Data data) {
+        Map<HashCollider, HashCollider> instance = newInstance(data.a());
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> e : data.c().readOnlyEntrySet()) {
+            assertFalse(instance.entrySet().remove(e));
+            assertEqualMap(expected, instance);
+        }
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldThrowIllegalStateException(Data data) {
+        Map<HashCollider, HashCollider> instance = newInstance(data.a());
+        Iterator<HashCollider> i = instance.keySet().iterator();
+        assertThrows(IllegalStateException.class, i::remove);
+        Iterator<HashCollider> k = instance.values().iterator();
+        assertThrows(IllegalStateException.class, k::remove);
+        Iterator<Map.Entry<HashCollider, HashCollider>> j = instance.entrySet().iterator();
+        assertThrows(IllegalStateException.class, j::remove);
     }
 
     @SuppressWarnings("unchecked")
-    private void testOfEntries(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map<HashCollider, HashCollider> actual;
-
-        // WHEN: a set is created with identical values
-        actual = copyOf(
-                MapEntries.linkedHashMap(MapEntries.of(firstValue1.getKey(), firstValue1.getValue(),
-                        firstValue1.getKey(), firstValue1.getValue(),
-                        firstValue1.getKey(), firstValue1.getValue())));
-        //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        expected.put(firstValue1.getKey(), firstValue1.getValue());
-        assertMapEquality(expected, actual);
-
-        // WHEN: a set is created with distinct values
-        actual = copyOf(values1.entrySet());
-        //
-        expected = new LinkedHashMap<>(values1);
-        assertMapEquality(expected, actual);
-    }
-
-    void testMap(int hashBitMask) {
-        // bulkSize must be at least 32 for good code coverage
-        int bulkSize = 32;
-        Random rng = new Random(0);
-        for (int i = 0; i < 64; i++) {
-            // values1, values2 are distinct sets of values
-            LinkedHashMap<HashCollider, HashCollider> values1 = new LinkedHashMap<>();
-            LinkedHashMap<HashCollider, HashCollider> values2 = new LinkedHashMap<>();
-            if (rng.nextBoolean()) {
-                values1.put(new HashCollider(Integer.MIN_VALUE, hashBitMask), null);
-            } else {
-                values2.put(new HashCollider(Integer.MIN_VALUE, hashBitMask), null);
-            }
-            while (values1.size() < bulkSize) {
-                int value = rng.nextInt();
-                if (value == Integer.MIN_VALUE) {
-                    continue;
-                }
-                values1.put(new HashCollider(value, hashBitMask), new HashCollider(value, hashBitMask));
-            }
-            while (values2.size() < bulkSize) {
-                int value = rng.nextInt();
-                HashCollider e = new HashCollider(value, hashBitMask);
-                if (!values1.containsKey(e)) {
-                    values2.put(e, new HashCollider(value, hashBitMask));
-                }
-            }
-
-            testPut(values1, values2, hashBitMask);
-            testRemove(values1, values2);
-            testPutAll(values1, values2, hashBitMask);
-            testRemoveAll(values1, values2);
-            testRetainAll(values1, values2);
-            testContains(values1, values2);
-            testOfEntries(values1, values2);
-            testCopyOf(values1, values2);
-            testEqualsHashCode(values1, values2, hashBitMask);
-            testSerialization(values1, values2, hashBitMask);
-        }
-    }
-
-    private void testSerialization(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        Map<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // WHEN: empty map is re-serialized
-        actual = reserialize(actual);
-
-
-        // WHEN: map with entries is re-serialized
-        actual.putAll(values1);
-        expected.putAll(values1);
-        assertMapEquality(expected, actual);
-        actual = reserialize(actual);
-        assertMapEquality(expected, actual);
-
-        // WHEN: map with more entries is re-serialized
-        actual.putAll(values2);
-        expected.putAll(values2);
-        assertMapEquality(expected, actual);
-
-        actual = reserialize(actual);
-        assertMapEquality(expected, actual);
-
-    }
-
-    public static <O> O reserialize(O object) {
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testSerializationShouldYieldSameMap(Data data) throws Exception {
+        Map<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertEqualMap(data.a().asMap(), instance);
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
-
         try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
-            out.writeObject(object);
-        } catch (IOException e) {
-            throw new AssertionError(e);
+            out.writeObject(instance);
         }
-
+        Map<HashCollider, HashCollider> deserialized;
         try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()))) {
-            @SuppressWarnings("unchecked") O o = (O) in.readObject();
-            return o;
-        } catch (IOException | ClassNotFoundException e) {
-            throw new AssertionError(e);
+            deserialized = (Map<HashCollider, HashCollider>) in.readObject();
+        }
+        assertEqualMap(data.a().asMap(), deserialized);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntryIteratorShouldUpdateMap(Data data) {
+        Map<HashCollider, HashCollider> instance = newInstance(data.a());
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> entry : instance.entrySet()) {
+            entry.setValue(data.b().get(entry.getKey()));
+            assertNotEqualMap(instance, expected);
+            expected.put(entry.getKey(), data.b().get(entry.getKey()));
+            assertEqualMap(instance, expected);
         }
     }
-
-    private void testPut(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        Map<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // GIVEN: a set with values1
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            actual.put(entry.getKey(), entry.getValue());
-            expected.put(entry.getKey(), entry.getValue());
-            assertMapEquality(expected, actual);
-        }
-        int id = 1000;
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            HashCollider newValue = new HashCollider(id++, -1);
-            // WHEN: key is already in set, then put must yield the old value
-            assertEquals(entry.getValue(), actual.put(entry.getKey(), newValue));
-
-        }
-
-        id = 2000;
-        for (Map.Entry<HashCollider, HashCollider> entry : values2.entrySet()) {
-            // WHEN: key is new in set, then put must yield null
-            // THEN: then put must yield the old value
-            assertNull(actual.put(entry.getKey(), entry.getValue()));
-            assertEquals(entry.getValue(), actual.put(entry.getKey(), entry.getValue()));
-        }
-    }
-
-    private void testPutAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        Map<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // WHEN: putAll(values1) on an empty set, then the set must be equal to values1
-        actual.putAll(values1);
-        expected.putAll(values1);
-        assertEquals(expected, actual);
-
-        // WHEN: putAll(values2) on set with values1, then the set must be equal to union of values1 and values2
-        actual.putAll(values2);
-        expected.putAll(values2);
-        assertEquals(expected, actual);
-
-        // WHEN: putAll(values1) on set with values1 and values2, then the set must be equal to union of values1 and values2
-        actual.putAll(values1);
-        expected.putAll(values1);
-        assertEquals(expected, actual);
-
-    }
-
-    private void testRemove(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // GIVEN: a set with values1
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            actual.put(entry.getKey(), entry.getValue());
-            expected.put(entry.getKey(), entry.getValue());
-            assertMapEquality(expected, actual);
-        }
-
-        int id = 1000;
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            HashCollider newValue = new HashCollider(id++, -1);
-
-            // WHEN: key is already in set, then put must yield the old value
-            assertEquals(entry.getValue(), actual.put(entry.getKey(), newValue));
-
-
-            // WHEN: key is removed, then must yield removed value
-            assertEquals(newValue, actual.remove(entry.getKey()));
-            assertFalse(actual.containsKey(entry.getKey()));
-
-            // WHEN: key is put again, then put must yield null
-            assertNull(actual.put(entry.getKey(), entry.getValue()));
-            assertTrue(actual.containsKey(entry.getKey()));
-
-            // WHEN: key is removed, then must yield old value
-            assertEquals(entry.getValue(), actual.remove(entry.getKey()));
-
-            // WHEN: non-existent key is removed, then must yield null
-            assertNull(actual.remove(entry.getKey()));
-        }
-    }
-
-    private void testRemoveAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // GIVEN: a set with values1 and values2
-        actual.putAll(values1);
-        actual.putAll(values2);
-        expected.putAll(values1);
-        expected.putAll(values2);
-        assertEquals(expected, actual);
-
-        // WHEN: removeAll values1
-        assertTrue(actual.entrySet().removeAll(values1.entrySet()));
-        expected.entrySet().removeAll(values1.entrySet());
-        assertEquals(expected, actual);
-
-        // WHEN: removeAll values1 which are not in set
-        assertFalse(actual.entrySet().removeAll(values1.entrySet()));
-        expected.entrySet().removeAll(values1.entrySet());
-        assertEquals(expected, actual);
-    }
-
-    private void testRetainAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // GIVEN: a set with values1 and values2
-        actual.putAll(values1);
-        actual.putAll(values2);
-        expected.putAll(values1);
-        expected.putAll(values2);
-        assertEquals(expected, actual);
-
-        // WHEN: retainAll with entry set of values1
-        actual.putAll(values2);
-        expected.putAll(values2);
-        actual.entrySet().retainAll(values1.entrySet());
-        expected.entrySet().retainAll(values1.entrySet());
-        assertEquals(expected, actual);
-
-        // WHEN: retainAll with key set of values1
-        actual.keySet().retainAll(values1.keySet());
-        expected.keySet().retainAll(values1.keySet());
-        assertEquals(expected, actual);
-
-    }
-
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestNullKeyNullValue() {
-        return Arrays.asList(
-                dynamicTest("null key", () -> testNullKeyNullValue(null, new HashCollider(5, -1))),
-                dynamicTest("null value", () -> testNullKeyNullValue(new HashCollider(5, -1), null)),
-                dynamicTest("null key, null value", () -> testNullKeyNullValue(null, null))
-        );
-    }
-
-    public void testNullKeyValueMap(@Nullable HashCollider key, @Nullable HashCollider value) {
-        testNullKeyNullValue(key, value);
-
-    }
-
-    public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        Map<HashCollider, HashCollider> set = copyOf(List.of(new AbstractMap.SimpleImmutableEntry<>(key, value)));
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        expected.put(key, value);
-        assertTrue(set.containsKey(key));
-        assertEquals(expected.toString(), set.toString());
-        assertEquals(expected.hashCode(), set.hashCode());
-        assertEquals(expected, set);
-
-        expected.remove(key);
-        set.remove(key);
-        assertEquals(expected, set);
-    }
-
-
 }

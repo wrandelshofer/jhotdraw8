@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Collection;
 import java.util.Map;
 
-public class SequencedChampMapTest extends AbstractSequencedMapTest {
+public class SequencedChampMapTestOld extends AbstractSequencedMapTest {
 
 
     @Override

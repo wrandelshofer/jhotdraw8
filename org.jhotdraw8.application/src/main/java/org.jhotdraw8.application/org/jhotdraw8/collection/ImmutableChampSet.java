@@ -78,9 +78,6 @@ import java.util.function.ToIntFunction;
 public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
     private static final ImmutableChampSet<?> EMPTY = new ImmutableChampSet<>(BitmapIndexedNode.emptyNode(), 0);
-    public static final @NonNull BiFunction<?, ?, ?> UPDATE_FUNCTION = (oldk, newk) -> oldk;
-    public static final @NonNull BiPredicate<?, ?> EQUALS_FUNCTION = Objects::equals;
-    public static final @NonNull ToIntFunction<?> HASH_FUNCTION = Objects::hashCode;
     final int size;
 
     ImmutableChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
@@ -281,18 +278,18 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     @NonNull
     @SuppressWarnings("unchecked")
     private ToIntFunction<E> getHashFunction() {
-        return (ToIntFunction<E>) HASH_FUNCTION;
+        return Objects::hashCode;
     }
 
     @NonNull
     @SuppressWarnings("unchecked")
     private BiPredicate<E, E> getEqualsFunction() {
-        return (BiPredicate<E, E>) EQUALS_FUNCTION;
+        return Objects::equals;
     }
 
     @NonNull
     @SuppressWarnings("unchecked")
     private BiFunction<E, E, E> getUpdateFunction() {
-        return (BiFunction<E, E, E>) UPDATE_FUNCTION;
+        return (oldk, newk) -> oldk;
     }
 }

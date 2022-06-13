@@ -82,12 +82,6 @@ import java.util.function.ToIntFunction;
  */
 public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private final static BiPredicate<AbstractMap.SimpleImmutableEntry<?, ?>, AbstractMap.SimpleImmutableEntry<?, ?>> EQUALS_FUNCTION =
-            (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    private final static ToIntFunction<SimpleImmutableEntry<?, ?>> HASH_FUNCTION =
-            (a) -> Objects.hashCode(a.getKey());
-    public static final @NonNull BiFunction<SimpleImmutableEntry<?, ?>, SimpleImmutableEntry<?, ?>, SimpleImmutableEntry<?, ?>> UPDATE_FUNCTION =
-            (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     private transient @Nullable UniqueId mutator;
     private transient @NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root;
     private transient int size;
@@ -300,23 +294,18 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     private @NonNull Object writeReplace() {
         return new SerializationProxy<K, V>(this);
     }
-
     @NonNull
-    @SuppressWarnings("unchecked")
     private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
-        return (ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>>) (ToIntFunction<?>) HASH_FUNCTION;
+        return (a) -> Objects.hashCode(a.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
-        return (BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>>) (BiPredicate<?, ?>) EQUALS_FUNCTION;
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>>)
-                (BiFunction<?, ?, ?>) UPDATE_FUNCTION;
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }

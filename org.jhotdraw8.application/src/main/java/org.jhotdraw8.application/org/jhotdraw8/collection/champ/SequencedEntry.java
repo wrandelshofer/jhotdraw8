@@ -60,11 +60,4 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         return newRoot;
     }
 
-    public final static BiPredicate<SequencedEntry<?, ?>, SequencedEntry<?, ?>> EQUALS_FUNCTION =
-            (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    public final static ToIntFunction<SequencedEntry<?, ?>> HASH_FUNCTION =
-            (a) -> Objects.hashCode(a.getKey());
-    public static final @NonNull BiFunction<SequencedEntry<?, ?>, SequencedEntry<?, ?>, SequencedEntry<?, ?>> UPDATE_FUNCTION =
-            (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
-
 }

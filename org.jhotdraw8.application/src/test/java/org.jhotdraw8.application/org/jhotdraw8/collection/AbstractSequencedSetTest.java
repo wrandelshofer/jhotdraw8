@@ -30,18 +30,9 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @Override
     protected abstract <T> @NonNull SequencedSet<T> create(int expectedMaxSize, float maxLoadFactor);
 
-    protected void assertEqualSets(LinkedHashSet<HashCollider> expected, Set<HashCollider> instance) {
-        super.assertEqualSets(expected, instance);
-        assertEquals(expected.toString(), instance.toString());
-    }
-
-    public void doTest(int mask, int... elements) throws Exception {
-        List<HashCollider> list = new ArrayList<>();
-        for (int e : elements) {
-            HashCollider e1 = new HashCollider(e, mask);
-            list.add(e1);
-        }
-        super.doTest(mask, elements);
+    @Override
+    public void doTest(List<HashCollider> list) throws Exception {
+        super.doTest(list);
         doTestIterationSequence(list);
         doTestAddFirst(list);
         doTestAddLast(list);
