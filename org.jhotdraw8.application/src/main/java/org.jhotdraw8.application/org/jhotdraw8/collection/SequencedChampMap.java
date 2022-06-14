@@ -419,8 +419,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      * 4 times the size of the set.
      */
     private void renumber() {
-        if ((long) last - first > size * 4L
-                || first == Sequenced.NO_SEQUENCE_NUMBER + 1
+        if (first == Sequenced.NO_SEQUENCE_NUMBER + 1
                 || last == Sequenced.NO_SEQUENCE_NUMBER) {
             root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
                     getHashFunction(), getEqualsFunction());

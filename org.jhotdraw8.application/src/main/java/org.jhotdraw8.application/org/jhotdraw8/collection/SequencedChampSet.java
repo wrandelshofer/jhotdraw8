@@ -375,8 +375,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * 4 times the size of the set.
      */
     private void renumber() {
-        if ((long) last - first > size * 4L
-                || first == Sequenced.NO_SEQUENCE_NUMBER + 1
+        if (first == Sequenced.NO_SEQUENCE_NUMBER + 1
                 || last == Sequenced.NO_SEQUENCE_NUMBER) {
             root = SequencedElement.renumber(size, root, getOrCreateMutator(), Objects::hashCode, Objects::equals);
             last = size;
