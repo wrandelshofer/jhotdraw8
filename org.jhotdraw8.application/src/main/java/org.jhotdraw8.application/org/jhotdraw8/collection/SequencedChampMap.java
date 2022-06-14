@@ -9,10 +9,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedEntry;
-import org.jhotdraw8.collection.champ.SequencedIterator;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -185,7 +185,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
 
     @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
-        return new FailFastIterator<>(new SequencedIterator<SequencedEntry<K, V>, Entry<K, V>>(
+        return new FailFastIterator<>(new HeapSequencedIterator<SequencedEntry<K, V>, Entry<K, V>>(
                 size, root, reversed,
                 this::immutableRemove,
                 e -> new MutableMapEntry<>(this::immutablePutIfPresent, e.getKey(), e.getValue())),
@@ -240,7 +240,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public @Nullable Entry<K, V> firstEntry() {
-        return isEmpty() ? null : SequencedIterator.getFirst(root, first, last);
+        return isEmpty() ? null : HeapSequencedIterator.getFirst(root, first, last);
     }
 
     @Override
@@ -261,7 +261,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     @Override
     public @Nullable Entry<K, V> lastEntry() {
-        return isEmpty() ? null : SequencedIterator.getLast(root, first, last);
+        return isEmpty() ? null : HeapSequencedIterator.getLast(root, first, last);
     }
 
     @Override
@@ -361,7 +361,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         if (isEmpty()) {
             return null;
         }
-        SequencedEntry<K, V> entry = SequencedIterator.getFirst(root, first, last);
+        SequencedEntry<K, V> entry = HeapSequencedIterator.getFirst(root, first, last);
         remove(entry.getKey());
         first = entry.getSequenceNumber() + 1;
         return entry;
@@ -371,7 +371,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         if (isEmpty()) {
             return null;
         }
-        SequencedEntry<K, V> entry = SequencedIterator.getLast(root, first, last);
+        SequencedEntry<K, V> entry = HeapSequencedIterator.getLast(root, first, last);
         remove(entry.getKey());
         last = entry.getSequenceNumber();
         return entry;

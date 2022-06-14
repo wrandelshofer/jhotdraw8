@@ -130,9 +130,6 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         ArrayList<E> expectedList = new ArrayList<>(expected);
         assertEquals(expectedList, new ArrayList<>(actual), message);
         assertEquals(expected.toString(), actual.toString(), message);
-
-        Collections.reverse(expectedList);
-        //assertEquals(expectedList, new ArrayList<>(actual.reversed()), message);
     }
 
     @TestFactory

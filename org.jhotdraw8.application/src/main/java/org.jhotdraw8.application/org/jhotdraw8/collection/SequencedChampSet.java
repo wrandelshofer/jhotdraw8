@@ -9,10 +9,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedElement;
-import org.jhotdraw8.collection.champ.SequencedIterator;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
@@ -186,7 +186,9 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
                 Objects.hashCode(e), 0, details, updateFunction, Objects::equals, Objects::hashCode);
         if (details.isModified) {
             root = newRoot;
-            size++;
+            if (!details.isReplaced) {
+                size++;
+            }
             modCount++;
             first--;
             renumber();
@@ -207,7 +209,9 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
                 details, updateFunction, Objects::equals, Objects::hashCode);
         if (details.isModified) {
             root = newRoot;
-            size++;
+            if (!details.isReplaced) {
+                size++;
+            }
             modCount++;
             last++;
             renumber();
@@ -261,12 +265,12 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public E getFirst() {
-        return SequencedIterator.getFirst(root, first, last).getElement();
+        return HeapSequencedIterator.getFirst(root, first, last).getElement();
     }
 
     @Override
     public E getLast() {
-        return SequencedIterator.getLast(root, first, last).getElement();
+        return HeapSequencedIterator.getLast(root, first, last).getElement();
     }
 
     @Override
@@ -294,7 +298,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * @return an iterator
      */
     public @NonNull Iterator<E> iterator(boolean reversed) {
-        return new FailFastIterator<>(new SequencedIterator<SequencedElement<E>, E>(
+        return new FailFastIterator<>(new HeapSequencedIterator<SequencedElement<E>, E>(
                 size, root, reversed,
                 this::immutableRemove, SequencedElement::getElement),
                 () -> SequencedChampSet.this.modCount);
@@ -355,7 +359,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public E removeFirst() {
-        SequencedElement<E> k = SequencedIterator.getFirst(root, first, last);
+        SequencedElement<E> k = HeapSequencedIterator.getFirst(root, first, last);
         remove(k.getElement());
         first = k.getSequenceNumber() + 1;
         return k.getElement();
@@ -363,7 +367,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public E removeLast() {
-        SequencedElement<E> k = SequencedIterator.getLast(root, first, last);
+        SequencedElement<E> k = HeapSequencedIterator.getLast(root, first, last);
         remove(k.getElement());
         last = k.getSequenceNumber();
         return k.getElement();

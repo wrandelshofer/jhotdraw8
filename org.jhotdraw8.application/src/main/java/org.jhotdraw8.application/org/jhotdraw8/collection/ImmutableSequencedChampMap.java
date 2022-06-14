@@ -8,9 +8,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.SequencedEntry;
-import org.jhotdraw8.collection.champ.SequencedIterator;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
@@ -336,7 +336,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
 
     @SuppressWarnings("unchecked")//Suppression is required for Java 8
     public @NonNull Iterator<Map.Entry<K, V>> entries(boolean reversed) {
-        return new SequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(
+        return new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(
                 size, this, reversed, null, Map.Entry.class::cast);
     }
 

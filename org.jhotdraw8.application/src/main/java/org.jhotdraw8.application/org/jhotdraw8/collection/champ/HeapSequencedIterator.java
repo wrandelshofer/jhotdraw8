@@ -3,13 +3,31 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.LongArrayHeap;
+import org.jhotdraw8.util.Preconditions;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class SequencedIterator<E extends Sequenced, X> implements Iterator<X> {
+/**
+ * Iterates over {@link Sequenced} elements in a CHAMP trie in the
+ * order of the sequence numbers.
+ * <p>
+ * Uses a {@link LongArrayHeap} and a data array for
+ * ordering the elements. This approach uses more memory than
+ * a {@link java.util.PriorityQueue} but is about twice as fast.
+ * <p>
+ * Performance characteristics:
+ * <ul>
+ *     <li>new instance: O(N)</li>
+ *     <li>iterator.next: O(log N)</li>
+ * </ul>
+ *
+ * @param <E> the type parameter of the  CHAMP trie {@link Node}s
+ * @param <X> the type parameter of the {@link Iterator} interface
+ */
+public class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private final @NonNull LongArrayHeap queue;
     private E current;
     private boolean canRemove;
@@ -17,12 +35,24 @@ public class SequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private final @NonNull Function<E, X> mappingFunction;
     private final @Nullable Consumer<E> immutableRemoveFunction;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param size            the size of the trie
+     * @param rootNode        the root node of the trie
+     * @param reversed        whether to iterate in the reversed sequence
+     * @param removeFunction  this function is called when {@link Iterator#remove()}
+     *                        is called
+     * @param mappingFunction mapping function from {@code E} to {@code X}
+     */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public SequencedIterator(int size, @NonNull Node<? extends E> rootNode,
-                             boolean reversed,
-                             @Nullable Consumer<E> immutableRemoveFunction,
-                             @NonNull Function<E, X> mappingFunction) {
-        this.immutableRemoveFunction = immutableRemoveFunction;
+    public HeapSequencedIterator(int size, @NonNull Node<? extends E> rootNode,
+                                 boolean reversed,
+                                 @Nullable Consumer<E> removeFunction,
+                                 @NonNull Function<E, X> mappingFunction) {
+        Preconditions.checkArgument(size >= 0, "size=%s", size);
+
+        this.immutableRemoveFunction = removeFunction;
         this.mappingFunction = mappingFunction;
         queue = new LongArrayHeap(size);
         array = (E[]) new Sequenced[size];

@@ -42,6 +42,7 @@ public abstract class AbstractSetTest {
         assertEquals(expected.size(), instance.size());
         assertEquals(expected.hashCode(), instance.hashCode());
         assertEquals(expected, instance);
+        assertEquals(expected, new LinkedHashSet<>(instance));
         assertEquals(instance, expected);
         assertEquals(expected.isEmpty(), instance.isEmpty());
 

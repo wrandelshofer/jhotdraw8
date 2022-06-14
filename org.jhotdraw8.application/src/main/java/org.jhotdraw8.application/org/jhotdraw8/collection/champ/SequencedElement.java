@@ -70,7 +70,7 @@ public class SequencedElement<E> implements Sequenced {
         BitmapIndexedNode<SequencedElement<K>> newRoot = root;
         ChangeEvent<SequencedElement<K>> details = new ChangeEvent<>();
         int seq = 0;
-        for (SequencedIterator<SequencedElement<K>, K> i = new SequencedIterator<>(size, root, false, null, SequencedElement::getElement); i.hasNext(); ) {
+        for (HeapSequencedIterator<SequencedElement<K>, K> i = new HeapSequencedIterator<>(size, root, false, null, SequencedElement::getElement); i.hasNext(); ) {
             K e = i.next();
             SequencedElement<K> newElement = new SequencedElement<>(e, seq);
             newRoot = newRoot.update(mutator,

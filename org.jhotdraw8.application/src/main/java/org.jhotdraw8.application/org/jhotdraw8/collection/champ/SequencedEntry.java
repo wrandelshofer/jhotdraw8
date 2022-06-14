@@ -48,7 +48,7 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         int seq = 0;
         BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> updateFunction = (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk;
-        for (SequencedIterator<SequencedEntry<K, V>, SequencedEntry<K, V>> i = new SequencedIterator<>(size, root, false, null, Function.identity()); i.hasNext(); ) {
+        for (HeapSequencedIterator<SequencedEntry<K, V>, SequencedEntry<K, V>> i = new HeapSequencedIterator<>(size, root, false, null, Function.identity()); i.hasNext(); ) {
             SequencedEntry<K, V> e = i.next();
             SequencedEntry<K, V> newElement = new SequencedEntry<>(e.getKey(), e.getValue(), seq);
             newRoot = newRoot.update(mutator,

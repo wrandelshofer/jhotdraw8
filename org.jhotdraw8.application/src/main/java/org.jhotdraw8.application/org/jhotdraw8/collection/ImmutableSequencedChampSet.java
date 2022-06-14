@@ -8,11 +8,12 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.BucketSequencedIterator;
 import org.jhotdraw8.collection.champ.ChangeEvent;
+import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedElement;
-import org.jhotdraw8.collection.champ.SequencedIterator;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -166,13 +167,13 @@ public class ImmutableSequencedChampSet<E>
 
     @Override
     public ImmutableSequencedChampSet<E> copyRemoveFirst() {
-        SequencedElement<E> k = SequencedIterator.getFirst(this, first, last);
+        SequencedElement<E> k = HeapSequencedIterator.getFirst(this, first, last);
         return copyRemove(k.getElement(), k.getSequenceNumber() + 1, last);
     }
 
     @Override
     public ImmutableSequencedChampSet<E> copyRemoveLast() {
-        SequencedElement<E> k = SequencedIterator.getLast(this, first, last);
+        SequencedElement<E> k = HeapSequencedIterator.getLast(this, first, last);
         return copyRemove(k.getElement(), first, k.getSequenceNumber());
     }
 
@@ -211,7 +212,8 @@ public class ImmutableSequencedChampSet<E>
             if (last + 1 == Sequenced.NO_SEQUENCE_NUMBER) {
                 return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
             } else {
-                return new ImmutableSequencedChampSet<>(newRootNode, size + 1, first, last + 1);
+                return new ImmutableSequencedChampSet<>(newRootNode,
+                        changeEvent.isReplaced ? size : size + 1, first, last + 1);
             }
         }
 
@@ -228,7 +230,8 @@ public class ImmutableSequencedChampSet<E>
             if (first - 1 == Sequenced.NO_SEQUENCE_NUMBER) {
                 return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
             } else {
-                return new ImmutableSequencedChampSet<>(newRootNode, size + 1, first - 1, last);
+                return new ImmutableSequencedChampSet<>(newRootNode,
+                        changeEvent.isReplaced ? size : size + 1, first - 1, last);
             }
         }
 
@@ -368,7 +371,12 @@ public class ImmutableSequencedChampSet<E>
      * @return an iterator
      */
     public @NonNull Iterator<E> iterator(boolean reversed) {
-        return new SequencedIterator<>(
+        if (BucketSequencedIterator.isSuitedForBucketSequencedIterator(size, first, last)) {
+            return new BucketSequencedIterator<>(
+                    size, first, last, this, reversed,
+                    null, SequencedElement::getElement);
+        }
+        return new HeapSequencedIterator<>(
                 size, this, reversed,
                 null, SequencedElement::getElement);
     }
@@ -390,7 +398,7 @@ public class ImmutableSequencedChampSet<E>
 
     @Override
     public E getLast() {
-        return SequencedIterator.getLast(this, first, last).getElement();
+        return HeapSequencedIterator.getLast(this, first, last).getElement();
     }
 
     @Override
@@ -407,7 +415,7 @@ public class ImmutableSequencedChampSet<E>
 
     @Override
     public E getFirst() {
-        return SequencedIterator.getFirst(this, first, last).getElement();
+        return HeapSequencedIterator.getFirst(this, first, last).getElement();
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
