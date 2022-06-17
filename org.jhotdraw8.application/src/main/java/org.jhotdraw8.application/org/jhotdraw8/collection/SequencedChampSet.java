@@ -15,13 +15,9 @@ import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedElement;
 
-import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -90,12 +86,9 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable, Cloneable, SequencedSet<E>, ReadOnlySequencedSet<E> {
+public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+        SequencedSet<E> {
     private final static long serialVersionUID = 0L;
-    private transient @Nullable UniqueId mutator;
-    private transient @NonNull BitmapIndexedNode<SequencedElement<E>> root;
-    private transient int size;
-    private transient int modCount;
 
     /**
      * Counter for the sequence number of the last element. The counter is
@@ -124,11 +117,12 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * Constructs an empty set.
      */
     public SequencedChampSet() {
-        this.root = BitmapIndexedNode.emptyNode();
+        root = BitmapIndexedNode.emptyNode();
     }
 
     /**
-     * Constructs a set containing the elements in the specified iterable.
+     * Constructs a set containing the elements in the specified
+     * {@link Iterable}.
      *
      * @param c an iterable
      */
@@ -152,28 +146,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     @Override
     public boolean add(final @Nullable E e) {
         return addLast(e, false);
-    }
-
-    @Override
-    public boolean addAll(@NonNull Collection<? extends E> c) {
-        return addAll((Iterable<? extends E>) c);
-    }
-
-    /**
-     * Adds all specified elements that are not already in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c == this) {
-            return false;
-        }
-        boolean modified = false;
-        for (E e : c) {
-            modified |= add(e);
-        }
-        return modified;
     }
 
     @Override
@@ -239,36 +211,15 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * Returns a shallow copy of this set.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public @NonNull SequencedChampSet<E> clone() {
-        try {
-            mutator = null;
-            return (SequencedChampSet<E>) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e);
-        }
+        return (SequencedChampSet<E>) super.clone();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        @SuppressWarnings("unchecked") final E key = (E) o;
-        return root.findByKey(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_VALUE;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (o instanceof SequencedChampSet<?>) {
-            return root.equivalent(((SequencedChampSet<?>) o).root);
-        }
-        return super.equals(o);
-    }
-
-    @Override
-    public Stream<E> stream() {
-        return super.stream();
+        return Node.NO_VALUE != root.findByKey(new SequencedElement<>((E) o),
+                Objects.hashCode((E) o), 0, Objects::equals);
     }
 
     @Override
@@ -279,18 +230,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     @Override
     public E getLast() {
         return HeapSequencedIterator.getLast(root, first, last).getElement();
-    }
-
-    @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new WrappedReadOnlySequencedSet<>(reversed());
-    }
-
-    private @NonNull UniqueId getOrCreateMutator() {
-        if (mutator == null) {
-            mutator = new UniqueId();
-        }
-        return mutator;
     }
 
     @Override
@@ -320,6 +259,11 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
     }
 
     @Override
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new WrappedReadOnlySequencedSet<>(reversed());
+    }
+
+    @Override
     public boolean remove(final Object o) {
         final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         @SuppressWarnings("unchecked")//
@@ -342,31 +286,6 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         return details.modified;
     }
 
-    @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
-        return removeAll((Iterable<?>) c);
-    }
-
-    /**
-     * Removes all specified elements that are in this set.
-     *
-     * @param c an iterable of elements
-     * @return {@code true} if this set changed
-     */
-    public boolean removeAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) {
-            return false;
-        }
-        if (c == this) {
-            clear();
-            return true;
-        }
-        boolean modified = false;
-        for (Object o : c) {
-            modified |= remove(o);
-        }
-        return modified;
-    }
 
     @Override
     public E removeFirst() {
@@ -390,13 +309,9 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * 4 times the size of the set.
      */
     private void renumber() {
-        long extent = (long) last - first;
-        assert size <= extent : "size=" + size + " extent=" + extent;
-        if (first == Sequenced.NO_SEQUENCE_NUMBER + 1
-                || last == Sequenced.NO_SEQUENCE_NUMBER
-                || extent > Integer.MAX_VALUE
-                || extent > size * 4L) {
-            root = SequencedElement.renumber(size, root, getOrCreateMutator(), Objects::hashCode, Objects::equals);
+        if (Sequenced.mustRenumber(size, first, last)) {
+            root = SequencedElement.renumber(size, root, getOrCreateMutator(),
+                    Objects::hashCode, Objects::equals);
             last = size;
             first = 0;
         }
@@ -404,23 +319,17 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public SequencedSet<E> reversed() {
-        return new WrappedSequencedSet<E>(
+        return new WrappedSequencedSet<>(
                 () -> iterator(true),
                 () -> iterator(false),
                 this::size,
                 this::contains,
                 this::clear,
                 this::remove,
-                this::getLast,
-                this::getFirst,
-                this::addLast,
-                this::addFirst
+                this::getLast, this::getFirst,
+                this::add, e -> addFirst(e, false),
+                this::addLast, this::addFirst
         );
-    }
-
-    @Override
-    public int size() {
-        return size;
     }
 
     /**

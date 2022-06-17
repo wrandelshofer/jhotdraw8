@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -71,7 +72,8 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                 AbstractSequencedMap.this::clear,
                 AbstractSequencedMap.this::removeKey,
                 AbstractSequencedMap.this::firstKey,
-                AbstractSequencedMap.this::lastKey, null, null
+                AbstractSequencedMap.this::lastKey,
+                null, null, null, null
         );
     }
 
@@ -84,8 +86,21 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                 AbstractSequencedMap.this::containsValue,
                 AbstractSequencedMap.this::clear,
                 AbstractSequencedMap.this::removeValue,
-                () -> firstEntry().getValue(),
-                () -> lastEntry().getValue(), null, null
+                () -> {
+                    Entry<K, V> entry = firstEntry();
+                    if (entry == null) {
+                        throw new NoSuchElementException();
+                    }
+                    return entry.getValue();
+                },
+                () -> {
+                    Entry<K, V> entry = lastEntry();
+                    if (entry == null) {
+                        throw new NoSuchElementException();
+                    }
+                    return entry.getValue();
+                },
+                null, null
         );
     }
 

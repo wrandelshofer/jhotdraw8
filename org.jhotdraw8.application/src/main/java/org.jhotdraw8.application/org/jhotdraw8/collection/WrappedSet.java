@@ -25,29 +25,31 @@ public class WrappedSet<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
     protected final @NonNull IntSupplier sizeFunction;
     protected final @NonNull Predicate<Object> containsFunction;
+    protected final @NonNull Predicate<E> addFunction;
     protected final @NonNull Runnable clearFunction;
     protected final @NonNull Predicate<Object> removeFunction;
 
     public WrappedSet(@NonNull ReadOnlySet<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
-                backingSet::contains, null, null);
+                backingSet::contains, null, null, null);
     }
 
     public WrappedSet(@NonNull Set<E> backingSet) {
         this(backingSet::iterator, backingSet::size,
-                backingSet::contains, backingSet::clear, backingSet::remove);
+                backingSet::contains, backingSet::clear, backingSet::add, backingSet::remove);
     }
 
     public WrappedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
                       @NonNull IntSupplier sizeFunction,
                       @NonNull Predicate<Object> containsFunction) {
-        this(iteratorFunction, sizeFunction, containsFunction, null, null);
+        this(iteratorFunction, sizeFunction, containsFunction, null, null, null);
     }
 
     public WrappedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
                       @NonNull IntSupplier sizeFunction,
                       @NonNull Predicate<Object> containsFunction,
                       @Nullable Runnable clearFunction,
+                      @Nullable Predicate<E> addFunction,
                       @Nullable Predicate<Object> removeFunction) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
@@ -58,6 +60,9 @@ public class WrappedSet<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         this.removeFunction = removeFunction == null ? o -> {
             throw new UnsupportedOperationException();
         } : removeFunction;
+        this.addFunction = addFunction == null ? o -> {
+            throw new UnsupportedOperationException();
+        } : addFunction;
     }
 
     @Override
@@ -99,5 +104,10 @@ public class WrappedSet<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     @Override
     public boolean contains(Object o) {
         return containsFunction.test(o);
+    }
+
+    @Override
+    public boolean add(E e) {
+        return addFunction.test(e);
     }
 }

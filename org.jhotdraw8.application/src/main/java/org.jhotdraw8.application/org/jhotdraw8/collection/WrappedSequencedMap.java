@@ -5,6 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
@@ -81,7 +82,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
                 clearFunction,
                 this::removeEntry,
                 firstEntryFunction,
-                lastEntryFunction, null, null
+                lastEntryFunction, null, null, null, null
         );
     }
 
@@ -100,7 +101,7 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
                 clearFunction,
                 this::removeEntry,
                 this::firstKey,
-                this::lastKey, null, null
+                this::lastKey, null, null, null, null
         );
     }
 
@@ -146,8 +147,20 @@ public class WrappedSequencedMap<K, V> extends WrappedMap<K, V> implements Seque
                 this::containsKey,
                 clearFunction,
                 this::removeEntry,
-                () -> firstEntry().getValue(),
-                () -> lastEntry().getValue(), null, null
+                () -> {
+                    Entry<K, V> entry = firstEntry();
+                    if (entry == null) {
+                        throw new NoSuchElementException();
+                    }
+                    return entry.getValue();
+                },
+                () -> {
+                    Entry<K, V> entry = lastEntry();
+                    if (entry == null) {
+                        throw new NoSuchElementException();
+                    }
+                    return entry.getValue();
+                }, null, null
         );
     }
 }

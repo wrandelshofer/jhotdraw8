@@ -26,23 +26,24 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
     private final @NonNull Consumer<E> addFirstFunction;
     private final @NonNull Consumer<E> addLastFunction;
     private final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
+    private final @NonNull Predicate<E> reversedAddFunction;
 
     public WrappedSequencedSet(@NonNull ReadOnlyCollection<E> backingSet,
                                @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
         this(backingSet::iterator, reversedIteratorFunction, backingSet::size,
-                backingSet::contains, null, null, null, null, null, null);
+                backingSet::contains, null, null, null, null, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull ReadOnlySequencedCollection<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
                 backingSet::size,
-                backingSet::contains, null, null, null, null, null, null);
+                backingSet::contains, null, null, null, null, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull Set<E> backingSet,
                                @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
         this(backingSet::iterator, reversedIteratorFunction, backingSet::size,
-                backingSet::contains, backingSet::clear, backingSet::remove, null, null, null, null);
+                backingSet::contains, backingSet::clear, backingSet::remove, null, null, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
@@ -50,7 +51,7 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
                                @NonNull IntSupplier sizeFunction,
                                @NonNull Predicate<Object> containsFunction) {
         this(iteratorFunction, reversedIteratorFunction,
-                sizeFunction, containsFunction, null, null, null, null, null, null);
+                sizeFunction, containsFunction, null, null, null, null, null, null, null, null);
     }
 
     public WrappedSequencedSet(@NonNull Supplier<Iterator<E>> iteratorFunction,
@@ -61,9 +62,11 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
                                @Nullable Predicate<Object> removeFunction,
                                @Nullable Supplier<E> getFirstFunction,
                                @Nullable Supplier<E> getLastFunction,
+                               @Nullable Predicate<E> addFunction,
+                               @Nullable Predicate<E> reversedAddFunction,
                                @Nullable Consumer<E> addFirstFunction,
                                @Nullable Consumer<E> addLastFunction) {
-        super(iteratorFunction, sizeFunction, containsFunction, clearFunction, removeFunction);
+        super(iteratorFunction, sizeFunction, containsFunction, clearFunction, addFunction, removeFunction);
         this.getFirstFunction = getFirstFunction == null ? () -> {
             throw new UnsupportedOperationException();
         } : getFirstFunction;
@@ -76,6 +79,9 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
         this.addLastFunction = addLastFunction == null ? e -> {
             throw new UnsupportedOperationException();
         } : addLastFunction;
+        this.reversedAddFunction = reversedAddFunction == null ? o -> {
+            throw new UnsupportedOperationException();
+        } : reversedAddFunction;
         this.reversedIteratorFunction = reversedIteratorFunction;
     }
 
@@ -117,6 +123,8 @@ public class WrappedSequencedSet<E> extends WrappedSet<E> implements SequencedSe
                 removeFunction,
                 getLastFunction,
                 getFirstFunction,
+                reversedAddFunction,
+                addFunction,
                 addLastFunction,
                 addFirstFunction);
     }

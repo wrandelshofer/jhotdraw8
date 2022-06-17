@@ -139,8 +139,9 @@ public class ImmutableSequencedChampSet<E>
     @NonNull
     private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
         if (Sequenced.mustRenumber(size, first, last)) {
-            root = SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals);
-            return new ImmutableSequencedChampSet<>(root, size, 0, size);
+            return new ImmutableSequencedChampSet<>(
+                    SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
+                    size, 0, size);
         }
         return new ImmutableSequencedChampSet<>(root, size, first, last);
     }

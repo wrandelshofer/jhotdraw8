@@ -99,7 +99,6 @@ import java.util.function.ToIntFunction;
  */
 public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implements Serializable, Cloneable {
     private final static long serialVersionUID = 0L;
-    private final static int ENTRY_LENGTH = 3;
     private transient @Nullable UniqueId mutator;
     private transient @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root;
     private transient int size;
@@ -117,11 +116,17 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     private int first = 0;
 
     public SequencedChampMap() {
-        this.root = BitmapIndexedNode.emptyNode();
+        root = BitmapIndexedNode.emptyNode();
     }
 
+    /**
+     * Constructs a map containing the same mappings as in the specified
+     * {@link Map}.
+     *
+     * @param m a map
+     */
     public SequencedChampMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof SequencedChampMap) {
+        if (m instanceof SequencedChampMap<?, ?>) {
             @SuppressWarnings("unchecked")
             SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) m;
             this.mutator = null;
@@ -135,6 +140,12 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         }
     }
 
+    /**
+     * Constructs a map containing the same mappings as in the specified
+     * {@link Iterable}.
+     *
+     * @param m an iterable
+     */
     public SequencedChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
@@ -143,6 +154,12 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
 
     }
 
+    /**
+     * Constructs a map containing the same mappings as in the specified
+     * {@link ReadOnlyMap}.
+     *
+     * @param m a read-only map
+     */
     public SequencedChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
         if (m instanceof ImmutableSequencedChampMap) {
             @SuppressWarnings("unchecked")
@@ -164,27 +181,26 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @NonNull SequencedChampMap<K, V> clone() {
         try {
-            @SuppressWarnings("unchecked") final SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) super.clone();
-            that.mutator = null;
-            this.mutator = null;
-            return that;
+            mutator = null;
+            return (SequencedChampMap<K, V>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean containsKey(final @NonNull Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.findByKey(new SequencedEntry<>(key, null, 0),
+        K key = (K) o;
+        return Node.NO_VALUE != root.findByKey(new SequencedEntry<>(key),
                 Objects.hashCode(key), 0,
-                getEqualsFunction()) != Node.NO_VALUE;
+                getEqualsFunction());
     }
 
-
-    @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
+    private @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
         return new FailFastIterator<>(new HeapSequencedIterator<SequencedEntry<K, V>, Entry<K, V>>(
                 size, root, reversed,
                 this::iteratorRemove,
@@ -193,7 +209,6 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
         return new WrappedSequencedSet<>(
                 () -> entryIterator(false),
@@ -203,38 +218,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                 this::clear,
                 this::removeEntry,
                 this::firstEntry,
-                this::lastEntry, null, null
-        );
-    }
-
-    @Override
-    public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return new WrappedReadOnlySequencedMap<>(
-                () -> entryIterator(true),
-                () -> entryIterator(false),
-                this::size,
-                this::containsKey,
-                this::get,
-                this::lastEntry,
-                this::firstEntry
-        );
-    }
-
-    @Override
-    public @NonNull SequencedMap<K, V> reversed() {
-        return new WrappedSequencedMap<>(
-                () -> entryIterator(true),
-                () -> entryIterator(false),
-                this::size,
-                this::containsKey,
-                this::get,
-                this::clear,
-                this::remove,
-                this::lastEntry,
-                this::firstEntry,
-                this::put,
-                this::putLast,
-                this::putFirst
+                this::lastEntry, null, null, null, null
         );
     }
 
@@ -259,9 +243,56 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return mutator;
     }
 
+    @NonNull
+    private BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> getEqualsFunction() {
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
+    }
+
+    @NonNull
+    private ToIntFunction<SequencedEntry<K, V>> getHashFunction() {
+        return (a) -> Objects.hashCode(a.getKey());
+    }
+
+    @NonNull
+    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    }
+
+    private void immutablePutIfPresent(@NonNull K k, V v) {
+        if (containsKey(k)) {
+            mutator = null;
+            put(k, v);
+        }
+    }
+
+    private void iteratorRemove(SequencedEntry<K, V> entry) {
+        //mutator = null;
+        remove(entry.getKey());
+    }
+
     @Override
     public @Nullable Entry<K, V> lastEntry() {
         return isEmpty() ? null : HeapSequencedIterator.getLast(root, first, last);
+    }
+
+    public Map.Entry<K, V> pollFirstEntry() {
+        if (isEmpty()) {
+            return null;
+        }
+        SequencedEntry<K, V> entry = HeapSequencedIterator.getFirst(root, first, last);
+        remove(entry.getKey());
+        first = entry.getSequenceNumber() + 1;
+        return entry;
+    }
+
+    public Map.Entry<K, V> pollLastEntry() {
+        if (isEmpty()) {
+            return null;
+        }
+        SequencedEntry<K, V> entry = HeapSequencedIterator.getLast(root, first, last);
+        remove(entry.getKey());
+        last = entry.getSequenceNumber();
+        return entry;
     }
 
     @Override
@@ -298,18 +329,6 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         return details;
     }
 
-    private void immutablePutIfPresent(@NonNull K k, V v) {
-        if (containsKey(k)) {
-            mutator = null;
-            put(k, v);
-        }
-    }
-
-    private void iteratorRemove(SequencedEntry<K, V> entry) {
-        //mutator = null;
-        remove(entry.getKey());
-    }
-
     @Override
     public V putLast(K key, V value) {
         SequencedEntry<K, V> oldValue = putLast(key, value, (oldk, newk) -> newk).getOldValue();
@@ -341,6 +360,19 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
+    public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
+        return new WrappedReadOnlySequencedMap<>(
+                () -> entryIterator(true),
+                () -> entryIterator(false),
+                this::size,
+                this::containsKey,
+                this::get,
+                this::lastEntry,
+                this::firstEntry
+        );
+    }
+
+    @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
@@ -355,26 +387,6 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
             return details.getOldValue().getValue();
         }
         return null;
-    }
-
-    public Map.Entry<K, V> pollFirstEntry() {
-        if (isEmpty()) {
-            return null;
-        }
-        SequencedEntry<K, V> entry = HeapSequencedIterator.getFirst(root, first, last);
-        remove(entry.getKey());
-        first = entry.getSequenceNumber() + 1;
-        return entry;
-    }
-
-    public Map.Entry<K, V> pollLastEntry() {
-        if (isEmpty()) {
-            return null;
-        }
-        SequencedEntry<K, V> entry = HeapSequencedIterator.getLast(root, first, last);
-        remove(entry.getKey());
-        last = entry.getSequenceNumber();
-        return entry;
     }
 
     @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(final K key) {
@@ -430,6 +442,24 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     }
 
     @Override
+    public @NonNull SequencedMap<K, V> reversed() {
+        return new WrappedSequencedMap<>(
+                () -> entryIterator(true),
+                () -> entryIterator(false),
+                this::size,
+                this::containsKey,
+                this::get,
+                this::clear,
+                this::remove,
+                this::lastEntry,
+                this::firstEntry,
+                this::put,
+                this::putLast,
+                this::putFirst
+        );
+    }
+
+    @Override
     public int size() {
         return size;
     }
@@ -462,20 +492,5 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         protected @NonNull Object readResolve() {
             return new SequencedChampMap<>(deserialized);
         }
-    }
-
-    @NonNull
-    private ToIntFunction<SequencedEntry<K, V>> getHashFunction() {
-        return (a) -> Objects.hashCode(a.getKey());
-    }
-
-    @NonNull
-    private BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> getEqualsFunction() {
-        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    }
-
-    @NonNull
-    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }

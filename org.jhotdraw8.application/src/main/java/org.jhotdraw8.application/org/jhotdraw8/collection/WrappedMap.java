@@ -105,6 +105,7 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
                 sizeFunction,
                 this::containsEntry,
                 clearFunction,
+                null,
                 this::removeEntry
         );
     }

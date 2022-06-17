@@ -195,7 +195,8 @@ public class BitmapIndexedNode<K> extends Node<K> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<K> remove(final @Nullable UniqueId mutator, final K key,
+    public @NonNull BitmapIndexedNode<K> remove(final @Nullable UniqueId mutator,
+                                                final K key,
                                                 final int keyHash, final int shift,
                                                 final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
         final int mask = mask(keyHash, shift);

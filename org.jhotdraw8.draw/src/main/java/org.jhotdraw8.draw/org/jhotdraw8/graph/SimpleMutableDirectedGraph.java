@@ -335,6 +335,6 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public @NonNull Set<V> getVertices() {
-        return new WrappedSet<V>(vertices::iterator, vertices::size, vertices::contains, null, null);
+        return new WrappedSet<V>(vertices::iterator, vertices::size, vertices::contains, null, null, null);
     }
 }

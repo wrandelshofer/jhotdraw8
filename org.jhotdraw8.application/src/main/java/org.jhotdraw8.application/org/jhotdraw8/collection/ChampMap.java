@@ -12,7 +12,6 @@ import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.KeyIterator;
 import org.jhotdraw8.collection.champ.Node;
 
-import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
@@ -82,15 +81,11 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable {
+public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
     private final static long serialVersionUID = 0L;
-    private transient @Nullable UniqueId mutator;
-    private transient @NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root;
-    private transient int size;
-    private transient int modCount;
 
     public ChampMap() {
-        this.root = BitmapIndexedNode.emptyNode();
+        root = BitmapIndexedNode.emptyNode();
     }
 
     public ChampMap(@NonNull Map<? extends K, ? extends V> m) {
@@ -135,29 +130,14 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @NonNull ChampMap<K, V> clone() {
-        try {
-            mutator = null;
             return (ChampMap<K, V>) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e);
-        }
     }
 
-    boolean containsEntry(final @Nullable Object o) {
-        if (o instanceof Entry) {
-            @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;
-            K key = entry.getKey();
-            return containsKey(key)
-                    && Objects.equals(entry.getValue(), get(key));
-        }
-        return false;
-    }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean containsKey(@NonNull Object o) {
+    public boolean containsKey(@Nullable Object o) {
         return root.findByKey(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0,
                 getEqualsFunction()) != Node.NO_VALUE;
@@ -168,35 +148,50 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return new WrappedSet<>(
                 () -> new MappedIterator<>(new FailFastIterator<>(new KeyIterator<>(
                         root,
-                        this::immutableRemove),
+                        this::iteratorRemove),
                         () -> this.modCount),
-                        e -> new MutableMapEntry<>(this::immutablePutIfPresent, e.getKey(), e.getValue())),
+                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
                 ChampMap.this::size,
                 ChampMap.this::containsEntry,
                 ChampMap.this::clear,
+                null,
                 ChampMap.this::removeEntry
         );
-    }
-
-    private void immutableRemove(AbstractMap.SimpleImmutableEntry<K, V> entry) {
-        mutator = null;
-        remove(entry.getKey());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(@NonNull Object o) {
-        K key = (K) o;
-        Object result = root.findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
-                getEqualsFunction());
-        return result == Node.NO_VALUE ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        Object result = root.findByKey(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
+                Objects.hashCode(o), 0, getEqualsFunction());
+        return result == Node.NO_VALUE || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
-    private @NonNull UniqueId getOrCreateMutator() {
-        if (mutator == null) {
-            mutator = new UniqueId();
+    @NonNull
+    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
+    }
+
+    @NonNull
+    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
+        return (a) -> Objects.hashCode(a.getKey());
+    }
+
+    @NonNull
+    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    }
+
+    private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
+        if (containsKey(k)) {
+            mutator = null;
+            put(k, v);
         }
-        return mutator;
+    }
+
+    private void iteratorRemove(AbstractMap.SimpleImmutableEntry<K, V> entry) {
+        mutator = null;
+        remove(entry.getKey());
     }
 
     @Override
@@ -225,13 +220,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return details;
     }
 
-    private void immutablePutIfPresent(@Nullable K k, @Nullable V v) {
-        if (containsKey(k)) {
-            mutator = null;
-            put(k, v);
-        }
-    }
-
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
@@ -239,7 +227,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return oldValue == null ? null : oldValue.getValue();
     }
 
-    @SuppressWarnings("unchecked")
     @NonNull ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
@@ -254,6 +241,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return details;
     }
 
+    @SuppressWarnings("unchecked")
     boolean removeEntry(final @Nullable Object o) {
         if (containsEntry(o)) {
             assert o != null;
@@ -264,11 +252,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         return false;
     }
 
-    @Override
-    public int size() {
-        return size;
-    }
-
     /**
      * Returns an immutable copy of this map.
      *
@@ -277,6 +260,10 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     public @NonNull ImmutableChampMap<K, V> toImmutable() {
         mutator = null;
         return size == 0 ? ImmutableChampMap.of() : new ImmutableChampMap<>(root, size);
+    }
+
+    private @NonNull Object writeReplace() {
+        return new SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
@@ -290,23 +277,5 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         protected @NonNull Object readResolve() {
             return new ChampMap<>(deserialized);
         }
-    }
-
-    private @NonNull Object writeReplace() {
-        return new SerializationProxy<K, V>(this);
-    }
-    @NonNull
-    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
-        return (a) -> Objects.hashCode(a.getKey());
-    }
-
-    @NonNull
-    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
-        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    }
-
-    @NonNull
-    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }
