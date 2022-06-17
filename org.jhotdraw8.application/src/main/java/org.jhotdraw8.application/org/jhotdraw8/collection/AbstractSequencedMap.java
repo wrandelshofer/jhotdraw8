@@ -62,39 +62,62 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @NonNull SequencedSet<K> keySet() {
+        return createKeySet(this);
+    }
+
+
+    @SuppressWarnings({"SuspiciousMethodCalls"})
+    public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
         return new WrappedSequencedSet<>(
-                () -> new MappedIterator<>(entrySet().iterator(), Entry::getKey),
-                () -> new MappedIterator<>(reversed().entrySet().iterator(), Entry::getKey),
-                AbstractSequencedMap.this::size,
-                AbstractSequencedMap.this::containsKey,
-                AbstractSequencedMap.this::clear,
-                AbstractSequencedMap.this::removeKey,
-                AbstractSequencedMap.this::firstKey,
-                AbstractSequencedMap.this::lastKey,
+                () -> new MappedIterator<>(m.entrySet().iterator(), Entry::getKey),
+                () -> new MappedIterator<>(m.reversed().entrySet().iterator(), Entry::getKey),
+                m::size,
+                m::containsKey,
+                m::clear,
+                o -> {
+                    if (m.containsKey(o)) {
+                        m.remove(o);
+                        return true;
+                    }
+                    return false;
+                },
+                m::firstKey,
+                m::lastKey,
                 null, null, null, null
         );
     }
 
     @Override
     public @NonNull SequencedCollection<V> values() {
+        return createValues(this);
+    }
+
+    public static <K, V> @NonNull SequencedCollection<V> createValues(@NonNull SequencedMap<K, V> m) {
         return new WrappedSequencedCollection<>(
-                () -> new MappedIterator<>(entrySet().iterator(), Entry::getValue),
-                () -> new MappedIterator<>(reversed().entrySet().iterator(), Entry::getValue),
-                AbstractSequencedMap.this::size,
-                AbstractSequencedMap.this::containsValue,
-                AbstractSequencedMap.this::clear,
-                AbstractSequencedMap.this::removeValue,
+                () -> new MappedIterator<>(m.entrySet().iterator(), Entry::getValue),
+                () -> new MappedIterator<>(m.reversed().entrySet().iterator(), Entry::getValue),
+                m::size,
+                m::containsValue,
+                m::clear,
+                (o) -> {
+                    for (Entry<K, V> entry : m.entrySet()) {
+                        if (Objects.equals(entry.getValue(), o)) {
+                            m.remove(entry.getKey());
+                            return true;
+                        }
+                    }
+                    return false;
+                },
                 () -> {
-                    Entry<K, V> entry = firstEntry();
+                    Entry<K, V> entry = m.firstEntry();
                     if (entry == null) {
                         throw new NoSuchElementException();
                     }
                     return entry.getValue();
                 },
                 () -> {
-                    Entry<K, V> entry = lastEntry();
+                    Entry<K, V> entry = m.lastEntry();
                     if (entry == null) {
                         throw new NoSuchElementException();
                     }

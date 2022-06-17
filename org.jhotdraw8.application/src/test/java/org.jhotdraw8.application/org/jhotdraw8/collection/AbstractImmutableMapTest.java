@@ -58,9 +58,9 @@ public abstract class AbstractImmutableMapTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {
         return Arrays.asList(
-                dynamicTest("32-bits hash", () -> testPersistentMap(-1)),
-                dynamicTest("3-bits hash", () -> testPersistentMap(7)),
-                dynamicTest("0-bits hash", () -> testPersistentMap(0))
+                dynamicTest("32-bits hash", () -> testImmutableMap(-1)),
+                dynamicTest("3-bits hash", () -> testImmutableMap(7)),
+                dynamicTest("0-bits hash", () -> testImmutableMap(0))
         );
     }
 
@@ -178,7 +178,7 @@ public abstract class AbstractImmutableMapTest {
         assertMapEquality(expected, actual);
     }
 
-    void testPersistentMap(int hashBitMask) {
+    void testImmutableMap(int hashBitMask) {
         // bulkSize must be at least 32 for good code coverage
         int bulkSize = 32;
         Random rng = new Random(0);
@@ -270,7 +270,7 @@ public abstract class AbstractImmutableMapTest {
         assertNotSame(newActual, actual);
         actual = newActual;
 
-        // WHEN: value2 is not yet in set, then copyPut must yield a new map
+        // WHEN: entry is not yet in set, then copyPut must yield a new map
         newActual = actual.copyPut(firstValue2.getKey(), firstValue2.getValue());
         assertNotSame(newActual, actual);
         actual = newActual;

@@ -129,9 +129,12 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
         modCount++;
     }
 
+    /**
+     * Returns a shallow copy of this map.
+     */
     @Override
     public @NonNull ChampMap<K, V> clone() {
-            return (ChampMap<K, V>) super.clone();
+        return (ChampMap<K, V>) super.clone();
     }
 
 

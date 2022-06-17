@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.BucketSequencedIterator;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
@@ -105,17 +106,18 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
      * The counter is incremented after a new entry is added to the end of the
      * sequence.
      */
-    private transient final int last;
+    protected transient final int last;
 
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
      */
-    private transient final int first;
+    protected transient final int first;
 
     ImmutableSequencedChampMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, int size,
                                int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
+        assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
         this.size = size;
         this.first = first;
         this.last = last;
@@ -195,48 +197,54 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
 
     @Override
     public @NonNull ImmutableSequencedChampMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
-        return putLastWithoutMoveToLast(key, value);
+        return copyPutLast(key, value, false);
     }
 
     //@Override
     public @NonNull ImmutableSequencedChampMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value) {
-        return copyRemove(key).putFirstWithoutMoveToFirst(key, value);
+        return copyPutFirst(key, value, true);
     }
 
     public @NonNull ImmutableSequencedChampMap<K, V> copyPutLast(@NonNull K key, @Nullable V value) {
-        return copyRemove(key).putLastWithoutMoveToLast(key, value);
+        return copyPutLast(key, value, true);
     }
 
     @NonNull
-    private ImmutableSequencedChampMap<K, V> putLastWithoutMoveToLast(@NonNull K key, @Nullable V value) {
+    private ImmutableSequencedChampMap<K, V> copyPutLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode = update(null,
                 new SequencedEntry<>(key, value, last + 1),
-                keyHash, 0, details, getUpdateFunction(), getEqualsFunction(), getHashFunction());
-        if (details.isModified()) {
-            if (details.isUpdated()) {
-                return new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
-            }
-            return renumber(newRootNode, size + 1, first, last + 1);
+                keyHash, 0, details,
+                moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
+                getEqualsFunction(), getHashFunction());
+        if (details.isUpdated) {
+            return moveToLast
+                    ? renumber(newRootNode, size,
+                    details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
+                    details.getOldValue().getSequenceNumber() == last ? last : last + 1)
+                    : new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
         }
-        return this;
+        return details.modified ? renumber(newRootNode, size + 1, first, last + 1) : this;
     }
 
     @NonNull
-    private ImmutableSequencedChampMap<K, V> putFirstWithoutMoveToFirst(@NonNull K key, @Nullable V value) {
+    private ImmutableSequencedChampMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode = update(null,
                 new SequencedEntry<>(key, value, first - 1),
-                keyHash, 0, details, getUpdateFunction(), getEqualsFunction(), getHashFunction());
-        if (details.isModified()) {
-            if (details.isUpdated()) {
-                return new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
-            }
-            return renumber(newRootNode, size + 1, first - 1, last);
+                keyHash, 0, details,
+                moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
+                getEqualsFunction(), getHashFunction());
+        if (details.isUpdated) {
+            return moveToFirst
+                    ? renumber(newRootNode, size,
+                    details.getOldValue().getSequenceNumber() == first ? first : first - 1,
+                    details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
+                    : new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
         }
-        return this;
+        return details.modified ? renumber(newRootNode, size + 1, first - 1, last) : this;
     }
 
     @SuppressWarnings("unchecked")
@@ -265,10 +273,9 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final SequencedChampMap<K, V> t = this.toMutable();
         boolean modified = false;
-        BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> updateFunction = getUpdateFunction();
         while (entries.hasNext()) {
             Map.Entry<? extends K, ? extends V> entry = entries.next();
-            ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), updateFunction);
+            ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), false);
             modified |= details.modified;
         }
         return modified ? t.toImmutable() : this;
@@ -292,7 +299,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
             if (seq == newLast) {
                 newLast--;
             }
-            return new ImmutableSequencedChampMap<>(newRootNode, size - 1, newFirst, newLast);
+            return renumber(newRootNode, size - 1, newFirst, newLast);
         }
         return this;
     }
@@ -335,10 +342,12 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         return entries(false);
     }
 
-    @SuppressWarnings("unchecked")//Suppression is required for Java 8
     public @NonNull Iterator<Map.Entry<K, V>> entries(boolean reversed) {
-        return new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(
-                size, this, reversed, null, Map.Entry.class::cast);
+        return BucketSequencedIterator.isSupported(size, first, last)
+                ? new BucketSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, first, last, this, reversed,
+                null, Map.Entry.class::cast)
+                : new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, this, reversed,
+                null, Map.Entry.class::cast);
     }
 
     @Override
@@ -424,6 +433,19 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
 
     @NonNull
     private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+        return (oldK, newK) -> Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
+                new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber());
+    }
+
+    @NonNull
+    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToLastFunction() {
+        return (oldK, newK) -> (Objects.equals(oldK.getValue(), newK.getValue())
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1) ? oldK : newK;
+    }
+
+    @NonNull
+    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToFirstFunction() {
+        return (oldK, newK) -> (Objects.equals(oldK.getValue(), newK.getValue())
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1) ? oldK : newK;
     }
 }

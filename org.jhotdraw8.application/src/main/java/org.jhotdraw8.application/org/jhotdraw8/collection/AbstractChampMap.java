@@ -7,7 +7,6 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Iterator;
-import java.util.Objects;
 
 /**
  * Abstract base class for CHAMP maps.
@@ -22,17 +21,6 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
     protected BitmapIndexedNode<X> root;
     protected int size;
     protected int modCount;
-
-    @Override
-    public boolean containsEntry(final @Nullable Object o) {
-        if (o instanceof Entry) {
-            @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;
-            K key = entry.getKey();
-            return containsKey(key)
-                    && Objects.equals(entry.getValue(), get(key));
-        }
-        return false;
-    }
 
     protected @NonNull UniqueId getOrCreateMutator() {
         if (mutator == null) {
@@ -76,5 +64,15 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
     @Override
     public Iterator<Entry<K, V>> iterator() {
         return entrySet().iterator();
+    }
+
+    @SuppressWarnings("unchecked")
+    boolean removeEntry(final @Nullable Object o) {
+        if (containsEntry(o)) {
+            assert o != null;
+            remove(((Entry<K, V>) o).getKey());
+            return true;
+        }
+        return false;
     }
 }

@@ -18,6 +18,7 @@ import org.jhotdraw8.collection.champ.SequencedElement;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -157,18 +158,19 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
                 Objects.hashCode(e), 0, details,
-                moveToFirst ? (oldk, newk) -> newk : (oldk, newk) -> oldk,
+                moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
             root = newRoot;
-            modCount++;
-            if (!details.isUpdated()) {
+            if (details.isUpdated) {
+                first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
+                last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
+            } else {
+                modCount++;
+                first--;
                 size++;
             }
-            if (!details.isUpdated || moveToFirst) {
-                first--;
-                renumber();
-            }
+            renumber();
         }
         return details.modified;
     }
@@ -183,18 +185,19 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         final BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(
                 getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
                 details,
-                moveToLast ? (oldk, newk) -> newk : (oldk, newk) -> oldk,
+                moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
             root = newRoot;
-            modCount++;
-            if (!details.isUpdated) {
+            if (details.isUpdated) {
+                first = details.getOldValue().getSequenceNumber() == first ? first + 1 : first;
+                last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
+            } else {
+                modCount++;
                 size++;
-            }
-            if (!details.isUpdated || moveToLast) {
                 last++;
-                renumber();
             }
+            renumber();
         }
         return details.modified;
     }
@@ -357,5 +360,20 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         protected @NonNull Object readResolve() {
             return new SequencedChampSet<>(deserialized);
         }
+    }
+
+    @NonNull
+    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateFunction() {
+        return (oldK, newK) -> oldK;
+    }
+
+    @NonNull
+    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToLastFunction() {
+        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
+    }
+
+    @NonNull
+    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToFirstFunction() {
+        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
     }
 }
