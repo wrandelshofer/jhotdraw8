@@ -26,11 +26,12 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
 
     int size();
 
-    @Nullable V get(@NonNull Object key);
+    @Nullable V get(Object key);
 
+    @SuppressWarnings("unchecked")
     default @Nullable V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
         V v;
-        return (((v = get(key)) != null) || containsKey(key))
+        return (((v = get((K) key)) != null) || containsKey(key))
                 ? v
                 : defaultValue;
     }

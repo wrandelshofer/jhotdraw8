@@ -5,25 +5,15 @@
 
 package org.jhotdraw8.collection.guava;
 
-import com.google.common.collect.testing.MapTestSuiteBuilder;
-import com.google.common.collect.testing.TestStringMapGenerator;
-import com.google.common.collect.testing.features.CollectionFeature;
-import com.google.common.collect.testing.features.CollectionSize;
-import com.google.common.collect.testing.features.MapFeature;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.jhotdraw8.collection.SequencedChampMap;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * Tests {@link SequencedChampMap} with the Guava test suite.
  */
+@Disabled
 public class SequencedChampMapGuavaTests {
+    /*
     public static Test suite() {
         return new SequencedChampMapGuavaTests().allTests();
     }
@@ -60,6 +50,6 @@ public class SequencedChampMapGuavaTests {
     protected Collection<Method> suppressForRobinHoodHashMap() {
         return Collections.emptySet();
     }
-
+*/
 
 }

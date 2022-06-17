@@ -1,87 +1,220 @@
-/*
- * @(#)AbstractSequencedMapTest.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public abstract class AbstractSequencedMapTest extends AbstractMapTestOld {
-    @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "SuspiciousMethodCalls"})
-    public void doTestIterationSequence(int mask, int... elements) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+public abstract class AbstractSequencedMapTest extends AbstractMapTest {
+    /**
+     * Creates a new empty instance.
+     */
+    protected abstract SequencedMap<HashCollider, HashCollider> newInstance();
 
-        // Add all in order
-        List<HashCollider> list = new ArrayList<>();
-        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        for (int e : elements) {
-            HashCollider e1 = new HashCollider(e, mask);
-            list.add(e1);
-            expected.put(e1, e1);
+    /**
+     * Creates a new instance with the specified expected number of elements
+     * and load factor.
+     */
+    protected abstract SequencedMap<HashCollider, HashCollider> newInstance(int numElements, float loadFactor);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract SequencedMap<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m);
+
+    protected abstract SequencedMap<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m);
+
+    protected abstract ImmutableSequencedMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m);
+
+    protected abstract SequencedMap<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    abstract SequencedMap<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m);
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testPutFirstWithContainedEntryShouldMoveEntryToFirst(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
+            instance.putFirst(e.getKey(), e.getValue());
+            assertEquals(e, instance.firstEntry());
+            expected.remove(e);
+            expected.add(0, e);
+            assertEqualSequence(expected, instance, "putFirst");
         }
-        Map<HashCollider, HashCollider> instance = copyOf(expected);
-
-        assertEqualSequence(expected, instance, "after adding all");
-
-        // Remove one element in the middle
-        HashCollider middle = list.get(list.size() / 2);
-        list.remove(list.size() / 2);
-        expected.remove(middle);
-        instance.remove(middle);
-        assertEqualSequence(expected, instance, "after removing " + middle + " from the middle of the sequence");
-
-        // Add the removed element
-        list.add(middle);
-        expected.put(middle, middle);
-        instance.put(middle, middle);
-        assertEqualSequence(expected, instance, "after adding " + middle + " to the end");
-
-        // Get another element from the middle
-        // Add the element from the middle - this must not reorder the instance,
-        // because the element is already present
-        middle = list.get(list.size() / 2);
-        expected.put(middle, middle);
-        instance.put(middle, middle);
-        assertEqualSequence(expected, instance, "after adding " + middle + " which is already in the map");
-
-        // Get the first element:
-        HashCollider firstKey1 = instance.keySet().iterator().next();
-        HashCollider firstKey2 = instance.entrySet().iterator().next().getKey();
-        assertEquals(list.get(0), firstKey1);
-        assertEquals(list.get(0), firstKey2);
     }
 
-    protected <K, V> void assertEqualSequence(Map<K, V> expected, Map<K, V> actual, String message) {
-        assertEquals(new ArrayList<>(expected.keySet()), new ArrayList<>(actual.keySet()), message);
-        assertEquals(new ArrayList<>(expected.entrySet()), new ArrayList<>(actual.entrySet()), message);
-        assertEquals(new ArrayList<>(expected.values()), new ArrayList<>(actual.values()), message);
-        assertEquals(expected.toString(), actual.toString(), message);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testPutFirstWithNewElementShouldMoveElementToFirst(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
+            instance.putFirst(e.getKey(), e.getValue());
+            assertEquals(e, instance.firstEntry());
+            expected.remove(e);
+            expected.add(0, e);
+            assertEqualSequence(expected, instance, "putFirst");
+        }
     }
 
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsIterationSequenceByInsertionOrder() {
-        return Arrays.asList(
-                dynamicTest("full mask 1..10", () -> doTestIterationSequence(-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("full mask 10..1", () -> doTestIterationSequence(-1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("full mask 1..1_000_000_000", () -> doTestIterationSequence(-1, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)),
-                dynamicTest("some collisions 1..10", () -> doTestIterationSequence(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("some collisions 10..1", () -> doTestIterationSequence(1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("some collisions 1..1_000_000_000", () -> doTestIterationSequence(1, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)),
-                dynamicTest("all collisions 1..10", () -> doTestIterationSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("all collisions 10..1", () -> doTestIterationSequence(0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("all collisions 1..1_000_000_000", () -> doTestIterationSequence(0, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000))
-        );
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testPutLastWithContainedElementShouldMoveElementToLast(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
+            instance.putLast(e.getKey(), e.getValue());
+            assertEquals(e, instance.lastEntry());
+            expected.remove(e);
+            expected.add(e);
+            assertEqualSequence(expected, instance, "putLast");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testPutLastWithNewElementShouldMoveElementToLast(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
+            instance.putLast(e.getKey(), e.getValue());
+            assertEquals(e, instance.lastEntry());
+            expected.remove(e);
+            expected.add(e);
+            assertEqualSequence(expected, instance, "putLast");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testPutWithContainedElementShouldNotMoveElementToLast(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
+            instance.put(e.getKey(), e.getValue());
+            assertEquals(expected.get(expected.size() - 1), instance.lastEntry());
+            assertEqualSequence(expected, instance, "put");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithLastElementShouldNotChangeSequenc(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        while (!expected.isEmpty()) {
+            Map.Entry<HashCollider, HashCollider> e = expected.remove(expected.size() - 1);
+            assertEquals(e.getValue(), instance.remove(e.getKey()));
+            assertEqualSequence(expected, instance, "remove(lastElement)");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveFirstShouldNotChangeSequence(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        while (!expected.isEmpty()) {
+            Map.Entry<HashCollider, HashCollider> e = expected.remove(0);
+            assertEquals(instance.pollFirstEntry(), e);
+            assertEqualSequence(expected, instance, "removeFirst");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveFirstWithEmptySetShouldReturnNull(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
+            instance.remove(e.getKey());
+        }
+        assertNull(instance.pollFirstEntry());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveLastWithEmptySetShouldReturnNull(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
+            instance.remove(e.getKey());
+        }
+        assertNull(instance.pollLastEntry());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveLastShouldNotChangeSequence(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        while (!expected.isEmpty()) {
+            assertEquals(instance.pollLastEntry(), expected.remove(expected.size() - 1));
+            assertEqualSequence(expected, instance, "removeLast");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithFirstElementShouldNotChangeSequence(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        while (!expected.isEmpty()) {
+            Map.Entry<HashCollider, HashCollider> e = expected.remove(0);
+            assertEquals(e.getValue(), instance.remove(e.getKey()));
+            assertEqualSequence(expected, instance, "remove(firstElement)");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithMiddleElementShouldNotChangeSequenc(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        while (!expected.isEmpty()) {
+            Map.Entry<HashCollider, HashCollider> e = expected.remove(expected.size() / 2);
+            assertEquals(e.getValue(), instance.remove(e.getKey()));
+            assertEqualSequence(expected, instance, "removeMiddle");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testPutWithNewElementShouldMoveElementToLast(Data data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
+            instance.put(e.getKey(), e.getValue());
+            assertEquals(e, instance.lastEntry());
+            expected.remove(e);
+            expected.add(e);
+            assertEqualSequence(expected, instance, "add");
+        }
+    }
+
+    protected <K, V> void assertEqualSequence(Collection<Map.Entry<K, V>> expected, SequencedMap<K, V> actual, String message) {
+        ArrayList<Map.Entry<K, V>> expectedList = new ArrayList<>(expected);
+        if (!expected.isEmpty()) {
+            assertEquals(expectedList.get(0), actual.firstEntry(), message);
+            assertEquals(expectedList.get(0), actual.entrySet().iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.lastEntry(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().entrySet().iterator().next(), message);
+        }
+        assertEquals(expectedList, new ArrayList<>(actual.entrySet()), message);
+
+        LinkedHashMap<Object, Object> x = new LinkedHashMap<>();
+        for (Map.Entry<K, V> e : expected) {
+            x.put(e.getKey(), e.getValue());
+        }
+        assertEquals(x.toString(), actual.toString(), message);
     }
 }

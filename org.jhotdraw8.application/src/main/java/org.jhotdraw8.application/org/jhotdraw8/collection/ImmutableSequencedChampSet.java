@@ -108,7 +108,7 @@ public class ImmutableSequencedChampSet<E>
 
     /**
      * Counter for the sequence number of the first element. The counter is
-     * decrement before a new entry is added to the start of the sequence.
+     * decrement after a new entry has been added to the start of the sequence.
      */
     final int first;
 
@@ -139,10 +139,13 @@ public class ImmutableSequencedChampSet<E>
      */
     @NonNull
     private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
+        if (size == 0) {
+            return of();
+        }
         if (Sequenced.mustRenumber(size, first, last)) {
             return new ImmutableSequencedChampSet<>(
                     SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
-                    size, 0, size);
+                    size, -1, size);
         }
         return new ImmutableSequencedChampSet<>(root, size, first, last);
     }
@@ -229,7 +232,7 @@ public class ImmutableSequencedChampSet<E>
                                                                boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedElement<E>> root = update(null,
-                new SequencedElement<>(key, last + 1), Objects.hashCode(key), 0, details,
+                new SequencedElement<>(key, last), Objects.hashCode(key), 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isUpdated) {

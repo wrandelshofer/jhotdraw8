@@ -18,8 +18,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
-public abstract class AbstractImmutableSequencedMapTest extends AbstractImmutableMapTest {
+@Deprecated
+public abstract class AbstractImmutableSequencedMapTestOld extends AbstractImmutableMapTest {
     @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "SuspiciousMethodCalls"})
     public void doTestIterationSequence(int mask, int... elements) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 

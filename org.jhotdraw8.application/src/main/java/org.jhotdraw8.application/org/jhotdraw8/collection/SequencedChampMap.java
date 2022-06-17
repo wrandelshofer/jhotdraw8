@@ -107,9 +107,9 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     /**
      * Counter for the sequence number of the first element. The counter is
-     * decrement before a new entry is added to the start of the sequence.
+     * decrement after a new entry has been added to the start of the sequence.
      */
-    private int first = 0;
+    private int first = -1;
 
     public SequencedChampMap() {
         root = BitmapIndexedNode.emptyNode();
@@ -175,7 +175,8 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         root = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
-        first = last = 0;
+        first = -1;
+        last = 0;
     }
 
     /**
@@ -229,7 +230,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(final @NonNull Object o) {
+    public V get(final Object o) {
         Object result = root.findByKey(
                 new SequencedEntry<>((K) o),
                 Objects.hashCode(o), 0, getEqualsFunction());
@@ -294,7 +295,8 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         }
         SequencedEntry<K, V> entry = HeapSequencedIterator.getFirst(root, first, last);
         remove(entry.getKey());
-        first = entry.getSequenceNumber() + 1;
+        first = entry.getSequenceNumber();
+        renumber();
         return entry;
     }
 
@@ -305,6 +307,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         SequencedEntry<K, V> entry = HeapSequencedIterator.getLast(root, first, last);
         remove(entry.getKey());
         last = entry.getSequenceNumber();
+        renumber();
         return entry;
     }
 
@@ -351,20 +354,18 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @NonNull ChangeEvent<SequencedEntry<K, V>> putLast(
-            final K key, final V val,
-            boolean moveToLast) {
-        final int keyHash = Objects.hashCode(key);
+            final K key, final V val, boolean moveToLast) {
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
+        final BitmapIndexedNode<SequencedEntry<K, V>> newRoot =
                 root.update(getOrCreateMutator(),
-                        new SequencedEntry<>(key, val, last), keyHash, 0, details,
+                        new SequencedEntry<>(key, val, last), Objects.hashCode(key), 0, details,
                         moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                         getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
-            root = newRootNode;
+            root = newRoot;
             if (details.isUpdated()) {
-                first = details.getOldValue().getSequenceNumber() == first ? first + 1 : first;
+                first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
             } else {
                 modCount++;
@@ -394,13 +395,6 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         @SuppressWarnings("unchecked") final K key = (K) o;
         ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
         if (details.modified) {
-            int seq = details.getOldValue().getSequenceNumber();
-            if (seq == last) {
-                last++;
-            }
-            if (seq == first) {
-                first--;
-            }
             return details.getOldValue().getValue();
         }
         return null;
@@ -417,9 +411,14 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
             root = newRootNode;
             size = size - 1;
             modCount++;
-            if (size == 0) {
-                last = Integer.MIN_VALUE;
+            int seq = details.getOldValue().getSequenceNumber();
+            if (seq == last - 1) {
+                last--;
             }
+            if (seq == first + 1) {
+                first++;
+            }
+            renumber();
         }
         return details;
     }
@@ -432,11 +431,16 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      * 4 times the size of the set.
      */
     private void renumber() {
+        if (size == 0) {
+            first = -1;
+            last = 0;
+            return;
+        }
         if (Sequenced.mustRenumber(size, first, last)) {
             root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
                     getHashFunction(), getEqualsFunction());
             last = size;
-            first = 0;
+            first = -1;
         }
     }
 

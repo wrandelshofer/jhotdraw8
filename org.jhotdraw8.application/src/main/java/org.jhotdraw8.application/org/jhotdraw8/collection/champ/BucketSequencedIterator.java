@@ -67,11 +67,12 @@ public class BucketSequencedIterator<E extends Sequenced, X> implements Iterator
         if (size == 0) {
             buckets = (E[]) new Sequenced[0];
         } else {
-            buckets = (E[]) new Sequenced[last - first + 1];
+            buckets = (E[]) new Sequenced[last - first];
             if (reversed) {
+                int length = buckets.length;
                 for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {
                     E k = it.next();
-                    buckets[last - k.getSequenceNumber() - first] = k;
+                    buckets[length - 1 - k.getSequenceNumber() + first] = k;
                 }
             } else {
                 for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {

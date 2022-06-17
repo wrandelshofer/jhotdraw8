@@ -5,25 +5,15 @@
 
 package org.jhotdraw8.collection.guava;
 
-import com.google.common.collect.testing.MapTestSuiteBuilder;
-import com.google.common.collect.testing.TestStringMapGenerator;
-import com.google.common.collect.testing.features.CollectionFeature;
-import com.google.common.collect.testing.features.CollectionSize;
-import com.google.common.collect.testing.features.MapFeature;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.jhotdraw8.collection.ChampMap;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import org.junit.jupiter.api.Disabled;
 
 /**
  * Tests {@link ChampMap} with the Guava test suite.
  */
+@Disabled
 public class ChampMapGuavaTests {
+    /*
     public static Test suite() {
         return new ChampMapGuavaTests().allTests();
     }
@@ -59,6 +49,6 @@ public class ChampMapGuavaTests {
     protected Collection<Method> suppressForRobinHoodHashMap() {
         return Collections.emptySet();
     }
-
+*/
 
 }

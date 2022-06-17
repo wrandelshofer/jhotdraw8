@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-
 public abstract class AbstractIndexedArrayObservableSetTest {
 
     protected abstract AbstractIndexedArrayObservableSet<Character> newInstance(Collection<Character> col);

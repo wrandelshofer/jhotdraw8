@@ -2,7 +2,7 @@ package org.jhotdraw8.collection;
 
 import java.util.Map;
 
-public class ChampMapMapTest extends AbstractMapTest {
+public class ChampMapTest extends AbstractMapTest {
     @Override
     protected Map<HashCollider, HashCollider> newInstance() {
         return new ChampMap<>();

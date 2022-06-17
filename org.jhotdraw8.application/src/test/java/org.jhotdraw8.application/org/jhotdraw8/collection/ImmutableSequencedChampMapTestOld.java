@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
-public class ImmutableSequencedChampMapTest extends AbstractImmutableSequencedMapTest {
+public class ImmutableSequencedChampMapTestOld extends AbstractImmutableSequencedMapTestOld {
 
 
     @Override

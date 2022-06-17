@@ -4,7 +4,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnlySequencedMap<K, V> {
@@ -24,13 +23,7 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
     @NonNull ImmutableSequencedMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> m);
-
-    @Override
-    @NonNull
-    default ImmutableSequencedMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutAll(m);
-    }
+    @NonNull ImmutableSequencedMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
 
     @Override
     @NonNull

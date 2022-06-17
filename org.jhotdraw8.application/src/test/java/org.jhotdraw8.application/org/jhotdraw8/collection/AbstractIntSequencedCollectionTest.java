@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 /**
  * Tests classes that implement the interface {@link IntSequencedCollection}.
  */
+@Deprecated
 public abstract class AbstractIntSequencedCollectionTest {
 
     public AbstractIntSequencedCollectionTest() {

@@ -11,7 +11,7 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class ImmutableSequencedChampSetSequencedSetTest extends AbstractSequencedSetTest {
+public class ImmutableSequencedChampSetSequencedSetTest extends AbstractSequencedSetTestOld {
 
     @Override
     protected @NonNull <T> SequencedSet<T> create(int expectedMaxSize, float maxLoadFactor) {

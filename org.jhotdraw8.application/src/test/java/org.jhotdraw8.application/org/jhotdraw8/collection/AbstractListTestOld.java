@@ -14,15 +14,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
- * Abstract base class for testing classes that implement the {@link Set} interface.
+ * Abstract base class for testing classes that implement the {@link List} interface.
  */
-public abstract class AbstractListTest {
+public abstract class AbstractListTestOld {
 
     protected abstract <T> @NonNull List<T> create();
 

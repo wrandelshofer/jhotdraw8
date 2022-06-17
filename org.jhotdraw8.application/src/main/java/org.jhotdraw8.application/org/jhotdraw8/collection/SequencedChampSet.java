@@ -94,23 +94,11 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
     /**
      * Counter for the sequence number of the last element. The counter is
      * incremented after a new entry is added to the end of the sequence.
-     * <p>
-     * The counter is in the range from {@code 0} to
-     * {@link Integer#MAX_VALUE} - 1.
-     * When the counter reaches {@link Integer#MAX_VALUE}, all
-     * sequence numbers are renumbered, and the counter is reset to
-     * {@code size}.
-     */
+      */
     private int last = 0;
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
-     * <p>
-     * The counter is in the range from {@code 0} to
-     * {@link Integer#MIN_VALUE}.
-     * When the counter is about to wrap over to {@link Integer#MAX_VALUE}, all
-     * sequence numbers are renumbered, and the counter is reset to
-     * {@code 0}.
      */
     private int first = 0;
 
@@ -190,7 +178,7 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         if (details.modified) {
             root = newRoot;
             if (details.isUpdated) {
-                first = details.getOldValue().getSequenceNumber() == first ? first + 1 : first;
+                first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
             } else {
                 modCount++;
@@ -207,7 +195,8 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         root = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
-        first = last = 0;
+        first = 0;
+        last = 0;
     }
 
     /**
@@ -278,13 +267,13 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
             size--;
             modCount++;
             int seq = details.getOldValue().getSequenceNumber();
-            if (seq == last) {
+            if (seq == last - 1) {
                 last--;
             }
             if (seq == first) {
                 first++;
             }
-            assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
+            renumber();
         }
         return details.modified;
     }
@@ -294,7 +283,8 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
     public E removeFirst() {
         SequencedElement<E> k = HeapSequencedIterator.getFirst(root, first, last);
         remove(k.getElement());
-        first = k.getSequenceNumber() + 1;
+        first = k.getSequenceNumber();
+        renumber();
         return k.getElement();
     }
 
@@ -303,6 +293,7 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         SequencedElement<E> k = HeapSequencedIterator.getLast(root, first, last);
         remove(k.getElement());
         last = k.getSequenceNumber();
+        renumber();
         return k.getElement();
     }
 
@@ -312,11 +303,16 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
      * 4 times the size of the set.
      */
     private void renumber() {
+        if (size == 0) {
+            first = -1;
+            last = 0;
+            return;
+        }
         if (Sequenced.mustRenumber(size, first, last)) {
             root = SequencedElement.renumber(size, root, getOrCreateMutator(),
                     Objects::hashCode, Objects::equals);
             last = size;
-            first = 0;
+            first = -1;
         }
     }
 

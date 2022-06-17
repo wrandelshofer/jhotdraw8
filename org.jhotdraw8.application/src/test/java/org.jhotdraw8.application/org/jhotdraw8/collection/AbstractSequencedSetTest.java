@@ -1,151 +1,238 @@
-/*
- * @(#)AbstractSequencedSetTest.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
 
-import java.lang.reflect.InvocationTargetException;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Provides tests for sets which keep elements ordered by their insertion order.
- */
 public abstract class AbstractSequencedSetTest extends AbstractSetTest {
-    @Override
-    protected abstract <T> @NonNull SequencedSet<T> create(int expectedMaxSize, float maxLoadFactor);
+    protected abstract SequencedSet<HashCollider> newInstance();
 
-    @Override
-    public void doTest(List<HashCollider> list) throws Exception {
-        super.doTest(list);
-        doTestIterationSequence(list);
-        doTestAddFirst(list);
-        doTestAddLast(list);
-    }
+    /**
+     * Creates a new instance with the specified expected number of elements
+     * and load factor.
+     */
+    protected abstract SequencedSet<HashCollider> newInstance(int numElements, float loadFactor);
 
-    public void doTestAddFirst(List<HashCollider> list) throws Exception {
-        SequencedSet<HashCollider> instance = create(0, 0.75f);
-        ArrayList<HashCollider> reversed = new ArrayList<>(list);
-        Collections.reverse(reversed);
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract SequencedSet<HashCollider> newInstance(SequencedSet<HashCollider> m);
 
-        // WHEN getFirst is invoked
-        // THEN throws NoSuchElementException
-        assertThrows(NoSuchElementException.class, instance::getFirst);
+    protected abstract SequencedSet<HashCollider> newInstance(ReadOnlySequencedSet<HashCollider> m);
 
-        // WHEN new elements are added with addFirst
-        // THEN the set must have the reversed sequence
-        for (HashCollider e : list) {
+    protected abstract ImmutableSequencedSet<HashCollider> toImmutableInstance(SequencedSet<HashCollider> m);
+
+    protected abstract SequencedSet<HashCollider> toClonedInstance(SequencedSet<HashCollider> m);
+
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract SequencedSet<HashCollider> newInstance(Set<HashCollider> m);
+
+    protected abstract SequencedSet<HashCollider> newInstance(ReadOnlySet<HashCollider> m);
+
+    protected abstract ImmutableSequencedSet<HashCollider> toImmutableInstance(Set<HashCollider> m);
+
+    protected abstract SequencedSet<HashCollider> toClonedInstance(Set<HashCollider> m);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract SequencedSet<HashCollider> newInstance(Iterable<HashCollider> m);
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddFirstWithContainedElementShouldMoveElementToFirst(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        for (HashCollider e : data.a()) {
             instance.addFirst(e);
             assertEquals(e, instance.getFirst());
+            expected.remove(e);
+            expected.add(0, e);
+            assertEqualSequence(expected, instance, "addFirst");
         }
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(reversed);
-        assertEqualSequence(expected, instance, "after addFirst of new elements");
-
-        // WHEN existing elements are added in reverse with addFirst
-        // THEN the set must have the non-reversed sequence
-        for (HashCollider e : reversed) {
-            instance.addFirst(e);
-        }
-        expected = new LinkedHashSet<>(list);
-        assertEqualSequence(expected, instance, "after addFirst of existing elements");
     }
 
-    public void doTestAddLast(List<HashCollider> list) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        SequencedSet<HashCollider> instance = create(0, 0.75f);
-        ArrayList<HashCollider> reversed = new ArrayList<>(list);
-        Collections.reverse(reversed);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddFirstWithNewElementShouldMoveElementToFirst(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        for (HashCollider e : data.c()) {
+            instance.addFirst(e);
+            assertEquals(e, instance.getFirst());
+            expected.remove(e);
+            expected.add(0, e);
+            assertEqualSequence(expected, instance, "addFirst");
+        }
+    }
 
-        // WHEN getLast is invoked
-        // THEN throws NoSuchElementException
-        assertThrows(NoSuchElementException.class, instance::getLast);
-
-        // WHEN new elements are added with addFirst
-        // THEN the set must have the list sequence
-        for (HashCollider e : list) {
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddLastWithContainedElementShouldMoveElementToLast(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        for (HashCollider e : data.a()) {
             instance.addLast(e);
             assertEquals(e, instance.getLast());
+            expected.remove(e);
+            expected.add(e);
+            assertEqualSequence(expected, instance, "addLast");
         }
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(list);
-        assertEqualSequence(expected, instance, "after addFirst of new elements");
+    }
 
-        // WHEN existing elements are added in reverse with addFirst
-        // THEN the set must have the reversed sequence
-        for (HashCollider e : reversed) {
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddLastWithNewElementShouldMoveElementToLast(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        for (HashCollider e : data.c()) {
             instance.addLast(e);
+            assertEquals(e, instance.getLast());
+            expected.remove(e);
+            expected.add(e);
+            assertEqualSequence(expected, instance, "addLast");
         }
-        expected = new LinkedHashSet<>(reversed);
-        assertEqualSequence(expected, instance, "after addFirst of existing elements");
     }
 
-    public void doTestIterationSequence(List<HashCollider> list) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Set<HashCollider> instance = create(0, 0.75f);
-
-        // Add all in order
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        for (HashCollider e1 : list) {
-            expected.add(e1);
-            instance.add(e1);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddWithContainedElementShouldNotMoveElementToLast(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        for (HashCollider e : data.a()) {
+            instance.add(e);
+            assertEquals(expected.get(expected.size() - 1), instance.getLast());
+            assertEqualSequence(expected, instance, "add");
         }
-
-        assertEqualSequence(expected, instance, "after adding all");
-
-        // Remove one element in the middle
-        HashCollider middle = list.get(list.size() / 2);
-        list.remove(list.size() / 2);
-        expected.remove(middle);
-        instance.remove(middle);
-        assertEqualSequence(expected, instance, "after removing " + middle + " from the middle of the sequence");
-
-        // Add the removed element to the end
-        list.add(middle);
-        instance.add(middle);
-        expected.add(middle);
-        assertEqualSequence(expected, instance, "after adding " + middle + " to the end");
-
-        // Get another element from the middle
-        // Add the element from the middle - this must not reorder the instance,
-        // because the element is already present
-        middle = list.get(list.size() / 2);
-        expected.add(middle);
-        instance.add(middle);
-        assertEqualSequence(expected, instance, "after adding " + middle + " which is already in the set");
     }
 
-    protected <E> void assertEqualSequence(Collection<E> expected, Set<E> actual, String message) {
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithLastElementShouldNotChangeSequenc(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        while (!expected.isEmpty()) {
+            assertTrue(instance.remove(expected.remove(expected.size() - 1)));
+            assertEqualSequence(expected, instance, "remove(lastElement)");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveFirstShouldNotChangeSequence(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        while (!expected.isEmpty()) {
+            assertEquals(instance.removeFirst(), expected.remove(0));
+            assertEqualSequence(expected, instance, "removeFirst");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveFirstWithEmptySetShouldThrowNoSuchElementException(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        instance.removeAll(data.a().asSet());
+        assertThrows(NoSuchElementException.class, instance::removeFirst);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveLastWithEmptySetShouldThrowNoSuchElementException(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        instance.removeAll(data.a().asSet());
+        assertThrows(NoSuchElementException.class, instance::removeLast);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveLastShouldNotChangeSequence(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        while (!expected.isEmpty()) {
+            assertEquals(instance.removeLast(), expected.remove(expected.size() - 1));
+            assertEqualSequence(expected, instance, "removeLast");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithFirstElementShouldNotChangeSequence(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        while (!expected.isEmpty()) {
+            assertTrue(instance.remove(expected.remove(0)));
+            assertEqualSequence(expected, instance, "remove(firstElement)");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithMiddleElementShouldNotChangeSequenc(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        while (!expected.isEmpty()) {
+            assertTrue(instance.remove(expected.remove(expected.size() / 2)));
+            assertEqualSequence(expected, instance, "removeMiddle");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddWithNewElementShouldMoveElementToLast(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        for (HashCollider e : data.c()) {
+            instance.add(e);
+            assertEquals(e, instance.getLast());
+            expected.remove(e);
+            expected.add(e);
+            assertEqualSequence(expected, instance, "add");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testReversedOfReversedShouldHaveSameSequence(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        ArrayList<HashCollider> actual = new ArrayList<>(instance.reversed().reversed());
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testReversedShouldHaveReversedSequence(Data data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        Collections.reverse(expected);
+        ArrayList<HashCollider> actual = new ArrayList<>(instance.reversed());
+        assertEquals(expected, actual);
+    }
+
+    protected <E> void assertEqualSequence(Collection<E> expected, SequencedSet<E> actual, String message) {
         ArrayList<E> expectedList = new ArrayList<>(expected);
+        if (!expected.isEmpty()) {
+            assertEquals(expectedList.get(0), actual.getFirst(), message);
+            assertEquals(expectedList.get(0), actual.iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().iterator().next(), message);
+        }
         assertEquals(expectedList, new ArrayList<>(actual), message);
         assertEquals(expected.toString(), actual.toString(), message);
     }
-
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsIterationSequenceByInsertionOrder() {
-        return Arrays.asList(
-                dynamicTest("full mask 1..10", () -> doTest(-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("full mask 10..1", () -> doTest(-1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("full mask 1..1_000_000_000", () -> doTest(-1, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)),
-                dynamicTest("some collisions 1..10", () -> doTest(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("some collisions 10..1", () -> doTest(1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("some collisions 1..1_000_000_000", () -> doTest(1, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)),
-                dynamicTest("all collisions 1..10", () -> doTest(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("all collisions 10..1", () -> doTest(0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("all collisions 1..1_000_000_000", () -> doTest(0, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000))
-        );
-    }
-
-
 }

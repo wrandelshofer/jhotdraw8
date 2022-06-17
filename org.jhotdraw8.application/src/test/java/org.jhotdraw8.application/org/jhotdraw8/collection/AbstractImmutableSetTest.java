@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
+@Deprecated
 public abstract class AbstractImmutableSetTest {
 
     private void assertEquality(LinkedHashSet<HashCollider> expected, ImmutableSet<HashCollider> actual) {

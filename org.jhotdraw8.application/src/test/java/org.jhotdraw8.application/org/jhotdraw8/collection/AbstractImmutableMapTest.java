@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
+@Deprecated
 public abstract class AbstractImmutableMapTest {
     protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> of();
 
@@ -300,6 +300,7 @@ public abstract class AbstractImmutableMapTest {
             values1WithDifferentValues.put(entry.getKey(),
                     new HashCollider(entry.getValue() == null ? -1 : entry.getValue().getValue() + 1, hashBitMask));
         }
+
         newActual = actual.copyPutAll(values1WithDifferentValues);
         assertNotSame(newActual, actual);
 

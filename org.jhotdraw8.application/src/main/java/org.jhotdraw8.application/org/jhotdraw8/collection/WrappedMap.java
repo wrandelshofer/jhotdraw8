@@ -38,7 +38,8 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
     }
 
     public WrappedMap(@NonNull Map<K, V> m) {
-        this(() -> m.entrySet().iterator(), m::size, m::containsKey, m::get, null, null, null);
+        this(() -> m.entrySet().iterator(), m::size, m::containsKey, m::get, m::clear,
+                m::remove, m::put);
     }
 
     public WrappedMap(@NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,
@@ -118,5 +119,10 @@ public class WrappedMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V remove(Object key) {
         return removeFunction.apply(key);
+    }
+
+    @Override
+    public V put(K key, V value) {
+        return putFunction.apply(key, value);
     }
 }

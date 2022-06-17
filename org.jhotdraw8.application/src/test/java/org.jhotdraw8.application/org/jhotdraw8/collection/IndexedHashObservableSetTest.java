@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Set;
 
-public class IndexedHashObservableSetTest extends AbstractSetTest {
+public class IndexedHashObservableSetTest extends AbstractSetTestOld {
     @Override
     protected @NonNull <T> Set<T> create(int expectedMaxSize, float maxLoadFactor) {
         return new IndexedHashObservableSet<>();

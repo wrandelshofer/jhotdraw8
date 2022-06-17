@@ -1,363 +1,444 @@
-/*
- * @(#)AbstractSetTest.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-/**
- * Abstract base class for testing classes that implement the {@link Set} interface.
- */
-@SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "EqualsWithItself", "SimplifiableAssertion"})
 public abstract class AbstractSetTest {
+    /**
+     * The test data.
+     */
+    static final class Data {
+        private final String name;
+        private final ReadOnlySet<HashCollider> a;
+        private final ReadOnlySet<HashCollider> c;
 
-    public static final HashCollider ZERO = new HashCollider(0, -1);
-    public static final HashCollider THREE = new HashCollider(3, -1);
-    public static final HashCollider FIVE = new HashCollider(5, -1);
-    public static final HashCollider SIX = new HashCollider(6, -1);
-    public static final HashCollider SEVEN = new HashCollider(7, -1);
-    public static final HashCollider EIGHT = new HashCollider(8, -1);
-
-    protected void assertEqualSets(Set<HashCollider> expected, Set<HashCollider> instance) {
-        assertEquals(expected.size(), instance.size());
-        assertEquals(expected.hashCode(), instance.hashCode());
-        assertEquals(expected, instance);
-        assertEquals(expected, new LinkedHashSet<>(instance));
-        assertEquals(instance, expected);
-        assertEquals(expected.isEmpty(), instance.isEmpty());
-
-        Set<Object> copy = create(instance.size(), 1.0f);
-        copy.addAll(instance);
-        assertEquals(instance, copy);
-    }
-
-    protected abstract <T> @NonNull Set<T> create(int expectedMaxSize, float maxLoadFactor);
-
-    public void doTest(int mask, int... elements) throws Exception {
-        List<HashCollider> list = new ArrayList<>(elements.length);
-        for (int e : elements) {
-            list.add(new HashCollider(e, mask));
+        /**
+         * Creates a new instance with 3 maps of the same non-empty size.
+         *
+         * @param name the name of the data
+         * @param a    a non-empty set
+         * @param c    a map with different elements than a
+         */
+        Data(String name, ReadOnlySet<HashCollider> a,
+             ReadOnlySet<HashCollider> c) {
+            this.name = name;
+            this.a = a;
+            this.c = c;
         }
-        doTest(list);
-    }
 
-    public void doTest(List<HashCollider> list) throws Exception {
-        doTestAddOneByOne(list);
-        doTestBulkAdd(list);
-        doTestClone(list);
-        doTestRemoveOneByOne(list);
-        doTestIteratorRemove(list);
-        doTestBulkRemove(list);
-        doTestBulkRetain(list);
-        doTestClear(list);
-        doTestEquals(list);
-    }
+        @Override
+        public String toString() {
+            return name;
+        }
 
-    public void doTestAddOneByOne(List<HashCollider> list) {
+        public String name() {
+            return name;
+        }
 
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        Set<HashCollider> instance = create(0, 0.75f);
+        public ReadOnlySet<HashCollider> a() {
+            return a;
+        }
 
-        // WHEN: Element is added to instance
-        // THEN: Instance must be equal to expected
-        for (HashCollider e : list) {
-            assertEquals(expected.contains(e), instance.contains(e));
-            assertEquals(expected.add(e), instance.add(e));
-            assertTrue(instance.contains(e));
-            assertEqualSets(expected, instance);
+        public ReadOnlySet<HashCollider> c() {
+            return c;
         }
     }
 
-    public void doTestEquals(List<HashCollider> list) {
-        Set<HashCollider> instance = create(0, 0.75f);
-        Set<HashCollider> instance2 = create(0, 0.75f);
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
+    /**
+     * Creates a new empty instance.
+     */
+    protected abstract Set<HashCollider> newInstance();
 
-        // WHEN: Element is added to instance
-        // THEN: Instance must be equal to expected
-        for (HashCollider e : list) {
-            if (instance.add(e)) {
-                assertNotEquals(instance, instance2);
-            }
-            instance2.add(e);
-            expected.add(e);
-            assertEquals(instance, instance2);
-            assertEquals(instance, expected);
-            assertEquals(expected, instance);
-        }
-    }
+    /**
+     * Creates a new instance with the specified expected number of elements
+     * and load factor.
+     */
+    protected abstract Set<HashCollider> newInstance(int numElements, float loadFactor);
 
-    public void doTestBulkAdd(List<HashCollider> list) {
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        Set<HashCollider> instance = create(0, 0.75f);
-        // WHEN: Elements are bulk-added to instance
-        // THEN Instance must be equal to expected
-        assertEquals(expected.containsAll(list), instance.containsAll(list));
-        assertEquals(expected.addAll(list), instance.addAll(list));
-        assertEquals(expected.containsAll(list), instance.containsAll(list));
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract Set<HashCollider> newInstance(Set<HashCollider> m);
 
-        // WHEN: Elements are bulk-added to instance again
-        // THEN Instance must be equal to expected
-        assertEquals(expected.addAll(list), instance.addAll(list));
+    protected abstract Set<HashCollider> newInstance(ReadOnlySet<HashCollider> m);
 
-        // WHEN: self is bulk-added to instance
-        // THEN Instance must be equal to expected
-        //noinspection CollectionAddedToSelf
-        assertEquals(expected.addAll(expected), instance.addAll(instance));
+    protected abstract ImmutableSet<HashCollider> toImmutableInstance(Set<HashCollider> m);
 
-        // WHEN: expected is bulk-added to instance
-        // THEN Instance must be equal to expected
-        assertEquals(expected.addAll(instance), instance.addAll(expected));
-    }
+    protected abstract Set<HashCollider> toClonedInstance(Set<HashCollider> m);
 
-    public void doTestBulkRemove(List<HashCollider> list) {
-        Set<HashCollider> instance = create(0, 0.75f);
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(list);
-        instance.addAll(list);
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract Set<HashCollider> newInstance(Iterable<HashCollider> m);
 
-        // WHEN: Elements are bulk-removed from instance
-        // THEN Instance must be equal to expected
-        //noinspection SuspiciousMethodCalls
-        assertEquals(expected.removeAll(Set.of()), instance.removeAll(Set.of()));
-        assertEquals(expected.removeAll(list), instance.removeAll(list));
-        //noinspection SuspiciousMethodCalls
-        assertEquals(expected.containsAll(Set.of()), instance.containsAll(Set.of()));
-        assertEquals(expected.containsAll(list), instance.containsAll(list));
-        assertEquals(expected.addAll(Set.of()), instance.addAll(Set.of()));
-
-        expected.addAll(list);
-        instance.addAll(list);
-        Collections.reverse(list);
-
-        // WHEN: Elements are bulk-removed from instance
-        // THEN Instance must be equal to expected
-        assertEquals(expected.removeAll(list), instance.removeAll(list));
-        assertEquals(expected.containsAll(list), instance.containsAll(list));
-
-        // WHEN: Elements are bulk-removed from self
-        // THEN Instance must be equal to expected
-        expected.addAll(list);
-        instance.addAll(list);
-        //noinspection CollectionAddedToSelf
-        assertEquals(expected.removeAll(expected), instance.removeAll(instance));
-
-        // WHEN: Elements are bulk-removed from expected
-        // THEN Instance must be equal to expected
-        expected.addAll(list);
-        instance.addAll(list);
-        assertEquals(!list.isEmpty(), instance.removeAll(expected));
-        assertEquals(Set.of(), instance);
-        instance.addAll(list);
-        //noinspection CollectionAddedToSelf
-        assertEquals(!list.isEmpty(), instance.removeAll(instance));
-        assertEquals(Set.of(), instance);
-    }
-
-    public void doTestBulkRetain(List<HashCollider> list) {
-        Set<HashCollider> instance = create(0, 0.75f);
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-
-        // WHEN: Elements are bulk-retained to instance
-        // THEN Instance must be equal to expected
-        //noinspection RedundantOperationOnEmptyContainer
-        expected.clear();
-        instance.clear();
-        assertEquals(expected.addAll(list), instance.addAll(list));
-        assertEquals(expected.retainAll(list), instance.retainAll(list));
-        assertEquals(expected.containsAll(list), instance.containsAll(list));
-        assertEqualSets(expected, instance);
-
-        // WHEN: Sub-List is bulk-retained to instance
-        // THEN Instance must be equal to expected
-        expected.clear();
-        instance.clear();
-        assertEquals(expected.addAll(list), instance.addAll(list));
-        List<HashCollider> subListLow = list.subList(0, list.size() / 2);
-        List<HashCollider> subListHigh = list.subList(list.size() / 2 + 1, list.size());
-        assertEquals(expected.retainAll(subListLow), instance.retainAll(subListLow));
-        assertEqualSets(expected, instance);
-        assertEquals(expected.retainAll(subListHigh), instance.retainAll(subListHigh));
-        assertEqualSets(expected, instance);
-
-        // WHEN: List with more elements is bulk-retained to instance
-        // THEN Instance must be equal to expected
-        expected.clear();
-        instance.clear();
-        assertEquals(expected.addAll(subListLow), instance.addAll(subListLow));
-        assertEquals(expected.retainAll(list), instance.retainAll(list));
-        assertEqualSets(expected, instance);
-
-        // WHEN: self is bulk-retained to instance
-        // THEN Instance must be equal to expected
-        expected.clear();
-        instance.clear();
-        assertEquals(expected.addAll(list), instance.addAll(list));
-        //noinspection CollectionAddedToSelf
-        assertEquals(expected.retainAll(expected), instance.retainAll(instance));
-        assertEquals(expected.retainAll(instance), instance.retainAll(expected));
-
-        // WHEN: self is bulk-retained to empty
-        // THEN Instance must be equal to expected
-        expected.clear();
-        instance.clear();
-        assertEquals(expected.addAll(list), instance.addAll(list));
-        //noinspection SuspiciousMethodCalls
-        assertEquals(expected.retainAll(Set.of()), instance.retainAll(Set.of()));
-        assertEquals(Set.of(), instance);
-
-        // WHEN: empty self is bulk-retained to non-empty
-        // THEN Instance must be equal to expected
-        expected.clear();
-        instance.clear();
-        assertEquals(expected.retainAll(list), instance.retainAll(list));
-        assertEquals(Set.of(), instance);
-    }
-
-    public void doTestClear(List<HashCollider> list) {
-        Set<HashCollider> instance = create(0, 0.75f);
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(list);
-        instance.addAll(list);
-
-        // WHEN: set is cleared
-        // THEN: set must be equal to expected
-        expected.clear();
-        instance.clear();
-        assertEqualSets(expected, instance);
-    }
-
-    public void doTestClone(List<HashCollider> list) throws
-            InvocationTargetException, IllegalAccessException {
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(list);
-        Set<HashCollider> instance = create(0, 0.75f);
-        instance.addAll(list);
-
-
-        // WHEN is cloned
-        // THEN Instance must be equal to expected
-        try {
-            Set<HashCollider> actualClone = (Set<HashCollider>) instance.getClass().getMethod("clone").invoke(instance);
-            assertEqualSets(expected, instance);
-
-            // WHEN: Elements are bulk-removed from instance
-            // THEN Instance must be equal to expected
-            assertEquals(expected.removeAll(list), instance.removeAll(list));
-            assertEquals(expected.containsAll(list), instance.containsAll(list));
-            assertEqualSets(expected, instance);
-
-            // WHEN: Elements are bulk-added to cloned instance
-            // THEN Instance must be equal to expected
-            expected.addAll(list);
-            assertTrue(instance.addAll(actualClone));
-            assertEqualSets(expected, instance);
-
-            // WHEN: Elements are bulk-added again to cloned instance
-            // THEN Instance must be equal to expected
-            assertFalse(instance.addAll(actualClone));
-            assertEqualSets(expected, instance);
-
-            // WHEN: Elements are bulk-removed from cloned instance
-            // THEN Instance must be equal to expected
-            expected.removeAll(list);
-            instance.removeAll(actualClone);
-            assertEqualSets(expected, instance);
-
-            // WHEN: Elements are bulk-removed again from cloned instance
-            // THEN Instance must be equal to expected
-            assertFalse(instance.removeAll(actualClone));
-            assertEquals(expected, instance);
-        } catch (NoSuchMethodException e) {
-            // its okay, we can not clone this set
-        }
-    }
-
-    public void doTestIteratorRemove(List<HashCollider> list) {
-        Set<HashCollider> instance = create(0, 0.75f);
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(list);
-        instance.addAll(list);
-
-        // WHEN: Element is iterator-removed to instance
-        // THEN Instance must be equal to expected
-        for (HashCollider e : list) {
-            for (Iterator<HashCollider> it = expected.iterator(); it.hasNext(); ) {
-                if (Objects.equals(e, it.next())) {
-                    it.remove();
-                    break;
-                }
-            }
-            for (Iterator<HashCollider> it = instance.iterator(); it.hasNext(); ) {
-                if (Objects.equals(e, it.next())) {
-                    it.remove();
-                    break;
-                }
-            }
-            assertEquals(expected, instance, "element " + e + " was removed from the iterator");
-        }
-    }
-
-    public void doTestRemoveOneByOne(List<HashCollider> list) {
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(list);
-        Set<HashCollider> instance = create(0, 0.75f);
-        instance.addAll(list);
-
-        // WHEN: Element is removed from instance
-        // THEN Instance must be equal to expected
-        for (HashCollider e : list) {
-            assertEquals(expected.contains(e), instance.contains(e));
-            if (expected.contains(e)) {
-                assertTrue(instance.remove(e));
-            } else {
-                assertFalse(instance.remove(e));
-            }
-            assertFalse(instance.contains(e));
-            expected.remove(e);
-            assertEqualSets(expected, instance);
-        }
-
-        expected.addAll(list.subList(0, list.size() / 2));
-        instance.addAll(list.subList(0, list.size() / 2));
-        // WHEN: Element is removed from instance
-        // THEN Instance must be equal to expected
-        for (HashCollider e : list) {
-            assertEquals(expected.contains(e), instance.contains(e));
-            if (expected.contains(e)) {
-                assertTrue(instance.remove(e));
-            } else {
-                assertFalse(instance.remove(e));
-            }
-            assertFalse(instance.contains(e));
-            expected.remove(e);
-            assertEqualSets(expected, instance);
-        }
-    }
-
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTests() {
-        return Arrays.asList(
-                dynamicTest("full mask", () -> doTest(-1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
-                dynamicTest("some collisions", () -> doTest(1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
-                dynamicTest("all collisions", () -> doTest(0, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1))
+    public static Stream<Data> dataProvider() {
+        return Stream.of(
+                NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
     }
 
+    private final static Data NO_COLLISION = newData("no collisions", -1, 32, 100_000);
+    private final static Data ALL_COLLISION = newData("all collisions", 0, 32, 100_000);
+    private final static Data SOME_COLLISION = newData("some collisions", 0x55555555, 32, 100_000);
 
+    private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
+        int value;
+        int count = 0;
+        do {
+            value = rng.nextInt(bound);
+            count++;
+            if (count >= bound) {
+                throw new RuntimeException("error in rng");
+            }
+        } while (!usedValues.add(value));
+        return value;
+    }
+
+    private static Data newData(String name, int hashBitMask, int size, int bound) {
+        Random rng = new Random(0);
+        LinkedHashSet<HashCollider> a = new LinkedHashSet<>(size * 2);
+        LinkedHashSet<HashCollider> c = new LinkedHashSet<>(size * 2);
+        LinkedHashSet<Integer> usedValues = new LinkedHashSet<>();
+        for (int i = 0; i < size; i++) {
+            int keyA = createNewValue(rng, usedValues, bound);
+            int keyC = createNewValue(rng, usedValues, bound);
+            a.add(new HashCollider(keyA, hashBitMask));
+            c.add(new HashCollider(keyC, hashBitMask));
+        }
+        return new Data(name,
+                new WrappedReadOnlySet<>(a),
+                new WrappedReadOnlySet<>(c));
+    }
+
+    protected void assertEqualSet(ReadOnlySet<HashCollider> expected, Set<HashCollider> actual) {
+        assertEqualSet(expected.asSet(), actual);
+    }
+
+    protected void assertEqualSet(Set<HashCollider> expected, Set<HashCollider> actual) {
+        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.isEmpty(), actual.isEmpty());
+        assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual);
+        assertEquals(actual, expected);
+
+        ArrayList<HashCollider> expectedValues = new ArrayList<>(expected);
+        ArrayList<HashCollider> actualValues = new ArrayList<>(actual);
+        expectedValues.sort(Comparator.comparing(HashCollider::getValue));
+        actualValues.sort(Comparator.comparing(HashCollider::getValue));
+        assertEquals(expectedValues, actualValues);
+    }
+
+    protected void assertNotEqualSet(Set<HashCollider> expected, Set<HashCollider> actual) {
+        assertNotEquals(expected, actual);
+        assertNotEquals(actual, expected);
+    }
+
+    @Test
+    public void testNewInstanceNoArgsShouldBeEmpty() {
+        Set<HashCollider> actual = newInstance();
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
+        assertEqualSet(expected, actual);
+    }
+
+    @Test
+    public void testNewInstanceCapacityArgsShouldBeEmpty() {
+        Set<HashCollider> actual = newInstance(24, 0.75f);
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(24, 0.75f);
+        assertEqualSet(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceSetArgsShouldBeEqualToSet(Data data) {
+        Set<HashCollider> actual = newInstance(data.a().asSet());
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(Data data) {
+        Set<HashCollider> actual1 = newInstance(data.a().asSet());
+        Set<HashCollider> actual = newInstance(actual1);
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlySetArgsShouldBeEqualToSet(Data data) {
+        Set<HashCollider> actual = newInstance(data.a());
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlySetArgsWithImmutableSetArgsOfSameTypeShouldBeEqualToSet(Data data) {
+        Set<HashCollider> actual1 = newInstance(data.a());
+        Set<HashCollider> actual = newInstance(toImmutableInstance(actual1));
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testClearShouldYieldEmptySet(Data data) {
+        Set<HashCollider> actual = newInstance(data.a());
+        assertNotEqualSet(Collections.emptySet(), actual);
+        actual.clear();
+        assertEqualSet(Collections.emptySet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testClearShouldBeIdempotent(Data data) {
+        Set<HashCollider> actual = newInstance(data.a());
+        assertNotEqualSet(Collections.emptySet(), actual);
+        actual.clear();
+        assertEqualSet(Collections.emptySet(), actual);
+        actual.clear();
+        assertEqualSet(Collections.emptySet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCloneShouldYieldEqualSet(Data data) {
+        Set<HashCollider> actual = newInstance(data.a());
+        Set<HashCollider> clone = toClonedInstance(actual);
+        assertEqualSet(data.a().asSet(), clone);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testContainsShouldYieldExpectedValue(Data data) {
+        Set<HashCollider> actual = newInstance(data.a());
+        for (HashCollider k : data.a()) {
+            assertTrue(actual.contains(k));
+        }
+        for (HashCollider k : data.c()) {
+            assertFalse(actual.contains(k));
+        }
+        assertFalse(actual.contains(new Object()));
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldRemoveElement(Data data) {
+        Set<HashCollider> actual = newInstance(data.a());
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        List<HashCollider> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
+        while (!toRemove.isEmpty() && !expected.isEmpty()) {
+            for (Iterator<HashCollider> i = actual.iterator(); i.hasNext(); ) {
+                HashCollider k = i.next();
+                if (k.equals(toRemove.get(0))) {
+                    i.remove();
+                    toRemove.remove(0);
+                    expected.remove(k);
+                    assertEqualSet(expected, actual);
+                }
+            }
+        }
+        assertEqualSet(Collections.emptySet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldThrowIllegalStateException(Data data) {
+        Set<HashCollider> instance = newInstance(data.a());
+        Iterator<HashCollider> i = instance.iterator();
+        assertThrows(IllegalStateException.class, i::remove);
+        Iterator<HashCollider> k = instance.iterator();
+        assertThrows(IllegalStateException.class, k::remove);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testSerializationShouldYieldSameSet(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a());
+        assertEqualSet(data.a().asSet(), instance);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
+            out.writeObject(instance);
+        }
+        Set<HashCollider> deserialized;
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()))) {
+            deserialized = (Set<HashCollider>) in.readObject();
+        }
+        assertEqualSet(data.a().asSet(), deserialized);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualWithThisShouldYieldTrue(Data data) {
+        Set<HashCollider> instance = newInstance(data.a());
+        assertEquals(instance, instance);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithCloneShouldYieldTrue(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a());
+        Set<HashCollider> clone = toClonedInstance(instance);
+        assertEquals(data.a().asSet(), clone);
+        assertEquals(instance, clone);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddWithNewElementShouldReturnTrue(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        for (HashCollider e : data.c) {
+            assertTrue(instance.add(e));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddWithContainedElementShouldReturnFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        for (HashCollider e : data.a) {
+            assertFalse(instance.add(e));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithNewElementsShouldReturnTrue(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertTrue(instance.addAll(data.c.asSet()));
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
+        assertEquals(expected, instance);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithContainedElementsShouldReturnFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertFalse(instance.addAll(data.a.asSet()));
+        assertEquals(data.a.asSet(), instance);
+    }
+
+    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithSelfShouldReturnFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertFalse(instance.addAll(instance));
+        assertEquals(data.a.asSet(), instance);
+    }
+
+    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithCloneShouldReturnFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertFalse(instance.addAll(toClonedInstance(instance)));
+        assertEquals(data.a.asSet(), instance);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithObjectShouldYieldFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a());
+        assertNotEquals(instance, new Object());
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithNewElementShouldReturnFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        for (HashCollider e : data.c) {
+            assertFalse(instance.remove(e));
+            assertEqualSet(data.a, instance);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveWithContainedKeyShouldReturnOldValue(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        for (HashCollider e : data.a) {
+            expected.remove(e);
+            assertTrue(instance.remove(e));
+            assertEqualSet(expected, instance);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveAllWithNewKeyShouldReturnFalse(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertFalse(instance.removeAll(data.c.asSet()));
+        assertEqualSet(data.a, instance);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveAllWithContainedKeyShouldReturnTrue(Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertTrue(instance.removeAll(data.a.asSet()));
+        assertEqualSet(Collections.emptySet(), instance);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveAllWithSomeContainedKeyShouldReturnTrue(Data data) throws Exception {
+        ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
+        ArrayList<HashCollider> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
+        list.addAll(listC.subList(0, listC.size() / 2));
+        Set<HashCollider> instance = newInstance(data.a);
+        assertTrue(instance.removeAll(list));
+        assertEqualSet(new LinkedHashSet<>(listA.subList(listA.size() / 2, listA.size())), instance);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithSomeNewKeyShouldReturnTrue(Data data) throws Exception {
+        ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
+        ArrayList<HashCollider> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
+        list.addAll(listC.subList(0, listC.size() / 2));
+        Set<HashCollider> instance = newInstance(data.a);
+        assertTrue(instance.addAll(list));
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
+        expected.addAll(list);
+        assertEqualSet(expected, instance);
+    }
 }

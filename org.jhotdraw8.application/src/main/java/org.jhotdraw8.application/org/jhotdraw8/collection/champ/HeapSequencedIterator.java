@@ -99,7 +99,7 @@ public class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X
             if (seq >= maxSeq) {
                 maxSeq = seq;
                 maxKey = k;
-                if (seq == last) {
+                if (seq == last - 1) {
                     break;
                 }
             }

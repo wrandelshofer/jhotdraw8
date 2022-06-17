@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
+@Disabled
 public class ChampMapTestOld extends AbstractMapTestOld {
     /**
      * Orders the trie by hash-code with bit partition size 5.

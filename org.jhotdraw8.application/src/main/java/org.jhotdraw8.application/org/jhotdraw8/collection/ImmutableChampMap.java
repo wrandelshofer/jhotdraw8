@@ -183,7 +183,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (isEmpty() && (m instanceof ChampMap)) {
             return ((ChampMap<K, V>) m).toImmutable();
         }
-        return copyPutAll(m.entrySet().iterator());
+        return copyPutAll(m.entrySet());
     }
 
     @Override
@@ -192,16 +192,15 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (isEmpty() && (m instanceof ImmutableChampMap)) {
             return (ImmutableChampMap<K, V>) m;
         }
-        return copyPutAll(m.readOnlyEntrySet().iterator());
+        return copyPutAll(m.readOnlyEntrySet());
     }
 
 
     @Override
-    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull Iterator<? extends Map.Entry<? extends K, ? extends V>> entries) {
+    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
-        while (entries.hasNext()) {
-            Map.Entry<? extends K, ? extends V> entry = entries.next();
+        for (Map.Entry<? extends K, ? extends V> entry : entries) {
             ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details =
                     t.putAndGiveDetails(entry.getKey(), entry.getValue());
             modified |= details.modified;
@@ -286,7 +285,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(final @NonNull Object o) {
+    public V get(final Object o) {
         K key = (K) o;
         Object result = findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, getEqualsFunction());
         return result == Node.NO_VALUE || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
@@ -331,7 +330,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
         @Override
         protected @NonNull Object readResolve() {
-            return ImmutableChampMap.of().copyPutAll(deserialized.iterator());
+            return ImmutableChampMap.of().copyPutAll(deserialized);
         }
     }
     @NonNull

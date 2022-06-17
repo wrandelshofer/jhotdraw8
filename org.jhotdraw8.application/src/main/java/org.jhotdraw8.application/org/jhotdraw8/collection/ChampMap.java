@@ -164,7 +164,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
 
     @Override
     @SuppressWarnings("unchecked")
-    public @Nullable V get(@NonNull Object o) {
+    public @Nullable V get(Object o) {
         Object result = root.findByKey(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0, getEqualsFunction());
         return result == Node.NO_VALUE || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();

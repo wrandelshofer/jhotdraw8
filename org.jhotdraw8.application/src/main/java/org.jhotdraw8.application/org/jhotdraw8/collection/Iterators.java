@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,12 +31,27 @@ public class Iterators {
      * @param iterable the iterable
      * @return the list
      */
-    public static @NonNull <T> List<T> toList(Iterable<T> iterable) {
+    public static @NonNull <T> List<T> toList(@NonNull Iterable<T> iterable) {
         if (iterable instanceof List<?>) {
             return (List<T>) iterable;
         }
         ArrayList<T> list = new ArrayList<>();
         iterable.forEach(list::add);
         return list;
+    }
+
+    public static <E> @NonNull Iterator<E> unmodifiableIterator(@NonNull Iterator<E> iterator) {
+        return new Iterator<E>() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public E next() {
+                return iterator.next();
+            }
+        };
     }
 }
