@@ -47,8 +47,7 @@ class HashCollisionNode<K> extends Node<K> {
         }
         HashCollisionNode<?> that = (HashCollisionNode<?>) other;
         @NonNull Object[] thatEntries = that.keys;
-        if (hash != that.hash
-                || thatEntries.length != keys.length) {
+        if (hash != that.hash || thatEntries.length != keys.length) {
             return false;
         }
 
@@ -56,8 +55,7 @@ class HashCollisionNode<K> extends Node<K> {
         @NonNull Object[] thatEntriesCloned = thatEntries.clone();
         int remainingLength = thatEntriesCloned.length;
         outerLoop:
-        for (int i = 0; i < keys.length; i += 1) {
-            final Object key = keys[i];
+        for (final Object key : keys) {
             for (int j = 0; j < remainingLength; j += 1) {
                 final Object todoKey = thatEntriesCloned[j];
                 if (Objects.equals((K) todoKey, (K) key)) {
@@ -126,7 +124,7 @@ class HashCollisionNode<K> extends Node<K> {
         for (int idx = 0, i = 0; i < keys.length; i += 1, idx++) {
             if (equalsFunction.test((K) keys[i], key)) {
                 @SuppressWarnings("unchecked") final K currentVal = (K) keys[i];
-                details.updated(currentVal);
+                details.setValueRemoved(currentVal);
 
                 if (keys.length == 1) {
                     return BitmapIndexedNode.emptyNode();
@@ -136,15 +134,14 @@ class HashCollisionNode<K> extends Node<K> {
                     // returned, or b) unwrapped and inlined.
                     final Object[] theOtherEntry = {getKey(idx ^ 1)};
                     return ChampTrie.newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)), theOtherEntry);
-                } else {
-                    // copy keys and vals and remove entryLength elements at position idx
-                    final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.keys, idx, 1);
-                    if (isAllowedToEdit(mutator)) {
-                        this.keys = entriesNew;
-                        return this;
-                    }
-                    return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew);
                 }
+                // copy keys and vals and remove entryLength elements at position idx
+                final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.keys, idx, 1);
+                if (isAllowedToEdit(mutator)) {
+                    this.keys = entriesNew;
+                    return this;
+                }
+                return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew);
             }
         }
         return this;
@@ -166,29 +163,25 @@ class HashCollisionNode<K> extends Node<K> {
                 if (updatedKey == oldKey) {
                     details.found(key);
                     return this;
-                } else {
-                    // copy entries and replace the entry
-                    details.updated(oldKey);
-                    if (isAllowedToEdit(mutator)) {
-                        this.keys[i] = updatedKey;
-                        return this;
-                    } else {
-                        final Object[] newKeys = ArrayHelper.copySet(this.keys, i, updatedKey);
-                        return ChampTrie.newHashCollisionNode(mutator, keyHash, newKeys);
-                    }
                 }
+                details.setValueUpdated(oldKey);
+                if (isAllowedToEdit(mutator)) {
+                    this.keys[i] = updatedKey;
+                    return this;
+                }
+                final Object[] newKeys = ArrayHelper.copySet(this.keys, i, updatedKey);
+                return ChampTrie.newHashCollisionNode(mutator, keyHash, newKeys);
             }
         }
 
         // copy entries and add 1 more at the end
         final Object[] entriesNew = ArrayHelper.copyComponentAdd(this.keys, this.keys.length, 1);
         entriesNew[this.keys.length] = key;
-        details.modified();
+        details.setValueAdded();
         if (isAllowedToEdit(mutator)) {
             this.keys = entriesNew;
             return this;
-        } else {
-            return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew);
         }
+        return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew);
     }
 }

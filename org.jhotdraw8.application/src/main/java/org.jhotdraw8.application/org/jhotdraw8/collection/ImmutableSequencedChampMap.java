@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
+import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedEntry;
 
 import java.io.ObjectStreamException;
@@ -120,6 +121,15 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         this.last = last;
     }
 
+    @NonNull
+    private ImmutableSequencedChampMap<K, V> renumber(BitmapIndexedNode<SequencedEntry<K, V>> root, int size, int first, int last) {
+        if (Sequenced.mustRenumber(size, first, last)) {
+            root = SequencedEntry.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals);
+            return new ImmutableSequencedChampMap<>(root, size, 0, size);
+        }
+        return new ImmutableSequencedChampMap<>(root, size, first, last);
+    }
+
     /**
      * Returns an empty immutable map.
      *
@@ -205,14 +215,10 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                 new SequencedEntry<>(key, value, last + 1),
                 keyHash, 0, details, getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
-                return new ImmutableSequencedChampMap<>(newRootNode, size, first, last + 1);
+            if (details.isUpdated()) {
+                return new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
             }
-            if (last + 1 == SequencedEntry.NO_SEQUENCE_NUMBER) {
-                return renumber(newRootNode);
-            } else {
-                return new ImmutableSequencedChampMap<>(newRootNode, size + 1, first, last + 1);
-            }
+            return renumber(newRootNode, size + 1, first, last + 1);
         }
         return this;
     }
@@ -225,14 +231,10 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                 new SequencedEntry<>(key, value, first - 1),
                 keyHash, 0, details, getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isUpdated()) {
                 return new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
             }
-            if (first - 2 == SequencedEntry.NO_SEQUENCE_NUMBER) {
-                return renumber(newRootNode);
-            } else {
-                return new ImmutableSequencedChampMap<>(newRootNode, size + 1, first - 1, last);
-            }
+            return renumber(newRootNode, size + 1, first - 1, last);
         }
         return this;
     }
@@ -267,7 +269,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         while (entries.hasNext()) {
             Map.Entry<? extends K, ? extends V> entry = entries.next();
             ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), updateFunction);
-            modified |= details.isModified;
+            modified |= details.modified;
         }
         return modified ? t.toImmutable() : this;
     }
@@ -283,7 +285,6 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
                 remove(null, new SequencedEntry<>(key), keyHash, 0, details, getEqualsFunction());
         if (details.isModified()) {
-            assert details.hasReplacedValue();
             int seq = details.getOldValue().getSequenceNumber();
             if (seq == newFirst) {
                 newFirst++;
@@ -305,7 +306,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<SequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
-            modified |= details.isModified;
+            modified |= details.modified;
         }
         return modified ? t.toImmutable() : this;
     }
@@ -377,13 +378,6 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     @Override
     public boolean isEmpty() {
         return size == 0;
-    }
-
-    @NonNull
-    private ImmutableSequencedChampMap<K, V> renumber(BitmapIndexedNode<SequencedEntry<K, V>> newRootNode) {
-        newRootNode = SequencedEntry.renumber(size, newRootNode, new UniqueId(),
-                getHashFunction(), getEqualsFunction());
-        return new ImmutableSequencedChampMap<>(newRootNode, size + 1, 0, size);
     }
 
     @Override

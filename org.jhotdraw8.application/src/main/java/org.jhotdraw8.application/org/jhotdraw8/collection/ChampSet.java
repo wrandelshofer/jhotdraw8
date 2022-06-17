@@ -130,12 +130,12 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
                 getUpdateFunction(),
                 getEqualsFunction(),
                 getHashFunction());
-        if (changeEvent.isModified) {
+        if (changeEvent.modified) {
             root = newRoot;
             size++;
             modCount++;
         }
-        return changeEvent.isModified;
+        return changeEvent.modified;
     }
 
     @NonNull
@@ -232,12 +232,12 @@ public class ChampSet<E> extends AbstractSet<E> implements Serializable, Cloneab
         BitmapIndexedNode<E> newRoot = root.remove(
                 getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, changeEvent,
                 getEqualsFunction());
-        if (changeEvent.isModified) {
+        if (changeEvent.modified) {
             root = newRoot;
             size--;
             modCount++;
         }
-        return changeEvent.isModified;
+        return changeEvent.modified;
     }
 
     /**

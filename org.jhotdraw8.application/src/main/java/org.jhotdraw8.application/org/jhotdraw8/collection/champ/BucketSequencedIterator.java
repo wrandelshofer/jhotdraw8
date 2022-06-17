@@ -10,18 +10,18 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Iterates over {@link Sequenced} elements in a CHAMP trie in the
- * order of the sequence numbers.
+ * Iterates over {@link Sequenced} elements in a CHAMP trie in the order of the
+ * sequence numbers.
  * <p>
- * Uses a bucket array for ordering the elements. The size of the
- * array is {@code last - first} sequence number.
- * This approach is fast, if the sequence numbers are dense,
- * that is when {@literal last - first <= size * 4}.
+ * Uses a bucket array for ordering the elements. The size of the array is
+ * {@code last - first} sequence number.
+ * This approach is fast, if the sequence numbers are dense, that is when
+ * {@literal last - first <= size * 4}.
  * <p>
  * Performance characteristics:
  * <ul>
  *     <li>new instance: O(N)</li>
- *     <li>iterator.next: O(l1)</li>
+ *     <li>iterator.next: O(1)</li>
  * </ul>
  *
  * @param <E> the type parameter of the  CHAMP trie {@link Node}s
@@ -30,7 +30,8 @@ import java.util.function.Function;
 public class BucketSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private int next;
     private int remaining;
-    private final E[] buckets;
+    private @Nullable E current;
+    private final @NonNull E[] buckets;
     private final Function<E, X> mappingFunction;
     private final Consumer<E> removeFunction;
 
@@ -57,28 +58,26 @@ public class BucketSequencedIterator<E extends Sequenced, X> implements Iterator
                                    boolean reversed,
                                    @Nullable Consumer<E> removeFunction,
                                    @NonNull Function<E, X> mappingFunction) {
-        int extent = last - first;
+        long extent = (long) last - first;
         Preconditions.checkArgument(extent >= 0, "first=%s, last=%s", first, last);
-        Preconditions.checkArgument(0 <= size && size <= extent, "size=%s", size);
-        if (size == 0) {
-            buckets = null;
-            this.removeFunction = null;
-            this.mappingFunction = null;
-            return;
-        }
+        Preconditions.checkArgument(0 <= size && size <= extent, "size=%s, extent=%s", size, extent);
         this.removeFunction = removeFunction;
         this.mappingFunction = mappingFunction;
         this.remaining = size;
-        buckets = (E[]) new Sequenced[last - first + 1];
-        if (reversed) {
-            for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {
-                E k = it.next();
-                buckets[last - k.getSequenceNumber() - first] = k;
-            }
+        if (size == 0) {
+            buckets = (E[]) new Sequenced[0];
         } else {
-            for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {
-                E k = it.next();
-                buckets[k.getSequenceNumber() - first] = k;
+            buckets = (E[]) new Sequenced[last - first + 1];
+            if (reversed) {
+                for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {
+                    E k = it.next();
+                    buckets[last - k.getSequenceNumber() - first] = k;
+                }
+            } else {
+                for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {
+                    E k = it.next();
+                    buckets[k.getSequenceNumber() - first] = k;
+                }
             }
         }
     }
@@ -93,7 +92,6 @@ public class BucketSequencedIterator<E extends Sequenced, X> implements Iterator
         if (remaining == 0) {
             throw new NoSuchElementException();
         }
-        E current;
         do {
             current = buckets[next++];
         } while (current == null);
@@ -106,16 +104,18 @@ public class BucketSequencedIterator<E extends Sequenced, X> implements Iterator
         if (removeFunction == null) {
             throw new UnsupportedOperationException();
         }
-        if (next < 0 || buckets[next - 1] == null) {
+        if (current == null) {
             throw new IllegalStateException();
         }
-        E current = buckets[next - 1];
-        buckets[next - 1] = null;
         removeFunction.accept(current);
+        current = null;
     }
 
-    public static boolean isSuitedForBucketSequencedIterator(int size, int first, int last) {
-        int extent = last - first;
-        return size >= 0 && extent >= 0 && size <= extent && extent <= size << 2;
+    public static boolean isSupported(int size, int first, int last) {
+        long extent = (long) last - first;
+        return extent < Integer.MAX_VALUE / 2
+                && extent <= size * 4L;
     }
+
+
 }

@@ -34,6 +34,4 @@ public class ChampTrie {
                 ? new HashCollisionNode<>(hash, entries)
                 : new MutableHashCollisionNode<>(mutator, hash, entries);
     }
-
-
 }

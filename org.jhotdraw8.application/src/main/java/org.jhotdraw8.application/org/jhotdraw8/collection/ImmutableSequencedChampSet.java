@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.BucketSequencedIterator;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.HeapSequencedIterator;
+import org.jhotdraw8.collection.champ.KeyIterator;
 import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedElement;
@@ -21,7 +22,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 
 /**
@@ -102,20 +102,47 @@ public class ImmutableSequencedChampSet<E>
      * Counter for the sequence number of the last element. The counter is
      * incremented after a new entry has been added to the end of the sequence.
      */
-    private final int last;
+    final int last;
 
 
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
      */
-    private int first;
+    final int first;
 
     ImmutableSequencedChampSet(@NonNull BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
+        assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
         this.size = size;
         this.first = first;
         this.last = last;
+        int count = 0;
+        for (KeyIterator<SequencedElement<E>> i = new KeyIterator<>(root); i.hasNext(); ) {
+            count++;
+            i.next();
+        }
+        if (count != size) {
+            throw new AssertionError("count=" + count + " size=" + size);
+        }
+    }
+
+    /**
+     * Renumbers the sequenced elements in the trie if necessary.
+     *
+     * @param root  the root of the trie
+     * @param size  the size of the trie
+     * @param first the estimated first sequence number
+     * @param last  the estimated last sequence number
+     * @return a new {@link ImmutableSequencedChampSet} instance
+     */
+    @NonNull
+    private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
+        if (Sequenced.mustRenumber(size, first, last)) {
+            root = SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals);
+            return new ImmutableSequencedChampSet<>(root, size, 0, size);
+        }
+        return new ImmutableSequencedChampSet<>(root, size, first, last);
     }
 
     /**
@@ -177,12 +204,6 @@ public class ImmutableSequencedChampSet<E>
         return copyRemove(k.getElement(), first, k.getSequenceNumber());
     }
 
-    @NonNull
-    private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> newRootNode) {
-        newRootNode = SequencedElement.renumber(size, newRootNode, new UniqueId(), Objects::hashCode, Objects::equals);
-        return new ImmutableSequencedChampSet<>(newRootNode, size + 1, first, size);
-    }
-
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
@@ -191,56 +212,46 @@ public class ImmutableSequencedChampSet<E>
 
     @Override
     public @NonNull ImmutableSequencedChampSet<E> copyAdd(final @Nullable E key) {
-        return copyAddLast(key, (oldk, newk) -> oldk);
+        return copyAddLast(key, false);
     }
 
     public @NonNull ImmutableSequencedChampSet<E> copyAddFirst(final @Nullable E key) {
-        return copyAddFirst(key, (oldk, newk) -> newk);
+        return copyAddFirst(key, true);
     }
 
     public @NonNull ImmutableSequencedChampSet<E> copyAddLast(final @Nullable E key) {
-        return copyAddLast(key, (oldk, newk) -> newk);
+        return copyAddLast(key, true);
     }
 
     private @NonNull ImmutableSequencedChampSet<E> copyAddLast(final @Nullable E key,
-                                                               @NonNull BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> updateFunction) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedElement<E>> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedElement<E>> newRootNode = update(null,
-                new SequencedElement<>(key, last), keyHash, 0, changeEvent, updateFunction, Objects::equals, Objects::hashCode);
-        if (changeEvent.isModified) {
-            if (last + 1 == Sequenced.NO_SEQUENCE_NUMBER) {
-                return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
-            } else {
-                return new ImmutableSequencedChampSet<>(newRootNode,
-                        changeEvent.isReplaced ? size : size + 1, first, last + 1);
-            }
+                                                               boolean moveToLast) {
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SequencedElement<E>> root = update(null,
+                new SequencedElement<>(key, last), Objects.hashCode(key), 0, details,
+                moveToLast ? (oldk, newk) -> newk : (oldk, newk) -> oldk,
+                Objects::equals, Objects::hashCode);
+        if (details.isUpdated) {
+            return new ImmutableSequencedChampSet<>(root, size, first, moveToLast ? last + 1 : last);
         }
-
-        return this;
+        return details.modified ? renumber(root, size + 1, first, last + 1) : this;
     }
 
-    private @NonNull ImmutableSequencedChampSet<E> copyAddFirst(final @Nullable E key,
-                                                                @NonNull BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> updateFunction) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedElement<E>> changeEvent = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedElement<E>> newRootNode = update(null,
-                new SequencedElement<>(key, first - 1), keyHash, 0, changeEvent, updateFunction, Objects::equals, Objects::hashCode);
-        if (changeEvent.isModified) {
-            if (first - 1 == Sequenced.NO_SEQUENCE_NUMBER) {
-                return new ImmutableSequencedChampSet<>(renumber(newRootNode), size + 1, 0, size + 1);
-            } else {
-                return new ImmutableSequencedChampSet<>(newRootNode,
-                        changeEvent.isReplaced ? size : size + 1, first - 1, last);
-            }
+    private @NonNull ImmutableSequencedChampSet<E> copyAddFirst(@Nullable E key,
+                                                                boolean moveToFirst) {
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SequencedElement<E>> root = update(null,
+                new SequencedElement<>(key, first - 1), Objects.hashCode(key), 0, details,
+                moveToFirst ? (oldk, newk) -> newk : (oldk, newk) -> oldk,
+                Objects::equals, Objects::hashCode);
+        if (details.isUpdated) {
+            return new ImmutableSequencedChampSet<>(root, size, moveToFirst ? first - 1 : first, last);
         }
-
-        return this;
+        return details.modified ? renumber(root, size + 1, first - 1, last) : this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ImmutableSequencedChampSet<E> copyAddAll(final @NonNull Iterable<? extends E> set) {
+    public @NonNull ImmutableSequencedChampSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ImmutableSequencedChampSet<?>)) {
             return (ImmutableSequencedChampSet<E>) set;
         }
@@ -271,7 +282,7 @@ public class ImmutableSequencedChampSet<E>
         final BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
-        if (details.isModified) {
+        if (details.modified) {
             int seq = details.getOldValue().getSequenceNumber();
             if (seq == newFirst) {
                 newFirst++;
@@ -371,13 +382,10 @@ public class ImmutableSequencedChampSet<E>
      * @return an iterator
      */
     public @NonNull Iterator<E> iterator(boolean reversed) {
-        if (BucketSequencedIterator.isSuitedForBucketSequencedIterator(size, first, last)) {
-            return new BucketSequencedIterator<>(
-                    size, first, last, this, reversed,
-                    null, SequencedElement::getElement);
-        }
-        return new HeapSequencedIterator<>(
-                size, this, reversed,
+        return BucketSequencedIterator.isSupported(size, first, last)
+                ? new BucketSequencedIterator<>(size, first, last, this, reversed,
+                null, SequencedElement::getElement)
+                : new HeapSequencedIterator<>(size, this, reversed,
                 null, SequencedElement::getElement);
     }
 

@@ -33,7 +33,7 @@ public class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X
     private boolean canRemove;
     private final E[] array;
     private final @NonNull Function<E, X> mappingFunction;
-    private final @Nullable Consumer<E> immutableRemoveFunction;
+    private final @Nullable Consumer<E> removeFunction;
 
     /**
      * Creates a new instance.
@@ -52,7 +52,7 @@ public class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X
                                  @NonNull Function<E, X> mappingFunction) {
         Preconditions.checkArgument(size >= 0, "size=%s", size);
 
-        this.immutableRemoveFunction = removeFunction;
+        this.removeFunction = removeFunction;
         this.mappingFunction = mappingFunction;
         queue = new LongArrayHeap(size);
         array = (E[]) new Sequenced[size];
@@ -79,13 +79,13 @@ public class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X
 
     @Override
     public void remove() {
-        if (immutableRemoveFunction == null) {
+        if (removeFunction == null) {
             throw new UnsupportedOperationException();
         }
         if (!canRemove) {
             throw new IllegalStateException();
         }
-        immutableRemoveFunction.accept(current);
+        removeFunction.accept(current);
         canRemove = false;
     }
 

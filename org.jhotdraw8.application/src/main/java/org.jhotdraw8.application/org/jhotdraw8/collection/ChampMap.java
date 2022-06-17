@@ -214,7 +214,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
                         getEqualsFunction(),
                         getHashFunction());
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isUpdated()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;
@@ -247,7 +247,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
                 root.remove(getOrCreateMutator(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         getEqualsFunction());
         if (details.isModified()) {
-            assert details.hasReplacedValue();
             root = newRootNode;
             size = size - 1;
             modCount++;

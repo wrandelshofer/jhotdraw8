@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.champ.BucketSequencedIterator;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.HeapSequencedIterator;
 import org.jhotdraw8.collection.champ.Node;
@@ -20,7 +21,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
@@ -141,6 +141,8 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
             ImmutableSequencedChampSet<E> that = (ImmutableSequencedChampSet<E>) c;
             this.root = that;
             this.size = that.size;
+            this.first = that.first;
+            this.last = that.last;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
             addAll(c);
@@ -149,7 +151,7 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public boolean add(final @Nullable E e) {
-        return addLast(e, (oldk, newk) -> oldk);
+        return addLast(e, false);
     }
 
     @Override
@@ -176,47 +178,53 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
 
     @Override
     public void addFirst(@Nullable E e) {
-        addFirst(e, (oldk, newk) -> newk);
+        addFirst(e, true);
     }
 
-    private boolean addFirst(@Nullable E e,
-                             @NonNull BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> updateFunction) {
-        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
-                Objects.hashCode(e), 0, details, updateFunction, Objects::equals, Objects::hashCode);
-        if (details.isModified) {
+    private boolean addFirst(@Nullable E e, boolean moveToFirst) {
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
+                Objects.hashCode(e), 0, details,
+                moveToFirst ? (oldk, newk) -> newk : (oldk, newk) -> oldk,
+                Objects::equals, Objects::hashCode);
+        if (details.modified) {
             root = newRoot;
-            if (!details.isReplaced) {
+            modCount++;
+            if (!details.isUpdated()) {
                 size++;
             }
-            modCount++;
-            first--;
-            renumber();
+            if (!details.isUpdated || moveToFirst) {
+                first--;
+                renumber();
+            }
         }
-        return details.isModified;
+        return details.modified;
     }
 
     @Override
     public void addLast(@Nullable E e) {
-        addLast(e, (oldk, newk) -> newk);
+        addLast(e, true);
     }
 
-    private boolean addLast(final @Nullable E e,
-                            @NonNull BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> updateFunction) {
+    private boolean addLast(@Nullable E e, boolean moveToLast) {
         final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(
                 getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
-                details, updateFunction, Objects::equals, Objects::hashCode);
-        if (details.isModified) {
+                details,
+                moveToLast ? (oldk, newk) -> newk : (oldk, newk) -> oldk,
+                Objects::equals, Objects::hashCode);
+        if (details.modified) {
             root = newRoot;
-            if (!details.isReplaced) {
+            modCount++;
+            if (!details.isUpdated) {
                 size++;
             }
-            modCount++;
-            last++;
-            renumber();
+            if (!details.isUpdated || moveToLast) {
+                last++;
+                renumber();
+            }
         }
-        return details.isModified;
+        return details.modified;
     }
 
     @Override
@@ -298,15 +306,17 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * @return an iterator
      */
     public @NonNull Iterator<E> iterator(boolean reversed) {
-        return new FailFastIterator<>(new HeapSequencedIterator<SequencedElement<E>, E>(
-                size, root, reversed,
-                this::immutableRemove, SequencedElement::getElement),
+        Iterator<E> i = BucketSequencedIterator.isSupported(size, first, last)
+                ? new BucketSequencedIterator<>(size, first, last, root, reversed,
+                this::iteratorRemove, SequencedElement::getElement)
+                : new HeapSequencedIterator<>(size, root, reversed,
+                this::iteratorRemove, SequencedElement::getElement);
+        return new FailFastIterator<>(i,
                 () -> SequencedChampSet.this.modCount);
     }
 
-    private void immutableRemove(SequencedElement<E> e) {
-        mutator = null;
-        remove(e.getElement());
+    private void iteratorRemove(SequencedElement<E> element) {
+        remove(element.getElement());
     }
 
     @Override
@@ -316,19 +326,20 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
         final BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(
                 getOrCreateMutator(), new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
-        if (details.isModified) {
+        if (details.modified) {
             root = newRoot;
             size--;
             modCount++;
             int seq = details.getOldValue().getSequenceNumber();
             if (seq == last) {
-                last++;
+                last--;
             }
             if (seq == first) {
-                first--;
+                first++;
             }
+            assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
         }
-        return details.isModified;
+        return details.modified;
     }
 
     @Override
@@ -379,8 +390,12 @@ public class SequencedChampSet<E> extends AbstractSet<E> implements Serializable
      * 4 times the size of the set.
      */
     private void renumber() {
+        long extent = (long) last - first;
+        assert size <= extent : "size=" + size + " extent=" + extent;
         if (first == Sequenced.NO_SEQUENCE_NUMBER + 1
-                || last == Sequenced.NO_SEQUENCE_NUMBER) {
+                || last == Sequenced.NO_SEQUENCE_NUMBER
+                || extent > Integer.MAX_VALUE
+                || extent > size * 4L) {
             root = SequencedElement.renumber(size, root, getOrCreateMutator(), Objects::hashCode, Objects::equals);
             last = size;
             first = 0;

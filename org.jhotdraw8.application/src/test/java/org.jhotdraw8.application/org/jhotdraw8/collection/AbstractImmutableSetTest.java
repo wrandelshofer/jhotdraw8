@@ -48,9 +48,9 @@ public abstract class AbstractImmutableSetTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {
         return Arrays.asList(
-                dynamicTest("32-bits hash", () -> testPersistentSet(-1)),
-                dynamicTest("3-bits hash", () -> testPersistentSet(7)),
-                dynamicTest("0-bits hash", () -> testPersistentSet(0))
+                dynamicTest("32-bits hash", () -> testImmutableSet(-1)),
+                dynamicTest("3-bits hash", () -> testImmutableSet(7)),
+                dynamicTest("0-bits hash", () -> testImmutableSet(0))
         );
     }
 
@@ -302,7 +302,7 @@ public abstract class AbstractImmutableSetTest {
         assertEquality(expected, actual);
     }
 
-    void testPersistentSet(int hashBitMask) {
+    void testImmutableSet(int hashBitMask) {
         // bulkSize must be at least 32 for good code coverage
         int bulkSize = 32;
         Random rng = new Random(0);

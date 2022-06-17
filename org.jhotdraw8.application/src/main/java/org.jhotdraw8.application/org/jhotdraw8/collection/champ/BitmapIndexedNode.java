@@ -97,20 +97,6 @@ public class BitmapIndexedNode<K> extends Node<K> {
         }
     }
 
-    @NonNull BitmapIndexedNode<K> copyAndSetValue(final @Nullable UniqueId mutator, final int bitpos,
-                                                  final K val, int entryLength) {
-        final int idx = entryLength * dataIndex(bitpos) + 1;
-        if (isAllowedToEdit(mutator)) {
-            // no copying if already editable
-            this.mixed[idx] = val;
-            return this;
-        } else {
-            // copy 'src' and set 1 element(s) at position 'idx'
-            final Object[] dst = ArrayHelper.copySet(this.mixed, idx, val);
-            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap, dst);
-        }
-    }
-
     @Override
     int dataArity() {
         return Integer.bitCount(dataMap);
@@ -146,13 +132,14 @@ public class BitmapIndexedNode<K> extends Node<K> {
     @Override
     public @Nullable Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction) {
         final int bitpos = bitpos(mask(keyHash, shift));
-        if ((dataMap & bitpos) != 0) {
-            final int index = dataIndex(bitpos);
-            if (equalsFunction.test(getKey(index), key)) {
-                return getKey(index);
-            }
-        } else if ((nodeMap & bitpos) != 0) {
+        if ((nodeMap & bitpos) != 0) {
             return nodeAt(bitpos).findByKey(key, keyHash, shift + BIT_PARTITION_SIZE, equalsFunction);
+        }
+        if ((dataMap & bitpos) != 0) {
+            K k = getKey(dataIndex(bitpos));
+            if (equalsFunction.test(k, key)) {
+                return k;
+            }
         }
         return NO_VALUE;
     }
@@ -213,13 +200,12 @@ public class BitmapIndexedNode<K> extends Node<K> {
                                                 final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
-
         if ((dataMap & bitpos) != 0) {
             return removeData(mutator, key, keyHash, shift, details, bitpos, equalsFunction);
-        } else if ((nodeMap & bitpos) != 0) {
+        }
+        if ((nodeMap & bitpos) != 0) {
             return removeSubNode(mutator, key, keyHash, shift, details, bitpos, equalsFunction);
         }
-
         return this;
     }
 
@@ -229,48 +215,35 @@ public class BitmapIndexedNode<K> extends Node<K> {
         if (!equalsFunction.test(getKey(dataIndex), key)) {
             return this;
         }
-
         final K currentVal = getKey(dataIndex);
-        details.updated(currentVal);
-
+        details.setValueRemoved(currentVal);
         if (dataArity() == 2 && !hasNodes()) {
-            // Create new node with remaining entry. The new node will
-            // a) either become the new root returned, or
-            // b) unwrapped and inlined during returning.
             final int newDataMap =
                     (shift == 0) ? (dataMap ^ bitpos) : bitpos(mask(keyHash, 0));
-
             Object[] nodes = {getKey(dataIndex ^ 1)};
             return ChampTrie.newBitmapIndexedNode(mutator, 0, newDataMap, nodes);
-        } else {
-            // copy 'src' and remove entryLength element(s) at position 'idx'
-            int idx = dataIndex * entryLength;
-            final Object[] dst = ArrayHelper.copyComponentRemove(this.mixed, idx, entryLength);
-            return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap ^ bitpos, dst);
         }
+        int idx = dataIndex * entryLength;
+        final Object[] dst = ArrayHelper.copyComponentRemove(this.mixed, idx, entryLength);
+        return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap ^ bitpos, dst);
     }
 
     private @NonNull BitmapIndexedNode<K> removeSubNode(@Nullable UniqueId mutator, K key, int keyHash, int shift,
                                                         @NonNull ChangeEvent<K> details,
                                                         int bitpos, @NonNull BiPredicate<K, K> equalsFunction) {
         final Node<K> subNode = nodeAt(bitpos);
-        final Node<K> subNodeNew =
+        final Node<K> updatedSubNode =
                 subNode.remove(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, equalsFunction);
-
-        if (subNode == subNodeNew) {
+        if (subNode == updatedSubNode) {
             return this;
         }
-
-        if (!subNodeNew.hasNodes() && subNodeNew.hasDataArityOne()) {
+        if (!updatedSubNode.hasNodes() && updatedSubNode.hasDataArityOne()) {
             if (!hasData() && nodeArity() == 1) {
-                // escalate (singleton or empty) result
-                return (BitmapIndexedNode<K>) subNodeNew;
-            } else {
-                // inline data entry (move to front)
-                return copyAndMigrateFromNodeToData(mutator, bitpos, subNodeNew);
+                return (BitmapIndexedNode<K>) updatedSubNode;
             }
+            return copyAndMigrateFromNodeToData(mutator, bitpos, updatedSubNode);
         }
-        return copyAndSetNode(mutator, bitpos, subNodeNew);
+        return copyAndSetNode(mutator, bitpos, updatedSubNode);
     }
 
     @Override
@@ -283,8 +256,7 @@ public class BitmapIndexedNode<K> extends Node<K> {
                                                 @NonNull ToIntFunction<K> hashFunction) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
-
-        if ((dataMap & bitpos) != 0) { // inplace value
+        if ((dataMap & bitpos) != 0) {
             final int dataIndex = dataIndex(bitpos);
             final K oldKey = getKey(dataIndex);
             if (equalsFunction.test(oldKey, key)) {
@@ -292,40 +264,33 @@ public class BitmapIndexedNode<K> extends Node<K> {
                 if (updatedKey == oldKey) {
                     details.found(oldKey);
                     return this;
-                } else {
-                    // copy entries and replace the entry
-                    details.updated(oldKey);
-                    if (isAllowedToEdit(mutator)) {
-                        this.mixed[dataIndex] = updatedKey;
-                        return this;
-                    } else {
-                        final Object[] newMixed = ArrayHelper.copySet(this.mixed, dataIndex, updatedKey);
-                        return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap, newMixed);
-                    }
                 }
-            } else {
-                final Node<K> subNodeNew =
-                        mergeTwoDataEntriesIntoNode(mutator,
-                                oldKey, hashFunction.applyAsInt(oldKey),
-                                key, keyHash, shift + BIT_PARTITION_SIZE);
-
-                details.modified();
-                return copyAndMigrateFromDataToNode(mutator, bitpos, subNodeNew);
+                details.setValueUpdated(oldKey);
+                return copyAndSetValue(mutator, dataIndex, updatedKey);
             }
-        } else if ((nodeMap & bitpos) != 0) { // node (not value)
-            final Node<K> subNode = nodeAt(bitpos);
-            final Node<K> subNodeNew =
-                    subNode.update(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
-
-            if (details.isModified()) {
-                return copyAndSetNode(mutator, bitpos, subNodeNew);
-            } else {
-                return this;
-            }
-        } else {
-            // no value
-            details.modified();
-            return copyAndInsertValue(mutator, bitpos, key);
+            final Node<K> updatedSubNode =
+                    mergeTwoDataEntriesIntoNode(mutator,
+                            oldKey, hashFunction.applyAsInt(oldKey),
+                            key, keyHash, shift + BIT_PARTITION_SIZE);
+            details.setValueAdded();
+            return copyAndMigrateFromDataToNode(mutator, bitpos, updatedSubNode);
+        } else if ((nodeMap & bitpos) != 0) {
+            Node<K> subNode = nodeAt(bitpos);
+            final Node<K> updatedSubNode = subNode
+                    .update(mutator, key, keyHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
+            return subNode == updatedSubNode ? this : copyAndSetNode(mutator, bitpos, updatedSubNode);
         }
+        details.setValueAdded();
+        return copyAndInsertValue(mutator, bitpos, key);
+    }
+
+    @NonNull
+    private BitmapIndexedNode<K> copyAndSetValue(@Nullable UniqueId mutator, int dataIndex, K updatedKey) {
+        if (isAllowedToEdit(mutator)) {
+            this.mixed[dataIndex] = updatedKey;
+            return this;
+        }
+        final Object[] newMixed = ArrayHelper.copySet(this.mixed, dataIndex, updatedKey);
+        return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap, newMixed);
     }
 }

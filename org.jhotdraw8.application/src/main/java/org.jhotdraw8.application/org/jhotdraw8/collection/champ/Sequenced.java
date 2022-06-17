@@ -12,4 +12,25 @@ public interface Sequenced {
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
     int getSequenceNumber();
+
+    /**
+     * Returns true if the sequenced elements must be renumbered because
+     * {@code first} or {@code last} are at risk of overflowing, or the
+     * extent from {@code first - last} is not densely filled enough for an
+     * efficient bucket sort.
+     * <p>
+     * {@code first} and {@code last} are estimates of the first and last
+     * sequence numbers in the trie. The estimated extent may be larger
+     * than the actual extent, but not smaller.
+     *
+     * @param size  the size of the trie
+     * @param first the estimated first sequence number
+     * @param last  the estimated last sequence number
+     * @return
+     */
+    static boolean mustRenumber(int size, int first, int last) {
+        return last > Integer.MAX_VALUE - 2
+                || first < Integer.MIN_VALUE + 2
+                || (long) last - first > size * 4L;
+    }
 }

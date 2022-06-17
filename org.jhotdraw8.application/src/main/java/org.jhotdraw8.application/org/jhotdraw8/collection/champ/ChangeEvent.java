@@ -7,9 +7,9 @@ package org.jhotdraw8.collection.champ;
 
 public class ChangeEvent<V> {
 
-    public boolean isModified;
+    public boolean modified;
     private V oldValue;
-    public boolean isReplaced;
+    public boolean isUpdated;
 
     public ChangeEvent() {
     }
@@ -22,22 +22,29 @@ public class ChangeEvent<V> {
         return oldValue;
     }
 
-    public boolean hasReplacedValue() {
-        return isReplaced;
+    public boolean isUpdated() {
+        return isUpdated;
     }
 
+    /**
+     * Returns true if a value has been inserted, replaced or removed.
+     */
     public boolean isModified() {
-        return isModified;
+        return modified;
     }
 
-    // update: inserted/removed single element, element count changed
-    void modified() {
-        this.isModified = true;
-    }
-
-    void updated(V oldValue) {
+    void setValueUpdated(V oldValue) {
         this.oldValue = oldValue;
-        this.isModified = true;
-        this.isReplaced = true;
+        this.isUpdated = true;
+        this.modified = true;
+    }
+
+    void setValueRemoved(V oldValue) {
+        this.oldValue = oldValue;
+        this.modified = true;
+    }
+
+    void setValueAdded() {
+        this.modified = true;
     }
 }

@@ -166,7 +166,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
                 getHashFunction());
 
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isUpdated()) {
                 return new ImmutableChampMap<>(newRootNode,
                         size);
             }
@@ -204,7 +204,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
             Map.Entry<? extends K, ? extends V> entry = entries.next();
             ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details =
                     t.putAndGiveDetails(entry.getKey(), entry.getValue());
-            modified |= details.isModified;
+            modified |= details.modified;
         }
         return modified ? t.toImmutable() : this;
     }
@@ -218,7 +218,6 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
                 remove(null, new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         getEqualsFunction());
         if (details.isModified()) {
-            assert details.hasReplacedValue();
             return new ImmutableChampMap<>(newRootNode, size - 1);
         }
         return this;
@@ -234,7 +233,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = t.removeAndGiveDetails(key);
-            modified |= details.isModified;
+            modified |= details.modified;
         }
         return modified ? t.toImmutable() : this;
     }

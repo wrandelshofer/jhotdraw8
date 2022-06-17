@@ -132,7 +132,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, getUpdateFunction(), getEqualsFunction(), getHashFunction());
-        if (changeEvent.isModified) {
+        if (changeEvent.modified) {
             return new ImmutableChampSet<>(newRootNode, size + 1);
         }
         return this;
@@ -165,7 +165,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, changeEvent, getEqualsFunction());
-        if (changeEvent.isModified) {
+        if (changeEvent.modified) {
             return new ImmutableChampSet<>(newRootNode, size - 1);
         }
         return this;

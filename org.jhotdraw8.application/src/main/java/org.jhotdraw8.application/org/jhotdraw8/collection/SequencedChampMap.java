@@ -187,7 +187,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
         return new FailFastIterator<>(new HeapSequencedIterator<SequencedEntry<K, V>, Entry<K, V>>(
                 size, root, reversed,
-                this::immutableRemove,
+                this::iteratorRemove,
                 e -> new MutableMapEntry<>(this::immutablePutIfPresent, e.getKey(), e.getValue())),
                 () -> this.modCount);
     }
@@ -285,7 +285,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                         new SequencedEntry<>(key, val, first), keyHash, 0, details,
                         updateFunction, getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isUpdated()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;
@@ -305,8 +305,8 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
         }
     }
 
-    private void immutableRemove(SequencedEntry<K, V> entry) {
-        mutator = null;
+    private void iteratorRemove(SequencedEntry<K, V> entry) {
+        //mutator = null;
         remove(entry.getKey());
     }
 
@@ -327,7 +327,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                         updateFunction, getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isUpdated()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;
@@ -344,7 +344,7 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
-        if (details.isModified) {
+        if (details.modified) {
             int seq = details.getOldValue().getSequenceNumber();
             if (seq == last) {
                 last++;
@@ -385,7 +385,6 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
                         new SequencedEntry<>(key), keyHash, 0, details,
                         getEqualsFunction());
         if (details.isModified()) {
-            assert details.hasReplacedValue();
             root = newRootNode;
             size = size - 1;
             modCount++;
@@ -420,7 +419,9 @@ public class SequencedChampMap<K, V> extends AbstractSequencedMap<K, V> implemen
      */
     private void renumber() {
         if (first == Sequenced.NO_SEQUENCE_NUMBER + 1
-                || last == Sequenced.NO_SEQUENCE_NUMBER) {
+                || last == Sequenced.NO_SEQUENCE_NUMBER
+                || last - first < 0
+                || last - first > size * 4) {
             root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
                     getHashFunction(), getEqualsFunction());
             last = size;

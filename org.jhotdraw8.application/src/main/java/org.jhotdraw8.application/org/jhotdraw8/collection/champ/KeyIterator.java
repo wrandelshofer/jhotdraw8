@@ -39,23 +39,32 @@ public class KeyIterator<K> implements Iterator<K> {
     /**
      * Creates a new instance.
      *
-     * @param rootNode       the root node of the trie
+     * @param root the root node of the trie
+     */
+    public KeyIterator(@NonNull Node<K> root) {
+        this(root, null);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * @param root           the root node of the trie
      * @param removeFunction a function that removes an entry from a field;
      *                       the function must not change the trie that was passed
      *                       to this iterator
      */
-    public KeyIterator(@NonNull Node<K> rootNode, @Nullable Consumer<K> removeFunction) {
+    public KeyIterator(@NonNull Node<K> root, @Nullable Consumer<K> removeFunction) {
         this.removeFunction = removeFunction;
-        if (rootNode.hasNodes()) {
+        if (root.hasNodes()) {
             nextStackLevel = 0;
-            nodes[0] = rootNode;
+            nodes[0] = root;
             nodeCursorsAndLengths[0] = 0;
-            nodeCursorsAndLengths[1] = rootNode.nodeArity();
+            nodeCursorsAndLengths[1] = root.nodeArity();
         }
-        if (rootNode.hasData()) {
-            nextValueNode = rootNode;
+        if (root.hasData()) {
+            nextValueNode = root;
             nextValueCursor = 0;
-            nextValueLength = rootNode.dataArity();
+            nextValueLength = root.dataArity();
         }
     }
 
