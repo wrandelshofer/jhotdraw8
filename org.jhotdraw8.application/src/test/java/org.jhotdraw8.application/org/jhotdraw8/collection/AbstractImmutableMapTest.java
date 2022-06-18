@@ -1,415 +1,536 @@
-/*
- * @(#)AbstractImmutableMapTest.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.Set;
+import java.util.stream.Stream;
 
-import static org.jhotdraw8.collection.AbstractMapTestOld.reserialize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-@Deprecated
+
 public abstract class AbstractImmutableMapTest {
-    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> of();
 
-    @SuppressWarnings("unchecked")
-    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> of(@NonNull Map.Entry<HashCollider, HashCollider>... entries);
-
-    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map);
-
-    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map);
+    /**
+     * Creates a new empty instance.
+     */
+    protected abstract <K, V> @NonNull ImmutableMap<K, V> newInstance();
 
 
-    protected abstract @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries);
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Map<K, V> m);
+
+    protected abstract <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> m);
 
 
-    private void assertMapEquality(LinkedHashMap<HashCollider, HashCollider> expected, ImmutableMap<HashCollider, HashCollider> actual) {
-        //noinspection EqualsBetweenInconvertibleTypes
-        assertTrue(actual.equals(new WrappedReadOnlyMap<>(expected)));
-        assertEquals(actual, actual);
-        //noinspection ConstantConditions
-        assertFalse(actual.equals(null));
-        assertEquals(expected, actual.asMap());
-        assertEquals(expected.hashCode(), actual.hashCode());
+    protected abstract <K, V> @NonNull ImmutableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
+
+    public static Stream<MapData> dataProvider() {
+        return Stream.of(
+                NO_COLLISION, ALL_COLLISION, SOME_COLLISION
+        );
+    }
+
+    private final static MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
+    private final static MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
+    private final static MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
+
+
+    protected <K, V> void assertEqualMap(ReadOnlyMap<K, V> expected, ImmutableMap<K, V> actual) {
+        assertEqualMap(expected.asMap(), actual);
+    }
+
+    protected <K, V> void assertEqualMap(Map<K, V> expected, ImmutableMap<K, V> actual) {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
-        //noinspection unchecked
-        assertEquals(actual, copyOf((Iterable<Map.Entry<HashCollider, HashCollider>>) actual));
-        assertFalse(actual.toString().isEmpty());
+        assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual.asMap());
+        assertEquals(actual.asMap(), expected);
+        assertEquals(expected.entrySet(), actual.readOnlyEntrySet().asSet());
+        assertEquals(expected.keySet(), actual.readOnlyKeySet().asSet());
+        assertEquals(new LinkedHashSet<>(expected.values()),
+                new LinkedHashSet<>(actual.readOnlyValues().asCollection()));
     }
 
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTests() {
-        return Arrays.asList(
-                dynamicTest("32-bits hash", () -> testImmutableMap(-1)),
-                dynamicTest("3-bits hash", () -> testImmutableMap(7)),
-                dynamicTest("0-bits hash", () -> testImmutableMap(0))
-        );
+    protected <K, V> void assertNotEqualMap(Map<K, V> expected, ImmutableMap<K, V> actual) {
+        assertNotEquals(expected, actual);
+        assertNotEquals(actual, expected);
+        assertNotEquals(expected.entrySet(), actual.readOnlyEntrySet().asSet());
     }
 
-    private void testContains(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
-
-        // GIVEN: a set with values1
-        actual = actual.copyPutAll(values1);
-
-        // WHEN: value1 is in set, then contains must be true
-        assertTrue(actual.readOnlyEntrySet().contains(firstValue1));
-        // WHEN: value2 is not in set, then contains must be false
-        assertFalse(actual.readOnlyEntrySet().contains(firstValue2));
-
+    @Test
+    public void testNewInstanceNoArgsShouldBeEmpty() {
+        ImmutableMap<HashCollider, HashCollider> actual = newInstance();
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
+        assertEqualMap(expected, actual);
     }
 
-    private void testCopyOf(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        ImmutableMap<HashCollider, HashCollider> actual;
-        ImmutableMap<HashCollider, HashCollider> newActual;
-
-        // WHEN: a set is created with copyOf a java.util.Map
-        actual = copyOf(values1);
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(values1);
-        assertMapEquality(expected, actual);
-
-        // WHEN: a set is created with copyOf a ImmutableMap
-        ImmutableMap<HashCollider, HashCollider> immutableExpected = ImmutableSequencedChampMap.copyOf(expected);
-        actual = copyOf(immutableExpected);
-        assertEquals(immutableExpected, actual);
-
-        // WHEN: a set is created with copyOf from itself
-        newActual = copyOf(actual);
-        assertSame(newActual, actual);
-        actual = newActual;
-        //
-        expected = new LinkedHashMap<>(values1);
-        assertMapEquality(expected, actual);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceMapArgsShouldBeEqualToArg(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> actual = newInstance(data.a().asMap());
+        assertEqualMap(data.a(), actual);
     }
 
-    private void testEqualsHashCode(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask, String message) {
-        assertTrue(values1.size() > 0);
-        assertEquals(values1.size(), values2.size());
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceMapArgsOfSameTypeShouldBeEqualToArg(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> actual1 = newInstance(data.a().asMap());
+        ImmutableMap<HashCollider, HashCollider> actual = newInstance(actual1);
+        assertEqualMap(data.a(), actual);
+    }
 
-        ImmutableMap<HashCollider, HashCollider> actual1a = copyOf(values1);
-        assertEquals(actual1a, actual1a);// equals of itself
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlyMapArgShouldBeEqualToARg(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> actual = newInstance(data.a());
+        assertEqualMap(data.a(), actual);
+    }
 
-        ImmutableMap<HashCollider, HashCollider> actual1b = copyOf(values1);
-        assertEquals(actual1a, actual1b);// equals of a new map that does not share trie nodes
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceIterableArgShouldBeEqualToArg(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> actual = newInstance(data.a().readOnlyEntrySet());
+        assertEqualMap(data.a(), actual);
+    }
 
-        ImmutableMap<HashCollider, HashCollider> actual1c = actual1a;
-        actual1c = actual1c.copyRemove(firstValue1.getKey());
-        actual1c = actual1c.copyPut(firstValue1.getKey(), firstValue1.getValue());
-        assertEquals(actual1a, actual1c);// equals of a new map that shares many trie nodes
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyClearShouldYieldEmptyMap(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertNotEqualMap(Collections.emptyMap(), instance);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyClear();
+        assertNotSame(instance, instance2);
+        assertEqualMap(Collections.emptyMap(), instance2);
+    }
 
-        ImmutableMap<HashCollider, HashCollider> actual2a = copyOf(values2);
-        ImmutableMap<HashCollider, HashCollider> actual2b = actual2a.copyRemove(firstValue2.getKey());
-        HashCollider zero = new HashCollider(0, 0);
-        LinkedHashMap<HashCollider, HashCollider> expected1 = new LinkedHashMap<>(values1);
-        LinkedHashMap<HashCollider, HashCollider> expected1plusZero = new LinkedHashMap<>(values1);
-        expected1plusZero.put(zero, null);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyClearShouldBeIdempotent(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertNotEqualMap(Collections.emptyMap(), instance);
+        instance = instance.copyClear();
+        assertEqualMap(Collections.emptyMap(), instance);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyClear();
+        assertSame(instance, instance2);
+        assertEqualMap(Collections.emptyMap(), instance2);
+    }
 
-        // some assertions may not make sense, but they are needed for test coverage
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCloneShouldYieldEqualMap(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> clone = toClonedInstance(instance);
+        assertEqualMap(data.a(), clone);
+    }
 
-        //noinspection AssertBetweenInconvertibleTypes
-        assertMapEquality(expected1, actual1a);
-        assertEquals(expected1, actual1a.asMap());
-        assertNotEquals(actual1a, actual2a);
-        assertNotEquals(actual1a, actual2b);
-
-        assertEquals(expected1.hashCode(), actual1a.hashCode());
-        assertNotEquals(actual1a, expected1plusZero);
-        assertNotEquals(actual1a, new Object());
-
-        LinkedHashMap<HashCollider, HashCollider> values1WithDifferentValues = new LinkedHashMap<>();
-        LinkedHashMap<HashCollider, HashCollider> values2WithDifferentValues = new LinkedHashMap<>();
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            values1WithDifferentValues.put(entry.getKey(),
-                    (entry.getValue() == null) ? new HashCollider(-1, hashBitMask) :
-                            new HashCollider(entry.getValue().getValue() + 1, hashBitMask));
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testContainsKeyShouldYieldExpectedValue(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        for (HashCollider k : data.a().readOnlyKeySet()) {
+            assertTrue(instance.containsKey(k));
         }
-        for (Map.Entry<HashCollider, HashCollider> entry : values2.entrySet()) {
-            values2WithDifferentValues.put(entry.getKey(),
-                    (entry.getValue() == null) ? new HashCollider(-1, hashBitMask) :
-                            new HashCollider(entry.getValue().getValue() + 1, hashBitMask));
+        for (HashCollider k : data.c().readOnlyKeySet()) {
+            assertFalse(instance.containsKey(k));
         }
-        ImmutableMap<HashCollider, HashCollider> actual1WithDifferentValues = copyOf(values1WithDifferentValues);
-        assertNotEquals(actual1a, actual1WithDifferentValues);
-        assertNotEquals(actual1a, values1WithDifferentValues);
-        assertNotEquals(actual1a, values2WithDifferentValues);
+        assertFalse(instance.containsKey(new Object()));
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testReadOnlyEntrySetContainsShouldYieldExpectedValue(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a().readOnlyEntrySet()) {
+            assertTrue(instance.readOnlyEntrySet().contains(e));
+        }
+        for (Map.Entry<HashCollider, HashCollider> e : data.b().readOnlyEntrySet()) {
+            assertFalse(instance.readOnlyEntrySet().contains(e));
+        }
+        for (Map.Entry<HashCollider, HashCollider> e : data.c().readOnlyEntrySet()) {
+            assertFalse(instance.readOnlyEntrySet().contains(e));
+        }
+        assertFalse(instance.readOnlyEntrySet().contains(new Object()));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldThrowException(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        Iterator<HashCollider> i = instance.readOnlyKeySet().iterator();
+        assertThrows(Exception.class, i::remove);
+        Iterator<HashCollider> k = instance.readOnlyValues().iterator();
+        assertThrows(Exception.class, k::remove);
+        Iterator<Map.Entry<HashCollider, HashCollider>> j = instance.readOnlyEntrySet().iterator();
+        assertThrows(Exception.class, j::remove);
     }
 
     @SuppressWarnings("unchecked")
-    private void testOfEntries(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        ImmutableMap<HashCollider, HashCollider> actual;
-
-        // WHEN: a set is created with identical values
-        actual = copyOf(
-                MapEntries.linkedHashMap(MapEntries.of(firstValue1.getKey(), firstValue1.getValue(),
-                        firstValue1.getKey(), firstValue1.getValue(),
-                        firstValue1.getKey(), firstValue1.getValue())));
-        //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        expected.put(firstValue1.getKey(), firstValue1.getValue());
-        assertMapEquality(expected, actual);
-
-        // WHEN: a set is created with distinct values
-        actual = copyOf(values1.entrySet());
-        //
-        expected = new LinkedHashMap<>(values1);
-        assertMapEquality(expected, actual);
-    }
-
-    void testImmutableMap(int hashBitMask) {
-        // bulkSize must be at least 32 for good code coverage
-        int bulkSize = 32;
-        Random rng = new Random(0);
-        for (int i = 0; i < 64; i++) {
-            // values1, values2 are distinct sets of values
-            LinkedHashMap<HashCollider, HashCollider> values1 = new LinkedHashMap<>();
-            LinkedHashMap<HashCollider, HashCollider> values2 = new LinkedHashMap<>();
-            if (rng.nextBoolean()) {
-                values1.put(new HashCollider(Integer.MIN_VALUE, hashBitMask), null);
-            } else {
-                values2.put(new HashCollider(Integer.MIN_VALUE, hashBitMask), null);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testSerializationShouldYieldSameMap(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertEqualMap(data.a(), instance);
+        if (instance instanceof Serializable) {
+            ByteArrayOutputStream buf = new ByteArrayOutputStream();
+            try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
+                out.writeObject(instance);
             }
-            while (values1.size() < bulkSize) {
-                int value = rng.nextInt();
-                if (value == Integer.MIN_VALUE) {
-                    continue;
-                }
-                values1.put(new HashCollider(value, hashBitMask), new HashCollider(value, hashBitMask));
+            ImmutableMap<HashCollider, HashCollider> deserialized;
+            try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()))) {
+                deserialized = (ImmutableMap<HashCollider, HashCollider>) in.readObject();
             }
-            while (values2.size() < bulkSize) {
-                int value = rng.nextInt();
-                HashCollider e = new HashCollider(value, hashBitMask);
-                if (!values1.containsKey(e)) {
-                    values2.put(e, new HashCollider(value, hashBitMask));
-                }
-            }
-
-            testCopyPut(values1, values2, hashBitMask);
-            testCopyRemove(values1, values2);
-            testCopyPutAll(values1, values2, hashBitMask);
-            testCopyRemoveAll(values1, values2);
-            testCopyRetainAll(values1, values2);
-            testContains(values1, values2);
-            testOfEntries(values1, values2);
-            testCopyOf(values1, values2);
-            testEqualsHashCode(values1, values2, hashBitMask, "" + i);
-            testSerialization(values1, values2, hashBitMask);
+            assertEqualMap(data.a(), deserialized);
         }
     }
 
-    private void testSerialization(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualWithThisShouldYieldTrue(MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertEquals(instance, instance);
+    }
 
-        if (!(actual instanceof Serializable)) {
-            return;
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithCloneWithUpdatedEntriesShouldYieldFalse(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = toClonedInstance(instance);
+        assertEquals(instance, instance2);
+
+        // WHEN instance3 has not the same size as instance2
+        ImmutableMap<HashCollider, HashCollider> instance3 = instance2.copyPutAll(data.b().asMap());
+        assertNotEquals(instance2.size(), instance3.size());
+        assertNotSame(instance2, instance3);
+        assertNotEquals(instance, instance3);
+        assertNotEquals(instance2, instance3);
+
+        // WHEN instance4 has the same size as instance
+        assertEquals(data.a().size(), data.b().size());
+        ImmutableMap<HashCollider, HashCollider> instance4 = newInstance(data.b());
+        assertNotEquals(instance, instance4);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutWithNewKeyShouldReturnNewInstance(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> e : data.c) {
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(e.getKey(), e.getValue());
+            assertNotSame(instance, instance2);
+            expected.put(e.getKey(), e.getValue());
+            assertEqualMap(expected, instance2);
+            instance = instance2;
         }
-
-        // WHEN: empty map is re-serialized
-        actual = reserialize(actual);
-
-
-        // WHEN: map with entries is re-serialized
-        actual = actual.copyPutAll(values1);
-        expected.putAll(values1);
-        assertMapEquality(expected, actual);
-        actual = reserialize(actual);
-        assertMapEquality(expected, actual);
-
-        // WHEN: map with more entries is re-serialized
-        actual = actual.copyPutAll(values2);
-        expected.putAll(values2);
-        assertMapEquality(expected, actual);
-        actual = reserialize(actual);
-        assertMapEquality(expected, actual);
     }
 
-    private void testCopyPut(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        ImmutableMap<HashCollider, HashCollider> newActual;
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-
-        // GIVEN: a set with values1
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            actual = actual.copyPut(entry.getKey(), entry.getValue());
-            expected.put(entry.getKey(), entry.getValue());
-            assertMapEquality(expected, actual);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutWithContainedKeyButNewValueShouldReturnNewInstance(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> e : data.b) {
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(e.getKey(), e.getValue());
+            assertNotSame(instance, instance2);
+            assertEqualMap(expected, instance);
+            expected.put(e.getKey(), e.getValue());
+            assertEqualMap(expected, instance2);
+            instance = instance2;
         }
-
-        // WHEN: value1 is already in set, then copyPut must yield the same map
-        newActual = actual.copyPut(firstValue1.getKey(), firstValue1.getValue());
-        assertSame(newActual, actual);
-
-        // WHEN: value1 is updated in set, then copyPut must yield a new map
-        HashCollider newValue1 = new HashCollider(firstValue1.getValue() == null ? -1 : firstValue1.getValue().getValue() + 1, hashBitMask);
-        newActual = actual.copyPut(firstValue1.getKey(), newValue1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: entry is not yet in set, then copyPut must yield a new map
-        newActual = actual.copyPut(firstValue2.getKey(), firstValue2.getValue());
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        expected.put(firstValue1.getKey(), newValue1);
-        expected.put(firstValue2.getKey(), firstValue2.getValue());
-        assertMapEquality(expected, actual);
     }
 
-    private void testCopyPutAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2, int hashBitMask) {
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        ImmutableMap<HashCollider, HashCollider> newActual;
-
-        // GIVEN: a set with values1
-        newActual = actual.copyPutAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: values1 are already in set, then copyPutAll must yield the same map
-        newActual = actual.copyPutAll(values1);
-        assertSame(newActual, actual);
-
-        // WHEN: values1 are updated in set, then copyPutAll must yield a new map
-        LinkedHashMap<HashCollider, HashCollider> values1WithDifferentValues = new LinkedHashMap<>();
-        for (Map.Entry<HashCollider, HashCollider> entry : values1.entrySet()) {
-            values1WithDifferentValues.put(entry.getKey(),
-                    new HashCollider(entry.getValue() == null ? -1 : entry.getValue().getValue() + 1, hashBitMask));
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveWithNewKeyShouldReturnThis(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        for (Map.Entry<HashCollider, HashCollider> e : data.c) {
+            assertSame(instance, instance.copyRemove(e.getKey()));
+            assertEqualMap(data.a.asMap(), instance);
         }
-
-        newActual = actual.copyPutAll(values1WithDifferentValues);
-        assertNotSame(newActual, actual);
-
-
-        // WHEN: values2 are not yet in set, then copyPutAll must yield a new map
-        newActual = actual.copyPutAll(values2);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        expected.putAll(values1);
-        expected.putAll(values2);
-        assertMapEquality(expected, actual);
     }
 
-    private void testCopyRemove(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        Map.Entry<HashCollider, HashCollider> firstValue1 = values1.entrySet().iterator().next();
-        Map.Entry<HashCollider, HashCollider> firstValue2 = values2.entrySet().iterator().next();
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        ImmutableMap<HashCollider, HashCollider> newActual;
-
-        // GIVEN: a set with values1
-        newActual = actual.copyPutAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: value1 is in set, then withRemove must yield a new map
-        newActual = actual.copyRemove(firstValue1.getKey());
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: value2 is not in set, then withRemove must yield the same map
-        newActual = actual.copyRemove(firstValue2.getKey());
-        assertSame(newActual, actual);
-
-        //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(values1);
-        expected.remove(firstValue1.getKey());
-        assertMapEquality(expected, actual);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a) {
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRemove(e.getKey());
+            assertNotSame(instance, instance2);
+            assertEqualMap(expected, instance);
+            expected.remove(e.getKey());
+            assertEqualMap(expected, instance2);
+            instance = instance2;
+        }
     }
 
-    private void testCopyRemoveAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        ImmutableMap<HashCollider, HashCollider> newActual;
-
-        // GIVEN: a set with values1
-        newActual = actual.copyPutAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: values2 are not in set, then withRemoveAll must yield the same map
-        newActual = actual.copyRemoveAll(values2.keySet());
-        assertSame(newActual, actual);
-
-        // WHEN: values1 are in set, then withRemoveAll must yield a new map
-        newActual = actual.copyRemoveAll(values1.keySet());
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        assertMapEquality(expected, actual);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntrySetContainsExpectedEntries(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        ReadOnlySet<Map.Entry<HashCollider, HashCollider>> entrySet = instance.readOnlyEntrySet();
+        for (Map.Entry<HashCollider, HashCollider> e : data.a) {
+            assertTrue(entrySet.contains(e));
+        }
+        for (Map.Entry<HashCollider, HashCollider> e : data.b) {
+            assertFalse(entrySet.contains(e));
+        }
+        for (Map.Entry<HashCollider, HashCollider> e : data.c) {
+            assertFalse(entrySet.contains(e));
+        }
+        assertTrue(entrySet.containsAll(data.a.readOnlyEntrySet().asSet()));
+        assertFalse(entrySet.containsAll(data.b.readOnlyEntrySet().asSet()));
+        assertFalse(entrySet.containsAll(data.c.readOnlyEntrySet().asSet()));
+        LinkedHashSet<Map.Entry<HashCollider, HashCollider>> abc = new LinkedHashSet<>(data.a.readOnlyEntrySet().asSet());
+        abc.addAll(data.b.readOnlyEntrySet().asSet());
+        abc.addAll(data.c.readOnlyEntrySet().asSet());
+        assertFalse(entrySet.containsAll(abc));
     }
 
-    private void testCopyRetainAll(LinkedHashMap<HashCollider, HashCollider> values1, LinkedHashMap<HashCollider, HashCollider> values2) {
-        ImmutableMap<HashCollider, HashCollider> actual = of();
-        ImmutableMap<HashCollider, HashCollider> newActual;
-
-        // GIVEN: a set with values1
-        newActual = actual.copyPutAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: values1 are in set, then withRetainAll must yield the same map
-        newActual = actual.copyRetainAll(values1.keySet());
-        assertSame(newActual, actual);
-
-        // WHEN: values2 are not in set, then withRetainAll must yield a new map
-        newActual = actual.copyRetainAll(values2.keySet());
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        assertMapEquality(expected, actual);
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEntryIteratorShouldYieldExpectedEntries(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        List<Map.Entry<HashCollider, HashCollider>> actualList = new ArrayList<>();
+        LinkedHashMap<HashCollider, HashCollider> actualMap = new LinkedHashMap<>();
+        instance.readOnlyEntrySet().iterator().forEachRemaining(actualList::add);
+        instance.readOnlyEntrySet().iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
+        assertEquals(data.a.size(), actualList.size());
+        assertEqualMap(data.a, newInstance(actualMap));
     }
 
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestNullKeyNullValue() {
-        return Arrays.asList(
-                dynamicTest("null key", () -> testNullKeyNullValue(null, new HashCollider(5, -1))),
-                dynamicTest("null value", () -> testNullKeyNullValue(new HashCollider(5, -1), null)),
-                dynamicTest("null key, null value", () -> testNullKeyNullValue(null, null))
-        );
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutWithContainedEntryShouldReturnThis(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        for (Map.Entry<HashCollider, HashCollider> e : data.a) {
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(e.getKey(), e.getValue());
+            assertSame(instance, instance2);
+            assertEqualMap(expected, instance2);
+        }
     }
 
-    public void testNullKeyNullValue(@Nullable HashCollider key, @Nullable HashCollider value) {
-        @SuppressWarnings("unchecked") ImmutableMap<HashCollider, HashCollider> set = copyOf(MapEntries.linkedHashMap(MapEntries.of(key, value)));
-        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>();
-        expected.put(key, value);
-        assertTrue(set.containsKey(key));
-        assertEquals(expected.toString(), set.toString());
-        assertEquals(expected, set.asMap());
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutAllWithContainedEntriesShouldReturnThis(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(data.a().asMap());
+        assertSame(instance, instance2);
+        assertEqualMap(data.a(), instance);
+    }
 
-        expected.remove(key);
-        set = set.copyRemove(key);
-        assertEquals(expected, set.asMap());
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutAllWithNewEntriesShouldReturnNewInstance(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(data.c().asMap());
+        assertNotSame(instance, instance2);
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        assertEqualMap(expected, instance);
+        expected.putAll(data.c().asMap());
+        assertEqualMap(expected, instance2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutAllWithContainedKeysButNewValuesShouldReturnNewInstance(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(data.b().asMap());
+        assertNotSame(instance, instance2);
+        Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        assertEqualMap(expected, instance);
+        expected.putAll(data.b().asMap());
+        assertEqualMap(expected, instance2);
+    }
+
+    @SuppressWarnings({"CollectionAddedToSelf"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutAllWithSelfShouldReturnThis(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(instance);
+        assertSame(instance, instance2);
+        assertEqualMap(data.a, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithObjectShouldYieldFalse(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertNotEquals(instance, new Object());
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testGetOrDefaultWithContainedKeyShouldYieldValue(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        HashCollider defaultValue = new HashCollider(7, -1);
+        for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
+            assertEquals(e.getValue(), instance.getOrDefault(e.getKey(), defaultValue));
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testGetOrDefaultWithNonContainedKeyShouldYieldDefault(MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        HashCollider defaultValue = new HashCollider(7, -1);
+        for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
+            assertEquals(defaultValue, instance.getOrDefault(e.getKey(), defaultValue));
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyPutAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
+        ArrayList<Map.Entry<HashCollider, HashCollider>> listB = new ArrayList<>(data.b.readOnlyEntrySet().asSet());
+        ArrayList<Map.Entry<HashCollider, HashCollider>> listC = new ArrayList<>(data.c.readOnlyEntrySet().asSet());
+        Map<HashCollider, HashCollider> m = new LinkedHashMap<>(data.a.asMap());
+        for (Map.Entry<HashCollider, HashCollider> entry : listB.subList(0, listB.size() / 2)) {
+            m.put(entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<HashCollider, HashCollider> entry : listC.subList(0, listC.size() / 2)) {
+            m.put(entry.getKey(), entry.getValue());
+        }
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(m);
+        assertNotSame(instance, instance2);
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
+        assertEqualMap(expected, instance);
+        expected.putAll(m);
+        assertEqualMap(expected, instance2);
+    }
+
+    @SuppressWarnings("SimplifiableAssertion")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithNullShouldYieldFalse(@NonNull MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        assertFalse(instance.equals(null));
     }
 
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testToStringShouldContainAllEntries(@NonNull MapData data) {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance();
+        assertEquals("{}", instance.toString());
+
+        instance = instance.copyPutAll(data.a.asMap());
+        String str = instance.toString();
+        assertEquals('{', str.charAt(0));
+        assertEquals('}', str.charAt(str.length() - 1));
+        LinkedHashSet<String> actual = new LinkedHashSet<>(Arrays.asList(str.substring(1, str.length() - 1).split(", ")));
+        Set<String> expected = new LinkedHashSet<>();
+        data.a.iterator().forEachRemaining(e -> expected.add(e.toString()));
+        assertEquals(expected, actual);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRetainAllWithContainedKeysShouldReturnThis(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(data.a().asMap().keySet());
+        assertSame(instance, instance2);
+        assertEqualMap(data.a(), instance2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRetainAllWithSomeContainedKeysShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(data.someAPlusSomeB().asMap().keySet());
+        assertNotSame(instance, instance2);
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
+        expected.keySet().retainAll(data.someAPlusSomeB().asMap().keySet());
+        assertEqualMap(expected, instance2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRetainAllWithEmptySetShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(Collections.emptySet());
+        assertNotSame(instance, instance2);
+        assertEqualMap(data.a(), instance);
+        assertEqualMap(Collections.emptyMap(), instance2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRetainAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance();
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(data.a().asMap().keySet());
+        assertSame(instance, instance2);
+        assertEqualMap(Collections.emptyMap(), instance2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance();
+        assertSame(instance, instance.copyRemoveAll(data.a.readOnlyKeySet().asSet()));
+        assertEqualMap(Collections.emptyMap(), instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllWithEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        assertSame(instance, instance.copyRemoveAll(Collections.emptySet()));
+        assertEqualMap(data.a(), instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRemoveAll(data.a.readOnlyKeySet().asSet());
+        assertNotSame(instance, instance2);
+        assertEqualMap(data.a, instance);
+        assertEqualMap(Collections.emptyMap(), instance2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRemoveAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
+        assertNotSame(instance, instance2);
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
+        assertEqualMap(expected, instance);
+        expected.keySet().removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
+        assertEqualMap(expected, instance2);
+    }
 }

@@ -45,7 +45,7 @@ public class ImmutableChampSetTest extends AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(@NonNull Data data) throws Exception {
+    public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = newInstance(data.c);
         ChampSet<HashCollider> mutableInstance = (ChampSet<HashCollider>) instance.toMutable();
@@ -54,5 +54,12 @@ public class ImmutableChampSetTest extends AbstractImmutableSetTest {
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         expected.addAll(data.c.asSet());
         assertEqualSet(expected, toImmutableInstance(mutableInstance));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testOfArrayArgShouldYieldExpectedResult(@NonNull SetData data) throws Exception {
+        ImmutableSet<HashCollider> instance = ImmutableChampSet.of(data.a().toArray(new HashCollider[0]));
+        assertEqualSet(data.a, instance);
     }
 }

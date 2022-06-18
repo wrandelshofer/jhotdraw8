@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Function;
 
-public class WrappedImmutableSet<E> implements ImmutableSet<E> {
+public class WrappedImmutableSet<E> extends AbstractReadOnlySet<E> implements ImmutableSet<E> {
     private final @NonNull Set<E> target;
     private final @NonNull Function<Set<E>, Set<E>> cloneFunction;
 
@@ -18,6 +18,9 @@ public class WrappedImmutableSet<E> implements ImmutableSet<E> {
 
     @Override
     public @NonNull ImmutableSet<E> copyClear() {
+        if (isEmpty()) {
+            return this;
+        }
         Set<E> clone = cloneFunction.apply(target);
         clone.clear();
         return new WrappedImmutableSet<>(clone, cloneFunction);
@@ -81,4 +84,6 @@ public class WrappedImmutableSet<E> implements ImmutableSet<E> {
     public @NonNull Set<E> toMutable() {
         return cloneFunction.apply(target);
     }
+
+
 }

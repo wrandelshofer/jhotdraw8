@@ -326,7 +326,7 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
                 this::clear,
                 this::remove,
                 this::getLast, this::getFirst,
-                this::add, e -> addFirst(e, false),
+                e -> addFirst(e, false), this::add,
                 this::addLast, this::addFirst
         );
     }

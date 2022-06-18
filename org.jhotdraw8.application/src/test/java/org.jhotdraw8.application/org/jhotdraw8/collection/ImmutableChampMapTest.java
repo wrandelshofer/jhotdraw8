@@ -10,35 +10,34 @@ import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
 public class ImmutableChampMapTest extends AbstractImmutableMapTest {
     @Override
-    protected @NonNull ImmutableChampMap<HashCollider, HashCollider> of() {
+    protected <K, V> @NonNull ImmutableChampMap<K, V> newInstance() {
         return ImmutableChampMap.of();
     }
 
+
     @Override
-    @SafeVarargs
-    protected final @NonNull ImmutableMap<HashCollider, HashCollider> of(Map.@NonNull Entry<HashCollider, HashCollider>... entries) {
-        return ImmutableChampMap.<HashCollider, HashCollider>of().copyPutAll(Arrays.asList(entries));
+    protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Map<K, V> map) {
+        return ImmutableChampMap.<K, V>of().copyPutAll(map);
     }
 
     @Override
-    protected @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull Map<? extends HashCollider, ? extends HashCollider> map) {
-        return ImmutableChampMap.<HashCollider, HashCollider>of().copyPutAll(map);
+    protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
+        return ImmutableChampMap.<K, V>of().copyPutAll(map);
     }
 
     @Override
-    protected @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull ReadOnlyMap<? extends HashCollider, ? extends HashCollider> map) {
-        return ImmutableChampMap.<HashCollider, HashCollider>of().copyPutAll(map);
+    protected @NonNull <K, V> ImmutableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
+        return ImmutableChampMap.<K, V>copyOf(m);
     }
 
     @Override
-    protected @NonNull ImmutableMap<HashCollider, HashCollider> copyOf(@NonNull Iterable<? extends Map.Entry<? extends HashCollider, ? extends HashCollider>> entries) {
-        return ImmutableChampMap.<HashCollider, HashCollider>of().copyPutAll(entries);
+    protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
+        return ImmutableChampMap.<K, V>of().copyPutAll(entries);
     }
 
     @Test

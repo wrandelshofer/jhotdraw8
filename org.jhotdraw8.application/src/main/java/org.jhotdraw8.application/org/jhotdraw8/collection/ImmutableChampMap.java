@@ -161,14 +161,11 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
         final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode = update(null, new AbstractMap.SimpleImmutableEntry<>(key, value),
                 keyHash, 0, details,
-                getUpdateFunction(),
-                getEqualsFunction(),
-                getHashFunction());
+                getUpdateFunction(), getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
             if (details.isUpdated()) {
-                return new ImmutableChampMap<>(newRootNode,
-                        size);
+                return new ImmutableChampMap<>(newRootNode, size);
             }
 
             return new ImmutableChampMap<>(newRootNode, size + 1);

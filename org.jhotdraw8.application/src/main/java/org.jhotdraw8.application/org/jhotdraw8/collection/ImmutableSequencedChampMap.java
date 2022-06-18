@@ -284,6 +284,11 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
+    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ImmutableSequencedChampMap<K, V>) ImmutableSequencedMap.super.copyPutAll(map);
+    }
+
+    @Override
     public @NonNull ImmutableSequencedChampMap<K, V> copyRemove(@NonNull K key) {
         return copyRemove(key, first, last);
     }

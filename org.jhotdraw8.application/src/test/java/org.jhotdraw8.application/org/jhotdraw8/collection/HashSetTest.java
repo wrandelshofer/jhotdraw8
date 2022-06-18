@@ -2,36 +2,42 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.HashSet;
 import java.util.Set;
 
-public class ChampSetTest extends AbstractSetTest {
+public class HashSetTest extends AbstractSetTest {
     @Override
     protected <E> @NonNull Set<E> newInstance() {
-        return new ChampSet<>();
+        return new HashSet<>();
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(int numElements, float loadFactor) {
-        return new ChampSet<>();
+        return new HashSet<>();
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(Set<E> m) {
-        return new ChampSet<>(m);
+        return new HashSet<>(m);
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(ReadOnlySet<E> m) {
-        return new ChampSet<>(m);
+        return new HashSet<>(m.asSet());
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
     protected <E> @NonNull Set<E> toClonedInstance(Set<E> m) {
-        return ((ChampSet<E>) m).clone();
+        return (Set<E>) ((HashSet<E>) m).clone();
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(Iterable<E> m) {
-        return new ChampSet<>(m);
+        HashSet<E> s = new HashSet<>();
+        m.iterator().forEachRemaining(s::add);
+        return s;
+
     }
 }

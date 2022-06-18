@@ -198,6 +198,7 @@ class HashCollisionNode<K> extends Node<K> {
                                       @NonNull BiPredicate<K, K> equalsFunction,
                                       @NonNull ToIntFunction<K> hashFunction) {
         if (o == this) {
+            bulkChange.numInBothCollections += dataArity();
             return this;
         }
         // The other node must be a HashCollisionNode

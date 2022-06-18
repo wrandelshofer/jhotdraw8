@@ -6,6 +6,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> implements ImmutableMap<K, V> {
@@ -20,6 +21,9 @@ public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> impleme
 
     @Override
     public @NonNull WrappedImmutableMap<K, V> copyClear() {
+        if (isEmpty()) {
+            return this;
+        }
         Map<K, V> clone = cloneFunction.apply(target);
         clone.clear();
         return new WrappedImmutableMap<>(clone, cloneFunction);
@@ -27,6 +31,9 @@ public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> impleme
 
     @Override
     public @NonNull WrappedImmutableMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+        if (containsKey(key) && Objects.equals(get(key), value)) {
+            return this;
+        }
         Map<K, V> clone = cloneFunction.apply(target);
         clone.put(key, value);
         return new WrappedImmutableMap<>(clone, cloneFunction);
@@ -36,6 +43,9 @@ public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> impleme
     public @NonNull WrappedImmutableMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
         Map<K, V> clone = cloneFunction.apply(target);
         clone.putAll(m.asMap());
+        if (clone.equals(target)) {
+            return this;
+        }
         return new WrappedImmutableMap<>(clone, cloneFunction);
     }
 
@@ -45,11 +55,17 @@ public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> impleme
         for (Map.Entry<? extends K, ? extends V> e : m) {
             clone.put(e.getKey(), e.getValue());
         }
+        if (clone.equals(target)) {
+            return this;
+        }
         return new WrappedImmutableMap<>(clone, cloneFunction);
     }
 
     @Override
     public @NonNull WrappedImmutableMap<K, V> copyRemove(@NonNull K key) {
+        if (!containsKey(key)) {
+            return this;
+        }
         Map<K, V> clone = cloneFunction.apply(target);
         clone.remove(key);
         return new WrappedImmutableMap<>(clone, cloneFunction);
@@ -58,12 +74,24 @@ public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> impleme
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public @NonNull WrappedImmutableMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+        if (isEmpty()) {
+            return this;
+        }
         Map<K, V> clone = cloneFunction.apply(target);
         if (c instanceof Collection<?>) {
-            clone.keySet().removeAll((Collection<?>) c);
+            Collection<?> coll = (Collection<?>) c;
+            if (coll.isEmpty()) {
+                return this;
+            }
+            clone.keySet().removeAll(coll);
         } else {
+            boolean changed = false;
             for (K k : c) {
+                changed |= clone.containsKey(k);
                 clone.remove(k);
+            }
+            if (!changed) {
+                return this;
             }
         }
         return new WrappedImmutableMap<>(clone, cloneFunction);
@@ -71,9 +99,17 @@ public class WrappedImmutableMap<K, V> extends AbstractReadOnlyMap<K, V> impleme
 
     @Override
     public @NonNull WrappedImmutableMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+        if (isEmpty()) {
+            return this;
+        }
+        if (c.isEmpty()) {
+            return copyClear();
+        }
         Map<K, V> clone = cloneFunction.apply(target);
-        clone.keySet().retainAll(c);
-        return new WrappedImmutableMap<>(clone, cloneFunction);
+        if (clone.keySet().retainAll(c)) {
+            return new WrappedImmutableMap<>(clone, cloneFunction);
+        }
+        return this;
     }
 
     @Override

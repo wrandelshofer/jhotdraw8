@@ -1,6 +1,8 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Map;
 
@@ -33,5 +35,12 @@ public class SequencedChampMapTest extends AbstractSequencedMapTest {
     @Override
     protected <K, V> @NonNull SequencedMap<K, V> toClonedInstance(Map<K, V> m) {
         return ((SequencedChampMap<K, V>) m).clone();
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testConstructorWithReadOnlyArgYieldsExpectedMap(@NonNull MapData data) throws Exception {
+        Map<HashCollider, HashCollider> instance = new SequencedChampMap<>(data.a());
+        assertEqualMap(data.a(), instance);
     }
 }

@@ -479,7 +479,6 @@ public class BitmapIndexedNode<K> extends Node<K> {
                                         final K key0, final int keyHash0,
                                         final K key1, final int keyHash1,
                                         final int shift) {
-        // FIXME This method only works with tupleLength=1
 
         assert !(key0.equals(key1));
 
