@@ -60,6 +60,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
             instance.putFirst(e.getKey(), e.getValue());
             assertEquals(e, instance.firstEntry());
+            assertEquals(e.getKey(), instance.firstKey());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "putFirst");
@@ -74,6 +75,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
             instance.putLast(e.getKey(), e.getValue());
             assertEquals(e, instance.lastEntry());
+            assertEquals(e.getKey(), instance.lastKey());
             expected.remove(e);
             expected.add(e);
             assertEqualSequence(expected, instance, "putLast");
