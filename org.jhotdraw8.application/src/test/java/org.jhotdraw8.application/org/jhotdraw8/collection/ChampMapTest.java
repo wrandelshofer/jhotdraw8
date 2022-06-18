@@ -1,42 +1,42 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.util.Map;
 
 public class ChampMapTest extends AbstractMapTest {
     @Override
-    protected Map<HashCollider, HashCollider> newInstance() {
+    protected <K, V> @NonNull Map<K, V> newInstance() {
         return new ChampMap<>();
     }
 
     @Override
-    protected Map<HashCollider, HashCollider> newInstance(int numElements, float loadFactor) {
+    protected <K, V> @NonNull Map<K, V> newInstance(int numElements, float loadFactor) {
         return new ChampMap<>();
     }
 
     @Override
-    protected Map<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m) {
+    protected <K, V> @NonNull Map<K, V> newInstance(Map<K, V> m) {
         return new ChampMap<>(m);
     }
 
     @Override
-    protected Map<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m) {
+    protected <K, V> @NonNull Map<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m) {
         return new ChampMap<>(m);
     }
 
-    @Override
-    protected Map<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m) {
-        return new ChampMap<>(m);
-    }
 
     @Override
-    protected ImmutableChampMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m) {
-        return ((ChampMap<HashCollider, HashCollider>) m).toImmutable();
+    protected <K, V> @NonNull Map<K, V> toClonedInstance(Map<K, V> m) {
+        return ((ChampMap<K, V>) m).clone();
     }
 
-    @Override
-    protected Map<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m) {
-        return ((ChampMap<HashCollider, HashCollider>) m).clone();
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlyArgOfDifferentTypeShouldBeEqualToArg(Data data) {
+        Map<HashCollider, HashCollider> actual = new ChampMap<>(data.a());
+        assertEqualMap(data.a(), actual);
     }
-
-
 }

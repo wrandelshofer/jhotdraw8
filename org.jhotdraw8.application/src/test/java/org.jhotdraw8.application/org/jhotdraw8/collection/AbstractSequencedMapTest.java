@@ -1,5 +1,6 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -16,29 +17,26 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract SequencedMap<HashCollider, HashCollider> newInstance();
+    protected abstract <K, V> @NonNull SequencedMap<K, V> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract SequencedMap<HashCollider, HashCollider> newInstance(int numElements, float loadFactor);
+    protected abstract <K, V> @NonNull SequencedMap<K, V> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract SequencedMap<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m);
+    protected abstract <K, V> @NonNull SequencedMap<K, V> newInstance(@NonNull Map<K, V> m);
 
-    protected abstract SequencedMap<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m);
 
-    protected abstract ImmutableSequencedMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m);
+    protected abstract <K, V> @NonNull ImmutableSequencedMap<K, V> toImmutableInstance(@NonNull Map<K, V> m);
 
-    protected abstract SequencedMap<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m);
+    protected abstract <K, V> @NonNull SequencedMap<K, V> toClonedInstance(@NonNull Map<K, V> m);
 
-    /**
-     * Creates a new instance with the specified map.
-     */
-    abstract SequencedMap<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m);
+    abstract <K, V> @NonNull SequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
+
 
     @ParameterizedTest
     @MethodSource("dataProvider")

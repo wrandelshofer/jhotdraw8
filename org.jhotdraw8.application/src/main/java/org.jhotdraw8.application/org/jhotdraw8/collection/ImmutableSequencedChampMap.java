@@ -226,7 +226,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                 keyHash, 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
-        if (details.isUpdated) {
+        if (details.updated) {
             return moveToLast
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
@@ -245,7 +245,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                 keyHash, 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
-        if (details.isUpdated) {
+        if (details.updated) {
             return moveToFirst
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,

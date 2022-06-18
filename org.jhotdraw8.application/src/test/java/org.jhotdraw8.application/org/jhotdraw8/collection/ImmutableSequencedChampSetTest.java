@@ -6,42 +6,34 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
-import org.junit.Ignore;
-import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.Set;
 
 public class ImmutableSequencedChampSetTest extends AbstractImmutableSequencedSetTest {
 
     @Override
-    protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return ImmutableSequencedChampSet.copyOf(set);
+    protected <E> @NonNull ImmutableSet<E> newInstance() {
+        return ImmutableChampSet.of();
     }
 
     @Override
-    protected ImmutableSet<HashCollider> of() {
-        return ImmutableSequencedChampSet.of();
+    protected <E> @NonNull Set<E> toMutableInstance(ImmutableSet<E> m) {
+        return m.toMutable();
     }
 
     @Override
-    protected ImmutableSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return ImmutableSequencedChampSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
+    protected <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m) {
+        return ((ChampSet<E>) m).toImmutable();
     }
 
+    @Override
+    protected <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
+        return ImmutableChampSet.copyOf(m.asSet());
+    }
 
-    @Test
-    @Ignore("manual test")
-    public void testDumpStructure() {
-        ImmutableSequencedChampSet<HashCollider> instance = ImmutableSequencedChampSet.of();
-        Random rng = new Random(0);
-        for (int i = 0; i < 30; i++) {
-            HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);
-            String value = "v" + i;
-            instance = instance.copyAdd(key);
-        }
-        System.out.println(new ChampTrieGraphviz().dumpTrie(instance));
+    @Override
+    protected <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m) {
+        return ImmutableChampSet.copyOf(m);
     }
 
 }

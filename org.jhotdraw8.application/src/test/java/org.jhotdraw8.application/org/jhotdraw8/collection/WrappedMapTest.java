@@ -1,48 +1,37 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class WrappedMapTest extends AbstractMapTest {
     @Override
-    protected Map<HashCollider, HashCollider> newInstance() {
-        return new WrappedMap<HashCollider, HashCollider>(new HashMap<>());
+    protected <K, V> @NonNull Map<K, V> newInstance() {
+        return new WrappedMap<K, V>(new HashMap<>());
     }
 
     @Override
-    protected Map<HashCollider, HashCollider> newInstance(int numElements, float loadFactor) {
-        return new WrappedMap<HashCollider, HashCollider>(new HashMap<>((int) (numElements / loadFactor), loadFactor));
+    protected <K, V> @NonNull Map<K, V> newInstance(int numElements, float loadFactor) {
+        return new WrappedMap<K, V>(new HashMap<>((int) (numElements / loadFactor), loadFactor));
     }
 
     @Override
-    protected Map<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m) {
-        return new WrappedMap<HashCollider, HashCollider>(new HashMap<>(m));
+    protected <K, V> @NonNull Map<K, V> newInstance(Map<K, V> m) {
+        return new WrappedMap<K, V>(new HashMap<>(m));
     }
 
     @Override
-    protected Map<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m) {
-        return new WrappedMap<HashCollider, HashCollider>(new HashMap<>(m.asMap()));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected ImmutableMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m) {
-        return new WrappedImmutableMap<>(m,
-                HashMap::new);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected Map<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m) {
-        return new WrappedMap<HashCollider, HashCollider>(new HashMap<>(m));
+    protected <K, V> @NonNull Map<K, V> toClonedInstance(Map<K, V> m) {
+        return new WrappedMap<K, V>(new HashMap<>(m));
     }
 
     @Override
-    Map<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m) {
-        HashMap<HashCollider, HashCollider> i = new HashMap<>();
-        for (Map.Entry<HashCollider, HashCollider> e : m) {
+    protected <K, V> @NonNull Map<K, V> newInstance(Iterable<Map.Entry<K, V>> m) {
+        HashMap<K, V> i = new HashMap<>();
+        for (Map.Entry<K, V> e : m) {
             i.put(e.getKey(), e.getValue());
         }
-        return new WrappedMap<HashCollider, HashCollider>(i);
+        return new WrappedMap<K, V>(i);
     }
 }

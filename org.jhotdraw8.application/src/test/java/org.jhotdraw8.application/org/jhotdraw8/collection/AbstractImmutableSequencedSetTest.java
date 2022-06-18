@@ -5,19 +5,9 @@
 
 package org.jhotdraw8.collection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 @Deprecated
 public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutableSetTest {
+    /*
     @SuppressWarnings({"unchecked", "SuspiciousMethodCalls"})
     public void doTestIterationSequence(int mask, int... elements) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
@@ -50,18 +40,5 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
         assertEquals(list, new ArrayList<>(instance.asCollection()));
     }
 
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsIterationSequenceByInsertionOrder() {
-        return Arrays.asList(
-                dynamicTest("full mask 1..10", () -> doTestIterationSequence(-1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("full mask 10..1", () -> doTestIterationSequence(-1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("full mask 1..1_000_000_000", () -> doTestIterationSequence(-1, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)),
-                dynamicTest("some collisions 1..10", () -> doTestIterationSequence(1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("some collisions 10..1", () -> doTestIterationSequence(1, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("some collisions 1..1_000_000_000", () -> doTestIterationSequence(1, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000)),
-                dynamicTest("all collisions 1..10", () -> doTestIterationSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
-                dynamicTest("all collisions 10..1", () -> doTestIterationSequence(0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)),
-                dynamicTest("all collisions 1..1_000_000_000", () -> doTestIterationSequence(0, 1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000))
-        );
-    }
+*/
 }

@@ -9,7 +9,8 @@ public class ChangeEvent<V> {
 
     public boolean modified;
     private V oldValue;
-    public boolean isUpdated;
+    public boolean updated;
+    public int numInBothCollections;
 
     public ChangeEvent() {
     }
@@ -23,7 +24,7 @@ public class ChangeEvent<V> {
     }
 
     public boolean isUpdated() {
-        return isUpdated;
+        return updated;
     }
 
     /**
@@ -35,7 +36,7 @@ public class ChangeEvent<V> {
 
     void setValueUpdated(V oldValue) {
         this.oldValue = oldValue;
-        this.isUpdated = true;
+        this.updated = true;
         this.modified = true;
     }
 

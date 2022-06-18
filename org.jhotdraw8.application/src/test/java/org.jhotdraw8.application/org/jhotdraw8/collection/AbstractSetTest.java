@@ -1,5 +1,6 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,41 +71,42 @@ public abstract class AbstractSetTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract Set<HashCollider> newInstance();
+    protected abstract <E> @NonNull Set<E> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract Set<HashCollider> newInstance(int numElements, float loadFactor);
+    protected abstract <E> @NonNull Set<E> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract Set<HashCollider> newInstance(Set<HashCollider> m);
+    protected abstract <E> @NonNull Set<E> newInstance(@NonNull Set<E> m);
 
-    protected abstract Set<HashCollider> newInstance(ReadOnlySet<HashCollider> m);
+    protected abstract <E> @NonNull Set<E> newInstance(@NonNull ReadOnlySet<E> m);
 
-    protected abstract ImmutableSet<HashCollider> toImmutableInstance(Set<HashCollider> m);
+    protected abstract <E> @NonNull ImmutableSet<E> toImmutableInstance(@NonNull Set<E> m);
 
-    protected abstract Set<HashCollider> toClonedInstance(Set<HashCollider> m);
+    protected abstract <E> @NonNull Set<E> toClonedInstance(@NonNull Set<E> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract Set<HashCollider> newInstance(Iterable<HashCollider> m);
+    protected abstract <E> @NonNull Set<E> newInstance(@NonNull Iterable<E> m);
 
-    public static Stream<Data> dataProvider() {
+    public static @NonNull Stream<Data> dataProvider() {
         return Stream.of(
-                NO_COLLISION, ALL_COLLISION, SOME_COLLISION
+                NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
     }
 
+    private final static Data NO_COLLISION_NICE_KEYS = newNiceData("no collisions nice keys", -1, 32, 100_000);
     private final static Data NO_COLLISION = newData("no collisions", -1, 32, 100_000);
     private final static Data ALL_COLLISION = newData("all collisions", 0, 32, 100_000);
     private final static Data SOME_COLLISION = newData("some collisions", 0x55555555, 32, 100_000);
 
-    private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
+    private static int createNewValue(@NonNull Random rng, @NonNull Set<Integer> usedValues, int bound) {
         int value;
         int count = 0;
         do {
@@ -116,7 +119,7 @@ public abstract class AbstractSetTest {
         return value;
     }
 
-    private static Data newData(String name, int hashBitMask, int size, int bound) {
+    private static @NonNull Data newData(@NonNull String name, int hashBitMask, int size, int bound) {
         Random rng = new Random(0);
         LinkedHashSet<HashCollider> a = new LinkedHashSet<>(size * 2);
         LinkedHashSet<HashCollider> c = new LinkedHashSet<>(size * 2);
@@ -132,11 +135,28 @@ public abstract class AbstractSetTest {
                 new WrappedReadOnlySet<>(c));
     }
 
-    protected void assertEqualSet(ReadOnlySet<HashCollider> expected, Set<HashCollider> actual) {
+    private static @NonNull Data newNiceData(String name, int hashBitMask, int size, int bound) {
+        int rng = 0;
+        LinkedHashSet<HashCollider> a = new LinkedHashSet<>(size * 2);
+        LinkedHashSet<HashCollider> c = new LinkedHashSet<>(size * 2);
+        for (int i = 0; i < size; i++) {
+            int keyA = rng++;
+            a.add(new HashCollider(keyA, hashBitMask));
+        }
+        for (int i = 0; i < size; i++) {
+            int keyC = rng++;
+            c.add(new HashCollider(keyC, hashBitMask));
+        }
+        return new Data(name,
+                new WrappedReadOnlySet<>(a),
+                new WrappedReadOnlySet<>(c));
+    }
+
+    protected void assertEqualSet(@NonNull ReadOnlySet<HashCollider> expected, @NonNull Set<HashCollider> actual) {
         assertEqualSet(expected.asSet(), actual);
     }
 
-    protected void assertEqualSet(Set<HashCollider> expected, Set<HashCollider> actual) {
+    protected void assertEqualSet(@NonNull Set<HashCollider> expected, @NonNull Set<HashCollider> actual) {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
         assertEquals(expected.hashCode(), actual.hashCode());
@@ -171,14 +191,14 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceSetArgsShouldBeEqualToSet(Data data) {
+    public void testNewInstanceSetArgsShouldBeEqualToSet(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a().asSet());
         assertEqualSet(data.a().asSet(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(Data data) {
+    public void testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(@NonNull Data data) {
         Set<HashCollider> actual1 = newInstance(data.a().asSet());
         Set<HashCollider> actual = newInstance(actual1);
         assertEqualSet(data.a().asSet(), actual);
@@ -186,14 +206,14 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceReadOnlySetArgsShouldBeEqualToSet(Data data) {
+    public void testNewInstanceReadOnlySetArgsShouldBeEqualToSet(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a());
         assertEqualSet(data.a().asSet(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceReadOnlySetArgsWithImmutableSetArgsOfSameTypeShouldBeEqualToSet(Data data) {
+    public void testNewInstanceReadOnlySetArgsWithImmutableSetArgsOfSameTypeShouldBeEqualToSet(@NonNull Data data) {
         Set<HashCollider> actual1 = newInstance(data.a());
         Set<HashCollider> actual = newInstance(toImmutableInstance(actual1));
         assertEqualSet(data.a().asSet(), actual);
@@ -201,7 +221,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testClearShouldYieldEmptySet(Data data) {
+    public void testClearShouldYieldEmptySet(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), actual);
         actual.clear();
@@ -210,7 +230,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testClearShouldBeIdempotent(Data data) {
+    public void testClearShouldBeIdempotent(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), actual);
         actual.clear();
@@ -221,7 +241,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCloneShouldYieldEqualSet(Data data) {
+    public void testCloneShouldYieldEqualSet(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a());
         Set<HashCollider> clone = toClonedInstance(actual);
         assertEqualSet(data.a().asSet(), clone);
@@ -230,7 +250,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testContainsShouldYieldExpectedValue(Data data) {
+    public void testContainsShouldYieldExpectedValue(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a());
         for (HashCollider k : data.a()) {
             assertTrue(actual.contains(k));
@@ -244,7 +264,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testIteratorRemoveShouldRemoveElement(Data data) {
+    public void testIteratorRemoveShouldRemoveElement(@NonNull Data data) {
         Set<HashCollider> actual = newInstance(data.a());
         Set<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
         List<HashCollider> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
@@ -262,9 +282,42 @@ public abstract class AbstractSetTest {
         assertEqualSet(Collections.emptySet(), actual);
     }
 
+    @SuppressWarnings("SimplifyStreamApiCallChains")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testIteratorRemoveShouldThrowIllegalStateException(Data data) {
+    public void testStreamShouldYieldElements(@NonNull Data data) {
+        Set<HashCollider> instance = newInstance(data.a());
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        List<HashCollider> actualList = instance.stream().collect(Collectors.toList());
+        assertEquals(expected.size(), actualList.size());
+        assertEquals(expected, newInstance(actualList));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorShouldYieldElements(@NonNull Data data) {
+        Set<HashCollider> instance = newInstance(data.a());
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        List<HashCollider> actualList = new ArrayList<>();
+        instance.iterator().forEachRemaining(actualList::add);
+        assertEquals(expected.size(), actualList.size());
+        assertEquals(expected, newInstance(actualList));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testSpliteratorShouldYieldElements(@NonNull Data data) {
+        Set<HashCollider> instance = newInstance(data.a());
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        List<HashCollider> actualList = new ArrayList<>();
+        instance.spliterator().forEachRemaining(actualList::add);
+        assertEquals(expected.size(), actualList.size());
+        assertEquals(expected, newInstance(actualList));
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldThrowIllegalStateException(@NonNull Data data) {
         Set<HashCollider> instance = newInstance(data.a());
         Iterator<HashCollider> i = instance.iterator();
         assertThrows(IllegalStateException.class, i::remove);
@@ -275,7 +328,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testSerializationShouldYieldSameSet(Data data) throws Exception {
+    public void testSerializationShouldYieldSameSet(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a());
         assertEqualSet(data.a().asSet(), instance);
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -291,45 +344,46 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualWithThisShouldYieldTrue(Data data) {
+    public void testEqualWithThisShouldYieldTrue(@NonNull Data data) {
         Set<HashCollider> instance = newInstance(data.a());
         assertEquals(instance, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualsWithCloneShouldYieldTrue(Data data) throws Exception {
+    public void testEqualsWithCloneShouldYieldTrue(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a());
         Set<HashCollider> clone = toClonedInstance(instance);
         assertEquals(data.a().asSet(), clone);
         assertEquals(instance, clone);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddWithNewElementShouldReturnTrue(Data data) throws Exception {
+    public void testAddWithNewElementShouldReturnTrue(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         for (HashCollider e : data.c) {
             assertTrue(instance.add(e));
+            expected.add(e);
+            assertEqualSet(expected, instance);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddWithContainedElementShouldReturnFalse(Data data) throws Exception {
+    public void testAddWithContainedElementShouldReturnFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         for (HashCollider e : data.a) {
             assertFalse(instance.add(e));
+            assertEqualSet(expected, instance);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddAllWithNewElementsShouldReturnTrue(Data data) throws Exception {
+    public void testAddAllWithNewElementsShouldReturnTrue(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         assertTrue(instance.addAll(data.c.asSet()));
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
@@ -337,45 +391,41 @@ public abstract class AbstractSetTest {
         assertEquals(expected, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddAllWithContainedElementsShouldReturnFalse(Data data) throws Exception {
+    public void testAddAllWithContainedElementsShouldReturnFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         assertFalse(instance.addAll(data.a.asSet()));
         assertEquals(data.a.asSet(), instance);
     }
 
-    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddAllWithSelfShouldReturnFalse(Data data) throws Exception {
+    public void testAddAllWithSelfShouldReturnFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         assertFalse(instance.addAll(instance));
         assertEquals(data.a.asSet(), instance);
     }
 
-    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddAllWithCloneShouldReturnFalse(Data data) throws Exception {
+    public void testAddAllWithCloneShouldReturnFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
-        assertFalse(instance.addAll(toClonedInstance(instance)));
+        Set<HashCollider> instance2 = toClonedInstance(instance);
+        assertFalse(instance.addAll(instance2));
         assertEquals(data.a.asSet(), instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualsWithObjectShouldYieldFalse(Data data) throws Exception {
+    public void testEqualsWithObjectShouldYieldFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a());
         assertNotEquals(instance, new Object());
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithNewElementShouldReturnFalse(Data data) throws Exception {
+    public void testRemoveWithNewElementShouldReturnFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         for (HashCollider e : data.c) {
             assertFalse(instance.remove(e));
@@ -383,10 +433,9 @@ public abstract class AbstractSetTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithContainedKeyShouldReturnOldValue(Data data) throws Exception {
+    public void testRemoveWithContainedKeyShouldReturnOldValue(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
         for (HashCollider e : data.a) {
@@ -396,28 +445,49 @@ public abstract class AbstractSetTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveAllWithNewKeyShouldReturnFalse(Data data) throws Exception {
+    public void testRemoveAllWithNewKeyShouldReturnFalse(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         assertFalse(instance.removeAll(data.c.asSet()));
         assertEqualSet(data.a, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveAllWithContainedKeyShouldReturnTrue(Data data) throws Exception {
+    public void testRemoveAllWithContainedKeyShouldReturnTrue(@NonNull Data data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         assertTrue(instance.removeAll(data.a.asSet()));
         assertEqualSet(Collections.emptySet(), instance);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveAllWithSomeContainedKeyShouldReturnTrue(Data data) throws Exception {
+    public void testRemoveAllOfEmptySetShouldReturnFalse(@NonNull Data data) throws Exception {
+        Set<HashCollider> instance = newInstance();
+        assertFalse(instance.removeAll(data.a.asSet()));
+        assertEqualSet(Collections.emptySet(), instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveAllWithEmptyThisShouldReturnFalse(@NonNull Data data) throws Exception {
+        Set<HashCollider> instance = newInstance();
+        assertFalse(instance.removeAll(instance));
+        assertEqualSet(Collections.emptySet(), instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveAllWithThisShouldReturnTrue(@NonNull Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        assertTrue(instance.removeAll(instance));
+        assertEqualSet(Collections.emptySet(), instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testRemoveAllWithSomeContainedKeyShouldReturnTrue(@NonNull Data data) throws Exception {
         ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
         ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
         ArrayList<HashCollider> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
@@ -427,18 +497,53 @@ public abstract class AbstractSetTest {
         assertEqualSet(new LinkedHashSet<>(listA.subList(listA.size() / 2, listA.size())), instance);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddAllWithSomeNewKeyShouldReturnTrue(Data data) throws Exception {
+    public void testAddAllWithSomeNewKeysShouldReturnTrue(@NonNull Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+
         ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
         ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
         ArrayList<HashCollider> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
         list.addAll(listC.subList(0, listC.size() / 2));
-        Set<HashCollider> instance = newInstance(data.a);
         assertTrue(instance.addAll(list));
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
         expected.addAll(list);
+        assertEqualSet(expected, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithSameTypeAndSomeNewKeysShouldReturnTrue(@NonNull Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+
+        ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
+
+        Set<HashCollider> instance2 = newInstance();
+        instance2.addAll(listA.subList(0, listA.size() / 2));
+        instance2.addAll(listC.subList(0, listC.size() / 2));
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
+        LinkedHashSet<HashCollider> expected2 = new LinkedHashSet<>();
+        expected2.addAll(listA.subList(0, listA.size() / 2));
+        expected2.addAll(listC.subList(0, listC.size() / 2));
+        assertEqualSet(expected2, instance2);
+
+        assertTrue(instance.addAll(instance2));
+        expected.addAll(expected2);
+        assertEqualSet(expected, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(@NonNull Data data) throws Exception {
+        Set<HashCollider> instance = newInstance(data.a);
+        Set<HashCollider> instance2 = newInstance(data.c);
+        assertTrue(instance.addAll(instance2));
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
         assertEqualSet(expected, instance);
     }
 }

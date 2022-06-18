@@ -126,11 +126,11 @@ public class KeyIterator<K> implements Iterator<K> {
 
     @Override
     public void remove() {
-        if (removeFunction == null) {
-            throw new UnsupportedOperationException("remove");
-        }
         if (!canRemove) {
             throw new IllegalStateException();
+        }
+        if (removeFunction == null) {
+            throw new UnsupportedOperationException("remove");
         }
         K toRemove = current;
         removeFunction.accept(toRemove);

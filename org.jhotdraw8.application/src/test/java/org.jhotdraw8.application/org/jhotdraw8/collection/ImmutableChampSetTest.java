@@ -6,39 +6,53 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.champ.ChampTrieGraphviz;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ImmutableChampSetTest extends AbstractImmutableSetTest {
 
+
     @Override
-    protected ImmutableSet<HashCollider> of() {
+    protected <E> @NonNull ImmutableSet<E> newInstance() {
         return ImmutableChampSet.of();
     }
 
-    @Override
-    protected ImmutableSet<HashCollider> of(@NonNull HashCollider... keys) {
-        return ImmutableChampSet.<HashCollider>of().copyAddAll(Arrays.asList(keys));
-    }
 
     @Override
-    protected ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set) {
-        return ImmutableChampSet.<HashCollider>of().copyAddAll(set);
+    protected <E> @NonNull Set<E> toMutableInstance(ImmutableSet<E> m) {
+        return m.toMutable();
     }
 
-    @Test
-    public void testDumpStructure() {
-        ImmutableChampSet<Integer> instance = ImmutableChampSet.of();
-        Random rng = new Random(0);
-        for (int i = 0; i < 5; i++) {
-            int key = rng.nextInt(10_000);
-            instance = instance.copyAdd(key);
-        }
-
-        System.out.println(new ChampTrieGraphviz().dumpTrie(instance));
+    @Override
+    protected <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m) {
+        return ((ChampSet<E>) m).toImmutable();
     }
 
+    @Override
+    protected <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
+        return ImmutableChampSet.copyOf(m.asSet());
+    }
+
+    @Override
+    protected <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m) {
+        return ImmutableChampSet.copyOf(m);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = newInstance(data.c);
+        ChampSet<HashCollider> mutableInstance = (ChampSet<HashCollider>) instance.toMutable();
+        assertTrue(mutableInstance.addAll(instance2));
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
+        assertEqualSet(expected, toImmutableInstance(mutableInstance));
+    }
 }

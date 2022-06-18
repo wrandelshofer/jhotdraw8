@@ -1,40 +1,42 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Set;
 
 public class ChampSetTest extends AbstractSetTest {
     @Override
-    protected Set<HashCollider> newInstance() {
+    protected <E> @NonNull Set<E> newInstance() {
         return new ChampSet<>();
     }
 
     @Override
-    protected Set<HashCollider> newInstance(int numElements, float loadFactor) {
+    protected <E> @NonNull Set<E> newInstance(int numElements, float loadFactor) {
         return new ChampSet<>();
     }
 
     @Override
-    protected Set<HashCollider> newInstance(Set<HashCollider> m) {
+    protected <E> @NonNull Set<E> newInstance(Set<E> m) {
         return new ChampSet<>(m);
     }
 
     @Override
-    protected Set<HashCollider> newInstance(ReadOnlySet<HashCollider> m) {
+    protected <E> @NonNull Set<E> newInstance(ReadOnlySet<E> m) {
         return new ChampSet<>(m);
     }
 
     @Override
-    protected ImmutableSet<HashCollider> toImmutableInstance(Set<HashCollider> m) {
-        return ((ChampSet<HashCollider>) m).toImmutable();
+    protected <E> ImmutableSet<E> toImmutableInstance(Set<E> m) {
+        return ((ChampSet<E>) m).toImmutable();
     }
 
     @Override
-    protected Set<HashCollider> toClonedInstance(Set<HashCollider> m) {
-        return ((ChampSet<HashCollider>) m).clone();
+    protected <E> @NonNull Set<E> toClonedInstance(Set<E> m) {
+        return ((ChampSet<E>) m).clone();
     }
 
     @Override
-    protected Set<HashCollider> newInstance(Iterable<HashCollider> m) {
+    protected <E> @NonNull Set<E> newInstance(Iterable<E> m) {
         return new ChampSet<>(m);
     }
 }

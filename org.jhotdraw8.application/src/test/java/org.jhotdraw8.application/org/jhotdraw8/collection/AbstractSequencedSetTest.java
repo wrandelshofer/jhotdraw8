@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection;
 
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -16,41 +17,41 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractSequencedSetTest extends AbstractSetTest {
-    protected abstract SequencedSet<HashCollider> newInstance();
+    protected abstract <E> @NonNull SequencedSet<E> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract SequencedSet<HashCollider> newInstance(int numElements, float loadFactor);
+    protected abstract <E> @NonNull SequencedSet<E> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract SequencedSet<HashCollider> newInstance(SequencedSet<HashCollider> m);
+    protected abstract <E> @NonNull SequencedSet<E> newInstance(@NonNull SequencedSet<E> m);
 
-    protected abstract SequencedSet<HashCollider> newInstance(ReadOnlySequencedSet<HashCollider> m);
+    protected abstract <E> @NonNull SequencedSet<E> newInstance(@NonNull ReadOnlySequencedSet<E> m);
 
-    protected abstract ImmutableSequencedSet<HashCollider> toImmutableInstance(SequencedSet<HashCollider> m);
+    protected abstract <E> @NonNull ImmutableSequencedSet<E> toImmutableInstance(@NonNull SequencedSet<E> m);
 
-    protected abstract SequencedSet<HashCollider> toClonedInstance(SequencedSet<HashCollider> m);
+    protected abstract <E> @NonNull SequencedSet<E> toClonedInstance(@NonNull SequencedSet<E> m);
 
-
-    /**
-     * Creates a new instance with the specified map.
-     */
-    protected abstract SequencedSet<HashCollider> newInstance(Set<HashCollider> m);
-
-    protected abstract SequencedSet<HashCollider> newInstance(ReadOnlySet<HashCollider> m);
-
-    protected abstract ImmutableSequencedSet<HashCollider> toImmutableInstance(Set<HashCollider> m);
-
-    protected abstract SequencedSet<HashCollider> toClonedInstance(Set<HashCollider> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract SequencedSet<HashCollider> newInstance(Iterable<HashCollider> m);
+    protected abstract <E> @NonNull SequencedSet<E> newInstance(Set<E> m);
+
+    protected abstract <E> @NonNull SequencedSet<E> newInstance(ReadOnlySet<E> m);
+
+    protected abstract <E> @NonNull ImmutableSequencedSet<E> toImmutableInstance(Set<E> m);
+
+    protected abstract <E> @NonNull SequencedSet<E> toClonedInstance(Set<E> m);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract <E> @NonNull SequencedSet<E> newInstance(Iterable<E> m);
 
     @ParameterizedTest
     @MethodSource("dataProvider")

@@ -5,61 +5,63 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Set;
 
 public class SequencedChampSetTest extends AbstractSequencedSetTest {
     @Override
-    protected SequencedSet<HashCollider> newInstance() {
+    protected <E> @NonNull SequencedSet<E> newInstance() {
         return new SequencedChampSet<>();
     }
 
     @Override
-    protected SequencedSet<HashCollider> newInstance(int numElements, float loadFactor) {
+    protected <E> @NonNull SequencedSet<E> newInstance(int numElements, float loadFactor) {
         return new SequencedChampSet<>();
     }
 
     @Override
-    protected SequencedSet<HashCollider> newInstance(Set<HashCollider> m) {
+    protected <E> @NonNull SequencedSet<E> newInstance(Set<E> m) {
         return new SequencedChampSet<>(m);
     }
 
     @Override
-    protected SequencedSet<HashCollider> newInstance(ReadOnlySet<HashCollider> m) {
+    protected <E> @NonNull SequencedSet<E> newInstance(ReadOnlySet<E> m) {
         return new SequencedChampSet<>(m);
     }
 
     @Override
-    protected ImmutableSequencedSet<HashCollider> toImmutableInstance(Set<HashCollider> m) {
+    protected <E> @NonNull ImmutableSequencedSet<E> toImmutableInstance(Set<E> m) {
         return new SequencedChampSet<>(m).toImmutable();
     }
 
     @Override
-    protected SequencedSet<HashCollider> toClonedInstance(Set<HashCollider> m) {
-        return ((SequencedChampSet<HashCollider>) m).clone();
+    protected <E> @NonNull SequencedSet<E> toClonedInstance(Set<E> m) {
+        return ((SequencedChampSet<E>) m).clone();
     }
 
     @Override
-    protected SequencedSet<HashCollider> newInstance(SequencedSet<HashCollider> m) {
+    protected <E> @NonNull SequencedSet<E> newInstance(SequencedSet<E> m) {
         return new SequencedChampSet<>(m);
     }
 
     @Override
-    protected SequencedSet<HashCollider> newInstance(ReadOnlySequencedSet<HashCollider> m) {
+    protected <E> @NonNull SequencedSet<E> newInstance(ReadOnlySequencedSet<E> m) {
         return new SequencedChampSet<>(m);
     }
 
     @Override
-    protected ImmutableSequencedSet<HashCollider> toImmutableInstance(SequencedSet<HashCollider> m) {
-        return ((SequencedChampSet<HashCollider>) m).toImmutable();
+    protected <E> @NonNull ImmutableSequencedSet<E> toImmutableInstance(SequencedSet<E> m) {
+        return ((SequencedChampSet<E>) m).toImmutable();
     }
 
     @Override
-    protected SequencedSet<HashCollider> toClonedInstance(SequencedSet<HashCollider> m) {
-        return ((SequencedChampSet<HashCollider>) m).clone();
+    protected <E> @NonNull SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
+        return ((SequencedChampSet<E>) m).clone();
     }
 
     @Override
-    protected SequencedSet<HashCollider> newInstance(Iterable<HashCollider> m) {
+    protected <E> @NonNull SequencedSet<E> newInstance(Iterable<E> m) {
         return new SequencedChampSet<>(m);
     }
 }

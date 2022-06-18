@@ -267,7 +267,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
 
         @Override
         protected @NonNull Object readResolve() {
-            return ImmutableChampSet.of(deserialized);
+            return ImmutableChampSet.copyOf(deserialized);
         }
     }
 

@@ -1,5 +1,6 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -85,29 +86,26 @@ public abstract class AbstractMapTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract Map<HashCollider, HashCollider> newInstance();
+    protected abstract <K, V> @NonNull Map<K, V> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract Map<HashCollider, HashCollider> newInstance(int numElements, float loadFactor);
+    protected abstract <K, V> @NonNull Map<K, V> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract Map<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m);
+    protected abstract <K, V> @NonNull Map<K, V> newInstance(@NonNull Map<K, V> m);
 
-    protected abstract Map<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m);
 
-    protected abstract ImmutableMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m);
-
-    protected abstract Map<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m);
+    protected abstract <K, V> @NonNull Map<K, V> toClonedInstance(@NonNull Map<K, V> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    abstract Map<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m);
+    abstract <K, V> @NonNull Map<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
 
     public static Stream<Data> dataProvider() {
         return Stream.of(
@@ -196,14 +194,14 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceMapArgsShouldBeEqualToMap(Data data) {
+    public void testNewInstanceMapArgsShouldBeEqualToArg(Data data) {
         Map<HashCollider, HashCollider> actual = newInstance(data.a().asMap());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceMapArgsOfSameTypeShouldBeEqualToMap(Data data) {
+    public void testNewInstanceMapArgsOfSameTypeShouldBeEqualToArg(Data data) {
         Map<HashCollider, HashCollider> actual1 = newInstance(data.a().asMap());
         Map<HashCollider, HashCollider> actual = newInstance(actual1);
         assertEqualMap(data.a(), actual);
@@ -211,23 +209,15 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceReadOnlyMapArgsShouldBeEqualToMap(Data data) {
+    public void testNewInstanceReadOnlyMapArgShouldBeEqualToARg(Data data) {
         Map<HashCollider, HashCollider> actual = newInstance(data.a());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceIterableArgsShouldBeEqualToMap(Data data) {
+    public void testNewInstanceIterableArgShouldBeEqualToArg(Data data) {
         Map<HashCollider, HashCollider> actual = newInstance(data.a().readOnlyEntrySet());
-        assertEqualMap(data.a(), actual);
-    }
-
-    @ParameterizedTest
-    @MethodSource("dataProvider")
-    public void testNewInstanceReadOnlyMapArgsWithImmutableMapArgsOfSameTypeShouldBeEqualToMap(Data data) {
-        Map<HashCollider, HashCollider> actual1 = newInstance(data.a());
-        Map<HashCollider, HashCollider> actual = newInstance(toImmutableInstance(actual1));
         assertEqualMap(data.a(), actual);
     }
 
@@ -290,7 +280,6 @@ public abstract class AbstractMapTest {
         assertFalse(actual.entrySet().contains(new Object()));
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testKeyIteratorRemoveShouldRemoveEntry(Data data) {
@@ -311,7 +300,6 @@ public abstract class AbstractMapTest {
         assertEqualMap(Collections.emptyMap(), actual);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEntryIteratorRemoveShouldRemoveEntryAndRemoveIsNotIdempotent(Data data) {
@@ -334,7 +322,6 @@ public abstract class AbstractMapTest {
         assertEqualMap(Collections.emptyMap(), actual);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEntrySetRemoveShouldRemoveEntryWithSameKeyAndValue(Data data) {
@@ -349,7 +336,6 @@ public abstract class AbstractMapTest {
         assertEqualMap(Collections.emptyMap(), actual);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEntrySetRemoveShouldNotRemoveEntryWithSameKeyButDifferentValue(Data data) {
@@ -361,7 +347,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEntrySetRemoveShouldNotRemoveEntryWithDifferentKeyAndDifferentValue(Data data) {
@@ -373,7 +358,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testIteratorRemoveShouldThrowIllegalStateException(Data data) {
@@ -425,7 +409,6 @@ public abstract class AbstractMapTest {
         assertEquals(instance, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEqualsWithCloneWithUpdatedEntriesShouldYieldFalse(Data data) throws Exception {
@@ -436,7 +419,6 @@ public abstract class AbstractMapTest {
         assertNotEquals(instance, clone);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testPutWithNewKeyShouldReturnNull(Data data) throws Exception {
@@ -446,7 +428,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testPutWithContainedKeyButNewValueShouldReturnOldValue(Data data) throws Exception {
@@ -457,7 +438,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testRemoveWithNewKeyShouldReturnNull(Data data) throws Exception {
@@ -468,7 +448,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testRemoveWithContainedKeyShouldReturnOldValue(Data data) throws Exception {
@@ -481,7 +460,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testKeySetRemoveAllWithNewKeyShouldReturnFalse(Data data) throws Exception {
@@ -490,7 +468,6 @@ public abstract class AbstractMapTest {
         assertEqualMap(data.a, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testKeySetRemoveAllWithContainedKeyShouldReturnTrue(Data data) throws Exception {
@@ -499,7 +476,6 @@ public abstract class AbstractMapTest {
         assertEqualMap(Collections.emptyMap(), instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEntrySetRemoveAllWithNewEntryShouldReturnFalse(Data data) throws Exception {
@@ -508,7 +484,6 @@ public abstract class AbstractMapTest {
         assertEqualMap(data.a, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEntrySetRemoveAllWithEntriesThatHaveSameKeyButDifferentValueShouldReturnFalse(Data data) throws Exception {
@@ -605,7 +580,6 @@ public abstract class AbstractMapTest {
         assertEquals(data.a().asMap(), instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEqualsWithObjectShouldYieldFalse(Data data) throws Exception {
@@ -613,7 +587,6 @@ public abstract class AbstractMapTest {
         assertNotEquals(instance, new Object());
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testGetOrDefaultWithContainedKeyShouldYieldValue(Data data) throws Exception {
@@ -624,7 +597,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testGetOrDefaultWithNonContainedKeyShouldYieldDefault(Data data) throws Exception {
@@ -635,7 +607,6 @@ public abstract class AbstractMapTest {
         }
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testPutAllWithSomeNewKeyShouldAddAll(Data data) throws Exception {

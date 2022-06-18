@@ -1,469 +1,559 @@
-/*
- * @(#)AbstractImmutableSetTest.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-@Deprecated
+
 public abstract class AbstractImmutableSetTest {
+    /**
+     * The test data.
+     */
+    static final class Data {
+        private final String name;
+        public final ReadOnlySet<HashCollider> a;
+        public final ReadOnlySet<HashCollider> c;
 
-    private void assertEquality(LinkedHashSet<HashCollider> expected, ImmutableSet<HashCollider> actual) {
-        assertEquals(expected.hashCode(), actual.hashCode(), "hashCode");
-        assertEquals(actual, actual, "equal to itself");
-        //noinspection ConstantConditions
-        assertFalse(actual.equals(null), "equal to null");
-        assertEquals(expected.size(), actual.size(), "equal size");
-        assertEquals(expected, actual.asSet(), "expected.equals(actual.asSet)");
-        assertEquals(expected.isEmpty(), actual.isEmpty(), "equal emptyness");
-        if (expected.size() <= 1) {
-            assertEquals(expected.toString(), actual.toString(), "equal toString");
-        }
-        assertEquals(actual, of(actual.toArray(new HashCollider[0])), "equal to reconstructed from array");
-        assertFalse(actual.toString().isEmpty(), "always has a string");
-        //noinspection EqualsBetweenInconvertibleTypes
-        assertTrue(actual.equals(new WrappedReadOnlySet<>(expected)), "actual to read-only wrapped expected");
-    }
-
-    protected abstract ImmutableSet<HashCollider> copyOf(@NonNull Iterable<? extends HashCollider> set);
-
-    @TestFactory
-    public @NonNull List<DynamicTest> dynamicTests() {
-        return Arrays.asList(
-                dynamicTest("32-bits hash", () -> testImmutableSet(-1)),
-                dynamicTest("3-bits hash", () -> testImmutableSet(7)),
-                dynamicTest("0-bits hash", () -> testImmutableSet(0))
-        );
-    }
-
-    protected abstract ImmutableSet<HashCollider> of();
-
-    protected abstract ImmutableSet<HashCollider> of(@NonNull HashCollider... keys);
-
-    private void testContains(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        ImmutableSet<HashCollider> actual = of();
-        HashCollider firstValue1 = entries1.iterator().next();
-        HashCollider firstValue2 = entries2.iterator().next();
-
-        // GIVEN: a set with entries1
-        actual = actual.copyAddAll(entries1);
-
-        // WHEN: entry1 is in set, then contains must be true
-        assertTrue(actual.contains(firstValue1));
-        // WHEN: entry2 is not in set, then contains must be false
-        assertFalse(actual.contains(firstValue2));
-
-    }
-
-    private void testCopyAdd(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        HashCollider firstValue1 = entries1.iterator().next();
-        HashCollider firstValue2 = entries2.iterator().next();
-        ImmutableSet<HashCollider> actual = of();
-        ImmutableSet<HashCollider> newActual;
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-
-        // GIVEN: a set with entries1
-        for (HashCollider e : entries1) {
-            ImmutableSet<HashCollider> previous = actual;
-            actual = actual.copyAdd(e);
-            boolean added = expected.add(e);
-            assertEquality(expected, actual);
-            if (added) {
-                assertNotEquals(previous, actual);
-            } else {
-                assertEquals(previous, actual);
-                assertSame(previous, actual);
-            }
+        /**
+         * Creates a new instance with 3 maps of the same non-empty size.
+         *
+         * @param name the name of the data
+         * @param a    a non-empty set
+         * @param c    a map with different elements than a
+         */
+        Data(String name, ReadOnlySet<HashCollider> a,
+             ReadOnlySet<HashCollider> c) {
+            this.name = name;
+            this.a = a;
+            this.c = c;
         }
 
-        // WHEN: entry1 is already in set, then withAdd must yield the same set
-        newActual = actual.copyAdd(firstValue1);
-        assertSame(newActual, actual);
-
-        // WHEN: entry2 is not yet in set, then withAdd must yield a new set
-        newActual = actual.copyAdd(firstValue2);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        expected.add(firstValue2);
-        assertEquality(expected, actual);
-    }
-
-    private void testCopyAddAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        ImmutableSet<HashCollider> actual = of();
-        ImmutableSet<HashCollider> newActual;
-
-        // GIVEN: a set with entries1
-        newActual = actual.copyAddAll(entries1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: entries1 are already in set, then withAddAll must yield the same set
-        newActual = actual.copyAddAll(entries1);
-        assertSame(newActual, actual);
-
-        // WHEN: entries2 are not yet in set, then withAddAll must yield a new set
-        newActual = actual.copyAddAll(entries2);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        expected.addAll(entries1);
-        expected.addAll(entries2);
-        assertEquality(expected, actual);
-    }
-
-    private void testCopyOf(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        ImmutableSet<HashCollider> actual;
-        ImmutableSet<HashCollider> newActual;
-
-        // WHEN: a set is created with copyOf
-        actual = copyOf(entries1);
-        //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(entries1);
-        assertEquality(expected, actual);
-
-        // WHEN: a set is created with copyOf from itself
-        newActual = copyOf(actual);
-        assertSame(newActual, actual);
-        actual = newActual;
-        //
-        expected = new LinkedHashSet<>(entries1);
-        assertEquality(expected, actual);
-    }
-
-    private void testCopyRemove(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        HashCollider firstValue1 = entries1.iterator().next();
-        HashCollider firstValue2 = entries2.iterator().next();
-        ImmutableSet<HashCollider> actual = of();
-        ImmutableSet<HashCollider> newActual;
-
-        // GIVEN: a set with entries1
-        newActual = actual.copyAddAll(entries1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: entry1 is in set, then withRemove must yield a new set
-        newActual = actual.copyRemove(firstValue1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: entry2 is not in set, then withRemove must yield the same set
-        newActual = actual.copyRemove(firstValue2);
-        assertSame(newActual, actual);
-
-        //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(entries1);
-        expected.remove(firstValue1);
-        assertEquality(expected, actual);
-
-        // Remove all one by one
-        for (HashCollider e : entries1) {
-            actual = actual.copyRemove(e);
-            expected.remove(e);
-        }
-        assertEquality(expected, actual);
-    }
-
-    private void testCopyRemoveAll(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
-        ImmutableSet<HashCollider> actual = of();
-        ImmutableSet<HashCollider> newActual;
-
-        // GIVEN: a set with entries1
-        newActual = actual.copyAddAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-        assertEquality(values1, actual);
-
-        // WHEN: entries2 are not in set, then withRemoveAll must yield the same set
-        newActual = actual.copyRemoveAll(values2);
-        assertSame(newActual, actual);
-
-        // WHEN: entries1 are in set, then withRemoveAll must yield a new set
-        newActual = actual.copyRemoveAll(values1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        assertEquality(expected, actual);
-    }
-
-    private void testCopyRetainAll(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        ImmutableSet<HashCollider> actual = of();
-        ImmutableSet<HashCollider> newActual;
-
-        // GIVEN: a set with entries1
-        newActual = actual.copyAddAll(entries1);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        // WHEN: entries1 are in set, then withRetainAll must yield the same set
-        newActual = actual.copyRetainAll(entries1);
-        assertSame(newActual, actual);
-
-        // WHEN: entries2 are not in set, then withRetainAll must yield a new set
-        newActual = actual.copyRetainAll(entries2);
-        assertNotSame(newActual, actual);
-        actual = newActual;
-
-        //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        assertEquality(expected, actual);
-    }
-
-    private void testEqualsHashCode(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        assertTrue(entries1.size() > 0);
-        assertEquals(entries1.size(), entries2.size());
-        HashCollider firstValue1 = entries1.iterator().next();
-        HashCollider firstValue2 = entries2.iterator().next();
-
-        ImmutableSet<HashCollider> actual1a = copyOf(entries1);
-        assertEquals(actual1a, actual1a);//equals of itself
-
-        ImmutableSet<HashCollider> actual1b = copyOf(entries1);
-        assertEquals(actual1a, actual1b);//equals of a new set that does not share trie nodes
-
-        ImmutableSet<HashCollider> actual1c = actual1a;
-        actual1c = actual1c.copyRemove(firstValue1);
-        actual1c = actual1c.copyAdd(firstValue1);
-        assertEquals(actual1a, actual1c);// equals of a new set that shares many trie nodes
-
-
-        ImmutableSet<HashCollider> actual2a = copyOf(entries2);
-        ImmutableSet<HashCollider> actual2b = actual2a.copyRemove(firstValue2);
-        HashCollider zero = new HashCollider(0, 0);
-        LinkedHashSet<HashCollider> expected1 = new LinkedHashSet<>(entries1);
-        LinkedHashSet<HashCollider> expected1plusZero = new LinkedHashSet<>(entries1);
-        expected1plusZero.add(zero);
-
-        // some assertions may not make sense, but they are needed for test coverage
-
-        //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(expected1, actual1a.asSet());
-        assertNotEquals(actual1a, actual2a);
-        assertNotEquals(actual1a, actual2b);
-
-        assertEquals(expected1.hashCode(), actual1a.hashCode());
-        assertNotEquals(actual1a, expected1plusZero);
-        assertNotEquals(actual1a, new Object());
-
-    }
-
-    @Test
-    public void testNullValue() {
-        ImmutableSet<HashCollider> set = of(new HashCollider[]{null});
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        expected.add(null);
-        assertTrue(set.contains(null));
-        assertEquals(expected.toString(), set.toString());
-        assertEquals(expected, set.asSet());
-
-        expected.remove(null);
-        set = set.copyRemove(null);
-        assertEquals(expected, set.asSet());
-    }
-
-    private void testOf(LinkedHashSet<HashCollider> entries1, LinkedHashSet<HashCollider> entries2) {
-        HashCollider firstValue1 = entries1.iterator().next();
-        ImmutableSet<HashCollider> actual;
-
-        // WHEN: a set is created with identical values
-        actual = of(firstValue1, firstValue1, firstValue1);
-        //
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
-        expected.add(firstValue1);
-        assertEquality(expected, actual);
-
-        // WHEN: a set is created with distinct values
-        actual = of(entries1.toArray(new HashCollider[0]));
-        //
-        expected = new LinkedHashSet<>(entries1);
-        assertEquality(expected, actual);
-    }
-
-    void testImmutableSet(int hashBitMask) {
-        // bulkSize must be at least 32 for good code coverage
-        int bulkSize = 32;
-        Random rng = new Random(0);
-        for (int i = 0; i < 64; i++) {
-            // entries1, entries2 are distinct sets of values
-            LinkedHashSet<HashCollider> entries1 = new LinkedHashSet<>();
-            LinkedHashSet<HashCollider> entries2 = new LinkedHashSet<>();
-            while (entries1.size() < bulkSize) {
-                entries1.add(new HashCollider(rng.nextInt(), hashBitMask));
-            }
-            while (entries2.size() < bulkSize) {
-                HashCollider e = new HashCollider(rng.nextInt(), hashBitMask);
-                if (!entries1.contains(e)) {
-                    entries2.add(e);
-                }
-            }
-
-            testCopyAdd(entries1, entries2);
-            testCopyRemove(entries1, entries2);
-            testCopyAddAll(entries1, entries2);
-            testCopyRemoveAll(entries1, entries2);
-            testCopyRetainAll(entries1, entries2);
-            testContains(entries1, entries2);
-            testOf(entries1, entries2);
-            testCopyOf(entries1, entries2);
-            testEqualsHashCode(entries1, entries2);
-        }
-    }
-
-    private void testCopyAddAll(int[] array1, int[] array2, int hashMask) {
-        Set<HashCollider> values1 = new LinkedHashSet<>();
-        Set<HashCollider> values2 = new LinkedHashSet<>();
-        for (int v1 : array1) {
-            values1.add(new HashCollider(v1, hashMask));
-        }
-        for (int v2 : array2) {
-            values2.add(new HashCollider(v2, hashMask));
-        }
-        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(values1);
-        expected.addAll(values2);
-
-        ImmutableSet<HashCollider> actualValues1 = copyOf(values1);
-        ImmutableSet<HashCollider> actualValues2 = copyOf(values2);
-
-        ImmutableSet<HashCollider> actual = actualValues1.copyAddAll(actualValues2);
-
-        if (values1.equals(expected)) {
-            assertSame(actualValues1, actual);
-        } else {
-            assertNotSame(actualValues1, actual);
+        @Override
+        public String toString() {
+            return name;
         }
 
-        assertEquality(expected, actual);
+        public String name() {
+            return name;
+        }
+
+        public ReadOnlySet<HashCollider> a() {
+            return a;
+        }
+
+        public ReadOnlySet<HashCollider> c() {
+            return c;
+        }
     }
 
     /**
-     * Tests cases in method BitmapIndexedNode.addAll().
-     * <pre>
-     * Given the same bit-position in this and that:
-     * case                   this.dataMap this.nodeMap that.dataMap  that.nodeMap
-     * ---------------------------------------------------------------------------
-     * 0    do nothing                -          -            -                -
-     * 1    put "a" in dataMap        "a"        -            -                -
-     * 2    put x in nodeMap          -          x            -                -
-     * 3    illegal                   "a"        x            -                -
-     * 4    put "b" in dataMap        -          -            "b"              -
-     * 5.1  put "a" in dataMap        "a"        -            "a"              -   values are equal
-     * 5.2  put {"a","b"} in nodeMap  "a"        -            "b"              -   values are not equal
-     * 6    put x ∪ {"b"} in nodeMap  -          x            "b"              -
-     * 7    illegal                   "a"        x            "b"              -
-     * 8    put y in nodeMap          -          -            -                y
-     * 9    put {"a"} ∪ y in nodeMap  "a"        -            -                y
-     * 10.1 put x in nodeMap          -          x            -                x   nodes are equivalent
-     * 10.2 put x ∪ y in nodeMap      -          x            -                y   nodes are not equivalent
-     * 11   illegal                   "a"        x            -                y
-     * 12   illegal                   -          -            "b"              y
-     * 13   illegal                   "a"        -            "b"              y
-     * 14   illegal                   -          x            "b"              y
-     * 15   illegal                   "a"        x            "b"              y
-     *  </pre>
-     *
-     * @return
+     * Creates a new empty instance.
      */
-    @TestFactory
-    public @NonNull List<DynamicTest> copyAddAllTests() {
-        int a = 0b00_00100;
-        int b = 0b01_00100;
-        int c = 0b10_00100;
-        int d = 0b11_00100;
-        int e = 0b11_00010;
-        int aa = 0b00_00110;
-        int bb = 0b01_00110;
-        int cc = 0b10_00110;
-        int dd = 0b11_00110;
+    protected abstract <E> @NonNull ImmutableSet<E> newInstance();
 
-        return Arrays.asList(
-                dynamicTest("case 0: ∅ u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{}, -1)),
-                dynamicTest("case 1: a u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{}, -1)),
-                dynamicTest("case 2: x={a,b} u e, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{e}, -1)),
-                dynamicTest("case 4: ∅ u b, 32-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{b}, -1)),
-                dynamicTest("case 5.1.!modified: a u a, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a}, -1)),
-                dynamicTest("case 5.1.modified: a u a,e, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, e}, -1)),
-                dynamicTest("case 5.2: a u b, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{b}, -1)),
-                dynamicTest("case 6.!modified: x={a,b} u a, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a}, -1)),
-                dynamicTest("case 6.modified: x={a,b} u c, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c}, -1)),
-                dynamicTest("case 8: e u y={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{e}, new int[]{a, b}, -1)),
-                dynamicTest("case 9: a u y={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, b}, -1)),
-                dynamicTest("case 10.1.!modified: x={a,b} u x={a,b}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, -1)),
-                dynamicTest("case 10.1.modified: x={a,b} u x={a,b,c}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b, c}, -1)),
-                dynamicTest("case 10.2: x={a,b} u y={c,d}, 32-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c, d}, -1)),
-                //
-                dynamicTest("case 0: ∅ u ∅, 0-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{}, 0)),
-                dynamicTest("case 1: a u ∅, 0-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{}, 0)),
-                dynamicTest("case 2: x={a,b} u ∅, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{}, 0)),
-                dynamicTest("case 4: ∅ u b, 0-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{b}, 0)),
-                dynamicTest("case 5.1: a u a, 0-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a}, 0)),
-                dynamicTest("case 5.2: a u b, 0-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{b}, 0)),
-                dynamicTest("case 6: x={a,b} u a, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a}, 0)),
-                dynamicTest("case 8: ∅ u y={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{a, b}, 0)),
-                dynamicTest("case 9: a u y={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, b}, 0)),
-                dynamicTest("case 10.1.!modified: x={a,b} u x={a,b}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, 0)),
-                dynamicTest("case 10.1.modified: x={a,b} u x={a,b,c}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b, c}, 0)),
-                dynamicTest("case 10.2: x={a,b} u y={c,d}, 0-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c, d}, 0)),
-                //
-                dynamicTest("case 0: ∅ u ∅, 4-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{}, 15)),
-                dynamicTest("case 1: a u ∅, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{}, 15)),
-                dynamicTest("case 2: x={a,b} u ∅, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{}, 15)),
-                dynamicTest("case 4: ∅ u b, 4-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{b}, 15)),
-                dynamicTest("case 5.1: a u a, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a}, 15)),
-                dynamicTest("case 5.2: a u b, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{b}, 15)),
-                dynamicTest("case 6: x={a,b} u a, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a}, 15)),
-                dynamicTest("case 8: ∅ u y={a,b}, 4-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{a, b}, 15)),
-                dynamicTest("case 9: a u y={a,b}, 4-bits hash", () -> testCopyAddAll(new int[]{a}, new int[]{a, b}, 15)),
-                dynamicTest("case 10.1.!modified: x={a,b} u x={a,b}, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b}, 15)),
-                dynamicTest("case 10.1.modified: x={a,b} u x={a,b,c}, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{a, b, c}, 15)),
-                dynamicTest("case 10.2: x={a,b} u y={c,d}, 4-bits hash", () -> testCopyAddAll(new int[]{a, b}, new int[]{c, d}, 15)),
-                //
-                dynamicTest("case 1: a,aa u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa}, new int[]{}, -1)),
-                dynamicTest("case 2: x={a,b},xx={aa,bb} u ∅, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa, b, bb}, new int[]{}, -1)),
-                dynamicTest("case 4: ∅ u b,bb, 32-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{b, bb}, -1)),
-                dynamicTest("case 5.1: a,aa u a,aa, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa}, new int[]{a, aa}, -1)),
-                dynamicTest("case 5.2: a,aa u b,bb, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa}, new int[]{b, bb}, -1)),
-                dynamicTest("case 6: x={a,b},xx={aa,bb} u a, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa, b, bb}, new int[]{a}, -1)),
-                dynamicTest("case 8: ∅ u y={a,b},yy={aa,bb}, 32-bits hash", () -> testCopyAddAll(new int[]{}, new int[]{a, aa, b, bb}, -1)),
-                dynamicTest("case 9: a,aa u y={a,b},yy={aa,bb}, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa}, new int[]{a, aa, b, bb}, -1)),
-                dynamicTest("case 10.1: x={a,b},xx={aa,bb} u x={a,b},xx={aa,bb}, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa, b, bb}, new int[]{a, aa, b, bb}, -1)),
-                dynamicTest("case 10.2: x={a,b},xx={aa,bb} u y={c,d},yy={cc,dd}, 32-bits hash", () -> testCopyAddAll(new int[]{a, aa, b, bb}, new int[]{c, cc, d, dd}, -1))
 
+    protected abstract <E> @NonNull Set<E> toMutableInstance(ImmutableSet<E> m);
+
+    protected abstract <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m);
+
+    protected abstract <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m);
+
+    /**
+     * Creates a new instance with the specified map.
+     */
+    protected abstract <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m);
+
+    public static @NonNull Stream<Data> dataProvider() {
+        return Stream.of(
+                NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
     }
 
-    private static final HashCollider[] DATA_SET_ARRAY = new HashCollider[10_000];
-    private static final ImmutableChampSet<HashCollider> IDENTICAL_SET;
+    private final static Data NO_COLLISION_NICE_KEYS = newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private final static Data NO_COLLISION = newData("no collisions", -1, 32, 100_000);
+    private final static Data ALL_COLLISION = newData("all collisions", 0, 32, 100_000);
+    private final static Data SOME_COLLISION = newData("some collisions", 0x55555555, 32, 100_000);
 
-    static {
-        Random rng = new Random(0);
-        for (int i = 0; i < DATA_SET_ARRAY.length; i++) {
-            DATA_SET_ARRAY[i] = new HashCollider(rng.nextInt(), -1);
-        }
-        IDENTICAL_SET = ImmutableChampSet.<HashCollider>of().copyAddAll(Arrays.asList(DATA_SET_ARRAY));
+    private static int createNewValue(@NonNull Random rng, @NonNull Set<Integer> usedValues, int bound) {
+        int value;
+        int count = 0;
+        do {
+            value = rng.nextInt(bound);
+            count++;
+            if (count >= bound) {
+                throw new RuntimeException("error in rng");
+            }
+        } while (!usedValues.add(value));
+        return value;
     }
 
+    private static @NonNull Data newData(String name, int hashBitMask, int size, int bound) {
+        Random rng = new Random(0);
+        LinkedHashSet<HashCollider> a = new LinkedHashSet<>(size * 2);
+        LinkedHashSet<HashCollider> c = new LinkedHashSet<>(size * 2);
+        LinkedHashSet<Integer> usedValues = new LinkedHashSet<>();
+        for (int i = 0; i < size; i++) {
+            int keyA = createNewValue(rng, usedValues, bound);
+            int keyC = createNewValue(rng, usedValues, bound);
+            a.add(new HashCollider(keyA, hashBitMask));
+            c.add(new HashCollider(keyC, hashBitMask));
+        }
+        return new Data(name,
+                new WrappedReadOnlySet<>(a),
+                new WrappedReadOnlySet<>(c));
+    }
+
+    private static @NonNull Data newNiceData(String name, int hashBitMask, int size, int bound) {
+        int rng = 0;
+        LinkedHashSet<HashCollider> a = new LinkedHashSet<>(size * 2);
+        LinkedHashSet<HashCollider> c = new LinkedHashSet<>(size * 2);
+        for (int i = 0; i < size; i++) {
+            int keyA = rng++;
+            a.add(new HashCollider(keyA, hashBitMask));
+        }
+        for (int i = 0; i < size; i++) {
+            int keyC = rng++;
+            c.add(new HashCollider(keyC, hashBitMask));
+        }
+        return new Data(name,
+                new WrappedReadOnlySet<>(a),
+                new WrappedReadOnlySet<>(c));
+    }
+
+    protected void assertEqualSet(@NonNull ReadOnlySet<HashCollider> expected, @NonNull ImmutableSet<HashCollider> actual) {
+        assertEqualSet(expected.asSet(), actual);
+    }
+
+    protected void assertEqualSet(@NonNull Set<HashCollider> expected, @NonNull ImmutableSet<HashCollider> actual) {
+        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.isEmpty(), actual.isEmpty());
+        assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual.asSet());
+        assertEquals(actual.asSet(), expected);
+
+        ArrayList<HashCollider> expectedValues = new ArrayList<>(expected);
+        ArrayList<HashCollider> actualValues = new ArrayList<>(actual.asSet());
+        expectedValues.sort(Comparator.comparing(HashCollider::getValue));
+        actualValues.sort(Comparator.comparing(HashCollider::getValue));
+        assertEquals(expectedValues, actualValues);
+    }
+
+    protected void assertNotEqualSet(Set<HashCollider> expected, @NonNull ImmutableSet<HashCollider> actual) {
+        assertNotEquals(expected, actual.asSet());
+        assertNotEquals(actual.asSet(), expected);
+    }
+
+    @Test
+    public void testNewInstanceNoArgsShouldBeEmpty() {
+        ImmutableSet<HashCollider> actual = newInstance();
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>();
+        assertEqualSet(expected, actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceSetArgsShouldBeEqualToSet(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a().asSet());
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual1 = newInstance(data.a().asSet());
+        ImmutableSet<HashCollider> actual = newInstance(actual1);
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlySetArgShouldBeEqualToArg(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlySetArgWithThisShouldBeEqualToArg(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        ImmutableSet<HashCollider> actual2 = newInstance(actual);
+        assertEqualSet(data.a().asSet(), actual2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testNewInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual1 = newInstance(data.a());
+        ImmutableSet<HashCollider> actual = newInstance(toMutableInstance(actual1));
+        assertEqualSet(data.a().asSet(), actual);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyClearShouldYieldEmptySet(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        assertNotEqualSet(Collections.emptySet(), actual);
+        ImmutableSet<HashCollider> actual2 = actual.copyClear();
+        assertNotSame(actual, actual2);
+        assertEqualSet(Collections.emptySet(), actual2);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyClearShouldBeIdempotent(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        assertNotEqualSet(Collections.emptySet(), actual);
+        ImmutableSet<HashCollider> actual2 = actual.copyClear();
+        assertEqualSet(Collections.emptySet(), actual2);
+        assertNotSame(actual, actual2);
+
+        ImmutableSet<HashCollider> actual3 = actual2.copyClear();
+        assertSame(actual2, actual3);
+        assertEqualSet(Collections.emptySet(), actual3);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCloneShouldYieldEqualSet(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        ImmutableSet<HashCollider> clone = toClonedInstance(actual);
+        assertEqualSet(data.a().asSet(), clone);
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testContainsShouldYieldExpectedValue(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        for (HashCollider k : data.a()) {
+            assertTrue(actual.contains(k));
+        }
+        for (HashCollider k : data.c()) {
+            assertFalse(actual.contains(k));
+        }
+        assertFalse(actual.contains(new Object()));
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldThrowUnsupportedOperationException(@NonNull Data data) {
+        ImmutableSet<HashCollider> actual = newInstance(data.a());
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        List<HashCollider> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
+        outer:
+        while (!toRemove.isEmpty() && !expected.isEmpty()) {
+            for (Iterator<HashCollider> i = actual.iterator(); i.hasNext(); ) {
+                HashCollider k = i.next();
+                if (k.equals(toRemove.get(0))) {
+                    assertThrows(UnsupportedOperationException.class, i::remove);
+                    toRemove.remove(0);
+                    assertEqualSet(expected, actual);
+                    continue outer;
+                }
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testIteratorRemoveShouldThrowIllegalStateException(@NonNull Data data) {
+        ImmutableSet<HashCollider> instance = newInstance(data.a());
+        Iterator<HashCollider> i = instance.iterator();
+        assertThrows(IllegalStateException.class, i::remove);
+        Iterator<HashCollider> k = instance.iterator();
+        assertThrows(IllegalStateException.class, k::remove);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testSerializationShouldYieldSameSet(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a());
+        assertEqualSet(data.a().asSet(), instance);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
+            out.writeObject(instance);
+        }
+        ImmutableSet<HashCollider> deserialized;
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(buf.toByteArray()))) {
+            deserialized = (ImmutableSet<HashCollider>) in.readObject();
+        }
+        assertEqualSet(data.a().asSet(), deserialized);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualWithThisShouldYieldTrue(@NonNull Data data) {
+        ImmutableSet<HashCollider> instance = newInstance(data.a());
+        assertEquals(instance, instance);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithCloneShouldYieldTrue(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a());
+        ImmutableSet<HashCollider> clone = toClonedInstance(instance);
+        assertEquals(data.a().asSet(), clone.asSet());
+        assertEquals(instance, clone);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddWithNewElementShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        for (HashCollider e : data.c) {
+            ImmutableSet<HashCollider> instance2 = instance.copyAdd(e);
+            assertNotSame(instance, instance2);
+            instance = instance2;
+            expected.add(e);
+            assertEqualSet(expected, instance);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddWithContainedElementShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        for (HashCollider e : data.a) {
+            ImmutableSet<HashCollider> instance2 = instance.copyAdd(e);
+            assertSame(instance, instance2);
+            assertEqualSet(expected, instance);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithNewElementsShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(data.c);
+        assertNotSame(instance, instance2);
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
+        assertEquals(expected, instance2.asSet());
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithContainedElementsShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(data.a.asSet());
+        assertSame(instance, instance2);
+        assertEquals(data.a.asSet(), instance2.asSet());
+    }
+
+    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithSelfShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(instance);
+        assertSame(instance, instance2);
+        assertEquals(data.a.asSet(), instance2.asSet());
+    }
+
+    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithCloneShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = toClonedInstance(instance);
+        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2);
+        assertSame(instance, instance3);
+        assertEquals(data.a.asSet(), instance3.asSet());
+    }
+
+    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithCloneToMutableShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = toClonedInstance(instance);
+        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2.toMutable());
+        assertSame(instance, instance3);
+        assertEquals(data.a.asSet(), instance3.asSet());
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testEqualsWithObjectShouldYieldFalse(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a());
+        assertNotEquals(instance, new Object());
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveWithNewElementShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        for (HashCollider e : data.c) {
+            ImmutableSet<HashCollider> instance2 = instance.copyRemove(e);
+            assertSame(instance, instance2);
+            assertEqualSet(data.a, instance);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveWithContainedKeyShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
+        for (HashCollider e : data.a) {
+            expected.remove(e);
+            ImmutableSet<HashCollider> instance2 = instance.copyRemove(e);
+            assertNotSame(instance, instance2);
+            instance = instance2;
+            assertEqualSet(expected, instance);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllWithNewKeyShouldReturnSameInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(data.c.asSet());
+        assertSame(instance, instance2);
+        assertEqualSet(data.a, instance);
+    }
+
+    @SuppressWarnings("unchecked")
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(data.a.asSet());
+        assertNotSame(instance, instance2);
+        assertEqualSet(Collections.emptySet(), instance2);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
+        ArrayList<HashCollider> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
+        list.addAll(listC.subList(0, listC.size() / 2));
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(list);
+        assertNotSame(instance, instance2);
+        assertEqualSet(new LinkedHashSet<>(listA.subList(listA.size() / 2, listA.size())), instance2);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+
+        ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
+        ArrayList<HashCollider> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
+        list.addAll(listC.subList(0, listC.size() / 2));
+        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(list);
+        assertNotSame(instance, instance2);
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
+        expected.addAll(list);
+        assertEqualSet(expected, instance2);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+
+        ArrayList<HashCollider> listA = new ArrayList<>(data.a.asSet());
+        ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
+
+        ImmutableSet<HashCollider> instance2 = newInstance();
+        instance2 = instance2.copyAddAll(listA.subList(0, listA.size() / 2));
+        instance2 = instance2.copyAddAll(listC.subList(0, listC.size() / 2));
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
+        LinkedHashSet<HashCollider> expected2 = new LinkedHashSet<>();
+        expected2.addAll(listA.subList(0, listA.size() / 2));
+        expected2.addAll(listC.subList(0, listC.size() / 2));
+        assertEqualSet(expected2, instance2);
+
+        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2);
+        assertNotSame(instance2, instance3);
+        expected.addAll(expected2);
+        assertEqualSet(expected, instance3);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = newInstance(data.c);
+        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2);
+        assertNotSame(instance2, instance3);
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
+        assertEqualSet(expected, instance3);
+    }
+
+    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = newInstance(data.c);
+        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2.toMutable());
+        assertNotSame(instance2, instance3);
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
+        assertEqualSet(expected, instance3);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testToMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(@NonNull Data data) throws Exception {
+        ImmutableSet<HashCollider> instance = newInstance(data.a);
+        ImmutableSet<HashCollider> instance2 = newInstance(data.c);
+        Set<HashCollider> mutableInstance = instance.toMutable();
+        assertTrue(mutableInstance.addAll(instance2.asSet()));
+
+        LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
+        expected.addAll(data.c.asSet());
+        assertEqualSet(expected, toImmutableInstance(mutableInstance));
+    }
 
 }

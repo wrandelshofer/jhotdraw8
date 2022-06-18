@@ -79,6 +79,13 @@ public abstract class Node<K> {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
+    public abstract @NonNull Node<K> updateAll(@NonNull Node<K> that, final int shift,
+                                               ChangeEvent<K> bulkChange, UniqueId mutator,
+                                               @NonNull BiFunction<K, K, K> updateFunction,
+                                               @NonNull BiFunction<K, K, K> inverseUpdateFunction,
+                                               @NonNull BiPredicate<K, K> equalsFunction,
+                                               @NonNull ToIntFunction<K> hashFunction);
+
     static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(UniqueId mutator,
                                                             final K k0, final int keyHash0,
                                                             final K k1, final int keyHash1,
@@ -163,7 +170,9 @@ public abstract class Node<K> {
     abstract int nodeArity();
 
     abstract @NonNull Node<K> remove(final @Nullable UniqueId mutator, final K key,
-                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction);
+                                     final int keyHash, final int shift,
+                                     final @NonNull ChangeEvent<K> details,
+                                     @NonNull BiPredicate<K, K> equalsFunction);
 
     /**
      * Inserts or updates a key in the trie.

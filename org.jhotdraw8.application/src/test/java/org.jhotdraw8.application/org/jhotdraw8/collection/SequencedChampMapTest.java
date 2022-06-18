@@ -1,41 +1,37 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Map;
 
 public class SequencedChampMapTest extends AbstractSequencedMapTest {
     @Override
-    protected SequencedChampMap<HashCollider, HashCollider> newInstance() {
+    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance() {
         return new SequencedChampMap<>();
     }
 
     @Override
-    protected SequencedChampMap<HashCollider, HashCollider> newInstance(int numElements, float loadFactor) {
+    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance(int numElements, float loadFactor) {
         return new SequencedChampMap<>();
     }
 
     @Override
-    protected SequencedChampMap<HashCollider, HashCollider> newInstance(Map<HashCollider, HashCollider> m) {
+    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance(Map<K, V> m) {
         return new SequencedChampMap<>(m);
     }
 
     @Override
-
-    protected SequencedChampMap<HashCollider, HashCollider> newInstance(ReadOnlyMap<HashCollider, HashCollider> m) {
+    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m) {
         return new SequencedChampMap<>(m);
     }
 
     @Override
-    protected SequencedChampMap<HashCollider, HashCollider> newInstance(Iterable<Map.Entry<HashCollider, HashCollider>> m) {
-        return new SequencedChampMap<>(m);
+    protected <K, V> @NonNull ImmutableSequencedMap<K, V> toImmutableInstance(Map<K, V> m) {
+        return ((SequencedChampMap<K, V>) m).toImmutable();
     }
 
     @Override
-    protected ImmutableSequencedMap<HashCollider, HashCollider> toImmutableInstance(Map<HashCollider, HashCollider> m) {
-        return ((SequencedChampMap<HashCollider, HashCollider>) m).toImmutable();
-    }
-
-    @Override
-    protected SequencedMap<HashCollider, HashCollider> toClonedInstance(Map<HashCollider, HashCollider> m) {
-        return ((SequencedChampMap<HashCollider, HashCollider>) m).clone();
+    protected <K, V> @NonNull SequencedMap<K, V> toClonedInstance(Map<K, V> m) {
+        return ((SequencedChampMap<K, V>) m).clone();
     }
 }

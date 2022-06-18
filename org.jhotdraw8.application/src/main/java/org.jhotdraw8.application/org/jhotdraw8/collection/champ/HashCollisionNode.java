@@ -10,10 +10,16 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ArrayHelper;
 import org.jhotdraw8.collection.UniqueId;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.collection.champ.ChampTrie.newHashCollisionNode;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -141,7 +147,7 @@ class HashCollisionNode<K> extends Node<K> {
                     this.keys = entriesNew;
                     return this;
                 }
-                return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew);
+                return newHashCollisionNode(mutator, keyHash, entriesNew);
             }
         }
         return this;
@@ -170,7 +176,7 @@ class HashCollisionNode<K> extends Node<K> {
                     return this;
                 }
                 final Object[] newKeys = ArrayHelper.copySet(this.keys, i, updatedKey);
-                return ChampTrie.newHashCollisionNode(mutator, keyHash, newKeys);
+                return newHashCollisionNode(mutator, keyHash, newKeys);
             }
         }
 
@@ -182,6 +188,53 @@ class HashCollisionNode<K> extends Node<K> {
             this.keys = entriesNew;
             return this;
         }
-        return ChampTrie.newHashCollisionNode(mutator, keyHash, entriesNew);
+        return newHashCollisionNode(mutator, keyHash, entriesNew);
+    }
+
+    @Override
+    public @NonNull Node<K> updateAll(@NonNull Node<K> o, int shift, ChangeEvent<K> bulkChange, UniqueId mutator,
+                                      @NonNull BiFunction<K, K, K> updateFunction,
+                                      @NonNull BiFunction<K, K, K> inverseUpdateFunction,
+                                      @NonNull BiPredicate<K, K> equalsFunction,
+                                      @NonNull ToIntFunction<K> hashFunction) {
+        if (o == this) {
+            return this;
+        }
+        // The other node must be a HashCollisionNode
+        HashCollisionNode<K> that = (HashCollisionNode<K>) o;
+
+        List<Object> list = new ArrayList<>(this.keys.length + that.keys.length);
+
+        // Step 1: Add all this.keys to list
+        list.addAll(Arrays.asList(this.keys));
+
+        // Step 2: Add all that.keys to list which are not in this.keys
+        //         This is quadratic.
+        //         If the sets are disjoint, we can do nothing about it.
+        //         If the sets intersect, we can mark those which are
+        //         equal in a bitset, so that we do not need to check
+        //         them over and over again.
+        BitSet bs = new BitSet(this.keys.length);
+        outer:
+        for (int j = 0; j < that.keys.length; j++) {
+            @SuppressWarnings("unchecked")
+            K key = (K) that.keys[j];
+            for (int i = bs.nextClearBit(0); i >= 0 && i < this.keys.length; i = bs.nextClearBit(i + 1)) {
+                if (Objects.equals(key, this.keys[i])) {
+                    bs.set(i);
+                    bulkChange.numInBothCollections++;
+                    continue outer;
+                }
+            }
+            list.add(key);
+        }
+
+        if (list.size() > this.keys.length) {
+            @SuppressWarnings("unchecked")
+            HashCollisionNode<K> unchecked = newHashCollisionNode(mutator, hash, list.toArray());
+            return unchecked;
+        }
+
+        return this;
     }
 }
