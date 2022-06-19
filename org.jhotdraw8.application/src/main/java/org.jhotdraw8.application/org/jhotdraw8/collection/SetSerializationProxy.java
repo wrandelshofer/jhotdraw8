@@ -41,7 +41,6 @@ import java.util.Set;
  * </pre>
  * <p>
  * References:
- * References:
  * <dl>
  *     <dt>Java Object Serialization Specification: 2 - Object Output Classes,
  *     2.5 The writeReplace Method</dt>

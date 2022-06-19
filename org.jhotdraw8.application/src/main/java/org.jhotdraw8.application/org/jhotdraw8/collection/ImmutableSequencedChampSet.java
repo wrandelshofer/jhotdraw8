@@ -44,7 +44,8 @@ import java.util.function.BiFunction;
  *     <li>contains: O(1)</li>
  *     <li>toMutable: O(1) + a cost distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(log N)</li>
+ *     <li>iterator creation: O(N)</li>
+ *     <li>iterator.next: O(1) with bucket sort or O(log N) with a heap</li>
  *     <li>getFirst(), getLast(): O(N)</li>
  * </ul>
  * <p>
@@ -59,7 +60,7 @@ import java.util.function.BiFunction;
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1).
  * <p>
- * This set can create a mutable copy of itself in O(1) time and O(0) space
+ * This set can create a mutable copy of itself in O(1) time and O(1) space
  * using method {@link #toMutable()}}. The mutable copy shares its nodes
  * with this set, until it has gradually replaced the nodes with exclusively
  * owned nodes.
@@ -95,7 +96,7 @@ public class ImmutableSequencedChampSet<E>
         extends BitmapIndexedNode<SequencedElement<E>>
         implements Serializable, ImmutableSequencedSet<E> {
     private final static long serialVersionUID = 0L;
-    private static final ImmutableSequencedChampSet<?> EMPTY_SET = new ImmutableSequencedChampSet<>(BitmapIndexedNode.emptyNode(), 0, 0, 0);
+    private static final ImmutableSequencedChampSet<?> EMPTY = new ImmutableSequencedChampSet<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
 
     final int size;
 
@@ -177,7 +178,7 @@ public class ImmutableSequencedChampSet<E>
      */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull ImmutableSequencedChampSet<E> of() {
-        return ((ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY_SET);
+        return ((ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY);
     }
 
     /**
@@ -191,9 +192,9 @@ public class ImmutableSequencedChampSet<E>
     @SafeVarargs
     public static <E> @NonNull ImmutableSequencedChampSet<E> of(E @NonNull ... elements) {
         if (elements.length == 0) {
-            return (ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY_SET;
+            return (ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY;
         } else {
-            return ((ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY_SET).copyAddAll(Arrays.asList(elements));
+            return ((ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY).copyAddAll(Arrays.asList(elements));
         }
     }
 
@@ -315,7 +316,8 @@ public class ImmutableSequencedChampSet<E>
             if (seq == newFirst) {
                 newFirst++;
             }
-            if (seq == newLast) {
+
+            if (seq == newLast - 1) {
                 newLast--;
             }
             return renumber(newRootNode, size - 1, newFirst, newLast);

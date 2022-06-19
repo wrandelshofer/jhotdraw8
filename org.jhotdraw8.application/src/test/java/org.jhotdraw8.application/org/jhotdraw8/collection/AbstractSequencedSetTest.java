@@ -267,6 +267,18 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
+    public void testRemoveLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance();
+        instance.addAll(data.a.asSet());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        while (!expected.isEmpty()) {
+            assertEquals(instance.removeLast(), expected.remove(expected.size() - 1));
+            assertEqualSequence(expected, instance, "removeLast");
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
     public void testReversedRemoveFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());

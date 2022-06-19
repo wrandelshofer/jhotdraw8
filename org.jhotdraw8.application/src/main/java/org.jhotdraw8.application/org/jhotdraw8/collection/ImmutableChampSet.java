@@ -56,7 +56,7 @@ import java.util.function.ToIntFunction;
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1).
  * <p>
- * This set can create a mutable copy of itself in O(1) time and O(0) space
+ * This set can create a mutable copy of itself in O(1) time and O(1) space
  * using method {@link #toMutable()}}. The mutable copy shares its nodes
  * with this set, until it has gradually replaced the nodes with exclusively
  * owned nodes.
@@ -276,19 +276,16 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private ToIntFunction<E> getHashFunction() {
         return Objects::hashCode;
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiPredicate<E, E> getEqualsFunction() {
         return Objects::equals;
     }
 
     @NonNull
-    @SuppressWarnings("unchecked")
     private BiFunction<E, E, E> getUpdateFunction() {
         return (oldk, newk) -> oldk;
     }

@@ -41,7 +41,8 @@ import java.util.function.BiFunction;
  *     this set</li>
  *     <li>clone: O(1) + a cost distributed across subsequent updates in this
  *     set and in the clone</li>
- *     <li>iterator.next: O(log N)</li>
+ *     <li>iterator creation: O(N)</li>
+ *     <li>iterator.next: O(1) with bucket sort or O(log N) with a heap</li>
  *     <li>getFirst, getLast: O(N)</li>
  * </ul>
  * <p>
@@ -61,7 +62,7 @@ import java.util.function.BiFunction;
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
- * This set can create an immutable copy of itself in O(1) time and O(0) space
+ * This set can create an immutable copy of itself in O(1) time and O(1) space
  * using method {@link #toImmutable()}. This set loses exclusive ownership of
  * all its tree nodes.
  * Thus, creating an immutable copy increases the constant cost of
@@ -94,13 +95,13 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
     /**
      * Counter for the sequence number of the last element. The counter is
      * incremented after a new entry is added to the end of the sequence.
-      */
+     */
     private int last = 0;
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement before a new entry is added to the start of the sequence.
      */
-    private int first = 0;
+    private int first = -1;
 
     /**
      * Constructs an empty set.

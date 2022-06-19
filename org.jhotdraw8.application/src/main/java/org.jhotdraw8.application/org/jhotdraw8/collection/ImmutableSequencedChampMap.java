@@ -45,7 +45,8 @@ import java.util.function.ToIntFunction;
  *     <li>toMutable: O(1) + a cost distributed across subsequent updates in
  *     the mutable copy</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(log N)</li>
+ *     <li>iterator creation: O(N)</li>
+ *     <li>iterator.next: O(1) with bucket sort or O(log N) with a heap</li>
  *     <li>getFirst, getLast: O(N)</li>
  * </ul>
  * <p>
@@ -60,7 +61,7 @@ import java.util.function.ToIntFunction;
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).
  * Since the CHAMP tree has a fixed maximal height, the cost is O(1).
  * <p>
- * This map can create a mutable copy of itself in O(1) time and O(0) space
+ * This map can create a mutable copy of itself in O(1) time and O(1) space
  * using method {@link #toMutable()}}. The mutable copy shares its nodes
  * with this map, until it has gradually replaced the nodes with exclusively
  * owned nodes.

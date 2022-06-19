@@ -76,10 +76,10 @@ public interface SequencedMap<K, V> extends Map<K, V> {
     @NonNull SequencedMap<K, V> reversed();
 
     /**
-     * Removes and returns the first entry in this map or code {@null}
+     * Removes and returns the first entry in this map or code {@code null}
      * if the map is empty.
      *
-     * @return the removed first entry of this map or code {@null}
+     * @return the removed first entry of this map or code {@code null}
      */
     default Map.Entry<K, V> pollFirstEntry() {
         Iterator<Entry<K, V>> it = entrySet().iterator();
@@ -93,10 +93,10 @@ public interface SequencedMap<K, V> extends Map<K, V> {
     }
 
     /**
-     * Removes and returns the first entry in this map or code {@null}
+     * Removes and returns the first entry in this map or code {@code null}
      * if the map is empty.
      *
-     * @return the removed first entry of this map or code {@null}
+     * @return the removed first entry of this map or code {@code null}
      */
     default Map.Entry<K, V> pollLastEntry() {
         Iterator<Entry<K, V>> it = reversed().entrySet().iterator();
