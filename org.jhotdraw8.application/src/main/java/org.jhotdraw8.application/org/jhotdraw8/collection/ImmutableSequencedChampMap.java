@@ -99,7 +99,6 @@ import java.util.function.ToIntFunction;
 @SuppressWarnings("exports")
 public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> implements ImmutableSequencedMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private final static int ENTRY_LENGTH = 3;
     private static final ImmutableSequencedChampMap<?, ?> EMPTY = new ImmutableSequencedChampMap<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
     /**
      * Counter for the sequence number of the last entry.
@@ -243,7 +242,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,
                     details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
-                    : new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
+                    : new ImmutableSequencedChampMap<>(newRootNode, size, first - 1, last);
         }
         return details.modified ? renumber(newRootNode, size + 1, first - 1, last) : this;
     }
@@ -266,7 +265,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
                     details.getOldValue().getSequenceNumber() == last ? last : last + 1)
-                    : new ImmutableSequencedChampMap<>(newRootNode, size, first, last);
+                    : new ImmutableSequencedChampMap<>(newRootNode, size, first, last + 1);
         }
         return details.modified ? renumber(newRootNode, size + 1, first, last + 1) : this;
     }
@@ -327,7 +326,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull Iterator<Map.Entry<K, V>> entries(boolean reversed) {
+    public @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
         return BucketSequencedIterator.isSupported(size, first, last)
                 ? new BucketSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, first, last, this, reversed,
                 null, Map.Entry.class::cast)
@@ -401,7 +400,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return entries(false);
+        return iterator(false);
     }
 
     @Override

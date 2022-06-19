@@ -226,7 +226,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     @Override
     public K firstKey() {
-        return SequencedMap.super.firstKey();
+        return HeapSequencedIterator.getFirst(root, first, last).getKey();
     }
 
     @Override
@@ -287,9 +287,10 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     @Override
     public K lastKey() {
-        return SequencedMap.super.lastKey();
+        return HeapSequencedIterator.getLast(root, first, last).getKey();
     }
 
+    @Override
     public Map.Entry<K, V> pollFirstEntry() {
         if (isEmpty()) {
             return null;
@@ -301,6 +302,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         return entry;
     }
 
+    @Override
     public Map.Entry<K, V> pollLastEntry() {
         if (isEmpty()) {
             return null;
