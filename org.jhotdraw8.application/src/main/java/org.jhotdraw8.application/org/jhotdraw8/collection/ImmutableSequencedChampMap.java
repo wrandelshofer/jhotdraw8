@@ -1,5 +1,5 @@
 /*
- * @(#)ImmutableSeqChampMap.java
+ * @(#)ImmutableSequencedChampMap.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -345,10 +345,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         }
         if (other instanceof ImmutableSequencedChampMap) {
             ImmutableSequencedChampMap<?, ?> that = (ImmutableSequencedChampMap<?, ?>) other;
-            if (this.size != that.size) {
-                return false;
-            }
-            return this.equivalent(that);
+            return size == that.size && equivalent(that);
         } else {
             return ReadOnlyMap.mapEquals(this, other);
         }

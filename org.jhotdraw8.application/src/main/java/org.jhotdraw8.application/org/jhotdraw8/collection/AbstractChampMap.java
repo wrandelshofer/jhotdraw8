@@ -1,3 +1,8 @@
+/*
+ * @(#)AbstractChampMap.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -51,7 +56,8 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
             return true;
         }
         if (o instanceof AbstractChampMap<?, ?, ?>) {
-            return root.equivalent(((AbstractChampMap<?, ?, ?>) o).root);
+            AbstractChampMap<?, ?, ?> that = (AbstractChampMap<?, ?, ?>) o;
+            return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
     }

@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 /**
  * Wraps {@code Set} functions into the {@link Set} interface.
  *
+ * @param <E> the element type of the set
  * @author Werner Randelshofer
  */
 public class WrappedSet<E> extends AbstractSet<E> implements ReadOnlySet<E> {

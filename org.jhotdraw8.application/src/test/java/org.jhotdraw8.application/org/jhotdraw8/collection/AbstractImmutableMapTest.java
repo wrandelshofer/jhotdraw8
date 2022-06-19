@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -533,4 +534,19 @@ public abstract class AbstractImmutableMapTest {
         expected.keySet().removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
         assertEqualMap(expected, instance2);
     }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void testGetOfEntryWithNullValueShouldYieldNull(@NonNull MapData data) throws Exception {
+        ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
+        HashCollider key = new HashCollider(42, -1);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(key, null);
+        assertNotSame(instance, instance2);
+        expected.put(key, null);
+        assertTrue(instance2.containsKey(key));
+        assertNull(instance2.get(key));
+        assertEqualMap(expected, instance2);
+    }
+
 }

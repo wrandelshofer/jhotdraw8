@@ -115,7 +115,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
             @SuppressWarnings("unchecked")
             ImmutableChampMap<K, V> that = (ImmutableChampMap<K, V>) m;
             this.root = that;
-            this.size = that.size;
+            this.size = that.size();
         } else {
             this.root = BitmapIndexedNode.emptyNode();
             this.putAll(m.asMap());

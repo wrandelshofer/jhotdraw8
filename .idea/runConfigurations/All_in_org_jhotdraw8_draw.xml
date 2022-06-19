@@ -5,7 +5,7 @@
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
-    <option name="VM_PARAMETERS" value="-ea  -ea  --add-opens org.jhotdraw.application/org.jhotdraw8.collection.guava=ALL-UNNAMED" />
+    <option name="VM_PARAMETERS" value="-ea -ea --add-opens org.jhotdraw.application/org.jhotdraw8.collection.guava=ALL-UNNAMED" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

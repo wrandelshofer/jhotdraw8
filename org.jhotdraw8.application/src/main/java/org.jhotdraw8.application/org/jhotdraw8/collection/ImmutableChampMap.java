@@ -82,7 +82,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
     private static final ImmutableChampMap<?, ?> EMPTY = new ImmutableChampMap<>(BitmapIndexedNode.emptyNode(), 0);
-    final transient int size;
+    private final int size;
 
     ImmutableChampMap(@NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
@@ -158,19 +158,15 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     public @NonNull ImmutableChampMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-
         final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode = update(null, new AbstractMap.SimpleImmutableEntry<>(key, value),
                 keyHash, 0, details,
                 getUpdateFunction(), getEqualsFunction(), getHashFunction());
-
         if (details.isModified()) {
             if (details.isUpdated()) {
                 return new ImmutableChampMap<>(newRootNode, size);
             }
-
             return new ImmutableChampMap<>(newRootNode, size + 1);
         }
-
         return this;
     }
 
@@ -224,7 +220,6 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (this.isEmpty()) {
             return this;
         }
-
         final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
@@ -262,13 +257,9 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (other == null) {
             return false;
         }
-
         if (other instanceof ImmutableChampMap) {
             ImmutableChampMap<?, ?> that = (ImmutableChampMap<?, ?>) other;
-            if (this.size != that.size) {
-                return false;
-            }
-            return this.equivalent(that);
+            return size == that.size && equivalent(that);
         } else {
             return ReadOnlyMap.mapEquals(this, other);
         }

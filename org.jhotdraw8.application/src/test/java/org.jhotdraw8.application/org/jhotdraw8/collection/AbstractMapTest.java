@@ -317,6 +317,19 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
+    public void testGetOfEntryWithNullValueShouldYieldNull(@NonNull MapData data) throws Exception {
+        Map<HashCollider, HashCollider> instance = newInstance(data.a());
+        LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
+        HashCollider key = new HashCollider(42, -1);
+        assertNull(instance.put(key, null));
+        expected.put(key, null);
+        assertTrue(instance.containsKey(key));
+        assertNull(instance.get(key));
+        assertEqualMap(expected, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
     public void testGetOrDefaultWithNonContainedKeyShouldYieldDefault(@NonNull MapData data) throws Exception {
         Map<HashCollider, HashCollider> instance = newInstance(data.a());
         HashCollider defaultValue = new HashCollider(7, -1);

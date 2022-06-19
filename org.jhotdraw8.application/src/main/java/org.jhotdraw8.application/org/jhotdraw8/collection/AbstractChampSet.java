@@ -1,3 +1,8 @@
+/*
+ * @(#)AbstractChampSet.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -51,7 +56,8 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
             return true;
         }
         if (o instanceof AbstractChampSet<?, ?>) {
-            return root.equivalent(((AbstractChampSet<?, ?>) o).root);
+            AbstractChampSet<?, ?> that = (AbstractChampSet<?, ?>) o;
+            return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
     }

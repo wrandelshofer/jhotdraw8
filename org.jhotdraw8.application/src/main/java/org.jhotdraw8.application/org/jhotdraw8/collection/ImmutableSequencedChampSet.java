@@ -1,5 +1,5 @@
 /*
- * @(#)ImmutableSeqChampSet.java
+ * @(#)ImmutableSequencedChampSet.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection;
@@ -11,7 +11,6 @@ import org.jhotdraw8.collection.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.champ.BucketSequencedIterator;
 import org.jhotdraw8.collection.champ.ChangeEvent;
 import org.jhotdraw8.collection.champ.HeapSequencedIterator;
-import org.jhotdraw8.collection.champ.KeyIterator;
 import org.jhotdraw8.collection.champ.Node;
 import org.jhotdraw8.collection.champ.Sequenced;
 import org.jhotdraw8.collection.champ.SequencedElement;
@@ -119,14 +118,6 @@ public class ImmutableSequencedChampSet<E>
         this.size = size;
         this.first = first;
         this.last = last;
-        int count = 0;
-        for (KeyIterator<SequencedElement<E>> i = new KeyIterator<>(root); i.hasNext(); ) {
-            count++;
-            i.next();
-        }
-        if (count != size) {
-            throw new AssertionError("count=" + count + " size=" + size);
-        }
     }
 
     /**
