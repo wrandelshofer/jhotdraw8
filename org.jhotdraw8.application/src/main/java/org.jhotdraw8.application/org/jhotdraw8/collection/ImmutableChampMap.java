@@ -255,12 +255,6 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) new KeyIterator<>(this, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
     public boolean equals(final @Nullable Object other) {
         if (other == this) {
             return true;
@@ -288,6 +282,21 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         return result == Node.NO_VALUE || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
     }
 
+    @NonNull
+    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
+    }
+
+    @NonNull
+    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
+        return (a) -> Objects.hashCode(a.getKey());
+    }
+
+    @NonNull
+    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    }
+
     @Override
     public int hashCode() {
         return ReadOnlyMap.iterableToHashCode(iterator());
@@ -298,6 +307,11 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         return size == 0;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) new KeyIterator<>(this, null);
+    }
 
     @Override
     public int size() {
@@ -329,19 +343,5 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         protected @NonNull Object readResolve() {
             return ImmutableChampMap.of().copyPutAll(deserialized);
         }
-    }
-    @NonNull
-    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
-        return (a) -> Objects.hashCode(a.getKey());
-    }
-
-    @NonNull
-    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
-        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    }
-
-    @NonNull
-    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 }

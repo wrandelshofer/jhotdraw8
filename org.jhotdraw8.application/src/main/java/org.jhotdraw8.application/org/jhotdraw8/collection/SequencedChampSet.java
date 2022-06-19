@@ -225,6 +225,21 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         return HeapSequencedIterator.getLast(root, first, last).getElement();
     }
 
+    @NonNull
+    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToFirstFunction() {
+        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
+    }
+
+    @NonNull
+    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToLastFunction() {
+        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
+    }
+
+    @NonNull
+    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateFunction() {
+        return (oldK, newK) -> oldK;
+    }
+
     @Override
     public @NonNull Iterator<E> iterator() {
         return iterator(false);
@@ -278,7 +293,6 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         }
         return details.modified;
     }
-
 
     @Override
     public E removeFirst() {
@@ -357,20 +371,5 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
         protected @NonNull Object readResolve() {
             return new SequencedChampSet<>(deserialized);
         }
-    }
-
-    @NonNull
-    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateFunction() {
-        return (oldK, newK) -> oldK;
-    }
-
-    @NonNull
-    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToLastFunction() {
-        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
-    }
-
-    @NonNull
-    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToFirstFunction() {
-        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
     }
 }

@@ -27,18 +27,21 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
 
     @Override
     @NonNull
-    default ImmutableSequencedMap<K, V> copyPutKeyValues(@NonNull Object @NonNull ... kv) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutKeyValues(kv);
-    }
-
-    @Override
-    @NonNull
     default ImmutableSequencedMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
         return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutAll(map);
     }
 
     @Override
+    @NonNull
+    default ImmutableSequencedMap<K, V> copyPutKeyValues(@NonNull Object @NonNull ... kv) {
+        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutKeyValues(kv);
+    }
+
+    @Override
     @NonNull ImmutableSequencedMap<K, V> copyRemove(@NonNull K key);
+
+    @Override
+    @NonNull ImmutableSequencedMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -61,9 +64,6 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
     default @NonNull ImmutableSequencedMap<K, V> copyRemoveLast() {
         return isEmpty() ? this : copyRemove(lastKey());
     }
-
-    @Override
-    @NonNull ImmutableSequencedMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c);
 
     @Override
     @NonNull ImmutableSequencedMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c);

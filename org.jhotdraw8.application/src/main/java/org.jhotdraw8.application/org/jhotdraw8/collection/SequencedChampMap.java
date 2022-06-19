@@ -249,8 +249,9 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @NonNull
-    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToFirstFunction() {
+        return (oldK, newK) -> (Objects.equals(oldK.getValue(), newK.getValue())
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1) ? oldK : newK;
     }
 
     @NonNull
@@ -260,9 +261,8 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @NonNull
-    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToFirstFunction() {
-        return (oldK, newK) -> (Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1) ? oldK : newK;
+    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 
     private void iteratorPutIfPresent(@NonNull K k, V v) {
