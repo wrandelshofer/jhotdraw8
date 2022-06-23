@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.readonly;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.Enumerator;
-import org.jhotdraw8.collection.enumerator.ReadOnlyListEnumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.ReadOnlyListEnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ObservableListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
@@ -116,7 +116,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     @Override
     default @NonNull Iterator<E> iterator() {
-        return new ReadOnlyListEnumerator<>(this);
+        return new ReadOnlyListEnumeratorSpliterator<>(this);
     }
 
     /**
@@ -126,7 +126,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     @Override
     default @NonNull Spliterator<E> spliterator() {
-        return new ReadOnlyListEnumerator<>(this);
+        return new ReadOnlyListEnumeratorSpliterator<>(this);
     }
 
     /**
@@ -134,8 +134,8 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      *
      * @return an iterator.
      */
-    default @NonNull Enumerator<E> enumerator() {
-        return new ReadOnlyListEnumerator<>(this);
+    default @NonNull EnumeratorSpliterator<E> enumerator() {
+        return new ReadOnlyListEnumeratorSpliterator<>(this);
     }
 
     /**
@@ -144,7 +144,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator() {
-        return new ReadOnlyListEnumerator<>(this);
+        return new ReadOnlyListEnumeratorSpliterator<>(this);
     }
 
     /**
@@ -155,7 +155,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator(int index) {
-        return new ReadOnlyListEnumerator<>(this, index, size());
+        return new ReadOnlyListEnumeratorSpliterator<>(this, index, size());
     }
 
     /**

@@ -16,7 +16,7 @@ import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ListEnumeratorTest {
+public class ListEnumeratorTestSpliterator {
     @Test
     public void testEnumeratorAsSpliterator() {
         List<Integer> list = new ArrayList<>();
@@ -24,7 +24,7 @@ public class ListEnumeratorTest {
             list.add(i);
         }
 
-        List<Integer> actual = StreamSupport.stream(new ListEnumerator<>(list), false).collect(Collectors.toList());
+        List<Integer> actual = StreamSupport.stream(new ListEnumeratorSpliterator<>(list), false).collect(Collectors.toList());
         assertEquals(list, actual);
     }
 
@@ -35,7 +35,7 @@ public class ListEnumeratorTest {
             list.add(i);
         }
         List<Integer> actual = new ArrayList<>();
-        for (ListEnumerator<Integer> i = new ListEnumerator<>(list); i.moveNext(); ) {
+        for (ListEnumeratorSpliterator<Integer> i = new ListEnumeratorSpliterator<>(list); i.moveNext(); ) {
             actual.add(i.current());
         }
         assertEquals(list, actual);
@@ -48,7 +48,7 @@ public class ListEnumeratorTest {
             list.add(i);
         }
         List<Integer> expected = iterativelySplitList(list.spliterator());
-        List<Integer> actual = iterativelySplitList(new ListEnumerator<>(list));
+        List<Integer> actual = iterativelySplitList(new ListEnumeratorSpliterator<>(list));
         assertEquals(expected, actual);
     }
 

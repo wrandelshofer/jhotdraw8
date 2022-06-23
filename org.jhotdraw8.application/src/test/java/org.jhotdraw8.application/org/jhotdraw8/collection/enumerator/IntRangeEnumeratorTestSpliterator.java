@@ -18,25 +18,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests {@link IntRangeEnumerator}.
+ * Tests {@link IntRangeEnumeratorSpliterator}.
  *
  * @author Werner Randelshofer
  */
-public class IntRangeEnumeratorTest {
+public class IntRangeEnumeratorTestSpliterator {
 
     /**
      * Tests if it is possible to iterate over a given array
-     * using the {@link IntRangeEnumerator#moveNext()} method.
+     * using the {@link IntRangeEnumeratorSpliterator#moveNext()} method.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#estimateSize()} ,
-     * {@link IntRangeEnumerator#moveNext()},
-     * {@link IntRangeEnumerator#current()},
-     * {@link IntRangeEnumerator#currentAsInt()}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#estimateSize()} ,
+     * {@link IntRangeEnumeratorSpliterator#moveNext()},
+     * {@link IntRangeEnumeratorSpliterator#current()},
+     * {@link IntRangeEnumeratorSpliterator#currentAsInt()}.
      */
     @Test
     public void testMoveNextWithRangeFrom0() {
         int[] a = {0, 1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(6);
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(6);
         assertEquals(a.length, instance.estimateSize());
         for (int i = 0; i < a.length; i++) {
             assertTrue(instance.moveNext());
@@ -48,17 +48,17 @@ public class IntRangeEnumeratorTest {
 
     /**
      * Tests if it is possible to iterate over a given array
-     * using the {@link IntRangeEnumerator#moveNext()} method.
+     * using the {@link IntRangeEnumeratorSpliterator#moveNext()} method.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#estimateSize()} ,
-     * {@link IntRangeEnumerator#moveNext()},
-     * {@link IntRangeEnumerator#current()},
-     * {@link IntRangeEnumerator#currentAsInt()}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#estimateSize()} ,
+     * {@link IntRangeEnumeratorSpliterator#moveNext()},
+     * {@link IntRangeEnumeratorSpliterator#current()},
+     * {@link IntRangeEnumeratorSpliterator#currentAsInt()}.
      */
     @Test
     public void testMoveNext() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(1, 6);
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(1, 6);
         assertEquals(a.length, instance.estimateSize());
         for (int i = 0; i < a.length; i++) {
             assertTrue(instance.moveNext());
@@ -70,17 +70,17 @@ public class IntRangeEnumeratorTest {
 
     /**
      * Tests if it is possible to iterate over a given array
-     * using the {@link IntRangeEnumerator#moveNext()} method.
+     * using the {@link IntRangeEnumeratorSpliterator#moveNext()} method.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#estimateSize()} ,
-     * {@link IntRangeEnumerator#moveNext()},
-     * {@link IntRangeEnumerator#current()},
-     * {@link IntRangeEnumerator#currentAsInt()}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#estimateSize()} ,
+     * {@link IntRangeEnumeratorSpliterator#moveNext()},
+     * {@link IntRangeEnumeratorSpliterator#current()},
+     * {@link IntRangeEnumeratorSpliterator#currentAsInt()}.
      */
     @Test
     public void testMoveNextWithIntFunction() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(i -> i + 1, 0, 5);
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(i -> i + 1, 0, 5);
         assertEquals(a.length, instance.estimateSize());
         for (int i = 0; i < a.length; i++) {
             assertTrue(instance.moveNext());
@@ -92,15 +92,15 @@ public class IntRangeEnumeratorTest {
 
     /**
      * Tests if it is possible to iterate over a given array
-     * using the {@link IntRangeEnumerator#tryAdvance(IntConsumer)} ()} method.
+     * using the {@link IntRangeEnumeratorSpliterator#tryAdvance(IntConsumer)} ()} method.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#estimateSize()} ,
-     * {@link IntRangeEnumerator#tryAdvance(IntConsumer)}}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#estimateSize()} ,
+     * {@link IntRangeEnumeratorSpliterator#tryAdvance(IntConsumer)}}.
      */
     @Test
     public void testTryAdvance() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(1, 6);
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(1, 6);
         assertEquals(a.length, instance.estimateSize());
         int[] element = new int[1];
         for (int i = 0; i < a.length; i++) {
@@ -114,13 +114,13 @@ public class IntRangeEnumeratorTest {
     /**
      * Tests if it is possible to split the iterator once.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#trySplit()}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#trySplit()}.
      */
     @Test
     public void testTrySplit() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(1, 6);
-        final IntRangeEnumerator prefix = instance.trySplit();
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(1, 6);
+        final IntRangeEnumeratorSpliterator prefix = instance.trySplit();
         assertNotNull(prefix);
         assertEquals(a.length, instance.estimateSize() + prefix.estimateSize());
 
@@ -139,13 +139,13 @@ public class IntRangeEnumeratorTest {
     /**
      * Tests if it is possible to split the iterator once.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#trySplit()}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#trySplit()}.
      */
     @Test
     public void testTrySplitWithFunction() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(i -> i + 1, 0, 5);
-        final IntRangeEnumerator prefix = instance.trySplit();
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(i -> i + 1, 0, 5);
+        final IntRangeEnumeratorSpliterator prefix = instance.trySplit();
         assertNotNull(prefix);
         assertEquals(a.length, instance.estimateSize() + prefix.estimateSize());
 
@@ -165,16 +165,16 @@ public class IntRangeEnumeratorTest {
      * Tests if it is possible to split the repeated times until it
      * is too small.
      * <p>
-     * Tests methods: {@link IntRangeEnumerator#trySplit()}.
+     * Tests methods: {@link IntRangeEnumeratorSpliterator#trySplit()}.
      */
     @Test
     public void testTrySplitUnlessTooSmall() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntRangeEnumerator instance = new IntRangeEnumerator(1, 6);
-        Deque<IntRangeEnumerator> stack = new ArrayDeque<>();
+        final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(1, 6);
+        Deque<IntRangeEnumeratorSpliterator> stack = new ArrayDeque<>();
         stack.push(instance);
 
-        IntRangeEnumerator it = instance.trySplit();
+        IntRangeEnumeratorSpliterator it = instance.trySplit();
         int maxIterations = a.length;
         int counter = 0;
         while (it != null && counter < maxIterations) {

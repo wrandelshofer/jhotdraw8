@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
@@ -418,7 +418,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Figure f = entry.getKey();
                 DirtyMask dm = entry.getValue();
                 if (dm.intersects(dmTransform) && visited.add(f)) {
-                    for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
+                    for (EnumeratorSpliterator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
                         final Figure a = i.current();
                         if (visited.add(a)) {
                             if (a instanceof TransformCachingFigure) {
@@ -470,7 +470,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
                 if (visited.add(f)) {
                     if (dm.intersects(dmLayout)) {
-                        for (Enumerator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
+                        for (EnumeratorSpliterator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
                             todo.add(i.current());
                         }
                     } else if (dm.intersects(dmLayoutObservers)) {

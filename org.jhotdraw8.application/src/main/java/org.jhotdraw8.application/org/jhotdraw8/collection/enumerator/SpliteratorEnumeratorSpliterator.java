@@ -14,11 +14,11 @@ import java.util.function.Consumer;
  *
  * @param <E> the eleemnt type
  */
-public class SpliteratorEnumerator<E> implements Enumerator<E>, Consumer<E> {
+public class SpliteratorEnumeratorSpliterator<E> implements EnumeratorSpliterator<E>, Consumer<E> {
     private final Spliterator<E> spliterator;
     private E current;
 
-    public SpliteratorEnumerator(Spliterator<E> spliterator) {
+    public SpliteratorEnumeratorSpliterator(Spliterator<E> spliterator) {
         this.spliterator = spliterator;
     }
 
@@ -40,7 +40,7 @@ public class SpliteratorEnumerator<E> implements Enumerator<E>, Consumer<E> {
     @Override
     public @Nullable Spliterator<E> trySplit() {
         final Spliterator<E> splitted = spliterator.trySplit();
-        return splitted == null ? null : new SpliteratorEnumerator<>(splitted);
+        return splitted == null ? null : new SpliteratorEnumeratorSpliterator<>(splitted);
     }
 
     @Override

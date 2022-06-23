@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.facade;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.SequencedCollection;
-import org.jhotdraw8.collection.enumerator.ReversedListEnumerator;
+import org.jhotdraw8.collection.enumerator.ReversedListEnumeratorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 
 import java.util.AbstractList;
@@ -114,7 +114,7 @@ public class ListFacade<E> extends AbstractList<E>
     @Override
     public SequencedCollection<E> reversed() {
         return new SequencedCollectionFacade<E>(
-                () -> new ReversedListEnumerator<>(this, 0, size()),
+                () -> new ReversedListEnumeratorSpliterator<>(this, 0, size()),
                 this::iterator,
                 sizeFunction,
                 this::contains,

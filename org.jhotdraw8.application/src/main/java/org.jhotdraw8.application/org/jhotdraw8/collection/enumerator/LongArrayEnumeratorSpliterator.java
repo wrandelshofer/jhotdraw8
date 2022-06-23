@@ -8,16 +8,16 @@ package org.jhotdraw8.collection.enumerator;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * A {@link LongEnumerator} over a {@code long}-array.
+ * A {@link LongEnumeratorSpliterator} over a {@code long}-array.
  *
  * @author Werner Randelshofer
  */
-public class LongArrayEnumerator extends AbstractLongEnumerator {
+public class LongArrayEnumeratorSpliterator extends AbstractLongEnumeratorSpliterator {
     private final int limit;
     private final long[] a;
     private int index;
 
-    public LongArrayEnumerator(long[] a, int from, int to) {
+    public LongArrayEnumeratorSpliterator(long[] a, int from, int to) {
         super(to - from, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = to;
         index = from;
@@ -35,9 +35,9 @@ public class LongArrayEnumerator extends AbstractLongEnumerator {
     }
 
     @Override
-    public @Nullable LongArrayEnumerator trySplit() {
+    public @Nullable LongArrayEnumeratorSpliterator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new LongArrayEnumerator(a, lo, index = mid);
+                new LongArrayEnumeratorSpliterator(a, lo, index = mid);
     }
 }

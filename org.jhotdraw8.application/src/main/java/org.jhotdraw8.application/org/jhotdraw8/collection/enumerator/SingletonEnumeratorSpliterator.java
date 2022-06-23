@@ -12,11 +12,11 @@ import java.util.Spliterators;
  *
  * @param <E> the element type
  */
-public class SingletonEnumerator<E> extends Spliterators.AbstractSpliterator<E> implements Enumerator<E> {
+public class SingletonEnumeratorSpliterator<E> extends Spliterators.AbstractSpliterator<E> implements EnumeratorSpliterator<E> {
     private final E current;
     private boolean canMove = true;
 
-    public SingletonEnumerator(E singleton) {
+    public SingletonEnumeratorSpliterator(E singleton) {
         super(1L, 0);
         current = singleton;
     }

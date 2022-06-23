@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.util.function.AddToSet;
 
@@ -22,7 +22,7 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class ArcEnumerator<V, A> extends AbstractEnumerator<Arc<V, A>> {
+public class ArcEnumeratorSpliterator<V, A> extends AbstractEnumeratorSpliterator<Arc<V, A>> {
 
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextFunction;
     private final @NonNull Deque<Arc<V, A>> deque;
@@ -36,7 +36,7 @@ public class ArcEnumerator<V, A> extends AbstractEnumerator<Arc<V, A>> {
      * @param root             the root vertex
      * @param dfs
      */
-    public ArcEnumerator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
+    public ArcEnumeratorSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
         this(nextArcsFunction, root, new HashSet<>()::add, dfs);
     }
 
@@ -49,7 +49,7 @@ public class ArcEnumerator<V, A> extends AbstractEnumerator<Arc<V, A>> {
      * @param visited      a predicate with side effect. The predicate returns true
      * @param dfs
      */
-    public ArcEnumerator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
+    public ArcEnumeratorSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");

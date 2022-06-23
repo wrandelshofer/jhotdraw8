@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.io.GraphvizWriter;
-import org.jhotdraw8.graph.iterator.VertexEnumerator;
+import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -81,8 +81,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(expected.findIndexOfPrev(u, v),
                         actual.findIndexOfPrev(u, v));
             }
-            List<Integer> expectedBfs = StreamSupport.stream(new VertexEnumerator<>(expected::getNextVertices, v, false), false).collect(Collectors.toList());
-            List<Integer> actualBfs = StreamSupport.stream(new VertexEnumerator<>(actual::getNextVertices, v, false), false).collect(Collectors.toList());
+            List<Integer> expectedBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<>(expected::getNextVertices, v, false), false).collect(Collectors.toList());
+            List<Integer> actualBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<>(actual::getNextVertices, v, false), false).collect(Collectors.toList());
             assertEquals(expectedBfs, actualBfs);
         }
     }

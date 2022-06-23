@@ -11,16 +11,16 @@ import java.util.Iterator;
 import java.util.Spliterator;
 
 /**
- * Wraps an {@link Iterator} into the {@link Enumerator} interface.
+ * Wraps an {@link Iterator} into the {@link EnumeratorSpliterator} interface.
  *
  * @author Werner Randelshofer
  */
-public class IteratorEnumerator<E> implements Enumerator<E> {
+public class IteratorEnumeratorSpliterator<E> implements EnumeratorSpliterator<E> {
     private final @NonNull Iterator<? extends E> iterator;
 
     private E current;
 
-    public IteratorEnumerator(final @NonNull Iterator<? extends E> iterator) {
+    public IteratorEnumeratorSpliterator(final @NonNull Iterator<? extends E> iterator) {
         this.iterator = iterator;
     }
 

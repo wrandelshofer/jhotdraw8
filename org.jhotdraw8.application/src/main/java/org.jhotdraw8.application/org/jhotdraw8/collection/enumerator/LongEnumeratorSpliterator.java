@@ -1,5 +1,5 @@
 /*
- * @(#)IntEnumerator.java
+ * @(#)LongEnumerator.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
@@ -9,10 +9,10 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
-import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
 
 /**
- * An object for enumerating primitive int-valued elements of a collection.
+ * An object for enumerating primitive long-valued elements of a collection.
  * <p>
  * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
  * {@link Iterator}, and avoids the inherent race involved in having separate methods for
@@ -20,31 +20,31 @@ import java.util.function.IntConsumer;
  *
  * @author Werner Randelshofer
  */
-public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
+public interface LongEnumeratorSpliterator extends EnumeratorSpliterator<Long>, Spliterator.OfLong {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default @NonNull Integer current() {
-        return currentAsInt();
+    default @NonNull Long current() {
+        return currentAsLong();
     }
 
     /**
      * Returns the current value.
      *
      * @return current
-     * @see Enumerator#current()
+     * @see EnumeratorSpliterator#current()
      */
-    int currentAsInt();
+    long currentAsLong();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    default boolean tryAdvance(@NonNull IntConsumer action) {
+    default boolean tryAdvance(@NonNull LongConsumer action) {
         if (moveNext()) {
-            action.accept(currentAsInt());
+            action.accept(currentAsLong());
             return true;
         }
         return false;
@@ -54,8 +54,8 @@ public interface IntEnumerator extends Enumerator<Integer>, Spliterator.OfInt {
      * {@inheritDoc}
      */
     @Override
-    default boolean tryAdvance(@NonNull Consumer<? super Integer> action) {
-        return Enumerator.super.tryAdvance(action);
+    default boolean tryAdvance(@NonNull Consumer<? super Long> action) {
+        return EnumeratorSpliterator.super.tryAdvance(action);
     }
 
 }

@@ -7,12 +7,12 @@ package org.jhotdraw8.collection.enumerator;
 import java.util.Spliterators;
 
 /**
- * Abstract base class for {@link LongEnumerator}s.
+ * Abstract base class for {@link LongEnumeratorSpliterator}s.
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractLongEnumerator extends Spliterators.AbstractLongSpliterator
-        implements LongEnumerator {
+public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.AbstractLongSpliterator
+        implements LongEnumeratorSpliterator {
 
     protected long current;
 
@@ -26,7 +26,7 @@ public abstract class AbstractLongEnumerator extends Spliterators.AbstractLongSp
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractLongEnumerator(long est, int additionalCharacteristics) {
+    protected AbstractLongEnumeratorSpliterator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 

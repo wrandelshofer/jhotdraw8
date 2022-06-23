@@ -5,7 +5,7 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -18,7 +18,7 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class TreeBreadthFirstSpliterator<V> extends AbstractEnumerator<V> {
+public class TreeBreadthFirstSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
     private final @NonNull Function<V, Iterable<V>> nextFunction;
     private final @NonNull Deque<V> deque;

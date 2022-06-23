@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
-import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractIntEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.util.function.AddToIntSet;
@@ -19,9 +19,9 @@ import java.util.function.Function;
  *
  * @author Werner Randelshofer
  */
-public class IndexedVertexEnumerator extends AbstractIntEnumerator {
+public class IndexedVertexEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
 
-    private final @NonNull Function<Integer, IntEnumerator> nextFunction;
+    private final @NonNull Function<Integer, IntEnumeratorSpliterator> nextFunction;
     private final @NonNull IntArrayDeque deque;
     private final @NonNull AddToIntSet visited;
     private final boolean dfs;
@@ -34,9 +34,9 @@ public class IndexedVertexEnumerator extends AbstractIntEnumerator {
      * @param vertexCount  the vertex count
      * @param dfs
      */
-    public IndexedVertexEnumerator(@NonNull Function<Integer, IntEnumerator> nextFunction,
-                                   int root,
-                                   int vertexCount, boolean dfs) {
+    public IndexedVertexEnumeratorSpliterator(@NonNull Function<Integer, IntEnumeratorSpliterator> nextFunction,
+                                              int root,
+                                              int vertexCount, boolean dfs) {
         this(nextFunction, root, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
@@ -47,7 +47,7 @@ public class IndexedVertexEnumerator extends AbstractIntEnumerator {
      * @param root         the root vertex
      * @param dfs
      */
-    public IndexedVertexEnumerator(@NonNull Function<Integer, IntEnumerator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
+    public IndexedVertexEnumeratorSpliterator(@NonNull Function<Integer, IntEnumeratorSpliterator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");
@@ -65,7 +65,7 @@ public class IndexedVertexEnumerator extends AbstractIntEnumerator {
             return false;
         }
         current = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
-        for (IntEnumerator it = nextFunction.apply(current); it.moveNext(); ) {
+        for (IntEnumeratorSpliterator it = nextFunction.apply(current); it.moveNext(); ) {
             int next = it.currentAsInt();
             if (visited.addAsInt(next)) {
                 deque.addLastAsInt(next);

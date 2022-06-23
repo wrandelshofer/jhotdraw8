@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.graph.iterator.VertexEnumerator;
+import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -79,7 +79,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     }
 
     private boolean dependsOn(final @NonNull Figure f, final @NonNull Set<Figure> others) {
-        return StreamSupport.stream(new VertexEnumerator<>(Figure::getLayoutSubjects, f, false), false)
+        return StreamSupport.stream(new VertexEnumeratorSpliterator<>(Figure::getLayoutSubjects, f, false), false)
                 .anyMatch(fg -> (fg != f) && others.contains(fg) ||
                         (fg.getParent() != null && containsAny(others, fg.getParent().getPath())));
     }

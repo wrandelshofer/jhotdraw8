@@ -10,12 +10,17 @@ import org.jhotdraw8.graph.io.GraphvizReader;
 import org.jhotdraw8.graph.io.GraphvizWriter;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Spliterators;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class VertexEnumeratorTest {
+public class VertexEnumeratorTestSpliterator {
 
     private DirectedGraph<Integer, Map<String, String>> createGraph() throws Exception {
         final GraphvizReader<Integer, Map<String, String>> builder =
@@ -107,7 +112,7 @@ public class VertexEnumeratorTest {
 
     public void testIterate(final DirectedGraph<Integer, Double> graph, final Integer start, final Integer goal, final List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        final VertexEnumerator<Integer> instance = new VertexEnumerator<>(graph::getNextVertices, start, false);
+        final VertexEnumeratorSpliterator<Integer> instance = new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, false);
         final Iterator<Integer> iterator = Spliterators.iterator(instance);
         final List<Integer> result = new ArrayList<>();
         while (iterator.hasNext()) {
@@ -131,7 +136,7 @@ public class VertexEnumeratorTest {
 
     public void testTryAdvance(final DirectedGraph<Integer, Double> graph, final Integer start, final Integer goal, final List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        final VertexEnumerator<Integer> instance = new VertexEnumerator<>(graph::getNextVertices, start, false);
+        final VertexEnumeratorSpliterator<Integer> instance = new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, false);
         final List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size() - 1).equals(goal)) {

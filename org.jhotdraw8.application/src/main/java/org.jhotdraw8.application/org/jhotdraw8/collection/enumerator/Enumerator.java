@@ -4,11 +4,7 @@
  */
 package org.jhotdraw8.collection.enumerator;
 
-import org.jhotdraw8.annotation.NonNull;
-
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 /**
  * Interface for enumerating elements of a collection.
@@ -20,7 +16,7 @@ import java.util.function.Consumer;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public interface Enumerator<E> extends Spliterator<E> {
+public interface Enumerator<E> {
     /**
      * Advances the enumerator to the next element of the collection.
      *
@@ -50,13 +46,4 @@ public interface Enumerator<E> extends Spliterator<E> {
      * @return current
      */
     E current();
-
-    @Override
-    default boolean tryAdvance(@NonNull Consumer<? super E> action) {
-        if (moveNext()) {
-            action.accept(current());
-            return true;
-        }
-        return false;
-    }
 }

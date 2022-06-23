@@ -15,7 +15,7 @@ import java.util.Iterator;
  *
  * @author Werner Randelshofer
  */
-public interface CharEnumerator extends Enumerator<Character> {
+public interface CharEnumeratorSpliterator extends EnumeratorSpliterator<Character> {
     /**
      * Advances the enumerator to the next element of the collection.
      *

@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.primitive.GrowableIntSet8Bit;
 import org.jhotdraw8.collection.primitive.LongArrayDeque;
 import org.jhotdraw8.util.function.AddToIntSet;
@@ -140,7 +140,7 @@ public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & C
 
     /**
      * Internal helper class, so that we can use a {@link Spliterator}
-     * like an {@link Enumerator}.
+     * like an {@link EnumeratorSpliterator}.
      */
     private static class MyIntConsumer implements IntConsumer {
         int value;

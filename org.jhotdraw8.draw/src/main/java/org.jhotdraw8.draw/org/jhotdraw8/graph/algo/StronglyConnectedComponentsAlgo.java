@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.Enumerator;
-import org.jhotdraw8.collection.enumerator.IteratorEnumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IteratorEnumeratorSpliterator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.DirectedGraph;
 
@@ -85,8 +85,8 @@ public class StronglyConnectedComponentsAlgo {
         Deque<V> stack = new ArrayDeque<>();
 
         IntArrayDeque minStack = new IntArrayDeque();
-        Deque<Enumerator<V>> enumeratorStack = new ArrayDeque<>();
-        Enumerator<V> enumerator = new IteratorEnumerator<>(vertices.iterator());
+        Deque<EnumeratorSpliterator<V>> enumeratorStack = new ArrayDeque<>();
+        EnumeratorSpliterator<V> enumerator = new IteratorEnumeratorSpliterator<>(vertices.iterator());
 
         STRONGCONNECT:
         while (true) {
@@ -101,7 +101,7 @@ public class StronglyConnectedComponentsAlgo {
                     // Level down:
                     minStack.pushAsInt(vdata.low);
                     enumeratorStack.push(enumerator);
-                    enumerator = new IteratorEnumerator<>(nextNodeFunction.apply(v).iterator());
+                    enumerator = new IteratorEnumeratorSpliterator<>(nextNodeFunction.apply(v).iterator());
                 } else {
                     if (!minStack.isEmpty()) {
                         minStack.pushAsInt(min(vdata.low, minStack.popAsInt()));

@@ -1,37 +1,38 @@
 /*
- * @(#)ReadOnlyListEnumerator.java
+ * @(#)ArrayListEnumerator.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
 
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * A {@link ListIterator}, {@link Enumerator}, and {@link Spliterator} for a
- * {@link ReadOnlyList}.
+ * A {@link ListIterator} over an unmodifiable object array.
  * <p>
  * Does not perform modification checks.
  *
  * @param <E> the element type
+ * @author Adrien Grzechowiak
  */
-public class ReadOnlyListEnumerator<E> extends AbstractListEnumerator<E> {
-    private final @NonNull ReadOnlyList<E> list;
+public class ArrayListEnumeratorSpliterator<E> extends AbstractListEnumeratorSpliterator<E> {
+    private final Object[] list;
     private int index;
-    private final int size;
+    final int size;
+
     private E current;
 
-    public ReadOnlyListEnumerator(@NonNull ReadOnlyList<E> list) {
-        this(list, 0, list.size());
+    public ArrayListEnumeratorSpliterator(@NonNull Object @NonNull [] list) {
+        this(list, 0, list.length);
     }
 
-    public ReadOnlyListEnumerator(@NonNull ReadOnlyList<E> list, int index, int size) {
+    public ArrayListEnumeratorSpliterator(@NonNull Object[] list, int index, int size) {
         this.list = list;
         this.size = size;
         this.index = index;
@@ -46,9 +47,13 @@ public class ReadOnlyListEnumerator<E> extends AbstractListEnumerator<E> {
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public E next() {
-        return current = list.get(index++);
+    public @NonNull E next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        return current = (E) list[index++];
     }
 
     @Override
@@ -56,9 +61,10 @@ public class ReadOnlyListEnumerator<E> extends AbstractListEnumerator<E> {
         return index > 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public E previous() {
-        return current = list.get(--index);
+    public @NonNull E previous() {
+        return current = (E) list[--index];
     }
 
     @Override
@@ -71,11 +77,12 @@ public class ReadOnlyListEnumerator<E> extends AbstractListEnumerator<E> {
         return index - 1;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
         Objects.requireNonNull(action, "action");
         if (index >= 0 && index < getSize()) {
-            action.accept(current = list.get(index++));
+            action.accept(current = (E) list[index++]);
             return true;
         }
         return false;
@@ -86,14 +93,13 @@ public class ReadOnlyListEnumerator<E> extends AbstractListEnumerator<E> {
         int lo = index, mid = (lo + getSize()) >>> 1;
         return (lo >= mid)
                 ? null
-                : new ReadOnlyListEnumerator<>(list, lo, index = mid);
+                : new ArrayListEnumeratorSpliterator<>(list, lo, index = mid);
     }
 
     @Override
     public long estimateSize() {
         return getSize() - index;
     }
-
 
     @Override
     public boolean moveNext() {

@@ -8,7 +8,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.graph.iterator.ArcEnumerator;
+import org.jhotdraw8.graph.iterator.ArcEnumeratorSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -63,7 +63,7 @@ public class DepthFirstArcSpliteratorTest {
         Set<Integer> goals = new HashSet<>(waypoints);
         StringBuilder buf = new StringBuilder();
         for (Integer root : waypoints) {
-            ArcEnumerator<Integer, Integer> itr = new ArcEnumerator<>(graph::getNextArcs, root, true);
+            ArcEnumeratorSpliterator<Integer, Integer> itr = new ArcEnumeratorSpliterator<>(graph::getNextArcs, root, true);
             while (itr.moveNext()) {
                 Arc<Integer, Integer> current = itr.current();
                 if (buf.length() > 0) {
@@ -91,7 +91,7 @@ public class DepthFirstArcSpliteratorTest {
         List<ImmutableList<Integer>> paths = new ArrayList<>();
         List<Integer> path = null;
         for (Integer root : waypoints) {
-            ArcEnumerator<Integer, Integer> itr = new ArcEnumerator<>(graph::getNextArcs, root, true);
+            ArcEnumeratorSpliterator<Integer, Integer> itr = new ArcEnumeratorSpliterator<>(graph::getNextArcs, root, true);
             while (itr.moveNext()) {
                 Arc<Integer, Integer> current = itr.current();
                 if (path == null) {

@@ -12,22 +12,22 @@ import java.util.List;
 import java.util.Spliterator;
 
 /**
- * An {@link Enumerator} over a {@link List}.
+ * An {@link EnumeratorSpliterator} over a {@link List}.
  * <p>
  * Does not perform modification checks.
  *
  * @param <T> the element type
  */
-public class ListEnumerator<T> extends AbstractEnumerator<T> {
+public class ListEnumeratorSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
     private int index;
     private final int endIndex;
     private final List<T> list;
 
-    public ListEnumerator(@NonNull List<T> list) {
+    public ListEnumeratorSpliterator(@NonNull List<T> list) {
         this(list, 0, list.size());
     }
 
-    public ListEnumerator(List<T> list, int startIndex, int endIndex) {
+    public ListEnumeratorSpliterator(List<T> list, int startIndex, int endIndex) {
         super(endIndex - startIndex, Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
         index = startIndex;
         this.endIndex = endIndex;
@@ -47,6 +47,6 @@ public class ListEnumerator<T> extends AbstractEnumerator<T> {
     public @Nullable Spliterator<T> trySplit() {
         int hi = endIndex, lo = index, mid = (lo + hi) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new ListEnumerator<>(list, lo, index = mid);
+                new ListEnumeratorSpliterator<>(list, lo, index = mid);
     }
 }

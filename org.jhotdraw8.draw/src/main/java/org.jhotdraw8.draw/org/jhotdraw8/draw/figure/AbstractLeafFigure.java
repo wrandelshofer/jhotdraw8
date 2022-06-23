@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.figure;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.EmptyEnumerator;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EmptyEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 
 /**
  * This base class can be used to implement figures which do not support child
@@ -27,8 +27,8 @@ public abstract class AbstractLeafFigure extends AbstractFigure {
     }
 
     @Override
-    public @NonNull Enumerator<Figure> getChildEnumerator() {
-        return EmptyEnumerator.emptyEnumerator();
+    public @NonNull EnumeratorSpliterator<Figure> getChildEnumerator() {
+        return EmptyEnumeratorSpliterator.emptyEnumerator();
     }
 
     /**

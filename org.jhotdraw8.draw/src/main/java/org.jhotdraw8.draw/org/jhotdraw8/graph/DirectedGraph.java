@@ -6,9 +6,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.graph.iterator.VertexEnumerator;
+import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayList;
@@ -177,7 +177,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param dfs   whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final boolean dfs) {
+    default @NonNull EnumeratorSpliterator<V> searchNextVertices(final @NonNull V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchNextVertices(start, visited::add, dfs);
     }
@@ -190,7 +190,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param dfs     whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
-        return new VertexEnumerator<V>(this::getNextVertices, start, visited, dfs);
+    default @NonNull EnumeratorSpliterator<V> searchNextVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+        return new VertexEnumeratorSpliterator<V>(this::getNextVertices, start, visited, dfs);
     }
 }

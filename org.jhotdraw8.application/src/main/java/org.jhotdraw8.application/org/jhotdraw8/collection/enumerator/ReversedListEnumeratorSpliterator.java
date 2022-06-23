@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
 
-public class ReversedListEnumerator<E> extends AbstractListEnumerator<E> {
+public class ReversedListEnumeratorSpliterator<E> extends AbstractListEnumeratorSpliterator<E> {
     private int index;
     private final int fromInclusive;
     private final int toExclusive;
     private E current;
     private @NonNull List<E> list;
 
-    public ReversedListEnumerator(@NonNull List<E> list, int fromInclusive, int toExclusive) {
+    public ReversedListEnumeratorSpliterator(@NonNull List<E> list, int fromInclusive, int toExclusive) {
         this.index = toExclusive - 1;
         this.fromInclusive = fromInclusive;
         this.toExclusive = toExclusive;
@@ -77,7 +77,7 @@ public class ReversedListEnumerator<E> extends AbstractListEnumerator<E> {
         int hi = index, mid = ((hi - fromInclusive) >>> 1) + fromInclusive;
         return (hi <= mid)
                 ? null
-                : new ReversedListEnumerator<>(list, index = mid, toExclusive);
+                : new ReversedListEnumeratorSpliterator<>(list, index = mid, toExclusive);
     }
 
     @Override

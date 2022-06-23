@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.primitive;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.enumerator.LongArrayEnumerator;
-import org.jhotdraw8.collection.enumerator.LongEnumerator;
+import org.jhotdraw8.collection.enumerator.LongArrayEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.LongEnumeratorSpliterator;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.AbstractList;
@@ -400,8 +400,8 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return a spliterator over the elements of this list
      */
-    public @NonNull LongEnumerator enumerator() {
-        return new LongArrayEnumerator(items, 0, size);
+    public @NonNull LongEnumeratorSpliterator enumerator() {
+        return new LongArrayEnumeratorSpliterator(items, 0, size);
     }
 
     /**

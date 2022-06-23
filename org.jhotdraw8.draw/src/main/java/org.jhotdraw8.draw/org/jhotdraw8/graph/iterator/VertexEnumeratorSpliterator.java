@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 import org.jhotdraw8.util.function.AddToSet;
 
 import java.util.ArrayDeque;
@@ -21,7 +21,7 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class VertexEnumerator<V> extends AbstractEnumerator<V> {
+public class VertexEnumeratorSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
     private final @NonNull Function<V, Iterable<V>> nextFunction;
     private final @NonNull Deque<V> deque;
@@ -35,18 +35,18 @@ public class VertexEnumerator<V> extends AbstractEnumerator<V> {
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
-    public VertexEnumerator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, boolean dfs) {
+    public VertexEnumeratorSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, boolean dfs) {
         this(nextFunction, root, new HashSet<>()::add, dfs);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param nextFunction  a function that returns the next vertices for a given vertex
+     * @param nextFunction a function that returns the next vertices for a given vertex
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
-    public VertexEnumerator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
+    public VertexEnumeratorSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");
