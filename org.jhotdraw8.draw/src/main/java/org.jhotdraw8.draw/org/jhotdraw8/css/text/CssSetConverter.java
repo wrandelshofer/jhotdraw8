@@ -6,7 +6,7 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ImmutableSequencedChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
@@ -48,7 +48,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
             }
         } while (tt.next() == CssTokenType.TT_COMMA || tt.current() == CssTokenType.TT_S);
         tt.pushBack();
-        return ImmutableSequencedChampSet.copyOf(list);
+        return ChampImmutableSequencedSet.copyOf(list);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSet<T>> {
 
     @Override
     public @Nullable ImmutableSet<T> getDefaultValue() {
-        return ImmutableSequencedChampSet.of();
+        return ChampImmutableSequencedSet.of();
     }
 
     @Override

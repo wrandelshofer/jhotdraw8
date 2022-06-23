@@ -18,12 +18,12 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ImmutableChampSetTest extends AbstractImmutableSetTest {
+public class ChampImmutableSetTest extends AbstractImmutableSetTest {
 
 
     @Override
     protected <E> @NonNull ImmutableSet<E> newInstance() {
-        return ImmutableChampSet.of();
+        return ChampImmutableSet.of();
     }
 
 
@@ -39,12 +39,12 @@ public class ImmutableChampSetTest extends AbstractImmutableSetTest {
 
     @Override
     protected <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
-        return ImmutableChampSet.copyOf(m.asSet());
+        return ChampImmutableSet.copyOf(m.asSet());
     }
 
     @Override
     protected <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m) {
-        return ImmutableChampSet.copyOf(m);
+        return ChampImmutableSet.copyOf(m);
     }
 
     @ParameterizedTest
@@ -63,7 +63,7 @@ public class ImmutableChampSetTest extends AbstractImmutableSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testOfArrayArgShouldYieldExpectedResult(@NonNull SetData data) throws Exception {
-        ImmutableSet<HashCollider> instance = ImmutableChampSet.of(data.a().toArray(new HashCollider[0]));
+        ImmutableSet<HashCollider> instance = ChampImmutableSet.of(data.a().toArray(new HashCollider[0]));
         assertEqualSet(data.a, instance);
     }
 }

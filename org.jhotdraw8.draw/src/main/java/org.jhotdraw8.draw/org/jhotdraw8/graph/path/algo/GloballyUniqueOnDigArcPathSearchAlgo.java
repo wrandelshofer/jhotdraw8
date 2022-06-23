@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.champ.ImmutableAddOnlyChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableAddOnlySet;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
@@ -157,7 +157,7 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
         final Queue<ArcBackLinkWithAncestorSet<V, A>> queue = new ArrayDeque<>(16);
         final Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new ArcBackLinkWithAncestorSet<V, A>(startVertex, null, null, ImmutableAddOnlyChampSet.of(startVertex)));
+        queue.add(new ArcBackLinkWithAncestorSet<V, A>(startVertex, null, null, ChampImmutableAddOnlySet.of(startVertex)));
 
         ArcBackLinkWithAncestorSet<V, A> found = null;
         while (!queue.isEmpty()) {
@@ -169,9 +169,9 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
-                ImmutableAddOnlyChampSet<V> uAncestors = u.removeAncestors();
+                ChampImmutableAddOnlySet<V> uAncestors = u.removeAncestors();
                 for (final Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    final ImmutableAddOnlyChampSet<V> vAncestors = uAncestors.copyAdd(v.getEnd());
+                    final ChampImmutableAddOnlySet<V> vAncestors = uAncestors.copyAdd(v.getEnd());
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
                             final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getArrow(), u, vAncestors);

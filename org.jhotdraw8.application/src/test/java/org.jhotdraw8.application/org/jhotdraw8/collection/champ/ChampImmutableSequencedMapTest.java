@@ -16,37 +16,37 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.Random;
 
-public class ImmutableSequencedChampMapTest extends AbstractImmutableSequencedMapTest {
+public class ChampImmutableSequencedMapTest extends AbstractImmutableSequencedMapTest {
     @Override
-    protected <K, V> @NonNull ImmutableSequencedChampMap<K, V> newInstance() {
-        return ImmutableSequencedChampMap.of();
+    protected <K, V> @NonNull ChampImmutableSequencedMap<K, V> newInstance() {
+        return ChampImmutableSequencedMap.of();
     }
 
 
     @Override
-    protected <K, V> @NonNull ImmutableSequencedChampMap<K, V> newInstance(@NonNull Map<K, V> map) {
-        return ImmutableSequencedChampMap.<K, V>of().copyPutAll(map);
+    protected <K, V> @NonNull ChampImmutableSequencedMap<K, V> newInstance(@NonNull Map<K, V> map) {
+        return ChampImmutableSequencedMap.<K, V>of().copyPutAll(map);
     }
 
     @Override
-    protected <K, V> @NonNull ImmutableSequencedChampMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
-        return ImmutableSequencedChampMap.<K, V>of().copyPutAll(map);
+    protected <K, V> @NonNull ChampImmutableSequencedMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
+        return ChampImmutableSequencedMap.<K, V>of().copyPutAll(map);
     }
 
     @Override
-    protected @NonNull <K, V> ImmutableSequencedChampMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return ImmutableSequencedChampMap.<K, V>copyOf(m);
+    protected @NonNull <K, V> ChampImmutableSequencedMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
+        return ChampImmutableSequencedMap.<K, V>copyOf(m);
     }
 
     @Override
-    protected <K, V> @NonNull ImmutableSequencedChampMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
-        return ImmutableSequencedChampMap.<K, V>of().copyPutAll(entries);
+    protected <K, V> @NonNull ChampImmutableSequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
+        return ChampImmutableSequencedMap.<K, V>of().copyPutAll(entries);
     }
 
     @Test
     @Ignore("manual test")
     public void testDumpStructure() {
-        ImmutableSequencedChampMap<HashCollider, String> instance = ImmutableSequencedChampMap.of();
+        ChampImmutableSequencedMap<HashCollider, String> instance = ChampImmutableSequencedMap.of();
         Random rng = new Random(0);
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);

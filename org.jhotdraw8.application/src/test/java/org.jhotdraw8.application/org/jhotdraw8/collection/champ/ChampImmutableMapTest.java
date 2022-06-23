@@ -16,37 +16,37 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 import java.util.Random;
 
-public class ImmutableChampMapTest extends AbstractImmutableMapTest {
+public class ChampImmutableMapTest extends AbstractImmutableMapTest {
     @Override
-    protected <K, V> @NonNull ImmutableChampMap<K, V> newInstance() {
-        return ImmutableChampMap.of();
+    protected <K, V> @NonNull ChampImmutableMap<K, V> newInstance() {
+        return ChampImmutableMap.of();
     }
 
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Map<K, V> map) {
-        return ImmutableChampMap.<K, V>of().copyPutAll(map);
+        return ChampImmutableMap.<K, V>of().copyPutAll(map);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
-        return ImmutableChampMap.<K, V>of().copyPutAll(map);
+        return ChampImmutableMap.<K, V>of().copyPutAll(map);
     }
 
     @Override
     protected @NonNull <K, V> ImmutableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return ImmutableChampMap.<K, V>copyOf(m);
+        return ChampImmutableMap.<K, V>copyOf(m);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
-        return ImmutableChampMap.<K, V>of().copyPutAll(entries);
+        return ChampImmutableMap.<K, V>of().copyPutAll(entries);
     }
 
     @Test
     @Ignore("manual test")
     public void testDumpStructure() {
-        ImmutableChampMap<HashCollider, String> instance = ImmutableChampMap.of();
+        ChampImmutableMap<HashCollider, String> instance = ChampImmutableMap.of();
         Random rng = new Random(0);
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);

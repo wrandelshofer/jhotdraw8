@@ -75,12 +75,12 @@ import java.util.function.ToIntFunction;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
+public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    private static final ImmutableChampSet<?> EMPTY = new ImmutableChampSet<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ChampImmutableSet<?> EMPTY = new ChampImmutableSet<>(BitmapIndexedNode.emptyNode(), 0);
     final int size;
 
-    ImmutableChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
+    ChampImmutableSet(@NonNull BitmapIndexedNode<E> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
@@ -92,8 +92,8 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
      * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableChampSet<E> of() {
-        return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY);
+    public static <E> @NonNull ChampImmutableSet<E> of() {
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY);
     }
 
     /**
@@ -105,8 +105,8 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableChampSet<E> of(E... elements) {
-        return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY).copyAddAll(Arrays.asList(elements));
+    public static <E> @NonNull ChampImmutableSet<E> of(E... elements) {
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).copyAddAll(Arrays.asList(elements));
     }
 
     /**
@@ -117,8 +117,8 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return ((ImmutableChampSet<E>) ImmutableChampSet.EMPTY).copyAddAll(iterable);
+    public static <E> @NonNull ChampImmutableSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).copyAddAll(iterable);
     }
 
     @Override
@@ -128,21 +128,21 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyAdd(@NonNull E key) {
+    public @NonNull ChampImmutableSet<E> copyAdd(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (changeEvent.modified) {
-            return new ImmutableChampSet<>(newRootNode, size + 1);
+            return new ChampImmutableSet<>(newRootNode, size + 1);
         }
         return this;
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull ImmutableChampSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof ImmutableChampSet<?>)) {
-            return (ImmutableChampSet<E>) set;
+    public @NonNull ChampImmutableSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
+        if (set == this || isEmpty() && (set instanceof ChampImmutableSet<?>)) {
+            return (ChampImmutableSet<E>) set;
         }
         if (isEmpty() && (set instanceof ChampSet)) {
             return ((ChampSet<E>) set).toImmutable();
@@ -161,18 +161,18 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRemove(@NonNull E key) {
+    public @NonNull ChampImmutableSet<E> copyRemove(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, changeEvent, getEqualsFunction());
         if (changeEvent.modified) {
-            return new ImmutableChampSet<>(newRootNode, size - 1);
+            return new ChampImmutableSet<>(newRootNode, size - 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRemoveAll(@NonNull Iterable<?> set) {
+    public @NonNull ChampImmutableSet<E> copyRemoveAll(@NonNull Iterable<?> set) {
         if (isEmpty()
                 || (set instanceof Collection<?>) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection<?>) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -196,7 +196,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ImmutableChampSet<E> copyRetainAll(final @NonNull Collection<?> set) {
+    public @NonNull ChampImmutableSet<E> copyRetainAll(final @NonNull Collection<?> set) {
         if (isEmpty()) {
             return this;
         }
@@ -226,8 +226,8 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
         if (other == null) {
             return false;
         }
-        if (other instanceof ImmutableChampSet) {
-            ImmutableChampSet<?> that = (ImmutableChampSet<?>) other;
+        if (other instanceof ChampImmutableSet) {
+            ChampImmutableSet<?> that = (ChampImmutableSet<?>) other;
             return size == that.size && equivalent(that);
         }
         return ReadOnlySet.setEquals(this, other);
@@ -267,7 +267,7 @@ public class ImmutableChampSet<E> extends BitmapIndexedNode<E> implements Immuta
 
         @Override
         protected @NonNull Object readResolve() {
-            return ImmutableChampSet.copyOf(deserialized);
+            return ChampImmutableSet.copyOf(deserialized);
         }
     }
 

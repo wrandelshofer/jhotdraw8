@@ -16,41 +16,41 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Map;
 
-public class SequencedChampMapTest extends AbstractSequencedMapTest {
+public class ChampSequencedMapTest extends AbstractSequencedMapTest {
     @Override
-    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance() {
-        return new SequencedChampMap<>();
+    protected <K, V> @NonNull ChampSequencedMap<K, V> newInstance() {
+        return new ChampSequencedMap<>();
     }
 
     @Override
-    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance(int numElements, float loadFactor) {
-        return new SequencedChampMap<>();
+    protected <K, V> @NonNull ChampSequencedMap<K, V> newInstance(int numElements, float loadFactor) {
+        return new ChampSequencedMap<>();
     }
 
     @Override
-    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance(@NonNull Map<K, V> m) {
-        return new SequencedChampMap<>(m);
+    protected <K, V> @NonNull ChampSequencedMap<K, V> newInstance(@NonNull Map<K, V> m) {
+        return new ChampSequencedMap<>(m);
     }
 
     @Override
-    protected <K, V> @NonNull SequencedChampMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m) {
-        return new SequencedChampMap<>(m);
+    protected <K, V> @NonNull ChampSequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m) {
+        return new ChampSequencedMap<>(m);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableSequencedMap<K, V> toImmutableInstance(@NonNull Map<K, V> m) {
-        return ((SequencedChampMap<K, V>) m).toImmutable();
+        return ((ChampSequencedMap<K, V>) m).toImmutable();
     }
 
     @Override
     protected <K, V> @NonNull SequencedMap<K, V> toClonedInstance(@NonNull Map<K, V> m) {
-        return ((SequencedChampMap<K, V>) m).clone();
+        return ((ChampSequencedMap<K, V>) m).clone();
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testConstructorWithReadOnlyArgYieldsExpectedMap(@NonNull MapData data) throws Exception {
-        Map<HashCollider, HashCollider> instance = new SequencedChampMap<>(data.a());
+        Map<HashCollider, HashCollider> instance = new ChampSequencedMap<>(data.a());
         assertEqualMap(data.a(), instance);
     }
 }

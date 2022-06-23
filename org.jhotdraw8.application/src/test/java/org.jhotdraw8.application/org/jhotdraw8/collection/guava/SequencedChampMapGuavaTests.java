@@ -5,11 +5,11 @@
 
 package org.jhotdraw8.collection.guava;
 
-import org.jhotdraw8.collection.champ.SequencedChampMap;
+import org.jhotdraw8.collection.champ.ChampSequencedMap;
 import org.junit.jupiter.api.Disabled;
 
 /**
- * Tests {@link SequencedChampMap} with the Guava test suite.
+ * Tests {@link ChampSequencedMap} with the Guava test suite.
  */
 @Disabled
 public class SequencedChampMapGuavaTests {

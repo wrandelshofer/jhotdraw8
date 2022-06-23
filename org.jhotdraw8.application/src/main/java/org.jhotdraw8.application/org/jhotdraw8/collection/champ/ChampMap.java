@@ -113,9 +113,9 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
     }
 
     public ChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof ImmutableChampMap) {
+        if (m instanceof ChampImmutableMap) {
             @SuppressWarnings("unchecked")
-            ImmutableChampMap<K, V> that = (ImmutableChampMap<K, V>) m;
+            ChampImmutableMap<K, V> that = (ChampImmutableMap<K, V>) m;
             this.root = that;
             this.size = that.size();
         } else {
@@ -262,9 +262,9 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
      *
      * @return an immutable copy
      */
-    public @NonNull ImmutableChampMap<K, V> toImmutable() {
+    public @NonNull ChampImmutableMap<K, V> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableChampMap.of() : new ImmutableChampMap<>(root, size);
+        return size == 0 ? ChampImmutableMap.of() : new ChampImmutableMap<>(root, size);
     }
 
     private @NonNull Object writeReplace() {

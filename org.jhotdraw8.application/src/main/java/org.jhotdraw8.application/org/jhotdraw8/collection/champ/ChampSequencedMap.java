@@ -103,7 +103,7 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
+public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
     private final static long serialVersionUID = 0L;
     /**
@@ -118,7 +118,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      */
     private int first = -1;
 
-    public SequencedChampMap() {
+    public ChampSequencedMap() {
         root = BitmapIndexedNode.emptyNode();
     }
 
@@ -128,10 +128,10 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      *
      * @param m a map
      */
-    public SequencedChampMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof SequencedChampMap<?, ?>) {
+    public ChampSequencedMap(@NonNull Map<? extends K, ? extends V> m) {
+        if (m instanceof ChampSequencedMap<?, ?>) {
             @SuppressWarnings("unchecked")
-            SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) m;
+            ChampSequencedMap<K, V> that = (ChampSequencedMap<K, V>) m;
             this.mutator = null;
             that.mutator = null;
             this.root = that.root;
@@ -149,7 +149,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      *
      * @param m an iterable
      */
-    public SequencedChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public ChampSequencedMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
@@ -163,10 +163,10 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      *
      * @param m a read-only map
      */
-    public SequencedChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof ImmutableSequencedChampMap) {
+    public ChampSequencedMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        if (m instanceof ChampImmutableSequencedMap) {
             @SuppressWarnings("unchecked")
-            ImmutableSequencedChampMap<K, V> that = (ImmutableSequencedChampMap<K, V>) m;
+            ChampImmutableSequencedMap<K, V> that = (ChampImmutableSequencedMap<K, V>) m;
             this.root = that;
             this.size = that.size;
             this.first = that.first;
@@ -190,8 +190,8 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      * Returns a shallow copy of this map.
      */
     @Override
-    public @NonNull SequencedChampMap<K, V> clone() {
-        return (SequencedChampMap<K, V>) super.clone();
+    public @NonNull ChampSequencedMap<K, V> clone() {
+        return (ChampSequencedMap<K, V>) super.clone();
     }
 
     @Override
@@ -476,9 +476,9 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      *
      * @return an immutable copy
      */
-    public @NonNull ImmutableSequencedChampMap<K, V> toImmutable() {
+    public @NonNull ChampImmutableSequencedMap<K, V> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableSequencedChampMap.of() : new ImmutableSequencedChampMap<>(root, size, first, last);
+        return size == 0 ? ChampImmutableSequencedMap.of() : new ChampImmutableSequencedMap<>(root, size, first, last);
     }
 
     @Override
@@ -499,7 +499,7 @@ public class SequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
         @Override
         protected @NonNull Object readResolve() {
-            return new SequencedChampMap<>(deserialized);
+            return new ChampSequencedMap<>(deserialized);
         }
     }
 }

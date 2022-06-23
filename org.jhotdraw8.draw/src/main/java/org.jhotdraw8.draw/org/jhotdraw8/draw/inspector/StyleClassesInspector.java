@@ -19,7 +19,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ImmutableChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.draw.DrawingView;
@@ -109,7 +109,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getModel().set(f, tagsKey, ImmutableChampSet.copyOf(newTags));
+                        getModel().set(f, tagsKey, ChampImmutableSet.copyOf(newTags));
                     }
                 }
                 updateList();
@@ -188,7 +188,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getModel().set(f, tagsKey, ImmutableChampSet.copyOf(newTags));
+                        getModel().set(f, tagsKey, ChampImmutableSet.copyOf(newTags));
                     }
                 }
                 updateList();

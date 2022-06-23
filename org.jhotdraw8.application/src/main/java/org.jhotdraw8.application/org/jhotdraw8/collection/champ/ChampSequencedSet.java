@@ -87,7 +87,7 @@ import java.util.function.BiFunction;
  *
  * @param <E> the element type
  */
-public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     private final static long serialVersionUID = 0L;
 
@@ -105,7 +105,7 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
     /**
      * Constructs an empty set.
      */
-    public SequencedChampSet() {
+    public ChampSequencedSet() {
         root = BitmapIndexedNode.emptyNode();
     }
 
@@ -116,12 +116,12 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public SequencedChampSet(Iterable<? extends E> c) {
-        if (c instanceof SequencedChampSet<?>) {
-            c = ((SequencedChampSet<? extends E>) c).toImmutable();
+    public ChampSequencedSet(Iterable<? extends E> c) {
+        if (c instanceof ChampSequencedSet<?>) {
+            c = ((ChampSequencedSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof ImmutableSequencedChampSet<?>) {
-            ImmutableSequencedChampSet<E> that = (ImmutableSequencedChampSet<E>) c;
+        if (c instanceof ChampImmutableSequencedSet<?>) {
+            ChampImmutableSequencedSet<E> that = (ChampImmutableSequencedSet<E>) c;
             this.root = that;
             this.size = that.size;
             this.first = that.first;
@@ -203,8 +203,8 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull SequencedChampSet<E> clone() {
-        return (SequencedChampSet<E>) super.clone();
+    public @NonNull ChampSequencedSet<E> clone() {
+        return (ChampSequencedSet<E>) super.clone();
     }
 
     @Override
@@ -258,7 +258,7 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
                 : new HeapSequencedIterator<>(size, root, reversed,
                 this::iteratorRemove, SequencedElement::getElement);
         return new FailFastIterator<>(i,
-                () -> SequencedChampSet.this.modCount);
+                () -> ChampSequencedSet.this.modCount);
     }
 
     private void iteratorRemove(SequencedElement<E> element) {
@@ -350,9 +350,9 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
      *
      * @return an immutable copy
      */
-    public @NonNull ImmutableSequencedChampSet<E> toImmutable() {
+    public @NonNull ChampImmutableSequencedSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableSequencedChampSet.of() : new ImmutableSequencedChampSet<>(root, size, first, last);
+        return size == 0 ? ChampImmutableSequencedSet.of() : new ChampImmutableSequencedSet<>(root, size, first, last);
     }
 
     private @NonNull Object writeReplace() {
@@ -368,7 +368,7 @@ public class SequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E
 
         @Override
         protected @NonNull Object readResolve() {
-            return new SequencedChampSet<>(deserialized);
+            return new ChampSequencedSet<>(deserialized);
         }
     }
 }

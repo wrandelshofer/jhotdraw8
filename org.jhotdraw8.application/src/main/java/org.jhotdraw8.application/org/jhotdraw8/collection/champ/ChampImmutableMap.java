@@ -77,13 +77,13 @@ import java.util.function.ToIntFunction;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>>
+public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private static final ImmutableChampMap<?, ?> EMPTY = new ImmutableChampMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ChampImmutableMap<?, ?> EMPTY = new ChampImmutableMap<>(BitmapIndexedNode.emptyNode(), 0);
     private final int size;
 
-    ImmutableChampMap(@NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root, int size) {
+    ChampImmutableMap(@NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
@@ -98,8 +98,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ImmutableChampMap<K, V>) ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
+    public static <K, V> @NonNull ChampImmutableMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ChampImmutableMap<K, V>) ((ChampImmutableMap<K, V>) ChampImmutableMap.EMPTY).copyPutAll(map);
     }
 
     /**
@@ -111,8 +111,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ((ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY).copyPutAll(map);
+    public static <K, V> @NonNull ChampImmutableMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return ((ChampImmutableMap<K, V>) ChampImmutableMap.EMPTY).copyPutAll(map);
     }
 
     /**
@@ -123,8 +123,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
      * @return an empty immutable map
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> of() {
-        return (ImmutableChampMap<K, V>) ImmutableChampMap.EMPTY;
+    public static <K, V> @NonNull ChampImmutableMap<K, V> of() {
+        return (ChampImmutableMap<K, V>) ChampImmutableMap.EMPTY;
     }
 
     /**
@@ -136,8 +136,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
      * @return an immutable map of the provided entries
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableChampMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        return (ImmutableChampMap<K, V>) of().copyPutAll(entries);
+    public static <K, V> @NonNull ChampImmutableMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        return (ChampImmutableMap<K, V>) of().copyPutAll(entries);
     }
 
     @SuppressWarnings("unchecked")
@@ -154,7 +154,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     }
 
     @Override
-    public @NonNull ImmutableChampMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampImmutableMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode = update(null, new AbstractMap.SimpleImmutableEntry<>(key, value),
@@ -162,16 +162,16 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
                 getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             if (details.isUpdated()) {
-                return new ImmutableChampMap<>(newRootNode, size);
+                return new ChampImmutableMap<>(newRootNode, size);
             }
-            return new ImmutableChampMap<>(newRootNode, size + 1);
+            return new ChampImmutableMap<>(newRootNode, size + 1);
         }
         return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+    public @NonNull ChampImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
         if (isEmpty() && (m instanceof ChampMap)) {
             return ((ChampMap<K, V>) m).toImmutable();
         }
@@ -180,16 +180,16 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        if (isEmpty() && (m instanceof ImmutableChampMap)) {
-            return (ImmutableChampMap<K, V>) m;
+    public @NonNull ChampImmutableMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+        if (isEmpty() && (m instanceof ChampImmutableMap)) {
+            return (ChampImmutableMap<K, V>) m;
         }
         return copyPutAll(m.readOnlyEntrySet());
     }
 
 
     @Override
-    public @NonNull ImmutableChampMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+    public @NonNull ChampImmutableMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
@@ -202,20 +202,20 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableChampMap<K, V> copyRemove(@NonNull K key) {
+    public @NonNull ChampImmutableMap<K, V> copyRemove(@NonNull K key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode =
                 remove(null, new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         getEqualsFunction());
         if (details.isModified()) {
-            return new ImmutableChampMap<>(newRootNode, size - 1);
+            return new ChampImmutableMap<>(newRootNode, size - 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull ImmutableChampMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ChampImmutableMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
         if (this.isEmpty()) {
             return this;
         }
@@ -229,7 +229,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     }
 
     @Override
-    public @NonNull ImmutableChampMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull ChampImmutableMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -256,8 +256,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (other == null) {
             return false;
         }
-        if (other instanceof ImmutableChampMap) {
-            ImmutableChampMap<?, ?> that = (ImmutableChampMap<?, ?>) other;
+        if (other instanceof ChampImmutableMap) {
+            ChampImmutableMap<?, ?> that = (ChampImmutableMap<?, ?>) other;
             return size == that.size && equivalent(that);
         } else {
             return ReadOnlyMap.mapEquals(this, other);
@@ -331,7 +331,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
         @Override
         protected @NonNull Object readResolve() {
-            return ImmutableChampMap.of().copyPutAll(deserialized);
+            return ChampImmutableMap.of().copyPutAll(deserialized);
         }
     }
 }

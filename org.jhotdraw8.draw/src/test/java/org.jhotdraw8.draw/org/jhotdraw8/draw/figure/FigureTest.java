@@ -14,7 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ImmutableChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.CssRectangle2D;
@@ -155,7 +155,7 @@ public class FigureTest {
 
         @Override
         public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
-            return ImmutableChampSet.of();
+            return ChampImmutableSet.of();
         }
 
         @Override

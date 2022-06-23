@@ -91,11 +91,11 @@ import java.util.function.BiFunction;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ImmutableSequencedChampSet<E>
+public class ChampImmutableSequencedSet<E>
         extends BitmapIndexedNode<SequencedElement<E>>
         implements Serializable, ImmutableSequencedSet<E> {
     private final static long serialVersionUID = 0L;
-    private static final ImmutableSequencedChampSet<?> EMPTY = new ImmutableSequencedChampSet<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
+    private static final ChampImmutableSequencedSet<?> EMPTY = new ChampImmutableSequencedSet<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
 
     final int size;
 
@@ -112,7 +112,7 @@ public class ImmutableSequencedChampSet<E>
      */
     final int first;
 
-    ImmutableSequencedChampSet(@NonNull BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
+    ChampImmutableSequencedSet(@NonNull BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
         this.size = size;
@@ -128,13 +128,13 @@ public class ImmutableSequencedChampSet<E>
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableSequencedChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        if (iterable instanceof ImmutableSequencedChampSet) {
-            return (ImmutableSequencedChampSet<E>) iterable;
-        } else if (iterable instanceof SequencedChampSet) {
-            return ((SequencedChampSet<E>) iterable).toImmutable();
+    public static <E> @NonNull ChampImmutableSequencedSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        if (iterable instanceof ChampImmutableSequencedSet) {
+            return (ChampImmutableSequencedSet<E>) iterable;
+        } else if (iterable instanceof ChampSequencedSet) {
+            return ((ChampSequencedSet<E>) iterable).toImmutable();
         }
-        SequencedChampSet<E> tr = new SequencedChampSet<>(of());
+        ChampSequencedSet<E> tr = new ChampSequencedSet<>(of());
         tr.addAll(iterable);
         return tr.toImmutable();
     }
@@ -146,8 +146,8 @@ public class ImmutableSequencedChampSet<E>
      * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableSequencedChampSet<E> of() {
-        return ((ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY);
+    public static <E> @NonNull ChampImmutableSequencedSet<E> of() {
+        return ((ChampImmutableSequencedSet<E>) ChampImmutableSequencedSet.EMPTY);
     }
 
     /**
@@ -159,11 +159,11 @@ public class ImmutableSequencedChampSet<E>
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableSequencedChampSet<E> of(E @NonNull ... elements) {
+    public static <E> @NonNull ChampImmutableSequencedSet<E> of(E @NonNull ... elements) {
         if (elements.length == 0) {
-            return (ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY;
+            return (ChampImmutableSequencedSet<E>) ChampImmutableSequencedSet.EMPTY;
         } else {
-            return ((ImmutableSequencedChampSet<E>) ImmutableSequencedChampSet.EMPTY).copyAddAll(Arrays.asList(elements));
+            return ((ChampImmutableSequencedSet<E>) ChampImmutableSequencedSet.EMPTY).copyAddAll(Arrays.asList(elements));
         }
     }
 
@@ -174,20 +174,20 @@ public class ImmutableSequencedChampSet<E>
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampSet<E> copyAdd(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> copyAdd(final @Nullable E key) {
         return copyAddLast(key, false);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ImmutableSequencedChampSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof ImmutableSequencedChampSet<?>)) {
-            return (ImmutableSequencedChampSet<E>) set;
+    public @NonNull ChampImmutableSequencedSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
+        if (set == this || isEmpty() && (set instanceof ChampImmutableSequencedSet<?>)) {
+            return (ChampImmutableSequencedSet<E>) set;
         }
-        if (isEmpty() && (set instanceof SequencedChampSet)) {
-            return ((SequencedChampSet<E>) set).toImmutable();
+        if (isEmpty() && (set instanceof ChampSequencedSet)) {
+            return ((ChampSequencedSet<E>) set).toImmutable();
         }
-        final SequencedChampSet<E> t = this.toMutable();
+        final ChampSequencedSet<E> t = this.toMutable();
         boolean modified = false;
         for (final E key : set) {
             modified |= t.add(key);
@@ -195,11 +195,11 @@ public class ImmutableSequencedChampSet<E>
         return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull ImmutableSequencedChampSet<E> copyAddFirst(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> copyAddFirst(final @Nullable E key) {
         return copyAddFirst(key, true);
     }
 
-    private @NonNull ImmutableSequencedChampSet<E> copyAddFirst(@Nullable E key,
+    private @NonNull ChampImmutableSequencedSet<E> copyAddFirst(@Nullable E key,
                                                                 boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedElement<E>> root = update(null,
@@ -211,16 +211,16 @@ public class ImmutableSequencedChampSet<E>
                     ? renumber(root, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,
                     details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
-                    : new ImmutableSequencedChampSet<>(root, size, first, last);
+                    : new ChampImmutableSequencedSet<>(root, size, first, last);
         }
         return details.modified ? renumber(root, size + 1, first - 1, last) : this;
     }
 
-    public @NonNull ImmutableSequencedChampSet<E> copyAddLast(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> copyAddLast(final @Nullable E key) {
         return copyAddLast(key, true);
     }
 
-    private @NonNull ImmutableSequencedChampSet<E> copyAddLast(final @Nullable E key,
+    private @NonNull ChampImmutableSequencedSet<E> copyAddLast(final @Nullable E key,
                                                                boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedElement<E>> root = update(null,
@@ -232,22 +232,22 @@ public class ImmutableSequencedChampSet<E>
                     ? renumber(root, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
                     details.getOldValue().getSequenceNumber() == last ? last : last + 1)
-                    : new ImmutableSequencedChampSet<>(root, size, first, last);
+                    : new ChampImmutableSequencedSet<>(root, size, first, last);
         }
         return details.modified ? renumber(root, size + 1, first, last + 1) : this;
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampSet<E> copyClear() {
+    public @NonNull ChampImmutableSequencedSet<E> copyClear() {
         return isEmpty() ? this : of();
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampSet<E> copyRemove(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> copyRemove(final @Nullable E key) {
         return copyRemove(key, first, last);
     }
 
-    private @NonNull ImmutableSequencedChampSet<E> copyRemove(final @Nullable E key, int newFirst, int newLast) {
+    private @NonNull ChampImmutableSequencedSet<E> copyRemove(final @Nullable E key, int newFirst, int newLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
@@ -269,7 +269,7 @@ public class ImmutableSequencedChampSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableSequencedChampSet<E> copyRemoveAll(final @NonNull Iterable<?> set) {
+    public @NonNull ChampImmutableSequencedSet<E> copyRemoveAll(final @NonNull Iterable<?> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -278,7 +278,7 @@ public class ImmutableSequencedChampSet<E>
         if (set == this) {
             return of();
         }
-        final SequencedChampSet<E> t = this.toMutable();
+        final ChampSequencedSet<E> t = this.toMutable();
         boolean modified = false;
         for (final Object key : set) {
             if (t.remove((E) key)) {
@@ -293,19 +293,19 @@ public class ImmutableSequencedChampSet<E>
     }
 
     @Override
-    public ImmutableSequencedChampSet<E> copyRemoveFirst() {
+    public ChampImmutableSequencedSet<E> copyRemoveFirst() {
         SequencedElement<E> k = HeapSequencedIterator.getFirst(this, first, last);
         return copyRemove(k.getElement(), k.getSequenceNumber() + 1, last);
     }
 
     @Override
-    public ImmutableSequencedChampSet<E> copyRemoveLast() {
+    public ChampImmutableSequencedSet<E> copyRemoveLast() {
         SequencedElement<E> k = HeapSequencedIterator.getLast(this, first, last);
         return copyRemove(k.getElement(), first, k.getSequenceNumber());
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampSet<E> copyRetainAll(final @NonNull Collection<?> set) {
+    public @NonNull ChampImmutableSequencedSet<E> copyRetainAll(final @NonNull Collection<?> set) {
         if (this.isEmpty()) {
             return this;
         }
@@ -313,7 +313,7 @@ public class ImmutableSequencedChampSet<E>
             return of();
         }
 
-        final SequencedChampSet<E> t = this.toMutable();
+        final ChampSequencedSet<E> t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {
@@ -336,8 +336,8 @@ public class ImmutableSequencedChampSet<E>
             return false;
         }
 
-        if (other instanceof ImmutableSequencedChampSet) {
-            ImmutableSequencedChampSet<?> that = (ImmutableSequencedChampSet<?>) other;
+        if (other instanceof ChampImmutableSequencedSet) {
+            ChampImmutableSequencedSet<?> that = (ChampImmutableSequencedSet<?>) other;
             return size == that.size && equivalent(that);
         } else {
             return ReadOnlySet.setEquals(this, other);
@@ -413,19 +413,19 @@ public class ImmutableSequencedChampSet<E>
      * @param size  the size of the trie
      * @param first the estimated first sequence number
      * @param last  the estimated last sequence number
-     * @return a new {@link ImmutableSequencedChampSet} instance
+     * @return a new {@link ChampImmutableSequencedSet} instance
      */
     @NonNull
-    private ImmutableSequencedChampSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
+    private ChampImmutableSequencedSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
         if (size == 0) {
             return of();
         }
         if (Sequenced.mustRenumber(size, first, last)) {
-            return new ImmutableSequencedChampSet<>(
+            return new ChampImmutableSequencedSet<>(
                     SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
                     size, -1, size);
         }
-        return new ImmutableSequencedChampSet<>(root, size, first, last);
+        return new ChampImmutableSequencedSet<>(root, size, first, last);
     }
 
     public @NonNull Iterator<E> reversedIterator() {
@@ -438,8 +438,8 @@ public class ImmutableSequencedChampSet<E>
     }
 
     @Override
-    public @NonNull SequencedChampSet<E> toMutable() {
-        return new SequencedChampSet<>(this);
+    public @NonNull ChampSequencedSet<E> toMutable() {
+        return new ChampSequencedSet<>(this);
     }
 
     @Override
@@ -460,7 +460,7 @@ public class ImmutableSequencedChampSet<E>
 
         @Override
         protected @NonNull Object readResolve() {
-            return ImmutableSequencedChampSet.copyOf(deserialized);
+            return ChampImmutableSequencedSet.copyOf(deserialized);
         }
     }
 }

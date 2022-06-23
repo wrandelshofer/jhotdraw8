@@ -100,8 +100,8 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
         if (c instanceof ChampSet<?>) {
             c = ((ChampSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof ImmutableChampSet<?>) {
-            ImmutableChampSet<E> that = (ImmutableChampSet<E>) c;
+        if (c instanceof ChampImmutableSet<?>) {
+            ChampImmutableSet<E> that = (ChampImmutableSet<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -132,8 +132,8 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
         if (c == this) {
             return false;
         }
-        if (c instanceof ImmutableChampSet<?>) {
-            c = (Iterable<? extends E>) ((ImmutableChampSet<?>) c).toMutable();
+        if (c instanceof ChampImmutableSet<?>) {
+            c = (Iterable<? extends E>) ((ChampImmutableSet<?>) c).toMutable();
         }
         if (c instanceof ChampSet<?>) {
             var that = (ChampSet<E>) ((ChampSet<?>) c);
@@ -206,9 +206,9 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
      *
      * @return an immutable copy
      */
-    public @NonNull ImmutableChampSet<E> toImmutable() {
+    public @NonNull ChampImmutableSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ImmutableChampSet.of() : new ImmutableChampSet<>(root, size);
+        return size == 0 ? ChampImmutableSet.of() : new ChampImmutableSet<>(root, size);
     }
 
     private @NonNull Object writeReplace() {

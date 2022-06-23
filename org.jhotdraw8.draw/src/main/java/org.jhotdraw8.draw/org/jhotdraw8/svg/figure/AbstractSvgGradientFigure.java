@@ -12,7 +12,7 @@ import javafx.scene.paint.Stop;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.MapEntries;
-import org.jhotdraw8.collection.champ.SequencedChampMap;
+import org.jhotdraw8.collection.champ.ChampSequencedMap;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.key.NonNullKey;
@@ -54,7 +54,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull SimpleNonNullStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
             new SimpleNonNullStyleableKey<>("gradientUnits", SvgGradientUnits.class,
-                    new MappedConverter<SvgGradientUnits>(new SequencedChampMap<>(MapEntries.of(
+                    new MappedConverter<SvgGradientUnits>(new ChampSequencedMap<>(MapEntries.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
                             "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
                     ))),
@@ -66,7 +66,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull SimpleNonNullStyleableKey<CycleMethod> SPREAD_METHOD =
             new SimpleNonNullStyleableKey<>("spreadMethod", CycleMethod.class,
-                    new MappedConverter<CycleMethod>(new SequencedChampMap<>(MapEntries.of(
+                    new MappedConverter<CycleMethod>(new ChampSequencedMap<>(MapEntries.of(
                             "pad", CycleMethod.NO_CYCLE,
                             "reflect", CycleMethod.REFLECT,
                             "repeat", CycleMethod.REPEAT

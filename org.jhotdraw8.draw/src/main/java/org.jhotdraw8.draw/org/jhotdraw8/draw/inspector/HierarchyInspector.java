@@ -27,7 +27,7 @@ import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.EditableComponent;
-import org.jhotdraw8.collection.champ.ImmutableChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -202,7 +202,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
                         Figure f = figure.get();
-                        return f == null ? null : ImmutableChampSet.copyOf(f.getStyleClasses());
+                        return f == null ? null : ChampImmutableSet.copyOf(f.getStyleClasses());
                     }
                 }
         );
@@ -212,7 +212,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
                         Figure f = figure.get();
-                        return f == null ? null : ImmutableChampSet.copyOf(f.getPseudoClassStates());
+                        return f == null ? null : ChampImmutableSet.copyOf(f.getPseudoClassStates());
                     }
                 }
         );
@@ -315,7 +315,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             }
                             // show the computed  classes!
                             if (figure != null) {
-                                setText(wordSetConverter.toString(ImmutableChampSet.copyOf(figure.getStyleClasses())));
+                                setText(wordSetConverter.toString(ChampImmutableSet.copyOf(figure.getStyleClasses())));
                             }
                         }
                         if (isEditable) {

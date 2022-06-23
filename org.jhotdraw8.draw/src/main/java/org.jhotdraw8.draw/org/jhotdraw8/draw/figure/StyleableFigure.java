@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ImmutableChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.ObservableWordSetKey;
@@ -37,7 +37,7 @@ public interface StyleableFigure extends Figure {
      * Default value: empty set.
      */
     @NonNull
-    ObservableWordSetKey STYLE_CLASS = new ObservableWordSetKey("class", ImmutableChampSet.of());
+    ObservableWordSetKey STYLE_CLASS = new ObservableWordSetKey("class", ChampImmutableSet.of());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -46,7 +46,7 @@ public interface StyleableFigure extends Figure {
      * Default value: empty set.
      */
     @NonNull
-    ObservableWordSetKey PSEUDO_CLASS = new ObservableWordSetKey("pseudoClass", ImmutableChampSet.of());
+    ObservableWordSetKey PSEUDO_CLASS = new ObservableWordSetKey("pseudoClass", ChampImmutableSet.of());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.

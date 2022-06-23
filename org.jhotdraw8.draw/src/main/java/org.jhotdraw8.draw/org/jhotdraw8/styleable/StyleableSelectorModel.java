@@ -13,7 +13,7 @@ import javafx.css.Styleable;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ImmutableSequencedChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.AbstractSelectorModel;
@@ -82,12 +82,12 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
     @Override
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Styleable element) {
-        return ImmutableSequencedChampSet.copyOf(element.getStyleClass());
+        return ChampImmutableSequencedSet.copyOf(element.getStyleClass());
     }
 
     @Override
     public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Styleable element) {
-        return ImmutableSequencedChampSet.copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
+        return ChampImmutableSequencedSet.copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
                 .collect(Collectors.toList()));
     }
 

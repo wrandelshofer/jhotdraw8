@@ -96,9 +96,9 @@ import java.util.function.ToIntFunction;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> implements ImmutableSequencedMap<K, V>, Serializable {
+public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> implements ImmutableSequencedMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private static final ImmutableSequencedChampMap<?, ?> EMPTY = new ImmutableSequencedChampMap<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
+    private static final ChampImmutableSequencedMap<?, ?> EMPTY = new ChampImmutableSequencedMap<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
     /**
      * Counter for the sequence number of the last entry.
      * The counter is incremented after a new entry is added to the end of the
@@ -112,7 +112,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     protected transient final int first;
     final transient int size;
 
-    ImmutableSequencedChampMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, int size,
+    ChampImmutableSequencedMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, int size,
                                int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
@@ -130,8 +130,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableSequencedChampMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ImmutableSequencedChampMap<K, V>) ((ImmutableSequencedChampMap<K, V>) ImmutableSequencedChampMap.EMPTY).copyPutAll(map);
+    public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ChampImmutableSequencedMap<K, V>) ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).copyPutAll(map);
     }
 
     /**
@@ -143,8 +143,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableSequencedChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ((ImmutableSequencedChampMap<K, V>) ImmutableSequencedChampMap.EMPTY).copyPutAll(map);
+    public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).copyPutAll(map);
     }
 
     /**
@@ -155,8 +155,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
      * @return an empty immutable map
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableSequencedChampMap<K, V> of() {
-        return (ImmutableSequencedChampMap<K, V>) ImmutableSequencedChampMap.EMPTY;
+    public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> of() {
+        return (ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY;
     }
 
     /**
@@ -168,8 +168,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
      * @return an immutable map of the provided entries
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ImmutableSequencedChampMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        return (ImmutableSequencedChampMap<K, V>) of().copyPutAll(entries);
+    public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        return (ChampImmutableSequencedMap<K, V>) of().copyPutAll(entries);
     }
 
     @Override
@@ -180,26 +180,26 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyClear() {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyClear() {
         return isEmpty() ? this : of();
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
         return copyPutLast(key, value, false);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
-        if (isEmpty() && (m instanceof SequencedChampMap)) {
-            return ((SequencedChampMap<K, V>) m).toImmutable();
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+        if (isEmpty() && (m instanceof ChampSequencedMap)) {
+            return ((ChampSequencedMap<K, V>) m).toImmutable();
         }
         return copyPutAll(m.entrySet());
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
         if (m == this) {
             return this;
         }
@@ -207,8 +207,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        final SequencedChampMap<K, V> t = this.toMutable();
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        final ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), false);
@@ -218,17 +218,17 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ImmutableSequencedChampMap<K, V>) ImmutableSequencedMap.super.copyPutAll(map);
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ChampImmutableSequencedMap<K, V>) ImmutableSequencedMap.super.copyPutAll(map);
     }
 
     //@Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value) {
         return copyPutFirst(key, value, true);
     }
 
     @NonNull
-    private ImmutableSequencedChampMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
+    private ChampImmutableSequencedMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode = update(null,
@@ -241,17 +241,17 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,
                     details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
-                    : new ImmutableSequencedChampMap<>(newRootNode, size, first - 1, last);
+                    : new ChampImmutableSequencedMap<>(newRootNode, size, first - 1, last);
         }
         return details.modified ? renumber(newRootNode, size + 1, first - 1, last) : this;
     }
 
-    public @NonNull ImmutableSequencedChampMap<K, V> copyPutLast(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyPutLast(@NonNull K key, @Nullable V value) {
         return copyPutLast(key, value, true);
     }
 
     @NonNull
-    private ImmutableSequencedChampMap<K, V> copyPutLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
+    private ChampImmutableSequencedMap<K, V> copyPutLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode = update(null,
@@ -264,17 +264,17 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
                     details.getOldValue().getSequenceNumber() == last ? last : last + 1)
-                    : new ImmutableSequencedChampMap<>(newRootNode, size, first, last + 1);
+                    : new ChampImmutableSequencedMap<>(newRootNode, size, first, last + 1);
         }
         return details.modified ? renumber(newRootNode, size + 1, first, last + 1) : this;
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyRemove(@NonNull K key) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyRemove(@NonNull K key) {
         return copyRemove(key, first, last);
     }
 
-    private @NonNull ImmutableSequencedChampMap<K, V> copyRemove(@NonNull K key, int newFirst, int newLast) {
+    private @NonNull ChampImmutableSequencedMap<K, V> copyRemove(@NonNull K key, int newFirst, int newLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
@@ -293,11 +293,11 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
         if (this.isEmpty()) {
             return this;
         }
-        final SequencedChampMap<K, V> t = this.toMutable();
+        final ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<SequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
@@ -307,14 +307,14 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ImmutableSequencedChampMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull ChampImmutableSequencedMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
         if (c.isEmpty()) {
             return of();
         }
-        final SequencedChampMap<K, V> t = this.toMutable();
+        final ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {
@@ -341,8 +341,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
         if (other == null) {
             return false;
         }
-        if (other instanceof ImmutableSequencedChampMap) {
-            ImmutableSequencedChampMap<?, ?> that = (ImmutableSequencedChampMap<?, ?>) other;
+        if (other instanceof ChampImmutableSequencedMap) {
+            ChampImmutableSequencedMap<?, ?> that = (ChampImmutableSequencedMap<?, ?>) other;
             return size == that.size && equivalent(that);
         } else {
             return ReadOnlyMap.mapEquals(this, other);
@@ -408,15 +408,15 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @NonNull
-    private ImmutableSequencedChampMap<K, V> renumber(BitmapIndexedNode<SequencedEntry<K, V>> root, int size, int first, int last) {
+    private ChampImmutableSequencedMap<K, V> renumber(BitmapIndexedNode<SequencedEntry<K, V>> root, int size, int first, int last) {
         if (size == 0) {
             return of();
         }
         if (Sequenced.mustRenumber(size, first, last)) {
             root = SequencedEntry.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals);
-            return new ImmutableSequencedChampMap<>(root, size, -1, size);
+            return new ChampImmutableSequencedMap<>(root, size, -1, size);
         }
-        return new ImmutableSequencedChampMap<>(root, size, first, last);
+        return new ChampImmutableSequencedMap<>(root, size, first, last);
     }
 
     @Override
@@ -425,8 +425,8 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull SequencedChampMap<K, V> toMutable() {
-        return new SequencedChampMap<>(this);
+    public @NonNull ChampSequencedMap<K, V> toMutable() {
+        return new ChampSequencedMap<>(this);
     }
 
     @Override
@@ -447,7 +447,7 @@ public class ImmutableSequencedChampMap<K, V> extends BitmapIndexedNode<Sequence
 
         @Override
         protected @NonNull Object readResolve() {
-            return ImmutableSequencedChampMap.of().copyPutAll(deserialized);
+            return ChampImmutableSequencedMap.of().copyPutAll(deserialized);
         }
     }
 }

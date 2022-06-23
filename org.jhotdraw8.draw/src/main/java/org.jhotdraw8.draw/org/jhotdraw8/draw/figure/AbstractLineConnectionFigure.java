@@ -9,7 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ImmutableSequencedChampSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -135,7 +135,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
-            return ImmutableSequencedChampSet.of();
+            return ChampImmutableSequencedSet.of();
         }
         Set<Figure> ctf = new LinkedHashSet<>();
         if (startTarget != null) {

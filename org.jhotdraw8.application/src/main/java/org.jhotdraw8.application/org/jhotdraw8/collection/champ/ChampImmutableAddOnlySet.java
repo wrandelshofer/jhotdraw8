@@ -26,14 +26,14 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
+public abstract class ChampImmutableAddOnlySet<E> implements ImmutableAddOnlySet<E> {
     private static final int ENTRY_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;
     private static final int BIT_PARTITION_SIZE = 4;
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
 
-    public ImmutableAddOnlyChampSet() {
+    public ChampImmutableAddOnlySet() {
     }
 
     private static char bitpos(final int mask) {
@@ -44,7 +44,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    private static <K> @NonNull ImmutableAddOnlyChampSet<K> mergeTwoKeyValPairs(final @NonNull K key0, final int keyHash0,
+    private static <K> @NonNull ChampImmutableAddOnlySet<K> mergeTwoKeyValPairs(final @NonNull K key0, final int keyHash0,
                                                                                 final @NonNull K key1, final int keyHash1, final int shift) {
         assert !(key0.equals(key1));
 
@@ -67,7 +67,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
                 return new BitmapIndexedNode<>((char) 0, dataMap, key1, key0);
             }
         } else {
-            final ImmutableAddOnlyChampSet<K> node =
+            final ChampImmutableAddOnlySet<K> node =
                     mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
             // values fit on next level
             final char nodeMap = bitpos(mask0);
@@ -76,14 +76,14 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ImmutableAddOnlyChampSet<E> of() {
-        return (ImmutableAddOnlyChampSet<E>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull ChampImmutableAddOnlySet<E> of() {
+        return (ChampImmutableAddOnlySet<E>) BitmapIndexedNode.EMPTY_NODE;
     }
 
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ImmutableAddOnlyChampSet<E> of(E @NonNull ... elements) {
-        ImmutableAddOnlyChampSet<E> set = (ImmutableAddOnlyChampSet<E>) BitmapIndexedNode.EMPTY_NODE;
+    public static <E> @NonNull ChampImmutableAddOnlySet<E> of(E @NonNull ... elements) {
+        ChampImmutableAddOnlySet<E> set = (ChampImmutableAddOnlySet<E>) BitmapIndexedNode.EMPTY_NODE;
         for (E e : elements) {
             set = set.copyAdd(e);
         }
@@ -91,14 +91,14 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
     }
 
     @Override
-    public @NonNull ImmutableAddOnlyChampSet<E> copyAdd(@NonNull E key) {
+    public @NonNull ChampImmutableAddOnlySet<E> copyAdd(@NonNull E key) {
         return updated(key, key.hashCode(), 0);
     }
 
-    abstract @NonNull ImmutableAddOnlyChampSet<E> updated(final @NonNull E key, final int keyHash, final int shift);
+    abstract @NonNull ChampImmutableAddOnlySet<E> updated(final @NonNull E key, final int keyHash, final int shift);
 
-    private static final class BitmapIndexedNode<K> extends ImmutableAddOnlyChampSet<K> {
-        private static final @NonNull ImmutableAddOnlyChampSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
+    private static final class BitmapIndexedNode<K> extends ChampImmutableAddOnlySet<K> {
+        private static final @NonNull ChampImmutableAddOnlySet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
         final @NonNull Object[] nodes;
         /**
          * We use char as an unsigned short.
@@ -116,7 +116,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
             this.nodes = nodes;
         }
 
-        @NonNull ImmutableAddOnlyChampSet<K> copyAndInsertValue(final int bitpos,
+        @NonNull ChampImmutableAddOnlySet<K> copyAndInsertValue(final int bitpos,
                                                                 final @NonNull K key) {
             final int idx = ENTRY_LENGTH * dataIndex(bitpos);
 
@@ -130,7 +130,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
             return new BitmapIndexedNode<>(nodeMap, (char) (dataMap | bitpos), dst);
         }
 
-        @NonNull ImmutableAddOnlyChampSet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull ImmutableAddOnlyChampSet<K> node) {
+        @NonNull ChampImmutableAddOnlySet<K> copyAndMigrateFromInlineToNode(final int bitpos, final @NonNull ChampImmutableAddOnlySet<K> node) {
 
             final int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
             final int idxNew = this.nodes.length - ENTRY_LENGTH - nodeIndex(bitpos);
@@ -148,8 +148,8 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
             return new BitmapIndexedNode<>((char) (nodeMap | bitpos), (char) (dataMap ^ bitpos), dst);
         }
 
-        @NonNull ImmutableAddOnlyChampSet<K> copyAndSetNode(final int bitpos,
-                                                            final @NonNull ImmutableAddOnlyChampSet<K> newNode) {
+        @NonNull ChampImmutableAddOnlySet<K> copyAndSetNode(final int bitpos,
+                                                            final @NonNull ChampImmutableAddOnlySet<K> newNode) {
 
             final int nodeIndex = nodeIndex(bitpos);
             final int idx = this.nodes.length - 1 - nodeIndex;
@@ -173,11 +173,11 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
         }
 
         @SuppressWarnings("unchecked")
-        @NonNull ImmutableAddOnlyChampSet<K> getNode(final int index) {
-            return (ImmutableAddOnlyChampSet<K>) nodes[nodes.length - 1 - index];
+        @NonNull ChampImmutableAddOnlySet<K> getNode(final int index) {
+            return (ChampImmutableAddOnlySet<K>) nodes[nodes.length - 1 - index];
         }
 
-        @NonNull ImmutableAddOnlyChampSet<K> nodeAt(final int bitpos) {
+        @NonNull ChampImmutableAddOnlySet<K> nodeAt(final int bitpos) {
             return getNode(nodeIndex(bitpos));
         }
 
@@ -186,7 +186,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
         }
 
         @Override
-        @NonNull ImmutableAddOnlyChampSet<K> updated(final @NonNull K key, final int keyHash,
+        @NonNull ChampImmutableAddOnlySet<K> updated(final @NonNull K key, final int keyHash,
                                                      final int shift) {
             final int mask = mask(keyHash, shift);
             final int bitpos = bitpos(mask);
@@ -198,13 +198,13 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
                 if (Objects.equals(currentKey, key)) {
                     return this;
                 } else {
-                    final ImmutableAddOnlyChampSet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
+                    final ChampImmutableAddOnlySet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
                             currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
                     return copyAndMigrateFromInlineToNode(bitpos, subNodeNew);
                 }
             } else if ((nodeMap & bitpos) != 0) { // node (not value)
-                final ImmutableAddOnlyChampSet<K> subNode = nodeAt(bitpos);
-                final ImmutableAddOnlyChampSet<K> subNodeNew =
+                final ChampImmutableAddOnlySet<K> subNode = nodeAt(bitpos);
+                final ChampImmutableAddOnlySet<K> subNodeNew =
                         subNode.updated(key, keyHash, shift + BIT_PARTITION_SIZE);
 
                 if (subNode != subNodeNew) {
@@ -220,7 +220,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
 
     }
 
-    private static final class HashCollisionNode<K> extends ImmutableAddOnlyChampSet<K> {
+    private static final class HashCollisionNode<K> extends ChampImmutableAddOnlySet<K> {
         private final @NonNull K[] keys;
         private final int hash;
 
@@ -234,7 +234,7 @@ public abstract class ImmutableAddOnlyChampSet<E> implements ImmutableAddOnlySet
 
         @Override
         @NonNull
-        ImmutableAddOnlyChampSet<K> updated(final @NonNull K key,
+        ChampImmutableAddOnlySet<K> updated(final @NonNull K key,
                                             final int keyHash, final int shift) {
             assert this.hash == keyHash;
 
