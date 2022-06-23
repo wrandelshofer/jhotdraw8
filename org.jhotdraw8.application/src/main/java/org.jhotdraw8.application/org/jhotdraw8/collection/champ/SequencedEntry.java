@@ -16,7 +16,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
+class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         implements Sequenced {
     private final static long serialVersionUID = 0L;
     private final int sequenceNumber;

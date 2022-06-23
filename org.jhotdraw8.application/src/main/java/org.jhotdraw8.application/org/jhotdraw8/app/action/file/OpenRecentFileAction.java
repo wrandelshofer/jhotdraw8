@@ -15,7 +15,7 @@ import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.WrappedReadOnlyMap;
+import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.net.UriUtil;
@@ -146,7 +146,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-            v.read(uri, format, new WrappedReadOnlyMap<>(new LinkedHashMap<>()), false, workState).whenComplete((actualFormat, exception) -> {
+            v.read(uri, format, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
                     v.setURI(oldUri);

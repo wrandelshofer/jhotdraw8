@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.css.CssFunctionProcessor;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;

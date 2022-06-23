@@ -1,6 +1,8 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.util.Set;
 

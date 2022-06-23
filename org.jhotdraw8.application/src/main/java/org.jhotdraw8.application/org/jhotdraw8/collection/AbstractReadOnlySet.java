@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
+
 /**
  * Abstract base class for {@link ReadOnlySet}s.
  *

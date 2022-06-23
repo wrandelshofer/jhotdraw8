@@ -6,8 +6,8 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableAddOnlyChampSet;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.champ.ImmutableAddOnlyChampSet;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;

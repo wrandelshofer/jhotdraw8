@@ -9,7 +9,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.text.Converter;

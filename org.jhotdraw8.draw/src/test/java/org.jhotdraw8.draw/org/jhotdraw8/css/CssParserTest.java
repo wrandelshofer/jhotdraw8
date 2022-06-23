@@ -5,7 +5,7 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Rule;
 import org.jhotdraw8.css.ast.SelectorGroup;

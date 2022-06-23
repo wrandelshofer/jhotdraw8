@@ -5,10 +5,10 @@
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntArrayList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.OrderedPairNonNull;
+import org.jhotdraw8.collection.primitive.IntArrayDeque;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.intersect.IntersectCircleCircle;

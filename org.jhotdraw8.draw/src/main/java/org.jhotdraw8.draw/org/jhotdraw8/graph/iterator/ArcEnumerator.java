@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.util.function.AddToSet;
 

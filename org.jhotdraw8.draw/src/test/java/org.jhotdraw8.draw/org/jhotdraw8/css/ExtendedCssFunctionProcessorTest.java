@@ -6,7 +6,7 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.function.AttrCssFunction;
 import org.jhotdraw8.css.function.CalcCssFunction;
 import org.jhotdraw8.css.function.ConcatCssFunction;

@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntEnumerator;
-import org.jhotdraw8.collection.IntRangeEnumerator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.

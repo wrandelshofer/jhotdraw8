@@ -32,7 +32,7 @@ import java.util.function.Function;
  * @param <E> the type parameter of the  CHAMP trie {@link Node}s
  * @param <X> the type parameter of the {@link Iterator} interface
  */
-public class BucketSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
+class BucketSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private int next;
     private int remaining;
     private @Nullable E current;

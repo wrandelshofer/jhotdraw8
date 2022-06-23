@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.WrappedList;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.jhotdraw8.util.function.AddToSet;
 
@@ -30,7 +30,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return a collection view on the previous arrows
      */
     default @NonNull Collection<A> getPrevArrows(@NonNull V v) {
-        return new WrappedList<>(() -> this.getPrevCount(v), i -> getPrevArrow(v, i));
+        return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArrow(v, i));
     }
 
     /**
@@ -40,7 +40,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return a collection view on the direct successor vertices of vertex
      */
     default @NonNull Collection<V> getPrevVertices(@NonNull V v) {
-        return new WrappedList<>(() -> this.getPrevCount(v), i -> getPrev(v, i));
+        return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrev(v, i));
     }
 
     /**
@@ -62,7 +62,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return a collection view on the arc data
      */
     default @NonNull Collection<Arc<V, A>> getPrevArcs(@NonNull V v) {
-        return new WrappedList<>(() -> this.getPrevCount(v), i -> getPrevArc(v, i));
+        return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArc(v, i));
     }
 
     /**

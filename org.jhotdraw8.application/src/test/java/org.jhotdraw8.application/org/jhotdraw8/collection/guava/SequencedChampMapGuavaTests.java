@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection.guava;
 
-import org.jhotdraw8.collection.SequencedChampMap;
+import org.jhotdraw8.collection.champ.SequencedChampMap;
 import org.junit.jupiter.api.Disabled;
 
 /**

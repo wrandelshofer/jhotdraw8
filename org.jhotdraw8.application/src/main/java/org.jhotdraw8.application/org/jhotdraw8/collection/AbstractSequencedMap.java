@@ -7,6 +7,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.facade.SequencedCollectionFacade;
+import org.jhotdraw8.collection.facade.SequencedSetFacadeFacade;
+import org.jhotdraw8.collection.mapped.MappedIterator;
+import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
@@ -69,7 +73,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     @SuppressWarnings({"SuspiciousMethodCalls"})
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
-        return new WrappedSequencedSet<>(
+        return new SequencedSetFacadeFacade<>(
                 () -> new MappedIterator<>(m.entrySet().iterator(), Entry::getKey),
                 () -> new MappedIterator<>(m.reversed().entrySet().iterator(), Entry::getKey),
                 m::size,
@@ -94,7 +98,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     public static <K, V> @NonNull SequencedCollection<V> createValues(@NonNull SequencedMap<K, V> m) {
-        return new WrappedSequencedCollection<>(
+        return new SequencedCollectionFacade<>(
                 () -> new MappedIterator<>(m.entrySet().iterator(), Entry::getValue),
                 () -> new MappedIterator<>(m.reversed().entrySet().iterator(), Entry::getValue),
                 m::size,

@@ -5,9 +5,9 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.DoubleArrayList;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableCollection;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableCollection;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 
 import java.util.Collection;
 

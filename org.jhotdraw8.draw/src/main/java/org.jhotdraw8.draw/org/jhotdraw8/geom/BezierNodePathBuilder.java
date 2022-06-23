@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;

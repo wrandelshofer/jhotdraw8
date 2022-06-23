@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.primitive.IntArrayDeque;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 
 import java.util.function.IntPredicate;
 

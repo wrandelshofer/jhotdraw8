@@ -6,9 +6,9 @@ package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.ListEnumerator;
 import org.jhotdraw8.collection.SpliteratorIterable;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.ListEnumerator;
 
 import java.io.IOException;
 import java.util.Iterator;

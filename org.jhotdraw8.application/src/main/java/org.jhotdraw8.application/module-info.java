@@ -50,6 +50,15 @@ module org.jhotdraw8.application {
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
     exports org.jhotdraw8.collection.key;
+    exports org.jhotdraw8.collection.facade;
+    exports org.jhotdraw8.collection.enumerator;
+    exports org.jhotdraw8.collection.champ;
+    exports org.jhotdraw8.collection.primitive;
+    exports org.jhotdraw8.collection.rrb;
+    exports org.jhotdraw8.collection.indexedset;
+    exports org.jhotdraw8.collection.readonly;
+    exports org.jhotdraw8.collection.immutable;
+    exports org.jhotdraw8.collection.mapped;
 
     uses NodeReaderProvider;
     provides NodeReaderProvider with org.jhotdraw8.app.spi.FxmlNodeReaderProvider, org.jhotdraw8.app.spi.ImageNodeReaderProvider;

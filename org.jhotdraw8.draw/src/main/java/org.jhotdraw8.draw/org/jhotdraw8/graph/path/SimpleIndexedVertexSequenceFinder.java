@@ -7,8 +7,8 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.path.algo.IndexedVertexPathSearchAlgo;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
 import org.jhotdraw8.util.function.AddToIntSet;

@@ -6,7 +6,7 @@ package org.jhotdraw8.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 
 import java.io.IOException;
 import java.io.Reader;

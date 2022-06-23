@@ -5,9 +5,9 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;

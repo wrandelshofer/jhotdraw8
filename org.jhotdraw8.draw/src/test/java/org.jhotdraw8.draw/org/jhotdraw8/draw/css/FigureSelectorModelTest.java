@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.css;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.Paintable;

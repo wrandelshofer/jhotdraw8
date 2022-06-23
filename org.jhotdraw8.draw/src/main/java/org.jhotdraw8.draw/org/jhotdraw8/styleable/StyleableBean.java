@@ -7,7 +7,7 @@ package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ReadOnlySet;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 /**
  * Styleable comprises the minimal interface required for a component (bean)

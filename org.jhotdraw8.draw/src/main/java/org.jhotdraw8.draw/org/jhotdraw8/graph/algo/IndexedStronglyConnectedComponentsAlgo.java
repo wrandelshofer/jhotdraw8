@@ -5,12 +5,12 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntArrayList;
-import org.jhotdraw8.collection.IntDeque;
-import org.jhotdraw8.collection.IntEnumerator;
-import org.jhotdraw8.collection.IntList;
-import org.jhotdraw8.collection.IntRangeEnumerator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
+import org.jhotdraw8.collection.primitive.IntArrayDeque;
+import org.jhotdraw8.collection.primitive.IntArrayList;
+import org.jhotdraw8.collection.primitive.IntDeque;
+import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
 import java.util.ArrayDeque;

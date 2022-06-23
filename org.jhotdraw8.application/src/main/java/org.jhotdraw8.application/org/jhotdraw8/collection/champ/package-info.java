@@ -7,8 +7,6 @@
  * Provides the implementation of a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP).
  * <p>
- * This package is not exported from the module.
- * <p>
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection.champ;
 
-public class ChangeEvent<V> {
+class ChangeEvent<V> {
 
     public boolean modified;
     private V oldValue;

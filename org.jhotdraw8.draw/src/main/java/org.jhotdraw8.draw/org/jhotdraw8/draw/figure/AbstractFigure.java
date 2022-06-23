@@ -9,13 +9,13 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSequencedChampSet;
 import org.jhotdraw8.collection.KeyMap;
-import org.jhotdraw8.collection.ReadOnlySet;
-import org.jhotdraw8.collection.WrappedReadOnlySet;
+import org.jhotdraw8.collection.champ.ImmutableSequencedChampSet;
+import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.StylesheetsManager;
@@ -118,7 +118,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         if (layoutObservers == null) {
             return ImmutableSequencedChampSet.of();
         }
-        return new WrappedReadOnlySet<>(layoutObservers);
+        return new ReadOnlySetFacade<>(layoutObservers);
     }
 
     @Override

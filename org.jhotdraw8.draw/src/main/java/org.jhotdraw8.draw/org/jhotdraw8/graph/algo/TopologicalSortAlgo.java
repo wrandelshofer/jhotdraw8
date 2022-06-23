@@ -5,9 +5,9 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayList;
-import org.jhotdraw8.collection.IntEnumerator;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.graph.AttributedIndexedDirectedGraph;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.IndexedDirectedGraph;

@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntList;
+import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.algo.IndexedStronglyConnectedComponentsAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

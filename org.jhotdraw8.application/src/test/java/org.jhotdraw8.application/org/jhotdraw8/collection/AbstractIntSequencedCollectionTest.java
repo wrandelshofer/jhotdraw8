@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.primitive.IntSequencedCollection;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

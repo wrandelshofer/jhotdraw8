@@ -1,6 +1,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
+import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection.champ;
 
-public interface Sequenced {
+interface Sequenced {
     /**
      * We use {@link Integer#MIN_VALUE} to detect overflows in the sequence number.
      * <p>

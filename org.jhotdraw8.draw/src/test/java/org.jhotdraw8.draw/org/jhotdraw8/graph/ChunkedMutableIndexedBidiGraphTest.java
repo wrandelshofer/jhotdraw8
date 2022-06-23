@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.DenseIntSet8Bit;
+import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.graph.iterator.VertexEnumerator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

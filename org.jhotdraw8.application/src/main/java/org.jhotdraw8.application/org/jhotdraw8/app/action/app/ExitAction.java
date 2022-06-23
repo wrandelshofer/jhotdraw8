@@ -18,7 +18,7 @@ import org.jhotdraw8.app.Application;
 import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.collection.WrappedReadOnlyMap;
+import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.concurrent.SimpleWorkState;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
@@ -229,7 +229,7 @@ public class ExitAction extends AbstractApplicationAction {
     protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
         if (v == null) return;
-        v.write(uri, format, new WrappedReadOnlyMap<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
+        v.write(uri, format, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
                 if (oldFocusOwner != null) {
@@ -259,7 +259,7 @@ public class ExitAction extends AbstractApplicationAction {
     protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
         if (v == null) return;
-        v.write(uri, format, new WrappedReadOnlyMap<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
+        v.write(uri, format, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

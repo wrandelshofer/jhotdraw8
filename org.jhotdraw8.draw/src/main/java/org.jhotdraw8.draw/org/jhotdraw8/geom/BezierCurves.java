@@ -6,8 +6,8 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.DoubleArrayList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.util.function.Double2Consumer;

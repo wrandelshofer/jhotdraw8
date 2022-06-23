@@ -5,9 +5,9 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.GrowableIntSet8Bit;
-import org.jhotdraw8.collection.LongArrayDeque;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.primitive.GrowableIntSet8Bit;
+import org.jhotdraw8.collection.primitive.LongArrayDeque;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Spliterator;

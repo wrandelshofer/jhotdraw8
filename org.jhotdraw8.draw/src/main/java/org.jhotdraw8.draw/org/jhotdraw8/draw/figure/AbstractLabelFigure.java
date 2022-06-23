@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssPoint2D;

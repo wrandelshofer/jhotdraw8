@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.text.CssFXPathElementsConverter;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;

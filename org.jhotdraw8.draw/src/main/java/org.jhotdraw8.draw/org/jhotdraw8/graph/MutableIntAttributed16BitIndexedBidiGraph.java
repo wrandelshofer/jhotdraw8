@@ -6,14 +6,14 @@ package org.jhotdraw8.graph;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumerator;
-import org.jhotdraw8.collection.AbstractLongEnumerator;
-import org.jhotdraw8.collection.DenseIntSet8Bit;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntEnumerator;
-import org.jhotdraw8.collection.IntUShortArrayEnumerator;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.LongEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractLongEnumerator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.IntUShortArrayEnumerator;
+import org.jhotdraw8.collection.enumerator.LongEnumerator;
+import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
+import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.util.Preconditions;
 import org.jhotdraw8.util.function.AddToIntSet;
 

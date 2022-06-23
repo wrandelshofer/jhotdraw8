@@ -9,8 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableMap;
-import org.jhotdraw8.collection.ImmutableSequencedChampMap;
+import org.jhotdraw8.collection.champ.ImmutableSequencedChampMap;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.util.LinkedHashMap;

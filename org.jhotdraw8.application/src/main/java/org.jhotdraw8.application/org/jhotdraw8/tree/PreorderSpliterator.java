@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.collection.AbstractEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 
 import java.util.ArrayDeque;
 import java.util.Collections;

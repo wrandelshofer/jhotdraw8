@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

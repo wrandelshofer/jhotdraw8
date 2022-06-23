@@ -10,6 +10,7 @@ import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.util.AbstractSet;
 import java.util.Collection;

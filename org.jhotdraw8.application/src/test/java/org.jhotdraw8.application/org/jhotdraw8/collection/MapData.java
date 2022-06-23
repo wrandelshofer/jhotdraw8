@@ -1,5 +1,8 @@
 package org.jhotdraw8.collection;
 
+import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -10,7 +13,7 @@ import java.util.Set;
 /**
  * The test data.
  */
-final class MapData {
+public final class MapData {
     private final String name;
     public final ReadOnlyMap<HashCollider, HashCollider> a;
     public final ReadOnlyMap<HashCollider, HashCollider> aWithDifferentValues;
@@ -45,7 +48,7 @@ final class MapData {
         aPlusB.addAll(b.readOnlyEntrySet().asSet());
         aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2)
                 .iterator().forEachRemaining(e -> someAPlusSomeB.put(e.getKey(), e.getValue()));
-        this.someAPlusSomeB = new WrappedReadOnlyMap<HashCollider, HashCollider>(someAPlusSomeB);
+        this.someAPlusSomeB = new ReadOnlyMapFacade<HashCollider, HashCollider>(someAPlusSomeB);
 
     }
 
@@ -100,10 +103,10 @@ final class MapData {
             c.put(new HashCollider(keyC, hashBitMask), new HashCollider(valueC, hashBitMask));
         }
         return new MapData(name,
-                new WrappedReadOnlyMap<>(a),
-                new WrappedReadOnlyMap<>(aWithDifferentValues),
-                new WrappedReadOnlyMap<>(b),
-                new WrappedReadOnlyMap<>(c));
+                new ReadOnlyMapFacade<>(a),
+                new ReadOnlyMapFacade<>(aWithDifferentValues),
+                new ReadOnlyMapFacade<>(b),
+                new ReadOnlyMapFacade<>(c));
     }
 
     private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {

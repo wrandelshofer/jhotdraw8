@@ -9,7 +9,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssTokenType;

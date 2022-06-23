@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 

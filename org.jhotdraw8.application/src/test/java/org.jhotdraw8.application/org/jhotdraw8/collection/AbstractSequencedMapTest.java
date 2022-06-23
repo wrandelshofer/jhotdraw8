@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -35,7 +36,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     protected abstract <K, V> @NonNull SequencedMap<K, V> toClonedInstance(@NonNull Map<K, V> m);
 
-    abstract <K, V> @NonNull SequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
+    protected abstract <K, V> @NonNull SequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
 
 
     @ParameterizedTest

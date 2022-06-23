@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
-import org.jhotdraw8.collection.ReadOnlySet;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;

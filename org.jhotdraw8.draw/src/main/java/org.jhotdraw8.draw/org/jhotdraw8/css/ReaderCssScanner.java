@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 
 import java.io.IOException;
 import java.io.Reader;

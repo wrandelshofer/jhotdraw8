@@ -6,7 +6,7 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

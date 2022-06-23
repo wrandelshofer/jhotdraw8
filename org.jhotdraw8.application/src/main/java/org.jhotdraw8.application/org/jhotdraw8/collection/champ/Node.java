@@ -22,7 +22,7 @@ import java.util.function.ToIntFunction;
  *
  * @param <K> the key type
  */
-public abstract class Node<K> {
+abstract class Node<K> {
     /**
      * Represents no value.
      * We can not use {@code null}, because we allow storing null-keys and

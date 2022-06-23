@@ -6,8 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableChampSet;
-import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.champ.ImmutableChampSet;
+import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.io.IdResolver;
 import org.jhotdraw8.io.IdSupplier;
 import org.jhotdraw8.text.Converter;

@@ -7,9 +7,9 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

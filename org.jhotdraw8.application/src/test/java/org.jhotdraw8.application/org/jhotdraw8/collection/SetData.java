@@ -1,6 +1,8 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -10,7 +12,7 @@ import java.util.Set;
 /**
  * The test data.
  */
-final class SetData {
+public final class SetData {
     private final String name;
     public final ReadOnlySet<HashCollider> a;
     public final ReadOnlySet<HashCollider> b;
@@ -38,7 +40,7 @@ final class SetData {
         aPlusB.addAll(a.asSet());
         aPlusB.addAll(b.asSet());
         someAPlusSomeB.addAll(aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2));
-        this.someAPlusSomeB = new WrappedReadOnlySet<HashCollider>(someAPlusSomeB);
+        this.someAPlusSomeB = new ReadOnlySetFacade<HashCollider>(someAPlusSomeB);
     }
 
     public ReadOnlySet<HashCollider> a() {
@@ -83,9 +85,9 @@ final class SetData {
         }
 
         return new SetData(name,
-                new WrappedReadOnlySet<>(a),
-                new WrappedReadOnlySet<>(b),
-                new WrappedReadOnlySet<>(c));
+                new ReadOnlySetFacade<>(a),
+                new ReadOnlySetFacade<>(b),
+                new ReadOnlySetFacade<>(c));
     }
 
     public static @NonNull SetData newNiceData(String name, int hashBitMask, int size, int bound) {
@@ -100,9 +102,9 @@ final class SetData {
             c.add(new HashCollider(keyA + size * 2, hashBitMask));
         }
         return new SetData(name,
-                new WrappedReadOnlySet<>(a),
-                new WrappedReadOnlySet<>(b),
-                new WrappedReadOnlySet<>(c));
+                new ReadOnlySetFacade<>(a),
+                new ReadOnlySetFacade<>(b),
+                new ReadOnlySetFacade<>(c));
     }
 
     private static int createNewValue(@NonNull Random rng, @NonNull Set<Integer> usedValues, int bound) {

@@ -6,7 +6,7 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayList;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 
 import java.util.ArrayList;

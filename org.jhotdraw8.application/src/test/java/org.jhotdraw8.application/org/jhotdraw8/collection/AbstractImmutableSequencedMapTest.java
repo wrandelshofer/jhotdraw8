@@ -1,6 +1,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
+import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
+import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.util.Map;
 

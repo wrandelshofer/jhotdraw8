@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.LongArrayHeap;
+import org.jhotdraw8.collection.primitive.LongArrayHeap;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.Iterator;
@@ -32,7 +32,7 @@ import java.util.function.Function;
  * @param <E> the type parameter of the  CHAMP trie {@link Node}s
  * @param <X> the type parameter of the {@link Iterator} interface
  */
-public class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
+class HeapSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
     private final @NonNull LongArrayHeap queue;
     private E current;
     private boolean canRemove;

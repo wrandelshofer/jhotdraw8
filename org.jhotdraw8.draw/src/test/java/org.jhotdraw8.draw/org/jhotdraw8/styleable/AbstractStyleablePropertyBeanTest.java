@@ -5,7 +5,7 @@
 package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ReadOnlySet;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.junit.jupiter.api.Test;

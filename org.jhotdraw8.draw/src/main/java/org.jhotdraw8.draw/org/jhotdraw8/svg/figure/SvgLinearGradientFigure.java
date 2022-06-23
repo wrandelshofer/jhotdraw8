@@ -10,7 +10,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;

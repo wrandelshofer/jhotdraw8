@@ -6,9 +6,9 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableList;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.SpliteratorIterable;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.AllWalksSpliterator;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;

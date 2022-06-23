@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.figure;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.EmptyEnumerator;
-import org.jhotdraw8.collection.Enumerator;
+import org.jhotdraw8.collection.enumerator.EmptyEnumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 
 /**
  * This base class can be used to implement figures which do not support child

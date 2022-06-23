@@ -22,7 +22,7 @@ import static java.lang.Math.min;
  *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
  * </dl>
  */
-public class ChampTrieGraphviz {
+class ChampTrieGraphviz {
 
     private <K> void dumpBitmapIndexedNodeSubTree(@NonNull Appendable a, @NonNull BitmapIndexedNode<K> node, int shift, int keyHash) throws IOException {
 

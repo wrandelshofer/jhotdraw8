@@ -5,9 +5,9 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Enumerator;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IteratorEnumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.IteratorEnumerator;
+import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.DirectedGraph;
 
 import java.util.ArrayDeque;

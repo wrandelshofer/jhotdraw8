@@ -8,8 +8,8 @@ package org.jhotdraw8.css;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableMap;
-import org.jhotdraw8.collection.ImmutableSequencedChampMap;
+import org.jhotdraw8.collection.champ.ImmutableSequencedChampMap;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

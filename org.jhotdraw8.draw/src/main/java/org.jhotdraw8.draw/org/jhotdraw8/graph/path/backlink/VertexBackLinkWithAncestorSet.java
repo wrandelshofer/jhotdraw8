@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableAddOnlyChampSet;
+import org.jhotdraw8.collection.champ.ImmutableAddOnlyChampSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

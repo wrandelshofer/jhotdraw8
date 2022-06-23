@@ -6,9 +6,9 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
-import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.readonly.ReadOnlyList;
 
 import java.util.List;
 

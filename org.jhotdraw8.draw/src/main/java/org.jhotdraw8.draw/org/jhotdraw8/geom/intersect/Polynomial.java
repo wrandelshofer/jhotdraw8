@@ -7,7 +7,7 @@ package org.jhotdraw8.geom.intersect;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.IntegralAlgorithms;
 

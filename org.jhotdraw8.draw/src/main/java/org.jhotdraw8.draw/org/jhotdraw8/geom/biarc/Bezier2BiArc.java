@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.DoubleArrayList;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;

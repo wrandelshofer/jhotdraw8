@@ -6,8 +6,8 @@ package org.jhotdraw8.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableSequencedChampSet;
-import org.jhotdraw8.collection.ImmutableSet;
+import org.jhotdraw8.collection.champ.ImmutableSequencedChampSet;
+import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;

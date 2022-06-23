@@ -18,7 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.DoubleArrayList;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXShapes;

@@ -16,7 +16,7 @@ import org.jhotdraw8.app.ApplicationLabels;
 import org.jhotdraw8.app.FileBasedActivity;
 import org.jhotdraw8.app.FileBasedApplication;
 import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.collection.WrappedReadOnlyMap;
+import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.SimpleNullableKey;
 import org.jhotdraw8.concurrent.SimpleWorkState;
@@ -123,7 +123,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         v.setDataFormat(chosenFormat);
 
         // Open the file
-        v.read(uri, chosenFormat, new WrappedReadOnlyMap<>(options), false, workState).whenComplete((actualFormat, exception) -> {
+        v.read(uri, chosenFormat, new ReadOnlyMapFacade<>(options), false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {

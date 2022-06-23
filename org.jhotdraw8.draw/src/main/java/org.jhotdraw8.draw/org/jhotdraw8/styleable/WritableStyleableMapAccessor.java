@@ -5,8 +5,8 @@
 package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.text.CssConverter;
 import org.jhotdraw8.text.Converter;
 

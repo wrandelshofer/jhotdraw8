@@ -5,10 +5,10 @@
 package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractIntEnumerator;
-import org.jhotdraw8.collection.DenseIntSet8Bit;
-import org.jhotdraw8.collection.IntArrayDeque;
-import org.jhotdraw8.collection.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
+import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.util.function.AddToIntSet;
 
 import java.util.Objects;

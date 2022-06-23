@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Enumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.key.MapAccessor;
 import org.jhotdraw8.collection.key.NonNullMapAccessor;

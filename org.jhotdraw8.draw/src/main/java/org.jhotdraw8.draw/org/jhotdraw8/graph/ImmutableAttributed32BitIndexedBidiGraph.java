@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IntArrayEnumerator;
-import org.jhotdraw8.collection.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.IntArrayEnumerator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
 import org.jhotdraw8.util.Preconditions;
 
 import java.util.Collections;

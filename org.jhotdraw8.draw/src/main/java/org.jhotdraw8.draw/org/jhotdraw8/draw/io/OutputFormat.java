@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ReadOnlyMap;
 import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 

@@ -6,8 +6,8 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ImmutableArrayList;
-import org.jhotdraw8.collection.ReadOnlyList;
+import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.SelectorModel;

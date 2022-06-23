@@ -1,6 +1,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.collection.immutable.ImmutableSet;
+import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 

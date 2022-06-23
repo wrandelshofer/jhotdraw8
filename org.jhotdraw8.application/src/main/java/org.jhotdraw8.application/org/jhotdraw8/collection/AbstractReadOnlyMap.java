@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 /**
  * Abstract base class for {@link ReadOnlyMap}s.
