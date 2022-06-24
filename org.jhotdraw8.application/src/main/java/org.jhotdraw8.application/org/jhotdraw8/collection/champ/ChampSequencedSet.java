@@ -50,7 +50,7 @@ import java.util.function.BiFunction;
  * This set performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
  * <p>
- * The CHAMP tree contains nodes that may be shared with other sets, and nodes
+ * The CHAMP trie contains nodes that may be shared with other sets, and nodes
  * that are exclusively owned by this set.
  * <p>
  * If a write operation is performed on an exclusively owned node, then this
@@ -58,7 +58,7 @@ import java.util.function.BiFunction;
  * If a write operation is performed on a potentially shared node, then this
  * set is forced to create an exclusive copy of the node and of all not (yet)
  * exclusively owned parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
+ * Since the CHAMP trie has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
  * This set can create an immutable copy of itself in O(1) time and O(1) space

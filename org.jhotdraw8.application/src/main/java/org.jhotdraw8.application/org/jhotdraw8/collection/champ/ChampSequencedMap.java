@@ -58,7 +58,7 @@ import java.util.function.ToIntFunction;
  * This map performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
  * <p>
- * The CHAMP tree contains nodes that may be shared with other maps, and nodes
+ * The CHAMP trie contains nodes that may be shared with other maps, and nodes
  * that are exclusively owned by this map.
  * <p>
  * If a write operation is performed on an exclusively owned node, then this
@@ -66,7 +66,7 @@ import java.util.function.ToIntFunction;
  * If a write operation is performed on a potentially shared node, then this
  * map is forced to create an exclusive copy of the node and of all not (yet)
  * exclusively owned parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP tree has a fixed maximal height, the cost is O(1) in either
+ * Since the CHAMP trie has a fixed maximal height, the cost is O(1) in either
  * case.
  * <p>
  * This map can create an immutable copy of itself in O(1) time and O(1) space
