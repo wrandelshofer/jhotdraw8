@@ -131,7 +131,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
      */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ChampImmutableSequencedMap<K, V>) ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).copyPutAll(map);
+        return (ChampImmutableSequencedMap<K, V>) ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).putAll(map);
     }
 
     /**
@@ -144,7 +144,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
      */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).copyPutAll(map);
+        return ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).putAll(map);
     }
 
     /**
@@ -169,7 +169,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
      */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        return (ChampImmutableSequencedMap<K, V>) of().copyPutAll(entries);
+        return (ChampImmutableSequencedMap<K, V>) of().putAll(entries);
     }
 
     @Override
@@ -180,34 +180,34 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyClear() {
+    public @NonNull ChampImmutableSequencedMap<K, V> clear() {
         return isEmpty() ? this : of();
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPut(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampImmutableSequencedMap<K, V> put(@NonNull K key, @Nullable V value) {
         return copyPutLast(key, value, false);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
         if (isEmpty() && (m instanceof ChampSequencedMap)) {
             return ((ChampSequencedMap<K, V>) m).toImmutable();
         }
-        return copyPutAll(m.entrySet());
+        return putAll(m.entrySet());
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
         if (m == this) {
             return this;
         }
-        return copyPutAll(m.readOnlyEntrySet());
+        return putAll(m.readOnlyEntrySet());
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
         final ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
@@ -218,8 +218,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ChampImmutableSequencedMap<K, V>) ImmutableSequencedMap.super.copyPutAll(map);
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ChampImmutableSequencedMap<K, V>) ImmutableSequencedMap.super.putAll(map);
     }
 
     //@Override
@@ -270,7 +270,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyRemove(@NonNull K key) {
+    public @NonNull ChampImmutableSequencedMap<K, V> remove(@NonNull K key) {
         return copyRemove(key, first, last);
     }
 
@@ -293,7 +293,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ChampImmutableSequencedMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
         if (this.isEmpty()) {
             return this;
         }
@@ -307,7 +307,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull ChampImmutableSequencedMap<K, V> retainAll(@NonNull Collection<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -447,7 +447,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
         @Override
         protected @NonNull Object readResolve() {
-            return ChampImmutableSequencedMap.of().copyPutAll(deserialized);
+            return ChampImmutableSequencedMap.of().putAll(deserialized);
         }
     }
 }

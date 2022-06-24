@@ -31,7 +31,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this set instance if it is already empty, or a different set
      * instance that is empty.
      */
-    @NonNull ImmutableMap<K, V> copyClear();
+    @NonNull ImmutableMap<K, V> clear();
 
     /**
      * Returns a copy of this map that contains all entries
@@ -42,7 +42,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entry, or
      * a different map instance with the entry added or updated
      */
-    @NonNull ImmutableMap<K, V> copyPut(@NonNull K key, @Nullable V value);
+    @NonNull ImmutableMap<K, V> put(@NonNull K key, @Nullable V value);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -52,8 +52,8 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    default @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
-        return copyPutAll(m.entrySet());
+    default @NonNull ImmutableMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
+        return putAll(m.entrySet());
     }
 
     /**
@@ -64,7 +64,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    @NonNull ImmutableMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
+    @NonNull ImmutableMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
 
 
     /**
@@ -75,7 +75,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    @NonNull ImmutableMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
+    @NonNull ImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -86,10 +86,10 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with the entries added or updated
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> copyPutKeyValues(@NonNull Object @NonNull ... kv) {
+    default @NonNull ImmutableMap<K, V> putKeyValues(@NonNull Object @NonNull ... kv) {
         ImmutableMap<K, V> that = this;
         for (int i = 0; i < kv.length; i += 2) {
-            that = that.copyPut((K) kv[i], (V) kv[i + 1]);
+            that = that.put((K) kv[i], (V) kv[i + 1]);
         }
         return that;
     }
@@ -103,11 +103,11 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with the entries added or updated
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+    default @NonNull ImmutableMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
         if (this.isEmpty() && getClass().isInstance(map)) {
             return getClass().cast(map);
         }
-        return copyPutAll((Iterable<? extends Map.Entry<? extends K, ? extends V>>) map);
+        return putAll((Iterable<? extends Map.Entry<? extends K, ? extends V>>) map);
     }
 
     /**
@@ -118,7 +118,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already does not contain the entry, or
      * a different map instance with the entry removed
      */
-    @NonNull ImmutableMap<K, V> copyRemove(@NonNull K key);
+    @NonNull ImmutableMap<K, V> remove(@NonNull K key);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -129,7 +129,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already does not contain the entries, or
      * a different map instance with the entries removed
      */
-    @NonNull ImmutableMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c);
+    @NonNull ImmutableMap<K, V> removeAll(@NonNull Iterable<? extends K> c);
 
     /**
      * Returns a copy of this map that contains only entries
@@ -139,7 +139,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it has not changed, or
      * a different map instance with entries removed
      */
-    @NonNull ImmutableMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c);
+    @NonNull ImmutableMap<K, V> retainAll(@NonNull Collection<? extends K> c);
 
     /**
      * Returns a copy of this map that contains only entries
@@ -149,11 +149,11 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it has not changed, or
      * a different map instance with entries removed
      */
-    default @NonNull ImmutableMap<K, V> copyRetainAll(@NonNull ReadOnlyCollection<? extends K> c) {
+    default @NonNull ImmutableMap<K, V> retainAll(@NonNull ReadOnlyCollection<? extends K> c) {
         if (c == this) {
             return this;
         }
-        return copyRetainAll(c.asCollection());
+        return retainAll(c.asCollection());
     }
 
     /**

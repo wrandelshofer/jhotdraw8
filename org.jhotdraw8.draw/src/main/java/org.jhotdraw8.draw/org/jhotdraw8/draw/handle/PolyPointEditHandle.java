@@ -105,7 +105,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     private void removePoint(@NonNull DrawingView dv) {
-        dv.getModel().set(owner, pointKey, owner.getNonNull(pointKey).copyRemoveAt(pointIndex));
+        dv.getModel().set(owner, pointKey, owner.getNonNull(pointKey).removeAt(pointIndex));
         dv.recreateHandles();
     }
 
@@ -119,7 +119,7 @@ public class PolyPointEditHandle extends AbstractHandle {
         }
 
         ImmutableList<Point2D> list = owner.getNonNull(pointKey);
-        view.getModel().set(getOwner(), pointKey, list.copySet(pointIndex, getOwner().worldToLocal(newPoint)));
+        view.getModel().set(getOwner(), pointKey, list.set(pointIndex, getOwner().worldToLocal(newPoint)));
     }
 
     @Override

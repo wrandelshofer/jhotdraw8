@@ -106,7 +106,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> @NonNull ChampImmutableSet<E> of(E... elements) {
-        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).copyAddAll(Arrays.asList(elements));
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).addAll(Arrays.asList(elements));
     }
 
     /**
@@ -118,7 +118,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
      */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull ChampImmutableSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).copyAddAll(iterable);
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).addAll(iterable);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ChampImmutableSet<E> copyAdd(@NonNull E key) {
+    public @NonNull ChampImmutableSet<E> add(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, changeEvent, getUpdateFunction(), getEqualsFunction(), getHashFunction());
@@ -140,7 +140,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull ChampImmutableSet<E> copyAddAll(@NonNull Iterable<? extends E> set) {
+    public @NonNull ChampImmutableSet<E> addAll(@NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof ChampImmutableSet<?>)) {
             return (ChampImmutableSet<E>) set;
         }
@@ -156,12 +156,12 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ImmutableSet<E> copyClear() {
+    public @NonNull ImmutableSet<E> clear() {
         return isEmpty() ? this : of();
     }
 
     @Override
-    public @NonNull ChampImmutableSet<E> copyRemove(@NonNull E key) {
+    public @NonNull ChampImmutableSet<E> remove(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> changeEvent = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, changeEvent, getEqualsFunction());
@@ -172,7 +172,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ChampImmutableSet<E> copyRemoveAll(@NonNull Iterable<?> set) {
+    public @NonNull ChampImmutableSet<E> removeAll(@NonNull Iterable<?> set) {
         if (isEmpty()
                 || (set instanceof Collection<?>) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection<?>) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -196,7 +196,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ChampImmutableSet<E> copyRetainAll(final @NonNull Collection<?> set) {
+    public @NonNull ChampImmutableSet<E> retainAll(final @NonNull Collection<?> set) {
         if (isEmpty()) {
             return this;
         }

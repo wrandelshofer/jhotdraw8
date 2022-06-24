@@ -16,40 +16,40 @@ import java.util.Map;
 
 public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnlySequencedMap<K, V> {
     @Override
-    @NonNull ImmutableSequencedMap<K, V> copyClear();
+    @NonNull ImmutableSequencedMap<K, V> clear();
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> copyPut(@NonNull K key, @Nullable V value);
-
-    @Override
-    @NonNull
-    default ImmutableSequencedMap<K, V> copyPutAll(@NonNull Map<? extends K, ? extends V> m) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutAll(m);
-    }
-
-    @Override
-    @NonNull ImmutableSequencedMap<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
-
-    @Override
-    @NonNull ImmutableSequencedMap<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
+    @NonNull ImmutableSequencedMap<K, V> put(@NonNull K key, @Nullable V value);
 
     @Override
     @NonNull
-    default ImmutableSequencedMap<K, V> copyPutAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutAll(map);
+    default ImmutableSequencedMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
+        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.putAll(m);
+    }
+
+    @Override
+    @NonNull ImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
+
+    @Override
+    @NonNull ImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
+
+    @Override
+    @NonNull
+    default ImmutableSequencedMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.putAll(map);
     }
 
     @Override
     @NonNull
-    default ImmutableSequencedMap<K, V> copyPutKeyValues(@NonNull Object @NonNull ... kv) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyPutKeyValues(kv);
+    default ImmutableSequencedMap<K, V> putKeyValues(@NonNull Object @NonNull ... kv) {
+        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.putKeyValues(kv);
     }
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> copyRemove(@NonNull K key);
+    @NonNull ImmutableSequencedMap<K, V> remove(@NonNull K key);
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c);
+    @NonNull ImmutableSequencedMap<K, V> removeAll(@NonNull Iterable<? extends K> c);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -58,8 +58,8 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return this map instance if it is already empty, or
      * a different map instance with the first entry removed
      */
-    default @NonNull ImmutableSequencedMap<K, V> copyRemoveFirst() {
-        return isEmpty() ? this : copyRemove(firstKey());
+    default @NonNull ImmutableSequencedMap<K, V> removeFirst() {
+        return isEmpty() ? this : remove(firstKey());
     }
 
     /**
@@ -69,17 +69,17 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return this map instance if it is already empty, or
      * a different map instance with the last entry removed
      */
-    default @NonNull ImmutableSequencedMap<K, V> copyRemoveLast() {
-        return isEmpty() ? this : copyRemove(lastKey());
+    default @NonNull ImmutableSequencedMap<K, V> removeLast() {
+        return isEmpty() ? this : remove(lastKey());
     }
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> copyRetainAll(@NonNull Collection<? extends K> c);
+    @NonNull ImmutableSequencedMap<K, V> retainAll(@NonNull Collection<? extends K> c);
 
     @Override
     @NonNull
-    default ImmutableSequencedMap<K, V> copyRetainAll(@NonNull ReadOnlyCollection<? extends K> c) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.copyRetainAll(c);
+    default ImmutableSequencedMap<K, V> retainAll(@NonNull ReadOnlyCollection<? extends K> c) {
+        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.retainAll(c);
     }
 
     @Override

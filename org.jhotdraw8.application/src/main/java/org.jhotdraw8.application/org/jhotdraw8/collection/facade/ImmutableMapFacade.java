@@ -28,7 +28,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyClear() {
+    public @NonNull ImmutableMapFacade<K, V> clear() {
         if (isEmpty()) {
             return this;
         }
@@ -38,7 +38,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyPut(@NonNull K key, @Nullable V value) {
+    public @NonNull ImmutableMapFacade<K, V> put(@NonNull K key, @Nullable V value) {
         if (containsKey(key) && Objects.equals(get(key), value)) {
             return this;
         }
@@ -48,7 +48,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyPutAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+    public @NonNull ImmutableMapFacade<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
         Map<K, V> clone = cloneFunction.apply(target);
         clone.putAll(m.asMap());
         if (clone.equals(target)) {
@@ -58,7 +58,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyPutAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
+    public @NonNull ImmutableMapFacade<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
         Map<K, V> clone = cloneFunction.apply(target);
         for (Map.Entry<? extends K, ? extends V> e : m) {
             clone.put(e.getKey(), e.getValue());
@@ -70,7 +70,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyRemove(@NonNull K key) {
+    public @NonNull ImmutableMapFacade<K, V> remove(@NonNull K key) {
         if (!containsKey(key)) {
             return this;
         }
@@ -81,7 +81,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
 
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyRemoveAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ImmutableMapFacade<K, V> removeAll(@NonNull Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -106,12 +106,12 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> copyRetainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull ImmutableMapFacade<K, V> retainAll(@NonNull Collection<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
         if (c.isEmpty()) {
-            return copyClear();
+            return clear();
         }
         Map<K, V> clone = cloneFunction.apply(target);
         if (clone.keySet().retainAll(c)) {

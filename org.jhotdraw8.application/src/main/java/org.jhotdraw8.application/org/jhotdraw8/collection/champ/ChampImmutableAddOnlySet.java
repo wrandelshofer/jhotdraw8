@@ -85,13 +85,13 @@ public abstract class ChampImmutableAddOnlySet<E> implements ImmutableAddOnlySet
     public static <E> @NonNull ChampImmutableAddOnlySet<E> of(E @NonNull ... elements) {
         ChampImmutableAddOnlySet<E> set = (ChampImmutableAddOnlySet<E>) BitmapIndexedNode.EMPTY_NODE;
         for (E e : elements) {
-            set = set.copyAdd(e);
+            set = set.add(e);
         }
         return set;
     }
 
     @Override
-    public @NonNull ChampImmutableAddOnlySet<E> copyAdd(@NonNull E key) {
+    public @NonNull ChampImmutableAddOnlySet<E> add(@NonNull E key) {
         return updated(key, key.hashCode(), 0);
     }
 

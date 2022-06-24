@@ -367,9 +367,9 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = FXTransforms.concat(ts.get(last), transform);
                 if (concatenatedWithLast instanceof Affine) {
-                    set(TRANSFORMS, ts.copyAdd(transform));
+                    set(TRANSFORMS, ts.add(transform));
                 } else {
-                    set(TRANSFORMS, ts.copySet(last, concatenatedWithLast));
+                    set(TRANSFORMS, ts.set(last, concatenatedWithLast));
                 }
             }
             return;
@@ -414,7 +414,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (transforms.isEmpty()) {
             set(TRANSFORMS, ImmutableArrayList.of(t));
         } else {
-            set(TRANSFORMS, transforms.copyAdd(t));
+            set(TRANSFORMS, transforms.add(t));
         }
     }
 
@@ -439,7 +439,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, ImmutableArrayList.of(t));
             } else {
-                set(TRANSFORMS, transforms.copySet(0, t));
+                set(TRANSFORMS, transforms.set(0, t));
             }
         }
     }

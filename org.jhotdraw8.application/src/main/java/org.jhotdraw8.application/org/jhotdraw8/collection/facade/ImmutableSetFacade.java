@@ -25,7 +25,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
-    public @NonNull ImmutableSet<E> copyClear() {
+    public @NonNull ImmutableSet<E> clear() {
         if (isEmpty()) {
             return this;
         }
@@ -35,13 +35,13 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
-    public @NonNull ImmutableSet<E> copyAdd(E element) {
+    public @NonNull ImmutableSet<E> add(E element) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.add(element) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override
-    public @NonNull ImmutableSet<E> copyAddAll(@NonNull Iterable<? extends E> c) {
+    public @NonNull ImmutableSet<E> addAll(@NonNull Iterable<? extends E> c) {
         Set<E> clone = cloneFunction.apply(target);
         boolean changed = false;
         for (E e : c) {
@@ -51,13 +51,13 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
-    public @NonNull ImmutableSet<E> copyRemove(E element) {
+    public @NonNull ImmutableSet<E> remove(E element) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.remove(element) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override
-    public @NonNull ImmutableSet<E> copyRemoveAll(@NonNull Iterable<?> c) {
+    public @NonNull ImmutableSet<E> removeAll(@NonNull Iterable<?> c) {
         Set<E> clone = cloneFunction.apply(target);
         boolean changed = false;
         for (Object e : c) {
@@ -68,7 +68,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
 
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
-    public @NonNull ImmutableSet<E> copyRetainAll(@NonNull Collection<?> c) {
+    public @NonNull ImmutableSet<E> retainAll(@NonNull Collection<?> c) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.retainAll(c) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }

@@ -149,7 +149,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
             }
         }
         if (insertAt != -1) {
-            view.getModel().set(owner, key, owner.getNonNull(key).copyAdd(insertAt, insertLocation));
+            view.getModel().set(owner, key, owner.getNonNull(key).add(insertAt, insertLocation));
             view.recreateHandles();
         }
     }

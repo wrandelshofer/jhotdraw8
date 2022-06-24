@@ -118,7 +118,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public @NonNull ImmutableArrayList<E> copyClear() {
+    public @NonNull ImmutableArrayList<E> clear() {
         if (list.isEmpty()) {
             return this;
         }
@@ -128,21 +128,21 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public @NonNull ImmutableArrayList<E> copyAdd(@NonNull E element) {
+    public @NonNull ImmutableArrayList<E> add(@NonNull E element) {
         List<E> c = cloneFunction.apply(list);
         c.add(element);
         return new ImmutableArrayList<>(c, cloneFunction);
     }
 
     @Override
-    public @NonNull ImmutableList<E> copyAdd(int index, @NonNull E element) {
+    public @NonNull ImmutableList<E> add(int index, @NonNull E element) {
         List<E> c = cloneFunction.apply(list);
         c.add(index, element);
         return new ImmutableArrayList<>(c, cloneFunction);
     }
 
     @Override
-    public @NonNull ImmutableArrayList<E> copyAddAll(@NonNull Iterable<? extends E> s) {
+    public @NonNull ImmutableArrayList<E> addAll(@NonNull Iterable<? extends E> s) {
         List<E> c = cloneFunction.apply(list);
         boolean changed = false;
         for (E e : s) {
@@ -153,7 +153,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableList<E> copyAddAll(int index, @NonNull Iterable<? extends E> it) {
+    public @NonNull ImmutableList<E> addAll(int index, @NonNull Iterable<? extends E> it) {
         List<E> c = cloneFunction.apply(list);
         if (it instanceof Collection<?>) {
             c.addAll(index, ((Collection<E>) it));
@@ -166,7 +166,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public @NonNull ImmutableArrayList<E> copyRemove(@NonNull E element) {
+    public @NonNull ImmutableArrayList<E> remove(@NonNull E element) {
         if (!list.contains(element)) {
             return this;
         }
@@ -177,21 +177,21 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public @NonNull ImmutableList<E> copyRemoveAt(int index) {
+    public @NonNull ImmutableList<E> removeAt(int index) {
         List<E> c = cloneFunction.apply(list);
         c.remove(index);
         return new ImmutableArrayList<>(c, cloneFunction);
     }
 
     @Override
-    public @NonNull ImmutableList<E> copyRemoveRange(int fromIndex, int toIndex) {
+    public @NonNull ImmutableList<E> removeRange(int fromIndex, int toIndex) {
         List<E> c = cloneFunction.apply(list);
         c.subList(fromIndex, toIndex).clear();
         return new ImmutableArrayList<>(c, cloneFunction);
     }
 
     @Override
-    public @NonNull ImmutableArrayList<E> copyRemoveAll(@NonNull Iterable<? extends E> s) {
+    public @NonNull ImmutableArrayList<E> removeAll(@NonNull Iterable<? extends E> s) {
         List<E> c = cloneFunction.apply(list);
         boolean changed = false;
         for (E e : s) {
@@ -201,7 +201,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public @NonNull ImmutableArrayList<E> copyRetainAll(@NonNull Collection<? extends E> s) {
+    public @NonNull ImmutableArrayList<E> retainAll(@NonNull Collection<? extends E> s) {
         List<E> c = cloneFunction.apply(list);
         boolean changed = false;
         for (Iterator<E> iterator = c.iterator(); iterator.hasNext(); ) {
@@ -215,7 +215,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     }
 
     @Override
-    public @NonNull ImmutableList<E> copySet(int index, @NonNull E element) {
+    public @NonNull ImmutableList<E> set(int index, @NonNull E element) {
         List<E> c = cloneFunction.apply(list);
         c.set(index, element);
         return new ImmutableArrayList<>(c, cloneFunction);

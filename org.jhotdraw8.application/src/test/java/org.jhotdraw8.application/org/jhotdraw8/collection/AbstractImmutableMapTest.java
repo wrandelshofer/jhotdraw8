@@ -130,7 +130,7 @@ public abstract class AbstractImmutableMapTest {
     public void testCopyClearShouldYieldEmptyMap(MapData data) {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyClear();
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.clear();
         assertNotSame(instance, instance2);
         assertEqualMap(Collections.emptyMap(), instance2);
     }
@@ -140,9 +140,9 @@ public abstract class AbstractImmutableMapTest {
     public void testCopyClearShouldBeIdempotent(MapData data) {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
-        instance = instance.copyClear();
+        instance = instance.clear();
         assertEqualMap(Collections.emptyMap(), instance);
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyClear();
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.clear();
         assertSame(instance, instance2);
         assertEqualMap(Collections.emptyMap(), instance2);
     }
@@ -231,7 +231,7 @@ public abstract class AbstractImmutableMapTest {
         assertEquals(instance, instance2);
 
         // WHEN instance3 has not the same size as instance2
-        ImmutableMap<HashCollider, HashCollider> instance3 = instance2.copyPutAll(data.b().asMap());
+        ImmutableMap<HashCollider, HashCollider> instance3 = instance2.putAll(data.b().asMap());
         assertNotEquals(instance2.size(), instance3.size());
         assertNotSame(instance2, instance3);
         assertNotEquals(instance, instance3);
@@ -249,7 +249,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<HashCollider, HashCollider> e : data.c) {
-            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(e.getKey(), e.getValue());
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.put(e.getKey(), e.getValue());
             assertNotSame(instance, instance2);
             expected.put(e.getKey(), e.getValue());
             assertEqualMap(expected, instance2);
@@ -263,7 +263,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<HashCollider, HashCollider> e : data.b) {
-            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(e.getKey(), e.getValue());
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.put(e.getKey(), e.getValue());
             assertNotSame(instance, instance2);
             assertEqualMap(expected, instance);
             expected.put(e.getKey(), e.getValue());
@@ -277,7 +277,7 @@ public abstract class AbstractImmutableMapTest {
     public void testCopyRemoveWithNewKeyShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
         for (Map.Entry<HashCollider, HashCollider> e : data.c) {
-            assertSame(instance, instance.copyRemove(e.getKey()));
+            assertSame(instance, instance.remove(e.getKey()));
             assertEqualMap(data.a.asMap(), instance);
         }
     }
@@ -288,7 +288,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<HashCollider, HashCollider> e : data.a) {
-            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRemove(e.getKey());
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.remove(e.getKey());
             assertNotSame(instance, instance2);
             assertEqualMap(expected, instance);
             expected.remove(e.getKey());
@@ -338,7 +338,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<HashCollider, HashCollider> e : data.a) {
-            ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(e.getKey(), e.getValue());
+            ImmutableMap<HashCollider, HashCollider> instance2 = instance.put(e.getKey(), e.getValue());
             assertSame(instance, instance2);
             assertEqualMap(expected, instance2);
         }
@@ -348,7 +348,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyPutAllWithContainedEntriesShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(data.a().asMap());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.putAll(data.a().asMap());
         assertSame(instance, instance2);
         assertEqualMap(data.a(), instance);
     }
@@ -357,7 +357,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyPutAllWithNewEntriesShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(data.c().asMap());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.putAll(data.c().asMap());
         assertNotSame(instance, instance2);
         Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         assertEqualMap(expected, instance);
@@ -369,7 +369,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyPutAllWithContainedKeysButNewValuesShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(data.b().asMap());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.putAll(data.b().asMap());
         assertNotSame(instance, instance2);
         Map<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         assertEqualMap(expected, instance);
@@ -382,7 +382,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyPutAllWithSelfShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(instance);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.putAll(instance);
         assertSame(instance, instance2);
         assertEqualMap(data.a, instance);
     }
@@ -427,7 +427,7 @@ public abstract class AbstractImmutableMapTest {
             m.put(entry.getKey(), entry.getValue());
         }
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPutAll(m);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.putAll(m);
         assertNotSame(instance, instance2);
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
         assertEqualMap(expected, instance);
@@ -450,7 +450,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance();
         assertEquals("{}", instance.toString());
 
-        instance = instance.copyPutAll(data.a.asMap());
+        instance = instance.putAll(data.a.asMap());
         String str = instance.toString();
         assertEquals('{', str.charAt(0));
         assertEquals('}', str.charAt(str.length() - 1));
@@ -465,7 +465,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithContainedKeysShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(data.a().asMap().keySet());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.retainAll(data.a().asMap().keySet());
         assertSame(instance, instance2);
         assertEqualMap(data.a(), instance2);
     }
@@ -474,7 +474,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithSomeContainedKeysShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(data.someAPlusSomeB().asMap().keySet());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.retainAll(data.someAPlusSomeB().asMap().keySet());
         assertNotSame(instance, instance2);
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a().asMap());
         expected.keySet().retainAll(data.someAPlusSomeB().asMap().keySet());
@@ -485,7 +485,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithEmptySetShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(Collections.emptySet());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.retainAll(Collections.emptySet());
         assertNotSame(instance, instance2);
         assertEqualMap(data.a(), instance);
         assertEqualMap(Collections.emptyMap(), instance2);
@@ -495,7 +495,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance();
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRetainAll(data.a().asMap().keySet());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.retainAll(data.a().asMap().keySet());
         assertSame(instance, instance2);
         assertEqualMap(Collections.emptyMap(), instance2);
     }
@@ -504,7 +504,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance();
-        assertSame(instance, instance.copyRemoveAll(data.a.readOnlyKeySet().asSet()));
+        assertSame(instance, instance.removeAll(data.a.readOnlyKeySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
     }
 
@@ -512,7 +512,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
-        assertSame(instance, instance.copyRemoveAll(Collections.emptySet()));
+        assertSame(instance, instance.removeAll(Collections.emptySet()));
         assertEqualMap(data.a(), instance);
     }
 
@@ -520,7 +520,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRemoveAll(data.a.readOnlyKeySet().asSet());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.removeAll(data.a.readOnlyKeySet().asSet());
         assertNotSame(instance, instance2);
         assertEqualMap(data.a, instance);
         assertEqualMap(Collections.emptyMap(), instance2);
@@ -530,7 +530,7 @@ public abstract class AbstractImmutableMapTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a);
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyRemoveAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
         assertNotSame(instance, instance2);
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
         assertEqualMap(expected, instance);
@@ -544,7 +544,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<HashCollider, HashCollider> instance = newInstance(data.a());
         LinkedHashMap<HashCollider, HashCollider> expected = new LinkedHashMap<>(data.a.asMap());
         HashCollider key = new HashCollider(42, -1);
-        ImmutableMap<HashCollider, HashCollider> instance2 = instance.copyPut(key, null);
+        ImmutableMap<HashCollider, HashCollider> instance2 = instance.put(key, null);
         assertNotSame(instance, instance2);
         expected.put(key, null);
         assertTrue(instance2.containsKey(key));

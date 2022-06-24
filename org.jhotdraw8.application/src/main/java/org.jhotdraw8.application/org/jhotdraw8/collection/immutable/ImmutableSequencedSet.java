@@ -16,23 +16,23 @@ import java.util.Collection;
 
 public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySequencedSet<E> {
     @Override
-    @NonNull ImmutableSequencedSet<E> copyAdd(E element);
+    @NonNull ImmutableSequencedSet<E> add(E element);
 
     @Override
-    @NonNull ImmutableSequencedSet<E> copyAddAll(@NonNull Iterable<? extends E> c);
+    @NonNull ImmutableSequencedSet<E> addAll(@NonNull Iterable<? extends E> c);
 
-    @NonNull ChampImmutableSequencedSet<E> copyAddFirst(final @Nullable E key);
+    @NonNull ChampImmutableSequencedSet<E> addFirst(final @Nullable E key);
 
-    @NonNull ChampImmutableSequencedSet<E> copyAddLast(final @Nullable E key);
-
-    @Override
-    @NonNull ImmutableSequencedSet<E> copyClear();
+    @NonNull ChampImmutableSequencedSet<E> addLast(final @Nullable E key);
 
     @Override
-    @NonNull ImmutableSequencedSet<E> copyRemove(E element);
+    @NonNull ImmutableSequencedSet<E> clear();
 
     @Override
-    @NonNull ImmutableSequencedSet<E> copyRemoveAll(@NonNull Iterable<?> c);
+    @NonNull ImmutableSequencedSet<E> remove(E element);
+
+    @Override
+    @NonNull ImmutableSequencedSet<E> removeAll(@NonNull Iterable<?> c);
 
     /**
      * Returns a copy of this set that contains all elements
@@ -41,8 +41,8 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      * @return this set instanceif it is already empty, or
      * a different set instance with the first element removed
      */
-    default ImmutableSequencedSet<E> copyRemoveFirst() {
-        return isEmpty() ? this : copyRemove(getFirst());
+    default ImmutableSequencedSet<E> removeFirst() {
+        return isEmpty() ? this : remove(getFirst());
     }
 
     /**
@@ -52,17 +52,17 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      * @return this set instance if it is already empty, or
      * a different set instance with the last element removed
      */
-    default ImmutableSequencedSet<E> copyRemoveLast() {
-        return isEmpty() ? this : copyRemove(getLast());
+    default ImmutableSequencedSet<E> removeLast() {
+        return isEmpty() ? this : remove(getLast());
     }
 
     @Override
-    @NonNull ImmutableSequencedSet<E> copyRetainAll(@NonNull Collection<?> c);
+    @NonNull ImmutableSequencedSet<E> retainAll(@NonNull Collection<?> c);
 
     @Override
     @NonNull
-    default ImmutableSequencedSet<E> copyRetainAll(final @NonNull ReadOnlyCollection<?> c) {
-        return (ImmutableSequencedSet<E>) ImmutableSet.super.copyRetainAll(c);
+    default ImmutableSequencedSet<E> retainAll(final @NonNull ReadOnlyCollection<?> c) {
+        return (ImmutableSequencedSet<E>) ImmutableSet.super.retainAll(c);
     }
 
     @Override

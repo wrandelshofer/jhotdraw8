@@ -470,7 +470,7 @@ public class FigureSvgTinyReader {
                 handleError(r, "stop: Cannot add stop to parent element " + parent.getTypeSelector());
             } else {
                 SvgStop stop = new SvgStop(offset.getConvertedValue(), stopColor, stopOpacity);
-                parent.put(stopsKey, parent.getNonNull(stopsKey).copyAdd(stop));
+                parent.put(stopsKey, parent.getNonNull(stopsKey).add(stop));
             }
         }
         skipElement(r, ctx);

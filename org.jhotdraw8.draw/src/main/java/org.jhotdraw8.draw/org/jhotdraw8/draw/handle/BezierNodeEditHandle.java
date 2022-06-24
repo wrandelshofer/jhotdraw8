@@ -203,7 +203,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
         BezierNode p = list.get(pointIndex);
         view.getModel().set(getOwner(), pointKey,
-                list.copySet(pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+                list.set(pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
     }
 
     @Override

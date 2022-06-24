@@ -38,8 +38,8 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
     @MethodSource("dataProvider")
     public void testCopyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
         ImmutableSequencedSet<HashCollider> instance = newInstance(data.a());
-        instance = instance.copyRemoveAll(data.a().asSet());
-        assertThrows(NoSuchElementException.class, instance::copyRemoveLast);
+        instance = instance.removeAll(data.a().asSet());
+        assertThrows(NoSuchElementException.class, instance::removeLast);
     }
 
     @ParameterizedTest
@@ -48,7 +48,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
         ImmutableSequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
-            ImmutableSequencedSet<HashCollider> instance2 = instance.copyRemoveLast();
+            ImmutableSequencedSet<HashCollider> instance2 = instance.removeLast();
             assertNotSame(instance, instance2);
             expected.remove(expected.size() - 1);
             assertEqualSequence(expected, instance2, "removeLast");
@@ -60,10 +60,10 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
     @MethodSource("dataProvider")
     public void testRemoveLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         ImmutableSequencedSet<HashCollider> instance = newInstance();
-        instance = instance.copyAddAll(data.a.asSet());
+        instance = instance.addAll(data.a.asSet());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
-            ImmutableSequencedSet<HashCollider> instance2 = instance.copyRemoveLast();
+            ImmutableSequencedSet<HashCollider> instance2 = instance.removeLast();
             assertNotSame(instance, instance2);
             expected.remove(expected.size() - 1);
             assertEqualSequence(expected, instance2, "removeLast");

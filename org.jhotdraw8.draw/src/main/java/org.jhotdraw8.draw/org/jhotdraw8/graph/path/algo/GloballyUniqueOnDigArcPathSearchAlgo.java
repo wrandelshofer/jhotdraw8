@@ -171,7 +171,7 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
             if (u.getDepth() < maxDepth) {
                 ChampImmutableAddOnlySet<V> uAncestors = u.removeAncestors();
                 for (final Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    final ChampImmutableAddOnlySet<V> vAncestors = uAncestors.copyAdd(v.getEnd());
+                    final ChampImmutableAddOnlySet<V> vAncestors = uAncestors.add(v.getEnd());
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
                             final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getArrow(), u, vAncestors);

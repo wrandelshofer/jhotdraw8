@@ -330,7 +330,7 @@ public class PageFigure extends AbstractCompositeFigure
         final Transform pageTransform = getPageTransform(currentPage);
         ImmutableList<Transform> transforms = ImmutableArrayList.of();
         if (!pageTransform.isIdentity()) {
-            transforms = transforms.copyAdd(pageTransform);
+            transforms = transforms.add(pageTransform);
         }
 
         for (Figure child : getChildren()) {

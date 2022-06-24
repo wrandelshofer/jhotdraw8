@@ -288,7 +288,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                     @Override
                     public void commitEdit(@NonNull ImmutableSet<String> newValue) {
-                        ImmutableSet<String> newValueSet = newValue.copyRemoveAll(syntheticClasses);
+                        ImmutableSet<String> newValueSet = newValue.removeAll(syntheticClasses);
                         super.commitEdit(newValueSet);
                     }
 

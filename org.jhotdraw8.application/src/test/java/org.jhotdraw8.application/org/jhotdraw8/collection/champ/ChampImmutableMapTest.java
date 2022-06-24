@@ -25,12 +25,12 @@ public class ChampImmutableMapTest extends AbstractImmutableMapTest {
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Map<K, V> map) {
-        return ChampImmutableMap.<K, V>of().copyPutAll(map);
+        return ChampImmutableMap.<K, V>of().putAll(map);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
-        return ChampImmutableMap.<K, V>of().copyPutAll(map);
+        return ChampImmutableMap.<K, V>of().putAll(map);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ChampImmutableMapTest extends AbstractImmutableMapTest {
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
-        return ChampImmutableMap.<K, V>of().copyPutAll(entries);
+        return ChampImmutableMap.<K, V>of().putAll(entries);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ChampImmutableMapTest extends AbstractImmutableMapTest {
         for (int i = 0; i < 30; i++) {
             HashCollider key = new HashCollider(rng.nextInt(1_000), ~0xff00);
             String value = "v" + i;
-            instance = instance.copyPut(key, value);
+            instance = instance.put(key, value);
         }
 
         System.out.println(new ChampTrieGraphviz().dumpTrie(instance));

@@ -62,35 +62,35 @@ public class ChampImmutableAddOnlySetTest {
 
         // GIVEN: a set with values1
         for (HashCollider v : values1) {
-            actual = actual.copyAdd(v);
+            actual = actual.add(v);
         }
 
         // WHEN: value1 is already in set, then withAdd must yield the same set
-        newActual = actual.copyAdd(firstValue1);
+        newActual = actual.add(firstValue1);
         assertSame(newActual, actual);
 
         // WHEN: value2 is not yet in set, then withAdd must yield a new set
-        newActual = actual.copyAdd(firstValue2);
+        newActual = actual.add(firstValue2);
         assertNotSame(newActual, actual);
     }
 
     private void testCopyAddAndOfWith1Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
-        ChampImmutableAddOnlySet<HashCollider> actual = ChampImmutableAddOnlySet.<HashCollider>of().copyAdd(firstValue1);
+        ChampImmutableAddOnlySet<HashCollider> actual = ChampImmutableAddOnlySet.<HashCollider>of().add(firstValue1);
         ChampImmutableAddOnlySet<HashCollider> newActual;
 
         // GIVEN: a set with values1
         for (HashCollider v : values1) {
-            actual = actual.copyAdd(v);
+            actual = actual.add(v);
         }
 
         // WHEN: value1 is already in set, then withAdd must yield the same set
-        newActual = actual.copyAdd(firstValue1);
+        newActual = actual.add(firstValue1);
         assertSame(newActual, actual);
 
         // WHEN: value2 is not yet in set, then withAdd must yield a new set
-        newActual = actual.copyAdd(firstValue2);
+        newActual = actual.add(firstValue2);
         assertNotSame(newActual, actual);
     }
 }

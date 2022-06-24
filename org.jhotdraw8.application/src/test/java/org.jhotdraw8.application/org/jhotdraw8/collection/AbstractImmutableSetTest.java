@@ -149,7 +149,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyClearShouldYieldEmptySet(@NonNull SetData data) {
         ImmutableSet<HashCollider> actual = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), actual);
-        ImmutableSet<HashCollider> actual2 = actual.copyClear();
+        ImmutableSet<HashCollider> actual2 = actual.clear();
         assertNotSame(actual, actual2);
         assertEqualSet(Collections.emptySet(), actual2);
     }
@@ -159,11 +159,11 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyClearShouldBeIdempotent(@NonNull SetData data) {
         ImmutableSet<HashCollider> instance = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), instance);
-        ImmutableSet<HashCollider> instance2 = instance.copyClear();
+        ImmutableSet<HashCollider> instance2 = instance.clear();
         assertEqualSet(Collections.emptySet(), instance2);
         assertNotSame(instance, instance2);
 
-        ImmutableSet<HashCollider> instance3 = instance2.copyClear();
+        ImmutableSet<HashCollider> instance3 = instance2.clear();
         assertSame(instance2, instance3);
         assertEqualSet(Collections.emptySet(), instance3);
     }
@@ -272,7 +272,7 @@ public abstract class AbstractImmutableSetTest {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         for (HashCollider e : data.c) {
-            ImmutableSet<HashCollider> instance2 = instance.copyAdd(e);
+            ImmutableSet<HashCollider> instance2 = instance.add(e);
             assertNotSame(instance, instance2);
             instance = instance2;
             expected.add(e);
@@ -287,7 +287,7 @@ public abstract class AbstractImmutableSetTest {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         for (HashCollider e : data.a) {
-            ImmutableSet<HashCollider> instance2 = instance.copyAdd(e);
+            ImmutableSet<HashCollider> instance2 = instance.add(e);
             assertSame(instance, instance2);
             assertEqualSet(expected, instance);
         }
@@ -298,7 +298,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyAddAllWithNewElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(data.c);
+        ImmutableSet<HashCollider> instance2 = instance.addAll(data.c);
         assertNotSame(instance, instance2);
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         expected.addAll(data.c.asSet());
@@ -310,7 +310,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyAddAllWithContainedElementsShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(data.a.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.addAll(data.a.asSet());
         assertSame(instance, instance2);
         assertEquals(data.a.asSet(), instance2.asSet());
     }
@@ -320,7 +320,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSelfShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(instance);
+        ImmutableSet<HashCollider> instance2 = instance.addAll(instance);
         assertSame(instance, instance2);
         assertEquals(data.a.asSet(), instance2.asSet());
     }
@@ -331,7 +331,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyAddAllWithCloneShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = toClonedInstance(instance);
-        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2);
+        ImmutableSet<HashCollider> instance3 = instance.addAll(instance2);
         assertSame(instance, instance3);
         assertEquals(data.a.asSet(), instance3.asSet());
     }
@@ -342,7 +342,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyAddAllWithCloneToMutableShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = toClonedInstance(instance);
-        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2.toMutable());
+        ImmutableSet<HashCollider> instance3 = instance.addAll(instance2.toMutable());
         assertSame(instance, instance3);
         assertEquals(data.a.asSet(), instance3.asSet());
     }
@@ -361,7 +361,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyRemoveWithNewElementShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         for (HashCollider e : data.c) {
-            ImmutableSet<HashCollider> instance2 = instance.copyRemove(e);
+            ImmutableSet<HashCollider> instance2 = instance.remove(e);
             assertSame(instance, instance2);
             assertEqualSet(data.a, instance);
         }
@@ -375,7 +375,7 @@ public abstract class AbstractImmutableSetTest {
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a().asSet());
         for (HashCollider e : data.a) {
             expected.remove(e);
-            ImmutableSet<HashCollider> instance2 = instance.copyRemove(e);
+            ImmutableSet<HashCollider> instance2 = instance.remove(e);
             assertNotSame(instance, instance2);
             instance = instance2;
             assertEqualSet(expected, instance);
@@ -387,7 +387,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithNewKeyShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(data.c.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.removeAll(data.c.asSet());
         assertSame(instance, instance2);
         assertEqualSet(data.a, instance);
     }
@@ -397,7 +397,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(data.a.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.removeAll(data.a.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(Collections.emptySet(), instance2);
     }
@@ -407,7 +407,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(data.someAPlusSomeB);
+        ImmutableSet<HashCollider> instance2 = instance.removeAll(data.someAPlusSomeB);
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
     }
@@ -417,7 +417,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithSetWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(data.someAPlusSomeB.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.removeAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
     }
@@ -427,7 +427,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRemoveAll(newInstance(data.someAPlusSomeB));
+        ImmutableSet<HashCollider> instance2 = instance.removeAll(newInstance(data.someAPlusSomeB));
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
@@ -440,7 +440,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyAddAll(data.someAPlusSomeB());
+        ImmutableSet<HashCollider> instance2 = instance.addAll(data.someAPlusSomeB());
         assertNotSame(instance, instance2);
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         assertEqualSet(expected, instance);
@@ -458,8 +458,8 @@ public abstract class AbstractImmutableSetTest {
         ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
 
         ImmutableSet<HashCollider> instance2 = newInstance();
-        instance2 = instance2.copyAddAll(listA.subList(0, listA.size() / 2));
-        instance2 = instance2.copyAddAll(listC.subList(0, listC.size() / 2));
+        instance2 = instance2.addAll(listA.subList(0, listA.size() / 2));
+        instance2 = instance2.addAll(listC.subList(0, listC.size() / 2));
 
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
         LinkedHashSet<HashCollider> expected2 = new LinkedHashSet<>();
@@ -467,7 +467,7 @@ public abstract class AbstractImmutableSetTest {
         expected2.addAll(listC.subList(0, listC.size() / 2));
         assertEqualSet(expected2, instance2);
 
-        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2);
+        ImmutableSet<HashCollider> instance3 = instance.addAll(instance2);
         assertNotSame(instance2, instance3);
         expected.addAll(expected2);
         assertEqualSet(expected, instance3);
@@ -479,7 +479,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = newInstance(data.c);
-        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2);
+        ImmutableSet<HashCollider> instance3 = instance.addAll(instance2);
         assertNotSame(instance2, instance3);
 
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
@@ -493,7 +493,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = newInstance(data.c);
-        ImmutableSet<HashCollider> instance3 = instance.copyAddAll(instance2.toMutable());
+        ImmutableSet<HashCollider> instance3 = instance.addAll(instance2.toMutable());
         assertNotSame(instance2, instance3);
 
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
@@ -520,7 +520,7 @@ public abstract class AbstractImmutableSetTest {
         ImmutableSet<HashCollider> instance = newInstance();
         assertEquals("[]", instance.toString());
 
-        instance = instance.copyAddAll(data.a.asSet());
+        instance = instance.addAll(data.a.asSet());
         String str = instance.toString();
         assertEquals('[', str.charAt(0));
         assertEquals(']', str.charAt(str.length() - 1));
@@ -535,7 +535,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyRetainAllWithCloneShouldReturnThis(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = toClonedInstance(instance);
-        assertSame(instance, instance.copyRetainAll(instance2));
+        assertSame(instance, instance.retainAll(instance2));
         assertEqualSet(data.a, instance);
     }
 
@@ -543,7 +543,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithContainedElementsShouldReturnThis(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        assertSame(instance, instance.copyRetainAll(data.a.asSet()));
+        assertSame(instance, instance.retainAll(data.a.asSet()));
         assertEqualSet(data.a, instance);
     }
 
@@ -552,7 +552,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyRetainAllWithSomeContainedElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         Set<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
-        ImmutableSet<HashCollider> instance2 = instance.copyRetainAll(data.someAPlusSomeB.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.retainAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(expected, instance);
         assertTrue(expected.retainAll(data.someAPlusSomeB.asSet()));
@@ -563,7 +563,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithNewElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRetainAll(data.c.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.retainAll(data.c.asSet());
         assertNotSame(instance, instance2);
         assertEqualSet(data.a, instance);
         assertEqualSet(Collections.emptySet(), instance2);
@@ -574,7 +574,7 @@ public abstract class AbstractImmutableSetTest {
     public void testCopyRetainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = newInstance(data.c);
-        ImmutableSet<HashCollider> instance3 = instance.copyRetainAll(instance2);
+        ImmutableSet<HashCollider> instance3 = instance.retainAll(instance2);
         assertNotSame(instance, instance3);
         assertEqualSet(data.a, instance);
         assertEqualSet(data.c, instance2);
@@ -590,8 +590,8 @@ public abstract class AbstractImmutableSetTest {
         ArrayList<HashCollider> listC = new ArrayList<>(data.c.asSet());
 
         ImmutableSet<HashCollider> instance2 = newInstance();
-        instance2 = instance2.copyAddAll(listA.subList(0, listA.size() / 2));
-        instance2 = instance2.copyAddAll(listC.subList(0, listC.size() / 2));
+        instance2 = instance2.addAll(listA.subList(0, listA.size() / 2));
+        instance2 = instance2.addAll(listC.subList(0, listC.size() / 2));
 
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(listA);
         LinkedHashSet<HashCollider> expected2 = new LinkedHashSet<>();
@@ -599,7 +599,7 @@ public abstract class AbstractImmutableSetTest {
         expected2.addAll(listC.subList(0, listC.size() / 2));
         assertEqualSet(expected2, instance2);
 
-        ImmutableSet<HashCollider> instance3 = instance.copyRetainAll(instance2);
+        ImmutableSet<HashCollider> instance3 = instance.retainAll(instance2);
         assertNotSame(instance2, instance3);
         expected.retainAll(expected2);
         assertEqualSet(expected, instance3);
@@ -609,7 +609,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithSelfShouldReturnThis(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        assertSame(instance, instance.copyRetainAll(instance));
+        assertSame(instance, instance.retainAll(instance));
         assertEqualSet(data.a, instance);
     }
 
@@ -617,7 +617,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithSomeNewKeysShouldReturnNewInstance(@NonNull org.jhotdraw8.collection.SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
-        ImmutableSet<HashCollider> instance2 = instance.copyRetainAll(data.someAPlusSomeB.asSet());
+        ImmutableSet<HashCollider> instance2 = instance.retainAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
         assertEqualSet(expected, instance);
@@ -629,7 +629,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllOfEmptySetShouldReturnThis(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance();
-        assertSame(instance, instance.copyRetainAll(data.c.asSet()));
+        assertSame(instance, instance.retainAll(data.c.asSet()));
         assertEqualSet(Collections.emptySet(), instance);
     }
 
@@ -637,7 +637,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void testCopyRetainAllWithEmptySetShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a.asSet());
-        ImmutableSet<HashCollider> instance2 = instance.copyRetainAll(Collections.emptySet());
+        ImmutableSet<HashCollider> instance2 = instance.retainAll(Collections.emptySet());
         assertNotSame(instance, instance2);
         assertEqualSet(Collections.emptySet(), instance2);
     }

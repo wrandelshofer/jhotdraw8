@@ -168,7 +168,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                         newbn = bn.setCollinear(true).setEquidistant(false);
                     }
                     dv.getModel().set(owner, pointKey,
-                            list.copySet(pointIndex, newbn));
+                            list.set(pointIndex, newbn));
                 }
             }
         }
@@ -196,7 +196,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 // move control point independently
                 BezierNode newBezierNode = bn.setC(controlPointMask, p);
                 view.getModel().set(f, pointKey,
-                        list.copySet(pointIndex, newBezierNode));
+                        list.set(pointIndex, newBezierNode));
             } else {
                 // move control point and opposite control point to same distance
                 BezierNode newBezierNode = bn.setC(controlPointMask, p);
@@ -221,7 +221,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 }
 
                 view.getModel().set(f, pointKey,
-                        list.copySet(pointIndex, newBezierNode));
+                        list.set(pointIndex, newBezierNode));
             }
         } else {
             Point2D c0 = bn.getC0();
@@ -257,7 +257,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 newBezierNode = bn.setC2(p).setC1(p2);
             }
             view.getModel().set(f, pointKey,
-                    list.copySet(pointIndex, newBezierNode));
+                    list.set(pointIndex, newBezierNode));
         }
     }
 

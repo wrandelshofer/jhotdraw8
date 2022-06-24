@@ -25,22 +25,22 @@ public class ImmutableMapFacadeTest extends AbstractImmutableMapTest {
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Map<K, V> map) {
-        return this.<K, V>newInstance().copyPutAll(map);
+        return this.<K, V>newInstance().putAll(map);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
-        return this.<K, V>newInstance().copyPutAll(map);
+        return this.<K, V>newInstance().putAll(map);
     }
 
     @Override
     protected @NonNull <K, V> ImmutableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return this.<K, V>newInstance().copyPutAll(m);
+        return this.<K, V>newInstance().putAll(m);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
-        return this.<K, V>newInstance().copyPutAll(entries);
+        return this.<K, V>newInstance().putAll(entries);
     }
 
 }

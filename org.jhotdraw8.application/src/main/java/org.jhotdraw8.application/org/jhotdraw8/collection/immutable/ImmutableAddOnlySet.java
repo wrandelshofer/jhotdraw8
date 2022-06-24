@@ -8,7 +8,8 @@ package org.jhotdraw8.collection.immutable;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Interface for an immutable set that only provides a {@code copyAdd} method.
+ * Functional Interface for an immutable set that only provides a
+ * {@link #add} method.
  *
  * @param <E> the element type
  */
@@ -21,6 +22,6 @@ public interface ImmutableAddOnlySet<E> {
      * @return this set if it already contains the element, or
      * a different set with the element added
      */
-    @NonNull ImmutableAddOnlySet<E> copyAdd(@NonNull E element);
+    @NonNull ImmutableAddOnlySet<E> add(@NonNull E element);
 
 }

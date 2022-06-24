@@ -241,7 +241,7 @@ public class TransformHandleKit {
                 break;
             default:
                 int last = oldTransforms.size() - 1;
-                model.set(owner, TRANSFORMS, oldTransforms.copySet(last, FXTransforms.concat(oldTransforms.get(last), transform)));
+                model.set(owner, TRANSFORMS, oldTransforms.set(last, FXTransforms.concat(oldTransforms.get(last), transform)));
                 break;
             }
         }

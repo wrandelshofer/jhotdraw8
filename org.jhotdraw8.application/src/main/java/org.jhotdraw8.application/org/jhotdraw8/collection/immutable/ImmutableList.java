@@ -29,7 +29,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it is already empty, or a different list
      * instance that is empty.
      */
-    @NonNull ImmutableList<E> copyClear();
+    @NonNull ImmutableList<E> clear();
 
     /**
      * Returns a copy of this list that contains all elements
@@ -39,7 +39,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param element an element
      * @return a different list instance with the element added
      */
-    @NonNull ImmutableList<E> copyAdd(@NonNull E element);
+    @NonNull ImmutableList<E> add(@NonNull E element);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -50,7 +50,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param element an element
      * @return a different list instance with the element added
      */
-    @NonNull ImmutableList<E> copyAdd(int index, @NonNull E element);
+    @NonNull ImmutableList<E> add(int index, @NonNull E element);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -60,7 +60,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param c a collection to be added to this list
      * @return a different list instance with the elements added
      */
-    @NonNull ImmutableList<E> copyAddAll(@NonNull Iterable<? extends E> c);
+    @NonNull ImmutableList<E> addAll(@NonNull Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -71,7 +71,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param c     a collection to be added to this list
      * @return a different list instance with the elements added
      */
-    @NonNull ImmutableList<E> copyAddAll(int index, @NonNull Iterable<? extends E> c);
+    @NonNull ImmutableList<E> addAll(int index, @NonNull Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -81,7 +81,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it already does not contain the element, or
      * a different list instance with the element removed
      */
-    @NonNull ImmutableList<E> copyRemove(@NonNull E element);
+    @NonNull ImmutableList<E> remove(@NonNull E element);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -90,7 +90,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param index an index
      * @return a different list instance with the element removed
      */
-    @NonNull ImmutableList<E> copyRemoveAt(int index);
+    @NonNull ImmutableList<E> removeAt(int index);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -100,7 +100,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param toIndex   to index (exclusive) of the sub-list
      * @return a different list instance with the element removed
      */
-    @NonNull ImmutableList<E> copyRemoveRange(int fromIndex, int toIndex);
+    @NonNull ImmutableList<E> removeRange(int fromIndex, int toIndex);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -111,7 +111,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it already does not contain the elements, or
      * a different list instance with the elements removed
      */
-    @NonNull ImmutableList<E> copyRemoveAll(@NonNull Iterable<? extends E> c);
+    @NonNull ImmutableList<E> removeAll(@NonNull Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains only elements
@@ -121,7 +121,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it has not changed, or
      * a different list instance with elements removed
      */
-    @NonNull ImmutableList<E> copyRetainAll(@NonNull Collection<? extends E> c);
+    @NonNull ImmutableList<E> retainAll(@NonNull Collection<? extends E> c);
 
     /**
      * Returns a copy of this list that contains only elements
@@ -131,11 +131,11 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it has not changed, or
      * a different list instance with elements removed
      */
-    default @NonNull ImmutableList<E> copyRetainAll(final @NonNull ReadOnlyCollection<? extends E> c) {
+    default @NonNull ImmutableList<E> retainAll(final @NonNull ReadOnlyCollection<? extends E> c) {
         if (c == this) {
             return this;
         }
-        return copyRetainAll(c.asCollection());
+        return retainAll(c.asCollection());
     }
 
     /**
@@ -146,7 +146,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it has not changed, or
      * a different list instance with the element changed
      */
-    @NonNull ImmutableList<E> copySet(int index, @NonNull E element);
+    @NonNull ImmutableList<E> set(int index, @NonNull E element);
 
     /**
      * Returns a copy of this list that contains only

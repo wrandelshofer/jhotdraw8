@@ -148,7 +148,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
             }
         }
         if (insertAt != -1 && insertLocation != null) {
-            view.getModel().set(owner, key, owner.getNonNull(key).copyAdd(insertAt, insertLocation));
+            view.getModel().set(owner, key, owner.getNonNull(key).add(insertAt, insertLocation));
             view.recreateHandles();
         }
     }
