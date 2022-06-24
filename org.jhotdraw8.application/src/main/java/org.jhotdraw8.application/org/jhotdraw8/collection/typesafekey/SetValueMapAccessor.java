@@ -2,7 +2,7 @@
  * @(#)SetValueMapAccessor.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection.key;
+package org.jhotdraw8.collection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;

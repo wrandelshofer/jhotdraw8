@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.key.SimpleNonNullKey;
+import org.jhotdraw8.collection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.reflect.TypeToken;
 
 /**

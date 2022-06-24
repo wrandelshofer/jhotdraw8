@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.SimpleNullableKey;
+import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.draw.connector.Connector;
 
 public interface LabelConnectionFigure extends Figure {

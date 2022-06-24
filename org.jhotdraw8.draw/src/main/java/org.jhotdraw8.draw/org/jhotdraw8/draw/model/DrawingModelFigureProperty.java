@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.model;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.event.SimpleWeakListener;

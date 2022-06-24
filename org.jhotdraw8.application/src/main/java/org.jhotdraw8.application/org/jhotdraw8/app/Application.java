@@ -21,8 +21,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.beans.PropertyBean;
-import org.jhotdraw8.collection.key.Key;
-import org.jhotdraw8.collection.key.SimpleNullableKey;
+import org.jhotdraw8.collection.typesafekey.Key;
+import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.concurrent.FXWorker;
 import org.jhotdraw8.util.Resources;
 

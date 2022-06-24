@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.NonNullKey;
+import org.jhotdraw8.collection.typesafekey.NonNullKey;
 import org.jhotdraw8.css.text.Point2DConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;

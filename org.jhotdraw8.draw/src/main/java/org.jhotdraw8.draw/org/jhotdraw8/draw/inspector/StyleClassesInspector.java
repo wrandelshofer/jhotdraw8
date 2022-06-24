@@ -21,7 +21,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;

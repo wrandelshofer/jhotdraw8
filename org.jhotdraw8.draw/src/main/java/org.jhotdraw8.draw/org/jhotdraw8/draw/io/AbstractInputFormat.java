@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
-import org.jhotdraw8.collection.key.Key;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.typesafekey.Key;
 
 import java.util.LinkedHashMap;
 

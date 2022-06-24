@@ -13,7 +13,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssSize;

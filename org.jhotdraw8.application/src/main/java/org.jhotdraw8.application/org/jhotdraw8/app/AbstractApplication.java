@@ -25,7 +25,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.action.Action;
 import org.jhotdraw8.beans.NonNullObjectProperty;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.util.EmptyResources;
 import org.jhotdraw8.util.Resources;
 

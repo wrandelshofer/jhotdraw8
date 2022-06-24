@@ -6,7 +6,7 @@ package org.jhotdraw8.styleable;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.junit.jupiter.api.Test;

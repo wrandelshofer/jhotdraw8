@@ -49,7 +49,7 @@ module org.jhotdraw8.application {
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
     opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
-    exports org.jhotdraw8.collection.key;
+    exports org.jhotdraw8.collection.typesafekey;
     exports org.jhotdraw8.collection.facade;
     exports org.jhotdraw8.collection.enumerator;
     exports org.jhotdraw8.collection.champ;

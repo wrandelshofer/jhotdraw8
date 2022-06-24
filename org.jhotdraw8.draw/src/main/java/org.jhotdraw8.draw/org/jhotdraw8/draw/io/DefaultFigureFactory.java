@@ -23,7 +23,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.key.MapAccessor;
+import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.CssFont;

@@ -8,7 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.key.MapAccessor;
+import org.jhotdraw8.collection.typesafekey.MapAccessor;
 
 /**
  * Interface for figures that support text editing at one or more

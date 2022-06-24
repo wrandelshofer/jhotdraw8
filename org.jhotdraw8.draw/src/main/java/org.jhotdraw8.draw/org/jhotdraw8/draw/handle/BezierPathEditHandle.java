@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.key.MapAccessor;
+import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;

@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.io;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.key.MapAccessor;
+import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.w3c.dom.Node;

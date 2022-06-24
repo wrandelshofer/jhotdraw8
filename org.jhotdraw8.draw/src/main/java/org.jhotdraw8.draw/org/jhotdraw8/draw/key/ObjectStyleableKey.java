@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.AbstractKey;
+import org.jhotdraw8.collection.typesafekey.AbstractKey;
 import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.text.Converter;

@@ -2,7 +2,7 @@
  * @(#)Key.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection.key;
+package org.jhotdraw8.collection.typesafekey;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;

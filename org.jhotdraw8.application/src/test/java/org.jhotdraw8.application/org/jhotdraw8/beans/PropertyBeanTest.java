@@ -5,8 +5,8 @@
 package org.jhotdraw8.beans;
 
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.collection.key.Key;
-import org.jhotdraw8.collection.key.SimpleNullableKey;
+import org.jhotdraw8.collection.typesafekey.Key;
+import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -15,7 +15,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.css.text.CssNumberConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;

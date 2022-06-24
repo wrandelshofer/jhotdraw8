@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.MapAccessor;
+import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.AnchorableFigure;

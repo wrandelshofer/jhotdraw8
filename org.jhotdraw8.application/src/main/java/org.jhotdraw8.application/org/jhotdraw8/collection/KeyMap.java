@@ -7,7 +7,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.key.Key;
+import org.jhotdraw8.collection.typesafekey.Key;
 
 import java.util.Arrays;
 import java.util.Collection;

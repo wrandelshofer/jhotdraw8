@@ -1,11 +1,12 @@
 /*
- * @(#)NonNullObjectKey.java
+ * @(#)AbstractKey.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection.key;
+package org.jhotdraw8.collection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -31,11 +32,10 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
+public abstract class AbstractKey<T> implements Key<T> {
 
     private static final long serialVersionUID = 1L;
     private final int ordinal;
-
     /**
      * Holds a String representation of the name.
      */
@@ -43,50 +43,77 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
     /**
      * Holds the default value.
      */
-    private final @NonNull T defaultValue;
+    private final @Nullable T initialValue;
     /**
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
     private final @NonNull Type type;
 
+
+    /**
+     * Whether the value may be set to null.
+     */
+    private final boolean isNullable;
     private final boolean isTransient;
+
+    /**
+     * Creates a new instance with the specified name, type token class, default
+     * value null, and allowing null values.
+     *
+     * @param name  The name of the key.
+     * @param clazz The type of the value.
+     */
+    public AbstractKey(@NonNull String name, @NonNull Type clazz) {
+        this(name, clazz, null);
+    }
+
+    public AbstractKey(@NonNull String name, @NonNull TypeToken<T> clazz, T initialValue) {
+        this(name, clazz.getType(), initialValue);
+    }
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
      * @param name         The name of the key.
-     * @param type         The type of the value.
-     * @param defaultValue The default value.
+     * @param clazz        The type of the value.
+     * @param initialValue The default value.
      */
-    public NonNullObjectKey(@NonNull String name, @NonNull Class<T> type, @NonNull T defaultValue) {
-        this(name, type, null, defaultValue);
+    public AbstractKey(@NonNull String name, @NonNull Type clazz, @Nullable T initialValue) {
+        this(name, clazz, true, initialValue);
     }
 
     /**
      * Creates a new instance with the specified name, type token class, default
      * value, and allowing or disallowing null values.
      *
-     * @param name           The name of the key.
-     * @param type           The type of the value.
-     * @param typeParameters The type parameters of the class. Specify null if
-     *                       no type parameters are given. Otherwise specify them in arrow brackets.
-     * @param defaultValue   The default value.
+     * @param name         The name of the key.
+     * @param clazz        The type of the value.
+     * @param isNullable   Whether the value may be set to null
+     * @param initialValue The default value.
      */
-    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters, @NonNull T defaultValue) {
-        this(name, type, typeParameters, false, defaultValue);
+    public AbstractKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T initialValue) {
+        this(name, clazz, isNullable, false, initialValue);
     }
 
-    public NonNullObjectKey(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters, boolean isTransient, @NonNull T defaultValue) {
+    public AbstractKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T initialValue) {
+        this(name, clazz, isNullable, false, initialValue);
+    }
+
+
+    public AbstractKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
         Objects.requireNonNull(name, "name");
-        Objects.requireNonNull(type, "clazz");
-        Objects.requireNonNull(defaultValue, "defaultValue");
+        Objects.requireNonNull(clazz, "clazz");
+        if (!isNullable && initialValue == null) {
+            throw new IllegalArgumentException("defaultValue may not be null if isNullable==false");
+        }
 
         this.name = name;
-        this.type = type;
+        this.type = clazz;
+        this.isNullable = isNullable;
         this.isTransient = isTransient;
-        this.defaultValue = defaultValue;
+        this.initialValue = initialValue;
         this.ordinal = Key.createNextOrdinal();
     }
 
@@ -105,19 +132,14 @@ public class NonNullObjectKey<@NonNull T> implements NonNullKey<@NonNull T> {
         return type;
     }
 
-    /**
-     * Returns the default value of the attribute.
-     *
-     * @return the default value.
-     */
     @Override
-    public @NonNull T getDefaultValue() {
-        return defaultValue;
+    public @Nullable T getDefaultValue() {
+        return initialValue;
     }
 
     @Override
     public boolean isNullable() {
-        return false;
+        return isNullable;
     }
 
     @Override

@@ -5,7 +5,7 @@
 package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.key.SimpleNullableKey;
+import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.css.text.CssStringConverter;
 import org.jhotdraw8.text.Converter;
 
