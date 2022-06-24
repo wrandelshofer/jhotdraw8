@@ -136,7 +136,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
             c = (Iterable<? extends E>) ((ChampImmutableSet<?>) c).toMutable();
         }
         if (c instanceof ChampSet<?>) {
-            var that = (ChampSet<E>) ((ChampSet<?>) c);
+            ChampSet<E> that = (ChampSet<E>) ((ChampSet<?>) c);
             ChangeEvent<E> details = new ChangeEvent<>();
             BitmapIndexedNode<E> newRoot = root.updateAll(that.root, 0, details, getOrCreateMutator(),
                     (oldk, newk) -> oldk, (oldk, newk) -> newk, Objects::equals, Objects::hashCode);

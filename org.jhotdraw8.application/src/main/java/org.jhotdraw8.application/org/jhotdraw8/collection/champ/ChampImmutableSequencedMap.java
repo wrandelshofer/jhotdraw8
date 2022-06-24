@@ -131,7 +131,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
      */
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ChampImmutableSequencedMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ChampImmutableSequencedMap<K, V>) ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).putAll(map);
+        return ((ChampImmutableSequencedMap<K, V>) ChampImmutableSequencedMap.EMPTY).putAll(map);
     }
 
     /**
