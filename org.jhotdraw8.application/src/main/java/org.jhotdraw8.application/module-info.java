@@ -59,6 +59,9 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.collection.readonly;
     exports org.jhotdraw8.collection.immutable;
     exports org.jhotdraw8.collection.mapped;
+    exports org.jhotdraw8.collection.observable;
+    exports org.jhotdraw8.collection.sequenced;
+    exports org.jhotdraw8.collection.sharedkeys;
 
     uses NodeReaderProvider;
     provides NodeReaderProvider with org.jhotdraw8.app.spi.FxmlNodeReaderProvider, org.jhotdraw8.app.spi.ImageNodeReaderProvider;

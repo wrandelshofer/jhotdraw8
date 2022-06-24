@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.AbstractSequencedMapTest;
 import org.jhotdraw8.collection.HashCollider;
 import org.jhotdraw8.collection.MapData;
-import org.jhotdraw8.collection.SequencedMap;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
+import org.jhotdraw8.collection.sequenced.SequencedMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 

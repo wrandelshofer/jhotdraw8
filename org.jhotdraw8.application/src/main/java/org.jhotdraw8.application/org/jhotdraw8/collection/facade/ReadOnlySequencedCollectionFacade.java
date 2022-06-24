@@ -5,9 +5,9 @@
 package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.SequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
+import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 import java.util.Iterator;
 import java.util.function.IntSupplier;

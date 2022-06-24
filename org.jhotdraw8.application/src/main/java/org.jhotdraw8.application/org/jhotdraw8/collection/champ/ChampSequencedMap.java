@@ -7,17 +7,17 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractSequencedMap;
 import org.jhotdraw8.collection.FailFastIterator;
 import org.jhotdraw8.collection.MutableMapEntry;
-import org.jhotdraw8.collection.SequencedCollection;
-import org.jhotdraw8.collection.SequencedMap;
-import org.jhotdraw8.collection.SequencedSet;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacadeFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
+import org.jhotdraw8.collection.sequenced.SequencedMap;
+import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.util.Iterator;

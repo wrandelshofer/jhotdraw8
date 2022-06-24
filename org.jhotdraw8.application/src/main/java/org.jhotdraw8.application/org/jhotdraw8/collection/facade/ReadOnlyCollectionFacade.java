@@ -5,7 +5,7 @@
 package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractReadOnlyCollection;
+import org.jhotdraw8.collection.readonly.AbstractReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 

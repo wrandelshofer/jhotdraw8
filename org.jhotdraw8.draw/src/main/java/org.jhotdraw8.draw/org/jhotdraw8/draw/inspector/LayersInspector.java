@@ -32,7 +32,7 @@ import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ReversedObservableList;
+import org.jhotdraw8.collection.observable.ReversedObservableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;

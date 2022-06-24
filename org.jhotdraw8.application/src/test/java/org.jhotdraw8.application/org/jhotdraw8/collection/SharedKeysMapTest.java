@@ -6,6 +6,7 @@ package org.jhotdraw8.collection;
 
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
+import org.jhotdraw8.collection.sharedkeys.SharedKeysMap;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

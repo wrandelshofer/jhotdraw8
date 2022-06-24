@@ -7,11 +7,11 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.SequencedCollection;
-import org.jhotdraw8.collection.SequencedMap;
-import org.jhotdraw8.collection.SequencedSet;
 import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
+import org.jhotdraw8.collection.sequenced.SequencedMap;
+import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 import java.util.Iterator;
 import java.util.Map;

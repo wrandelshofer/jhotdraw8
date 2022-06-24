@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.AbstractReadOnlyList;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
+import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 

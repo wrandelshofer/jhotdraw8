@@ -2,7 +2,7 @@
  * @(#)ReversedObservableList.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection;
+package org.jhotdraw8.collection.observable;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

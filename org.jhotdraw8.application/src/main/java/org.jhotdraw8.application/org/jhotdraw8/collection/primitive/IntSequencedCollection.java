@@ -6,7 +6,7 @@
 package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.SequencedCollection;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 /**
  * Interface for collection of {@code int}-values with a well-defined linear

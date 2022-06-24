@@ -2,10 +2,9 @@
  * @(#)AbstractReadOnlyMap.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection;
+package org.jhotdraw8.collection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 /**
  * Abstract base class for {@link ReadOnlyMap}s.

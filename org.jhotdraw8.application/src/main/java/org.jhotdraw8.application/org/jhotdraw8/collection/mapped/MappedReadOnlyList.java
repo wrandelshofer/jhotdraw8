@@ -5,8 +5,8 @@
 package org.jhotdraw8.collection.mapped;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.AbstractReadOnlyList;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedCollectionFacade;
+import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 

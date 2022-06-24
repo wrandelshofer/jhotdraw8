@@ -2,7 +2,7 @@
  * @(#)StrongMapEntryProperty.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection;
+package org.jhotdraw8.collection.observable;
 
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.MapChangeListener;

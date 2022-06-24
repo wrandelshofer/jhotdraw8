@@ -8,10 +8,10 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
-import org.jhotdraw8.collection.SequencedSet;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacadeFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacadeFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
+import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.util.Iterator;
