@@ -5,21 +5,32 @@
 
 package org.jhotdraw8.collection.guava;
 
+import com.google.common.collect.testing.MinimalCollection;
+import com.google.common.collect.testing.SetTestSuiteBuilder;
+import com.google.common.collect.testing.TestStringSetGenerator;
+import com.google.common.collect.testing.features.CollectionFeature;
+import com.google.common.collect.testing.features.CollectionSize;
+import com.google.common.collect.testing.features.SetFeature;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import org.jhotdraw8.collection.champ.ChampSequencedSet;
-import org.junit.jupiter.api.Disabled;
+
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * Tests {@link ChampSequencedSet} with the Guava test suite.
  */
-@Disabled
 public class SequencedChampSetGuavaTests {
-    /*
+
     public static Test suite() {
         return new SequencedChampSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(SequencedChampSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(ChampSequencedSet.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -29,10 +40,10 @@ public class SequencedChampSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new SequencedChampSet<>(MinimalCollection.of(elements));
+                                return new ChampSequencedSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(SequencedChampSet.class.getSimpleName())
+                .named(ChampSequencedSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.KNOWN_ORDER,
@@ -49,5 +60,5 @@ public class SequencedChampSetGuavaTests {
         return Collections.emptySet();
     }
 
-     */
+
 }

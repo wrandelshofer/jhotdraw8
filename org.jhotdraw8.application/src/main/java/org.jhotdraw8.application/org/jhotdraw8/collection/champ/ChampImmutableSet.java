@@ -86,14 +86,15 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     /**
-     * Returns an empty immutable set.
+     * Returns an immutable set that contains the provided elements.
      *
-     * @param <E> the element type
-     * @return an empty immutable set
+     * @param iterable an iterable
+     * @param <E>      the element type
+     * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampImmutableSet<E> of() {
-        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY);
+    public static <E> @NonNull ChampImmutableSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).addAll(iterable);
     }
 
     /**
@@ -110,21 +111,14 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     /**
-     * Returns an immutable set that contains the provided elements.
+     * Returns an empty immutable set.
      *
-     * @param iterable an iterable
-     * @param <E>      the element type
-     * @return an immutable set of the provided elements
+     * @param <E> the element type
+     * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampImmutableSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY).addAll(iterable);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable Object o) {
-        return findByKey((E) o, Objects.hashCode(o), 0, getEqualsFunction()) != Node.NO_VALUE;
+    public static <E> @NonNull ChampImmutableSet<E> of() {
+        return ((ChampImmutableSet<E>) ChampImmutableSet.EMPTY);
     }
 
     @Override
@@ -158,6 +152,52 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     @Override
     public @NonNull ImmutableSet<E> clear() {
         return isEmpty() ? this : of();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean contains(@Nullable Object o) {
+        return findByKey((E) o, Objects.hashCode(o), 0, getEqualsFunction()) != Node.NO_VALUE;
+    }
+
+    @Override
+    public boolean equals(final @Nullable Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (other instanceof ChampImmutableSet) {
+            ChampImmutableSet<?> that = (ChampImmutableSet<?>) other;
+            return size == that.size && equivalent(that);
+        }
+        return ReadOnlySet.setEquals(this, other);
+    }
+
+    @NonNull
+    private BiPredicate<E, E> getEqualsFunction() {
+        return Objects::equals;
+    }
+
+    @NonNull
+    private ToIntFunction<E> getHashFunction() {
+        return Objects::hashCode;
+    }
+
+    @NonNull
+    private BiFunction<E, E, E> getUpdateFunction() {
+        return (oldk, newk) -> oldk;
+    }
+
+    @Override
+    public int hashCode() {
+        return ReadOnlySet.iteratorToHashCode(iterator());
+    }
+
+    @Override
+    public @NonNull Iterator<E> iterator() {
+        return new KeyIterator<E>(this, null);
     }
 
     @Override
@@ -219,31 +259,6 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public boolean equals(final @Nullable Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (other == null) {
-            return false;
-        }
-        if (other instanceof ChampImmutableSet) {
-            ChampImmutableSet<?> that = (ChampImmutableSet<?>) other;
-            return size == that.size && equivalent(that);
-        }
-        return ReadOnlySet.setEquals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return ReadOnlySet.iteratorToHashCode(iterator());
-    }
-
-    @Override
-    public @NonNull Iterator<E> iterator() {
-        return new KeyIterator<E>(this, null);
-    }
-
-    @Override
     public int size() {
         return size;
     }
@@ -258,6 +273,10 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
         return ReadOnlyCollection.iterableToString(this);
     }
 
+    private @NonNull Object writeReplace() {
+        return new SerializationProxy<E>(this.toMutable());
+    }
+
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
         private final static long serialVersionUID = 0L;
 
@@ -269,24 +288,5 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
         protected @NonNull Object readResolve() {
             return ChampImmutableSet.copyOf(deserialized);
         }
-    }
-
-    private @NonNull Object writeReplace() {
-        return new SerializationProxy<E>(this.toMutable());
-    }
-
-    @NonNull
-    private ToIntFunction<E> getHashFunction() {
-        return Objects::hashCode;
-    }
-
-    @NonNull
-    private BiPredicate<E, E> getEqualsFunction() {
-        return Objects::equals;
-    }
-
-    @NonNull
-    private BiFunction<E, E, E> getUpdateFunction() {
-        return (oldk, newk) -> oldk;
     }
 }

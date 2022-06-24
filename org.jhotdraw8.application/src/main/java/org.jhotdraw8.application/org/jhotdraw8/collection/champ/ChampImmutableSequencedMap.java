@@ -173,53 +173,15 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public boolean containsKey(final @Nullable Object o) {
-        @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(new SequencedEntry<>(key), Objects.hashCode(key), 0,
-                getEqualsFunction()) != Node.NO_VALUE;
-    }
-
-    @Override
     public @NonNull ChampImmutableSequencedMap<K, V> clear() {
         return isEmpty() ? this : of();
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> put(@NonNull K key, @Nullable V value) {
-        return copyPutLast(key, value, false);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
-        if (isEmpty() && (m instanceof ChampSequencedMap)) {
-            return ((ChampSequencedMap<K, V>) m).toImmutable();
-        }
-        return putAll(m.entrySet());
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        if (m == this) {
-            return this;
-        }
-        return putAll(m.readOnlyEntrySet());
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        final ChampSequencedMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), false);
-            modified |= details.modified;
-        }
-        return modified ? t.toImmutable() : this;
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ChampImmutableSequencedMap<K, V>) ImmutableSequencedMap.super.putAll(map);
+    public boolean containsKey(final @Nullable Object o) {
+        @SuppressWarnings("unchecked") final K key = (K) o;
+        return findByKey(new SequencedEntry<>(key), Objects.hashCode(key), 0,
+                getEqualsFunction()) != Node.NO_VALUE;
     }
 
     //@Override
@@ -269,11 +231,6 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         return details.modified ? renumber(newRootNode, size + 1, first, last + 1) : this;
     }
 
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> remove(@NonNull K key) {
-        return copyRemove(key, first, last);
-    }
-
     private @NonNull ChampImmutableSequencedMap<K, V> copyRemove(@NonNull K key, int newFirst, int newLast) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
@@ -290,47 +247,6 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
             return renumber(newRootNode, size - 1, newFirst, newLast);
         }
         return this;
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
-        if (this.isEmpty()) {
-            return this;
-        }
-        final ChampSequencedMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (K key : c) {
-            ChangeEvent<SequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
-            modified |= details.modified;
-        }
-        return modified ? t.toImmutable() : this;
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedMap<K, V> retainAll(@NonNull Collection<? extends K> c) {
-        if (isEmpty()) {
-            return this;
-        }
-        if (c.isEmpty()) {
-            return of();
-        }
-        final ChampSequencedMap<K, V> t = this.toMutable();
-        boolean modified = false;
-        for (K key : readOnlyKeySet()) {
-            if (!c.contains(key)) {
-                t.removeAndGiveDetails(key);
-                modified = true;
-            }
-        }
-        return modified ? t.toImmutable() : this;
-    }
-
-    public @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
-        return BucketSequencedIterator.isSupported(size, first, last)
-                ? new BucketSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, first, last, this, reversed,
-                null, Map.Entry.class::cast)
-                : new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, this, reversed,
-                null, Map.Entry.class::cast);
     }
 
     @Override
@@ -397,14 +313,79 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         return size == 0;
     }
 
+    public @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
+        return BucketSequencedIterator.isSupported(size, first, last)
+                ? new BucketSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, first, last, this, reversed,
+                null, Map.Entry.class::cast)
+                : new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, this, reversed,
+                null, Map.Entry.class::cast);
+    }
+
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return iterator(false);
     }
 
     @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> put(@NonNull K key, @Nullable V value) {
+        return copyPutLast(key, value, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
+        if (isEmpty() && (m instanceof ChampSequencedMap)) {
+            return ((ChampSequencedMap<K, V>) m).toImmutable();
+        }
+        return putAll(m.entrySet());
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
+        if (m == this) {
+            return this;
+        }
+        return putAll(m.readOnlyEntrySet());
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
+        final ChampSequencedMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (Map.Entry<? extends K, ? extends V> entry : entries) {
+            ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), false);
+            modified |= details.modified;
+        }
+        return modified ? t.toImmutable() : this;
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
+        return (ChampImmutableSequencedMap<K, V>) ImmutableSequencedMap.super.putAll(map);
+    }
+
+    @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return this;//FIXME implement me
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> remove(@NonNull K key) {
+        return copyRemove(key, first, last);
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
+        if (this.isEmpty()) {
+            return this;
+        }
+        final ChampSequencedMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (K key : c) {
+            ChangeEvent<SequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
+            modified |= details.modified;
+        }
+        return modified ? t.toImmutable() : this;
     }
 
     @NonNull
@@ -417,6 +398,25 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
             return new ChampImmutableSequencedMap<>(root, size, -1, size);
         }
         return new ChampImmutableSequencedMap<>(root, size, first, last);
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> retainAll(@NonNull Collection<? extends K> c) {
+        if (isEmpty()) {
+            return this;
+        }
+        if (c.isEmpty()) {
+            return of();
+        }
+        final ChampSequencedMap<K, V> t = this.toMutable();
+        boolean modified = false;
+        for (K key : readOnlyKeySet()) {
+            if (!c.contains(key)) {
+                t.removeAndGiveDetails(key);
+                modified = true;
+            }
+        }
+        return modified ? t.toImmutable() : this;
     }
 
     @Override

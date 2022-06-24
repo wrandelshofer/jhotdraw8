@@ -140,6 +140,11 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         return (ChampImmutableMap<K, V>) of().putAll(entries);
     }
 
+    @Override
+    public @NonNull ImmutableMap<K, V> clear() {
+        return isEmpty() ? this : of();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(final @Nullable Object o) {
@@ -148,9 +153,60 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
                 getEqualsFunction()) != Node.NO_VALUE;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableMap<K, V> clear() {
-        return isEmpty() ? this : of();
+    public boolean equals(final @Nullable Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (other instanceof ChampImmutableMap) {
+            ChampImmutableMap<?, ?> that = (ChampImmutableMap<?, ?>) other;
+            return size == that.size && equivalent(that);
+        } else {
+            return ReadOnlyMap.mapEquals(this, other);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public V get(final Object o) {
+        K key = (K) o;
+        Object result = findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, getEqualsFunction());
+        return result == Node.NO_VALUE || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
+    }
+
+    @NonNull
+    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
+        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
+    }
+
+    @NonNull
+    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
+        return (a) -> Objects.hashCode(a.getKey());
+    }
+
+    @NonNull
+    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
+        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    }
+
+    @Override
+    public int hashCode() {
+        return ReadOnlyMap.iterableToHashCode(iterator());
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) new KeyIterator<>(this, null);
     }
 
     @Override
@@ -186,7 +242,6 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         }
         return putAll(m.readOnlyEntrySet());
     }
-
 
     @Override
     public @NonNull ChampImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
@@ -245,62 +300,6 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
             }
         }
         return modified ? t.toImmutable() : this;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean equals(final @Nullable Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (other == null) {
-            return false;
-        }
-        if (other instanceof ChampImmutableMap) {
-            ChampImmutableMap<?, ?> that = (ChampImmutableMap<?, ?>) other;
-            return size == that.size && equivalent(that);
-        } else {
-            return ReadOnlyMap.mapEquals(this, other);
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public V get(final Object o) {
-        K key = (K) o;
-        Object result = findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, getEqualsFunction());
-        return result == Node.NO_VALUE || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
-    }
-
-    @NonNull
-    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
-        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    }
-
-    @NonNull
-    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
-        return (a) -> Objects.hashCode(a.getKey());
-    }
-
-    @NonNull
-    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
-    }
-
-    @Override
-    public int hashCode() {
-        return ReadOnlyMap.iterableToHashCode(iterator());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) new KeyIterator<>(this, null);
     }
 
     @Override

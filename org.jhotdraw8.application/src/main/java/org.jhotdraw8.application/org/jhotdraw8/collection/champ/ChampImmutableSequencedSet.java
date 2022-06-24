@@ -168,12 +168,6 @@ public class ChampImmutableSequencedSet<E>
     }
 
     @Override
-    public boolean contains(@Nullable final Object o) {
-        @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_VALUE;
-    }
-
-    @Override
     public @NonNull ChampImmutableSequencedSet<E> add(final @Nullable E key) {
         return copyAddLast(key, false);
     }
@@ -199,6 +193,21 @@ public class ChampImmutableSequencedSet<E>
         return copyAddFirst(key, true);
     }
 
+    public @NonNull ChampImmutableSequencedSet<E> addLast(final @Nullable E key) {
+        return copyAddLast(key, true);
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedSet<E> clear() {
+        return isEmpty() ? this : of();
+    }
+
+    @Override
+    public boolean contains(@Nullable final Object o) {
+        @SuppressWarnings("unchecked") final E key = (E) o;
+        return findByKey(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_VALUE;
+    }
+
     private @NonNull ChampImmutableSequencedSet<E> copyAddFirst(@Nullable E key,
                                                                 boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
@@ -216,10 +225,6 @@ public class ChampImmutableSequencedSet<E>
         return details.modified ? renumber(root, size + 1, first - 1, last) : this;
     }
 
-    public @NonNull ChampImmutableSequencedSet<E> addLast(final @Nullable E key) {
-        return copyAddLast(key, true);
-    }
-
     private @NonNull ChampImmutableSequencedSet<E> copyAddLast(final @Nullable E key,
                                                                boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
@@ -235,16 +240,6 @@ public class ChampImmutableSequencedSet<E>
                     : new ChampImmutableSequencedSet<>(root, size, first, last);
         }
         return details.modified ? renumber(root, size + 1, first, last + 1) : this;
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedSet<E> clear() {
-        return isEmpty() ? this : of();
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedSet<E> remove(final @Nullable E key) {
-        return copyRemove(key, first, last);
     }
 
     private @NonNull ChampImmutableSequencedSet<E> copyRemove(final @Nullable E key, int newFirst, int newLast) {
@@ -265,66 +260,6 @@ public class ChampImmutableSequencedSet<E>
             return renumber(newRootNode, size - 1, newFirst, newLast);
         }
         return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public @NonNull ChampImmutableSequencedSet<E> removeAll(final @NonNull Iterable<?> set) {
-        if (this.isEmpty()
-                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
-            return this;
-        }
-        if (set == this) {
-            return of();
-        }
-        final ChampSequencedSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (final Object key : set) {
-            if (t.remove((E) key)) {
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
-            }
-
-        }
-        return modified ? t.toImmutable() : this;
-    }
-
-    @Override
-    public ChampImmutableSequencedSet<E> removeFirst() {
-        SequencedElement<E> k = HeapSequencedIterator.getFirst(this, first, last);
-        return copyRemove(k.getElement(), k.getSequenceNumber() + 1, last);
-    }
-
-    @Override
-    public ChampImmutableSequencedSet<E> removeLast() {
-        SequencedElement<E> k = HeapSequencedIterator.getLast(this, first, last);
-        return copyRemove(k.getElement(), first, k.getSequenceNumber());
-    }
-
-    @Override
-    public @NonNull ChampImmutableSequencedSet<E> retainAll(final @NonNull Collection<?> set) {
-        if (this.isEmpty()) {
-            return this;
-        }
-        if (set.isEmpty()) {
-            return of();
-        }
-
-        final ChampSequencedSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (E key : this) {
-            if (!set.contains(key)) {
-                t.remove(key);
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return modified ? t.toImmutable() : this;
     }
 
     @Override
@@ -406,6 +341,48 @@ public class ChampImmutableSequencedSet<E>
         );
     }
 
+    @Override
+    public @NonNull ChampImmutableSequencedSet<E> remove(final @Nullable E key) {
+        return copyRemove(key, first, last);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NonNull ChampImmutableSequencedSet<E> removeAll(final @NonNull Iterable<?> set) {
+        if (this.isEmpty()
+                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
+                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
+            return this;
+        }
+        if (set == this) {
+            return of();
+        }
+        final ChampSequencedSet<E> t = this.toMutable();
+        boolean modified = false;
+        for (final Object key : set) {
+            if (t.remove((E) key)) {
+                modified = true;
+                if (t.isEmpty()) {
+                    break;
+                }
+            }
+
+        }
+        return modified ? t.toImmutable() : this;
+    }
+
+    @Override
+    public ChampImmutableSequencedSet<E> removeFirst() {
+        SequencedElement<E> k = HeapSequencedIterator.getFirst(this, first, last);
+        return copyRemove(k.getElement(), k.getSequenceNumber() + 1, last);
+    }
+
+    @Override
+    public ChampImmutableSequencedSet<E> removeLast() {
+        SequencedElement<E> k = HeapSequencedIterator.getLast(this, first, last);
+        return copyRemove(k.getElement(), first, k.getSequenceNumber());
+    }
+
     /**
      * Renumbers the sequenced elements in the trie if necessary.
      *
@@ -426,6 +403,29 @@ public class ChampImmutableSequencedSet<E>
                     size, -1, size);
         }
         return new ChampImmutableSequencedSet<>(root, size, first, last);
+    }
+
+    @Override
+    public @NonNull ChampImmutableSequencedSet<E> retainAll(final @NonNull Collection<?> set) {
+        if (this.isEmpty()) {
+            return this;
+        }
+        if (set.isEmpty()) {
+            return of();
+        }
+
+        final ChampSequencedSet<E> t = this.toMutable();
+        boolean modified = false;
+        for (E key : this) {
+            if (!set.contains(key)) {
+                t.remove(key);
+                modified = true;
+                if (t.isEmpty()) {
+                    break;
+                }
+            }
+        }
+        return modified ? t.toImmutable() : this;
     }
 
     public @NonNull Iterator<E> reversedIterator() {
