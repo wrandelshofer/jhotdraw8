@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
@@ -207,7 +206,7 @@ public class AnalysisOfSvgTestSuitesTest {
 
         FigureSvgTinyReader instance = new FigureSvgTinyReader();
         instance.setBestEffort(true);
-        Figure testFigure = instance.read(new StreamSource(testFile.toFile()));
+        Figure testFigure = instance.read(testFile);
         dump(testFigure, 0);
 
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
@@ -240,9 +239,9 @@ public class AnalysisOfSvgTestSuitesTest {
 
         FigureSvgTinyReader instance = new FigureSvgTinyReader();
         instance.setBestEffort(true);
-        Figure testFigure = instance.read(new StreamSource(testFile.toFile()));
+        Figure testFigure = instance.read(testFile);
         dump(testFigure, 0);
-        Figure referenceFigure = instance.read(new StreamSource(referenceFile.toFile()));
+        Figure referenceFigure = instance.read(referenceFile);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node testNode = r.render(testFigure);
         Node referenceNode = r.render(referenceFigure);

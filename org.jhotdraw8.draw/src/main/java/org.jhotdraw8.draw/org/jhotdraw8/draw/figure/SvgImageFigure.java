@@ -27,9 +27,10 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.svg.io.FXSvgTinyReader;
 
-import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -138,14 +139,13 @@ public class SvgImageFigure extends AbstractLeafFigure
         URI documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
         URI absoluteUri = (documentHome == null) ? uri : documentHome.resolve(uri);
 
-        Source source = new StreamSource(absoluteUri.toString());
-        try {
+        try (InputStream in = new BufferedInputStream(absoluteUri.toURL().openStream())) {
             final String path = absoluteUri.getPath() == null ? absoluteUri.toString() : absoluteUri.getPath();
             if (path != null && path.toLowerCase().endsWith(".svg")) {
                 // must be wrapped in a group, because the node returned
                 // by the reader might have transformations associated to it
                 Group g = new Group();
-                g.getChildren().addAll(new FXSvgTinyReader().read(source));
+                g.getChildren().addAll(new FXSvgTinyReader().read(new StreamSource(in)));
                 return g;
             } else {
                 final Image image = new Image(absoluteUri.toString(), true);

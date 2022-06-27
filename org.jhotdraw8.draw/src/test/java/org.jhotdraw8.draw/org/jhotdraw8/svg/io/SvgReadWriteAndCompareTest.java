@@ -122,7 +122,7 @@ public class SvgReadWriteAndCompareTest {
 
         FigureSvgTinyReader reader = new FigureSvgTinyReader();
         reader.setBestEffort(true);
-        Figure drawing1 = reader.read(new StreamSource(testFile.toFile()));
+        Figure drawing1 = reader.read(testFile);
 
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         Node drawing1Node = r.render(drawing1);

@@ -101,10 +101,11 @@ class ResourcesHelper {
                     Object module = r.getModule();
                     NodeReader reader = NodeReaderRegistry.getNodeReader(rsrcName);
                     if (reader != null) {
-                        InputStream resourceAsStream = (InputStream) module.getClass().getMethod("getResourceAsStream", String.class)
-                                .invoke(module, rsrcName);
-                        if (resourceAsStream != null) {
-                            return reader.read(resourceAsStream);
+                        try (InputStream resourceAsStream = (InputStream) module.getClass().getMethod("getResourceAsStream", String.class)
+                                .invoke(module, rsrcName)) {
+                            if (resourceAsStream != null) {
+                                return reader.read(resourceAsStream);
+                            }
                         }
                     }
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException e) {

@@ -11,6 +11,7 @@ import org.jhotdraw8.app.spi.NodeReader;
 import org.jhotdraw8.svg.io.FXSvgTinyReader;
 
 import javax.xml.transform.stream.StreamSource;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -21,7 +22,9 @@ public class SvgNodeReader implements NodeReader {
 
     @Override
     public Node read(@NonNull URL url) throws IOException {
-        return new FXSvgTinyReader().read(new StreamSource(url.toString()));
+        try (InputStream in = new BufferedInputStream(url.openStream())) {
+            return new FXSvgTinyReader().read(new StreamSource(in));
+        }
     }
 
     @Override
