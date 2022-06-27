@@ -194,4 +194,8 @@ public interface StylesheetsManager<E> {
 
         Stylesheet getStylesheet();
     }
+
+    default boolean hasStylesheets() {
+        return !getStylesheets().isEmpty();
+    }
 }

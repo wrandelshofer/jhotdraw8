@@ -639,6 +639,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         return list;
     }
 
+    @Override
+    public boolean hasStylesheets() {
+        return !userAgentList.isEmpty()
+                || !authorList.isEmpty()
+                || !inlineList.isEmpty();
+    }
+
     public Supplier<CssParser> getParserFactory() {
         return parserFactory;
     }

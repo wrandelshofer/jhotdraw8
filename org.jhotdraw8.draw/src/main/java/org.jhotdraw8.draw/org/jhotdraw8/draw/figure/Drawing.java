@@ -217,7 +217,7 @@ public interface Drawing extends Figure {
 
     default void updateAllCss(@NonNull RenderContext ctx) {
         StylesheetsManager<Figure> styleManager = getStyleManager();
-        if (styleManager != null) {
+        if (styleManager != null && styleManager.hasStylesheets()) {
             // Performance: We copy preorderIterable into a list, so that it
             //              splits better for parallel execution.
             List<Figure> list = new ArrayList<>();
