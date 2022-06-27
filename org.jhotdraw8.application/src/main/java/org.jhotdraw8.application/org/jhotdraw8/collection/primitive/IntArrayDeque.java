@@ -65,6 +65,25 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
+    /**
+     * Adds first using branch-less code that takes advantage of the out-of-order
+     * execution unit in the CPU.
+     *
+     * @param e         an element
+     * @param reallyAdd true if this element should really be added
+     */
+    public void addFirstAsIntBranchless(final int e, final boolean reallyAdd) {
+        //Note: elements.length is a power of two.
+        final int index = (head - 1) & (elements.length - 1);
+        elements[index] = e;
+        if (reallyAdd) {
+            head = index;
+            if (head == tail) {
+                doubleCapacity();
+            }
+        }
+    }
+
     @Override
     public void addLastAllAsInt(int @NonNull [] array) {
         addLastAllAsInt(array, 0, array.length);
@@ -93,7 +112,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
      * Increases the capacity of this deque.
      */
     private void grow(int capacity) {
-        if (elements.length > capacity) return;
+        if (elements.length > capacity) {
+            return;
+        }
         int newLength = Integer.highestOneBit(capacity + capacity - 1);
         final int[] a = new int[newLength];
         int size = size();
@@ -119,6 +140,23 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     /**
+     * Adds last using branch-less code that takes advantage of the out-of-order
+     * execution unit in the CPU.
+     *
+     * @param e         an element
+     * @param reallyAdd true if this element should really be added
+     */
+    public void addLastAsIntBranchless(int e, boolean reallyAdd) {
+        elements[tail] = e;
+        if (reallyAdd) {
+            tail = (tail + 1) & (elements.length - 1);
+            if (tail == head) {
+                doubleCapacity();
+            }
+        }
+    }
+
+    /**
      * Clears the deque in O(1).
      */
     @Override
@@ -131,7 +169,6 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     public @NonNull Iterator<Integer> descendingIterator() {
         throw new UnsupportedOperationException();
     }
-
 
 
     @Override

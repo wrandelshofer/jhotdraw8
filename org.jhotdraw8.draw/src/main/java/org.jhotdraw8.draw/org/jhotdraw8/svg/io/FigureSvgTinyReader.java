@@ -50,6 +50,7 @@ import org.jhotdraw8.svg.figure.SvgTextFigure;
 import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
 import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.xml.text.XmlStringConverter;
+import org.jhotdraw8.xml.text.XmlWordSetConverter;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -147,7 +148,9 @@ public class FigureSvgTinyReader {
             figureMap.put(new QName(SVG_NAMESPACE, e.getKey()), () -> {
                 try {
                     return figureClass.getConstructor().newInstance();
-                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ex) {
+                } catch (NoSuchMethodException | InstantiationException |
+                         IllegalAccessException |
+                         InvocationTargetException ex) {
                     throw new RuntimeException(ex);
                 }
             });
@@ -314,38 +317,49 @@ public class FigureSvgTinyReader {
             String localName = r.getAttributeLocalName(i);
             String value = r.getAttributeValue(i);
 
-            if ("id".equals(localName)
-                    && (namespace == null
-                    || SVG_NAMESPACE.equals(namespace)
-                    || XML_NAMESPACE.equals(namespace))) {
+            boolean isInSvgNs = namespace == null || SVG_NAMESPACE.equals(namespace);
+            boolean isInXmlNsOrInSvgNs = isInSvgNs
+                    || XML_NAMESPACE.equals(namespace);
+            if ("id".equals(localName) && isInXmlNsOrInSvgNs) {
                 ctx.idFactory.putIdAndObject(value, node);
                 node.set(StyleableFigure.ID, value);
-            } else if (namespace == null || SVG_NAMESPACE.equals(namespace)) {
-                Location location = r.getLocation();
-                if (m != null) {
-                    ctx.secondPass.add(() -> {
-                        @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
-                        if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?>) {
-                            ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) mapAccessor;
-                            Converter<?> converter = converterMap.get(rosma.getValueType());
-                            if (converter == null) {
-                                handleError(location, "No converter for attribute \"" + localName + "\".");
-                            } else {
-                                try {
-                                    node.set(mapAccessor, converter.fromString(value, ctx.idFactory));
-                                } catch (ParseException | IOException e) {
-                                    handleError(location, "Could not read attribute \"" + localName + "\".", e);
-                                }
-                            }
-                        } else {
-                            handleError(location, "Unsupported attribute " + localName + "=\"" + value + "\".");
-                        }
-                    });
-                } else {
-                    handleError(r, "Skipping SVG attribute " + localName + "=\"" + value + "\".");
+            } else if ("class".equals(localName) && isInSvgNs) {
+                try {
+                    node.set(StyleableFigure.STYLE_CLASS, new XmlWordSetConverter().fromString(value));
+                } catch (ParseException | IOException e) {
+                    Location location = r.getLocation();
+                    handleError(location, "Could not read attribute \"" + localName + "\".", e);
                 }
             } else {
-                handleError(r, "Skipping foreign attribute {" + namespace + "}" + localName + "=\"" + value + "\".");
+                if (isInSvgNs) {
+                    if (m != null) {
+                        ctx.secondPass.add(() -> {
+                            @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
+                            if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?>) {
+                                ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) mapAccessor;
+                                Converter<?> converter = converterMap.get(rosma.getValueType());
+                                if (converter == null) {
+                                    Location location = r.getLocation();
+                                    handleError(location, "No converter for attribute \"" + localName + "\".");
+                                } else {
+                                    try {
+                                        node.set(mapAccessor, converter.fromString(value, ctx.idFactory));
+                                    } catch (ParseException | IOException e) {
+                                        Location location = r.getLocation();
+                                        handleError(location, "Could not read attribute \"" + localName + "\".", e);
+                                    }
+                                }
+                            } else {
+                                Location location = r.getLocation();
+                                handleError(location, "Unsupported attribute " + localName + "=\"" + value + "\".");
+                            }
+                        });
+                    } else {
+                        handleError(r, "Skipping SVG attribute " + localName + "=\"" + value + "\".");
+                    }
+                } else {
+                    handleError(r, "Skipping foreign attribute {" + namespace + "}" + localName + "=\"" + value + "\".");
+                }
             }
         }
     }

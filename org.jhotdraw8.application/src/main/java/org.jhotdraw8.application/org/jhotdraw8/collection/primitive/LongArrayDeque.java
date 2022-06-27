@@ -54,13 +54,24 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         elements = new long[Math.max(size, 0)];
     }
 
-    /**
-     * Inserts the specified element at the head of this deque.
-     *
-     * @param e the element to add
-     */
     @Override
     public void addFirstAsLong(long e) {
+        //Note: elements.length is a power of two.
+        head = (head - 1) & (elements.length - 1);
+        elements[head] = e;
+        if (head == tail) {
+            doubleCapacity();
+        }
+    }
+
+    /**
+     * Adds first using branch-less code that takes advantage of the out-of-order
+     * execution unit in the CPU.
+     *
+     * @param e         an element
+     * @param reallyAdd true if this element should really be added
+     */
+    public void addFirstAsLongBranchless(long e, boolean reallyAdd) {
         //Note: elements.length is a power of two.
         head = (head - 1) & (elements.length - 1);
         elements[head] = e;
@@ -90,11 +101,6 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         tail = secondPart;
     }
 
-    /**
-     * Inserts the specified element at the tail of this deque.
-     *
-     * @param e the element
-     */
     @Override
     public void addLastAsLong(long e) {
         //Note: elements.length is a power of two.
@@ -102,6 +108,24 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         tail = (tail + 1) & (elements.length - 1);
         if (tail == head) {
             doubleCapacity();
+        }
+    }
+
+    /**
+     * Adds last using branch-less code that takes advantage of the out-of-order
+     * execution unit in the CPU.
+     *
+     * @param e         an element
+     * @param reallyAdd true if this element should really be added
+     */
+    public void addLastAsLongBranchless(long e, boolean reallyAdd) {
+        //Note: elements.length is a power of two.
+        elements[tail] = e;
+        if (reallyAdd) {
+            tail = (tail + 1) & (elements.length - 1);
+            if (tail == head) {
+                doubleCapacity();
+            }
         }
     }
 
