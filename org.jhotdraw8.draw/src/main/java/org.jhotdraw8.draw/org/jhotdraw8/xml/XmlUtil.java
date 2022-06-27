@@ -356,18 +356,18 @@ public class XmlUtil {
                             systemID,
                             baseURI,
                             namespace) -> null);
-        try (InputStream in = (source instanceof StreamSource) ? ((StreamSource) source).getInputStream() : null) {
-            for (XMLStreamReader r = in == null ? dbf.createXMLStreamReader(source) : dbf.createXMLStreamReader(in); r.hasNext(); ) {
+        try {
+            for (XMLStreamReader r = dbf.createXMLStreamReader(source); r.hasNext(); ) {
                 int next = r.next();
                 switch (next) {
-                    case XMLStreamReader.START_ELEMENT:
-                        return r.getNamespaceURI();
-                    case XMLStreamReader.END_ELEMENT:
-                        return null;
-                    case XMLStreamReader.PROCESSING_INSTRUCTION:
-                        break;
-                    case XMLStreamReader.CHARACTERS:
-                        break;
+                case XMLStreamReader.START_ELEMENT:
+                    return r.getNamespaceURI();
+                case XMLStreamReader.END_ELEMENT:
+                    return null;
+                case XMLStreamReader.PROCESSING_INSTRUCTION:
+                    break;
+                case XMLStreamReader.CHARACTERS:
+                    break;
                 case XMLStreamReader.COMMENT:
                     break;
                 case XMLStreamReader.SPACE:
@@ -397,6 +397,8 @@ public class XmlUtil {
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
+
+
         return null;
     }
 }
