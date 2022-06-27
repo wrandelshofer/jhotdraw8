@@ -91,11 +91,11 @@ public class FigureSvgTinyReader {
     /**
      * Maps from an attribute name to an accessor.
      */
-    private final @NonNull Map<String, Map<String, MapAccessor<?>>> accessorMap = new LinkedHashMap<>();
+    private final static @NonNull Map<String, Map<String, MapAccessor<?>>> accessorMap;
     /**
      * Maps from an element name to a figure factory.
      */
-    private final @NonNull Map<QName, Supplier<Figure>> figureMap = new LinkedHashMap<>();
+    private final static @NonNull Map<QName, Supplier<Figure>> figureMap;
 
     /**
      * Converts a CSS size string into a CssSize value.
@@ -114,9 +114,13 @@ public class FigureSvgTinyReader {
     /**
      * Maps from a type to a converter.
      */
-    private final @NonNull Map<Type, Converter<?>> converterMap = new LinkedHashMap<>();
+    private final static @NonNull Map<Type, Converter<?>> converterMap;
 
-    {
+    static {
+        final LinkedHashMap<String, Map<String, MapAccessor<?>>> mutableAccessorMap = new LinkedHashMap<>();
+        final LinkedHashMap<QName, Supplier<Figure>> mutableFigureMap = new LinkedHashMap<>();
+        final LinkedHashMap<Type, Converter<?>> mutableConverterMap = new LinkedHashMap<>();
+
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
                 MapEntries.entry("svg", SvgDrawing.class),
                 MapEntries.entry("g", SvgGFigure.class),
@@ -137,15 +141,15 @@ public class FigureSvgTinyReader {
             Map<String, MapAccessor<?>> m = Figure.getDeclaredAndInheritedMapAccessors(figureClass).stream()
                     .collect(Collectors.toMap(MapAccessor::getName, Function.identity()
                     ));
-            accessorMap.put(elem, m);
+            mutableAccessorMap.put(elem, m);
             for (MapAccessor<?> acc : m.values()) {
                 if (acc instanceof ReadOnlyStyleableMapAccessor) {
                     ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) acc;
-                    converterMap.put(acc.getValueType(), rosma.getCssConverter());
+                    mutableConverterMap.put(acc.getValueType(), rosma.getCssConverter());
                 }
             }
 
-            figureMap.put(new QName(SVG_NAMESPACE, e.getKey()), () -> {
+            mutableFigureMap.put(new QName(SVG_NAMESPACE, e.getKey()), () -> {
                 try {
                     return figureClass.getConstructor().newInstance();
                 } catch (NoSuchMethodException | InstantiationException |
@@ -156,11 +160,16 @@ public class FigureSvgTinyReader {
             });
         }
 
+
         // Override converters that have different representations in CSS and XML
-        converterMap.put(String.class, new XmlStringConverter());
-        converterMap.put(new TypeToken<CssDefaultableValue<Paintable>>() {
+        mutableConverterMap.put(String.class, new XmlStringConverter());
+        mutableConverterMap.put(new TypeToken<CssDefaultableValue<Paintable>>() {
                 }.getType(),
                 new CssDefaultableValueConverter<>(new SvgXmlPaintableConverter()));
+
+        converterMap = Collections.unmodifiableMap(mutableConverterMap);
+        figureMap = Collections.unmodifiableMap(mutableFigureMap);
+        accessorMap = Collections.unmodifiableMap(mutableAccessorMap);
     }
 
     private final Key<String> textKey = SvgTextFigure.TEXT;
