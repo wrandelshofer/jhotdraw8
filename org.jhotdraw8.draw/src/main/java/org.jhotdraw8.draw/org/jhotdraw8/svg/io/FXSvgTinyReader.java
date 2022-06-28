@@ -53,7 +53,7 @@ public class FXSvgTinyReader {
     }
 
     /**
-     * The readers does not close the provide source.
+     * The reader does not close the provided source.
      */
     @SuppressWarnings("unchecked")
     public Node read(@NonNull Source in, Map<MapAccessor<?>, Object> renderingHints) throws IOException {
