@@ -31,6 +31,12 @@
     <arg value="--date=short"/>
     <arg value="--pretty=format:%cd_%h"/>
   </exec>
+  <exec executable="git" outputproperty="git.timestamp" failifexecutionfails="false" errorproperty="">
+    <arg value="log"/>
+    <arg value="--max-count=1"/>
+    <arg value="--date=iso-strict"/>
+    <arg value="--pretty=format:%cd"/>
+  </exec>
 
   <tstamp>
     <format property="pub-year" pattern="yyyy" locale="en,GB"/>
