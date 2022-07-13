@@ -133,10 +133,10 @@ public class TransformFlattener {
                     list.add(new LineTo(e.getX() + tx, e.getY() + ty));
                 } else if (element instanceof QuadCurveTo) {
                     QuadCurveTo e = (QuadCurveTo) element;
-                    list.add(new QuadCurveTo(e.getX() + tx, e.getY() + ty, e.getControlX() + tx, e.getControlY() + ty));
+                    list.add(new QuadCurveTo(e.getControlX() + tx, e.getControlY() + ty, e.getX() + tx, e.getY() + ty));
                 } else if (element instanceof CubicCurveTo) {
                     CubicCurveTo e = (CubicCurveTo) element;
-                    list.add(new CubicCurveTo(e.getX() + tx, e.getY() + ty, e.getControlX1() + tx, e.getControlY1() + ty, e.getControlX2() + tx, e.getControlY2() + ty));
+                    list.add(new CubicCurveTo(e.getControlX1() + tx, e.getControlY1() + ty, e.getControlX2() + tx, e.getControlY2() + ty, e.getX() + tx, e.getY() + ty));
                 } else if (element instanceof ArcTo) {
                     ArcTo e = (ArcTo) element;
                     list.add(new ArcTo(e.getRadiusX(), e.getRadiusY(),
