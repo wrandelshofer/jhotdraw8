@@ -12,7 +12,6 @@ import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.SvgPaths;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.stream.XMLStreamException;
@@ -89,21 +88,15 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
         return true;
     }
 
-    protected @Nullable Element writePath(@NonNull Document doc, @NonNull Element
-            parent, @NonNull Path node) {
-        if (node.getElements().isEmpty()) {
-            return null;
-        }
-        Element elem = doc.createElement("path");
-        parent.appendChild(elem);
+    protected void writePathStartElement(@NonNull XMLStreamWriter w, @NonNull Path node) throws XMLStreamException {
+        w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
             d = SvgPaths.floatRelativeSvgStringFromAwt(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
             d = FXSvgPaths.floatSvgStringFromPathElements(node.getElements());
         }
-        elem.setAttribute("d", d);
-        return elem;
+        w.writeAttribute("d", d);
     }
 
     @Override

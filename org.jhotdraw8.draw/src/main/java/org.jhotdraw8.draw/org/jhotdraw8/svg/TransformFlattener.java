@@ -8,24 +8,15 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.QuadCurveTo;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.FXShapes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TransformFlattener.
@@ -52,7 +43,17 @@ public class TransformFlattener {
 
     }
 
-    private @NonNull Translate flattenTranslate(@NonNull Node node) {
+    /**
+     * Removes the translate transforms of a node and clears the translateX,
+     * translateY properties.
+     * <p>
+     * If the node has a clip - flattens the transforms of the clip.
+     *
+     * @param node
+     * @return Returns the summed up translate of the node.
+     */
+
+    private @NonNull Translate flattenTranslateTransforms(@NonNull Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
             if ((t instanceof Translate)) {
@@ -65,6 +66,12 @@ public class TransformFlattener {
         node.setTranslateX(0.0);
         node.setTranslateY(0.0);
         node.getTransforms().clear();
+
+        if (node.getClip() instanceof Shape s) {
+            node.setClip(FXShapes.fxShapeFromAwt(FXShapes.awtShapeFromFX(s)
+                    .getPathIterator(FXShapes.awtTransformFromFX(translate))));
+        }
+
         return translate;
     }
 
@@ -87,9 +94,9 @@ public class TransformFlattener {
             return;
         }
 
-        Translate translate = flattenTranslate(parent);
+        Translate translate = flattenTranslateTransforms(parent);
 
-        // apply  translation to children
+        // apply translation to children
         if (!translate.isIdentity()) {
             for (Node child : parent.getChildrenUnmodifiable()) {
                 child.getTransforms().add(0, translate);
@@ -106,49 +113,53 @@ public class TransformFlattener {
         if (!canFlattenTranslate(path)) {
             return;
         }
-        Translate t = flattenTranslate(path);
-        double tx = t.getX();
-        double ty = t.getY();
+        Translate t = flattenTranslateTransforms(path);
+        double tx = t.getTx();
+        double ty = t.getTy();
+        boolean first = true;
+
+        // We must clone the PathElements, because they might be shared with
+        // other Path objects.
+        List<PathElement> list = new ArrayList<>(path.getElements().size());
         for (PathElement element : path.getElements()) {
-            if (element instanceof ClosePath) {
-                // nothing to do
-            } else if (element instanceof MoveTo) {
-                MoveTo e = (MoveTo) element;
-                e.setX(e.getX() + tx);
-                e.setY(e.getY() + ty);
-            } else if (element instanceof LineTo) {
-                LineTo e = (LineTo) element;
-                e.setX(e.getX() + tx);
-                e.setY(e.getY() + ty);
-            } else if (element instanceof QuadCurveTo) {
-                QuadCurveTo e = (QuadCurveTo) element;
-                e.setX(e.getX() + tx);
-                e.setY(e.getY() + ty);
-                e.setControlX(e.getControlX() + tx);
-                e.setControlY(e.getControlY() + ty);
-            } else if (element instanceof CubicCurveTo) {
-                CubicCurveTo e = (CubicCurveTo) element;
-                e.setX(e.getX() + tx);
-                e.setY(e.getY() + ty);
-                e.setControlX1(e.getControlX1() + tx);
-                e.setControlY1(e.getControlY1() + ty);
-                e.setControlX2(e.getControlX2() + tx);
-                e.setControlY2(e.getControlY2() + ty);
-            } else if (element instanceof ArcTo) {
-                ArcTo e = (ArcTo) element;
-                e.setX(e.getX() + tx);
-                e.setY(e.getY() + ty);
+            if (element.isAbsolute() || first) {
+                if (element instanceof ClosePath) {
+                    list.add(element);
+                } else if (element instanceof MoveTo) {
+                    MoveTo e = (MoveTo) element;
+                    list.add(new MoveTo(e.getX() + tx, e.getY() + ty));
+                } else if (element instanceof LineTo) {
+                    LineTo e = (LineTo) element;
+                    list.add(new LineTo(e.getX() + tx, e.getY() + ty));
+                } else if (element instanceof QuadCurveTo) {
+                    QuadCurveTo e = (QuadCurveTo) element;
+                    list.add(new QuadCurveTo(e.getX() + tx, e.getY() + ty, e.getControlX() + tx, e.getControlY() + ty));
+                } else if (element instanceof CubicCurveTo) {
+                    CubicCurveTo e = (CubicCurveTo) element;
+                    list.add(new CubicCurveTo(e.getX() + tx, e.getY() + ty, e.getControlX1() + tx, e.getControlY1() + ty, e.getControlX2() + tx, e.getControlY2() + ty));
+                } else if (element instanceof ArcTo) {
+                    ArcTo e = (ArcTo) element;
+                    list.add(new ArcTo(e.getRadiusX(), e.getRadiusY(),
+                            e.getXAxisRotation(),
+                            e.getX() + tx, e.getY() + ty,
+                            e.isLargeArcFlag(),
+                            e.isSweepFlag()));
+                } else {
+                    throw new UnsupportedOperationException("unknown element type: " + element);
+                }
             } else {
-                throw new UnsupportedOperationException("unknown element type: " + element);
+                list.add(element);
             }
+            first = false;
         }
+        path.getElements().setAll(list);
     }
 
     private void flattenTranslatesInPolygon(@NonNull Polygon path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
-        Translate t = flattenTranslate(path);
+        Translate t = flattenTranslateTransforms(path);
         ObservableList<Double> points = path.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double x = points.get(i);
@@ -163,7 +174,7 @@ public class TransformFlattener {
         if (!canFlattenTranslate(path)) {
             return;
         }
-        Translate t = flattenTranslate(path);
+        Translate t = flattenTranslateTransforms(path);
         ObservableList<Double> points = path.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double x = points.get(i);
@@ -178,7 +189,7 @@ public class TransformFlattener {
         if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(shape);
+        Translate t = flattenTranslateTransforms(shape);
         Point2D p = t.transform(shape.getStartX(), shape.getStartY());
         shape.setStartX(p.getX());
         shape.setStartY(p.getY());
@@ -191,7 +202,7 @@ public class TransformFlattener {
         if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(shape);
+        Translate t = flattenTranslateTransforms(shape);
         Point2D p = t.transform(shape.getCenterX(), shape.getCenterY());
         shape.setCenterX(p.getX());
         shape.setCenterY(p.getY());
@@ -201,7 +212,7 @@ public class TransformFlattener {
         if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(shape);
+        Translate t = flattenTranslateTransforms(shape);
         Point2D p = t.transform(shape.getX(), shape.getY());
         shape.setX(p.getX());
         shape.setY(p.getY());
@@ -211,7 +222,7 @@ public class TransformFlattener {
         if (!canFlattenTranslate(shape)) {
             return;
         }
-        Translate t = flattenTranslate(shape);
+        Translate t = flattenTranslateTransforms(shape);
         Point2D p = t.transform(shape.getX(), shape.getY());
         shape.setX(p.getX());
         shape.setY(p.getY());
