@@ -47,11 +47,10 @@ public class DenseIntSet8Bit implements IntSet {
      */
     @Override
     public boolean addAsInt(int element) {
-        if (a[element] != mark) {
-            a[element] = mark;
-            return true;
-        }
-        return false;
+        // Performance: this is branch-less code
+        byte oldValue = a[element];
+        a[element] = mark;
+        return oldValue != mark;
     }
 
     /**
@@ -64,11 +63,10 @@ public class DenseIntSet8Bit implements IntSet {
      */
     @Override
     public boolean removeAsInt(int element) {
-        if (a[element] == mark) {
-            a[element] = 0;
-            return true;
-        }
-        return false;
+        // Performance: this is branch-less code
+        byte oldValue = a[element];
+        a[element] = 0;
+        return oldValue != 0;
     }
 
     /**
