@@ -317,11 +317,6 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (size == 0) {
-            first = -1;
-            last = 0;
-            return;
-        }
         if (Sequenced.mustRenumber(size, first, last)) {
             root = SequencedElement.renumber(size, root, getOrCreateMutator(),
                     Objects::hashCode, Objects::equals);

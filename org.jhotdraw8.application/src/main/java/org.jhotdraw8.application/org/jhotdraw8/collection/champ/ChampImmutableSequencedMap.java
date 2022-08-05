@@ -390,9 +390,6 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @NonNull
     private ChampImmutableSequencedMap<K, V> renumber(BitmapIndexedNode<SequencedEntry<K, V>> root, int size, int first, int last) {
-        if (size == 0) {
-            return of();
-        }
         if (Sequenced.mustRenumber(size, first, last)) {
             root = SequencedEntry.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals);
             return new ChampImmutableSequencedMap<>(root, size, -1, size);

@@ -35,7 +35,8 @@ interface Sequenced {
      */
     static boolean mustRenumber(int size, int first, int last) {
         long extent = (long) last - first;
-        return last > Integer.MAX_VALUE - 2
+        return size == 0 && (first != -1 || last != 0)
+                || last > Integer.MAX_VALUE - 2
                 || first < Integer.MIN_VALUE + 2
                 || extent > 16 && extent > size * 4L;
     }

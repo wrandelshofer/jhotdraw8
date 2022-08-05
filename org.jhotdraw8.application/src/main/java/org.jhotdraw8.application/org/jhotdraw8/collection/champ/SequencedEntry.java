@@ -49,6 +49,10 @@ class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
     public static <K, V> BitmapIndexedNode<SequencedEntry<K, V>> renumber(int size, @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, @NonNull UniqueId mutator,
                                                                           @NonNull ToIntFunction<SequencedEntry<K, V>> hashFunction,
                                                                           @NonNull BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> equalsFunction) {
+        if (size == 0) {
+            return root;
+        }
+
         BitmapIndexedNode<SequencedEntry<K, V>> newRoot = root;
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         int seq = 0;

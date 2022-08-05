@@ -394,9 +394,6 @@ public class ChampImmutableSequencedSet<E>
      */
     @NonNull
     private ChampImmutableSequencedSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
-        if (size == 0) {
-            return of();
-        }
         if (Sequenced.mustRenumber(size, first, last)) {
             return new ChampImmutableSequencedSet<>(
                     SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),

@@ -72,6 +72,9 @@ class SequencedElement<E> implements Sequenced {
     public static <K> BitmapIndexedNode<SequencedElement<K>> renumber(int size, @NonNull BitmapIndexedNode<SequencedElement<K>> root, @NonNull UniqueId mutator,
                                                                       @NonNull ToIntFunction<SequencedElement<K>> hashFunction,
                                                                       @NonNull BiPredicate<SequencedElement<K>, SequencedElement<K>> equalsFunction) {
+        if (size == 0) {
+            return root;
+        }
         BitmapIndexedNode<SequencedElement<K>> newRoot = root;
         ChangeEvent<SequencedElement<K>> details = new ChangeEvent<>();
         int seq = 0;

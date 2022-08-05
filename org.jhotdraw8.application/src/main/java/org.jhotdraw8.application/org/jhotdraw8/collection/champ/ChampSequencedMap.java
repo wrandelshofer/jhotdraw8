@@ -440,17 +440,12 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (size == 0) {
-            first = -1;
-            last = 0;
-            return;
-        }
-        if (Sequenced.mustRenumber(size, first, last)) {
-            root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
-                    getHashFunction(), getEqualsFunction());
-            last = size;
-            first = -1;
-        }
+       if (Sequenced.mustRenumber(size, first, last)) {
+           root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
+                   getHashFunction(), getEqualsFunction());
+           last = size;
+           first = -1;
+       }
     }
 
     @Override
