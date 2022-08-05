@@ -127,31 +127,6 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
         return details.modified;
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c == this) {
-            return false;
-        }
-        if (c instanceof ChampImmutableSet<?>) {
-            c = (Iterable<? extends E>) ((ChampImmutableSet<?>) c).toMutable();
-        }
-        if (c instanceof ChampSet<?>) {
-            ChampSet<E> that = (ChampSet<E>) ((ChampSet<?>) c);
-            ChangeEvent<E> details = new ChangeEvent<>();
-            BitmapIndexedNode<E> newRoot = root.updateAll(that.root, 0, details, getOrCreateMutator(),
-                    (oldk, newk) -> oldk, (oldk, newk) -> newk, Objects::equals, Objects::hashCode);
-            if (details.modified) {
-                root = newRoot;
-                if (!details.isValueUpdated()) {
-                    size += that.size - details.numInBothCollections;
-                }
-                modCount++;
-            }
-            return details.modified;
-        }
-        return super.addAll(c);
-    }
-
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();

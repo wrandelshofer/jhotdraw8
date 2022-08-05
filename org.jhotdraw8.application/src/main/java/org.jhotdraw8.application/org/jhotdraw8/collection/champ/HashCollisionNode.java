@@ -10,10 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ArrayHelper;
 import org.jhotdraw8.collection.UniqueId;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -189,56 +185,5 @@ class HashCollisionNode<K> extends Node<K> {
             return this;
         }
         return newHashCollisionNode(mutator, keyHash, entriesNew);
-    }
-
-    @Override
-    public @NonNull Node<K> updateAll(@NonNull Node<K> o, int shift, ChangeEvent<K> bulkChange, UniqueId mutator,
-                                      @NonNull BiFunction<K, K, K> updateFunction,
-                                      @NonNull BiFunction<K, K, K> inverseUpdateFunction,
-                                      @NonNull BiPredicate<K, K> equalsFunction,
-                                      @NonNull ToIntFunction<K> hashFunction) {
-        if (o == this) {
-            bulkChange.numInBothCollections += dataArity();
-            return this;
-        }
-        // The other node must be a HashCollisionNode
-        HashCollisionNode<K> that = (HashCollisionNode<K>) o;
-
-        List<Object> list = new ArrayList<>(this.keys.length + that.keys.length);
-
-        // Step 1: Add all this.keys to list
-        list.addAll(Arrays.asList(this.keys));
-
-        // Step 2: Add all that.keys to list which are not in this.keys
-        //         This is quadratic.
-        //         If the sets are disjoint, we can do nothing about it.
-        //         If the sets intersect, we can mark those which are
-        //         equal in a bitset, so that we do not need to check
-        //         them over and over again.
-        BitSet bs = new BitSet(this.keys.length);
-        outer:
-        for (int j = 0; j < that.keys.length; j++) {
-            @SuppressWarnings("unchecked")
-            K thatKey = (K) that.keys[j];
-            for (int i = bs.nextClearBit(0); i >= 0 && i < this.keys.length; i = bs.nextClearBit(i + 1)) {
-                @SuppressWarnings("unchecked")
-                K thisKey = (K) this.keys[i];
-                if (equalsFunction.test(thatKey, thisKey)) {
-                    list.set(i, updateFunction.apply(thisKey, thatKey));
-                    bs.set(i);
-                    bulkChange.numInBothCollections++;
-                    continue outer;
-                }
-            }
-            list.add(thatKey);
-        }
-
-        if (list.size() > this.keys.length) {
-            @SuppressWarnings("unchecked")
-            HashCollisionNode<K> unchecked = newHashCollisionNode(mutator, hash, list.toArray());
-            return unchecked;
-        }
-
-        return this;
     }
 }
