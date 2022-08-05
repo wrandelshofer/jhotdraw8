@@ -215,7 +215,7 @@ public class ChampImmutableSequencedSet<E>
                 new SequencedElement<>(key, first - 1), Objects.hashCode(key), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        if (details.updated) {
+        if (details.valueUpdated) {
             return moveToFirst
                     ? renumber(root, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,
@@ -232,7 +232,7 @@ public class ChampImmutableSequencedSet<E>
                 new SequencedElement<>(key, last), Objects.hashCode(key), 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        if (details.updated) {
+        if (details.valueUpdated) {
             return moveToLast
                     ? renumber(root, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,

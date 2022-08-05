@@ -343,7 +343,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
                         getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             root = newRootNode;
-            if (details.isUpdated()) {
+            if (details.isValueUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
                 last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -373,7 +373,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
         if (details.isModified()) {
             root = newRoot;
-            if (details.isUpdated()) {
+            if (details.isValueUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
             } else {

@@ -119,7 +119,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
             root = newRoot;
-            if (!details.isUpdated()) {
+            if (!details.isValueUpdated()) {
                 size++;
             }
             modCount++;
@@ -142,7 +142,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
                     (oldk, newk) -> oldk, (oldk, newk) -> newk, Objects::equals, Objects::hashCode);
             if (details.modified) {
                 root = newRoot;
-                if (!details.isUpdated()) {
+                if (!details.isValueUpdated()) {
                     size += that.size - details.numInBothCollections;
                 }
                 modCount++;

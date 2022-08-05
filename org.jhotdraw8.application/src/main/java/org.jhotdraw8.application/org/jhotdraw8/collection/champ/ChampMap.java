@@ -214,7 +214,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
                         getEqualsFunction(),
                         getHashFunction());
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            if (details.isValueUpdated()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;

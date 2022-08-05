@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ArrayHelper;
 import org.jhotdraw8.collection.UniqueId;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
@@ -345,10 +344,9 @@ class BitmapIndexedNode<K> extends Node<K> {
         }
         BitmapIndexedNode<K> that = (BitmapIndexedNode<K>) o;
 
-        int newNodeLength = Integer.bitCount(this.nodeMap | this.dataMap | that.nodeMap | that.dataMap);
-        Object[] newMixed = new Object[newNodeLength];
         int newNodeMap = this.nodeMap | that.nodeMap;
         int newDataMap = this.dataMap | that.dataMap;
+        Object[] newMixed = new Object[Integer.bitCount(newNodeMap | newDataMap)];
         int thisNodeMapToDo = this.nodeMap;
         int thatNodeMapToDo = that.nodeMap;
 
@@ -369,9 +367,9 @@ class BitmapIndexedNode<K> extends Node<K> {
             if (thisHasData && thatHasData) {
                 K thisKey = this.getKey(index(this.dataMap, bitpos));
                 K thatKey = that.getKey(index(that.dataMap, bitpos));
-                if (Objects.equals(thisKey, thatKey)) {
+                if (equalsFunction.test(thisKey, thatKey)) {
                     // case 5.1:
-                    newMixed[dataIndex++] = thisKey;
+                    newMixed[dataIndex++] = updateFunction.apply(thisKey, thatKey);
                     bulkChange.numInBothCollections++;
                 } else {
                     // case 5.2:
@@ -389,14 +387,12 @@ class BitmapIndexedNode<K> extends Node<K> {
                     // case 9:
                     newDataMap ^= bitpos;
                     thatNodeMapToDo ^= bitpos;
-                    int thisKeyHash = hashFunction.applyAsInt(thisKey);
-                    subDetails.modified = false;
-                    subDetails.updated = false;
-                    Node<K> subNode = that.nodeAt(bitpos);
-                    Node<K> subNodeNew = subNode.update(mutator, thisKey, thisKeyHash, shift + BIT_PARTITION_SIZE, subDetails, updateFunction, equalsFunction, hashFunction);
-                    newMixed[nodeIndexAt(newMixed, newNodeMap, bitpos)] = subNodeNew;
+                    subDetails.reset();
+                    newMixed[nodeIndexAt(newMixed, newNodeMap, bitpos)] = that.nodeAt(bitpos)
+                            .update(mutator, thisKey, hashFunction.applyAsInt(thisKey),
+                                    shift + BIT_PARTITION_SIZE, subDetails, updateFunction, equalsFunction, hashFunction);
                     changed = true;
-                    if (!subDetails.modified || subDetails.updated) {
+                    if (!subDetails.modified || subDetails.valueUpdated) {
                         bulkChange.numInBothCollections++;
                     }
                 } else {
@@ -406,19 +402,16 @@ class BitmapIndexedNode<K> extends Node<K> {
             } else {
                 assert thatHasData;
                 K thatKey = that.getKey(index(that.dataMap, bitpos));
-                int thatKeyHash = hashFunction.applyAsInt(thatKey);
                 boolean thisHasNode = (this.nodeMap & bitpos) != 0;
                 if (thisHasNode) {
                     // case 6:
                     newDataMap ^= bitpos;
                     thisNodeMapToDo ^= bitpos;
-                    subDetails.modified = false;
-                    subDetails.updated = false;
-                    Node<K> subNode = this.getNode(index(this.nodeMap, bitpos));
-                    Node<K> subNodeNew = subNode.update(mutator, thatKey, thatKeyHash, shift + BIT_PARTITION_SIZE, subDetails,
-                            updateFunction, equalsFunction, hashFunction);
-                    newMixed[nodeIndexAt(newMixed, newNodeMap, bitpos)] = subNodeNew;
-                    if (!subDetails.modified || subDetails.updated) {
+                    subDetails.reset();
+                    newMixed[nodeIndexAt(newMixed, newNodeMap, bitpos)] = this.nodeAt(bitpos)
+                            .update(mutator, thatKey, hashFunction.applyAsInt(thatKey),
+                                    shift + BIT_PARTITION_SIZE, subDetails, updateFunction, equalsFunction, hashFunction);
+                    if (!subDetails.modified || subDetails.valueUpdated) {
                         bulkChange.numInBothCollections++;
                     } else {
                         changed = true;
@@ -455,7 +448,6 @@ class BitmapIndexedNode<K> extends Node<K> {
                 changed = true;
             } else {
                 // case 2
-                assert thisHasNodeToDo;
                 Node<K> thisSubNode = this.getNode(index(this.nodeMap, bitpos));
                 newMixed[nodeIndexAt(newMixed, newNodeMap, bitpos)] = thisSubNode;
             }

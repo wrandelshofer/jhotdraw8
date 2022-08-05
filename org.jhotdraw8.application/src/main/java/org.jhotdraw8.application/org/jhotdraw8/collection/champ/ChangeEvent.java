@@ -9,10 +9,14 @@ class ChangeEvent<V> {
 
     public boolean modified;
     private V oldValue;
-    public boolean updated;
+    public boolean valueUpdated;
     public int numInBothCollections;
 
     public ChangeEvent() {
+    }
+
+    void reset() {
+        modified = valueUpdated = false;
     }
 
     void found(V oldValue) {
@@ -23,12 +27,12 @@ class ChangeEvent<V> {
         return oldValue;
     }
 
-    public boolean isUpdated() {
-        return updated;
+    public boolean isValueUpdated() {
+        return valueUpdated;
     }
 
     /**
-     * Returns true if a value has been inserted, replaced or removed.
+     * Returns true if an entry has been inserted, updated or removed.
      */
     public boolean isModified() {
         return modified;
@@ -36,7 +40,7 @@ class ChangeEvent<V> {
 
     void setValueUpdated(V oldValue) {
         this.oldValue = oldValue;
-        this.updated = true;
+        this.valueUpdated = true;
         this.modified = true;
     }
 

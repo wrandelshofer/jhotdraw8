@@ -64,8 +64,8 @@ abstract class Node<K> {
      * Given a bitmap and a bit-position, returns the index
      * in the array.
      * <p>
-     * For example, if the bitmap is 0b1101 and
-     * bit-position is 0b0100, then the index is 1.
+     * For example, if the bitmap is 0b11101 and
+     * bit-position is 0b00100, then the index is 1.
      *
      * @param bitmap a bit-map
      * @param bitpos a bit-position

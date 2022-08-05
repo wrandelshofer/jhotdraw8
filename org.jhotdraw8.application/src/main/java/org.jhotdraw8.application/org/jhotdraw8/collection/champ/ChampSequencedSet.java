@@ -150,7 +150,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
             root = newRoot;
-            if (details.updated) {
+            if (details.valueUpdated) {
                 first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
                 last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -177,7 +177,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
             root = newRoot;
-            if (details.updated) {
+            if (details.valueUpdated) {
                 first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
             } else {

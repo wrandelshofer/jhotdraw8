@@ -219,15 +219,18 @@ class HashCollisionNode<K> extends Node<K> {
         outer:
         for (int j = 0; j < that.keys.length; j++) {
             @SuppressWarnings("unchecked")
-            K key = (K) that.keys[j];
+            K thatKey = (K) that.keys[j];
             for (int i = bs.nextClearBit(0); i >= 0 && i < this.keys.length; i = bs.nextClearBit(i + 1)) {
-                if (Objects.equals(key, this.keys[i])) {
+                @SuppressWarnings("unchecked")
+                K thisKey = (K) this.keys[i];
+                if (equalsFunction.test(thatKey, thisKey)) {
+                    list.set(i, updateFunction.apply(thisKey, thatKey));
                     bs.set(i);
                     bulkChange.numInBothCollections++;
                     continue outer;
                 }
             }
-            list.add(key);
+            list.add(thatKey);
         }
 
         if (list.size() > this.keys.length) {
