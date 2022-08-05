@@ -24,9 +24,30 @@ import java.util.stream.Stream;
 abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     private final static long serialVersionUID = 0L;
+
+    /**
+     * The current mutator id of this set.
+     * <p>
+     * All nodes that have the same non-null mutator id, are exclusively owned
+     * by this set, and therefore can be mutated without affecting other sets.
+     * <p>
+     * If this mutator id is null, then this set does not own any nodes.
+     */
     protected @Nullable UniqueId mutator;
+
+    /**
+     * The root of this CHAMP trie.
+     */
     protected BitmapIndexedNode<X> root;
+
+    /**
+     * The number of elements in this set.
+     */
     protected int size;
+
+    /**
+     * The number of times this set has been structurally modified.
+     */
     protected transient int modCount;
 
     @Override
@@ -68,6 +89,12 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
         return size;
     }
 
+    /**
+     * Gets the mutator id of this set. Creates a new id, if this
+     * set has no mutator id.
+     *
+     * @return a new unique id or the existing unique id.
+     */
     protected @NonNull UniqueId getOrCreateMutator() {
         if (mutator == null) {
             mutator = new UniqueId();
