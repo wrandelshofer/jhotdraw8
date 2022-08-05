@@ -22,6 +22,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.BezierCurveCharacteristics;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.biarc.Bezier2BiArc;
@@ -190,7 +191,7 @@ public class BiArcApproExampleMain extends Application {
 
     private void approxBezierCurve(ObservableList<PathElement> inf1, double x, double y, double x1, double y1, double x2, double y2, double x3, double y3) {
         ObservableList<PathElement> appr = approxPath.getElements();
-        for (double t : BezierCurves.inflectionPoints(
+        for (double t : new BezierCurveCharacteristics().inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3)) {
             double r = 2;
             java.awt.geom.Point2D p = BezierCurves.evalCubicCurve(x, y, x1, y1, x2, y2, x3, y3, t);
@@ -206,7 +207,7 @@ public class BiArcApproExampleMain extends Application {
                 x2, y2, x3, y3
         );
         List<BiArc> biArcs = Bezier2BiArc.approxCubicBezier(cubicBezier, 3, 0.25);
-        System.out.println("#inflectionPoints: " + BezierCurves.inflectionPoints(
+        System.out.println("#inflectionPoints: " + new BezierCurveCharacteristics().inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3).size());
         System.out.println("#biArcs: " + biArcs.size());
         for (BiArc biArc : biArcs) {

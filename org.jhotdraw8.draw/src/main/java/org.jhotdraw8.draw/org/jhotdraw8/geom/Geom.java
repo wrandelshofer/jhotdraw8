@@ -189,6 +189,24 @@ public class Geom {
     }
 
     /**
+     * Clamps a value to the given range.
+     *
+     * @param value the value
+     * @param min   the lower bound of the range
+     * @param max   the upper bound of the range
+     * @return the constrained value
+     */
+    public static long clamp(long value, long min, long max) {
+        if (value < min) {
+            return min;
+        }
+        if (value > max) {
+            return max;
+        }
+        return value;
+    }
+
+    /**
      * Returns true if the bounds contain the specified point within the given
      * tolerance.
      *

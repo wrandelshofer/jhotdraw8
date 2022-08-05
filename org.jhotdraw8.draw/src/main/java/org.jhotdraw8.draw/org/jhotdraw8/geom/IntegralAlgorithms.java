@@ -47,7 +47,7 @@ public class IntegralAlgorithms {
         Rp[0] = (f.applyAsDouble(t0) + f.applyAsDouble(t1)) * h * 0.5;
 
         for (int i = 1; i < maxSteps; i++) {
-            h /= 2;
+            h *= 0.5;
             double c = 0;
             int ep = 1 << (i - 1);
             for (int j = 1; j <= ep; j++) {

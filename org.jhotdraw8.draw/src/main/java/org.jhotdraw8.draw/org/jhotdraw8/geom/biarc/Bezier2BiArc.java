@@ -7,6 +7,7 @@ package org.jhotdraw8.geom.biarc;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
+import org.jhotdraw8.geom.BezierCurveCharacteristics;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
@@ -177,7 +178,7 @@ public class Bezier2BiArc {
         if (bezier.getP1().equals(bezier.getCtrlP1()) || bezier.getP2().equals(bezier.getCtrlP2())) {
             stack.push(bezier);
         } else {
-            DoubleArrayList inflex = BezierCurves.inflectionPoints(bezier);
+            DoubleArrayList inflex = new BezierCurveCharacteristics().inflectionPoints(bezier);
 
             if (inflex.size() == 1) {
                 OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = BezierCurves.split(bezier, inflex.get(0));

@@ -19,6 +19,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
+import org.jhotdraw8.geom.BezierArcLengthGravesen;
+import org.jhotdraw8.geom.BezierArcLengthRomberg;
+import org.jhotdraw8.geom.BezierArcLengthSimpson;
+import org.jhotdraw8.geom.BezierCurveCharacteristics;
 import org.jhotdraw8.geom.BezierCurves;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXShapes;
@@ -77,7 +81,8 @@ public class BezierArcLengthExampleMain extends Application {
         }
 
         private void onMouseDragged(@NonNull MouseEvent evt) {
-            setPosition(round(evt.getX() / 10) * 10, round(evt.getY() / 10) * 10);
+            setPosition(Geom.clamp(round(evt.getX() / 10) * 10, 4, Integer.MAX_VALUE),
+                    Geom.clamp(round(evt.getY() / 10) * 10, 4, Integer.MAX_VALUE));
             handlesChanged();
         }
     }
@@ -164,7 +169,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndX(),
                 curve.getEndY()};
 
-        BezierCurves.Characteristics characteristics = BezierCurves.characteristics(b);
+        BezierCurveCharacteristics.Characteristics characteristics = BezierCurveCharacteristics.characteristics(b);
         PathArcLengthParameterization param = new PathArcLengthParameterization(
                 FXShapes.awtShapeFromFX(new CubicCurve(curve.getStartX(),
                         curve.getStartY(),
@@ -176,12 +181,12 @@ public class BezierArcLengthExampleMain extends Application {
                         curve.getEndY())).getPathIterator(null, 1.0)
         );
 
-        double gravesen = BezierCurves.arcLengthGravesen(b, 0.001);
-        double romberg = BezierCurves.arcLengthRomberg(b, 0.001);
-        double simpson = BezierCurves.arcLengthSimpson(b, 0.001);
+        double gravesen = BezierArcLengthGravesen.arcLength(b, 0.001);
+        double romberg = BezierArcLengthRomberg.arcLength(b, 0.001);
+        double simpson = BezierArcLengthSimpson.arcLength(b, 0.001);
 
         label.setText("length"
-                + "\n ∑:" + (float) param.length
+                + "\n ∑:" + (float) param.length + " segs: " + param.segments.size()
                 + "\n gravesen:" + (float) gravesen
                 + "\n romberg:" + (float) romberg
                 + "\n simpson:" + (float) simpson
@@ -209,7 +214,7 @@ public class BezierArcLengthExampleMain extends Application {
         }
 
 
-        for (int i = 1, n = 10; i < n; i++) {
+        for (int i = 1, n = 50; i < n; i++) {
             double s = i / (double) n;
             javafx.geometry.Point2D p = param.interpolate(s);
             Circle e = new Circle(p.getX(), p.getY(), 2);
@@ -255,7 +260,7 @@ public class BezierArcLengthExampleMain extends Application {
      */
     private void updatePointsOfInterest() {
 
-        DoubleArrayList infl = BezierCurves.inflectionPoints(curve.getStartX(),
+        DoubleArrayList infl = BezierCurveCharacteristics.inflectionPoints(curve.getStartX(),
                 curve.getStartY(),
                 curve.getControlX1(),
                 curve.getControlY1(),
@@ -271,7 +276,7 @@ public class BezierArcLengthExampleMain extends Application {
             addPoints(infl, Color.BLACK, null);
         }
         if (infl.isEmpty()) {
-            Double p = BezierCurves.singularPoint(curve.getStartX(),
+            Double p = BezierCurveCharacteristics.singularPoint(curve.getStartX(),
                     curve.getStartY(),
                     curve.getControlX1(),
                     curve.getControlY1(),
