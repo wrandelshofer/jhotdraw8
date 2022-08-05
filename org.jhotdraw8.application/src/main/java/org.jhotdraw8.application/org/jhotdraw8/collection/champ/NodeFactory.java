@@ -10,14 +10,14 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.UniqueId;
 
 /**
- * Provides static utility methods for CHAMP tries.
+ * Provides factory methods for {@link Node}s.
  */
-class ChampTrie {
+class NodeFactory {
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private ChampTrie() {
+    private NodeFactory() {
     }
 
     static <K> @NonNull BitmapIndexedNode<K> newBitmapIndexedNode(

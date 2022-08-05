@@ -14,8 +14,8 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.champ.ChampTrie.newBitmapIndexedNode;
-import static org.jhotdraw8.collection.champ.ChampTrie.newHashCollisionNode;
+import static org.jhotdraw8.collection.champ.NodeFactory.newBitmapIndexedNode;
+import static org.jhotdraw8.collection.champ.NodeFactory.newHashCollisionNode;
 
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
