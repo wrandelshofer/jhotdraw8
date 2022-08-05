@@ -195,7 +195,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
         root = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
-        first = 0;
+        first = -1;
         last = 0;
     }
 
