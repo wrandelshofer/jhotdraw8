@@ -113,15 +113,12 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     @Override
     public boolean add(final @Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRoot = root.update(getOrCreateMutator(),
+        root = root.update(getOrCreateMutator(),
                 e, Objects.hashCode(e), 0, details,
-                (oldk, newk) -> oldk,
+                (oldKey, newKey) -> oldKey,
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
-            root = newRoot;
-            if (!details.isValueUpdated()) {
-                size++;
-            }
+            size++;
             modCount++;
         }
         return details.modified;
@@ -145,8 +142,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_VALUE != root.findByKey((E) o, Objects.hashCode(o), 0,
-                Objects::equals);
+        return Node.NO_VALUE != root.findByKey((E) o, Objects.hashCode(o), 0, Objects::equals);
     }
 
     @Override
@@ -165,11 +161,10 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     @SuppressWarnings("unchecked")
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRoot = root.remove(
+        root = root.remove(
                 getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, details,
                 Objects::equals);
         if (details.modified) {
-            root = newRoot;
             size--;
             modCount++;
         }

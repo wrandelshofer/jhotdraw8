@@ -336,13 +336,11 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
                                                                 boolean moveToFirst) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
-                root.update(getOrCreateMutator(),
-                        new SequencedEntry<>(key, val, first), keyHash, 0, details,
-                        moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
-                        getEqualsFunction(), getHashFunction());
+        root = root.update(getOrCreateMutator(),
+                new SequencedEntry<>(key, val, first), keyHash, 0, details,
+                moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
+                getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            root = newRootNode;
             if (details.isValueUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
                 last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
@@ -365,14 +363,12 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     @NonNull ChangeEvent<SequencedEntry<K, V>> putLast(
             final K key, final V val, boolean moveToLast) {
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedEntry<K, V>> newRoot =
-                root.update(getOrCreateMutator(),
-                        new SequencedEntry<>(key, val, last), Objects.hashCode(key), 0, details,
-                        moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
-                        getEqualsFunction(), getHashFunction());
+        root = root.update(getOrCreateMutator(),
+                new SequencedEntry<>(key, val, last), Objects.hashCode(key), 0, details,
+                moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
+                getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
-            root = newRoot;
             if (details.isValueUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
@@ -412,12 +408,10 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(final K key) {
         final int keyHash = Objects.hashCode(key);
         final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
-                root.remove(getOrCreateMutator(),
-                        new SequencedEntry<>(key), keyHash, 0, details,
-                        getEqualsFunction());
+        root = root.remove(getOrCreateMutator(),
+                new SequencedEntry<>(key), keyHash, 0, details,
+                getEqualsFunction());
         if (details.isModified()) {
-            root = newRootNode;
             size = size - 1;
             modCount++;
             int seq = details.getOldValue().getSequenceNumber();
@@ -433,19 +427,18 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
 
-
     /**
      * Renumbers the sequence numbers if they have overflown,
      * or if the extent of the sequence numbers is more than
      * 4 times the size of the set.
      */
     private void renumber() {
-       if (Sequenced.mustRenumber(size, first, last)) {
-           root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
-                   getHashFunction(), getEqualsFunction());
-           last = size;
-           first = -1;
-       }
+        if (Sequenced.mustRenumber(size, first, last)) {
+            root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
+                    getHashFunction(), getEqualsFunction());
+            last = size;
+            first = -1;
+        }
     }
 
     @Override

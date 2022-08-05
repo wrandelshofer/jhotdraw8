@@ -144,12 +144,11 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
+        root = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
-            root = newRoot;
             if (details.valueUpdated) {
                 first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
                 last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
@@ -170,13 +169,12 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedElement<E>> newRoot = root.update(
+        root = root.update(
                 getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
                 details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.modified) {
-            root = newRoot;
             if (details.valueUpdated) {
                 first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
@@ -270,15 +268,14 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
         return new ReadOnlySequencedSetFacadeFacade<>(reversed());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean remove(final Object o) {
         final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        @SuppressWarnings("unchecked")//
-        final BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(
+        root = root.remove(
                 getOrCreateMutator(), new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
         if (details.modified) {
-            root = newRoot;
             size--;
             modCount++;
             int seq = details.getOldValue().getSequenceNumber();
