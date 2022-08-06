@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * An immutable CHAMP set that only provides a {@code copyAdd} method.
+ * An immutable CHAMP set that only provides a {@link ImmutableAddOnlySet#add}
+ * method.
  * <p>
  * References:
  * <dl>
@@ -32,8 +33,10 @@ public abstract class ChampImmutableAddOnlySet<E> implements ImmutableAddOnlySet
     private static final int BIT_PARTITION_SIZE = 4;
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
-
-    public ChampImmutableAddOnlySet() {
+    /**
+     * Creates a new empty set.
+     */
+    ChampImmutableAddOnlySet() {
     }
 
     private static char bitpos(int mask) {
@@ -75,11 +78,24 @@ public abstract class ChampImmutableAddOnlySet<E> implements ImmutableAddOnlySet
         }
     }
 
+    /**
+     * Returns an empty set.
+     *
+     * @param <E> the element type.
+     * @return an empty set.
+     */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull ChampImmutableAddOnlySet<E> of() {
         return (ChampImmutableAddOnlySet<E>) BitmapIndexedNode.EMPTY_NODE;
     }
 
+    /**
+     * Returns a set that contains the specified elements.
+     *
+     * @param elements the specified elements
+     * @param <E>      the element type.
+     * @return a set of the specified elements.
+     */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> @NonNull ChampImmutableAddOnlySet<E> of(E @NonNull ... elements) {

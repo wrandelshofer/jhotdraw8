@@ -18,7 +18,7 @@ import java.util.function.ToIntFunction;
  * <p>
  * {@code hashCode} and {@code equals} are based on the key only.
  */
-class SequencedElement<E> implements Sequenced {
+class SequencedElement<E> implements SequencedKey {
 
     private final @Nullable E element;
     private final int sequenceNumber;
@@ -64,9 +64,9 @@ class SequencedElement<E> implements Sequenced {
      * Afterwards the sequence number for the next inserted entry must be
      * set to the value {@code size};
      *
+     * @param <K>     the key type
      * @param root    the root of the trie
      * @param mutator the mutator which will own all nodes of the trie
-     * @param <K>     the key type
      * @return the new root
      */
     public static <K> BitmapIndexedNode<SequencedElement<K>> renumber(int size, @NonNull BitmapIndexedNode<SequencedElement<K>> root, @NonNull UniqueId mutator,

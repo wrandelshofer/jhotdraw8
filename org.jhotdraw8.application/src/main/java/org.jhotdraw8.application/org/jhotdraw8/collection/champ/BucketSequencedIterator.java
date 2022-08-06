@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Iterates over {@link Sequenced} elements in a CHAMP trie in the order of the
+ * Iterates over {@link SequencedKey} elements in a CHAMP trie in the order of the
  * sequence numbers.
  * <p>
  * Uses a bucket array for ordering the elements. The size of the array is
@@ -32,7 +32,7 @@ import java.util.function.Function;
  * @param <E> the type parameter of the  CHAMP trie {@link Node}s
  * @param <X> the type parameter of the {@link Iterator} interface
  */
-class BucketSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
+class BucketSequencedIterator<E extends SequencedKey, X> implements Iterator<X> {
     private int next;
     private int remaining;
     private @Nullable E current;
@@ -70,9 +70,9 @@ class BucketSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
         this.mappingFunction = mappingFunction;
         this.remaining = size;
         if (size == 0) {
-            buckets = (E[]) new Sequenced[0];
+            buckets = (E[]) new SequencedKey[0];
         } else {
-            buckets = (E[]) new Sequenced[last - first];
+            buckets = (E[]) new SequencedKey[last - first];
             if (reversed) {
                 int length = buckets.length;
                 for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); ) {
@@ -119,9 +119,7 @@ class BucketSequencedIterator<E extends Sequenced, X> implements Iterator<X> {
 
     public static boolean isSupported(int size, int first, int last) {
         long extent = (long) last - first;
-        return extent < Integer.MAX_VALUE / 2
+        return extent <= Integer.MAX_VALUE / 2
                 && extent <= size * 4L;
     }
-
-
 }

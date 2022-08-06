@@ -30,6 +30,7 @@ import java.util.function.BiFunction;
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to 2<sup>30</sup> elements</li>
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
@@ -41,10 +42,10 @@ import java.util.function.BiFunction;
  *     <li>copyAdd: O(1) amortized</li>
  *     <li>copyRemove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toMutable: O(1) + a cost distributed across subsequent updates in the mutable copy</li>
+ *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator creation: O(N)</li>
- *     <li>iterator.next: O(1) with bucket sort or O(log N) with a heap</li>
+ *     <li>iterator.next: O(1) with bucket sort, O(log N) with heap sort</li>
  *     <li>getFirst(), getLast(): O(N)</li>
  * </ul>
  * <p>
@@ -394,7 +395,7 @@ public class ChampImmutableSequencedSet<E>
      */
     @NonNull
     private ChampImmutableSequencedSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
-        if (Sequenced.mustRenumber(size, first, last)) {
+        if (SequencedKey.mustRenumber(size, first, last)) {
             return new ChampImmutableSequencedSet<>(
                     SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
                     size, -1, size);
@@ -445,7 +446,7 @@ public class ChampImmutableSequencedSet<E>
     }
 
     private @NonNull Object writeReplace() {
-        return new SerializationProxy<E>(this.toMutable());
+        return new SerializationProxy<E>(toMutable());
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {

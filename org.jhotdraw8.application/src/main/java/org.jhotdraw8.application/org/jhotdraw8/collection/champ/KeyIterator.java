@@ -9,41 +9,31 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 /**
- * Entry iterator over a CHAMP trie.
+ * Key iterator over a CHAMP trie.
  * <p>
  * Uses a fixed stack in depth.
  * Iterates first over inlined data entries and then continues depth first.
  * <p>
- * Supports remove and {@link Map.Entry#setValue}. The functions that are
+ * Supports the {@code remove} operation. The functions that are
  * passed to this iterator must not change the trie structure that the iterator
  * currently uses.
  */
 class KeyIterator<K> implements Iterator<K> {
 
     private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
-    int nextValueCursor;
+    private int nextValueCursor;
     private int nextValueLength;
     private int nextStackLevel = -1;
-    Node<K> nextValueNode;
-    @Nullable K current;
+    private @Nullable Node<K> nextValueNode;
+    private @Nullable K current;
     private boolean canRemove = false;
     private final @Nullable Consumer<K> removeFunction;
     @SuppressWarnings({"unchecked", "rawtypes"})
-    Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
-
-    /**
-     * Creates a new instance.
-     *
-     * @param root the root node of the trie
-     */
-    public KeyIterator(@NonNull Node<K> root) {
-        this(root, null);
-    }
+    private Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Creates a new instance.

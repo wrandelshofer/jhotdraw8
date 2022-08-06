@@ -21,27 +21,28 @@ import java.util.function.BiFunction;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP).
+ * (CHAMP), with predictable iteration order.
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to 2<sup>30</sup> elements</li>
  *     <li>allows null elements</li>
  *     <li>is mutable</li>
  *     <li>is not thread-safe</li>
- *     <li>does not guarantee a specific iteration order</li>
+ *     <li>iterates in the order, in which elements were inserted</li>
  * </ul>
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1)</li>
+ *     <li>add: O(1) amortized</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + a cost distributed across subsequent updates in
+ *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
  *     this set</li>
- *     <li>clone: O(1) + a cost distributed across subsequent updates in this
+ *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     set and in the clone</li>
  *     <li>iterator creation: O(N)</li>
- *     <li>iterator.next: O(1) with bucket sort or O(log N) with a heap</li>
+ *     <li>iterator.next: O(1) with bucket sort, O(log N) with heap sort</li>
  *     <li>getFirst, getLast: O(N)</li>
  * </ul>
  * <p>
@@ -67,6 +68,19 @@ import java.util.function.BiFunction;
  * Thus, creating an immutable copy increases the constant cost of
  * subsequent writes, until all shared nodes have been gradually replaced by
  * exclusively owned nodes again.
+ * <p>
+ * Insertion Order:
+ * <p>
+ * This set uses a counter to keep track of the insertion order.
+ * It stores the current value of the counter in the sequence number
+ * field of each data entry. If the counter wraps around, it must renumber all
+ * sequence numbers.
+ * <p>
+ * The renumbering is why the {@code add} is O(1) only in an amortized sense.
+ * <p>
+ * The iterator of the set is a priority queue, that orders the entries by
+ * their stored insertion counter value. This is why {@code iterator.next()}
+ * is O(log n).
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access this set concurrently, and at least
@@ -314,7 +328,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (Sequenced.mustRenumber(size, first, last)) {
+        if (SequencedKey.mustRenumber(size, first, last)) {
             root = SequencedElement.renumber(size, root, getOrCreateMutator(),
                     Objects::hashCode, Objects::equals);
             last = size;
