@@ -206,7 +206,7 @@ public class ChampImmutableSequencedSet<E>
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return findByKey(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_VALUE;
+        return findByData(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
     private @NonNull ChampImmutableSequencedSet<E> copyAddFirst(@Nullable E key,
@@ -395,7 +395,7 @@ public class ChampImmutableSequencedSet<E>
      */
     @NonNull
     private ChampImmutableSequencedSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
-        if (SequencedKey.mustRenumber(size, first, last)) {
+        if (SequencedData.mustRenumber(size, first, last)) {
             return new ChampImmutableSequencedSet<>(
                     SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
                     size, -1, size);

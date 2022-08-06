@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Iterates over {@link SequencedKey} elements in a CHAMP trie in the
+ * Iterates over {@link SequencedData} elements in a CHAMP trie in the
  * order of the sequence numbers.
  * <p>
  * Uses a {@link LongArrayHeap} and a data array for
@@ -32,7 +32,7 @@ import java.util.function.Function;
  * @param <E> the type parameter of the  CHAMP trie {@link Node}s
  * @param <X> the type parameter of the {@link Iterator} interface
  */
-class HeapSequencedIterator<E extends SequencedKey, X> implements Iterator<X> {
+class HeapSequencedIterator<E extends SequencedData, X> implements Iterator<X> {
     private final @NonNull LongArrayHeap queue;
     private E current;
     private boolean canRemove;
@@ -60,7 +60,7 @@ class HeapSequencedIterator<E extends SequencedKey, X> implements Iterator<X> {
         this.removeFunction = removeFunction;
         this.mappingFunction = mappingFunction;
         queue = new LongArrayHeap(size);
-        array = (E[]) new SequencedKey[size];
+        array = (E[]) new SequencedData[size];
         int i = 0;
         for (Iterator<? extends E> it = new KeyIterator<>(rootNode, null); it.hasNext(); i++) {
             E k = it.next();
@@ -95,7 +95,7 @@ class HeapSequencedIterator<E extends SequencedKey, X> implements Iterator<X> {
     }
 
 
-    public static <E extends SequencedKey> @NonNull E getLast(@NonNull Node<? extends E> root, int first, int last) {
+    public static <E extends SequencedData> @NonNull E getLast(@NonNull Node<? extends E> root, int first, int last) {
         int maxSeq = first;
         E maxKey = null;
         for (KeyIterator<? extends E> i = new KeyIterator<>(root, null); i.hasNext(); ) {
@@ -115,7 +115,7 @@ class HeapSequencedIterator<E extends SequencedKey, X> implements Iterator<X> {
         return maxKey;
     }
 
-    public static <E extends SequencedKey> @NonNull E getFirst(@NonNull Node<? extends E> root, int first, int last) {
+    public static <E extends SequencedData> @NonNull E getFirst(@NonNull Node<? extends E> root, int first, int last) {
         int minSeq = last;
         E minKey = null;
         for (KeyIterator<? extends E> i = new KeyIterator<>(root, null); i.hasNext(); ) {

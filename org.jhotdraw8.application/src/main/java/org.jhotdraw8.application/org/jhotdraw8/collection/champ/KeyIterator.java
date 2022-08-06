@@ -73,7 +73,7 @@ class KeyIterator<K> implements Iterator<K> {
             throw new NoSuchElementException();
         } else {
             canRemove = true;
-            current = nextValueNode.getKey(nextValueCursor++);
+            current = nextValueNode.getData(nextValueCursor++);
             return current;
         }
     }

@@ -150,8 +150,8 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
-                getEqualsFunction()) != Node.NO_VALUE;
+        return findByData(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
+                getEqualsFunction()) != Node.NO_DATA;
     }
 
     @SuppressWarnings("unchecked")
@@ -175,8 +175,8 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     @SuppressWarnings("unchecked")
     public V get(Object o) {
         K key = (K) o;
-        Object result = findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, getEqualsFunction());
-        return result == Node.NO_VALUE || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
+        Object result = findByData(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, getEqualsFunction());
+        return result == Node.NO_DATA || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
     }
 
     @NonNull
