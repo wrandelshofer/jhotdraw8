@@ -347,7 +347,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            if (details.isValueUpdated()) {
+            if (details.isUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
                 last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -375,7 +375,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
                 getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
-            if (details.isValueUpdated()) {
+            if (details.isUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
             } else {
@@ -405,7 +405,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
-        if (details.modified) {
+        if (details.isModified()) {
             return details.getOldValue().getValue();
         }
         return null;

@@ -212,7 +212,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
                 getUpdateFunction(),
                 getEqualsFunction(),
                 getHashFunction());
-        if (details.isModified() && !details.isValueUpdated()) {
+        if (details.isModified() && !details.isUpdated()) {
             size += 1;
             modCount++;
         }

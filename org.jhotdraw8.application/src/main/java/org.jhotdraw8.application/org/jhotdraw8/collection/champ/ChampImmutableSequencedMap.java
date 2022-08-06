@@ -199,14 +199,14 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
                 keyHash, 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
-        if (details.valueUpdated) {
+        if (details.isUpdated()) {
             return moveToFirst
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,
                     details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
                     : new ChampImmutableSequencedMap<>(newRootNode, size, first - 1, last);
         }
-        return details.modified ? renumber(newRootNode, size + 1, first - 1, last) : this;
+        return details.isModified() ? renumber(newRootNode, size + 1, first - 1, last) : this;
     }
 
     public @NonNull ChampImmutableSequencedMap<K, V> copyPutLast(@NonNull K key, @Nullable V value) {
@@ -222,14 +222,14 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
                 keyHash, 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
-        if (details.valueUpdated) {
+        if (details.isUpdated()) {
             return moveToLast
                     ? renumber(newRootNode, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
                     details.getOldValue().getSequenceNumber() == last ? last : last + 1)
                     : new ChampImmutableSequencedMap<>(newRootNode, size, first, last + 1);
         }
-        return details.modified ? renumber(newRootNode, size + 1, first, last + 1) : this;
+        return details.isModified() ? renumber(newRootNode, size + 1, first, last + 1) : this;
     }
 
     private @NonNull ChampImmutableSequencedMap<K, V> copyRemove(@NonNull K key, int newFirst, int newLast) {
@@ -355,7 +355,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), false);
-            modified |= details.modified;
+            modified |= details.isModified();
         }
         return modified ? t.toImmutable() : this;
     }
@@ -384,7 +384,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<SequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
-            modified |= details.modified;
+            modified |= details.isModified();
         }
         return modified ? t.toImmutable() : this;
     }

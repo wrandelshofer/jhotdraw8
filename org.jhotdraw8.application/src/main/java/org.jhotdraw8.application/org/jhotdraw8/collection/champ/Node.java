@@ -17,9 +17,9 @@ import java.util.function.ToIntFunction;
 /**
  * Represents a node in a CHAMP trie.
  *
- * @param <K> the key type
+ * @param <E> the element type
  */
-abstract class Node<K> {
+abstract class Node<E> {
     /**
      * Represents no value.
      * We can not use {@code null}, because we allow storing null-keys in the
@@ -121,15 +121,15 @@ abstract class Node<K> {
      * @param shift   the shift for this node
      * @return the value, returns {@link #NO_VALUE} if the value is not present.
      */
-    abstract Object findByKey(K key, int keyHash, int shift, @NonNull BiPredicate<K, K> equalsFunction);
+    abstract Object findByKey(E key, int keyHash, int shift, @NonNull BiPredicate<E, E> equalsFunction);
 
-    abstract @Nullable K getKey(int index);
+    abstract @Nullable E getKey(int index);
 
     @Nullable UniqueId getMutator() {
         return null;
     }
 
-    abstract @NonNull Node<K> getNode(int index);
+    abstract @NonNull Node<E> getNode(int index);
 
     abstract boolean hasData();
 
@@ -144,10 +144,10 @@ abstract class Node<K> {
 
     abstract int nodeArity();
 
-    abstract @NonNull Node<K> remove(@Nullable UniqueId mutator, K key,
+    abstract @NonNull Node<E> remove(@Nullable UniqueId mutator, E key,
                                      int keyHash, int shift,
-                                     @NonNull ChangeEvent<K> details,
-                                     @NonNull BiPredicate<K, K> equalsFunction);
+                                     @NonNull ChangeEvent<E> details,
+                                     @NonNull BiPredicate<E, E> equalsFunction);
 
     /**
      * Inserts or updates a key in the trie.
@@ -163,9 +163,9 @@ abstract class Node<K> {
      *                       key with the new key
      * @return the updated trie
      */
-    abstract @NonNull Node<K> update(@Nullable UniqueId mutator, K key,
-                                     int keyHash, int shift, @NonNull ChangeEvent<K> details,
-                                     @NonNull BiFunction<K, K, K> updateFunction,
-                                     @NonNull BiPredicate<K, K> equalsFunction,
-                                     @NonNull ToIntFunction<K> hashFunction);
+    abstract @NonNull Node<E> update(@Nullable UniqueId mutator, E key,
+                                     int keyHash, int shift, @NonNull ChangeEvent<E> details,
+                                     @NonNull BiFunction<E, E, E> updateFunction,
+                                     @NonNull BiPredicate<E, E> equalsFunction,
+                                     @NonNull ToIntFunction<E> hashFunction);
 }

@@ -216,14 +216,14 @@ public class ChampImmutableSequencedSet<E>
                 new SequencedElement<>(key, first - 1), Objects.hashCode(key), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        if (details.valueUpdated) {
+        if (details.isUpdated()) {
             return moveToFirst
                     ? renumber(root, size,
                     details.getOldValue().getSequenceNumber() == first ? first : first - 1,
                     details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
                     : new ChampImmutableSequencedSet<>(root, size, first, last);
         }
-        return details.modified ? renumber(root, size + 1, first - 1, last) : this;
+        return details.isModified() ? renumber(root, size + 1, first - 1, last) : this;
     }
 
     private @NonNull ChampImmutableSequencedSet<E> copyAddLast(@Nullable E key,
@@ -233,14 +233,14 @@ public class ChampImmutableSequencedSet<E>
                 new SequencedElement<>(key, last), Objects.hashCode(key), 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        if (details.valueUpdated) {
+        if (details.isUpdated()) {
             return moveToLast
                     ? renumber(root, size,
                     details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
                     details.getOldValue().getSequenceNumber() == last ? last : last + 1)
                     : new ChampImmutableSequencedSet<>(root, size, first, last);
         }
-        return details.modified ? renumber(root, size + 1, first, last + 1) : this;
+        return details.isModified() ? renumber(root, size + 1, first, last + 1) : this;
     }
 
     private @NonNull ChampImmutableSequencedSet<E> copyRemove(@Nullable E key, int newFirst, int newLast) {
@@ -249,7 +249,7 @@ public class ChampImmutableSequencedSet<E>
         BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
-        if (details.modified) {
+        if (details.isModified()) {
             int seq = details.getOldValue().getSequenceNumber();
             if (seq == newFirst) {
                 newFirst++;

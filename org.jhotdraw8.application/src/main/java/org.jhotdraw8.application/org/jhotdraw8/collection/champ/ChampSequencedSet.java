@@ -162,8 +162,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        if (details.modified) {
-            if (details.valueUpdated) {
+        if (details.isModified()) {
+            if (details.isUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
                 last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -173,7 +173,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
             }
             renumber();
         }
-        return details.modified;
+        return details.isModified();
     }
 
     @Override
@@ -188,8 +188,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        if (details.modified) {
-            if (details.valueUpdated) {
+        if (details.isModified()) {
+            if (details.isUpdated()) {
                 first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
             } else {
@@ -199,7 +199,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
             }
             renumber();
         }
-        return details.modified;
+        return details.isModified();
     }
 
     @Override
@@ -289,7 +289,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
         root = root.remove(
                 getOrCreateMutator(), new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
-        if (details.modified) {
+        if (details.isModified()) {
             size--;
             modCount++;
             int seq = details.getOldValue().getSequenceNumber();
@@ -301,7 +301,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
             }
             renumber();
         }
-        return details.modified;
+        return details.isModified();
     }
 
     @Override

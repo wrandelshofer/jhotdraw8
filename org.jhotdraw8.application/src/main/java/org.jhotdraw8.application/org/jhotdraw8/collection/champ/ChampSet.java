@@ -118,11 +118,11 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
                 e, Objects.hashCode(e), 0, details,
                 (oldKey, newKey) -> oldKey,
                 Objects::equals, Objects::hashCode);
-        if (details.modified) {
+        if (details.isModified()) {
             size++;
             modCount++;
         }
-        return details.modified;
+        return details.isModified();
     }
 
     @Override
@@ -165,11 +165,11 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
         root = root.remove(
                 getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, details,
                 Objects::equals);
-        if (details.modified) {
+        if (details.isModified()) {
             size--;
             modCount++;
         }
-        return details.modified;
+        return details.isModified();
     }
 
     /**
