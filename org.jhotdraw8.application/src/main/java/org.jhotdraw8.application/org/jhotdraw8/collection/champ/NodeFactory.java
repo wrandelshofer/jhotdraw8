@@ -21,8 +21,8 @@ class NodeFactory {
     }
 
     static <K> @NonNull BitmapIndexedNode<K> newBitmapIndexedNode(
-            @Nullable UniqueId mutator, final int nodeMap,
-            final int dataMap, final @NonNull Object[] nodes) {
+            @Nullable UniqueId mutator, int nodeMap,
+            int dataMap, @NonNull Object[] nodes) {
         return mutator == null
                 ? new BitmapIndexedNode<>(nodeMap, dataMap, nodes)
                 : new MutableBitmapIndexedNode<>(mutator, nodeMap, dataMap, nodes);

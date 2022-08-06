@@ -226,9 +226,9 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
         return oldValue == null ? null : oldValue.getValue();
     }
 
-    @NonNull ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(final K key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+    @NonNull ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.remove(getOrCreateMutator(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                 getEqualsFunction());
         if (details.isModified()) {
@@ -239,7 +239,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
     }
 
     @SuppressWarnings("unchecked")
-    boolean removeEntry(final @Nullable Object o) {
+    boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {
             assert o != null;
             @SuppressWarnings("unchecked") Entry<K, V> entry = (Entry<K, V>) o;

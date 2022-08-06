@@ -178,7 +178,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public boolean containsKey(final @Nullable Object o) {
+    public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return findByKey(new SequencedEntry<>(key), Objects.hashCode(key), 0,
                 getEqualsFunction()) != Node.NO_VALUE;
@@ -191,8 +191,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @NonNull
     private ChampImmutableSequencedMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode = update(null,
                 new SequencedEntry<>(key, value, first),
                 keyHash, 0, details,
@@ -214,8 +214,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @NonNull
     private ChampImmutableSequencedMap<K, V> copyPutLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode = update(null,
                 new SequencedEntry<>(key, value, last),
                 keyHash, 0, details,
@@ -232,9 +232,9 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     private @NonNull ChampImmutableSequencedMap<K, V> copyRemove(@NonNull K key, int newFirst, int newLast) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
                 remove(null, new SequencedEntry<>(key), keyHash, 0, details, getEqualsFunction());
         if (details.isModified()) {
             int seq = details.getOldValue().getSequenceNumber();
@@ -250,7 +250,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     @Override
-    public boolean equals(final @Nullable Object other) {
+    public boolean equals(@Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -267,7 +267,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(final Object o) {
+    public V get(Object o) {
         Object result = findByKey(
                 new SequencedEntry<>((K) o),
                 Objects.hashCode(o), 0, getEqualsFunction());
@@ -350,7 +350,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @Override
     public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        final ChampSequencedMap<K, V> t = this.toMutable();
+        ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             ChangeEvent<SequencedEntry<K, V>> details = t.putLast(entry.getKey(), entry.getValue(), false);
@@ -379,7 +379,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         if (this.isEmpty()) {
             return this;
         }
-        final ChampSequencedMap<K, V> t = this.toMutable();
+        ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<SequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
@@ -405,7 +405,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         if (c.isEmpty()) {
             return of();
         }
-        final ChampSequencedMap<K, V> t = this.toMutable();
+        ChampSequencedMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {

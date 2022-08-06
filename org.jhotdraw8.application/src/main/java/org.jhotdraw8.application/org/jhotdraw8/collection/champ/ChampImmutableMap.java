@@ -147,7 +147,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean containsKey(final @Nullable Object o) {
+    public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
                 getEqualsFunction()) != Node.NO_VALUE;
@@ -155,7 +155,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean equals(final @Nullable Object other) {
+    public boolean equals(@Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -172,7 +172,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(final Object o) {
+    public V get(Object o) {
         K key = (K) o;
         Object result = findByKey(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, getEqualsFunction());
         return result == Node.NO_VALUE || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
@@ -211,9 +211,9 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @Override
     public @NonNull ChampImmutableMap<K, V> put(@NonNull K key, @Nullable V value) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode = update(null, new AbstractMap.SimpleImmutableEntry<>(key, value),
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+        BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode = update(null, new AbstractMap.SimpleImmutableEntry<>(key, value),
                 keyHash, 0, details,
                 getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
@@ -245,7 +245,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
 
     @Override
     public @NonNull ChampImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        final ChampMap<K, V> t = this.toMutable();
+        ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
             ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details =
@@ -258,9 +258,9 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampImmutableMap<K, V> remove(@NonNull K key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode =
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+        BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode =
                 remove(null, new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         getEqualsFunction());
         if (details.isModified()) {
@@ -274,7 +274,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (this.isEmpty()) {
             return this;
         }
-        final ChampMap<K, V> t = this.toMutable();
+        ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
             ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = t.removeAndGiveDetails(key);
@@ -291,7 +291,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
         if (c.isEmpty()) {
             return of();
         }
-        final ChampMap<K, V> t = this.toMutable();
+        ChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {

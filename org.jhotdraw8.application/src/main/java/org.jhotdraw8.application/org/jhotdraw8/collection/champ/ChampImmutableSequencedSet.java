@@ -168,7 +168,7 @@ public class ChampImmutableSequencedSet<E>
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedSet<E> add(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> add(@Nullable E key) {
         return copyAddLast(key, false);
     }
 
@@ -181,19 +181,19 @@ public class ChampImmutableSequencedSet<E>
         if (isEmpty() && (set instanceof ChampSequencedSet)) {
             return ((ChampSequencedSet<E>) set).toImmutable();
         }
-        final ChampSequencedSet<E> t = this.toMutable();
+        ChampSequencedSet<E> t = this.toMutable();
         boolean modified = false;
-        for (final E key : set) {
+        for (E key : set) {
             modified |= t.add(key);
         }
         return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull ChampImmutableSequencedSet<E> addFirst(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> addFirst(@Nullable E key) {
         return copyAddFirst(key, true);
     }
 
-    public @NonNull ChampImmutableSequencedSet<E> addLast(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> addLast(@Nullable E key) {
         return copyAddLast(key, true);
     }
 
@@ -225,7 +225,7 @@ public class ChampImmutableSequencedSet<E>
         return details.modified ? renumber(root, size + 1, first - 1, last) : this;
     }
 
-    private @NonNull ChampImmutableSequencedSet<E> copyAddLast(final @Nullable E key,
+    private @NonNull ChampImmutableSequencedSet<E> copyAddLast(@Nullable E key,
                                                                boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedElement<E>> root = update(null,
@@ -242,10 +242,10 @@ public class ChampImmutableSequencedSet<E>
         return details.modified ? renumber(root, size + 1, first, last + 1) : this;
     }
 
-    private @NonNull ChampImmutableSequencedSet<E> copyRemove(final @Nullable E key, int newFirst, int newLast) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        final BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
+    private @NonNull ChampImmutableSequencedSet<E> copyRemove(@Nullable E key, int newFirst, int newLast) {
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         if (details.modified) {
@@ -263,7 +263,7 @@ public class ChampImmutableSequencedSet<E>
     }
 
     @Override
-    public boolean equals(final @Nullable Object other) {
+    public boolean equals(@Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -342,13 +342,13 @@ public class ChampImmutableSequencedSet<E>
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedSet<E> remove(final @Nullable E key) {
+    public @NonNull ChampImmutableSequencedSet<E> remove(@Nullable E key) {
         return copyRemove(key, first, last);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampImmutableSequencedSet<E> removeAll(final @NonNull Iterable<?> set) {
+    public @NonNull ChampImmutableSequencedSet<E> removeAll(@NonNull Iterable<?> set) {
         if (this.isEmpty()
                 || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
                 || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
@@ -357,9 +357,9 @@ public class ChampImmutableSequencedSet<E>
         if (set == this) {
             return of();
         }
-        final ChampSequencedSet<E> t = this.toMutable();
+        ChampSequencedSet<E> t = this.toMutable();
         boolean modified = false;
-        for (final Object key : set) {
+        for (Object key : set) {
             if (t.remove((E) key)) {
                 modified = true;
                 if (t.isEmpty()) {
@@ -403,7 +403,7 @@ public class ChampImmutableSequencedSet<E>
     }
 
     @Override
-    public @NonNull ChampImmutableSequencedSet<E> retainAll(final @NonNull Collection<?> set) {
+    public @NonNull ChampImmutableSequencedSet<E> retainAll(@NonNull Collection<?> set) {
         if (this.isEmpty()) {
             return this;
         }
@@ -411,7 +411,7 @@ public class ChampImmutableSequencedSet<E>
             return of();
         }
 
-        final ChampSequencedSet<E> t = this.toMutable();
+        ChampSequencedSet<E> t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
             if (!set.contains(key)) {

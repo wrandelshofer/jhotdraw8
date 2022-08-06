@@ -111,7 +111,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     }
 
     @Override
-    public boolean add(final @Nullable E e) {
+    public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
         root = root.update(getOrCreateMutator(),
                 e, Objects.hashCode(e), 0, details,

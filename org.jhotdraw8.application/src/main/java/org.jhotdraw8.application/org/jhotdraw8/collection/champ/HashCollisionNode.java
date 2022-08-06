@@ -26,7 +26,7 @@ class HashCollisionNode<K> extends Node<K> {
     private final int hash;
     @NonNull Object[] keys;
 
-    HashCollisionNode(final int hash, final Object @NonNull [] keys) {
+    HashCollisionNode(int hash, Object @NonNull [] keys) {
         this.keys = keys;
         this.hash = hash;
     }
@@ -57,9 +57,9 @@ class HashCollisionNode<K> extends Node<K> {
         @NonNull Object[] thatEntriesCloned = thatEntries.clone();
         int remainingLength = thatEntriesCloned.length;
         outerLoop:
-        for (final Object key : keys) {
+        for (Object key : keys) {
             for (int j = 0; j < remainingLength; j += 1) {
-                final Object todoKey = thatEntriesCloned[j];
+                Object todoKey = thatEntriesCloned[j];
                 if (Objects.equals((K) todoKey, (K) key)) {
                     // We have found an equal entry. We do not need to compare
                     // this entry again. So we replace it with the last entry
@@ -79,7 +79,7 @@ class HashCollisionNode<K> extends Node<K> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction) {
+    Object findByKey(K key, int keyHash, int shift, @NonNull BiPredicate<K, K> equalsFunction) {
         for (Object entry : keys) {
             if (equalsFunction.test(key, (K) entry)) {
                 return entry;
@@ -91,7 +91,7 @@ class HashCollisionNode<K> extends Node<K> {
     @Override
     @SuppressWarnings("unchecked")
     @NonNull
-    K getKey(final int index) {
+    K getKey(int index) {
         return (K) keys[index];
     }
 
@@ -121,11 +121,11 @@ class HashCollisionNode<K> extends Node<K> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Node<K> remove(final @Nullable UniqueId mutator, final K key,
-                   final int keyHash, final int shift, final @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
+    Node<K> remove(@Nullable UniqueId mutator, K key,
+                   int keyHash, int shift, @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
         for (int idx = 0, i = 0; i < keys.length; i += 1, idx++) {
             if (equalsFunction.test((K) keys[i], key)) {
-                @SuppressWarnings("unchecked") final K currentVal = (K) keys[i];
+                @SuppressWarnings("unchecked") K currentVal = (K) keys[i];
                 details.setValueRemoved(currentVal);
 
                 if (keys.length == 1) {
@@ -134,11 +134,11 @@ class HashCollisionNode<K> extends Node<K> {
                     // Create root node with singleton element.
                     // This node will be a) either be the new root
                     // returned, or b) unwrapped and inlined.
-                    final Object[] theOtherEntry = {getKey(idx ^ 1)};
-                    return NodeFactory.newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)), theOtherEntry);
+                    return NodeFactory.newBitmapIndexedNode(mutator, 0, bitpos(mask(keyHash, 0)),
+                            new Object[]{getKey(idx ^ 1)});
                 }
-                // copy keys and vals and remove entryLength elements at position idx
-                final Object[] entriesNew = ArrayHelper.copyComponentRemove(this.keys, idx, 1);
+                // copy keys and remove 1 element at position idx
+                Object[] entriesNew = ArrayHelper.copyComponentRemove(this.keys, idx, 1);
                 if (isAllowedToEdit(mutator)) {
                     this.keys = entriesNew;
                     return this;
@@ -152,9 +152,9 @@ class HashCollisionNode<K> extends Node<K> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Node<K> update(final @Nullable UniqueId mutator, final K key,
-                   final int keyHash, final int shift, final @NonNull ChangeEvent<K> details,
-                   final @NonNull BiFunction<K, K, K> updateFunction, @NonNull BiPredicate<K, K> equalsFunction,
+    Node<K> update(@Nullable UniqueId mutator, K key,
+                   int keyHash, int shift, @NonNull ChangeEvent<K> details,
+                   @NonNull BiFunction<K, K, K> updateFunction, @NonNull BiPredicate<K, K> equalsFunction,
                    @NonNull ToIntFunction<K> hashFunction) {
         assert this.hash == keyHash;
 
@@ -177,7 +177,7 @@ class HashCollisionNode<K> extends Node<K> {
         }
 
         // copy entries and add 1 more at the end
-        final Object[] entriesNew = ArrayHelper.copyComponentAdd(this.keys, this.keys.length, 1);
+        Object[] entriesNew = ArrayHelper.copyComponentAdd(this.keys, this.keys.length, 1);
         entriesNew[this.keys.length] = key;
         details.setValueAdded();
         if (isAllowedToEdit(mutator)) {

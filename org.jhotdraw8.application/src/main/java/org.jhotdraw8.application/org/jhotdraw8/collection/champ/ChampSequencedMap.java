@@ -196,7 +196,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean containsKey(final @NonNull Object o) {
+    public boolean containsKey(@NonNull Object o) {
         K key = (K) o;
         return Node.NO_VALUE != root.findByKey(new SequencedEntry<>(key),
                 Objects.hashCode(key), 0,
@@ -237,7 +237,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(final Object o) {
+    public V get(Object o) {
         Object result = root.findByKey(
                 new SequencedEntry<>((K) o),
                 Objects.hashCode(o), 0, getEqualsFunction());
@@ -332,10 +332,10 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         return oldValue == null ? null : oldValue.getValue();
     }
 
-    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(final K key, final V val,
+    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val,
                                                                 boolean moveToFirst) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         root = root.update(getOrCreateMutator(),
                 new SequencedEntry<>(key, val, first), keyHash, 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
@@ -361,8 +361,8 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @NonNull ChangeEvent<SequencedEntry<K, V>> putLast(
-            final K key, final V val, boolean moveToLast) {
-        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+            final K key, V val, boolean moveToLast) {
+        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         root = root.update(getOrCreateMutator(),
                 new SequencedEntry<>(key, val, last), Objects.hashCode(key), 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
@@ -405,9 +405,9 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
         return null;
     }
 
-    @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(final K key) {
-        final int keyHash = Objects.hashCode(key);
-        final ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+    @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
+        int keyHash = Objects.hashCode(key);
+        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         root = root.remove(getOrCreateMutator(),
                 new SequencedEntry<>(key), keyHash, 0, details,
                 getEqualsFunction());

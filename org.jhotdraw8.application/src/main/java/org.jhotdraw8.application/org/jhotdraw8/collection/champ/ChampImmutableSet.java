@@ -161,7 +161,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public boolean equals(final @Nullable Object other) {
+    public boolean equals(@Nullable Object other) {
         if (other == this) {
             return true;
         }
@@ -221,9 +221,9 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
         if (set == this) {
             return of();
         }
-        final ChampSet<E> t = toMutable();
+        ChampSet<E> t = toMutable();
         boolean modified = false;
-        for (final Object key : set) {
+        for (Object key : set) {
             //noinspection SuspiciousMethodCalls
             if (t.remove(key)) {
                 modified = true;
@@ -236,14 +236,14 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     }
 
     @Override
-    public @NonNull ChampImmutableSet<E> retainAll(final @NonNull Collection<?> set) {
+    public @NonNull ChampImmutableSet<E> retainAll(@NonNull Collection<?> set) {
         if (isEmpty()) {
             return this;
         }
         if (set.isEmpty()) {
             return of();
         }
-        final ChampSet<E> t = this.toMutable();
+        ChampSet<E> t = this.toMutable();
         boolean modified = false;
         for (Object key : this) {
             if (!set.contains(key)) {

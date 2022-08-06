@@ -22,8 +22,8 @@ import java.util.function.ToIntFunction;
 abstract class Node<K> {
     /**
      * Represents no value.
-     * We can not use {@code null}, because we allow storing null-keys and
-     * null-values in the trie.
+     * We can not use {@code null}, because we allow storing null-keys in the
+     * trie.
      */
     public static final Object NO_VALUE = new Object();
     static final int HASH_CODE_LENGTH = 32;
@@ -53,33 +53,18 @@ abstract class Node<K> {
      * @param mask masked key hash
      * @return bit position
      */
-    static int bitpos(final int mask) {
+    static int bitpos(int mask) {
         return 1 << mask;
     }
 
-    /**
-     * Given a bitmap and a bit-position, returns the index
-     * in the array.
-     * <p>
-     * For example, if the bitmap is 0b11101 and
-     * bit-position is 0b00100, then the index is 1.
-     *
-     * @param bitmap a bit-map
-     * @param bitpos a bit-position
-     * @return the array index
-     */
-    static int index(final int bitmap, final int bitpos) {
-        return Integer.bitCount(bitmap & (bitpos - 1));
-    }
-
-    static int mask(final int keyHash, final int shift) {
+    static int mask(int keyHash, int shift) {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
     static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(UniqueId mutator,
-                                                            final K k0, final int keyHash0,
-                                                            final K k1, final int keyHash1,
-                                                            final int shift) {
+                                                            K k0, int keyHash0,
+                                                            K k1, int keyHash1,
+                                                            int shift) {
         assert !Objects.equals(k0, k1);
 
         if (shift >= HASH_CODE_LENGTH) {
@@ -89,12 +74,12 @@ abstract class Node<K> {
             return NodeFactory.newHashCollisionNode(mutator, keyHash0, entries);
         }
 
-        final int mask0 = mask(keyHash0, shift);
-        final int mask1 = mask(keyHash1, shift);
+        int mask0 = mask(keyHash0, shift);
+        int mask1 = mask(keyHash1, shift);
 
         if (mask0 != mask1) {
             // both nodes fit on same level
-            final int dataMap = bitpos(mask0) | bitpos(mask1);
+            int dataMap = bitpos(mask0) | bitpos(mask1);
 
             Object[] entries = new Object[2];
             if (mask0 < mask1) {
@@ -107,13 +92,13 @@ abstract class Node<K> {
                 return NodeFactory.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             }
         } else {
-            final Node<K> node = mergeTwoDataEntriesIntoNode(mutator,
+            Node<K> node = mergeTwoDataEntriesIntoNode(mutator,
                     k0, keyHash0,
                     k1, keyHash1,
                     shift + BIT_PARTITION_SIZE);
             // values fit on next level
 
-            final int nodeMap = bitpos(mask0);
+            int nodeMap = bitpos(mask0);
             return NodeFactory.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node});
         }
     }
@@ -126,7 +111,7 @@ abstract class Node<K> {
      * @param other the other trie
      * @return true if equivalent
      */
-    abstract boolean equivalent(final @NonNull Object other);
+    abstract boolean equivalent(@NonNull Object other);
 
     /**
      * Finds a value by a key.
@@ -136,15 +121,15 @@ abstract class Node<K> {
      * @param shift   the shift for this node
      * @return the value, returns {@link #NO_VALUE} if the value is not present.
      */
-    abstract Object findByKey(final K key, final int keyHash, final int shift, @NonNull BiPredicate<K, K> equalsFunction);
+    abstract Object findByKey(K key, int keyHash, int shift, @NonNull BiPredicate<K, K> equalsFunction);
 
-    abstract @Nullable K getKey(final int index);
+    abstract @Nullable K getKey(int index);
 
     @Nullable UniqueId getMutator() {
         return null;
     }
 
-    abstract @NonNull Node<K> getNode(final int index);
+    abstract @NonNull Node<K> getNode(int index);
 
     abstract boolean hasData();
 
@@ -159,9 +144,9 @@ abstract class Node<K> {
 
     abstract int nodeArity();
 
-    abstract @NonNull Node<K> remove(final @Nullable UniqueId mutator, final K key,
-                                     final int keyHash, final int shift,
-                                     final @NonNull ChangeEvent<K> details,
+    abstract @NonNull Node<K> remove(@Nullable UniqueId mutator, K key,
+                                     int keyHash, int shift,
+                                     @NonNull ChangeEvent<K> details,
                                      @NonNull BiPredicate<K, K> equalsFunction);
 
     /**
@@ -178,8 +163,8 @@ abstract class Node<K> {
      *                       key with the new key
      * @return the updated trie
      */
-    abstract @NonNull Node<K> update(final @Nullable UniqueId mutator, final K key,
-                                     final int keyHash, final int shift, final @NonNull ChangeEvent<K> details,
+    abstract @NonNull Node<K> update(@Nullable UniqueId mutator, K key,
+                                     int keyHash, int shift, @NonNull ChangeEvent<K> details,
                                      @NonNull BiFunction<K, K, K> updateFunction,
                                      @NonNull BiPredicate<K, K> equalsFunction,
                                      @NonNull ToIntFunction<K> hashFunction);

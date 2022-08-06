@@ -133,7 +133,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     }
 
     @Override
-    public boolean add(final @Nullable E e) {
+    public boolean add(@Nullable E e) {
         return addLast(e, false);
     }
 
@@ -168,7 +168,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     }
 
     private boolean addLast(@Nullable E e, boolean moveToLast) {
-        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         root = root.update(
                 getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
                 details,
@@ -270,8 +270,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean remove(final Object o) {
-        final ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+    public boolean remove(Object o) {
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         root = root.remove(
                 getOrCreateMutator(), new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);

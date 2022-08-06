@@ -95,7 +95,7 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
     }
 
     @SuppressWarnings("unchecked")
-    boolean removeEntry(final @Nullable Object o) {
+    boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {
             assert o != null;
             remove(((Entry<K, V>) o).getKey());
