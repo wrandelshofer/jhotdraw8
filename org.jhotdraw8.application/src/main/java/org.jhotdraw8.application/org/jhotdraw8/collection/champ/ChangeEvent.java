@@ -6,52 +6,49 @@
 package org.jhotdraw8.collection.champ;
 
 /**
- * This class is used to report a change (or no changes) in a CHAMP trie.
+ * This class is used to report a change (or no changes) of data in a CHAMP trie.
  *
- * @param <V> the value type of elements stored in the CHAMP trie. Only
- *            elements that are 'map entries' do have a value type. If a CHAMP
- *            trie is used to store 'elements' of a set, then the value
- *            type should be the {@link Void} type.
+ * @param <D> the data type
  */
-class ChangeEvent<V> {
+class ChangeEvent<D> {
     enum Type {
         UNCHANGED,
         ADDED,
         REMOVED,
-        UPDATED
+        REPLACED
     }
 
     private Type type = Type.UNCHANGED;
-    private V oldValue;
+    private D data;
 
     public ChangeEvent() {
     }
 
-    void found(V oldValue) {
-        this.oldValue = oldValue;
+    void found(D data) {
+        this.data = data;
     }
 
-    public V getOldValue() {
-        return oldValue;
+    public D getData() {
+        return data;
     }
 
     /**
      * Call this method to indicate that the value of an element has changed.
      *
-     * @param oldValue the old value of the element
+     * @param oldData the old value of the element
      */
-    void setUpdated(V oldValue) {
-        this.oldValue = oldValue;
-        this.type = Type.UPDATED;
+    void setReplaced(D oldData) {
+        this.data = oldData;
+        this.type = Type.REPLACED;
     }
 
     /**
      * Call this method to indicate that an element has been removed.
      *
-     * @param oldValue the value of the removed element
+     * @param oldData the value of the removed element
      */
-    void setRemoved(V oldValue) {
-        this.oldValue = oldValue;
+    void setRemoved(D oldData) {
+        this.data = oldData;
         this.type = Type.REMOVED;
     }
 
@@ -73,6 +70,6 @@ class ChangeEvent<V> {
      * Returns true if the value of an element has been updated.
      */
     boolean isUpdated() {
-        return type == Type.UPDATED;
+        return type == Type.REPLACED;
     }
 }

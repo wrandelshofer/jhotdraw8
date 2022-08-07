@@ -79,7 +79,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Object findByData(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
+    Object find(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
         for (Object entry : data) {
             if (equalsFunction.test(key, (D) entry)) {
                 return entry;
@@ -139,7 +139,7 @@ class HashCollisionNode<D> extends Node<D> {
                 }
                 // copy keys and remove 1 element at position idx
                 Object[] entriesNew = ArrayHelper.copyComponentRemove(this.data, idx, 1);
-                if (isAllowedToEdit(mutator)) {
+                if (isAllowedToUpdate(mutator)) {
                     this.data = entriesNew;
                     return this;
                 }
@@ -154,20 +154,20 @@ class HashCollisionNode<D> extends Node<D> {
     @Nullable
     Node<D> update(@Nullable UniqueId mutator, D data,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                   @NonNull BiFunction<D, D, D> replaceFunction, @NonNull BiPredicate<D, D> equalsFunction,
                    @NonNull ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
         for (int i = 0; i < this.data.length; i++) {
             D oldKey = (D) this.data[i];
             if (equalsFunction.test(oldKey, data)) {
-                D updatedKey = updateFunction.apply(oldKey, data);
+                D updatedKey = replaceFunction.apply(oldKey, data);
                 if (updatedKey == oldKey) {
                     details.found(data);
                     return this;
                 }
-                details.setUpdated(oldKey);
-                if (isAllowedToEdit(mutator)) {
+                details.setReplaced(oldKey);
+                if (isAllowedToUpdate(mutator)) {
                     this.data[i] = updatedKey;
                     return this;
                 }
@@ -180,7 +180,7 @@ class HashCollisionNode<D> extends Node<D> {
         Object[] entriesNew = ArrayHelper.copyComponentAdd(this.data, this.data.length, 1);
         entriesNew[this.data.length] = data;
         details.setAdded();
-        if (isAllowedToEdit(mutator)) {
+        if (isAllowedToUpdate(mutator)) {
             this.data = entriesNew;
             return this;
         }

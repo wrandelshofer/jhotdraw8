@@ -143,7 +143,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
-        return root.findByData(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
+        return root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0,
                 getEqualsFunction()) != Node.NO_DATA;
     }
@@ -167,7 +167,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
-        Object result = root.findByData(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
+        Object result = root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0, getEqualsFunction());
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
@@ -201,7 +201,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
 
     @Override
     public V put(K key, V value) {
-        SimpleImmutableEntry<K, V> oldValue = putAndGiveDetails(key, value).getOldValue();
+        SimpleImmutableEntry<K, V> oldValue = putAndGiveDetails(key, value).getData();
         return oldValue == null ? null : oldValue.getValue();
     }
 
@@ -222,7 +222,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        SimpleImmutableEntry<K, V> oldValue = removeAndGiveDetails(key).getOldValue();
+        SimpleImmutableEntry<K, V> oldValue = removeAndGiveDetails(key).getData();
         return oldValue == null ? null : oldValue.getValue();
     }
 

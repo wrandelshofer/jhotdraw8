@@ -158,7 +158,7 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return findByData((E) o, Objects.hashCode(o), 0, getEqualsFunction()) != Node.NO_DATA;
+        return find((E) o, Objects.hashCode(o), 0, getEqualsFunction()) != Node.NO_DATA;
     }
 
     @Override

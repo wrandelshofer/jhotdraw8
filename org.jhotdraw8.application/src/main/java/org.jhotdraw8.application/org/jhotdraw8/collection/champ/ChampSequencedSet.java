@@ -164,8 +164,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             if (details.isUpdated()) {
-                first = details.getOldValue().getSequenceNumber() == first ? first : first - 1;
-                last = details.getOldValue().getSequenceNumber() == last ? last - 1 : last;
+                first = details.getData().getSequenceNumber() == first ? first : first - 1;
+                last = details.getData().getSequenceNumber() == last ? last - 1 : last;
             } else {
                 modCount++;
                 first--;
@@ -190,8 +190,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             if (details.isUpdated()) {
-                first = details.getOldValue().getSequenceNumber() == first - 1 ? first - 1 : first;
-                last = details.getOldValue().getSequenceNumber() == last ? last : last + 1;
+                first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
+                last = details.getData().getSequenceNumber() == last ? last : last + 1;
             } else {
                 modCount++;
                 size++;
@@ -222,7 +222,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.findByData(new SequencedElement<>((E) o),
+        return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
                 Objects.hashCode((E) o), 0, Objects::equals);
     }
 
@@ -292,7 +292,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
         if (details.isModified()) {
             size--;
             modCount++;
-            int seq = details.getOldValue().getSequenceNumber();
+            int seq = details.getData().getSequenceNumber();
             if (seq == last - 1) {
                 last--;
             }

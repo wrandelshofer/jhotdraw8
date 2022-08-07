@@ -143,7 +143,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.findByData((E) o, Objects.hashCode(o), 0, Objects::equals);
+        return Node.NO_DATA != root.find((E) o, Objects.hashCode(o), 0, Objects::equals);
     }
 
     @Override

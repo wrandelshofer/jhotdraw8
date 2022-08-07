@@ -181,7 +181,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByData(new SequencedEntry<>(key), Objects.hashCode(key), 0,
+        return find(new SequencedEntry<>(key), Objects.hashCode(key), 0,
                 getEqualsFunction()) != Node.NO_DATA;
     }
 
@@ -202,8 +202,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         if (details.isUpdated()) {
             return moveToFirst
                     ? renumber(newRootNode, size,
-                    details.getOldValue().getSequenceNumber() == first ? first : first - 1,
-                    details.getOldValue().getSequenceNumber() == last ? last - 1 : last)
+                    details.getData().getSequenceNumber() == first ? first : first - 1,
+                    details.getData().getSequenceNumber() == last ? last - 1 : last)
                     : new ChampImmutableSequencedMap<>(newRootNode, size, first - 1, last);
         }
         return details.isModified() ? renumber(newRootNode, size + 1, first - 1, last) : this;
@@ -225,8 +225,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         if (details.isUpdated()) {
             return moveToLast
                     ? renumber(newRootNode, size,
-                    details.getOldValue().getSequenceNumber() == first ? first + 1 : first,
-                    details.getOldValue().getSequenceNumber() == last ? last : last + 1)
+                    details.getData().getSequenceNumber() == first ? first + 1 : first,
+                    details.getData().getSequenceNumber() == last ? last : last + 1)
                     : new ChampImmutableSequencedMap<>(newRootNode, size, first, last + 1);
         }
         return details.isModified() ? renumber(newRootNode, size + 1, first, last + 1) : this;
@@ -238,7 +238,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         BitmapIndexedNode<SequencedEntry<K, V>> newRootNode =
                 remove(null, new SequencedEntry<>(key), keyHash, 0, details, getEqualsFunction());
         if (details.isModified()) {
-            int seq = details.getOldValue().getSequenceNumber();
+            int seq = details.getData().getSequenceNumber();
             if (seq == newFirst) {
                 newFirst++;
             }
@@ -269,7 +269,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     @Override
     @SuppressWarnings("unchecked")
     public V get(Object o) {
-        Object result = findByData(
+        Object result = find(
                 new SequencedEntry<>((K) o),
                 Objects.hashCode(o), 0, getEqualsFunction());
         return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;

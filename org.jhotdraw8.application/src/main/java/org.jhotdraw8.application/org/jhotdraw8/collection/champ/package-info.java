@@ -4,8 +4,8 @@
  */
 
 /**
- * Provides the implementation of a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP).
+ * Provides collections which use a Compressed Hash-Array Mapped Prefix-tree
+ * (CHAMP) as their internal data structure.
  * <p>
  * References:
  * <dl>
