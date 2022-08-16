@@ -24,9 +24,9 @@ import static org.jhotdraw8.collection.champ.NodeFactory.newBitmapIndexedNode;
 class BitmapIndexedNode<D> extends Node<D> {
     static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});
 
-    public final Object @NonNull [] mixed;
-    final int nodeMap;
-    final int dataMap;
+    final Object @NonNull [] mixed;
+    private final int nodeMap;
+    private final int dataMap;
 
     protected BitmapIndexedNode(int nodeMap,
                                 int dataMap, @NonNull Object @NonNull [] mixed) {
