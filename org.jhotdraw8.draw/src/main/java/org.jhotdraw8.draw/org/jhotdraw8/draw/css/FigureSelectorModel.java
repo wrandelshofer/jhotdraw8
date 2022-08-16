@@ -161,13 +161,13 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return stringValue != null && stringValue.startsWith(substring);
     }
 
-    protected @Nullable ReadOnlyStyleableMapAccessor<Object> getReadableAttributeAccessor(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    protected @Nullable ReadOnlyStyleableMapAccessor<Object> getReadableAttributeAccessor(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
         @SuppressWarnings("unchecked")
         ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
         return k;
     }
 
-    protected @Nullable String getReadOnlyAttributeValueAsString(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    protected @Nullable String getReadOnlyAttributeValueAsString(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
         ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
         if (k == null) {
             return null;
