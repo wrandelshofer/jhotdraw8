@@ -28,16 +28,12 @@ import java.util.stream.StreamSupport;
 /**
  * Searches a globally unique vertex path from a set of start vertices to a
  * set of goal vertices using a breadth-first search algorithm on a directed
- * acyclic graph (DAG).
+ * (potentially cyclic) graph (DIG).
  * <p>
  * Uniqueness is global up to (inclusive) the specified maximal depth.
  * <p>
  * This algorithm <b>ignores</b> cost limit. If you need it, use one of
  * the shortest path search algorithms.
- * <p>
- * The graph must be <b>acyclic</b>.
- * (If the graph has cycles, then this algorithm incorrectly considers a
- * path as non-unique, if it can be reached by a walk.)
  * <p>
  * Performance characteristics:
  * <dl>

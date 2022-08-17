@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * See {@link GloballyUniqueOnDagArcPathSearchAlgo} for a description of this
+ * See {@link GloballyUniqueOnDigArcPathSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
