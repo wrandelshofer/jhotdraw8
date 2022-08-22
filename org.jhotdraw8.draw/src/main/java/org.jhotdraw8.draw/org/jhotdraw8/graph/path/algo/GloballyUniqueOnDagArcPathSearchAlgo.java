@@ -113,7 +113,7 @@ public class GloballyUniqueOnDagArcPathSearchAlgo<V, A, C extends Number & Compa
         Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
         for (V s : startVertices) {
             if (visitedCount.put(s, 1) == null) {
-                queue.add(new ArcBackLink<V, A>(s, null, null));
+                queue.add(new ArcBackLink<>(s, null, null));
             }
         }
 

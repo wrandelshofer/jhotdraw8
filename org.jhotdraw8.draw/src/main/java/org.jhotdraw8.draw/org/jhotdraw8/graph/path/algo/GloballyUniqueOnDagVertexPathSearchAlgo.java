@@ -96,7 +96,7 @@ public class GloballyUniqueOnDagVertexPathSearchAlgo<V, C extends Number & Compa
             if (u.getDepth() < maxDepth) {
                 for (V v : nextVerticesFunction.apply(u.getVertex())) {
                     if (visitedCount.merge(v, 1, Integer::sum) == 1) {
-                        queue.add(new VertexBackLink<V>(v, u));
+                        queue.add(new VertexBackLink<>(v, u));
                     }
                 }
             }

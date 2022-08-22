@@ -112,7 +112,6 @@ public class GloballyUniqueOnDigVertexPathSearchAlgo<V, C extends Number & Compa
      * (the latter is ignored when determining whether
      * the result is unique).
      */
-    @SuppressWarnings("unchecked")
     private @NonNull OrderedPair<SearchResultType, @Nullable VertexBackLinkWithAncestorSet<V>>
     searchSingleStartVertex(final @NonNull V startVertex,
                             final @NonNull Predicate<V> goalPredicate,

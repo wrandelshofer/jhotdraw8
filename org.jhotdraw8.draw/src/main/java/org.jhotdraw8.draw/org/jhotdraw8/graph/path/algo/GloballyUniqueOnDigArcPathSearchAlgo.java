@@ -153,7 +153,7 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
         final Queue<ArcBackLinkWithAncestorSet<V, A>> queue = new ArrayDeque<>(16);
         final Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new ArcBackLinkWithAncestorSet<V, A>(startVertex, null, null, ChampImmutableAddOnlySet.of(startVertex)));
+        queue.add(new ArcBackLinkWithAncestorSet<>(startVertex, null, null, ChampImmutableAddOnlySet.of(startVertex)));
 
         ArcBackLinkWithAncestorSet<V, A> found = null;
         while (!queue.isEmpty()) {

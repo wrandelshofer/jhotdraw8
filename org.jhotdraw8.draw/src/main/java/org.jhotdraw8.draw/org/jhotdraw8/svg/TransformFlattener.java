@@ -8,7 +8,20 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.QuadCurveTo;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -67,7 +80,8 @@ public class TransformFlattener {
         node.setTranslateY(0.0);
         node.getTransforms().clear();
 
-        if (node.getClip() instanceof Shape s) {
+        if (node.getClip() instanceof Shape) {
+            Shape s = (Shape) node.getClip();
             node.setClip(FXShapes.fxShapeFromAwt(FXShapes.awtShapeFromFX(s)
                     .getPathIterator(FXShapes.awtTransformFromFX(translate))));
         }
