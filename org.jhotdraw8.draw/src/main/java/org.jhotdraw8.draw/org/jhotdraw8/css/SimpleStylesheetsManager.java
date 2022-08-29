@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -69,7 +69,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
      * @see #userAgentList
      */
     private @NonNull LinkedHashMap<Object, StylesheetEntry> inlineList = new LinkedHashMap<>();
-    private final @NonNull Executor executor = Executors.newCachedThreadPool();
+    private final @NonNull Executor executor = ForkJoinPool.commonPool();
     private @Nullable Map<String, ImmutableList<CssToken>> cachedAuthorCustomProperties;
     private @Nullable Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
     private @Nullable Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
