@@ -5,9 +5,14 @@
 
 package org.jhotdraw8.draw.render;
 
-import javafx.application.Platform;
+import javafx.animation.AnimationTimer;
 import javafx.beans.Observable;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -34,7 +39,15 @@ import org.jhotdraw8.tree.TreeModelEvent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 
@@ -68,9 +81,16 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
     private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
     private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
-    private @Nullable Runnable repainter = null;
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     private final @NonNull NodeFinder nodeFinder = new NodeFinder();
+
+    private final @NonNull AnimationTimer repainter = new AnimationTimer() {
+        @Override
+        public void handle(long now) {
+            stop();
+            paint();
+        }
+    };
 
     public InteractiveDrawingRenderer() {
         drawingPane.setManaged(false);
@@ -577,7 +597,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             getModel().validate(getRenderContext());
             remainingLimit -= updateNodes(remainingLimit);
         }
-        repainter = null;
+        repainter.stop();
         if (!dirtyFigureNodes.isEmpty()) {
             repaint();
         }
@@ -606,10 +626,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     public void repaint() {
-        if (repainter == null) {
-            repainter = this::paint;
-            Platform.runLater(repainter);
-        }
+        repainter.start();
     }
 
     /**
