@@ -3,10 +3,7 @@
   ~ @(#)build-jhotdraw.xml
   ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
-<project name="jhotdraw8" basedir="." default="all"
-         xmlns:unless="ant:unless"
-         xmlns:if="ant:if"
->
+<project name="jhotdraw8" basedir="." default="all" xmlns:unless="ant:unless">
   <!-- gobal build properties -->
   <property file="build.properties"/>
 
@@ -44,7 +41,9 @@
   <property name="name" value="${ant.project.name}"/>
   <property name="copyright" value="Copyright © ${pub-year} ${author}."/>
   <property name="version" value="${git.version}"/>
+  <property name="timestamp" value="${git.timestamp}"/>
   <echo message="${name} ${version} / desc:${git.describe} rev:${git.hash.date.author}"/>
+  <echo message="timestamp: ${timestamp}"/>
 
   <property name="manifest.application-name" value="${ant.project.name}"/>
   <property name="manifest.implementation-version" value="${version}"/>
@@ -1195,7 +1194,6 @@
       <jar destfile="${build}/modules/@{module}.jar"
            basedir="${module.classes}/@{module}"
       >
-
         <manifest>
           <attribute name="Copyright" value="${author}"/>
           <attribute name="License" value="${license}"/>
@@ -1208,16 +1206,11 @@
         </manifest>
       </jar>
       <echo message="Updating version number in jar @{module}.jar to version: ${version}"/>
-      <exec executable="jar" unless:blank="@{mainclass}">
+      <exec executable="jar">
         <arg line="--update"/>
-        <arg line="--main-class @{mainclass}"/>
+        <arg line="--main-class @{mainclass}" unless:blank="@{mainclass}"/>
         <arg line="--module-version=${version}"/>
-        <arg line="-f"/>
-        <arg file="${build}/modules/@{module}.jar"/>
-      </exec>
-      <exec executable="jar" if:blank="@{mainclass}">
-        <arg line="--update"/>
-        <arg line="--module-version=${version}"/>
+        <arg line="--date=${timestamp}"/>
         <arg line="-f"/>
         <arg file="${build}/modules/@{module}.jar"/>
       </exec>
