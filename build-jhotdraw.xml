@@ -1215,10 +1215,17 @@
         <arg file="${build}/modules/@{module}.jar"/>
       </exec>
 
-      <jar destfile="${build}/sources/@{module}-src.jar"
-           basedir="@{module}/src/main/java/@{module}"
-      >
-      </jar>
+      <exec executable="jar">
+        <arg line="-v"/>
+        <arg line="--create"/>
+        <arg line="--date=${timestamp}"/>
+        <arg line="--no-manifest"/>
+        <arg line="-f"/>
+        <arg file="${build}/sources/@{module}-src.jar"/>
+        <arg value="-C"/>
+        <arg path="@{module}/src/main/java/@{module}"/>
+        <arg value="."/>
+      </exec>
     </sequential>
   </macrodef>
 
