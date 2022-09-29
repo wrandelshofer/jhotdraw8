@@ -60,7 +60,7 @@ public class GrowableIntSet8Bit extends DenseIntSet8Bit {
 
     private void ensureCapacity(int index) {
         if (capacity() < index) {
-            setCapacity(Integer.highestOneBit(index + index - 1));
+            setCapacity(Integer.highestOneBit(index + index + 1));
         }
     }
 
