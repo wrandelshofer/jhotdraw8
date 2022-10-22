@@ -14,6 +14,7 @@ import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
 import org.jhotdraw8.css.CssTokenType;
+import org.jhotdraw8.draw.css.converter.CssStrokeStyleConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

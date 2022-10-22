@@ -8,7 +8,7 @@ import javafx.scene.effect.Effect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.draw.css.text.CssEffectConverter;
+import org.jhotdraw8.draw.css.converter.CssEffectConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

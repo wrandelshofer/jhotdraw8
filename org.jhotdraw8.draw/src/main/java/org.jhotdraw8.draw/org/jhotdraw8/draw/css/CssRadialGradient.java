@@ -10,7 +10,7 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.css.text.CssStop;
+import org.jhotdraw8.draw.css.converter.CssStop;
 
 import java.util.Arrays;
 import java.util.List;

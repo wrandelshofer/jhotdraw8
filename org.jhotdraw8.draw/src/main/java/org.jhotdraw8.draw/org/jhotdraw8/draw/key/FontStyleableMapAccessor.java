@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.css.CssFont;
-import org.jhotdraw8.draw.css.text.CssFontConverter;
+import org.jhotdraw8.draw.css.converter.CssFontConverter;
 
 import java.util.Map;
 

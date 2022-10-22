@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.draw.css.text.Rectangle2DConverter;
+import org.jhotdraw8.draw.css.converter.Rectangle2DConverter;
 
 /**
  * Converts a {@code javafx.geometry.Rectangle2D} into a {@code String} and vice

@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.draw.css.text.CssPaintConverter;
+import org.jhotdraw8.draw.css.converter.CssPaintConverter;
 
 import java.io.IOException;
 import java.util.function.Consumer;

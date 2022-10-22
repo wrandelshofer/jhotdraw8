@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.draw.css.text.CssDoubleConverter;
+import org.jhotdraw8.draw.css.converter.CssDoubleConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

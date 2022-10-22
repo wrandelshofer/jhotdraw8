@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.draw.css.text.CssPercentageConverter;
+import org.jhotdraw8.draw.css.converter.CssPercentageConverter;
 import org.jhotdraw8.draw.key.BlendModeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.EffectStyleableKey;

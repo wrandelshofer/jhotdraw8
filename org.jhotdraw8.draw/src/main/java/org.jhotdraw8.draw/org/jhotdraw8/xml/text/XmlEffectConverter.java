@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.draw.css.text.CssEffectConverter;
+import org.jhotdraw8.draw.css.converter.CssEffectConverter;
 
 /**
  * XmlEffectConverter.

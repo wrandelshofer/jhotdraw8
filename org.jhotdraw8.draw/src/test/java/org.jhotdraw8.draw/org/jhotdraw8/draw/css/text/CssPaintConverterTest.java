@@ -12,6 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.converter.CssPaintConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

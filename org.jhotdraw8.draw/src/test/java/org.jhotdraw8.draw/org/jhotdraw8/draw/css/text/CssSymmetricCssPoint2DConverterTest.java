@@ -9,6 +9,8 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.CssPoint2D;
+import org.jhotdraw8.draw.css.converter.CssSymmetricCssPoint2DConverter;
+import org.jhotdraw8.draw.css.converter.SymmetricPoint2DConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

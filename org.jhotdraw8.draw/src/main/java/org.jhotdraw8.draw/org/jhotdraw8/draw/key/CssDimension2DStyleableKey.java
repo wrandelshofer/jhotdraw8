@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.CssDimension2D;
-import org.jhotdraw8.draw.css.text.CssDimension2DConverter;
+import org.jhotdraw8.draw.css.converter.CssDimension2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

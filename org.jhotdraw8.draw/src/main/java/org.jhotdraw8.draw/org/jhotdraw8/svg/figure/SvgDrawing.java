@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.css.converter.CssStringConverter;
 import org.jhotdraw8.draw.css.CssRectangle2D;
-import org.jhotdraw8.draw.css.text.CssRectangle2DConverter;
+import org.jhotdraw8.draw.css.converter.CssRectangle2DConverter;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LockableFigure;

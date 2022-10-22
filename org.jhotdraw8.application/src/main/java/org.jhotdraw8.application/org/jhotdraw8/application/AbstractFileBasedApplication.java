@@ -51,6 +51,7 @@ import org.jhotdraw8.application.action.file.NewFileAction;
 import org.jhotdraw8.application.action.file.OpenFileAction;
 import org.jhotdraw8.application.action.file.OpenRecentFileAction;
 import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.base.text.NaturalSortCollator;
 import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.typesafekey.Key;
@@ -59,7 +60,6 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
-import org.jhotdraw8.text.NaturalSortCollator;
 import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 import java.lang.ref.WeakReference;

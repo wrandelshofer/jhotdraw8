@@ -30,7 +30,7 @@ module org.jhotdraw8.draw {
     opens org.jhotdraw8.draw.gui to javafx.fxml;
     opens org.jhotdraw8.draw.popup to javafx.fxml;
 
-    exports org.jhotdraw8.draw.css.text;
+    exports org.jhotdraw8.draw.css.converter;
     exports org.jhotdraw8.draw.css.function;
     exports org.jhotdraw8.draw;
     exports org.jhotdraw8.draw.action;

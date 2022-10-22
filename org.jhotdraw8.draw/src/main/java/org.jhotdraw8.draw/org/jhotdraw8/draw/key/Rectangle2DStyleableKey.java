@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.text.Rectangle2DConverter;
+import org.jhotdraw8.draw.css.converter.Rectangle2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

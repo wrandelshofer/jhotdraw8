@@ -10,6 +10,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.converter.CssColorConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

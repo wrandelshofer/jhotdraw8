@@ -11,6 +11,7 @@ import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.draw.css.converter.CssSizeConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.css.CssInsets;
-import org.jhotdraw8.draw.css.text.CssInsetsConverter;
+import org.jhotdraw8.draw.css.converter.CssInsetsConverter;
 
 import java.util.Map;
 

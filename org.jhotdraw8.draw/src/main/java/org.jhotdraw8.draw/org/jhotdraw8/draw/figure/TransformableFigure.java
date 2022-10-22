@@ -20,7 +20,7 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.draw.css.CssPoint2D;
-import org.jhotdraw8.draw.css.text.CssTranslate3DConverter;
+import org.jhotdraw8.draw.css.converter.CssTranslate3DConverter;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;

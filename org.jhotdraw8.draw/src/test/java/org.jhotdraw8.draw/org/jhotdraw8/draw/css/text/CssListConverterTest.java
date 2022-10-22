@@ -11,6 +11,8 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.converter.CssStringConverter;
+import org.jhotdraw8.draw.css.converter.CssDoubleConverter;
+import org.jhotdraw8.draw.css.converter.CssListConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

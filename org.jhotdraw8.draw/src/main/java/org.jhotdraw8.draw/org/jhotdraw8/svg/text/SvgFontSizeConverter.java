@@ -14,7 +14,7 @@ import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
-import org.jhotdraw8.draw.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.css.converter.CssSizeConverter;
 
 import java.io.IOException;
 import java.text.ParseException;

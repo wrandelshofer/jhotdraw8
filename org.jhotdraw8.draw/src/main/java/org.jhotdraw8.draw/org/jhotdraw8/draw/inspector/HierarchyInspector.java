@@ -27,6 +27,8 @@ import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.EditableComponent;
+import org.jhotdraw8.base.text.CachingCollator;
+import org.jhotdraw8.base.text.NaturalSortCollator;
 import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
@@ -43,8 +45,6 @@ import org.jhotdraw8.fxbase.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
 import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
-import org.jhotdraw8.text.CachingCollator;
-import org.jhotdraw8.text.NaturalSortCollator;
 import org.jhotdraw8.xml.text.XmlWordListConverter;
 import org.jhotdraw8.xml.text.XmlWordSetConverter;
 

@@ -20,7 +20,7 @@ import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.Paintable;
-import org.jhotdraw8.draw.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.css.converter.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;

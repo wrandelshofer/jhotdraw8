@@ -10,6 +10,7 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.converter.CssRectangle2DConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

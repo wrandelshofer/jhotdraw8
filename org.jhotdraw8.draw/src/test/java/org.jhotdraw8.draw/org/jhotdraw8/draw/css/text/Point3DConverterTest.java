@@ -8,6 +8,7 @@ package org.jhotdraw8.draw.css.text;
 import javafx.geometry.Point3D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
+import org.jhotdraw8.draw.css.converter.Point3DConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

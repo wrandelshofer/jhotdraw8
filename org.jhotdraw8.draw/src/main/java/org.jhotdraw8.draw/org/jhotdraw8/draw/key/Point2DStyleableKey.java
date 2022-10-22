@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.NonNullKey;
-import org.jhotdraw8.draw.css.text.Point2DConverter;
+import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

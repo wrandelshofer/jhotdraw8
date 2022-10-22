@@ -13,7 +13,7 @@ import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.ListCssTokenizer;
 import org.jhotdraw8.css.function.AbstractCssFunction;
 import org.jhotdraw8.draw.css.CssColor;
-import org.jhotdraw8.draw.css.text.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.CssColorConverter;
 
 import java.io.IOException;
 import java.text.ParseException;

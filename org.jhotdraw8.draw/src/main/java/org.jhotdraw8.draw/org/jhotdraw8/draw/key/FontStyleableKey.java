@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.CssFont;
-import org.jhotdraw8.draw.css.text.CssFontConverter;
+import org.jhotdraw8.draw.css.converter.CssFontConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

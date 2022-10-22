@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.draw.css.text.CssIntegerConverter;
+import org.jhotdraw8.draw.css.converter.CssIntegerConverter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 

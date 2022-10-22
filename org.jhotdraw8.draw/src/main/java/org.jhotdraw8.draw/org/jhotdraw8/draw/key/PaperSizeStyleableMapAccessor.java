@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.css.CssDimension2D;
-import org.jhotdraw8.draw.css.text.CssPaperSizeConverter;
+import org.jhotdraw8.draw.css.converter.CssPaperSizeConverter;
 
 import java.util.Map;
 

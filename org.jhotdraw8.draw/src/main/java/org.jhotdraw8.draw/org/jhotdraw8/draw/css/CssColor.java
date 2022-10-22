@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.css.text.CssColorConverter;
-import org.jhotdraw8.draw.css.text.CssNumberConverter;
+import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.CssNumberConverter;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.io.IOException;

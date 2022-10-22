@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.draw.css.text.InsetsConverter;
+import org.jhotdraw8.draw.css.converter.InsetsConverter;
 
 import java.util.Map;
 

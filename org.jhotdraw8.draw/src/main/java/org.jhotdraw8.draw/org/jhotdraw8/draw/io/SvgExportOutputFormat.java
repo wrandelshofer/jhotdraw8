@@ -20,7 +20,7 @@ import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.css.CssDimension2D;
-import org.jhotdraw8.draw.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.css.converter.CssSizeConverter;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;

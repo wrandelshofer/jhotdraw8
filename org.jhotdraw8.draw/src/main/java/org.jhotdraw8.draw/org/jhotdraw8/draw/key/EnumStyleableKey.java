@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullKey;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.draw.css.text.CssKebabCaseEnumConverter;
+import org.jhotdraw8.draw.css.converter.CssKebabCaseEnumConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**

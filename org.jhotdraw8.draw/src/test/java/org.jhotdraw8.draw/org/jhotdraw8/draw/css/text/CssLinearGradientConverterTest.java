@@ -10,6 +10,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.CssLinearGradient;
+import org.jhotdraw8.draw.css.converter.CssLinearGradientConverter;
+import org.jhotdraw8.draw.css.converter.CssStop;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

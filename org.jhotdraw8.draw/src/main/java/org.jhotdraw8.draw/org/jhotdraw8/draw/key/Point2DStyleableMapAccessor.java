@@ -11,7 +11,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.draw.css.text.Point2DConverter;
+import org.jhotdraw8.draw.css.converter.Point2DConverter;
 
 import java.util.Map;
 import java.util.Objects;

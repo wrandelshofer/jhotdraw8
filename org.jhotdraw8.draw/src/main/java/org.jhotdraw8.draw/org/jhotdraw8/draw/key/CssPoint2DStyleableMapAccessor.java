@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.css.CssPoint2D;
-import org.jhotdraw8.draw.css.text.CssPoint2DConverter;
+import org.jhotdraw8.draw.css.converter.CssPoint2DConverter;
 
 import java.util.Map;
 

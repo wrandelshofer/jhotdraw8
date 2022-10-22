@@ -18,7 +18,7 @@ import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.DrawLabels;
-import org.jhotdraw8.draw.css.text.CssNumberConverter;
+import org.jhotdraw8.draw.css.converter.CssNumberConverter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.fxbase.control.InputDialog;

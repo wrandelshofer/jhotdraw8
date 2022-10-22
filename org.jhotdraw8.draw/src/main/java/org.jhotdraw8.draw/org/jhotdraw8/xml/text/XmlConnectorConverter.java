@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.connector.EllipseConnector;
 import org.jhotdraw8.draw.connector.LocatorConnector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.css.text.CssLocatorConverter;
+import org.jhotdraw8.draw.css.converter.CssLocatorConverter;
 import org.jhotdraw8.draw.locator.Locator;
 
 import java.io.IOException;

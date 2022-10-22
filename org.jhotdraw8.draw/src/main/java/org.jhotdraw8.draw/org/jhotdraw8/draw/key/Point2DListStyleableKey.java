@@ -11,8 +11,8 @@ import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.draw.css.text.CssListConverter;
-import org.jhotdraw8.draw.css.text.Point2DConverter;
+import org.jhotdraw8.draw.css.converter.CssListConverter;
+import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
