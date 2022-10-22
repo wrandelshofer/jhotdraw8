@@ -17,7 +17,7 @@
 
     <artifactId>org.jhotdraw8.teddy</artifactId>
     <packaging>jar</packaging>
-    <name>JHotDraw8 Teddy Demo Application</name>
+    <name>JHotDraw8 Teddy Demo: Text Editor Application</name>
 
     <build>
       <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.teddy</sourceDirectory>

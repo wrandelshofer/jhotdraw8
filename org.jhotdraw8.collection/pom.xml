@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.collection</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Collection Framework</name>
+  <name>JHotDraw8 Collections</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.collection</sourceDirectory>

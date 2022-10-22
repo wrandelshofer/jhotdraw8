@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.fxbase</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 FXBase Framework</name>
+  <name>JHotDraw8 JavaFX Base Classes</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.fxbase</sourceDirectory>

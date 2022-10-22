@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.color</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Color Framework</name>
+  <name>JHotDraw8 Color Classes</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.color</sourceDirectory>

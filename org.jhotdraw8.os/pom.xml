@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.os</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Operating System Framework</name>
+  <name>JHotDraw8 Operating System Classes</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.os</sourceDirectory>

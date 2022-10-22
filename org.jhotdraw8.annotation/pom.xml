@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.annotation</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Annotation Framework</name>
+  <name>JHotDraw8 Annotations</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.annotation</sourceDirectory>

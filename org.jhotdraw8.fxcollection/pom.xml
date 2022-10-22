@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.fxcollection</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 JavaFX Collection Framework</name>
+  <name>JHotDraw8 JavaFX Collections</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.fxcollection</sourceDirectory>

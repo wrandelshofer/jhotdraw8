@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.css</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 CSS Framework</name>
+  <name>JHotDraw8 CSS Parser</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.css</sourceDirectory>

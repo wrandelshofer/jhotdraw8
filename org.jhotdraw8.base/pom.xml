@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.base</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Base Framework</name>
+  <name>JHotDraw8 Base Classes</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.base</sourceDirectory>

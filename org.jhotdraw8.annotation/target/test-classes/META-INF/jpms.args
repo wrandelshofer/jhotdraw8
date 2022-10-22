@@ -1,4 +1,0 @@
---patch-module
-org.jhotdraw8.annotation=_
---add-reads
-org.jhotdraw8.annotation=ALL-UNNAMED

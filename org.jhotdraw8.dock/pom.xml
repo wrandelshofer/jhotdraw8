@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.dock</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Docking Framework</name>
+  <name>JHotDraw8 Docking Controls</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.dock</sourceDirectory>

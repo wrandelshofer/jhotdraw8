@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.theme</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Theme Framework</name>
+  <name>JHotDraw8 User Interface Theme Classes</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.theme</sourceDirectory>

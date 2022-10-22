@@ -14,7 +14,7 @@
   <artifactId>org.jhotdraw8.graph</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Graph Framework</name>
+  <name>JHotDraw8 Graph Classes</name>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.graph</sourceDirectory>
@@ -37,6 +37,10 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.annotation</artifactId>
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
