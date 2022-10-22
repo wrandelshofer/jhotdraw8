@@ -7,7 +7,7 @@ package org.jhotdraw8.svg.io;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssDimension2D;
+import org.jhotdraw8.draw.css.CssDimension2D;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 
 import javax.xml.stream.XMLStreamException;

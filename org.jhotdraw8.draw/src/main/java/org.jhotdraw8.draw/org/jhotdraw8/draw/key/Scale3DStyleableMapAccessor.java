@@ -7,11 +7,11 @@ package org.jhotdraw8.draw.key;
 import javafx.geometry.Point3D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssScale3DConverter;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.draw.css.text.CssScale3DConverter;
 
 import java.util.Map;
 

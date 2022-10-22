@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.jhotdraw8.collection.ChampMapTest
+-------------------------------------------------------------------------------
+Tests run: 158, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.177 s - in org.jhotdraw8.collection.ChampMapTest

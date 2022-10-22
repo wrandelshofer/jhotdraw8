@@ -9,8 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.css.CssTransforms;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class GroupFigure extends AbstractCompositeFigure
     @Override
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         flattenTransforms();
-        Transform localTransform = FXTransforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
+        Transform localTransform = CssTransforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);
         }

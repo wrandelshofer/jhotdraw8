@@ -7,6 +7,7 @@ package org.jhotdraw8.text;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 
 import java.io.IOException;
 import java.text.ParseException;

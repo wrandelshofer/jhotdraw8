@@ -6,20 +6,20 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.IdResolver;
+import org.jhotdraw8.base.converter.IdSupplier;
+import org.jhotdraw8.base.io.CharSequenceReader;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.StreamCssTokenizer;
-import org.jhotdraw8.css.text.CssLocatorConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.EllipseConnector;
 import org.jhotdraw8.draw.connector.LocatorConnector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.css.text.CssLocatorConverter;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
-import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -77,7 +77,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     @Override
     public @Nullable Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Connector c;
-        CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
+        CssTokenizer tt = new StreamCssTokenizer(new CharSequenceReader(buf));
         c = parseConnector(tt, idResolver);
 
         if (!buf.toString().trim().isEmpty()) {

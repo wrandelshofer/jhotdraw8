@@ -5,11 +5,11 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.css.text.CssDoubleConverter;
+import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.draw.css.text.CssDoubleConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
 
 /**
  * DoubleStyleableKey.

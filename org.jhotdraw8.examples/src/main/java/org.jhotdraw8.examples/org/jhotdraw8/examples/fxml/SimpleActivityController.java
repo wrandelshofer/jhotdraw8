@@ -10,8 +10,8 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.AbstractActivity;
-import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.application.AbstractActivity;
+import org.jhotdraw8.application.action.Action;
 
 import java.net.URL;
 import java.util.ResourceBundle;

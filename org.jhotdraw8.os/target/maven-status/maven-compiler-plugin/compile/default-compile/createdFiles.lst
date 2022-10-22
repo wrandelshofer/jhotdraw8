@@ -1,0 +1,13 @@
+org/jhotdraw8/os/macos/BinaryPListParser$PosByteArrayInputStream.class
+org/jhotdraw8/os/SimpleSystemPreferences.class
+org/jhotdraw8/os/macos/BinaryPListParser$BPLDict.class
+org/jhotdraw8/os/SystemPreferences.class
+org/jhotdraw8/os/macos/BinaryPListParser$BPLUid.class
+org/jhotdraw8/os/AbstractSystemPreferences.class
+org/jhotdraw8/os/macos/BinaryPListParser.class
+org/jhotdraw8/os/macos/MacOSPreferencesUtil$1.class
+org/jhotdraw8/os/Appearance.class
+org/jhotdraw8/os/macos/MacOSPreferencesUtil.class
+org/jhotdraw8/os/macos/MacOsSystemPreferences.class
+module-info.class
+org/jhotdraw8/os/macos/BinaryPListParser$BPLArray.class

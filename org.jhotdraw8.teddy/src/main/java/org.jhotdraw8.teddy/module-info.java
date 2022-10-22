@@ -10,6 +10,9 @@ module org.jhotdraw8.teddy {
     requires java.desktop;
     requires java.prefs;
     requires org.jhotdraw8.application;
+    requires org.jhotdraw8.annotation;
+    requires org.jhotdraw8.collection;
+    requires org.jhotdraw8.font;
     provides java.util.spi.ResourceBundleProvider with TeddyResourceBundleProvider;
 
     opens org.jhotdraw8.samples.teddy

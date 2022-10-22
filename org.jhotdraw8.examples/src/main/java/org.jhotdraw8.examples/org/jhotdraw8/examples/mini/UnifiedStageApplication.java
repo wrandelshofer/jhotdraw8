@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.jhotdraw8.macos.MacOSPreferences;
+import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 
 
 public class UnifiedStageApplication extends Application {
@@ -47,7 +47,7 @@ public class UnifiedStageApplication extends Application {
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
 
-        final Object value = MacOSPreferences.get(MacOSPreferences.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
+        final Object value = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
         if ("Dark".equals(value)) {
             scene.getStylesheets().add(UnifiedStageApplication.class.getResource("dark-theme.css").toString());
         } else {

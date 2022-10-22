@@ -6,7 +6,8 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.text.ConverterFactory;
 import org.jhotdraw8.text.DefaultConverter;
 import org.jhotdraw8.text.XmlWordConverter;

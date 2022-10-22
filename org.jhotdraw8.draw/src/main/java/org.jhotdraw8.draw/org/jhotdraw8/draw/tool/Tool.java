@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Disableable;
+import org.jhotdraw8.application.Disableable;
 import org.jhotdraw8.beans.PropertyBean;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NullableKey;

@@ -3,8 +3,8 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-import org.jhotdraw8.app.spi.ApplicationResourceBundleProvider;
-import org.jhotdraw8.app.spi.NodeReaderProvider;
+import org.jhotdraw8.application.spi.ApplicationResourceBundleProvider;
+import org.jhotdraw8.application.spi.NodeReaderProvider;
 
 @SuppressWarnings("module")
 module org.jhotdraw8.application {
@@ -14,55 +14,34 @@ module org.jhotdraw8.application {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
+    requires org.jhotdraw8.annotation;
+    requires org.jhotdraw8.collection;
+    requires org.jhotdraw8.base;
 
-    exports org.jhotdraw8.app;
-    exports org.jhotdraw8.annotation;
-    exports org.jhotdraw8.app.action;
-    exports org.jhotdraw8.app.action.edit;
-    exports org.jhotdraw8.app.action.file;
-    exports org.jhotdraw8.app.action.view;
-    exports org.jhotdraw8.app.spi;
-    exports org.jhotdraw8.app.undo;
-    exports org.jhotdraw8.collection;
+    exports org.jhotdraw8.application;
+    exports org.jhotdraw8.application.action;
+    exports org.jhotdraw8.application.action.edit;
+    exports org.jhotdraw8.application.action.file;
+    exports org.jhotdraw8.application.action.view;
+    exports org.jhotdraw8.application.spi;
+    exports org.jhotdraw8.application.undo;
     exports org.jhotdraw8.concurrent;
     exports org.jhotdraw8.net;
-    exports org.jhotdraw8.reflect;
     exports org.jhotdraw8.util;
     exports org.jhotdraw8.util.prefs;
-    exports org.jhotdraw8.util.function;
     exports org.jhotdraw8.beans;
-    exports org.jhotdraw8.io;
     exports org.jhotdraw8.binding;
     exports org.jhotdraw8.gui;
-    exports org.jhotdraw8.gui.dock;
     exports org.jhotdraw8.event;
-    exports org.jhotdraw8.gui.fontchooser;
     exports org.jhotdraw8.text;
-    exports org.jhotdraw8.macos;
-    exports org.jhotdraw8.app.action.app;
+    exports org.jhotdraw8.application.action.app;
     exports org.jhotdraw8.fxml;
     exports org.jhotdraw8.tree;
-
-    // XXX Remove me - this is here for debugging only
-    opens org.jhotdraw8.macos;
+    exports org.jhotdraw8.application.clipboard;
 
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
-    opens org.jhotdraw8.gui.fontchooser to javafx.fxml;
-    exports org.jhotdraw8.collection.typesafekey;
-    exports org.jhotdraw8.collection.facade;
-    exports org.jhotdraw8.collection.enumerator;
-    exports org.jhotdraw8.collection.champ;
-    exports org.jhotdraw8.collection.primitive;
-    exports org.jhotdraw8.collection.rrb;
-    exports org.jhotdraw8.collection.indexedset;
-    exports org.jhotdraw8.collection.readonly;
-    exports org.jhotdraw8.collection.immutable;
-    exports org.jhotdraw8.collection.mapped;
-    exports org.jhotdraw8.collection.observable;
-    exports org.jhotdraw8.collection.sequenced;
-    exports org.jhotdraw8.collection.sharedkeys;
 
     uses NodeReaderProvider;
-    provides NodeReaderProvider with org.jhotdraw8.app.spi.FxmlNodeReaderProvider, org.jhotdraw8.app.spi.ImageNodeReaderProvider;
+    provides NodeReaderProvider with org.jhotdraw8.application.spi.FxmlNodeReaderProvider, org.jhotdraw8.application.spi.ImageNodeReaderProvider;
 }

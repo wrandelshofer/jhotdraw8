@@ -7,8 +7,8 @@ package org.jhotdraw8.samples.teddy;
 import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.AbstractFileBasedApplication;
-import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.application.AbstractFileBasedApplication;
+import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.fxml.FxmlUtil;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
@@ -16,8 +16,8 @@ import org.jhotdraw8.gui.URIExtensionFilter;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.jhotdraw8.app.action.file.AbstractOpenFileAction.OPEN_CHOOSER_FACTORY_KEY;
-import static org.jhotdraw8.app.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
+import static org.jhotdraw8.application.action.file.AbstractOpenFileAction.OPEN_CHOOSER_FACTORY_KEY;
+import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_CHOOSER_FACTORY_KEY;
 
 /**
  * TeddyApplication.

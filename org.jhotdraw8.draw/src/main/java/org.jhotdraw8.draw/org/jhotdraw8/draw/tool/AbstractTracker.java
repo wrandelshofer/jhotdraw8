@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.AbstractDisableable;
+import org.jhotdraw8.application.AbstractDisableable;
 
 /**
  * AbstractAction.

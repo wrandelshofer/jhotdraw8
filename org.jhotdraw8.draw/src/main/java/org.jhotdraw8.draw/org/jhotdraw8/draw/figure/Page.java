@@ -10,9 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssDimension2D;
 import org.jhotdraw8.css.DefaultUnitConverter;
 import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.draw.css.CssDimension2D;
 
 import java.util.Arrays;
 import java.util.List;

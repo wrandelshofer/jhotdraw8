@@ -7,14 +7,14 @@ package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.IdResolver;
+import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
 import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
+import org.jhotdraw8.css.converter.CssConverter;
 
 import java.io.IOException;
 import java.text.ParseException;

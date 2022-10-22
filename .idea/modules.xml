@@ -3,11 +3,23 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.annotation/org.jhotdraw8.annotation.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.annotation/org.jhotdraw8.annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.application/org.jhotdraw8.application.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.application/org.jhotdraw8.application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.base/org.jhotdraw8.base.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.base/org.jhotdraw8.base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.collection/org.jhotdraw8.collection.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.collection/org.jhotdraw8.collection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.color/org.jhotdraw8.color.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.color/org.jhotdraw8.color.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.css/org.jhotdraw8.css.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.css/org.jhotdraw8.css.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.dock/org.jhotdraw8.dock.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.dock/org.jhotdraw8.dock.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.examples/org.jhotdraw8.examples.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.examples/org.jhotdraw8.examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.font/org.jhotdraw8.font.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.font/org.jhotdraw8.font.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.fxcollection/org.jhotdraw8.fxcollection.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.fxcollection/org.jhotdraw8.fxcollection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.geom/org.jhotdraw8.geom.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.geom/org.jhotdraw8.geom.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.grapher/org.jhotdraw8.grapher.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.grapher/org.jhotdraw8.grapher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.os/org.jhotdraw8.os.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.os/org.jhotdraw8.os.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.teddy/org.jhotdraw8.teddy.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.teddy/org.jhotdraw8.teddy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.theme/org.jhotdraw8.theme.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.theme/org.jhotdraw8.theme.iml" />
     </modules>
   </component>
 </project>

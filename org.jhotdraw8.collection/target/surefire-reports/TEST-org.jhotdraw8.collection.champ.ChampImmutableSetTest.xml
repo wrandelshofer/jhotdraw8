@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.15" tests="193" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="git.build.version" value="1.0"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="CH"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/surefire 2022-10-22T10-17-54_425-jvmRun1 surefire-20221022101800976_4tmp surefire_1-20221022101800976_5tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/wr"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="jdk.module.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/classes:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.annotation/target/org.jhotdraw8.annotation-2022-10-22_43c7afa.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1-mac.jar"/>
+    <property name="java.version.date" value="2021-09-14"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="git.commit.id.full" value="43c7afaef2c64f3fb7922f6c10ce84d60179a849"/>
+    <property name="git.build.time" value="2022-10-22"/>
+    <property name="surefire.real.class.path" value="/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-booter/3.0.0-M7/surefire-booter-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-api/3.0.0-M7/surefire-api-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-logger-api/3.0.0-M7/surefire-logger-api-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-shared-utils/3.0.0-M7/surefire-shared-utils-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-extensions-spi/3.0.0-M7/surefire-extensions-spi-3.0.0-M7.jar:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-junit-platform/3.0.0-M7/surefire-junit-platform-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/common-java5/3.0.0-M7/common-java5-3.0.0-M7.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="17+35-2724"/>
+    <property name="user.name" value="wr"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="12.6"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="US-ASCII"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/Users/wr/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/var/folders/3m/gpbl2zqn72jbptr4x51yq1s40000gn/T/"/>
+    <property name="idea.version" value="2022.2.2"/>
+    <property name="java.version" value="17"/>
+    <property name="user.dir" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="git.commit.id.abbrev" value="43c7afa"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="US-ASCII"/>
+    <property name="java.library.path" value="/Users/wr/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="17+35-2724"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testNewInstanceReadOnlySetArgWithThisShouldBeEqualToArg(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testNewInstanceReadOnlySetArgWithThisShouldBeEqualToArg(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testNewInstanceReadOnlySetArgWithThisShouldBeEqualToArg(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgWithThisShouldBeEqualToArg(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSomeContainedElementsShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSomeContainedElementsShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithSomeContainedElementsShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSomeContainedElementsShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSomeNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSomeNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithSomeNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSomeNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithContainedElementsShouldReturnThis(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithContainedElementsShouldReturnThis(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithContainedElementsShouldReturnThis(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithContainedElementsShouldReturnThis(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithSetWithSomeContainedKeyShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveAllWithSetWithSomeContainedKeyShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithSetWithSomeContainedKeyShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithSetWithSomeContainedKeyShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldThrowException(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testIteratorRemoveShouldThrowException(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldThrowException(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldThrowException(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddWithNewElementShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.002"/>
+  <testcase name="testCopyAddWithNewElementShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.003"/>
+  <testcase name="testCopyAddWithNewElementShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.003"/>
+  <testcase name="testCopyAddWithNewElementShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.002"/>
+  <testcase name="testCopyRemoveAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testToMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testToMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveWithContainedKeyShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveWithContainedKeyShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveWithContainedKeyShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.002"/>
+  <testcase name="testCopyRemoveWithContainedKeyShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithCloneShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithCloneShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithCloneShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithCloneShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithCloneToMutableShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithCloneToMutableShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithCloneToMutableShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithCloneToMutableShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceNoArgsShouldBeEmpty" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.005"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithEmptySetShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithEmptySetShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithEmptySetShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithEmptySetShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllOfEmptySetShouldReturnThis(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllOfEmptySetShouldReturnThis(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllOfEmptySetShouldReturnThis(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllOfEmptySetShouldReturnThis(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldThrowUnsupportedOperationException(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testIteratorRemoveShouldThrowUnsupportedOperationException(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.002"/>
+  <testcase name="testIteratorRemoveShouldThrowUnsupportedOperationException(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.005"/>
+  <testcase name="testIteratorRemoveShouldThrowUnsupportedOperationException(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithContainedElementsShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithContainedElementsShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithContainedElementsShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithContainedElementsShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddWithContainedElementShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddWithContainedElementShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddWithContainedElementShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.002"/>
+  <testcase name="testCopyAddWithContainedElementShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveAllWithNewKeyShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithNewKeyShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveAllWithNewKeyShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveAllWithNewKeyShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyClearShouldBeIdempotent(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyClearShouldBeIdempotent(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyClearShouldBeIdempotent(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyClearShouldBeIdempotent(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSelfShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithSelfShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSelfShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSelfShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithNewElementsShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithNewElementsShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithNewElementsShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithNewElementsShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyClearShouldYieldEmptySet(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyClearShouldYieldEmptySet(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyClearShouldYieldEmptySet(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyClearShouldYieldEmptySet(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testNewInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgShouldBeEqualToArg(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgShouldBeEqualToArg(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgShouldBeEqualToArg(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testNewInstanceReadOnlySetArgShouldBeEqualToArg(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithCloneShouldReturnThis(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRetainAllWithCloneShouldReturnThis(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithCloneShouldReturnThis(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithCloneShouldReturnThis(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithNewElementsShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithNewElementsShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithNewElementsShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyAddAllWithNewElementsShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSelfShouldReturnThis(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSelfShouldReturnThis(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSelfShouldReturnThis(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRetainAllWithSelfShouldReturnThis(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testCopyRemoveWithNewElementShouldReturnSameInstance(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveWithNewElementShouldReturnSameInstance(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveWithNewElementShouldReturnSameInstance(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testCopyRemoveWithNewElementShouldReturnSameInstance(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testOfArrayArgShouldYieldExpectedResult(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testOfArrayArgShouldYieldExpectedResult(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testOfArrayArgShouldYieldExpectedResult(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testOfArrayArgShouldYieldExpectedResult(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0"/>
+  <testcase name="testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+  <testcase name="testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.champ.ChampImmutableSetTest" time="0.001"/>
+</testsuite>

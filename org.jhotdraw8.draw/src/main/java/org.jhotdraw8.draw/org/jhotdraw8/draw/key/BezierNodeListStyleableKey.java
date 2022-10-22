@@ -5,14 +5,14 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssBezierNodeListConverter;
+import org.jhotdraw8.draw.css.text.CssBezierNodeListConverter;
 import org.jhotdraw8.geom.BezierNode;
-import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
 
 /**
  * BezierNodeListStyleableKey.

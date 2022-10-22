@@ -12,8 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.jhotdraw8.app.Activity;
-import org.jhotdraw8.app.ApplicationLabels;
+import org.jhotdraw8.application.Activity;
+import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.concurrent.FXWorker;
 
 import java.net.URL;

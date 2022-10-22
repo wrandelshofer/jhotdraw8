@@ -18,7 +18,7 @@ import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.NonNullObjectProperty;
-import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.tool.ToolEvent;

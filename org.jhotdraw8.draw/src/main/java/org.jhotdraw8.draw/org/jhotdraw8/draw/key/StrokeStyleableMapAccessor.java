@@ -9,14 +9,14 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.CssStrokeStyle;
-import org.jhotdraw8.css.text.CssStrokeStyleConverter;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.draw.css.text.CssStrokeStyleConverter;
 
 import java.util.Map;
 

@@ -8,9 +8,22 @@ package org.jhotdraw8.draw.gui;
 import javafx.beans.Observable;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.css.*;
+import javafx.css.CssMetaData;
+import javafx.css.PseudoClass;
+import javafx.css.StyleConverter;
+import javafx.css.Styleable;
+import javafx.css.StyleableBooleanProperty;
+import javafx.css.StyleableObjectProperty;
+import javafx.css.StyleableProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
@@ -27,12 +40,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.*;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -394,7 +411,7 @@ public class ZoomableScrollPane extends GridPane {
 
         // we only consume if we can scroll
         if (visible < max - min) {
-            scrollBar.setValue(Geom.clamp(value - delta, min, max));
+            scrollBar.setValue(MathUtil.clamp(value - delta, min, max));
             event.consume();
         }
     }
@@ -488,7 +505,7 @@ public class ZoomableScrollPane extends GridPane {
         if (visible > max) {
             return -Math.round((visible - max) * 0.5);
         }
-        return Geom.clamp(Math.round((max - min - visible) * (value - min) / (max - min)) + min, min, max);
+        return MathUtil.clamp(Math.round((max - min - visible) * (value - min) / (max - min)) + min, min, max);
     }
 
     public @NonNull Bounds getViewportRect() {
@@ -536,8 +553,8 @@ public class ZoomableScrollPane extends GridPane {
                 hvalue = cx * (hmax - hmin) / (hmax - hvisible) + hmin,
                 vvalue = cy * (vmax - vmin) / (vmax - vvisible) + vmin;
 
-        horizontalScrollBar.setValue(Geom.clamp(hvalue, horizontalScrollBar.getMin(), horizontalScrollBar.getMax()));
-        verticalScrollBar.setValue(Geom.clamp(vvalue, verticalScrollBar.getMin(), verticalScrollBar.getMax()));
+        horizontalScrollBar.setValue(MathUtil.clamp(hvalue, horizontalScrollBar.getMin(), horizontalScrollBar.getMax()));
+        verticalScrollBar.setValue(MathUtil.clamp(vvalue, verticalScrollBar.getMin(), verticalScrollBar.getMax()));
 
     }
 

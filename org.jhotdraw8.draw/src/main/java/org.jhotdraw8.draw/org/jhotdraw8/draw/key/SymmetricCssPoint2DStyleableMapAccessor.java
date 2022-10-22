@@ -6,12 +6,12 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.text.CssSymmetricCssPoint2DConverter;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.draw.css.CssPoint2D;
+import org.jhotdraw8.draw.css.text.CssSymmetricCssPoint2DConverter;
 
 import java.util.Map;
 import java.util.Objects;

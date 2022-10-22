@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.annotation/src/main/java/org.jhotdraw8.annotation" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.application/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.application/src/main/java/org.jhotdraw8.application" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.application/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.base/src/main/java/org.jhotdraw8.base" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.collection/src/main/java/org.jhotdraw8.collection" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.color/src/main/java/org.jhotdraw8.collection" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.color/src/main/java/org.jhotdraw8.color" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.css/src/main/java/org.jhotdraw8.css" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.css/src/main/java/org.jhotdraw8.dock" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.dock/src/main/java/org.jhotdraw8.color" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.dock/src/main/java/org.jhotdraw8.dock" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.draw/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.draw/src/main/java/org.jhotdraw8.draw" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.draw/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.examples/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.examples/src/main/java/org.jhotdraw8.examples" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.font/src/main/java/org.jhotdraw8.collection" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.font/src/main/java/org.jhotdraw8.font" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.fxcollection/src/main/java/org.jhotdraw8.fxcollection" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.geom/src/main/java/org.jhotdraw8.geom" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.graph/src/main/java/org.jhotdraw8.graph" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.grapher/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.grapher/src/main/java/org.jhotdraw8.grapher" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.grapher/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.os/src/main/java/org.jhotdraw8.os" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.precondition/src/main/java/org.jhotdraw8.precondition" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.teddy/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/org.jhotdraw8.teddy/src/main/java/org.jhotdraw8.teddy" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/org.jhotdraw8.theme/src/main/java/org.jhotdraw8.theme" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

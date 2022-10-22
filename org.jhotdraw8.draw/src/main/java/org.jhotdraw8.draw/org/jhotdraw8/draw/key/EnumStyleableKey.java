@@ -5,12 +5,12 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullKey;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
+import org.jhotdraw8.draw.css.text.CssKebabCaseEnumConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
 
 /**
  * Convenience class for creating a {@link Key} for an enum type.

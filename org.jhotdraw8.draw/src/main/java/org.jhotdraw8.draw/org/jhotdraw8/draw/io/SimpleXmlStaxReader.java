@@ -9,6 +9,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
@@ -20,7 +21,6 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.io.IdFactory;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;

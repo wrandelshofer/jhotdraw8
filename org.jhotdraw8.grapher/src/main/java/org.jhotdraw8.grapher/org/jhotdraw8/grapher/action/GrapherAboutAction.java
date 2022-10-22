@@ -13,10 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.ApplicationLabels;
-import org.jhotdraw8.app.action.AbstractApplicationAction;
-import org.jhotdraw8.app.action.app.AboutAction;
+import org.jhotdraw8.application.Application;
+import org.jhotdraw8.application.ApplicationLabels;
+import org.jhotdraw8.application.action.AbstractApplicationAction;
+import org.jhotdraw8.application.action.app.AboutAction;
 
 import java.lang.module.ModuleReference;
 import java.lang.module.ResolvedModule;
@@ -25,10 +25,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.jhotdraw8.app.Application.COPYRIGHT_KEY;
-import static org.jhotdraw8.app.Application.LICENSE_KEY;
-import static org.jhotdraw8.app.Application.NAME_KEY;
-import static org.jhotdraw8.app.Application.VERSION_KEY;
+import static org.jhotdraw8.application.Application.COPYRIGHT_KEY;
+import static org.jhotdraw8.application.Application.LICENSE_KEY;
+import static org.jhotdraw8.application.Application.NAME_KEY;
+import static org.jhotdraw8.application.Application.VERSION_KEY;
 
 /**
  * Displays a dialog showing information about the application.

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jhotdraw8.collection.HashSetTest" time="0.133" tests="206" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="git.build.version" value="1.0"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://java.oracle.com/"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="CH"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/surefire 2022-10-22T10-17-54_425-jvmRun1 surefire-20221022101800976_4tmp surefire_1-20221022101800976_5tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/wr"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="jdk.module.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/classes:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.annotation/target/org.jhotdraw8.annotation-2022-10-22_43c7afa.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1-mac.jar"/>
+    <property name="java.version.date" value="2021-09-14"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="git.commit.id.full" value="43c7afaef2c64f3fb7922f6c10ce84d60179a849"/>
+    <property name="git.build.time" value="2022-10-22"/>
+    <property name="surefire.real.class.path" value="/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-booter/3.0.0-M7/surefire-booter-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-api/3.0.0-M7/surefire-api-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-logger-api/3.0.0-M7/surefire-logger-api-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-shared-utils/3.0.0-M7/surefire-shared-utils-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-extensions-spi/3.0.0-M7/surefire-extensions-spi-3.0.0-M7.jar:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-junit-platform/3.0.0-M7/surefire-junit-platform-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/common-java5/3.0.0-M7/common-java5-3.0.0-M7.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="17+35-2724"/>
+    <property name="user.name" value="wr"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="12.6"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="US-ASCII"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/Users/wr/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="/var/folders/3m/gpbl2zqn72jbptr4x51yq1s40000gn/T/"/>
+    <property name="idea.version" value="2022.2.2"/>
+    <property name="java.version" value="17"/>
+    <property name="user.dir" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="git.commit.id.abbrev" value="43c7afa"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="US-ASCII"/>
+    <property name="java.library.path" value="/Users/wr/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="17+35-2724"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testRetainAllWithSomeContainedElementsShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSomeContainedElementsShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSomeContainedElementsShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSomeContainedElementsShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSelfShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSelfShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSelfShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSelfShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testCloneShouldYieldEqualSet(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testClearShouldYieldEmptySet(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testClearShouldYieldEmptySet(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testClearShouldYieldEmptySet(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testClearShouldYieldEmptySet(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithEmptySetShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithEmptySetShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithEmptySetShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithEmptySetShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithNewElementsShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithNewElementsShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithNewElementsShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithNewElementsShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSomeNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSomeNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithSomeNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSomeNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testEqualsWithCloneShouldYieldTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllWithNewKeyShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithNewKeyShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllWithNewKeyShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithNewKeyShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddWithNewElementShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddWithNewElementShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddWithNewElementShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.003"/>
+  <testcase name="testAddWithNewElementShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllOfEmptySetShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllOfEmptySetShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllOfEmptySetShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllOfEmptySetShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithCloneShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithCloneShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithCloneShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithCloneShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testHashCodeShouldYieldExpectedValue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.002"/>
+  <testcase name="testHashCodeShouldYieldExpectedValue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testHashCodeShouldYieldExpectedValue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testHashCodeShouldYieldExpectedValue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithNullShouldYieldFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithContainedKeyShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithContainedKeyShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithContainedKeyShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithContainedKeyShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualsWithObjectShouldYieldFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSpliteratorShouldYieldElements(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testSpliteratorShouldYieldElements(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSpliteratorShouldYieldElements(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testSpliteratorShouldYieldElements(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="toArrayWithTemplateArgShouldYieldElements(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="toArrayWithTemplateArgShouldYieldElements(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="toArrayWithTemplateArgShouldYieldElements(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="toArrayWithTemplateArgShouldYieldElements(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSizeShouldReturnExpectedValue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSizeShouldReturnExpectedValue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSizeShouldReturnExpectedValue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testSizeShouldReturnExpectedValue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.002"/>
+  <testcase name="testRemoveWithContainedKeyShouldReturnOldValue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveWithContainedKeyShouldReturnOldValue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveWithContainedKeyShouldReturnOldValue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveWithContainedKeyShouldReturnOldValue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceNoArgsShouldBeEmpty" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="toArrayShouldYieldElements(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="toArrayShouldYieldElements(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="toArrayShouldYieldElements(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="toArrayShouldYieldElements(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testSerializationShouldYieldSameSet(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldRemoveElement(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldRemoveElement(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldRemoveElement(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testIteratorRemoveShouldRemoveElement(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithSomeNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSomeNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSomeNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithSomeNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllWithSomeContainedKeyShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithSomeContainedKeyShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithSomeContainedKeyShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllWithSomeContainedKeyShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddWithContainedElementShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddWithContainedElementShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddWithContainedElementShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddWithContainedElementShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testNewInstanceCapacityArgsShouldBeEmpty" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithEmptyThisShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithEmptyThisShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithEmptyThisShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithEmptyThisShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIsEmptyShouldReturnExpectedValue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIsEmptyShouldReturnExpectedValue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIsEmptyShouldReturnExpectedValue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testIsEmptyShouldReturnExpectedValue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testClearShouldBeIdempotent(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testClearShouldBeIdempotent(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testClearShouldBeIdempotent(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testClearShouldBeIdempotent(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithNewElementsShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithNewElementsShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithNewElementsShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithNewElementsShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testIteratorShouldYieldElements(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorShouldYieldElements(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorShouldYieldElements(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testIteratorShouldYieldElements(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testEqualWithThisShouldYieldTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgsShouldBeEqualToSet(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testNewInstanceReadOnlySetArgsShouldBeEqualToSet(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgsShouldBeEqualToSet(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceReadOnlySetArgsShouldBeEqualToSet(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testNewInstanceSetArgsShouldBeEqualToSet(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsShouldYieldExpectedValue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllOfEmptySetShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllOfEmptySetShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllOfEmptySetShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllOfEmptySetShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsAllShouldYieldExpectedValue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsAllShouldYieldExpectedValue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsAllShouldYieldExpectedValue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testContainsAllShouldYieldExpectedValue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testToStringShouldContainAllElements(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllWithThisShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveAllWithThisShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithThisShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveAllWithThisShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveWithNewElementShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRemoveWithNewElementShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveWithNewElementShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRemoveWithNewElementShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithContainedElementsShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithContainedElementsShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testAddAllWithContainedElementsShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testAddAllWithContainedElementsShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithContainedElementsShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithContainedElementsShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithContainedElementsShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithContainedElementsShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testStreamShouldYieldElements(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testStreamShouldYieldElements(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testStreamShouldYieldElements(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testStreamShouldYieldElements(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithSelfShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testRetainAllWithSelfShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSelfShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithSelfShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testIteratorRemoveShouldThrowIllegalStateException(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0.001"/>
+  <testcase name="testIteratorRemoveShouldThrowIllegalStateException(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldThrowIllegalStateException(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testIteratorRemoveShouldThrowIllegalStateException(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithCloneShouldReturnFalse(SetData)[1]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithCloneShouldReturnFalse(SetData)[2]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithCloneShouldReturnFalse(SetData)[3]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+  <testcase name="testRetainAllWithCloneShouldReturnFalse(SetData)[4]" classname="org.jhotdraw8.collection.HashSetTest" time="0"/>
+</testsuite>

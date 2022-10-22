@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.jhotdraw8.collection.champ.ChampImmutableSequencedMapTest
+-------------------------------------------------------------------------------
+Tests run: 118, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.235 s - in org.jhotdraw8.collection.champ.ChampImmutableSequencedMapTest

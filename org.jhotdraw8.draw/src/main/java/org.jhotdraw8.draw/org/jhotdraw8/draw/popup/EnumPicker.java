@@ -9,9 +9,9 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.text.CssConverter;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.util.Resources;
 
 import java.util.function.BiConsumer;

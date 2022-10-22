@@ -7,9 +7,10 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.css.CssPoint2D;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -17,7 +18,6 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.Resources;
 
 import java.util.function.Supplier;
@@ -60,8 +60,8 @@ public class LineCreationTool extends CreationTool {
         DrawingModel dm = view.getModel();
         dm.addChildTo(createdFigure, parent);
 
-        double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double anchorX = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure,

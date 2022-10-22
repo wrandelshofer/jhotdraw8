@@ -6,10 +6,10 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.IdResolver;
+import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
-import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.net.URI;

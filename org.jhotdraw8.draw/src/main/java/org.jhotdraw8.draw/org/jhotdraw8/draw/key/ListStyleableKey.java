@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.reflect.TypeToken;
+import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.draw.css.text.CssListConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 
 import java.lang.reflect.Type;

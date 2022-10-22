@@ -8,10 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.Application;
-import org.jhotdraw8.app.action.AbstractActivityAction;
-import org.jhotdraw8.gui.fontchooser.FontDialog;
-import org.jhotdraw8.gui.fontchooser.FontFamilySize;
+import org.jhotdraw8.application.Application;
+import org.jhotdraw8.application.action.AbstractActivityAction;
+import org.jhotdraw8.font.fontchooser.FontDialog;
+import org.jhotdraw8.font.fontchooser.FontFamilySize;
 import org.jhotdraw8.samples.teddy.TeddyLabels;
 
 import java.util.Optional;

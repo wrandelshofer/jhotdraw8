@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.text.CssBooleanConverter;
+import org.jhotdraw8.draw.css.text.CssBooleanConverter;
 import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 

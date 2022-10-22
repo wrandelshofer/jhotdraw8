@@ -17,23 +17,23 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.NamedCssColor;
-import org.jhotdraw8.css.Paintable;
-import org.jhotdraw8.css.text.CssColorConverter;
-import org.jhotdraw8.css.text.CssDoubleConverter;
-import org.jhotdraw8.css.text.CssKebabCaseEnumConverter;
-import org.jhotdraw8.css.text.CssListConverter;
-import org.jhotdraw8.css.text.CssMappedConverter;
-import org.jhotdraw8.css.text.CssPercentageConverter;
-import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.NamedCssColor;
+import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.text.CssColorConverter;
+import org.jhotdraw8.draw.css.text.CssDoubleConverter;
+import org.jhotdraw8.draw.css.text.CssKebabCaseEnumConverter;
+import org.jhotdraw8.draw.css.text.CssListConverter;
+import org.jhotdraw8.draw.css.text.CssMappedConverter;
+import org.jhotdraw8.draw.css.text.CssPercentageConverter;
+import org.jhotdraw8.draw.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.reflect.TypeToken;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.SvgPaintDefaulting;
 import org.jhotdraw8.svg.io.SvgFontFamilyConverter;
@@ -367,7 +367,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
         if ((fill instanceof CssColor) && ("currentColor".equals(((CssColor) fill).getName()))) {
             fill = getDefaultableStyled(COLOR_KEY);
         }
-        shape.setFill(Paintable.getPaint(fill, ctx));
+        shape.setFill(Paintable.getPaint(fill));
 
         double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
         shape.setOpacity(fillOpacity);
@@ -384,7 +384,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
         if ((stroke instanceof CssColor) && ("currentColor".equals(((CssColor) stroke).getName()))) {
             stroke = getDefaultableStyled(COLOR_KEY);
         }
-        shape.setStroke(Paintable.getPaint(stroke, ctx));
+        shape.setStroke(Paintable.getPaint(stroke));
 
         CssSize sw = getDefaultableStyledNonNull(STROKE_WIDTH_KEY);
         shape.setStrokeWidth(sw.getConvertedValue(ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY)));

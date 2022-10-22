@@ -8,8 +8,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.geom.Geom;
 
 /**
  * A locator that specifies a point that is relative to the bounds of a figure.
@@ -91,8 +91,8 @@ public class BoundsLocator extends AbstractLocator {
      * @param y      a local coordinate on the figre
      */
     public BoundsLocator(@NonNull Bounds bounds, double x, double y) {
-        this(Geom.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
-                Geom.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
+        this(MathUtil.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
+                MathUtil.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
     }
 
     public double getRelativeX() {

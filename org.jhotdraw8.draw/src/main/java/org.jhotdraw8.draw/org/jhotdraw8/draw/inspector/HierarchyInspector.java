@@ -26,7 +26,7 @@ import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.EditableComponent;
+import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;

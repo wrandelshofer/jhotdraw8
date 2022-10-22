@@ -5,9 +5,9 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.text.CssRegexConverter;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.draw.css.text.CssRegexConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
 import org.jhotdraw8.text.RegexReplace;
 
 /**

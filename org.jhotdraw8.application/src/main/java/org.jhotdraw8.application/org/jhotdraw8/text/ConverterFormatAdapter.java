@@ -6,9 +6,10 @@ package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.IdFactory;
+import org.jhotdraw8.base.converter.IdResolver;
+import org.jhotdraw8.base.converter.IdSupplier;
 
 import java.nio.CharBuffer;
 import java.text.Format;

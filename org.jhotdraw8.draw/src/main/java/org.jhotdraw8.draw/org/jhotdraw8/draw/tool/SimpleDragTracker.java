@@ -9,12 +9,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 
 import java.util.Collection;
@@ -125,8 +125,8 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
             // or whatever corner is specified in the anchor
             Bounds bounds = anchorFigure.getLayoutBounds();
 
-            double anchorX = Geom.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
-            double anchorY = Geom.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
+            double anchorX = MathUtil.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+            double anchorY = MathUtil.clamp(anchorFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
             Point2D loc = new Point2D(bounds.getMinX() + anchorX * bounds.getWidth(),
                     bounds.getMinY() + anchorY * bounds.getHeight());

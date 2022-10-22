@@ -14,15 +14,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.io.SimpleUriResolver;
 
 import java.net.URI;
 

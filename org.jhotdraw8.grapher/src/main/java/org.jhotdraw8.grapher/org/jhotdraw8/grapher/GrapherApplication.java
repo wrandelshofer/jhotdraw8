@@ -7,8 +7,8 @@ package org.jhotdraw8.grapher;
 import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.AbstractFileBasedApplication;
-import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.application.AbstractFileBasedApplication;
+import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.collection.typesafekey.NonNullKey;
 import org.jhotdraw8.collection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.draw.DrawStylesheets;
@@ -18,15 +18,15 @@ import org.jhotdraw8.fxml.FxmlUtil;
 import org.jhotdraw8.grapher.action.GrapherAboutAction;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
-import org.jhotdraw8.macos.MacOSPreferences;
+import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.app.action.file.ExportFileAction.EXPORT_CHOOSER_FACTORY_KEY;
-import static org.jhotdraw8.io.DataFormats.registerDataFormat;
+import static org.jhotdraw8.application.action.file.ExportFileAction.EXPORT_CHOOSER_FACTORY_KEY;
+import static org.jhotdraw8.application.clipboard.DataFormats.registerDataFormat;
 
 /**
  * GrapherApplication.
@@ -95,7 +95,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
 
     @Override
     protected void startUserAgentStylesheet() {
-        final Object value = MacOSPreferences.get(MacOSPreferences.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
+        final Object value = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
         if ("Dark".equals(value)) {
             set(DARK_MODE_KEY, true);
             getStylesheets().add(getClass().getResource("dark-theme.css").toString());

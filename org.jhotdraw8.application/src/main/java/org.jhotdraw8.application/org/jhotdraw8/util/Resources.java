@@ -12,7 +12,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.application.action.Action;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

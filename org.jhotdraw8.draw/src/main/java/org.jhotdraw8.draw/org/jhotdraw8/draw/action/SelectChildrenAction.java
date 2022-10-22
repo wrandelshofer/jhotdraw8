@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.action.Action;
+import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;

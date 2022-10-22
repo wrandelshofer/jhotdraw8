@@ -12,8 +12,9 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -27,7 +28,6 @@ import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
-import org.jhotdraw8.xml.text.XmlNumberConverter;
 
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;

@@ -35,11 +35,20 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>ch.randelshofer</groupId>
-            <artifactId>org.jhotdraw8.application</artifactId>
-            <version>1.0</version>
-        </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.annotation</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.application</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.font</artifactId>
+        <version>1.0</version>
+        <scope>compile</scope>
+      </dependency>
     </dependencies>
 
 </project>

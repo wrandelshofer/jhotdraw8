@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 

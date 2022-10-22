@@ -8,7 +8,7 @@ package org.jhotdraw8.draw;
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssColor;
+import org.jhotdraw8.draw.css.CssColor;
 
 import java.util.prefs.Preferences;
 

@@ -5,14 +5,13 @@
 package org.jhotdraw8.draw.css;
 
 import javafx.css.StyleOrigin;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.css.CssToken;
 import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
-import org.jhotdraw8.text.Converter;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;

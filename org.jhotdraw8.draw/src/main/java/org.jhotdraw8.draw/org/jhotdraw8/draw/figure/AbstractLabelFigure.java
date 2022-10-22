@@ -20,15 +20,15 @@ import javafx.scene.text.TextBoundsType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssDimension2D;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
+import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.CssDimension2D;
+import org.jhotdraw8.draw.css.CssPoint2D;
+import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.Paintable;
 import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
@@ -395,7 +395,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             path = new Path();
             iconGroupNode.getChildren().setAll(path);
         }
-        path.setFill(Paintable.getPaint(getStyled(ICON_FILL)));
+        path.setFill(Paintable.getPaint(getStyled(ICON_FILL), ctx));
         path.setStroke(null);
         path.getElements().setAll(elements.asList());
     }

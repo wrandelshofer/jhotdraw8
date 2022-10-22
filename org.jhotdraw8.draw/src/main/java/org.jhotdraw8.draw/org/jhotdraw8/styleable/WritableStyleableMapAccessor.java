@@ -5,10 +5,10 @@
 package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.text.CssConverter;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.converter.CssConverter;
 
 /**
  * Interface for keys which support styled values from CSS.

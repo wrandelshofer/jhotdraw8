@@ -7,8 +7,8 @@ package org.jhotdraw8.util;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.spi.NodeReader;
-import org.jhotdraw8.app.spi.NodeReaderRegistry;
+import org.jhotdraw8.application.spi.NodeReader;
+import org.jhotdraw8.application.spi.NodeReaderRegistry;
 
 import java.io.IOException;
 import java.io.InputStream;

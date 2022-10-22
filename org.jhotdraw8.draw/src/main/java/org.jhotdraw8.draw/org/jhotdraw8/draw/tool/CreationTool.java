@@ -8,17 +8,17 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssPoint2D;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
+import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.util.Resources;
 
 import java.util.function.Supplier;
@@ -90,8 +90,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         x2 = x1;
         y2 = y1;
 
-        double anchorX = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = Geom.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double anchorX = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
+        double anchorY = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
 
 
         CssPoint2D c =

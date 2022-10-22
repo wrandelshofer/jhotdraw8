@@ -9,6 +9,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -621,5 +622,147 @@ public class CustomBinding {
 
         };
 
+    }
+
+    private static class ViaProperty<AA, BB> extends SimpleObjectProperty<BB> implements ChangeListener<AA> {
+        final Function<AA, ? extends ObservableValue<BB>> stepFunction;
+
+        ViaProperty(Function<AA, ? extends ObservableValue<BB>> viaFunction) {
+            this.stepFunction = viaFunction;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends AA> o, AA oldValue, AA newValue) {
+            if (oldValue != null) {
+                unbind();
+            }
+            if (newValue != null) {
+                bind(stepFunction.apply(newValue));
+            } else {
+                set(null);
+            }
+        }
+
+        @Override
+        protected void invalidated() {
+            // By calling get(), we mark the property as valid again.
+            // Without calling get, the property will be marked as invalid once,
+            // and then will never call invalidated() again.
+            get();
+        }
+    }
+
+    /**
+     * Creates a binding to get a property {@code a.b}.
+     *
+     * @param root observable value {@code a}
+     * @param step the function that gets {@code a.b}
+     * @param <A>  the type of {@code a}
+     * @param <B>  the type of {@code b}
+     * @return the binding {@code a.b}.
+     */
+    public static <A, B> ObservableValue<B> via(ObservableValue<A> root, Function<A, ObservableValue<B>> step) {
+        ViaProperty<A, B> viaProperty = new ViaProperty<>(step);
+        root.addListener(viaProperty);
+        viaProperty.changed(root, null, root.getValue());
+        return viaProperty;
+    }
+
+    /**
+     * Creates a binding to get an observable value {@code a.b.c}.
+     *
+     * @param root  observable value {@code a}
+     * @param stepB the function that gets {@code a.b}
+     * @param stepC the function that gets {@code b.c}
+     * @param <A>   the type of {@code a}
+     * @param <B>   the type of {@code b}
+     * @param <C>   the type of {@code c}
+     * @return the binding {@code a.b.c}.
+     */
+    public static <A, B, C> ObservableValue<C> via(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
+                                                   Function<B, ObservableValue<C>> stepC) {
+        return via(via(root, stepB), stepC);
+    }
+
+    /**
+     * Creates a binding to get an observable value {@code a.b.c.d}.
+     *
+     * @param root  observable value {@code a}
+     * @param stepB the function that gets {@code a.b}
+     * @param stepC the function that gets {@code b.c}
+     * @param stepD the function that gets {@code c.d}
+     * @param <A>   the type of {@code a}
+     * @param <B>   the type of {@code b}
+     * @param <C>   the type of {@code c}
+     * @param <D>   the type of {@code d}
+     * @return the binding {@code a.b.c}.
+     */
+    public static <A, B, C, D> ObservableValue<D> via(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
+                                                      Function<B, ObservableValue<C>> stepC,
+                                                      Function<C, ObservableValue<D>> stepD) {
+        return via(via(via(root, stepB), stepC), stepD);
+    }
+
+
+    /**
+     * Creates a binding to get a property {@code a.b}.
+     *
+     * @param root observable value {@code a}
+     * @param step the function that gets {@code a.b}
+     * @param <A>  the type of {@code a}
+     * @param <B>  the type of {@code b}
+     * @return the binding {@code a.b}.
+     */
+    public static <A, B> Property<B> viaBidirectional(ObservableValue<A> root, Function<A, Property<B>> step) {
+        SimpleObjectProperty<B> viaProperty = new SimpleObjectProperty<>();
+        ChangeListener<A> changeListener = new ChangeListener<A>() {
+            @Override
+            public void changed(ObservableValue<? extends A> o, A oldValue, A newValue) {
+                if (oldValue != null) {
+                    viaProperty.unbindBidirectional(step.apply(newValue));
+                }
+                if (newValue != null) {
+                    viaProperty.bindBidirectional(step.apply(newValue));
+                }
+            }
+        };
+        root.addListener(changeListener);
+        changeListener.changed(root, null, root.getValue());
+        return viaProperty;
+    }
+
+    /**
+     * Creates a binding to get a property {@code a.b.c}.
+     *
+     * @param root  observable value {@code a}
+     * @param stepB the function that gets {@code a.b}
+     * @param stepC the function that gets {@code b.c}
+     * @param <A>   the type of {@code a}
+     * @param <B>   the type of {@code b}
+     * @param <C>   the type of {@code c}
+     * @return the binding {@code a.b.c}.
+     */
+    public static <A, B, C> Property<C> viaBidirectional(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
+                                                         Function<B, Property<C>> stepC) {
+        return viaBidirectional(via(root, stepB), stepC);
+    }
+
+    /**
+     * Creates a binding to get a property {@code a.b.c.d}.
+     *
+     * @param root  observable value {@code a}
+     * @param stepB the function that gets {@code a.b}
+     * @param stepC the function that gets {@code b.c}
+     * @param stepD the function that gets {@code c.d}
+     * @param <A>   the type of {@code a}
+     * @param <B>   the type of {@code b}
+     * @param <C>   the type of {@code c}
+     * @param <D>   the type of {@code d}
+     * @return the binding {@code a.b.c}.
+     */
+    public static <A, B, C, D> Property<D> viaBidirectional(ObservableValue<A> root, Function<A, ObservableValue<B>> stepB,
+                                                            Function<B, ObservableValue<C>> stepC,
+                                                            Function<C, Property<D>> stepD) {
+        return viaBidirectional(via(via(root, stepB), stepC), stepD);
     }
 }

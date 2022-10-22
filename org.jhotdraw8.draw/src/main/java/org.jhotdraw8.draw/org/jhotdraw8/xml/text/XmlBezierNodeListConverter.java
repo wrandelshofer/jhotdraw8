@@ -6,6 +6,10 @@ package org.jhotdraw8.xml.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.IdResolver;
+import org.jhotdraw8.base.converter.IdSupplier;
+import org.jhotdraw8.base.io.CharSequenceReader;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.CssTokenType;
@@ -14,10 +18,6 @@ import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
 import org.jhotdraw8.geom.SvgPaths;
-import org.jhotdraw8.io.CharBufferReader;
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
-import org.jhotdraw8.text.Converter;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -41,7 +41,7 @@ public class XmlBezierNodeListConverter implements Converter<ImmutableList<Bezie
     @Override
     public @Nullable ImmutableList<BezierNode> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         String input = buf.toString();
-        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
+        StreamCssTokenizer tt = new StreamCssTokenizer(new CharSequenceReader(buf));
 
         ImmutableList<BezierNode> p = null;
         if (tt.next() == CssTokenType.TT_IDENT) {

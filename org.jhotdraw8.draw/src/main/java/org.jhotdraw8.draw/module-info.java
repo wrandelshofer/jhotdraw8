@@ -3,7 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-import org.jhotdraw8.app.spi.NodeReaderProvider;
+import org.jhotdraw8.application.spi.NodeReaderProvider;
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
 import org.jhotdraw8.draw.spi.SvgImageReaderProvider;
 
@@ -16,6 +16,13 @@ module org.jhotdraw8.draw {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive org.jhotdraw8.application;
+    requires org.jhotdraw8.annotation;
+    requires org.jhotdraw8.collection;
+    requires org.jhotdraw8.base;
+    requires org.jhotdraw8.font;
+    requires org.jhotdraw8.css;
+    requires org.jhotdraw8.geom;
+    requires org.jhotdraw8.graph;
 
     opens org.jhotdraw8.draw.inspector;
     opens org.jhotdraw8.draw;
@@ -23,10 +30,8 @@ module org.jhotdraw8.draw {
     opens org.jhotdraw8.draw.gui to javafx.fxml;
     opens org.jhotdraw8.draw.popup to javafx.fxml;
 
-    exports org.jhotdraw8.css;
-    exports org.jhotdraw8.css.ast;
-    exports org.jhotdraw8.css.text;
-    exports org.jhotdraw8.css.function;
+    exports org.jhotdraw8.draw.css.text;
+    exports org.jhotdraw8.draw.css.function;
     exports org.jhotdraw8.draw;
     exports org.jhotdraw8.draw.action;
     exports org.jhotdraw8.draw.constrain;
@@ -39,12 +44,9 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.io;
     exports org.jhotdraw8.draw.tool;
     exports org.jhotdraw8.draw.spi;
-    exports org.jhotdraw8.svg;
     exports org.jhotdraw8.draw.model;
-    exports org.jhotdraw8.graph;
     exports org.jhotdraw8.draw.key;
     exports org.jhotdraw8.draw.render;
-    exports org.jhotdraw8.geom;
     exports org.jhotdraw8.draw.connector;
     exports org.jhotdraw8.draw.locator;
     exports org.jhotdraw8.xml.text;
@@ -52,15 +54,6 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.styleable;
     exports org.jhotdraw8.draw.gui;
     exports org.jhotdraw8.svg.io;
-    exports org.jhotdraw8.geom.contour;
-    exports org.jhotdraw8.geom.biarc;
-    exports org.jhotdraw8.graph.io;
-    exports org.jhotdraw8.geom.intersect;
-    exports org.jhotdraw8.graph.path;
-    exports org.jhotdraw8.graph.iterator;
-    exports org.jhotdraw8.graph.algo;
-    exports org.jhotdraw8.graph.path.backlink;
-    exports org.jhotdraw8.graph.path.algo;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
     provides NodeReaderProvider with SvgImageReaderProvider;

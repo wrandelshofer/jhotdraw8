@@ -13,8 +13,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.css.CssTransforms;
+import org.jhotdraw8.draw.css.Paintable;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
@@ -80,7 +81,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         }
         PathIterator iter = f.getPathIterator(ctx, childTx);
         if (f instanceof StrokableFigure) {
-            Paint stroke = Paintable.getPaint(f.getStyled(STROKE));
+            Paint stroke = Paintable.getPaint(f.getStyled(STROKE), ctx);
             if (stroke != null) {
                 double strokeWidth = f.getStyledNonNull(STROKE_WIDTH).getConvertedValue();
                 if (strokeWidth > 0.0) {
@@ -190,7 +191,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         // XXX if one ofCollection the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
-        Transform localTransform = FXTransforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
+        Transform localTransform = CssTransforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
         for (Figure child : getChildren()) {
             child.reshapeInParent(localTransform);
         }

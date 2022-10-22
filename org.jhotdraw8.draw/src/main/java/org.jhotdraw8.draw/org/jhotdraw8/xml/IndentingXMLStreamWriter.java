@@ -7,7 +7,7 @@ package org.jhotdraw8.xml;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.util.Preconditions;
+import org.jhotdraw8.base.precondition.Preconditions;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;

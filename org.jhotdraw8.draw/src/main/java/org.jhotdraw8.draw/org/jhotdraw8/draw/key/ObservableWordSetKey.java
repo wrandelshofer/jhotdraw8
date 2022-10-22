@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
+import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.typesafekey.SimpleNonNullKey;
-import org.jhotdraw8.reflect.TypeToken;
 
 /**
  * ObservableWordSetKey.

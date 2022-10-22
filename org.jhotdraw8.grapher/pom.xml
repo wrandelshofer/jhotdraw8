@@ -37,8 +37,19 @@
   <dependencies>
     <dependency>
       <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
       <artifactId>org.jhotdraw8.draw</artifactId>
-      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.os</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.dock</artifactId>
     </dependency>
   </dependencies>
 

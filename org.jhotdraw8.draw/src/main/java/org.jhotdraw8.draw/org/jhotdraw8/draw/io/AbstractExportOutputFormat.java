@@ -10,6 +10,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.IdFactory;
+import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.collection.champ.ChampImmutableSequencedMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
@@ -20,8 +22,6 @@ import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.io.SimpleIdFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -5,9 +5,9 @@
 package org.jhotdraw8.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
-import org.jhotdraw8.css.text.CssStringConverter;
-import org.jhotdraw8.text.Converter;
+import org.jhotdraw8.css.converter.CssStringConverter;
 
 public class StringStyleableKey extends SimpleNullableKey<String> implements WritableStyleableMapAccessor<String> {
     private static final long serialVersionUID = 0L;

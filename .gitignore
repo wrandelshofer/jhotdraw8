@@ -10,3 +10,15 @@
 /lib/
 /dist/
 **/.DS_Store
+/org.jhotdraw8.annotation/target/
+/org.jhotdraw8.base/target/
+/org.jhotdraw8.collection/target/
+/org.jhotdraw8.color/target/
+/org.jhotdraw8.css/target/
+/org.jhotdraw8.dock/target/
+/org.jhotdraw8.font/target/
+/org.jhotdraw8.fxcollection/target/
+/org.jhotdraw8.geom/target/
+/org.jhotdraw8.graph/target/
+/org.jhotdraw8.os/target/
+/org.jhotdraw8.theme/target/

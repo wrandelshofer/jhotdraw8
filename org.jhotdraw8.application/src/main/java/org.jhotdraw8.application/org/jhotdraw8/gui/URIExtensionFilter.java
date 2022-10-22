@@ -7,7 +7,7 @@ package org.jhotdraw8.gui;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.io.DataFormats;
+import org.jhotdraw8.application.clipboard.DataFormats;
 
 import java.util.List;
 

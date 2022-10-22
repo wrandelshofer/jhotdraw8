@@ -24,7 +24,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.action.file.BrowseFileDirectoryAction;
+import org.jhotdraw8.application.action.file.BrowseFileDirectoryAction;
+import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.draw.DrawingView;
@@ -33,7 +34,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.io.SimpleUriResolver;
 import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.xml.text.XmlUriConverter;
 

@@ -6,9 +6,9 @@ package org.jhotdraw8.draw.constrain;
 
 import javafx.beans.Observable;
 import javafx.scene.Node;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.css.CssPoint2D;
+import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**

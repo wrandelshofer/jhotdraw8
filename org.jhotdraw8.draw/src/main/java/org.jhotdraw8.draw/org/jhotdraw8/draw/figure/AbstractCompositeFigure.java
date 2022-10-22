@@ -11,7 +11,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.tree.ChildList;
 

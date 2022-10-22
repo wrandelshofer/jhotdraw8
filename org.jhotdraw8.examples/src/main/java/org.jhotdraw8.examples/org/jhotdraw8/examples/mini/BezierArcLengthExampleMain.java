@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.BezierArcLengthGravesen;
 import org.jhotdraw8.geom.BezierArcLengthRomberg;
@@ -81,8 +82,8 @@ public class BezierArcLengthExampleMain extends Application {
         }
 
         private void onMouseDragged(@NonNull MouseEvent evt) {
-            setPosition(Geom.clamp(round(evt.getX() / 10) * 10, 4, Integer.MAX_VALUE),
-                    Geom.clamp(round(evt.getY() / 10) * 10, 4, Integer.MAX_VALUE));
+            setPosition(MathUtil.clamp(round(evt.getX() / 10) * 10, 4, Integer.MAX_VALUE),
+                    MathUtil.clamp(round(evt.getY() / 10) * 10, 4, Integer.MAX_VALUE));
             handlesChanged();
         }
     }

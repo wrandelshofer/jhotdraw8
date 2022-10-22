@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.popup;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.gui.fontchooser.FontFamilyDialog;
+import org.jhotdraw8.font.fontchooser.FontFamilyDialog;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;

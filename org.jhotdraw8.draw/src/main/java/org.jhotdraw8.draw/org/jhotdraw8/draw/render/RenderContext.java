@@ -13,10 +13,10 @@ import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullKey;
 import org.jhotdraw8.collection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
-import org.jhotdraw8.css.DefaultSystemColorConverter;
 import org.jhotdraw8.css.DefaultUnitConverter;
-import org.jhotdraw8.css.SystemColorConverter;
 import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.draw.css.DefaultSystemColorConverter;
+import org.jhotdraw8.draw.css.SystemColorConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
 

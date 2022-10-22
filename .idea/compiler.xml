@@ -19,29 +19,71 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="org.jhotdraw8.geom" />
         <module name="org.jhotdraw8.draw" />
-        <module name="org.jhotdraw8.application" />
-        <module name="org.jhotdraw8.teddy" />
+        <module name="org.jhotdraw8.css" />
+        <module name="org.jhotdraw8.collection" />
         <module name="org.jhotdraw8.examples" />
         <module name="org.jhotdraw8.grapher" />
+        <module name="org.jhotdraw8.graph" />
+        <module name="org.jhotdraw8.annotation" />
+        <module name="org.jhotdraw8.color" />
+        <module name="org.jhotdraw8.font" />
+        <module name="org.jhotdraw8.fxcollection" />
+        <module name="org.jhotdraw8.theme" />
+        <module name="org.jhotdraw8.dock" />
+        <module name="org.jhotdraw8.base" />
+        <module name="org.jhotdraw8.application" />
+        <module name="org.jhotdraw8.teddy" />
+        <module name="org.jhotdraw8.os" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17">
-      <module name="org.jhotdraw8" target="17" />
+      <module name="org.jhotdraw8" target="1.5" />
+      <module name="org.jhotdraw8.annotation" target="17" />
       <module name="org.jhotdraw8.application" target="17" />
+      <module name="org.jhotdraw8.base" target="17" />
+      <module name="org.jhotdraw8.collection" target="17" />
+      <module name="org.jhotdraw8.color" target="17" />
+      <module name="org.jhotdraw8.color (1)" target="17" />
+      <module name="org.jhotdraw8.css" target="17" />
+      <module name="org.jhotdraw8.dock" target="17" />
+      <module name="org.jhotdraw8.dock (1)" target="17" />
       <module name="org.jhotdraw8.draw" target="17" />
       <module name="org.jhotdraw8.examples" target="17" />
+      <module name="org.jhotdraw8.font" target="17" />
+      <module name="org.jhotdraw8.fxcollection" target="17" />
+      <module name="org.jhotdraw8.geom" target="17" />
+      <module name="org.jhotdraw8.graph" target="17" />
       <module name="org.jhotdraw8.grapher" target="17" />
+      <module name="org.jhotdraw8.os" target="17" />
+      <module name="org.jhotdraw8.precondition" target="17" />
       <module name="org.jhotdraw8.teddy" target="17" />
+      <module name="org.jhotdraw8.theme" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="org.jhotdraw8.annotation" options="-Xlint:all" />
       <module name="org.jhotdraw8.application" options="-Xlint:all" />
+      <module name="org.jhotdraw8.base" options="-Xlint:all" />
+      <module name="org.jhotdraw8.collection" options="-Xlint:all" />
+      <module name="org.jhotdraw8.color" options="-Xlint:all" />
+      <module name="org.jhotdraw8.color (1)" options="-Xlint:all" />
+      <module name="org.jhotdraw8.css" options="-Xlint:all" />
+      <module name="org.jhotdraw8.dock" options="-Xlint:all" />
+      <module name="org.jhotdraw8.dock (1)" options="-Xlint:all" />
       <module name="org.jhotdraw8.draw" options="-Xlint:all" />
       <module name="org.jhotdraw8.examples" options="-Xlint:all" />
+      <module name="org.jhotdraw8.font" options="-Xlint:all" />
+      <module name="org.jhotdraw8.fxcollection" options="-Xlint:all" />
+      <module name="org.jhotdraw8.geom" options="-Xlint:all" />
+      <module name="org.jhotdraw8.graph" options="-Xlint:all" />
       <module name="org.jhotdraw8.grapher" options="-Xlint:all" />
+      <module name="org.jhotdraw8.os" options="-Xlint:all" />
+      <module name="org.jhotdraw8.precondition" options="-Xlint:all" />
       <module name="org.jhotdraw8.teddy" options="-Xlint:all" />
+      <module name="org.jhotdraw8.theme" options="-Xlint:all" />
     </option>
   </component>
 </project>

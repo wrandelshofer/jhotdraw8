@@ -13,18 +13,18 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.css.DefaultUnitConverter;
-import org.jhotdraw8.css.Paintable;
 import org.jhotdraw8.css.UnitConverter;
-import org.jhotdraw8.css.text.CssSizeConverter;
+import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.text.CssSizeConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -137,7 +137,7 @@ public interface TextStrokeableFigure extends Figure {
      * @param shape a shape node
      */
     default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
-        Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE));
+        Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE), ctx);
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
         double strokeWidth = units.convert(getStyledNonNull(TEXT_STROKE_WIDTH), UnitConverter.DEFAULT);

@@ -13,8 +13,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.gui.fontchooser.FontDialog;
-import org.jhotdraw8.gui.fontchooser.FontFamilySize;
+import org.jhotdraw8.font.fontchooser.FontDialog;
+import org.jhotdraw8.font.fontchooser.FontFamilySize;
 
 /**
  * FontChooserMain.

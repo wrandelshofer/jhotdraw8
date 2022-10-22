@@ -9,7 +9,7 @@ import javafx.collections.MapChangeListener;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.util.Preconditions;
+import org.jhotdraw8.base.precondition.Preconditions;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;

@@ -6,9 +6,9 @@ package org.jhotdraw8.svg.figure;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssColor;
 import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 
 import java.util.Objects;

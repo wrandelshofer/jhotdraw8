@@ -5,10 +5,10 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.text.CssColorConverter;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.text.CssColorConverter;
 import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.text.Converter;
 
 /**
  * NullableCssColorStyleableKey.

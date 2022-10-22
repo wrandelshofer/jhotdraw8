@@ -6,10 +6,10 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.io.IdFactory;
-import org.jhotdraw8.text.Converter;
 import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLStreamException;

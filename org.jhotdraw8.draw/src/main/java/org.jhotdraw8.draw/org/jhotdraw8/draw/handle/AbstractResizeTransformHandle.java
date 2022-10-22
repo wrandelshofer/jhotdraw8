@@ -19,11 +19,12 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.CssPoint2D;
-import org.jhotdraw8.css.CssRectangle2D;
 import org.jhotdraw8.css.DefaultUnitConverter;
+import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.CssPoint2D;
+import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -102,9 +103,9 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
             resize(newPoint, owner, startBounds, view.getModel(), keepAspect);
         } else {
             resize(
-                    DefaultUnitConverter.getInstance().convertPoint2D(
+                    convertPoint2D(
                             new CssPoint2D(FXTransforms.transform(t, newPoint.getConvertedValue())),
-                            newPoint.getX().getUnits()),
+                            newPoint.getX().getUnits(), DefaultUnitConverter.getInstance()),
                     owner, startBounds, view.getModel(), keepAspect);
         }
     }
@@ -161,5 +162,10 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         // Rotate the node.
         node.setRotate(f.getStyledNonNull(ROTATE));
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
+    }
+
+    private @NonNull CssPoint2D convertPoint2D(@NonNull CssPoint2D cssPoint2D, @NonNull String units, @NonNull UnitConverter c) {
+        return new CssPoint2D(c.convertSize(cssPoint2D.getX(), units),
+                c.convertSize(cssPoint2D.getY(), units));
     }
 }

@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.ApplicationLabels;
+import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;

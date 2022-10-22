@@ -19,10 +19,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.binding.CustomBinding;
-import org.jhotdraw8.css.CssColor;
-import org.jhotdraw8.css.NamedCssColor;
-import org.jhotdraw8.css.text.CssColorConverter;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.NamedCssColor;
+import org.jhotdraw8.draw.css.text.CssColorConverter;
 import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.text.StringConverterAdapter;
 

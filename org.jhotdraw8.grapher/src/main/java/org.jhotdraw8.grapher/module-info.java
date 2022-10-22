@@ -15,6 +15,11 @@ module org.jhotdraw8.grapher {
     requires transitive javafx.fxml;
     requires jdk.javadoc;
     requires transitive org.jhotdraw8.draw;
+    requires org.jhotdraw8.annotation;
+    requires org.jhotdraw8.os;
+    requires org.jhotdraw8.collection;
+    requires org.jhotdraw8.dock;
+    requires org.jhotdraw8.base;
 
     opens org.jhotdraw8.grapher to javafx.fxml, javafx.graphics;
 

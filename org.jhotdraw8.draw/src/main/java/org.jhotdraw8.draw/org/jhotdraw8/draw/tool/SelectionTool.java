@@ -12,7 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.app.ApplicationLabels;
+import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;

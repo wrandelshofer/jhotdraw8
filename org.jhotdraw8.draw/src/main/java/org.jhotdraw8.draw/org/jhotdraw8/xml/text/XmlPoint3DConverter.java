@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.xml.text;
 
-import org.jhotdraw8.css.text.Point3DConverter;
+import org.jhotdraw8.draw.css.text.Point3DConverter;
 
 /**
  * Converts a {@code javafx.geometry.Point3D} into a {@code String} and vice

@@ -17,12 +17,31 @@
   <packaging>pom</packaging>
   <name>Parent project for JHotDraw8</name>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+
   <modules>
+    <module>org.jhotdraw8.annotation</module>
     <module>org.jhotdraw8.application</module>
+    <module>org.jhotdraw8.base</module>
+    <module>org.jhotdraw8.css</module>
+    <module>org.jhotdraw8.color</module>
     <module>org.jhotdraw8.draw</module>
-    <module>org.jhotdraw8.grapher</module>
-    <module>org.jhotdraw8.teddy</module>
+    <module>org.jhotdraw8.collection</module>
+    <module>org.jhotdraw8.dock</module>
     <module>org.jhotdraw8.examples</module>
+    <module>org.jhotdraw8.font</module>
+    <module>org.jhotdraw8.fxcollection</module>
+    <module>org.jhotdraw8.geom</module>
+    <module>org.jhotdraw8.graph</module>
+    <module>org.jhotdraw8.grapher</module>
+    <module>org.jhotdraw8.os</module>
+    <module>org.jhotdraw8.teddy</module>
+    <module>org.jhotdraw8.theme</module>
   </modules>
 
   <properties>
@@ -58,7 +77,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M5</version>
+          <version>3.0.0-M7</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -143,19 +162,104 @@
     </plugins>
   </reporting>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.8.2</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-fxml</artifactId>
-      <version>18.0.1</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <!-- https://mvnrepository.com/artifact/com.google.guava/guava-testlib -->
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava-testlib</artifactId>
+        <version>31.1-jre</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.annotation</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.application</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.color</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.collection</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.css</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.dock</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.draw</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.fxcollection</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.os</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.base</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.geom</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.graph</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.8.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.8.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>18.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>18.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>18.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>18.0.1</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>

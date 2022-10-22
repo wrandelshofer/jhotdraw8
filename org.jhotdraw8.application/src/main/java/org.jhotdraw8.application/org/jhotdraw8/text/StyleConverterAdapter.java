@@ -9,6 +9,7 @@ import javafx.css.StyleConverter;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 
 import java.io.IOException;
 import java.text.ParseException;

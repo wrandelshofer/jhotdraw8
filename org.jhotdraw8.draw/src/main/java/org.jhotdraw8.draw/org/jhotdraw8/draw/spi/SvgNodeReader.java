@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.spi;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.app.spi.NodeReader;
+import org.jhotdraw8.application.spi.NodeReader;
 import org.jhotdraw8.svg.io.FXSvgTinyReader;
 
 import javax.xml.transform.stream.StreamSource;

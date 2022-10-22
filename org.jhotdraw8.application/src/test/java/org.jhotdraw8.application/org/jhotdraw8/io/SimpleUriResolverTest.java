@@ -6,6 +6,7 @@
 package org.jhotdraw8.io;
 
 
+import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;

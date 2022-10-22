@@ -5,8 +5,9 @@
 
 package org.jhotdraw8.text;
 
-import org.jhotdraw8.io.IdResolver;
-import org.jhotdraw8.io.IdSupplier;
+import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.IdResolver;
+import org.jhotdraw8.base.converter.IdSupplier;
 
 /**
  * Converters that implement this interface require non-null values
