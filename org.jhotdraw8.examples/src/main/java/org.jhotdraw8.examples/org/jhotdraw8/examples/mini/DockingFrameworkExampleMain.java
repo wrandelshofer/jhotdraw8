@@ -22,7 +22,7 @@ import org.jhotdraw8.dock.SimpleDockRoot;
 import org.jhotdraw8.dock.SimpleDockable;
 import org.jhotdraw8.dock.TabPaneTrack;
 import org.jhotdraw8.dock.TabbedAccordionTrack;
-import org.jhotdraw8.tree.PreorderSpliterator;
+import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 
 import java.util.ArrayList;
 import java.util.List;

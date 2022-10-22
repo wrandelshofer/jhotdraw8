@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
-import org.jhotdraw8.fxml.FxmlUtil;
+import org.jhotdraw8.fxbase.fxml.FxmlUtil;
 import org.jhotdraw8.grapher.action.GrapherAboutAction;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.jhotdraw8.application.action.file.ExportFileAction.EXPORT_CHOOSER_FACTORY_KEY;
-import static org.jhotdraw8.application.clipboard.DataFormats.registerDataFormat;
+import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
 /**
  * GrapherApplication.

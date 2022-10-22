@@ -9,11 +9,11 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
-import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.text.ParseException;

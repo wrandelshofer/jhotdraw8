@@ -6,13 +6,13 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.geom.intersect.IntersectRayRay;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.base.function.Double2Consumer;
 import org.jhotdraw8.base.function.Double4Consumer;
 import org.jhotdraw8.base.function.Double6Consumer;
 import org.jhotdraw8.base.function.Double8Consumer;
+import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.geom.intersect.IntersectRayRay;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -519,7 +519,6 @@ public class BezierCurves {
         return new double[]{left[2], left[3],
                 right[0], right[1], right[2], right[3]};
     }
-
 
 
     /**

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jhotdraw8.collection.ImmutableArrayListTest" time="0.007" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="org.jhotdraw8.collection.ImmutableArrayListTest" time="0.011" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="git.build.version" value="1.0"/>
@@ -13,7 +13,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="CH"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/surefire 2022-10-22T10-17-54_425-jvmRun1 surefire-20221022101800976_4tmp surefire_1-20221022101800976_5tmp"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/surefire 2022-10-22T11-36-20_653-jvmRun1 surefire-20221022113626950_4tmp surefire_1-20221022113626950_5tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:"/>
@@ -21,7 +21,7 @@
     <property name="user.home" value="/Users/wr"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
-    <property name="jdk.module.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/classes:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.annotation/target/org.jhotdraw8.annotation-2022-10-22_43c7afa.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1-mac.jar"/>
+    <property name="jdk.module.path" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/classes:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.annotation/target/classes:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1-mac.jar"/>
     <property name="java.version.date" value="2021-09-14"/>
     <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"/>
     <property name="file.separator" value="/"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="git.commit.id.full" value="43c7afaef2c64f3fb7922f6c10ce84d60179a849"/>
+    <property name="git.commit.id.full" value="eafa9a970b677977aa25b3c11107b06700fc1a14"/>
     <property name="git.build.time" value="2022-10-22"/>
     <property name="surefire.real.class.path" value="/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-booter/3.0.0-M7/surefire-booter-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-api/3.0.0-M7/surefire-api-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-logger-api/3.0.0-M7/surefire-logger-api-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-shared-utils/3.0.0-M7/surefire-shared-utils-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-extensions-spi/3.0.0-M7/surefire-extensions-spi-3.0.0-M7.jar:/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection/target/test-classes:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1.jar:/Users/wr/.m2/repository/org/openjfx/javafx-graphics/18.0.1/javafx-graphics-18.0.1-mac.jar:/Users/wr/.m2/repository/org/openjfx/javafx-base/18.0.1/javafx-base-18.0.1.jar:/Users/wr/.m2/repository/com/google/guava/guava-testlib/31.1-jre/guava-testlib-31.1-jre.jar:/Users/wr/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/wr/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/wr/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/wr/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/wr/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/wr/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/wr/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/wr/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/wr/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/wr/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/wr/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/wr/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/surefire-junit-platform/3.0.0-M7/surefire-junit-platform-3.0.0-M7.jar:/Users/wr/.m2/repository/org/apache/maven/surefire/common-java5/3.0.0-M7/common-java5-3.0.0-M7.jar:/Users/wr/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -49,7 +49,7 @@
     <property name="java.version" value="17"/>
     <property name="user.dir" value="/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.collection"/>
     <property name="os.arch" value="x86_64"/>
-    <property name="git.commit.id.abbrev" value="43c7afa"/>
+    <property name="git.commit.id.abbrev" value="eafa9a9"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="native.encoding" value="US-ASCII"/>
     <property name="java.library.path" value="/Users/wr/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
@@ -60,5 +60,5 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testSubList" classname="org.jhotdraw8.collection.ImmutableArrayListTest" time="0.006"/>
+  <testcase name="testSubList" classname="org.jhotdraw8.collection.ImmutableArrayListTest" time="0.01"/>
 </testsuite>

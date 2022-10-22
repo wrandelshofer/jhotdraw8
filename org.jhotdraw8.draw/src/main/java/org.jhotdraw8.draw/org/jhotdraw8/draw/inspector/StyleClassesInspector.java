@@ -19,6 +19,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.typesafekey.Key;
@@ -28,7 +29,6 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.ObservableWordSetKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
-import org.jhotdraw8.event.Listener;
 import org.jhotdraw8.gui.PlatformUtil;
 
 import java.io.IOException;

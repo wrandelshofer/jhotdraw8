@@ -20,6 +20,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="org.jhotdraw8.geom" />
+        <module name="org.jhotdraw8.fxbase" />
         <module name="org.jhotdraw8.draw" />
         <module name="org.jhotdraw8.css" />
         <module name="org.jhotdraw8.collection" />
@@ -52,6 +53,7 @@
       <module name="org.jhotdraw8.draw" target="17" />
       <module name="org.jhotdraw8.examples" target="17" />
       <module name="org.jhotdraw8.font" target="17" />
+      <module name="org.jhotdraw8.fxbase" target="17" />
       <module name="org.jhotdraw8.fxcollection" target="17" />
       <module name="org.jhotdraw8.geom" target="17" />
       <module name="org.jhotdraw8.graph" target="17" />
@@ -76,6 +78,7 @@
       <module name="org.jhotdraw8.draw" options="-Xlint:all" />
       <module name="org.jhotdraw8.examples" options="-Xlint:all" />
       <module name="org.jhotdraw8.font" options="-Xlint:all" />
+      <module name="org.jhotdraw8.fxbase" options="-Xlint:all" />
       <module name="org.jhotdraw8.fxcollection" options="-Xlint:all" />
       <module name="org.jhotdraw8.geom" options="-Xlint:all" />
       <module name="org.jhotdraw8.graph" options="-Xlint:all" />

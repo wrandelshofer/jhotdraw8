@@ -14,7 +14,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 import java.io.IOException;
 import java.util.Optional;

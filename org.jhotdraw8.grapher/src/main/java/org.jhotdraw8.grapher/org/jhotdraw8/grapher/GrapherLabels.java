@@ -5,7 +5,7 @@
 package org.jhotdraw8.grapher;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 public class GrapherLabels {
     private GrapherLabels() {

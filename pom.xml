@@ -28,6 +28,7 @@
     <module>org.jhotdraw8.annotation</module>
     <module>org.jhotdraw8.application</module>
     <module>org.jhotdraw8.base</module>
+    <module>org.jhotdraw8.fxbase</module>
     <module>org.jhotdraw8.css</module>
     <module>org.jhotdraw8.color</module>
     <module>org.jhotdraw8.draw</module>
@@ -218,6 +219,11 @@
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.base</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.fxbase</artifactId>
         <version>1.0</version>
       </dependency>
       <dependency>

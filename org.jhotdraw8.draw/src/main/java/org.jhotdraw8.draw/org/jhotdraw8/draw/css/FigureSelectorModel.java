@@ -20,10 +20,10 @@ import org.jhotdraw8.css.ListCssTokenizer;
 import org.jhotdraw8.css.QualifiedName;
 import org.jhotdraw8.css.StreamCssTokenizer;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.draw.css.text.CssStringConverter;
+import org.jhotdraw8.css.converter.CssStringConverter;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 import java.io.IOException;
 import java.text.ParseException;

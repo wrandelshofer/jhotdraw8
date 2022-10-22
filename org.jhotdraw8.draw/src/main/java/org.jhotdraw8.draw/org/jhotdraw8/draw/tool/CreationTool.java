@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.css.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -19,7 +20,6 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.util.Resources;
 
 import java.util.function.Supplier;
 

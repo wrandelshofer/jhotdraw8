@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.SelectorModel;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -21,9 +22,8 @@ import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.tree.TreeModelEvent;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 
 /**
  * FXML Controller class

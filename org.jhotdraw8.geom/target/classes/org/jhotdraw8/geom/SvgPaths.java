@@ -9,10 +9,10 @@ import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.intersect.IntersectLinePoint;
-import org.jhotdraw8.base.io.StreamPosTokenizer;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.converter.XmlNumberConverter;
+import org.jhotdraw8.base.io.StreamPosTokenizer;
+import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;

@@ -6,9 +6,9 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.CharBuffer;
 
 import static org.jhotdraw8.css.CssTokenType.TT_AT_KEYWORD;
 import static org.jhotdraw8.css.CssTokenType.TT_BAD_COMMENT;

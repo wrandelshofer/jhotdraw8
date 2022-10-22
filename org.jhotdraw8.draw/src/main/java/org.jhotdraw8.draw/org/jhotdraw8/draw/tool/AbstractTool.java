@@ -23,11 +23,11 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.application.EditableComponent;
+import org.jhotdraw8.application.resources.Resources;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.util.Resources;
 
 import java.util.LinkedList;
 

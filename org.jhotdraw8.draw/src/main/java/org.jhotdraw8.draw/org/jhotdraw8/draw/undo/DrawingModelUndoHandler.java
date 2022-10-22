@@ -3,11 +3,11 @@ package org.jhotdraw8.draw.undo;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.tree.TreeModelEvent;
+import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;

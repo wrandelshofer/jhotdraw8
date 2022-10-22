@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.css.text;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.text.RegexReplace;
+import org.jhotdraw8.base.text.RegexReplace;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

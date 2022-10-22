@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 /**
  * This action toggles the state of its boolean property.

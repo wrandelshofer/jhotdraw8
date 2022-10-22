@@ -25,6 +25,7 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:18.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:18.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:18.0.1" level="project" />
+    <orderEntry type="module" module-name="org.jhotdraw8.fxbase" />
     <orderEntry type="module" module-name="org.jhotdraw8.css" />
     <orderEntry type="module" module-name="org.jhotdraw8.geom" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter:5.8.2" level="project" />

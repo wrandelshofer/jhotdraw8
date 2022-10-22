@@ -7,7 +7,7 @@ package org.jhotdraw8.dock;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import static javafx.geometry.Orientation.VERTICAL;
 

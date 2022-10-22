@@ -15,15 +15,15 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.css.text.CssNumberConverter;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
-import org.jhotdraw8.gui.InputDialog;
+import org.jhotdraw8.fxbase.control.InputDialog;
+import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.svg.io.SvgSceneGraphWriter;
-import org.jhotdraw8.text.StringConverterAdapter;
-import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,7 +34,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
-import static org.jhotdraw8.application.clipboard.DataFormats.registerDataFormat;
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_DRAWING_DPI_KEY;
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_DRAWING_KEY;
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_PAGES_DPI_KEY;
@@ -43,6 +42,7 @@ import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_DPI_KEY;
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_KEY;
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_2X_KEY;
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_3X_KEY;
+import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
 public class DrawingExportOptionsPane extends GridPane {
 

@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
+import org.jhotdraw8.fxbase.control.Disableable;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -21,7 +22,7 @@ import java.util.concurrent.ExecutionException;
  * on an {@link Application}.
  * <p>
  * An AbstractApplicationAction is disabled when it has disablers
- * {@link org.jhotdraw8.application.Disableable} or when its application is disabled.
+ * {@link Disableable} or when its application is disabled.
  *
  * @author Werner Randelshofer.
  */

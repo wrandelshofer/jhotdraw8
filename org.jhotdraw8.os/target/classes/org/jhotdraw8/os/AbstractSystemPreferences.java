@@ -10,10 +10,11 @@ import org.jhotdraw8.annotation.NonNull;
 /**
  * Abstract base class for system preferences.
  */
-public abstract class AbstractSystemPreferences implements SystemPreferences{
-    protected final@NonNull ReadOnlyObjectWrapper<Color> accentColor=new ReadOnlyObjectWrapper<>();
-    protected final@NonNull ReadOnlyObjectWrapper<Appearance> appearance=new ReadOnlyObjectWrapper<>();
-    protected final@NonNull ReadOnlyDoubleWrapper fontSize=new ReadOnlyDoubleWrapper();
+public abstract class AbstractSystemPreferences implements SystemPreferences {
+    protected final @NonNull ReadOnlyObjectWrapper<Color> accentColor = new ReadOnlyObjectWrapper<>();
+    protected final @NonNull ReadOnlyObjectWrapper<Appearance> appearance = new ReadOnlyObjectWrapper<>();
+    protected final @NonNull ReadOnlyDoubleWrapper fontSize = new ReadOnlyDoubleWrapper();
+
     @Override
     public @NonNull ReadOnlyObjectProperty<Color> accentColorProperty() {
         return accentColor.getReadOnlyProperty();

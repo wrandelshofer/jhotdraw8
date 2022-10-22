@@ -15,7 +15,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 /**
  * This track stacks its children on the Z-axis into a tab pane.

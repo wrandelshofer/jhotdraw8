@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.base.util.MathUtil;
+import org.jhotdraw8.geom.Geom;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

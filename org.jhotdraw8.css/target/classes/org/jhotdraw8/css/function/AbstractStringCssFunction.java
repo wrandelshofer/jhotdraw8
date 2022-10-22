@@ -40,19 +40,19 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
         functionProcessor.processToken(element, tt, temp::add, new ArrayDeque<>());
         for (CssToken t : temp) {
             switch (t.getType()) {
-                case CssTokenType.TT_STRING:
-                case CssTokenType.TT_URL:
-                    buf.append(t.getStringValue());
-                    count++;
-                    break;
-                case CssTokenType.TT_NUMBER:
-                case CssTokenType.TT_DIMENSION:
-                case CssTokenType.TT_PERCENTAGE:
-                    buf.append(t.fromToken());
-                    count++;
-                    break;
-                default:
-                    throw new ParseException(getName() + "(): String, Number, Dimension, Percentage or URL expected.", t.getStartPos());
+            case CssTokenType.TT_STRING:
+            case CssTokenType.TT_URL:
+                buf.append(t.getStringValue());
+                count++;
+                break;
+            case CssTokenType.TT_NUMBER:
+            case CssTokenType.TT_DIMENSION:
+            case CssTokenType.TT_PERCENTAGE:
+                buf.append(t.fromToken());
+                count++;
+                break;
+            default:
+                throw new ParseException(getName() + "(): String, Number, Dimension, Percentage or URL expected.", t.getStartPos());
             }
         }
         if (count == 0) {

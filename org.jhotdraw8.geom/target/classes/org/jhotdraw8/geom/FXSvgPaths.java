@@ -17,9 +17,9 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.VLineTo;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.io.StreamPosTokenizer;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.converter.XmlNumberConverter;
+import org.jhotdraw8.base.io.StreamPosTokenizer;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -284,27 +284,27 @@ public class FXSvgPaths {
                     ix = cx2 = cx1 = x;
                     iy = cy2 = cy1 = y;
                     break;
-                    case 'm':
-                        // relative-moveto dx dy
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
-                        x = tt.nval;
-                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'm'");
-                        y = tt.nval;
-                        MoveTo moveTo = new MoveTo(x, y);
-                        if (!first) {
-                            // The first element of a path can not be relative.
-                            moveTo.setAbsolute(false);
-                        }
-                        builder.add(moveTo);
-                        next = 'l';
-                        ix = cx2 = cx1 = x += px;
-                        iy = cy2 = cy1 = y += px;
+                case 'm':
+                    // relative-moveto dx dy
+                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
+                    x = tt.nval;
+                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'm'");
+                    y = tt.nval;
+                    MoveTo moveTo = new MoveTo(x, y);
+                    if (!first) {
+                        // The first element of a path can not be relative.
+                        moveTo.setAbsolute(false);
+                    }
+                    builder.add(moveTo);
+                    next = 'l';
+                    ix = cx2 = cx1 = x += px;
+                    iy = cy2 = cy1 = y += px;
 
-                        break;
-                    case 'Z':
-                        // close path
-                        builder.add(new ClosePath());
-                        next = 'Z';
+                    break;
+                case 'Z':
+                    // close path
+                    builder.add(new ClosePath());
+                    next = 'Z';
                     cx2 = cx1 = x = ix;
                     cy2 = cy1 = y = iy;
                     break;

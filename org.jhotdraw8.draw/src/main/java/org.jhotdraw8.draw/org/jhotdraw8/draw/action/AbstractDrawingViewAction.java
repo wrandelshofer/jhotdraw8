@@ -9,9 +9,9 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.AbstractAction;
-import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 /**
  * This abstract class can be extended to implement an {@code Action} that acts

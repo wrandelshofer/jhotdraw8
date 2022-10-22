@@ -6,6 +6,11 @@
 package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.fxbase.tree.PostorderSpliterator;
+import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
+import org.jhotdraw8.fxbase.tree.SimpleTreeNode;
+import org.jhotdraw8.fxbase.tree.TreeBreadthFirstSpliterator;
+import org.jhotdraw8.fxbase.tree.TreeDepthFirstSpliterator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

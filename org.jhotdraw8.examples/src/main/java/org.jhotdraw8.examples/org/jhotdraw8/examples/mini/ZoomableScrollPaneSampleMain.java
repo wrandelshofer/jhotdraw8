@@ -19,8 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.gui.ZoomableScrollPane;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.geom.FXGeom;
 
 import java.io.IOException;

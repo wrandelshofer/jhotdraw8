@@ -13,7 +13,8 @@ import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
-import org.jhotdraw8.beans.PropertyBean;
+import org.jhotdraw8.fxbase.beans.PropertyBean;
+import org.jhotdraw8.fxbase.control.Disableable;
 
 /**
  * Represents an activity that the user performs with an {@link Application}.

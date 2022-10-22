@@ -53,5 +53,17 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.fxbase</artifactId>
+    </dependency>
   </dependencies>
 </project>

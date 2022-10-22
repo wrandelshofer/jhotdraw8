@@ -17,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,6 +27,7 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.WritableRenderContext;
 import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.ArrayList;

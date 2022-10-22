@@ -12,7 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class FontChooserController extends FontFamilyChooserController {
 

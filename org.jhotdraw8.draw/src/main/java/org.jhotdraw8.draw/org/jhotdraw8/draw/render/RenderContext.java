@@ -8,7 +8,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.ReadOnlyPropertyBean;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.NonNullKey;
 import org.jhotdraw8.collection.typesafekey.NonNullObjectKey;
@@ -19,6 +18,7 @@ import org.jhotdraw8.draw.css.DefaultSystemColorConverter;
 import org.jhotdraw8.draw.css.SystemColorConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.fxbase.beans.ReadOnlyPropertyBean;
 
 import java.time.Instant;
 

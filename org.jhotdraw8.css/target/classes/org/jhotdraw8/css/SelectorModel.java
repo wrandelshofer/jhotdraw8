@@ -256,7 +256,7 @@ public interface SelectorModel<T> {
      *
      * @param element       An element of the document
      * @param namespace     an optional namespace (null means any namespace
-    ,
+     *                      ,
      *                      an empty String means no namespace)
      * @param attributeName an attribute name
      * @return true if the element has an attribute with the specified name
@@ -312,8 +312,8 @@ public interface SelectorModel<T> {
      *
      * @param element   The element
      * @param origin    The style origin
-     * @param namespace     an optional namespace ("*" means any namespace,
-     *                      null means no namespace)
+     * @param namespace an optional namespace ("*" means any namespace,
+     *                  null means no namespace)
      * @param name      The attribute name
      * @param value     The attribute value. {@code null} removes the attribute from the
      *                  element. That is, {@code null} has the same effect like the

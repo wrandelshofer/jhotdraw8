@@ -6,8 +6,8 @@ package org.jhotdraw8.xml;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.tree.ChildIterator;
-import org.jhotdraw8.tree.PreorderSpliterator;
+import org.jhotdraw8.fxbase.tree.ChildIterator;
+import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.application;
 
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 /**
  * ApplicationLabels.

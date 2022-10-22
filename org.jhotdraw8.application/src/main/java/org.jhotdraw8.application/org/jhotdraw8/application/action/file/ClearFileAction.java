@@ -9,7 +9,7 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractSaveUnsavedChangesAction;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 import java.util.concurrent.CompletionStage;
 

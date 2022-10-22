@@ -6,6 +6,7 @@
 package org.jhotdraw8.text;
 
 
+import org.jhotdraw8.base.text.RegexReplace;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

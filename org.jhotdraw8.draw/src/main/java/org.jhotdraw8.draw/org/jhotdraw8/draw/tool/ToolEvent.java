@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.tool;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.event.Event;
+import org.jhotdraw8.base.event.Event;
 
 /**
  * ToolEvent.

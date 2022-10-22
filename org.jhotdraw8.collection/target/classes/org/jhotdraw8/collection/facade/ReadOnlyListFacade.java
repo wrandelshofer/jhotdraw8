@@ -5,10 +5,10 @@
 package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.precondition.Preconditions;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.collection.precondition.Preconditions;
 
 import java.util.List;
 import java.util.function.IntFunction;

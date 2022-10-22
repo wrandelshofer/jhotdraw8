@@ -6,6 +6,8 @@ package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.SimpleUriResolver;
+import org.jhotdraw8.base.converter.UriResolver;
 import org.jhotdraw8.css.ast.AbstractAttributeSelector;
 import org.jhotdraw8.css.ast.AdjacentSiblingCombinator;
 import org.jhotdraw8.css.ast.AndCombinator;
@@ -36,8 +38,6 @@ import org.jhotdraw8.css.ast.SubstringMatchSelector;
 import org.jhotdraw8.css.ast.SuffixMatchSelector;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.ast.UniversalSelector;
-import org.jhotdraw8.base.converter.SimpleUriResolver;
-import org.jhotdraw8.base.converter.UriResolver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -789,11 +789,11 @@ public class CssParser {
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             try {
                 switch (tt.current()) {
-                    case CssTokenType.TT_S:
-                    case CssTokenType.TT_CDC:
-                    case CssTokenType.TT_CDO:
-                    case CssTokenType.TT_COMMENT:
-                        break;
+                case CssTokenType.TT_S:
+                case CssTokenType.TT_CDC:
+                case CssTokenType.TT_CDO:
+                case CssTokenType.TT_COMMENT:
+                    break;
                 case CssTokenType.TT_AT_KEYWORD: {
                     tt.pushBack();
                     final int startPosition = tt.getStartPosition();

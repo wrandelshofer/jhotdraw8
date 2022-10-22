@@ -9,7 +9,7 @@ import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractFileBasedApplication;
 import org.jhotdraw8.application.action.Action;
-import org.jhotdraw8.fxml.FxmlUtil;
+import org.jhotdraw8.fxbase.fxml.FxmlUtil;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIExtensionFilter;
 

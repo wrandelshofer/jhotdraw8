@@ -9,6 +9,7 @@ module org.jhotdraw8.font {
     requires javafx.graphics;
     //FIXME should not depend on application!
     requires org.jhotdraw8.application;
+    requires org.jhotdraw8.fxbase;
 
     exports org.jhotdraw8.font.fontchooser;
     opens org.jhotdraw8.font.fontchooser to javafx.fxml;

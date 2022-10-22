@@ -1,7 +1,7 @@
 package org.jhotdraw8.draw.undo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.tree.TreeModelEvent;
+import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;

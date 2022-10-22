@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.css.text.CssStringOrIdentConverter;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
  * This key has a string value which can be given as a CSS "IDENT"-token or

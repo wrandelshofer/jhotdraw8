@@ -11,6 +11,7 @@
 package org.jhotdraw8.text;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.converter.DefaultConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

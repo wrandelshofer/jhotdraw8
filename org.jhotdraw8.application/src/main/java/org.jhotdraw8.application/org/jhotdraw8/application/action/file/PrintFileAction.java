@@ -12,8 +12,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
-import org.jhotdraw8.concurrent.SimpleWorkState;
-import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
+import org.jhotdraw8.fxbase.concurrent.WorkState;
 
 /**
  * Presents a printer chooser to the user and then prints the

@@ -137,8 +137,6 @@ public class Geom {
     }
 
 
-
-
     /**
      * Returns true if the bounds contain the specified point within the given
      * tolerance.

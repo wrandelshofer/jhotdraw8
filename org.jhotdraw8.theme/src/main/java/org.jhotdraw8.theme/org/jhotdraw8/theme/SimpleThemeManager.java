@@ -10,7 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class SimpleThemeManager implements ThemeManager {
     private final @NonNull ObjectProperty<Theme> theme = new SimpleObjectProperty<>(this, "theme", null);

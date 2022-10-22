@@ -10,10 +10,10 @@ import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullObjectProperty;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 
 /**
  * The DrawingEditor can be used to edit multiple {@code DrawingView}s with a

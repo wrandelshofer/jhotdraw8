@@ -7,7 +7,7 @@ package org.jhotdraw8.dock;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class HBoxTrack extends AbstractDockParent implements Track {
     private final ScrollPane scrollPane = new ScrollPane();

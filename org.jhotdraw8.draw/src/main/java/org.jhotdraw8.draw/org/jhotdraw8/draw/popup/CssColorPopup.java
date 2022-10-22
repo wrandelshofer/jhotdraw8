@@ -13,11 +13,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.NamedCssColor;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import java.util.function.BiConsumer;
 

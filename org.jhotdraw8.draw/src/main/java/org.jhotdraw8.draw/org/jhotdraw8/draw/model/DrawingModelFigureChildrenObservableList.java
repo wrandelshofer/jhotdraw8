@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.model;
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.TransformationList;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.mapped.MappedObservableList;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.event.SimpleWeakListener;
+import org.jhotdraw8.fxbase.event.SimpleWeakListener;
 
 import java.util.Collections;
 import java.util.List;

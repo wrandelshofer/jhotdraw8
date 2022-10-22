@@ -6,14 +6,14 @@ package org.jhotdraw8.geom.contour;
 
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.function.QuadConsumer;
+import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Geom;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.base.function.QuadConsumer;
-import org.jhotdraw8.base.function.TriFunction;
 
 import java.awt.geom.Point2D;
 import java.util.Objects;

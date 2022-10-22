@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.css.text;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.text.ConverterFactory;
-import org.jhotdraw8.text.DefaultConverter;
+import org.jhotdraw8.base.converter.ConverterFactory;
+import org.jhotdraw8.base.converter.DefaultConverter;
 
 /**
  * CssConverterFactory.

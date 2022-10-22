@@ -16,7 +16,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.AbstractPropertyBean;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -26,6 +25,7 @@ import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 
 import java.io.IOException;
 import java.util.ArrayList;

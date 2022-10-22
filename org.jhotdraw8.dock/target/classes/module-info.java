@@ -10,5 +10,6 @@ module org.jhotdraw8.dock {
     requires org.jhotdraw8.annotation;
     requires org.jhotdraw8.application;
     requires org.jhotdraw8.collection;
+    requires org.jhotdraw8.fxbase;
     exports org.jhotdraw8.dock;
 }

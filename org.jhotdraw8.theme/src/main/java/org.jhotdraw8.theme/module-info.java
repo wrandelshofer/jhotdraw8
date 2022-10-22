@@ -8,4 +8,5 @@ module org.jhotdraw8.theme {
     requires org.jhotdraw8.color;
     requires org.jhotdraw8.os;
     requires org.jhotdraw8.annotation;
+    requires org.jhotdraw8.fxbase;
 }

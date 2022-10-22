@@ -9,12 +9,12 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.util.Resources;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -43,12 +43,14 @@ public interface CssFunction<T> {
 
     /**
      * Gets localized help text about this function.
+     *
      * @return localized help text
      */
     String getHelpText();
 
     /**
      * Returns the function name.
+     *
      * @return the function name
      */
     String getName();

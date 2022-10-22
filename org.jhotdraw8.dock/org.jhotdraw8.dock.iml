@@ -22,5 +22,6 @@
     <orderEntry type="module" module-name="org.jhotdraw8.collection" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:18.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:18.0.1" level="project" />
+    <orderEntry type="module" module-name="org.jhotdraw8.fxbase" />
   </component>
 </module>

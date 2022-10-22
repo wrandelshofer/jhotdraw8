@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.css.text.CssListConverter;
 import org.jhotdraw8.draw.css.text.CssTransformConverter;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
  * TransformListStyleableKey.

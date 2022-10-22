@@ -57,8 +57,12 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         EqualsMatchSelector that = (EqualsMatchSelector) o;
         return Objects.equals(namespace, that.namespace) && attributeName.equals(that.attributeName) && attributeValue.equals(that.attributeValue);
     }

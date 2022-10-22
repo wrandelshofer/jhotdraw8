@@ -7,6 +7,7 @@ package org.jhotdraw8.tree;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.fxbase.tree.TreeNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

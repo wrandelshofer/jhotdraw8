@@ -14,11 +14,12 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.concurrent.CompletableWorker;
-import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.concurrent.SimpleCompletableWorker;
-import org.jhotdraw8.concurrent.SimpleWorkState;
-import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.fxbase.concurrent.CompletableWorker;
+import org.jhotdraw8.fxbase.concurrent.FXWorker;
+import org.jhotdraw8.fxbase.concurrent.SimpleCompletableWorker;
+import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
+import org.jhotdraw8.fxbase.concurrent.WorkState;
+import org.jhotdraw8.fxbase.control.Disableable;
 
 import java.net.URI;
 import java.util.concurrent.CompletionStage;

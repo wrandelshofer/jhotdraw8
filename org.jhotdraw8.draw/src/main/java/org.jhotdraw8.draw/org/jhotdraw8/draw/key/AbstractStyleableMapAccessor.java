@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;

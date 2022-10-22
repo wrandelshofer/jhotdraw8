@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.constrain;
 
-import org.jhotdraw8.beans.SimpleObservable;
+import org.jhotdraw8.fxbase.beans.SimpleObservable;
 
 /**
  * AbstractConstrainer.

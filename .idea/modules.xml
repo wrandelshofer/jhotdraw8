@@ -13,6 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.examples/org.jhotdraw8.examples.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.examples/org.jhotdraw8.examples.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.font/org.jhotdraw8.font.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.font/org.jhotdraw8.font.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.fxbase/org.jhotdraw8.fxbase.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.fxbase/org.jhotdraw8.fxbase.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.fxcollection/org.jhotdraw8.fxcollection.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.fxcollection/org.jhotdraw8.fxcollection.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.geom/org.jhotdraw8.geom.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.geom/org.jhotdraw8.geom.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" />

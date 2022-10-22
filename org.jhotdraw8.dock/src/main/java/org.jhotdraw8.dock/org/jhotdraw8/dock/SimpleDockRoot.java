@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.gui.RectangleTransition;
 
 import java.util.ArrayDeque;

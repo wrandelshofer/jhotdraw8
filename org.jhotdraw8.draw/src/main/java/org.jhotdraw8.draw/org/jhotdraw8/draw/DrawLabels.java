@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 public class DrawLabels {
     private static Resources labels;

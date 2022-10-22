@@ -18,13 +18,13 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
-import org.jhotdraw8.concurrent.SimpleWorkState;
-import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
+import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.gui.FileURIChooser;
 import org.jhotdraw8.gui.URIChooser;
 import org.jhotdraw8.net.UriUtil;
-import org.jhotdraw8.util.Resources;
 
 import java.net.URI;
 import java.util.ArrayList;

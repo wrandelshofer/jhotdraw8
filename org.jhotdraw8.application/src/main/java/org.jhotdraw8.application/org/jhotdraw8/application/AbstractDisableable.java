@@ -10,6 +10,7 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.fxbase.control.Disableable;
 
 /**
  * AbstractDisableable.

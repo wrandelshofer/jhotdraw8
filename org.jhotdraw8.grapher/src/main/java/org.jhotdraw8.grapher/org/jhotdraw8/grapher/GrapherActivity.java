@@ -25,12 +25,11 @@ import org.jhotdraw8.application.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.application.action.file.ExportFileAction;
 import org.jhotdraw8.application.action.file.PrintFileAction;
 import org.jhotdraw8.application.action.view.ToggleBooleanAction;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.dock.DockChild;
 import org.jhotdraw8.dock.DockRoot;
 import org.jhotdraw8.dock.Dockable;
@@ -129,9 +128,10 @@ import org.jhotdraw8.draw.tool.SelectionTool;
 import org.jhotdraw8.draw.tool.TextCreationTool;
 import org.jhotdraw8.draw.tool.TextEditingTool;
 import org.jhotdraw8.draw.tool.Tool;
+import org.jhotdraw8.fxbase.concurrent.FXWorker;
+import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
-import org.jhotdraw8.util.Resources;
 
 import java.io.IOException;
 import java.net.URI;
@@ -149,7 +149,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 
-import static org.jhotdraw8.application.clipboard.DataFormats.registerDataFormat;
+import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
 /**
  * GrapherActivityController.

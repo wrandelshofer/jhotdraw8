@@ -13,14 +13,14 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.concurrent.SimpleWorkState;
-import org.jhotdraw8.concurrent.WorkState;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
+import org.jhotdraw8.fxbase.concurrent.WorkState;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLInputFactory;

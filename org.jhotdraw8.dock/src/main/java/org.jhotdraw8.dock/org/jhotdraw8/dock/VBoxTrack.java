@@ -9,7 +9,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.binding.CustomBinding;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class VBoxTrack extends AbstractDockParent implements Track {
     private final ScrollPane scrollPane = new ScrollPane();

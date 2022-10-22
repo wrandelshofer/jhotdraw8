@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
@@ -18,7 +19,6 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.util.Resources;
 
 import java.util.function.Supplier;
 

@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.Paintable;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
 

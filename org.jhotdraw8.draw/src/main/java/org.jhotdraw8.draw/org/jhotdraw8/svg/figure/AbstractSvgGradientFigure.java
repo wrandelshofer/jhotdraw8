@@ -11,6 +11,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.MappedConverter;
 import org.jhotdraw8.collection.MapEntries;
 import org.jhotdraw8.collection.champ.ChampSequencedMap;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
@@ -35,7 +36,6 @@ import org.jhotdraw8.draw.key.SimpleNonNullStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
-import org.jhotdraw8.text.MappedConverter;
 
 import java.util.ArrayList;
 

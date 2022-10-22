@@ -7,9 +7,9 @@ package org.jhotdraw8.css;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.function.TriConsumer;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.base.function.TriConsumer;
 
 import java.net.URI;
 import java.text.ParseException;

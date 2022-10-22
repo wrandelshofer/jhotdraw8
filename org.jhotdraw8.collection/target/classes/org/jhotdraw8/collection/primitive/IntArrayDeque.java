@@ -5,8 +5,8 @@
 package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.precondition.Preconditions;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.AbstractCollection;
 import java.util.ConcurrentModificationException;

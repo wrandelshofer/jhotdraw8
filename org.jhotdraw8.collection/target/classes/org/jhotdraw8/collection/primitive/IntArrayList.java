@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.precondition.Preconditions;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.AbstractList;
 import java.util.Arrays;

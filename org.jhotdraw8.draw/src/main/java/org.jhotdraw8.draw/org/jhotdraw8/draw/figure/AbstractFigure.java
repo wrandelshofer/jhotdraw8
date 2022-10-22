@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -20,8 +21,7 @@ import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.CssDefaulting;
 import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.styleable.AbstractStyleablePropertyBean;
+import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;

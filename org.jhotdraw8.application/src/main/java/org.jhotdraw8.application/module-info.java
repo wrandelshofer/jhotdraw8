@@ -4,7 +4,6 @@
  */
 
 import org.jhotdraw8.application.spi.ApplicationResourceBundleProvider;
-import org.jhotdraw8.application.spi.NodeReaderProvider;
 
 @SuppressWarnings("module")
 module org.jhotdraw8.application {
@@ -17,6 +16,7 @@ module org.jhotdraw8.application {
     requires org.jhotdraw8.annotation;
     requires org.jhotdraw8.collection;
     requires org.jhotdraw8.base;
+    requires org.jhotdraw8.fxbase;
 
     exports org.jhotdraw8.application;
     exports org.jhotdraw8.application.action;
@@ -25,23 +25,16 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.application.action.view;
     exports org.jhotdraw8.application.spi;
     exports org.jhotdraw8.application.undo;
-    exports org.jhotdraw8.concurrent;
     exports org.jhotdraw8.net;
     exports org.jhotdraw8.util;
     exports org.jhotdraw8.util.prefs;
-    exports org.jhotdraw8.beans;
-    exports org.jhotdraw8.binding;
     exports org.jhotdraw8.gui;
-    exports org.jhotdraw8.event;
     exports org.jhotdraw8.text;
     exports org.jhotdraw8.application.action.app;
-    exports org.jhotdraw8.fxml;
-    exports org.jhotdraw8.tree;
-    exports org.jhotdraw8.application.clipboard;
+    exports org.jhotdraw8.application.resources;
 
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
 
-    uses NodeReaderProvider;
-    provides NodeReaderProvider with org.jhotdraw8.application.spi.FxmlNodeReaderProvider, org.jhotdraw8.application.spi.ImageNodeReaderProvider;
+    uses org.jhotdraw8.fxbase.spi.NodeReaderProvider;
 }

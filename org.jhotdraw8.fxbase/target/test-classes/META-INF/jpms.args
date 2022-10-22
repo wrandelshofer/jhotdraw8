@@ -1,0 +1,4 @@
+--patch-module
+org.jhotdraw8.fxbase=_
+--add-reads
+org.jhotdraw8.fxbase=ALL-UNNAMED

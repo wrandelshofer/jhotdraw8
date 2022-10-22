@@ -7,6 +7,9 @@ package org.jhotdraw8.css;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.SimpleUriResolver;
+import org.jhotdraw8.base.converter.UriResolver;
+import org.jhotdraw8.base.function.TriConsumer;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
@@ -16,9 +19,6 @@ import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.function.CssFunction;
-import org.jhotdraw8.base.converter.SimpleUriResolver;
-import org.jhotdraw8.base.converter.UriResolver;
-import org.jhotdraw8.base.function.TriConsumer;
 
 import java.io.IOException;
 import java.net.URI;
@@ -163,30 +163,30 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private LinkedHashMap<Object, StylesheetEntry> getMap(@NonNull StyleOrigin origin) {
         switch (origin) {
-            case AUTHOR:
-                return authorList;
-            case USER_AGENT:
-                return userAgentList;
-            case INLINE:
-                return inlineList;
-            default:
-                throw new IllegalArgumentException("illegal origin:" + origin);
+        case AUTHOR:
+            return authorList;
+        case USER_AGENT:
+            return userAgentList;
+        case INLINE:
+            return inlineList;
+        default:
+            throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
     private void setMap(@NonNull StyleOrigin origin, LinkedHashMap<Object, StylesheetEntry> newValue) {
         switch (origin) {
-            case AUTHOR:
-                authorList = newValue;
-                break;
-            case USER_AGENT:
-                userAgentList = newValue;
-                break;
-            case INLINE:
-                inlineList = newValue;
-                break;
-            default:
-                throw new IllegalArgumentException("illegal origin:" + origin);
+        case AUTHOR:
+            authorList = newValue;
+            break;
+        case USER_AGENT:
+            userAgentList = newValue;
+            break;
+        case INLINE:
+            inlineList = newValue;
+            break;
+        default:
+            throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
@@ -458,12 +458,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 CssToken first = value.size() == 0 ? null : value.getFirst();
                 if (first != null && first.getType() == CssTokenType.TT_IDENT) {
                     switch (first.getStringValueNonNull()) {
-                        case CssTokenType.IDENT_UNSET:
-                            appliedValue = null;
-                            break;
-                        default:
-                            appliedValue = value;
-                            break;
+                    case CssTokenType.IDENT_UNSET:
+                        appliedValue = null;
+                        break;
+                    default:
+                        appliedValue = value;
+                        break;
                     }
                 } else {
                     appliedValue = value;

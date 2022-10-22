@@ -51,8 +51,12 @@ public class ClassSelector extends SimpleSelector {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ClassSelector that = (ClassSelector) o;
         return clazz.equals(that.clazz);
     }

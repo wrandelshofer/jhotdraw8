@@ -12,6 +12,7 @@ module org.jhotdraw8.examples {
     requires org.jhotdraw8.dock;
     requires org.jhotdraw8.geom;
     requires org.jhotdraw8.base;
+    requires org.jhotdraw8.fxbase;
 
     exports org.jhotdraw8.examples.mini to javafx.graphics, javafx.fxml;
     exports org.jhotdraw8.examples.colorspace;

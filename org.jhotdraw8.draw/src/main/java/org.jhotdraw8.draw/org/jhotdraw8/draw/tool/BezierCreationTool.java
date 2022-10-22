@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -25,7 +26,6 @@ import org.jhotdraw8.geom.BezierFit;
 import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.BezierNodePathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.util.Resources;
 
 import java.util.ArrayList;
 import java.util.List;

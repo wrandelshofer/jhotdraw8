@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.primitive.LongArrayHeap;
 import org.jhotdraw8.collection.precondition.Preconditions;
+import org.jhotdraw8.collection.primitive.LongArrayHeap;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

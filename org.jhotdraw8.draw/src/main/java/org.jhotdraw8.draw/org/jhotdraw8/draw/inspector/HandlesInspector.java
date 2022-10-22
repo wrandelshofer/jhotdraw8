@@ -17,14 +17,14 @@ import javafx.scene.control.TextField;
 import javafx.util.converter.NumberStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullObjectProperty;
-import org.jhotdraw8.binding.CustomBinding;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.NamedCssColor;
 import org.jhotdraw8.draw.css.text.CssColorConverter;
+import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
+import org.jhotdraw8.fxbase.binding.CustomBinding;
+import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.StringConverterAdapter;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -24,10 +24,10 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.action.Action;
-import org.jhotdraw8.beans.NonNullObjectProperty;
+import org.jhotdraw8.application.resources.EmptyResources;
+import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.util.EmptyResources;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 
 import java.net.URI;
 import java.net.URISyntaxException;

@@ -13,7 +13,9 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-/** Encapsulates system preferences. */
+/**
+ * Encapsulates system preferences.
+ */
 public interface SystemPreferences {
     @NonNull ObjectProperty<SystemPreferences> instance = new SimpleObjectProperty<>();
 
@@ -46,6 +48,7 @@ public interface SystemPreferences {
      * @return accent color property
      */
     @NonNull ReadOnlyObjectProperty<Appearance> appearanceProperty();
+
     default @Nullable Appearance getAppearance() {
         return appearanceProperty().get();
     }
@@ -56,6 +59,7 @@ public interface SystemPreferences {
      * @return font size property
      */
     @NonNull ReadOnlyDoubleProperty fontSizeProperty();
+
     default double getFontSize() {
         return fontSizeProperty().get();
     }

@@ -10,7 +10,7 @@ import javafx.concurrent.Task;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
-import org.jhotdraw8.util.Resources;
+import org.jhotdraw8.application.resources.Resources;
 
 import java.util.ArrayList;
 import java.util.Arrays;

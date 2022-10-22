@@ -13,6 +13,8 @@ module org.jhotdraw8.teddy {
     requires org.jhotdraw8.annotation;
     requires org.jhotdraw8.collection;
     requires org.jhotdraw8.font;
+    requires org.jhotdraw8.fxbase;
+    requires org.jhotdraw8.base;
     provides java.util.spi.ResourceBundleProvider with TeddyResourceBundleProvider;
 
     opens org.jhotdraw8.samples.teddy

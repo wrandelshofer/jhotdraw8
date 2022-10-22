@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.jhotdraw8.collection.champ.ChampImmutableSetTest
 -------------------------------------------------------------------------------
-Tests run: 193, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.15 s - in org.jhotdraw8.collection.champ.ChampImmutableSetTest
+Tests run: 193, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.167 s - in org.jhotdraw8.collection.champ.ChampImmutableSetTest

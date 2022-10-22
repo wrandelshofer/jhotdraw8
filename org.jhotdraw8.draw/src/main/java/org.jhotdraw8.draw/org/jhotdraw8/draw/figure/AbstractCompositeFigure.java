@@ -12,8 +12,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.fxbase.tree.ChildList;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.tree.ChildList;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

@@ -31,10 +31,10 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.gui.ClipboardIO;
 import org.jhotdraw8.gui.ListViewUtil;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.text.StringConverterAdapter;
 import org.jhotdraw8.xml.text.XmlUriConverter;
 
 import java.io.File;

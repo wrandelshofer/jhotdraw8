@@ -28,5 +28,6 @@
     <orderEntry type="module" module-name="org.jhotdraw8.application" />
     <orderEntry type="module" module-name="org.jhotdraw8.base" />
     <orderEntry type="module" module-name="org.jhotdraw8.collection" />
+    <orderEntry type="module" module-name="org.jhotdraw8.fxbase" />
   </component>
 </module>

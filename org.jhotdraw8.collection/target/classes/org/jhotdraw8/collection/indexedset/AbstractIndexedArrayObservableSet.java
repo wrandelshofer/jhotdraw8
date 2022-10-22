@@ -9,9 +9,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.ReversedListEnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacadeFacade;
+import org.jhotdraw8.collection.precondition.Preconditions;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
-import org.jhotdraw8.collection.precondition.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Arrays;

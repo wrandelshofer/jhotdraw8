@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ @(#)pom.xml
+  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ch.randelshofer</groupId>
+    <artifactId>org.jhotdraw8</artifactId>
+    <version>1.0</version>
+  </parent>
+  <artifactId>org.jhotdraw8.fxbase</artifactId>
+  <packaging>jar</packaging>
+
+  <name>JHotDraw8 FXBase Framework</name>
+
+  <build>
+    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.fxbase</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.fxbase</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/java/org.jhotdraw8.fxbase</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>${basedir}/src/test/java/org.jhotdraw8.fxbase</directory>
+      </testResource>
+    </testResources>
+
+    <plugins></plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.collection</artifactId>
+    </dependency>
+  </dependencies>
+</project>

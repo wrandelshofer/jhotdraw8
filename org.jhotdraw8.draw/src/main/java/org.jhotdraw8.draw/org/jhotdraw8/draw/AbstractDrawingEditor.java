@@ -17,12 +17,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.beans.NonNullObjectProperty;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.tool.ToolEvent;
-import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 
 import java.util.HashSet;
 

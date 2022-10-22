@@ -68,8 +68,8 @@ import org.jhotdraw8.draw.popup.ExamplesPicker;
 import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
 import org.jhotdraw8.draw.popup.Picker;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.gui.PlatformUtil;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 
 import java.io.IOException;
 import java.io.InputStream;

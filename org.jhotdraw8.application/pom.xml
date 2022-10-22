@@ -79,5 +79,9 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.fxbase</artifactId>
+    </dependency>
   </dependencies>
 </project>

@@ -3,7 +3,6 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-import org.jhotdraw8.application.spi.NodeReaderProvider;
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
 import org.jhotdraw8.draw.spi.SvgImageReaderProvider;
 
@@ -16,13 +15,14 @@ module org.jhotdraw8.draw {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive org.jhotdraw8.application;
-    requires org.jhotdraw8.annotation;
-    requires org.jhotdraw8.collection;
-    requires org.jhotdraw8.base;
-    requires org.jhotdraw8.font;
-    requires org.jhotdraw8.css;
-    requires org.jhotdraw8.geom;
-    requires org.jhotdraw8.graph;
+    requires transitive org.jhotdraw8.annotation;
+    requires transitive org.jhotdraw8.collection;
+    requires transitive org.jhotdraw8.base;
+    requires transitive org.jhotdraw8.font;
+    requires transitive org.jhotdraw8.css;
+    requires transitive org.jhotdraw8.geom;
+    requires transitive org.jhotdraw8.graph;
+    requires transitive org.jhotdraw8.fxbase;
 
     opens org.jhotdraw8.draw.inspector;
     opens org.jhotdraw8.draw;
@@ -51,11 +51,10 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.locator;
     exports org.jhotdraw8.xml.text;
     exports org.jhotdraw8.xml;
-    exports org.jhotdraw8.styleable;
     exports org.jhotdraw8.draw.gui;
     exports org.jhotdraw8.svg.io;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
-    provides NodeReaderProvider with SvgImageReaderProvider;
+    provides org.jhotdraw8.fxbase.spi.NodeReaderProvider with SvgImageReaderProvider;
 
 }

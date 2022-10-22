@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.ApplicationLabels;
-import org.jhotdraw8.concurrent.FXWorker;
+import org.jhotdraw8.fxbase.concurrent.FXWorker;
 
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;

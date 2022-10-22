@@ -6,8 +6,8 @@
 package org.jhotdraw8.draw.spi;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.application.spi.NodeReader;
-import org.jhotdraw8.application.spi.NodeReaderProvider;
+import org.jhotdraw8.fxbase.spi.NodeReader;
+import org.jhotdraw8.fxbase.spi.NodeReaderProvider;
 
 import java.net.URL;
 

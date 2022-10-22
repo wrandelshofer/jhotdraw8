@@ -20,8 +20,8 @@ import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.concurrent.FXWorker;
-import org.jhotdraw8.concurrent.WorkState;
+import org.jhotdraw8.fxbase.concurrent.FXWorker;
+import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.samples.teddy.action.FontAction;
 import org.jhotdraw8.samples.teddy.action.FontableActivity;
 

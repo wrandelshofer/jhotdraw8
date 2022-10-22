@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.resources.ResourceDecoder;
 
 import java.io.IOException;
 import java.io.InputStream;

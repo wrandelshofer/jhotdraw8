@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.tree.PreorderSpliterator;
+import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 
 import java.util.ArrayList;
 import java.util.Collections;

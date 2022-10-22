@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.CssDimension2D;
 import org.jhotdraw8.draw.css.text.CssDimension2DConverter;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
  * Non-null CssDimension2DStyleableFigureKey.

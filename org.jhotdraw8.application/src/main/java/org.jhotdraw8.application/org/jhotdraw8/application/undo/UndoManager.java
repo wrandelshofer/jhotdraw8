@@ -4,7 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.event.Listener;
+import org.jhotdraw8.base.event.Listener;
 
 public interface UndoManager extends Listener<UndoableEdit> {
     default boolean isUndoable() {

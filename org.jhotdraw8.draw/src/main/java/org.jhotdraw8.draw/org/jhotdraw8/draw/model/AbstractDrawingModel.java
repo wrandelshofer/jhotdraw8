@@ -5,9 +5,9 @@
 package org.jhotdraw8.draw.model;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.event.Listener;
-import org.jhotdraw8.tree.AbstractTreeModel;
+import org.jhotdraw8.fxbase.tree.AbstractTreeModel;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

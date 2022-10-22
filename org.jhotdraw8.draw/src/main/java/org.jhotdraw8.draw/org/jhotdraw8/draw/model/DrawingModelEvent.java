@@ -6,10 +6,10 @@ package org.jhotdraw8.draw.model;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.event.Event;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.event.Event;
 
 /**
  * DrawingModelEvent.

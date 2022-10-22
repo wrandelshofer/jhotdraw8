@@ -10,8 +10,8 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.draw.css.text.CssBezierNodeListConverter;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.geom.BezierNode;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
 
 /**
  * BezierNodeListStyleableKey.

@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.text.CssBooleanConverter;
-import org.jhotdraw8.styleable.ReadOnlyStyleableMapAccessor;
-import org.jhotdraw8.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
  * Nullable BooleanStyleableKey.
