@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;

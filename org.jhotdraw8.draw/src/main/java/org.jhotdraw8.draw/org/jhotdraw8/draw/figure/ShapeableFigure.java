@@ -9,7 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;

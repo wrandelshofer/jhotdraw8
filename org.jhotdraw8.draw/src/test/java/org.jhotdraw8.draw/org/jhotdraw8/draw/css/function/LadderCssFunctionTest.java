@@ -7,12 +7,12 @@ package org.jhotdraw8.draw.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.CssFunctionProcessor;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.DocumentSelectorModel;
-import org.jhotdraw8.css.SimpleCssFunctionProcessor;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.function.VarCssFunction;
+import org.jhotdraw8.css.manager.CssFunctionProcessor;
+import org.jhotdraw8.css.manager.SimpleCssFunctionProcessor;
+import org.jhotdraw8.css.model.DocumentSelectorModel;
+import org.jhotdraw8.css.parser.CssToken;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Element;

@@ -6,12 +6,12 @@ package org.jhotdraw8.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
-import org.jhotdraw8.css.CssFunctionProcessor;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.ListCssTokenizer;
-import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.manager.CssFunctionProcessor;
+import org.jhotdraw8.css.model.SelectorModel;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.css.parser.ListCssTokenizer;
 
 import java.io.IOException;
 import java.text.ParseException;

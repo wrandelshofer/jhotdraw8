@@ -8,8 +8,8 @@ import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 
 import java.util.Objects;
 

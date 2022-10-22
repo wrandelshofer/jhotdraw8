@@ -14,7 +14,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.handle.Handle;

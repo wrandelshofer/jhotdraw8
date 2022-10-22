@@ -6,9 +6,9 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.model.SelectorModel;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -43,7 +43,7 @@ public class DashMatchSelector extends AbstractAttributeSelector {
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
-        if (!SelectorModel.ANY_NAMESPACE.equals(namespace)) {
+        if (!TypeSelector.ANY_NAMESPACE.equals(namespace)) {
             if (namespace != null) {
                 consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
             }

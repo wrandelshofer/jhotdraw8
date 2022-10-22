@@ -13,7 +13,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.XmlNumberConverter;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;

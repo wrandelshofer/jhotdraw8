@@ -40,11 +40,11 @@
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.annotation</artifactId>
+      <artifactId>org.jhotdraw8.base</artifactId>
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.application</artifactId>
+      <artifactId>org.jhotdraw8.collection</artifactId>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

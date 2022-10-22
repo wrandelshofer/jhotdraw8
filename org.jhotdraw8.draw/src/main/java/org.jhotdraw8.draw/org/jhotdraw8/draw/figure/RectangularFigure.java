@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;

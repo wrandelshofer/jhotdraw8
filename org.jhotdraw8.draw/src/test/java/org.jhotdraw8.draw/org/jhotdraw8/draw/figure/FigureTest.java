@@ -18,7 +18,7 @@ import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.render.RenderContext;

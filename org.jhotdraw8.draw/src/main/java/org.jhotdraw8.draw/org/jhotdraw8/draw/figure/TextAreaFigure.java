@@ -13,7 +13,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.locator.BoundsLocator;

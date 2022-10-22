@@ -6,6 +6,7 @@ package org.jhotdraw8.css;
 
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.css.parser.CssScanner;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

@@ -12,9 +12,9 @@ import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.css.parser.StreamCssTokenizer;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

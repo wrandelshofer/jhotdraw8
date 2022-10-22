@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.reflect.TypeToken;
-import org.jhotdraw8.css.CssDefaultableValue;
 import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.draw.css.converter.CssDefaultableValueConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 

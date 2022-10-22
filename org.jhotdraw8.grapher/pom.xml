@@ -49,7 +49,7 @@
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.dock</artifactId>
+      <artifactId>org.jhotdraw8.fxcontrols</artifactId>
     </dependency>
   </dependencies>
 

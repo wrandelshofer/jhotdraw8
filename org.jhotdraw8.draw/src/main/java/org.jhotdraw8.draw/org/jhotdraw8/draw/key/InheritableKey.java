@@ -4,10 +4,12 @@
  */
 package org.jhotdraw8.draw.key;
 
+import org.jhotdraw8.css.value.CssDefaulting;
+
 /**
  * This interface is used to mark a key as inheritable.
  * <p>
- * See {@link org.jhotdraw8.css.CssDefaulting}.
+ * See {@link CssDefaulting}.
  */
 public interface InheritableKey {
 }

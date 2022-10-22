@@ -8,8 +8,8 @@ package org.jhotdraw8.draw.figure;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssDefaultableValue;
-import org.jhotdraw8.css.CssDefaulting;
+import org.jhotdraw8.css.value.CssDefaultableValue;
+import org.jhotdraw8.css.value.CssDefaulting;
 import org.jhotdraw8.draw.key.DefaultableStyleableMapAccessor;
 
 import java.util.Objects;

@@ -8,12 +8,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.UnitConverter;
 import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 
 import java.io.IOException;
 import java.text.ParseException;

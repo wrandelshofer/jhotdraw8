@@ -37,13 +37,6 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.CssParser;
-import org.jhotdraw8.css.CssPrettyPrinter;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.SelectorModel;
-import org.jhotdraw8.css.StylesheetsManager;
 import org.jhotdraw8.css.ast.AndCombinator;
 import org.jhotdraw8.css.ast.ClassSelector;
 import org.jhotdraw8.css.ast.Declaration;
@@ -56,6 +49,13 @@ import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.css.io.CssPrettyPrinter;
+import org.jhotdraw8.css.manager.StylesheetsManager;
+import org.jhotdraw8.css.model.SelectorModel;
+import org.jhotdraw8.css.parser.CssParser;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.CssFont;
 import org.jhotdraw8.draw.css.Paintable;
@@ -409,7 +409,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         List<SimpleSelector> selectors = new ArrayList<>();
         if (type != null && !type.getName().isEmpty()) {
-            selectors.add(new TypeSelector(SelectorModel.ANY_NAMESPACE, type.getName()));
+            selectors.add(new TypeSelector(TypeSelector.ANY_NAMESPACE, type.getName()));
         }
         if (id != null && id.length() > 0) {
             selectors.add(new IdSelector(id));

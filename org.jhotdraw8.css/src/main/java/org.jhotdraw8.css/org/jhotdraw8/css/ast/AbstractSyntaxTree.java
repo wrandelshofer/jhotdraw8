@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.parser.CssToken;
 
 import java.util.function.Consumer;
 

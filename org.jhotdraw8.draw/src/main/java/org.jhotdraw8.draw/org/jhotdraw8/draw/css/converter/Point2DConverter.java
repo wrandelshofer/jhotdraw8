@@ -9,10 +9,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.parser.CssTokenizer;
 
 import java.io.IOException;
 import java.text.ParseException;

@@ -17,10 +17,10 @@ import java.util.List;
  */
 public class StyleRule extends Rule {
 
-    private final SelectorGroup selectorList;
+    private final @NonNull SelectorGroup selectorList;
     private final @NonNull ImmutableList<Declaration> declarations;
 
-    public StyleRule(SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
+    public StyleRule(@NonNull SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
         this.selectorList = selectorGroup;
         this.declarations = ImmutableArrayList.copyOf(declarations);
     }

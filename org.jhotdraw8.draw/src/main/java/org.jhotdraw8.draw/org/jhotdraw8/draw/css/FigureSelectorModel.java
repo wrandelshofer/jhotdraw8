@@ -12,15 +12,16 @@ import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.css.AbstractSelectorModel;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
-import org.jhotdraw8.css.ListCssTokenizer;
-import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssStringConverter;
+import org.jhotdraw8.css.model.AbstractSelectorModel;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.css.parser.ListCssTokenizer;
+import org.jhotdraw8.css.parser.StreamCssTokenizer;
+import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -79,7 +80,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public boolean hasType(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String type) {
-        if (namespacePattern == null || ANY_NAMESPACE.equals(namespacePattern)) {
+        if (namespacePattern == null || TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
             return type.equals(element.getTypeSelector());
         }
         if (JAVA_CLASS_NAMESPACE.equals(namespacePattern)) {
@@ -136,7 +137,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     if (sk.getCssNamespace() != null) {
                         m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
                     }
-                    m.put(new QualifiedName(ANY_NAMESPACE, element.getClass() + "$" + sk.getCssName()), sk);
+                    m.put(new QualifiedName(TypeSelector.ANY_NAMESPACE, element.getClass() + "$" + sk.getCssName()), sk);
                 }
             }
             return m;

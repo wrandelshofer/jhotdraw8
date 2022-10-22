@@ -9,12 +9,11 @@
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.collection/org.jhotdraw8.collection.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.collection/org.jhotdraw8.collection.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.color/org.jhotdraw8.color.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.color/org.jhotdraw8.color.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.css/org.jhotdraw8.css.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.css/org.jhotdraw8.css.iml" />
-      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.dock/org.jhotdraw8.dock.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.dock/org.jhotdraw8.dock.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.draw/org.jhotdraw8.draw.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.examples/org.jhotdraw8.examples.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.examples/org.jhotdraw8.examples.iml" />
-      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.font/org.jhotdraw8.font.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.font/org.jhotdraw8.font.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.fxbase/org.jhotdraw8.fxbase.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.fxbase/org.jhotdraw8.fxbase.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.fxcollection/org.jhotdraw8.fxcollection.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.fxcollection/org.jhotdraw8.fxcollection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.fxcontrols/org.jhotdraw8.fxcontrols.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.fxcontrols/org.jhotdraw8.fxcontrols.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.geom/org.jhotdraw8.geom.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.geom/org.jhotdraw8.geom.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.grapher/org.jhotdraw8.grapher.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.grapher/org.jhotdraw8.grapher.iml" />

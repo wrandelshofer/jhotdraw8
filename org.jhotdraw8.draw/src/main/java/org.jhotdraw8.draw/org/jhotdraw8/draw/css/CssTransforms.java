@@ -8,12 +8,18 @@ package org.jhotdraw8.draw.css;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.DefaultUnitConverter;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.DefaultUnitConverter;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.geom.FXTransforms;
 
 public class CssTransforms {
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private CssTransforms() {
+    }
+
     public static @NonNull CssRectangle2D transform(@NonNull Transform transform, @NonNull CssRectangle2D b) {
         Bounds tb = transform.transform(b.getConvertedBoundsValue());
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();

@@ -7,9 +7,9 @@ package org.jhotdraw8.draw.css;
 import javafx.geometry.Insets;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.DefaultUnitConverter;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.DefaultUnitConverter;
+import org.jhotdraw8.css.value.UnitConverter;
 
 import java.util.Objects;
 

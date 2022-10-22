@@ -18,7 +18,7 @@ module org.jhotdraw8.draw {
     requires transitive org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;
-    requires transitive org.jhotdraw8.font;
+    requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.css;
     requires transitive org.jhotdraw8.geom;
     requires transitive org.jhotdraw8.graph;

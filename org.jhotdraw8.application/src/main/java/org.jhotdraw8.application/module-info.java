@@ -13,10 +13,10 @@ module org.jhotdraw8.application {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
-    requires org.jhotdraw8.annotation;
-    requires org.jhotdraw8.collection;
-    requires org.jhotdraw8.base;
-    requires org.jhotdraw8.fxbase;
+    requires transitive org.jhotdraw8.annotation;
+    requires transitive org.jhotdraw8.collection;
+    requires transitive org.jhotdraw8.base;
+    requires transitive org.jhotdraw8.fxbase;
 
     exports org.jhotdraw8.application;
     exports org.jhotdraw8.application.action;

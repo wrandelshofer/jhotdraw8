@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.css;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssSize;
-import org.jhotdraw8.css.UnitConverter;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.converter.CssNumberConverter;
 
 import static org.jhotdraw8.base.util.MathUtil.clamp;

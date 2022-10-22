@@ -24,10 +24,10 @@ import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.CssTokenizer;
 import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.CssColor;
 
 import java.io.IOException;

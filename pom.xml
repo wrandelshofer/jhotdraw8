@@ -33,10 +33,9 @@
     <module>org.jhotdraw8.color</module>
     <module>org.jhotdraw8.draw</module>
     <module>org.jhotdraw8.collection</module>
-    <module>org.jhotdraw8.dock</module>
     <module>org.jhotdraw8.examples</module>
-    <module>org.jhotdraw8.font</module>
     <module>org.jhotdraw8.fxcollection</module>
+    <module>org.jhotdraw8.fxcontrols</module>
     <module>org.jhotdraw8.geom</module>
     <module>org.jhotdraw8.graph</module>
     <module>org.jhotdraw8.grapher</module>
@@ -198,7 +197,7 @@
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.dock</artifactId>
+        <artifactId>org.jhotdraw8.fxcontrols</artifactId>
         <version>1.0</version>
       </dependency>
       <dependency>

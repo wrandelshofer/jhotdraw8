@@ -6,9 +6,9 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.SelectorModel;
+import org.jhotdraw8.css.model.SelectorModel;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.CssTokenType;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -19,12 +19,28 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class TypeSelector extends SimpleSelector {
+    /**
+     * Special namespace value which means 'any namespace'.
+     * <p>
+     * Value: {@value #ANY_NAMESPACE}
+     */
+    @NonNull
+    public static final String ANY_NAMESPACE = "*";
+    /**
+     * Special namespace value which means 'without a namespace'.
+     * <p>
+     * See <a href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML Namespaces</a>.
+     * <p>
+     * Value: {@code null}
+     */
+    @Nullable
+    public static final String WITHOUT_NAMESPACE = null;
     private final @Nullable String namespacePattern;
     private final @NonNull String type;
 
     /**
      * @param namespacePattern null means no namespace,
-     *                         {@link SelectorModel#ANY_NAMESPACE} means any namespace
+     *                         {@link TypeSelector#ANY_NAMESPACE} means any namespace
      * @param type
      */
     public TypeSelector(@Nullable String namespacePattern, @NonNull String type) {
@@ -52,7 +68,7 @@ public class TypeSelector extends SimpleSelector {
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
-        if (!SelectorModel.ANY_NAMESPACE.equals(namespacePattern)) {
+        if (!ANY_NAMESPACE.equals(namespacePattern)) {
             if (namespacePattern != null) {
                 consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespacePattern));
             }

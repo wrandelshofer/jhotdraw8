@@ -10,7 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.handle.Handle;

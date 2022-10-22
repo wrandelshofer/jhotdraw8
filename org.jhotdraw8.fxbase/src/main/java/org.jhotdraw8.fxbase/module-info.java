@@ -26,4 +26,5 @@ module org.jhotdraw8.fxbase {
     provides org.jhotdraw8.fxbase.spi.NodeReaderProvider
             with org.jhotdraw8.fxbase.spi.FxmlNodeReaderProvider,
                     org.jhotdraw8.fxbase.spi.ImageNodeReaderProvider;
+    uses org.jhotdraw8.fxbase.spi.NodeReaderProvider;
 }

@@ -10,8 +10,8 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.io.CharSequenceReader;
-import org.jhotdraw8.css.CssTokenType;
-import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.css.parser.StreamCssTokenizer;
 
 import java.io.IOException;
 import java.nio.CharBuffer;

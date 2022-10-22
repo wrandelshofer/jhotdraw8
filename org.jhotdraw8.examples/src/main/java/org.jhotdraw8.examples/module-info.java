@@ -8,8 +8,7 @@ module org.jhotdraw8.examples {
     requires transitive org.jhotdraw8.color;
     requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.collection;
-    requires transitive org.jhotdraw8.font;
-    requires transitive org.jhotdraw8.dock;
+    requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.geom;
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.fxbase;

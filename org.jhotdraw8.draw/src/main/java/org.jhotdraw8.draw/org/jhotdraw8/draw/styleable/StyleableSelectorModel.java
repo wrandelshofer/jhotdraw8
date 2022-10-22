@@ -16,10 +16,10 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
-import org.jhotdraw8.css.AbstractSelectorModel;
-import org.jhotdraw8.css.CssToken;
-import org.jhotdraw8.css.QualifiedName;
-import org.jhotdraw8.css.StreamCssTokenizer;
+import org.jhotdraw8.css.model.AbstractSelectorModel;
+import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.css.parser.StreamCssTokenizer;
+import org.jhotdraw8.css.value.QualifiedName;
 
 import java.io.IOException;
 import java.util.Collection;

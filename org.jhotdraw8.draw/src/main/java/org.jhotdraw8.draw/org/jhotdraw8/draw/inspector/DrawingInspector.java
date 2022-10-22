@@ -15,7 +15,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.CssSize;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.CssColor;
 import org.jhotdraw8.draw.css.converter.CssColorConverter;

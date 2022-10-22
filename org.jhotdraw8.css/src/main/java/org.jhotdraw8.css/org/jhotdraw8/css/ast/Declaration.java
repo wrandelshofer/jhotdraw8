@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.css.CssToken;
+import org.jhotdraw8.css.parser.CssToken;
 
 import java.util.List;
 
@@ -22,15 +22,21 @@ public class Declaration extends AbstractSyntaxTree {
     private final @Nullable String namespace;
     private final @NonNull String propertyName;
     private final @NonNull ImmutableList<CssToken> terms;
-    private int startPos = -1;
-    private int endPos = -1;
+    private final int startPos;
+    private final int endPos;
+    private final int lineNumber;
 
-    public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos) {
+    public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos, int lineNumber) {
         this.namespace = namespace;
         this.propertyName = propertyName;
         this.terms = ImmutableArrayList.copyOf(terms);
         this.startPos = startPos;
         this.endPos = endPos;
+        this.lineNumber = lineNumber;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
     }
 
     public @Nullable String getNamespace() {

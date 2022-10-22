@@ -17,9 +17,9 @@ import org.jhotdraw8.collection.sharedkeys.KeyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.css.CssDefaultableValue;
-import org.jhotdraw8.css.CssDefaulting;
-import org.jhotdraw8.css.StylesheetsManager;
+import org.jhotdraw8.css.manager.StylesheetsManager;
+import org.jhotdraw8.css.value.CssDefaultableValue;
+import org.jhotdraw8.css.value.CssDefaulting;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 

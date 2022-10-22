@@ -45,9 +45,7 @@
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.font</artifactId>
-        <version>1.0</version>
-        <scope>compile</scope>
+        <artifactId>org.jhotdraw8.fxcontrols</artifactId>
       </dependency>
     </dependencies>
 
