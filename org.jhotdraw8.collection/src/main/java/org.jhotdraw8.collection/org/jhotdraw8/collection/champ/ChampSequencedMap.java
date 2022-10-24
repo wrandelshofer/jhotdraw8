@@ -104,6 +104,7 @@ import java.util.function.ToIntFunction;
  * @param <K> the key type
  * @param <V> the value type
  */
+@SuppressWarnings("exports")
 public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
     private final static long serialVersionUID = 0L;

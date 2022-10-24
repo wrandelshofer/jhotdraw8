@@ -16,6 +16,10 @@ public class HSLuvColorUtil {
     private final float minLightness = hsluvSpace.getMinValue(2);
     private final float extentLightness = maxLightness - minLightness;
 
+    public HSLuvColorUtil() {
+
+    }
+
     public Color adjustLightness(Color c, float lightness) {
         float[] baseRgb = new float[]{
                 (float) c.getRed(),

@@ -3,9 +3,10 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+@SuppressWarnings("module")
 module org.jhotdraw8.collection {
-    requires org.jhotdraw8.annotation;
-    requires javafx.base;
+    requires transitive org.jhotdraw8.annotation;
+    requires transitive javafx.base;
     exports org.jhotdraw8.collection;
     exports org.jhotdraw8.collection.typesafekey;
     exports org.jhotdraw8.collection.facade;

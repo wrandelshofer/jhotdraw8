@@ -3,6 +3,7 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+@SuppressWarnings("module")
 module org.jhotdraw8.css {
     exports org.jhotdraw8.css.converter;
     exports org.jhotdraw8.css.ast;
@@ -14,7 +15,7 @@ module org.jhotdraw8.css {
     exports org.jhotdraw8.css.io;
     requires transitive org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
-    requires java.logging;
+    requires transitive java.logging;
     requires transitive org.jhotdraw8.base;
     requires transitive javafx.graphics;
     requires transitive java.xml;

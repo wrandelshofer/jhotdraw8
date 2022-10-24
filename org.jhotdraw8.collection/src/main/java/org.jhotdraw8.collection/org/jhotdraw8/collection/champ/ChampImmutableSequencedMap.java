@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 /**
@@ -315,11 +316,15 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     }
 
     public @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
+        @SuppressWarnings("unchecked")// Java 17 requires this suppression
+        Function<SequencedEntry<K, V>, Map.Entry<K, V>> castEntry = Map.Entry.class::<K, V>cast;
         return BucketSequencedIterator.isSupported(size, first, last)
-                ? new BucketSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, first, last, this, reversed,
-                null, Map.Entry.class::cast)
-                : new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(size, this, reversed,
-                null, Map.Entry.class::cast);
+                ? new BucketSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(
+                size, first, last, this, reversed,
+                null, castEntry)
+                : new HeapSequencedIterator<SequencedEntry<K, V>, Map.Entry<K, V>>(
+                size, this, reversed,
+                null, castEntry);
     }
 
     @Override

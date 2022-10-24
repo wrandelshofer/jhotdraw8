@@ -15,6 +15,9 @@ public abstract class AbstractSystemPreferences implements SystemPreferences {
     protected final @NonNull ReadOnlyObjectWrapper<Appearance> appearance = new ReadOnlyObjectWrapper<>();
     protected final @NonNull ReadOnlyDoubleWrapper fontSize = new ReadOnlyDoubleWrapper();
 
+    protected AbstractSystemPreferences() {
+    }
+
     @Override
     public @NonNull ReadOnlyObjectProperty<Color> accentColorProperty() {
         return accentColor.getReadOnlyProperty();

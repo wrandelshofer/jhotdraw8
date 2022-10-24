@@ -236,7 +236,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                             @Override
                             public void updateItem(String t, boolean empty) {
                                 super.updateItem(t, empty);
-                                TreeTableRow<Figure> row = getTreeTableRow();
+                                TreeTableRow<Figure> row = getTableRow();
                                 boolean isEditable = false;
                                 if (row != null) {
                                     Figure item = row.getItem();
@@ -294,7 +294,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                     @Override
                     public void startEdit() {
-                        Figure figure = getTreeTableRow().getItem();
+                        Figure figure = getTableRow().getItem();
                         figure.get(StyleableFigure.STYLE_CLASS);
                         syntheticClasses.clear();
                         syntheticClasses.addAll(figure.getStyleClasses().asCollection());
@@ -305,7 +305,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     @Override
                     public void updateItem(ImmutableSet<String> t, boolean empty) {
                         super.updateItem(t, empty);
-                        TreeTableRow<Figure> row = getTreeTableRow();
+                        TreeTableRow<Figure> row = getTableRow();
                         boolean isEditable = false;
                         if (row != null) {
                             Figure figure = row.getItem();

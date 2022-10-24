@@ -3,8 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+@SuppressWarnings("module")
 module org.jhotdraw8.base {
-    requires org.jhotdraw8.annotation;
+    requires transitive org.jhotdraw8.annotation;
     requires java.logging;
     exports org.jhotdraw8.base.converter;
     exports org.jhotdraw8.base.io;

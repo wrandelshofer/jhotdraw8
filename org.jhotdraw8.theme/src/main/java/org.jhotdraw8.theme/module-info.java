@@ -3,10 +3,11 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+@SuppressWarnings("module")
 module org.jhotdraw8.theme {
-    requires org.jhotdraw8.application;
-    requires org.jhotdraw8.color;
-    requires org.jhotdraw8.os;
-    requires org.jhotdraw8.annotation;
-    requires org.jhotdraw8.fxbase;
+    requires transitive org.jhotdraw8.application;
+    requires transitive org.jhotdraw8.color;
+    requires transitive org.jhotdraw8.os;
+    requires transitive org.jhotdraw8.annotation;
+    requires transitive org.jhotdraw8.fxbase;
 }

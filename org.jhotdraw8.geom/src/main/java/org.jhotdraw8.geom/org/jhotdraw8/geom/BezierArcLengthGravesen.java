@@ -6,6 +6,13 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
 public class BezierArcLengthGravesen {
+
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private BezierArcLengthGravesen() {
+    }
+
     /**
      * Estimates the arc-length of a bézier curve using adaptive subdivision.
      * <p>

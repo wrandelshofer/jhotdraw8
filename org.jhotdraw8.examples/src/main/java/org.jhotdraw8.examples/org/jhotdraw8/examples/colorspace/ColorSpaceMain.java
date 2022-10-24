@@ -38,6 +38,9 @@ import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 public class ColorSpaceMain extends Application {
+    public ColorSpaceMain() {
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         stage.setTitle("ColorSpace Demo");

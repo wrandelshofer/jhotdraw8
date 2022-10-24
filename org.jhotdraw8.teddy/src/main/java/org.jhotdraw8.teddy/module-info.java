@@ -9,12 +9,12 @@ import org.jhotdraw8.teddy.spi.TeddyResourceBundleProvider;
 module org.jhotdraw8.teddy {
     requires transitive java.desktop;
     requires java.prefs;
-    requires org.jhotdraw8.application;
-    requires org.jhotdraw8.annotation;
-    requires org.jhotdraw8.collection;
-    requires org.jhotdraw8.fxcontrols;
-    requires org.jhotdraw8.fxbase;
-    requires org.jhotdraw8.base;
+    requires transitive org.jhotdraw8.application;
+    requires transitive org.jhotdraw8.annotation;
+    requires transitive org.jhotdraw8.collection;
+    requires transitive org.jhotdraw8.fxcontrols;
+    requires transitive org.jhotdraw8.fxbase;
+    requires transitive org.jhotdraw8.base;
     provides java.util.spi.ResourceBundleProvider with TeddyResourceBundleProvider;
 
     opens org.jhotdraw8.teddy

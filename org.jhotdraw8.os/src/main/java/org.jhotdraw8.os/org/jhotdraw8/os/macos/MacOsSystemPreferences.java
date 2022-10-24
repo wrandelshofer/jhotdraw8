@@ -7,6 +7,9 @@ import org.jhotdraw8.os.Appearance;
 import java.util.LinkedHashMap;
 
 public class MacOsSystemPreferences extends AbstractSystemPreferences {
+    public MacOsSystemPreferences() {
+    }
+
     /**
      * Synchronously loads the system preferences.
      */

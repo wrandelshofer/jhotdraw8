@@ -101,6 +101,7 @@ import java.util.function.BiFunction;
  *
  * @param <E> the element type
  */
+@SuppressWarnings("exports")
 public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     private final static long serialVersionUID = 0L;

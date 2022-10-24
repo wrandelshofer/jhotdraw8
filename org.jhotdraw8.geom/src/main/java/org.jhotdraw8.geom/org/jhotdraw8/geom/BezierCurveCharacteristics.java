@@ -11,6 +11,13 @@ import static org.jhotdraw8.geom.Geom.isCollinear;
 
 public class BezierCurveCharacteristics {
 
+
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    public BezierCurveCharacteristics() {
+    }
+
     public enum Characteristics {
         PLAIN_CURVE,
         SINGLE_INFLECTION,

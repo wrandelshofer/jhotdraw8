@@ -178,18 +178,19 @@
       <modulesourcepath path="org.jhotdraw8.base/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.collection/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.color/src/main/java"/>
-      <modulesourcepath path="org.jhotdraw8.css/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.os/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.application/src/main/java"/>
-      <modulesourcepath path="org.jhotdraw8.draw/src/main/java"/>
-      <modulesourcepath path="org.jhotdraw8.examples/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.fxbase/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.fxcollection/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.fxcontrols/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.geom/src/main/java"/>
-      <modulesourcepath path="org.jhotdraw8.grapher/src/main/java"/>
-      <modulesourcepath path="org.jhotdraw8.os/src/main/java"/>
-      <modulesourcepath path="org.jhotdraw8.teddy/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.css/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.theme/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.graph/src/main/java"/>
+
+      <modulesourcepath path="org.jhotdraw8.draw/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.grapher/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.teddy/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.examples/src/main/java"/>
       <modulepath>
         <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>
@@ -1236,11 +1237,23 @@
   </macrodef>
 
   <target name="do-jar-modules" depends="init">
+    <modular-jar module="org.jhotdraw8.annotation"/>
     <modular-jar module="org.jhotdraw8.application"/>
+    <modular-jar module="org.jhotdraw8.base"/>
+    <modular-jar module="org.jhotdraw8.collection"/>
+    <modular-jar module="org.jhotdraw8.color"/>
+    <modular-jar module="org.jhotdraw8.css"/>
     <modular-jar module="org.jhotdraw8.draw"/>
-    <modular-jar module="org.jhotdraw8.grapher"/>
     <modular-jar module="org.jhotdraw8.examples"/>
+    <modular-jar module="org.jhotdraw8.fxbase"/>
+    <modular-jar module="org.jhotdraw8.fxcollection"/>
+    <modular-jar module="org.jhotdraw8.fxcontrols"/>
+    <modular-jar module="org.jhotdraw8.geom"/>
+    <modular-jar module="org.jhotdraw8.graph"/>
+    <modular-jar module="org.jhotdraw8.grapher"/>
+    <modular-jar module="org.jhotdraw8.os"/>
     <modular-jar module="org.jhotdraw8.teddy"/>
+    <modular-jar module="org.jhotdraw8.theme"/>
   </target>
 
   <macrodef name="modular-package">
@@ -1285,6 +1298,7 @@
     <mkdir dir="${dist}/class"/>
     <mkdir dir="${dist}/module"/>
     <mkdir dir="${dist}/source"/>
+    <!--
     <copy todir="${dist}/class">
       <fileset dir="${build.main.jars}">
         <exclude name=".*"/>
@@ -1295,6 +1309,7 @@
         <include name="*.jar"/>
       </fileset>
     </copy>
+    -->
     <copy todir="${dist}/module">
       <fileset dir="${build.main.modules}">
         <exclude name=".*"/>
@@ -1348,9 +1363,7 @@
   <target name="docbook" depends="clean,javadoc,do-docbook"
           description="generates specification and user documentation">
   </target>
-  <target name="dist" depends="clean,jar-classes,jar-modules,do-dist"
-          description="creates a distributable stand-alone application">
-  </target>
+  <target name="dist" depends="clean,jar-modules,do-dist" description="creates a distributable stand-alone application"></target>
   <target name="run" depends="jar-classes,do-run" description="runs the built jar files">
   </target>
   <target name="all" depends="dist" description="Everything">

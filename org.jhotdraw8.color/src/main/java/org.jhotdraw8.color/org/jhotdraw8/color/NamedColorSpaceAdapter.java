@@ -1,6 +1,7 @@
 package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 
 /**
  * Implements conversions from/to linear RGB color space.
@@ -20,6 +21,9 @@ import java.awt.color.ColorSpace;
  * </dl>
  */
 public class NamedColorSpaceAdapter extends AbstractNamedColorSpace {
+
+    @Serial
+    private static final long serialVersionUID = 0L;
     private final ColorSpace cs;
     private final String name;
 
