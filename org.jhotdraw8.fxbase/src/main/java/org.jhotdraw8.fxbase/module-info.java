@@ -26,6 +26,7 @@ module org.jhotdraw8.fxbase {
     exports org.jhotdraw8.fxbase.event;
     exports org.jhotdraw8.fxbase.undo;
     exports org.jhotdraw8.fxbase.transition;
+    exports org.jhotdraw8.fxbase.lang;
 
     provides org.jhotdraw8.fxbase.spi.NodeReaderProvider
             with org.jhotdraw8.fxbase.spi.FxmlNodeReaderProvider,

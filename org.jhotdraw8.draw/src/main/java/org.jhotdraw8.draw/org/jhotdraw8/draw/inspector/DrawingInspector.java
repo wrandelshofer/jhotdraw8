@@ -85,7 +85,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
-        PlatformUtil.fxRun(() -> {
+        PlatformUtil.invokeAndWait(() -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(InspectorLabels.getResources().asResourceBundle());
             loader.setController(this);

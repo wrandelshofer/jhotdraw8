@@ -59,8 +59,8 @@ public class PlatformUtil {
      *
      * @param r the runnable
      */
-    public static void fxRun(@NonNull RunnableWithException r) {
-        fxRun(60 * 1000, r);
+    public static void invokeAndWait(@NonNull RunnableWithException r) {
+        invokeAndWait(60 * 1000, r);
     }
 
     /**
@@ -70,7 +70,7 @@ public class PlatformUtil {
      * @param timeout the timeout in milliseconds
      * @param r       the runnable
      */
-    public static void fxRun(long timeout, @NonNull RunnableWithException r) {
+    public static void invokeAndWait(long timeout, @NonNull RunnableWithException r) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Platform.runLater(() -> {
             try {
@@ -95,8 +95,8 @@ public class PlatformUtil {
      *
      * @param r the runnable
      */
-    public static <T> T fxCall(@NonNull Callable<T> r) {
-        return fxCall(60 * 1000, r);
+    public static <T> T callAndWait(@NonNull Callable<T> r) {
+        return callAndWait(60 * 1000, r);
     }
 
     /**
@@ -106,7 +106,7 @@ public class PlatformUtil {
      * @param timeout the timeout in milliseconds
      * @param r       the runnable
      */
-    public static <T> T fxCall(long timeout, @NonNull Callable<T> r) {
+    public static <T> T callAndWait(long timeout, @NonNull Callable<T> r) {
         CompletableFuture<T> f = new CompletableFuture<>();
         Platform.runLater(() -> {
             try {
