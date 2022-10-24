@@ -8,14 +8,14 @@ import javafx.geometry.Dimension2D;
 import javafx.stage.FileChooser;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
+import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.gui.FileURIChooser;
-import org.jhotdraw8.gui.URIChooser;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;

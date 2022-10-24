@@ -6,6 +6,8 @@ package org.jhotdraw8.application.action;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
@@ -60,14 +62,25 @@ public class Actions {
         // create a strong reference to name binding:
         if (bindLabel) {
             Binding<String> nameBinding = Action.LABEL.valueAt(action.getProperties());
-            control.getProperties().put("ActionsNameBinding", nameBinding);
-            control.textProperty().bind(Action.LABEL.valueAt(action.getProperties()));
-
+            control.textProperty().bind(nameBinding);
             Binding<KeyCombination> acceleratorBinding = Action.ACCELERATOR_KEY.valueAt(action.getProperties());
-            // create a strong reference to name binding:
-            control.getProperties().put("ActionsAcceleratorBinding", acceleratorBinding);
-            // this only creates a weak reference to the name binding:
             control.acceleratorProperty().bind(acceleratorBinding);
+
+            // Create strong references to the bindings.
+            control.getProperties().put("nameBinding", nameBinding);
+            control.getProperties().put("acceleratorBinding", acceleratorBinding);
+            ChangeListener<String> stringChangeListener = new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> o, String oldv, String newv) {
+                    System.out.println("ACTION menu item " + o + "," + oldv + "," + newv);
+                }
+
+                @Override
+                protected void finalize() throws Throwable {
+                    System.out.println("Action finalize " + action);
+                }
+            };
+            nameBinding.addListener(stringChangeListener);
         }
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());

@@ -68,8 +68,8 @@ import org.jhotdraw8.draw.popup.ExamplesPicker;
 import org.jhotdraw8.draw.popup.FontFamilyPicker;
 import org.jhotdraw8.draw.popup.PaintablePicker;
 import org.jhotdraw8.draw.popup.Picker;
+import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.gui.PlatformUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -494,7 +494,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     protected void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
-        PlatformUtil.invokeAndWait(() -> {
+        PlatformUtil.fxRun(() -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(InspectorLabels.getResources().asResourceBundle());
             loader.setController(this);

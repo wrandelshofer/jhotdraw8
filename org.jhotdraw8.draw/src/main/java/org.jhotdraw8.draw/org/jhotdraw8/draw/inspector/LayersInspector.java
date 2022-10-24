@@ -42,10 +42,10 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelFigureChildrenObservableList;
+import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
+import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
+import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
-import org.jhotdraw8.gui.ClipboardIO;
-import org.jhotdraw8.gui.ListViewUtil;
-import org.jhotdraw8.gui.PlatformUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -201,7 +201,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
-        PlatformUtil.invokeAndWait(() -> {
+        PlatformUtil.fxRun(() -> {
 
             FXMLLoader loader = new FXMLLoader();
             loader.setController(this);

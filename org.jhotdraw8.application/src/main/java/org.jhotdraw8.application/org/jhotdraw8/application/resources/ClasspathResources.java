@@ -6,7 +6,6 @@ package org.jhotdraw8.application.resources;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.resources.LocaleUtil;
 
 import java.io.Serializable;
 import java.util.Collections;

@@ -7,7 +7,6 @@ package org.jhotdraw8.application.resources;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.resources.ResourceDecoder;
 import org.jhotdraw8.fxbase.spi.NodeReader;
 import org.jhotdraw8.fxbase.spi.NodeReaderRegistry;
 

@@ -8,7 +8,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Activity;
-import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.action.Action;
@@ -29,10 +28,9 @@ public class RedoAction extends AbstractActivityAction<Activity> {
     /**
      * Creates a new instance.
      *
-     * @param app  the application
      * @param view the view
      */
-    public RedoAction(@NonNull Application app, Activity view, @NonNull FXUndoManager manager) {
+    public RedoAction(@NonNull Activity view, @NonNull FXUndoManager manager) {
         super(view);
         this.manager = manager;
         ApplicationLabels.getResources().configureAction(this, ID);
@@ -43,6 +41,9 @@ public class RedoAction extends AbstractActivityAction<Activity> {
                 disablers.remove(this);
             }
         });
+        if (!manager.canRedo()) {
+            disablers.add(this);
+        }
         manager.redoPresentationNameProperty().addListener((ChangeListener<? super String>) (o, oldv, newv) -> {
             set(Action.LABEL, newv);
         });

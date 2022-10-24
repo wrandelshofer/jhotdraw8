@@ -50,6 +50,7 @@ import org.jhotdraw8.application.action.file.CloseFileAction;
 import org.jhotdraw8.application.action.file.NewFileAction;
 import org.jhotdraw8.application.action.file.OpenFileAction;
 import org.jhotdraw8.application.action.file.OpenRecentFileAction;
+import org.jhotdraw8.application.prefs.PreferencesUtil;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.text.NaturalSortCollator;
 import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
@@ -60,7 +61,6 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
-import org.jhotdraw8.util.prefs.PreferencesUtil;
 
 import java.lang.ref.WeakReference;
 import java.net.URI;
@@ -187,11 +187,12 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 if (mi instanceof Menu) {
                     todo.add((Menu) mi);
                 } else {
-                    Action a = actions.get(mi.getId());
+                    String id = mi.getId();
+                    Action a = actions.get(id);
                     if (a != null) {
                         Actions.bindMenuItem(mi, a);
                     } else {
-                        a = new ScreenMenuBarProxyAction(this, mi.getId());
+                        a = new ScreenMenuBarProxyAction(this, id);
                         a.set(Action.LABEL, mi.getText());
                         systemMenuActiveViewActions.add(a);
                         Actions.bindMenuItem(mi, a, true);
@@ -391,7 +392,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             Map<String, Action> allActions = new LinkedHashMap<>(getActions());
             MenuBar mb = createMenuBar(activity, stage, allActions);
             if (mb != null) {
-                mb.setUseSystemMenuBar(true);
+                //  mb.setUseSystemMenuBar(true);
                 borderPane.setTop(mb);
             }
         }

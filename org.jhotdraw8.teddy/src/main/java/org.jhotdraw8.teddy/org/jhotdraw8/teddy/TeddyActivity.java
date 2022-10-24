@@ -24,8 +24,8 @@ import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
+import org.jhotdraw8.fxbase.control.TextInputControlUndoAdapter;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
-import org.jhotdraw8.fxbase.undo.TextInputControlUndoAdapter;
 import org.jhotdraw8.teddy.action.FontAction;
 import org.jhotdraw8.teddy.action.FontableActivity;
 
@@ -73,8 +73,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
         super.initActions(map);
         final Application app = getApplication();
         map.put(FontAction.ID, new FontAction(app, this));
-        map.put(UndoAction.ID, new UndoAction(app, this, undoManager));
-        map.put(RedoAction.ID, new RedoAction(app, this, undoManager));
+        map.put(UndoAction.ID, new UndoAction(this, undoManager));
+        map.put(RedoAction.ID, new RedoAction(this, undoManager));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         textArea.textProperty().addListener((observable -> modified.set(true)));
-        TextInputControlUndoAdapter.attach(textArea, undoManager);
+        new TextInputControlUndoAdapter(textArea).addUndoEditListener(undoManager);
         undoManager.discardAllEdits();
     }
 

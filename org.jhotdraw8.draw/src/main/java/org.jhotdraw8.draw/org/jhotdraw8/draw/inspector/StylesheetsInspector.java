@@ -31,10 +31,10 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
+import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
+import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
-import org.jhotdraw8.gui.ClipboardIO;
-import org.jhotdraw8.gui.ListViewUtil;
-import org.jhotdraw8.gui.PlatformUtil;
 import org.jhotdraw8.xml.text.XmlUriConverter;
 
 import java.io.File;
@@ -84,7 +84,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private void init(@NonNull URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instantiate a Window and a Scene.
-        PlatformUtil.invokeAndWait(() -> {
+        PlatformUtil.fxRun(() -> {
 
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(InspectorLabels.getResources().asResourceBundle());

@@ -5,17 +5,19 @@
 package org.jhotdraw8.application.action;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
+import org.jhotdraw8.collection.typesafekey.Key;
 
 /**
  * ScreenMenuBarProxyAction.
  *
  * @author Werner Randelshofer
  */
-public class ScreenMenuBarProxyAction extends AbstractAction {
+public class ScreenMenuBarProxyAction extends AbstractAction implements MapChangeListener<Key<?>, Object> {
 
     private final @NonNull Application app;
     private @Nullable Action currentAction;
@@ -33,16 +35,18 @@ public class ScreenMenuBarProxyAction extends AbstractAction {
                 disabled.set(true);
                 selectedProperty().unbind();
                 selectedProperty().set(false);
+                currentAction.getProperties().removeListener(this);
             }
             if (newv != null) {
                 currentAction = newv.getActions().get(id);
             }
-            if (currentAction != null) {
-                disabled.bind(Bindings.isNotEmpty(disablers).or(currentAction.disabledProperty()));
-                selectedProperty().bind(currentAction.selectedProperty());
-                set(LABEL, currentAction.get(LABEL));
-                set(MNEMONIC_KEY, currentAction.get(MNEMONIC_KEY));
-                set(ACCELERATOR_KEY, currentAction.get(ACCELERATOR_KEY));
+            Action currentAction1 = currentAction;
+            if (currentAction1 != null) {
+                disabled.bind(Bindings.isNotEmpty(disablers).or(currentAction1.disabledProperty()));
+                selectedProperty().bind(currentAction1.selectedProperty());
+                getProperties().clear();
+                getProperties().putAll(currentAction1.getProperties());
+                currentAction1.getProperties().addListener(this);
             }
         });
     }
@@ -54,4 +58,13 @@ public class ScreenMenuBarProxyAction extends AbstractAction {
         }
     }
 
+    @Override
+    public void onChanged(Change<? extends Key<?>, ?> change) {
+        if (change.wasRemoved() & !change.wasAdded()) {
+            getProperties().remove(change.getKey());
+        }
+        if (change.wasAdded()) {
+            getProperties().put(change.getKey(), change.getValueAdded());
+        }
+    }
 }

@@ -21,6 +21,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractFileBasedActivity;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.Action;
+import org.jhotdraw8.application.action.edit.RedoAction;
+import org.jhotdraw8.application.action.edit.UndoAction;
 import org.jhotdraw8.application.action.file.BrowseFileDirectoryAction;
 import org.jhotdraw8.application.action.file.ExportFileAction;
 import org.jhotdraw8.application.action.file.PrintFileAction;
@@ -108,6 +110,7 @@ import org.jhotdraw8.draw.io.SimpleXmlStaxReader;
 import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
+import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.draw.tool.ConnectionTool;
@@ -121,6 +124,8 @@ import org.jhotdraw8.draw.tool.TextEditingTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
+import org.jhotdraw8.fxbase.tree.TreeModelUndoAdapter;
+import org.jhotdraw8.fxbase.undo.FXUndoManager;
 import org.jhotdraw8.fxcontrols.dock.DockChild;
 import org.jhotdraw8.fxcontrols.dock.DockRoot;
 import org.jhotdraw8.fxcontrols.dock.Dockable;
@@ -179,6 +184,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     @FXML
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
+
+    private final @NonNull FXUndoManager undoManager = new FXUndoManager();
 
     private @NonNull Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
@@ -274,6 +281,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         map.put(AlignVerticalAction.ID, new AlignVerticalAction(editor));
         map.put(DistributeHorizontallyAction.ID, new DistributeHorizontallyAction(editor));
         map.put(DistributeVerticallyAction.ID, new DistributeVerticallyAction(editor));
+        map.put(UndoAction.ID, new UndoAction(this, undoManager));
+        map.put(RedoAction.ID, new RedoAction(this, undoManager));
     }
 
     private @NonNull Supplier<Layer> initToolBar() throws MissingResourceException {
@@ -349,9 +358,11 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         drawingView.setConstrainer(new GridConstrainer(0, 0, 10, 10, 11.25, 5, 5));
         //drawingView.setHandleType(HandleType.TRANSFORM);
         //
-        drawingView.getModel().addListener(drawingModel -> {
+        DrawingModel model = drawingView.getModel();
+        model.addListener(drawingModel -> {
             modified.set(true);
         });
+        new TreeModelUndoAdapter<>(model).addUndoEditListener(undoManager);
 
         IdFactory idFactory = new SimpleFigureIdFactory();
         FigureFactory factory = new DefaultFigureFactory(idFactory);

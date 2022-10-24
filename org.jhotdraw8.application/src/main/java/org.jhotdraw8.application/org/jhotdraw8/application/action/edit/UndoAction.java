@@ -8,7 +8,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Activity;
-import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.action.Action;
@@ -27,11 +26,10 @@ public class UndoAction extends AbstractActivityAction<Activity> {
     /**
      * Creates a new instance.
      *
-     * @param app     the application
      * @param view    the view
      * @param manager
      */
-    public UndoAction(@NonNull Application app, Activity view, @NonNull FXUndoManager manager) {
+    public UndoAction(@NonNull Activity view, @NonNull FXUndoManager manager) {
         super(view);
         this.manager = manager;
         ApplicationLabels.getResources().configureAction(this, ID);
@@ -42,6 +40,9 @@ public class UndoAction extends AbstractActivityAction<Activity> {
                 disablers.remove(this);
             }
         });
+        if (!manager.canUndo()) {
+            disablers.add(this);
+        }
         manager.undoPresentationNameProperty().addListener((ChangeListener<? super String>) (o, oldv, newv) -> {
             set(Action.LABEL, newv);
         });

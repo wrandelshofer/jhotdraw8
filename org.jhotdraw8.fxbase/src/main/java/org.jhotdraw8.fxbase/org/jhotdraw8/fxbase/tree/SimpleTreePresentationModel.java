@@ -50,13 +50,13 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
                 N f = event.getNode();
                 switch (event.getEventType()) {
                 case NODE_ADDED_TO_PARENT:
-                    onNodeAdded(f, event.getParent(), event.getIndex());
+                    onNodeAdded(f, event.getParent(), event.getChildIndex());
                     break;
                 case NODE_REMOVED_FROM_PARENT:
-                    onNodeRemoved(f, event.getParent(), event.getIndex());
+                    onNodeRemoved(f, event.getParent(), event.getChildIndex());
                     break;
                 case NODE_ADDED_TO_TREE:
-                    onNodeAddedToTree(f, event.getParent(), event.getIndex());
+                    onNodeAddedToTree(f, event.getParent(), event.getChildIndex());
                     break;
                 case NODE_REMOVED_FROM_TREE:
                     onNodeRemovedFromTree(f);

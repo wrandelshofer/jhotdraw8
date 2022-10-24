@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.jhotdraw8.fxbase.concurrent.FXConcurrentUtil.update;
+import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
 
 /**
  * Simple implementation of {@code CompletableWorker}.

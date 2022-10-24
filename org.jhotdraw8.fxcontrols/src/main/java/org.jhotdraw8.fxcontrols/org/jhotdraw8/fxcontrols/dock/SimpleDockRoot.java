@@ -20,7 +20,7 @@ import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
-import org.jhotdraw8.gui.RectangleTransition;
+import org.jhotdraw8.fxbase.transition.RectangleTransition;
 
 import java.util.ArrayDeque;
 import java.util.function.Supplier;

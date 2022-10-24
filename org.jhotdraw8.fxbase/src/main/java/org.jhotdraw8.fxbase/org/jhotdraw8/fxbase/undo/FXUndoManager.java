@@ -50,6 +50,8 @@ public class FXUndoManager implements UndoableEditListener {
     private void updateProperties() {
         canUndo.set(manager.canUndo());
         canRedo.set(manager.canRedo());
+        undoPresentationNameProperty().set(manager.getUndoPresentationName());
+        redoPresentationNameProperty().set(manager.getRedoPresentationName());
     }
 
     public void redo() {

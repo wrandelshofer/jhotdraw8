@@ -40,11 +40,11 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelFigureProperty;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
+import org.jhotdraw8.fxbase.control.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.fxbase.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
-import org.jhotdraw8.gui.BooleanPropertyCheckBoxTreeTableCell;
 import org.jhotdraw8.xml.text.XmlWordListConverter;
 import org.jhotdraw8.xml.text.XmlWordSetConverter;
 

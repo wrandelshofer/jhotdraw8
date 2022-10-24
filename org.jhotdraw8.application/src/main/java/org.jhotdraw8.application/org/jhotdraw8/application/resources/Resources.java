@@ -13,7 +13,6 @@ import javafx.scene.input.KeyCombination;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
-import org.jhotdraw8.base.resources.ResourceDecoder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

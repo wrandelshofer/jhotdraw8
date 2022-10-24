@@ -69,15 +69,15 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
 
     private final E parentOrOldRoot;
     private final E root;
-    private final int index;
+    private final int childIndex;
     private final TreeModelEvent.EventType eventType;
 
-    private TreeModelEvent(@NonNull TreeModel<E> source, EventType eventType, E node, E parentOrOldRoot, E root, int index) {
+    private TreeModelEvent(@NonNull TreeModel<E> source, EventType eventType, E node, E parentOrOldRoot, E root, int childIndex) {
         super(source);
         this.node = node;
         this.parentOrOldRoot = parentOrOldRoot;
         this.root = root;
-        this.index = index;
+        this.childIndex = childIndex;
         this.eventType = eventType;
     }
 
@@ -170,8 +170,8 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
      *
      * @return an index. Returns -1 if the figure was neither added or removed.
      */
-    public int getIndex() {
-        return index;
+    public int getChildIndex() {
+        return childIndex;
     }
 
     /**
@@ -188,7 +188,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
         return "TreeModelEvent{"
                 + "node=" + node
                 + ", parent=" + parentOrOldRoot
-                + ", index=" + index + ", eventType="
+                + ", index=" + childIndex + ", eventType="
                 + eventType + ", source=" + source + '}';
     }
 

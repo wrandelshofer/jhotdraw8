@@ -27,7 +27,7 @@ public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
             event.getSource().removeFromParent(event.getChild());
             break;
         case NODE_REMOVED_FROM_PARENT:
-            event.getSource().insertChildAt(event.getChild(), event.getParent(), event.getIndex());
+            event.getSource().insertChildAt(event.getChild(), event.getParent(), event.getChildIndex());
             break;
         case NODE_ADDED_TO_TREE:
             break;
@@ -47,7 +47,7 @@ public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
         case SUBTREE_NODES_CHANGED:
             break;
         case NODE_ADDED_TO_PARENT:
-            event.getSource().insertChildAt(event.getChild(), event.getParent(), event.getIndex());
+            event.getSource().insertChildAt(event.getChild(), event.getParent(), event.getChildIndex());
             break;
         case NODE_REMOVED_FROM_PARENT:
             event.getSource().removeFromParent(event.getChild());

@@ -3,7 +3,8 @@ package org.jhotdraw8.fxbase.undo;
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import org.jhotdraw8.fxbase.concurrent.FXConcurrentUtil;
+import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
+import org.jhotdraw8.fxbase.control.TextInputControlUndoAdapter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,9 +17,9 @@ class UndoableTextFilterTest {
         Platform.startup(() -> {
         });
 
-        FXConcurrentUtil.fxRun(1000, () -> {
+        PlatformUtil.fxRun(1000, () -> {
             TextField textField = new TextField();
-            TextInputControlUndoAdapter filter = new TextInputControlUndoAdapter();
+            TextInputControlUndoAdapter filter = new TextInputControlUndoAdapter(textField);
             textField.setTextFormatter(new TextFormatter<Object>(filter));
             FXUndoManager undoManager = new FXUndoManager();
             filter.addUndoEditListener(undoManager);

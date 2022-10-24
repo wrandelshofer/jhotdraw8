@@ -17,8 +17,8 @@ import org.jhotdraw8.application.action.file.ExportFileAction;
 import org.jhotdraw8.application.action.file.RevertFileAction;
 import org.jhotdraw8.application.action.file.SaveFileAction;
 import org.jhotdraw8.application.action.file.SaveFileAsAction;
+import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
-import org.jhotdraw8.net.UriUtil;
 
 import java.net.URI;
 

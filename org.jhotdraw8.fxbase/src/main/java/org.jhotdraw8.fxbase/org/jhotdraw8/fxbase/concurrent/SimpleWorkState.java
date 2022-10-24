@@ -17,8 +17,8 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.jhotdraw8.fxbase.concurrent.FXConcurrentUtil.NO_UPDATE_IS_IN_PROGRESS;
-import static org.jhotdraw8.fxbase.concurrent.FXConcurrentUtil.update;
+import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.NO_UPDATE_IS_IN_PROGRESS;
+import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
 
 /**
  * A simple implementation of the {@link WorkState} interface.

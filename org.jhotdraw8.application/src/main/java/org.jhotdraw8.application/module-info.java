@@ -24,13 +24,9 @@ module org.jhotdraw8.application {
     exports org.jhotdraw8.application.action.file;
     exports org.jhotdraw8.application.action.view;
     exports org.jhotdraw8.application.spi;
-    exports org.jhotdraw8.net;
-    exports org.jhotdraw8.util;
-    exports org.jhotdraw8.util.prefs;
-    exports org.jhotdraw8.gui;
-    exports org.jhotdraw8.text;
     exports org.jhotdraw8.application.action.app;
     exports org.jhotdraw8.application.resources;
+    exports org.jhotdraw8.application.controls.urichooser;
 
     uses java.util.spi.ResourceBundleProvider;
     provides java.util.spi.ResourceBundleProvider with ApplicationResourceBundleProvider;
