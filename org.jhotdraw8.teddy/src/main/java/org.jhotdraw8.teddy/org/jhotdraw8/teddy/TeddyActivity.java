@@ -18,10 +18,14 @@ import org.jhotdraw8.application.AbstractFileBasedActivity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.Action;
+import org.jhotdraw8.application.action.edit.RedoAction;
+import org.jhotdraw8.application.action.edit.UndoAction;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
+import org.jhotdraw8.fxbase.undo.FXUndoManager;
+import org.jhotdraw8.fxbase.undo.TextInputControlUndoAdapter;
 import org.jhotdraw8.teddy.action.FontAction;
 import org.jhotdraw8.teddy.action.FontableActivity;
 
@@ -46,6 +50,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @FXML
     private TextArea textArea;
 
+    private FXUndoManager undoManager = new FXUndoManager();
+
     @Override
     public @NonNull CompletionStage<Void> clear() {
         textArea.setText(null);
@@ -67,6 +73,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
         super.initActions(map);
         final Application app = getApplication();
         map.put(FontAction.ID, new FontAction(app, this));
+        map.put(UndoAction.ID, new UndoAction(app, this, undoManager));
+        map.put(RedoAction.ID, new RedoAction(app, this, undoManager));
     }
 
     @Override
@@ -81,6 +89,8 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         textArea.textProperty().addListener((observable -> modified.set(true)));
+        TextInputControlUndoAdapter.attach(textArea, undoManager);
+        undoManager.discardAllEdits();
     }
 
     @Override

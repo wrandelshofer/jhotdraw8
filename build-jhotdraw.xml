@@ -170,20 +170,26 @@
   </target>
   <target name="do-compile-modules" depends="init">
     <mkdir dir="${module.classes}"/>
-    <javac executable="${jdk.modular}/bin/javac" fork="yes"
-           source="${jdk.modular.version}" target="${jdk.modular.version}"
-           encoding="UTF-8" destdir="${module.classes}"
-           debug="true"
-           verbose="false"
-           createmissingpackageinfoclass="false" includeantruntime="false"
-    >
+    <javac executable="${jdk.modular}/bin/javac" fork="yes" source="${jdk.modular.version}" target="${jdk.modular.version}" encoding="UTF-8" destdir="${module.classes}" debug="true" verbose="false" createmissingpackageinfoclass="false" includeantruntime="false">
       <compilerarg value="-Xlint"/>
       <compilerarg value="-XprintRounds"/>
       <compilerarg value="-Xdiags:verbose"/>
+      <modulesourcepath path="org.jhotdraw8.annotation/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.base/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.collection/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.color/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.css/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.application/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.draw/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.examples/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.fxbase/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.fxcollection/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.fxcontrols/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.geom/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.grapher/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.os/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.teddy/src/main/java"/>
+      <modulesourcepath path="org.jhotdraw8.theme/src/main/java"/>
       <modulesourcepath path="org.jhotdraw8.examples/src/main/java"/>
       <modulepath>
         <fileset dir="${lib.compile}/modulepath" includes="**/*.jar"/>

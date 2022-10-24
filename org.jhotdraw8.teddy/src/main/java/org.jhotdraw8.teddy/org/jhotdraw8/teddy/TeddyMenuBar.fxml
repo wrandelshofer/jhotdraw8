@@ -26,6 +26,9 @@
     </Menu>
     <Menu id="edit" mnemonicParsing="false" text="%edit.text">
       <items>
+        <MenuItem id="edit.undo" mnemonicParsing="false" text="Undo"/>
+        <MenuItem id="edit.redo" mnemonicParsing="false" text="Redo"/>
+        <SeparatorMenuItem mnemonicParsing="false"/>
         <MenuItem id="edit.cut" mnemonicParsing="false" text="Cut"/>
         <MenuItem id="edit.copy" mnemonicParsing="false" text="Copy"/>
         <MenuItem id="edit.paste" mnemonicParsing="false" text="Paste"/>

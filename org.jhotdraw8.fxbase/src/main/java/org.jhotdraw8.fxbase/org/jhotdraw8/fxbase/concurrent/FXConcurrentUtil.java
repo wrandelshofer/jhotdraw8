@@ -10,9 +10,13 @@ import javafx.beans.property.Property;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
-class FXConcurrentUtil {
+public class FXConcurrentUtil {
     /**
      * This object is used to coalesce multiple updates.
      */
@@ -45,6 +49,25 @@ class FXConcurrentUtil {
                 X andSet = (X) propertyUpdate.getAndSet(NO_UPDATE_IS_IN_PROGRESS);
                 property.setValue(andSet);
             });
+        }
+    }
+
+    public static void fxRun(long timeout, @NonNull RunnableWithException r) {
+        CompletableFuture<Void> f = new CompletableFuture<>();
+        Platform.runLater(() -> {
+            try {
+                r.run();
+                f.complete(null);
+            } catch (Throwable t) {
+                f.completeExceptionally(t);
+            }
+        });
+
+        try {
+            f.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException | ExecutionException |
+                 TimeoutException e) {
+            throw new RuntimeException(e);
         }
     }
 }

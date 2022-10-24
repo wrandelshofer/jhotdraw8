@@ -12,7 +12,7 @@ import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.action.Action;
-import org.jhotdraw8.application.undo.UndoManager;
+import org.jhotdraw8.fxbase.undo.FXUndoManager;
 
 /**
  * Undoes the last user action.
@@ -22,7 +22,7 @@ import org.jhotdraw8.application.undo.UndoManager;
 public class UndoAction extends AbstractActivityAction<Activity> {
 
     public static final String ID = "edit.undo";
-    private final @NonNull UndoManager manager;
+    private final @NonNull FXUndoManager manager;
 
     /**
      * Creates a new instance.
@@ -31,12 +31,12 @@ public class UndoAction extends AbstractActivityAction<Activity> {
      * @param view    the view
      * @param manager
      */
-    public UndoAction(@NonNull Application app, Activity view, @NonNull UndoManager manager) {
+    public UndoAction(@NonNull Application app, Activity view, @NonNull FXUndoManager manager) {
         super(view);
         this.manager = manager;
         ApplicationLabels.getResources().configureAction(this, ID);
         manager.undoableProperty().addListener((ChangeListener<? super Boolean>) (o, oldv, newv) -> {
-            if (newv) {
+            if (!newv) {
                 disablers.add(this);
             } else {
                 disablers.remove(this);
