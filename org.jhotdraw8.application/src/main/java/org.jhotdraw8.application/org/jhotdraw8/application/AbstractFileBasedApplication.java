@@ -392,7 +392,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             Map<String, Action> allActions = new LinkedHashMap<>(getActions());
             MenuBar mb = createMenuBar(activity, stage, allActions);
             if (mb != null) {
-                //  mb.setUseSystemMenuBar(true);
+                mb.setUseSystemMenuBar(true);
                 borderPane.setTop(mb);
             }
         }
