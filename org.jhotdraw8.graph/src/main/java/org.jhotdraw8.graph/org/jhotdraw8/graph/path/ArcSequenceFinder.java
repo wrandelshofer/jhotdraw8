@@ -104,7 +104,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
 
 
     /**
-     * Finds an arc walk through the given waypoints.
+     * Finds an arc sequence through the given waypoints.
      *
      * @param waypoints         an iterable of waypoints
      * @param maxDepth          the maximal depth (inclusive) of the search
@@ -121,7 +121,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull Supplier<AddToSet<V>> visitedSetFactory);
 
     /**
-     * Finds an arc walk through the given waypoints.
+     * Finds an arc sequence through the given waypoints.
      *
      * @param waypoints an iterable of waypoints
      * @param maxDepth  the maximal depth (inclusive) of the search
@@ -138,7 +138,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
     }
 
     /**
-     * Finds an arc walk through the given waypoints.
+     * Finds an arc sequence through the given waypoints.
      *
      * @param waypoints an iterable of waypoints
      * @param costLimit the algorithm-specific cost limit for paths between waypoints

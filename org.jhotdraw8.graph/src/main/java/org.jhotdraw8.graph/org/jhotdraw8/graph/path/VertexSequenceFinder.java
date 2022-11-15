@@ -205,7 +205,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     }
 
     /**
-     * Finds a vertex walk through the given waypoints.
+     * Finds a vertex sequence through the given waypoints.
      *
      * @param waypoints         a list of waypoints
      * @param maxDepth          the maximal depth (inclusive) of the search
@@ -223,7 +223,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
 
 
     /**
-     * Finds a vertex walk through the given waypoints.
+     * Finds a vertex sequence through the given waypoints.
      *
      * @param waypoints a list of waypoints
      * @param maxDepth  the maximal depth (inclusive) of the search
@@ -240,8 +240,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
     }
 
     /**
-     * /**
-     * Finds a vertex walk through the given waypoints.
+     * Finds a vertex sequence through the given waypoints.
      *
      * @param waypoints a list of waypoints
      * @param costLimit the algorithm-specific cost limit for paths between waypoints

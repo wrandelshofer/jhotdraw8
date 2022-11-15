@@ -143,7 +143,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     }
 
     /**
-     * Finds an arrow walk through the given waypoints.
+     * Finds an arrow sequence through the given waypoints.
      *
      * @param waypoints         a list of waypoints
      * @param maxDepth          the maximal depth (inclusive) of the search
@@ -158,7 +158,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull Supplier<AddToSet<V>> visitedSetFactory);
 
     /**
-     * Finds an arrow walk through the given waypoints.
+     * Finds an arrow sequence through the given waypoints.
      *
      * @param waypoints a list of waypoints
      * @param maxDepth  the maximal depth (inclusive) of the search
@@ -173,7 +173,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
     }
 
     /**
-     * Finds an arrow walk through the given waypoints.
+     * Finds an arrow sequence through the given waypoints.
      *
      * @param waypoints a list of waypoints
      * @param costLimit the algorithm-specific cost limit for paths between waypoints
