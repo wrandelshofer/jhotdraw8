@@ -9,12 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -27,8 +22,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 public class BinaryPListParserTest {
@@ -114,40 +107,4 @@ public class BinaryPListParserTest {
         DOMSource source = new DOMSource(doc);
         t.transform(source, result);
     }
-
-    private static Document normalizeWhitespace(final Document doc, final boolean stripComments) {
-        normalizeWhitespace((Node) doc, stripComments);
-        return doc;
-    }
-
-    private static void normalizeWhitespace(final @NonNull Node node, final boolean stripComments) {
-        final NodeList childNodes = node.getChildNodes();
-        final List<Node> list = new ArrayList<>();
-        for (int i = 0, n = childNodes.getLength(); i < n; i++) {
-            list.add(childNodes.item(i));
-        }
-        boolean deleteEmptyLine = false;
-        for (final Node item : list) {
-            if (item instanceof Element) {
-                normalizeWhitespace(item, stripComments);
-                deleteEmptyLine = false;
-            } else if (item instanceof Comment) {
-                if (stripComments) {
-                    node.removeChild(item);
-                }
-                deleteEmptyLine = true;
-            } else if (item instanceof Text) {
-                final Text text = (Text) item;
-                if (text.getTextContent().trim().isEmpty()) {
-                    if (deleteEmptyLine) {
-                        node.removeChild(item);
-                    } else {
-                        text.setTextContent("\n");
-                    }
-                    deleteEmptyLine = true;
-                }
-            }
-        }
-    }
-
 }
