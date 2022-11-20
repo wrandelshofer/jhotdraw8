@@ -455,24 +455,6 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     /**
-     * Globally renames the specified key.
-     */
-    private <T> void renameKey(@NonNull MapAccessor<T> key, String newName) {
-        for (Map.Entry<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> entry : attrToKey.entrySet()) {
-            HashMap<String, MapAccessor<?>> map = entry.getValue();
-            if (map.values().remove(key)) {
-                map.put(newName, key);
-            }
-        }
-        for (Map.Entry<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> entry : keyToAttr.entrySet()) {
-            HashMap<MapAccessor<?>, String> map = entry.getValue();
-            if (map.containsKey(key)) {
-                map.put(key, newName);
-            }
-        }
-    }
-
-    /**
      * Globally removes the specified key.
      *
      * @param key the key
@@ -556,41 +538,47 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return builder.toString();
     }
 
-    private static class FigureAccessorKey<T> {
-
+    private static final class FigureAccessorKey<T> {
         private final Class<? extends Figure> figure;
         private final MapAccessor<T> acc;
 
-        public FigureAccessorKey(Class<? extends Figure> figure, MapAccessor<T> acc) {
+        private FigureAccessorKey(Class<? extends Figure> figure,
+                                  MapAccessor<T> acc) {
             this.figure = figure;
             this.acc = acc;
         }
 
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            return hash;
+        public Class<? extends Figure> figure() {
+            return figure;
+        }
+
+        public MapAccessor<T> acc() {
+            return acc;
         }
 
         @Override
-        public boolean equals(@Nullable Object obj) {
-            if (this == obj) {
+        public boolean equals(Object obj) {
+            if (obj == this) {
                 return true;
             }
-            if (obj == null) {
+            if (obj == null || obj.getClass() != this.getClass()) {
                 return false;
             }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-
-            final FigureAccessorKey<?> other = (FigureAccessorKey<?>) obj;
-            if (!Objects.equals(this.figure, other.figure)) {
-                return false;
-            }
-            return Objects.equals(this.acc, other.acc);
+            FigureAccessorKey that = (FigureAccessorKey) obj;
+            return Objects.equals(this.figure, that.figure) &&
+                    Objects.equals(this.acc, that.acc);
         }
 
-    }
+        @Override
+        public int hashCode() {
+            return Objects.hash(figure, acc);
+        }
 
+        @Override
+        public String toString() {
+            return "FigureAccessorKey[" +
+                    "figure=" + figure + ", " +
+                    "acc=" + acc + ']';
+        }
+    }
 }
