@@ -109,11 +109,10 @@ public class DepthFirstSpliteratorTest {
         while (iter.hasNext()) {
             final Integer next = iter.next();
             result.add(next);
-            if (next == goal) {
+            if (next.equals(goal)) {
                 break;
             }
         }
-
         assertEquals(result, expResult);
     }
 
