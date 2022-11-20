@@ -748,13 +748,6 @@ public class BezierFit {
         return new Point2D(x, y);
     }
 
-    /**
-     * Scales the input vector by the specified factor and returns it.
-     */
-    private static @NonNull Point2D v2ScaleIII(@NonNull Point2D v, double s) {
-        Point2D result = new Point2D(v.getX() * s, v.getY() * s);
-        return result;
-    }
 
     /**
      * Returns length of input vector.
@@ -779,15 +772,6 @@ public class BezierFit {
     }
 
     /**
-     * Return vector sum = a+b.
-     */
-    private static @NonNull Point2D v2AddII(@NonNull Point2D a, @NonNull Point2D b) {
-        return new Point2D(
-                a.getX() + b.getX(),
-                a.getY() + b.getY());
-    }
-
-    /**
      * Negates the input vector and returns it.
      */
     private static @NonNull Point2D v2Negate(@NonNull Point2D v) {
@@ -795,12 +779,6 @@ public class BezierFit {
                 -v.getY());
     }
 
-    /**
-     * Return the dot product of vectors a and b.
-     */
-    private static double v2Dot(@NonNull Point2D a, @NonNull Point2D b) {
-        return (a.getX() * b.getX()) + (a.getY() * b.getY());
-    }
 
     /**
      * Normalizes the input vector and returns it.
@@ -826,27 +804,5 @@ public class BezierFit {
         Point2D c = new Point2D(a.getX() - b.getX(),
                 a.getY() - b.getY());
         return (c);
-    }
-
-    /**
-     * B0, B1, B2, B3 : BezierFit multipliers
-     */
-    private static double b0(double u) {
-        double tmp = 1.0 - u;
-        return (tmp * tmp * tmp);
-    }
-
-    private static double b1(double u) {
-        double tmp = 1.0 - u;
-        return (3 * u * (tmp * tmp));
-    }
-
-    private static double b2(double u) {
-        double tmp = 1.0 - u;
-        return (3 * u * u * tmp);
-    }
-
-    private static double b3(double u) {
-        return (u * u * u);
     }
 }
