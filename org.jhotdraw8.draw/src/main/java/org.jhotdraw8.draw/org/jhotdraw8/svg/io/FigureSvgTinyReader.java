@@ -622,8 +622,6 @@ public class FigureSvgTinyReader {
                 case XMLStreamReader.START_ELEMENT:
                     if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {
                         handleError(r, "Skipping element " + r.getName() + ".");
-                    } else {
-                        handleError(r, "Skipping element " + r.getName() + ".");
                     }
                     depth++;
                     break;
