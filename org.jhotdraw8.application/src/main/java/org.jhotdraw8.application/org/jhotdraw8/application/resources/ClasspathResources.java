@@ -32,7 +32,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      */
     private final @NonNull String baseName;
     /**
-     * The locale.
+     * The locale. This field is currently only used for debugging.
      */
     private final @NonNull Locale locale;
 
