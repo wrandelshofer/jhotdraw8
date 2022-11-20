@@ -192,6 +192,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         Dockable dockable = new SimpleDockable(r.getString(id + ".toolbar"), inspector.getNode());
         inspector.showingProperty().bind(dockable.showingProperty());
         inspector.getNode().getProperties().put("inspector", inspector);
+        VBox.setVgrow(dockable.getNode(), grow);
         return dockable;
     }
 
