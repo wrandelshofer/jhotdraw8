@@ -28,11 +28,6 @@ public class UriUtil {
     private UriUtil() {
     }
 
-    /**
-     * Prevent instance creation.
-     */
-    private void URIUtil() {
-    }
 
     /**
      * Returns the name of an URI for display in the title bar of a window.
