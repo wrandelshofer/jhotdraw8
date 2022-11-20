@@ -136,8 +136,6 @@ public class HitTestExampleMain extends Application {
     }
 
     private void updateView() {
-        ThreadLocalRandom prng = ThreadLocalRandom.current();
-
         Text text = new Text();
         text.setText(ch);
         text.setFont(Font.font(300));
