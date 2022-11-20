@@ -1183,10 +1183,8 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                         w.writeEndElement();
                     }
                 }
-                if (s != null) {
-                    if (!region.getBorder().getImages().isEmpty()) {
-                        throw new IOException("border image not yet implemented");
-                    }
+                if (s != null && !region.getBorder().getImages().isEmpty()) {
+                    throw new IOException("border image not yet implemented");
                 }
             }
         }
