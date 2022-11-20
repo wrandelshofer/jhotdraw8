@@ -22,7 +22,6 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 import java.util.function.BiConsumer;
 
 public class CssColorPopup {
-    private CssColorDialog dialog;
     private final ContextMenu contextMenu;
     private final MenuItem noneItem;
     private final ColorPicker colorPicker;
