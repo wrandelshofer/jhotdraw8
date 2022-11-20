@@ -42,7 +42,9 @@ public class Uint8HexSrgbaCssColor extends CssColor {
             length = 8;
         }
         String hex = Integer.toHexString(value);
-        for (int i = 0, n = length - hex.length(); i < n; i++) buf.append('0');
+        for (int i = 0, n = length - hex.length(); i < n; i++) {
+            buf.append('0');
+        }
         buf.append(hex);
         return buf.toString();
     }

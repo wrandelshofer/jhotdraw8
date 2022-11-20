@@ -138,8 +138,9 @@ public class StyleableMapTest {
         };
         ArrayList<SimpleStyleableMap<Character, Character>> list = new ArrayList<>();
         int n = 1000;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++) {
             list.add(new SimpleStyleableMap<>(sharedKeysMap));
+        }
         list.stream().parallel().forEach(m -> {
             ThreadLocalRandom prng = ThreadLocalRandom.current();
             int numInserts = prng.nextInt(10, 37);

@@ -416,9 +416,13 @@ public class DoubleArrayList implements Iterable<Double> {
             } else {
                 // XXX this is inefficient, we need a sort method for a double-array that takes a comparator.
                 final Double[] objects = new Double[size];
-                for (int i = 0; i < size; i++) objects[i] = items[i];
+                for (int i = 0; i < size; i++) {
+                    objects[i] = items[i];
+                }
                 Arrays.sort(objects, 0, size, c);
-                for (int i = 0; i < size; i++) items[i] = objects[i];
+                for (int i = 0; i < size; i++) {
+                    items[i] = objects[i];
+                }
             }
         }
     }

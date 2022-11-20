@@ -322,8 +322,9 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         beginChange();
         nextRemove(fromIndex, removed);
         ++modCount;
-        for (E old : removed)
+        for (E old : removed) {
             onRemoved(old);
+        }
         endChange();
     }
 

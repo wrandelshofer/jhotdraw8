@@ -494,9 +494,13 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
             } else {
                 // XXX this is inefficient, we need a sort method for an int-array that takes a comparator.
                 final Integer[] objects = new Integer[size];
-                for (int i = 0; i < size; i++) objects[i] = items[i];
+                for (int i = 0; i < size; i++) {
+                    objects[i] = items[i];
+                }
                 Arrays.sort(objects, 0, size, c);
-                for (int i = 0; i < size; i++) items[i] = objects[i];
+                for (int i = 0; i < size; i++) {
+                    items[i] = objects[i];
+                }
             }
         }
     }

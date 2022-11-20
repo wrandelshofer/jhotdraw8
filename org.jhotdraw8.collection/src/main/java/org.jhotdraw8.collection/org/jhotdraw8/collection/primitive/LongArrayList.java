@@ -503,9 +503,13 @@ public class LongArrayList extends AbstractList<Long> {
             } else {
                 // XXX this is inefficient, we need a sort method for an int-array that takes a comparator.
                 final Long[] objects = new Long[size];
-                for (int i = 0; i < size; i++) objects[i] = items[i];
+                for (int i = 0; i < size; i++) {
+                    objects[i] = items[i];
+                }
                 Arrays.sort(objects, 0, size, c);
-                for (int i = 0; i < size; i++) items[i] = objects[i];
+                for (int i = 0; i < size; i++) {
+                    items[i] = objects[i];
+                }
             }
         }
     }

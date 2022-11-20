@@ -228,7 +228,9 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
-        if (v == null) return;
+        if (v == null) {
+            return;
+        }
         v.write(uri, format, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(this);
@@ -258,7 +260,9 @@ public class ExitAction extends AbstractApplicationAction {
 
     protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
-        if (v == null) return;
+        if (v == null) {
+            return;
+        }
         v.write(uri, format, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);

@@ -132,8 +132,9 @@ public class DenseIntSet8Bit implements IntSet {
     public int hashCode() {
         long h = 1234;
         long[] words = toLongArray();
-        for (int i = words.length; --i >= 0; )
+        for (int i = words.length; --i >= 0; ) {
             h ^= words[i] * (i + 1);
+        }
         return (int) ((h >> 32) ^ h);
     }
 

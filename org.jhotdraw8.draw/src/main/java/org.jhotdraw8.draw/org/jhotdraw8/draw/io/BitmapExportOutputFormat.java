@@ -188,8 +188,9 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     private void writeImage(@NonNull OutputStream out, @NonNull WritableImage writableImage, double dpi) throws IOException {
         BufferedImage image = fromFXImage(writableImage, null);
-        if (image == null)
+        if (image == null) {
             throw new IOException("Could not convert the JavaFX image to AWT.");
+        }
 
         for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("png"); iw.hasNext(); ) {
             ImageWriter writer = iw.next();

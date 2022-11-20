@@ -757,8 +757,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             if (node.getImage() != null) {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
                 final BufferedImage im = fromFXImage(node.getImage(), null);
-                if (im == null)
+                if (im == null) {
                     throw new IOException("Could not create an AWT image.");
+                }
                 ImageIO.write(im, "PNG", bout);
                 bout.close();
                 byte[] imageData = bout.toByteArray();

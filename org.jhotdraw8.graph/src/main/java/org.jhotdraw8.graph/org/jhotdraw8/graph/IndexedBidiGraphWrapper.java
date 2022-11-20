@@ -73,7 +73,9 @@ public class IndexedBidiGraphWrapper implements BidiGraph<Integer, Integer> {
     @Override
     public @NonNull Set<Integer> getVertices() {
         LinkedHashSet<Integer> set = new LinkedHashSet<>(graph.getVertexCount());
-        for (int i = 0, n = graph.getVertexCount(); i < n; i++) set.add(i);
+        for (int i = 0, n = graph.getVertexCount(); i < n; i++) {
+            set.add(i);
+        }
         return set;
     }
 }

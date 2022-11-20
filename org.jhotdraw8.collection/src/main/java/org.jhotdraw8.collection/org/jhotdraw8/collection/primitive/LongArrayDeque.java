@@ -237,7 +237,9 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
      * Increases the capacity of this deque when the elements array is not full.
      */
     private void grow(int capacity) {
-        if (elements.length > capacity) return;
+        if (elements.length > capacity) {
+            return;
+        }
         int newLength = Integer.highestOneBit(capacity + capacity - 1);
         final long[] a = new long[newLength];
         int size = size();
