@@ -401,10 +401,6 @@ public class BezierNode {
         return collinear;
     }
 
-    public boolean isControlPoint(int mask) {
-        return (mask & mask) == mask;
-    }
-
     /**
      * @return the equidistant
      */
