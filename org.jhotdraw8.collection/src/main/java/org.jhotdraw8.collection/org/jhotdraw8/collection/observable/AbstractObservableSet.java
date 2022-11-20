@@ -5,7 +5,6 @@
 package org.jhotdraw8.collection.observable;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
@@ -160,10 +159,6 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     }
 
     protected abstract boolean backingSetIsEmpty();
-
-    private void itemInvalidated(Observable o) {
-        fireInvalidated();
-    }
 
     @Override
     public @NonNull Iterator<E> iterator() {
