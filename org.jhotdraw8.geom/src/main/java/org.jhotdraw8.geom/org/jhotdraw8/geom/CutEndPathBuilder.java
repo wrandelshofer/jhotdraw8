@@ -50,7 +50,6 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
         cy = currentPoint.getY();
         double[] seg = new double[6];
         double x = 0, y = 0;
-        Loop:
         for (PathIterator i = path.build(); !i.isDone(); i.next()) {
             switch (i.currentSegment(seg)) {
             case PathIterator.SEG_CLOSE:
@@ -58,14 +57,13 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
                 break;
             case PathIterator.SEG_CUBICTO: {
                 IntersectionResult isect = IntersectCircleCubicCurve.intersectCubicCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
-                if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
-                    // break Loop;
-                } else if (isect.isEmpty()) {
-                    out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
-                } else {
-                    BezierCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLast().getArgumentA(),
-                            out::curveTo, null);
-                    //  break Loop;
+                if (isect.getStatus() != IntersectionStatus.NO_INTERSECTION_INSIDE) {
+                    if (isect.isEmpty()) {
+                        out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
+                    } else {
+                        BezierCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLast().getArgumentA(),
+                                out::curveTo, null);
+                    }
                 }
                 x = seg[4];
                 y = seg[5];
@@ -73,14 +71,13 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
             }
             case PathIterator.SEG_LINETO: {
                 IntersectionResult isect = IntersectCircleLine.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
-                if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
-                    //         break Loop;
-                } else if (isect.isEmpty()) {
-                    out.lineTo(seg[0], seg[1]);
-                } else {
-                    Geom.splitLine(x, y, seg[0], seg[1], isect.getLast().getArgumentA(),
-                            out::lineTo, null);
-                    //   break Loop;
+                if (isect.getStatus() != IntersectionStatus.NO_INTERSECTION_INSIDE) {
+                    if (isect.isEmpty()) {
+                        out.lineTo(seg[0], seg[1]);
+                    } else {
+                        Geom.splitLine(x, y, seg[0], seg[1], isect.getLast().getArgumentA(),
+                                out::lineTo, null);
+                    }
                 }
                 x = seg[0];
                 y = seg[1];
@@ -94,14 +91,13 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
             }
             case PathIterator.SEG_QUADTO: {
                 IntersectionResult isect = IntersectCircleQuadCurve.intersectQuadCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
-                if (isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE) {
-                    //               break Loop;
-                } else if (isect.isEmpty()) {
-                    out.quadTo(seg[0], seg[1], seg[2], seg[3]);
-                } else {
-                    BezierCurves.splitQuadCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLast().getArgumentA(),
-                            out::quadTo, null);
-                    //   break Loop;
+                if (isect.getStatus() != IntersectionStatus.NO_INTERSECTION_INSIDE) {
+                    if (isect.isEmpty()) {
+                        out.quadTo(seg[0], seg[1], seg[2], seg[3]);
+                    } else {
+                        BezierCurves.splitQuadCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLast().getArgumentA(),
+                                out::quadTo, null);
+                    }
                 }
                 x = seg[2];
                 y = seg[3];
@@ -111,8 +107,6 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
                 throw new IllegalArgumentException("illegal path command:" + i.currentSegment(seg));
             }
         }
-
-
         out.pathDone();
     }
 
