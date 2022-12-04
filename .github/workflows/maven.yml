@@ -30,4 +30,5 @@ jobs:
     - name: Build with Maven
       run: mvn -batch-mode package --fail-at-end
     - name: Publish Test Report
+      if: ${{ always() }}
       uses: scacap/action-surefire-report@v1
