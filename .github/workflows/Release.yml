@@ -17,6 +17,6 @@ jobs:
       with:
         artifacts: '**/target/org.jhotdraw.*.jar'
         replacesArtifacts: false
-        tag: ${{ GITHUB_SHA }}
-        name: Release ${{ GITHUB_SHA }}
-        body: Commit ${{ GITHUB_SHA }}
+        tag: $GITHUB_SHA
+        name: Release $GITHUB_SHA
+        body: Commit $GITHUB_SHA
