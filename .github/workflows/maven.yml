@@ -49,7 +49,7 @@ jobs:
         with:
           script: |
             const { SHORT_SHA, TAG_PREFIX } = process.env
-            github.rest.git.createRef({
+            await github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `refs/tags/${TAG_PREFIX}_${SHORT_SHA}`,
