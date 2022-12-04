@@ -37,3 +37,7 @@ jobs:
         path: '**/target/surefire-reports/*.xml'
         reporter: java-junit
         fail-on-error: true
+    - name: Create Release Zip
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "**/target/org.jhotdraw8.*.jar"
