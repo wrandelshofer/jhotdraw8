@@ -38,13 +38,15 @@ jobs:
         reporter: java-junit
         fail-on-error: true
     - name: Create Release Zip
-      uses: ncipollo/release-action@v1
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - uses: rickstaa/action-create-tag@v1
       with:
-        artifacts: "**/target/org.jhotdraw8.*.jar"
+        tag: '${{ steps.date.outputs.date }}_${{ github.sha }}'
     - uses: ncipollo/release-action@v1
       with:
         artifacts: '**/target/org.jhotdraw.*.jar'
         replacesArtifacts: false
-        tag: '${{ github.sha }}'
-        name: 'Release ${{ github.sha }}'
+        tag: '${{ steps.date.outputs.date }}_${{ github.sha }}'
+        name: 'Release ${{ steps.date.outputs.date }}_${{ github.sha }}'
         body: 'Commit ${{ github.sha }}'
