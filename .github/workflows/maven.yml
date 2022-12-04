@@ -42,7 +42,7 @@ jobs:
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
       - name: Get current date for tag prefix (like "2022-01-01_")
-        run: echo "TAG_PREFIX=`echo $(date +'%Y-%m-%d')`"
+        run: echo "TAG_PREFIX=`echo $(date +'%Y-%m-%d')`" >> $GITHUB_ENV
 
       - name: Tag commit
         uses: actions/github-script@v6
