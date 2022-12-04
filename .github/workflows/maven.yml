@@ -19,6 +19,9 @@ jobs:
 
     runs-on: macos-latest
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -42,7 +45,7 @@ jobs:
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
       - name: Get current date for tag prefix (like "2022-01-01_")
-        run: echo "TAG_PREFIX=$(date +'%Y-%m-%d')"
+        run: echo "TAG_PREFIX=`echo $(date +'%Y-%m-%d')`"
 
       - name: Tag commit
         uses: actions/github-script@v6
@@ -52,13 +55,11 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `refs/tags/${TAG_PREFIX}${SHORT_SHA}`,
+              ref: `refs/tags/${TAG_PREFIX}_${SHORT_SHA}`,
               sha: context.sha
             })
 
-      - name: Create Release Zip
-        uses: marvinpinto/action-automatic-releases@latest
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.15
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: '**/target/org.jhotdraw.*.jar'
+          files: "**/target/org.jhotdraw8.*.jar"
