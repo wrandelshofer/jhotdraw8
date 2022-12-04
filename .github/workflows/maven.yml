@@ -41,3 +41,10 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "**/target/org.jhotdraw8.*.jar"
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: '**/target/org.jhotdraw.*.jar'
+        replacesArtifacts: false
+        tag: ${{ github.sha }}
+        name: Release ${{ github.sha }}
+        body: Commit ${{ github.sha }}
