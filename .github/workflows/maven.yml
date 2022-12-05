@@ -23,7 +23,6 @@ jobs:
         run: mvn -batch-mode package --fail-at-end
       - name: Report
         uses: dorny/test-reporter@v1
-        if: always()
         with:
           name: Maven Tests
           path: '**/target/surefire-reports/*.xml'
