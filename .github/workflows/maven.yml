@@ -1,12 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Java CI with Maven
+name: Run JUnit tests
 
 on:
   push:
@@ -37,27 +29,3 @@ jobs:
           path: '**/target/surefire-reports/*.xml'
           reporter: java-junit
           fail-on-error: true
-
-      - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
-
-      - name: Get current date for tag prefix (like "2022-01-01_")
-        run: echo "TAG_PREFIX=`echo $(date +'%Y-%m-%d')`" >> $GITHUB_ENV
-
-      - name: Tag commit
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { SHORT_SHA, TAG_PREFIX } = process.env
-            await github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${TAG_PREFIX}_${SHORT_SHA}`,
-              sha: context.sha
-            })
-
-      - name: Release
-        uses: softprops/action-gh-release@v0.1.15
-        with:
-          tag_name: '${{ env.TAG_PREFIX}}_${{ env.SHORT_SHA}}'
-          files: "**/target/org.jhotdraw8.*.jar"
