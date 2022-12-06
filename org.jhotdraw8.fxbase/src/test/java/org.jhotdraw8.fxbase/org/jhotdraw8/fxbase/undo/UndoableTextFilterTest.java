@@ -17,7 +17,7 @@ class UndoableTextFilterTest {
         Platform.startup(() -> {
         });
 
-        PlatformUtil.invokeAndWait(1000, () -> {
+        PlatformUtil.invokeAndWait(10000, () -> {
             TextField textField = new TextField();
             TextInputControlUndoAdapter filter = new TextInputControlUndoAdapter(textField);
             textField.setTextFormatter(new TextFormatter<Object>(filter));
