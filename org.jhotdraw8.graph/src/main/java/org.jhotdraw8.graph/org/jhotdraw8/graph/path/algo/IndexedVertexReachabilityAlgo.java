@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.function.AddToIntSet;
+import org.jhotdraw8.graph.algo.AddToIntSet;
 
 import java.util.Spliterator;
 import java.util.function.BiFunction;

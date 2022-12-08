@@ -6,8 +6,8 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.function.AddToIntSet;
 import org.jhotdraw8.collection.primitive.GrowableIntSet8Bit;
+import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLink;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
 

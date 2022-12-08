@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
-import org.jhotdraw8.collection.function.AddToSet;
+import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

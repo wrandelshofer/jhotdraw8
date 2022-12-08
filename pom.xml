@@ -13,16 +13,18 @@
   <groupId>ch.randelshofer</groupId>
   <artifactId>org.jhotdraw8</artifactId>
   <version>1.0</version>
-
-  <packaging>pom</packaging>
-  <name>Parent project for JHotDraw8</name>
-
   <licenses>
     <license>
       <name>MIT License</name>
       <url>https://opensource.org/licenses/MIT</url>
     </license>
   </licenses>
+  <scm>
+    <url>https://github.com/wrandelshofer/jhotdraw8.git</url>
+  </scm>
+
+  <packaging>pom</packaging>
+  <name>Parent project for JHotDraw8</name>
 
   <modules>
     <module>org.jhotdraw8.annotation</module>
@@ -49,7 +51,7 @@
   </properties>
 
   <build>
-    <finalName>${project.artifactId}-${git.build.time}_${git.commit.id.abbrev}</finalName>
+    <finalName>${project.artifactId}-${git.commit.time}_${git.commit.id.abbrev}</finalName>
 
     <pluginManagement>
       <plugins>
@@ -109,7 +111,7 @@
           </generateGitPropertiesFilename>
           <dateFormat>yyyy-MM-dd</dateFormat>
           <includeOnlyProperties>
-            <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+            <includeOnlyProperty>^git.commit.(time|version)$</includeOnlyProperty>
             <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
           </includeOnlyProperties>
           <commitIdGenerationMode>full</commitIdGenerationMode>
@@ -125,7 +127,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <SCM-Revision>${git.build.time}_${git.commit.id.abbrev}</SCM-Revision>
+              <SCM-Revision>${git.commit.time}_${git.commit.id.abbrev}</SCM-Revision>
             </manifestEntries>
           </archive>
         </configuration>

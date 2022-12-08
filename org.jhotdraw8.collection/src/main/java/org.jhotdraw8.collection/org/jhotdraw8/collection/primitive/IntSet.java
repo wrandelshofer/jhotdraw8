@@ -5,12 +5,18 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.collection.function.AddToIntSet;
-
 /**
  * Interface for a collection of int-valued elements that contains no duplicates.
  */
-public interface IntSet extends AddToIntSet {
+public interface IntSet {
+    /**
+     * Adds the specified element to the set if it is not already present.
+     *
+     * @param e element to be added to the set
+     * @return {@code true} if this set did not already contain the specified
+     * element
+     */
+    boolean addAsInt(int e);
 
     /**
      * Removes the specified element from the set.

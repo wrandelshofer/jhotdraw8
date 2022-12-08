@@ -2,7 +2,7 @@
  * @(#)AddToIntSet.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection.function;
+package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 

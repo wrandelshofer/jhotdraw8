@@ -54,7 +54,7 @@ public class DisjointSetsAlgo {
             for (V v : getNextVertices.apply(u)) {
                 List<V> uset = forest.get(u);
                 List<V> vset = forest.get(v);
-                if (uset != vset) {
+                if (uset != vset) {// compare sets by identity and not by their content!
                     MinimumSpanningTreeAlgo.union(uset, vset, forest);
                 }
             }

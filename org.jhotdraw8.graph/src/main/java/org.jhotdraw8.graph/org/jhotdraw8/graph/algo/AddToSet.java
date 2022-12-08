@@ -2,7 +2,7 @@
  * @(#)AddToSet.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection.function;
+package org.jhotdraw8.graph.algo;
 
 /**
  * A function that adds an element to a set if not already present.

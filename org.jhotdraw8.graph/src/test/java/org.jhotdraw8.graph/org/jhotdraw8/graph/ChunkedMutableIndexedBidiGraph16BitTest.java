@@ -104,12 +104,12 @@ public class ChunkedMutableIndexedBidiGraph16BitTest extends AbstractMutableInde
         for (Integer v : expected.getVertices()) {
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<Integer>(expected::getNextVertices, v, false), false).collect(Collectors.toCollection(LinkedHashSet::new));
-                Set<Integer> actualBfs = StreamSupport.stream(a.searchNextVertexData(v, false, new DenseIntSet8Bit(expected.getVertexCount())), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> actualBfs = StreamSupport.stream(a.searchNextVertexData(v, false, new DenseIntSet8Bit(expected.getVertexCount())::addAsInt), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
             {
                 Set<Integer> expectedBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<Integer>(expected::getPrevVertices, v, false), false).collect(Collectors.toCollection(LinkedHashSet::new));
-                Set<Integer> actualBfs = StreamSupport.stream(a.searchPrevVertexData(v, false, new DenseIntSet8Bit(expected.getVertexCount())), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> actualBfs = StreamSupport.stream(a.searchPrevVertexData(v, false, new DenseIntSet8Bit(expected.getVertexCount())::addAsInt), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
         }

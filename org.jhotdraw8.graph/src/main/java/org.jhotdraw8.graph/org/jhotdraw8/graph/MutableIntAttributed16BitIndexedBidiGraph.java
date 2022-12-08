@@ -13,9 +13,9 @@ import org.jhotdraw8.collection.enumerator.AbstractLongEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IntUShortArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.LongEnumeratorSpliterator;
-import org.jhotdraw8.collection.function.AddToIntSet;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
+import org.jhotdraw8.graph.algo.AddToIntSet;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

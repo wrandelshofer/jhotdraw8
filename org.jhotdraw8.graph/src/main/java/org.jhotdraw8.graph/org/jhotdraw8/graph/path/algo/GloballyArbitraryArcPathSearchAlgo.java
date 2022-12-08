@@ -7,8 +7,8 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
-import org.jhotdraw8.collection.function.AddToSet;
 import org.jhotdraw8.graph.Arc;
+import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 

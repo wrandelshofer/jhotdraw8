@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.function.AddToSet;
+import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.function.Predicate;
 

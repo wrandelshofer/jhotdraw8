@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.function.AddToSet;
+import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 
 import java.util.Collection;

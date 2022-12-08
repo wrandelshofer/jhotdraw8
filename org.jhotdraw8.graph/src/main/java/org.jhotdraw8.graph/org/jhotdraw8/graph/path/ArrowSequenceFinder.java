@@ -8,9 +8,9 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.function.AddToSet;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.ArrayList;
 import java.util.HashSet;
