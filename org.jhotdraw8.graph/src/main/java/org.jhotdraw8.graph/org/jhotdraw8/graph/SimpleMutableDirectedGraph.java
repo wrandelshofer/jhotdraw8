@@ -6,9 +6,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.SetFacade;
+import org.jhotdraw8.graph.function.TriFunction;
 
 import java.util.ArrayList;
 import java.util.HashMap;

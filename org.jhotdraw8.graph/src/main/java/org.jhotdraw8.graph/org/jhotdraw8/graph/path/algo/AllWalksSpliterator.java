@@ -6,11 +6,11 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.Arc;
+import org.jhotdraw8.graph.function.TriFunction;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 
 import java.util.ArrayDeque;

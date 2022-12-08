@@ -7,9 +7,9 @@
 module org.jhotdraw8.graph {
     requires transitive org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
-    requires transitive org.jhotdraw8.base;
     exports org.jhotdraw8.graph;
     exports org.jhotdraw8.graph.algo;
+    exports org.jhotdraw8.graph.function;
     exports org.jhotdraw8.graph.iterator;
     exports org.jhotdraw8.graph.path;
     exports org.jhotdraw8.graph.path.algo;

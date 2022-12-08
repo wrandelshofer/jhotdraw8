@@ -7,12 +7,12 @@ package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.Pair;
 import org.jhotdraw8.collection.UnorderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
+import org.jhotdraw8.graph.function.TriFunction;
 
 import java.util.ArrayList;
 import java.util.Collection;

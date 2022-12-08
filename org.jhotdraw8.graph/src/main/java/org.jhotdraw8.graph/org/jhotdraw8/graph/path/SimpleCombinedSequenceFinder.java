@@ -7,11 +7,11 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
+import org.jhotdraw8.graph.function.TriFunction;
 import org.jhotdraw8.graph.path.algo.ArcPathSearchAlgo;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 

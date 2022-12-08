@@ -5,7 +5,6 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.precondition.Preconditions;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.AbstractLongEnumeratorSpliterator;
@@ -13,6 +12,7 @@ import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.LongEnumeratorSpliterator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.algo.AddToIntSet;
+import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;

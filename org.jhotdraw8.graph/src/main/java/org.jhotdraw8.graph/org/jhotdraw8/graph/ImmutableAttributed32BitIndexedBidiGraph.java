@@ -5,9 +5,9 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.precondition.Preconditions;
 import org.jhotdraw8.collection.enumerator.IntArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
+import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Collections;
 import java.util.HashMap;
