@@ -10,7 +10,7 @@ import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
-import org.jhotdraw8.collection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 /**
  * ScreenMenuBarProxyAction.

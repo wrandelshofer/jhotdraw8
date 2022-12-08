@@ -20,12 +20,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.beans.PropertyBean;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.control.Disableable;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 
 import java.net.URI;
 import java.util.concurrent.CompletionStage;

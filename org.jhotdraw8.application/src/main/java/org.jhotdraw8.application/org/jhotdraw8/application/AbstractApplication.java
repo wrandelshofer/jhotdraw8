@@ -26,8 +26,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.EmptyResources;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.net.URI;
 import java.net.URISyntaxException;

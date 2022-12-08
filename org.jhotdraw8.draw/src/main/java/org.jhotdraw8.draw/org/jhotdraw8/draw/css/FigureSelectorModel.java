@@ -10,8 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
-import org.jhotdraw8.collection.typesafekey.CompositeMapAccessor;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssStringConverter;
@@ -25,6 +23,8 @@ import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 import java.io.IOException;
 import java.text.ParseException;

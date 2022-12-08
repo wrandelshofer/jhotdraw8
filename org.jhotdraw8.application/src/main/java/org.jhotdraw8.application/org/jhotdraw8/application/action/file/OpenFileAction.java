@@ -7,7 +7,7 @@ package org.jhotdraw8.application.action.file;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedApplication;
-import org.jhotdraw8.collection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

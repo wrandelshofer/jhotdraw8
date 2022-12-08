@@ -20,8 +20,6 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.CssColor;
@@ -29,6 +27,8 @@ import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.css.Paintable;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.function.Function;

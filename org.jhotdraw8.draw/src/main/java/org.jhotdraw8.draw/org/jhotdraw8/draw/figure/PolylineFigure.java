@@ -13,7 +13,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.css.CssRectangle2D;
@@ -24,6 +23,7 @@ import org.jhotdraw8.draw.handle.PolyPointMoveHandle;
 import org.jhotdraw8.draw.handle.PolylineOutlineHandle;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 

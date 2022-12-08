@@ -8,10 +8,10 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.util.Collection;
 import java.util.HashMap;

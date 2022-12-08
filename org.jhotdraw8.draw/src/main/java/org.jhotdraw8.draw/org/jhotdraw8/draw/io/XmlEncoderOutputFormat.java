@@ -8,9 +8,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.beans.XMLEncoder;
 import java.io.IOException;

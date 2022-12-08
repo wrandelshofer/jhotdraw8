@@ -12,8 +12,8 @@ import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.collection.reflect.TypeToken;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 
 import java.net.URI;
 import java.util.Map;

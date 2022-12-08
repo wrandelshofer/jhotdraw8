@@ -58,12 +58,9 @@
       <artifactId>javafx-controls</artifactId>
     </dependency>
     <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.base</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.fxbase</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

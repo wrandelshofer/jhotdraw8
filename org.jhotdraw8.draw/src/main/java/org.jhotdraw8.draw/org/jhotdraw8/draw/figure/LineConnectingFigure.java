@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 
 /**
  * LineConnectingFigure.

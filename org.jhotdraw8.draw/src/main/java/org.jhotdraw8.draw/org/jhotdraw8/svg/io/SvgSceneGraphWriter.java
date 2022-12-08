@@ -5,7 +5,7 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
-import org.jhotdraw8.collection.typesafekey.NonNullObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 
 public interface SvgSceneGraphWriter {
     /**

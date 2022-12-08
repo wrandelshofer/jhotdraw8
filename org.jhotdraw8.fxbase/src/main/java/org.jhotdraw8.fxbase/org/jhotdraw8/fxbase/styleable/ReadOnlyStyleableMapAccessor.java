@@ -7,7 +7,7 @@ package org.jhotdraw8.fxbase.styleable;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 /**
  * Generic interface for map accessors that are readable by CSS.

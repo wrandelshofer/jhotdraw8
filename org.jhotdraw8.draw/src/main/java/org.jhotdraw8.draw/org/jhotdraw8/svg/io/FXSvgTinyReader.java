@@ -7,11 +7,11 @@ package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;

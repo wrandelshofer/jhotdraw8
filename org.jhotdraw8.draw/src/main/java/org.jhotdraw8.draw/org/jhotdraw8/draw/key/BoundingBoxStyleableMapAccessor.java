@@ -8,9 +8,9 @@ import javafx.geometry.BoundingBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.css.converter.CssBoundingBoxConverter;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 import java.util.Map;
 import java.util.Objects;

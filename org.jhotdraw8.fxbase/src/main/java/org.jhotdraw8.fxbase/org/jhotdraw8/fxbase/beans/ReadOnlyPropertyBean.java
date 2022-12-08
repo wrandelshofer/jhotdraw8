@@ -7,8 +7,8 @@ package org.jhotdraw8.fxbase.beans;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 public interface ReadOnlyPropertyBean {
     /**

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.render;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 /**
  * RenderContext.

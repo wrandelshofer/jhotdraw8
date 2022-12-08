@@ -17,8 +17,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.css.CssRectangle2D;
@@ -38,6 +36,8 @@ import org.jhotdraw8.fxbase.styleable.StyleableBean;
 import org.jhotdraw8.fxbase.styleable.StyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.tree.TreeNode;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXTransforms;
 

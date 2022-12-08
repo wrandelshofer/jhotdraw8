@@ -73,5 +73,9 @@
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.graph</artifactId>
       </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.fxcollection</artifactId>
+      </dependency>
     </dependencies>
 </project>

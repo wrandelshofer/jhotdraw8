@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 import java.util.Map;
 

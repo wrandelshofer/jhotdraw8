@@ -5,9 +5,9 @@
 package org.jhotdraw8.draw.render;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 
 /**
  * PrintRenderContext.

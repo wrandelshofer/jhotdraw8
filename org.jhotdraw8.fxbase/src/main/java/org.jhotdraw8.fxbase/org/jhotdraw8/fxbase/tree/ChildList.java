@@ -6,7 +6,7 @@
 package org.jhotdraw8.fxbase.tree;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.indexedset.AbstractIndexedArrayObservableSet;
+import org.jhotdraw8.fxcollection.indexedset.AbstractIndexedArrayObservableSet;
 
 /**
  * A child list for implementations of the {@link TreeNode} interface.

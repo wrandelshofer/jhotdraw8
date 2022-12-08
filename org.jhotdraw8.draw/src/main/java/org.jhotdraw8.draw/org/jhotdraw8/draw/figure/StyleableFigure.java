@@ -14,6 +14,7 @@ import org.jhotdraw8.draw.key.ObservableWordSetKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.fxcollection.facade.ObservableSetFacade;
 
 /**
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
@@ -82,7 +83,7 @@ public interface StyleableFigure extends Figure {
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EXPORT) {
             String styleId = getId();
             node.setId(styleId == null ? "" : styleId);
-            node.getStyleClass().setAll(getStyleClasses().asObservableSet());
+            node.getStyleClass().setAll(new ObservableSetFacade<>(getStyleClasses()));
             node.getProperties().put(TYPE_SELECTOR_NODE_KEY, getTypeSelector());
         }
     }

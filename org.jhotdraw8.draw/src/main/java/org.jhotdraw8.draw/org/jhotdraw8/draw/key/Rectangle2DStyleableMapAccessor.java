@@ -8,9 +8,9 @@ import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.css.converter.Rectangle2DConverter;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.Map;
 import java.util.Objects;

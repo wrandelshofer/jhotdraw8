@@ -8,9 +8,9 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.event.SimpleWeakListener;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.lang.ref.WeakReference;
 

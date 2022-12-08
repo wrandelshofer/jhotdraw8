@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.svg.key;
 
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 
 public interface SvgDefaultablePaintStyleableMapAccessor<T extends Paintable> extends NonNullMapAccessor<SvgDefaultablePaint<T>> {

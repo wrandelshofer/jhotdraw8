@@ -7,7 +7,6 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.css.converter.CssStringConverter;
 import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.css.converter.CssRectangle2DConverter;
@@ -18,6 +17,7 @@ import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.SimpleStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 /**
  * Represents an SVG 'svg' element.

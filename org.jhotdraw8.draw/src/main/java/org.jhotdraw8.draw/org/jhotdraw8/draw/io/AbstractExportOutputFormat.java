@@ -14,7 +14,6 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.collection.champ.ChampImmutableSequencedMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -22,6 +21,7 @@ import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -8,9 +8,9 @@ import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.fxbase.beans.PropertyBean;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.Objects;
 

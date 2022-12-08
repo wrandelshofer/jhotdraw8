@@ -23,6 +23,7 @@ module org.jhotdraw8.draw {
     requires transitive org.jhotdraw8.geom;
     requires transitive org.jhotdraw8.graph;
     requires transitive org.jhotdraw8.fxbase;
+    requires org.jhotdraw8.fxcollection;
 
     opens org.jhotdraw8.draw.inspector;
     opens org.jhotdraw8.draw;

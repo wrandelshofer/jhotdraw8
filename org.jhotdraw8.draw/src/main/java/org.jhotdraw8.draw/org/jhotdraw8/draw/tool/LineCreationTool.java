@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
@@ -19,6 +18,7 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 import java.util.function.Supplier;
 

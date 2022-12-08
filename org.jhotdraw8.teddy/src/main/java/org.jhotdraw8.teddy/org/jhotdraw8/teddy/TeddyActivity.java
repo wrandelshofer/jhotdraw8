@@ -21,11 +21,11 @@ import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.action.edit.RedoAction;
 import org.jhotdraw8.application.action.edit.UndoAction;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxbase.control.TextInputControlUndoAdapter;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.teddy.action.FontAction;
 import org.jhotdraw8.teddy.action.FontableActivity;
 

@@ -9,10 +9,10 @@ import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.typesafekey.Key;
-import org.jhotdraw8.collection.typesafekey.MapAccessor;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.HashMap;
 import java.util.Map;

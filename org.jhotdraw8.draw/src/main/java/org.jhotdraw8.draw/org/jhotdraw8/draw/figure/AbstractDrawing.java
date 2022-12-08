@@ -21,7 +21,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.css.manager.SimpleStylesheetsManager;
 import org.jhotdraw8.css.manager.StylesheetsManager;
 import org.jhotdraw8.css.value.CssSize;
@@ -29,6 +28,7 @@ import org.jhotdraw8.draw.css.CssRectangle2D;
 import org.jhotdraw8.draw.css.FigureSelectorModel;
 import org.jhotdraw8.draw.css.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.net.URI;
 import java.util.ArrayList;

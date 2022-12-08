@@ -25,9 +25,9 @@ import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.typesafekey.Key;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.util.LinkedList;
 

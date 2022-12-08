@@ -4,9 +4,7 @@
  */
 package org.jhotdraw8.collection.readonly;
 
-import javafx.collections.ObservableSet;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.facade.ObservableSetFacadeFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.facade.SetFacade;
 
@@ -67,14 +65,6 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
         return false;
     }
 
-    /**
-     * Wraps this set in the ObservableSet interface - without copying.
-     *
-     * @return the wrapped set
-     */
-    default @NonNull ObservableSet<E> asObservableSet() {
-        return new ObservableSetFacadeFacade<>(this);
-    }
 
     /**
      * Wraps this set in the Set interface - without copying.

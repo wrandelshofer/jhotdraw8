@@ -16,7 +16,6 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:18.0.1" level="project" />
     <orderEntry type="module" module-name="org.jhotdraw8.annotation" />
     <orderEntry type="module" module-name="org.jhotdraw8.collection" />
-    <orderEntry type="module" module-name="org.jhotdraw8.base" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.8.2" level="project" />

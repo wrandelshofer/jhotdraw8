@@ -17,8 +17,6 @@ import org.jhotdraw8.collection.champ.ChampSequencedMap;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
-import org.jhotdraw8.collection.typesafekey.NonNullKey;
-import org.jhotdraw8.collection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.CssColor;
@@ -34,6 +32,8 @@ import org.jhotdraw8.draw.figure.ResizableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.SimpleNonNullStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
 

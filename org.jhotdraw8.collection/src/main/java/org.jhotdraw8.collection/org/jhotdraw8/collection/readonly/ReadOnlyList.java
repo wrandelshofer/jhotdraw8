@@ -4,13 +4,11 @@
  */
 package org.jhotdraw8.collection.readonly;
 
-import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.ReadOnlyListEnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.facade.ObservableListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 
 import java.util.ArrayList;
@@ -174,15 +172,6 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     default @NonNull List<E> asList() {
         return new ListFacade<>(this);
-    }
-
-    /**
-     * Wraps this list in the ObservableList interface - without copying.
-     *
-     * @return the wrapped list
-     */
-    default @NonNull ObservableList<E> asObservableList() {
-        return new ObservableListFacade<>(this);
     }
 
     /**

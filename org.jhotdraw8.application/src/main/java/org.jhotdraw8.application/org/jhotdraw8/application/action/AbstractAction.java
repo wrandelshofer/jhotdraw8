@@ -11,7 +11,7 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractDisableable;
-import org.jhotdraw8.collection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 /**
  * AbstractAction.

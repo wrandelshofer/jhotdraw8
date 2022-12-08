@@ -33,7 +33,6 @@ import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.observable.ReversedObservableList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -46,6 +45,7 @@ import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
+import org.jhotdraw8.fxcollection.ReversedObservableList;
 
 import java.io.IOException;
 import java.io.InputStream;

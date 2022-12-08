@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.draw.css.converter.SymmetricPoint2DConverter;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 /**
  * SymmetricPoint2DStyleableMapAccessor.
