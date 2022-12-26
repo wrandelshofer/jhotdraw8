@@ -24,7 +24,7 @@
   </scm>
 
   <packaging>pom</packaging>
-  <name>Parent project for JHotDraw8</name>
+  <name>JHotDraw8 parent project</name>
 
   <modules>
     <module>org.jhotdraw8.annotation</module>
@@ -48,10 +48,11 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
   </properties>
 
   <build>
-    <finalName>${project.artifactId}-${git.commit.time}_${git.commit.id.abbrev}</finalName>
+    <!--finalName>${project.artifactId}-${git.commit.time}_${git.commit.id.abbrev}</finalName-->
 
     <pluginManagement>
       <plugins>
@@ -78,8 +79,14 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.0.0-M7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-artifact-plugin</artifactId>
+          <version>3.3.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -109,7 +116,8 @@
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
           <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
           </generateGitPropertiesFilename>
-          <dateFormat>yyyy-MM-dd</dateFormat>
+          <dateFormatTimeZone>UTC</dateFormatTimeZone>
+          <dateFormat>yyyy-MM-dd'T'HH:mm:ss'Z'</dateFormat>
           <includeOnlyProperties>
             <includeOnlyProperty>^git.commit.(time|version)$</includeOnlyProperty>
             <includeOnlyProperty>^git.commit.id.(abbrev|full)$</includeOnlyProperty>
@@ -123,16 +131,66 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.3.0</version>
         <configuration>
           <archive>
+            <manifest>
+              <addDefaultEntries>false</addDefaultEntries>
+            </manifest>
             <manifestEntries>
+              <SCM-URL>${project.scm.url}</SCM-URL>
               <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
               <Git-Commit-Id>${git.commit.id.full}</Git-Commit-Id>
             </manifestEntries>
           </archive>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultEntries>false</addDefaultEntries>
+            </manifest>
+            <manifestEntries>
+              <SCM-URL>${project.scm.url}</SCM-URL>
+              <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
+              <Git-Commit-Id>${git.commit.id.full}</Git-Commit-Id>
+            </manifestEntries>
+            <addMavenDescriptor>false</addMavenDescriptor>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <windowtitle>JHotDraw 8 ${project.version}</windowtitle>
+          <header>JHotDraw 8 ${project.version}</header>
+          <bottom>Copyright © 2022 Werner Randelshofer, Switzerland. MIT License.</bottom>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      -->
     </plugins>
   </build>
 
@@ -141,7 +199,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
         <reportSets>
           <reportSet>
             <id>aggregate</id>
@@ -158,8 +216,10 @@
           </reportSet>
         </reportSets>
         <configuration>
-          <additionalOptions>-Xdoclint:none</additionalOptions>
-          <additionalJOption>-Xdoclint:none</additionalJOption>
+          <windowtitle>JHotDraw 8 ${project.version}</windowtitle>
+          <header>JHotDraw 8 ${project.version}</header>
+          <bottom>Copyright © 2022 Werner Randelshofer, Switzerland. MIT License.</bottom>
+          <additionalOptions>-Xdoclint:all</additionalOptions>
         </configuration>
       </plugin>
     </plugins>
