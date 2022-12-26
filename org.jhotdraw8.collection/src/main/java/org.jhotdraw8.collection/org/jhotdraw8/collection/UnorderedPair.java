@@ -14,7 +14,7 @@ import java.util.Objects;
  * <p>
  * This is a value-type.
  *
- * @param <V> the type of the items that form the pair
+ * @param <V> the type of the elements that form the pair
  * @author Werner Randelshofer
  */
 public class UnorderedPair<V> implements Pair<V, V> {

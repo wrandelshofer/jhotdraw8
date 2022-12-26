@@ -17,6 +17,11 @@ public abstract class AbstractSyntaxTree {
     public AbstractSyntaxTree() {
     }
 
+    /**
+     * Produces tokens for the subtree starting at this tree node.
+     *
+     * @param consumer a consumer for the tokens
+     */
     public void produceTokens(Consumer<CssToken> consumer) {
     }
 }

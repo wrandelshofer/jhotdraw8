@@ -50,10 +50,18 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
      */
     public static final String NAME = "attr";
 
+    /**
+     * Creates a new instance with the function name {@value #NAME}.
+     */
     public AttrCssFunction() {
         super(NAME);
     }
 
+    /**
+     * Creates a new instance with the specified function name.
+     *
+     * @param name the name of the function
+     */
     public AttrCssFunction(String name) {
         super(name);
     }
@@ -102,7 +110,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         applyFunction(element, model, functionProcessor, out, recursionStack, line, start, attrName, typeOrUnit, attrFallback, end);
     }
 
-    public void applyFunction(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack, int line, int start, QualifiedName attrName, String typeOrUnit, List<CssToken> attrFallback, int end) throws IOException, ParseException {
+    private void applyFunction(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack, int line, int start, QualifiedName attrName, String typeOrUnit, List<CssToken> attrFallback, int end) throws IOException, ParseException {
         @Nullable List<CssToken> tokenizedValue = model.getAttribute(element, null, attrName.getNamespace(), attrName.getName());
         if (tokenizedValue != null) {
             switch (typeOrUnit == null ? "string" : typeOrUnit) {
@@ -189,12 +197,23 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     }
 
     /**
-     * The attribute value is parsed as a CSS <number>, that is without the unit (e.g. 12.5), and interpreted as a <percentage>. If it is not valid, that is not a number or out of the range accepted by the CSS property, the default value is used.
+     * The attribute value is parsed as a CSS {@code number}, that is without the unit
+     * (e.g. 12.5), and interpreted as a {@code percentage}.
+     * If it is not valid, that is not a number or out of the range accepted by
+     * the CSS property, the default value is used.
      * If the given value is used as a length, attr() computes it to an absolute length.
      * Leading and trailing spaces are stripped.
      * <p>
      * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
      * MDN web docs, attr()</a>
+     *
+     * @param out the consumer of the output tokens
+     * @param line the line number to be stated in the location info of the output tokens
+     * @param start the start position to be stated in the location info of the output tokens
+     * @param typeOrUnit the target type or unit of the output tokens
+     * @param end the end position to be stated in the location info of the output tokens
+     * @param tokenizedValue the input tokens
+     * @return true on success
      */
     private boolean applyAsPercentage(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
@@ -308,8 +327,16 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
      * <p>
      * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
      * MDN web docs, attr()</a>
+     *
+     * @param out            the consumer of the output tokens
+     * @param line           the line number to be stated in the location info of the output tokens
+     * @param start          the start position to be stated in the location info of the output tokens
+     * @param typeOrUnit     the target type or unit of the output tokens
+     * @param end            the end position to be stated in the location info of the output tokens
+     * @param tokenizedValue the input tokens
+     * @return true on success
      */
-    public boolean applyAsLengthInTheGivenUnits(@NonNull Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, @NonNull List<CssToken> tokenizedValue) {
+    private boolean applyAsLengthInTheGivenUnits(@NonNull Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, @NonNull List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
         if (t2.next() == CssTokenType.TT_EOF) {
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, 0, typeOrUnit));
@@ -341,13 +368,22 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
 
     /**
      * The attribute value is treated as a CSS {@code string}.
-     * It is NOT reparsed, and in particular the characters are used as-is
+     * It is NOT parsed again, and in particular the characters are used as-is
      * instead of CSS escapes being turned into different characters.
      * <p>
      * <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/attr">
      * MDN web docs, attr()</a>
+     *
+     * @param element  the element that provides the attribute value
+     * @param model    the selector model for the element
+     * @param out      the consumer of the output tokens
+     * @param line     the line number to be stated in the location info of the output tokens
+     * @param start    the start position to be stated in the location info of the output tokens
+     * @param attrName the name of the attribute
+     * @param end      the end position to be stated in the location info of the output tokens
+     * @return true on success
      */
-    public boolean applyAsString(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
+    private boolean applyAsString(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
         String attributeAsString = model.getAttributeAsString(element, null, attrName.getNamespace(), attrName.getName());
         if (attributeAsString == null) {
             return false;

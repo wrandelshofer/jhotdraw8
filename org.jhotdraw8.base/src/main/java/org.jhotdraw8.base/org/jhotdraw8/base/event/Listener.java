@@ -7,6 +7,7 @@ package org.jhotdraw8.base.event;
 /**
  * Functional listener interface.
  *
+ * @param <E> the event type
  * @author Werner Randelshofer
  */
 @FunctionalInterface

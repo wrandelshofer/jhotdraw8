@@ -151,7 +151,7 @@ import java.util.function.Function;
  * <dt>CSS Syntax Module Level 3, Chapter 5. Parsing</dt>
  * <dd><a href="https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#parsing">w3.org</a></dd>
  * <dt>W3C CSS2.2, Appendix G.1 Grammar of CSS 2.2</dt>
- * <dd><a href="https://www.w3.org/TR/CSS22/grammar.html>w3.org</a></dd>
+ * <dd><a href="https://www.w3.org/TR/CSS22/grammar.html">w3.org</a></dd>
  * </dl>
  *
  * @author Werner Randelshofer

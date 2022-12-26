@@ -57,6 +57,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -69,7 +70,7 @@ import java.util.function.Supplier;
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
-    private final CachingCollator collator = new CachingCollator(new NaturalSortCollator());
+    private final Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));
     private final @NonNull XmlWordListConverter wordListConverter = new XmlWordListConverter();
     private final XmlWordSetConverter wordSetConverter = new XmlWordSetConverter();
     private final SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();

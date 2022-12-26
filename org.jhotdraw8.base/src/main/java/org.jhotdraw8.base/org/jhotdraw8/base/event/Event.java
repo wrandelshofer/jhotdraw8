@@ -11,20 +11,21 @@ import java.util.EventObject;
 /**
  * Event.
  *
+ * @param <S> the type of the event source
  * @author Werner Randelshofer
  */
-public class Event<E> extends EventObject {
+public class Event<S> extends EventObject {
 
     private static final long serialVersionUID = 1L;
 
-    public Event(@NonNull E source) {
+    public Event(@NonNull S source) {
         super(source);
     }
 
     @Override
-    public @NonNull E getSource() {
+    public @NonNull S getSource() {
         @SuppressWarnings("unchecked")
-        E temp = (E) super.getSource();
+        S temp = (S) super.getSource();
         return temp;
     }
 

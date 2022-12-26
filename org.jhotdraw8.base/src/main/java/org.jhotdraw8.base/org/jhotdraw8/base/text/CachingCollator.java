@@ -13,7 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * CachingCollator.
+ * A {@link Comparator} that compares {@link String}s using a provided
+ * {@link Collator}.
+ * <p>
+ * This comparator caches the collation keys.
  *
  * @author Werner Randelshofer
  */

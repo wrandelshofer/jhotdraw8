@@ -15,6 +15,8 @@ import java.util.Objects;
  * <p>
  * This is a value-type.
  *
+ * @param <U> the type of the first element of the pair
+ * @param <V> the type of the second element of the pair
  * @author Werner Randelshofer
  */
 public class OrderedPair<U, V> implements Pair<U, V> {

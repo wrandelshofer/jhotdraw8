@@ -5,6 +5,10 @@
 
 import org.jhotdraw8.application.spi.ApplicationResourceBundleProvider;
 
+/**
+ * Defines a programming model for document oriented applications and provides default
+ * implementations.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.application {
     requires transitive javafx.graphics;

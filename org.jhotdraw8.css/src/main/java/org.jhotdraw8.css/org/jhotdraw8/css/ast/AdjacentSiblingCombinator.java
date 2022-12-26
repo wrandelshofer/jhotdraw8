@@ -21,6 +21,12 @@ import java.util.function.Consumer;
  */
 public class AdjacentSiblingCombinator extends Combinator {
 
+    /**
+     * Creates a new instance.
+     *
+     * @param first  the first selector
+     * @param second the second selector
+     */
     public AdjacentSiblingCombinator(SimpleSelector first, Selector second) {
         super(first, second);
     }

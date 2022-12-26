@@ -23,6 +23,13 @@ public class AtRule extends Rule {
     private final @NonNull ImmutableList<CssToken> header;
     private final @NonNull ImmutableList<CssToken> body;
 
+    /**
+     * Creates a new instance.
+     *
+     * @param atKeyword the "at-keyword"
+     * @param header    the list of header tokens
+     * @param body      the list of body tokens
+     */
     public AtRule(@NonNull String atKeyword,
                   @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body) {
         this.atKeyword = atKeyword;
@@ -53,14 +60,29 @@ public class AtRule extends Rule {
         return buf.toString();
     }
 
+    /**
+     * Gets the "at-keyword".
+     *
+     * @return the "at-keyword".
+     */
     public @NonNull String getAtKeyword() {
         return atKeyword;
     }
 
+    /**
+     * Gets the list of header tokens.
+     *
+     * @return the header tokens
+     */
     public @NonNull ReadOnlyList<CssToken> getHeader() {
         return header;
     }
 
+    /**
+     * Gets the list of body tokens.
+     *
+     * @return the body tokens
+     */
     public @NonNull ReadOnlyList<CssToken> getBody() {
         return body;
     }
