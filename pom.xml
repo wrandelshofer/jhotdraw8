@@ -172,10 +172,11 @@
           </execution>
         </executions>
       </plugin>
-      <!--
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.3.2</version>
         <configuration>
           <windowtitle>JHotDraw 8 ${project.version}</windowtitle>
           <header>JHotDraw 8 ${project.version}</header>
@@ -190,7 +191,7 @@
           </execution>
         </executions>
       </plugin>
-      -->
+
     </plugins>
   </build>
 
