@@ -32,7 +32,7 @@ public class ReadOnlySequencedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
         super((Map<K, V>) target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
-        this.reversedIteratorFunction = () -> target.reversed().entrySet().iterator();
+        this.reversedIteratorFunction = () -> target.reversed().sequencedEntrySet().iterator();
     }
 
     public ReadOnlySequencedMapFacade(

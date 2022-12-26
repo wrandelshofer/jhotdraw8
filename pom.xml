@@ -127,7 +127,8 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <SCM-Revision>${git.commit.time}_${git.commit.id.abbrev}</SCM-Revision>
+              <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
+              <Git-Commit-Id>${git.commit.id.full}</Git-Commit-Id>
             </manifestEntries>
           </archive>
         </configuration>

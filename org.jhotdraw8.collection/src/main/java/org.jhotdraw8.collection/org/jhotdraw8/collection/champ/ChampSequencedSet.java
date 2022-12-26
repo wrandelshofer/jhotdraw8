@@ -8,8 +8,8 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
-import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacadeFacade;
-import org.jhotdraw8.collection.facade.SequencedSetFacadeFacade;
+import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
+import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -280,7 +280,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacadeFacade<>(reversed());
+        return new ReadOnlySequencedSetFacade<>(reversed());
     }
 
     @SuppressWarnings("unchecked")
@@ -339,7 +339,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     @Override
     public SequencedSet<E> reversed() {
-        return new SequencedSetFacadeFacade<>(
+        return new SequencedSetFacade<>(
                 () -> iterator(true),
                 () -> iterator(false),
                 this::size,

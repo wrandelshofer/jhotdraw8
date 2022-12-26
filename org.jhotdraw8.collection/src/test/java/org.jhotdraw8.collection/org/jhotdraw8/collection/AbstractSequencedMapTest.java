@@ -207,11 +207,11 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         ArrayList<Map.Entry<K, V>> expectedList = new ArrayList<>(expected);
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.firstEntry(), message);
-            assertEquals(expectedList.get(0), actual.entrySet().iterator().next(), message);
+            assertEquals(expectedList.get(0), actual.sequencedEntrySet().iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.lastEntry(), message);
-            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().entrySet().iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().sequencedEntrySet().iterator().next(), message);
         }
-        assertEquals(expectedList, new ArrayList<>(actual.entrySet()), message);
+        assertEquals(expectedList, new ArrayList<>(actual.sequencedEntrySet()), message);
 
         LinkedHashMap<Object, Object> x = new LinkedHashMap<>();
         for (Map.Entry<K, V> e : expected) {

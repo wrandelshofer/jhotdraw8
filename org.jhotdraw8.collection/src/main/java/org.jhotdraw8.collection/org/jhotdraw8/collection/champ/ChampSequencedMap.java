@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.FailFastIterator;
 import org.jhotdraw8.collection.MutableMapEntry;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
-import org.jhotdraw8.collection.facade.SequencedSetFacadeFacade;
+import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
@@ -220,7 +220,12 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
 
     @Override
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
-        return new SequencedSetFacadeFacade<>(
+        return sequencedEntrySet();
+    }
+
+    @Override
+    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+        return new SequencedSetFacade<>(
                 () -> entryIterator(false),
                 () -> entryIterator(true),
                 this::size,
@@ -289,7 +294,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @Override
-    public @NonNull SequencedSet<K> keySet() {
+    public @NonNull SequencedSet<K> sequencedKeySet() {
         return AbstractSequencedMap.createKeySet(this);
     }
 
@@ -477,7 +482,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @Override
-    public @NonNull SequencedCollection<V> values() {
+    public @NonNull SequencedCollection<V> sequencedValues() {
         return AbstractSequencedMap.createValues(this);
     }
 

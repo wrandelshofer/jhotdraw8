@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacadeFacade;
+import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
 
 import java.util.Map;
@@ -64,7 +64,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
 
     @Override
     default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
-        return new ReadOnlySequencedSetFacadeFacade<>(
+        return new ReadOnlySequencedSetFacade<>(
                 this::iterator,
                 () -> readOnlyReversed().readOnlyEntrySet().iterator(),
                 this::size,
@@ -76,7 +76,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
 
     @Override
     default @NonNull ReadOnlySequencedSet<K> readOnlyKeySet() {
-        return new ReadOnlySequencedSetFacadeFacade<>(
+        return new ReadOnlySequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getKey),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getKey),
                 this::size,
@@ -88,7 +88,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
 
     @Override
     default @NonNull ReadOnlySequencedCollection<V> readOnlyValues() {
-        return new ReadOnlySequencedSetFacadeFacade<>(
+        return new ReadOnlySequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getValue),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getValue),
                 this::size,

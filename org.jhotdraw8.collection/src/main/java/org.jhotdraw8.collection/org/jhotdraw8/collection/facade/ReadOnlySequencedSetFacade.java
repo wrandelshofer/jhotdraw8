@@ -18,29 +18,29 @@ import java.util.function.Supplier;
  *
  * @author Werner Randelshofer
  */
-public class ReadOnlySequencedSetFacadeFacade<E> extends ReadOnlySetFacade<E>
+public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>
         implements ReadOnlySequencedSet<E> {
 
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
     final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
 
-    public ReadOnlySequencedSetFacadeFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
+    public ReadOnlySequencedSetFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public ReadOnlySequencedSetFacadeFacade(@NonNull SequencedSet<E> backingSet) {
+    public ReadOnlySequencedSetFacade(@NonNull SequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public ReadOnlySequencedSetFacadeFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                            @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
-                                            @NonNull IntSupplier sizeFunction,
-                                            @NonNull Predicate<Object> containsFunction,
-                                            @NonNull Supplier<E> getFirstFunction,
-                                            @NonNull Supplier<E> getLastFunction) {
+    public ReadOnlySequencedSetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                                      @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
+                                      @NonNull IntSupplier sizeFunction,
+                                      @NonNull Predicate<Object> containsFunction,
+                                      @NonNull Supplier<E> getFirstFunction,
+                                      @NonNull Supplier<E> getLastFunction) {
         super(iteratorFunction, sizeFunction, containsFunction);
         this.getFirstFunction = getFirstFunction;
         this.getLastFunction = getLastFunction;
@@ -60,7 +60,7 @@ public class ReadOnlySequencedSetFacadeFacade<E> extends ReadOnlySetFacade<E>
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacadeFacade<>(
+        return new ReadOnlySequencedSetFacade<>(
                 reversedIteratorFunction,
                 iteratorFunction,
                 sizeFunction,

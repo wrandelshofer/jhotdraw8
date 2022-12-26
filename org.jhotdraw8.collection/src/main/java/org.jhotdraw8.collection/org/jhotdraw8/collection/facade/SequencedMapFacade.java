@@ -53,7 +53,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
         this.lastEntryFunction = m::lastEntry;
         this.putFirstFunction = m::putFirst;
         this.putLastFunction = m::putLast;
-        this.reversedIteratorFunction = () -> m.reversed().entrySet().iterator();
+        this.reversedIteratorFunction = () -> m.reversed().sequencedEntrySet().iterator();
     }
 
     public SequencedMapFacade(
@@ -83,8 +83,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     }
 
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> entrySet() {
-        return new SequencedSetFacadeFacade<>(
+    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+        return new SequencedSetFacade<>(
                 iteratorFunction,
                 reversedIteratorFunction,
                 sizeFunction,
@@ -92,8 +92,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                 clearFunction,
                 this::removeEntry,
                 firstEntryFunction,
-                lastEntryFunction, null, null, null, null
-        );
+                lastEntryFunction, null, null, null, null);
     }
 
     @Override
@@ -102,8 +101,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     }
 
     @Override
-    public @NonNull SequencedSet<K> keySet() {
-        return new SequencedSetFacadeFacade<>(
+    public @NonNull SequencedSet<K> sequencedKeySet() {
+        return new SequencedSetFacade<>(
                 () -> new MappedIterator<>(iteratorFunction.get(), Map.Entry::getKey),
                 () -> new MappedIterator<>(reversedIteratorFunction.get(), Map.Entry::getKey),
                 sizeFunction,
@@ -111,8 +110,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                 clearFunction,
                 this::removeEntry,
                 this::firstKey,
-                this::lastKey, null, null, null, null
-        );
+                this::lastKey, null, null, null, null);
     }
 
     @Override
@@ -149,7 +147,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     }
 
     @Override
-    public @NonNull SequencedCollection<V> values() {
+    public @NonNull SequencedCollection<V> sequencedValues() {
         return new SequencedCollectionFacade<>(
                 () -> new MappedIterator<>(iteratorFunction.get(), Map.Entry::getValue),
                 () -> new MappedIterator<>(reversedIteratorFunction.get(), Map.Entry::getValue),

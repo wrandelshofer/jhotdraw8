@@ -28,6 +28,7 @@
     <orderEntry type="module" module-name="org.jhotdraw8.css" />
     <orderEntry type="module" module-name="org.jhotdraw8.geom" />
     <orderEntry type="module" module-name="org.jhotdraw8.graph" />
+    <orderEntry type="module" module-name="org.jhotdraw8.fxcollection" />
     <orderEntry type="module" module-name="org.jhotdraw8.os" />
     <orderEntry type="module" module-name="org.jhotdraw8.fxcontrols" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:18.0.1" level="project" />

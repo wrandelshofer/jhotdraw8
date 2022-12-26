@@ -32,7 +32,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @throws java.util.NoSuchElementException if the map is empty
      */
     default @Nullable Map.Entry<K, V> firstEntry() {
-        return isEmpty() ? null : entrySet().iterator().next();
+        return isEmpty() ? null : sequencedEntrySet().iterator().next();
     }
 
     /**
@@ -42,7 +42,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @throws java.util.NoSuchElementException if the map is empty
      */
     default K firstKey() {
-        return keySet().iterator().next();
+        return sequencedKeySet().iterator().next();
     }
 
     /**
@@ -52,7 +52,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @throws java.util.NoSuchElementException if the map is empty
      */
     default @Nullable Map.Entry<K, V> lastEntry() {
-        return isEmpty() ? null : reversed().entrySet().iterator().next();
+        return isEmpty() ? null : reversed().sequencedEntrySet().iterator().next();
     }
 
     /**
@@ -62,7 +62,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @throws java.util.NoSuchElementException if the map is empty
      */
     default K lastKey() {
-        return reversed().keySet().iterator().next();
+        return reversed().sequencedKeySet().iterator().next();
     }
 
     /**
@@ -82,7 +82,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the removed first entry of this map or code {@code null}
      */
     default Map.Entry<K, V> pollFirstEntry() {
-        Iterator<Entry<K, V>> it = entrySet().iterator();
+        Iterator<Entry<K, V>> it = sequencedEntrySet().iterator();
         if (it.hasNext()) {
             Entry<K, V> entry = it.next();
             it.remove();
@@ -99,7 +99,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the removed first entry of this map or code {@code null}
      */
     default Map.Entry<K, V> pollLastEntry() {
-        Iterator<Entry<K, V>> it = reversed().entrySet().iterator();
+        Iterator<Entry<K, V>> it = reversed().sequencedEntrySet().iterator();
         if (it.hasNext()) {
             Entry<K, V> entry = it.next();
             it.remove();
@@ -133,17 +133,30 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      */
     V putLast(K k, V v);
 
-    @Override
+    /**
+     * Returns a {@link SequencedSet} view of the keys contained in this map.
+     *
+     * @return a {@link SequencedSet} view of the keys
+     */
     @NonNull
-    SequencedSet<K> keySet();
+    SequencedSet<K> sequencedKeySet();
 
-    @Override
+    /**
+     * Returns a {@link SequencedCollection} view of the values contained in
+     * this map.
+     *
+     * @return a {@link SequencedCollection} view of the values
+     */
     @NonNull
-    SequencedCollection<V> values();
+    SequencedCollection<V> sequencedValues();
 
-    @Override
+    /**
+     * Returns a {@link SequencedSet} view of the entries contained in this map.
+     *
+     * @return a {@link SequencedSet} view of the entries
+     */
     @NonNull
-    SequencedSet<Entry<K, V>> entrySet();
+    SequencedSet<Entry<K, V>> sequencedEntrySet();
 
     @Override
     default V getOrDefault(Object key, V defaultValue) {

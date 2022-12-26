@@ -8,7 +8,7 @@ import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.ReversedListEnumeratorSpliterator;
-import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacadeFacade;
+import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.fxcollection.precondition.Preconditions;
@@ -814,7 +814,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacadeFacade<E>(
+        return new ReadOnlySequencedSetFacade<E>(
                 () -> new ReversedListEnumeratorSpliterator<>(this, 0, size),
                 this::iterator,
                 this::size,

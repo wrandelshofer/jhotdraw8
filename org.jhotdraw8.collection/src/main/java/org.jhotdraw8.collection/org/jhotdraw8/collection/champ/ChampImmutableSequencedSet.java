@@ -8,7 +8,7 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.UniqueId;
-import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacadeFacade;
+import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
@@ -332,7 +332,7 @@ public class ChampImmutableSequencedSet<E>
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacadeFacade<>(
+        return new ReadOnlySequencedSetFacade<>(
                 this::reversedIterator,
                 this::iterator,
                 this::size,
