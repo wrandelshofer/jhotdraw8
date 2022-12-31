@@ -7,7 +7,6 @@ package org.jhotdraw8.xml;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.precondition.Preconditions;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
@@ -560,7 +559,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     @Override
     public void writeCharacters(@NonNull char[] text, int start, int len) throws XMLStreamException {
         Objects.requireNonNull(text, "text");
-        Preconditions.checkFromIndexSize(start, len, text.length);
+        Objects.checkFromIndexSize(start, len, text.length);
         closeStartTagOrCloseEmptyElemTag();
 
         if (!isPreserveSpace() && !hasContent() && isBlank(text, start, len)) {

@@ -8,10 +8,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.jhotdraw8.text;
+package org.jhotdraw8.base.converter;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.converter.DefaultConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

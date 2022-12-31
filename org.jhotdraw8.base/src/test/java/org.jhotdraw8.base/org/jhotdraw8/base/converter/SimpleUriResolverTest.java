@@ -3,10 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.io;
+package org.jhotdraw8.base.converter;
 
 
-import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
