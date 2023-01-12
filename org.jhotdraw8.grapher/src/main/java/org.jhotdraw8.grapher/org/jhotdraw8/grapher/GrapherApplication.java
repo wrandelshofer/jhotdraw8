@@ -4,11 +4,9 @@
  */
 package org.jhotdraw8.grapher;
 
-import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractFileBasedApplication;
-import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIExtensionFilter;
 import org.jhotdraw8.draw.DrawStylesheets;
@@ -17,7 +15,6 @@ import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.fxbase.fxml.FxmlUtil;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
-import org.jhotdraw8.grapher.action.GrapherAboutAction;
 import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
@@ -55,12 +52,6 @@ public class GrapherApplication extends AbstractFileBasedApplication {
         }
 
         launch(args);
-    }
-
-    @Override
-    protected void initActions(@NonNull ObservableMap<String, Action> map) {
-        super.initActions(map);
-        map.put(GrapherAboutAction.ID, new GrapherAboutAction(this));
     }
 
     @Override
