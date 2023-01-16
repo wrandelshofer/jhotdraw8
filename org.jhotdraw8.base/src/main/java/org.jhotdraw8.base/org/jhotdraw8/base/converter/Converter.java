@@ -124,7 +124,7 @@ public interface Converter<T> {
     default @Nullable T fromString(@NonNull CharSequence in) throws ParseException, IOException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
-        if (buf.remaining() != 0 && !buf.toString().trim().isEmpty()) {
+        if (buf.remaining() != 0) {
             throw new ParseException(buf.remaining() + " remaining character(s) not consumed." + " remaining: \"" + buf + "\".", buf.position());
         }
         return value;

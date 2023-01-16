@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.base.io.CharSequenceReader;
+import org.jhotdraw8.base.io.CharBufferReader;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 
@@ -29,7 +29,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
 
     @Override
     public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        StreamCssTokenizer tt = new StreamCssTokenizer(new CharSequenceReader(buf));
+        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
             throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
         }

@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.base.io.CharSequenceReader;
+import org.jhotdraw8.base.io.CharBufferReader;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
@@ -77,7 +77,7 @@ public class XmlConnectorConverter implements Converter<Connector> {
     @Override
     public @Nullable Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Connector c;
-        CssTokenizer tt = new StreamCssTokenizer(new CharSequenceReader(buf));
+        CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         c = parseConnector(tt, idResolver);
 
         if (!buf.toString().trim().isEmpty()) {
