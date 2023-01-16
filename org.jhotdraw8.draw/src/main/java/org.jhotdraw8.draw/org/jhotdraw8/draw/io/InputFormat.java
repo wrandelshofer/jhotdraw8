@@ -63,6 +63,8 @@ public interface InputFormat {
         URI documentHome = file.getParent() == null ? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri() : file.getParent().toUri();
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(in, drawing, documentHome, workState);
+        } catch (IOException e) {
+            throw new IOException("Error reading file " + file, e);
         }
     }
 

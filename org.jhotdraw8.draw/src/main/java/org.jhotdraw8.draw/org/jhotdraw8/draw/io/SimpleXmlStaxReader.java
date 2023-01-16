@@ -245,7 +245,9 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
                     try {
                         figure.set(key, figureFactory.stringToValue(key, attributeValue));
                     } catch (IOException e) {
-                        throw new UncheckedIOException(e);
+                        throw new UncheckedIOException(
+                                "Error reading attribute" + attributeLocalName + "\" at line " + location.getLineNumber() + ", col " + location.getColumnNumber(),
+                                e);
                     }
                 });
 
