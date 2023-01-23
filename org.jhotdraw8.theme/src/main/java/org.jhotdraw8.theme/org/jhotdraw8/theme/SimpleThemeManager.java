@@ -15,7 +15,7 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 public class SimpleThemeManager implements ThemeManager {
     private final @NonNull ObjectProperty<Theme> theme = new SimpleObjectProperty<>(this, "theme", null);
     private final @NonNull ObjectProperty<ThemeParameters> themeParameters = new SimpleObjectProperty<>(
-            this, "themeParameters", new SimpleThemeOptions());
+            this, "themeParameters", new SimpleThemeParameters());
     private final @NonNull ReadOnlyListWrapper<Theme> themes = new ReadOnlyListWrapper<>(
             this, "themes", FXCollections.observableArrayList());
     private final @NonNull ObservableValue<Number> viaFontSize = CustomBinding.via(themeParameters, ThemeParameters::fontSizeProperty);

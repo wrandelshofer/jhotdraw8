@@ -11,9 +11,9 @@ import org.jhotdraw8.os.Appearance;
  *     <dd><a href="https://github.com/mkpaz/atlantafx">github.com</a></dd>
  * </dl>
  */
-public class NordDarkTheme extends AtlantaFXTheme {
+public class NordDarkTheme extends AbstractAtlantaFXTheme {
     public NordDarkTheme() {
-        super("Atlanta Nord Dark", Appearance.DARK, "/ch/randelshofer/flexythemefx/nord-dark.css");
+        super("Atlanta Nord Dark", Appearance.DARK, "/org/jhotdraw8/theme/atlantafx/nord-dark.css");
     }
 
 }

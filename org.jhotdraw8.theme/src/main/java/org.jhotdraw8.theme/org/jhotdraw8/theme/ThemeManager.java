@@ -15,11 +15,11 @@ public interface ThemeManager {
         return instance;
     }
 
-    static @Nullable ThemeManager getInstance() {
+    static @NonNull ThemeManager getInstance() {
         return instance.get();
     }
 
-    static void setInstance(@Nullable ThemeManager newInstance) {
+    static void setInstance(@NonNull ThemeManager newInstance) {
         instance.set(newInstance);
     }
 
@@ -27,7 +27,7 @@ public interface ThemeManager {
 
     @NonNull ObjectProperty<ThemeParameters> themeParametersProperty();
 
-    default @Nullable ThemeParameters getThemeParameters() {
+    default @NonNull ThemeParameters getThemeParameters() {
         return themeParametersProperty().get();
     }
 

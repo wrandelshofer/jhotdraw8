@@ -11,7 +11,7 @@ import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
 
 
-public class SimpleThemeOptions implements ThemeParameters {
+public class SimpleThemeParameters implements ThemeParameters {
     private final @NonNull DoubleProperty fontSize = new SimpleDoubleProperty(
             this, "fontSize", Font.getDefault().getSize());
     private final @NonNull StringProperty customCss = new SimpleStringProperty(

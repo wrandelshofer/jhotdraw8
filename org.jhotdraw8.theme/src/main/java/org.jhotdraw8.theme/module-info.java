@@ -12,4 +12,5 @@ module org.jhotdraw8.theme {
     requires transitive org.jhotdraw8.fxbase;
     exports org.jhotdraw8.theme;
     exports org.jhotdraw8.theme.atlantafx;
+    opens org.jhotdraw8.theme.atlantafx;
 }

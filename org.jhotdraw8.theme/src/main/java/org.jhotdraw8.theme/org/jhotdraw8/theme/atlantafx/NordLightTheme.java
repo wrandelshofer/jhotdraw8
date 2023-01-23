@@ -12,9 +12,9 @@ import org.jhotdraw8.os.Appearance;
  *     <dd><a href="https://github.com/mkpaz/atlantafx">github.com</a></dd>
  * </dl>
  */
-public class NordLightTheme extends AtlantaFXTheme {
+public class NordLightTheme extends AbstractAtlantaFXTheme {
     public NordLightTheme() {
-        super("Atlanta Nord Light", Appearance.LIGHT, "/ch/randelshofer/flexythemefx/nord-light.css");
+        super("Atlanta Nord Light", Appearance.LIGHT, "/org/jhotdraw8/theme/atlantafx/nord-light.css");
     }
 
 }

@@ -24,10 +24,10 @@ import static org.jhotdraw8.color.FXColorUtil.toWebColor;
  *     <dd><a href="https://github.com/mkpaz/atlantafx">github.com</a></dd>
  * </dl>
  */
-public class AtlantaFXTheme extends AbstractTheme {
+public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
     private final String uaStylesheetUrl;
 
-    protected AtlantaFXTheme(String name, Appearance appearance, String uaStylesheetUrl) {
+    protected AbstractAtlantaFXTheme(String name, Appearance appearance, String uaStylesheetUrl) {
         super(name, appearance);
         this.uaStylesheetUrl = uaStylesheetUrl;
     }

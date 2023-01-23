@@ -11,9 +11,9 @@ import org.jhotdraw8.os.Appearance;
  *     <dd><a href="https://github.com/mkpaz/atlantafx">github.com</a></dd>
  * </dl>
  */
-public class PrimerDarkTheme extends AtlantaFXTheme {
+public class PrimerDarkTheme extends AbstractAtlantaFXTheme {
     public PrimerDarkTheme() {
-        super("Atlanta Primer Dark", Appearance.DARK, "/ch/randelshofer/flexythemefx/primer-dark.css");
+        super("Atlanta Primer Dark", Appearance.DARK, "/org/jhotdraw8/theme/atlantafx/primer-dark.css");
     }
 
 }
