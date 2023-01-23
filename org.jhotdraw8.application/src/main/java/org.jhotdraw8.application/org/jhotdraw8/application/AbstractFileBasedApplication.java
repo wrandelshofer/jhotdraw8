@@ -543,7 +543,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        startUserAgentStylesheet();
+        //startUserAgentStylesheet();
         try {
             isSystemMenuSupported = false; //Toolkit.getToolkit().getSystemMenu().isSupported();
         } catch (IllegalAccessError e) {
@@ -735,6 +735,12 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         initProperties();
         initFactories();
         initActions(getActions());
+        initTheme();
+    }
+
+    protected void initTheme() {
+
+
     }
 
     protected void initResourceBundle() {

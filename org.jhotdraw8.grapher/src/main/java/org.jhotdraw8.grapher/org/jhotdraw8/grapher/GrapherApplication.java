@@ -18,6 +18,11 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
+import org.jhotdraw8.theme.ThemeManager;
+import org.jhotdraw8.theme.atlantafx.NordDarkTheme;
+import org.jhotdraw8.theme.atlantafx.NordLightTheme;
+import org.jhotdraw8.theme.atlantafx.PrimerDarkTheme;
+import org.jhotdraw8.theme.atlantafx.PrimerLightTheme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +41,8 @@ public class GrapherApplication extends AbstractFileBasedApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
+
         // See
         // https://bugs.openjdk.java.net/browse/JDK-8091497
 
@@ -64,7 +71,6 @@ public class GrapherApplication extends AbstractFileBasedApplication {
 
     @Override
     protected void initProperties() {
-        super.initProperties();
         set(NAME_KEY, "Grapher");
         set(COPYRIGHT_KEY, "Copyright © 2021 The authors and contributors of JHotDraw.");
         set(LICENSE_KEY, "MIT License.");
@@ -84,17 +90,26 @@ public class GrapherApplication extends AbstractFileBasedApplication {
 
     public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new SimpleNonNullKey<>("darkMode", Boolean.class, Boolean.FALSE);
 
-    @Override
-    protected void startUserAgentStylesheet() {
+
+    protected void initTheme() {
+        final ThemeManager mgr = ThemeManager.getInstance();
+        final NordLightTheme lightTheme = new NordLightTheme();
+        final NordDarkTheme darkTheme = new NordDarkTheme();
+        mgr.getThemes().addAll(new PrimerDarkTheme(), new PrimerLightTheme(), lightTheme, darkTheme);
         final Object value = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
+        if ("Dark".equals(value)) {
+            mgr.setTheme(darkTheme);
+        } else {
+            mgr.setTheme(lightTheme);
+        }
+        /*
         if ("Dark".equals(value)) {
             set(DARK_MODE_KEY, true);
             getStylesheets().add(getClass().getResource("dark-theme.css").toString());
         } else {
             set(DARK_MODE_KEY, false);
             getStylesheets().add(getClass().getResource("light-theme.css").toString());
-        }
+        }*/
         getStylesheets().add(DrawStylesheets.getInspectorsStylesheet());
-
     }
 }
