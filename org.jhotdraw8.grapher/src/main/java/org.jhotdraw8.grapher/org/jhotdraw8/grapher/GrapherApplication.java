@@ -18,11 +18,6 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
-import org.jhotdraw8.theme.ThemeManager;
-import org.jhotdraw8.theme.atlantafx.NordDarkTheme;
-import org.jhotdraw8.theme.atlantafx.NordLightTheme;
-import org.jhotdraw8.theme.atlantafx.PrimerDarkTheme;
-import org.jhotdraw8.theme.atlantafx.PrimerLightTheme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +31,7 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
  * @author Werner Randelshofer
  */
 public class GrapherApplication extends AbstractFileBasedApplication {
+    public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new SimpleNonNullKey<>("darkMode", Boolean.class, Boolean.FALSE);
 
     /**
      * @param args the command line arguments
@@ -88,10 +84,8 @@ public class GrapherApplication extends AbstractFileBasedApplication {
         setResources(GrapherLabels.getResources());
     }
 
-    public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new SimpleNonNullKey<>("darkMode", Boolean.class, Boolean.FALSE);
-
-
     protected void initTheme() {
+        /*
         final ThemeManager mgr = ThemeManager.getInstance();
         final NordLightTheme lightTheme = new NordLightTheme();
         final NordDarkTheme darkTheme = new NordDarkTheme();
@@ -102,14 +96,15 @@ public class GrapherApplication extends AbstractFileBasedApplication {
         } else {
             mgr.setTheme(lightTheme);
         }
-        /*
+        */
+        final Object value = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
         if ("Dark".equals(value)) {
             set(DARK_MODE_KEY, true);
             getStylesheets().add(getClass().getResource("dark-theme.css").toString());
         } else {
             set(DARK_MODE_KEY, false);
             getStylesheets().add(getClass().getResource("light-theme.css").toString());
-        }*/
+        }
         getStylesheets().add(DrawStylesheets.getInspectorsStylesheet());
     }
 }
