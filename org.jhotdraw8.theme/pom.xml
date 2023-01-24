@@ -36,7 +36,7 @@
   <dependencies>
     <dependency>
       <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.application</artifactId>
+      <artifactId>org.jhotdraw8.annotation</artifactId>
       <version>1.0</version>
     </dependency>
     <dependency>
@@ -48,6 +48,10 @@
       <groupId>ch.randelshofer</groupId>
       <artifactId>org.jhotdraw8.os</artifactId>
       <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
     </dependency>
   </dependencies>
 </project>

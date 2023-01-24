@@ -7,7 +7,6 @@
 module org.jhotdraw8.os {
     exports org.jhotdraw8.os;
     exports org.jhotdraw8.os.macos;
-    requires transitive javafx.graphics;
     requires transitive org.jhotdraw8.annotation;
     requires transitive java.xml;
 }

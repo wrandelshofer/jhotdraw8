@@ -8,7 +8,6 @@ module org.jhotdraw8.fxcollection {
     requires transitive org.jhotdraw8.annotation;
     requires transitive javafx.base;
     requires transitive org.jhotdraw8.collection;
-    requires transitive javafx.controls;
 
     exports org.jhotdraw8.fxcollection;
     exports org.jhotdraw8.fxcollection.facade;

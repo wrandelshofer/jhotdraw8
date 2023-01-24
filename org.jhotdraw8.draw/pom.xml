@@ -6,7 +6,7 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -45,15 +45,27 @@
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.fxbase</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.css</artifactId>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.fxbase</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.fxcollection</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.fxcontrols</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.geom</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.graph</artifactId>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -66,16 +78,8 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.fxcontrols</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.graph</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.fxcollection</artifactId>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
       </dependency>
     </dependencies>
 </project>
