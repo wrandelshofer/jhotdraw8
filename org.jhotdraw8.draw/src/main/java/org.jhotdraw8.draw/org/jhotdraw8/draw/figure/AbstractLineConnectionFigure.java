@@ -14,8 +14,8 @@ import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.css.CssPoint2D;
-import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
 

@@ -13,8 +13,8 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.CssStrokeStyle;
 import org.jhotdraw8.draw.css.converter.CssStrokeStyleConverter;
+import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 

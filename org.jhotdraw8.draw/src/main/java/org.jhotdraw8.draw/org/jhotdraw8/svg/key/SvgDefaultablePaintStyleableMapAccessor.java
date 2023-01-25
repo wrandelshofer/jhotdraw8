@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.svg.key;
 
-import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 

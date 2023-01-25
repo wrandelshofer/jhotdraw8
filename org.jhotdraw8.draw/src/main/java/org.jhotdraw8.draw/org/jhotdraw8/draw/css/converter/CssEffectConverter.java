@@ -25,10 +25,11 @@ import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.value.CssColor;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

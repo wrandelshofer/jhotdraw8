@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.popup;
 
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.draw.css.CssColor;
-import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.draw.css.value.Paintable;
 
 import java.util.function.BiConsumer;
 

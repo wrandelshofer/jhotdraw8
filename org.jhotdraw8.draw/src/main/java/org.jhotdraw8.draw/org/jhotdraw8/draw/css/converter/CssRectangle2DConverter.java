@@ -13,13 +13,13 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.value.CssRectangle2D;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-import static org.jhotdraw8.draw.css.converter.CssSizeConverter.parseSize;
+import static org.jhotdraw8.css.converter.CssSizeConverter.parseSize;
 
 
 /**

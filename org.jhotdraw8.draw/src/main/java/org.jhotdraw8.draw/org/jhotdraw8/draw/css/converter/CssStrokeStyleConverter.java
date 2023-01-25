@@ -19,7 +19,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.CssStrokeStyle;
+import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 
 import java.io.IOException;
 import java.text.ParseException;

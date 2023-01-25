@@ -10,11 +10,11 @@ import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.converter.MappedConverter;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
+import org.jhotdraw8.css.converter.CssSizeConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssSizeConverter;
 
 import java.io.IOException;
 import java.text.ParseException;

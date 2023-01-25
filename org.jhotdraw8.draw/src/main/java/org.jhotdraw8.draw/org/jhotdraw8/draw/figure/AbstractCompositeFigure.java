@@ -10,7 +10,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxbase.tree.ChildList;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;

@@ -10,7 +10,7 @@ import javafx.scene.text.FontWeight;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.CssFont;
+import org.jhotdraw8.draw.css.value.CssFont;
 import org.jhotdraw8.fxcontrols.fontchooser.FontDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
 

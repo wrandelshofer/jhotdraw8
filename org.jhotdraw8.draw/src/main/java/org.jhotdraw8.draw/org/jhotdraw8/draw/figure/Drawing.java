@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.manager.StylesheetsManager;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NullableCssColorStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;

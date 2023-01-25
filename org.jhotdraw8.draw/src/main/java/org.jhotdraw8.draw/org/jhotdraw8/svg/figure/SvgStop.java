@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.CssColor;
+import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 
 import java.util.Objects;

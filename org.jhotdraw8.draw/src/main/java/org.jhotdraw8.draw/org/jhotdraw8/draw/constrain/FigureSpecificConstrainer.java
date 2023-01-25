@@ -11,8 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.CssPoint2D;
-import org.jhotdraw8.draw.css.CssRectangle2D;
+import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 

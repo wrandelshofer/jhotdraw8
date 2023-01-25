@@ -28,7 +28,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.CssPoint2D;
+import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;

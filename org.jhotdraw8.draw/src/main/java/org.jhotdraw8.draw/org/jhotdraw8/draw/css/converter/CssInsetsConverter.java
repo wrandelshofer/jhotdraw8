@@ -13,7 +13,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.CssInsets;
+import org.jhotdraw8.draw.css.value.CssInsets;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static org.jhotdraw8.draw.css.converter.CssSizeConverter.parseSize;
+import static org.jhotdraw8.css.converter.CssSizeConverter.parseSize;
 
 /**
  * Converts a {@link CssInsets} object into a {@code String} and vice

@@ -12,7 +12,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.CssDimension2D;
+import org.jhotdraw8.draw.css.value.CssDimension2D;
 
 import java.util.Arrays;
 import java.util.List;

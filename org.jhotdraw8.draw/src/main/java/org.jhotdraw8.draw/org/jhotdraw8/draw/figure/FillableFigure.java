@@ -9,8 +9,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.css.CssColor;
-import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 

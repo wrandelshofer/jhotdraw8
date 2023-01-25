@@ -15,8 +15,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
-import org.jhotdraw8.draw.css.CssColor;
-import org.jhotdraw8.draw.css.NamedCssColor;
+import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.draw.css.value.NamedCssColor;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import java.util.function.BiConsumer;

@@ -6,8 +6,8 @@
 package org.jhotdraw8.svg.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.draw.css.CssColor;
-import org.jhotdraw8.draw.css.Paintable;
+import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.svg.figure.SvgDefaultableFigure;
 import org.jhotdraw8.svg.figure.SvgRectFigure;

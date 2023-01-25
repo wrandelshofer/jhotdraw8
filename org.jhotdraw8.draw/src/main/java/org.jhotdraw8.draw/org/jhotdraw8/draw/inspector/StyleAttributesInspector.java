@@ -18,7 +18,7 @@ import org.jhotdraw8.css.manager.StylesheetsManager;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.FigureSelectorModel;
+import org.jhotdraw8.draw.css.value.FigureSelectorModel;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
