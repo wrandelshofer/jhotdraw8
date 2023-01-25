@@ -68,27 +68,27 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeType type = StrokeType.CENTERED;
         StrokeLineCap lineCap = StrokeLineCap.BUTT;
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
-        CssSize miterLimit = CssSize.from(4);
-        CssSize dashOffset = CssSize.from(0);
+        CssSize miterLimit = CssSize.of(4);
+        CssSize dashOffset = CssSize.of(0);
         ImmutableList<CssSize> dashArray = ImmutableArrayList.of();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
             switch (tt.currentStringNonNull()) {
-            case TYPE:
-                type = parseStrokeType(tt);
-                break;
-            case LINECAP:
-                lineCap = parseLineCap(tt);
+                case TYPE:
+                    type = parseStrokeType(tt);
+                    break;
+                case LINECAP:
+                    lineCap = parseLineCap(tt);
                 break;
             case LINEJOIN:
                 lineJoin = parseLineJoin(tt);
                 break;
             case MITERLIMIT:
-                miterLimit = parseNumericFunction(MITERLIMIT, CssSize.from(10), tt, idResolver);
+                miterLimit = parseNumericFunction(MITERLIMIT, CssSize.of(10), tt, idResolver);
                 break;
             case DASHOFFSET:
-                dashOffset = parseNumericFunction(DASHOFFSET, CssSize.from(0), tt, idResolver);
+                dashOffset = parseNumericFunction(DASHOFFSET, CssSize.of(0), tt, idResolver);
                 break;
             case DASHARRAY:
                 dashArray = parseDashArray(tt, idResolver);
@@ -203,10 +203,10 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         CssSize value;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            value = CssSize.from(tt.currentNumberNonNull().doubleValue());
+            value = CssSize.of(tt.currentNumberNonNull().doubleValue());
             break;
         case CssTokenType.TT_DIMENSION:
-            value = CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+            value = CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             break;
         default:
             value = defaultValue;

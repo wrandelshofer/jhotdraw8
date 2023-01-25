@@ -120,7 +120,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
     public @NonNull CssFont parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
-        CssSize fontSize = CssSize.from(12.0);
+        CssSize fontSize = CssSize.of(12.0);
         String fontFamily = "System";
 
         // parse FontStyle
@@ -185,9 +185,9 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
         // parse FontSize
         if (tt.next() == CssTokenType.TT_DIMENSION || tt.current() == CssTokenType.TT_NUMBER) {
             if (tt.current() == CssTokenType.TT_DIMENSION) {
-                fontSize = CssSize.from(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+                fontSize = CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
             } else if (tt.current() == CssTokenType.TT_NUMBER) {
-                fontSize = CssSize.from(tt.currentNumberNonNull().doubleValue());
+                fontSize = CssSize.of(tt.currentNumberNonNull().doubleValue());
             }
             if (fontWeightOrFontSizeConsumed) {
                 switch ((int) fontWeightOrFontSize) {
@@ -225,7 +225,7 @@ public class CssFontConverter extends AbstractCssConverter<CssFont> {
 
         } else if (fontWeightOrFontSizeConsumed) {
             tt.pushBack();
-            fontSize = CssSize.from(fontWeightOrFontSize);
+            fontSize = CssSize.of(fontWeightOrFontSize);
         } else {
             tt.pushBack();
         }

@@ -79,7 +79,7 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", CssSize.from(10.0));
+    CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", CssSize.of(10.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code null}.

@@ -77,7 +77,7 @@ public interface SecondStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    CssSizeStyleableKey SECOND_STROKE_MITER_LIMIT = new CssSizeStyleableKey("second-stroke-miterlimit", CssSize.from(4.0));
+    CssSizeStyleableKey SECOND_STROKE_MITER_LIMIT = new CssSizeStyleableKey("second-stroke-miterlimit", CssSize.of(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.

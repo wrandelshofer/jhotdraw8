@@ -36,7 +36,7 @@ public interface TextFontableFigure extends Figure {
      * Defines the font used. Default value: {@code new Font("Arial",12)}
      */
     StringOrIdentStyleableKey FONT_FAMILY = new StringOrIdentStyleableKey("fontFamily", "Arial");
-    CssSizeStyleableKey FONT_SIZE = new CssSizeStyleableKey("fontSize", CssSize.from(12.0));
+    CssSizeStyleableKey FONT_SIZE = new CssSizeStyleableKey("fontSize", CssSize.of(12.0));
     EnumStyleableKey<FontPosture> FONT_STYLE = new EnumStyleableKey<>("fontStyle", FontPosture.class, FontPosture.REGULAR);
     EnumStyleableKey<FontWeight> FONT_WEIGHT = new EnumStyleableKey<>("fontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);

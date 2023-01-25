@@ -143,9 +143,9 @@ public class CssColorConverter implements CssConverter<CssColor> {
                 throw tt.createParseException("CssColor: hsb found unsupported dimension.");
             }
             if (tt.current() == CssTokenType.TT_PERCENTAGE) {
-                sizes[i++] = CssSize.from(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+                sizes[i++] = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
             } else {
-                sizes[i++] = CssSize.from(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
+                sizes[i++] = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
             }
             if (tt.next() != ',') {
                 tt.pushBack();
@@ -173,9 +173,9 @@ public class CssColorConverter implements CssConverter<CssColor> {
         CssSize[] sizes = new CssSize[4];
         while (i < 4 && (tt.next() == CssTokenType.TT_NUMBER || tt.current() == CssTokenType.TT_PERCENTAGE)) {
             if (tt.current() == CssTokenType.TT_PERCENTAGE) {
-                sizes[i++] = CssSize.from(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+                sizes[i++] = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
             } else {
-                sizes[i++] = CssSize.from(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
+                sizes[i++] = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.DEFAULT);
             }
             if (tt.next() != ',') {
                 tt.pushBack();

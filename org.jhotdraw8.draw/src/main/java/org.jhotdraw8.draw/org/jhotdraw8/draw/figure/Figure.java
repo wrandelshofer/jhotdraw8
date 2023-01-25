@@ -1124,7 +1124,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param height desired height in parent coordinates, may be negative
      */
     default void reshapeInLocal(double x, double y, double width, double height) {
-        reshapeInLocal(CssSize.from(x), CssSize.from(y), CssSize.from(width), CssSize.from(height));
+        reshapeInLocal(CssSize.of(x), CssSize.of(y), CssSize.of(width), CssSize.of(height));
     }
 
     /**

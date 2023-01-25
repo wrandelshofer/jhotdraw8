@@ -135,9 +135,9 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
                 createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
         createdFigure.reshapeInLocal(
-                anchorX == 0 ? c.getX() : c.getX().subtract(CssSize.from(defaultWidth).multiply(anchorX)),
-                anchorY == 0 ? c.getY() : c.getY().subtract(CssSize.from(defaultHeight).multiply(anchorY)),
-                CssSize.from(defaultWidth), CssSize.from(defaultHeight));
+                anchorX == 0 ? c.getX() : c.getX().subtract(CssSize.of(defaultWidth).multiply(anchorX)),
+                anchorY == 0 ? c.getY() : c.getY().subtract(CssSize.of(defaultHeight).multiply(anchorY)),
+                CssSize.of(defaultWidth), CssSize.of(defaultHeight));
     }
 
 
@@ -210,9 +210,9 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
                 double preferredAspectRatio = createdFigure.getPreferredAspectRatio();
                 double newRatio = newHeight.getConvertedValue() / newWidth.getConvertedValue();
                 if (newRatio > preferredAspectRatio) {
-                    newHeight = CssSize.from(newWidth.getConvertedValue() * preferredAspectRatio);
+                    newHeight = CssSize.of(newWidth.getConvertedValue() * preferredAspectRatio);
                 } else {
-                    newWidth = CssSize.from(newHeight.getConvertedValue() / preferredAspectRatio);
+                    newWidth = CssSize.of(newHeight.getConvertedValue() / preferredAspectRatio);
                 }
             }
 

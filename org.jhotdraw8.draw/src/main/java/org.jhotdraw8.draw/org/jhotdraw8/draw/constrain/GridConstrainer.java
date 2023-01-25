@@ -191,7 +191,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * @param majory the interval for major grid lines on the y-axis
      */
     public GridConstrainer(double x, double y, double width, double height, double angle, int majorx, int majory) {
-        this(CssSize.from(x), CssSize.from(y), CssSize.from(width), CssSize.from(height), angle, majorx, majory);
+        this(CssSize.of(x), CssSize.of(y), CssSize.of(width), CssSize.of(height), angle, majorx, majory);
     }
 
     public GridConstrainer(CssSize x, CssSize y, CssSize width, CssSize height, double angle, int majorx, int majory) {
@@ -343,7 +343,7 @@ public class GridConstrainer extends AbstractConstrainer {
 
         double x = Geom.fma(tx, cwidth, cx);
         double y = Geom.fma(ty, cheight, cy);
-        return new CssPoint2D(CssSize.from(x, wunits), CssSize.from(y, hunits));
+        return new CssPoint2D(CssSize.of(x, wunits), CssSize.of(y, hunits));
     }
 
     @Override

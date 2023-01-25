@@ -169,7 +169,7 @@ public interface UnitConverter {
     }
 
     default @NonNull CssSize convertSize(double value, @NonNull String inputUnit, @NonNull String outputUnit) {
-        return CssSize.from(convert(value, inputUnit, outputUnit), outputUnit);
+        return CssSize.of(convert(value, inputUnit, outputUnit), outputUnit);
     }
 
     /**
@@ -184,7 +184,7 @@ public interface UnitConverter {
     }
 
     default @NonNull CssSize convertSize(@NonNull CssSize value, @NonNull String outputUnit) {
-        return CssSize.from(convert(value.getValue(), value.getUnits(), outputUnit), outputUnit);
+        return CssSize.of(convert(value.getValue(), value.getUnits(), outputUnit), outputUnit);
     }
 
 

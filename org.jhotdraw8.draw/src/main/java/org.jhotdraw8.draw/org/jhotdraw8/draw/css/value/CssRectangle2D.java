@@ -47,7 +47,7 @@ public class CssRectangle2D {
     }
 
     public CssRectangle2D(double x, double y, double width, double height, String units) {
-        this(CssSize.from(x, units), CssSize.from(y, units), CssSize.from(width, units), CssSize.from(height, units));
+        this(CssSize.of(x, units), CssSize.of(y, units), CssSize.of(width, units), CssSize.of(height, units));
     }
 
     public CssRectangle2D() {

@@ -31,7 +31,7 @@ public class CssDimension2D {
     }
 
     public CssDimension2D(double width, double height, @NonNull String units) {
-        this(CssSize.from(width, units), CssSize.from(height, units));
+        this(CssSize.of(width, units), CssSize.of(height, units));
     }
 
     public CssDimension2D() {

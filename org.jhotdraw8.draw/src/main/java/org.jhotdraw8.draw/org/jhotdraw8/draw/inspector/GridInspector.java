@@ -166,10 +166,10 @@ public class GridInspector extends AbstractDrawingViewInspector {
             } else {
 
                 gridConstrainer = new GridConstrainer(
-                        CssSize.from(prefs.getDouble("gridX", 0), prefs.get("gridXUnits", null)),
-                        CssSize.from(prefs.getDouble("gridY", 0), prefs.get("gridYUnits", null)),
-                        CssSize.from(prefs.getDouble("gridWidth", 0), prefs.get("gridWidthUnits", null)),
-                        CssSize.from(prefs.getDouble("gridHeight", 0), prefs.get("gridHeightUnits", null)),
+                        CssSize.of(prefs.getDouble("gridX", 0), prefs.get("gridXUnits", null)),
+                        CssSize.of(prefs.getDouble("gridY", 0), prefs.get("gridYUnits", null)),
+                        CssSize.of(prefs.getDouble("gridWidth", 0), prefs.get("gridWidthUnits", null)),
+                        CssSize.of(prefs.getDouble("gridHeight", 0), prefs.get("gridHeightUnits", null)),
                         prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
                 Converter<CssColor> converter = new CssColorConverter(true);
                 try {

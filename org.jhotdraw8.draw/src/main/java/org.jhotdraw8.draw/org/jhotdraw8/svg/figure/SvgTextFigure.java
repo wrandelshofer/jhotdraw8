@@ -67,10 +67,10 @@ public class SvgTextFigure extends AbstractLeafFigure
     public SvgTextFigure(double x, double y) {
         // Performance: Only set properties if they differ from the default value.
         if (x != 0) {
-            set(X, CssSize.from(x));
+            set(X, CssSize.of(x));
         }
         if (y != 0) {
-            set(Y, CssSize.from(y));
+            set(Y, CssSize.of(y));
         }
     }
 
@@ -187,8 +187,8 @@ public class SvgTextFigure extends AbstractLeafFigure
     public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         Bounds lb = computeLayoutBounds();
         Insets i = new Insets(0, 0, 0, 0);
-        set(X, CssSize.from(x.getConvertedValue() + i.getLeft()));
-        set(Y, CssSize.from(y.getConvertedValue() + lb.getHeight() - i.getBottom()));
+        set(X, CssSize.of(x.getConvertedValue() + i.getLeft()));
+        set(Y, CssSize.of(y.getConvertedValue() + lb.getHeight() - i.getBottom()));
     }
 
     @Override

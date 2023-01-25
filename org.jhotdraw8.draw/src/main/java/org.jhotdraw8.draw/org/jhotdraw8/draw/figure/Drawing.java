@@ -94,11 +94,11 @@ public interface Drawing extends Figure {
     /**
      * Defines the width of the canvas.
      */
-    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.from(640.0));
+    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.of(640.0));
     /**
      * Defines the height of the canvas.
      */
-    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.from(480.0));
+    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.of(480.0));
 
 
     /**

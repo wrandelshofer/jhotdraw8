@@ -55,13 +55,13 @@ public class CssFontConverterTest {
     public @NonNull List<DynamicTest> dynamicTestsFont() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFont(
-                        new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, CssSize.from(12)),
+                        new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, CssSize.of(12)),
                         "12 Arial")),
                 dynamicTest("2", () -> testFont(
-                        new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, CssSize.from(12, "pt")),
+                        new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, CssSize.of(12, "pt")),
                         "12pt Arial")),
                 dynamicTest("3", () -> testFont(
-                        new CssFont("Arial", FontWeight.SEMI_BOLD, FontPosture.REGULAR, CssSize.from(12, "pt")),
+                        new CssFont("Arial", FontWeight.SEMI_BOLD, FontPosture.REGULAR, CssSize.of(12, "pt")),
                         "600 12pt Arial"))
         );
     }

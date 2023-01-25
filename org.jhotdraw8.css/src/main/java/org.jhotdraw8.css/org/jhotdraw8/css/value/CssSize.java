@@ -36,7 +36,7 @@ public class CssSize {
         this.value = value;
     }
 
-    public static CssSize from(double value, @Nullable String units) {
+    public static CssSize of(double value, @Nullable String units) {
         boolean hasDefaultUnits = units == null || units.equals(UnitConverter.DEFAULT);
         if (hasDefaultUnits) {
             if (value == 0.0) {
@@ -49,8 +49,8 @@ public class CssSize {
         return hasDefaultUnits ? new CssSize(value) : new CssSizeWithUnits(value, units);
     }
 
-    public static CssSize from(double value) {
-        return from(value, null);
+    public static CssSize of(double value) {
+        return of(value, null);
     }
 
     public static @NonNull CssSize max(@NonNull CssSize a, @NonNull CssSize b) {
@@ -122,22 +122,22 @@ public class CssSize {
     }
 
     public @NonNull CssSize subtract(@NonNull CssSize that, @NonNull UnitConverter unitConverter) {
-        return from(this.value - unitConverter.convert(that, this.getUnits()), this.getUnits());
+        return of(this.value - unitConverter.convert(that, this.getUnits()), this.getUnits());
     }
 
     public @NonNull CssSize add(@NonNull CssSize that, @NonNull UnitConverter unitConverter) {
-        return from(this.value + unitConverter.convert(that, this.getUnits()), this.getUnits());
+        return of(this.value + unitConverter.convert(that, this.getUnits()), this.getUnits());
     }
 
     public @NonNull CssSize abs() {
-        return value >= 0 ? this : from(Math.abs(value), getUnits());
+        return value >= 0 ? this : of(Math.abs(value), getUnits());
     }
 
     public @NonNull CssSize multiply(double factor) {
-        return from(value * factor, getUnits());
+        return of(value * factor, getUnits());
     }
 
     public @NonNull CssSize divide(double divisor) {
-        return from(value / divisor, getUnits());
+        return of(value / divisor, getUnits());
     }
 }

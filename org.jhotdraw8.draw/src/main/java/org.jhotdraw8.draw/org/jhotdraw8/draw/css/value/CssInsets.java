@@ -35,7 +35,7 @@ public class CssInsets {
     }
 
     public CssInsets(double top, double right, double bottom, double left, String units) {
-        this(CssSize.from(top, units), CssSize.from(right, units), CssSize.from(bottom, units), CssSize.from(left, units));
+        this(CssSize.of(top, units), CssSize.of(right, units), CssSize.of(bottom, units), CssSize.of(left, units));
     }
 
     public CssInsets() {
