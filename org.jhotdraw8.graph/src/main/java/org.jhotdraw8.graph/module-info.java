@@ -6,10 +6,11 @@
 @SuppressWarnings("module")
 module org.jhotdraw8.graph {
     requires transitive org.jhotdraw8.annotation;
+    requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;
+
     exports org.jhotdraw8.graph;
     exports org.jhotdraw8.graph.algo;
-    exports org.jhotdraw8.graph.function;
     exports org.jhotdraw8.graph.iterator;
     exports org.jhotdraw8.graph.path;
     exports org.jhotdraw8.graph.path.algo;

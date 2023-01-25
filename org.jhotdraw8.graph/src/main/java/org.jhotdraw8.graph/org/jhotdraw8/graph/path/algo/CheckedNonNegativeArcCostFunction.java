@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.graph.function.TriFunction;
+import org.jhotdraw8.base.function.TriFunction;
 
 /**
  * A cost function that checks if the provided cost function always returns

@@ -13,7 +13,6 @@ module org.jhotdraw8.base {
     requires java.prefs;
     exports org.jhotdraw8.base.converter;
     exports org.jhotdraw8.base.io;
-    exports org.jhotdraw8.base.precondition;
     exports org.jhotdraw8.base.function;
     exports org.jhotdraw8.base.util;
     exports org.jhotdraw8.base.event;

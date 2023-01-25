@@ -48,6 +48,10 @@
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
       <artifactId>org.jhotdraw8.collection</artifactId>
     </dependency>
     <dependency>
