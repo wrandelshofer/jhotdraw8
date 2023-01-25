@@ -9,6 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.draw.css.model.FigureSelectorModel;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;

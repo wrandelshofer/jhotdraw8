@@ -54,6 +54,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.svg.io;
     exports org.jhotdraw8.xml.text;
     exports org.jhotdraw8.xml;
+    exports org.jhotdraw8.draw.css.model;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
     provides org.jhotdraw8.fxbase.spi.NodeReaderProvider with SvgImageReaderProvider;

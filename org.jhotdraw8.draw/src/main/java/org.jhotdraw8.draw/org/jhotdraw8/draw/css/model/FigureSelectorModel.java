@@ -2,7 +2,7 @@
  * @(#)FigureSelectorModel.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.draw.css.model;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
