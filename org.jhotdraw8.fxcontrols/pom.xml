@@ -22,12 +22,20 @@
     <resources>
       <resource>
         <directory>src/main/java/org.jhotdraw8.fxcontrols</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
       </resource>
+
     </resources>
     <testResources>
       <testResource>
         <directory>${basedir}/src/test/java/org.jhotdraw8.fxcontrols</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
       </testResource>
+
     </testResources>
 
     <plugins></plugins>
