@@ -5,12 +5,12 @@
 package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.precondition.Preconditions;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
@@ -48,7 +48,8 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
 
     @Override
     public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
-        Preconditions.checkFromToIndex(fromIndex, toIndex, size());
+        int length = size();
+        Objects.checkFromToIndex(fromIndex, toIndex, length);
         return new ReadOnlyListFacade<>(
                 () -> toIndex - fromIndex,
                 i -> getFunction.apply(i - fromIndex)

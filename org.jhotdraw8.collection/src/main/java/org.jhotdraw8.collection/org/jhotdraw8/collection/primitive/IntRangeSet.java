@@ -6,10 +6,10 @@ package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.precondition.Preconditions;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlySet;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 /**
@@ -26,7 +26,7 @@ public class IntRangeSet extends AbstractReadOnlySet<Integer> {
      * @param to   exclusive
      */
     public IntRangeSet(int from, int to) {
-        Preconditions.checkIndex(from, to);
+        Objects.checkIndex(from, to);
         this.from = from;
         this.to = to;
     }

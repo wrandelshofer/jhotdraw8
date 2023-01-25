@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.precondition.Preconditions;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.AbstractList;
@@ -106,7 +105,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      */
     @Override
     public void addAsInt(int index, int newItem) {
-        Preconditions.checkIndex(index, size + 1);
+        Objects.checkIndex(index, size + 1);
         grow(size + 1);
         items[index] = newItem;
         ++size;
@@ -191,7 +190,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      */
     @Override
     public int getAsInt(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         return items[index];
     }
 
@@ -203,7 +202,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      */
     @Override
     public Integer get(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         return items[index];
     }
 
@@ -305,7 +304,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      */
     @Override
     public int removeAtAsInt(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         int removedItem = items[index];
         int numMoved = size - index - 1;
         if (numMoved > 0) {
@@ -337,7 +336,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @return the old item
      */
     public int setAsInt(int index, int newItem) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         int removedItem = items[index];
         items[index] = newItem;
         return removedItem;

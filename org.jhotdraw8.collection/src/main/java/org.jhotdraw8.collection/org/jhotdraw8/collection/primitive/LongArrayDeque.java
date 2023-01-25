@@ -5,12 +5,12 @@
 package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.precondition.Preconditions;
 
 import java.util.AbstractCollection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * A {@code long}-valued deque backed by a primitive array.
@@ -308,7 +308,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
      */
     public void removeAt(int i) {
         int size = size();
-        Preconditions.checkIndex(i, size);
+        Objects.checkIndex(i, size);
         if (tail < head) {
             if (head + i < elements.length) {
                 if (i > 0) {

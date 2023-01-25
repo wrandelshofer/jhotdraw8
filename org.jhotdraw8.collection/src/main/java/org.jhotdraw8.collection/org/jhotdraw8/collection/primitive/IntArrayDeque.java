@@ -5,13 +5,13 @@
 package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.precondition.Preconditions;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.AbstractCollection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * A {@code int}-valued deque backed by a primitive array.
@@ -232,7 +232,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     public int getAsInt(int index) {
-        Preconditions.checkIndex(index, size());
+        Objects.checkIndex(index, size());
         return (head + index < elements.length) ? elements[head + index] : elements[head + index - elements.length];
     }
 
@@ -328,7 +328,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
      */
     public void removeAt(int i) {
         int size = size();
-        Preconditions.checkIndex(i, size);
+        Objects.checkIndex(i, size);
         if (tail < head) {
             if (head + i < elements.length) {
                 if (i > 0) {

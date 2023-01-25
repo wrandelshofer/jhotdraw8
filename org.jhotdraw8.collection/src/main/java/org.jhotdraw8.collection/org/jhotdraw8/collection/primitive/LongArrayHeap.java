@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.collection.precondition.Preconditions;
-
 import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Spliterators;
 
 /**
@@ -93,7 +92,7 @@ public class LongArrayHeap extends AbstractCollection<Long>
      * @param capacity the initial heap capacity
      */
     public LongArrayHeap(int capacity) {
-        Preconditions.checkIndex(capacity + 1, Integer.MAX_VALUE - 8 - 1);
+        Objects.checkIndex(capacity + 1, Integer.MAX_VALUE - 8 - 1);
         this.array = new long[capacity + 1];
         this.array[0] = Long.MIN_VALUE;
         this.size = 0;

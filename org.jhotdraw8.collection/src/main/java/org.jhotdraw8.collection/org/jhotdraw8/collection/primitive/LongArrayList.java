@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.enumerator.LongArrayEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.LongEnumeratorSpliterator;
-import org.jhotdraw8.collection.precondition.Preconditions;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -104,7 +103,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @param newItem the new item
      */
     public void addAsLong(int index, long newItem) {
-        Preconditions.checkIndex(index, size + 1);
+        Objects.checkIndex(index, size + 1);
         grow(size + 1);
         items[index] = newItem;
         ++size;
@@ -188,7 +187,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return the item at the index
      */
     public long getAsLong(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         return items[index];
     }
 
@@ -200,7 +199,7 @@ public class LongArrayList extends AbstractList<Long> {
      */
     @Override
     public Long get(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         return items[index];
     }
 
@@ -304,7 +303,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return the removed item
      */
     public long removeAtAsLong(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         long removedItem = items[index];
         int numMoved = size - index - 1;
         if (numMoved > 0) {
@@ -335,7 +334,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return the old item
      */
     public long setAsLong(int index, long newItem) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         long removedItem = items[index];
         items[index] = newItem;
         return removedItem;
