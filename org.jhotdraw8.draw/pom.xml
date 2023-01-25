@@ -12,7 +12,7 @@
     <parent>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>org.jhotdraw8.draw</artifactId>

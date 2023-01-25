@@ -3,7 +3,10 @@
   ~ @(#)pom.xml
   ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
-
+<!--
+  ~ Usage:
+  ~ mvn clean install -Dfile.encoding=UTF-8 -Drevision=2023-01-24_4e22d7cc
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -12,7 +15,7 @@
 
   <groupId>ch.randelshofer</groupId>
   <artifactId>org.jhotdraw8</artifactId>
-  <version>1.0</version>
+  <version>${revision}</version>
   <licenses>
     <license>
       <name>MIT License</name>
@@ -52,6 +55,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <docencoding>UTF-8</docencoding>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
+    <revision>1.0</revision>
   </properties>
 
   <build>
@@ -115,14 +119,7 @@
             <goals>
               <goal>revision</goal>
             </goals>
-            <phase>validate</phase>
-          </execution>
-          <execution>
-            <id>validate-the-git-infos</id>
-            <goals>
-              <goal>validateRevision</goal>
-            </goals>
-            <phase>package</phase>
+            <phase>initialize</phase>
           </execution>
         </executions>
         <configuration>
@@ -279,67 +276,67 @@
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.annotation</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.application</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.color</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.collection</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.css</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.fxcontrols</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.draw</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.fxcollection</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.os</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.base</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.fxbase</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.geom</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.graph</artifactId>
-        <version>1.0</version>
+        <version>${revision}</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
