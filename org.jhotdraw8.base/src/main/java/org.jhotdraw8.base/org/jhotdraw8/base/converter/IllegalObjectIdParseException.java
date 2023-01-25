@@ -2,7 +2,7 @@
  * @(#)IllegalObjectIdParseException.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.converter;
+package org.jhotdraw8.base.converter;
 
 import java.text.ParseException;
 
