@@ -5,7 +5,7 @@
   -->
 <!--
   ~ Usage:
-  ~ mvn clean install -Dfile.encoding=UTF-8 -Drevision=2023-01-24_4e22d7cc
+  ~ mvn clean deploy -Drevision=$(git show -s - -format=%cs_%h)
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -53,7 +53,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <docencoding>UTF-8</docencoding>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
     <revision>1.0</revision>
   </properties>
@@ -66,12 +65,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.9.1</version>
+          <version>4.0.0-M4</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.2.2</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -98,7 +97,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M7</version>
+          <version>3.0.0-M8</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -260,6 +259,9 @@
           <header>JHotDraw 8 ${project.version}</header>
           <bottom>Copyright © 2022 Werner Randelshofer, Switzerland. MIT License.</bottom>
           <additionalOptions>-Xdoclint:all</additionalOptions>
+          <charset>UTF-8</charset>
+          <docencoding>UTF-8</docencoding>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
     </plugins>
@@ -370,4 +372,12 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>internal.repo</id>
+      <name>My Internal Repository</name>
+      <url>file:///Users/Shared/Developer/Maven</url>
+    </repository>
+  </distributionManagement>
 </project>
