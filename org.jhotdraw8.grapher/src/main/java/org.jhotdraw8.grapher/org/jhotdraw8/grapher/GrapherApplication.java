@@ -97,8 +97,13 @@ public class GrapherApplication extends AbstractFileBasedApplication {
             mgr.setTheme(lightTheme);
         }
         */
-        final Object value = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
-        if ("Dark".equals(value)) {
+
+        // https://stackoverflow.com/questions/57303286/how-to-detect-if-osx-in-dark-or-light-mode-in-auto-appearance-mode-in-catalina
+
+        final Object interfaceStyle = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
+        final Object interfaceStyleSwitchesAutomatically = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyleSwitchesAutomatically");
+        if ("Dark".equals(interfaceStyle)
+                || interfaceStyle == null && "true".equals(interfaceStyleSwitchesAutomatically)) {
             set(DARK_MODE_KEY, true);
             getStylesheets().add(getClass().getResource("dark-theme.css").toString());
         } else {

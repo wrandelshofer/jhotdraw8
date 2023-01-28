@@ -14,7 +14,7 @@ public class SimpleSystemPreferences extends AbstractSystemPreferences {
         accentColor.set(value);
     }
 
-    public void setAppearance(@Nullable Appearance value) {
+    public void setAppearance(@Nullable String value) {
         appearance.set(value);
     }
 

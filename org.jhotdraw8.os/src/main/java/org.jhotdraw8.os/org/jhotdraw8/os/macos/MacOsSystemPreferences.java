@@ -2,7 +2,6 @@ package org.jhotdraw8.os.macos;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.os.AbstractSystemPreferences;
-import org.jhotdraw8.os.Appearance;
 
 import java.util.LinkedHashMap;
 
@@ -17,28 +16,24 @@ public class MacOsSystemPreferences extends AbstractSystemPreferences {
         LinkedHashMap<String, Object> prefs = new LinkedHashMap<>();
         MacOSPreferencesUtil.readPreferences(MacOSPreferencesUtil.GLOBAL_PREFERENCES, prefs);
         Object interfaceStyleValue = MacOSPreferencesUtil.get(prefs, "AppleInterfaceStyle");
-        Appearance appearance;
-        if ("Dark".equals(interfaceStyleValue)) {
-            appearance = Appearance.DARK;
-        } else {
-            appearance = Appearance.LIGHT;
+        if (interfaceStyleValue instanceof String appearance) {
+            this.appearance.set(appearance);
         }
-        this.appearance.set(appearance);
         Object accentColorValue = MacOSPreferencesUtil.get(prefs, "AppleAccentColor");
         Color accentColor = Color.BLACK;
         if (accentColorValue instanceof Number) {
             int accentColorIntValue = ((Number) (accentColorValue)).intValue();
-            if (appearance == Appearance.DARK) {
+            if ("Dark".equals(interfaceStyleValue)) {
                 switch (accentColorIntValue) {
-                case 0://red
-                    accentColor = Color.web("#ec5f5e");
-                    break;
-                case 1://orange
-                    accentColor = Color.web("#e8883a");
-                    break;
-                case 2://yellow
-                    accentColor = Color.web("#f7c844");
-                    break;
+                    case 0://red
+                        accentColor = Color.web("#ec5f5e");
+                        break;
+                    case 1://orange
+                        accentColor = Color.web("#e8883a");
+                        break;
+                    case 2://yellow
+                        accentColor = Color.web("#f7c844");
+                        break;
                 case 3://green
                     accentColor = Color.web("#77b856");
                     break;

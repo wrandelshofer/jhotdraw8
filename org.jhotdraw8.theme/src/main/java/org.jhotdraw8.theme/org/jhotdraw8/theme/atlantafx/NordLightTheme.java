@@ -1,8 +1,6 @@
 
 package org.jhotdraw8.theme.atlantafx;
 
-import org.jhotdraw8.os.Appearance;
-
 /**
  * Provides the 'Nord Light' theme from AtlantaFX.
  * <p>
@@ -14,7 +12,7 @@ import org.jhotdraw8.os.Appearance;
  */
 public class NordLightTheme extends AbstractAtlantaFXTheme {
     public NordLightTheme() {
-        super("Atlanta Nord Light", Appearance.LIGHT, "/org/jhotdraw8/theme/atlantafx/nord-light.css");
+        super("Atlanta Nord Light", "light", "/org/jhotdraw8/theme/atlantafx/nord-light.css");
     }
 
 }

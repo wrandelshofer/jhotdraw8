@@ -3,7 +3,6 @@ package org.jhotdraw8.theme;
 import javafx.application.Application;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.os.Appearance;
 
 import java.util.Base64;
 
@@ -36,11 +35,21 @@ public interface Theme {
 
     /**
      * Gets the appearance of the theme.
+     * <p>
+     * This is an open-ended set of values. Common values are "light", "dark".
+     * <dl>
+     *  <dt>light</dt>
+     *  <dd>A light appearance ("day mode") consists of light background colors and dark foreground/text colors.</dd>
+     *
+     *  <dt>dark</dt>
+     *  <dd>A dark appearance ("night mode") consists of the opposite, with dark background colors and light
+     *  foreground/text colors.</dd>
+     * </dl>
      *
      * @return the appearance
      */
     @NonNull
-    Appearance getAppearance();
+    String getAppearance();
 
 
     /**

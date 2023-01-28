@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public abstract class AbstractSystemPreferences implements SystemPreferences {
     protected final @NonNull ReadOnlyObjectWrapper<Color> accentColor = new ReadOnlyObjectWrapper<>();
-    protected final @NonNull ReadOnlyObjectWrapper<Appearance> appearance = new ReadOnlyObjectWrapper<>();
+    protected final @NonNull ReadOnlyObjectWrapper<String> appearance = new ReadOnlyObjectWrapper<>();
     protected final @NonNull ReadOnlyDoubleWrapper fontSize = new ReadOnlyDoubleWrapper();
 
     protected AbstractSystemPreferences() {
@@ -24,7 +24,7 @@ public abstract class AbstractSystemPreferences implements SystemPreferences {
     }
 
     @Override
-    public @NonNull ReadOnlyObjectProperty<Appearance> appearanceProperty() {
+    public @NonNull ReadOnlyObjectProperty<String> appearanceProperty() {
         return appearance.getReadOnlyProperty();
     }
 

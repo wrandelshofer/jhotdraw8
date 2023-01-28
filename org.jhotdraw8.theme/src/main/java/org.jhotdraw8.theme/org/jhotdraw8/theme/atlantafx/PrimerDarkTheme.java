@@ -1,6 +1,5 @@
 package org.jhotdraw8.theme.atlantafx;
 
-import org.jhotdraw8.os.Appearance;
 
 /**
  * Provides the 'Primer Dark' theme from AtlantaFX.
@@ -13,7 +12,7 @@ import org.jhotdraw8.os.Appearance;
  */
 public class PrimerDarkTheme extends AbstractAtlantaFXTheme {
     public PrimerDarkTheme() {
-        super("Atlanta Primer Dark", Appearance.DARK, "/org/jhotdraw8/theme/atlantafx/primer-dark.css");
+        super("Atlanta Primer Dark", "dark", "/org/jhotdraw8/theme/atlantafx/primer-dark.css");
     }
 
 }

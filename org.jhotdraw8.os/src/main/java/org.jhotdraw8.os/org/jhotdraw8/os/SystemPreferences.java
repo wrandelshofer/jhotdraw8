@@ -47,9 +47,9 @@ public interface SystemPreferences {
      *
      * @return accent color property
      */
-    @NonNull ReadOnlyObjectProperty<Appearance> appearanceProperty();
+    @NonNull ReadOnlyObjectProperty<String> appearanceProperty();
 
-    default @Nullable Appearance getAppearance() {
+    default @Nullable String getAppearance() {
         return appearanceProperty().get();
     }
 

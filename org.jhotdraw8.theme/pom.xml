@@ -58,11 +58,6 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.os</artifactId>
-      <version>${revision}</version>
-    </dependency>
-    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
     </dependency>

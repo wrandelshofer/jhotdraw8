@@ -7,7 +7,6 @@ package org.jhotdraw8.theme.atlantafx;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.color.HSLuvColorUtil;
-import org.jhotdraw8.os.Appearance;
 import org.jhotdraw8.theme.AbstractTheme;
 import org.jhotdraw8.theme.Theme;
 import org.jhotdraw8.theme.ThemeParameters;
@@ -27,7 +26,7 @@ import static org.jhotdraw8.color.FXColorUtil.toWebColor;
 public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
     private final String uaStylesheetUrl;
 
-    protected AbstractAtlantaFXTheme(String name, Appearance appearance, String uaStylesheetUrl) {
+    protected AbstractAtlantaFXTheme(String name, String appearance, String uaStylesheetUrl) {
         super(name, appearance);
         this.uaStylesheetUrl = uaStylesheetUrl;
     }
@@ -42,16 +41,16 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
         HSLuvColorUtil hsLuvColorUtil = new HSLuvColorUtil();
         switch (getAppearance()) {
 
-        case LIGHT -> {
-            if (hsLuvColorUtil.getLightness(accentColor) > 0.4f) {
-                accentColor = hsLuvColorUtil.adjustLightness(accentColor, 0.4f);
+            case "Light" -> {
+                if (hsLuvColorUtil.getLightness(accentColor) > 0.4f) {
+                    accentColor = hsLuvColorUtil.adjustLightness(accentColor, 0.4f);
+                }
             }
-        }
-        case DARK -> {
-            if (hsLuvColorUtil.getLightness(accentColor) < 0.6f) {
-                accentColor = hsLuvColorUtil.adjustLightness(accentColor, 0.6f);
+            case "Dark" -> {
+                if (hsLuvColorUtil.getLightness(accentColor) < 0.6f) {
+                    accentColor = hsLuvColorUtil.adjustLightness(accentColor, 0.6f);
+                }
             }
-        }
         }
         Color accentColorMuted = new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 0.4);
         Color accentColorSubtle = new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 0.2);

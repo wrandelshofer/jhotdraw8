@@ -6,11 +6,7 @@ package org.jhotdraw8.os.macos;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
+import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -23,15 +19,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.StreamSupport;
 
 /**
@@ -49,7 +40,7 @@ public class MacOSPreferencesUtil {
     /**
      * Each entry in this hash map represents a cached preferences file.
      */
-    private static HashMap<File, HashMap<String, Object>> cachedFiles;
+    private static ConcurrentHashMap<File, Map<String, Object>> cachedFiles;
 
     /**
      * Creates a new instance.
@@ -78,7 +69,7 @@ public class MacOSPreferencesUtil {
      */
     public static @Nullable Object get(@NonNull File file, @NonNull String key) {
         ensureCached(file);
-        final HashMap<String, Object> map = cachedFiles.get(file);
+        final Map<String, Object> map = cachedFiles.get(file);
         return map == null ? null : get(map, key);
     }
 
@@ -89,7 +80,6 @@ public class MacOSPreferencesUtil {
         if (plist instanceof List) {
             for (Object o : (List) plist) {
                 if (o instanceof Map) {
-                    Map<String, Object> m = (Map<String, Object>) o;
                     flattened.putAll((Map<String, Object>) o);
                 }
             }
@@ -161,17 +151,23 @@ public class MacOSPreferencesUtil {
      */
     public static Object get(@NonNull File file, String key, Object defaultValue) {
         ensureCached(file);
-        return (cachedFiles.get(file).containsKey(key)) ? cachedFiles.get(file).get(key) : defaultValue;
+        return cachedFiles.get(file).getOrDefault(key, defaultValue);
     }
 
     private static void ensureCached(@NonNull File file) {
         if (cachedFiles == null) {
-            cachedFiles = new HashMap<File, HashMap<String, Object>>();
+            cachedFiles = new ConcurrentHashMap<>();
         }
         if (!cachedFiles.containsKey(file)) {
-            HashMap<String, Object> cache = new HashMap<String, Object>();
-            cachedFiles.put(file, cache);
+            Map<String, Object> cache = new HashMap<String, Object>();
+            try {
+                FileTime lastModifiedTime = Files.getLastModifiedTime(file.toPath());
+                cache.put("lastModifiedTime", lastModifiedTime);
+            } catch (IOException e) {
+                //we failed to determine the last modified time
+            }
             readPreferences(file, cache);
+            cachedFiles.put(file, Map.copyOf(cache));
         }
     }
 
@@ -180,14 +176,12 @@ public class MacOSPreferencesUtil {
         return osName != null && osName.toLowerCase().startsWith("mac");
     }
 
-    public static void readPreferences(@NonNull File file, @NonNull HashMap<String, Object> cache) {
+    public static void readPreferences(@NonNull File file, @NonNull Map<String, Object> cache) {
         cache.clear();
 
         if (isMacOs()) {
             try {
                 Document plist = readPList(file);
-
-                Stack<String> keyPath = new Stack<String>();
                 cache.put("plist", readNode(plist.getDocumentElement()));
             } catch (Throwable e) {
                 System.err.println("Warning: ch.randelshofer.quaqua.util.OSXPreferences failed to load " + file);
@@ -200,18 +194,18 @@ public class MacOSPreferencesUtil {
         String name = node.getTagName();
         Object value;
         switch (name) {
-        case "plist":
-            value = readPList(node);
-            break;
-        case "dict":
-            value = readDict(node);
-            break;
-        case "array":
-            value = readArray(node);
-            break;
-        default:
-            value = readValue(node);
-            break;
+            case "plist":
+                value = readPList(node);
+                break;
+            case "dict":
+                value = readDict(node);
+                break;
+            case "array":
+                value = readArray(node);
+                break;
+            default:
+                value = readValue(node);
+                break;
         }
         return value;
     }
@@ -281,40 +275,40 @@ public class MacOSPreferencesUtil {
     private static Object readValue(@NonNull Element value) throws IOException {
         Object parsedValue;
         switch (value.getTagName()) {
-        case "true":
-            parsedValue = true;
-            break;
-        case "false":
-            parsedValue = false;
-            break;
-        case "data":
-            parsedValue = Base64.getDecoder().decode(getContent(value));
-            break;
-        case "date":
-            try {
-                parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
-            } catch (IllegalArgumentException |
-                     DatatypeConfigurationException e) {
-                throw new IOException(e);
-            }
-            break;
-        case "real":
-            try {
-                parsedValue = Double.valueOf(getContent(value));
-            } catch (NumberFormatException e) {
-                throw new IOException(e);
-            }
-            break;
-        case "integer":
-            try {
-                parsedValue = Long.valueOf(getContent(value));
-            } catch (NumberFormatException e) {
-                throw new IOException(e);
-            }
-            break;
-        default:
-            parsedValue = getContent(value);
-            break;
+            case "true":
+                parsedValue = true;
+                break;
+            case "false":
+                parsedValue = false;
+                break;
+            case "data":
+                parsedValue = Base64.getDecoder().decode(getContent(value));
+                break;
+            case "date":
+                try {
+                    parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
+                } catch (IllegalArgumentException |
+                         DatatypeConfigurationException e) {
+                    throw new IOException(e);
+                }
+                break;
+            case "real":
+                try {
+                    parsedValue = Double.valueOf(getContent(value));
+                } catch (NumberFormatException e) {
+                    throw new IOException(e);
+                }
+                break;
+            case "integer":
+                try {
+                    parsedValue = Long.valueOf(getContent(value));
+                } catch (NumberFormatException e) {
+                    throw new IOException(e);
+                }
+                break;
+            default:
+                parsedValue = getContent(value);
+                break;
         }
         return parsedValue;
     }

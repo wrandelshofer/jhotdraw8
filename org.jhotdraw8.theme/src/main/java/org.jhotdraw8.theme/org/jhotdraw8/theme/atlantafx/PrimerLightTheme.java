@@ -1,7 +1,6 @@
 
 package org.jhotdraw8.theme.atlantafx;
 
-import org.jhotdraw8.os.Appearance;
 
 /**
  * Provides the 'Primer Light' theme from AtlantaFX.
@@ -14,7 +13,7 @@ import org.jhotdraw8.os.Appearance;
  */
 public class PrimerLightTheme extends AbstractAtlantaFXTheme {
     public PrimerLightTheme() {
-        super("Atlanta Primer Light", Appearance.LIGHT, "/org/jhotdraw8/theme/atlantafx/primer-light.css");
+        super("Atlanta Primer Light", "light", "/org/jhotdraw8/theme/atlantafx/primer-light.css");
     }
 
 }

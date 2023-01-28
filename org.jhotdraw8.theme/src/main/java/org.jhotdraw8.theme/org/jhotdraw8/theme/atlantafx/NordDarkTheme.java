@@ -1,7 +1,5 @@
 package org.jhotdraw8.theme.atlantafx;
 
-import org.jhotdraw8.os.Appearance;
-
 /**
  * Provides the 'Nord Dark' theme from AtlantaFX.
  * <p>
@@ -13,7 +11,7 @@ import org.jhotdraw8.os.Appearance;
  */
 public class NordDarkTheme extends AbstractAtlantaFXTheme {
     public NordDarkTheme() {
-        super("Atlanta Nord Dark", Appearance.DARK, "/org/jhotdraw8/theme/atlantafx/nord-dark.css");
+        super("Atlanta Nord Dark", "dark", "/org/jhotdraw8/theme/atlantafx/nord-dark.css");
     }
 
 }
