@@ -19,11 +19,7 @@ import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LabelConnectorHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
@@ -262,9 +258,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         Point2D labelTranslation = getStyledNonNull(LABEL_TRANSLATE).getConvertedValue();
         origin = origin.add(labelTranslation);
         set(ORIGIN, new CssPoint2D(origin));
-
         set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
-        set(ORIGIN, new CssPoint2D(origin));
 
         if (layoutTransforms) {
             final List<Transform> transforms = new ArrayList<>();
