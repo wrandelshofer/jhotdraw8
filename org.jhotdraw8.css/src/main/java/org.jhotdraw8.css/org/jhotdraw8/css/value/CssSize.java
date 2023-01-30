@@ -110,7 +110,7 @@ public class CssSize {
 
     @Override
     public @NonNull String toString() {
-        return "CssSize{" + value + "\"" + getUnits() + "\"" + '}';
+        return "CssSize{" + value + getUnits() + '}';
     }
 
     public @NonNull CssSize subtract(@NonNull CssSize that) {
