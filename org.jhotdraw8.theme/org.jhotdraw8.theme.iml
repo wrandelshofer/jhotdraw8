@@ -19,10 +19,9 @@
     <orderEntry type="module" module-name="org.jhotdraw8.fxbase" />
     <orderEntry type="module" module-name="org.jhotdraw8.base" />
     <orderEntry type="module" module-name="org.jhotdraw8.fxcollection" />
+    <orderEntry type="module" module-name="org.jhotdraw8.collection" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:19.0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:19.0.2.1" level="project" />
-    <orderEntry type="module" module-name="org.jhotdraw8.os" />
-    <orderEntry type="module" module-name="org.jhotdraw8.collection" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:19.0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:19.0.2.1" level="project" />
   </component>
