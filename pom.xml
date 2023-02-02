@@ -28,7 +28,7 @@
   </scm>
 
   <packaging>pom</packaging>
-  <name>JHotDraw8 parent project</name>
+  <name>*Parent Project JHotDraw8</name>
 
   <modules>
     <module>org.jhotdraw8.annotation</module>
