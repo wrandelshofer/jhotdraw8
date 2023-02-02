@@ -270,27 +270,27 @@ public class InteractiveHandleRenderer {
     private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-            break;
-        case NODE_REMOVED_FROM_PARENT:
-            onFigureRemoved(f);
-            break;
-        case NODE_ADDED_TO_TREE:
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            break;
-        case NODE_CHANGED:
-            onNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            onRootChanged();
-            break;
-        case SUBTREE_NODES_CHANGED:
-            onSubtreeNodesChanged(f);
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+            case NODE_ADDED_TO_PARENT:
+                break;
+            case NODE_REMOVED_FROM_PARENT:
+                onFigureRemoved(f);
+                break;
+            case NODE_ADDED_TO_TREE:
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                break;
+            case NODE_CHANGED:
+                onNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                onRootChanged();
+                break;
+            case SUBTREE_NODES_CHANGED:
+                onSubtreeNodesChanged(f);
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     }
 
@@ -362,11 +362,11 @@ public class InteractiveHandleRenderer {
                 for (Handle handle : entry.getValue()) {
                     Node n = handle.getNode(getDrawingViewNonNull());
                     handle.updateNode(getDrawingViewNonNull());
-                    //  if (visibleRect.intersects(n.getBoundsInParent())) {
                     if (nodeToHandleMap.put(n, handle) == null) {
                         handlesPane.getChildren().add(n);
+                        n.applyCss();
                     }
-                    //  }
+                    handle.updateNode(getDrawingViewNonNull());
                 }
             }
         } else {
