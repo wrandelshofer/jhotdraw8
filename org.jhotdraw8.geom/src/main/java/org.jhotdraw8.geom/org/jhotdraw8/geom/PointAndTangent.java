@@ -8,31 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.util.function.BiFunction;
 
-public class PointAndTangent {
-    private final double x, y, tangentX, tangentY;
-
-    public PointAndTangent(double x, double y, double tangentX, double tangentY) {
-        this.x = x;
-        this.y = y;
-        this.tangentX = tangentX;
-        this.tangentY = tangentY;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getTangentX() {
-        return tangentX;
-    }
-
-    public double getTangentY() {
-        return tangentY;
-    }
+public record PointAndTangent(double x, double y, double tangentX, double tangentY) {
 
     public <T> @NonNull T getPoint(BiFunction<Double, Double, T> factory) {
         return factory.apply(x, y);
