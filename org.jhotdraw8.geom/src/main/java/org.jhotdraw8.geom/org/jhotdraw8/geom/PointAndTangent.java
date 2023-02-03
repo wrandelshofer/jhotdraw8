@@ -17,14 +17,4 @@ public record PointAndTangent(double x, double y, double tangentX, double tangen
     public <T> @NonNull T getTangent(BiFunction<Double, Double, T> factory) {
         return factory.apply(tangentX, tangentY);
     }
-
-    @Override
-    public String toString() {
-        return "PointAndTangent{" +
-                "x=" + x +
-                ", y=" + y +
-                ", tangentX=" + tangentX +
-                ", tangentY=" + tangentY +
-                '}';
-    }
 }
