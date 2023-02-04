@@ -189,27 +189,6 @@
       </plugin>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <windowtitle>JHotDraw 8 ${project.version}</windowtitle>
-          <header>JHotDraw 8 ${project.version}</header>
-          <bottom>Copyright © 2022 Werner Randelshofer, Switzerland. MIT License.</bottom>
-          <charset>UTF-8</charset>
-          <docencoding>UTF-8</docencoding>
-          <encoding>UTF-8</encoding>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>flatten-maven-plugin</artifactId>
         <configuration>
