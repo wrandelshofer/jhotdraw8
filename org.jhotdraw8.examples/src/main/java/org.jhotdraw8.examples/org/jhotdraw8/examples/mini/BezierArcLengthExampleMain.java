@@ -19,24 +19,19 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
+import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.BezierArcLengthGravesen;
-import org.jhotdraw8.geom.BezierArcLengthRomberg;
-import org.jhotdraw8.geom.BezierArcLengthSimpson;
-import org.jhotdraw8.geom.BezierCurveCharacteristics;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.function.ToDoubleFunction;
 
 import static java.lang.Math.round;
+import static org.jhotdraw8.geom.CubicCurves.getArcLengthIntegrand;
 
 // https://math.stackexchange.com/questions/1954845/bezier-curvature-extrema
 public class BezierArcLengthExampleMain extends Application {
@@ -155,7 +150,10 @@ public class BezierArcLengthExampleMain extends Application {
 
         updatePointsOfInterest();
         updateTimePoints();
-        updateDistancePoints();
+        distancePoints.getChildren().clear();
+        updateApproximatedDistancePointsGaussLegendre(distancePoints);
+        updateApproximatedDistancePoints(distancePoints);
+        updateDistancePoints(distancePoints);
         updateText();
 
     }
@@ -170,7 +168,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndX(),
                 curve.getEndY()};
 
-        BezierCurveCharacteristics.Characteristics characteristics = BezierCurveCharacteristics.characteristics(b);
+        CubicCurveCharacteristics.Characteristics characteristics = CubicCurveCharacteristics.characteristics(b);
         PathArcLengthParameterization param = new PathArcLengthParameterization(
                 FXShapes.awtShapeFromFX(new CubicCurve(curve.getStartX(),
                         curve.getStartY(),
@@ -182,20 +180,22 @@ public class BezierArcLengthExampleMain extends Application {
                         curve.getEndY())).getPathIterator(null, 1.0)
         );
 
-        double gravesen = BezierArcLengthGravesen.arcLength(b, 0.001);
-        double romberg = BezierArcLengthRomberg.arcLength(b, 0.001);
-        double simpson = BezierArcLengthSimpson.arcLength(b, 0.001);
+        double gravesen = CubicCurveArcLengthGravesen.arcLength(b, 0.001);
+        double romberg = CubicCurveArcLengthRomberg.arcLength(b, 0, 0.001);
+        double simpson = CubicCurveArcLengthSimpson.arcLength(b, 0, 0.001);
+        double gaussLegendre = CubicCurveArcLengthGaussLegendre.arcLength(b, 0);
 
         label.setText("length"
                 + "\n ∑:" + (float) param.length + " segs: " + param.segments.size()
                 + "\n gravesen:" + (float) gravesen
                 + "\n romberg:" + (float) romberg
                 + "\n simpson:" + (float) simpson
+                + "\n gauss:" + (float) gaussLegendre
                 + "\n " + characteristics
         );
     }
 
-    private void updateDistancePoints() {
+    private void updateDistancePoints(Group distancePoints) {
         PathArcLengthParameterization param = new PathArcLengthParameterization(
                 FXShapes.awtShapeFromFX(new CubicCurve(curve.getStartX(),
                         curve.getStartY(),
@@ -206,7 +206,6 @@ public class BezierArcLengthExampleMain extends Application {
                         curve.getEndX(),
                         curve.getEndY())).getPathIterator(null, 1.0)
         );
-        distancePoints.getChildren().clear();
 
         for (PathArcLengthParameterization.Segment seg : param.segments) {
             Line e = new Line(seg.x0, seg.y0, seg.x1, seg.y1);
@@ -215,7 +214,7 @@ public class BezierArcLengthExampleMain extends Application {
         }
 
 
-        for (int i = 1, n = 50; i < n; i++) {
+        for (int i = 1, n = 10; i < n; i++) {
             double s = i / (double) n;
             javafx.geometry.Point2D p = param.interpolate(s);
             Circle e = new Circle(p.getX(), p.getY(), 2);
@@ -224,11 +223,67 @@ public class BezierArcLengthExampleMain extends Application {
         }
     }
 
+    private void updateApproximatedDistancePoints(Group distancePoints) {
+        double[] b = {
+                curve.getStartX(),
+                curve.getStartY(),
+                curve.getControlX1(),
+                curve.getControlY1(),
+                curve.getControlX2(),
+                curve.getControlY2(),
+                curve.getEndX(),
+                curve.getEndY()
+        };
+
+        double totalLength = CubicCurves.arcLength(b, 0, 1.0);
+
+
+        for (int i = 1, n = 10; i < n; i++) {
+            double s = i / (double) n;
+            double t = CubicCurves.invArcLength(b, 0, s * totalLength);
+            PointAndTangent pat = CubicCurves.eval(b, 0, t);
+            javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
+            Circle e = new Circle(p.getX(), p.getY(), 4);
+            e.setFill(Color.RED);
+            distancePoints.getChildren().add(e);
+        }
+    }
+
+    private void updateApproximatedDistancePointsGaussLegendre(Group distancePoints) {
+        double[] b = {
+                curve.getStartX(),
+                curve.getStartY(),
+                curve.getControlX1(),
+                curve.getControlY1(),
+                curve.getControlX2(),
+                curve.getControlY2(),
+                curve.getEndX(),
+                curve.getEndY()
+        };
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(b, 0);
+        OrderedPair<ToDoubleFunction<Double>, Double> pair = Solvers.invSpeedPolynomialChebyshevApprox(20, Integrals::gaussLegendre7, f, 0, 1);
+        //OrderedPair<ToDoubleFunction<Double>, Double> pair = IntegralAlgorithms.invSpeedPolynomialChebyshevApprox(20, (f1, t0, t1) -> IntegralAlgorithms.rombergQuadrature(f1, t0, t1,0.1), f, 0, 1);
+        //OrderedPair<ToDoubleFunction<Double>, Double> pair = IntegralAlgorithms.invPolynomialApprox3( IntegralAlgorithms::gaussLegendre7, f, 0, 1);
+        ToDoubleFunction<Double> sToT = pair.first();
+        double totalLength = pair.second();
+
+
+        for (int i = 1, n = 10; i < n; i++) {
+            double s = i / (double) n;
+            double t = sToT.applyAsDouble(s * totalLength);
+            PointAndTangent pat = CubicCurves.eval(b, 0, t);
+            javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
+            Circle e = new Circle(p.getX(), p.getY(), 4);
+            e.setFill(Color.ORANGE);
+            distancePoints.getChildren().add(e);
+        }
+    }
+
     private void updateTimePoints() {
         timePoints.getChildren().clear();
         for (int i = 1, n = 10; i < n; i++) {
             double t = i / (double) n;
-            Point2D.Double p = BezierCurves.evalCubicCurve(curve.getStartX(),
+            PointAndTangent pat = CubicCurves.eval(curve.getStartX(),
                     curve.getStartY(),
                     curve.getControlX1(),
                     curve.getControlY1(),
@@ -236,19 +291,11 @@ public class BezierArcLengthExampleMain extends Application {
                     curve.getControlY2(),
                     curve.getEndX(),
                     curve.getEndY(), t);
-            Point2D.Double tag = BezierCurves.evalCubicCurveTangent(curve.getStartX(),
-                    curve.getStartY(),
-                    curve.getControlX1(),
-                    curve.getControlY1(),
-                    curve.getControlX2(),
-                    curve.getControlY2(),
-                    curve.getEndX(),
-                    curve.getEndY(), t);
-            javafx.geometry.Point2D perp = new javafx.geometry.Point2D(tag.y, -tag.x);
+            javafx.geometry.Point2D perp = new javafx.geometry.Point2D(pat.tangentY(), -pat.tangentX());
             javafx.geometry.Point2D tg = perp.normalize();
 
-            timePoints.getChildren().add(new Line(p.x - tg.getX(), p.y - tg.getY(),
-                    p.x + tg.getX(), p.y + tg.getY()));
+            timePoints.getChildren().add(new Line(pat.x() - tg.getX(), pat.y() - tg.getY(),
+                    pat.x() + tg.getX(), pat.y() + tg.getY()));
 
         }
 
@@ -261,7 +308,7 @@ public class BezierArcLengthExampleMain extends Application {
      */
     private void updatePointsOfInterest() {
 
-        DoubleArrayList infl = BezierCurveCharacteristics.inflectionPoints(curve.getStartX(),
+        DoubleArrayList infl = CubicCurveCharacteristics.inflectionPoints(curve.getStartX(),
                 curve.getStartY(),
                 curve.getControlX1(),
                 curve.getControlY1(),
@@ -270,14 +317,14 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndX(),
                 curve.getEndY());
         pointsOfInterest.getChildren().clear();
-        if (infl.size() == 2 && Geom.almostEqual(infl.get(0), infl.get(1), 0.09)) {
+        if (infl.size() == 2 && Points.almostEqual(infl.get(0), infl.get(1), 0.09)) {
             double cusp = (infl.get(0) + infl.get(1)) / 2;
             addPoint(cusp, Color.WHITE, Color.BLACK);
         } else {
             addPoints(infl, Color.BLACK, null);
         }
         if (infl.isEmpty()) {
-            Double p = BezierCurveCharacteristics.singularPoint(curve.getStartX(),
+            Double p = CubicCurveCharacteristics.singularPoint(curve.getStartX(),
                     curve.getStartY(),
                     curve.getControlX1(),
                     curve.getControlY1(),
@@ -299,7 +346,7 @@ public class BezierArcLengthExampleMain extends Application {
 
     private void addPoint(double t, Color fill, Color stroke) {
 
-        Point2D.Double p = BezierCurves.evalCubicCurve(curve.getStartX(),
+        PointAndTangent pat = CubicCurves.eval(curve.getStartX(),
                 curve.getStartY(),
                 curve.getControlX1(),
                 curve.getControlY1(),
@@ -307,7 +354,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getControlY2(),
                 curve.getEndX(),
                 curve.getEndY(), t);
-        Circle circle = new Circle(p.x, p.y, 4);
+        Circle circle = new Circle(pat.x(), pat.y(), 4);
         circle.setFill(fill);
         circle.setStroke(stroke);
         pointsOfInterest.getChildren().add(circle);
@@ -331,7 +378,7 @@ public class BezierArcLengthExampleMain extends Application {
                 this.x1 = x1;
                 this.y1 = y1;
                 this.pos = pos;
-                this.length = Geom.distance(x0, y0, x1, y1);
+                this.length = Points.distance(x0, y0, x1, y1);
             }
 
             /**
@@ -359,20 +406,20 @@ public class BezierArcLengthExampleMain extends Application {
             DoubleSummaryStatistics sum = new DoubleSummaryStatistics();
             while (!it.isDone()) {
                 switch (it.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
-                    addNonDegeneratedSegment(moveX, moveY, prevX, prevY, sum, segments);
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    moveX = prevX = coords[0];
-                    moveY = prevY = coords[1];
-                    break;
-                case PathIterator.SEG_LINETO:
-                    addNonDegeneratedSegment(prevX, prevY, coords[0], coords[1], sum, segments);
-                    prevX = coords[0];
-                    prevY = coords[1];
-                    break;
-                default:
-                    throw new IllegalArgumentException("Path iterator is not flattened!");
+                    case PathIterator.SEG_CLOSE:
+                        addNonDegeneratedSegment(moveX, moveY, prevX, prevY, sum, segments);
+                        break;
+                    case PathIterator.SEG_MOVETO:
+                        moveX = prevX = coords[0];
+                        moveY = prevY = coords[1];
+                        break;
+                    case PathIterator.SEG_LINETO:
+                        addNonDegeneratedSegment(prevX, prevY, coords[0], coords[1], sum, segments);
+                        prevX = coords[0];
+                        prevY = coords[1];
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Path iterator is not flattened!");
                 }
                 it.next();
             }
@@ -397,7 +444,7 @@ public class BezierArcLengthExampleMain extends Application {
 
         private void addNonDegeneratedSegment(double moveX, double moveY, double prevX, double prevY, DoubleSummaryStatistics sum, List<Segment> list) {
             Segment seg = new Segment(sum.getSum(), moveX, moveY, prevX, prevY);
-            if (!Geom.almostZero(seg.length)) {
+            if (!Points.almostZero(seg.length)) {
                 list.add(seg);
                 sum.accept(seg.length);
             }

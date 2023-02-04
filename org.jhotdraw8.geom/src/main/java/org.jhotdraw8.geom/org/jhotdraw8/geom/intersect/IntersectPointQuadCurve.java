@@ -5,9 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -118,7 +116,7 @@ public class IntersectPointQuadCurve {
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
-                if (abs(dd - bestDistance) < Geom.REAL_THRESHOLD) {
+                if (abs(dd - bestDistance) < Rectangles.REAL_THRESHOLD) {
                     result.add(new IntersectionPoint(p, tt));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;
@@ -141,10 +139,10 @@ public class IntersectPointQuadCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalQuadCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            PointAndTangent tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
                     0, 1, 0
             ));
         }

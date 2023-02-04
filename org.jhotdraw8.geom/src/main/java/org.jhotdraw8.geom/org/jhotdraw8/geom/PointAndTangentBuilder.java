@@ -7,12 +7,8 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.Shape;
-import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.QuadCurve2D;
+import java.awt.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.DoubleSummaryStatistics;
@@ -73,7 +69,7 @@ public class PointAndTangentBuilder {
                 y1 = y;
                 x2 = x = coords[0];
                 y2 = y = coords[1];
-                double length = Geom.length(x1, y1, x2, y2);
+                double length = Lines.arcLength(x1, y1, x2, y2);
                 if (length > eps) {
                     Line2D.Double line = new Line2D.Double(x1, y1, x2, y2);
                     stats.accept(length);
@@ -123,7 +119,7 @@ public class PointAndTangentBuilder {
                 break;
             }
             case PathIterator.SEG_CLOSE: {
-                double length = Geom.length(x, y, startX, startY);
+                double length = Lines.arcLength(x, y, startX, startY);
                 if (length > eps) {
                     Line2D.Double line = new Line2D.Double(x, y, startX, startY);
                     stats.accept(length);
@@ -154,28 +150,26 @@ public class PointAndTangentBuilder {
         if (seg.shape instanceof Line2D.Double) {
             Line2D.Double line = (Line2D.Double) seg.shape;
             double tInLine = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
-            Point2D.Double p = Geom.lerp(line.x1, line.y1, line.x2, line.y2, tInLine);
+            Point2D.Double p = Lines.lerp(line.x1, line.y1, line.x2, line.y2, tInLine);
             return new PointAndTangent(p.x, p.y, line.x2 - line.x1, line.y2 - line.y1);
         } else if (seg.shape instanceof QuadCurve2D.Double) {
             QuadCurve2D.Double quadCurve = (QuadCurve2D.Double) seg.shape;
             double tInQuadCurve = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
-            Point2D.Double p = BezierCurves.evalQuadCurve(quadCurve.x1, quadCurve.y1, quadCurve.ctrlx, quadCurve.ctrly,
+            PointAndTangent p = QuadCurves.eval(quadCurve.x1, quadCurve.y1, quadCurve.ctrlx, quadCurve.ctrly,
                     quadCurve.x2, quadCurve.y2, tInQuadCurve);
-            Point2D.Double tangent = BezierCurves.evalQuadCurveTangent(quadCurve.x1, quadCurve.y1, quadCurve.ctrlx, quadCurve.ctrly,
-                    quadCurve.x2, quadCurve.y2, tInQuadCurve);
-            return new PointAndTangent(p.x, p.y, tangent.x, tangent.y);
+            return new PointAndTangent(p.x(), p.y(), p.tangentX(), p.tangentY());
 
         } else {
             CubicCurve2D.Double cubicCurve = (CubicCurve2D.Double) seg.shape;
             double tInCubicCurve = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
-            Point2D.Double p = BezierCurves.evalCubicCurve(cubicCurve.x1, cubicCurve.y1,
+
+            PointAndTangent pat = CubicCurves.eval(cubicCurve.x1, cubicCurve.y1,
                     cubicCurve.ctrlx1, cubicCurve.ctrly1,
                     cubicCurve.ctrlx2, cubicCurve.ctrly2,
                     cubicCurve.x2, cubicCurve.y2, tInCubicCurve);
-            Point2D.Double tangent = BezierCurves.evalCubicCurveTangent(cubicCurve.x1, cubicCurve.y1,
-                    cubicCurve.ctrlx1, cubicCurve.ctrly1,
-                    cubicCurve.ctrlx2, cubicCurve.ctrly2,
-                    cubicCurve.x2, cubicCurve.y2, tInCubicCurve);
+            Point2D.Double p = pat.getPoint(Point2D.Double::new);
+            Point2D.Double tangent = pat.getTangent(Point2D.Double::new);
+            ;
             return new PointAndTangent(p.x, p.y, tangent.x, tangent.y);
         }
     }
@@ -203,7 +197,7 @@ public class PointAndTangentBuilder {
                 startY = y = coords[1];
                 break;
             case PathIterator.SEG_LINETO:
-                stats.accept(Geom.length(x, y, x = coords[0], y = coords[1]));
+                stats.accept(Lines.arcLength(x, y, x = coords[0], y = coords[1]));
                 break;
             case PathIterator.SEG_QUADTO:
                 stats.accept(computeLength(new QuadCurve2D.Double(x, y, coords[0], coords[1],
@@ -215,7 +209,7 @@ public class PointAndTangentBuilder {
                         x = coords[4], y = coords[5]).getPathIterator(null, flatness), flatness));
                 break;
             case PathIterator.SEG_CLOSE:
-                stats.accept(Geom.length(startX, startY, x, y));
+                stats.accept(Lines.arcLength(startX, startY, x, y));
                 break;
             default:
                 throw new IllegalArgumentException("unsupported op-code in PathIterator: " + op);

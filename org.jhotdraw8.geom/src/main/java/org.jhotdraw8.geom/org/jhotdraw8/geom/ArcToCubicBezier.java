@@ -96,8 +96,8 @@ public class ArcToCubicBezier {
         ry = radiusY;
         phi = xAxisRotation;
 
-        double sin_phi = Geom.sinDegrees(phi);
-        double cos_phi = Geom.cosDegrees(phi);
+        double sin_phi = Angles.sinDegrees(phi);
+        double cos_phi = Angles.cosDegrees(phi);
 
         // Make sure radii are valid.
         double x1p = cos_phi * (x1 - x2) * 0.5 + sin_phi * (y1 - y2) * 0.5;

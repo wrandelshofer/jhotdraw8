@@ -5,8 +5,10 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.PointAndTangent;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ public class IntersectCircleCubicCurve {
 
     public static IntersectionResultEx intersectCubicCurveCircleEx(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                                                    double cx, double cy, double r) {
-        return intersectCubicCurveCircleEx(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, r, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveCircleEx(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, r, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectCubicCurveCircleEx(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
@@ -58,10 +60,10 @@ public class IntersectCircleCubicCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D tangentA = BezierCurves.evalCubicCurveTangent(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
+            PointAndTangent tangentA = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
             list.add(new IntersectionPointEx(x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
-                    Geom.atan2(y - cy, x - cx), y - cy, cx - x));
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    Angles.atan2(y - cy, x - cx), y - cy, cx - x));
         }
 
         return new IntersectionResultEx(result.getStatus(), list);

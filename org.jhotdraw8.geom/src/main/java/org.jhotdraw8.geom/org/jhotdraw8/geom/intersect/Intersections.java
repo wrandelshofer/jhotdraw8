@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.Polynomial;
 
 import java.awt.geom.Point2D;
 import java.util.Arrays;

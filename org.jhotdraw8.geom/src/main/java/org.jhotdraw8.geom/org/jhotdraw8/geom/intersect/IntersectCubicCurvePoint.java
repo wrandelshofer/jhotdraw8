@@ -6,9 +6,7 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class IntersectCubicCurvePoint {
     public static @NonNull IntersectionResultEx intersectCubicCurvePointEx(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy) {
-        return intersectCubicCurvePointEx(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, Geom.REAL_THRESHOLD);
+        return intersectCubicCurvePointEx(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectCubicCurvePointEx(
@@ -36,10 +34,10 @@ public class IntersectCubicCurvePoint {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
                     0, 1, 0
             ));
         }
@@ -155,7 +153,7 @@ public class IntersectCubicCurvePoint {
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
-                if (abs(dd - bestDistance) < Geom.REAL_THRESHOLD) {
+                if (abs(dd - bestDistance) < Rectangles.REAL_THRESHOLD) {
                     result.add(new IntersectionPoint(p, t));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;

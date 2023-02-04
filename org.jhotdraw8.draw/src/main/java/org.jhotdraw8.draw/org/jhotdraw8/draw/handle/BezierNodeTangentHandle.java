@@ -6,11 +6,7 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
@@ -21,9 +17,9 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.geom.BezierNode;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.shape.BezierNode;
 
 import java.util.List;
 
@@ -53,7 +49,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
+        return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
     private BezierNode getBezierNode() {

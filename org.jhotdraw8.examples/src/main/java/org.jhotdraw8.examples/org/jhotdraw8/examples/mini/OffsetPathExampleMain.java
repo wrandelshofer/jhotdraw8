@@ -27,11 +27,7 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.OffsetPathBuilder;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PlineVertex;
 import org.jhotdraw8.geom.contour.PolyArcPath;
@@ -256,7 +252,7 @@ public class OffsetPathExampleMain extends Application {
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double px = points.get(i);
             double py = points.get(i + 1);
-            double sq = Geom.squaredDistance(x, y, px, py);
+            double sq = Points.squaredDistance(x, y, px, py);
             if (sq < 25 && sq < bestDistance) {
                 bestDistance = sq;
                 index = i;

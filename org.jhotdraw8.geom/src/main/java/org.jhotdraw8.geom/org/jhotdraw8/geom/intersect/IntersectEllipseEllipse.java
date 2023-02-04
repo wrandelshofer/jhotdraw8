@@ -5,7 +5,8 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class IntersectEllipseEllipse {
      * @return computed intersection
      */
     public static @NonNull IntersectionResult intersectEllipseEllipse(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
-        return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Geom.REAL_THRESHOLD);
+        return intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -110,7 +111,7 @@ public class IntersectEllipseEllipse {
     }
 
     public static IntersectionResultEx intersectEllipseEllipseEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2) {
-        return intersectEllipseEllipseEx(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Geom.REAL_THRESHOLD);
+        return intersectEllipseEllipseEx(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectEllipseEllipseEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {

@@ -20,15 +20,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.ResizeHandleKit;
-import org.jhotdraw8.draw.handle.RotateHandle;
-import org.jhotdraw8.draw.handle.TransformHandleKit;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -38,18 +30,12 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.tree.TreeNode;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -257,7 +243,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 if (b == null) {
                     b = fb;
                 } else {
-                    b = FXGeom.union(b, fb);
+                    b = FXRectangles.union(b, fb);
                 }
             } else {
                 for (Figure ff : f.preorderIterable()) {
@@ -278,12 +264,12 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     if (ff.get(CompositableFigure.EFFECT) != null) {
                         grow += 10.0;
                     }
-                    fb = FXGeom.grow(fb, grow, grow);
+                    fb = FXRectangles.grow(fb, grow, grow);
                     fb = f.localToWorld(fb);
                     if (b == null) {
                         b = fb;
                     } else {
-                        b = FXGeom.union(b, fb);
+                        b = FXRectangles.union(b, fb);
                     }
                 }
             }
@@ -588,7 +574,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default @NonNull Point2D getCenterInLocal() {
         Bounds b = getLayoutBounds();
-        return FXGeom.center(b);
+        return FXRectangles.center(b);
     }
 
     /**
@@ -598,7 +584,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default @NonNull Point2D getCenterInParent() {
         Bounds b = getLayoutBoundsInParent();
-        return FXGeom.center(b);
+        return FXRectangles.center(b);
     }
 
     /**

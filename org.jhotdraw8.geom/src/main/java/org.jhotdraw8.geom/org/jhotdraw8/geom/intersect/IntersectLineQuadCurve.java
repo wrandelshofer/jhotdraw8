@@ -5,15 +5,13 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 import static org.jhotdraw8.geom.intersect.IntersectLinePoint.argumentOnLine;
 
 public class IntersectLineQuadCurve {
@@ -50,7 +48,7 @@ public class IntersectLineQuadCurve {
                 a1x, a1y,
                 p0x, p0y,
                 p1x, p1y,
-                p2x, p2y, Geom.REAL_THRESHOLD);
+                p2x, p2y, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -148,7 +146,7 @@ public class IntersectLineQuadCurve {
      * @return the computed intersection
      */
     public static @NonNull IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1) {
-        return intersectQuadCurveLine(p0, p1, p2, a0, a1, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveLine(p0, p1, p2, a0, a1, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -249,7 +247,7 @@ public class IntersectLineQuadCurve {
     public static @NonNull IntersectionResult intersectQuadCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1) {
-        return intersectQuadCurveLine(ax0, ay0, ax1, ay1, ax2, ay2, bx0, by0, bx1, by1, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveLine(ax0, ay0, ax1, ay1, ax2, ay2, bx0, by0, bx1, by1, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResult intersectQuadCurveLine(
@@ -261,7 +259,7 @@ public class IntersectLineQuadCurve {
 
     public static IntersectionResultEx intersectLineQuadCurveEx(double a0x, double a0y, double a1x, double a1y,
                                                                 double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
-        return intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, p0x, p0y, p1x, p1y, p2x, p2y, Geom.REAL_THRESHOLD);
+        return intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, p0x, p0y, p1x, p1y, p2x, p2y, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectLineQuadCurveEx(double a0x, double a0y, double a1x, double a1y,
@@ -272,11 +270,11 @@ public class IntersectLineQuadCurve {
         for (IntersectionPoint ip : result) {
             double px = ip.getX();
             double py = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalQuadCurveTangent(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndTangent tangentA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     px, py,
                     IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, px, py), a1x - a0x, a1y - a0y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY()
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY()
             ));
         }
         return new IntersectionResultEx(result.getStatus(), list);
@@ -287,7 +285,7 @@ public class IntersectLineQuadCurve {
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
             double a0x, double a0y, double a1x, double a1y
     ) {
-        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectQuadCurveLineEx(
@@ -299,10 +297,10 @@ public class IntersectLineQuadCurve {
         for (IntersectionPoint ip : result) {
             double px = ip.getX();
             double py = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalQuadCurveTangent(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndTangent tangentA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     px, py,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
                     IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, px, py), a1x - a0x, a1y - a0y
             ));
         }

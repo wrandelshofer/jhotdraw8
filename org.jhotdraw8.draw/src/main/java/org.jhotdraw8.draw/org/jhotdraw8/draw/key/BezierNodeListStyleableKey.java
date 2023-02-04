@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.draw.css.converter.CssBezierNodeListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.geom.BezierNode;
+import org.jhotdraw8.geom.shape.BezierNode;
 
 /**
  * BezierNodeListStyleableKey.

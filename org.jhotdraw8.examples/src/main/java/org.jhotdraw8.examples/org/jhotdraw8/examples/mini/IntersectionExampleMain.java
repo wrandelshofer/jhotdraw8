@@ -16,53 +16,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
-import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
-import org.jhotdraw8.geom.intersect.IntersectCircleEllipse;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectCirclePoint;
-import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectCircleRectangle;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveCubicCurve;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveEllipse;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveLine;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurvePoint;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectEllipseEllipse;
-import org.jhotdraw8.geom.intersect.IntersectEllipseLine;
-import org.jhotdraw8.geom.intersect.IntersectEllipseQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectEllipseRectangle;
-import org.jhotdraw8.geom.intersect.IntersectLineLine;
-import org.jhotdraw8.geom.intersect.IntersectLinePoint;
-import org.jhotdraw8.geom.intersect.IntersectLineQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectPointQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectQuadCurveQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectRectangleRectangle;
-import org.jhotdraw8.geom.intersect.IntersectionPointEx;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.intersect.*;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -452,12 +414,12 @@ public class IntersectionExampleMain extends Application {
                     System.out.println("  t:" + isect.getFirst().getArgumentA() + " ctrlPoint:" + isect.getLast());
                     double[] left = new double[6];
                     double[] right = new double[6];
-                    BezierCurves.splitCubicCurve(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(),
+                    CubicCurves.split(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(),
                             l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(), isect.getFirst().getArgumentA(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
-                    double[] newControlPoint = BezierCurves.mergeCubicCurve(
+                    double[] newControlPoint = CubicCurves.merge(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], left[4], left[5], right[0], right[1], right[2], right[3], right[4], right[5], 1.0);
                     System.out.println("  new ctrlPoint:" + Arrays.toString(newControlPoint));
                 }
@@ -548,11 +510,11 @@ public class IntersectionExampleMain extends Application {
                     System.out.println("  t:" + isect.getFirst().getArgumentA() + " ctrlPoint:" + isect.getLast());
                     double[] left = new double[4];
                     double[] right = new double[4];
-                    BezierCurves.splitQuadCurveTo(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirst().getArgumentA(),
+                    QuadCurves.split(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.getFirst().getArgumentA(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
-                    double[] newControlPoint = BezierCurves.mergeQuadCurve(
+                    double[] newControlPoint = QuadCurves.merge(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], right[0], right[1], right[2], right[3], 1.0);
                     System.out.println("  new ctrlPoints:" + newControlPoint);
                 }

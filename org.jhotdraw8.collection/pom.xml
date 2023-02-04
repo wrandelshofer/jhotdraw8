@@ -55,5 +55,9 @@
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.base</artifactId>
+    </dependency>
   </dependencies>
 </project>

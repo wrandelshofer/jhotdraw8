@@ -9,12 +9,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
@@ -31,7 +26,7 @@ import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 import java.util.function.Function;
 
@@ -71,7 +66,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
+        return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
     @Override

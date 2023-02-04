@@ -7,16 +7,10 @@ package org.jhotdraw8.collection.primitive;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.collection.facade.ListFacade;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
@@ -25,10 +19,10 @@ import java.util.stream.DoubleStream;
  *
  * @author Werner Randelshofer
  */
-public class DoubleArrayList implements Iterable<Double> {
-    private final static double[] EMPTY_LIST = new double[0];
+public class DoubleArrayList extends AbstractList<Double> implements DoubleList {
+    private final static double[] EMPTY = new double[0];
+    private double[] items;
 
-    private double @NonNull [] items = EMPTY_LIST;
     /**
      * Holds the size of the list. Invariant: size >= 0.
      */
@@ -38,6 +32,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * Creates a new empty instance with 0 initial capacity.
      */
     public DoubleArrayList() {
+        items = EMPTY;
     }
 
     /**
@@ -46,7 +41,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param initialCapacity the initial capacity
      */
     public DoubleArrayList(int initialCapacity) {
-        grow(initialCapacity);
+        items = new double[initialCapacity];
     }
 
     /**
@@ -54,18 +49,19 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @param collection a collection of integers
      */
-    public DoubleArrayList(@NonNull Collection<Integer> collection) {
+    public DoubleArrayList(@NonNull Collection<Double> collection) {
         this.size = collection.size();
         this.items = new double[size];
 
         int count = 0;
-        for (Iterator<Integer> iter = collection.iterator(); iter.hasNext(); ) {
-            Integer value = iter.next();
+        //noinspection ForLoopReplaceableByForEach
+        for (Iterator<Double> iter = collection.iterator(); iter.hasNext(); ) {
+            Double value = iter.next();
             items[count++] = value;
         }
     }
 
-    private DoubleArrayList(@NonNull double @NonNull [] items) {
+    private DoubleArrayList(double @NonNull [] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -77,7 +73,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull DoubleArrayList of(@NonNull double @NonNull ... items) {
+    public static @NonNull DoubleArrayList of(double @NonNull ... items) {
         return new DoubleArrayList(items);
     }
 
@@ -86,7 +82,8 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @param newItem the new item
      */
-    public void add(double newItem) {
+    @Override
+    public void addAsDouble(double newItem) {
         grow(size + 1);
         items[size++] = newItem;
     }
@@ -97,10 +94,10 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param index   the index
      * @param newItem the new item
      */
-    public void add(int index, double newItem) {
-        rangeCheck(index, size + 1);
+    @Override
+    public void addAsDouble(int index, double newItem) {
+        Objects.checkIndex(index, size + 1);
         grow(size + 1);
-        System.arraycopy(items, index, items, index + 1, size - index);
         items[index] = newItem;
         ++size;
     }
@@ -110,7 +107,7 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @param that another list
      */
-    public void addAll(@NonNull DoubleArrayList that) {
+    public void addAllAsDouble(@NonNull DoubleArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -134,10 +131,11 @@ public class DoubleArrayList implements Iterable<Double> {
     }
 
     /**
-     * Clears the array in O(1).
+     * Clears the list in O(1).
      */
+    @Override
     public void clear() {
-        //Performance: Do not fill items with 0 values.
+        // Performance: do not fill array with 0 values
         size = 0;
     }
 
@@ -147,7 +145,7 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(@NonNull double @NonNull [] a, int offset) {
+    public void copyInto(int @NonNull [] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -159,6 +157,7 @@ public class DoubleArrayList implements Iterable<Double> {
         if (obj == null) {
             return false;
         }
+        // FIXME this is not correct since we implement List<Double>
         if (getClass() != obj.getClass()) {
             return false;
         }
@@ -180,15 +179,38 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param index an index
      * @return the item at the index
      */
-    public double get(int index) {
-        rangeCheck(index, size);
+    @Override
+    public double getAsDouble(int index) {
+        Objects.checkIndex(index, size);
         return items[index];
+    }
+
+    /*
+     * Gets the item at the specified index.
+     *
+     * @param index an index
+     * @return the item at the index
+     */
+    @Override
+    public Double get(int index) {
+        Objects.checkIndex(index, size);
+        return items[index];
+    }
+
+    @Override
+    public double getLastAsDouble() {
+        return getAsDouble(size - 1);
+    }
+
+    @Override
+    public double getFirstAsDouble() {
+        return getAsDouble(0);
     }
 
     /**
      * Sets the size of this list. If the new size is greater than the current
      * size, new {@code 0} items are added to the end of the list. If the new
-     * size is is less than the current size, all items at indices greater or
+     * size is less than the current size, all items at indices greater or
      * equal {@code newSize} are discarded.
      *
      * @param newSize the new size
@@ -205,25 +227,40 @@ public class DoubleArrayList implements Iterable<Double> {
     public int hashCode() {
         int result = 1;
         for (int i = 0; i < size; i++) {
-            result = 31 * result + Double.hashCode(items[i]);
+            long bits = Double.doubleToLongBits(items[i]);
+            result = 31 * result + (int) (bits ^ (bits >>> 32));
         }
 
         return result;
     }
 
     private void grow(int capacity) {
-        items = ListHelper.grow(capacity, 1, items);
+        if (items.length < capacity) {
+            items = ListHelper.grow(Math.max(1, items.length * 2), 1, items);
+        }
     }
 
-    /**
-     * Returns the first index of the item, or -1 if this list does not contain
-     * the item.
-     *
-     * @param item the item
-     * @return the index of the item, or -1.
-     */
-    public int indexOf(double item) {
-        for (int i = 0; i < size; i++) {
+    @Override
+    public int indexOfAsDouble(double item) {
+        return indexOfAsDouble(item, 0);
+    }
+
+    public int indexOfAsDouble(double item, int start) {
+        for (int i = start; i < size; i++) {
+            if (items[i] == item) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public int lastIndexOfAsDouble(double item) {
+        return lastIndexOfAsDouble(item, size - 1);
+    }
+
+    public int lastIndexOfAsDouble(double item, int start) {
+        for (int i = start; i >= 0; i--) {
             if (items[i] == item) {
                 return i;
             }
@@ -236,14 +273,18 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return true if empty
      */
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
-    private void rangeCheck(int index, int maxExclusive) throws IllegalArgumentException {
-        if (index < 0 || index >= maxExclusive) {
-            throw new IndexOutOfBoundsException("Index out of bounds " + index);
+
+    @Override
+    public boolean contains(Object o) {
+        if (o instanceof Double e) {
+            return indexOfAsDouble(e) != -1;
         }
+        return false;
     }
 
     /**
@@ -252,8 +293,9 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param index an index
      * @return the removed item
      */
-    public double removeAt(int index) {
-        rangeCheck(index, size);
+    @Override
+    public double removeAtAsDouble(int index) {
+        Objects.checkIndex(index, size);
         double removedItem = items[index];
         int numMoved = size - index - 1;
         if (numMoved > 0) {
@@ -269,11 +311,12 @@ public class DoubleArrayList implements Iterable<Double> {
      * @return the removed item
      * @throws NoSuchElementException if the list is empty
      */
-    public double removeLast() {
+    @Override
+    public double removeLastAsDouble() {
         if (isEmpty()) {
             throw new NoSuchElementException("List is empty.");
         }
-        return removeAt(size - 1);
+        return removeAtAsDouble(size - 1);
     }
 
     /**
@@ -283,8 +326,8 @@ public class DoubleArrayList implements Iterable<Double> {
      * @param newItem the new item
      * @return the old item
      */
-    public double set(int index, double newItem) {
-        rangeCheck(index, size);
+    public double setAsDouble(int index, double newItem) {
+        Objects.checkIndex(index, size);
         double removedItem = items[index];
         items[index] = newItem;
         return removedItem;
@@ -295,10 +338,10 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return the size
      */
+    @Override
     public int size() {
         return size;
     }
-
 
     /**
      * Trims the capacity of the list its current size.
@@ -349,51 +392,75 @@ public class DoubleArrayList implements Iterable<Double> {
      *
      * @return a stream
      */
-    public @NonNull DoubleStream stream() {
-        return Arrays.stream(items, 0, size);
+    public @NonNull DoubleStream doubleStream() {
+        return (size == 0) ? DoubleStream.empty() : Arrays.stream(items, 0, size);
     }
 
     /**
-     * Returns a new array containing all of the elements in this collection.
+     * Returns a new array containing all the elements in this collection.
      *
      * @return array
      */
-    public @NonNull double @NonNull [] toArray() {
+    public double @NonNull [] toDoubleArray() {
         double[] result = new double[size];
-        if (size > 0) {
-            System.arraycopy(items, 0, result, 0, size);
-        }
+        System.arraycopy(items, 0, result, 0, size);
         return result;
     }
 
     @Override
+    public boolean add(Double e) {
+        addAsDouble(e);
+        return true;
+    }
+
+
+    @Override
+    public boolean remove(Object o) {
+        if (o instanceof Double e) {
+            int index = indexOfAsDouble(e);
+            if (index != -1) {
+                removeAtAsDouble(index);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    @Override
     public @NonNull String toString() {
-        return Arrays.toString(items);
+        StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; i < size; i++) {
+            if (i > 0) {
+                b.append(", ");
+            }
+            b.append(items[i]);
+        }
+        return b.append(']').toString();
     }
 
     /**
      * Sorts the items in ascending order.
      */
     public void sort() {
-        if (size > 1) {
-            Arrays.sort(items, 0, size);
-        }
+        Arrays.sort(items, 0, size);
     }
 
     /**
-     * Removes all of the elements of this collection that satisfy the given
+     * Removes all the elements of this collection that satisfy the given
      * predicate.
      *
      * @param filter a predicate which returns {@code true} for elements to be
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIf(@NonNull DoublePredicate filter) {
+    public boolean removeIfAsDouble(@NonNull DoublePredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
-            if (filter.test(get(i))) {
-                removeAt(i);
+            if (filter.test(getAsDouble(i))) {
+                removeAtAsDouble(i);
                 hasRemoved = true;
             }
         }
@@ -409,12 +476,13 @@ public class DoubleArrayList implements Iterable<Double> {
      *          A {@code null} value indicates that the elements'
      *          {@linkplain Comparable natural ordering} should be used.
      */
+    @Override
     public void sort(@Nullable Comparator<? super Double> c) {
         if (size > 1) {
             if (c == null) {
                 Arrays.sort(items, 0, size);
             } else {
-                // XXX this is inefficient, we need a sort method for a double-array that takes a comparator.
+                // XXX this is inefficient, we need a sort method for an int-array that takes a comparator.
                 final Double[] objects = new Double[size];
                 for (int i = 0; i < size; i++) {
                     objects[i] = items[i];
@@ -425,5 +493,17 @@ public class DoubleArrayList implements Iterable<Double> {
                 }
             }
         }
+    }
+
+    @Override
+    public SequencedCollection<Double> reversed() {
+        return new ListFacade<>(
+                this::size,
+                i -> get(size() - i)
+        );
+    }
+
+    public double[] getArray() {
+        return items;
     }
 }

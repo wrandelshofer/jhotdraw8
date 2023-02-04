@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 /**
  * A LocatorHandle implements a Handle by delegating the location requests to a
@@ -50,6 +50,6 @@ public abstract class LocatorHandle extends AbstractHandle {
     @Override
     public boolean contains(@NonNull DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocation(dv);
-        return Geom.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
+        return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 }

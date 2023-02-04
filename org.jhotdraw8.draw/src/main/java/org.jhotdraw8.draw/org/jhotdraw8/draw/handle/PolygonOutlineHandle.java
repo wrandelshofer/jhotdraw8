@@ -27,13 +27,10 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PolylineFigure;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
-import org.jhotdraw8.geom.intersect.IntersectionResult;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.intersect.*;
 
 import java.awt.geom.PathIterator;
 
@@ -71,7 +68,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
-        if (FXGeom.contains(poly2.getBoundsInParent(), x, y, tolerance)) {
+        if (FXRectangles.contains(poly2.getBoundsInParent(), x, y, tolerance)) {
             IntersectionResult i = IntersectPathIteratorPoint.intersectPathIteratorPoint(
                     SvgPaths.pathIteratorFromPointCoords(poly2.getPoints(), true, PathIterator.WIND_EVEN_ODD, null),
                     x, y, tolerance);

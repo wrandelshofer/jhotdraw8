@@ -22,32 +22,32 @@ public class BezierCurvesTest {
     public @NonNull List<DynamicTest> dynamicTestsCharacterization() {
         return Arrays.asList(
                 dynamicTest("plainCurve", () -> testCurveCharacteristics(new double[]{160, 200, 75, 240, 260, 300, 260, 80},
-                        BezierCurveCharacteristics.Characteristics.PLAIN_CURVE)),
+                        CubicCurveCharacteristics.Characteristics.PLAIN_CURVE)),
                 dynamicTest("loopAtT0", () -> testCurveCharacteristics(new double[]{160, 200, 75, 240, 260, 300, 104, 123},
-                        BezierCurveCharacteristics.Characteristics.LOOP_AT_T_0)),
+                        CubicCurveCharacteristics.Characteristics.LOOP_AT_T_0)),
                 dynamicTest("loopAtT1", () -> testCurveCharacteristics(new double[]{228, 127, 75, 240, 260, 300, 200, 150},
-                        BezierCurveCharacteristics.Characteristics.LOOP_AT_T_1)),
+                        CubicCurveCharacteristics.Characteristics.LOOP_AT_T_1)),
                 dynamicTest("loop", () -> testCurveCharacteristics(new double[]{230, 120, 75, 240, 260, 300, 150, 120},
-                        BezierCurveCharacteristics.Characteristics.LOOP)),
+                        CubicCurveCharacteristics.Characteristics.LOOP)),
                 dynamicTest("cusp", () -> testCurveCharacteristics(new double[]{230, 120, 166, 223, 260, 300, 150, 120},
-                        BezierCurveCharacteristics.Characteristics.CUSP)),
+                        CubicCurveCharacteristics.Characteristics.CUSP)),
                 dynamicTest("doubleInflection", () -> testCurveCharacteristics(new double[]{260, 120, 166, 223, 260, 300, 150, 120},
-                        BezierCurveCharacteristics.Characteristics.DOUBLE_INFLECTION)),
+                        CubicCurveCharacteristics.Characteristics.DOUBLE_INFLECTION)),
                 dynamicTest("singleInflection", () -> testCurveCharacteristics(new double[]{260, 120, 220, 190, 260, 300, 150, 120},
-                        BezierCurveCharacteristics.Characteristics.SINGLE_INFLECTION)),
+                        CubicCurveCharacteristics.Characteristics.SINGLE_INFLECTION)),
                 dynamicTest("collinearMonotonicMotion", () -> testCurveCharacteristics(new double[]{0, 0, 10, 0, 20, 0, 30, 0},
-                        BezierCurveCharacteristics.Characteristics.COLLINEAR)),
+                        CubicCurveCharacteristics.Characteristics.COLLINEAR)),
                 dynamicTest("collinearOneFold", () -> testCurveCharacteristics(new double[]{0, 0, 20, 0, 30, 0, 10, 0},
-                        BezierCurveCharacteristics.Characteristics.COLLINEAR)),
+                        CubicCurveCharacteristics.Characteristics.COLLINEAR)),
                 dynamicTest("collinearTwoFold", () -> testCurveCharacteristics(new double[]{10, 0, 0, 0, 30, 0, 20, 0},
-                        BezierCurveCharacteristics.Characteristics.COLLINEAR)),
+                        CubicCurveCharacteristics.Characteristics.COLLINEAR)),
                 dynamicTest("collinearLoop", () -> testCurveCharacteristics(new double[]{10, 0, 30, 0, 0, 0, 20, 0},
-                        BezierCurveCharacteristics.Characteristics.COLLINEAR))
+                        CubicCurveCharacteristics.Characteristics.COLLINEAR))
         );
     }
 
-    public void testCurveCharacteristics(double[] b, BezierCurveCharacteristics.Characteristics expected) {
-        BezierCurveCharacteristics.Characteristics actual = new BezierCurveCharacteristics().characteristics(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
+    public void testCurveCharacteristics(double[] b, CubicCurveCharacteristics.Characteristics expected) {
+        CubicCurveCharacteristics.Characteristics actual = new CubicCurveCharacteristics().characteristics(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
         assertEquals(expected, actual);
     }
 
@@ -84,14 +84,14 @@ public class BezierCurvesTest {
     }
 
     private void testInflections(double[] b, double[] expected) {
-        new BezierCurveCharacteristics();
-        DoubleArrayList inflections = BezierCurveCharacteristics.inflectionPoints(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
-        assertArrayEquals(expected, inflections.toArray());
+        new CubicCurveCharacteristics();
+        DoubleArrayList inflections = CubicCurveCharacteristics.inflectionPoints(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
+        assertArrayEquals(expected, inflections.toDoubleArray());
     }
 
     private void testInflections(double[] b, double[] expected, double expectedSingularPoint) {
-        DoubleArrayList inflections = BezierCurveCharacteristics.inflectionPoints(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
-        assertArrayEquals(expected, inflections.toArray());
+        DoubleArrayList inflections = CubicCurveCharacteristics.inflectionPoints(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
+        assertArrayEquals(expected, inflections.toDoubleArray());
     }
 
     @TestFactory
@@ -107,7 +107,7 @@ public class BezierCurvesTest {
     }
 
     private void testAlign(double[] b, double[] expected) {
-        double[] actual = new BezierCurveCharacteristics().align(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
+        double[] actual = new CubicCurveCharacteristics().align(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
         assertArrayEquals(expected, actual);
     }
 }

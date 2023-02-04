@@ -28,7 +28,7 @@ public class GeomTest {
 
     private void testSinDegrees(double aDeg) {
         double expected = Math.sin(Math.toRadians(aDeg));
-        double actual = Geom.sinDegrees(aDeg);
+        double actual = Angles.sinDegrees(aDeg);
         assertEquals(expected, actual, 0.0001, "sin(" + aDeg + "deg)");
     }
 
@@ -44,7 +44,7 @@ public class GeomTest {
 
     private void testCosDegrees(double aDeg) {
         double expected = Math.cos(Math.toRadians(aDeg));
-        double actual = Geom.cosDegrees(aDeg);
+        double actual = Angles.cosDegrees(aDeg);
         assertEquals(expected, actual, 0.0001, "sin(" + aDeg + "deg)");
     }
 }

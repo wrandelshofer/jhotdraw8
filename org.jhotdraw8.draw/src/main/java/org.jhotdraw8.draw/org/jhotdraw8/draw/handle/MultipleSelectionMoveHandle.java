@@ -8,12 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
@@ -24,9 +19,9 @@ import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 /**
  * Handle for moving all selected figures.
@@ -63,7 +58,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
+        return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
     @Override
@@ -149,7 +144,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             if (b == null) {
                 b = fb;
             } else {
-                b = FXGeom.add(b, fb);
+                b = FXRectangles.add(b, fb);
             }
         }
         locationInDrawing = b == null ? null : new Point2D(b.getMinX() + relativeX * b.getWidth(), b.getMinY() + relativeY * b.getHeight());

@@ -6,11 +6,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectionResult;
-import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.intersect.*;
 
 import java.awt.geom.PathIterator;
 
@@ -61,7 +57,7 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
                     if (isect.isEmpty()) {
                         out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
                     } else {
-                        BezierCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLast().getArgumentA(),
+                        CubicCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLast().getArgumentA(),
                                 out::curveTo, null);
                     }
                 }
@@ -75,7 +71,7 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
                     if (isect.isEmpty()) {
                         out.lineTo(seg[0], seg[1]);
                     } else {
-                        Geom.splitLine(x, y, seg[0], seg[1], isect.getLast().getArgumentA(),
+                        Lines.split(x, y, seg[0], seg[1], isect.getLast().getArgumentA(),
                                 out::lineTo, null);
                     }
                 }
@@ -95,7 +91,7 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
                     if (isect.isEmpty()) {
                         out.quadTo(seg[0], seg[1], seg[2], seg[3]);
                     } else {
-                        BezierCurves.splitQuadCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLast().getArgumentA(),
+                        QuadCurves.split(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLast().getArgumentA(),
                                 out::quadTo, null);
                     }
                 }

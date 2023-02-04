@@ -10,17 +10,9 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
-import org.jhotdraw8.geom.NineRegionsScalingBuilder;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Path2D;
 import java.text.ParseException;
@@ -78,7 +70,7 @@ public interface ShapeableFigure extends Figure {
 
             javafx.geometry.Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
 
-            final Bounds srcBounds = shapeBounds == null || FXGeom.isEmpty(shapeBounds) ? FXGeom.getBounds(path) : FXGeom.getBounds(shapeBounds);
+            final Bounds srcBounds = shapeBounds == null || FXRectangles.isEmpty(shapeBounds) ? FXRectangles.getBounds(path) : FXRectangles.getBounds(shapeBounds);
             Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
 
             FXPathElementsBuilder builder2 = new FXPathElementsBuilder();

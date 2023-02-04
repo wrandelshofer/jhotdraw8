@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
+import org.jhotdraw8.geom.shape.BezierNode;
+import org.jhotdraw8.geom.shape.BezierNodePath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -298,8 +300,8 @@ public class BezierFit {
                 continue;
             }
 
-            double aPrev = Geom.atan2(prev.getY() - p.getY(), prev.getX() - p.getX());
-            double aNext = Geom.atan2(next.getY() - p.getY(), next.getX() - p.getX());
+            double aPrev = Angles.atan2(prev.getY() - p.getY(), prev.getX() - p.getX());
+            double aNext = Angles.atan2(next.getY() - p.getY(), next.getX() - p.getX());
             double angle = Math.abs(aPrev - aNext);
             if (angle < Math.PI - minAngle || angle > Math.PI + minAngle) {
                 if (intersectsPreviousCorner) {

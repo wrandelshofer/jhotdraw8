@@ -49,14 +49,15 @@ public class CardinalSplines {
      *     <li>Tb = 3 * (C - B)</li>
      *     <li>Te = 3 * (E - D)</li>
      * </ul>
-     * Therefore we can compute C and D from the cardinal spline as follows:
+     * Therefore, we can compute C and D from the cardinal spline as follows:
      * <ul>
      *     <li>C = B + (E - A) * c / 3</li>
      *     <li>D = E - (F - B) * c/ 3</li>
      * </ul>
      * References:
      * <dl>
-     *     <dt>Stackoverflow, Converting a Cubic Bezier Curves into a Cardinal Spline and back</dt>
+     *     <dt>Stackoverflow. Converting a Cubic Bezier Curves into a Cardinal Spline and back.
+     *     Copyright MBo. CC BY-SA 4.0 license.</dt>
      *     <dd><a href="https://stackoverflow.com/questions/31274246/converting-a-cubic-bezier-curves-into-a-cardinal-spline-and-back">stackoverflow.com</a></dd>
      * </dl>
      *

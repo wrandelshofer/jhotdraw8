@@ -4,15 +4,7 @@
  */
 package org.jhotdraw8.draw.constrain;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -35,13 +27,8 @@ import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ViewBoxableDrawing;
-import org.jhotdraw8.geom.Geom;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 /**
  * GridConstrainer.
@@ -341,8 +328,8 @@ public class GridConstrainer extends AbstractConstrainer {
         }
 
 
-        double x = Geom.fma(tx, cwidth, cx);
-        double y = Geom.fma(ty, cheight, cy);
+        double x = Math.fma(tx, cwidth, cx);
+        double y = Math.fma(ty, cheight, cy);
         return new CssPoint2D(CssSize.of(x, wunits), CssSize.of(y, hunits));
     }
 
@@ -383,8 +370,8 @@ public class GridConstrainer extends AbstractConstrainer {
         }
 
         return new CssRectangle2D(
-                Geom.fma(tx, cwidth, cx),
-                Geom.fma(ty, cheight, cy), r.getWidth(), r.getHeight());
+                Math.fma(tx, cwidth, cx),
+                Math.fma(ty, cheight, cy), r.getWidth(), r.getHeight());
     }
 
     @Override

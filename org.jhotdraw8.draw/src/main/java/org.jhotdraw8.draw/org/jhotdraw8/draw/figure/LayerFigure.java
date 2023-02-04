@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +137,7 @@ public class LayerFigure extends AbstractCompositeFigure
         }
 
         Bounds tb = text.getLayoutBounds();
-        tb = FXGeom.grow(tb, unitConverter.convert(0.1, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT));
+        tb = FXRectangles.grow(tb, unitConverter.convert(0.1, UnitConverter.VIEWPORT_MIN_PERCENTAGE, UnitConverter.DEFAULT));
         r.setX(tb.getMinX());
         r.setY(tb.getMinY());
         r.setWidth(tb.getWidth());

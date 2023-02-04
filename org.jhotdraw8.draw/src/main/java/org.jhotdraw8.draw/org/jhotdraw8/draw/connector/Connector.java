@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Lines;
 import org.jhotdraw8.geom.PointAndTangent;
 import org.jhotdraw8.geom.intersect.IntersectLineRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
@@ -89,7 +89,7 @@ public interface Connector {
         IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
         Point2D tangent = end.subtract(start);
         return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, tangent.getX(), tangent.getY(), 0, tangent.getX(), tangent.getY()) :
-                new IntersectionPointEx(Geom.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getTangentA(), ip.getArgumentB(), ip.getTangentB());
+                new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getTangentA(), ip.getArgumentB(), ip.getTangentB());
     }
 
     /**

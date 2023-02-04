@@ -15,7 +15,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 
 /**
  * Draws the {@code boundsInLocal} of all selected figurs, but does not provide
@@ -49,7 +49,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
             if (b == null) {
                 b = fb;
             } else {
-                b = FXGeom.add(b, fb);
+                b = FXRectangles.add(b, fb);
             }
         }
         return b == null ? null : dv.getWorldToView().transform(b);

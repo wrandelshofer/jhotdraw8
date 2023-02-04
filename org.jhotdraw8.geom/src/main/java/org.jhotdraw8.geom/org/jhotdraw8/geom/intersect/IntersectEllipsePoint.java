@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class IntersectEllipsePoint {
 
         double det = (px - cx) * (px - cx) / (rx * rx) + (py - py) * (py - py) / (ry * ry);
         IntersectionStatus status;
-        if (abs(det) - 1 >= Geom.REAL_THRESHOLD) {
+        if (abs(det) - 1 >= Rectangles.REAL_THRESHOLD) {
             status = IntersectionStatus.INTERSECTION;
             result.add(new IntersectionPoint(new Point2D.Double(px, py), 0.0));
         } else if (det < 1) {

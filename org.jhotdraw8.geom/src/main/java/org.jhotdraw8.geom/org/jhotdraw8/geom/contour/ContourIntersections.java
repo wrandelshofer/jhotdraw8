@@ -13,24 +13,16 @@ import org.jhotdraw8.collection.OrderedPairNonNull;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectLineLine;
-import org.jhotdraw8.geom.intersect.IntersectionResult;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.intersect.*;
 
 import java.awt.geom.Point2D;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.DoubleFunction;
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
@@ -50,7 +42,7 @@ public class ContourIntersections {
      */
     public static IntersectionResult intrCircle2Circle2(double radius1, final Point2D.Double center1,
                                                         double radius2, final Point2D.Double center2) {
-        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Geom.REAL_THRESHOLD);
+        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Rectangles.REAL_THRESHOLD);
     }
 
 
@@ -132,14 +124,14 @@ public class ContourIntersections {
             PlineIntersect sliceStart = new PlineIntersect();
             sliceStart.pos = split1.splitVertex.pos();
 
-            if (Geom.almostEqual(v1.pos(), intr.point1, Utils.realPrecision)) {
+            if (Points.almostEqual(v1.pos(), intr.point1, Utils.realPrecision)) {
                 // coincidence starts at beginning of segment, report as starting at end of previous index
                 sliceStart.sIndex1 = Utils.prevWrappingIndex(intr.sIndex1, pline1);
             } else {
                 sliceStart.sIndex1 = intr.sIndex1;
             }
 
-            if (Geom.almostEqual(u1.pos(), sliceStart.pos, Utils.realPrecision)) {
+            if (Points.almostEqual(u1.pos(), sliceStart.pos, Utils.realPrecision)) {
                 sliceStart.sIndex2 = Utils.prevWrappingIndex(intr.sIndex2, pline2);
             } else {
                 sliceStart.sIndex2 = intr.sIndex2;
@@ -157,7 +149,7 @@ public class ContourIntersections {
             PlineIntersect sliceEnd = new PlineIntersect();
             sliceEnd.pos = intr.point2;
             sliceEnd.sIndex1 = intr.sIndex1;
-            if (Geom.almostEqual(u1.pos(), sliceEnd.pos, Utils.realPrecision)) {
+            if (Points.almostEqual(u1.pos(), sliceEnd.pos, Utils.realPrecision)) {
                 sliceEnd.sIndex2 = Utils.prevWrappingIndex(intr.sIndex2, pline2);
             } else {
                 sliceEnd.sIndex2 = intr.sIndex2;
@@ -172,7 +164,7 @@ public class ContourIntersections {
             final PlineVertex v1 = pline1.get(intr.sIndex1);
             final PlineVertex v2 = pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1));
 
-            if (Geom.almostEqual(intr.point1, currCoincidentSlice[0].lastVertex().pos(),
+            if (Points.almostEqual(intr.point1, currCoincidentSlice[0].lastVertex().pos(),
                     Utils.realPrecision)) {
                 // continue coincident slice
                 currCoincidentSlice[0].removeLast();
@@ -195,7 +187,7 @@ public class ContourIntersections {
             // check if last coincident slice connects with first()
             final Point2D.Double lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
             final Point2D.Double firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
-            if (Geom.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
+            if (Points.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
                 final PolyArcPath lastSlice = coincidentSlices.getLast();
                 lastSlice.removeLast();
@@ -226,7 +218,7 @@ public class ContourIntersections {
         if (pline.size() == 2) {
             if (pline.isClosed()) {
                 // check if overlaps on itself from vertex 1 to vertex 2
-                if (Geom.almostEqual(pline.get(0).bulge(), -pline.get(1).bulge())) {
+                if (Points.almostEqual(pline.get(0).bulge(), -pline.get(1).bulge())) {
                     // coincident
                     output.add(new PlineIntersect(0, 1, pline.get(1).pos()));
                     output.add(new PlineIntersect(1, 0, pline.get(0).pos()));
@@ -241,26 +233,26 @@ public class ContourIntersections {
             final PlineVertex v3 = pline.get(k);
             // testing intersection between v1->v2 and v2->v3 segments
 
-            if (Geom.almostEqual(v1.pos(), v2.pos(), Utils.realPrecision)) {
+            if (Points.almostEqual(v1.pos(), v2.pos(), Utils.realPrecision)) {
                 // singularity
                 // coincident
                 output.add(new PlineIntersect(i, j, v1.pos()));
             } else {
                 IntrPlineSegsResult intrResult = intrPlineSegs(v1, v2, v2, v3);
                 switch (intrResult.intrType) {
-                case NoIntersect:
-                    break;
-                case TangentIntersect:
-                case OneIntersect:
-                    if (!Geom.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
-                        output.add(new PlineIntersect(i, j, intrResult.point1));
-                    }
+                    case NoIntersect:
+                        break;
+                    case TangentIntersect:
+                    case OneIntersect:
+                        if (!Points.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
+                            output.add(new PlineIntersect(i, j, intrResult.point1));
+                        }
                     break;
                 case TwoIntersects:
-                    if (!Geom.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
+                    if (!Points.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
                         output.add(new PlineIntersect(i, j, intrResult.point1));
                     }
-                    if (!Geom.almostEqual(intrResult.point2, v2.pos(), Utils.realPrecision)) {
+                    if (!Points.almostEqual(intrResult.point2, v2.pos(), Utils.realPrecision)) {
                         output.add(new PlineIntersect(i, j, intrResult.point2));
                     }
                     break;
@@ -329,7 +321,7 @@ public class ContourIntersections {
                 final PlineVertex u2 = pline.get(hitIndexEnd);
 
                 Predicate<Point2D.Double> intrAtStartPt = (final Point2D.Double intr) ->
-                        Geom.almostEqual(v1.pos(), intr) || Geom.almostEqual(u1.pos(), intr);
+                        Points.almostEqual(v1.pos(), intr) || Points.almostEqual(u1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(v1, v2, u1, u2);
                 switch (intrResult.intrType) {
@@ -358,7 +350,7 @@ public class ContourIntersections {
             };
 
             spatialIndex.visitQuery(
-                    minX - Geom.REAL_THRESHOLD, minY - Geom.REAL_THRESHOLD, maxX + Geom.REAL_THRESHOLD, maxY + Geom.REAL_THRESHOLD,
+                    minX - Rectangles.REAL_THRESHOLD, minY - Rectangles.REAL_THRESHOLD, maxX + Rectangles.REAL_THRESHOLD, maxY + Rectangles.REAL_THRESHOLD,
                     indexVisitor, queryStack);
 
             // visit all pline indexes
@@ -396,14 +388,14 @@ public class ContourIntersections {
 
             queryResults.clear();
             AABB bb = createFastApproxBoundingBox(p2v1, p2v2);
-            pline1SpatialIndex.query(bb.getMinX(), bb.getMinY(), bb.getMaxX(), bb.getMaxY(), queryResults, queryStack);
+            pline1SpatialIndex.query(bb.minX(), bb.minY(), bb.maxX(), bb.maxY(), queryResults, queryStack);
             for (int i1 : queryResults) {
                 int j1 = Utils.nextWrappingIndex(i1, pline1);
                 final PlineVertex p1v1 = pline1.get(i1);
                 final PlineVertex p1v2 = pline1.get(j1);
 
                 Predicate<Point2D.Double> intrAtStartPt = (final Point2D.Double intr) ->
-                        Geom.almostEqual(p1v1.pos(), intr) || Geom.almostEqual(p2v1.pos(), intr);
+                        Points.almostEqual(p1v1.pos(), intr) || Points.almostEqual(p2v1.pos(), intr);
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
                 switch (intrResult.intrType) {
@@ -423,18 +415,18 @@ public class ContourIntersections {
                         intrs.add(new PlineIntersect(i1, i2, intrResult.point2));
                     }
                     break;
-                case SegmentOverlap:
-                case ArcOverlap:
-                    coincidentIntrs.add(new PlineCoincidentIntersect(i1, i2, intrResult.point1, intrResult.point2));
-                    if (Geom.almostEqual(p1v1.pos(), intrResult.point1) ||
-                            Geom.almostEqual(p1v1.pos(), intrResult.point2)) {
-                        possibleDuplicates.add(new OrderedPair<>(Utils.prevWrappingIndex(i1, pline1), i2));
-                    }
-                    if (Geom.almostEqual(p2v1.pos(), intrResult.point1) ||
-                            Geom.almostEqual(p2v1.pos(), intrResult.point2)) {
-                        possibleDuplicates.add(new OrderedPair<>(i1, Utils.prevWrappingIndex(i2, pline2)));
-                    }
-                    break;
+                    case SegmentOverlap:
+                    case ArcOverlap:
+                        coincidentIntrs.add(new PlineCoincidentIntersect(i1, i2, intrResult.point1, intrResult.point2));
+                        if (Points.almostEqual(p1v1.pos(), intrResult.point1) ||
+                                Points.almostEqual(p1v1.pos(), intrResult.point2)) {
+                            possibleDuplicates.add(new OrderedPair<>(Utils.prevWrappingIndex(i1, pline1), i2));
+                        }
+                        if (Points.almostEqual(p2v1.pos(), intrResult.point1) ||
+                                Points.almostEqual(p2v1.pos(), intrResult.point2)) {
+                            possibleDuplicates.add(new OrderedPair<>(i1, Utils.prevWrappingIndex(i2, pline2)));
+                        }
+                        break;
                 }
             }
 
@@ -453,13 +445,13 @@ public class ContourIntersections {
 
             final Point2D.Double endPt1 =
                     pline1.get(Utils.nextWrappingIndex(intr.sIndex1, pline1)).pos();
-            if (Geom.almostEqual(intr.pos, endPt1)) {
+            if (Points.almostEqual(intr.pos, endPt1)) {
                 return true;
             }
 
             final Point2D.Double endPt2 =
                     pline2.get(Utils.nextWrappingIndex(intr.sIndex2, pline2)).pos();
-            return Geom.almostEqual(intr.pos, endPt2);
+            return Points.almostEqual(intr.pos, endPt2);
         });
     }
 
@@ -478,8 +470,8 @@ public class ContourIntersections {
 
             // helper function to test and get point within arc sweep
             DoubleFunction<OrderedPairNonNull<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
-                if (t + Geom.REAL_THRESHOLD < 0.0 ||
-                        t > 1.0 + Geom.REAL_THRESHOLD) {
+                if (t + Rectangles.REAL_THRESHOLD < 0.0 ||
+                        t > 1.0 + Rectangles.REAL_THRESHOLD) {
                     return new OrderedPairNonNull<>(false, new Point2D.Double(0, 0));
                 }
 
@@ -614,11 +606,11 @@ public class ContourIntersections {
                 double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
                 double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                if (Geom.almostEqual(arc1StartAndSweep.first(), arc2End)) {
+                if (Points.almostEqual(arc1StartAndSweep.first(), arc2End)) {
                     // only end points touch at start of arc1
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = v1.pos();
-                } else if (Geom.almostEqual(arc2StartAndSweep.first(), arc1End)) {
+                } else if (Points.almostEqual(arc2StartAndSweep.first(), arc1End)) {
                     // only end points touch at start of arc2
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = u1.pos();

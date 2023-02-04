@@ -7,9 +7,7 @@ package org.jhotdraw8.geom.intersect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -42,7 +40,7 @@ public class IntersectCubicCurveEllipse {
             double cx, double cy, double rx, double ry) {
         return intersectCubicCurveEllipseEx(
                 x0, y0, x1, y1, x2, y2, x3, y3,
-                cx, cy, rx, ry, Geom.REAL_THRESHOLD);
+                cx, cy, rx, ry, Rectangles.REAL_THRESHOLD);
 
     }
 
@@ -56,11 +54,11 @@ public class IntersectCubicCurveEllipse {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
+            PointAndTangent pat = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
-                    Geom.atan2Ellipse(cx, cy, rx, ry, x, y), y - cy, cx - x
+                    ip.getArgumentA(), pat.tangentX(), pat.tangentY(),
+                    Angles.atan2Ellipse(cx, cy, rx, ry, x, y), y - cy, cx - x
             ));
         }
 
@@ -85,7 +83,7 @@ public class IntersectCubicCurveEllipse {
     public static @NonNull IntersectionResult intersectCubicCurveEllipse(
             @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
             @NonNull Point2D ec, double rx, double ry) {
-        return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Rectangles.REAL_THRESHOLD);
     }
 
     /**

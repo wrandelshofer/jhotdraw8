@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 import java.util.List;
 import java.util.Map;
@@ -80,10 +80,10 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         boolean b = false;
         if (connectorLocation != null) {
-            b = Geom.squaredDistance(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance * tolerance;
+            b = Points.squaredDistance(x, y, connectorLocation.getX(), connectorLocation.getY()) <= tolerance * tolerance;
         }
         if (!b && pickLocation != null) {
-            b = Geom.squaredDistance(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance * tolerance;
+            b = Points.squaredDistance(x, y, pickLocation.getX(), pickLocation.getY()) <= tolerance * tolerance;
         }
         return b;
     }

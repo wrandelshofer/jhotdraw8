@@ -5,15 +5,13 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 import static org.jhotdraw8.geom.intersect.IntersectLinePoint.argumentOnLine;
 
 public class IntersectCubicCurveLine {
@@ -41,7 +39,7 @@ public class IntersectCubicCurveLine {
      * @return the computed intersection
      */
     public static @NonNull IntersectionResult intersectCubicCurveLine(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D b0, @NonNull Point2D b1) {
-        return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -121,12 +119,12 @@ public class IntersectCubicCurveLine {
                 // See if point is on line segment
                 // Had to make special cases for vertical and horizontal lines due
                 // to slight errors in calculation of p10
-                if (Geom.almostEqual(a0x, a1x, epsilon)) {
+                if (Points.almostEqual(a0x, a1x, epsilon)) {
                     if (topLeft.getY() <= p10.getY() && p10.getY() <= bottomRight.getY()) {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPoint(p10, t));
                     }
-                } else if (Geom.almostEqual(a0y, a1y, epsilon)) {
+                } else if (Points.almostEqual(a0y, a1y, epsilon)) {
                     if (topLeft.getX() <= p10.getX() && p10.getX() <= bottomRight.getX()) {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPoint(p10, t));
@@ -170,7 +168,7 @@ public class IntersectCubicCurveLine {
         Point2D.Double p1 = new Point2D.Double(p1x, p1y);
         Point2D.Double p2 = new Point2D.Double(p2x, p2y);
         Point2D.Double p3 = new Point2D.Double(p3x, p3y);
-        return intersectLineCubicCurve(a0, a1, p0, p1, p2, p3, Geom.REAL_THRESHOLD);
+        return intersectLineCubicCurve(a0, a1, p0, p1, p2, p3, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -277,11 +275,11 @@ public class IntersectCubicCurveLine {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
+            PointAndTangent tangentA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, x, y), a1x - a0x, a1y - a0y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY()
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY()
             ));
         }
 
@@ -289,7 +287,7 @@ public class IntersectCubicCurveLine {
     }
 
     public static IntersectionResultEx intersectLineCubicCurveEx(double a0x, double a0y, double a1x, double a1y, double lastx, double lasty, double v, double v1, double v2, double v3, double x, double y) {
-        return intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, v, v1, v2, v3, x, y, Geom.REAL_THRESHOLD);
+        return intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, v, v1, v2, v3, x, y, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectCubicCurveLineEx(
@@ -304,10 +302,10 @@ public class IntersectCubicCurveLine {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
                     IntersectLinePoint.argumentOnLine(b0x, b0y, b1x, b1y, x, y), b1x - b0x, b1y - b0y
             ));
         }
@@ -318,6 +316,6 @@ public class IntersectCubicCurveLine {
     public static IntersectionResultEx intersectCubicCurveLineEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y) {
-        return intersectCubicCurveLineEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveLineEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
     }
 }

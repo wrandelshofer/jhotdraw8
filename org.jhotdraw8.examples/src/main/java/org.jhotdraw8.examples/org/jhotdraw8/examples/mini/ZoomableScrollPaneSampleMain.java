@@ -21,7 +21,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.jhotdraw8.draw.gui.ZoomableScrollPane;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -67,10 +67,10 @@ public class ZoomableScrollPaneSampleMain extends Application {
         Button b = new Button("storeRect");
         b.setOnAction(evt -> {
             Bounds w = p.getVisibleContentRect();
-            System.err.println("stored contentRect   " + FXGeom.toString(w));
-            System.err.println("stored viewRect      " + FXGeom.toString(p.getViewRect()));
-            System.err.println("computed viewRect    " + FXGeom.toString(p.getContentToView().transform(w)));
-            System.err.println("computed contentRect " + FXGeom.toString(p.getViewToContent().transform(p.getViewRect())));
+            System.err.println("stored contentRect   " + FXRectangles.toString(w));
+            System.err.println("stored viewRect      " + FXRectangles.toString(p.getViewRect()));
+            System.err.println("computed viewRect    " + FXRectangles.toString(p.getContentToView().transform(w)));
+            System.err.println("computed contentRect " + FXRectangles.toString(p.getViewToContent().transform(p.getViewRect())));
             storedBounds.setX(w.getMinX());
             storedBounds.setY(w.getMinY());
             storedBounds.setWidth(w.getWidth());
@@ -79,9 +79,9 @@ public class ZoomableScrollPaneSampleMain extends Application {
         Button b2 = new Button("scrollToRect");
         b2.setOnAction(evt -> {
             p.scrollContentRectToVisible(storedBounds.getBoundsInLocal());
-            System.err.println("restored contentRect " + FXGeom.toString(p.getVisibleContentRect()));
-            System.err.println("restored viewRect    " + FXGeom.toString(p.getViewRect()));
-            System.err.println("computed viewRect    " + FXGeom.toString(p.getContentToView().transform(p.getVisibleContentRect())));
+            System.err.println("restored contentRect " + FXRectangles.toString(p.getVisibleContentRect()));
+            System.err.println("restored viewRect    " + FXRectangles.toString(p.getViewRect()));
+            System.err.println("computed viewRect    " + FXRectangles.toString(p.getContentToView().transform(p.getVisibleContentRect())));
         });
         hbox.getChildren().add(s);
         hbox.getChildren().add(b);
@@ -91,7 +91,7 @@ public class ZoomableScrollPaneSampleMain extends Application {
         Scene scene = new Scene(borderPane, 300, 250);
         Label label = new Label("-");
         borderPane.setBottom(label);
-        label.textProperty().bind(CustomBinding.convert(p.visibleContentRectProperty(), FXGeom::toString));
+        label.textProperty().bind(CustomBinding.convert(p.visibleContentRectProperty(), FXRectangles::toString));
 
         primaryStage.setScene(scene);
 

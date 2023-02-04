@@ -3,10 +3,11 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.shape;
 
-import java.awt.Rectangle;
-import java.awt.Shape;
+import org.jhotdraw8.geom.EmptyPathIterator;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;

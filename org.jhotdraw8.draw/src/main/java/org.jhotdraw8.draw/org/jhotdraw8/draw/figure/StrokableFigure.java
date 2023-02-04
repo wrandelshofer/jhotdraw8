@@ -21,15 +21,11 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
-import org.jhotdraw8.draw.key.ListStyleableKey;
-import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
-import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -274,9 +270,9 @@ public interface StrokableFigure extends Figure {
         default:
             return layoutBounds;
         case OUTSIDE:
-            return FXGeom.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
+            return FXRectangles.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
         case CENTERED:
-            return FXGeom.grow(layoutBounds, strokeWidth, strokeWidth);
+            return FXRectangles.grow(layoutBounds, strokeWidth, strokeWidth);
         }
     }
 }

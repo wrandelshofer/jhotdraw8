@@ -23,9 +23,9 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.BezierFit;
-import org.jhotdraw8.geom.BezierNode;
-import org.jhotdraw8.geom.BezierNodePathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.shape.BezierNode;
+import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

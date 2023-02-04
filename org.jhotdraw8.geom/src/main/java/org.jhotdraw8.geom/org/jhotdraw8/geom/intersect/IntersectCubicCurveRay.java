@@ -5,15 +5,13 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 import static org.jhotdraw8.geom.intersect.IntersectLinePoint.argumentOnLine;
 
 public class IntersectCubicCurveRay {
@@ -42,7 +40,7 @@ public class IntersectCubicCurveRay {
      * @return the computed intersection
      */
     public static @NonNull IntersectionResult intersectCubicCurveRay(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D bo, @NonNull Point2D bd) {
-        return intersectCubicCurveRay(a0, a1, a2, a3, bo, bd, Double.MAX_VALUE, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveRay(a0, a1, a2, a3, bo, bd, Double.MAX_VALUE, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -162,7 +160,7 @@ public class IntersectCubicCurveRay {
         Point2D.Double p1 = new Point2D.Double(p1x, p1y);
         Point2D.Double p2 = new Point2D.Double(p2x, p2y);
         Point2D.Double p3 = new Point2D.Double(p3x, p3y);
-        return intersectRayCubicCurve(a0, a1, maxT, p0, p1, p2, p3, Geom.REAL_THRESHOLD);
+        return intersectRayCubicCurve(a0, a1, maxT, p0, p1, p2, p3, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -264,11 +262,11 @@ public class IntersectCubicCurveRay {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
+            PointAndTangent tangentA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     IntersectLinePoint.argumentOnLine(aox, aoy, adx, ady, x, y), adx, ady,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY()
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY()
             ));
         }
 
@@ -278,7 +276,7 @@ public class IntersectCubicCurveRay {
     public static IntersectionResultEx intersectRayCubicCurveEx(
             double aox, double aoy, double adx, double ady, double maxT,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
-        return intersectRayCubicCurveEx(aox, aoy, adx, ady, maxT, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Geom.REAL_THRESHOLD);
+        return intersectRayCubicCurveEx(aox, aoy, adx, ady, maxT, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectCubicCurveRayEx(
@@ -293,10 +291,10 @@ public class IntersectCubicCurveRay {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
                     IntersectLinePoint.argumentOnLine(b0x, b0y, b1x, b1y, x, y), b1x - b0x, b1y - b0y
             ));
         }
@@ -307,6 +305,6 @@ public class IntersectCubicCurveRay {
     public static IntersectionResultEx intersectCubicCurveRayEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y, double maxT) {
-        return intersectCubicCurveRayEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, maxT, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveRayEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, maxT, Rectangles.REAL_THRESHOLD);
     }
 }

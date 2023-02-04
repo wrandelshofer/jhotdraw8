@@ -6,13 +6,13 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.REAL_THRESHOLD;
+import static org.jhotdraw8.geom.Rectangles.REAL_THRESHOLD;
 
 public class IntersectRayRay {
 
@@ -125,7 +125,7 @@ public class IntersectRayRay {
         double ub_t = adx * doy - ady * dox;
         double u_b = bdy * adx - bdx * ady;
 
-        if (!Geom.almostZero(u_b, epsilon)) {
+        if (!Points.almostZero(u_b, epsilon)) {
             double ua = ua_t / u_b;
             double ub = ub_t / u_b;
 
@@ -145,13 +145,13 @@ public class IntersectRayRay {
                 ));
             }
         } else {
-            if (Geom.almostZero(ua_t) || Geom.almostZero(ub_t)) {
+            if (Points.almostZero(ua_t) || Points.almostZero(ub_t)) {
                 // either collinear or degenerate (segments are single points)
-                boolean aIsPoint = Geom.almostZero(amax * adx, epsilon) && Geom.almostZero(amax * ady, epsilon);
-                boolean bIsPoint = Geom.almostZero(bmax * bdx, epsilon) && Geom.almostZero(bmax * bdy, epsilon);
+                boolean aIsPoint = Points.almostZero(amax * adx, epsilon) && Points.almostZero(amax * ady, epsilon);
+                boolean bIsPoint = Points.almostZero(bmax * bdx, epsilon) && Points.almostZero(bmax * bdy, epsilon);
                 if (aIsPoint && bIsPoint) {
                     // both segments are just points
-                    if (Geom.almostEqual(aox, box) && Geom.almostEqual(aoy, boy)) {
+                    if (Points.almostEqual(aox, box) && Points.almostEqual(aoy, boy)) {
                         // same point
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPointEx(
@@ -189,7 +189,7 @@ public class IntersectRayRay {
                 } else {
                     // neither segment is a point, check if they overlap
                     double at0, at1;
-                    if (Geom.almostZero(adx)) {
+                    if (Points.almostZero(adx)) {
                         at0 = (boy - aoy) / ady;
                         at1 = (bdy + boy - aoy) / ady;
                     } else {
@@ -207,7 +207,7 @@ public class IntersectRayRay {
                         at0 = MathUtil.clamp(at0, 0.0, amax);
                         at1 = MathUtil.clamp(at1, 0.0, bmax);
                         double bt0, bt1;
-                        if (Geom.almostZero(bdx)) {
+                        if (Points.almostZero(bdx)) {
                             bt0 = (aoy + at0 * ady - boy) / bdy;
                             bt1 = (aoy + at1 * ady - boy) / bdy;
                         } else {

@@ -7,9 +7,7 @@ package org.jhotdraw8.geom.intersect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class IntersectCubicCurveCubicCurve {
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
         return intersectCubicCurveCubicCurve(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(a3x, a3y),
-                new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), new Point2D.Double(b2x, b2y), new Point2D.Double(b3x, b3y), Geom.REAL_THRESHOLD);
+                new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), new Point2D.Double(b2x, b2y), new Point2D.Double(b3x, b3y), Rectangles.REAL_THRESHOLD);
 
     }
 
@@ -58,7 +56,7 @@ public class IntersectCubicCurveCubicCurve {
      */
     public static @NonNull IntersectionResult intersectCubicCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3,
                                                                             @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3) {
-        return intersectCubicCurveCubicCurve(a0, a1, a2, a3, b0, b1, b2, b3, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveCubicCurve(a0, a1, a2, a3, b0, b1, b2, b3, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -350,7 +348,7 @@ public class IntersectCubicCurveCubicCurve {
                 for (double xRoot : xRoots) {
                     if (tMin < xRoot && xRoot <= tMax) {
                         for (double yRoot : yRoots) {
-                            if (Geom.almostEqual(xRoot, yRoot, ROOT_X_Y_TOLERANCE)) {
+                            if (Points.almostEqual(xRoot, yRoot, ROOT_X_Y_TOLERANCE)) {
                                 result.add(new IntersectionPoint(
                                         Points2D.sum(
                                                 Points2D.multiply(c23, s * s * s),
@@ -373,7 +371,7 @@ public class IntersectCubicCurveCubicCurve {
     public static IntersectionResultEx intersectCubicCurveCubicCurveEx(double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
                                                                        double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y
     ) {
-        return intersectCubicCurveCubicCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Geom.REAL_THRESHOLD);
+        return intersectCubicCurveCubicCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
 
     }
 
@@ -409,18 +407,18 @@ public class IntersectCubicCurveCubicCurve {
             double y = ipA.getY();
             double argumentB = Double.NaN;
             for (IntersectionPoint ipB : resultB) {
-                if (Geom.almostEqual(ipA, ipB, CURVE_A_B_TOLERANCE)) {
+                if (Points.almostEqual(ipA, ipB, CURVE_A_B_TOLERANCE)) {
                     argumentB = ipB.argumentA;
                     break;
                 }
             }
             assert !Double.isNaN(argumentB) : "argumentB must exist";
-            Point2D.Double tangentA = BezierCurves.evalCubicCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
-            Point2D.Double tangentB = BezierCurves.evalCubicCurveTangent(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
+            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
+            PointAndTangent tangentB = CubicCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ipA.getArgumentA(), tangentA.getX(), tangentA.getY(),
-                    argumentB, tangentB.getX(), tangentB.getY()
+                    ipA.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    argumentB, tangentB.tangentX(), tangentB.tangentY()
             ));
         }
 

@@ -21,16 +21,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Polyline;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CardinalSplines;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 import java.util.ArrayList;
 
@@ -164,7 +159,7 @@ public class CardinalSplineExampleMain extends Application {
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double px = points.get(i);
             double py = points.get(i + 1);
-            double sq = Geom.squaredDistance(x, y, px, py);
+            double sq = Points.squaredDistance(x, y, px, py);
             if (sq < 25 && sq < bestDistance) {
                 bestDistance = sq;
                 index = i;

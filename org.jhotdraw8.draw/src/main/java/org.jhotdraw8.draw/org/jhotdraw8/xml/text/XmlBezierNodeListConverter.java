@@ -14,10 +14,10 @@ import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.geom.BezierNode;
-import org.jhotdraw8.geom.BezierNodePath;
-import org.jhotdraw8.geom.BezierNodePathBuilder;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.shape.BezierNode;
+import org.jhotdraw8.geom.shape.BezierNodePath;
+import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
 
 import java.io.IOException;
 import java.nio.CharBuffer;

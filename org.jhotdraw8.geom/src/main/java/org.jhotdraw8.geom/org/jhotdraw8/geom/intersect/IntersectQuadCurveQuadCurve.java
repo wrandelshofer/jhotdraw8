@@ -5,9 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -23,13 +21,13 @@ public class IntersectQuadCurveQuadCurve {
     public static @NonNull IntersectionResult intersectQuadCurveQuadCurve(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
-        return intersectQuadCurveQuadCurve(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveQuadCurve(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectQuadCurveQuadCurveEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
-        return intersectQuadCurveQuadCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveQuadCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectQuadCurveQuadCurveEx(
@@ -44,19 +42,19 @@ public class IntersectQuadCurveQuadCurve {
             double y = ipA.getY();
             double argumentB = Double.NaN;
             for (IntersectionPoint ipB : resultB) {
-                if (Geom.almostEqual(ipA, ipB, CURVE_A_B_TOLERANCE)) {
+                if (Points.almostEqual(ipA, ipB, CURVE_A_B_TOLERANCE)) {
                     argumentB = ipB.argumentA;
                     break;
                 }
             }
             // argumentB should always exist, but if it does not we rather have no intersection instead of a crash.
             if (!Double.isNaN(argumentB)) {
-                Point2D.Double tangentA = BezierCurves.evalQuadCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, ipA.getArgumentA());
-                Point2D.Double tangentB = BezierCurves.evalQuadCurveTangent(b0x, b0y, b1x, b1y, b2x, b2y, argumentB);
+                PointAndTangent tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ipA.getArgumentA());
+                PointAndTangent tangentB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, argumentB);
                 list.add(new IntersectionPointEx(
                         x, y,
-                        ipA.getArgumentA(), tangentA.getX(), tangentA.getY(),
-                        argumentB, tangentB.getX(), tangentB.getY()
+                        ipA.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                        argumentB, tangentB.tangentX(), tangentB.tangentY()
                 ));
             }
         }

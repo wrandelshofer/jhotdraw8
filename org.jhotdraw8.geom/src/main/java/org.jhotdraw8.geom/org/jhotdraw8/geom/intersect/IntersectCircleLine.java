@@ -5,13 +5,14 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 
 public class IntersectCircleLine {
     private IntersectCircleLine() {
@@ -167,7 +168,7 @@ public class IntersectCircleLine {
                         Point2D.Double p = lerp(x0, y0, x1, y1, t1);
                         result.add(new IntersectionPointEx(p,
                                 t1, new Point2D.Double(x1 - x0, y1 - y0),
-                                Geom.atan2(p.getY() - cy, p.getX() - cx),
+                                Angles.atan2(p.getY() - cy, p.getX() - cx),
                                 new Point2D.Double(p.getY() - cy, -p.getX() - cx)
                         ));
                     }
@@ -175,7 +176,7 @@ public class IntersectCircleLine {
                         Point2D.Double p = lerp(x0, y0, x1, y1, t2);
                         result.add(new IntersectionPointEx(p,
                                 t2, new Point2D.Double(x1 - x0, y1 - y0),
-                                Geom.atan2(p.getY() - cy, p.getX() - cx),
+                                Angles.atan2(p.getY() - cy, p.getX() - cx),
                                 new Point2D.Double(p.getY() - cy, -p.getX() - cx)
                         ));
                     }
@@ -187,7 +188,7 @@ public class IntersectCircleLine {
                     Point2D.Double p = lerp(x0, y0, x1, y1, t);
                     result.add(new IntersectionPointEx(p,
                             t, new Point2D.Double(x1 - x0, y1 - y0),
-                            Geom.atan2(p.getY() - cy, p.getX() - cx),
+                            Angles.atan2(p.getY() - cy, p.getX() - cx),
                             new Point2D.Double(p.getY() - cy, -p.getX() - cx)
                     ));
                 } else {
@@ -200,7 +201,7 @@ public class IntersectCircleLine {
     }
 
     public static @NonNull IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
-        return intersectLineCircle(x0, y0, x1, y1, cx, cy, r, Geom.REAL_THRESHOLD);
+        return intersectLineCircle(x0, y0, x1, y1, cx, cy, r, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {

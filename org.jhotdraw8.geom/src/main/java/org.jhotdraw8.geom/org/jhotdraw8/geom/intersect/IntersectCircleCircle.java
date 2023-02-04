@@ -5,13 +5,14 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Points;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 
 public class IntersectCircleCircle {
     private IntersectCircleCircle() {
@@ -57,7 +58,7 @@ public class IntersectCircleCircle {
         double r_min = Math.abs(r1 - r2);
 
         // Determine actual distance between the two circles
-        double c_dist = Geom.distance(c1x, c1y, c2x, c2y);
+        double c_dist = Points.distance(c1x, c1y, c2x, c2y);
 
         IntersectionStatus status;
 
@@ -65,7 +66,7 @@ public class IntersectCircleCircle {
             status = IntersectionStatus.NO_INTERSECTION_OUTSIDE;
         } else if (c_dist < r_min) {
             status = r1 < r2 ? IntersectionStatus.NO_INTERSECTION_INSIDE : IntersectionStatus.NO_INTERSECTION_OUTSIDE;
-        } else if (Geom.almostZero(c_dist, epsilon) && Geom.almostEqual(r1, r2, epsilon)) {
+        } else if (Points.almostZero(c_dist, epsilon) && Points.almostEqual(r1, r2, epsilon)) {
             status = IntersectionStatus.NO_INTERSECTION_COINCIDENT;
         } else {
             status = IntersectionStatus.INTERSECTION;
@@ -80,16 +81,16 @@ public class IntersectCircleCircle {
             double p1x = p.getX() - b * dy;
             double p1y = p.getY() + b * dx;
             result.add(new IntersectionPointEx(new Point2D.Double(p1x, p1y),
-                    Geom.atan2(p1y - c1y, p1x - c1x), Geom.perp(p1x - c1x, p1y - c1y),
-                    Geom.atan2(p1y - c2y, p1x - c2x), Geom.perp(p1x - c2x, p1y - c2y)
+                    Angles.atan2(p1y - c1y, p1x - c1x), Angles.perp(p1x - c1x, p1y - c1y),
+                    Angles.atan2(p1y - c2y, p1x - c2x), Angles.perp(p1x - c2x, p1y - c2y)
             ));
             double p2x = p.getX() + b * dy;
             double p2y = p.getY() - b * dx;
 
-            if (!Geom.almostEqual(c_dist, r_max, epsilon)) {
+            if (!Points.almostEqual(c_dist, r_max, epsilon)) {
                 result.add(new IntersectionPointEx(new Point2D.Double(p2x, p2y),
-                        Geom.atan2(p2y - c1y, p2x - c1x), Geom.perp(p2x - c1x, p2y - c1y),
-                        Geom.atan2(p2y - c2y, p2x - c2x), Geom.perp(p2x - c2x, p2y - c2y)
+                        Angles.atan2(p2y - c1y, p2x - c1x), Angles.perp(p2x - c1x, p2y - c1y),
+                        Angles.atan2(p2y - c2y, p2x - c2x), Angles.perp(p2x - c2x, p2y - c2y)
 
                 ));
             }
@@ -133,7 +134,7 @@ public class IntersectCircleCircle {
         double r_min = Math.abs(r1 - r2);
 
         // Determine actual distance between the two circles
-        double c_distSq = Geom.squaredDistance(c1x, c1y, c2x, c2y);
+        double c_distSq = Points.squaredDistance(c1x, c1y, c2x, c2y);
         double c_dist = Math.sqrt(c_distSq);
 
         IntersectionStatus status;
@@ -142,7 +143,7 @@ public class IntersectCircleCircle {
             status = IntersectionStatus.NO_INTERSECTION_OUTSIDE;
         } else if (c_dist < r_min) {
             status = r1 < r2 ? IntersectionStatus.NO_INTERSECTION_INSIDE : IntersectionStatus.NO_INTERSECTION_OUTSIDE;
-        } else if (Geom.almostZero(c_dist, epsilon) && Geom.almostEqual(r1, r2, epsilon)) {
+        } else if (Points.almostZero(c_dist, epsilon) && Points.almostEqual(r1, r2, epsilon)) {
             status = IntersectionStatus.NO_INTERSECTION_COINCIDENT;
         } else {
             status = IntersectionStatus.INTERSECTION;
@@ -157,14 +158,14 @@ public class IntersectCircleCircle {
             double p1x = p.getX() - b * dy;
             double p1y = p.getY() + b * dx;
             result.add(new IntersectionPoint(p1x, p1y,
-                    Geom.atan2(p1y - c1y, p1x - c1x)
+                    Angles.atan2(p1y - c1y, p1x - c1x)
             ));
             double p2x = p.getX() + b * dy;
             double p2y = p.getY() - b * dx;
 
-            if (!Geom.almostEqual(c_dist, r_max, epsilon)) {
+            if (!Points.almostEqual(c_dist, r_max, epsilon)) {
                 result.add(new IntersectionPoint(p2x, p2y,
-                        Geom.atan2(p2y - c1y, p2x - c1x)
+                        Angles.atan2(p2y - c1y, p2x - c1x)
 
                 ));
             }

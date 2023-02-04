@@ -74,7 +74,7 @@ public class ShortSegmentsSkipperPathBuilder<T> extends AbstractPathBuilder<T> {
 
 
     private boolean shouldntSkip(double x, double y) {
-        return Geom.squaredDistance(getLastX(), getLastY(), x, y) >= squaredEpsilon;
+        return Points.squaredDistance(getLastX(), getLastY(), x, y) >= squaredEpsilon;
     }
 
     @Override

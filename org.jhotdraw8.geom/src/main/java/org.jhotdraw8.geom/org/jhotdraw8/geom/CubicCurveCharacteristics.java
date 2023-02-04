@@ -6,16 +6,16 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 
 import static java.lang.Math.sqrt;
-import static org.jhotdraw8.geom.Geom.almostZero;
-import static org.jhotdraw8.geom.Geom.isCollinear;
+import static org.jhotdraw8.geom.Lines.isCollinear;
+import static org.jhotdraw8.geom.Points.almostZero;
 
-public class BezierCurveCharacteristics {
+public class CubicCurveCharacteristics {
 
 
     /**
      * Don't let anyone instantiate this class.
      */
-    public BezierCurveCharacteristics() {
+    public CubicCurveCharacteristics() {
     }
 
     public enum Characteristics {
@@ -70,7 +70,7 @@ public class BezierCurveCharacteristics {
 
             if (x <= 0) {
                 double l1 = (-x * x + 3 * x) / 3;
-                if (Geom.almostEqual(y, l1, 0.06)) {
+                if (Points.almostEqual(y, l1, 0.06)) {
                     return Characteristics.LOOP_AT_T_0;
                 }
                 if (l1 < y && y < cusp) {
@@ -80,7 +80,7 @@ public class BezierCurveCharacteristics {
 
             if (0 <= x) {
                 double l0 = (sqrt(3) * sqrt(4 * x - x * x) - x) / 2;
-                if (Geom.almostEqual(y, l0, 0.06)) {
+                if (Points.almostEqual(y, l0, 0.06)) {
                     return Characteristics.LOOP_AT_T_1;
                 }
                 if (l0 < y && y < cusp) {
@@ -88,7 +88,7 @@ public class BezierCurveCharacteristics {
                 }
             }
 
-            if (Geom.almostEqual(y, cusp, 0.06)) {
+            if (Points.almostEqual(y, cusp, 0.06)) {
                 return Characteristics.CUSP;
             }
 
@@ -176,7 +176,7 @@ public class BezierCurveCharacteristics {
                                  double x2, double y2,
                                  double x3, double y3) {
         double[] e = {x0, y0, x1, y1, x2, y2, x3, y3};
-        double theta = -Geom.atan2(y3 - y0, x3 - x0);
+        double theta = -Angles.atan2(y3 - y0, x3 - x0);
         double cosTheta = Math.cos(theta);
         double sinTheta = Math.sin(theta);
         double[] n = new double[8];
@@ -211,7 +211,8 @@ public class BezierCurveCharacteristics {
      * <p>
      * References:
      * <dl>
-     *     <dt>Calculating the Inflection Point of a Cubic Bezier Curve</dt>
+     *     <dt>Stackoverflow, Calculating the Inflection Point of a Cubic Bezier Curve,
+     *     Copyright MBo, CC BY-SA 4.0 license</dt>
      *     <dd><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow.com</a></dd>
      * </dl>
      * <dl>

@@ -15,10 +15,10 @@ import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.geom.BezierNode;
-import org.jhotdraw8.geom.BezierNodePath;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.shape.BezierNode;
+import org.jhotdraw8.geom.shape.BezierNodePath;
 
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;

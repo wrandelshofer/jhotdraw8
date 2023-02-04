@@ -5,24 +5,26 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 
 public class IntersectCirclePoint {
     private IntersectCirclePoint() {
     }
 
     public static @NonNull IntersectionResult intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr) {
-        return intersectCirclePoint(cx, cy, cr, px, py, pr, Geom.REAL_THRESHOLD);
+        return intersectCirclePoint(cx, cy, cr, px, py, pr, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectCirclePointEx(double cx, double cy, double cr, double px, double py, double pr) {
-        return intersectCirclePointEx(cx, cy, cr, px, py, pr, Geom.REAL_THRESHOLD);
+        return intersectCirclePointEx(cx, cy, cr, px, py, pr, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr, double epsilon) {
@@ -35,7 +37,7 @@ public class IntersectCirclePoint {
         double c_dist = cc.distance(pc);
 
         IntersectionStatus status;
-        if (Geom.almostZero(c_dist, epsilon)) {
+        if (Points.almostZero(c_dist, epsilon)) {
             status = IntersectionStatus.NO_INTERSECTION_INSIDE;
         } else {
 
@@ -44,7 +46,7 @@ public class IntersectCirclePoint {
             if (dd <= pr * pr) {
                 status = IntersectionStatus.INTERSECTION;
                 // FIXME compute t
-                result.add(new IntersectionPoint(p, Geom.atan2(p.getY() - cc.getY(), p.getX() - cc.getX())));
+                result.add(new IntersectionPoint(p, Angles.atan2(p.getY() - cc.getY(), p.getX() - cc.getX())));
             } else {
                 status = IntersectionStatus.NO_INTERSECTION_OUTSIDE;
             }

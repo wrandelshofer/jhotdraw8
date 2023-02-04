@@ -5,15 +5,13 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.AABB;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Geom.lerp;
+import static org.jhotdraw8.geom.Lines.lerp;
 
 public class IntersectEllipseLine {
     private IntersectEllipseLine() {
@@ -38,7 +36,7 @@ public class IntersectEllipseLine {
             double y = ip.getY();
             list.add(new IntersectionPoint(
                     x, y,
-                    Geom.atan2Ellipse(ac.getX(), ac.getY(), arx, ary, x, y)
+                    Angles.atan2Ellipse(ac.getX(), ac.getY(), arx, ary, x, y)
             ));
         }
 
@@ -52,12 +50,12 @@ public class IntersectEllipseLine {
 
     public static @NonNull IntersectionResult intersectEllipseLine(double acx, double acy, double arx, double ary,
                                                                    double b0x, double b0y, double b1x, double b1y) {
-        return intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Geom.REAL_THRESHOLD);
+        return intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
                                                                        double b0x, double b0y, double b1x, double b1y) {
-        return intersectEllipseLineEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Geom.REAL_THRESHOLD);
+        return intersectEllipseLineEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
@@ -96,9 +94,9 @@ public class IntersectEllipseLine {
      * @return computed intersection
      */
     public static @NonNull IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull AABB e) {
-        double rx = e.getWidth() * 0.5;
-        double ry = e.getHeight() * 0.5;
-        return intersectLineEllipse(a0, a1, new Point2D.Double(e.getMinX() + rx, e.getMinY() + ry), rx, ry);
+        double rx = e.width() * 0.5;
+        double ry = e.height() * 0.5;
+        return intersectLineEllipse(a0, a1, new Point2D.Double(e.minX() + rx, e.minY() + ry), rx, ry);
     }
 
     /**
@@ -115,7 +113,7 @@ public class IntersectEllipseLine {
      * @return computed intersection
      */
     public static @NonNull IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D ec, double rx, double ry) {
-        return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Geom.REAL_THRESHOLD);
+        return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -167,7 +165,7 @@ public class IntersectEllipseLine {
             } else {
                 status = IntersectionStatus.INTERSECTION;
                 if (0 <= t0 && t0 <= 1) {
-                    result.add(new IntersectionPoint(Geom.lerp(x0, y0, x1, y1, t0), t0));
+                    result.add(new IntersectionPoint(Lines.lerp(x0, y0, x1, y1, t0), t0));
                 }
                 if (0 <= t1 && t1 <= 1) {
                     result.add(new IntersectionPoint(lerp(x0, y0, x1, y1, t1), t1));
@@ -189,7 +187,7 @@ public class IntersectEllipseLine {
     public static IntersectionResultEx intersectLineEllipseEx(double x0, double y0, double x1, double y1,
                                                               double cx, double cy, double rx, double ry) {
 
-        return intersectLineEllipseEx(x0, y0, x1, y1, cx, cy, rx, ry, Geom.REAL_THRESHOLD);
+        return intersectLineEllipseEx(x0, y0, x1, y1, cx, cy, rx, ry, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectLineEllipseEx(double x0, double y0, double x1, double y1,
@@ -199,7 +197,7 @@ public class IntersectEllipseLine {
         double atx = x1 - x0, aty = y1 - y0;
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result) {
-            double barg = Geom.atan2Ellipse(cx, cy, rx, ry, ip.getX(), ip.getY());
+            double barg = Angles.atan2Ellipse(cx, cy, rx, ry, ip.getX(), ip.getY());
             list.add(new IntersectionPointEx(ip.getX(), ip.getY(),
                     ip.getArgumentA(), atx, aty,
                     barg, ip.getY() - cy, cx - ip.getX()

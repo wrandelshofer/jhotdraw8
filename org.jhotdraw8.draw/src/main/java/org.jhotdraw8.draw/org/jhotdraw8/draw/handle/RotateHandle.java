@@ -10,20 +10,10 @@ import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -32,16 +22,15 @@ import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
-import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
+import static org.jhotdraw8.draw.figure.TransformableFigure.*;
 
 /**
  * A Handle to rotate a TransformableFigure around the center of its bounds in
@@ -109,7 +98,7 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Geom.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
+        return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
     @Override
@@ -150,7 +139,7 @@ public class RotateHandle extends AbstractHandle {
         TransformableFigure o = getOwner();
         Transform t = o.getParentToWorld();
 
-        Point2D center = FXGeom.center(o.getLayoutBounds());
+        Point2D center = FXRectangles.center(o.getLayoutBounds());
         Transform translate = Transform.translate(o.getStyled(TransformableFigure.TRANSLATE_X), o.getStyled(TransformableFigure.TRANSLATE_Y));
         Transform scale = Transform.scale(o.getStyled(TransformableFigure.SCALE_X), o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
         Transform rotate = Transform.rotate(o.getStyled(TransformableFigure.ROTATE), center.getX(), center.getY());
@@ -164,7 +153,7 @@ public class RotateHandle extends AbstractHandle {
     private @Nullable Transform getWorldToRotate() {
         TransformableFigure o = getOwner();
         Transform t = o.getWorldToParent();
-        Point2D center = FXGeom.center(o.getLayoutBounds());
+        Point2D center = FXRectangles.center(o.getLayoutBounds());
 
         Transform translate = Transform.translate(-o.getStyled(TransformableFigure.TRANSLATE_X), -o.getStyled(TransformableFigure.TRANSLATE_Y));
         Transform scale = Transform.scale(1.0 / o.getStyled(TransformableFigure.SCALE_X), 1.0 / o.getStyled(TransformableFigure.SCALE_Y), center.getX(), center.getY());
@@ -179,10 +168,10 @@ public class RotateHandle extends AbstractHandle {
     @Override
     public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         TransformableFigure o = getOwner();
-        Point2D center = FXGeom.center(o.getLayoutBounds());
+        Point2D center = FXRectangles.center(o.getLayoutBounds());
         Transform t = FXTransforms.concat(getWorldToRotate(), view.getViewToWorld());
         Point2D newPoint = FXTransforms.transform(t, new Point2D(event.getX(), event.getY()));
-        double newRotate = 90 + Math.toDegrees(Geom.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY()));
+        double newRotate = 90 + Math.toDegrees(Angles.angle(center.getX(), center.getY(), newPoint.getX(), newPoint.getY()));
 
         newRotate = newRotate % 360;
         if (newRotate < 0) {
@@ -240,7 +229,7 @@ public class RotateHandle extends AbstractHandle {
         TransformableFigure o = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), getRotateToWorld());
         Bounds b = o.getLayoutBounds();
-        Point2D centerInLocal = FXGeom.center(b);
+        Point2D centerInLocal = FXRectangles.center(b);
         double scaleY = o.getStyled(SCALE_Y);
 
         Point2D p = new Point2D(centerInLocal.getX(), centerInLocal.getY() - b.getHeight() * 0.5 * scaleY);

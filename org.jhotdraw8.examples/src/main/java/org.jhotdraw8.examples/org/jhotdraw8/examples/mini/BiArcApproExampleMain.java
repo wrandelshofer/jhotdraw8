@@ -12,19 +12,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.QuadCurveTo;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurveCharacteristics;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.CubicCurveCharacteristics;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.biarc.Bezier2BiArc;
 import org.jhotdraw8.geom.biarc.BiArc;
 
@@ -105,7 +98,7 @@ public class BiArcApproExampleMain extends Application {
         for (int i = 0, n = points.size(); i < n; i += 2) {
             double px = points.get(i);
             double py = points.get(i + 1);
-            double sq = Geom.squaredDistance(x, y, px, py);
+            double sq = Points.squaredDistance(x, y, px, py);
             if (sq < 25 && sq < bestDistance) {
                 bestDistance = sq;
                 index = i;
@@ -191,10 +184,10 @@ public class BiArcApproExampleMain extends Application {
 
     private void approxBezierCurve(ObservableList<PathElement> inf1, double x, double y, double x1, double y1, double x2, double y2, double x3, double y3) {
         ObservableList<PathElement> appr = approxPath.getElements();
-        for (double t : BezierCurveCharacteristics.inflectionPoints(
+        for (double t : CubicCurveCharacteristics.inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3)) {
             double r = 2;
-            java.awt.geom.Point2D p = BezierCurves.evalCubicCurve(x, y, x1, y1, x2, y2, x3, y3, t);
+            java.awt.geom.Point2D p = CubicCurves.eval(x, y, x1, y1, x2, y2, x3, y3, t).getPoint(java.awt.geom.Point2D.Double::new);
 
             // Draw a circle around each inflection point
             inf1.add(new MoveTo(p.getX() - r, p.getY()));
@@ -207,7 +200,7 @@ public class BiArcApproExampleMain extends Application {
                 x2, y2, x3, y3
         );
         List<BiArc> biArcs = Bezier2BiArc.approxCubicBezier(cubicBezier, 3, 0.25);
-        System.out.println("#inflectionPoints: " + BezierCurveCharacteristics.inflectionPoints(
+        System.out.println("#inflectionPoints: " + CubicCurveCharacteristics.inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3).size());
         System.out.println("#biArcs: " + biArcs.size());
         for (BiArc biArc : biArcs) {

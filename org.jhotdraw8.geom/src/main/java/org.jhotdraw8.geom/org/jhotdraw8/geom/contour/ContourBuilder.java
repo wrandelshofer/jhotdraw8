@@ -11,45 +11,21 @@ import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.ContourIntersections.allSelfIntersects;
-import static org.jhotdraw8.geom.contour.ContourIntersections.findIntersects;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrCircle2Circle2;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2Circle2;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2LineSeg2;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrPlineSegs;
-import static org.jhotdraw8.geom.contour.PlineVertex.closestPointOnSeg;
-import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
-import static org.jhotdraw8.geom.contour.PlineVertex.segMidpoint;
-import static org.jhotdraw8.geom.contour.PlineVertex.splitAtPoint;
+import static org.jhotdraw8.geom.contour.ContourIntersections.*;
+import static org.jhotdraw8.geom.contour.PlineVertex.*;
 import static org.jhotdraw8.geom.contour.PolyArcPath.createApproxSpatialIndex;
-import static org.jhotdraw8.geom.contour.Utils.angle;
-import static org.jhotdraw8.geom.contour.Utils.deltaAngle;
-import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
-import static org.jhotdraw8.geom.contour.Utils.realPrecision;
-import static org.jhotdraw8.geom.contour.Utils.sliceJoinThreshold;
-import static org.jhotdraw8.geom.contour.Utils.unitPerp;
+import static org.jhotdraw8.geom.contour.Utils.*;
 
 public class ContourBuilder {
 
@@ -98,7 +74,7 @@ public class ContourBuilder {
             return;
         }
 
-        if (Geom.almostEqual(pline.lastVertex().pos(), vertex.pos(), epsilon)) {
+        if (Points.almostEqual(pline.lastVertex().pos(), vertex.pos(), epsilon)) {
             pline.lastVertex().bulge(vertex.bulge());
             return;
         }
@@ -382,7 +358,7 @@ public class ContourBuilder {
 
             // must do final singularity prune between first and second vertex after joining curves (n, 0)
             // and (0, 1)
-            if (result.size() > 1 && Geom.almostEqual(result.get(0).pos(), result.get(1).pos(), realPrecision)) {
+            if (result.size() > 1 && Points.almostEqual(result.get(0).pos(), result.get(1).pos(), realPrecision)) {
                 result.remove(0);
             }
         } else {
@@ -427,7 +403,7 @@ public class ContourBuilder {
 
             // collapsed arc, offset arc start and end points towards arc center and turn into line
             // handles case where offset vertexes are equal and simplifies path for clipping algorithm
-            boolean isCollapsedArc = radiusAfterOffset < Geom.REAL_THRESHOLD;
+            boolean isCollapsedArc = radiusAfterOffset < Rectangles.REAL_THRESHOLD;
 
             PlineOffsetSegment seg = new PlineOffsetSegment(
                     new PlineVertex(Points2D.add(Points2D.multiply(v1ToCenter, offs), v1.pos()),
@@ -506,8 +482,8 @@ public class ContourBuilder {
                 return !intersects[0];
             };
 
-            origPlineSpatialIndex.visitQuery(approxBB.getMinX(), approxBB.getMinY(),
-                    approxBB.getMaxX(), approxBB.getMaxY(),
+            origPlineSpatialIndex.visitQuery(approxBB.minX(), approxBB.minY(),
+                    approxBB.maxX(), approxBB.maxY(),
                     visitor, queryStack);
 
             return intersects[0];
@@ -592,7 +568,7 @@ public class ContourBuilder {
                     // update prevVertex for next loop iteration
                     prevVertex = split.splitVertex;
                     // skip if they're ontop of each other
-                    if (Geom.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
+                    if (Points.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
                             Utils.realPrecision)) {
                         continue;
                     }
@@ -921,7 +897,7 @@ public class ContourBuilder {
         QuintFunction<Point2D.Double, Point2D.Double, Point2D.Double, Double, Point2D.Double, Boolean>
                 validArcSegIntersect = (Point2D.Double arcCenter, Point2D.Double arcStart,
                                         Point2D.Double arcEnd, Double bulge,
-                                        Point2D.Double intrPoint) -> !Geom.almostEqual(arcStart, intrPoint, Utils.realPrecision) &&
+                                        Point2D.Double intrPoint) -> !Points.almostEqual(arcStart, intrPoint, Utils.realPrecision) &&
                 pointWithinArcSweepAngle(arcCenter, arcStart, arcEnd, bulge, intrPoint);
 
         for (int sIndex : queryResults) {
@@ -1074,8 +1050,8 @@ public class ContourBuilder {
                 return !hasIntersect[0];
             };
 
-            origPlineSpatialIndex.visitQuery(approxBB.getMinX(), approxBB.getMinY(),
-                    approxBB.getMaxX(), approxBB.getMaxY(),
+            origPlineSpatialIndex.visitQuery(approxBB.minX(), approxBB.minY(),
+                    approxBB.maxX(), approxBB.maxY(),
                     visitor, queryStack);
 
             return hasIntersect[0];
@@ -1101,7 +1077,7 @@ public class ContourBuilder {
                     // update prevVertex for next loop iteration
                     prevVertex = split.splitVertex;
                     // skip if they're ontop of each other
-                    if (Geom.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
+                    if (Points.almostEqual(split.updatedStart.pos(), split.splitVertex.pos(),
                             Utils.realPrecision)) {
                         continue;
                     }
@@ -1213,7 +1189,7 @@ public class ContourBuilder {
 
             isValidPline = isValidPline && currSlice.size() > 1;
 
-            if (isValidPline && Geom.almostEqual(currSlice.get(0).pos(), currSlice.lastVertex().pos())) {
+            if (isValidPline && Points.almostEqual(currSlice.get(0).pos(), currSlice.lastVertex().pos())) {
                 // discard very short slice loops (invalid loops may arise due to valid offset distance
                 // thresholding)
                 isValidPline = currSlice.getPathLength() > 1e-2;
@@ -1246,7 +1222,7 @@ public class ContourBuilder {
         if (slices.size() == 1) {
             result.add(slices.get(0).pline);
             if (closedPolyline &&
-                    Geom.almostEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
+                    Points.almostEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
                 result.get(0).isClosed(true);
                 result.get(0).removeLast();
             }
@@ -1304,7 +1280,7 @@ public class ContourBuilder {
                         indexDist = origMaxIndex - currLoopStartIndex + slice.intrStartIndex;
                     }
 
-                    boolean equalToInitial = Geom.almostEqual(slice.pline.lastVertex().pos(), initialStartPoint,
+                    boolean equalToInitial = Points.almostEqual(slice.pline.lastVertex().pos(), initialStartPoint,
                             Utils.realPrecision);
 
                     return new OrderedPair<>(indexDist, equalToInitial);
@@ -1326,7 +1302,7 @@ public class ContourBuilder {
                 if (queryResults.size() == 0) {
                     // we're done
                     if (currPline.size() > 1) {
-                        if (closedPolyline && Geom.almostEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
+                        if (closedPolyline && Points.almostEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
                                 Utils.realPrecision)) {
                             currPline.removeLast();
                             currPline.isClosed(true);

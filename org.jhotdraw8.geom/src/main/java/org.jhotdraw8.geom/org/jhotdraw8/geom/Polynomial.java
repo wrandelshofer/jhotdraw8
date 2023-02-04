@@ -1,26 +1,13 @@
-/*
- * @(#)Polynomial.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-package org.jhotdraw8.geom.intersect;
+package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.IntegralAlgorithms;
 
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.cbrt;
-import static java.lang.Math.ceil;
-import static java.lang.Math.cos;
-import static java.lang.Math.log;
-import static java.lang.Math.max;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 public class Polynomial implements ToDoubleFunction<Double> {
 
@@ -189,7 +176,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param scalar a scalar
      * @return a new polynomial
      */
-    public @NonNull Polynomial divide_scalar(double scalar) {
+    public @NonNull Polynomial divideScalar(double scalar) {
         double[] result = new double[this.coefs.length];
         for (int i = 0; i < this.coefs.length; i++) {
             result[i] = this.coefs[i] /= scalar;
@@ -207,7 +194,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
     public double eval(double x) {
         double result = 0;
         for (int i = this.coefs.length - 1; i >= 0; i--) {
-            result = Geom.fma(result, x, this.coefs[i]);
+            result = fma(result, x, this.coefs[i]);
         }
         return result;
     }
@@ -263,7 +250,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
             results[numResults++] = root - offset;
         } else if (discrim < 0) {
             double distance = sqrt(-a / 3);
-            double angle = Geom.atan2(sqrt(-discrim), -halfB) / 3;
+            double angle = Angles.atan2(sqrt(-discrim), -halfB) / 3;
             double cos = cos(angle);
             double sin = sin(angle);
             final double sqrt3 = sqrt(3);
@@ -468,23 +455,23 @@ public class Polynomial implements ToDoubleFunction<Double> {
         final int simplifiedDegree = simplifiedDegree();
 
         switch (simplifiedDegree) {
-        case 0:
-            result = new double[0];
-            break;
-        case 1:
-            result = getLinearRoot();
-            break;
-        case 2:
-            result = getQuadraticRoots();
-            break;
-        case 3:
-            result = getCubicRoots();
-            break;
-        case 4:
-            result = getQuarticRoots();
-            break;
-        default:
-            throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
+            case 0:
+                result = new double[0];
+                break;
+            case 1:
+                result = getLinearRoot();
+                break;
+            case 2:
+                result = getQuadraticRoots();
+                break;
+            case 3:
+                result = getCubicRoots();
+                break;
+            case 4:
+                result = getQuarticRoots();
+                break;
+            default:
+                throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
         }
 
         return result;
@@ -503,30 +490,30 @@ public class Polynomial implements ToDoubleFunction<Double> {
         int numRoots = 0;
 
         switch (this.simplifiedDegree()) {
-        case 0:
-            break;
-        case 1:
-        case 2:
-        case 3:
-        case 4: {
-            double[] allroots = getRoots();
-            for (int i = 0; i < allroots.length; i++) {
-                double root = allroots[i];
-                if (min <= root && root <= max) {
-                    roots.add(root);
+            case 0:
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4: {
+                double[] allroots = getRoots();
+                for (int i = 0; i < allroots.length; i++) {
+                    double root = allroots[i];
+                    if (min <= root && root <= max) {
+                        roots.add(root);
+                    }
                 }
+                break;
             }
-            break;
-        }
-        default: {
-            // get roots of derivative
-            Polynomial deriv = this.getDerivative();
-            DoubleArrayList droots = deriv.getRootsInInterval(min, max);
+            default: {
+                // get roots of derivative
+                Polynomial deriv = this.getDerivative();
+                DoubleArrayList droots = deriv.getRootsInInterval(min, max);
 
-            roots = getRootsInInterval(this, droots, min, max);
-            numRoots = roots.size();
-            break;
-        }
+                roots = getRootsInInterval(this, droots, min, max);
+                numRoots = roots.size();
+                break;
+            }
         }
 
         roots.sort();
@@ -656,7 +643,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param a      the array
      * @return array of the specified length
      */
-    static @NonNull double[] trim(int length, @NonNull double[] a) {
+    public static @NonNull double[] trim(int length, @NonNull double[] a) {
         if (length == a.length) {
             return a;
         }
@@ -767,7 +754,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      */
     public double arcLength(double min, double max) {
         final Polynomial dfdx = getDerivative();
-        return IntegralAlgorithms.simpson(x -> {
+        return Integrals.simpson(x -> {
             double y = dfdx.eval(x);
             return sqrt(1 + y * y);
         }, min, max, EPSILON);

@@ -10,8 +10,9 @@ import org.jhotdraw8.base.function.QuadConsumer;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.geom.AABB;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
@@ -23,10 +24,7 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.Utils.angle;
-import static org.jhotdraw8.geom.contour.Utils.closestPointOnLineSeg;
-import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.contour.Utils.*;
 
 public class PlineVertex implements Cloneable {
     private final double x;
@@ -180,11 +178,11 @@ public class PlineVertex implements Cloneable {
         if (v1.bulgeIsZero()) {
             result.updatedStart = v1;
             result.splitVertex = new PlineVertex(point, 0.0);
-        } else if (Geom.almostEqual(v1.pos(), v2.pos(), Utils.realPrecision) ||
-                Geom.almostEqual(v1.pos(), point, Utils.realPrecision)) {
+        } else if (Points.almostEqual(v1.pos(), v2.pos(), Utils.realPrecision) ||
+                Points.almostEqual(v1.pos(), point, Utils.realPrecision)) {
             result.updatedStart = new PlineVertex(point, 0.0);
             result.splitVertex = new PlineVertex(point, v1.bulge());
-        } else if (Geom.almostEqual(v2.pos(), point, Utils.realPrecision)) {
+        } else if (Points.almostEqual(v2.pos(), point, Utils.realPrecision)) {
             result.updatedStart = v1;
             result.splitVertex = new PlineVertex(v2.pos(), 0.0);
         } else {
@@ -207,7 +205,7 @@ public class PlineVertex implements Cloneable {
 
     /// Calculate the path length for the segment defined from v1 to v2.
     public static double segLength(PlineVertex v1, PlineVertex v2) {
-        if (Geom.almostEqual(v1.pos(), v2.pos())) {
+        if (Points.almostEqual(v1.pos(), v2.pos())) {
             return 0.0;
         }
 
@@ -257,7 +255,7 @@ public class PlineVertex implements Cloneable {
 
         BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(v1, v2);
 
-        if (Geom.almostEqual(point, arc.center)) {
+        if (Points.almostEqual(point, arc.center)) {
             // avoid normalizing zero length vector (point is at center, just return start point)
             return v1.pos();
         }
@@ -293,8 +291,8 @@ public class PlineVertex implements Cloneable {
 
             // helper function to test and get point within arc sweep
             Function<Double, OrderedPair<Boolean, Point2D.Double>> pointInSweep = (Double t) -> {
-                if (t + Geom.REAL_THRESHOLD < 0.0 ||
-                        t > 1.0 + Geom.REAL_THRESHOLD) {
+                if (t + Rectangles.REAL_THRESHOLD < 0.0 ||
+                        t > 1.0 + Rectangles.REAL_THRESHOLD) {
                     return new OrderedPair<>(false, new Point2D.Double(0, 0));
                 }
 
@@ -423,11 +421,11 @@ public class PlineVertex implements Cloneable {
                 double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
                 double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                if (Geom.almostEqual(arc1StartAndSweep.first(), arc2End)) {
+                if (Points.almostEqual(arc1StartAndSweep.first(), arc2End)) {
                     // only end points touch at start of arc1
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = v1.pos();
-                } else if (Geom.almostEqual(arc2StartAndSweep.first(), arc1End)) {
+                } else if (Points.almostEqual(arc2StartAndSweep.first(), arc1End)) {
                     // only end points touch at start of arc2
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = u1.pos();

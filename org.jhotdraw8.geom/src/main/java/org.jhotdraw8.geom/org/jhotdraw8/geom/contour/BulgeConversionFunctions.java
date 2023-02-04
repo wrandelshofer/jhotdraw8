@@ -4,7 +4,8 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 
 import java.awt.geom.Point2D;
@@ -98,12 +99,12 @@ public class BulgeConversionFunctions {
      * </ul>
      */
     public static ArcRadiusAndCenter computeCircle(double x1, double y1, double x2, double y2, double b) {
-        double chord = Geom.distance(x1, y1, x2, y2);
+        double chord = Points.distance(x1, y1, x2, y2);
 
         double theta = 4 * Math.atan(b);
 
         double r = chord * (b * b + 1) / (4 * b);
-        double a = Geom.atan2(y2 - y1, x2 - x1) + (Math.PI - theta) / 2;
+        double a = Angles.atan2(y2 - y1, x2 - x1) + (Math.PI - theta) / 2;
         double cx = x1 + Math.sin(a) * r;
         double cy = y1 + Math.cos(a) * r;
 
@@ -127,7 +128,7 @@ public class BulgeConversionFunctions {
      * @return the bulge
      */
     public static double computeBulge(double x1, double y1, double x2, double y2, double x3, double y3) {
-        double a = 0.5 * (Math.PI - Geom.atan2(y2 - y1, x2 - x1) + Geom.atan2(y2 - y3, x2 - x3));
+        double a = 0.5 * (Math.PI - Angles.atan2(y2 - y1, x2 - x1) + Angles.atan2(y2 - y3, x2 - x3));
         double cosa = Math.cos(a);
         return cosa == 0.0 ? 0 : Math.sin(a) / cosa;
     }
@@ -151,7 +152,7 @@ public class BulgeConversionFunctions {
      * @return the bulge
      */
     public static double computeBulge(double x1, double y1, double x2, double y2, double r) {
-        double chord = Geom.distance(x1, y1, x2, y2);
+        double chord = Points.distance(x1, y1, x2, y2);
         double d = chord * 0.5;
         return r <= chord ? 0.0 : Math.tan(Math.asin(d / r) * 0.5);
     }
@@ -160,7 +161,7 @@ public class BulgeConversionFunctions {
     public static BulgeConversionFunctions.ArcRadiusAndCenter arcRadiusAndCenter(PlineVertex v1,
                                                                                  PlineVertex v2) {
         assert !v1.bulgeIsZero() : "v1 to v2 must be an arc";
-        assert !Geom.almostEqual(v1.pos(), v2.pos()) : "v1 must not be ontop of v2";
+        assert !Points.almostEqual(v1.pos(), v2.pos()) : "v1 must not be ontop of v2";
 
         // compute radius
         double b = Math.abs(v1.bulge());

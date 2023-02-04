@@ -16,12 +16,12 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 
 /**
  * Provides methods for finding JavaFX nodes within a radius around a point.
@@ -81,17 +81,17 @@ public class NodeFinder {
                 widthFactor = 1;
                 break;
             }
-            if (FXGeom.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+            if (FXRectangles.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 int cap;
                 switch (shape.getStrokeLineCap()) {
-                case SQUARE:
-                    cap = BasicStroke.CAP_SQUARE;
-                    break;
-                case BUTT:
-                    cap = (toleranceInLocal > 0) ? BasicStroke.CAP_ROUND : BasicStroke.CAP_BUTT;
-                    break;
-                case ROUND:
-                    cap = BasicStroke.CAP_ROUND;
+                    case SQUARE:
+                        cap = BasicStroke.CAP_SQUARE;
+                        break;
+                    case BUTT:
+                        cap = (toleranceInLocal > 0) ? BasicStroke.CAP_ROUND : BasicStroke.CAP_BUTT;
+                        break;
+                    case ROUND:
+                        cap = BasicStroke.CAP_ROUND;
                     break;
                 default:
                     throw new IllegalArgumentException();
@@ -115,18 +115,18 @@ public class NodeFinder {
                         cap, join, (float) shape.getStrokeMiterLimit()
                 ).createStrokedShape(awtShape)
                         .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()))
-                        ? Geom.distanceFromShape(awtShape, pointInLocal.getX(), pointInLocal.getY()) : null;
+                        ? Points.distanceFromShape(awtShape, pointInLocal.getX(), pointInLocal.getY()) : null;
             } else {
                 return null;
             }
         } else if (node instanceof Group) {
-            if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+            if (FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 return childContains((Parent) node, pointInLocal, radiusInLocal);
 
             }
             return null;
         } else if (node instanceof Region) {
-            if (FXGeom.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+            if (FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
                 Region region = (Region) node;
                 final Background bg = region.getBackground();
                 final Border border = region.getBorder();
@@ -138,7 +138,7 @@ public class NodeFinder {
             }
             return null;
         } else { // foolishly assumes that all other nodes are rectangular
-            return FXGeom.contains(node.getBoundsInLocal(), pointInLocal, radiusInLocal) ? 0.0 : null;
+            return FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, radiusInLocal) ? 0.0 : null;
         }
     }
 

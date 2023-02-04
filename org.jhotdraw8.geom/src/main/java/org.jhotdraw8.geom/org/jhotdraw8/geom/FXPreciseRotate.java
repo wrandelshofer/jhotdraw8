@@ -35,8 +35,8 @@ public class FXPreciseRotate extends Rotate {
 
             // 2D case
             double angle = getAngle();
-            cos = Geom.cosDegrees(angle);
-            sin = Geom.sinDegrees(angle);
+            cos = Angles.cosDegrees(angle);
+            sin = Angles.sinDegrees(angle);
 
             mxx = cos;
             mxy = -sin;

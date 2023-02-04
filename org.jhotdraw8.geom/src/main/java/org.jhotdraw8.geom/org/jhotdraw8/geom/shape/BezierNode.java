@@ -2,7 +2,7 @@
  * @(#)BezierNode.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.shape;
 
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;

@@ -5,15 +5,15 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 
 public class IntersectLinePoint {
     private IntersectLinePoint() {
@@ -111,7 +111,7 @@ public class IntersectLinePoint {
     public static boolean lineContainsPoint(double x1, double y1,
                                             double x2, double y2,
                                             double px, double py) {
-        return lineContainsPoint(x1, y1, x2, y2, px, py, Geom.REAL_THRESHOLD);
+        return lineContainsPoint(x1, y1, x2, y2, px, py, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -130,16 +130,16 @@ public class IntersectLinePoint {
     public static boolean lineContainsPoint(double x1, double y1,
                                             double x2, double y2,
                                             double px, double py, double tolerance) {
-        if (!Geom.contains(min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1), px, py, tolerance)) {
+        if (!Rectangles.contains(min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1), px, py, tolerance)) {
             return false;
         }
 
         double a, b, x, y;
 
-        if (Geom.almostEqual(x1, x2, tolerance)) {
+        if (Points.almostEqual(x1, x2, tolerance)) {
             return (abs(px - x1) <= tolerance);
         }
-        if (Geom.almostEqual(y1, y2, tolerance)) {
+        if (Points.almostEqual(y1, y2, tolerance)) {
             return (abs(py - y1) <= tolerance);
         }
 

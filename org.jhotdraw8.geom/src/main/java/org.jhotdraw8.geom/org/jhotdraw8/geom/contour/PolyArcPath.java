@@ -142,15 +142,15 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
 
         for (int i = 0; i < pline.size() - 1; ++i) {
             AABB approxBB = createFastApproxBoundingBox(pline.get(i), pline.get(i + 1));
-            result.add(approxBB.getMinX(), approxBB.getMinY(),
-                    approxBB.getMaxX(), approxBB.getMaxY());
+            result.add(approxBB.minX(), approxBB.minY(),
+                    approxBB.maxX(), approxBB.maxY());
         }
 
         if (pline.isClosed()) {
             // add final segment from last to first
             AABB approxBB = createFastApproxBoundingBox(pline.lastVertex(), pline.get(0));
-            result.add(approxBB.getMinX(), approxBB.getMinY(),
-                    approxBB.getMaxX(), approxBB.getMaxY());
+            result.add(approxBB.minX(), approxBB.minY(),
+                    approxBB.maxX(), approxBB.maxY());
         }
 
         result.finish();

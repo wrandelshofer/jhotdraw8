@@ -7,19 +7,13 @@ package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.SvgPaths;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.SwingUtilities;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -157,9 +151,9 @@ public class ContourBuilderTest {
             for (int j = 0; j < e.size(); j++) {
                 PlineVertex ev = e.get(j);
                 PlineVertex av = a.get(j);
-                isEqual &= Geom.almostEqual(ev.bulge(), av.bulge(), 1e-5);
-                isEqual &= Geom.almostEqual(ev.getX(), av.getX(), 1e-5);
-                isEqual &= Geom.almostEqual(ev.getY(), av.getY(), 1e-5);
+                isEqual &= Points.almostEqual(ev.bulge(), av.bulge(), 1e-5);
+                isEqual &= Points.almostEqual(ev.getX(), av.getX(), 1e-5);
+                isEqual &= Points.almostEqual(ev.getY(), av.getY(), 1e-5);
                 if (!isEqual) {
                     System.err.println("expected: " + ev);
                     System.err.println("actual:   " + av);

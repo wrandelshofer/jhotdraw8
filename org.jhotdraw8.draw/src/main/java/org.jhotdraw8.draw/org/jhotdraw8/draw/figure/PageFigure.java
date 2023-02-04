@@ -10,14 +10,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -29,16 +22,10 @@ import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
-import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
-import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 
 import java.util.ArrayList;
@@ -245,7 +232,7 @@ public class PageFigure extends AbstractCompositeFigure
         double y = pageY + (pageHeight - pageOverlapY) * py;
 
 
-        Bounds b = FXGeom.intersection(getLayoutBounds(),
+        Bounds b = FXRectangles.intersection(getLayoutBounds(),
                 new BoundingBox(x + insets.getLeft() * contentAreaFactor, y + insets.getTop() * contentAreaFactor,
                         pageWidth - (insets.getLeft() + insets.getRight()) * contentAreaFactor,
                         pageHeight - (insets.getTop() + insets.getBottom()) * contentAreaFactor));

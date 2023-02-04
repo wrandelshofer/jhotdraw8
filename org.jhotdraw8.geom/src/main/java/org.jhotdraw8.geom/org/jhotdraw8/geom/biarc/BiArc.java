@@ -4,7 +4,8 @@
  */
 package org.jhotdraw8.geom.biarc;
 
-import org.jhotdraw8.geom.Geom;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 
 import java.awt.geom.Point2D;
@@ -55,15 +56,15 @@ public class BiArc {
         // Calculate start and sweep angles
         Point2D.Double startVector1 = Points2D.subtract(p1, C1);
         Point2D.Double endVector1 = Points2D.subtract(tp, C1);
-        double startAngle1 = Geom.almostZero(startVector1)
-                ? 0.0 : Geom.atan2(startVector1.getY(), startVector1.getX());
-        double sweepAngle1 = Geom.almostZero(endVector1)
-                ? 0.0 : Geom.atan2(endVector1.getY(), endVector1.getX()) - startAngle1;
+        double startAngle1 = Points.almostZero(startVector1)
+                ? 0.0 : Angles.atan2(startVector1.getY(), startVector1.getX());
+        double sweepAngle1 = Points.almostZero(endVector1)
+                ? 0.0 : Angles.atan2(endVector1.getY(), endVector1.getX()) - startAngle1;
 
         Point2D.Double startVector2 = Points2D.subtract(tp, C2);
         Point2D.Double endVector2 = Points2D.subtract(p2, C2);
-        double startAngle2 = Geom.atan2(startVector2.getY(), startVector2.getX());
-        double sweepAngle2 = Geom.atan2(endVector2.getY(), endVector2.getX()) - startAngle2;
+        double startAngle2 = Angles.atan2(startVector2.getY(), startVector2.getX());
+        double sweepAngle2 = Angles.atan2(endVector2.getY(), endVector2.getX()) - startAngle2;
 
         // Adjust angles according to the orientation of the curve
         if (cw && sweepAngle1 < 0) {

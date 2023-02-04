@@ -64,6 +64,22 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
+    public static @NonNull byte @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final byte @NonNull [] items) {
+        if (targetCapacity * itemSize <= items.length) {
+            return items;
+        }
+        int newLength = max(targetCapacity * itemSize, items.length * 2);
+        return Arrays.copyOf(items, newLength);
+    }
+
+    /**
+     * Grows an items array.
+     *
+     * @param targetCapacity {@literal >= 0}
+     * @param itemSize       number of array elements that an item occupies
+     * @param items          the items array
+     * @return a new item array of larger size or the same if no resizing is necessary
+     */
     public static @NonNull short @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final short @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
@@ -178,6 +194,22 @@ public class ListHelper {
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
     public static @NonNull double @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final double @NonNull [] items) {
+        int newLength = size * itemSize;
+        if (items.length == newLength) {
+            return items;
+        }
+        return Arrays.copyOf(items, newLength);
+    }
+
+    /**
+     * Resizes an array to fit the number of items.
+     *
+     * @param size     the size to fit
+     * @param itemSize number of array elements that an item occupies
+     * @param items    the items array
+     * @return a new item array of smaller size or the same if no resizing is necessary
+     */
+    public static @NonNull byte @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final byte @NonNull [] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;

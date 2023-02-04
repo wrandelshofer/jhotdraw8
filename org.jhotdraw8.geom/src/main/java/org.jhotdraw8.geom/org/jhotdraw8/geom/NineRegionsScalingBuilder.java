@@ -55,7 +55,7 @@ public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {
 
         double it = srcInsets.getTop(), ib = srcInsets.getBottom(), ir = srcInsets.getRight(), il = srcInsets.getLeft();
 
-        Bounds si = FXGeom.subtractInsets(srcBounds, srcInsets);
+        Bounds si = FXRectangles.subtractInsets(srcBounds, srcInsets);
         this.minX = si.getMinX();
         this.maxX = si.getMaxX();
         this.minY = si.getMinY();

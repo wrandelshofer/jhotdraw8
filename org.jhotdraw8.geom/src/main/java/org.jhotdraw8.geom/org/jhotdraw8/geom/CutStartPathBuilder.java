@@ -7,11 +7,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectionResult;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.*;
 
 import java.awt.geom.Point2D;
 
@@ -59,7 +55,7 @@ public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
         case INTERSECTION:
             double t = i.getLast().getArgumentA();
             out.moveTo(i.getLast().getX(), i.getLast().getY());
-            BezierCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
+            CubicCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
             break;
         case NO_INTERSECTION_INSIDE:
             cx = x3;
@@ -132,7 +128,7 @@ public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
         case INTERSECTION:
             double t = i.getLast().getArgumentA();
             out.moveTo(i.getLast().getX(), i.getLast().getY());
-            BezierCurves.splitQuadCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
+            QuadCurves.split(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
             state = State.CUT_DONE;
             break;
         case NO_INTERSECTION_INSIDE:

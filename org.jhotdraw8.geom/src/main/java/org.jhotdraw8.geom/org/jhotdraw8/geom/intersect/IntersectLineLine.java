@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 
-import static org.jhotdraw8.geom.Geom.REAL_THRESHOLD;
+import static org.jhotdraw8.geom.Rectangles.REAL_THRESHOLD;
 
 public class IntersectLineLine {
     private IntersectLineLine() {

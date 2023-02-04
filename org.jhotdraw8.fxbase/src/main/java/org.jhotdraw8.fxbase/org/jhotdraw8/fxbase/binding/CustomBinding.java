@@ -22,11 +22,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.DoubleSupplier;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * Provides bindings with conversion functions.
@@ -34,8 +30,12 @@ import java.util.function.Supplier;
  * Slightly adapted code from example shown at stackoverflow.com.
  * <p>
  * Reference:
- * <a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx">
- * stackoverflow.com: Custom Bidirectional Bindings in JavaFX</a>
+ * <dl>
+ *     <dt>Stackoverflow. Custom Bidirectional Bindings in JavaFX,
+ *     Copyright BlackLabrador, CC BY-SA 4.0 license</dt>
+ *     <dd><a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx">
+ *   stackoverflow.com</a></dd>
+ * </dl>
  *
  * @author BlackLabrador (as stated in the reference)
  */

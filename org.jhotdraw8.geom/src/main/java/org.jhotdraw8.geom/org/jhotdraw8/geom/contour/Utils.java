@@ -6,8 +6,7 @@ package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -44,7 +43,7 @@ public class Utils {
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue) {
-        return fuzzyInRange(minValue, value, maxValue, Geom.REAL_THRESHOLD);
+        return fuzzyInRange(minValue, value, maxValue, Rectangles.REAL_THRESHOLD);
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue, double epsilon) {
@@ -56,7 +55,7 @@ public class Utils {
      */
     static boolean pointWithinArcSweepAngle(final Point2D.Double center, final Point2D.Double arcStart,
                                             final Point2D.Double arcEnd, double bulge, final Point2D.Double point) {
-        assert Math.abs(bulge) > Geom.REAL_THRESHOLD : "expected arc";
+        assert Math.abs(bulge) > Rectangles.REAL_THRESHOLD : "expected arc";
         assert Math.abs(bulge) <= 1.0 : "bulge should always be between -1 and 1";
 
         if (bulge > 0.0) {
@@ -73,7 +72,7 @@ public class Utils {
      */
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                       final Point2D.Double point) {
-        return isLeftOrCoincident(p0, p1, point, Geom.REAL_THRESHOLD);
+        return isLeftOrCoincident(p0, p1, point, Rectangles.REAL_THRESHOLD);
     }
 
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
@@ -88,7 +87,7 @@ public class Utils {
      */
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                        final Point2D.Double point) {
-        return isRightOrCoincident(p0, p1, point, Geom.REAL_THRESHOLD);
+        return isRightOrCoincident(p0, p1, point, Rectangles.REAL_THRESHOLD);
     }
 
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
@@ -105,7 +104,7 @@ public class Utils {
         // that are very near each other in value.
         // See:
         // https://math.stackexchange.com/questions/311382/solving-a-quadratic-equation-with-precision-when-using-floating-point-variables
-        assert Geom.almostEqual(b * b - 4.0 * a * c, discr, Geom.REAL_THRESHOLD) : "discriminate is not correct";
+        assert Points.almostEqual(b * b - 4.0 * a * c, discr, Rectangles.REAL_THRESHOLD) : "discriminate is not correct";
         double sqrtDiscr = Math.sqrt(discr);
         double denom = 2.0 * a;
         double sol1;
@@ -123,7 +122,7 @@ public class Utils {
      * Return the point on the segment going from p0 to p1 at parametric value t.
      */
     public static Point2D.Double pointFromParametric(final Point2D.Double p0, final Point2D.Double p1, double t) {
-        return Geom.lerp(p0, p1, t);
+        return Lines.lerp(p0, p1, t);
         //return Points2D.add(p0,Points2D.multiply(Points2D.subtract(p1,p0),t));
     }
 
@@ -131,7 +130,7 @@ public class Utils {
      * Counter clockwise angle of the vector going from p0 to p1.
      */
     public static double angle(final Point2D.Double p0, final Point2D.Double p1) {
-        return Geom.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
+        return Angles.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
     }
 
     /**
@@ -177,7 +176,7 @@ public class Utils {
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle) {
-        return angleIsWithinSweep(startAngle, sweepAngle, testAngle, Geom.REAL_THRESHOLD);
+        return angleIsWithinSweep(startAngle, sweepAngle, testAngle, Rectangles.REAL_THRESHOLD);
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle,
@@ -191,7 +190,7 @@ public class Utils {
     }
 
     static boolean angleIsBetween(double startAngle, double endAngle, double testAngle) {
-        return angleIsBetween(startAngle, endAngle, testAngle, Geom.REAL_THRESHOLD);
+        return angleIsBetween(startAngle, endAngle, testAngle, Rectangles.REAL_THRESHOLD);
     }
 
     static boolean angleIsBetween(double startAngle, double endAngle, double testAngle,
@@ -211,12 +210,12 @@ public class Utils {
         Point2D.Double v = Points2D.subtract(p1, p0);
         Point2D.Double w = Points2D.subtract(point, p0);
         double c1 = Points2D.dotProduct(w, v);
-        if (c1 < Geom.REAL_THRESHOLD) {
+        if (c1 < Rectangles.REAL_THRESHOLD) {
             return p0;
         }
 
         double c2 = Points2D.dotProduct(v, v);
-        if (c2 < c1 + Geom.REAL_THRESHOLD) {
+        if (c2 < c1 + Rectangles.REAL_THRESHOLD) {
             return p1;
         }
 

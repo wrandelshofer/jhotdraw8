@@ -5,9 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.BezierCurves;
-import org.jhotdraw8.geom.Geom;
-import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ public class IntersectEllipseQuadCurve {
     public static @NonNull IntersectionResult intersectQuadCurveEllipse(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry) {
-        return intersectQuadCurveEllipse(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveEllipse(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResult intersectQuadCurveEllipse(
@@ -32,7 +30,7 @@ public class IntersectEllipseQuadCurve {
     public static @NonNull IntersectionResultEx intersectQuadCurveEllipseEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry) {
-        return intersectQuadCurveEllipseEx(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveEllipseEx(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectQuadCurveEllipseEx(
@@ -43,11 +41,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentA = BezierCurves.evalQuadCurveTangent(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
-            double argumentB = Geom.atan2Ellipse(bcx, bcy, brx, bry, x, y);
+            PointAndTangent tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            double argumentB = Angles.atan2Ellipse(bcx, bcy, brx, bry, x, y);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.getX(), tangentA.getY(),
+                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
                     argumentB, x - bcx, bcy - y
             ));
         }
@@ -72,7 +70,7 @@ public class IntersectEllipseQuadCurve {
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     public static @NonNull IntersectionResult intersectQuadCurveEllipse(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D c, double rx, double ry) {
-        return intersectQuadCurveEllipse(p0, p1, p2, c, rx, ry, Geom.REAL_THRESHOLD);
+        return intersectQuadCurveEllipse(p0, p1, p2, c, rx, ry, Rectangles.REAL_THRESHOLD);
     }
 
     /**
@@ -143,7 +141,7 @@ public class IntersectEllipseQuadCurve {
             double y = ip.getY();
             list.add(new IntersectionPoint(
                     x, y,
-                    Geom.atan2Ellipse(acx, acy, arx, ary, x, y)
+                    Angles.atan2Ellipse(acx, acy, arx, ary, x, y)
             ));
         }
 
@@ -153,7 +151,7 @@ public class IntersectEllipseQuadCurve {
     public static @NonNull IntersectionResultEx intersectEllipseQuadCurveEx(
             double acx, double acy, double arx, double ary,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
-        return intersectEllipseQuadCurveEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, b2x, b2y, Geom.REAL_THRESHOLD);
+        return intersectEllipseQuadCurveEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, b2x, b2y, Rectangles.REAL_THRESHOLD);
     }
 
     public static @NonNull IntersectionResultEx intersectEllipseQuadCurveEx(
@@ -165,11 +163,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : resultB) {
             double x = ip.getX();
             double y = ip.getY();
-            Point2D.Double tangentB = BezierCurves.evalQuadCurveTangent(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
+            PointAndTangent tangentB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    Geom.atan2Ellipse(acx, acy, arx, ary, x, y), x - acx, acy - y,
-                    ip.getArgumentA(), tangentB.getX(), tangentB.getY()
+                    Angles.atan2Ellipse(acx, acy, arx, ary, x, y), x - acx, acy - y,
+                    ip.getArgumentA(), tangentB.tangentX(), tangentB.tangentY()
             ));
         }
 

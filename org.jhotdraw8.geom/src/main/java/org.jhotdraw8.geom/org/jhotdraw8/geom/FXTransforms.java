@@ -4,17 +4,8 @@
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import javafx.geometry.Point3D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
+import javafx.geometry.*;
+import javafx.scene.transform.*;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
@@ -23,11 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.isNaN;
-import static java.lang.Math.abs;
-import static java.lang.Math.atan;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 /**
  * Transforms.
@@ -240,7 +227,7 @@ public class FXTransforms {
      * @return a rotation transform
      */
     public static @NonNull Transform rotate(@NonNull Point2D tangent, @NonNull Point2D pivot) {
-        double theta = Geom.atan2(tangent.getY(), tangent.getX());
+        double theta = Angles.atan2(tangent.getY(), tangent.getX());
         return rotateRadians(theta, pivot.getX(), pivot.getY());
     }
 
@@ -270,7 +257,7 @@ public class FXTransforms {
      * @return a rotation transform
      */
     public static @NonNull Transform rotate(double tangentX, double tangentY, double pivotX, double pivotY) {
-        double theta = Geom.atan2(tangentY, tangentX);
+        double theta = Angles.atan2(tangentY, tangentX);
         return rotateRadians(theta, pivotX, pivotY);
     }
 

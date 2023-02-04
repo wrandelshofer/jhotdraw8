@@ -9,6 +9,7 @@ module org.jhotdraw8.geom {
     exports org.jhotdraw8.geom.intersect;
     exports org.jhotdraw8.geom.contour;
     exports org.jhotdraw8.geom.biarc;
+    exports org.jhotdraw8.geom.shape;
     requires transitive javafx.graphics;
     requires transitive org.jhotdraw8.annotation;
     requires transitive java.desktop;
