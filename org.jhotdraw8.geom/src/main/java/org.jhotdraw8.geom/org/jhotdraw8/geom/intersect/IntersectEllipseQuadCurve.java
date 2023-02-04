@@ -41,11 +41,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            PointAndDerivative tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
             double argumentB = Angles.atan2Ellipse(bcx, bcy, brx, bry, x, y);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
                     argumentB, x - bcx, bcy - y
             ));
         }
@@ -163,11 +163,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : resultB) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
+            PointAndDerivative tangentB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     Angles.atan2Ellipse(acx, acy, arx, ary, x, y), x - acx, acy - y,
-                    ip.getArgumentA(), tangentB.tangentX(), tangentB.tangentY()
+                    ip.getArgumentA(), tangentB.dx(), tangentB.dy()
             ));
         }
 

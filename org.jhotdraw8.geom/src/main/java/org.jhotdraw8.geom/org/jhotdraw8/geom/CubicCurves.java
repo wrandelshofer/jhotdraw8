@@ -37,7 +37,7 @@ public class CubicCurves {
      * @param t       the time
      * @return the point at time t
      */
-    public static @NonNull PointAndTangent eval(double[] a, int offsetA, double t) {
+    public static @NonNull PointAndDerivative eval(double[] a, int offsetA, double t) {
         return eval(
                 a[offsetA], a[offsetA + 1],
                 a[offsetA + 2], a[offsetA + 3],
@@ -60,8 +60,8 @@ public class CubicCurves {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull PointAndTangent eval(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
-                                                double t) {
+    public static @NonNull PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+                                                   double t) {
 
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = lerp(x0, x1, t);
@@ -82,7 +82,7 @@ public class CubicCurves {
         x0123 = lerp(x012, x123, t);
         y0123 = lerp(y012, y123, t);
 
-        return new PointAndTangent(x0123, y0123, x123 - x012, y123 - y012);
+        return new PointAndDerivative(x0123, y0123, x123 - x012, y123 - y012);
     }
 
     /**
@@ -246,13 +246,13 @@ public class CubicCurves {
      * @param x3    point P3 of the curve
      * @param y3    point P3 of the curve
      * @param t     where to split
-     * @param left  if not null, accepts the curve from x1,y1 to t
-     * @param right if not null, accepts the curve from t to x4,y4
+     * @param first  if not null, accepts the curve from x1,y1 to t
+     * @param second if not null, accepts the curve from t to x4,y4
      */
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                              double t,
-                             @Nullable Double8Consumer left,
-                             @Nullable Double8Consumer right) {
+                             @Nullable Double8Consumer first,
+                             @Nullable Double8Consumer second) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -267,11 +267,52 @@ public class CubicCurves {
         x0123 = lerp(x012, x123, t);
         y0123 = lerp(y012, y123, t);
 
-        if (left != null) {
-            left.accept(x0, y0, x01, y01, x012, y012, x0123, y0123);
+        if (first != null) {
+            first.accept(x0, y0, x01, y01, x012, y012, x0123, y0123);
         }
-        if (right != null) {
-            right.accept(x0123, y0123, x123, y123, x23, y23, x3, y3);
+        if (second != null) {
+            second.accept(x0123, y0123, x123, y123, x23, y23, x3, y3);
+        }
+    }
+
+    public static void split(double[] p, int o,
+                             double t,
+                             double[] f, int fo,
+                             double[] s, int so) {
+        final double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3], x2 = p[o + 4], y2 = p[o + 5], x3 = p[o + 6], y3 = p[o + 7];
+        final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
+        x01 = lerp(x0, x1, t);
+        y01 = lerp(y0, y1, t);
+        x12 = lerp(x1, x2, t);
+        y12 = lerp(y1, y2, t);
+        x23 = lerp(x2, x3, t);
+        y23 = lerp(y2, y3, t);
+        x012 = lerp(x01, x12, t);
+        y012 = lerp(y01, y12, t);
+        x123 = lerp(x12, x23, t);
+        y123 = lerp(y12, y23, t);
+        x0123 = lerp(x012, x123, t);
+        y0123 = lerp(y012, y123, t);
+
+        if (f != null) {
+            f[fo + 0] = x0;
+            f[fo + 1] = y0;
+            f[fo + 2] = x01;
+            f[fo + 3] = y01;
+            f[fo + 4] = x012;
+            f[fo + 5] = y012;
+            f[fo + 6] = x0123;
+            f[fo + 7] = y0123;
+        }
+        if (s != null) {
+            s[so + 0] = x0123;
+            s[so + 1] = y0123;
+            s[so + 2] = x123;
+            s[so + 3] = y123;
+            s[so + 4] = x23;
+            s[so + 5] = y23;
+            s[so + 6] = x3;
+            s[so + 7] = y3;
         }
     }
 
@@ -365,6 +406,15 @@ public class CubicCurves {
      * @return the
      */
     public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] v, int offset) {
+        // Instead of the code below, we could evaluate the magnitude of the derivative
+        /*
+        return (t)-> {
+            PointAndDerivative p = eval(v, offset, t);
+            return Math.hypot(p.dx(),p.dy());
+            //return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
+        };
+        */
+
         // Calculate the coefficients of a Bezier derivative.
         double x0 = v[offset], y0 = v[offset + 1],
                 x1 = v[+2], y1 = v[+3],
@@ -383,7 +433,7 @@ public class CubicCurves {
             // Calculate quadratic equations of derivatives for x and y
             double dx = (ax * t + bx) * t + cx,
                     dy = (ay * t + by) * t + cy;
-            return Math.hypot(dx, dy);
+            return Math.hypot(dx, dy);// consider using Math.sqrt(dx*dx+dy*dy); instead
         };
     }
 

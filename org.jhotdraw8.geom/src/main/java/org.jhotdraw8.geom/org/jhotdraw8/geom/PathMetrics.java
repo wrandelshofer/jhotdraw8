@@ -52,7 +52,7 @@ public class PathMetrics {
      * @param t the time in the range [0,1]
      * @return point and tangent at t
      */
-    public @NonNull PointAndTangent eval(double t) {
+    public @NonNull PointAndDerivative eval(double t) {
         return evalAtArcLength(t * getLength());
     }
 
@@ -62,7 +62,7 @@ public class PathMetrics {
      * @param s the arc length
      * @return point and tangent at s
      */
-    public @NonNull PointAndTangent evalAtArcLength(double s) {
+    public @NonNull PointAndDerivative evalAtArcLength(double s) {
         int search = Arrays.binarySearch(accumulatedLengths, s);
         int i = search < 0 ? ~search : search;
 
@@ -78,8 +78,8 @@ public class PathMetrics {
         double start = (i == 0 ? 0 : accumulatedLengths[i - 1]);
         final double segmentS = s - start;
         return switch (commands[i]) {
-            case SEG_CLOSE -> new PointAndTangent(0, 0, 1, 0);
-            case SEG_MOVETO -> new PointAndTangent(coords[offset], coords[offset + 1], 1, 0);
+            case SEG_CLOSE -> new PointAndDerivative(0, 0, 1, 0);
+            case SEG_MOVETO -> new PointAndDerivative(coords[offset], coords[offset + 1], 1, 0);
             case SEG_LINETO -> Lines.eval(coords, offset, Lines.invArcLength(coords, offset, segmentS));
             case SEG_QUADTO -> QuadCurves.eval(coords, offset, QuadCurves.invArcLength(coords, offset, segmentS));
             case SEG_CUBICTO -> CubicCurves.eval(coords, offset, CubicCurves.invArcLength(coords, offset, segmentS));

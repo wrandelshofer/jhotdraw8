@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Lines;
-import org.jhotdraw8.geom.PointAndTangent;
+import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.intersect.IntersectLineRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
@@ -37,8 +37,8 @@ public interface Connector {
      * @return A point and tangent on the target figure in local coordinates of the target
      * figure.
      */
-    @NonNull PointAndTangent getPointAndTangentInLocal(@NonNull Figure connection,
-                                                       @NonNull Figure target);
+    @NonNull PointAndDerivative getPointAndTangentInLocal(@NonNull Figure connection,
+                                                          @NonNull Figure target);
 
     /**
      * Returns a point and tangent on the target figure for the specified
@@ -48,12 +48,12 @@ public interface Connector {
      * @param target     the target
      * @return A point and tangent on the target figure in world coordinates
      */
-    default @NonNull PointAndTangent getPointAndTangentInWorld(Figure connection, Figure target) {
-        PointAndTangent inLocal = getPointAndTangentInLocal(connection, target);
+    default @NonNull PointAndDerivative getPointAndTangentInWorld(Figure connection, Figure target) {
+        PointAndDerivative inLocal = getPointAndTangentInLocal(connection, target);
         Transform localToWorld = target.getLocalToWorld();
         Point2D pointInWorld = FXTransforms.transform(localToWorld, inLocal.getPoint(Point2D::new));
-        Point2D tangentInWorld = FXTransforms.deltaTransform(localToWorld, inLocal.getTangent(Point2D::new));
-        return new PointAndTangent(pointInWorld.getX(), pointInWorld.getY(),
+        Point2D tangentInWorld = FXTransforms.deltaTransform(localToWorld, inLocal.getDerivative(Point2D::new));
+        return new PointAndDerivative(pointInWorld.getX(), pointInWorld.getY(),
                 tangentInWorld.getX(), tangentInWorld.getY());
     }
 

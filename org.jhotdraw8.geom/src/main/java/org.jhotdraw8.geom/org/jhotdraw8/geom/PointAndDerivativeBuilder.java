@@ -28,7 +28,7 @@ import java.util.List;
  * If the path is empty, then all {@code t} are mapped to {@code point=(0,0),
  * tangent=(1,0)}.
  */
-public class PointAndTangentBuilder {
+public class PointAndDerivativeBuilder {
     private final @NonNull List<Segment> segments = new ArrayList<>();
     private final double length;
 
@@ -41,14 +41,14 @@ public class PointAndTangentBuilder {
     /**
      * Creates a new PointAndTangentBuilder.
      */
-    public PointAndTangentBuilder(@NonNull Shape shape, double flatness) {
+    public PointAndDerivativeBuilder(@NonNull Shape shape, double flatness) {
         this(shape.getPathIterator(null), flatness);
     }
 
     /**
      * Creates a new PointAndTangentBuilder.
      */
-    public PointAndTangentBuilder(@NonNull PathIterator it, double flatness) {
+    public PointAndDerivativeBuilder(@NonNull PathIterator it, double flatness) {
         final float[] coords = new float[6];
         double startX = 0, startY = 0;
         double x = 0, y = 0;
@@ -138,9 +138,9 @@ public class PointAndTangentBuilder {
         length = stats.getSum();
     }
 
-    public PointAndTangent getPointAndTangentAt(double t) {
+    public PointAndDerivative getPointAndDerivativeAt(double t) {
         if (segments.isEmpty()) {
-            return new PointAndTangent(degeneratedX, degeneratedY, 1, 0);
+            return new PointAndDerivative(degeneratedX, degeneratedY, 1, 0);
         }
 
         double distanceFromStart = length * t;
@@ -151,26 +151,26 @@ public class PointAndTangentBuilder {
             Line2D.Double line = (Line2D.Double) seg.shape;
             double tInLine = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
             Point2D.Double p = Lines.lerp(line.x1, line.y1, line.x2, line.y2, tInLine);
-            return new PointAndTangent(p.x, p.y, line.x2 - line.x1, line.y2 - line.y1);
+            return new PointAndDerivative(p.x, p.y, line.x2 - line.x1, line.y2 - line.y1);
         } else if (seg.shape instanceof QuadCurve2D.Double) {
             QuadCurve2D.Double quadCurve = (QuadCurve2D.Double) seg.shape;
             double tInQuadCurve = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
-            PointAndTangent p = QuadCurves.eval(quadCurve.x1, quadCurve.y1, quadCurve.ctrlx, quadCurve.ctrly,
+            PointAndDerivative p = QuadCurves.eval(quadCurve.x1, quadCurve.y1, quadCurve.ctrlx, quadCurve.ctrly,
                     quadCurve.x2, quadCurve.y2, tInQuadCurve);
-            return new PointAndTangent(p.x(), p.y(), p.tangentX(), p.tangentY());
+            return new PointAndDerivative(p.x(), p.y(), p.dx(), p.dy());
 
         } else {
             CubicCurve2D.Double cubicCurve = (CubicCurve2D.Double) seg.shape;
             double tInCubicCurve = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
 
-            PointAndTangent pat = CubicCurves.eval(cubicCurve.x1, cubicCurve.y1,
+            PointAndDerivative pat = CubicCurves.eval(cubicCurve.x1, cubicCurve.y1,
                     cubicCurve.ctrlx1, cubicCurve.ctrly1,
                     cubicCurve.ctrlx2, cubicCurve.ctrly2,
                     cubicCurve.x2, cubicCurve.y2, tInCubicCurve);
             Point2D.Double p = pat.getPoint(Point2D.Double::new);
-            Point2D.Double tangent = pat.getTangent(Point2D.Double::new);
+            Point2D.Double tangent = pat.getDerivative(Point2D.Double::new);
             ;
-            return new PointAndTangent(p.x, p.y, tangent.x, tangent.y);
+            return new PointAndDerivative(p.x, p.y, tangent.x, tangent.y);
         }
     }
 
@@ -239,7 +239,7 @@ public class PointAndTangentBuilder {
         return length;
     }
 
-    public static PointAndTangent computePointAndTangentAt(@NonNull PathIterator it, double flatness, double t) {
-        return new PointAndTangentBuilder(it, flatness).getPointAndTangentAt(t);
+    public static PointAndDerivative computePointAndTangentAt(@NonNull PathIterator it, double flatness, double t) {
+        return new PointAndDerivativeBuilder(it, flatness).getPointAndDerivativeAt(t);
     }
 }

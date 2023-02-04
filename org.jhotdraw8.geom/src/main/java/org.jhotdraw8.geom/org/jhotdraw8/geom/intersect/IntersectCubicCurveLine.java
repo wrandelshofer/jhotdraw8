@@ -275,11 +275,11 @@ public class IntersectCubicCurveLine {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
+            PointAndDerivative tangentA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, x, y), a1x - a0x, a1y - a0y,
-                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY()
+                    ip.getArgumentA(), tangentA.dx(), tangentA.dy()
             ));
         }
 
@@ -302,10 +302,10 @@ public class IntersectCubicCurveLine {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndDerivative tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
                     IntersectLinePoint.argumentOnLine(b0x, b0y, b1x, b1y, x, y), b1x - b0x, b1y - b0y
             ));
         }

@@ -11,10 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
@@ -87,6 +84,7 @@ public class BezierArcLengthExampleMain extends Application {
     private Group pointsOfInterest;
     private Group timePoints;
     private Group distancePoints;
+    private Group quadraticCurves;
     private CubicCurve curve;
     private Handle start, end, c1, c2;
     private Text label;
@@ -108,7 +106,9 @@ public class BezierArcLengthExampleMain extends Application {
         label.setY(20);
         curve.setManaged(false);
         label.setManaged(false);
-        canvas.getChildren().addAll(curve, label);
+        quadraticCurves = new Group();
+        quadraticCurves.setManaged(false);
+        canvas.getChildren().addAll(quadraticCurves, curve, label);
 
         pointsOfInterest = new Group();
         pointsOfInterest.setManaged(false);
@@ -151,8 +151,10 @@ public class BezierArcLengthExampleMain extends Application {
         updatePointsOfInterest();
         updateTimePoints();
         distancePoints.getChildren().clear();
-        updateApproximatedDistancePointsGaussLegendre(distancePoints);
-        updateApproximatedDistancePoints(distancePoints);
+        addApproximatedDistancePointsGaussLegendre(distancePoints);
+        addApproximatedDistancePoints(distancePoints);
+        quadraticCurves.getChildren().clear();
+        addApproximatedQuadraticCurves(quadraticCurves);
         updateDistancePoints(distancePoints);
         updateText();
 
@@ -168,7 +170,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndX(),
                 curve.getEndY()};
 
-        CubicCurveCharacteristics.Characteristics characteristics = CubicCurveCharacteristics.characteristics(b);
+        CubicCurveCharacteristics.Characteristics characteristics = CubicCurveCharacteristics.characteristics(b, 0);
         PathArcLengthParameterization param = new PathArcLengthParameterization(
                 FXShapes.awtShapeFromFX(new CubicCurve(curve.getStartX(),
                         curve.getStartY(),
@@ -223,17 +225,8 @@ public class BezierArcLengthExampleMain extends Application {
         }
     }
 
-    private void updateApproximatedDistancePoints(Group distancePoints) {
-        double[] b = {
-                curve.getStartX(),
-                curve.getStartY(),
-                curve.getControlX1(),
-                curve.getControlY1(),
-                curve.getControlX2(),
-                curve.getControlY2(),
-                curve.getEndX(),
-                curve.getEndY()
-        };
+    private void addApproximatedDistancePoints(Group distancePoints) {
+        double[] b = FXCubicCurves.toArray(curve);
 
         double totalLength = CubicCurves.arcLength(b, 0, 1.0);
 
@@ -241,7 +234,7 @@ public class BezierArcLengthExampleMain extends Application {
         for (int i = 1, n = 10; i < n; i++) {
             double s = i / (double) n;
             double t = CubicCurves.invArcLength(b, 0, s * totalLength);
-            PointAndTangent pat = CubicCurves.eval(b, 0, t);
+            PointAndDerivative pat = CubicCurves.eval(b, 0, t);
             javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
             Circle e = new Circle(p.getX(), p.getY(), 4);
             e.setFill(Color.RED);
@@ -249,7 +242,23 @@ public class BezierArcLengthExampleMain extends Application {
         }
     }
 
-    private void updateApproximatedDistancePointsGaussLegendre(Group distancePoints) {
+    private void addApproximatedQuadraticCurves(Group quadraticCurves) {
+        double[] b = FXCubicCurves.toArray(curve);
+        double[] q = new double[16 * 6];
+        int n = QuadCurves.approximateCubicCurve(b, 0, q, 0, 0.5);
+
+
+        for (int i = 0; i < n; i++) {
+            int offset = i * 6;
+            QuadCurve c = FXQuadCurves.ofArray(q, offset);
+            c.setStroke(Color.YELLOW);
+            c.setStrokeWidth(5.0);
+            c.setFill(null);
+            quadraticCurves.getChildren().add(c);
+        }
+    }
+
+    private void addApproximatedDistancePointsGaussLegendre(Group distancePoints) {
         double[] b = {
                 curve.getStartX(),
                 curve.getStartY(),
@@ -271,7 +280,7 @@ public class BezierArcLengthExampleMain extends Application {
         for (int i = 1, n = 10; i < n; i++) {
             double s = i / (double) n;
             double t = sToT.applyAsDouble(s * totalLength);
-            PointAndTangent pat = CubicCurves.eval(b, 0, t);
+            PointAndDerivative pat = CubicCurves.eval(b, 0, t);
             javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
             Circle e = new Circle(p.getX(), p.getY(), 4);
             e.setFill(Color.ORANGE);
@@ -283,7 +292,7 @@ public class BezierArcLengthExampleMain extends Application {
         timePoints.getChildren().clear();
         for (int i = 1, n = 10; i < n; i++) {
             double t = i / (double) n;
-            PointAndTangent pat = CubicCurves.eval(curve.getStartX(),
+            PointAndDerivative pat = CubicCurves.eval(curve.getStartX(),
                     curve.getStartY(),
                     curve.getControlX1(),
                     curve.getControlY1(),
@@ -291,7 +300,7 @@ public class BezierArcLengthExampleMain extends Application {
                     curve.getControlY2(),
                     curve.getEndX(),
                     curve.getEndY(), t);
-            javafx.geometry.Point2D perp = new javafx.geometry.Point2D(pat.tangentY(), -pat.tangentX());
+            javafx.geometry.Point2D perp = new javafx.geometry.Point2D(pat.dy(), -pat.dx());
             javafx.geometry.Point2D tg = perp.normalize();
 
             timePoints.getChildren().add(new Line(pat.x() - tg.getX(), pat.y() - tg.getY(),
@@ -323,7 +332,7 @@ public class BezierArcLengthExampleMain extends Application {
         } else {
             addPoints(infl, Color.BLACK, null);
         }
-        if (infl.isEmpty()) {
+        //if (infl.isEmpty()) {
             Double p = CubicCurveCharacteristics.singularPoint(curve.getStartX(),
                     curve.getStartY(),
                     curve.getControlX1(),
@@ -335,7 +344,7 @@ public class BezierArcLengthExampleMain extends Application {
             if (p != null) {
                 addPoint(p, Color.GRAY, null);
             }
-        }
+        //}
     }
 
     private void addPoints(DoubleArrayList infl, Color fill, Color stroke) {
@@ -346,7 +355,7 @@ public class BezierArcLengthExampleMain extends Application {
 
     private void addPoint(double t, Color fill, Color stroke) {
 
-        PointAndTangent pat = CubicCurves.eval(curve.getStartX(),
+        PointAndDerivative pat = CubicCurves.eval(curve.getStartX(),
                 curve.getStartY(),
                 curve.getControlX1(),
                 curve.getControlY1(),

@@ -413,12 +413,12 @@ public class IntersectCubicCurveCubicCurve {
                 }
             }
             assert !Double.isNaN(argumentB) : "argumentB must exist";
-            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
-            PointAndTangent tangentB = CubicCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
+            PointAndDerivative tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
+            PointAndDerivative tangentB = CubicCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ipA.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
-                    argumentB, tangentB.tangentX(), tangentB.tangentY()
+                    ipA.getArgumentA(), tangentA.dx(), tangentA.dy(),
+                    argumentB, tangentB.dx(), tangentB.dy()
             ));
         }
 

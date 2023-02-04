@@ -139,10 +139,10 @@ public class IntersectPointQuadCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            PointAndDerivative tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
                     0, 1, 0
             ));
         }

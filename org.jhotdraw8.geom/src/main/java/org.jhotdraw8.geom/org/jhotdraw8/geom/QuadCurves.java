@@ -7,9 +7,11 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Double4Consumer;
+import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
+import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
@@ -58,7 +60,7 @@ public class QuadCurves {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull PointAndTangent eval(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
+    public static @NonNull PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -69,10 +71,10 @@ public class QuadCurves {
         x012 = lerp(x01, x12, t);
         y012 = lerp(y01, y12, t);
 
-        return new PointAndTangent(x012, y012, x12 - x01, y12 - y01);
+        return new PointAndDerivative(x012, y012, x12 - x01, y12 - y01);
     }
 
-    public static @NonNull PointAndTangent eval(double[] p, int offset, double t) {
+    public static @NonNull PointAndDerivative eval(double[] p, int offset, double t) {
         double x0 = p[offset], y0 = p[offset + 1], x1 = p[offset + 2], y1 = p[offset + 3], x2 = p[offset + 4], y2 = p[offset + 5];
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
@@ -84,7 +86,7 @@ public class QuadCurves {
         x012 = lerp(x01, x12, t);
         y012 = lerp(y01, y12, t);
 
-        return new PointAndTangent(x012, y012, x12 - x01, y12 - y01);
+        return new PointAndDerivative(x012, y012, x12 - x01, y12 - y01);
     }
 
 
@@ -245,25 +247,28 @@ public class QuadCurves {
      * C = bx² + by²
      * </pre>
      * <p>
-     * The arc-length {@code s} can now be computed with the following equation:
+     * The arc-length {@code L} can now be computed with the following equation:
      * <pre>
-     *     s = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
+     *     L = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
      * </pre>
      * Which we can write as:
      * <pre>
-     *     s = √(A) * integrate( √( t² + 2*b*t +c ), d:t, from:0, to:t)
+     *     L = √(A) * integrate( √( t² + 2*b*t +c ), d:t, from:0, to:t)
      *     where b = B/(2*A)
      *           c = C/A
      * </pre>
      * Then we get:
      * <pre>
-     *     s = √(A) * integrate( √(u²+k), d:t, from:b, to:u)
+     *     L = √(A) * integrate( √(u²+k), d:t, from:b, to:u)
      *     where u = t + b
      *           k = c - b²
      * </pre>
      * Now we can use the integral identity from the link to obtain:
      * <pre>
-     *     s = √(A)/2 * ( u * √(u²+k) - b * √(b²+k) + k * log( (u+√(u²+k))/ (b+√(b²+k)) ) )
+     *     L = √(A)/2 * (
+     *                   u*√(u²+k) - b*√(b²+k)
+     *                   + k*log( (u+√(u²+k)) / (b+√(b²+k)) )
+     *                   )
      * </pre>
      * <p>
      * References:
@@ -278,8 +283,8 @@ public class QuadCurves {
      * </dl>
      *
      * @param q      the coordinates of the control points of the bézier curve
+     * @param offset the offset of the first control point in {@code q}
      * @param t      the value of t in range [0,1]
-     * @param offset the offset of the first control point in {@code b}
      */
     public static double arcLength(double[] q, int offset, double t) {
         double x0 = q[offset],
@@ -288,23 +293,23 @@ public class QuadCurves {
                 y1 = q[offset + 3],
                 x2 = q[offset + 4],
                 y2 = q[offset + 5];
-        double ax, ay, bx, by, A, B, C, b, c, u, k, s;
+        double ax, ay, bx, by, A, B, C, b, c, u, k, E, F;
         ax = x0 - x1 - x1 + x2;
         ay = y0 - y1 - y1 + y2;
         bx = x1 + x1 - x0 - x0;
         by = y1 + y1 - y0 - y0;
         A = 4.0 * (ax * ax + ay * ay);
         B = 4.0 * (ax * bx + ay * by);
-        C = (bx * bx) + (by * by);
+        C = bx * bx + by * by;
         b = B / (2.0 * A);
         c = C / A;
         u = t + b;
         k = c - (b * b);
-        s = ((u * sqrt((u * u) + k))
-                - (b * sqrt((b * b) + k))
-                + (k * log(abs((u + sqrt((u * u) + k)) / (b + sqrt((b * b) + k)))))
-        ) * 0.5 * sqrt(A);
-        return s;
+        E = sqrt((u * u) + k);
+        F = sqrt((b * b) + k);
+        return 0.5 * sqrt(A)
+                * (u * E - b * F + (k * log(abs((u + E) / (b + F)))));
+
     }
 
     /**
@@ -344,6 +349,15 @@ public class QuadCurves {
      * @param offset the offset of the first control point in {@code p}
      */
     public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] p, int offset) {
+        // Instead of the code below, we could evaluate the magnitude of the derivative
+        /*
+        return (t)-> {
+            PointAndDerivative p = eval(v, offset, t);
+            return Math.hypot(p.dx(),p.dy());
+            //return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
+        };
+        */
+
         double x0 = p[offset],
                 y0 = p[offset + 1],
                 x1 = p[offset + 2],
@@ -361,5 +375,115 @@ public class QuadCurves {
 
         // Derivative:
         return (t) -> sqrt(A * t * t + B * t + C);
+    }
+
+    /**
+     * Approximates a cubic curve with up to 16 quadratic curves.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
+     *     Quadratic Approximation of Cubic Curves.
+     *     NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
+     *     Copyright 2020 held by the owner/author(s). Publication rights licensed to ACM.
+     *     </dt>
+     *     <dd><a href="https://ttnghia.github.io/pdf/QuadraticApproximation.pdf">ttnghia.github.io</a>
+     *     </dd>
+     * </dl>
+     *
+     * @param p       the points of the cubic curve
+     * @param offsetP the index of the first point in p
+     * @param q       the points of the quadratic curves (on output)
+     * @param offsetQ the index of the first point in q
+     * @return the number of quadratic curves
+     */
+    public static int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
+        return approximateCubicCurve(p, offsetP, q, offsetQ, tolerance, 3);
+    }
+
+    private static int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance, int maxDepth) {
+        double errorSquared = maxDepth == 0 ? 0 : estimateCubicCurveApproximationErrorSquared(p, offsetP);
+        if (errorSquared > tolerance * tolerance) {
+            // we should split
+
+            DoubleArrayList list = CubicCurveCharacteristics.inflectionPoints(p, offsetP);
+            Double singularPoint = CubicCurveCharacteristics.singularPoint(p, offsetP);
+            if (singularPoint != null) {
+                list.add(singularPoint);
+                list.sort();
+            }
+            final double epsilon = 1e-6;
+            for (double t : list) {
+                if (!Points.almostEqual(t, 0, epsilon) && !Points.almostEqual(t, 1, epsilon)) {
+                    return approximateCubicCurveSplitCase(p, offsetP, t, q, offsetQ, tolerance, maxDepth);
+                }
+            }
+            return approximateCubicCurveSplitCase(p, offsetP, 0.5, q, offsetQ, tolerance, maxDepth);
+        } else {
+            // we only need to split once or not at all
+            return approximateCubicCurveBaseCase(p, offsetP, q, offsetQ, tolerance);
+        }
+    }
+
+    private static int approximateCubicCurveSplitCase(double[] p, int offsetP, double t, double[] q, int offsetQ, double tolerance, int maxDepth) {
+        double[] pp = new double[8 * 2];
+        CubicCurves.split(p, offsetP, t, pp, 0, pp, 8);
+        int count = approximateCubicCurve(pp, 0, q, offsetQ, tolerance, maxDepth - 1);
+        return count + approximateCubicCurve(pp, 8, q, offsetQ + count * 6, tolerance, maxDepth - 1);
+    }
+
+    private static int approximateCubicCurveBaseCase(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
+        double x0 = p[offsetP];
+        double y0 = p[offsetP + 1];
+        double x1 = p[offsetP + 2];
+        double y1 = p[offsetP + 3];
+        double x2 = p[offsetP + 4];
+        double y2 = p[offsetP + 5];
+        double x3 = p[offsetP + 6];
+        double y3 = p[offsetP + 7];
+
+        // The quadratic curve always starts at the same point as the cubic curve
+        int qq = offsetQ;
+        q[qq] = x0;
+        q[qq + 1] = y0;
+
+        if (CubicCurve2D.getFlatnessSq(p, offsetP) <= tolerance * tolerance) {
+            // p1 and p2 coincide or
+            // the curve is almost flat
+            q[qq + 2] = (x0 + x3) * 0.5;
+            q[qq + 3] = (y0 + y3) * 0.5;
+            q[qq + 4] = x3;
+            q[qq + 5] = y3;
+            return 1;
+        }
+        double gamma = 0.5;
+        double x2i = x0 + (3.0 * 0.5 * gamma) * (x1 - x0);
+        double y2i = y0 + (3.0 * 0.5 * gamma) * (y1 - y0);
+        double x2iplus1 = x3 + (3.0 * 0.5 * (1 - gamma)) * (x2 - x3);
+        double y2iplus1 = y3 + (3.0 * 0.5 * (1 - gamma)) * (y2 - y3);
+        q[qq + 2] = x2i;
+        q[qq + 3] = y2i;
+        q[qq + 4] = q[qq + 6] = (1 - gamma) * x2i + gamma * x2iplus1;
+        q[qq + 5] = q[qq + 7] = (1 - gamma) * y2i + gamma * y2iplus1;
+        q[qq + 8] = x2iplus1;
+        q[qq + 9] = y2iplus1;
+        q[qq + 10] = x3;
+        q[qq + 11] = y3;
+        return 2;
+    }
+
+    private static double estimateCubicCurveApproximationErrorSquared(double[] p, int offsetP) {
+        double x0 = p[offsetP];
+        double y0 = p[offsetP + 1];
+        double x1 = p[offsetP + 2];
+        double y1 = p[offsetP + 3];
+        double x2 = p[offsetP + 4];
+        double y2 = p[offsetP + 5];
+        double x3 = p[offsetP + 6];
+        double y3 = p[offsetP + 7];
+
+        double ex = -x0 + 3 * x1 - 3 * x2 + x3;
+        double ey = -y0 + 3 * y1 - 3 * y2 + y3;
+        return (ex * ex + ey * ey) * (1.0 / (54 * 54));
     }
 }

@@ -34,10 +34,10 @@ public class IntersectCubicCurvePoint {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndDerivative tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
                     0, 1, 0
             ));
         }

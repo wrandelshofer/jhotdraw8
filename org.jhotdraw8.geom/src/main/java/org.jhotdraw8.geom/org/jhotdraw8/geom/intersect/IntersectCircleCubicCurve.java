@@ -7,7 +7,7 @@ package org.jhotdraw8.geom.intersect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.CubicCurves;
-import org.jhotdraw8.geom.PointAndTangent;
+import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
@@ -60,9 +60,9 @@ public class IntersectCircleCubicCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndTangent tangentA = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
+            PointAndDerivative tangentA = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
             list.add(new IntersectionPointEx(x, y,
-                    ip.getArgumentA(), tangentA.tangentX(), tangentA.tangentY(),
+                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
                     Angles.atan2(y - cy, x - cx), y - cy, cx - x));
         }
 

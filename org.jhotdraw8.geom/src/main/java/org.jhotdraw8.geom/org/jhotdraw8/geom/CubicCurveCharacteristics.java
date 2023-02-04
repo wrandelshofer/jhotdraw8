@@ -1,5 +1,7 @@
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 
 import java.awt.geom.CubicCurve2D;
@@ -20,24 +22,36 @@ public class CubicCurveCharacteristics {
 
     public enum Characteristics {
         PLAIN_CURVE,
+        /**
+         * The curve has 1 inflection point.
+         */
         SINGLE_INFLECTION,
+        /** The curve has 2 inflection points. */
         DOUBLE_INFLECTION,
+        /** The curve has 1 cusp at the singular point. */
         CUSP,
+        /** The curve has a loop that intersects neither at t0 nor at t1 with the curve. */
         LOOP,
+        /**
+         * The curve has a loop that intersects at t0 with the curve.
+         */
         LOOP_AT_T_0,
+        /**
+         * The curve has a loop that intersects at t1 with the curve.
+         */
         LOOP_AT_T_1,
+        /**
+         * The curve is (almost) a line.
+         */
         COLLINEAR
     }
 
 
-    public static Characteristics characteristics(double[] b) {
-        if (b.length != 8) {
-            throw new IllegalArgumentException("b must be cubic bézier curve");
-        }
-        return characteristics(b[0], b[1],
-                b[2], b[3],
-                b[4], b[5],
-                b[6], b[7]);
+    public static Characteristics characteristics(double[] b, int o) {
+        return characteristics(b[o + 0], b[o + 1],
+                b[o + 2], b[o + 3],
+                b[o + 4], b[o + 5],
+                b[o + 6], b[o + 7]);
     }
 
     /**
@@ -192,8 +206,22 @@ public class CubicCurveCharacteristics {
     /**
      * Computes the inflection points of the given cubic curve.
      */
-    public DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
+    public @NonNull DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
         return inflectionPoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
+    }
+
+    public static @NonNull DoubleArrayList inflectionPoints(double[] b, int o) {
+        return inflectionPoints(b[o + 0], b[o + 1],
+                b[o + 2], b[o + 3],
+                b[o + 4], b[o + 5],
+                b[o + 6], b[o + 7]);
+    }
+
+    public static @Nullable Double singularPoint(double[] b, int o) {
+        return singularPoint(b[o + 0], b[o + 1],
+                b[o + 2], b[o + 3],
+                b[o + 4], b[o + 5],
+                b[o + 6], b[o + 7]);
     }
 
     /**
@@ -221,12 +249,12 @@ public class CubicCurveCharacteristics {
      *    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
      * </dl>
      */
-    public static DoubleArrayList inflectionPoints(double x0, double y0,
-                                                   double x1, double y1,
-                                                   double x2, double y2,
-                                                   double x3, double y3) {
+    public static @NonNull DoubleArrayList inflectionPoints(double x0, double y0,
+                                                            double x1, double y1,
+                                                            double x2, double y2,
+                                                            double x3, double y3) {
 
-        DoubleArrayList result = new DoubleArrayList();
+        DoubleArrayList result = new DoubleArrayList(2);
         double[] n = align(x0, y0, x1, y1, x2, y2, x3, y3);
         double
                 ax1 = n[2],
@@ -268,10 +296,10 @@ public class CubicCurveCharacteristics {
     }
 
 
-    public static Double singularPoint(double x0, double y0,
-                                       double x1, double y1,
-                                       double x2, double y2,
-                                       double x3, double y3) {
+    public static @Nullable Double singularPoint(double x0, double y0,
+                                                 double x1, double y1,
+                                                 double x2, double y2,
+                                                 double x3, double y3) {
 
         double[] n = align(x0, y0, x1, y1, x2, y2, x3, y3);
         double

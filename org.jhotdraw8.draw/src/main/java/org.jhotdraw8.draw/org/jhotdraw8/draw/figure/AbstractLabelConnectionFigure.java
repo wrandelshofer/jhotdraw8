@@ -29,7 +29,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
-import org.jhotdraw8.geom.PointAndTangent;
+import org.jhotdraw8.geom.PointAndDerivative;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,9 +221,9 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
         final UnitConverter units = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
-        final PointAndTangent pointAndTangent = labelConnector.getPointAndTangentInWorld(this, labelTarget);
-        final Point2D labeledLoc = worldToParent(pointAndTangent.getPoint(Point2D::new));
-        final Point2D tangent = getWorldToParent().deltaTransform(pointAndTangent.getTangent(Point2D::new)).normalize();
+        final PointAndDerivative pointAndDerivative = labelConnector.getPointAndTangentInWorld(this, labelTarget);
+        final Point2D labeledLoc = worldToParent(pointAndDerivative.getPoint(Point2D::new));
+        final Point2D tangent = getWorldToParent().deltaTransform(pointAndDerivative.getDerivative(Point2D::new)).normalize();
         final Point2D perp = FXGeom.perp(tangent);
 
         final double labelOffsetX = getStyledNonNull(LABEL_OFFSET_X).getConvertedValue(units);

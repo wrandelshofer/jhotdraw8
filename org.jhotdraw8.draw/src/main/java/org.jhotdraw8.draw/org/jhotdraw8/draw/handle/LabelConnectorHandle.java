@@ -23,7 +23,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.PointAndTangent;
+import org.jhotdraw8.geom.PointAndDerivative;
 
 import java.util.function.Function;
 
@@ -115,9 +115,9 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         lineNode.setStartX(origin.getX());
         lineNode.setStartY(origin.getY());
         if (isConnected) {
-            PointAndTangent pointAndTangent = connector.getPointAndTangentInWorld(owner, target);
-            connectorLocation = view.worldToView(pointAndTangent.getPoint(Point2D::new));
-            connectorTangent = view.getWorldToView().deltaTransform(pointAndTangent.getTangent(Point2D::new));
+            PointAndDerivative pointAndDerivative = connector.getPointAndTangentInWorld(owner, target);
+            connectorLocation = view.worldToView(pointAndDerivative.getPoint(Point2D::new));
+            connectorTangent = view.getWorldToView().deltaTransform(pointAndDerivative.getDerivative(Point2D::new));
             if (connectorLocation != null) {
                 targetNode.relocate(connectorLocation.getX() - size * 0.5, connectorLocation.getY() - size * 0.5);
                 lineNode.setEndX(connectorLocation.getX());

@@ -230,9 +230,9 @@ public class Lines {
         return new Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
-    public static @NonNull PointAndTangent eval(double[] a, int offset, double t) {
+    public static @NonNull PointAndDerivative eval(double[] a, int offset, double t) {
         double x0 = a[offset], y0 = a[offset + 1], x1 = a[offset + 2], y1 = a[offset + 3];
-        return new PointAndTangent(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t,
+        return new PointAndDerivative(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t,
                 x1 - x0, y1 - y0);
     }
 

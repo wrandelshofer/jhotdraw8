@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
-    private final List<PointAndTangent> startPoints = new ArrayList<>();
-    private final List<PointAndTangent> endPoints = new ArrayList<>();
+    private final List<PointAndDerivative> startPoints = new ArrayList<>();
+    private final List<PointAndDerivative> endPoints = new ArrayList<>();
 
     private double startX;
     private double startY;
@@ -35,8 +35,8 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
     @Override
     protected void doPathDone() {
         if (startDone) {
-            startPoints.add(new PointAndTangent(startX, startY, startTangentX, startTangentY));
-            endPoints.add(new PointAndTangent(endX, endY, endTangentX, endTangentY));
+            startPoints.add(new PointAndDerivative(startX, startY, startTangentX, startTangentY));
+            endPoints.add(new PointAndDerivative(endX, endY, endTangentX, endTangentY));
         }
         startDone = false;
     }
@@ -74,8 +74,8 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
     @Override
     protected void doMoveTo(double x, double y) {
         if (startDone) {
-            startPoints.add(new PointAndTangent(startX, startY, startTangentX, startTangentY));
-            endPoints.add(new PointAndTangent(endX, endY, endTangentX, endTangentY));
+            startPoints.add(new PointAndDerivative(startX, startY, startTangentX, startTangentY));
+            endPoints.add(new PointAndDerivative(endX, endY, endTangentX, endTangentY));
             startDone = false;
         }
     }
@@ -95,11 +95,11 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
         endTangentY = y2 - y1;
     }
 
-    public @NonNull List<PointAndTangent> getStartPoints() {
+    public @NonNull List<PointAndDerivative> getStartPoints() {
         return startPoints;
     }
 
-    public @NonNull List<PointAndTangent> getEndPoints() {
+    public @NonNull List<PointAndDerivative> getEndPoints() {
         return endPoints;
     }
 
