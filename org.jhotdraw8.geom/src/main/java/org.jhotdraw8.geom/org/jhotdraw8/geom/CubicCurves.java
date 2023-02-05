@@ -374,22 +374,16 @@ public class CubicCurves {
      * @param ta where to split
      * @param tb where to split
      */
-    public static double[] subCurve(double x0, double y0,
-                                    double x1, double y1,
-                                    double x2, double y2,
-                                    double x3, double y3,
-                                    double ta, double tb) {
-        double[] left = new double[6];
-        double[] right = new double[6];
-        double tab = ta / tb;
-        split(x0, y0,
-                x1, y1, x2, y2, x3, y3, tb, left, null);
-        split(x0, y0,
-                left[0], left[1], left[2], left[3], left[4], left[5], tab, left, right);
-        return new double[]{left[4], left[5],
-                right[0], right[1], right[2], right[3], right[4], right[5]};
-    }
 
+    public static void subCurve(@NonNull double[] q, int offset,
+                                double ta, double tb,
+                                @NonNull double[] first, int offsetFirst) {
+        double tab = ta / tb;
+        split(q, offset,
+                tb, null, 0, first, offsetFirst);
+        split(first, offsetFirst, tab,
+                null, 0, first, offsetFirst);
+    }
 
     /**
      * From paper.js, src/path/Curve.js, MIT License.

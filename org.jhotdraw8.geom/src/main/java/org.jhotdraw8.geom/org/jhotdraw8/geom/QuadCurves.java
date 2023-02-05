@@ -127,20 +127,20 @@ public class QuadCurves {
     }
 
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2, double t,
-                             double[] left,
-                             double[] right) {
+                             double[] first,
+                             double[] second) {
         split(x0, y0, x1, y1, x2, y2, t,
                 (a, b, c, d) -> {
-                    left[0] = a;
-                    left[1] = b;
-                    left[2] = c;
-                    left[3] = d;
+                    first[0] = a;
+                    first[1] = b;
+                    first[2] = c;
+                    first[3] = d;
                 },
                 (a, b, c, d) -> {
-                    right[0] = a;
-                    right[1] = b;
-                    right[2] = c;
-                    right[3] = d;
+                    second[0] = a;
+                    second[1] = b;
+                    second[2] = c;
+                    second[3] = d;
                 });
 
     }
@@ -148,19 +148,20 @@ public class QuadCurves {
     /**
      * Splits the provided bezier curve into two parts.
      *
-     * @param x0           point 1 of the curve
-     * @param y0           point 1 of the curve
-     * @param x1           point 2 of the curve
-     * @param y1           point 2 of the curve
-     * @param x2           point 3 of the curve
-     * @param y2           point 3 of the curve
-     * @param t            where to split
-     * @param leftCurveTo  if not null, accepts the curve from x1,y1 to t
-     * @param rightCurveTo if not null, accepts the curve from t to x3,y3
+     * @param x0     point 1 of the curve
+     * @param y0     point 1 of the curve
+     * @param x1     point 2 of the curve
+     * @param y1     point 2 of the curve
+     * @param x2     point 3 of the curve
+     * @param y2     point 3 of the curve
+     * @param t      where to split
+     * @param first  if not null, accepts the curve from x1,y1 to t
+     * @param second if not null, accepts the curve from t to x3,y3
      */
-    public static void split(double x0, double y0, double x1, double y1, double x2, double y2, double t,
-                             @Nullable Double4Consumer leftCurveTo,
-                             @Nullable Double4Consumer rightCurveTo) {
+    public static void split(double x0, double y0, double x1, double y1, double x2, double y2,
+                             double t,
+                             @Nullable Double4Consumer first,
+                             @Nullable Double4Consumer second) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -169,39 +170,65 @@ public class QuadCurves {
         x012 = lerp(x01, x12, t);
         y012 = lerp(y01, y12, t);
 
-        if (leftCurveTo != null) {
-            leftCurveTo.accept(x01, y01, x012, y012);
+        if (first != null) {
+            first.accept(x01, y01, x012, y012);
         }
-        if (rightCurveTo != null) {
-            rightCurveTo.accept(x12, y12, x2, y2);
+        if (second != null) {
+            second.accept(x12, y12, x2, y2);
+        }
+    }
+
+    /**
+     * Splits the provided bezier curve into two parts.
+     *
+     * @param t      where to split
+     * @param first  if not null, accepts the curve from x1,y1 to t
+     * @param second if not null, accepts the curve from t to x3,y3
+     */
+    public static void split(@NonNull double[] p, int o, double t,
+                             @Nullable double[] first, int offsetFirst,
+                             @Nullable double[] second, int offsetSecond) {
+        double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3], x2 = p[o + 4], y2 = p[o + 5];
+        final double x01, y01, x12, y12, x012, y012;
+        x01 = lerp(x0, x1, t);
+        y01 = lerp(y0, y1, t);
+        x12 = lerp(x1, x2, t);
+        y12 = lerp(y1, y2, t);
+        x012 = lerp(x01, x12, t);
+        y012 = lerp(y01, y12, t);
+
+        if (first != null) {
+            first[offsetFirst] = x0;
+            first[offsetFirst + 1] = y0;
+            first[offsetFirst + 2] = x01;
+            first[offsetFirst + 3] = y01;
+            first[offsetFirst + 4] = x012;
+            first[offsetFirst + 5] = y012;
+        }
+        if (second != null) {
+            first[offsetFirst] = x012;
+            first[offsetFirst + 1] = y012;
+            second[offsetSecond + 2] = x12;
+            second[offsetSecond + 3] = y12;
+            second[offsetSecond + 4] = x2;
+            second[offsetSecond + 5] = y2;
         }
     }
 
     /**
      * Extracts the specified segment [ta,tb] from the given quad curve.
      *
-     * @param x0 point P0 of the curve
-     * @param y0 point P0 of the curve
-     * @param x1 point P1 of the curve
-     * @param y1 point P1 of the curve
-     * @param x2 point P2 of the curve
-     * @param y2 point P2 of the curve
      * @param ta where to split
      * @param tb where to split
      */
-    public static double[] subCurve(double x0, double y0,
-                                    double x1, double y1,
-                                    double x2, double y2,
-                                    double ta, double tb) {
-        double[] left = new double[4];
-        double[] right = new double[4];
+    public static void subCurve(@NonNull double[] q, int offset,
+                                double ta, double tb,
+                                @NonNull double[] first, int offsetFirst) {
         double tab = ta / tb;
-        split(x0, y0,
-                x1, y1, x2, y2, tb, left, null);
-        split(x0, y0,
-                left[0], left[1], left[2], left[3], tab, left, right);
-        return new double[]{left[2], left[3],
-                right[0], right[1], right[2], right[3]};
+        split(q, offset,
+                tb, null, 0, first, offsetFirst);
+        split(first, offsetFirst, tab,
+                null, 0, first, offsetFirst);
     }
 
 
@@ -219,7 +246,7 @@ public class QuadCurves {
      * @param b      the coordinates of the control points of the bézier curve
      * @param offset the offset of the first control point in {@code b}
      */
-    public static double arcLength(double[] b, int offset) {
+    public static double arcLength(@NonNull double[] b, int offset) {
         return arcLength(b, offset, 1.0);
     }
 

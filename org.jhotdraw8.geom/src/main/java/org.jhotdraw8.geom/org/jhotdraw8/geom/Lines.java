@@ -199,26 +199,69 @@ public class Lines {
     /**
      * Splits the provided line into two parts.
      *
-     * @param x0          point 1 of the line
-     * @param y0          point 1 of the line
-     * @param x1          point 2 of the line
-     * @param y1          point 2 of the line
-     * @param t           where to split
-     * @param leftLineTo  if not null, accepts the curve from x1,y1 to t1
-     * @param rightLineTo if not null, accepts the curve from t1 to x2,y2
+     * @param x0     point 1 of the line
+     * @param y0     point 1 of the line
+     * @param x1     point 2 of the line
+     * @param y1     point 2 of the line
+     * @param t      where to split
+     * @param first  if not null, accepts the curve from x1,y1 to t1
+     * @param second if not null, accepts the curve from t1 to x2,y2
      */
     public static void split(double x0, double y0, double x1, double y1, double t,
-                             @Nullable Double2Consumer leftLineTo,
-                             @Nullable Double2Consumer rightLineTo) {
+                             @Nullable Double2Consumer first,
+                             @Nullable Double2Consumer second) {
         final double x12 = (x1 - x0) * t + x0;
         final double y12 = (y1 - y0) * t + y0;
 
-        if (leftLineTo != null) {
-            leftLineTo.accept(x12, y12);
+        if (first != null) {
+            first.accept(x12, y12);
         }
-        if (rightLineTo != null) {
-            rightLineTo.accept(x1, y1);
+        if (second != null) {
+            second.accept(x1, y1);
         }
+    }
+
+    /**
+     * Splits the provided line into two parts.
+     */
+    public static void split(@NonNull double[] p, int o,
+                             double t,
+                             @Nullable double[] first, int offsetFirst,
+                             @Nullable double[] second, int offsetSecond) {
+        double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3];
+        final double x12 = (x1 - x0) * t + x0;
+        final double y12 = (y1 - y0) * t + y0;
+
+        if (first != null) {
+            first[offsetFirst] = x0;
+            first[offsetFirst + 1] = y0;
+            first[offsetFirst + 2] = x12;
+            first[offsetFirst + 3] = y12;
+        }
+        if (second != null) {
+            second[offsetSecond] = x12;
+            second[offsetSecond + 1] = y12;
+            second[offsetSecond + 2] = x1;
+            second[offsetSecond + 3] = y1;
+        }
+    }
+
+    /**
+     * Extracts a sub-line.
+     */
+    public static void subLine(@NonNull double[] p, int o,
+                               double t0, double t1,
+                               @NonNull double[] first, int offsetFirst) {
+        double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3];
+        final double x11 = (x1 - x0) * t0 + x0;
+        final double y11 = (y1 - y0) * t0 + y0;
+        final double x22 = (x1 - x0) * t1 + x0;
+        final double y22 = (y1 - y0) * t1 + y0;
+
+        first[offsetFirst] = x11;
+        first[offsetFirst + 1] = y11;
+        first[offsetFirst + 2] = x22;
+        first[offsetFirst + 3] = y22;
     }
 
     public static @NonNull Point2D.Double lerp(double x0, double y0, double x1, double y1, double t) {

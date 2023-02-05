@@ -53,7 +53,7 @@ public class PathMetrics {
      * @return point and tangent at t
      */
     public @NonNull PointAndDerivative eval(double t) {
-        return evalAtArcLength(t * getLength());
+        return evalAtArcLength(t * getArcLength());
     }
 
     /**
@@ -92,7 +92,144 @@ public class PathMetrics {
      *
      * @return the length of the path in [0,Double.MAX_VALUE].
      */
-    public double getLength() {
+    public double getArcLength() {
         return accumulatedLengths[accumulatedLengths.length - 1];
+    }
+
+    /**
+     * Builds a sub-path from t0 to t1.
+     *
+     * @param t0 the start time in [0,1].
+     * @param t1 the end time in [0,1].
+     * @param b  the builder
+     */
+    public void buildSubPath(double t0, double t1, @NonNull PathBuilder b, boolean skipFirstMoveTo) {
+        double totalArcLength = getArcLength();
+        double s0 = t0 * totalArcLength;
+        double s1 = t1 * totalArcLength;
+        int search0 = t0 == 0 ? 0 : Arrays.binarySearch(accumulatedLengths, s0);
+        boolean startsAtSegment = search0 >= 0;
+        int i0 = search0 < 0 ? ~search0 : search0;
+        if (i0 == 0 && skipFirstMoveTo) {
+            i0++;
+        }
+        while (i0 < commands.length && commands[i0] == SEG_CLOSE) i0++;
+
+        int search1 = t1 == 1 ? commands.length - 1 : Arrays.binarySearch(accumulatedLengths, s1);
+        boolean endsAtSegment = search1 >= 0;
+        int i1 = search1 < 0 ? ~search1 : search1;
+        while (i1 >= 0 && commands[i1] == SEG_MOVETO) i1--;
+        if (i1 < i0) return;
+
+        double[] splitCoords = new double[8];
+        if (i0 == i1 && !startsAtSegment && !endsAtSegment) {
+            int offset = offsets[i0];
+            double sStart = s0 - accumulatedLengths[i0 - 1];
+            double sEnd = s1 - accumulatedLengths[i0 - 1];
+            double arcLength = accumulatedLengths[i0] - accumulatedLengths[i0 - 1];
+            switch (commands[i0]) {
+                case SEG_CLOSE -> b.closePath();
+                case SEG_MOVETO -> b.moveTo(coords[offset], coords[offset + 1]);
+                case SEG_LINETO -> {
+                    Lines.subLine(coords, offset - 2,
+                            sStart / arcLength, sEnd / arcLength, splitCoords, 0);
+                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    b.lineTo(splitCoords[2], splitCoords[3]);
+                }
+                case SEG_QUADTO -> {
+                    QuadCurves.subCurve(coords, offset - 2,
+                            QuadCurves.invArcLength(coords, offset - 1, sStart),
+                            QuadCurves.invArcLength(coords, offset - 1, sEnd),
+                            splitCoords, 0);
+                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
+                }
+                case SEG_CUBICTO -> {
+                    CubicCurves.subCurve(coords, offset - 2,
+                            QuadCurves.invArcLength(coords, offset - 1, sStart),
+                            QuadCurves.invArcLength(coords, offset - 1, sEnd),
+                            splitCoords, 0);
+                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
+                }
+                default -> throw new IllegalStateException("unexpected command=" + commands[i0] + " at index=" + i0);
+            }
+            return;
+        }
+
+        if (!startsAtSegment) {
+            int offset = offsets[i0];
+            double s = s0 - accumulatedLengths[i0 - 1];
+            double arcLength = accumulatedLengths[i0] - accumulatedLengths[i0 - 1];
+            switch (commands[i0]) {
+                case SEG_CLOSE, SEG_MOVETO -> {
+                }
+                case SEG_LINETO -> {
+                    Lines.split(coords, offset - 2,
+                            s / arcLength, null, 0, splitCoords, 0);
+                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    b.lineTo(splitCoords[2], splitCoords[3]);
+                }
+                case SEG_QUADTO -> {
+                    QuadCurves.split(coords, offset - 2,
+                            QuadCurves.invArcLength(coords, offset - 1, s), null, 0, splitCoords, 0);
+                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
+                }
+                case SEG_CUBICTO -> {
+                    CubicCurves.split(coords, offset - 2,
+                            CubicCurves.invArcLength(coords, offset - 1, s), null, 0, splitCoords, 0);
+                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
+                }
+                default -> throw new IllegalStateException("unexpected command=" + commands[i0] + " at index=" + i0);
+            }
+        } else {
+            if (commands[i0] != SEG_MOVETO) {
+                int offset = offsets[i0];
+                if (offset > 0) {
+                    b.moveTo(coords[offset - 2], coords[offset - 1]);
+                }
+            }
+        }
+
+        for (int i = startsAtSegment ? i0 : i0 + 1, n = endsAtSegment ? i1 : i1 - 1; i < n; i++) {
+            int offset = offsets[i];
+            switch (commands[i]) {
+                case SEG_CLOSE -> b.closePath();
+                case SEG_MOVETO -> b.moveTo(coords[offset], coords[offset + 1]);
+                case SEG_LINETO -> b.lineTo(coords[offset], coords[offset + 1]);
+                case SEG_QUADTO -> b.quadTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3]);
+                case SEG_CUBICTO ->
+                        b.curveTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3], coords[offset + 4], coords[offset + 5]);
+                default -> throw new IllegalStateException("unexpected command=" + commands[i] + " at index=" + i);
+            }
+        }
+        if (!endsAtSegment) {
+            int offset = offsets[i1];
+            double s = s0 - accumulatedLengths[i1 - 1];
+            double arcLength = accumulatedLengths[i1] - accumulatedLengths[i1 - 1];
+            switch (commands[i1]) {
+                case SEG_CLOSE -> b.closePath();
+                case SEG_MOVETO -> {
+                }
+                case SEG_LINETO -> {
+                    Lines.split(coords, offset - 2,
+                            (s0 - accumulatedLengths[i0 - 1]) / arcLength, splitCoords, 0, null, 0);
+                    b.lineTo(splitCoords[2], splitCoords[3]);
+                }
+                case SEG_QUADTO -> {
+                    QuadCurves.split(coords, offset - 2,
+                            QuadCurves.invArcLength(coords, offset - 1, s), splitCoords, 0, null, 0);
+                    b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
+                }
+                case SEG_CUBICTO -> {
+                    CubicCurves.split(coords, offset - 2,
+                            CubicCurves.invArcLength(coords, offset - 1, s), splitCoords, 0, null, 0);
+                    b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
+                }
+                default -> throw new IllegalStateException("unexpected command=" + commands[i1] + " at index=" + i1);
+            }
+        }
     }
 }
