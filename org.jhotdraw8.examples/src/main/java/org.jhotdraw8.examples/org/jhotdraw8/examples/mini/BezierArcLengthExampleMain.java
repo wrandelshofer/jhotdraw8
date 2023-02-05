@@ -182,14 +182,12 @@ public class BezierArcLengthExampleMain extends Application {
                         curve.getEndY())).getPathIterator(null, 1.0)
         );
 
-        double gravesen = CubicCurveArcLengthGravesen.arcLength(b, 0.001);
-        double romberg = CubicCurveArcLengthRomberg.arcLength(b, 0, 0.001);
-        double simpson = CubicCurveArcLengthSimpson.arcLength(b, 0, 0.001);
-        double gaussLegendre = CubicCurveArcLengthGaussLegendre.arcLength(b, 0);
+        double romberg = arcLengthRomberg(b, 0, 0.001);
+        double simpson = arcLengthSimpson(b, 0, 0.001);
+        double gaussLegendre = arcLengthGaussLegendre(b, 0);
 
         label.setText("length"
                 + "\n ∑:" + (float) param.length + " segs: " + param.segments.size()
-                + "\n gravesen:" + (float) gravesen
                 + "\n romberg:" + (float) romberg
                 + "\n simpson:" + (float) simpson
                 + "\n gauss:" + (float) gaussLegendre
@@ -270,7 +268,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndY()
         };
         ToDoubleFunction<Double> f = getArcLengthIntegrand(b, 0);
-        OrderedPair<ToDoubleFunction<Double>, Double> pair = Solvers.invSpeedPolynomialChebyshevApprox(20, Integrals::gaussLegendre7, f, 0, 1);
+        OrderedPair<ToDoubleFunction<Double>, Double> pair = Solvers.invPolynomialChebyshevApprox(20, Integrals::gaussLegendre7, f, 0, 1);
         //OrderedPair<ToDoubleFunction<Double>, Double> pair = IntegralAlgorithms.invSpeedPolynomialChebyshevApprox(20, (f1, t0, t1) -> IntegralAlgorithms.rombergQuadrature(f1, t0, t1,0.1), f, 0, 1);
         //OrderedPair<ToDoubleFunction<Double>, Double> pair = IntegralAlgorithms.invPolynomialApprox3( IntegralAlgorithms::gaussLegendre7, f, 0, 1);
         ToDoubleFunction<Double> sToT = pair.first();
@@ -458,6 +456,21 @@ public class BezierArcLengthExampleMain extends Application {
                 sum.accept(seg.length);
             }
         }
+    }
 
+
+    public static double arcLengthGaussLegendre(double[] b, int offset) {
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(b, offset);
+        return Integrals.gaussLegendre7(f, 0, 1);
+    }
+
+    public static double arcLengthRomberg(double[] b, int offset, double eps) {
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(b, offset);
+        return Integrals.rombergQuadrature(f, 0, 1, eps);
+    }
+
+    public static double arcLengthSimpson(double[] b, int offset, double eps) {
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(b, offset);
+        return Integrals.simpson(f, 0, 1, eps);
     }
 }

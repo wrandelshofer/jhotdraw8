@@ -1,6 +1,5 @@
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
@@ -9,6 +8,16 @@ import java.util.function.ToDoubleFunction;
 
 import static java.lang.Math.*;
 
+/**
+ * A polynomial.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>polynomial.js</dt>
+ *     <dd>polynomial.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+ *     <a href="http://www.kevlindev.com/gui/math/polynomial/Polynomial.js">kevlindev.com</a></dd>
+ * </dl>
+ */
 public class Polynomial implements ToDoubleFunction<Double> {
 
     private static final double ACCURACY = 6;
@@ -158,10 +167,8 @@ public class Polynomial implements ToDoubleFunction<Double> {
 
                 if (value * minValue < 0) {
                     max = result;
-                    maxValue = value;
                 } else {
                     min = result;
-                    minValue = value;
                 }
             }
         }
@@ -652,96 +659,6 @@ public class Polynomial implements ToDoubleFunction<Double> {
         return finalResults;
     }
 
-    /**
-     * Estimates the integral of the given function in the given interval using the
-     * trapezoidal rule.
-     * <p>
-     * trapezoid Based on trapzd in "Numerical Recipes in C", page 137
-     *
-     * @param func the function
-     * @param min  the lower bound of the interval
-     * @param max  the upper bound of the interval
-     * @param n    the number of trapezoids
-     * @return the area of the function
-     */
-    public static double trapezoid(@NonNull ToDoubleFunction<Double> func, double min, double max, int n) {
-
-        double range = max - min;
-        double _s = 0;
-        if (n == 1) {
-            double minValue = func.applyAsDouble(min);
-            double maxValue = func.applyAsDouble(max);
-            _s = 0.5 * range * (minValue + maxValue);
-        } else {
-            double it = 1 << (n - 2);
-            double delta = range / it;
-            double x = min + 0.5 * delta;
-            double sum = 0;
-
-            for (double i = 0; i < it; i++) {
-                sum += func.applyAsDouble(x);
-                x += delta;
-            }
-            _s = 0.5 * (_s + range * sum / it);
-        }
-
-        return _s;
-    }
-
-    /**
-     * Interpolate. Computes y and dy for a given x.
-     *
-     * @param xs
-     * @param ys
-     * @param n
-     * @param offset
-     * @param x
-     * @return a tuple: y, dy
-     */
-    private static @NonNull Point2D interpolate(double[] xs, double[] ys, int n, int offset, double x) {
-
-        double y;
-        double dy = 0;
-        double[] c = new double[n];
-        double[] d = new double[n];
-        int ns = 0;
-        Point2D result;
-
-        double diff = abs(x - xs[offset]);
-        for (int i = 0; i < n; i++) {
-            double dift = abs(x - xs[offset + i]);
-
-            if (dift < diff) {
-                ns = i;
-                diff = dift;
-            }
-            c[i] = d[i] = ys[offset + i];
-        }
-        y = ys[offset + ns];
-        ns--;
-
-        for (int m = 1; m < n; m++) {
-            for (int i = 0; i < n - m; i++) {
-                double ho = xs[offset + i] - x;
-                double hp = xs[offset + i + m] - x;
-                double w = c[i + 1] - d[i];
-                double den = ho - hp;
-
-                if (den == 0.0) {
-                    result = new Point2D(0, 0); //{ y: 0, dy: 0};
-                    break;
-                }
-
-                den = w / den;
-                d[i] = hp * den;
-                c[i] = ho * den;
-            }
-            dy = (2 * (ns + 1) < (n - m)) ? c[ns + 1] : d[ns--];
-            y += dy;
-        }
-
-        return new Point2D(y, dy);// { y: y, dy: dy };
-    }
 
     /**
      * Estimates the arc length of the polynomial in the interval [min,max].

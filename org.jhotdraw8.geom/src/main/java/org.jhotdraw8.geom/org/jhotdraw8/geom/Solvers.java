@@ -260,7 +260,7 @@ public class Solvers {
      * @param tmax
      * @return
      */
-    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> invSpeedPolynomialChebyshevApprox(
+    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
             int N,
             @NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             @NonNull ToDoubleFunction<Double> fp,

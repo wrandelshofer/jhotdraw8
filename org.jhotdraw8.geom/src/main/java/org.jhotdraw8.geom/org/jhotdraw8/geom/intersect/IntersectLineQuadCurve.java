@@ -150,11 +150,11 @@ public class IntersectLineQuadCurve {
     }
 
     /**
-     * The code of this method has been derived from intersection.js [1].
+     * The code of this method has been derived from intersection.js.
      * <p>
      * References:
      * <dl>
-     *     <dt>[1] intersection.js</dt>
+     *     <dt>intersection.js</dt>
      *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
      *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
      * </dl>

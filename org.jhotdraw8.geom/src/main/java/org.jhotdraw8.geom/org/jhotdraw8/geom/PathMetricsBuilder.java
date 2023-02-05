@@ -54,7 +54,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        double length = CubicCurveArcLengthSimpson.arcLength(coords.getArray(), coords.size() - 8, 0.1);
+        double length = CubicCurves.arcLength(coords.getArray(), coords.size() - 8, 0.1);
         if (length > 0) {
             commands.addAsByte(SEG_CUBICTO);
             offsets.addAsInt(offsets.size() + 6);

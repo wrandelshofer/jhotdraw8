@@ -35,7 +35,6 @@ public class Integrals {
      * @param f       the function
      * @param t0      the lower bound of the integral
      * @param t1      the upper bound of the integral
-     * @param epsilon the desired precision
      * @return the estimated integral
      */
     public static double rombergQuadrature(ToDoubleFunction<Double> f, double t0, double t1) {
