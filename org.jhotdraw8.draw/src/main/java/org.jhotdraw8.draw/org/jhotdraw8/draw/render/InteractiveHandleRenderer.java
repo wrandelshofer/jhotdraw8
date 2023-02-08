@@ -50,41 +50,41 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class InteractiveHandleRenderer {
-    private static final String DRAWING_VIEW = "drawingView";
+    private static final @NonNull String DRAWING_VIEW = "drawingView";
     private final @NonNull Group handlesPane = new Group();
     private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
      */
-    private final Set<Figure> dirtyHandles = new HashSet<>();
+    private final @NonNull Set<Figure> dirtyHandles = new HashSet<>();
     /**
      * The selectedFiguresProperty holds the list of selected figures in the
      * sequence they were selected by the user.
      */
-    private final SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>()));
+    private final @NonNull SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>()));
     private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
+    private final @NonNull Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final Map<Figure, List<Handle>> handles = new LinkedHashMap<>();
-    private final ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
+    private final @NonNull Map<Figure, List<Handle>> handles = new LinkedHashMap<>();
+    private final @NonNull ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
 
     /**
      * Provides a read-only view on the current set of handles.
      */
-    private final ReadOnlySetWrapper<Handle> handlesProperty = new ReadOnlySetWrapper<>(this, "handles", FXCollections.unmodifiableObservableSet(handlesView));
+    private final @NonNull ReadOnlySetWrapper<Handle> handlesProperty = new ReadOnlySetWrapper<>(this, "handles", FXCollections.unmodifiableObservableSet(handlesView));
 
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
      */
-    private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
-    private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
+    private final @NonNull ArrayList<Handle> secondaryHandles = new ArrayList<>();
+    private final @NonNull ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
     private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, "model", new SimpleDrawingModel());
@@ -101,7 +101,7 @@ public class InteractiveHandleRenderer {
 
     }
 
-    private void onDrawingModelChanged(Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    private void onDrawingModelChanged(@NonNull Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(treeModelListener);
         }
@@ -172,11 +172,11 @@ public class InteractiveHandleRenderer {
         return null;
     }
 
-    private DrawingView getDrawingViewNonNull() {
+    private @NonNull DrawingView getDrawingViewNonNull() {
         return Objects.requireNonNull(drawingView.get(), "drawingView");
     }
 
-    DrawingEditor getEditor() {
+    @Nullable DrawingEditor getEditor() {
         return editorProperty().get();
     }
 
@@ -196,11 +196,11 @@ public class InteractiveHandleRenderer {
         return result.keySet();
     }
 
-    public Node getNode() {
+    public @NonNull Node getNode() {
         return handlesPane;
     }
 
-    ObservableSet<Figure> getSelectedFigures() {
+    @NonNull ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty().get();
     }
 
@@ -243,11 +243,11 @@ public class InteractiveHandleRenderer {
         flash.play();
     }
 
-    public Property<DrawingModel> modelProperty() {
+    public @NonNull Property<DrawingModel> modelProperty() {
         return model;
     }
 
-    private void onClipBoundsChanged(Observable observable) {
+    private void onClipBoundsChanged(@NonNull Observable observable) {
         invalidateHandles();
         repaint();
     }
@@ -267,7 +267,7 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    private void onTreeModelEvent(TreeModelEvent<Figure> event) {
+    private void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT:
@@ -330,13 +330,12 @@ public class InteractiveHandleRenderer {
         return selectedFigures;
     }
 
-    public void setDrawingView(DrawingView newValue) {
+    public void setDrawingView(@NonNull DrawingView newValue) {
         drawingView.set(newValue);
     }
 
     private void updateHandles() {
         if (recreateHandles) {
-            // FIXME - We create and destroy many handles here!!!
             for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
                 for (Handle h : entry.getValue()) {
                     h.dispose();
@@ -361,7 +360,6 @@ public class InteractiveHandleRenderer {
             for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
                 for (Handle handle : entry.getValue()) {
                     Node n = handle.getNode(getDrawingViewNonNull());
-                    handle.updateNode(getDrawingViewNonNull());
                     if (nodeToHandleMap.put(n, handle) == null) {
                         handlesPane.getChildren().add(n);
                         n.applyCss();
@@ -399,7 +397,7 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    public void setSelectedFigures(ObservableSet<Figure> selectedFigures) {
+    public void setSelectedFigures(@NonNull ObservableSet<Figure> selectedFigures) {
         this.selectedFigures.set(selectedFigures);
     }
 
