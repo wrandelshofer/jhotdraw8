@@ -145,8 +145,8 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private final @NonNull ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
     private final @NonNull Region background = new Region();
     private final @NonNull StackPane foreground = new StackPane();
-    private final InteractiveDrawingRenderer drawingRenderer = new InteractiveDrawingRenderer();
-    private final InteractiveHandleRenderer handleRenderer = new InteractiveHandleRenderer();
+    private final @NonNull InteractiveDrawingRenderer drawingRenderer = new InteractiveDrawingRenderer();
+    private final @NonNull InteractiveHandleRenderer handleRenderer = new InteractiveHandleRenderer();
     private boolean isLayoutValid = true;
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
 
@@ -219,12 +219,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public Node getNode() {
+    public @NonNull Node getNode() {
         return node;
     }
 
     @Override
-    public @Nullable Node getNode(Figure f) {
+    public @Nullable Node getNode(@NonNull Figure f) {
         return drawingRenderer.getNode(f);
     }
 
@@ -264,7 +264,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         CustomBinding.bind(focused, toolProperty(), Tool::focusedProperty);
     }
 
-    private void onContentToViewChanged(Observable observable) {
+    private void onContentToViewChanged(@NonNull Observable observable) {
         updateBackgroundNode();
     }
 
@@ -289,16 +289,16 @@ public class SimpleDrawingView extends AbstractDrawingView {
         constrainerNodeValid = false;
     }
 
-    private void onConstrainerInvalidated(Observable o) {
+    private void onConstrainerInvalidated(@NonNull Observable o) {
         invalidateConstrainer();
         repaint();
     }
 
-    private void onZoomFactorChanged(Observable observable) {
+    private void onZoomFactorChanged(@NonNull Observable observable) {
         revalidateLayout();
     }
 
-    private void onViewRectChanged(Observable observable, Bounds oldValue, Bounds newValue) {
+    private void onViewRectChanged(@NonNull Observable observable, @Nullable Bounds oldValue, @Nullable Bounds newValue) {
         revalidateLayout();
     }
 
@@ -331,7 +331,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private void onDrawingChanged() {
     }
 
-    private void onDrawingModelChanged(Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    private void onDrawingModelChanged(@NonNull Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(treeModelListener);
         }
@@ -342,7 +342,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
 
-    private void onNodeChanged(Figure f) {
+    private void onNodeChanged(@NonNull Figure f) {
         if (f == getDrawing()) {
             revalidateLayout();
         }
@@ -356,11 +356,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
         repaint();
     }
 
-    private void onSubtreeNodesChanged(Figure f) {
+    private void onSubtreeNodesChanged(@NonNull Figure f) {
     }
 
     @Override
-    protected void onToolChanged(Observable observable, Tool oldValue, Tool newValue) {
+    protected void onToolChanged(@NonNull Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue) {
         if (oldValue != null) {
             foreground.getChildren().remove(oldValue.getNode());
             oldValue.setDrawingView(null);
@@ -373,17 +373,17 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onTreeModelEvent(TreeModelEvent<Figure> event) {
+    private void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-        case NODE_ADDED_TO_PARENT:
-        case NODE_REMOVED_FROM_PARENT:
-        case NODE_ADDED_TO_TREE:
-            break;
-        case NODE_REMOVED_FROM_TREE:
-            onNodeRemoved(f);
-            break;
-        case NODE_CHANGED:
+            case NODE_ADDED_TO_PARENT:
+            case NODE_REMOVED_FROM_PARENT:
+            case NODE_ADDED_TO_TREE:
+                break;
+            case NODE_REMOVED_FROM_TREE:
+                onNodeRemoved(f);
+                break;
+            case NODE_CHANGED:
             onNodeChanged(f);
             break;
         case ROOT_CHANGED:
@@ -398,7 +398,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onNodeRemoved(Figure f) {
+    private void onNodeRemoved(@NonNull Figure f) {
         ObservableSet<Figure> selectedFigures = getSelectedFigures();
         for (Figure d : f.preorderIterable()) {
             selectedFigures.remove(d);
@@ -466,7 +466,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public void scrollRectToVisible(Bounds boundsInView) {
+    public void scrollRectToVisible(@NonNull Bounds boundsInView) {
         zoomableScrollPane.scrollViewRectToVisible(boundsInView);
     }
 

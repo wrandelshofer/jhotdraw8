@@ -50,9 +50,9 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
      * The selectedFiguresProperty holds the list of selected figures in the
      * sequence they were selected by the user.
      */
-    private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private final @NonNull ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
-    private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
+    private final @NonNull ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
 
     {
         tool.addListener(this::onToolChanged);
@@ -67,7 +67,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
         selectedFigures.addListener(listener);
     }
 
-    private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final @NonNull ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
     public AbstractDrawingView() {
     }
@@ -178,7 +178,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     protected abstract void repaint();
 
-    protected abstract void onToolChanged(Observable observable, Tool oldValue, Tool newValue);
+    protected abstract void onToolChanged(@NonNull Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue);
 
     @Override
     public <T> void set(@NonNull MapAccessor<T> key, @Nullable T value) {
