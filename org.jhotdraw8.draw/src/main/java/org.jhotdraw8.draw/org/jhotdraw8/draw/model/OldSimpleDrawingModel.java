@@ -14,11 +14,10 @@ import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.ChildLayoutingFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
-import org.jhotdraw8.draw.figure.TransformableFigure;
+import org.jhotdraw8.draw.figure.TransformCachingFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
@@ -30,29 +29,28 @@ import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 
 import java.util.AbstractMap;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 
 /**
- * A DrawingModel for drawings which can handle {@link TransformableFigure}s,
- * {@link ChildLayoutingFigure} and layout observing figures,
- * like {@code LineConnectionFigure}.
+ * A DrawingModel for drawings which contains {@code TransformableFigure}s and
+ * layout observing figures, like {@code LineConnectionFigure}.
  *
  * @author Werner Randelshofer
  */
-public class SimpleDrawingModel extends AbstractDrawingModel {
+public class OldSimpleDrawingModel extends AbstractDrawingModel {
 
-    public SimpleDrawingModel() {
+    public OldSimpleDrawingModel() {
         this.listenOnDrawing = false;
     }
 
-    public SimpleDrawingModel(boolean listenOnDrawing) {
+    public OldSimpleDrawingModel(boolean listenOnDrawing) {
         this.listenOnDrawing = listenOnDrawing;
     }
 
@@ -108,7 +106,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     private boolean isValidating = false;
     private boolean valid = true;
-    private final @NonNull Set<Figure> dirties = new HashSet<>();
+    /**
+     * Performance: Every figure has a unique reference. IdentityHashMap is faster than HashMap in this case.
+     */
+    private final @NonNull Map<Figure, DirtyMask> dirties = new IdentityHashMap<>();
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
     private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
@@ -160,10 +161,13 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, figure));
     }
 
-    private void markDirty(@NonNull Figure figure) {
-        dirties.add(figure);
+    private void markDirty(@NonNull Figure figure, @NonNull DirtyBits... bits) {
+        dirties.merge(figure, DirtyMask.of(bits), mergeDirtyMask);
     }
 
+    private void markDirty(@NonNull Figure figure, @NonNull DirtyMask mask) {
+        dirties.merge(figure, mask, mergeDirtyMask);
+    }
 
     private void removeDirty(@NonNull Figure figure) {
         dirties.remove(figure);
@@ -373,73 +377,163 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (!valid) {
             isValidating = true;
 
-            // all dirty figures: invoke layoutObserverChanged/layoutSubjectChangedNotify
-            for (Figure f : dirties) {
-                f.layoutSubjectChanged();
-                f.layoutObserverChanged();
+            // all figures with dirty bit LAYOUT_SUBJECT
+            // invoke layoutSubjectChangedNotify
+            // all figures with dirty bit LAYOUT_OBSERVERS
+            // invoke layoutSubjectChangedNotify
+            DirtyMask dmLayoutSubject = DirtyMask.of(DirtyBits.LAYOUT_SUBJECT);
+            DirtyMask dmLayoutObserversAddRemove = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS_ADDED_OR_REMOVED);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmLayoutSubject)) {
+                    Figure f = entry.getKey();
+                    f.layoutSubjectChanged();
+                }
+                if (dm.intersects(dmLayoutObserversAddRemove)) {
+                    Figure f = entry.getKey();
+                    f.layoutObserverChanged();
+                }
             }
 
-            // collect all dirty figures and their subtrees
-            final Set<Figure> subtrees = Collections.newSetFromMap(new IdentityHashMap<>(dirties.size() * 2));
-            for (Figure f : dirties) {
-                if (subtrees.add(f)) {
-                    EnumeratorSpliterator<Figure> enumerator = f.preorderEnumerator();
-                    while (enumerator.moveNext()) {
-                        Figure ff = enumerator.current();
-                        subtrees.add(ff);
+            // all figures with dirty bit "STYLE"
+            // invoke stylesheetNotify
+            // induce a dirty bit "TRANSFORM", "NODE" and "LAYOUT
+            // Performance: Every figure has a unique reference. IdentityHashMap is faster than HashMap in this case.
+            final Set<Figure> visited = Collections.newSetFromMap(new IdentityHashMap<>(dirties.size() * 2));
+            DirtyMask dmStyle = DirtyMask.of(DirtyBits.STYLE);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                DirtyMask dm = entry.getValue();
+                Figure f = entry.getKey();
+                if (dm.intersects(dmStyle) && visited.add(f)) {
+                    f.stylesheetChanged(ctx);
+                    markDirty(f, DirtyBits.NODE, DirtyBits.TRANSFORM, DirtyBits.LAYOUT);
+                }
+            }
+
+            // all figures with dirty bit "TRANSFORM"
+            // induce dirty bits "TRANSFORM" and "LAYOUT_OBSERVERS" on all descendants which implement the TransformingFigure interface.
+            visited.clear();
+            DirtyMask dmTransform = DirtyMask.of(DirtyBits.TRANSFORM);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmTransform) && visited.add(f)) {
+                    for (EnumeratorSpliterator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
+                        final Figure a = i.current();
+                        if (visited.add(a)) {
+                            if (a instanceof TransformCachingFigure) {
+                                markDirty(a, DirtyBits.TRANSFORM, DirtyBits.LAYOUT_OBSERVERS);
+                            }
+                        }
                     }
                 }
             }
 
-            // build a graph which includes all dirtiesSubtrees and
-            // 1) all their ancestors that have the LayoutsChildrenFigure marker interface
-            // 2) all their layout observers transitively
-            final Set<Figure> visited = Collections.newSetFromMap(new IdentityHashMap<>(subtrees.size() * 2));
+            // all figures with dirty bit "TRANSFORM"
+            // invoke transformChanged
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmTransform)) {
+                    f.transformChanged();
+                }
+            }
+
+            // for all figures with dirty bit "LAYOUT" we must also update the node of their layoutable parents
+            DirtyMask dmLayout = DirtyMask.of(DirtyBits.LAYOUT);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmLayout)) {
+                    for (Figure p : f.ancestorIterable()) {
+                        if (p == f) {
+                            continue;
+                        }
+                        if (p.isLayoutable()) {
+                            markDirty(p, DirtyBits.LAYOUT, DirtyBits.NODE);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // all figures with dirty bit "LAYOUT" must be laid out
+            // all observers of figures with dirty bit "LAYOUT_OBBSERVERS" must be laid out.
+            // all layoutable parents must be laid out.
+            visited.clear();
+            DirtyMask dmLayoutObservers = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS);
+            Set<Figure> todo = new LinkedHashSet<>(dirties.size() * 2);
+            for (Map.Entry<Figure, DirtyMask> entry : new ArrayList<>(dirties.entrySet())) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+
+                if (visited.add(f)) {
+                    if (dm.intersects(dmLayout)) {
+                        for (EnumeratorSpliterator<Figure> i = f.preorderEnumerator(); i.moveNext(); ) {
+                            todo.add(i.current());
+                        }
+                    } else if (dm.intersects(dmLayoutObservers)) {
+                        for (Figure layoutObserver : f.getReadOnlyLayoutObservers()) {
+                            todo.add(layoutObserver);
+                        }
+                    }
+                }
+            }
+            // build a graph which includes all figures that must be laid out and all their observers
+            // transitively
+            visited.clear();
             SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>();
-            ArrayDeque<Figure> queue = new ArrayDeque<>(subtrees);
+            ArrayDeque<Figure> queue = new ArrayDeque<>(todo);
             while (!queue.isEmpty()) {
                 Figure f = queue.removeFirst();
                 if (visited.add(f)) {
                     graphBuilder.addVertex(f);
-
-                    // 1)
-                    Iterator<Figure> it = f.ancestorIterable().iterator();
-                    Figure layoutRoot = f;//initialize ancestor with f, this helps if f is the root
-                    Figure child = it.next();//ancestor iterable starts with f
-                    while (it.hasNext()) {
-                        Figure parent = it.next();
-                        if (parent instanceof ChildLayoutingFigure) {
-                            layoutRoot = parent;
-                            graphBuilder.addVertex(layoutRoot);
-                            graphBuilder.addArrow(child, layoutRoot, null);
-                        } else {
-                            break;
-                        }
-                        child = layoutRoot;
-                    }
-
-                    // 2)
                     for (Figure obs : f.getReadOnlyLayoutObservers()) {
                         graphBuilder.addVertex(obs);
-                        graphBuilder.addArrow(layoutRoot, obs, null);
+                        graphBuilder.addArrow(f, obs, f);
                         if (!visited.contains(obs)) {
                             queue.add(obs);
                         }
                     }
-
-
                 }
             }
+            visited.clear();
             if (graphBuilder.getVertexCount() > 0) {
                 for (Figure f : new TopologicalSortAlgo().sortTopologically(graphBuilder)) {
-                    f.stylesheetChanged(ctx);
-                    f.layoutChanged(ctx);
-                    f.transformChanged();
+                    if (visited.add(f)) {
+                        if (!f.getLayoutSubjects().isEmpty()) {
+                            // The :leftToRight pseudo class may have changed,
+                            // if the layout subject of the label has changed its layout.
+                            f.stylesheetChanged(ctx);
+                        }
+                        f.layoutChanged(ctx);
+                        f.transformChanged();
+                        markDirty(f, DirtyBits.NODE);
+                    }
+                }
+            }
+
+            // For all figures with dirty flag Node
+            // we must fireNodeInvalidated node
+            DirtyMask dmNode = DirtyMask.of(DirtyBits.NODE);
+            for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmNode)) {
                     fireNodeInvalidated(f);
                 }
             }
 
+            for (Map.Entry<Figure, DirtyMask> entry : dirties.entrySet()) {
+                Figure f = entry.getKey();
+                DirtyMask dm = entry.getValue();
+                if (dm.intersects(dmTransform)) {
+                    f.transformChanged();
+                }
+            }
             dirties.clear();
+
             isValidating = false;
             valid = true;
         }
@@ -466,7 +560,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
         switch (event.getEventType()) {
             case TRANSFORM_CHANGED:
-                markDirty(figure);
+                markDirty(figure, DirtyBits.TRANSFORM);
                 invalidate();
                 break;
             case PROPERTY_VALUE_CHANGED: {
@@ -474,16 +568,26 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 Object oldValue = event.getOldValue();
                 Object newValue = event.getNewValue();
                 figure.propertyChanged(key, oldValue, newValue);
-                markDirty(figure);
-                invalidate();
+
+                //final DirtyMask dm = fk.getDirtyMask().add(DirtyBits.STYLE);
+                final DirtyMask dm = DirtyMask.of(DirtyBits.STYLE,
+                        DirtyBits.LAYOUT, DirtyBits.NODE, DirtyBits.TRANSFORM,
+                        DirtyBits.LAYOUT_OBSERVERS
+                );
+                if (!dm.isEmpty()) {
+                    markDirty(figure, dm);
+                    invalidate();
+                }
+
                 break;
             }
             case LAYOUT_CHANGED:
-                markDirty(figure);
+                // A layout change also changes the transform of the figure, because its center may have moved
+                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.TRANSFORM);
                 invalidate();
                 break;
             case STYLE_CHANGED:
-                markDirty(figure);
+                markDirty(figure, DirtyBits.STYLE);
                 invalidate();
                 break;
 
@@ -502,7 +606,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT:
-                markDirty(figure);
+                markDirty(figure, DirtyBits.LAYOUT, DirtyBits.STYLE);
                 invalidate();
                 break;
             case NODE_ADDED_TO_TREE:
@@ -517,11 +621,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 removeDirty(figure);
                 break;
             case NODE_REMOVED_FROM_PARENT:
-                markDirty(event.getParent());
+                markDirty(event.getParent(), DirtyBits.LAYOUT_OBSERVERS, DirtyBits.NODE);
                 invalidate();
                 break;
             case NODE_CHANGED:
-                markDirty(event.getNode());
+                markDirty(event.getNode(), DirtyBits.TRANSFORM, DirtyBits.NODE);
                 invalidate();
                 break;
             case ROOT_CHANGED:
