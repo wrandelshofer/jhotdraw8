@@ -68,51 +68,51 @@ public interface DrawingView extends WritableRenderContext {
     /**
      * The name of the model property.
      */
-    String MODEL_PROPERTY = "model";
+    @NonNull String MODEL_PROPERTY = "model";
     /**
      * The name of the tool property.
      */
-    String TOOL_PROPERTY = "tool";
+    @NonNull String TOOL_PROPERTY = "tool";
     /**
      * The name of the focused property.
      */
-    String FOCUSED_PROPERTY = "focused";
+    @NonNull String FOCUSED_PROPERTY = "focused";
     /**
      * The name of the scale factor property.
      */
-    String ZOOM_FACTOR_PROPERTY = "scaleFactor";
+    @NonNull String ZOOM_FACTOR_PROPERTY = "zoomFactor";
     /**
      * The name of the constrainer property.
      */
-    String CONSTRAINER_PROPERTY = "constrainer";
+    @NonNull String CONSTRAINER_PROPERTY = "constrainer";
     /**
      * The name of the selection property.
      */
-    String SELECTED_FIGURES_PROPERTY = "selectedFigures";
+    @NonNull String SELECTED_FIGURES_PROPERTY = "selectedFigures";
     /**
      * The name of the active handle property.
      */
-    String ACTIVE_HANDLE_PROPERTY = "activeHandle";
+    @NonNull String ACTIVE_HANDLE_PROPERTY = "activeHandle";
     /**
      * The name of the active layer property.
      */
-    String ACTIVE_PARENT_PROPERTY = "activeLayer";
+    @NonNull String ACTIVE_PARENT_PROPERTY = "activeLayer";
     /**
      * The name of the clipboardInputFormat property.
      */
-    String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
+    @NonNull String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
     /**
      * The name of the clibpoardOutputFormat property.
      */
-    String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
+    @NonNull String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
     /**
      * The name of the drawing property.
      */
-    String DRAWING_PROPERTY = "drawing";
+    @NonNull String DRAWING_PROPERTY = "drawing";
     /**
      * The name of the editor property.
      */
-    String EDITOR_PROPERTY = "editor";
+    @NonNull String EDITOR_PROPERTY = "editor";
 
 
     // ---
