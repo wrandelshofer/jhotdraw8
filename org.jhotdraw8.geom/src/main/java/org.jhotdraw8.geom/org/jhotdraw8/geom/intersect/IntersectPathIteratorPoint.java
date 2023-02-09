@@ -112,7 +112,7 @@ public class IntersectPathIteratorPoint {
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 for (IntersectionPointEx ip : rayCheck) {
-                    double ty = ip.getTangentB().getY();
+                    double ty = ip.getDerivativeB().getY();
                     if (Points.almostZero(ty)) {
                         // intersection point is tangential to ray - no crossing
                     } else if (ty > 0) {

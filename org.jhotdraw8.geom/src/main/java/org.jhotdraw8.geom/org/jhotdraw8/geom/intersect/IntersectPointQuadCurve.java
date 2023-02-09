@@ -5,7 +5,11 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -139,10 +143,10 @@ public class IntersectPointQuadCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
+                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
                     0, 1, 0
             ));
         }

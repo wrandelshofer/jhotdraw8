@@ -1,5 +1,5 @@
 /*
- * @(#)PointAndTangentBuilderTest.java
+ * @(#)PointAndDerivativeBuilderTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -7,13 +7,17 @@ package org.jhotdraw8.geom;
 
 import org.junit.jupiter.api.Test;
 
-import java.awt.geom.*;
+import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Rectangle2D;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PointAndTangentBuilderTest {
+public class PointAndDerivativeBuilderTest {
     @Test
-    public void testPointAndTangentAtStraightLine() {
+    public void testPointAndDerivativeAtStraightLine() {
         Line2D.Double line = new Line2D.Double(0, 0, 1, 0);
         PointAndDerivativeBuilder instance = new PointAndDerivativeBuilder(line.getPathIterator(null), 0.125);
 
@@ -35,7 +39,7 @@ public class PointAndTangentBuilderTest {
     }
 
     @Test
-    public void testPointAndTangentAtQuadCurve() {
+    public void testPointAndDerivativeAtQuadCurve() {
         QuadCurve2D.Double quadCurve = new QuadCurve2D.Double(0, 0, 1, 0, 1, 1);
         PointAndDerivativeBuilder instance = new PointAndDerivativeBuilder(quadCurve.getPathIterator(null), 0.125);
         double actualLength = instance.getLength();
@@ -56,7 +60,7 @@ public class PointAndTangentBuilderTest {
     }
 
     @Test
-    public void testPointAndTangentAtCubicCurve() {
+    public void testPointAndDerivativeAtCubicCurve() {
         CubicCurve2D.Double cubicCurve = new CubicCurve2D.Double(0, 0, 1, 0, 1, 0, 1, 1);
         PointAndDerivativeBuilder instance = new PointAndDerivativeBuilder(cubicCurve.getPathIterator(null), 0.125);
         double actualLength = instance.getLength();
@@ -77,7 +81,7 @@ public class PointAndTangentBuilderTest {
     }
 
     @Test
-    public void testPointAndTangentAtSquare() {
+    public void testPointAndDerivativeAtSquare() {
         Rectangle2D.Double rectangle = new Rectangle2D.Double(0, 0, 1, 1);
         PointAndDerivativeBuilder instance = new PointAndDerivativeBuilder(rectangle, 0.125);
         double actualLength = instance.getLength();

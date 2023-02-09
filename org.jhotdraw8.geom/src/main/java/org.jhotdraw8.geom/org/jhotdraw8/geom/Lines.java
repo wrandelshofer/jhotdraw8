@@ -20,8 +20,8 @@ public class Lines {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull Point2D.Double evalLine(double x0, double y0, double x1, double y1, double t) {
-        return new Point2D.Double(lerp(x0, x1, t), lerp(y0, y1, t));
+    public static @NonNull PointAndDerivative eval(double x0, double y0, double x1, double y1, double t) {
+        return new PointAndDerivative(lerp(x0, x1, t), lerp(y0, y1, t), x1 - x0, y1 - y0);
     }
 
 

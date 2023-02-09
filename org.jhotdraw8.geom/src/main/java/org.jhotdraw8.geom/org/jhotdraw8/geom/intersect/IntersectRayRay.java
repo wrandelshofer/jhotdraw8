@@ -114,8 +114,8 @@ public class IntersectRayRay {
             double box, double boy, double bdx, double bdy, double bmax,
             double epsilon) {
 
-        Point2D.Double tangentA = new Point2D.Double(adx, ady);
-        Point2D.Double tangentB = new Point2D.Double(bdx, bdy);
+        Point2D.Double derivativeA = new Point2D.Double(adx, ady);
+        Point2D.Double derivativeB = new Point2D.Double(bdx, bdy);
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status;
 
@@ -135,13 +135,13 @@ public class IntersectRayRay {
                 status = IntersectionStatus.INTERSECTION;
                 result.add(new IntersectionPointEx(
                         new Point2D.Double(aox + ua * adx, aoy + ua * ady),
-                        ua, tangentA, ub, tangentB
+                        ua, derivativeA, ub, derivativeB
                 ));
             } else {
                 status = IntersectionStatus.NO_INTERSECTION;
                 result.add(new IntersectionPointEx(
                         new Point2D.Double(aox + ua * adx, aoy + ua * ady),
-                        ua, tangentA, ub, tangentB
+                        ua, derivativeA, ub, derivativeB
                 ));
             }
         } else {
@@ -156,7 +156,7 @@ public class IntersectRayRay {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(aox, aoy),
-                                0, tangentA, 0, tangentB
+                                0, derivativeA, 0, derivativeB
                         ));
                     } else {
                         // distinct points
@@ -169,8 +169,8 @@ public class IntersectRayRay {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(aox, aoy),
-                                0, tangentA,
-                                MathUtil.clamp(argB, 0, bmax), tangentB
+                                0, derivativeA,
+                                MathUtil.clamp(argB, 0, bmax), derivativeB
                         ));
                     } else {
                         status = IntersectionStatus.NO_INTERSECTION_PARALLEL;
@@ -181,7 +181,7 @@ public class IntersectRayRay {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(box, boy),
-                                MathUtil.clamp(argA, 0, amax), tangentA, 0, tangentB
+                                MathUtil.clamp(argA, 0, amax), derivativeA, 0, derivativeB
                         ));
                     } else {
                         status = IntersectionStatus.NO_INTERSECTION_PARALLEL;
@@ -218,11 +218,11 @@ public class IntersectRayRay {
                         status = IntersectionStatus.NO_INTERSECTION_COINCIDENT;
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(aox + at0 * adx, aoy + at0 * ady),
-                                at0, tangentA, bt0, tangentB
+                                at0, derivativeA, bt0, derivativeB
                         ));
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(aox + at1 * adx, aoy + at1 * ady),
-                                at1, tangentA, bt1, tangentB
+                                at1, derivativeA, bt1, derivativeB
                         ));
                     } else {
                         status = IntersectionStatus.NO_INTERSECTION_PARALLEL;

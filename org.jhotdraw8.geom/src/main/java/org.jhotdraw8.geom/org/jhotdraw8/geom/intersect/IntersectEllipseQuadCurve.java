@@ -5,7 +5,12 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -41,11 +46,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
             double argumentB = Angles.atan2Ellipse(bcx, bcy, brx, bry, x, y);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
+                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
                     argumentB, x - bcx, bcy - y
             ));
         }
@@ -163,11 +168,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : resultB) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative tangentB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
+            PointAndDerivative pdB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     Angles.atan2Ellipse(acx, acy, arx, ary, x, y), x - acx, acy - y,
-                    ip.getArgumentA(), tangentB.dx(), tangentB.dy()
+                    ip.getArgumentA(), pdB.dx(), pdB.dy()
             ));
         }
 

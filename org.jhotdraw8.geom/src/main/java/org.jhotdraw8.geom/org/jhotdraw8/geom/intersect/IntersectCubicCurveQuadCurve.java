@@ -233,7 +233,7 @@ public class IntersectCubicCurveQuadCurve {
             // resultA should never by empty, but if this happen we rather have no intersection than a crash.
             if (!resultA.isEmpty()) {
                 IntersectionPointEx firstA = resultA.getFirst();
-                list.add(new IntersectionPointEx(ip, firstA.getArgumentA(), firstA.getTangentA(),
+                list.add(new IntersectionPointEx(ip, firstA.getArgumentA(), firstA.getDerivativeA(),
                         ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y,
                         ip.getArgumentA()).getDerivative(Point2D.Double::new)));
             }
@@ -257,7 +257,7 @@ public class IntersectCubicCurveQuadCurve {
             IntersectionPointEx firstB = resultB.getFirst();
             list.add(new IntersectionPointEx(ip,
                     ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA()).getDerivative(Point2D.Double::new),
-                    firstB.getArgumentA(), firstB.getTangentA()
+                    firstB.getArgumentA(), firstB.getDerivativeA()
             ));
         }
 

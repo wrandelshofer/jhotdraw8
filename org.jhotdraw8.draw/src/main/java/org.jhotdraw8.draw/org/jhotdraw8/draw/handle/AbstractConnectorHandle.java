@@ -151,7 +151,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
                 if (newConnector != null && o.canConnect(cff, newConnector)) {
                     newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
-                    constrainedPointInWorld = new CssPoint2D(newConnector.getPointAndTangentInLocal(o, cff).getPoint(Point2D::new));
+                    constrainedPointInWorld = new CssPoint2D(newConnector.getPointAndDerivativeInLocal(o, cff).getPoint(Point2D::new));
                     isConnected = true;
                 }
             } else {
@@ -170,7 +170,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                                 final ConnectorAndConnectedFigure candidate = find(constrainedPointInWorld, o, cff, event, tolerance);
                                 final Connector candidateConnector = candidate == null ? null : candidate.getConnector();
                                 if (candidateConnector != null && o.canConnect(ff, newConnector)) {
-                                    Point2D p = candidate.getConnector().getPointAndTangentInWorld(owner, candidate.getConnectedFigure()).getPoint(Point2D::new);
+                                    Point2D p = candidate.getConnector().getPointAndDerivativeInWorld(owner, candidate.getConnectedFigure()).getPoint(Point2D::new);
                                     double distanceSq = FXGeom.distanceSq(p, unconstrainedPointInWorld);
                                     if (distanceSq <= closestDistanceSq) {
                                         // we compare <= because we go back to front, and the

@@ -260,13 +260,13 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
 
         if (startConnector != null && startTarget != null) {
-            start = startConnector.getPointAndTangentInWorld(this, startTarget).getPoint(Point2D::new);
+            start = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            end = endConnector.getPointAndTangentInWorld(this, endTarget).getPoint(Point2D::new);
+            end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
 
-        Point2D endTangent = null;
+        Point2D endDerivative = null;
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx intersectionPointEx = startConnector.chopStart(ctx, this, startTarget, start, end);
             start = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
@@ -274,7 +274,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         }
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx intersectionPointEx = endConnector.chopEnd(ctx, this, endTarget, start, end);
-            endTangent = new Point2D(intersectionPointEx.getTangentB().getX(), intersectionPointEx.getTangentB().getY());
+            endDerivative = new Point2D(intersectionPointEx.getDerivativeB().getX(), intersectionPointEx.getDerivativeB().getY());
             end = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(END, new CssPoint2D(end));
         }
@@ -282,25 +282,25 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         //ObservableList<Double> points = path.getPoints();
         // points.clear();
         CssSize elbowOffsetSize = getElbowOffset();
-        if (elbowOffset == 0 || endTangent == null || FXGeom.squaredMagnitude(endTangent) < 1e-7) {
+        if (elbowOffset == 0 || endDerivative == null || FXGeom.squaredMagnitude(endDerivative) < 1e-7) {
             points.addAll(start.getX(), start.getY());
             points.addAll(end.getX(), end.getY());
         } else {
-            Point2D endTangentNormalized = endTangent.normalize();
+            Point2D endDerivativeNormalized = endDerivative.normalize();
             // Enforce perfect vertical or perfect horizontal line
-            if (abs(endTangentNormalized.getX()) > abs(endTangentNormalized.getY())) {
-                endTangentNormalized = new Point2D(signum(endTangentNormalized.getX()), 0);
+            if (abs(endDerivativeNormalized.getX()) > abs(endDerivativeNormalized.getY())) {
+                endDerivativeNormalized = new Point2D(signum(endDerivativeNormalized.getX()), 0);
             } else {
-                endTangentNormalized = new Point2D(0, signum(endTangentNormalized.getY()));
+                endDerivativeNormalized = new Point2D(0, signum(endDerivativeNormalized.getY()));
             }
-            Point2D dir = new Point2D(endTangent.getY(), -endTangent.getX()).normalize();
+            Point2D dir = new Point2D(endDerivative.getY(), -endDerivative.getX()).normalize();
             Point2D p1;
             Point2D p2;
             if (UnitConverter.PERCENTAGE.equals(elbowOffsetSize.getUnits())) {
                 elbowOffset = elbowOffsetSize.getConvertedValue() * abs(dir.dotProduct(end.subtract(start)));
             }
-            p2 = endTangentNormalized.multiply(elbowOffset);
-            p1 = endTangentNormalized.multiply(abs(dir.dotProduct(end.subtract(start))) - elbowOffset);
+            p2 = endDerivativeNormalized.multiply(elbowOffset);
+            p1 = endDerivativeNormalized.multiply(abs(dir.dotProduct(end.subtract(start))) - elbowOffset);
 
             points.addAll(start.getX(), start.getY());
             points.addAll(start.getX() - p1.getY(), start.getY() + p1.getX());

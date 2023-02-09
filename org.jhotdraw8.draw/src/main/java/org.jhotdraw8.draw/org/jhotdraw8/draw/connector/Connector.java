@@ -29,32 +29,32 @@ import java.awt.geom.Rectangle2D;
 public interface Connector {
 
     /**
-     * Returns a point and tangent on the target figure for the specified
+     * Returns a point and derivative on the target figure for the specified
      * connection figure in local coordinates.
      *
      * @param connection a connection figure
      * @param target     the target
-     * @return A point and tangent on the target figure in local coordinates of the target
+     * @return A point and derivative on the target figure in local coordinates of the target
      * figure.
      */
-    @NonNull PointAndDerivative getPointAndTangentInLocal(@NonNull Figure connection,
-                                                          @NonNull Figure target);
+    @NonNull PointAndDerivative getPointAndDerivativeInLocal(@NonNull Figure connection,
+                                                             @NonNull Figure target);
 
     /**
-     * Returns a point and tangent on the target figure for the specified
+     * Returns a point and derivative on the target figure for the specified
      * connection figure in world coordinates.
      *
      * @param connection a connection figure
      * @param target     the target
-     * @return A point and tangent on the target figure in world coordinates
+     * @return A point and derivative on the target figure in world coordinates
      */
-    default @NonNull PointAndDerivative getPointAndTangentInWorld(Figure connection, Figure target) {
-        PointAndDerivative inLocal = getPointAndTangentInLocal(connection, target);
+    default @NonNull PointAndDerivative getPointAndDerivativeInWorld(Figure connection, Figure target) {
+        PointAndDerivative inLocal = getPointAndDerivativeInLocal(connection, target);
         Transform localToWorld = target.getLocalToWorld();
         Point2D pointInWorld = FXTransforms.transform(localToWorld, inLocal.getPoint(Point2D::new));
-        Point2D tangentInWorld = FXTransforms.deltaTransform(localToWorld, inLocal.getDerivative(Point2D::new));
+        Point2D derivativeInWorld = FXTransforms.deltaTransform(localToWorld, inLocal.getDerivative(Point2D::new));
         return new PointAndDerivative(pointInWorld.getX(), pointInWorld.getY(),
-                tangentInWorld.getX(), tangentInWorld.getY());
+                derivativeInWorld.getX(), derivativeInWorld.getY());
     }
 
     /**
@@ -87,9 +87,9 @@ public interface Connector {
      */
     default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
-        Point2D tangent = end.subtract(start);
-        return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, tangent.getX(), tangent.getY(), 0, tangent.getX(), tangent.getY()) :
-                new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getTangentA(), ip.getArgumentB(), ip.getTangentB());
+        Point2D derivative = end.subtract(start);
+        return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, derivative.getX(), derivative.getY(), 0, derivative.getX(), derivative.getY()) :
+                new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getDerivativeA(), ip.getArgumentB(), ip.getDerivativeB());
     }
 
     /**

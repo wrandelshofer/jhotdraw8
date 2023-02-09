@@ -6,9 +6,19 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -54,7 +64,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
     protected final @NonNull NonNullMapAccessor<CssPoint2D> originKey;
 
-    protected @Nullable Point2D connectorTangent;
+    protected @Nullable Point2D connectorDerivative;
 
 
     public LabelConnectorHandle(@NonNull ConnectingFigure figure,
@@ -108,16 +118,16 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
         double size = targetNode.getWidth();
         // rotates the node:
-        final double a = connectorTangent == null ? 0 : Angles.atan2(connectorTangent.getY(), connectorTangent.getX());
+        final double a = connectorDerivative == null ? 0 : Angles.atan2(connectorDerivative.getY(), connectorDerivative.getX());
         targetNode.setRotate(a * 180 / PI);
 
         Point2D origin = FXTransforms.transform(t, f.getNonNull(originKey).getConvertedValue());
         lineNode.setStartX(origin.getX());
         lineNode.setStartY(origin.getY());
         if (isConnected) {
-            PointAndDerivative pointAndDerivative = connector.getPointAndTangentInWorld(owner, target);
+            PointAndDerivative pointAndDerivative = connector.getPointAndDerivativeInWorld(owner, target);
             connectorLocation = view.worldToView(pointAndDerivative.getPoint(Point2D::new));
-            connectorTangent = view.getWorldToView().deltaTransform(pointAndDerivative.getDerivative(Point2D::new));
+            connectorDerivative = view.getWorldToView().deltaTransform(pointAndDerivative.getDerivative(Point2D::new));
             if (connectorLocation != null) {
                 targetNode.relocate(connectorLocation.getX() - size * 0.5, connectorLocation.getY() - size * 0.5);
                 lineNode.setEndX(connectorLocation.getX());

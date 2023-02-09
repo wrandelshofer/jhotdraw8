@@ -43,7 +43,7 @@ public class LocatorConnector extends AbstractConnector {
     }
 
     @Override
-    public @NonNull PointAndDerivative getPointAndTangentInLocal(@NonNull Figure connection, @NonNull Figure target) {
+    public @NonNull PointAndDerivative getPointAndDerivativeInLocal(@NonNull Figure connection, @NonNull Figure target) {
         return new PointAndDerivative(locator.locate(target).getX(), locator.locate(target).getY(), new Point2D(1, 0).getX(), new Point2D(1, 0).getY());
     }
 
@@ -53,17 +53,17 @@ public class LocatorConnector extends AbstractConnector {
         Point2D center = new Point2D(b.getMinX() + b.getWidth() * 0.5, b.getMinY() + b.getHeight() * 0.5);
         Point2D location = locator.locate(target);
         Point2D direction = location.subtract(center);
-        Point2D tangent1 = new Point2D(direction.getY(), -direction.getX());
-        Point2D tangent2 = new Point2D(direction.getX(), direction.getY());
-        if (FXGeom.squaredMagnitude(tangent1) < 1e-6) {
-            tangent1 = new Point2D(1, 0);
-            tangent2 = new Point2D(0, -1);
+        Point2D derivative1 = new Point2D(direction.getY(), -direction.getX());
+        Point2D derivative2 = new Point2D(direction.getX(), direction.getY());
+        if (FXGeom.squaredMagnitude(derivative1) < 1e-6) {
+            derivative1 = new Point2D(1, 0);
+            derivative2 = new Point2D(0, -1);
         }
 
         Transform localToWorld = target.getLocalToWorld();
         Point2D targetP = target.localToWorld(location);
-        Point2D t1p = localToWorld == null ? tangent1 : localToWorld.deltaTransform(tangent1);
-        Point2D t2p = localToWorld == null ? tangent2 : localToWorld.deltaTransform(tangent2);
+        Point2D t1p = localToWorld == null ? derivative1 : localToWorld.deltaTransform(derivative1);
+        Point2D t2p = localToWorld == null ? derivative2 : localToWorld.deltaTransform(derivative2);
         return new IntersectionPointEx(
                 targetP.getX(), targetP.getY(),
                 0, t1p.getX(), t1p.getY(),

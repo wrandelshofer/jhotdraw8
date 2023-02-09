@@ -19,7 +19,11 @@ import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LabelConnectorHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.EnumStyleableKey;
@@ -44,7 +48,7 @@ import java.util.Set;
  * and rotation of the label using the properties {@link #LABEL_OFFSET}
  * and {@link #LABEL_AUTOROTATE}.
  * <pre>
- * LABELED_LOCATION:    x,y (has a tangent that can be rotated)
+ * LABELED_LOCATION:    x,y (has a derivative that can be rotated)
  *                       |
  *                       | + LABEL_OFFSET (perpendicular to
  *                       |                 LABELED_LOCATION)
@@ -221,29 +225,29 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         }
         final UnitConverter units = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
-        final PointAndDerivative pointAndDerivative = labelConnector.getPointAndTangentInWorld(this, labelTarget);
+        final PointAndDerivative pointAndDerivative = labelConnector.getPointAndDerivativeInWorld(this, labelTarget);
         final Point2D labeledLoc = worldToParent(pointAndDerivative.getPoint(Point2D::new));
-        final Point2D tangent = getWorldToParent().deltaTransform(pointAndDerivative.getDerivative(Point2D::new)).normalize();
-        final Point2D perp = FXGeom.perp(tangent);
+        final Point2D derivative = getWorldToParent().deltaTransform(pointAndDerivative.getDerivative(Point2D::new)).normalize();
+        final Point2D perp = FXGeom.perp(derivative);
 
         final double labelOffsetX = getStyledNonNull(LABEL_OFFSET_X).getConvertedValue(units);
         final double labelOffsetY = getStyledNonNull(LABEL_OFFSET_Y).getConvertedValue(units);
 
         Point2D origin = labeledLoc
                 .add(perp.multiply(-labelOffsetY))
-                .add(tangent.multiply(labelOffsetX));
+                .add(derivative.multiply(labelOffsetX));
 
         Rotate rotate = null;
         final boolean layoutTransforms;
         switch (getStyledNonNull(LABEL_AUTOROTATE)) {
             case FULL: {// the label follows the rotation of its target figure in the full circle: 0..360°
-                final double theta = (Math.toDegrees(Angles.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
+                final double theta = (Math.toDegrees(Angles.atan2(derivative.getY(), derivative.getX())) + 360.0) % 360.0;
                 rotate = new FXPreciseRotate(theta, origin.getX(), origin.getY());
                 layoutTransforms = true;
             }
             break;
             case HALF: {// the label follows the rotation of its target figure in the half circle: -90..90°
-                final double theta = (Math.toDegrees(Angles.atan2(tangent.getY(), tangent.getX())) + 360.0) % 360.0;
+                final double theta = (Math.toDegrees(Angles.atan2(derivative.getY(), derivative.getX())) + 360.0) % 360.0;
                 final double halfTheta = theta <= 90.0 || theta > 270.0 ? theta : (theta + 180.0) % 360.0;
                 rotate = new FXPreciseRotate(halfTheta, origin.getX(), origin.getY());
                 layoutTransforms = true;

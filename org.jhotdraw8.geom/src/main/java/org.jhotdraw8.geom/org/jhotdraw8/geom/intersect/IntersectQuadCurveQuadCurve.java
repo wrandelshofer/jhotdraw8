@@ -5,7 +5,12 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -49,12 +54,12 @@ public class IntersectQuadCurveQuadCurve {
             }
             // argumentB should always exist, but if it does not we rather have no intersection instead of a crash.
             if (!Double.isNaN(argumentB)) {
-                PointAndDerivative tangentA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ipA.getArgumentA());
-                PointAndDerivative tangentB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, argumentB);
+                PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ipA.getArgumentA());
+                PointAndDerivative pdB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, argumentB);
                 list.add(new IntersectionPointEx(
                         x, y,
-                        ipA.getArgumentA(), tangentA.dx(), tangentA.dy(),
-                        argumentB, tangentB.dx(), tangentB.dy()
+                        ipA.getArgumentA(), pdA.dx(), pdA.dy(),
+                        argumentB, pdB.dx(), pdB.dy()
                 ));
             }
         }

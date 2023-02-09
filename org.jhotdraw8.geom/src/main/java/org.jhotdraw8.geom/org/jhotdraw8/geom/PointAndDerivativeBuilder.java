@@ -1,5 +1,5 @@
 /*
- * @(#)PointAndTangentBuilder.java
+ * @(#)PointAndDerivativeBuilder.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -7,15 +7,18 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.Shape;
+import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 /**
- * Builder for creating points and tangents at the relative arc distance
+ * Builder for creating points and derivatives at the relative arc distance
  * {@code t ∈ [0,1]} of a path iterator.
  * <p>
  * Empty segments of a path have zero arc distance. A segment is considered
@@ -26,7 +29,7 @@ import java.util.List;
  * last empty segment of the path.
  * <p>
  * If the path is empty, then all {@code t} are mapped to {@code point=(0,0),
- * tangent=(1,0)}.
+ * derivative=(1,0)}.
  */
 public class PointAndDerivativeBuilder {
     private final @NonNull List<Segment> segments = new ArrayList<>();
@@ -34,19 +37,19 @@ public class PointAndDerivativeBuilder {
 
     /**
      * If all segments are degenerated, the builder will create a point and
-     * tangent at the last degenerated point.
+     * derivative at the last degenerated point.
      */
     private double degeneratedX, degeneratedY;
 
     /**
-     * Creates a new PointAndTangentBuilder.
+     * Creates a new instance.
      */
     public PointAndDerivativeBuilder(@NonNull Shape shape, double flatness) {
         this(shape.getPathIterator(null), flatness);
     }
 
     /**
-     * Creates a new PointAndTangentBuilder.
+     * Creates a new instance.
      */
     public PointAndDerivativeBuilder(@NonNull PathIterator it, double flatness) {
         final float[] coords = new float[6];
@@ -150,14 +153,13 @@ public class PointAndDerivativeBuilder {
         if (seg.shape instanceof Line2D.Double) {
             Line2D.Double line = (Line2D.Double) seg.shape;
             double tInLine = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
-            Point2D.Double p = Lines.lerp(line.x1, line.y1, line.x2, line.y2, tInLine);
-            return new PointAndDerivative(p.x, p.y, line.x2 - line.x1, line.y2 - line.y1);
+            return Lines.eval(line.x1, line.y1, line.x2, line.y2, tInLine);
         } else if (seg.shape instanceof QuadCurve2D.Double) {
             QuadCurve2D.Double quadCurve = (QuadCurve2D.Double) seg.shape;
             double tInQuadCurve = seg.length == 0 ? 0 : (distanceFromStart - seg.distanceFromStart) / seg.length;
             PointAndDerivative p = QuadCurves.eval(quadCurve.x1, quadCurve.y1, quadCurve.ctrlx, quadCurve.ctrly,
                     quadCurve.x2, quadCurve.y2, tInQuadCurve);
-            return new PointAndDerivative(p.x(), p.y(), p.dx(), p.dy());
+            return p;
 
         } else {
             CubicCurve2D.Double cubicCurve = (CubicCurve2D.Double) seg.shape;
@@ -167,10 +169,7 @@ public class PointAndDerivativeBuilder {
                     cubicCurve.ctrlx1, cubicCurve.ctrly1,
                     cubicCurve.ctrlx2, cubicCurve.ctrly2,
                     cubicCurve.x2, cubicCurve.y2, tInCubicCurve);
-            Point2D.Double p = pat.getPoint(Point2D.Double::new);
-            Point2D.Double tangent = pat.getDerivative(Point2D.Double::new);
-            ;
-            return new PointAndDerivative(p.x, p.y, tangent.x, tangent.y);
+            return pat;
         }
     }
 
@@ -239,7 +238,7 @@ public class PointAndDerivativeBuilder {
         return length;
     }
 
-    public static PointAndDerivative computePointAndTangentAt(@NonNull PathIterator it, double flatness, double t) {
+    public static PointAndDerivative computePointAndDerivativeAt(@NonNull PathIterator it, double flatness, double t) {
         return new PointAndDerivativeBuilder(it, flatness).getPointAndDerivativeAt(t);
     }
 }

@@ -15,10 +15,19 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -129,10 +138,10 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
         if (startConnector != null && startTarget != null) {
-            start = startConnector.getPointAndTangentInWorld(this, startTarget).getPoint(Point2D::new);
+            start = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            end = endConnector.getPointAndTangentInWorld(this, endTarget).getPoint(Point2D::new);
+            end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
 
         if (startConnector != null && startTarget != null) {

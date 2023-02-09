@@ -16,41 +16,45 @@ public class IntersectionPointEx extends IntersectionPoint {
 
 
     /**
-     * @see #getTangentA()
+     * @see #getDerivativeA()
      */
-    private final Point2D.Double tangentA;
+    private final Point2D.Double derivativeA;
 
     /**
-     * @see #getTangentB()
+     * @see #getDerivativeB()
      */
-    private final Point2D.Double tangentB;
+    private final Point2D.Double derivativeB;
 
     /**
      * @see #getSegmentB()
      */
     private final int segmentB;
 
-    public IntersectionPointEx(Point2D.Double point, double argumentA, Point2D.Double tangentA, double argumentB, Point2D.Double tangentB) {
-        this(point, argumentA, tangentA, 0, argumentB, tangentB, 0);
+    public IntersectionPointEx(Point2D.Double point, double argumentA, Point2D.Double derivativeA, double argumentB, Point2D.Double derivativeB) {
+        this(point, argumentA, derivativeA, 0, argumentB, derivativeB, 0);
     }
 
-    public IntersectionPointEx(double px, double py, double argumentA, double tangentAX, double tangentAY, double argumentB, double tangentBX, double tangentBY) {
-        this(px, py, argumentA, tangentAX, tangentAY, 0, argumentB, tangentBX, tangentBY, 0);
+    public IntersectionPointEx(double px, double py,
+                               double argumentA, double derivativeAX, double derivativeAY,
+                               double argumentB, double derivativeBX, double derivativeBY) {
+        this(px, py, argumentA, derivativeAX, derivativeAY, 0, argumentB, derivativeBX, derivativeBY, 0);
     }
 
-    public IntersectionPointEx(Point2D.Double point, double argumentA, Point2D.Double tangentA, int segmentA, double argumentB, Point2D.Double tangentB, int segmentB) {
+    public IntersectionPointEx(Point2D.Double point,
+                               double argumentA, Point2D.Double derivativeA, int segmentA,
+                               double argumentB, Point2D.Double derivativeB, int segmentB) {
         super(point.getX(), point.getY(), argumentA, segmentA);
-        this.tangentA = tangentA;
+        this.derivativeA = derivativeA;
         this.argumentB = argumentB;
-        this.tangentB = tangentB;
+        this.derivativeB = derivativeB;
         this.segmentB = segmentB;
     }
 
     public IntersectionPointEx(double px, double py, double argumentA, double tx1, double ty1, int segmentA, double t2, double tx2, double ty2, int segment2) {
         super(px, py, argumentA, segmentA);
-        this.tangentA = new Point2D.Double(tx1, ty1);
+        this.derivativeA = new Point2D.Double(tx1, ty1);
         this.argumentB = t2;
-        this.tangentB = new Point2D.Double(tx2, ty2);
+        this.derivativeB = new Point2D.Double(tx2, ty2);
         this.segmentB = segment2;
     }
 
@@ -68,11 +72,11 @@ public class IntersectionPointEx extends IntersectionPoint {
 
 
     /**
-     * The tangent vector at the intersection of the parametric function 'a'.
+     * The derivative vector at the intersection of the parametric function 'a'.
      * This vector is not normalized.
      */
-    public Point2D.Double getTangentA() {
-        return tangentA;
+    public Point2D.Double getDerivativeA() {
+        return derivativeA;
     }
 
     /**
@@ -83,15 +87,15 @@ public class IntersectionPointEx extends IntersectionPoint {
     }
 
     /**
-     * The tangent vector at the intersection of the second parametric function.
+     * The derivative vector at the intersection of the second parametric function.
      * This vector is not normalized.
      */
-    public Point2D.Double getTangentB() {
-        return tangentB;
+    public Point2D.Double getDerivativeB() {
+        return derivativeB;
     }
 
     public IntersectionPointEx withSegment2(int segmentIndex) {
-        return new IntersectionPointEx(this, this.argumentA, this.tangentA, this.segmentA, this.argumentB, this.tangentB, segmentIndex);
+        return new IntersectionPointEx(this, this.argumentA, this.derivativeA, this.segmentA, this.argumentB, this.derivativeB, segmentIndex);
     }
 
     @Override
@@ -100,8 +104,8 @@ public class IntersectionPointEx extends IntersectionPoint {
                 "t1=" + argumentA +
                 ", t2=" + argumentB +
                 ", point=" + getX() + ", " + getY() +
-                ", tangent1=" + tangentA +
-                ", tangent2=" + tangentB +
+                ", tangent1=" + derivativeA +
+                ", tangent2=" + derivativeB +
                 ", segment1=" + segmentA +
                 ", segment2=" + segmentB +
                 '}';

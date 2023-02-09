@@ -7,7 +7,12 @@ package org.jhotdraw8.geom.intersect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -413,12 +418,12 @@ public class IntersectCubicCurveCubicCurve {
                 }
             }
             assert !Double.isNaN(argumentB) : "argumentB must exist";
-            PointAndDerivative tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
-            PointAndDerivative tangentB = CubicCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
+            PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
+            PointAndDerivative pdB = CubicCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ipA.getArgumentA(), tangentA.dx(), tangentA.dy(),
-                    argumentB, tangentB.dx(), tangentB.dy()
+                    ipA.getArgumentA(), pdA.dx(), pdA.dy(),
+                    argumentB, pdB.dx(), pdB.dy()
             ));
         }
 

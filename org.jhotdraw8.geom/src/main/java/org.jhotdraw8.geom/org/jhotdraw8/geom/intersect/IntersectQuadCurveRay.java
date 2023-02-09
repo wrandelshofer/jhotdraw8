@@ -5,7 +5,11 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -236,11 +240,11 @@ public class IntersectQuadCurveRay {
         for (IntersectionPoint ip : result) {
             double px = ip.getX();
             double py = ip.getY();
-            PointAndDerivative tangentA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     px, py,
                     IntersectPointRay.projectedPointOnRay(aox, aoy, adx, ady, px, py), adx - aox, ady - aoy,
-                    ip.getArgumentA(), tangentA.dx(), tangentA.dy()
+                    ip.getArgumentA(), pdA.dx(), pdA.dy()
             ));
         }
         return new IntersectionResultEx(result.getStatus(), list);
@@ -263,10 +267,10 @@ public class IntersectQuadCurveRay {
         for (IntersectionPoint ip : result) {
             double px = ip.getX();
             double py = ip.getY();
-            PointAndDerivative tangentA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     px, py,
-                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
+                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
                     IntersectPointRay.projectedPointOnRay(aox, aoy, adx, ady, px, py), adx - aox, ady - aoy
             ));
         }

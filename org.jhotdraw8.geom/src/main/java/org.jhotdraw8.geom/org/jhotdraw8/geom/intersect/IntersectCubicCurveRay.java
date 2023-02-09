@@ -5,7 +5,11 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -262,11 +266,11 @@ public class IntersectCubicCurveRay {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative tangentA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
+            PointAndDerivative pdA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     IntersectLinePoint.argumentOnLine(aox, aoy, adx, ady, x, y), adx, ady,
-                    ip.getArgumentA(), tangentA.dx(), tangentA.dy()
+                    ip.getArgumentA(), pdA.dx(), pdA.dy()
             ));
         }
 
@@ -291,10 +295,10 @@ public class IntersectCubicCurveRay {
         for (IntersectionPoint ip : result) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative tangentA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), tangentA.dx(), tangentA.dy(),
+                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
                     IntersectLinePoint.argumentOnLine(b0x, b0y, b1x, b1y, x, y), b1x - b0x, b1y - b0y
             ));
         }
