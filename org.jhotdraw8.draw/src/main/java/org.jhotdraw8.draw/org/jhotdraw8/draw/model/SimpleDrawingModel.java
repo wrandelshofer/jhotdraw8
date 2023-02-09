@@ -18,6 +18,7 @@ import org.jhotdraw8.draw.figure.ChildLayoutingFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
+import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
@@ -31,7 +32,6 @@ import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 import java.util.AbstractMap;
 import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     private boolean isValidating = false;
     private boolean valid = true;
-    private final @NonNull Set<Figure> dirties = new HashSet<>();
+    private final @NonNull Set<Figure> dirties = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
     private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
@@ -382,7 +382,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // collect all dirty figures and their subtrees
             final Set<Figure> subtrees = Collections.newSetFromMap(new IdentityHashMap<>(dirties.size() * 2));
             for (Figure f : dirties) {
-                if (subtrees.add(f)) {
+                if (subtrees.add(f) && !(f instanceof Layer)) {
                     EnumeratorSpliterator<Figure> enumerator = f.preorderEnumerator();
                     while (enumerator.moveNext()) {
                         Figure ff = enumerator.current();
@@ -391,7 +391,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 }
             }
 
-            // build a graph which includes all dirtiesSubtrees and
+            // build a graph which includes all dirty subtrees and
             // 1) all their ancestors that have the LayoutsChildrenFigure marker interface
             // 2) all their layout observers transitively
             final Set<Figure> visited = Collections.newSetFromMap(new IdentityHashMap<>(subtrees.size() * 2));
@@ -443,6 +443,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             isValidating = false;
             valid = true;
         }
+
     }
 
     @Override

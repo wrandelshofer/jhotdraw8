@@ -39,6 +39,12 @@ import java.util.Set;
 import java.util.function.BiFunction;
 
 /**
+ * This class will be deleted.
+ * <p>
+ * This class guessed what figures needed to be
+ * validated after a change. This is incorrect, because there can be
+ * stylesheet rules that require that more figures must be validated.
+ * <p>
  * A DrawingModel for drawings which contains {@code TransformableFigure}s and
  * layout observing figures, like {@code LineConnectionFigure}.
  *
@@ -459,7 +465,7 @@ public class OldSimpleDrawingModel extends AbstractDrawingModel {
             }
 
             // all figures with dirty bit "LAYOUT" must be laid out
-            // all observers of figures with dirty bit "LAYOUT_OBBSERVERS" must be laid out.
+            // all observers of figures with dirty bit "LAYOUT_OBSERVERS" must be laid out.
             // all layoutable parents must be laid out.
             visited.clear();
             DirtyMask dmLayoutObservers = DirtyMask.of(DirtyBits.LAYOUT_OBSERVERS);
