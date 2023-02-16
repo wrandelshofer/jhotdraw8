@@ -19,6 +19,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -330,6 +332,10 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return iterator(false);
+    }
+
+    public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
+        return Spliterators.spliterator(iterator(false), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
     }
 
     @Override

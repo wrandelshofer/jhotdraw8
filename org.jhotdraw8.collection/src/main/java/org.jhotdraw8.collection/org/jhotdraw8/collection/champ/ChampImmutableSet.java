@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
@@ -199,6 +201,10 @@ public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements Immuta
     @Override
     public @NonNull Iterator<E> iterator() {
         return new KeyIterator<E>(this, null);
+    }
+
+    public @NonNull Spliterator<E> spliterator() {
+        return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
     @Override

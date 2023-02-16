@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
@@ -208,6 +210,10 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return (Iterator<Map.Entry<K, V>>) (Iterator<?>) new KeyIterator<>(this, null);
+    }
+
+    public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
+        return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
     @Override

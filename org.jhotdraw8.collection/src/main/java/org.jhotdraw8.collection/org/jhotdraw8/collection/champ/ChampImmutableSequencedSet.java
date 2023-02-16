@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 
 
@@ -313,6 +315,10 @@ public class ChampImmutableSequencedSet<E>
     @Override
     public @NonNull Iterator<E> iterator() {
         return iterator(false);
+    }
+
+    public @NonNull Spliterator<E> spliterator() {
+        return Spliterators.spliterator(iterator(false), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
     }
 
     /**
