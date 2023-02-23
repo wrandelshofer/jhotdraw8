@@ -110,6 +110,7 @@ import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.SvgExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelUndoAdapter;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.draw.tool.BezierCreationTool;
 import org.jhotdraw8.draw.tool.ConnectionTool;
@@ -123,7 +124,6 @@ import org.jhotdraw8.draw.tool.TextEditingTool;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
-import org.jhotdraw8.fxbase.tree.TreeModelUndoAdapter;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcontrols.dock.DockChild;
@@ -363,7 +363,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         model.addListener(drawingModel -> {
             modified.set(true);
         });
-        new TreeModelUndoAdapter<>(model).addUndoEditListener(undoManager);
+        new DrawingModelUndoAdapter(model).addUndoEditListener(undoManager);
 
         IdFactory idFactory = new SimpleFigureIdFactory();
         FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -375,6 +375,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
 
         editor = new SimpleDrawingEditor();
+        editor.setUndoManager(undoManager);
         new DrawingEditorPreferencesHandler(editor,
                 getApplication().getPreferences());
         editor.addDrawingView(drawingView);

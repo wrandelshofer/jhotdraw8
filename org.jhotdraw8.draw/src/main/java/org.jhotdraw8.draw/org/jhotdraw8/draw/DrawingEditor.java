@@ -14,6 +14,7 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
+import org.jhotdraw8.fxbase.undo.FXUndoManager;
 
 /**
  * The DrawingEditor can be used to edit multiple {@code DrawingView}s with a
@@ -64,6 +65,10 @@ public interface DrawingEditor {
      * The name of the defaultTool property.
      */
     String DEFAULT_TOOL_PROPERTY = "defaultTool";
+    /**
+     * The name of the undoManager property.
+     */
+    String UNDO_MANAGER_PROPERTY = "undoManager";
 
     // ---
     // properties
@@ -332,5 +337,21 @@ public interface DrawingEditor {
 
     default @Nullable HandleType getMultiHandleType() {
         return multiHandleTypeProperty().get();
+    }
+
+    /**
+     * The undo manager is responsible for providing undo/redo functionality.
+     *
+     * @return the undo manager
+     */
+    @NonNull NonNullObjectProperty<FXUndoManager> undoManagerProperty();
+
+
+    default void setUndoManager(@NonNull FXUndoManager newValue) {
+        undoManagerProperty().set(newValue);
+    }
+
+    default @NonNull FXUndoManager getUndoManager() {
+        return undoManagerProperty().get();
     }
 }

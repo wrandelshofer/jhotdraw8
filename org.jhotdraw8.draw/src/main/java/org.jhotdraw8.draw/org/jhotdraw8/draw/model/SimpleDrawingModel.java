@@ -49,7 +49,7 @@ import java.util.function.BiFunction;
 public class SimpleDrawingModel extends AbstractDrawingModel {
 
     public SimpleDrawingModel() {
-        this.listenOnDrawing = false;
+        this.listenOnDrawing = true;
     }
 
     public SimpleDrawingModel(boolean listenOnDrawing) {

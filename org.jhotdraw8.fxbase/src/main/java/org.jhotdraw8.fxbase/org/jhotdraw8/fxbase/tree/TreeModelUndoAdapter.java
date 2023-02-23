@@ -8,6 +8,8 @@ package org.jhotdraw8.fxbase.tree;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
+import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
+import org.jhotdraw8.fxbase.text.ResourceBundleStub;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
 
 import javax.swing.event.UndoableEditEvent;
@@ -16,6 +18,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
+import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -28,7 +31,49 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @param <E> the element type of the tree
  */
-public class TreeModelUndoAdapter<E> implements Listener<TreeModelEvent<E>> {
+public class TreeModelUndoAdapter<E> {
+    public static final @NonNull String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
+    private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
+
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle.get();
+    }
+
+    public NonNullObjectProperty<ResourceBundle> resourceBundleProperty() {
+        return resourceBundle;
+    }
+
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle.set(resourceBundle);
+    }
+
+    private @NonNull
+    final Listener<TreeModelEvent<E>> treeModelListener = new Listener<TreeModelEvent<E>>() {
+        @Override
+        public void handle(@NonNull TreeModelEvent<E> event) {
+            UndoableEdit edit = switch (event.getEventType()) {
+                case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
+                case SUBTREE_NODES_CHANGED,
+                        NODE_ADDED_TO_TREE,
+                        NODE_REMOVED_FROM_TREE,
+                        NODE_CHANGED -> null;
+                case NODE_ADDED_TO_PARENT ->
+                        new NodeAddedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
+                case NODE_REMOVED_FROM_PARENT ->
+                        new NodeRemovedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
+
+            };
+            if (edit != null) {
+                fireUndoableEdit(event.getSource(), edit);
+            }
+        }
+    };
+
+    protected void fireUndoableEdit(@NonNull Object source, @NonNull UndoableEdit edit) {
+        final UndoableEditEvent editEvent = new UndoableEditEvent(source, edit);
+        listeners.forEach(e -> e.undoableEditHappened(editEvent));
+    }
+
     private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
 
     public TreeModelUndoAdapter() {
@@ -40,33 +85,13 @@ public class TreeModelUndoAdapter<E> implements Listener<TreeModelEvent<E>> {
 
     public void bind(@NonNull TreeModel<E> model) {
         unbind(model);
-        model.addTreeModelListener(this);
+        model.addTreeModelListener(treeModelListener);
     }
 
     public void unbind(@NonNull TreeModel<E> model) {
-        model.removeTreeModelListener(this);
+        model.removeTreeModelListener(treeModelListener);
     }
 
-    @Override
-    public void handle(@NonNull TreeModelEvent<E> event) {
-        UndoableEdit edit = switch (event.getEventType()) {
-            case ROOT_CHANGED ->
-                    new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
-            case SUBTREE_NODES_CHANGED,
-                    NODE_ADDED_TO_TREE,
-                    NODE_REMOVED_FROM_TREE,
-                    NODE_CHANGED -> null;
-            case NODE_ADDED_TO_PARENT ->
-                    new NodeAddedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
-            case NODE_REMOVED_FROM_PARENT ->
-                    new NodeRemovedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
-
-        };
-        if (edit != null) {
-            final UndoableEditEvent editEvent = new UndoableEditEvent(event.getSource(), edit);
-            listeners.forEach(e -> e.undoableEditHappened(editEvent));
-        }
-    }
 
     public void removeUndoEditListener(@NonNull UndoableEditListener listener) {
         listeners.remove(listener);
@@ -101,7 +126,7 @@ public class TreeModelUndoAdapter<E> implements Listener<TreeModelEvent<E>> {
 
         @Override
         public String getPresentationName() {
-            return "Set Root";
+            return getResourceBundle().getString("edit.SetRoot");
         }
     }
 
@@ -132,7 +157,7 @@ public class TreeModelUndoAdapter<E> implements Listener<TreeModelEvent<E>> {
 
         @Override
         public String getPresentationName() {
-            return "Add";
+            return getResourceBundle().getString("edit.Add");
         }
     }
 
@@ -163,7 +188,7 @@ public class TreeModelUndoAdapter<E> implements Listener<TreeModelEvent<E>> {
 
         @Override
         public String getPresentationName() {
-            return "Remove";
+            return getResourceBundle().getString("edit.Remove");
         }
     }
 }

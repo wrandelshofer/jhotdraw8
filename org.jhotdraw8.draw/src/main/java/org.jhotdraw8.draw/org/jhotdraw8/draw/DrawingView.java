@@ -504,28 +504,28 @@ public interface DrawingView extends WritableRenderContext {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose, Figure::isSelectable);
     }
 
-    default void setDrawing(Drawing newValue) {
+    default void setDrawing(@Nullable Drawing newValue) {
         getModel().setRoot(newValue);
         setActiveParent(null);
     }
 
-    default Drawing getDrawing() {
+    default @Nullable Drawing getDrawing() {
         return modelProperty().get().getDrawing();
     }
 
-    default void setEditor(DrawingEditor newValue) {
+    default void setEditor(@Nullable DrawingEditor newValue) {
         editorProperty().set(newValue);
     }
 
-    default DrawingEditor getEditor() {
+    default @Nullable DrawingEditor getEditor() {
         return editorProperty().get();
     }
 
-    default void setConstrainer(Constrainer newValue) {
+    default void setConstrainer(@Nullable Constrainer newValue) {
         constrainerProperty().set(newValue);
     }
 
-    default Constrainer getConstrainer() {
+    default @Nullable Constrainer getConstrainer() {
         return constrainerProperty().get();
     }
 

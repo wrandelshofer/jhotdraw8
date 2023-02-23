@@ -241,10 +241,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
 
     @Override
     protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue) {
-        // XXX WR we do not want to invalidate transforms and fire property
-        //        change events because this slows everything down!
-        // invalidateTransforms();
-        // firePropertyChangeEvent(this, key, oldValue, newValue);
+        firePropertyChangeEvent(this, key, oldValue, newValue);
     }
 
     @Override

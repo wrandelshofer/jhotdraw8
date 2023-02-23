@@ -23,11 +23,13 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.draw.tool.ToolEvent;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
+import org.jhotdraw8.fxbase.undo.FXUndoManager;
 
 import java.util.HashSet;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
+    private final @NonNull NonNullObjectProperty<FXUndoManager> undoManager = new NonNullObjectProperty<FXUndoManager>(this, UNDO_MANAGER_PROPERTY, new FXUndoManager());
     private final @NonNull DoubleProperty handleSize = new SimpleDoubleProperty(
             this, HANDLE_SIZE_PROPERTY, 5.0) {
         @Override
@@ -206,5 +208,10 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     @Override
     public @NonNull DoubleProperty toleranceProperty() {
         return tolerance;
+    }
+
+    @Override
+    public @NonNull NonNullObjectProperty<FXUndoManager> undoManagerProperty() {
+        return undoManager;
     }
 }

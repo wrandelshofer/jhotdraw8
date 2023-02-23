@@ -9,14 +9,18 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.fxbase.undo.CompositeEdit;
 import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 
+import javax.swing.event.UndoableEditEvent;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,10 +54,12 @@ import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
 public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     private static final long serialVersionUID = 1L;
-    private Set<Figure> groupReshapeableFigures;
-    private Figure anchorFigure;
-    private CssPoint2D oldPoint;
-    private CssPoint2D anchor;
+    private @Nullable Set<Figure> groupReshapeableFigures;
+    private @Nullable Figure anchorFigure;
+    private @Nullable CssPoint2D oldPoint;
+    private @Nullable CssPoint2D anchor;
+
+    private @Nullable CompositeEdit undoableEdit;
 
     public SimpleDragTracker() {
     }
@@ -102,8 +108,14 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     @Override
     public void trackMouseReleased(MouseEvent event, @NonNull DrawingView dv) {
-// FIXME fire undoable edit
         dv.recreateHandles();
+        if (undoableEdit != null) {
+            DrawingEditor editor = dv.getEditor();
+            if (editor != null) {
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+            }
+            undoableEdit = null;
+        }
         //  fireToolDone();
     }
 
@@ -113,6 +125,14 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     @Override
     public void trackMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        if (undoableEdit == null) {
+            undoableEdit = new CompositeEdit();
+            DrawingEditor editor = view.getEditor();
+            if (editor != null) {
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+            }
+        }
+
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
