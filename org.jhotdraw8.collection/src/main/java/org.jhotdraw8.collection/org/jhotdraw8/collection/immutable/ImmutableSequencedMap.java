@@ -14,6 +14,12 @@ import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Interface for an immutable sequenced map.
+ * <p>
+ * An immutable sequenced map provides methods for creating a new immutable sequenced map with
+ * added, updated or removed entries, without changing the original immutable sequenced map.
+ */
 public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnlySequencedMap<K, V> {
     @Override
     @NonNull ImmutableSequencedMap<K, V> clear();

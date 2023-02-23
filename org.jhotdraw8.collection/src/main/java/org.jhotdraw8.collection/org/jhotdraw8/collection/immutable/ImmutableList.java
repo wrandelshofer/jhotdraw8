@@ -17,10 +17,6 @@ import java.util.List;
  * <p>
  * An immutable list provides methods for creating a new immutable list with
  * added or removed elements, without changing the original immutable list.
- * <p>
- * Implementations are expected to only require time and space that is
- * proportional to the differences between the newly created immutable list to
- * the original immutable list.
  */
 public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E> {
     /**

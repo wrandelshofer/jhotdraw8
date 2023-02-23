@@ -17,10 +17,6 @@ import java.util.Set;
  * <p>
  * An immutable set provides methods for creating a new immutable set with
  * added or removed elements, without changing the original immutable set.
- * <p>
- * Implementations are expected to only require time and space that is
- * proportional to the differences between the newly created immutable set to
- * the original immutable set.
  */
 public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> {
     /**
