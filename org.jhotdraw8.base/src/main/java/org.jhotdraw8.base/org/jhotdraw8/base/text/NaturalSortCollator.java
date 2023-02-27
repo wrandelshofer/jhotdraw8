@@ -44,7 +44,7 @@ import java.util.function.Function;
  */
 public class NaturalSortCollator extends Collator {
 
-    private Collator collator;
+    private final @NonNull Collator collator;
 
     /**
      * Creates a new instance.
@@ -54,10 +54,10 @@ public class NaturalSortCollator extends Collator {
     }
 
     public NaturalSortCollator(@NonNull Locale locale) {
-        collator = Collator.getInstance(locale);
+        Collator c = Collator.getInstance(locale);
 
-        if (collator instanceof RuleBasedCollator) {
-            String rules = ((RuleBasedCollator) collator).getRules();
+        if (c instanceof RuleBasedCollator) {
+            String rules = ((RuleBasedCollator) c).getRules();
 
             // If hyphen is ignored except for tertiary difference, make it
             // a primary difference, and move in front of the first primary
@@ -90,11 +90,12 @@ public class NaturalSortCollator extends Collator {
             }
 
             try {
-                collator = new RuleBasedCollator(rules);
+                c = new RuleBasedCollator(rules);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+        this.collator = c;
     }
 
     @Override
