@@ -53,7 +53,7 @@ public class NaturalSortCollator extends Collator {
         this(Locale.getDefault());
     }
 
-    public NaturalSortCollator(Locale locale) {
+    public NaturalSortCollator(@NonNull Locale locale) {
         collator = Collator.getInstance(locale);
 
         if (collator instanceof RuleBasedCollator) {
@@ -109,14 +109,13 @@ public class NaturalSortCollator extends Collator {
     }
 
     @Override
-    public CollationKey getCollationKey(String source) {
+    public @NonNull CollationKey getCollationKey(@NonNull String source) {
         return collator.getCollationKey(expandNumbers(source));
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof NaturalSortCollator) {
-            NaturalSortCollator that = (NaturalSortCollator) o;
+    public boolean equals(@Nullable Object o) {
+        if (o instanceof NaturalSortCollator that) {
             return this.collator.equals(that.collator);
         } else {
             return false;
@@ -184,7 +183,7 @@ public class NaturalSortCollator extends Collator {
         }
     }
 
-    public static <T> Comparator<T> comparing(
+    public static <T> @NonNull Comparator<T> comparing(
             @NonNull Function<? super T, String> keyExtractor) {
         NaturalSortCollator collator = new NaturalSortCollator();
         Objects.requireNonNull(keyExtractor, "keyExtractor");
