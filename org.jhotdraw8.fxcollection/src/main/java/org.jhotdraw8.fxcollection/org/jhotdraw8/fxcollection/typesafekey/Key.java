@@ -6,7 +6,6 @@ package org.jhotdraw8.fxcollection.typesafekey;
 
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.MapExpression;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
@@ -238,8 +237,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @param map a map
      * @return a property for the map entry
      */
-    default @NonNull ReadOnlyProperty<T> readOnlyPropertyAt(final @NonNull MapExpression<Key<?>, Object> map) {
-        ObjectBinding<Object> value = map.valueAt(this);
+    default @NonNull ReadOnlyProperty<T> readOnlyPropertyAt(final @NonNull ObservableMap<Key<?>, Object> map) {
         return new KeyMapEntryProperty<>(map, this);
     }
 

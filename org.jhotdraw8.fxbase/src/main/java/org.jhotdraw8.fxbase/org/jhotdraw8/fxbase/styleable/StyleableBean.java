@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.fxbase.styleable;
 
+import javafx.beans.property.ReadOnlyProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -36,6 +37,13 @@ public interface StyleableBean {
      */
     @Nullable
     String getId();
+
+    /**
+     * Gets a read-only property of the id.
+     *
+     * @return
+     */
+    @NonNull ReadOnlyProperty<String> idProperty();
 
     /**
      * The style class selector of this {@code StyleableBean}.

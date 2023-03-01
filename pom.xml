@@ -6,6 +6,7 @@
 <!--
   ~ Usage:
   ~ mvn clean deploy -Drevision=$(git show -s - -format=%cs_%h)
+  ~ mvn clean deploy -Drevision=1.8.0
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -154,6 +155,7 @@
             </manifest>
             <manifestEntries>
               <SCM-URL>${project.scm.url}</SCM-URL>
+              <Revision>$revision</Revision>
               <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
               <Git-Commit-Id>${git.commit.id.full}</Git-Commit-Id>
             </manifestEntries>

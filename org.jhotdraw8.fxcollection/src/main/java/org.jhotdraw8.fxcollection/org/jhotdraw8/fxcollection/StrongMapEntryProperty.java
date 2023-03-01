@@ -76,12 +76,14 @@ public class StrongMapEntryProperty<K, V, T extends V> extends ObjectPropertyBas
 
     @Override
     public void set(@Nullable T value) {
-        V temp = value;
-        map.put(key, temp);
+        // We must ignore calls to this method after unbind() has been called.
+        if (map != null) {
+            map.put(key, value);
 
-        // Note: super must be called after "put", so that listeners
-        //       can be properly informed.
-        super.set(value);
+            // Note: super must be called after "put", so that listeners
+            //       can be properly informed.
+            super.set(value);
+        }
     }
 
     @Override

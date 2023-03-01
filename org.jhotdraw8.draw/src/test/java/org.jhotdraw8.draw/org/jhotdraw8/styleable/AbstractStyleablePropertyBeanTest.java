@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.styleable;
 
+import javafx.beans.property.ReadOnlyProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.figure.FillableFigure;
@@ -60,6 +61,11 @@ public class AbstractStyleablePropertyBeanTest {
         @Override
         public @NonNull String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public ReadOnlyProperty<String> idProperty() {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override

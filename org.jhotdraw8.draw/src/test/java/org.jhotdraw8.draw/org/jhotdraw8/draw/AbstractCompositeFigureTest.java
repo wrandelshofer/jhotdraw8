@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw;
 
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
@@ -174,6 +175,11 @@ public class AbstractCompositeFigureTest {
 
         @Override
         public @NonNull String getId() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public ReadOnlyProperty<String> idProperty() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

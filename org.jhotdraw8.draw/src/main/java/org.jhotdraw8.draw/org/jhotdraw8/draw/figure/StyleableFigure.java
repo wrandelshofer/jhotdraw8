@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -107,5 +108,10 @@ public interface StyleableFigure extends Figure {
     @Override
     default @Nullable String getId() {
         return get(ID);
+    }
+
+    @Override
+    default ReadOnlyProperty<String> idProperty() {
+        return ID.readOnlyPropertyAt(getProperties());
     }
 }

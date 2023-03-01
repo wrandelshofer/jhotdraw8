@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.css.StyleOrigin;
@@ -236,6 +237,11 @@ public class FigureTest {
         @Override
         public @NonNull String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public ReadOnlyProperty<String> idProperty() {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override

@@ -208,7 +208,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 }
         );
         // Type arguments needed for Java 8!
-        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<String>>((DrawingModel) model.getTreeModel(),
+        pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
@@ -221,12 +221,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // This cell factory ensures that only styleable figures support editing of ids.
         // And it ensures, that the users sees the computed id, and not the one that he entered.
         idColumn.setCellFactory(
-                // Type arguments needed for Java 8!
-                new Callback<TreeTableColumn<Figure, String>, TreeTableCell<Figure, String>>() {
+                new Callback<>() {
 
                     @Override
                     public @NonNull TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
-                        // Type arguments needed for Java 8!
                         return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
                             @Override
                             public void cancelEdit() {
@@ -236,7 +234,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                             @Override
                             public void updateItem(String t, boolean empty) {
-                                super.updateItem(t, empty);
+                                // super.updateItem(t, empty);
                                 TreeTableRow<Figure> row = getTableRow();
                                 boolean isEditable = false;
                                 if (row != null) {
@@ -247,6 +245,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                                     }
 
                                     // show the computed  id!
+                                    // FIXME We should bind to the idProperty here,
+                                    //if (item != null) {
+                                    //textProperty().bind(item.idProperty());
+                                    //setText(item.getId());
+                                    //}else{
+                                    //textProperty().unbind();
+                                    //}
                                     if (item != null) {
                                         setText(item.getId());
                                     }
@@ -269,6 +274,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         // Type arguments needed for Java 8!
         styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<String>>, TreeTableCell<Figure, ImmutableSet<String>>>() {
+            // FIXME This column should be bound to the styleClasses of the figure,
+            //   so that it updates automatically.
 
             @Override
             public @NonNull TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
@@ -330,10 +337,13 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 };
             }
         });
-        // Type arguments needed for Java 8!
-        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<Figure, ImmutableSet<String>>() {
+        pseudoClassesColumn.setCellFactory(paramTableColumn -> new TextFieldTreeTableCell<>() {
             {
+                // FIXME This column should be bound to the pseudoClasses of the figure,
+                //   so that it updates automatically.
                 setConverter(new StringConverterAdapter<ImmutableSet<String>>(wordSetConverter));
+                setEditable(false);
+                this.setStyle("-fx-text-fill: grey");
             }
 
         });
@@ -408,34 +418,34 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             DrawingView myDrawingView = this.drawingView;
             Set<Figure> selection = myDrawingView == null ? Collections.emptySet() : myDrawingView.getSelectedFigures();
             switch (selection.size()) {
-            case 0:
-                selectionModel.clearSelection();
-                break;
-            case 1:
-                selectionModel.clearSelection();
-                final TreeItem<Figure> treeItem = model.getTreeItem(selection.iterator().next());
-                if (treeItem != null) {
-                    selectionModel.select(treeItem);
-                }
-                break;
-            default:
-                int index = 0;
-                int count = 0;
-                final int size = selection.size();
-                for (TreeItem<Figure> node : (Iterable<TreeItem<Figure>>) () -> new ExpandedTreeItemIterator<>(model.getRoot())) {
-                    boolean isSelected = selection.contains(node.getValue());
-                    if (isSelected != selectionModel.isSelected(index)) {
-                        if (isSelected) {
-                            selectionModel.select(index);
-                        } else {
-                            selectionModel.clearSelection(index);
+                case 0:
+                    selectionModel.clearSelection();
+                    break;
+                case 1:
+                    selectionModel.clearSelection();
+                    final TreeItem<Figure> treeItem = model.getTreeItem(selection.iterator().next());
+                    if (treeItem != null) {
+                        selectionModel.select(treeItem);
+                    }
+                    break;
+                default:
+                    int index = 0;
+                    int count = 0;
+                    final int size = selection.size();
+                    for (TreeItem<Figure> node : (Iterable<TreeItem<Figure>>) () -> new ExpandedTreeItemIterator<>(model.getRoot())) {
+                        boolean isSelected = selection.contains(node.getValue());
+                        if (isSelected != selectionModel.isSelected(index)) {
+                            if (isSelected) {
+                                selectionModel.select(index);
+                            } else {
+                                selectionModel.clearSelection(index);
+                            }
                         }
+                        if (isSelected && ++count == size) {
+                            break;
+                        }
+                        index++;
                     }
-                    if (isSelected && ++count == size) {
-                        break;
-                    }
-                    index++;
-                }
             }
             isUpdatingSelectionInView = false;
         }
