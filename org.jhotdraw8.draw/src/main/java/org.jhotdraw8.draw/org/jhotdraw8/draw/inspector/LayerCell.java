@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
@@ -72,6 +73,8 @@ public class LayerCell extends ListCell<Figure> {
         init(fxmlUrl);
     }
 
+    private Tooltip selectionLabelTooltip;
+
     private void init(@NonNull URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
@@ -90,7 +93,7 @@ public class LayerCell extends ListCell<Figure> {
 
         visibleCheckBox.getStyleClass().add(InspectorStyleClasses.VISIBLE_CHECK_BOX);
         lockedCheckBox.getStyleClass().add(InspectorStyleClasses.LOCKED_CHECK_BOX);
-
+        selectionLabelTooltip = new Tooltip(rsrc.getString("figures.dragToLayer.toolTipText"));
     }
 
     @Override
@@ -123,9 +126,9 @@ public class LayerCell extends ListCell<Figure> {
                 }
             }
             setGraphic(node);
-            Integer count = inspector.getSelectionCount((Layer) item);
-            selectionLabel.setText(count == null ? "" : "(" + count + ")");
-
+            int count = inspector.getSelectionCount((Layer) item);
+            selectionLabel.setText(count == 0 ? null : "❏\u2009" + count);
+            selectionLabel.setTooltip(count == 0 ? null : selectionLabelTooltip);
             visibleCheckBox.setSelected(item.get(HideableFigure.VISIBLE));
             lockedCheckBox.setSelected(item.get(LockableFigure.LOCKED));
             isUpdating = false;
