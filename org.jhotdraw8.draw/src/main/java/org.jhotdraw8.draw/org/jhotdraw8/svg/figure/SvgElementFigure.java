@@ -6,7 +6,7 @@
 package org.jhotdraw8.svg.figure;
 
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.styleable.StringStyleableKey;
+import org.jhotdraw8.draw.key.StringStyleableKey;
 
 public interface SvgElementFigure extends Figure {
     /**

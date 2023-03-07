@@ -2,7 +2,7 @@
  * @(#)StyleableSelectorModel.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.styleable;
+package org.jhotdraw8.css.model;
 
 import javafx.css.CssMetaData;
 import javafx.css.ParsedValue;
@@ -16,7 +16,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
-import org.jhotdraw8.css.model.AbstractSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
@@ -30,7 +29,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * StyleableSelectorModel.
+ * A {@link SelectorModel} for objects that implement the {@link Styleable}
+ * interface.
  *
  * @author Werner Randelshofer
  */
