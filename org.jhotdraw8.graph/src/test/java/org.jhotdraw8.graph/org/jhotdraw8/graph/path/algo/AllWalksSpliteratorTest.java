@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class AllPathsSpliteratorTest {
+public class AllWalksSpliteratorTest {
 
     private @NonNull CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
         return new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);

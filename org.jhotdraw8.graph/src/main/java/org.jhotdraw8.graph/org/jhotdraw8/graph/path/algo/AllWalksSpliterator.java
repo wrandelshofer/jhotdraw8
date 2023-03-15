@@ -25,12 +25,14 @@ import java.util.function.Predicate;
  * <p>
  * Only enumerates walks that contain a goal once.
  * <p>
- * Expected run time: The enumeration of paths in a graph is NP-complete.
- * (Because counting the paths is #P-complete).
+ * Expected run time: The enumeration of all walks in a graph is NP-complete.
+ * (Because counting paths is #P-complete).
  * <p>
  * Only run this algorithm on acyclic graphs. In graphs with cycles the
  * algorithm may run out of space, and will then throw a
  * {@link IllegalStateException}.
+ * In an acyclic graph, the algorithm will return paths (a path is a walk
+ * that only contains each vertex once).
  * <p>
  * References:
  * <dl>
@@ -46,7 +48,7 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  * @param <E> the element type of the path
  */
-public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
+public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumeratorSpliterator<OrderedPair<ImmutableList<E>, C>> {
     private final @NonNull Queue<ArcBackLinkWithCost<V, A, C>> queue = new ArrayDeque<>();
     private final @NonNull Predicate<V> goalPredicate;
     private final int maxDepth;
@@ -72,7 +74,7 @@ public class AllPathsSpliterator<V, A, C extends Number & Comparable<C>, E> exte
      * @param costFunction     the cost function.
      * @param sumFunction      the function for adding two cost values
      */
-    public AllPathsSpliterator(@NonNull Iterable<V> startVertices,
+    public AllWalksSpliterator(@NonNull Iterable<V> startVertices,
                                @NonNull Predicate<V> goalPredicate,
                                @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
                                @NonNull Function<ArcBackLinkWithCost<V, A, C>,
