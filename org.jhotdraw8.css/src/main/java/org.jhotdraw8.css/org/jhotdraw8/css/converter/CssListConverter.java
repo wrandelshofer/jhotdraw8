@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 /**
  * Parses a list with items separated by configurable optional delimiters.
  * <p>
- * If the delimiter consists of multiple character tokens, than the parser accepts each
+ * If the delimiter consists of multiple character tokens, then the parser accepts each
  * of the character tokens and any combination of them.
  * <p>
  * The delimiters are optional when the list is parsed from a String.
@@ -37,7 +37,18 @@ import java.util.function.Consumer;
  * Stops parsing at EOF, semicolon and closing bracket.
  * <p>
  * This parser is intentionally forgiving, so that lists can be output with nice
- * delimiters, but the user does not need to type in the delimiter.
+ * delimiters, but the user does not need to type the delimiter.
+ * <p>
+ * In XML files list elements are typically separated by a space character
+ * (see XML Schema 2).
+ * <p>
+ * In CSS list elements are typically separated by a comma character.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>XML Schema 2, List Datatypes</dt>
+ *     <dd><a href="https://www.w3.org/TR/xmlschema-2/#list-datatypes">w3.org</a></dd>
+ * </dl>
  *
  * @param <T> the element type
  */
