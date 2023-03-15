@@ -15,7 +15,7 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
-import org.jhotdraw8.graph.path.SimpleCombinedAllWalksFinder;
+import org.jhotdraw8.graph.path.SimpleCombinedAllSequencesFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -122,7 +122,7 @@ public class ArbitraryArcPathSearchAlgoTest {
 
     @NonNull
     private CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(DirectedGraph<Integer, Double> graph) {
-        CombinedAllSequencesFinder<Integer, Double, Double> instance = new SimpleCombinedAllWalksFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
+        CombinedAllSequencesFinder<Integer, Double, Double> instance = new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
         return instance;
     }
 

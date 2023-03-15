@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
-import org.jhotdraw8.graph.path.SimpleCombinedAllWalksFinder;
+import org.jhotdraw8.graph.path.SimpleCombinedAllSequencesFinder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class AllWalksSpliteratorTest {
+public class AllPathsSpliteratorTest {
 
     private @NonNull CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
-        return new SimpleCombinedAllWalksFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
+        return new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
     }
 
 
