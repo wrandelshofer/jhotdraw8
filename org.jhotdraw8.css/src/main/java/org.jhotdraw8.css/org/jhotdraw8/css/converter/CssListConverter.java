@@ -42,9 +42,15 @@ import java.util.function.Consumer;
  * In XML files list elements are typically separated by a space character
  * (see XML Schema 2).
  * <p>
- * In CSS list elements are typically separated by a comma character.
+ * In CSS list elements are separated by a comma character.
+ * <p>
+ * FIXME Change this class, so that it <b>requires</b> a comma between list elements.
  * <p>
  * References:
+ * <dl>
+ *     <dt>CSS Syntax Module Level 3, 5.3.11. Parse a comma-separated list of component values</dt>
+ *     <dd><a href="https://www.w3.org/TR/css-syntax-3/#parse-comma-separated-list-of-component-values">w3.org</a></dd>
+ * </dl>
  * <dl>
  *     <dt>XML Schema 2, List Datatypes</dt>
  *     <dd><a href="https://www.w3.org/TR/xmlschema-2/#list-datatypes">w3.org</a></dd>
