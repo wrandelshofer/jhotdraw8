@@ -21,13 +21,13 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 /**
- * WordListConverter converts an PersistentSet of Strings into a
+ * WordSetConverter converts an Set of Strings from/to a
  * String.
  * <p>
- * The word list is actually a "set ofCollection space separated tokens", as specified in
+ * The word set is actually a "set ofCollection space separated tokens", as specified in
  * HTML 5 and in XML Schema Part 2.
  * <p>
- * The word list converter coalesces duplicate entries if they have the same
+ * The word set converter coalesces duplicate entries if they have the same
  * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
  * <p>
  * References:
