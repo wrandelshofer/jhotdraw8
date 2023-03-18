@@ -109,8 +109,17 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                 this::containsKey,
                 clearFunction,
                 this::removeEntry,
-                this::firstKey,
-                this::lastKey, null, null, null, null);
+                () -> {
+                    Entry<K, V> e = firstEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getKey();
+                },
+                () -> {
+                    Entry<K, V> e = lastEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getKey();
+                },
+                null, null, null, null);
     }
 
     @Override

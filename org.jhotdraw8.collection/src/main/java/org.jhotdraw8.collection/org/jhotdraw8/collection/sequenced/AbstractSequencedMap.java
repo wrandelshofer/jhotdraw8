@@ -52,18 +52,8 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    public K firstKey() {
-        return SequencedMap.super.firstKey();
-    }
-
-    @Override
     public @Nullable Entry<K, V> lastEntry() {
         return SequencedMap.super.lastEntry();
-    }
-
-    @Override
-    public K lastKey() {
-        return SequencedMap.super.lastKey();
     }
 
     @Override
@@ -84,7 +74,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     @SuppressWarnings({"SuspiciousMethodCalls"})
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
-        return new SequencedSetFacade<>(
+        return new SequencedSetFacade<K>(
                 () -> new MappedIterator<>(m.sequencedEntrySet().iterator(), Entry::getKey),
                 () -> new MappedIterator<>(m.reversed().sequencedEntrySet().iterator(), Entry::getKey),
                 m::size,
@@ -97,8 +87,16 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
                     }
                     return false;
                 },
-                m::firstKey,
-                m::lastKey,
+                () -> {
+                    Entry<K, V> e = m.firstEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getKey();
+                },
+                () -> {
+                    Entry<K, V> e = m.lastEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getKey();
+                },
                 null, null, null, null);
     }
 

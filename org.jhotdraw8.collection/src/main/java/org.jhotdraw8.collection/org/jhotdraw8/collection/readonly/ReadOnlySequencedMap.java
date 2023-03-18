@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
     /**
@@ -33,16 +34,6 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
     }
 
     /**
-     * Gets the first key in this map.
-     *
-     * @return the first key
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    default K firstKey() {
-        return readOnlyKeySet().iterator().next();
-    }
-
-    /**
      * Gets the last entry in this map or {@code null} if this map is empty.
      *
      * @return the last entry or {@code null}
@@ -52,18 +43,30 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
         return isEmpty() ? null : readOnlyReversed().readOnlyEntrySet().iterator().next();
     }
 
-    /**
-     * Gets the last key in this map.
-     *
-     * @return the last key
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    default K lastKey() {
-        return readOnlyReversed().readOnlyKeySet().iterator().next();
+    @Override
+    @NonNull
+    default ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
+        return readOnlySequencedEntrySet();
     }
 
     @Override
-    default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
+    @NonNull
+    default ReadOnlySet<K> readOnlyKeySet() {
+        return readOnlySequencedKeySet();
+    }
+
+    @Override
+    @NonNull
+    default ReadOnlyCollection<V> readOnlyValues() {
+        return readOnlySequencedValues();
+    }
+
+    /**
+     * Returns a {@link ReadOnlySequencedSet} view of the entries contained in this map.
+     *
+     * @return a {@link ReadOnlySequencedSet} view of the entries
+     */
+    default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlySequencedEntrySet() {
         return new ReadOnlySequencedSetFacade<>(
                 this::iterator,
                 () -> readOnlyReversed().readOnlyEntrySet().iterator(),
@@ -74,27 +77,52 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
         );
     }
 
-    @Override
-    default @NonNull ReadOnlySequencedSet<K> readOnlyKeySet() {
+    /**
+     * Returns a {@link ReadOnlySequencedSet} view of the keys contained in this map.
+     *
+     * @return a {@link ReadOnlySequencedSet} view of the keys
+     */
+    default @NonNull ReadOnlySequencedSet<K> readOnlySequencedKeySet() {
         return new ReadOnlySequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getKey),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getKey),
                 this::size,
                 this::containsKey,
-                this::firstKey,
-                this::lastKey
+                () -> {
+                    Map.Entry<K, V> e = firstEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getKey();
+                },
+                () -> {
+                    Map.Entry<K, V> e = lastEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getKey();
+                }
         );
     }
 
-    @Override
-    default @NonNull ReadOnlySequencedCollection<V> readOnlyValues() {
+    /**
+     * Returns a {@link ReadOnlySequencedCollection} view of the values contained in
+     * this map.
+     *
+     * @return a {@link ReadOnlySequencedCollection} view of the values
+     */
+    default @NonNull ReadOnlySequencedCollection<V> readOnlySequencedValues() {
         return new ReadOnlySequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getValue),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getValue),
                 this::size,
                 this::containsValue,
-                () -> firstEntry().getValue(),
-                () -> lastEntry().getValue()
+                () -> {
+                    Map.Entry<K, V> e = firstEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getValue();
+                },
+                () -> {
+                    Map.Entry<K, V> e = lastEntry();
+                    if (e == null) throw new NoSuchElementException();
+                    return e.getValue();
+                }
         );
     }
 }

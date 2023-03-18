@@ -243,11 +243,6 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     @Override
-    public K firstKey() {
-        return HeapSequencedIterator.getFirst(root, first, last).getKey();
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public V get(Object o) {
         Object result = root.find(
@@ -301,11 +296,6 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     @Override
     public @Nullable Entry<K, V> lastEntry() {
         return isEmpty() ? null : HeapSequencedIterator.getLast(root, first, last);
-    }
-
-    @Override
-    public K lastKey() {
-        return HeapSequencedIterator.getLast(root, first, last).getKey();
     }
 
     @Override

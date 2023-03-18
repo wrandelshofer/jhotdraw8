@@ -36,16 +36,6 @@ public interface SequencedMap<K, V> extends Map<K, V> {
     }
 
     /**
-     * Gets the first key in this map.
-     *
-     * @return the first key
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    default K firstKey() {
-        return sequencedKeySet().iterator().next();
-    }
-
-    /**
      * Gets the last entry in this map or {@code null} if this map is empty.
      *
      * @return the last entry or {@code null}
@@ -53,16 +43,6 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      */
     default @Nullable Map.Entry<K, V> lastEntry() {
         return isEmpty() ? null : reversed().sequencedEntrySet().iterator().next();
-    }
-
-    /**
-     * Gets the last key in this map.
-     *
-     * @return the last key
-     * @throws java.util.NoSuchElementException if the map is empty
-     */
-    default K lastKey() {
-        return reversed().sequencedKeySet().iterator().next();
     }
 
     /**

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class AbstractSequencedMapTest extends AbstractMapTest {
@@ -61,8 +62,10 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
             instance.putFirst(e.getKey(), e.getValue());
-            assertEquals(e, instance.firstEntry());
-            assertEquals(e.getKey(), instance.firstKey());
+            Map.Entry<HashCollider, HashCollider> firstEntry = instance.firstEntry();
+            assertEquals(e, firstEntry);
+            assertNotNull(firstEntry);
+            assertEquals(e.getKey(), firstEntry.getKey());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "putFirst");
@@ -76,8 +79,10 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
             instance.putLast(e.getKey(), e.getValue());
-            assertEquals(e, instance.lastEntry());
-            assertEquals(e.getKey(), instance.lastKey());
+            Map.Entry<HashCollider, HashCollider> lastEntry = instance.lastEntry();
+            assertEquals(e, lastEntry);
+            assertNotNull(lastEntry);
+            assertEquals(e.getKey(), lastEntry.getKey());
             expected.remove(e);
             expected.add(e);
             assertEqualSequence(expected, instance, "putLast");

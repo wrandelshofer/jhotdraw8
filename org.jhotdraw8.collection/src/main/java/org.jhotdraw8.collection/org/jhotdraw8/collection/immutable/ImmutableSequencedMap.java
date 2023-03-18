@@ -65,7 +65,8 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * a different map instance with the first entry removed
      */
     default @NonNull ImmutableSequencedMap<K, V> removeFirst() {
-        return isEmpty() ? this : remove(firstKey());
+        Map.Entry<K, V> e = firstEntry();
+        return e == null ? this : remove(e.getKey());
     }
 
     /**
@@ -76,7 +77,8 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * a different map instance with the last entry removed
      */
     default @NonNull ImmutableSequencedMap<K, V> removeLast() {
-        return isEmpty() ? this : remove(lastKey());
+        Map.Entry<K, V> e = lastEntry();
+        return e == null ? this : remove(e.getKey());
     }
 
     @Override
