@@ -6,28 +6,28 @@ package org.jhotdraw8.draw.css.converter;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Converts a {@code CssDimension2D} into a {@code String} and vice versa.
  *
  * @author Werner Randelshofer
  */
-public class CssPaperSizeConverter implements Converter<CssDimension2D> {
+public class CssPaperSizeConverter extends AbstractCssConverter<CssDimension2D> {
 
     private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
     private static final @NonNull Map<String, CssDimension2D> paperSizes;
@@ -70,6 +70,7 @@ public class CssPaperSizeConverter implements Converter<CssDimension2D> {
     private static final String PORTRAIT = "portrait";
 
     public CssPaperSizeConverter() {
+        super(false);
     }
 
     private @Nullable CssDimension2D parsePageSize(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
@@ -113,9 +114,25 @@ public class CssPaperSizeConverter implements Converter<CssDimension2D> {
     }
 
     @Override
-    public @Nullable CssDimension2D fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        CssTokenizer tt = new StreamCssTokenizer(buf);
+    public @NonNull CssDimension2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         return parsePageSize(tt, idResolver);
+    }
+
+    @Override
+    protected <TT extends CssDimension2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+        String paper = sizePapers.get(value);
+        if (paper != null) {
+            boolean first = true;
+            for (String ident : paper.split("\\s+")) {
+                if (first) first = false;
+                else out.accept(new CssToken(CssTokenType.TT_S, " "));
+                out.accept(new CssToken(CssTokenType.TT_IDENT, ident));
+            }
+        } else {
+            sizeConverter.produceTokens(value.getWidth(), idSupplier, out);
+            out.accept(new CssToken(CssTokenType.TT_S, " "));
+            sizeConverter.produceTokens(value.getHeight(), idSupplier, out);
+        }
 
     }
 
