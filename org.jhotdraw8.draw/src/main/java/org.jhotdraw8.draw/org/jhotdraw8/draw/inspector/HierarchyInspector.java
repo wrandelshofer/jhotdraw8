@@ -45,8 +45,8 @@ import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.fxbase.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
-import org.jhotdraw8.xml.text.XmlWordListConverter;
-import org.jhotdraw8.xml.text.XmlWordSetConverter;
+import org.jhotdraw8.xml.converter.XmlWordListConverter;
+import org.jhotdraw8.xml.converter.XmlWordSetConverter;
 
 import java.io.IOException;
 import java.io.InputStream;

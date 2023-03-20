@@ -20,7 +20,8 @@ module org.jhotdraw8.grapher {
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.base;
-    requires org.jhotdraw8.theme;
+    requires transitive org.jhotdraw8.svg;
+    requires transitive org.jhotdraw8.theme;
 
     opens org.jhotdraw8.grapher to javafx.fxml, javafx.graphics;
 

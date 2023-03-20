@@ -4,7 +4,6 @@
  */
 
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
-import org.jhotdraw8.draw.spi.SvgImageReaderProvider;
 
 @SuppressWarnings("module")
 module org.jhotdraw8.draw {
@@ -24,6 +23,7 @@ module org.jhotdraw8.draw {
     requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.geom;
     requires transitive org.jhotdraw8.graph;
+    requires transitive org.jhotdraw8.xml;
 
     opens org.jhotdraw8.draw.action.images;
     opens org.jhotdraw8.draw.gui to javafx.fxml;
@@ -51,12 +51,9 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.spi;
     exports org.jhotdraw8.draw.tool;
     exports org.jhotdraw8.draw;
-    exports org.jhotdraw8.svg.io;
-    exports org.jhotdraw8.xml.text;
-    exports org.jhotdraw8.xml;
     exports org.jhotdraw8.draw.css.model;
+    exports org.jhotdraw8.draw.xml.converter;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
-    provides org.jhotdraw8.fxbase.spi.NodeReaderProvider with SvgImageReaderProvider;
 
 }

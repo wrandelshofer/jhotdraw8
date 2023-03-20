@@ -47,8 +47,10 @@
     <module>org.jhotdraw8.graph</module>
     <module>org.jhotdraw8.grapher</module>
     <module>org.jhotdraw8.os</module>
+    <module>org.jhotdraw8.svg</module>
     <module>org.jhotdraw8.teddy</module>
     <module>org.jhotdraw8.theme</module>
+    <module>org.jhotdraw8.xml</module>
   </modules>
 
   <properties>
@@ -321,6 +323,16 @@
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.graph</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.xml</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.svg</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>

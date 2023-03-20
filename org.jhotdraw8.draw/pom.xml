@@ -76,6 +76,10 @@
         <artifactId>org.jhotdraw8.graph</artifactId>
       </dependency>
       <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.xml</artifactId>
+      </dependency>
+      <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
         <scope>test</scope>

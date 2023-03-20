@@ -35,7 +35,7 @@ import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
-import org.jhotdraw8.xml.text.XmlUriConverter;
+import org.jhotdraw8.xml.converter.XmlUriConverter;
 
 import java.io.File;
 import java.io.IOException;

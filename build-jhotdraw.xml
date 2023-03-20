@@ -1123,7 +1123,7 @@
     <echo file="${build.main.classes}/META-INF/services/org.jhotdraw8.app.spi.NodeReaderProvider">
       org.jhotdraw8.application.spi.FxmlNodeReaderProvider
       org.jhotdraw8.application.spi.ImageNodeReaderProvider
-      org.jhotdraw8.draw.spi.SvgImageReaderProvider
+      org.jhotdraw8.svg.spi.SvgImageReaderProvider
     </echo>
 
     <jar destfile="${build.main.jars}/${ant.project.name}.jar">

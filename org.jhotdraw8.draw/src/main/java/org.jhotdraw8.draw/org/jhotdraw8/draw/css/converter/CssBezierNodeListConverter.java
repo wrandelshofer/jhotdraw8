@@ -51,6 +51,7 @@ public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableLi
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
+            // FIXME we lose smooth here! Use a PathBuilder instead.
             out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null))));
         }
     }

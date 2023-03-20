@@ -55,16 +55,20 @@
           <groupId>ch.randelshofer</groupId>
           <artifactId>org.jhotdraw8.os</artifactId>
       </dependency>
-      <dependency>
-          <groupId>ch.randelshofer</groupId>
-          <artifactId>org.jhotdraw8.fxcontrols</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>ch.randelshofer</groupId>
-          <artifactId>org.jhotdraw8.theme</artifactId>
-        <version>${revision}</version>
-          <scope>compile</scope>
-      </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.fxcontrols</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.theme</artifactId>
+      <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.svg</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

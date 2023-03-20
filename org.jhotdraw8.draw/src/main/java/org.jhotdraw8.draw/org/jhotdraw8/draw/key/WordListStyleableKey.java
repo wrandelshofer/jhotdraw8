@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.xml.text.XmlWordListConverter;
+import org.jhotdraw8.xml.converter.XmlWordListConverter;
 
 /**
  * WordListStyleableKey.
