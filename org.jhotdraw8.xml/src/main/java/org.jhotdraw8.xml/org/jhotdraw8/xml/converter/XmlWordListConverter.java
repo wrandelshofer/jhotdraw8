@@ -50,7 +50,9 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends ImmutableList<String>> void toString(Appendable out,
+                                                            @Nullable IdSupplier idSupplier,
+                                                            @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
