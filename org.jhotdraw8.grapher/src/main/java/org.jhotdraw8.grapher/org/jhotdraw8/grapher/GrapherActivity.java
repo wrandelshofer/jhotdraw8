@@ -133,7 +133,7 @@ import org.jhotdraw8.fxcontrols.dock.SplitPaneTrack;
 import org.jhotdraw8.fxcontrols.dock.TabbedAccordionTrack;
 import org.jhotdraw8.fxcontrols.dock.Track;
 import org.jhotdraw8.fxcontrols.dock.VBoxTrack;
-import org.jhotdraw8.svg.gui.DrawingExportOptionsPane;
+import org.jhotdraw8.svg.gui.SvgDrawingExportOptionsPane;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 import org.jhotdraw8.svg.io.SvgExportOutputFormat;
@@ -256,7 +256,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     protected void initActions(@NonNull ObservableMap<String, Action> map) {
         super.initActions(map);
         map.put(PrintFileAction.ID, new PrintFileAction(this));
-        map.put(ExportFileAction.ID, new ExportFileAction(this, DrawingExportOptionsPane::createDialog));
+        map.put(ExportFileAction.ID, new ExportFileAction(this, SvgDrawingExportOptionsPane::createDialog));
         map.put(RemoveTransformationsAction.ID, new RemoveTransformationsAction(editor));
         map.put(BrowseFileDirectoryAction.ID, new BrowseFileDirectoryAction(this));
         map.put(SelectSameAction.ID, new SelectSameAction(editor));

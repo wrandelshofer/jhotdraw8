@@ -44,11 +44,11 @@ import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_
 import static org.jhotdraw8.draw.io.ExportOutputFormat.EXPORT_SLICES_RESOLUTION_3X_KEY;
 import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
-public class DrawingExportOptionsPane extends GridPane {
+public class SvgDrawingExportOptionsPane extends GridPane {
 
     public static @NonNull Dialog<Map<Key<?>, Object>> createDialog(DataFormat format) {
         Resources labels = ApplicationLabels.getResources();
-        final DrawingExportOptionsPane pane = new DrawingExportOptionsPane();
+        final SvgDrawingExportOptionsPane pane = new SvgDrawingExportOptionsPane();
         pane.setFormat(format);
         return new InputDialog<>(labels.getString("file.export.dialog.title"), labels.getString("file.export.dialog.headerText"), pane, pane::getExportOptions);
     }
@@ -110,7 +110,7 @@ public class DrawingExportOptionsPane extends GridPane {
     private Label optionsLabel;
     private DataFormat format;
 
-    public DrawingExportOptionsPane() {
+    public SvgDrawingExportOptionsPane() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setRoot(this);
