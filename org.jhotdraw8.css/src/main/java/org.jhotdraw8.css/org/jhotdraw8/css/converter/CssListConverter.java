@@ -95,18 +95,35 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
 
-    public CssListConverter(CssConverter<T> elementConverter,
+    /**
+     * Creates a new instance that does not sort the elements.
+     *
+     * @param elementConverter converter for elements
+     * @param delimiter        optional delimiter for parsing; the delimiter is used for pretty printing
+     * @param prefix           white-space tokens for pretty printing that are used when producing tokens or a String
+     * @param suffix           white-space tokens for pretty printing that are used when producing tokens or a String
+     */
+    public CssListConverter(@NonNull CssConverter<T> elementConverter,
                             @NonNull Iterable<CssToken> delimiter,
-                            Iterable<CssToken> prefix,
-                            Iterable<CssToken> suffix
+                            @NonNull Iterable<CssToken> prefix,
+                            @NonNull Iterable<CssToken> suffix
     ) {
         this(elementConverter, delimiter, prefix, suffix, null);
     }
 
-    public CssListConverter(CssConverter<T> elementConverter,
+    /**
+     * Creates a new instance.
+     *
+     * @param elementConverter     converter for elements
+     * @param delimiter            optional delimiter for parsing; the delimiter is used for pretty printing
+     * @param prefix               white-space tokens for pretty printing that are used when producing tokens or a String
+     * @param suffix               white-space tokens for pretty printing that are used when producing tokens or a String
+     * @param comparatorForSorting optional comparator for sorting; null means no sorting
+     */
+    public CssListConverter(@NonNull CssConverter<T> elementConverter,
                             @NonNull Iterable<CssToken> delimiter,
-                            Iterable<CssToken> prefix,
-                            Iterable<CssToken> suffix,
+                            @NonNull Iterable<CssToken> prefix,
+                            @NonNull Iterable<CssToken> suffix,
                             @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;

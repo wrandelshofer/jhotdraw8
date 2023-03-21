@@ -19,7 +19,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class CssToken /*extends AST*/ {
+public class CssToken {
 
     /**
      * The token type.
@@ -457,5 +457,18 @@ public class CssToken /*extends AST*/ {
 
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CssToken cssToken = (CssToken) o;
+        return ttype == cssToken.ttype && Objects.equals(stringValue, cssToken.stringValue) && Objects.equals(numericValue, cssToken.numericValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ttype, stringValue, numericValue);
     }
 }

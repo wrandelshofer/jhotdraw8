@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
@@ -16,7 +17,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import java.lang.reflect.Type;
 
 /**
- * TListStyleableFigureKey.
+ * ListStyleableKey.
  *
  * @author Werner Randelshofer
  */
@@ -65,6 +66,11 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableL
 
     public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
         super(xmlName, cssName, type.getType(), new CssListConverter<>(converter), defaultValue);
+    }
+
+    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter,
+                            @Nullable String delimiter, @NonNull ImmutableList<T> defaultValue) {
+        super(xmlName, cssName, type.getType(), new CssListConverter<>(converter, delimiter), defaultValue);
     }
 
 }

@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.champ.ChampImmutableSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 
@@ -16,9 +17,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.Normalizer;
 import java.text.ParseException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.TreeSet;
+import java.util.List;
 
 /**
  * WordSetConverter converts an Set of Strings from/to a
@@ -28,7 +29,7 @@ import java.util.TreeSet;
  * HTML 5 and in XML Schema Part 2.
  * <p>
  * The word set converter coalesces duplicate entries if they have the same
- * Unicode NFD form. The tokens are sorted using their Unicode NFD form.
+ * Unicode NFC form. The tokens are sorted using their Unicode NFD form.
  * <p>
  * References:
  * <dl>
@@ -43,10 +44,14 @@ import java.util.TreeSet;
  */
 public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
-    public static final Comparator<String> NFD_COMPARATOR
-            = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
+    private final @Nullable Comparator<String> comparator;
 
     public XmlWordSetConverter() {
+        this(Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD)));
+    }
+
+    public XmlWordSetConverter(@Nullable Comparator<String> comparator) {
+        this.comparator = comparator;
     }
 
     @Override
@@ -54,10 +59,15 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
         if (value == null) {
             return;
         }
-        final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
-        tree.addAll(value.asSet());
+        Iterable<String> words;
+        if (comparator != null) {
+            words = new ArrayList<>(value.asSet());
+            ((ArrayList<String>) words).sort(comparator);
+        } else {
+            words = value;
+        }
         boolean isFirst = true;
-        for (String s : tree) {
+        for (String s : words) {
             if (isFirst) {
                 isFirst = false;
             } else {
@@ -73,10 +83,16 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
         if (buf == null) {
             return ChampImmutableSet.of();
         }
-        final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
-        tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
+        String[] strings = buf.toString().split("\\s+");
+        List<String> words = new ArrayList<>(strings.length);
+        for (String str : strings) {
+            words.add(Normalizer.normalize(str, Normalizer.Form.NFC));
+        }
+        if (comparator != null) {
+            words.sort(comparator);
+        }
         buf.position(buf.length());// consume buffer
-        return ChampImmutableSet.copyOf(tree);
+        return ChampImmutableSequencedSet.copyOf(words);
     }
 
     @Override

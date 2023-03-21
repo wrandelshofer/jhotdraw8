@@ -25,7 +25,7 @@ import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.key.ObservableWordSetKey;
+import org.jhotdraw8.draw.key.WordSetKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
@@ -79,7 +79,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @SuppressWarnings("unchecked")
     private @NonNull
-    final ObservableWordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
+    final WordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;

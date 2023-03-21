@@ -10,11 +10,11 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 
 /**
- * ObservableWordSetKey.
+ * WordSetKey.
  *
  * @author Werner Randelshofer
  */
-public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> {
+public class WordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet
      *
      * @param name The name of the key.
      */
-    public ObservableWordSetKey(@NonNull String name) {
+    public WordSetKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -34,7 +34,7 @@ public class ObservableWordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public ObservableWordSetKey(@NonNull String name, @NonNull ImmutableSet<String> defaultValue) {
+    public WordSetKey(@NonNull String name, @NonNull ImmutableSet<String> defaultValue) {
         super(name, new TypeToken<ImmutableSet<String>>() {
         }, defaultValue);
     }
