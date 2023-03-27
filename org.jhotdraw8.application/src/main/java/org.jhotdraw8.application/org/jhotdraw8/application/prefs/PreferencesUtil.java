@@ -101,22 +101,13 @@ public class PreferencesUtil {
      *                    this window.
      */
     public static void installStagePrefsHandler(final @NonNull Preferences prefs, final String name, @NonNull Stage stage, @NonNull Dimension2D defaultSize) {
-
-        double prefWidth;
-        double prefHeight;
-
-        prefWidth = prefs.getDouble(name + ".width", defaultSize.getWidth());
-        prefHeight = prefs.getDouble(name + ".height", defaultSize.getHeight());
+        double prefWidth = prefs.getDouble(name + ".width", defaultSize.getWidth());
+        double prefHeight = prefs.getDouble(name + ".height", defaultSize.getHeight());
+        Rectangle2D stageBounds = new Rectangle2D(0, 0, prefWidth, prefHeight);
         Screen primary = Screen.getPrimary();
-        Rectangle2D screenBounds = primary == null ? null : primary.getBounds();
-
-        if (prefWidth > 0 && screenBounds != null && prefWidth <= screenBounds.getWidth()) {
-            stage.setWidth(prefWidth);
-        }
-        if (prefHeight > 0 && screenBounds != null && prefHeight <= screenBounds.getHeight()) {
-            stage.setHeight(prefHeight);
-        }
-
+        Rectangle2D screenBounds = primary == null ? stageBounds : primary.getVisualBounds();
+        stage.setWidth(Math.min(screenBounds.getWidth(), prefWidth));
+        stage.setHeight(Math.min(screenBounds.getHeight(), prefHeight));
         stage.widthProperty().addListener((o, oldValue, newValue) -> prefs.putDouble(name + ".width", newValue.doubleValue()));
         stage.heightProperty().addListener((o, oldValue, newValue) -> prefs.putDouble(name + ".height", newValue.doubleValue()));
     }
