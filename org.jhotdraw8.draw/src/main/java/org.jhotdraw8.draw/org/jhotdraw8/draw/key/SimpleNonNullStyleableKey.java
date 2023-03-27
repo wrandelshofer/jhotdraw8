@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 import java.lang.reflect.Type;
 
@@ -16,8 +16,8 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class SimpleNonNullStyleableKey<T> extends AbstractReadOnlyStyleableKey< T> implements WritableStyleableMapAccessor<@NonNull T>,
-        NonNullMapAccessor< T> {
+public class SimpleNonNullStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<@NonNull T>,
+        NonNullKey<T> {
 
     private static final long serialVersionUID = 1L;
 

@@ -10,15 +10,14 @@ import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 /**
  * Convenience class for creating a {@link Key} for an enum type.
  *
  * @author Werner Randelshofer
  */
-public class EnumStyleableKey< T extends Enum<T>> extends SimpleStyleableKey< T>
-        implements WritableStyleableMapAccessor<T>, NonNullMapAccessor< T>, NonNullKey<T> {
+public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
+        implements WritableStyleableMapAccessor<T>, NonNullKey<T> {
 
     private static final long serialVersionUID = 1L;
 

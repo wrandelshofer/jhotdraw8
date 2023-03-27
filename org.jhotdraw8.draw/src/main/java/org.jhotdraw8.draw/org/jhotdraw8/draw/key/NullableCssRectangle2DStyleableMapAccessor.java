@@ -12,7 +12,6 @@ import org.jhotdraw8.draw.css.converter.CssRectangle2DConverter;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.Map;
 
@@ -22,7 +21,7 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class NullableCssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@Nullable CssRectangle2D>
-        implements NonNullMapAccessor<@NonNull CssRectangle2D> {
+        implements MapAccessor<@NonNull CssRectangle2D> {
 
     private static final long serialVersionUID = 1L;
 

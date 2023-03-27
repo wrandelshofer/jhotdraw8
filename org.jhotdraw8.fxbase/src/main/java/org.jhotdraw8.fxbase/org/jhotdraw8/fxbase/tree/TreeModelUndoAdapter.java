@@ -33,26 +33,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class TreeModelUndoAdapter<E> {
     public static final @NonNull String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
-    private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
-
-    public ResourceBundle getResourceBundle() {
-        return resourceBundle.get();
-    }
-
-    public NonNullObjectProperty<ResourceBundle> resourceBundleProperty() {
-        return resourceBundle;
-    }
-
-    public void setResourceBundle(ResourceBundle resourceBundle) {
-        this.resourceBundle.set(resourceBundle);
-    }
-
+    private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
     private @NonNull
     final Listener<TreeModelEvent<E>> treeModelListener = new Listener<TreeModelEvent<E>>() {
         @Override
         public void handle(@NonNull TreeModelEvent<E> event) {
             UndoableEdit edit = switch (event.getEventType()) {
-                case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
+                case ROOT_CHANGED ->
+                        new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
                 case SUBTREE_NODES_CHANGED,
                         NODE_ADDED_TO_TREE,
                         NODE_REMOVED_FROM_TREE,
@@ -68,13 +56,7 @@ public class TreeModelUndoAdapter<E> {
             }
         }
     };
-
-    protected void fireUndoableEdit(@NonNull Object source, @NonNull UndoableEdit edit) {
-        final UndoableEditEvent editEvent = new UndoableEditEvent(source, edit);
-        listeners.forEach(e -> e.undoableEditHappened(editEvent));
-    }
-
-    private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
+    private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
 
     public TreeModelUndoAdapter() {
     }
@@ -83,22 +65,38 @@ public class TreeModelUndoAdapter<E> {
         bind(model);
     }
 
+    public void addUndoEditListener(@NonNull UndoableEditListener listener) {
+        listeners.add(listener);
+    }
+
     public void bind(@NonNull TreeModel<E> model) {
         unbind(model);
         model.addTreeModelListener(treeModelListener);
     }
 
-    public void unbind(@NonNull TreeModel<E> model) {
-        model.removeTreeModelListener(treeModelListener);
+    protected void fireUndoableEdit(@NonNull Object source, @NonNull UndoableEdit edit) {
+        final UndoableEditEvent editEvent = new UndoableEditEvent(source, edit);
+        listeners.forEach(e -> e.undoableEditHappened(editEvent));
     }
 
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle.get();
+    }
+
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle.set(resourceBundle);
+    }
 
     public void removeUndoEditListener(@NonNull UndoableEditListener listener) {
         listeners.remove(listener);
     }
 
-    public void addUndoEditListener(@NonNull UndoableEditListener listener) {
-        listeners.add(listener);
+    public NonNullObjectProperty<ResourceBundle> resourceBundleProperty() {
+        return resourceBundle;
+    }
+
+    public void unbind(@NonNull TreeModel<E> model) {
+        model.removeTreeModelListener(treeModelListener);
     }
 
     class RootChangedEdit<E> extends AbstractUndoableEdit {
@@ -113,9 +111,8 @@ public class TreeModelUndoAdapter<E> {
         }
 
         @Override
-        public void undo() throws CannotUndoException {
-            super.undo();
-            model.setRoot(oldRoot);
+        public String getPresentationName() {
+            return getResourceBundle().getString("edit.SetRoot");
         }
 
         @Override
@@ -125,8 +122,9 @@ public class TreeModelUndoAdapter<E> {
         }
 
         @Override
-        public String getPresentationName() {
-            return getResourceBundle().getString("edit.SetRoot");
+        public void undo() throws CannotUndoException {
+            super.undo();
+            model.setRoot(oldRoot);
         }
     }
 
@@ -144,9 +142,8 @@ public class TreeModelUndoAdapter<E> {
         }
 
         @Override
-        public void undo() throws CannotUndoException {
-            super.undo();
-            model.removeFromParent(child);
+        public String getPresentationName() {
+            return getResourceBundle().getString("edit.Add");
         }
 
         @Override
@@ -156,8 +153,9 @@ public class TreeModelUndoAdapter<E> {
         }
 
         @Override
-        public String getPresentationName() {
-            return getResourceBundle().getString("edit.Add");
+        public void undo() throws CannotUndoException {
+            super.undo();
+            model.removeFromParent(child);
         }
     }
 
@@ -175,9 +173,8 @@ public class TreeModelUndoAdapter<E> {
         }
 
         @Override
-        public void undo() throws CannotUndoException {
-            super.undo();
-            model.insertChildAt(child, parent, childIndex);
+        public String getPresentationName() {
+            return getResourceBundle().getString("edit.Remove");
         }
 
         @Override
@@ -187,8 +184,9 @@ public class TreeModelUndoAdapter<E> {
         }
 
         @Override
-        public String getPresentationName() {
-            return getResourceBundle().getString("edit.Remove");
+        public void undo() throws CannotUndoException {
+            super.undo();
+            model.insertChildAt(child, parent, childIndex);
         }
     }
 }

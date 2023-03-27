@@ -9,13 +9,14 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * BlendModeStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> implements WritableStyleableMapAccessor<BlendMode> {
+public class BlendModeStyleableKey extends AbstractStyleableKey<BlendMode> implements WritableStyleableMapAccessor<BlendMode>, NonNullKey<BlendMode> {
 
     static final long serialVersionUID = 1L;
     private final @NonNull Converter<BlendMode> converter = new CssKebabCaseEnumConverter<>(BlendMode.class, false);

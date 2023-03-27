@@ -49,14 +49,17 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
         this.compatibleFigures = compatibleFigures;
     }
 
+
     @Override
     public void trackMousePressed(MouseEvent event, DrawingView dv) {
+        stopCompositeEdit(dv);
         handle.onMousePressed(event, dv);
         node.setCursor(handle.getCursor());
     }
 
     @Override
     public void trackMouseClicked(MouseEvent event, DrawingView dv) {
+        stopCompositeEdit(dv);
         handle.onMouseClicked(event, dv);
     }
 
@@ -64,10 +67,12 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
     public void trackMouseReleased(MouseEvent event, DrawingView dv) {
         handle.onMouseReleased(event, dv);
         node.setCursor(handle.getCursor());
+        stopCompositeEdit(dv);
     }
 
     @Override
     public void trackMouseDragged(MouseEvent event, DrawingView dv) {
+        startCompositeEdit(dv);
         handle.onMouseDragged(event, dv);
         node.setCursor(handle.getCursor());
     }

@@ -198,6 +198,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     private void apply(ActionEvent event) {
+        startCompositeEdit();
         isApplying = true;
         CssParser parser = new CssParser();
         TextArea textArea = getTextArea();
@@ -238,7 +239,12 @@ public abstract class AbstractStyleAttributesInspector<E> {
             textArea.requestFocus();
         }
         isApplying = false;
+        stopCompositeEdit();
     }
+
+    protected abstract void startCompositeEdit();
+
+    protected abstract void stopCompositeEdit();
 
     /**
      * Attribute filter can be used to show only a specific set
@@ -736,6 +742,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     break;
                 }
                 BiConsumer<Boolean, Object> lambda = (b, o) -> {
+                    startCompositeEdit();
                     if (b) {
                         for (E f : selectedF) {
                             AbstractStyleAttributesInspector.this.set(f, finalSelectedAccessor, o);
@@ -746,6 +753,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                         }
                     }
                     invalidateTextArea(null);
+                    stopCompositeEdit();
                 };
                 picker.show(getTextArea(), screenX, screenY,
                         initialValue, lambda);

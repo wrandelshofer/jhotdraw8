@@ -11,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
@@ -20,7 +19,6 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.undo.CompositeEdit;
 import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
 
-import javax.swing.event.UndoableEditEvent;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -102,6 +100,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
     @Override
     public void trackMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        stopCompositeEdit(view);
         oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure,
                 new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
     }
@@ -109,30 +108,17 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     @Override
     public void trackMouseReleased(MouseEvent event, @NonNull DrawingView dv) {
         dv.recreateHandles();
-        if (undoableEdit != null) {
-            DrawingEditor editor = dv.getEditor();
-            if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
-            }
-            undoableEdit = null;
-        }
-        //  fireToolDone();
+        stopCompositeEdit(dv);
     }
 
     @Override
     public void trackMouseClicked(MouseEvent event, DrawingView dv) {
+        stopCompositeEdit(dv);
     }
 
     @Override
     public void trackMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
-        if (undoableEdit == null) {
-            undoableEdit = new CompositeEdit();
-            DrawingEditor editor = view.getEditor();
-            if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
-            }
-        }
-
+        startCompositeEdit(view);
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -208,5 +194,4 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     @Override
     public void trackKeyTyped(KeyEvent event, DrawingView view) {
     }
-
 }

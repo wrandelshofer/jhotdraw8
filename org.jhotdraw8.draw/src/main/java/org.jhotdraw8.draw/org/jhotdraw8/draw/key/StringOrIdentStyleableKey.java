@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssStringOrIdentConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * This key has a string value which can be given as a CSS "IDENT"-token or
@@ -17,7 +17,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
  * @author Werner Randelshofer
  */
 public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull String>
-        implements WritableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
+        implements WritableStyleableMapAccessor<@NonNull String>, NonNullKey<@NonNull String> {
 
     static final long serialVersionUID = 1L;
     private final Converter<String> converter = new CssStringOrIdentConverter();

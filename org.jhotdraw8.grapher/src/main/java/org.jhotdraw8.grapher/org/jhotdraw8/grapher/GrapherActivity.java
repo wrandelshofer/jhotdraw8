@@ -363,7 +363,9 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         model.addListener(drawingModel -> {
             modified.set(true);
         });
-        new DrawingModelUndoAdapter(model).addUndoEditListener(undoManager);
+        final DrawingModelUndoAdapter undoAdapter = new DrawingModelUndoAdapter(model);
+        undoAdapter.setResourceBundle(getApplication().getResources().asResourceBundle());
+        undoAdapter.addUndoEditListener(undoManager);
 
         IdFactory idFactory = new SimpleFigureIdFactory();
         FigureFactory factory = new DefaultFigureFactory(idFactory);

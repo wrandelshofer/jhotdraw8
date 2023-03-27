@@ -27,8 +27,10 @@ import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.fxbase.undo.CompositeEdit;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
+import javax.swing.event.UndoableEditEvent;
 import java.util.LinkedList;
 
 /**
@@ -38,9 +40,6 @@ import java.util.LinkedList;
  */
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
-    // ---
-    // Fields
-    // ---
     /**
      * The getProperties.
      */
@@ -420,5 +419,28 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     @Override
     public @NonNull ReadOnlyBooleanProperty focusedProperty() {
         return eventPane.focusedProperty();
+    }
+
+
+    protected CompositeEdit undoableEdit;
+
+    protected void startCompositeEdit(DrawingView view) {
+        if (undoableEdit == null) {
+            undoableEdit = new CompositeEdit();
+            DrawingEditor editor = view.getEditor();
+            if (editor != null) {
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+            }
+        }
+    }
+
+    protected void stopCompositeEdit(DrawingView view) {
+        if (undoableEdit != null) {
+            DrawingEditor editor = view.getEditor();
+            if (editor != null) {
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+            }
+            undoableEdit = null;
+        }
     }
 }

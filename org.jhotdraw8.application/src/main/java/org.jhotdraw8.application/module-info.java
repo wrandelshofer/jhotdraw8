@@ -6,8 +6,7 @@
 import org.jhotdraw8.application.spi.ApplicationResourceBundleProvider;
 
 /**
- * Defines a programming model for document oriented applications and provides default
- * implementations.
+ * Defines a framework for document-oriented applications.
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.application {

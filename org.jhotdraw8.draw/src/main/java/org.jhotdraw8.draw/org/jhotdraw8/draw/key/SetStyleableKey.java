@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * ListStyleableKey.
@@ -19,7 +19,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
  */
 public class SetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSequencedSet<T>>
         implements WritableStyleableMapAccessor<ImmutableSequencedSet<T>>,
-        NonNullMapAccessor<ImmutableSequencedSet<T>> {
+        NonNullKey<ImmutableSequencedSet<T>> {
 
     private static final long serialVersionUID = 1L;
 

@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.draw.css.converter.CssBezierNodeListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.geom.shape.BezierNode;
 
 /**
@@ -22,7 +22,7 @@ import org.jhotdraw8.geom.shape.BezierNode;
 public class BezierNodeListStyleableKey
         extends AbstractStyleableKey<@NonNull ImmutableList<BezierNode>>
         implements WritableStyleableMapAccessor<@NonNull ImmutableList<BezierNode>>,
-        NonNullMapAccessor<@NonNull ImmutableList<BezierNode>> {
+        NonNullKey<@NonNull ImmutableList<BezierNode>> {
 
     private static final long serialVersionUID = 1L;
 

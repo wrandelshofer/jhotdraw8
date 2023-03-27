@@ -452,7 +452,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         if (!Objects.equals(oldRawValue, newRawValue)) {
             if (ordinal == StyleOrigin.USER.ordinal()) {
                 // Only StyleOrigin.USER may fire a property change event.
-                // The other style origins can be update in parallel, and thus
+                // The other style origins can be updated in parallel, and thus
                 // firing an event is not a good idea!
                 @SuppressWarnings("unchecked")
                 V newValue = rawValueToValue(newRawValue);

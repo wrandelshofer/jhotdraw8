@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssStringConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * StringStyleableKey.
@@ -16,7 +16,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
  * @author Werner Randelshofer
  */
 public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
-        implements WritableStyleableMapAccessor<@NonNull String>, NonNullMapAccessor<@NonNull String> {
+        implements WritableStyleableMapAccessor<@NonNull String>, NonNullKey<@NonNull String> {
 
     static final long serialVersionUID = 1L;
     private final @NonNull CssStringConverter converter;

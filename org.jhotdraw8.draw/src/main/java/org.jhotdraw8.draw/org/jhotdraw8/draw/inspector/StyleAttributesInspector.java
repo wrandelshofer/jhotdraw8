@@ -24,6 +24,9 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
+import org.jhotdraw8.fxbase.undo.CompositeEdit;
+
+import javax.swing.event.UndoableEditEvent;
 
 /**
  * FXML Controller class
@@ -36,6 +39,32 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     protected final @NonNull ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
 
     public StyleAttributesInspector() {
+    }
+
+    protected CompositeEdit undoableEdit;
+
+    @Override
+    protected void startCompositeEdit() {
+        if (undoableEdit == null) {
+            undoableEdit = new CompositeEdit();
+            final DrawingView s = getSubject();
+            final DrawingEditor editor = s == null ? null : s.getEditor();
+            if (editor != null) {
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+            }
+        }
+    }
+
+    @Override
+    protected void stopCompositeEdit() {
+        if (undoableEdit != null) {
+            final DrawingView s = getSubject();
+            final DrawingEditor editor = s == null ? null : s.getEditor();
+            if (editor != null) {
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+            }
+            undoableEdit = null;
+        }
     }
 
     @Override

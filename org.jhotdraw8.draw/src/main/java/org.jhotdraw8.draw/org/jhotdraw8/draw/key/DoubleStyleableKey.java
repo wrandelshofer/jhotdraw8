@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * DoubleStyleableKey.
@@ -19,7 +19,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 public class DoubleStyleableKey
         extends AbstractStyleableKey<@NonNull Double>
         implements WritableStyleableMapAccessor<@NonNull Double>,
-        NonNullMapAccessor<@NonNull Double> {
+        NonNullKey<@NonNull Double> {
     static final long serialVersionUID = 1L;
 
     private final Converter<@NonNull Double> converter;

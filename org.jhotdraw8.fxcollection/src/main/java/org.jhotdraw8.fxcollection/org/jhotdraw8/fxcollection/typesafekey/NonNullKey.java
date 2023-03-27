@@ -5,6 +5,32 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+
+import java.util.Map;
 
 public interface NonNullKey<@NonNull T> extends Key<@NonNull T>, NonNullMapAccessor<@NonNull T> {
+    @Override
+    default @NonNull T get(@NonNull Map<? super Key<?>, Object> a) {
+        // Performance: explicit cast is nice, but is very slow
+        //return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
+        @SuppressWarnings("unchecked")
+        T result = (T) a.get(this);
+        return result == null ? getDefaultValueNonNull() : result;
+    }
+
+    /**
+     * Gets the value of the attribute denoted by this Key from a Map.
+     *
+     * @param a A Map.
+     * @return The value of the attribute.
+     */
+    @Override
+    default @NonNull T get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+        // Performance: explicit cast is nice, but is very slow
+        //return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
+        @SuppressWarnings("unchecked")
+        T result = (T) a.get(this);
+        return result == null ? getDefaultValueNonNull() : result;
+    }
 }

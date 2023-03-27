@@ -8,16 +8,16 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssBooleanConverter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * BooleanStyleableKey (not nullable).
  *
  * @author Werner Randelshofer
  */
-public class BooleanStyleableKey extends SimpleStyleableKey< Boolean>
-        implements WritableStyleableMapAccessor< Boolean>,
-        NonNullMapAccessor<Boolean> {
+public class BooleanStyleableKey extends SimpleStyleableKey<Boolean>
+        implements WritableStyleableMapAccessor<Boolean>,
+        NonNullKey<Boolean> {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class BooleanStyleableKey extends SimpleStyleableKey< Boolean>
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), false);
     }
 
-    public BooleanStyleableKey(@NonNull String key,@NonNull Boolean defaultValue) {
+    public BooleanStyleableKey(@NonNull String key, @NonNull Boolean defaultValue) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), defaultValue);
     }
 

@@ -5,6 +5,9 @@
 
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
 
+/**
+ * Defines a framework for vector drawing editors.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.draw {
     requires transitive java.desktop;

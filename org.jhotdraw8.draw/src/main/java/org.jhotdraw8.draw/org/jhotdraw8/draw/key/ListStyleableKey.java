@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 import java.lang.reflect.Type;
 
@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
  */
 public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableList<T>>
         implements WritableStyleableMapAccessor<ImmutableList<T>>,
-        NonNullMapAccessor<ImmutableList<T>> {
+        NonNullKey<ImmutableList<T>> {
 
     private static final long serialVersionUID = 1L;
 

@@ -12,15 +12,16 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.draw.css.converter.CssDefaultableValueConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
- * TListStyleableFigureKey.
+ * DefaultableStyleableKey.
  *
  * @author Werner Randelshofer
  */
 public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull CssDefaultableValue<T>>
         implements WritableStyleableMapAccessor<@NonNull CssDefaultableValue<T>>,
-        DefaultableStyleableMapAccessor<T> {
+        DefaultableStyleableMapAccessor<T>, NonNullKey<CssDefaultableValue<T>> {
 
     private static final long serialVersionUID = 1L;
 

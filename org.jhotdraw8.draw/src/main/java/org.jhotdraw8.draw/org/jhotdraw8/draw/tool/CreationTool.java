@@ -77,6 +77,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        stopCompositeEdit(view);
+
         createdFigure = createFigure();
         Figure parent = getOrCreateParent(view, createdFigure);
         if (parent == null) {
@@ -84,6 +86,8 @@ public class CreationTool extends AbstractCreationTool<Figure> {
             createdFigure = null;
             return;
         }
+
+        startCompositeEdit(view);
 
         x1 = event.getX();
         y1 = event.getY();
@@ -112,6 +116,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+        stopCompositeEdit(dv);
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
                 double width = getDefaultWidth();
@@ -144,6 +149,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+        startCompositeEdit(dv);
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();
