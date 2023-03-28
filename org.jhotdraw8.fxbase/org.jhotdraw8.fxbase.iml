@@ -14,8 +14,8 @@
     <orderEntry type="module" module-name="org.jhotdraw8.base" />
     <orderEntry type="module" module-name="org.jhotdraw8.fxcollection" />
     <orderEntry type="module" module-name="org.jhotdraw8.collection" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:20" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:20" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter:5.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-params:5.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.8.2" level="project" />
@@ -24,11 +24,11 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.8.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:20" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:20" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:20" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:20" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:20" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:20" level="project" />
   </component>
 </module>
