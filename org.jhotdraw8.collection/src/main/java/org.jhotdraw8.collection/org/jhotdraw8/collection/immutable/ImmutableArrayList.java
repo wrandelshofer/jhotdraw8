@@ -52,8 +52,24 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
     private final @NonNull Function<List<E>, List<E>> cloneFunction;
 
     public ImmutableArrayList(@NonNull List<? extends E> list, @NonNull Function<List<E>, List<E>> cloneFunction) {
-        this.list = new ArrayList<>(list);
+        this.list = List.copyOf(list);
         this.cloneFunction = cloneFunction;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ImmutableArrayList(@NonNull ImmutableList<? extends E> list) {
+        this.list = (List<E>) list.asList();
+        this.cloneFunction = ArrayList::new;
+    }
+
+    public ImmutableArrayList(@NonNull List<? extends E> list) {
+        this.list = List.copyOf(list);
+        this.cloneFunction = ArrayList::new;
+    }
+
+    private ImmutableArrayList(@NonNull List<E> list, boolean trustedAPI) {
+        this.list = list;
+        this.cloneFunction = ArrayList::new;
     }
 
     public ImmutableArrayList(@NonNull Iterable<? extends E> list) {
@@ -88,7 +104,7 @@ public class ImmutableArrayList<E> extends AbstractReadOnlyList<E> implements Im
         if (elements.length == 0) {
             return (ImmutableArrayList<E>) EMPTY;
         } else {
-            return new ImmutableArrayList<>(Arrays.asList(elements));
+            return new ImmutableArrayList<>(Arrays.asList(elements), true);
         }
     }
 
