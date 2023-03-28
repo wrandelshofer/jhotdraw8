@@ -92,7 +92,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         @Override
         public void redo() throws CannotRedoException {
             super.redo();
-            if (wasRemoved) {
+            if (wasRemoved && !wasAdded) {
                 model.remove(figure, key);
             } else {
                 model.set(figure, key, newValue);
@@ -102,7 +102,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         @Override
         public void undo() throws CannotUndoException {
             super.undo();
-            if (wasAdded) {
+            if (wasAdded && !wasRemoved) {
                 model.remove(figure, key);
             } else {
                 model.set(figure, key, oldValue);

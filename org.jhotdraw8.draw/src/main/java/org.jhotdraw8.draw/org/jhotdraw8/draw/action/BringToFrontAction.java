@@ -42,7 +42,6 @@ public class BringToFrontAction extends AbstractDrawingViewAction {
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
         final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         bringToFront(drawingView, figures);
-
     }
 
     public void bringToFront(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {

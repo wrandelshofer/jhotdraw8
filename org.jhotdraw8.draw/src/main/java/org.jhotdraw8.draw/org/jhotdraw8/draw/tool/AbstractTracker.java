@@ -21,9 +21,6 @@ import javax.swing.event.UndoableEditEvent;
  */
 public abstract class AbstractTracker extends AbstractDisableable implements Tracker {
 
-    // ---
-    // Fields
-    // ---
     protected final BorderPane node = new BorderPane();
     protected CompositeEdit undoableEdit;
 

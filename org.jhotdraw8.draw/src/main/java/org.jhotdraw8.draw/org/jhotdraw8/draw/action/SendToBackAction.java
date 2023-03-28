@@ -41,7 +41,6 @@ public class SendToBackAction extends AbstractDrawingViewAction {
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
         final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         sendToBack(dview, figures);
-
     }
 
     public void sendToBack(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {

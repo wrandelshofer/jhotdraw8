@@ -43,7 +43,6 @@ public class AddToGroupAction extends AbstractDrawingViewAction {
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
         final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         addToGroup(drawingView, figures);
-
     }
 
     public static void addToGroup(@NonNull DrawingView view, @NonNull List<Figure> figures) {

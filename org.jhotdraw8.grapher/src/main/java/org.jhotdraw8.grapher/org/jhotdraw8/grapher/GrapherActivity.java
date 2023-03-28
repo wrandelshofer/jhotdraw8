@@ -208,6 +208,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         }
         applyUserAgentStylesheet(d);
         drawingView.setDrawing(d);
+        undoManager.discardAllEdits();
         return CompletableFuture.completedFuture(null);
     }
 
@@ -487,6 +488,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             return drawing;
         }).thenApply(drawing -> {
             drawingView.setDrawing(drawing);
+            undoManager.discardAllEdits();
             return format;
         });
     }

@@ -18,6 +18,9 @@ import javax.swing.undo.UndoableEdit;
 public class CompositeEdit extends CompoundEdit {
 
 
+    public CompositeEdit() {
+    }
+
     /**
      * If this edit is {@code inProgress},
      * accepts {@code anEdit} and returns true.
