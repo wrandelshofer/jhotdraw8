@@ -20,12 +20,16 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
     private final @NonNull Key<?> key;
     private final @Nullable Object oldValue;
     private final @Nullable Object newValue;
+    private final boolean wasAdded;
+    private final boolean wasRemoved;
 
-    public <T> FigurePropertyChangeEvent(@NonNull Figure source, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    public <T> FigurePropertyChangeEvent(@NonNull Figure source, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         super(source);
         this.key = key;
         this.oldValue = oldValue;
         this.newValue = newValue;
+        this.wasAdded = wasAdded;
+        this.wasRemoved = wasRemoved;
     }
 
     /**
@@ -47,4 +51,21 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
         return newValue;
     }
 
+    /**
+     * If the change is the result of an add operation.
+     *
+     * @return true if a new key-value entry was added to the map.
+     */
+    public boolean wasAdded() {
+        return wasAdded;
+    }
+
+    /**
+     * If the change is the result of a remove operation.
+     *
+     * @return true if an existing key-value entry was removed from the map.
+     */
+    public boolean wasRemoved() {
+        return wasRemoved;
+    }
 }

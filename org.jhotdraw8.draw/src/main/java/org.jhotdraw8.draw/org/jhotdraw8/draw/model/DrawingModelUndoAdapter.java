@@ -28,7 +28,8 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         public void handle(DrawingModelEvent event) {
             UndoableEdit edit = switch (event.getEventType()) {
                 case PROPERTY_VALUE_CHANGED ->
-                        new PropertyChangedEdit<>(event.getSource(), event.getNode(), event.getKey(), event.getOldValue(), event.getNewValue());
+                        new PropertyChangedEdit<>(event.getSource(), event.getNode(), event.getKey(), event.getOldValue(), event.getNewValue(),
+                                event.wasAdded(), event.wasRemoved());
                 case LAYOUT_CHANGED, STYLE_CHANGED, TRANSFORM_CHANGED -> null;
             };
             if (edit != null) {
@@ -63,14 +64,24 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         private final @NonNull Key<Object> key;
         private final @Nullable Object oldValue;
         private final @Nullable Object newValue;
+        /**
+         * True if the change is the result of an add operation.
+         */
+        private final boolean wasAdded;
+        /**
+         * True if the change is the result of a remove operation.
+         */
+        private final boolean wasRemoved;
 
 
-        public PropertyChangedEdit(@NonNull DrawingModel model, @NonNull Figure figure, @NonNull Key<Object> key, @Nullable Object oldValue, @Nullable Object newValue) {
+        public PropertyChangedEdit(@NonNull DrawingModel model, @NonNull Figure figure, @NonNull Key<Object> key, @Nullable Object oldValue, @Nullable Object newValue, boolean wasAdded, boolean wasRemoved) {
             this.model = model;
             this.figure = figure;
             this.key = key;
             this.oldValue = oldValue;
             this.newValue = newValue;
+            this.wasAdded = wasAdded;
+            this.wasRemoved = wasRemoved;
         }
 
         @Override
@@ -81,13 +92,21 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         @Override
         public void redo() throws CannotRedoException {
             super.redo();
-            model.set(figure, key, newValue);
+            if (wasRemoved) {
+                model.remove(figure, key);
+            } else {
+                model.set(figure, key, newValue);
+            }
         }
 
         @Override
         public void undo() throws CannotUndoException {
             super.undo();
-            model.set(figure, key, oldValue);
+            if (wasAdded) {
+                model.remove(figure, key);
+            } else {
+                model.set(figure, key, oldValue);
+            }
         }
     }
 }

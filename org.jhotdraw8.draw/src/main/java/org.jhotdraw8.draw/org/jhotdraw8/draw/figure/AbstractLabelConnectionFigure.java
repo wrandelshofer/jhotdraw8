@@ -100,7 +100,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected <T> void onPropertyChanged(@NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    protected <T> void onPropertyChanged(@NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         if (key == LABEL_TARGET) {
             if (getDrawing() != null) {
                 if (oldValue != null) {

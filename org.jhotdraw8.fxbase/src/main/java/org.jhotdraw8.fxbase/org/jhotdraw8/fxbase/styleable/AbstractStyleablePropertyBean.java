@@ -41,7 +41,8 @@ public abstract class AbstractStyleablePropertyBean
                 final Key<Object> key = (Key<Object>) change.getKey();
                 onPropertyChanged(key,
                         change.wasRemoved() ? change.getValueRemoved() : key.getDefaultValue(),
-                        change.wasAdded() ? change.getValueAdded() : key.getDefaultValue());
+                        change.wasAdded() ? change.getValueAdded() : key.getDefaultValue(),
+                        change.wasAdded(), change.wasRemoved());
                 AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
                 super.callObservers(origin, change);
             }
@@ -144,12 +145,14 @@ public abstract class AbstractStyleablePropertyBean
      * This method is invoked just before listeners are notified. This
      * implementation is empty.
      *
-     * @param <T>      the type
-     * @param key      the changed key
-     * @param oldValue the old value
-     * @param newValue the new value
+     * @param <T>        the type
+     * @param key        the changed key
+     * @param oldValue   the old value
+     * @param newValue   the new value
+     * @param wasAdded
+     * @param wasRemoved
      */
-    protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue) {
+    protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
     }
 
     /**

@@ -20,5 +20,8 @@ module org.jhotdraw8.svg {
     exports org.jhotdraw8.svg.gui;
     exports org.jhotdraw8.svg.figure;
     exports org.jhotdraw8.svg.draw.figure;
+
+    opens org.jhotdraw8.svg.gui to javafx.fxml;
+
     provides org.jhotdraw8.fxbase.spi.NodeReaderProvider with SvgImageReaderProvider;
 }

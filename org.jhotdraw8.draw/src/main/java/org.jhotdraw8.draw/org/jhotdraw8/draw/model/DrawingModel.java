@@ -351,14 +351,16 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
     /**
      * Fires "node invalidated" event for the specified figure.
      *
-     * @param <T>      the value type
-     * @param f        the figure
-     * @param key      the property key
-     * @param oldValue the old value
-     * @param newValue the new value
+     * @param <T>        the value type
+     * @param f          the figure
+     * @param key        the property key
+     * @param oldValue   the old value
+     * @param newValue   the new value
+     * @param wasAdded
+     * @param wasRemoved
      */
-    default <T> void firePropertyValueChanged(Figure f, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
-        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue));
+    default <T> void firePropertyValueChanged(Figure f, Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
+        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue, wasAdded, wasRemoved));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 

@@ -111,10 +111,10 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public <T> void firePropertyChangeEvent(@Nullable Figure source, Key<T> key, T oldValue, T newValue) {
+    public <T> void firePropertyChangeEvent(@Nullable Figure source, Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
         if (children.hasChangeListeners()) {
             children.fireItemUpdated(children.indexOf(source));
         }
-        super.firePropertyChangeEvent(source, key, oldValue, newValue);
+        super.firePropertyChangeEvent(source, key, oldValue, newValue, wasAdded, wasRemoved);
     }
 }

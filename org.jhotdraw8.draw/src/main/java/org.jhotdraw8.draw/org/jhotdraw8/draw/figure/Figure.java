@@ -20,7 +20,15 @@ import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.ResizeHandleKit;
+import org.jhotdraw8.draw.handle.RotateHandle;
+import org.jhotdraw8.draw.handle.TransformHandleKit;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -35,7 +43,13 @@ import org.jhotdraw8.geom.FXTransforms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -424,19 +438,21 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * Fires a property change event.
      *
-     * @param <T>      the value type
-     * @param source   the event source
-     * @param key      the property key
-     * @param oldValue the old property value
-     * @param newValue the new property value
+     * @param <T>        the value type
+     * @param source     the event source
+     * @param key        the property key
+     * @param oldValue   the old property value
+     * @param newValue   the new property value
+     * @param wasAdded   true if the new property value was added
+     * @param wasRemoved true if the old property value was removed
      */
-    default <T> void firePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    default <T> void firePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         if (hasPropertyChangeListeners()) {
-            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, key, oldValue, newValue));
+            firePropertyChangeEvent(new FigurePropertyChangeEvent(source, key, oldValue, newValue, wasAdded, wasRemoved));
         }
         Figure parent = getParent();
         if (parent != null) {
-            parent.firePropertyChangeEvent(source, key, oldValue, newValue);
+            parent.firePropertyChangeEvent(source, key, oldValue, newValue, wasAdded, wasRemoved);
         }
     }
 

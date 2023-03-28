@@ -240,8 +240,8 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue) {
-        firePropertyChangeEvent(this, key, oldValue, newValue);
+    protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
+        firePropertyChangeEvent(this, key, oldValue, newValue, wasAdded, wasRemoved);
     }
 
     @Override

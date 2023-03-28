@@ -57,7 +57,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    protected <T> void onPropertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    protected <T> void onPropertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         // When properties of this figure change, we access the layout observer lists
         // of other figures - therefore these must be synchronized lists!
 

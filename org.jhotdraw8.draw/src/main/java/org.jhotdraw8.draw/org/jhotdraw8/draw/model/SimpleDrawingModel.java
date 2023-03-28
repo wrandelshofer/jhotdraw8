@@ -92,9 +92,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         @SuppressWarnings("unchecked")
         public Object put(Key<?> key, Object newValue) {
             if (target != null) {
+                final boolean wasAdded = !target.containsKey(key);
                 Object oldValue = target.put(key, newValue);
                 if (figure != null) {
-                    onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue);
+                    onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue, wasAdded, false);
                 }
                 return oldValue;
             } else {
@@ -149,14 +150,14 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         if (!Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     event.getKey(), event.getOldValue(),
-                    event.getNewValue()));
+                    event.getNewValue(), event.wasAdded(), event.wasRemoved()));
             fireTreeModelEvent(TreeModelEvent.nodeChanged(this, event.getSource()));
         }
     }
 
-    private <T> void onPropertyChanged(@NonNull Figure figure, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue) {
+    private <T> void onPropertyChanged(@NonNull Figure figure, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
-                key, oldValue, newValue));
+                key, oldValue, newValue, wasAdded, wasRemoved));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, figure));
     }
 
@@ -250,11 +251,12 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> T set(@NonNull Figure figure, @NonNull MapAccessor<T> key, @Nullable T newValue) {
         if (key instanceof Key<?>) {
+            boolean wasAdded = !figure.getProperties().containsKey(key);
             T oldValue = figure.put(key, newValue);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
             @SuppressWarnings({"unchecked", "RedundantSuppression"})
             Key<Object> keyObject = (Key<Object>) key;
-            onPropertyChanged(figure, keyObject, oldValue, newValue);
+            onPropertyChanged(figure, keyObject, oldValue, newValue, wasAdded, false);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);
@@ -271,11 +273,12 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> T remove(@NonNull Figure figure, @NonNull MapAccessor<T> key) {
         if (key instanceof Key<?>) {
+            boolean wasRemoved = figure.getProperties().containsKey(key);
             T oldValue = figure.remove((Key<T>) key);
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
             @SuppressWarnings({"unchecked", "RedundantSuppression"})
             Key<Object> keyObject = (Key<Object>) key;
-            onPropertyChanged(figure, keyObject, oldValue, null);
+            onPropertyChanged(figure, keyObject, oldValue, null, false, wasRemoved);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);
@@ -291,9 +294,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public <T> T remove(@NonNull Figure figure, @NonNull Key<T> key) {
+        boolean wasRemoved = figure.getProperties().containsKey(key);
         T oldValue = figure.remove(key);
         // event will be fired by method handlePropertyChanged
-        onPropertyChanged(figure, key, oldValue, key.getDefaultValue());
+        onPropertyChanged(figure, key, oldValue, key.getDefaultValue(), false, wasRemoved);
         return oldValue;
     }
 

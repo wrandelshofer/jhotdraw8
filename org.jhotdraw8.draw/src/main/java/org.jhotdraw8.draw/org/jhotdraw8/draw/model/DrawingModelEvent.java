@@ -50,7 +50,10 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     private final int index;
     private final DrawingModelEvent.EventType eventType;
 
-    private DrawingModelEvent(@NonNull DrawingModel source, EventType eventType, Figure figure, Figure parent, Drawing drawing, int index, Key<?> key, Object oldValue, Object newValue) {
+    private final boolean valueWasAdded;
+    private final boolean valueWasRemoved;
+
+    private DrawingModelEvent(@NonNull DrawingModel source, EventType eventType, Figure figure, Figure parent, Drawing drawing, int index, Key<?> key, Object oldValue, Object newValue, boolean valueWasAdded, boolean valueWasRemoved) {
         super(source);
         this.figure = figure;
         this.key = key;
@@ -60,22 +63,24 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         this.drawing = drawing;
         this.index = index;
         this.eventType = eventType;
+        this.valueWasAdded = valueWasAdded;
+        this.valueWasRemoved = valueWasRemoved;
     }
 
-    public static @NonNull <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue) {
-        return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue);
+    public static @NonNull <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
+        return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue, wasAdded, wasRemoved);
     }
 
     public static @NonNull <T> DrawingModelEvent transformChanged(@NonNull DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
     public static @NonNull <T> DrawingModelEvent layoutChanged(@NonNull DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
     public static @NonNull <T> DrawingModelEvent styleInvalidated(@NonNull DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null);
+        return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
     /**
@@ -166,6 +171,24 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      */
     public DrawingModelEvent.EventType getEventType() {
         return eventType;
+    }
+
+    /**
+     * If the figure was changed, returns true if the property value was added.
+     *
+     * @return true if added
+     */
+    public boolean wasAdded() {
+        return valueWasAdded;
+    }
+
+    /**
+     * If the figure was changed, returns true if the property value was removed.
+     *
+     * @return true if removed
+     */
+    public boolean wasRemoved() {
+        return valueWasRemoved;
     }
 
     @Override
