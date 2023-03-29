@@ -213,7 +213,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                 throw new InternalError(ex);
             }
 
-            addButton.addEventHandler(ActionEvent.ACTION, o -> {
+            addButton.addEventHandler(ActionEvent.ACTION, event -> {
                 Layer layer = layerFactory.get();
                 int index = listView.getSelectionModel().getSelectedIndex();
                 if (index < 0) {
@@ -224,7 +224,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                 int size = drawing.getChildren().size();
                 model.insertChildAt(layer, drawing, size - index);
             });
-            removeButton.addEventHandler(ActionEvent.ACTION, o -> {
+            removeButton.addEventHandler(ActionEvent.ACTION, event -> {
                 ArrayList<Integer> indices = new ArrayList<>(listView.getSelectionModel().getSelectedIndices());
                 Drawing drawing = getDrawing();
                 DrawingModel model = getModel();
@@ -314,6 +314,10 @@ public class LayersInspector extends AbstractDrawingInspector {
                     new DrawingModelFigureChildrenObservableList(drawingModel, newValue));
             listView.setItems(layers);
         }
+    }
+
+    public ListView<Figure> getListView() {
+        return listView;
     }
 
     @Override

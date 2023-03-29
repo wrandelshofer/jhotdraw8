@@ -22,11 +22,21 @@ import javax.swing.event.UndoableEditEvent;
 public abstract class AbstractDrawingViewInspector extends AbstractInspector<DrawingView> {
 
 
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+
     {
         subject.addListener(this::onDrawingViewChanged);
     }
 
     public AbstractDrawingViewInspector() {
+    }
+
+    private void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+        final DrawingView s = getSubject();
+        final DrawingEditor editor = s == null ? null : s.getEditor();
+        if (editor != null) {
+            editor.getUndoManager().undoableEditHappened(event);
+        }
     }
 
     protected DrawingModel getDrawingModel() {
@@ -42,15 +52,5 @@ public abstract class AbstractDrawingViewInspector extends AbstractInspector<Dra
      */
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
-    }
-
-    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
-
-    private void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
-        final DrawingView s = getSubject();
-        final DrawingEditor editor = s == null ? null : s.getEditor();
-        if (editor != null) {
-            editor.getUndoManager().undoableEditHappened(event);
-        }
     }
 }

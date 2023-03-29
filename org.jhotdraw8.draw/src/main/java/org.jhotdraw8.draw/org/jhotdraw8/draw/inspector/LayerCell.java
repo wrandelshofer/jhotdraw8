@@ -14,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -89,11 +90,43 @@ public class LayerCell extends ListCell<Figure> {
         }
 
         visibleCheckBox.selectedProperty().addListener(this::commitLayerVisible);
+        visibleCheckBox.setOnMouseClicked(this::toggleAllVisible);
         lockedCheckBox.selectedProperty().addListener(this::commitLayerLocked);
+        lockedCheckBox.setOnMouseClicked(this::toggleAllLocked);
 
         visibleCheckBox.getStyleClass().add(InspectorStyleClasses.VISIBLE_CHECK_BOX);
         lockedCheckBox.getStyleClass().add(InspectorStyleClasses.LOCKED_CHECK_BOX);
         selectionLabelTooltip = new Tooltip(rsrc.getString("figures.dragToLayer.toolTipText"));
+    }
+
+    private void toggleAllVisible(@NonNull MouseEvent e) {
+        if (e.isShiftDown()) {
+            e.consume();
+            DrawingModel m = this.drawingModel.get();
+            if (m != null) {
+                inspector.undoHelper.startCompositeEdit(null);
+                boolean toggle = !visibleCheckBox.isSelected();
+                for (Figure f : inspector.getListView().getItems()) {
+                    m.set(f, HideableFigure.VISIBLE, toggle);
+                }
+                inspector.undoHelper.stopCompositeEdit();
+            }
+        }
+    }
+
+    private void toggleAllLocked(@NonNull MouseEvent e) {
+        if (e.isShiftDown()) {
+            e.consume();
+            DrawingModel m = this.drawingModel.get();
+            if (m != null) {
+                inspector.undoHelper.startCompositeEdit(null);
+                boolean toggle = !lockedCheckBox.isSelected();
+                for (Figure f : inspector.getListView().getItems()) {
+                    m.set(f, LockableFigure.LOCKED, toggle);
+                }
+                inspector.undoHelper.stopCompositeEdit();
+            }
+        }
     }
 
     @Override
