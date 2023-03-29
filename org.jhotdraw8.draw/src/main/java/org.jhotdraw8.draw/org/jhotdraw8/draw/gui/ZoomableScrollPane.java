@@ -169,7 +169,7 @@ public class ZoomableScrollPane extends GridPane {
     }
 
     private void initBehavior() {
-        // - Scroll in nize chunks
+        // - Scroll in chunks of 20 pixels
         horizontalScrollBar.setUnitIncrement(20);
         verticalScrollBar.setUnitIncrement(20);
 

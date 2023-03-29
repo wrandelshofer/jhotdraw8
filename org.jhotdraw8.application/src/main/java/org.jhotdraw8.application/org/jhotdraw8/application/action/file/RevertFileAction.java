@@ -81,7 +81,9 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
         if (uri == null) {
             view.clear().handle((ignored, throwable) -> handler.apply(null, throwable));
         } else {
-            view.read(uri, dataFormat, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), false, workState).handle(handler);
+            view.read(uri, dataFormat,
+                            new ReadOnlyMapFacade<>(new LinkedHashMap<>()), false, workState)
+                    .handle(handler);
         }
     }
 
