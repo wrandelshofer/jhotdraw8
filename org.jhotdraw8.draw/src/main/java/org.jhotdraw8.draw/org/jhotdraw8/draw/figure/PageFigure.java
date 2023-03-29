@@ -10,7 +10,14 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
@@ -20,9 +27,16 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
+import org.jhotdraw8.draw.css.value.CssInsets;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.PaperSizeStyleableMapAccessor;
+import org.jhotdraw8.draw.key.Point2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.FXRectangles;
@@ -43,7 +57,11 @@ public class PageFigure extends AbstractCompositeFigure
         FillableFigure, StrokableFigure {
 
     public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    /**
+     * The computed number of pages along the x-axis.
+     */
     public static final @NonNull DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
+    /** The computed number of pages along the y-axis. */
     public static final @NonNull DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
     public static final @NonNull Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
     public static final @NonNull CssSizeStyleableKey PAGE_INSETS_BOTTOM = new CssSizeStyleableKey("page-insets-bottom", CssSize.ZERO);
@@ -86,6 +104,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     private double computeContentAreaFactor() {
+        if (true) return 1;
         String units = getNonNull(WIDTH).getUnits();
         DefaultUnitConverter uc = DefaultUnitConverter.getInstance();
 
@@ -313,8 +332,26 @@ public class PageFigure extends AbstractCompositeFigure
 
     @Override
     public void layout(@NonNull RenderContext ctx) {
+        final CssSize width = get(WIDTH);
+        final CssSize height = get(HEIGHT);
+        final CssDimension2D paperSize = getPaperSize();
+        final CssInsets pageInsets = getStyled(PAGE_INSETS);
+        final CssPoint2D pageOverlap = get(PAGE_OVERLAP);
+        CssDimension2D innerPageSize = paperSize.subtract(
+                new CssDimension2D(pageInsets.getLeft().add(pageInsets.getRight()),
+                        pageInsets.getTop().add(pageInsets.getBottom())));
+        final int numPagesX = 1 + Math.max(0, (int) Math.ceil(
+                width.subtract(innerPageSize.getWidth()).getConvertedValue()
+                        / (innerPageSize.getWidth().subtract(pageOverlap.getX())).getConvertedValue()));
+        final int numPagesY = 1 + Math.max(0, (int) Math.ceil(
+                height.subtract(innerPageSize.getHeight()).getConvertedValue()
+                        / (innerPageSize.getHeight().subtract(pageOverlap.getY())).getConvertedValue()));
+        set(NUM_PAGES_X, (double) numPagesX);
+        set(NUM_PAGES_Y, (double) numPagesY);
+
         int currentPage = 0;
         final Transform pageTransform = getPageTransform(currentPage);
+
         ImmutableList<Transform> transforms = ImmutableArrayList.of();
         if (!pageTransform.isIdentity()) {
             transforms = transforms.add(pageTransform);
