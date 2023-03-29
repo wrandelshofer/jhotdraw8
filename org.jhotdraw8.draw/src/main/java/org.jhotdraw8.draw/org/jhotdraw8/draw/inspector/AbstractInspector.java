@@ -32,4 +32,6 @@ public abstract class AbstractInspector<S> implements Inspector<S> {
     public @NonNull BooleanProperty showingProperty() {
         return showing;
     }
+
+
 }

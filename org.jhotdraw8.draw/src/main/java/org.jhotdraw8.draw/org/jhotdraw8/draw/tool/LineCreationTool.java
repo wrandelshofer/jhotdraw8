@@ -47,7 +47,7 @@ public class LineCreationTool extends CreationTool {
 
     @Override
     protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
-        stopCompositeEdit(view);
+        undoHelper.stopCompositeEdit();
         x1 = event.getX();
         y1 = event.getY();
         x2 = x1;
@@ -58,7 +58,7 @@ public class LineCreationTool extends CreationTool {
             createdFigure = null;
             return;
         }
-        startCompositeEdit(view);
+        undoHelper.startCompositeEdit(null);
         DrawingModel dm = view.getModel();
         dm.addChildTo(createdFigure, parent);
 
@@ -78,7 +78,7 @@ public class LineCreationTool extends CreationTool {
 
     @Override
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        startCompositeEdit(dv);
+        undoHelper.startCompositeEdit(null);
         if (createdFigure != null) {
             x2 = event.getX();
             y2 = event.getY();

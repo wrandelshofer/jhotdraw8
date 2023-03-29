@@ -6,10 +6,14 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
+
+import javax.swing.event.UndoableEditEvent;
 
 /**
  * AbstractDrawingInspector.
@@ -82,4 +86,11 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
     protected void onDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) {
 
     }
+
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEditEvent);
+
+    protected void forwardUndoableEditEvent(@NonNull UndoableEditEvent undoableEditEvent) {
+
+    }
+
 }

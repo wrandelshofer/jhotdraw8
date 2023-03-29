@@ -20,10 +20,13 @@ import javafx.util.Callback;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 
+import javax.swing.event.UndoableEditEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -43,15 +46,17 @@ public class ListViewUtil {
 
     private static class DnDSupport<T> {
 
-        private final ListView<T> listView;
+        private final @NonNull ListView<T> listView;
         private int draggedCellIndex = -1;
-        private final ClipboardIO<T> io;
+        private final @NonNull ClipboardIO<T> io;
         private final boolean reorderingOnly;
+        private final @NonNull UndoableEditHelper undoHelper;
 
-        public DnDSupport(ListView<T> listView, ClipboardIO<T> io, boolean reorderingOnly) {
+        public DnDSupport(@NonNull ListView<T> listView, @NonNull ClipboardIO<T> io, boolean reorderingOnly, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
             this.listView = listView;
             this.io = io;
             this.reorderingOnly = reorderingOnly;
+            this.undoHelper = new UndoableEditHelper(listView, undoableEditEventConsumer);
         }
 
         private final @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
@@ -77,8 +82,6 @@ public class ListViewUtil {
                     event.consume();
                     return;
                 }
-
-                ListCell<?> cell = (ListCell<?>) event.getSource();
                 if (event.getAcceptedTransferMode() == TransferMode.MOVE) {
                     listView.getItems().remove(draggedCellIndex);
                 }
@@ -217,6 +220,7 @@ public class ListViewUtil {
             private void onDragDropped(@NonNull DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable) {
+                    undoHelper.startCompositeEdit(null);
                     boolean success = false;
                     TransferMode[] mode = acceptModes(event);
                     if (mode.length == 0) {
@@ -249,6 +253,7 @@ public class ListViewUtil {
                     }
                     event.setDropCompleted(success);
                     event.consume();
+                    undoHelper.stopCompositeEdit();
                 }
             }
 
@@ -265,31 +270,33 @@ public class ListViewUtil {
     /**
      * Adds drag and drop support to the list view
      *
-     * @param <T>         the data type of the list view
-     * @param listView    the list view
-     * @param clipboardIO a reader/writer for the clipboard.
+     * @param <T>                       the data type of the list view
+     * @param listView                  the list view
+     * @param clipboardIO               a reader/writer for the clipboard.
+     * @param undoableEditEventConsumer
      */
-    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO) {
-        addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO);
+    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+        addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEventConsumer);
     }
 
     /**
      * Adds drag and drop support to the list view
      * <p>
      * FIXME should also add support for cut, copy and paste keys
+     *  @param <T>         the data type of the list view
      *
-     * @param <T>         the data type of the list view
-     * @param listView    the list view
-     * @param cellFactory the cell factory of the list view
-     * @param clipboardIO a reader/writer for the clipboard.
+     * @param listView                  the list view
+     * @param cellFactory               the cell factory of the list view
+     * @param clipboardIO               a reader/writer for the clipboard.
+     * @param undoableEditEventConsumer
      */
-    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO) {
-        addDragAndDropSupport(listView, cellFactory, clipboardIO, false);
+    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+        addDragAndDropSupport(listView, cellFactory, clipboardIO, false, undoableEditEventConsumer);
     }
 
     private static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO,
-                                                  boolean reorderingOnly) {
-        DnDSupport<T> dndSupport = new DnDSupport<>(listView, clipboardIO, reorderingOnly);
+                                                  boolean reorderingOnly, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+        DnDSupport<T> dndSupport = new DnDSupport<>(listView, clipboardIO, reorderingOnly, undoableEditEventConsumer);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
             ListCell<T> cell = cellFactory.call(lv);
             cell.addEventHandler(DragEvent.ANY, dndSupport.cellDragHandler);
@@ -303,22 +310,24 @@ public class ListViewUtil {
     /**
      * Adds reordering support to the list view.
      *
-     * @param <T>      the data type of the list view
-     * @param listView the list view
+     * @param <T>                       the data type of the list view
+     * @param listView                  the list view
+     * @param undoableEditEventConsumer
      */
-    public static <T> void addReorderingSupport(@NonNull ListView<T> listView) {
-        addReorderingSupport(listView, listView.getCellFactory(), null);
+    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+        addReorderingSupport(listView, listView.getCellFactory(), null, undoableEditEventConsumer);
     }
 
     /**
      * Adds reordering support to the list view.
      *
-     * @param <T>         the data type of the list view
-     * @param listView    the list view
-     * @param clipboardIO the clipboard i/o
+     * @param <T>                       the data type of the list view
+     * @param listView                  the list view
+     * @param clipboardIO               the clipboard i/o
+     * @param undoableEditEventConsumer
      */
-    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO) {
-        addReorderingSupport(listView, listView.getCellFactory(), clipboardIO);
+    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+        addReorderingSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEventConsumer);
     }
 
     /**
@@ -327,13 +336,14 @@ public class ListViewUtil {
      * FIXME should also add support for cut, copy and paste keys.
      * <p>
      * FIXME only supports lists with single item selection (no multiple item selection yet!).
+     *  @param <T>         the data type of the list view
      *
-     * @param <T>         the data type of the list view
-     * @param listView    the list view
-     * @param cellFactory the cell factory of the list view
-     * @param clipboardIO a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
+     * @param listView                  the list view
+     * @param cellFactory               the cell factory of the list view
+     * @param clipboardIO               a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
+     * @param undoableEditEventConsumer
      */
-    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO) {
+    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         if (clipboardIO == null) {
             clipboardIO = new ClipboardIO<T>() {
                 @Override
@@ -359,7 +369,7 @@ public class ListViewUtil {
                 }
             };
         }
-        addDragAndDropSupport(listView, cellFactory, clipboardIO, true);
+        addDragAndDropSupport(listView, cellFactory, clipboardIO, true, undoableEditEventConsumer);
     }
 
 

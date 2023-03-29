@@ -5,9 +5,14 @@
 package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.value.ObservableValue;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
+
+import javax.swing.event.UndoableEditEvent;
 
 /**
  * AbstractDrawingInspector.
@@ -37,5 +42,15 @@ public abstract class AbstractDrawingViewInspector extends AbstractInspector<Dra
      */
     protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
+    }
+
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+
+    private void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+        final DrawingView s = getSubject();
+        final DrawingEditor editor = s == null ? null : s.getEditor();
+        if (editor != null) {
+            editor.getUndoManager().undoableEditHappened(event);
+        }
     }
 }

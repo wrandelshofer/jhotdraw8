@@ -170,7 +170,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                             }
                         });
                         return cell;
-                    }, io);
+                    }, io, this::forwardUndoableEditEvent);
         });
     }
 

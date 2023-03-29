@@ -9,11 +9,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 
+import javax.swing.event.UndoableEditEvent;
 import java.util.Collections;
 import java.util.Set;
 
@@ -68,4 +71,14 @@ public abstract class AbstractSelectionInspector extends AbstractInspector<Drawi
      * @param newValue the new selection
      */
     protected abstract void onSelectionChanged(Set<Figure> newValue);
+
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+
+    protected void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+        DrawingView s = getSubject();
+        DrawingEditor editor = s == null ? null : s.getEditor();
+        if (editor != null) {
+            editor.getUndoManager().undoableEditHappened(event);
+        }
+    }
 }

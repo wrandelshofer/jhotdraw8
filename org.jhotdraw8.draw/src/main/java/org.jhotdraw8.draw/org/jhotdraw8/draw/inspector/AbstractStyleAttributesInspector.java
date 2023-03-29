@@ -70,7 +70,9 @@ import org.jhotdraw8.draw.popup.PaintablePicker;
 import org.jhotdraw8.draw.popup.Picker;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 
+import javax.swing.event.UndoableEditEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -162,6 +164,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private boolean textAreaValid = true;
     private boolean isApplying;
 
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+
+    protected abstract void forwardUndoableEdit(@NonNull UndoableEditEvent event);
+
     {
         showing.addListener((o, oldv, newv) -> {
             if (newv) {
@@ -198,7 +204,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     private void apply(ActionEvent event) {
-        startCompositeEdit();
+        undoHelper.startCompositeEdit(null);
         isApplying = true;
         CssParser parser = new CssParser();
         TextArea textArea = getTextArea();
@@ -239,12 +245,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
             textArea.requestFocus();
         }
         isApplying = false;
-        stopCompositeEdit();
+        undoHelper.stopCompositeEdit();
     }
 
-    protected abstract void startCompositeEdit();
-
-    protected abstract void stopCompositeEdit();
 
     /**
      * Attribute filter can be used to show only a specific set
@@ -742,7 +745,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     break;
                 }
                 BiConsumer<Boolean, Object> lambda = (b, o) -> {
-                    startCompositeEdit();
+                    undoHelper.startCompositeEdit(null);
                     if (b) {
                         for (E f : selectedF) {
                             AbstractStyleAttributesInspector.this.set(f, finalSelectedAccessor, o);
@@ -753,7 +756,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                         }
                     }
                     invalidateTextArea(null);
-                    stopCompositeEdit();
+                    undoHelper.stopCompositeEdit();
                 };
                 picker.show(getTextArea(), screenX, screenY,
                         initialValue, lambda);

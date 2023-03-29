@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -21,8 +22,8 @@ import javax.swing.event.UndoableEditEvent;
  */
 public abstract class AbstractTracker extends AbstractDisableable implements Tracker {
 
-    protected final BorderPane node = new BorderPane();
-    protected CompositeEdit undoableEdit;
+    protected final @NonNull BorderPane node = new BorderPane();
+    protected @Nullable CompositeEdit compositeEdit;
 
     /**
      * Creates a new instance.
@@ -37,22 +38,22 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
     }
 
     protected void startCompositeEdit(DrawingView view) {
-        if (undoableEdit == null) {
-            undoableEdit = new CompositeEdit();
+        if (compositeEdit == null) {
+            compositeEdit = new CompositeEdit();
             DrawingEditor editor = view.getEditor();
             if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, compositeEdit));
             }
         }
     }
 
     protected void stopCompositeEdit(DrawingView view) {
-        if (undoableEdit != null) {
+        if (compositeEdit != null) {
             DrawingEditor editor = view.getEditor();
             if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
+                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, compositeEdit));
             }
-            undoableEdit = null;
+            compositeEdit = null;
         }
     }
 }

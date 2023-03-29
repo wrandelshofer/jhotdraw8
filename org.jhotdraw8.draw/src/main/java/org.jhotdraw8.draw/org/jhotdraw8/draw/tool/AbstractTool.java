@@ -27,7 +27,7 @@ import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.fxbase.undo.CompositeEdit;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import javax.swing.event.UndoableEditEvent;
@@ -421,26 +421,12 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         return eventPane.focusedProperty();
     }
 
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
 
-    protected CompositeEdit undoableEdit;
-
-    protected void startCompositeEdit(DrawingView view) {
-        if (undoableEdit == null) {
-            undoableEdit = new CompositeEdit();
-            DrawingEditor editor = view.getEditor();
-            if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
-            }
-        }
-    }
-
-    protected void stopCompositeEdit(DrawingView view) {
-        if (undoableEdit != null) {
-            DrawingEditor editor = view.getEditor();
-            if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
-            }
-            undoableEdit = null;
+    protected void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+        DrawingEditor editor = getDrawingEditor();
+        if (editor != null) {
+            editor.getUndoManager().undoableEditHappened(event);
         }
     }
 }

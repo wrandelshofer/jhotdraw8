@@ -1,5 +1,7 @@
 package org.jhotdraw8.fxbase.undo;
 
+import org.jhotdraw8.annotation.Nullable;
+
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
 
@@ -16,9 +18,13 @@ import javax.swing.undo.UndoableEdit;
  * </pre>
  */
 public class CompositeEdit extends CompoundEdit {
-
+    private @Nullable String localizedName;
 
     public CompositeEdit() {
+    }
+
+    public CompositeEdit(@Nullable String localizedName) {
+        this.localizedName = localizedName;
     }
 
     /**

@@ -12,7 +12,7 @@ import org.jhotdraw8.application.action.AbstractAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
-import org.jhotdraw8.fxbase.undo.CompositeEdit;
+import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 
 import javax.swing.event.UndoableEditEvent;
 
@@ -30,7 +30,7 @@ import javax.swing.event.UndoableEditEvent;
 public abstract class AbstractDrawingViewAction extends AbstractAction {
 
     private final @NonNull DrawingEditor editor;
-    protected CompositeEdit undoableEdit;
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
 
     /**
      * Creates an action which acts on the selected figures on the current view
@@ -46,6 +46,10 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
         SimpleBooleanProperty editorHasNoDrawingViewOrDrawingViewIsDisabledProperty = new SimpleBooleanProperty();
         CustomBinding.bind(editorHasNoDrawingViewOrDrawingViewIsDisabledProperty, editor.activeDrawingViewProperty(), drawingView -> drawingView == null ? new SimpleBooleanProperty(true) : drawingView.getNode().disableProperty());
         CustomBinding.bindMembershipToBoolean(disablers(), new Object(), editorHasNoDrawingViewOrDrawingViewIsDisabledProperty);
+    }
+
+    public void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+        editor.getUndoManager().undoableEditHappened(event);
     }
 
     /**
@@ -71,32 +75,12 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
     protected void onActionPerformed(@NonNull ActionEvent event) {
         DrawingView view = getView();
         if (view != null) {
-            startCompositeEdit(view);
+            undoHelper.startCompositeEdit(null);
             onActionPerformed(event, view);
-            stopCompositeEdit(view);
+            undoHelper.stopCompositeEdit();
         }
     }
 
     protected abstract void onActionPerformed(@NonNull ActionEvent even, @NonNull DrawingView view);
 
-
-    protected void startCompositeEdit(DrawingView view) {
-        if (undoableEdit == null) {
-            undoableEdit = new CompositeEdit();
-            DrawingEditor editor = view.getEditor();
-            if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
-            }
-        }
-    }
-
-    protected void stopCompositeEdit(DrawingView view) {
-        if (undoableEdit != null) {
-            DrawingEditor editor = view.getEditor();
-            if (editor != null) {
-                editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, undoableEdit));
-            }
-            undoableEdit = null;
-        }
-    }
 }

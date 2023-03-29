@@ -279,7 +279,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             listView.setFixedCellSize(24.0);
             listView.setCellFactory(addSelectionLabelDndSupport(listView, this::createCell, io));
-            ListViewUtil.addReorderingSupport(listView);
+            ListViewUtil.addReorderingSupport(listView, this::forwardUndoableEditEvent);
         });
     }
 
@@ -419,6 +419,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             private void onDragDropped(@NonNull DragEvent event) {
                 if (isAcceptable(event)) {
+                    undoHelper.startCompositeEdit(null);
                     event.acceptTransferModes(TransferMode.MOVE);
                     List<Figure> items = listView.getItems();
 
@@ -433,7 +434,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                         event.setDropCompleted(false);
                     }
                     event.consume();
-
+                    undoHelper.stopCompositeEdit();
                 }
             }
 
@@ -456,6 +457,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     protected void moveSelectedFiguresFromToLayer(Layer from, @NonNull Layer to) {
+        undoHelper.startCompositeEdit(null);
         DrawingModel model = getModel();
         DrawingView view = getSubject();
         LinkedHashSet<Figure> selection = new LinkedHashSet<>(view.getSelectedFigures());
@@ -474,6 +476,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         // same figures but they have now a different ancestor.
         view.getSelectedFigures().clear();
         view.getSelectedFigures().addAll(selection);
+        undoHelper.stopCompositeEdit();
     }
 
     @Override

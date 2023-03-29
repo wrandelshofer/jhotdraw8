@@ -93,6 +93,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     }
 
     public void addTag(@NonNull String wordList) {
+       undoHelper.startCompositeEdit(null);
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();
@@ -115,6 +116,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 updateList();
             }
         }
+        undoHelper.stopCompositeEdit();
     }
 
     @Override
