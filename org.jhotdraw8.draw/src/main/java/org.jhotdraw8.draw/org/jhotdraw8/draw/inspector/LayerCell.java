@@ -104,12 +104,12 @@ public class LayerCell extends ListCell<Figure> {
             e.consume();
             DrawingModel m = this.drawingModel.get();
             if (m != null) {
-                inspector.undoHelper.startCompositeEdit(null);
+                inspector.getUndoHelper().startCompositeEdit(null);
                 boolean toggle = !visibleCheckBox.isSelected();
                 for (Figure f : inspector.getListView().getItems()) {
                     m.set(f, HideableFigure.VISIBLE, toggle);
                 }
-                inspector.undoHelper.stopCompositeEdit();
+                inspector.getUndoHelper().stopCompositeEdit();
             }
         }
     }
@@ -119,12 +119,12 @@ public class LayerCell extends ListCell<Figure> {
             e.consume();
             DrawingModel m = this.drawingModel.get();
             if (m != null) {
-                inspector.undoHelper.startCompositeEdit(null);
+                inspector.getUndoHelper().startCompositeEdit(null);
                 boolean toggle = !lockedCheckBox.isSelected();
                 for (Figure f : inspector.getListView().getItems()) {
                     m.set(f, LockableFigure.LOCKED, toggle);
                 }
-                inspector.undoHelper.stopCompositeEdit();
+                inspector.getUndoHelper().stopCompositeEdit();
             }
         }
     }
