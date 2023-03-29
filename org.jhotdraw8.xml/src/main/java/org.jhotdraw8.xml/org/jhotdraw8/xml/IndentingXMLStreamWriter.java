@@ -795,8 +795,6 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     private void writeXmlContent(String content, boolean isDoubleQuoted, boolean isComment) throws XMLStreamException {
-
-
         for (int index = 0, end = content.length(); index < end; index++) {
             char ch = content.charAt(index);
 
@@ -821,56 +819,67 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             }
 
             switch (ch) {
-            case '\r':
-                write("&xD;");// makes carriage return visible in the output!
-                break;
+                case '\r':
+                    write("&xD;");// makes carriage return visible in the output!
+                    break;
 
-            case '<':
-                if (isComment) {
-                    write('<');
-                } else {
-                    write("&lt;");
-                }
-                break;
+                case '\n':
+                    if (isComment) {
+                        writeLineBreakAndIndentation();
+                        while (index < end - 1 && Character.isWhitespace(content.charAt(index + 1))) {
+                            index++;
+                        }
+                    } else {
+                        write('\n');
+                    }
+                    break;
 
-            case '&':
-                if (isComment) {
-                    write('&');
-                } else {
-                    write("&amp;");
-                }
-                break;
+                case '<':
+                    if (isComment) {
+                        write('<');
+                    } else {
+                        write("&lt;");
+                    }
+                    break;
+
+                case '&':
+                    if (isComment) {
+                        write('&');
+                    } else {
+                        write("&amp;");
+                    }
+                    break;
 
 
-            case '-':
-                // In a comment, we must escape double dashes
-                if (isComment && index < end - 1 && content.charAt(index + 1) == '-') {
-                    index++;
-                    writeCharRef('-');
-                    writeCharRef('-');
-                } else {
+                case '-':
+                    // In a comment, we must escape double dashes
+                    if (isComment && index < end - 1 && content.charAt(index + 1) == '-') {
+                        index++;
+                        writeCharRef('-');
+                        writeCharRef('-');
+                    } else {
+                        write(ch);
+                    }
+                    break;
+                case '>':
+                    // Canonical XML replaces closing angle brackets only inside
+                    // text nodes.
+                    if (isComment || !escapeClosingAngleBracket || isDoubleQuoted) {
+                        write('>');
+                    } else {
+                        write("&gt;");
+                    }
+                    break;
+                case '"':
+                    if (isDoubleQuoted) {
+                        write("&quot;");
+                    } else {
+                        write(ch);
+                    }
+                    break;
+                default:
                     write(ch);
-                }
-                break;
-            case '>':
-                // Canonical XML replaces closing angle brackets only inside
-                // text nodes.
-                if (isComment || !escapeClosingAngleBracket || isDoubleQuoted) {
-                    write('>');
-                } else {
-                    write("&gt;");
-                }
-                break;
-            case '"':
-                if (isDoubleQuoted) {
-                    write("&quot;");
-                } else {
-                    write(ch);
-                }
-                break;
-            default:
-                write(ch);
-                break;
+                    break;
             }
         }
     }
