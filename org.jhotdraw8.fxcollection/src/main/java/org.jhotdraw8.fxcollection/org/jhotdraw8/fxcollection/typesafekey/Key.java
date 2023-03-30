@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.lang.reflect.ParameterizedType;
@@ -126,6 +127,19 @@ public interface Key<T> extends MapAccessor<T> {
             a.put(this, value);
             return getDefaultValue();
         }
+    }
+
+    /**
+     * Use this method to perform a type-safe put operation of an attribute into
+     * a Map.
+     *
+     * @param a     An attribute map.
+     * @param value The new value.
+     * @return The updated map
+     */
+    @Override
+    default @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable T value) {
+        return a.put(this, value);
     }
 
     /**

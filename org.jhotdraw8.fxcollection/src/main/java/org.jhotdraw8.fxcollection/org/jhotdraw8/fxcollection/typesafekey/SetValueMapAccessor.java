@@ -6,6 +6,7 @@ package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
@@ -89,6 +90,18 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         }
         setAccessor.put(a, set);
         return oldValue;
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Boolean value) {
+        ImmutableSet<E> set = setAccessor.get(a);
+        assert set != null;
+        if (value != null && value) {
+            set = set.add(this.value);
+        } else {
+            set = set.remove(this.value);
+        }
+        return setAccessor.put(a, set);
     }
 
     @Override

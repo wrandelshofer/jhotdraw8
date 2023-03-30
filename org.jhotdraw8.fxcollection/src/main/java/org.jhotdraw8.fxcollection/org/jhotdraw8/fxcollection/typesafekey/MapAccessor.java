@@ -6,6 +6,7 @@ package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.io.Serializable;
@@ -63,6 +64,15 @@ public interface MapAccessor<T> extends Serializable {
      */
     @Nullable
     T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value);
+
+    /**
+     * Puts the value of the attribute denoted by this accessor from a Map.
+     *
+     * @param a     A map.
+     * @param value The new value. Subclasses may require that the value is non-null.
+     * @return The updated map.
+     */
+    @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable T value);
 
     /**
      * Sets the value of the attribute denoted by this accessor from a Map.
