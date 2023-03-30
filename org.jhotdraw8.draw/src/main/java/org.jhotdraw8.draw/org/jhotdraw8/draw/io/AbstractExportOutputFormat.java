@@ -12,8 +12,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedMap;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.champ.ChampImmutableMap;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -40,7 +40,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private @NonNull ReadOnlyMap<Key<?>, Object> options = ChampImmutableSequencedMap.of();
+    private @NonNull ImmutableMap<Key<?>, Object> options = ChampImmutableMap.of();
 
     public AbstractExportOutputFormat() {
     }
@@ -229,12 +229,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     }
 
     @Override
-    public @NonNull ReadOnlyMap<Key<?>, Object> getOptions() {
+    public @NonNull ImmutableMap<Key<?>, Object> getOptions() {
         return options;
     }
 
     @Override
-    public void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> options) {
+    public void setOptions(@NonNull ImmutableMap<Key<?>, Object> options) {
         this.options = options;
     }
 

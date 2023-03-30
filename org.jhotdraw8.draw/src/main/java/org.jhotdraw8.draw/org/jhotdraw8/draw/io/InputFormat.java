@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
@@ -27,9 +27,9 @@ import java.nio.file.Paths;
  * @author Werner Randelshofer
  */
 public interface InputFormat {
-    void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> newValue);
+    void setOptions(@NonNull ImmutableMap<Key<?>, Object> newValue);
 
-    @NonNull ReadOnlyMap<Key<?>, Object> getOptions();
+    @NonNull ImmutableMap<Key<?>, Object> getOptions();
 
     /**
      * Reads a figure from an URI

@@ -21,7 +21,7 @@ import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
-import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.collection.champ.ChampImmutableMap;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
@@ -166,7 +166,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     }
 
     protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, @NonNull Map<Key<?>, Object> options, WorkState<Void> workState) {
-        view.write(uri, format, new ReadOnlyMapFacade<>(options), workState).handle((result, exception) -> {
+        view.write(uri, format, ChampImmutableMap.copyOf(options), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);
                 if (oldFocusOwner != null) {

@@ -20,7 +20,7 @@ import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.action.edit.RedoAction;
 import org.jhotdraw8.application.action.edit.UndoAction;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxbase.control.TextInputControlUndoAdapter;
@@ -99,7 +99,11 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState) {
+    public @NonNull CompletionStage<DataFormat> read(
+            @NonNull URI uri, DataFormat format,
+            @NonNull ImmutableMap<Key<?>, Object> options,
+            boolean insert,
+            WorkState<Void> workState) {
         return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
             StringBuilder builder = new StringBuilder();
             char[] cbuf = new char[8192];
@@ -125,7 +129,10 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ReadOnlyMap<Key<?>, Object> options, @NonNull WorkState<Void> workState) {
+    public @NonNull CompletionStage<Void> write(
+            @NonNull URI uri, DataFormat format,
+            @NonNull ImmutableMap<Key<?>, Object> options,
+            @NonNull WorkState<Void> workState) {
         final String text = textArea.getText();
         return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {

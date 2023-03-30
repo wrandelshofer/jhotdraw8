@@ -17,12 +17,11 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
-import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.collection.champ.ChampImmutableMap;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 
 import java.net.URI;
-import java.util.LinkedHashMap;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Optional;
@@ -146,7 +145,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-            v.read(uri, format, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), false, workState).whenComplete((actualFormat, exception) -> {
+            v.read(uri, format, ChampImmutableMap.of(), false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
                     v.setURI(oldUri);

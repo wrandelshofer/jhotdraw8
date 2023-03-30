@@ -9,9 +9,9 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.collection.champ.ChampImmutableMap;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.ClippingFigure;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -21,6 +21,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -44,7 +45,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,7 +72,12 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    private @NonNull ReadOnlyMap<Key<?>, Object> options = new ReadOnlyMapFacade<>(new LinkedHashMap<>());
+    private @NonNull ImmutableMap<Key<?>, Object> options = ChampImmutableMap.of();
+
+    /**
+     * Specifies the number of characters that should be used for indentation.
+     */
+    public static SimpleNonNullKey<Integer> INDENT_NUMBER = new SimpleNonNullKey<Integer>("indent-number", Integer.class, 2);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -152,12 +157,12 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     @Override
-    public void setOptions(@NonNull ReadOnlyMap<Key<?>, Object> newValue) {
+    public void setOptions(@NonNull ImmutableMap<Key<?>, Object> newValue) {
         options = newValue;
     }
 
     @Override
-    public @NonNull ReadOnlyMap<Key<?>, Object> getOptions() {
+    public @NonNull ImmutableMap<Key<?>, Object> getOptions() {
         return options;
     }
 
@@ -168,7 +173,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     protected void write(@Nullable URI documentHome, @NonNull Writer out, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
-        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
+        IndentingXMLStreamWriter w = createXmlStreamWriter(out);
         workState.updateProgress(0.0);
         try {
             writeDocument(w, documentHome, drawing);
@@ -181,7 +186,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     @Override
     public void write(@NonNull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
-        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
+        IndentingXMLStreamWriter w = createXmlStreamWriter(sw);
         URI documentHome = null;
         try {
             if (selection == null || selection.isEmpty()) {
@@ -194,6 +199,13 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         }
 
         out.put(getDataFormat(), sw.toString());
+    }
+
+
+    private @NonNull IndentingXMLStreamWriter createXmlStreamWriter(Writer sw) {
+        IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
+        w.setIndentation(" ".repeat(INDENT_NUMBER.get(options)));
+        return w;
     }
 
     protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection, @Nullable URI documentHome) throws IOException, XMLStreamException {

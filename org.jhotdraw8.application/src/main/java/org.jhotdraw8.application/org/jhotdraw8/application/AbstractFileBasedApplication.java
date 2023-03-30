@@ -53,7 +53,7 @@ import org.jhotdraw8.application.action.file.OpenRecentFileAction;
 import org.jhotdraw8.application.prefs.PreferencesUtil;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.text.NaturalSortCollator;
-import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.collection.champ.ChampImmutableMap;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
@@ -590,7 +590,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             getActivities().add(v);
             v.addDisabler(this);
             v.read(uri, null,
-                    new ReadOnlyMapFacade<Key<?>, Object>(new LinkedHashMap<>()),
+                    ChampImmutableMap.of(),
                     false, new SimpleWorkState<Void>()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();

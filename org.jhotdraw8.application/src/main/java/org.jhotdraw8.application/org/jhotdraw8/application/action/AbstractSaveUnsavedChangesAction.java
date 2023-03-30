@@ -24,12 +24,11 @@ import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
-import org.jhotdraw8.collection.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.collection.champ.ChampImmutableMap;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 
 import java.net.URI;
-import java.util.LinkedHashMap;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
@@ -203,7 +202,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     protected void saveViewToURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState<Void> workState) {
-        v.write(uri, dataFormat, new ReadOnlyMapFacade<>(new LinkedHashMap<>()), workState).handle((result, exception) -> {
+        v.write(uri, dataFormat, ChampImmutableMap.of(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
                 if (oldFocusOwner != null) {

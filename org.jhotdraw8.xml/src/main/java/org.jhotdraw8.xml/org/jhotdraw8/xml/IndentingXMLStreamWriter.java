@@ -826,7 +826,9 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                 case '\n':
                     if (isComment) {
                         writeLineBreakAndIndentation();
-                        while (index < end - 1 && Character.isWhitespace(content.charAt(index + 1))) {
+                        while (index < end - 1
+                                && '\n' != content.charAt(index + 1)
+                                && Character.isWhitespace(content.charAt(index + 1))) {
                             index++;
                         }
                     } else {
