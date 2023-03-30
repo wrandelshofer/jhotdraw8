@@ -77,7 +77,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     /**
      * Specifies the number of characters that should be used for indentation.
      */
-    public static SimpleNonNullKey<Integer> INDENT_NUMBER = new SimpleNonNullKey<Integer>("indent-number", Integer.class, 2);
+    public static SimpleNonNullKey<Integer> INDENT_AMOUNT = new SimpleNonNullKey<Integer>("indent-amount", Integer.class, 2);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -204,7 +204,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
 
     private @NonNull IndentingXMLStreamWriter createXmlStreamWriter(Writer sw) {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
-        w.setIndentation(" ".repeat(INDENT_NUMBER.get(options)));
+        w.setIndentation(" ".repeat(INDENT_AMOUNT.get(options)));
         return w;
     }
 
