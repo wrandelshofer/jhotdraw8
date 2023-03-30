@@ -126,7 +126,6 @@ public abstract class AbstractStyleableMapAccessor<T>
         return oldValue;
     }
 
-
     /**
      * Returns the name string.
      */

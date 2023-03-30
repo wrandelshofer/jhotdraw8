@@ -5,7 +5,9 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssPoint2DConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -80,4 +82,15 @@ public class CssPoint2DStyleableMapAccessor
         return oldValue;
     }
 
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssPoint2D value) {
+        a = xKey.put(a, value.getX());
+        return yKey.put(a, value.getY());
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = xKey.remove(a);
+        return yKey.remove(a);
+    }
 }

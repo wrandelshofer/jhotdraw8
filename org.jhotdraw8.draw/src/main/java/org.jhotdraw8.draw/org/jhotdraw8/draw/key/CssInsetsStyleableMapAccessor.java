@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssInsetsConverter;
 import org.jhotdraw8.draw.css.value.CssInsets;
@@ -77,10 +78,7 @@ public class CssInsetsStyleableMapAccessor
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
         if (value == null) {
-            topKey.put(a, null);
-            rightKey.put(a, null);
-            bottomKey.put(a, null);
-            leftKey.put(a, null);
+            remove(a);
         } else {
             topKey.put(a, value.getTop());
             rightKey.put(a, value.getRight());
@@ -97,5 +95,25 @@ public class CssInsetsStyleableMapAccessor
         bottomKey.remove(a);
         leftKey.remove(a);
         return oldValue;
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssInsets value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = topKey.put(a, value.getTop());
+            a = rightKey.put(a, value.getRight());
+            a = bottomKey.put(a, value.getBottom());
+            return leftKey.put(a, value.getLeft());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = topKey.remove(a);
+        a = rightKey.remove(a);
+        a = bottomKey.remove(a);
+        return leftKey.remove(a);
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.text.FontWeight;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssFontConverter;
 import org.jhotdraw8.draw.css.value.CssFont;
@@ -80,15 +81,32 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssFont value) {
         if (value == null) {
-            familyKey.put(a, null);
-            weightKey.put(a, null);
-            postureKey.put(a, null);
-            sizeKey.put(a, null);
+            remove(a);
         } else {
             familyKey.put(a, value.getFamily());
             weightKey.put(a, value.getWeight());
             postureKey.put(a, value.getPosture());
             sizeKey.put(a, value.getSize());
         }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssFont value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = familyKey.put(a, value.getFamily());
+            a = weightKey.put(a, value.getWeight());
+            a = postureKey.put(a, value.getPosture());
+            return sizeKey.put(a, value.getSize());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = familyKey.remove(a);
+        a = weightKey.remove(a);
+        a = postureKey.remove(a);
+        return sizeKey.remove(a);
     }
 }

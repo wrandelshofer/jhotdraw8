@@ -94,6 +94,15 @@ public interface MapAccessor<T> extends Serializable {
     T remove(@NonNull Map<? super Key<?>, Object> a);
 
     /**
+     * Removes the value of the attribute denoted by this accessor from a Map.
+     *
+     * @param a A map.
+     * @return The old value.
+     */
+    @NonNull
+    ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a);
+
+    /**
      * Returns the value type of this map accessor.
      * <p>
      * If the value type has type parameters, make sure to create it using

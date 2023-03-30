@@ -159,6 +159,18 @@ public interface Key<T> extends MapAccessor<T> {
     }
 
     /**
+     * Use this method to perform a type-safe remove operation of an attribute
+     * on a Map.
+     *
+     * @param a An attribute map.
+     * @return The old value.
+     */
+    @Override
+    default @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        return a.remove(this);
+    }
+
+    /**
      * Use this method to perform a type-safe put operation of an attribute into
      * a Map.
      *

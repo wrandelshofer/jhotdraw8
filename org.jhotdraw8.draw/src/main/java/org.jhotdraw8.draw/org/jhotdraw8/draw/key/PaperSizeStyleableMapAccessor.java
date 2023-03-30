@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssPaperSizeConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
@@ -57,8 +58,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssDimension2D value) {
         if (value == null) {
-            widthKey.remove(a);
-            heightKey.remove(a);
+            remove(a);
         } else {
             widthKey.put(a, value.getWidth());
             heightKey.put(a, value.getHeight());
@@ -73,4 +73,19 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
         return oldValue;
     }
 
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable CssDimension2D value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = widthKey.put(a, value.getWidth());
+            return heightKey.put(a, value.getHeight());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = widthKey.remove(a);
+        return heightKey.remove(a);
+    }
 }

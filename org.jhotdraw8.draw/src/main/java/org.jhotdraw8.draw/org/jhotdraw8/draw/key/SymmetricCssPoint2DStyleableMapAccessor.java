@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssSymmetricCssPoint2DConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -14,7 +15,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * SymmetricCssPoint2DStyleableMapAccessor.
@@ -60,9 +60,12 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssPoint2D value) {
-        Objects.requireNonNull(value, "value");
-        xKey.put(a, value.getX());
-        yKey.put(a, value.getY());
+        if (value == null) {
+            remove(a);
+        } else {
+            xKey.put(a, value.getX());
+            yKey.put(a, value.getY());
+        }
     }
 
     @Override
@@ -73,4 +76,19 @@ public class SymmetricCssPoint2DStyleableMapAccessor
         return oldValue;
     }
 
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssPoint2D value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = xKey.put(a, value.getX());
+            return yKey.put(a, value.getY());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = xKey.remove(a);
+        return yKey.remove(a);
+    }
 }

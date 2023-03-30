@@ -8,6 +8,7 @@ import javafx.geometry.Point3D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.css.converter.CssScale3DConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -69,6 +70,17 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull Point3D value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = xKey.put(a, value.getX());
+            a = yKey.put(a, value.getY());
+            return zKey.put(a, value.getZ());
+        }
+    }
+
+    @Override
     public @NonNull Converter<Point3D> getCssConverter() {
         return converter;
     }
@@ -80,6 +92,13 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
         yKey.remove(a);
         zKey.remove(a);
         return oldValue;
+    }
+
+    @Override
+    public @Nullable ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = xKey.remove(a);
+        a = yKey.remove(a);
+        return zKey.remove(a);
     }
 
     @Override

@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
@@ -52,13 +54,18 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
     }
 
     @Override
-    public @NonNull Rectangle2D put(@NonNull Map<? super Key<?>, Object> a, @NonNull Rectangle2D value) {
+    public @NonNull Rectangle2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable Rectangle2D value) {
         Rectangle2D oldValue = get(a);
-        xKey.put(a, value.getMinX());
-        yKey.put(a, value.getMinY());
-        widthKey.put(a, value.getWidth());
-        heightKey.put(a, value.getHeight());
+        if (value == null) {
+            remove(a);
+        } else {
+            xKey.put(a, value.getMinX());
+            yKey.put(a, value.getMinY());
+            widthKey.put(a, value.getWidth());
+            heightKey.put(a, value.getHeight());
+        }
         return oldValue;
+
     }
 
     @Override
@@ -71,4 +78,24 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
         return oldValue;
     }
 
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Rectangle2D value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = xKey.put(a, value.getMinX());
+            a = yKey.put(a, value.getMinY());
+            a = widthKey.put(a, value.getWidth());
+            return heightKey.put(a, value.getHeight());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = xKey.remove(a);
+        a = yKey.remove(a);
+        a = widthKey.remove(a);
+        return heightKey.remove(a);
+
+    }
 }

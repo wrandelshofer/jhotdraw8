@@ -6,7 +6,9 @@ package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Insets;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.css.converter.InsetsConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -76,10 +78,34 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @NonNull Insets value) {
-        topKey.put(a, value.getTop());
-        rightKey.put(a, value.getRight());
-        bottomKey.put(a, value.getBottom());
-        leftKey.put(a, value.getLeft());
+    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Insets value) {
+        if (value == null) {
+            remove(a);
+        } else {
+            topKey.put(a, value.getTop());
+            rightKey.put(a, value.getRight());
+            bottomKey.put(a, value.getBottom());
+            leftKey.put(a, value.getLeft());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Insets value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = topKey.put(a, value.getTop());
+            a = rightKey.put(a, value.getRight());
+            a = bottomKey.put(a, value.getBottom());
+            return leftKey.put(a, value.getLeft());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = topKey.remove(a);
+        a = rightKey.remove(a);
+        a = bottomKey.remove(a);
+        return leftKey.remove(a);
     }
 }

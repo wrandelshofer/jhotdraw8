@@ -10,8 +10,8 @@ import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssStrokeStyleConverter;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
@@ -112,12 +112,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStrokeStyle value) {
         if (value == null) {
-            dashOffsetKey.put(a, CssSize.ZERO);
-            dashArrayKey.put(a, ImmutableArrayList.of());
-            typeKey.put(a, StrokeType.CENTERED);
-            lineJoinKey.put(a, StrokeLineJoin.MITER);
-            lineCapKey.put(a, StrokeLineCap.SQUARE);
-            miterLimitKey.put(a, CssSize.of(10.0));
+            remove(a);
         } else {
             dashOffsetKey.put(a, value.getDashOffset());
             dashArrayKey.put(a, value.getDashArray());
@@ -126,5 +121,29 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
             lineCapKey.put(a, value.getLineCap());
             miterLimitKey.put(a, value.getMiterLimit());
         }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable CssStrokeStyle value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = dashOffsetKey.put(a, value.getDashOffset());
+            a = dashArrayKey.put(a, value.getDashArray());
+            a = typeKey.put(a, value.getType());
+            a = lineJoinKey.put(a, value.getLineJoin());
+            a = lineCapKey.put(a, value.getLineCap());
+            return miterLimitKey.put(a, value.getMiterLimit());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = typeKey.remove(a);
+        a = lineJoinKey.remove(a);
+        a = lineCapKey.remove(a);
+        a = miterLimitKey.remove(a);
+        a = dashOffsetKey.remove(a);
+        return dashArrayKey.remove(a);
     }
 }

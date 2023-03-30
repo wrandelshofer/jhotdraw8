@@ -8,13 +8,13 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Point2DStyleableMapAccessor.
@@ -76,8 +76,27 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     @Override
     public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
-        Objects.requireNonNull(value, "value");
-        xKey.put(a, value.getX());
-        yKey.put(a, value.getY());
+        if (value == null) {
+            remove(a);
+        } else {
+            xKey.put(a, value.getX());
+            yKey.put(a, value.getY());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Point2D value) {
+        if (value == null) {
+            return remove(a);
+        } else {
+            a = xKey.put(a, value.getX());
+            return yKey.put(a, value.getY());
+        }
+    }
+
+    @Override
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        a = xKey.remove(a);
+        return yKey.remove(a);
     }
 }

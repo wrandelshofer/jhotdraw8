@@ -109,4 +109,8 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         return put(a, false);
     }
 
+    @Override
+    public @Nullable ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+        return setAccessor.remove(a);
+    }
 }
