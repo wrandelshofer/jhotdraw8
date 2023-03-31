@@ -7,9 +7,10 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ArrayHelper;
+import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.UniqueId;
 
+import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
@@ -44,7 +45,7 @@ class BitmapIndexedNode<D> extends Node<D> {
     @NonNull BitmapIndexedNode<D> copyAndInsertData(@Nullable UniqueId mutator, int bitpos,
                                                     D data) {
         int idx = dataIndex(bitpos);
-        Object[] dst = ArrayHelper.copyComponentAdd(this.mixed, idx, 1);
+        Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
         dst[idx] = data;
         return newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst);
     }
@@ -94,7 +95,7 @@ class BitmapIndexedNode<D> extends Node<D> {
             return this;
         } else {
             // copy 'src' and set 1 element(s) at position 'idx'
-            final Object[] dst = ArrayHelper.copySet(this.mixed, idx, node);
+            final Object[] dst = ListHelper.copySet(this.mixed, idx, node);
             return newBitmapIndexedNode(mutator, nodeMap, dataMap, dst);
         }
     }
@@ -125,9 +126,9 @@ class BitmapIndexedNode<D> extends Node<D> {
         int splitAt = dataArity();
         return nodeMap() == that.nodeMap()
                 && dataMap() == that.dataMap()
-                && ArrayHelper.equals(mixed, 0, splitAt, thatNodes, 0, splitAt)
-                && ArrayHelper.equals(mixed, splitAt, mixed.length, thatNodes, splitAt, thatNodes.length,
-                (a, b) -> ((Node<D>) a).equivalent(b));
+                && Arrays.equals(mixed, 0, splitAt, thatNodes, 0, splitAt)
+                && Arrays.equals(mixed, splitAt, mixed.length, thatNodes, splitAt, thatNodes.length,
+                (a, b) -> ((Node<D>) a).equivalent(b) ? 0 : 1);
     }
 
 
@@ -227,7 +228,7 @@ class BitmapIndexedNode<D> extends Node<D> {
             return newBitmapIndexedNode(mutator, 0, newDataMap, nodes);
         }
         int idx = dataIndex * entryLength;
-        Object[] dst = ArrayHelper.copyComponentRemove(this.mixed, idx, entryLength);
+        Object[] dst = ListHelper.copyComponentRemove(this.mixed, idx, entryLength);
         return newBitmapIndexedNode(mutator, nodeMap, dataMap ^ bitpos, dst);
     }
 
@@ -293,7 +294,7 @@ class BitmapIndexedNode<D> extends Node<D> {
             this.mixed[dataIndex] = updatedData;
             return this;
         }
-        Object[] newMixed = ArrayHelper.copySet(this.mixed, dataIndex, updatedData);
+        Object[] newMixed = ListHelper.copySet(this.mixed, dataIndex, updatedData);
         return newBitmapIndexedNode(mutator, nodeMap, dataMap, newMixed);
     }
 }

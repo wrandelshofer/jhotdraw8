@@ -7,7 +7,6 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
@@ -27,9 +26,9 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     @Override
     @NonNull ImmutableSequencedSet<E> addAll(@NonNull Iterable<? extends E> c);
 
-    @NonNull ChampImmutableSequencedSet<E> addFirst(final @Nullable E key);
+    @NonNull ImmutableSequencedSet<E> addFirst(final @Nullable E key);
 
-    @NonNull ChampImmutableSequencedSet<E> addLast(final @Nullable E key);
+    @NonNull ImmutableSequencedSet<E> addLast(final @Nullable E key);
 
     @Override
     @NonNull ImmutableSequencedSet<E> clear();

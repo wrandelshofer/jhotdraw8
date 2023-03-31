@@ -18,8 +18,10 @@
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.graph/org.jhotdraw8.graph.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.grapher/org.jhotdraw8.grapher.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.grapher/org.jhotdraw8.grapher.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.os/org.jhotdraw8.os.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.os/org.jhotdraw8.os.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.svg/org.jhotdraw8.svg.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.svg/org.jhotdraw8.svg.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.teddy/org.jhotdraw8.teddy.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.teddy/org.jhotdraw8.teddy.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.theme/org.jhotdraw8.theme.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.theme/org.jhotdraw8.theme.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.jhotdraw8.xml/org.jhotdraw8.xml.iml" filepath="$PROJECT_DIR$/org.jhotdraw8.xml/org.jhotdraw8.xml.iml" />
     </modules>
   </component>
 </project>

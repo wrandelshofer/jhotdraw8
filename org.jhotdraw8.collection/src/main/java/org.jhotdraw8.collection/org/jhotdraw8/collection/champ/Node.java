@@ -40,12 +40,12 @@ import java.util.function.ToIntFunction;
  * of the tree.
  * <p>
  * In this implementation, a hash code has a length of
- * {@value #HASH_CODE_LENGTH} bits, and is split up into parts of
- * {@value BIT_PARTITION_SIZE} bits (the last part contains the remaining bits).
+ * {@value #HASH_CODE_LENGTH} bits, and is split up in little-endian order into parts of
+ * {@value #BIT_PARTITION_SIZE} bits (the last part contains the remaining bits).
  *
  * @param <D> the type of the data objects that are stored in this trie
  */
-abstract class Node<D> {
+public abstract class Node<D> {
     /**
      * Represents no data.
      * We can not use {@code null}, because we allow storing null-data in the

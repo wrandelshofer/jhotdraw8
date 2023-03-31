@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ArrayHelper;
+import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Objects;
@@ -138,7 +138,7 @@ class HashCollisionNode<D> extends Node<D> {
                             new Object[]{getData(idx ^ 1)});
                 }
                 // copy keys and remove 1 element at position idx
-                Object[] entriesNew = ArrayHelper.copyComponentRemove(this.data, idx, 1);
+                Object[] entriesNew = ListHelper.copyComponentRemove(this.data, idx, 1);
                 if (isAllowedToUpdate(mutator)) {
                     this.data = entriesNew;
                     return this;
@@ -171,13 +171,13 @@ class HashCollisionNode<D> extends Node<D> {
                     this.data[i] = updatedKey;
                     return this;
                 }
-                final Object[] newKeys = ArrayHelper.copySet(this.data, i, updatedKey);
+                final Object[] newKeys = ListHelper.copySet(this.data, i, updatedKey);
                 return newHashCollisionNode(mutator, dataHash, newKeys);
             }
         }
 
         // copy entries and add 1 more at the end
-        Object[] entriesNew = ArrayHelper.copyComponentAdd(this.data, this.data.length, 1);
+        Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
         entriesNew[this.data.length] = data;
         details.setAdded();
         if (isAllowedToUpdate(mutator)) {

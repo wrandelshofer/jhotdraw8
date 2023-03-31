@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.rrb;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ArrayHelper;
+import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Arrays;
@@ -165,7 +165,7 @@ class TrieListHelper {
                                                       E @NonNull [] elements,
                                                       int index,
                                                       int shift) {
-            E[] newData = ArrayHelper.copyAddAll(data, index, elements);
+            E[] newData = ListHelper.copyAddAll(data, index, elements);
             if (isAllowedToEdit(mutator)) {
                 this.data = newData;
                 return new Node[]{this};
@@ -174,15 +174,6 @@ class TrieListHelper {
             }
         }
 
-        @NonNull LeafNode<E> inc(@Nullable UniqueId mutator) {
-            E[] newData = Arrays.copyOf(data, data.length + 1);
-            if (isAllowedToEdit(mutator)) {
-                data = newData;
-                return this;
-            } else {
-                return new LeafNode<>(newData);
-            }
-        }
 
     }
 

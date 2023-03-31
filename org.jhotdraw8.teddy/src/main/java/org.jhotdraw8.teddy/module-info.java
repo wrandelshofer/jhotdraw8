@@ -15,6 +15,7 @@ module org.jhotdraw8.teddy {
     requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.fxbase;
     requires transitive org.jhotdraw8.base;
+    requires javafx.base;
     provides java.util.spi.ResourceBundleProvider with TeddyResourceBundleProvider;
 
     opens org.jhotdraw8.teddy
