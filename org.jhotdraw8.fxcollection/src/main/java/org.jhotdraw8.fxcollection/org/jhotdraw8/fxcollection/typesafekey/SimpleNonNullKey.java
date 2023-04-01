@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 /**
  * A simple {@link Key} which has a non-nullable value.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public class SimpleNonNullKey<@NonNull T> extends AbstractKey<@NonNull T> implements

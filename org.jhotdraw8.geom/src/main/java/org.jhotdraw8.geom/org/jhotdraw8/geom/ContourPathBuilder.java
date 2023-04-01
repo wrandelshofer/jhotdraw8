@@ -10,6 +10,11 @@ import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PolyArcPath;
 import org.jhotdraw8.geom.contour.PolyArcPathBuilder;
 
+/**
+ * Builds a contour path around a path.
+ *
+ * @param <T> the product type
+ */
 public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     private final double offset;
 

@@ -19,6 +19,7 @@ import java.lang.ref.WeakReference;
  * <p>
  * If the key is not declared by the figure, then the value will always be null.
  *
+ * @param <T> the value type of the property
  * @author Werner Randelshofer
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {

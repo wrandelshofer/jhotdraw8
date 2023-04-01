@@ -1,7 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-
-import org.jhotdraw8.collection.champ.ChampImmutableSet;
+import io.vavr.collection.HashSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -18,17 +17,17 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.36
+ * # JMH version: 1.28
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                    (mask)   (size)  Mode  Cnt         Score   Error  Units
- * mContainsFound        -65  1000000  avgt            188.427          ns/op
- * mContainsNotFound     -65  1000000  avgt            191.026          ns/op
- * mHead                 -65  1000000  avgt             26.244          ns/op
- * mIterate              -65  1000000  avgt       38966616.650          ns/op
- * mRemoveThenAdd        -65  1000000  avgt            583.167          ns/op
- * mTail                 -65  1000000  avgt            117.821          ns/op
+ *                    (size)  Mode  Cnt         Score   Error  Units
+ * ContainsFound     1000000  avgt            218.947          ns/op
+ * ContainsNotFound  1000000  avgt            216.666          ns/op
+ * Head              1000000  avgt             28.630          ns/op
+ * Iterate           1000000  avgt       78528548.555          ns/op
+ * RemoveAdd         1000000  avgt            559.294          ns/op
+ * Tail              1000000  avgt            139.689          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -37,20 +36,19 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhChampImmutableSet {
+public class VavrHashSetJmh {
     @Param({"1000000"})
     private int size;
 
-    @Param({"-65"})
-    private int mask;
+    private final int mask = ~64;
 
     private BenchmarkData data;
-    private ChampImmutableSet<Key> setA;
+    private HashSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = ChampImmutableSet.copyOf(data.setA);
+        setA = HashSet.ofAll(data.setA);
     }
 
     @Benchmark
@@ -63,19 +61,19 @@ public class JmhChampImmutableSet {
     }
 
     @Benchmark
-    public ChampImmutableSet<Key> mRemoveThenAdd() {
+    public HashSet<Key> mRemoveAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
 
     @Benchmark
     public Key mHead() {
-        return setA.iterator().next();
+        return setA.head();
     }
 
     @Benchmark
-    public ChampImmutableSet<Key> mTail() {
-        return setA.remove(setA.iterator().next());
+    public HashSet<Key> mTail() {
+        return setA.tail();
     }
 
     @Benchmark

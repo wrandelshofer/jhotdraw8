@@ -18,6 +18,7 @@ import org.jhotdraw8.fxcollection.typesafekey.KeyMapEntryProperty;
 /**
  * KeyMapEntryStyleableProperty.
  *
+ * @param <T> the type of the value
  * @author Werner Randelshofer
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {

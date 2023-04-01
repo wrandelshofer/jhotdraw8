@@ -15,6 +15,7 @@ import org.jhotdraw8.fxcollection.MapEntryProperty;
  * FIXME currently only works fully if the provided MapAccessor is an instance
  * of Key.
  *
+ * @param <V> the value type
  * @author Werner Randelshofer
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {

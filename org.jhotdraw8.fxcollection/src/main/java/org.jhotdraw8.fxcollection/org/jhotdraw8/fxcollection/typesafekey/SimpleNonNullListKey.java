@@ -10,8 +10,9 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 
 /**
- * An abstract {@link Key} that stores a list of values.
+ * A {@link Key} that stores a list of values.
  *
+ * @param <E> the element type of the list
  * @author Werner Randelshofer
  */
 public class SimpleNonNullListKey<E> extends SimpleNonNullKey<ImmutableList<E>> {

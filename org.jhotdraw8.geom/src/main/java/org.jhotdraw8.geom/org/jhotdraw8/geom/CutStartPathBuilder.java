@@ -7,13 +7,18 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.intersect.*;
+import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
 
 /**
  * Clips the start of the path on the specified circle.
  *
+ * @param <T> the product type
  * @author Werner Randelshofer
  */
 public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {

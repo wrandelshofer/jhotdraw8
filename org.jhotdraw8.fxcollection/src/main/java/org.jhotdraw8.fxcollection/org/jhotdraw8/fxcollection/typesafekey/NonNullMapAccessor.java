@@ -13,6 +13,7 @@ import java.util.Objects;
 /**
  * NonNullMapAccessor.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public interface NonNullMapAccessor<@NonNull T> extends MapAccessor<T> {

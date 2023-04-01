@@ -18,6 +18,7 @@ import static java.lang.Math.min;
  * Reversed list provides a view on an underlying list with items ordered in
  * reverse.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ReversedObservableList<E> extends TransformationList<E, E> {

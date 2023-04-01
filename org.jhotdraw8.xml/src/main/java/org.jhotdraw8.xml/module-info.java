@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Provides XML interoperability for drawing editors.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.xml {
     requires transitive java.logging;

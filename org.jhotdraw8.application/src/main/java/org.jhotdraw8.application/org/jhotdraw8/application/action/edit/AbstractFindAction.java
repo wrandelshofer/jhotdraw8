@@ -14,9 +14,10 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
  * Presents a find dialog to the user and then highlights the found items in the
  * active view.
  *
+ * @param <A> the activity type
  * @author Werner Randelshofer
  */
-public abstract class AbstractFindAction<V extends Activity> extends AbstractActivityAction<V> {
+public abstract class AbstractFindAction<A extends Activity> extends AbstractActivityAction<A> {
 
     public static final String ID = "edit.find";
 
@@ -27,7 +28,7 @@ public abstract class AbstractFindAction<V extends Activity> extends AbstractAct
      * @param view      the view
      * @param viewClass the class of the view
      */
-    public AbstractFindAction(@NonNull Application app, V view, Class<V> viewClass) {
+    public AbstractFindAction(@NonNull Application app, A view, Class<A> viewClass) {
         super(view);
         ApplicationLabels.getResources().configureAction(this, ID);
     }

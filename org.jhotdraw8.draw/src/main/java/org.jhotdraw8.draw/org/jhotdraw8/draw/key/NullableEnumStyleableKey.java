@@ -13,6 +13,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 /**
  * NullableEnumStyleableKey.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public class NullableEnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T> implements WritableStyleableMapAccessor<T> {

@@ -18,8 +18,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps map functions in the {@link ReadOnlyMap} interface.
+ * Wraps {@code Map} functions in the {@link ReadOnlyMap} interface.
  *
+ * @param <K> the key type
+ * @param <V> the value type
  * @author Werner Randelshofer
  */
 public class ReadOnlyMapFacade<K, V> implements ReadOnlyMap<K, V> {

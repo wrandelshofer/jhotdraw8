@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Provides JavaFX-specific utility classes used by the JHotDraw framework.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.fxbase {
     requires transitive org.jhotdraw8.annotation;

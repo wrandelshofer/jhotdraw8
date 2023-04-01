@@ -14,8 +14,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps set functions into the {@link ReadOnlySequencedSet} interface.
+ * Wraps {@code Set} functions into the {@link ReadOnlySequencedSet} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>

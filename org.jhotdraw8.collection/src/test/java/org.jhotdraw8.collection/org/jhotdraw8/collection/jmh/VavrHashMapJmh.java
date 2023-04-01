@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-import io.vavr.collection.HashSet;
+import io.vavr.collection.HashMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -21,13 +21,7 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                    (size)  Mode  Cnt         Score   Error  Units
- * ContainsFound     1000000  avgt            218.947          ns/op
- * ContainsNotFound  1000000  avgt            216.666          ns/op
- * Head              1000000  avgt             28.630          ns/op
- * Iterate           1000000  avgt       78528548.555          ns/op
- * RemoveAdd         1000000  avgt            559.294          ns/op
- * Tail              1000000  avgt            139.689          ns/op
+ *
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -36,55 +30,64 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhVavrHashSet {
+public class VavrHashMapJmh {
     @Param({"1000000"})
     private int size;
 
     private final int mask = ~64;
 
     private BenchmarkData data;
-    private HashSet<Key> setA;
+    private HashMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = HashSet.ofAll(data.setA);
+        mapA = HashMap.empty();
+        for (Key key : data.setA) {
+            mapA = mapA.put(key, Boolean.TRUE);
+        }
     }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (Key k : setA) {
+        for (Key k : mapA.keysIterator()) {
             sum += k.value;
         }
         return sum;
     }
 
     @Benchmark
-    public HashSet<Key> mRemoveAdd() {
+    public HashMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
-        return setA.remove(key).add(key);
+        return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public Key mHead() {
-        return setA.head();
-    }
-
-    @Benchmark
-    public HashSet<Key> mTail() {
-        return setA.tail();
+    public HashMap<Key, Boolean> mPut() {
+        Key key = data.nextKeyInA();
+        return mapA.put(key, Boolean.FALSE);
     }
 
     @Benchmark
     public boolean mContainsFound() {
         Key key = data.nextKeyInA();
-        return setA.contains(key);
+        return mapA.containsKey(key);
     }
 
     @Benchmark
     public boolean mContainsNotFound() {
         Key key = data.nextKeyInB();
-        return setA.contains(key);
+        return mapA.containsKey(key);
+    }
+
+    @Benchmark
+    public Key mHead() {
+        return mapA.head()._1;
+    }
+
+    @Benchmark
+    public HashMap<Key, Boolean> mTail() {
+        return mapA.tail();
     }
 }

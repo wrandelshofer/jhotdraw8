@@ -17,6 +17,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * Wraps {@code Map} functions in the {@link ImmutableMap} interface.
+ *
+ * @param <K> the key type
+ * @param <V> the element type
+ */
 public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implements ImmutableMap<K, V> {
 
     private final @NonNull Map<K, V> target;

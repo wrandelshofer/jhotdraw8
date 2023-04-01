@@ -13,6 +13,9 @@ import org.jhotdraw8.annotation.NonNull;
  * @author Werner Randelshofer
  */
 public class Preconditions {
+    /**
+     * Don't let anyone instantiate this class.
+     */
     private Preconditions() {
 
     }

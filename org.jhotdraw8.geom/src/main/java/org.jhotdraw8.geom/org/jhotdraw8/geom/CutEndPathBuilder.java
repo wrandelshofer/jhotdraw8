@@ -6,13 +6,18 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.geom.intersect.*;
+import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
 import java.awt.geom.PathIterator;
 
 /**
  * CutEndPathBuilder.
  *
+ * @param <T> the product type
  * @author Werner Randelshofer
  */
 public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {

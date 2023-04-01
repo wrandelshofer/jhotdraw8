@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
  * regex       = string-token ;
  * replacement = string-token ;
  * </pre>
+ *
+ * @param <T> the element type of the DOM
  */
 public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     /**

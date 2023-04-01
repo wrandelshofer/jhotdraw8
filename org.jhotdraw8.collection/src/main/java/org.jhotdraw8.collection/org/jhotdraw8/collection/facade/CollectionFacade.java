@@ -17,8 +17,9 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@code Collection} functions into the {@link Collection} interface.
+ * Wraps {@code Collection} functions in the {@link Collection} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class CollectionFacade<E> extends AbstractCollection<E> implements ReadOnlyCollection<E> {

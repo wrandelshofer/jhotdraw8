@@ -12,6 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
 /**
  * TransformPathBuilder.
  *
+ * @param <T> the product type
  * @author Werner Randelshofer
  */
 public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {

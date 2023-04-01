@@ -16,24 +16,25 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * SimpleTreeModel.
  *
+ * @param <N> the node type
  * @author Werner Randelshofer
  */
-public class SimpleTreeModel<E> implements TreeModel<E> {
+public class SimpleTreeModel<N> implements TreeModel<N> {
     public SimpleTreeModel() {
     }
 
     @Override
-    public @NonNull E getChild(E parent, int index) {
+    public @NonNull N getChild(N parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int getChildCount(E node) {
+    public int getChildCount(N node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public @NonNull List<E> getChildren(E node) {
+    public @NonNull List<N> getChildren(N node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -43,22 +44,22 @@ public class SimpleTreeModel<E> implements TreeModel<E> {
     }
 
     @Override
-    public @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
+    public @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> getTreeModelListeners() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void insertChildAt(E child, E parent, int index) {
+    public void insertChildAt(N child, N parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void removeFromParent(E child) {
+    public void removeFromParent(N child) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public @NonNull ObjectProperty<E> rootProperty() {
+    public @NonNull ObjectProperty<N> rootProperty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

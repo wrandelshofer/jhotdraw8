@@ -11,6 +11,8 @@ import org.jhotdraw8.annotation.Nullable;
 /**
  * Skips lineTo, quadTo and curveTo segments
  * if the distance to the previous segment is less than epsilon.
+ *
+ * @param <T> the product type
  */
 public class ShortSegmentsSkipperPathBuilder<T> extends AbstractPathBuilder<T> {
 

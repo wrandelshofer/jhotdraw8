@@ -16,8 +16,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps collection functions into the {@link ReadOnlyCollection} interface.
+ * Wraps {@code Collection} functions into the {@link ReadOnlyCollection} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {

@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Provides support for JavaFX themes.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.theme {
     requires transitive org.jhotdraw8.color;

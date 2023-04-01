@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-import io.vavr.collection.LinkedHashSet;
+import org.jhotdraw8.collection.champ.ChampImmutableSequencedMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *
+ *  --
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -30,55 +30,64 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhVavrLinkedHashSet {
+public class ChampImmutableSequencedMapJmh {
     @Param({"1000000"})
     private int size;
 
     private final int mask = ~64;
 
     private BenchmarkData data;
-    private LinkedHashSet<Key> setA;
+    private ChampImmutableSequencedMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = LinkedHashSet.ofAll(data.setA);
+        mapA = ChampImmutableSequencedMap.of();
+        for (Key key : data.setA) {
+            mapA = mapA.put(key, Boolean.TRUE);
+        }
     }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (Key k : setA) {
+        for (Key k : mapA.readOnlyKeySet()) {
             sum += k.value;
         }
         return sum;
     }
 
     @Benchmark
-    public LinkedHashSet<Key> mRemoveAdd() {
+    public ChampImmutableSequencedMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
-        return setA.remove(key).add(key);
+        return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public Key mHead() {
-        return setA.head();
-    }
-
-    @Benchmark
-    public LinkedHashSet<Key> mTail() {
-        return setA.tail();
+    public ChampImmutableSequencedMap<Key, Boolean> mPut() {
+        Key key = data.nextKeyInA();
+        return mapA.put(key, Boolean.FALSE);
     }
 
     @Benchmark
     public boolean mContainsFound() {
         Key key = data.nextKeyInA();
-        return setA.contains(key);
+        return mapA.containsKey(key);
     }
 
     @Benchmark
     public boolean mContainsNotFound() {
         Key key = data.nextKeyInB();
-        return setA.contains(key);
+        return mapA.containsKey(key);
+    }
+
+    @Benchmark
+    public Key mHead() {
+        return mapA.iterator().next().getKey();
+    }
+
+    @Benchmark
+    public ChampImmutableSequencedMap<Key, Boolean> mTail() {
+        return mapA.remove(mapA.iterator().next().getKey());
     }
 }

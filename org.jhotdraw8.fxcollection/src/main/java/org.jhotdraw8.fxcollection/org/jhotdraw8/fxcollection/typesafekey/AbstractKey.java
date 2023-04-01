@@ -31,6 +31,7 @@ import java.util.Objects;
  * keys have the same name.
  *
  * @author Werner Randelshofer
+ * @param <T> the value type
  */
 public abstract class AbstractKey<T> implements Key<T> {
 

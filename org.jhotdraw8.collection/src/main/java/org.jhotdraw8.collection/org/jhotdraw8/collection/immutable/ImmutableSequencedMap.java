@@ -19,6 +19,9 @@ import java.util.Map;
  * <p>
  * An immutable sequenced map provides methods for creating a new immutable sequenced map with
  * added, updated or removed entries, without changing the original immutable sequenced map.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnlySequencedMap<K, V> {
     @Override

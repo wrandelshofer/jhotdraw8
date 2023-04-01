@@ -12,7 +12,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import scala.Tuple2;
-import scala.collection.immutable.TreeSeqMap;
+import scala.collection.immutable.VectorMap;
 import scala.collection.mutable.Builder;
 
 import java.util.concurrent.TimeUnit;
@@ -32,19 +32,19 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhScalaTreeSeqMap {
+public class ScalaVectorMapJmh {
     @Param({"1000000"})
     private int size;
 
     private final int mask = ~64;
 
     private BenchmarkData data;
-    private TreeSeqMap<Key, Boolean> mapA;
+    private VectorMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        Builder<Tuple2<Key, Boolean>, TreeSeqMap<Key, Boolean>> b = TreeSeqMap.newBuilder();
+        Builder<Tuple2<Key, Boolean>, VectorMap<Key, Boolean>> b = VectorMap.newBuilder();
         for (Key key : data.setA) {
             b.addOne(new Tuple2<>(key, Boolean.TRUE));
         }
@@ -90,7 +90,7 @@ public class JmhScalaTreeSeqMap {
     }
 
     @Benchmark
-    public TreeSeqMap<Key, Boolean> mTail() {
+    public VectorMap<Key, Boolean> mTail() {
         return mapA.tail();
     }
 }

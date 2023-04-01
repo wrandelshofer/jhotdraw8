@@ -12,9 +12,10 @@ import org.jhotdraw8.base.event.Event;
 /**
  * TreeModelEvent.
  *
+ * @param <N> the node type
  * @author Werner Randelshofer
  */
-public class TreeModelEvent<E> extends Event<TreeModel<E>> {
+public class TreeModelEvent<N> extends Event<TreeModel<N>> {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,14 +66,14 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
 
     }
 
-    private final E node;
+    private final N node;
 
-    private final E parentOrOldRoot;
-    private final E root;
+    private final N parentOrOldRoot;
+    private final N root;
     private final int childIndex;
     private final TreeModelEvent.EventType eventType;
 
-    private TreeModelEvent(@NonNull TreeModel<E> source, EventType eventType, E node, E parentOrOldRoot, E root, int childIndex) {
+    private TreeModelEvent(@NonNull TreeModel<N> source, EventType eventType, N node, N parentOrOldRoot, N root, int childIndex) {
         super(source);
         this.node = node;
         this.parentOrOldRoot = parentOrOldRoot;
@@ -112,7 +113,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     /**
      * If the root has changed, returns the old root.
      */
-    public @Nullable E getOldRoot() {
+    public @Nullable N getOldRoot() {
         if (EventType.ROOT_CHANGED != eventType) {
             throw new IllegalStateException();
         }
@@ -122,7 +123,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
     /**
      * If the root has changed, returns the new root.
      */
-    public @Nullable E getNewRoot() {
+    public @Nullable N getNewRoot() {
         if (EventType.ROOT_CHANGED != eventType) {
             throw new IllegalStateException();
         }
@@ -134,7 +135,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
      *
      * @return the figure
      */
-    public E getNode() {
+    public N getNode() {
         return node;
     }
 
@@ -143,7 +144,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
      *
      * @return the parent
      */
-    public E getParent() {
+    public N getParent() {
         return parentOrOldRoot;
     }
 
@@ -152,7 +153,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
      *
      * @return the root
      */
-    public E getRoot() {
+    public N getRoot() {
         return root;
     }
 
@@ -161,7 +162,7 @@ public class TreeModelEvent<E> extends Event<TreeModel<E>> {
      *
      * @return the child
      */
-    public E getChild() {
+    public N getChild() {
         return node;
     }
 

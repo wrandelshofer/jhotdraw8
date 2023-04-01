@@ -23,6 +23,7 @@ import java.util.function.Consumer;
  * If you need a different mapping use {@link CssMappedConverter} or
  * {@link CssLiteralEnumConverter}.
  *
+ * @param <E> the type of the enum that can be converted from/to CSS
  * @author Werner Randelshofer
  */
 public class CssKebabCaseEnumConverter<E extends Enum<E>> implements CssConverter<E> {

@@ -18,6 +18,8 @@ import java.util.function.BiConsumer;
 
 /**
  * Picker for boolean values.
+ *
+ * @param <T> the enum type
  */
 public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
     private ContextMenu contextMenu;

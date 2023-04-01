@@ -13,8 +13,9 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
- * ListStyleableKey.
+ * SetStyleableKey.
  *
+ * @param <T> the element type of the set
  * @author Werner Randelshofer
  */
 public class SetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSequencedSet<T>>

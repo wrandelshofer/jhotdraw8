@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 /**
  * SimpleStyleableKey.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public class SimpleStyleableKey<T> extends AbstractReadOnlyStyleableKey<T>

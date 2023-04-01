@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Defines functions for 2D geometry processing.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.geom {
     exports org.jhotdraw8.geom;

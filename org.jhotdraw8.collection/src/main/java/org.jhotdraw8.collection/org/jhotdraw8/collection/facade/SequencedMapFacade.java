@@ -26,8 +26,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps map functions into the {@link SequencedMap} interface.
+ * Wraps {@code Map} functions into the {@link SequencedMap} interface.
  *
+ * @param <K> the key type
+ * @param <V> the value type
  * @author Werner Randelshofer
  */
 public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements SequencedMap<K, V> {

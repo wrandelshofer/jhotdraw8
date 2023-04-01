@@ -12,6 +12,11 @@ import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
 
 import java.lang.reflect.Type;
 
+/**
+ * ObjectStyleableKey.
+ *
+ * @param <T> the object type
+ */
 public class ObjectStyleableKey<T> extends AbstractKey<T> implements WritableStyleableMapAccessor<T> {
     private static final long serialVersionUID = 0L;
 

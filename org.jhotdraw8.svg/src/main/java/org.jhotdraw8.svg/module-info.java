@@ -5,6 +5,9 @@
 
 import org.jhotdraw8.svg.spi.SvgImageReaderProvider;
 
+/**
+ * Provides SVG interoperability for drawing editors.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.svg {
     requires transitive java.logging;

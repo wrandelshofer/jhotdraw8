@@ -35,6 +35,7 @@ import org.jhotdraw8.annotation.Nullable;
  * </ul>
  *
  * @author Werner Randelshofer
+ * @param <T> the product type
  */
 public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {
 

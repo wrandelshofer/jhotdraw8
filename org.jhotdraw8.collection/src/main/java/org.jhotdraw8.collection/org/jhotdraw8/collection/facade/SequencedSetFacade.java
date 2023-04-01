@@ -22,6 +22,7 @@ import java.util.function.Supplier;
 /**
  * Wraps {@code Set} functions into the {@link Set} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<E> {

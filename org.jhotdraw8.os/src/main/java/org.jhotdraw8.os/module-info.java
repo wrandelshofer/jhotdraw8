@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Defines operation specific functions.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.os {
     requires transitive java.xml;

@@ -15,7 +15,9 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.log;
+import static java.lang.Math.sqrt;
 import static org.jhotdraw8.geom.Lines.lerp;
 
 /**
@@ -31,7 +33,7 @@ import static org.jhotdraw8.geom.Lines.lerp;
  * <pre>
  * ∂B∂t(t) = 2*t*(P₀ − 2*P₁ + P₂) + 2*P₁ − 2*P₀
  * </pre>
- * </p>
+ *
  * References:
  * <dl>
  *     <dt>Quadratic Bezier curves, Copyright malczak</dt>

@@ -93,7 +93,6 @@ import static org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet.seq
  * The renumbering is why the {@code put} and {@code remove} methods are
  * O(1) only in an amortized sense.
  * <p>
- * <p>
  * To support iteration, a second CHAMP trie is maintained. The second CHAMP
  * trie has the same contents as the first. However, we use the sequence number
  * for computing the hash code of an element.

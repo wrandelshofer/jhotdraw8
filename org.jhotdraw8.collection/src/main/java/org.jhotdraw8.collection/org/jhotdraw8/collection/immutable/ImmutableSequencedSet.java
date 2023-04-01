@@ -18,6 +18,8 @@ import java.util.Collection;
  * <p>
  * An immutable sequenced set provides methods for creating a new immutable sequenced set with
  * added or removed elements, without changing the original immutable sequenced set.
+ *
+ * @param <E> the element type
  */
 public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySequencedSet<E> {
     @Override

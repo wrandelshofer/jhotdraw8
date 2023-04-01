@@ -13,6 +13,8 @@ import org.jhotdraw8.fxcollection.indexedset.AbstractIndexedArrayObservableSet;
  * <p>
  * This list maintains the parent of tree nodes that are added/removed
  * from the child list, as described in {@link TreeNode#getChildren()}.
+ *
+ * @param <E> the node type
  */
 public class ChildList<E extends TreeNode<E>> extends AbstractIndexedArrayObservableSet<E> {
 

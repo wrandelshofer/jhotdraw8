@@ -21,8 +21,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps map functions into the {@link java.util.Map} interface.
+ * Wraps {@code Map} functions into the {@link java.util.Map} interface.
  *
+ * @param <K> the key type
+ * @param <V> the value type
  * @author Werner Randelshofer
  */
 public class MapFacade<K, V> extends AbstractMap<K, V> {

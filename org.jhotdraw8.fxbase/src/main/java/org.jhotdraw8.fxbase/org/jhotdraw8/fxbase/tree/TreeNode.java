@@ -28,13 +28,9 @@ import java.util.NoSuchElementException;
  * <p>
  * A node may only support a restricted set of child types
  * {@literal <C extends T>}.
- * <p>
- * The type {@literal <T>} is checked at compile time using a Java type
- * parameter. The types {@literal <P>} and {@literal <C>} are checked at
- * runtime.
  *
- * @param <T> the type of the tree node
  * @author Werner Randelshofer
+ * @param <T> the type of the tree node
  */
 public interface TreeNode<T extends TreeNode<T>> {
 

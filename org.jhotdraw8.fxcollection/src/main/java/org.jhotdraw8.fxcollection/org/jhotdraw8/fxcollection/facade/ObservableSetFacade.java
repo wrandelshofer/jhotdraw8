@@ -17,6 +17,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySet;
  * The underlying ReadOnlySet is referenced - not copied. This allows to pass a
  * ReadOnlySet to a client who does not understand the ReadOnlySet APi.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ObservableSetFacade<E> extends SetFacade<E> implements ObservableSet<E> {

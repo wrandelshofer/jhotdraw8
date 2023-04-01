@@ -19,6 +19,7 @@ import java.lang.reflect.Type;
 /**
  * ListStyleableKey.
  *
+ * @param <T> the element type of the list
  * @author Werner Randelshofer
  */
 public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableList<T>>

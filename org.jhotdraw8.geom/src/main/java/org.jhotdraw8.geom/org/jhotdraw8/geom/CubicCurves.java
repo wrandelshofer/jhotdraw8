@@ -363,26 +363,22 @@ public class CubicCurves {
     /**
      * Extracts the specified segment [ta,tb] from the given cubic curve.
      *
-     * @param x0 point P0 of the curve
-     * @param y0 point P0 of the curve
-     * @param x1 point P1 of the curve
-     * @param y1 point P1 of the curve
-     * @param x2 point P2 of the curve
-     * @param y2 point P2 of the curve
-     * @param x3 point P3 of the curve
-     * @param y3 point P3 of the curve
-     * @param ta where to split
-     * @param tb where to split
+     * @param q             the cubic bezier curve
+     * @param qOffset       the index of the first curve parameter in q
+     * @param ta            where to split from
+     * @param tb            where to split to
+     * @param segment       the output array
+     * @param segmentOffset the index of the first curve parameter in segment
      */
 
-    public static void subCurve(@NonNull double[] q, int offset,
+    public static void subCurve(@NonNull double[] q, int qOffset,
                                 double ta, double tb,
-                                @NonNull double[] first, int offsetFirst) {
+                                @NonNull double[] segment, int segmentOffset) {
         double tab = ta / tb;
-        split(q, offset,
-                tb, null, 0, first, offsetFirst);
-        split(first, offsetFirst, tab,
-                null, 0, first, offsetFirst);
+        split(q, qOffset,
+                tb, null, 0, segment, segmentOffset);
+        split(segment, segmentOffset, tab,
+                null, 0, segment, segmentOffset);
     }
 
     /**
@@ -390,10 +386,9 @@ public class CubicCurves {
      * <p>
      * References:
      * <dl>
-     *     <dt>paper.js. Copyright (c) 2011 - 2020 Jürg Lehni & Jonathan Puckey. MIT License.</dt>
+     *     <dt>paper.js. Copyright (c) 2011 - 2020 Jürg Lehni &amp; Jonathan Puckey. MIT License.</dt>
      *     <dd><a href="https://github.com/paperjs/paper.js/blob/develop/src/path/Curve.js">github.com</a></dd>
      * </dl>
-     * </p>
      *
      * @param v      a cubic bezier curve
      * @param offset offset into array v

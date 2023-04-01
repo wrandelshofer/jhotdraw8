@@ -14,6 +14,8 @@ import org.jhotdraw8.annotation.Nullable;
 /**
  * Work state can be used to report the current state
  * of work, and provides an ability to cancel work in progress.
+ *
+ * @param <V> the type of the result value
  */
 public interface WorkState<V> extends Worker<V> {
     /**

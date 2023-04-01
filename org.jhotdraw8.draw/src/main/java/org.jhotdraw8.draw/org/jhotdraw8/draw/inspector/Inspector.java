@@ -12,6 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
 /**
  * Interface for inspectors.
  *
+ * @param <S> the subject type
  * @author Werner Randelshofer
  */
 public interface Inspector<S> {

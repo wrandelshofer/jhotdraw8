@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Provides controls that are based on JavaFX controls.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.fxcontrols {
     requires transitive java.desktop;

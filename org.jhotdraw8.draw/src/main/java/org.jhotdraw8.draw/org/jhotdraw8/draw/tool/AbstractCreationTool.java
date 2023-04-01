@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 /**
  * AbstractCreationTool.
  *
+ * @param <F> the type of the figures that can be created by this tool
  * @author Werner Randelshofer
  */
 public abstract class AbstractCreationTool<F extends Figure> extends AbstractTool {

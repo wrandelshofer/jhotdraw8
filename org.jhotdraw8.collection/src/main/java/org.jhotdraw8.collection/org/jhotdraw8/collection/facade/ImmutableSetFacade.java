@@ -15,6 +15,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Function;
 
+/**
+ * Wraps {@code Set} functions in the {@link ImmutableSet} interface.
+ *
+ * @param <E> the element type
+ */
 public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements ImmutableSet<E> {
     private final @NonNull Set<E> target;
     private final @NonNull Function<Set<E>, Set<E>> cloneFunction;

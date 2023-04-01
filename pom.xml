@@ -242,7 +242,7 @@
         <configuration>
           <windowtitle>JHotDraw 8 ${project.version}</windowtitle>
           <header>JHotDraw 8 ${project.version}</header>
-          <bottom>Copyright © 2022 Werner Randelshofer, Switzerland. MIT License.</bottom>
+          <bottom>Copyright © 2023 Werner Randelshofer, Switzerland. MIT License.</bottom>
           <additionalOptions>-Xdoclint:all</additionalOptions>
           <charset>UTF-8</charset>
           <docencoding>UTF-8</docencoding>

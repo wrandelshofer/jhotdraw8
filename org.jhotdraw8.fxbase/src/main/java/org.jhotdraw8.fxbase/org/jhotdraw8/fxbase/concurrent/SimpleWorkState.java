@@ -24,6 +24,8 @@ import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
  * A simple implementation of the {@link WorkState} interface.
  * <p>
  * This implementation requires that the FX Application Thread is running.
+ *
+ * @param <V> the type of the result value
  */
 public class SimpleWorkState<V> implements WorkState<V> {
     private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);

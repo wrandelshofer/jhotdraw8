@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 /**
  * SimpleWeakListener.
  *
+ * @param <E> the type of the event
  * @author Werner Randelshofer
  */
 public final class SimpleWeakListener<E extends EventObject> implements Listener<E>, javafx.beans.WeakListener {

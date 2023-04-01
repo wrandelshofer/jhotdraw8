@@ -1,5 +1,7 @@
 package org.jhotdraw8.collection.jmh;
 
+
+import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -11,86 +13,80 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
-import scala.Tuple2;
-import scala.collection.immutable.VectorMap;
-import scala.collection.mutable.Builder;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.28
+ * # JMH version: 1.36
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *
+ *                   (mask)   (size)  Mode  Cnt         Score   Error  Units
+ * ContainsFound        -65  1000000  avgt    2       204.253          ns/op
+ * ContainsNotFound     -65  1000000  avgt    2       204.079          ns/op
+ * Head                 -65  1000000  avgt    2  30313036.380          ns/op
+ * Iterate              -65  1000000  avgt    2  60016917.215          ns/op
+ * RemoveThenAdd        -65  1000000  avgt    2       625.272          ns/op
+ * Tail                 -65  1000000  avgt    2  18838851.234          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
+@Measurement(iterations = 2)
+@Warmup(iterations = 2)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhScalaVectorMap {
+public class ChampImmutableSequencedSetJmh {
     @Param({"1000000"})
     private int size;
 
-    private final int mask = ~64;
+    @Param({"-65"})
+    private int mask;
 
     private BenchmarkData data;
-    private VectorMap<Key, Boolean> mapA;
+    private ChampImmutableSequencedSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        Builder<Tuple2<Key, Boolean>, VectorMap<Key, Boolean>> b = VectorMap.newBuilder();
-        for (Key key : data.setA) {
-            b.addOne(new Tuple2<>(key, Boolean.TRUE));
-        }
-        mapA = b.result();
+        setA = ChampImmutableSequencedSet.copyOf(data.setA);
     }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (var i = mapA.keysIterator(); i.hasNext(); ) {
-            sum += i.next().value;
+        for (Key k : setA) {
+            sum += k.value;
         }
         return sum;
     }
 
     @Benchmark
-    public Object mRemoveThenAdd() {
+    public ChampImmutableSequencedSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
-        return mapA.$minus(key).$plus(new Tuple2<>(key, Boolean.TRUE));
+        return setA.remove(key).add(key);
     }
 
     @Benchmark
-    public Object mPut() {
-        Key key = data.nextKeyInA();
-        return mapA.$plus(new Tuple2<>(key, Boolean.FALSE));
+    public Key mHead() {
+        return setA.iterator().next();
+    }
+
+    @Benchmark
+    public ChampImmutableSequencedSet<Key> mTail() {
+        return setA.remove(setA.getFirst());
     }
 
     @Benchmark
     public boolean mContainsFound() {
         Key key = data.nextKeyInA();
-        return mapA.contains(key);
+        return setA.contains(key);
     }
 
     @Benchmark
     public boolean mContainsNotFound() {
         Key key = data.nextKeyInB();
-        return mapA.contains(key);
-    }
-
-    @Benchmark
-    public Key mHead() {
-        return mapA.head()._1;
-    }
-
-    @Benchmark
-    public VectorMap<Key, Boolean> mTail() {
-        return mapA.tail();
+        return setA.contains(key);
     }
 }

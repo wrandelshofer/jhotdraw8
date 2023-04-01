@@ -36,8 +36,9 @@ import java.util.function.Consumer;
  * </pre>
  * In addition, white space is required on both sides of the '+' and '-' operators.
  * (The '*' and '/' operaters can be used without white space around them.)
+ *
+ * @param <T> the element type of the DOM
  */
-
 public class CalcCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.

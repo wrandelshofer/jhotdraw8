@@ -16,8 +16,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps set functions into the {@link ReadOnlySet} interface.
+ * Wraps {@code Set} functions into the {@link ReadOnlySet} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ReadOnlySetFacade<E> extends AbstractReadOnlySet<E> {

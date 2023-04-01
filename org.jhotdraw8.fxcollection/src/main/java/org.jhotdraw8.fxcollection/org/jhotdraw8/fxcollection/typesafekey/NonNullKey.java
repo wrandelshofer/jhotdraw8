@@ -9,6 +9,11 @@ import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.util.Map;
 
+/**
+ * NonNullKey.
+ *
+ * @param <T> the value type
+ */
 public interface NonNullKey<@NonNull T> extends Key<@NonNull T>, NonNullMapAccessor<@NonNull T> {
     @Override
     default @NonNull T get(@NonNull Map<? super Key<?>, Object> a) {

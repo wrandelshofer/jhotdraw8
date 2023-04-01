@@ -15,6 +15,7 @@ import java.util.function.Function;
 /**
  * PreorderEnumerator.
  *
+ * @param <T> the element type
  * @author Werner Randelshofer
  */
 public class PreorderEnumeratorSpliterator<T> extends AbstractEnumeratorSpliterator<T> {

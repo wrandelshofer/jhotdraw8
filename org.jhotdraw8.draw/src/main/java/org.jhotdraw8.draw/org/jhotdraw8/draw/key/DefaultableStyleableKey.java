@@ -17,6 +17,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * DefaultableStyleableKey.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull CssDefaultableValue<T>>

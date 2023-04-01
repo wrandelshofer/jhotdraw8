@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Defines data structures and algorithms for graphs.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.graph {
     requires transitive org.jhotdraw8.annotation;

@@ -1,3 +1,6 @@
+/**
+ * Provides examples for various features of the JHotDraw drawing framework.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.examples {
     requires transitive java.desktop;

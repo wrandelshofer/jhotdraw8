@@ -14,6 +14,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * Convenience class for creating a {@link Key} for an enum type.
  *
+ * @param <T> the enum type
  * @author Werner Randelshofer
  */
 public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>

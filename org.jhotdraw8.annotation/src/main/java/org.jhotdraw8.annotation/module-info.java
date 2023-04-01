@@ -4,7 +4,7 @@
  */
 
 /**
- * Provides annotations for static code analysis.
+ * Defines annotations for static code analysis.
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.annotation {

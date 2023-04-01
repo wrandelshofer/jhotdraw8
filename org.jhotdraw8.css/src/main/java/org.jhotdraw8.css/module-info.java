@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Defines an interpreter for CSS stylesheets.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.css {
     requires transitive java.logging;

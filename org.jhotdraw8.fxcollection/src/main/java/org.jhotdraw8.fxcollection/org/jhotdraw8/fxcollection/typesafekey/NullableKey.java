@@ -10,6 +10,11 @@ import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.util.Map;
 
+/**
+ * NullableKey.
+ *
+ * @param <T> the value type
+ */
 public interface NullableKey<T> extends Key<T> {
     @Override
     default @Nullable T get(@NonNull Map<? super Key<?>, Object> a) {

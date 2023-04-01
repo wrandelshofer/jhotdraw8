@@ -23,6 +23,8 @@ import java.util.function.Consumer;
  * string-iist         = value ,  { [ ',' ] , value } ;
  * value               = string | number | dimension | percentage | url ;
  * </pre>
+ *
+ * @param <T> the element type of the DOM
  */
 public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
     /**

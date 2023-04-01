@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 /**
  * CssSizeStyleableKey.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public class SimpleNonNullStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<@NonNull T>,

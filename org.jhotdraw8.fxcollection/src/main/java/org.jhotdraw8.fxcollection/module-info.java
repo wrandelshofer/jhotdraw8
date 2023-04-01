@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Provides additional collection classes that interoperate with JavaFX observable collections.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.fxcollection {
     requires transitive org.jhotdraw8.annotation;

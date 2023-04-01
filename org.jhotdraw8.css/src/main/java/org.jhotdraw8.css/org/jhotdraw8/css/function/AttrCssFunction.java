@@ -43,6 +43,7 @@ import java.util.function.Consumer;
  *     <dt>attr() function</dt>
  *     <dd><a href="https://drafts.csswg.org/css-values-4/#attr-notation">csswg.org</a></dd>
  * </dl>
+ * @param <T> the element type of the DOM
  */
 public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     /**

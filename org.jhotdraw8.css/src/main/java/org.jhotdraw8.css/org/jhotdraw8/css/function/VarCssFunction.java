@@ -28,6 +28,8 @@ import java.util.function.Consumer;
  *     declaration-value = fallback-value;
  * </pre>
  * The custom-property-name must start with two dashes "--".
+ *
+ * @param <T> the element type of the DOM
  */
 public class VarCssFunction<T> extends AbstractCssFunction<T> {
     /**

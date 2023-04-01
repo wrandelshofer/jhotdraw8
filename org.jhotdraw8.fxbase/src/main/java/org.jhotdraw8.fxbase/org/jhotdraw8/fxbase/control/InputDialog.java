@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 /**
  * This class is similar to TextInputDialog, but allows to specify an arbitrary JavaFX node as input form.
  *
+ * @param <R> the return type of the dialog
  * @author Werner Randelshofer
  */
 public class InputDialog<R> extends Dialog<R> {

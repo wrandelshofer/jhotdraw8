@@ -3,6 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+/**
+ * Defines primitive collections, read-only collections and immutable collections.
+ */
 @SuppressWarnings("module")
 module org.jhotdraw8.collection {
     requires transitive org.jhotdraw8.annotation;

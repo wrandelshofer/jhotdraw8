@@ -18,6 +18,9 @@ import java.util.Map;
  * <p>
  * An immutable map provides methods for creating a new immutable map with
  * new, updated or deleted entries, without changing the original immutable map.
+ *
+ * @param <K> the key type
+ * @param <V> the value type
  */
 public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
 

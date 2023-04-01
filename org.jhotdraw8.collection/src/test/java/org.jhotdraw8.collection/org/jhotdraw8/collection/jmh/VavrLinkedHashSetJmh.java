@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-import io.vavr.collection.HashMap;
+import io.vavr.collection.LinkedHashSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -30,64 +30,55 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhVavrHashMap {
+public class VavrLinkedHashSetJmh {
     @Param({"1000000"})
     private int size;
 
     private final int mask = ~64;
 
     private BenchmarkData data;
-    private HashMap<Key, Boolean> mapA;
+    private LinkedHashSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = HashMap.empty();
-        for (Key key : data.setA) {
-            mapA = mapA.put(key, Boolean.TRUE);
-        }
+        setA = LinkedHashSet.ofAll(data.setA);
     }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (Key k : mapA.keysIterator()) {
+        for (Key k : setA) {
             sum += k.value;
         }
         return sum;
     }
 
     @Benchmark
-    public HashMap<Key, Boolean> mRemoveThenAdd() {
+    public LinkedHashSet<Key> mRemoveAdd() {
         Key key = data.nextKeyInA();
-        return mapA.remove(key).put(key, Boolean.TRUE);
+        return setA.remove(key).add(key);
     }
 
     @Benchmark
-    public HashMap<Key, Boolean> mPut() {
-        Key key = data.nextKeyInA();
-        return mapA.put(key, Boolean.FALSE);
+    public Key mHead() {
+        return setA.head();
+    }
+
+    @Benchmark
+    public LinkedHashSet<Key> mTail() {
+        return setA.tail();
     }
 
     @Benchmark
     public boolean mContainsFound() {
         Key key = data.nextKeyInA();
-        return mapA.containsKey(key);
+        return setA.contains(key);
     }
 
     @Benchmark
     public boolean mContainsNotFound() {
         Key key = data.nextKeyInB();
-        return mapA.containsKey(key);
-    }
-
-    @Benchmark
-    public Key mHead() {
-        return mapA.head()._1;
-    }
-
-    @Benchmark
-    public HashMap<Key, Boolean> mTail() {
-        return mapA.tail();
+        return setA.contains(key);
     }
 }

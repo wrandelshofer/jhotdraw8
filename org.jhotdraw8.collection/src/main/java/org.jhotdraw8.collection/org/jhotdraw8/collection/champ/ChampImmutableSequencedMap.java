@@ -41,7 +41,7 @@ import java.util.function.ToIntFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>{@link #put}, {@link #putFirst}, {@link #putLast): O(1) amortized due to
+ *     <li>{@link #put}, {@link #putFirst}, {@link #putLast}: O(1) amortized due to
  *     renumbering</li>
  *     <li>remove: O(1) amortized due to renumbering</li>
  *     <li>containsKey: O(1)</li>

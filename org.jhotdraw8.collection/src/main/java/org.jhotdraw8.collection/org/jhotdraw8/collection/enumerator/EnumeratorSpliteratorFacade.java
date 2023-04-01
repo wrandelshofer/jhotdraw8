@@ -13,6 +13,7 @@ import java.util.Spliterator;
 /**
  * Wraps an {@link Iterator} into the {@link EnumeratorSpliterator} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class EnumeratorSpliteratorFacade<E> implements EnumeratorSpliterator<E> {

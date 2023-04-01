@@ -19,6 +19,7 @@ import java.util.Collection;
  * The underlying ReadOnlyList is referenced - not copied. This allows to pass a
  * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ObservableListFacade<E> extends ListFacade<E> implements ObservableList<E> {

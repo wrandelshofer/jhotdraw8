@@ -80,6 +80,7 @@ import java.util.List;
  * Performance: This algorithm is O(n^2).
  *
  * @author Werner Randelshofer
+ * @param <T> the product type
  */
 public class OffsetPathBuilder<T> extends AbstractPathBuilder<T> {
 

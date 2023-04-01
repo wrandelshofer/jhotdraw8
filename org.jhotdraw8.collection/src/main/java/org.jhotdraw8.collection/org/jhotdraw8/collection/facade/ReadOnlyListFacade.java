@@ -15,8 +15,9 @@ import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
 /**
- * Wraps list functions in the {@link ReadOnlyList} interface.
+ * Wraps {@code List} functions in the {@link ReadOnlyList} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {

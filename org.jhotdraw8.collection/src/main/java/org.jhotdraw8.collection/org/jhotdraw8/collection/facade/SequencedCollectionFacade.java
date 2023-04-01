@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 /**
  * Wraps {@code Collection} functions into the {@link Collection} interface.
  *
+ * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements SequencedCollection<E> {

@@ -13,11 +13,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * AbstractTreeModel.
  *
+ * @param <N> the node type
  * @author Werner Randelshofer
  */
-public abstract class AbstractTreeModel<E> implements TreeModel<E> {
+public abstract class AbstractTreeModel<N> implements TreeModel<N> {
 
-    private final CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> treeModelListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> treeModelListeners = new CopyOnWriteArrayList<>();
 
     private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
@@ -25,7 +26,7 @@ public abstract class AbstractTreeModel<E> implements TreeModel<E> {
     }
 
     @Override
-    public final @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<E>>> getTreeModelListeners() {
+    public final @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> getTreeModelListeners() {
         return treeModelListeners;
     }
 

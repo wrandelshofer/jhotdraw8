@@ -4,7 +4,7 @@
  */
 
 /**
- * Provides common utility classes.
+ * Provides basic utility classes used by the JHotDraw framework.
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.base {

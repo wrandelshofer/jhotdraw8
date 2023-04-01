@@ -17,8 +17,9 @@ import java.util.function.Supplier;
  * An Iterable which takes a Spliterator supplier to implement the
  * Iterable methods.
  *
+ * @param <T> the element type
  * @author Werner Randelshofer
-  */
+ */
 public class SpliteratorIterable<T> implements Iterable<T> {
     private final Supplier<Spliterator<T>> factory;
 

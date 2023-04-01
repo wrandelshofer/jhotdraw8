@@ -27,14 +27,14 @@ public class Integrals {
      * References:
      * <dl>
      *     <dt>waruyama</dt>
-     *     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></a></dd>
+     *     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></dd>
      *     <dt>Wikipedia. Romberg's method.</dt>
-     *     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></a></dd>
+     *     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></dd>
      * </dl>
      *
-     * @param f       the function
-     * @param t0      the lower bound of the integral
-     * @param t1      the upper bound of the integral
+     * @param f  the function
+     * @param t0 the lower bound of the integral
+     * @param t1 the upper bound of the integral
      * @return the estimated integral
      */
     public static double rombergQuadrature(ToDoubleFunction<Double> f, double t0, double t1) {
@@ -47,9 +47,9 @@ public class Integrals {
      * References:
      * <dl>
      *     <dt>waruyama</dt>
-     *     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></a></dd>
+     *     <dd><a href="https://github.com/Pomax/BezierInfo-2/issues/77">github.com</a></dd>
      *     <dt>Wikipedia. Romberg's method.</dt>
-     *     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></a></dd>
+     *     <dd><a href="https://en.wikipedia.org/wiki/Romberg%27s_method">wikipedia.org</a></dd>
      * </dl>
      *
      * @param f       the function

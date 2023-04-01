@@ -11,6 +11,7 @@ import java.util.function.IntFunction;
 /**
  * Iterates over the children of a tree node.
  *
+ * @param <T> the element type
  * @author Werner Randelshofer
  */
 public class ChildIterator<T> implements Iterator<T> {

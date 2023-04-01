@@ -1,7 +1,5 @@
 package org.jhotdraw8.collection.jmh;
 
-
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -13,69 +11,78 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
+import scala.collection.Iterator;
+import scala.collection.immutable.HashSet;
+import scala.collection.immutable.Set;
+import scala.collection.mutable.ReusableBuilder;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
  * # JMH version: 1.36
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
+ * # VM version: JDK 1.8.0_345, OpenJDK 64-Bit Server VM, 25.345-b01
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+ * # org.scala-lang:scala-library:2.13.10
  *
- *                   (mask)   (size)  Mode  Cnt         Score   Error  Units
- * ContainsFound        -65  1000000  avgt    2       204.253          ns/op
- * ContainsNotFound     -65  1000000  avgt    2       204.079          ns/op
- * Head                 -65  1000000  avgt    2  30313036.380          ns/op
- * Iterate              -65  1000000  avgt    2  60016917.215          ns/op
- * RemoveThenAdd        -65  1000000  avgt    2       625.272          ns/op
- * Tail                 -65  1000000  avgt    2  18838851.234          ns/op
+ *                    (size)  Mode  Cnt         Score   Error  Units
+ * ContainsFound     1000000  avgt            258.226          ns/op
+ * ContainsNotFound  1000000  avgt            213.963          ns/op
+ * Head              1000000  avgt             25.830          ns/op
+ * Iterate           1000000  avgt       50716705.732          ns/op
+ * RemoveAdd         1000000  avgt            809.836          ns/op
+ * Tail              1000000  avgt            128.902          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 2)
-@Warmup(iterations = 2)
+@Measurement(iterations = 1)
+@Warmup(iterations = 1)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class JmhChampImmutableSequencedSet {
+@SuppressWarnings("unchecked")
+public class ScalaHashSetJmh {
     @Param({"1000000"})
     private int size;
 
-    @Param({"-65"})
-    private int mask;
+    private final int mask = ~64;
 
     private BenchmarkData data;
-    private ChampImmutableSequencedSet<Key> setA;
+    private HashSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = ChampImmutableSequencedSet.copyOf(data.setA);
+        ReusableBuilder<Key, HashSet<Key>> b = HashSet.newBuilder();
+        for (Key key : data.setA) {
+            b.addOne(key);
+        }
+        setA = b.result();
     }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (Key k : setA) {
-            sum += k.value;
+        for (Iterator<Key> i = setA.iterator(); i.hasNext(); ) {
+            sum += i.next().value;
         }
         return sum;
     }
 
     @Benchmark
-    public ChampImmutableSequencedSet<Key> mRemoveThenAdd() {
+    public Set<Key> mRemoveAdd() {
         Key key = data.nextKeyInA();
-        return setA.remove(key).add(key);
+        return setA.$minus(key).$plus(key);
     }
 
     @Benchmark
     public Key mHead() {
-        return setA.iterator().next();
+        return setA.head();
     }
 
     @Benchmark
-    public ChampImmutableSequencedSet<Key> mTail() {
-        return setA.remove(setA.getFirst());
+    public HashSet<Key> mTail() {
+        return setA.tail();
     }
 
     @Benchmark

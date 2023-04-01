@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * keys have the same name.
  *
  * @author Werner Randelshofer
+ * @param <T> the value type
  */
 public interface Key<T> extends MapAccessor<T> {
 

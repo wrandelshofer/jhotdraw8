@@ -45,6 +45,7 @@ import static org.jhotdraw8.collection.rrb.TrieListHelper.M;
  *     Transience</dt>
  *     <dd><a href="https://hypirion.com/thesis.pdf">hypirion.com</a></dd>
  * </dl>
+ * @param <E> the element type
  */
 public class TrieArray<E> {
     private final int size;
