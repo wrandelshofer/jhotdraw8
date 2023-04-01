@@ -13,7 +13,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import scala.collection.Iterator;
 import scala.collection.immutable.HashSet;
-import scala.collection.immutable.Set;
 import scala.collection.mutable.ReusableBuilder;
 
 import java.util.concurrent.TimeUnit;
@@ -70,7 +69,7 @@ public class ScalaHashSetJmh {
     }
 
     @Benchmark
-    public Set<Key> mRemoveAdd() {
+    public Object mRemoveAdd() {
         Key key = data.nextKeyInA();
         return setA.$minus(key).$plus(key);
     }

@@ -21,7 +21,15 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *  --
+ *                    (size)  Mode  Cnt     _     Score   Error  Units
+ * ContainsFound     1000000  avgt          _   190.401          ns/op
+ * ContainsNotFound  1000000  avgt          _   189.662          ns/op
+ * CopyOf            1000000  avgt       316_462143.781          ns/op
+ * Head              1000000  avgt        35_253418.518          ns/op
+ * Iterate           1000000  avgt        81_542559.057          ns/op
+ * Put               1000000  avgt          _   355.011          ns/op
+ * RemoveThenAdd     1000000  avgt          _   571.975          ns/op
+ * Tail              1000000  avgt        34_213526.290          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -89,5 +97,10 @@ public class ChampImmutableSequencedMapJmh {
     @Benchmark
     public ChampImmutableSequencedMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
+    }
+
+    @Benchmark
+    public ChampImmutableSequencedMap<Key, Boolean> mCopyOf() {
+        return ChampImmutableSequencedMap.<Key, Boolean>copyOf(data.mapA);
     }
 }

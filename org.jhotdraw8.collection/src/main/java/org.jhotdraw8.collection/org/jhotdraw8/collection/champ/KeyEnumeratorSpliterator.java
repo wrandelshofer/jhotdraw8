@@ -14,29 +14,29 @@ import java.util.function.Function;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-class ReversedDataEnumeratorSpliterator<K, E> extends AbstractDataEnumeratorSpliterator<K, E> {
-    public ReversedDataEnumeratorSpliterator(@NonNull Node<K> root, @NonNull Function<K, E> mappingFunction, int characteristics, long size) {
+class KeyEnumeratorSpliterator<K, E> extends AbstractKeyEnumeratorSpliterator<K, E> {
+    public KeyEnumeratorSpliterator(@NonNull Node<K> root, @NonNull Function<K, E> mappingFunction, int characteristics, long size) {
         super(root, mappingFunction, characteristics, size);
     }
 
     @Override
     boolean isReverse() {
-        return true;
-    }
-
-    @Override
-    boolean isDone(AbstractDataEnumeratorSpliterator.@NonNull StackElement<K> elem) {
-        return elem.index < 0;
-    }
-
-    @Override
-    int moveIndex(@NonNull StackElement<K> elem) {
-        return elem.index--;
+        return false;
     }
 
     @Override
     int getNextBitpos(StackElement<K> elem) {
-        return 1 << (31 - Integer.numberOfLeadingZeros(elem.map));
+        return 1 << Integer.numberOfTrailingZeros(elem.map);
+    }
+
+    @Override
+    boolean isDone(@NonNull StackElement<K> elem) {
+        return elem.index >= elem.size;
+    }
+
+    @Override
+    int moveIndex(@NonNull StackElement<K> elem) {
+        return elem.index++;
     }
 
 }

@@ -21,13 +21,14 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                    (size)  Mode  Cnt         Score   Error  Units
- * ContainsFound     1000000  avgt            205.055          ns/op
- * ContainsNotFound  1000000  avgt            224.330          ns/op
- * Head              1000000  avgt              1.730          ns/op
- * Iterate           1000000  avgt       64981930.600          ns/op
- * Put               1000000  avgt       23548703.806          ns/op
- * RemoveThenAdd     1000000  avgt       70123036.329          ns/op
+ *                    (size)  Mode  Cnt    _     Score   Error  Units
+ * ContainsFound     1000000  avgt         _   205.055          ns/op
+ * ContainsNotFound  1000000  avgt         _   224.330          ns/op
+ * Head              1000000  avgt         _     1.730          ns/op
+ * Iterate           1000000  avgt       64_981930.600          ns/op
+ * Put               1000000  avgt       23_548703.806          ns/op
+ * RemoveThenAdd     1000000  avgt       70_123036.329          ns/op
+ * Tail              1000000  avgt      742_708327.286          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)

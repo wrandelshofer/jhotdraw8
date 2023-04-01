@@ -298,9 +298,9 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     private @NonNull Iterator<E> iterator(boolean reversed) {
         Enumerator<E> i;
         if (reversed) {
-            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         } else {
-            i = new DataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new KeyEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         }
         return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> ChampChampSequencedSet.this.modCount);
     }
@@ -308,9 +308,9 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     private @NonNull Spliterator<E> spliterator(boolean reversed) {
         Spliterator<E> i;
         if (reversed) {
-            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         } else {
-            i = new DataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new KeyEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         }
         return i;
     }

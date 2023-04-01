@@ -1,7 +1,7 @@
 package org.jhotdraw8.collection.jmh;
 
-
-import org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet;
+import kotlinx.collections.immutable.ExtensionsKt;
+import kotlinx.collections.immutable.PersistentSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -18,39 +18,38 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.36
+ * # JMH version: 1.28
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                   (mask)   (size)  Mode  Cnt    _     Score   Error  Units
- * ContainsFound        -65  1000000  avgt         _   214.381          ns/op
- * ContainsNotFound     -65  1000000  avgt         _   208.868          ns/op
- * Head                 -65  1000000  avgt         _    98.765          ns/op
- * Iterate              -65  1000000  avgt       78_730023.766          ns/op
- * RemoveThenAdd        -65  1000000  avgt         _  1144.644          ns/op
- * Tail                 -65  1000000  avgt         _   278.567          ns/op
+ * Benchmark           (size)  Mode  Cnt    _     Score         Error  Units
+ * mContainsFound     1000000  avgt    4    _   165.449 ±      13.209  ns/op
+ * mContainsNotFound  1000000  avgt    4    _   169.791 ±       2.502  ns/op
+ * mHead              1000000  avgt    4    _   104.946 ±       3.025  ns/op
+ * mIterate           1000000  avgt    4  71_505927.591 ± 1063359.317  ns/op
+ * mRemoveThenAdd     1000000  avgt    4    _   458.736 ±       6.936  ns/op
+ * mTail              1000000  avgt    4    _   197.068 ±       3.920  ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
+@Measurement(iterations = 4)
+@Warmup(iterations = 4)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class ChampChampImmutableSequencedSetJmh {
+public class KotlinxPersistentHashSetJmh {
     @Param({"1000000"})
     private int size;
 
-    @Param({"-65"})
-    private int mask;
+    private final int mask = ~64;
 
     private BenchmarkData data;
-    private ChampChampImmutableSequencedSet<Key> setA;
+    private PersistentSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = ChampChampImmutableSequencedSet.copyOf(data.setA);
+        setA = ExtensionsKt.toPersistentHashSet(data.setA);
     }
 
     @Benchmark
@@ -63,7 +62,7 @@ public class ChampChampImmutableSequencedSetJmh {
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedSet<Key> mRemoveThenAdd() {
+    public PersistentSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
@@ -74,8 +73,8 @@ public class ChampChampImmutableSequencedSetJmh {
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedSet<Key> mTail() {
-        return setA.remove(setA.getFirst());
+    public PersistentSet<Key> mTail() {
+        return setA.remove(setA.iterator().next());
     }
 
     @Benchmark

@@ -1,16 +1,23 @@
 package org.jhotdraw8.collection.jmh;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * A key with an integer value and a masked hash code.
  * The mask allows to provoke collisions in hash maps.
  */
-public class Key {
+public class Key implements Comparable<Key> {
     public final int value;
     public final int hashCode;
 
     public Key(int value, int mask) {
         this.value = value;
         this.hashCode = value & mask;
+    }
+
+    @Override
+    public int compareTo(@NonNull Key o) {
+        return Integer.compare(o.value, this.value);
     }
 
     @Override

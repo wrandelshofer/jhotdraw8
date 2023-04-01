@@ -392,9 +392,9 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
     private @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
         Enumerator<Map.Entry<K, V>> i;
         if (reversed) {
-            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
         } else {
-            i = new DataEnumeratorSpliterator<>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+            i = new KeyEnumeratorSpliterator<>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
         }
         return new IteratorFacade<>(i, null);
     }
@@ -422,10 +422,11 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
         return putAll(m.entrySet());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampChampImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        if (m == this) {
-            return this;
+        if (m == this || isEmpty() && (m instanceof ChampChampImmutableSequencedMap)) {
+            return (ChampChampImmutableSequencedMap<K, V>) m;
         }
         return putAll(m.readOnlyEntrySet());
     }

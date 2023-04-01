@@ -79,5 +79,10 @@
       <artifactId>scala-library</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlinx</groupId>
+      <artifactId>kotlinx-collections-immutable-jvm</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

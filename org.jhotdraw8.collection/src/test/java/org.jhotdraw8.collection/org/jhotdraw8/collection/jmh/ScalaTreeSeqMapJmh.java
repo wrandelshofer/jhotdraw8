@@ -23,7 +23,15 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *
+ *                    (size)  Mode  Cnt    _     Score   Error  Units
+ * ContainsFound     1000000  avgt         _   348.505          ns/op
+ * ContainsNotFound  1000000  avgt         _   264.846          ns/op
+ * Head              1000000  avgt         _    53.705          ns/op
+ * Iterate           1000000  avgt       33_279549.804          ns/op
+ * Put               1000000  avgt         _  1074.934          ns/op
+ * RemoveThenAdd     1000000  avgt         _  1509.428          ns/op
+ * Tail              1000000  avgt         _   312.867          ns/op
+ * CopyOf            1000000  avgt      846_489177.333          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -92,5 +100,14 @@ public class ScalaTreeSeqMapJmh {
     @Benchmark
     public TreeSeqMap<Key, Boolean> mTail() {
         return mapA.tail();
+    }
+
+    @Benchmark
+    public TreeSeqMap<Key, Boolean> mCopyOf() {
+        Builder<Tuple2<Key, Boolean>, TreeSeqMap<Key, Boolean>> b = TreeSeqMap.newBuilder();
+        for (Key key : data.setA) {
+            b.addOne(new Tuple2<>(key, Boolean.TRUE));
+        }
+        return b.result();
     }
 }

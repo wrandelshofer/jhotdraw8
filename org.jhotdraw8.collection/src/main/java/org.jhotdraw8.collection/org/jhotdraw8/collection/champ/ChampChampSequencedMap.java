@@ -236,11 +236,11 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
     private @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
         Enumerator<Entry<K, V>> i;
         if (reversed) {
-            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot,
+            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot,
                     e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                     Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         } else {
-            i = new DataEnumeratorSpliterator<>(sequenceRoot,
+            i = new KeyEnumeratorSpliterator<>(sequenceRoot,
                     e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                     Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         }
@@ -251,9 +251,9 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
     private @NonNull Spliterator<Entry<K, V>> entrySpliterator(boolean reversed) {
         Spliterator<Entry<K, V>> i;
         if (reversed) {
-            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         } else {
-            i = new DataEnumeratorSpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new KeyEnumeratorSpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         }
         return i;
     }

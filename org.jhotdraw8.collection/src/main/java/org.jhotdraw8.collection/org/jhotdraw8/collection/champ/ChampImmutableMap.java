@@ -244,8 +244,11 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
     @Override
     @SuppressWarnings("unchecked")
     public @NonNull ChampImmutableMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        if (isEmpty() && (m instanceof ChampImmutableMap)) {
-            return (ChampImmutableMap<K, V>) m;
+        if (m instanceof ChampImmutableMap) {
+            ChampImmutableMap<K, V> b = (ChampImmutableMap<K, V>) m;
+            if (b.size() > size()) {
+                return b.putAll(readOnlyEntrySet());
+            }
         }
         return putAll(m.readOnlyEntrySet());
     }

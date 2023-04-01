@@ -13,7 +13,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import scala.Tuple2;
 import scala.collection.immutable.HashMap;
-import scala.collection.immutable.Map;
 import scala.collection.mutable.ReusableBuilder;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +23,15 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *
+ *                    (size)  Mode  Cnt     _     Score   Error  Units
+ * ContainsFound     1000000  avgt          _   383.583          ns/op
+ * ContainsNotFound  1000000  avgt          _   376.334          ns/op
+ * CopyOf            1000000  avgt       389_558025.654          ns/op
+ * Head              1000000  avgt          _    26.078          ns/op
+ * Iterate           1000000  avgt        42_105638.475          ns/op
+ * Put               1000000  avgt          _   410.023          ns/op
+ * RemoveThenAdd     1000000  avgt          _   684.607          ns/op
+ * Tail              1000000  avgt          _   117.174          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -62,7 +69,7 @@ public class ScalaHashMapJmh {
     }
 
     @Benchmark
-    public Map<Key, Boolean> mRemoveThenAdd() {
+    public Object mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.$minus(key).$plus(new Tuple2<>(key, Boolean.TRUE));
     }
@@ -93,5 +100,14 @@ public class ScalaHashMapJmh {
     @Benchmark
     public HashMap<Key, Boolean> mTail() {
         return mapA.tail();
+    }
+
+    @Benchmark
+    public HashMap<Key, Boolean> mCopyOf() {
+        ReusableBuilder<Tuple2<Key, Boolean>, HashMap<Key, Boolean>> b = HashMap.newBuilder();
+        for (Key key : data.setA) {
+            b.addOne(new Tuple2<>(key, Boolean.TRUE));
+        }
+        return b.result();
     }
 }

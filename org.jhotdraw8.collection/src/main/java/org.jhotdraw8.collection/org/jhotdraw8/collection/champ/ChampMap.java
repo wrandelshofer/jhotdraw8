@@ -160,7 +160,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
                         () -> this.modCount),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
                 () -> new FailFastSpliterator<>(
-                        new DataEnumeratorSpliterator<>(root, Function.identity(), Spliterator.SIZED | Spliterator.DISTINCT, size()),
+                        new KeyEnumeratorSpliterator<>(root, Function.identity(), Spliterator.SIZED | Spliterator.DISTINCT, size()),
                         () -> this.modCount),
                 ChampMap.this::size,
                 ChampMap.this::containsEntry,

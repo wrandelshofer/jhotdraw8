@@ -353,10 +353,11 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         return putAll(m.entrySet());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        if (m == this) {
-            return this;
+        if (m == this || isEmpty() && (m instanceof ChampImmutableSequencedMap)) {
+            return (ChampImmutableSequencedMap<K, V>) m;
         }
         return putAll(m.readOnlyEntrySet());
     }

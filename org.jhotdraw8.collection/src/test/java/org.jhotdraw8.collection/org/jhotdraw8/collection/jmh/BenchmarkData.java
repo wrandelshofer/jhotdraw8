@@ -2,8 +2,10 @@ package org.jhotdraw8.collection.jmh;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -20,6 +22,10 @@ public class BenchmarkData {
      * Set 'a'.
      */
     public final Set<Key> setA;
+    /**
+     * Map 'a'.
+     */
+    public final Map<Key, Boolean> mapA;
     /**
      * List 'b'.
      * <p>
@@ -43,6 +49,10 @@ public class BenchmarkData {
             keysNotInSet.add(createKey(rng, preventDuplicates, mask));
         }
         setA = new HashSet<>(keysInSet);
+        mapA = new HashMap<>();
+        for (var k : keysInSet) {
+            mapA.put(k, true);
+        }
         Collections.shuffle(keysInSet);
         Collections.shuffle(keysNotInSet);
         this.listA = Collections.unmodifiableList(keysInSet);
