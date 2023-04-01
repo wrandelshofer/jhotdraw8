@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.io.Serializable;
@@ -32,7 +32,7 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
      * <p>
      * If this mutator id is null, then this map does not own any nodes.
      */
-    protected @Nullable UniqueId mutator;
+    protected @Nullable IdentityObject mutator;
 
     /**
      * The root of this CHAMP trie.
@@ -49,9 +49,9 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
      */
     protected int modCount;
 
-    protected @NonNull UniqueId getOrCreateMutator() {
+    protected @NonNull IdentityObject getOrCreateMutator() {
         if (mutator == null) {
-            mutator = new UniqueId();
+            mutator = new IdentityObject();
         }
         return mutator;
     }

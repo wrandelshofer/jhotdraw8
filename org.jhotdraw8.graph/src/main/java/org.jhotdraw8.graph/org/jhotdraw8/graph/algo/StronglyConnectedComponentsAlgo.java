@@ -6,11 +6,17 @@ package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IteratorEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliteratorFacade;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.DirectedGraph;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static java.lang.Math.min;
@@ -81,7 +87,7 @@ public class StronglyConnectedComponentsAlgo {
 
         IntArrayDeque minStack = new IntArrayDeque();
         Deque<EnumeratorSpliterator<V>> enumeratorStack = new ArrayDeque<>();
-        EnumeratorSpliterator<V> enumerator = new IteratorEnumeratorSpliterator<>(vertices.iterator());
+        EnumeratorSpliterator<V> enumerator = new EnumeratorSpliteratorFacade<>(vertices.iterator());
 
         STRONGCONNECT:
         while (true) {
@@ -96,7 +102,7 @@ public class StronglyConnectedComponentsAlgo {
                     // Level down:
                     minStack.pushAsInt(vdata.low);
                     enumeratorStack.push(enumerator);
-                    enumerator = new IteratorEnumeratorSpliterator<>(nextNodeFunction.apply(v).iterator());
+                    enumerator = new EnumeratorSpliteratorFacade<>(nextNodeFunction.apply(v).iterator());
                 } else {
                     if (!minStack.isEmpty()) {
                         minStack.pushAsInt(min(vdata.low, minStack.popAsInt()));

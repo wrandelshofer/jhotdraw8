@@ -12,6 +12,8 @@ import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
@@ -29,23 +31,28 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
     private final @NonNull Consumer<E> addFirstFunction;
     private final @NonNull Consumer<E> addLastFunction;
     private final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
+    private final @NonNull Supplier<Spliterator<E>> reversedSpliteratorFunction;
     private final @NonNull Predicate<E> reversedAddFunction;
 
     public SequencedSetFacade(@NonNull ReadOnlyCollection<E> backingSet,
                               @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
-        this(backingSet::iterator, reversedIteratorFunction, backingSet::size,
+        this(backingSet::iterator, backingSet::spliterator,
+                reversedIteratorFunction,
+                () -> Spliterators.spliterator(reversedIteratorFunction.get(), backingSet.size(), Spliterator.DISTINCT),
+                backingSet::size,
                 backingSet::contains, null, null, null, null, null, null, null, null);
     }
 
     public SequencedSetFacade(@NonNull ReadOnlySequencedCollection<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
-                backingSet::size,
+        this(backingSet::iterator, backingSet::spliterator, () -> backingSet.readOnlyReversed().iterator(),
+                () -> backingSet.readOnlyReversed().spliterator(), backingSet::size,
                 backingSet::contains, null, null, null, null, null, null, null, null);
     }
 
     public SequencedSetFacade(@NonNull Set<E> backingSet,
                               @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
-        this(backingSet::iterator, reversedIteratorFunction, backingSet::size,
+        this(backingSet::iterator, backingSet::spliterator,
+                reversedIteratorFunction, () -> Spliterators.spliterator(reversedIteratorFunction.get(), backingSet.size(), Spliterator.DISTINCT), backingSet::size,
                 backingSet::contains, backingSet::clear, backingSet::remove, null, null, null, null, null, null);
     }
 
@@ -53,12 +60,16 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
                               @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
                               @NonNull IntSupplier sizeFunction,
                               @NonNull Predicate<Object> containsFunction) {
-        this(iteratorFunction, reversedIteratorFunction,
+        this(iteratorFunction,
+                () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT), reversedIteratorFunction,
+                () -> Spliterators.spliterator(reversedIteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
                 sizeFunction, containsFunction, null, null, null, null, null, null, null, null);
     }
 
     public SequencedSetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                              @NonNull Supplier<Spliterator<E>> spliteratorFunction,
                               @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
+                              @NonNull Supplier<Spliterator<E>> reversedSpliteratorFunction,
                               @NonNull IntSupplier sizeFunction,
                               @NonNull Predicate<Object> containsFunction,
                               @Nullable Runnable clearFunction,
@@ -69,7 +80,7 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
                               @Nullable Predicate<E> reversedAddFunction,
                               @Nullable Consumer<E> addFirstFunction,
                               @Nullable Consumer<E> addLastFunction) {
-        super(iteratorFunction, sizeFunction, containsFunction, clearFunction, addFunction, removeFunction);
+        super(iteratorFunction, spliteratorFunction, sizeFunction, containsFunction, clearFunction, addFunction, removeFunction);
         this.getFirstFunction = getFirstFunction == null ? () -> {
             throw new UnsupportedOperationException();
         } : getFirstFunction;
@@ -86,6 +97,7 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
             throw new UnsupportedOperationException();
         } : reversedAddFunction;
         this.reversedIteratorFunction = reversedIteratorFunction;
+        this.reversedSpliteratorFunction = reversedSpliteratorFunction;
     }
 
     @Override
@@ -119,8 +131,8 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
     public SequencedSet<E> reversed() {
         return new SequencedSetFacade<E>(
                 reversedIteratorFunction,
-                iteratorFunction,
-                sizeFunction,
+                spliteratorFunction, iteratorFunction,
+                reversedSpliteratorFunction, sizeFunction,
                 containsFunction,
                 clearFunction,
                 removeFunction,

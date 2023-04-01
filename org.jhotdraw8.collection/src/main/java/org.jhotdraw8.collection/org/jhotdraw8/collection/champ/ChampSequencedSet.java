@@ -17,6 +17,8 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 
 /**
@@ -159,7 +161,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        root = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
+        root = root.update(getOrCreateIdentity(), new SequencedElement<>(e, first - 1),
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
@@ -185,7 +187,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         root = root.update(
-                getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
+                getOrCreateIdentity(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
                 details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
@@ -257,14 +259,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
         return iterator(false);
     }
 
-    /**
-     * Returns an iterator over the elements of this set, that optionally
-     * iterates in reversed direction.
-     *
-     * @param reversed whether to iterate in reverse direction
-     * @return an iterator
-     */
-    public @NonNull Iterator<E> iterator(boolean reversed) {
+    private @NonNull Iterator<E> iterator(boolean reversed) {
         Iterator<E> i = BucketSequencedIterator.isSupported(size, first, last)
                 ? new BucketSequencedIterator<>(size, first, last, root, reversed,
                 this::iteratorRemove, SequencedElement::getElement)
@@ -275,6 +270,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     }
 
     private void iteratorRemove(SequencedElement<E> element) {
+        mutator = null;
         remove(element.getElement());
     }
 
@@ -288,7 +284,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     public boolean remove(Object o) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         root = root.remove(
-                getOrCreateMutator(), new SequencedElement<>((E) o),
+                getOrCreateIdentity(), new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
         if (details.isModified()) {
             size--;
@@ -309,8 +305,6 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     public E removeFirst() {
         SequencedElement<E> k = HeapSequencedIterator.getFirst(root, first, last);
         remove(k.getElement());
-        first = k.getSequenceNumber();
-        renumber();
         return k.getElement();
     }
 
@@ -318,8 +312,6 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     public E removeLast() {
         SequencedElement<E> k = HeapSequencedIterator.getLast(root, first, last);
         remove(k.getElement());
-        last = k.getSequenceNumber();
-        renumber();
         return k.getElement();
     }
 
@@ -329,8 +321,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (SequencedData.mustRenumber(size, first, last)) {
-            root = SequencedElement.renumber(size, root, getOrCreateMutator(),
+        if (ChampImmutableSequencedSet.mustRenumber(size, first, last)) {
+            root = SequencedElement.renumber(size, root, getOrCreateIdentity(),
                     Objects::hashCode, Objects::equals);
             last = size;
             first = -1;
@@ -341,7 +333,9 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     public SequencedSet<E> reversed() {
         return new SequencedSetFacade<>(
                 () -> iterator(true),
+                () -> Spliterators.spliterator(iterator(true), size(), Spliterator.DISTINCT | Spliterator.ORDERED),
                 () -> iterator(false),
+                () -> Spliterators.spliterator(iterator(false), size(), Spliterator.DISTINCT | Spliterator.ORDERED),
                 this::size,
                 this::contains,
                 this::clear,

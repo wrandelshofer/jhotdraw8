@@ -23,10 +23,10 @@ import java.util.Set;
 /**
  * Tests {@link ChampSequencedSet} with the Guava test suite.
  */
-public class SequencedChampSetGuavaTests {
+public class ChampSequencedSetGuavaTests {
 
     public static Test suite() {
-        return new SequencedChampSetGuavaTests().allTests();
+        return new ChampSequencedSetGuavaTests().allTests();
     }
 
     public Test allTests() {

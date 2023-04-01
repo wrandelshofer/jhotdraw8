@@ -15,12 +15,12 @@ import java.util.Spliterator;
  *
  * @author Werner Randelshofer
  */
-public class IteratorEnumeratorSpliterator<E> implements EnumeratorSpliterator<E> {
+public class EnumeratorSpliteratorFacade<E> implements EnumeratorSpliterator<E> {
     private final @NonNull Iterator<? extends E> iterator;
 
     private E current;
 
-    public IteratorEnumeratorSpliterator(final @NonNull Iterator<? extends E> iterator) {
+    public EnumeratorSpliteratorFacade(final @NonNull Iterator<? extends E> iterator) {
         this.iterator = iterator;
     }
 

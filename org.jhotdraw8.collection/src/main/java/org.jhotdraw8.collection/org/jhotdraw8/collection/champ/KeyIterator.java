@@ -15,12 +15,12 @@ import java.util.function.Consumer;
 /**
  * Key iterator over a CHAMP trie.
  * <p>
- * Uses a fixed stack in depth.
+ * Uses a stack with a fixed maximal depth.
  * Iterates first over inlined data entries and then continues depth first.
  * <p>
- * Supports the {@code remove} operation. The functions that are
- * passed to this iterator must not change the trie structure that the iterator
- * currently uses.
+ * Supports the {@code remove} operation. The remove function must
+ * create a new version of the trie, so that iterator does not have
+ * to deal with structural changes of the trie.
  */
 class KeyIterator<K> implements Iterator<K> {
 

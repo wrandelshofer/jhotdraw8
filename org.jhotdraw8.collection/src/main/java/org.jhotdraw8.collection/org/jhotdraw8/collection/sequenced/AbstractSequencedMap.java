@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.SequencedCollectionFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
+import org.jhotdraw8.collection.mapped.MappedSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
 import java.util.AbstractMap;
@@ -17,6 +18,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
 
 /**
  * Abstract base class for {@link SequencedMap}s.
@@ -76,7 +78,9 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
         return new SequencedSetFacade<K>(
                 () -> new MappedIterator<>(m.sequencedEntrySet().iterator(), Entry::getKey),
+                () -> new MappedSpliterator<>(m.sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
                 () -> new MappedIterator<>(m.reversed().sequencedEntrySet().iterator(), Entry::getKey),
+                () -> new MappedSpliterator<>(m.reversed().sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
                 m::size,
                 m::containsKey,
                 m::clear,

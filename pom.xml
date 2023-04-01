@@ -261,6 +261,18 @@
         <version>31.1-jre</version>
       </dependency>
       <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-core</artifactId>
+        <version>1.36</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-generator-annprocess</artifactId>
+        <version>1.36</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.annotation</artifactId>
         <version>${revision}</version>
@@ -364,6 +376,16 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
         <version>20</version>
+      </dependency>
+      <dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>0.10.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-library</artifactId>
+        <version>2.13.10</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

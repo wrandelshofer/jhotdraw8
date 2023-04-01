@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 
 import java.util.AbstractMap;
 import java.util.Objects;
@@ -53,9 +53,10 @@ class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
      * @param mutator the mutator which will own all nodes of the trie
      * @return the new root
      */
-    public static <K, V> BitmapIndexedNode<SequencedEntry<K, V>> renumber(int size, @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, @NonNull UniqueId mutator,
+    public static <K, V> BitmapIndexedNode<SequencedEntry<K, V>> renumber(int size, @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, @NonNull IdentityObject mutator,
                                                                           @NonNull ToIntFunction<SequencedEntry<K, V>> hashFunction,
-                                                                          @NonNull BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> equalsFunction) {
+                                                                          @NonNull BiPredicate<SequencedEntry<K, V>,
+                                                                                  SequencedEntry<K, V>> equalsFunction) {
         if (size == 0) {
             return root;
         }

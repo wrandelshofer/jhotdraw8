@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;
@@ -42,7 +42,7 @@ class BitmapIndexedNode<D> extends Node<D> {
         return (BitmapIndexedNode<K>) EMPTY_NODE;
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndInsertData(@Nullable UniqueId mutator, int bitpos,
+    @NonNull BitmapIndexedNode<D> copyAndInsertData(@Nullable IdentityObject mutator, int bitpos,
                                                     D data) {
         int idx = dataIndex(bitpos);
         Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
@@ -50,7 +50,7 @@ class BitmapIndexedNode<D> extends Node<D> {
         return newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndMigrateFromDataToNode(@Nullable UniqueId mutator,
+    @NonNull BitmapIndexedNode<D> copyAndMigrateFromDataToNode(@Nullable IdentityObject mutator,
                                                                int bitpos, Node<D> node) {
 
         int idxOld = dataIndex(bitpos);
@@ -68,7 +68,7 @@ class BitmapIndexedNode<D> extends Node<D> {
         return newBitmapIndexedNode(mutator, nodeMap | bitpos, dataMap ^ bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndMigrateFromNodeToData(@Nullable UniqueId mutator,
+    @NonNull BitmapIndexedNode<D> copyAndMigrateFromNodeToData(@Nullable IdentityObject mutator,
                                                                int bitpos, @NonNull Node<D> node) {
         int idxOld = this.mixed.length - 1 - nodeIndex(bitpos);
         int idxNew = dataIndex(bitpos);
@@ -85,7 +85,7 @@ class BitmapIndexedNode<D> extends Node<D> {
         return newBitmapIndexedNode(mutator, nodeMap ^ bitpos, dataMap | bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndSetNode(@Nullable UniqueId mutator, int bitpos,
+    @NonNull BitmapIndexedNode<D> copyAndSetNode(@Nullable IdentityObject mutator, int bitpos,
                                                  Node<D> node) {
 
         int idx = this.mixed.length - 1 - nodeIndex(bitpos);
@@ -189,6 +189,12 @@ class BitmapIndexedNode<D> extends Node<D> {
         return (Node<D>) mixed[mixed.length - 1 - nodeIndex(bitpos)];
     }
 
+    @SuppressWarnings("unchecked")
+    @NonNull
+    D dataAt(int bitpos) {
+        return (D) mixed[dataIndex(bitpos)];
+    }
+
     int nodeIndex(int bitpos) {
         return Integer.bitCount(nodeMap & (bitpos - 1));
     }
@@ -198,7 +204,7 @@ class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<D> remove(@Nullable UniqueId mutator,
+    public @NonNull BitmapIndexedNode<D> remove(@Nullable IdentityObject mutator,
                                                 D data,
                                                 int dataHash, int shift,
                                                 @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
@@ -213,7 +219,7 @@ class BitmapIndexedNode<D> extends Node<D> {
         return this;
     }
 
-    private @NonNull BitmapIndexedNode<D> removeData(@Nullable UniqueId mutator, D data, int dataHash, int shift, @NonNull ChangeEvent<D> details, int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
+    private @NonNull BitmapIndexedNode<D> removeData(@Nullable IdentityObject mutator, D data, int dataHash, int shift, @NonNull ChangeEvent<D> details, int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
         int dataIndex = dataIndex(bitpos);
         int entryLength = 1;
         if (!equalsFunction.test(getData(dataIndex), data)) {
@@ -232,7 +238,7 @@ class BitmapIndexedNode<D> extends Node<D> {
         return newBitmapIndexedNode(mutator, nodeMap, dataMap ^ bitpos, dst);
     }
 
-    private @NonNull BitmapIndexedNode<D> removeSubNode(@Nullable UniqueId mutator, D data, int dataHash, int shift,
+    private @NonNull BitmapIndexedNode<D> removeSubNode(@Nullable IdentityObject mutator, D data, int dataHash, int shift,
                                                         @NonNull ChangeEvent<D> details,
                                                         int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
         Node<D> subNode = nodeAt(bitpos);
@@ -251,7 +257,7 @@ class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<D> update(@Nullable UniqueId mutator,
+    public @NonNull BitmapIndexedNode<D> update(@Nullable IdentityObject mutator,
                                                 @Nullable D data,
                                                 int dataHash, int shift,
                                                 @NonNull ChangeEvent<D> details,
@@ -289,7 +295,7 @@ class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @NonNull
-    private BitmapIndexedNode<D> copyAndSetData(@Nullable UniqueId mutator, int dataIndex, D updatedData) {
+    private BitmapIndexedNode<D> copyAndSetData(@Nullable IdentityObject mutator, int dataIndex, D updatedData) {
         if (isAllowedToUpdate(mutator)) {
             this.mixed[dataIndex] = updatedData;
             return this;

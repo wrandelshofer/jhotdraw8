@@ -8,6 +8,7 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
+import org.jhotdraw8.collection.FailFastSpliterator;
 import org.jhotdraw8.collection.MutableMapEntry;
 import org.jhotdraw8.collection.facade.SetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
@@ -18,8 +19,10 @@ import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
 /**
@@ -156,6 +159,9 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
                         this::iteratorRemove),
                         () -> this.modCount),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
+                () -> new FailFastSpliterator<>(
+                        new DataEnumeratorSpliterator<>(root, Function.identity(), Spliterator.SIZED | Spliterator.DISTINCT, size()),
+                        () -> this.modCount),
                 ChampMap.this::size,
                 ChampMap.this::containsEntry,
                 ChampMap.this::clear,

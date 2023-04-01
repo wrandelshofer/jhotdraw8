@@ -21,11 +21,19 @@ public class FailFastIterator<E> implements Iterator<E> {
     private final @NonNull Iterator<? extends E> i;
     private int expectedModCount;
     private final @NonNull IntSupplier modCountSupplier;
+    private final @NonNull Runnable removeFunction;
 
     public FailFastIterator(@NonNull Iterator<? extends E> i, @NonNull IntSupplier modCountSupplier) {
+        this(i, modCountSupplier, i::remove);
+    }
+
+    public FailFastIterator(@NonNull Iterator<? extends E> i,
+                            @NonNull IntSupplier modCountSupplier,
+                            @NonNull Runnable removeFunction) {
         this.i = i;
         this.modCountSupplier = modCountSupplier;
         this.expectedModCount = modCountSupplier.getAsInt();
+        this.removeFunction = removeFunction;
     }
 
     @Override
@@ -49,7 +57,7 @@ public class FailFastIterator<E> implements Iterator<E> {
     @Override
     public void remove() {
         ensureUnmodified();
-        i.remove();
+        removeFunction.run();
         expectedModCount = modCountSupplier.getAsInt();
     }
 }

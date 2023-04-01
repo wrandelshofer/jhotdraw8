@@ -48,6 +48,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
     public void testRemoveLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         ImmutableSequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        assertEqualSequence(expected, instance, "new instance(data.a())");
         while (!expected.isEmpty()) {
             ImmutableSequencedSet<HashCollider> instance2 = instance.removeLast();
             assertNotSame(instance, instance2);

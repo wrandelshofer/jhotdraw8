@@ -23,6 +23,8 @@ import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
@@ -167,6 +169,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      *
      * @param m a read-only map
      */
+    @SuppressWarnings("unchecked")
     public ChampSequencedMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
         if (m instanceof ChampImmutableSequencedMap) {
             @SuppressWarnings("unchecked")
@@ -227,7 +230,9 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
                 () -> entryIterator(false),
+                () -> Spliterators.spliterator(entryIterator(false), size(), Spliterator.DISTINCT),
                 () -> entryIterator(true),
+                () -> Spliterators.spliterator(entryIterator(true), size(), Spliterator.DISTINCT),
                 this::size,
                 this::containsEntry,
                 this::clear,
@@ -285,6 +290,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
     }
 
     private void iteratorRemove(SequencedEntry<K, V> entry) {
+        mutator = null;
         remove(entry.getKey());
     }
 
@@ -435,7 +441,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (SequencedData.mustRenumber(size, first, last)) {
+        if (ChampImmutableSequencedSet.mustRenumber(size, first, last)) {
             root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
                     getHashFunction(), getEqualsFunction());
             last = size;

@@ -114,7 +114,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     @Override
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.update(getOrCreateMutator(),
+        root = root.update(getOrCreateIdentity(),
                 e, Objects.hashCode(e), 0, details,
                 (oldKey, newKey) -> oldKey,
                 Objects::equals, Objects::hashCode);
@@ -163,7 +163,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
         root = root.remove(
-                getOrCreateMutator(), (E) o, Objects.hashCode(o), 0, details,
+                getOrCreateIdentity(), (E) o, Objects.hashCode(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             size--;

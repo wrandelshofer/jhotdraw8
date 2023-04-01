@@ -8,6 +8,9 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
+import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
@@ -17,7 +20,10 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.BiFunction;
+
+import static org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet.seqHash;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -119,13 +125,14 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     /**
      * The root of the CHAMP trie for the sequence numbers.
      */
-    protected BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
+    private @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
 
     /**
      * Constructs an empty set.
      */
     public ChampChampSequencedSet() {
         root = BitmapIndexedNode.emptyNode();
+        sequenceRoot = BitmapIndexedNode.emptyNode();
     }
 
     /**
@@ -145,8 +152,10 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
             this.size = that.size;
             this.first = that.first;
             this.last = that.last;
+            this.sequenceRoot = that.sequenceRoot;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
+            this.sequenceRoot = BitmapIndexedNode.emptyNode();
             addAll(c);
         }
     }
@@ -163,12 +172,24 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
 
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        root = root.update(getOrCreateMutator(), new SequencedElement<>(e, first - 1),
+        SequencedElement<E> newElem = new SequencedElement<>(e, first - 1);
+        IdentityObject mutator = getOrCreateIdentity();
+        root = root.update(mutator, newElem,
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            SequencedElement<E> oldElem = details.getData();
+            boolean isUpdated = details.isUpdated();
+            sequenceRoot = sequenceRoot.update(mutator,
+                    newElem, seqHash(first - 1), 0, details,
+                    getUpdateFunction(),
+                    Objects::equals, ChampChampImmutableSequencedSet::seqHashCode);
+            if (isUpdated) {
+                sequenceRoot = sequenceRoot.remove(mutator,
+                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
+                        Objects::equals);
+
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -188,13 +209,25 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
 
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        SequencedElement<E> newElem = new SequencedElement<>(e, last);
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.update(
-                getOrCreateMutator(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
+                mutator, newElem, Objects.hashCode(e), 0,
                 details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            SequencedElement<E> oldElem = details.getData();
+            boolean isUpdated = details.isUpdated();
+            sequenceRoot = sequenceRoot.update(mutator,
+                    newElem, seqHash(last), 0, details,
+                    getUpdateFunction(),
+                    Objects::equals, ChampChampImmutableSequencedSet::seqHashCode);
+            if (isUpdated) {
+                sequenceRoot = sequenceRoot.remove(mutator,
+                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
+                        Objects::equals);
+
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
             } else {
@@ -210,6 +243,7 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
+        sequenceRoot = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
         first = -1;
@@ -233,12 +267,12 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
 
     @Override
     public E getFirst() {
-        return HeapSequencedIterator.getFirst(root, first, last).getElement();
+        return Node.getFirst(sequenceRoot).getElement();
     }
 
     @Override
     public E getLast() {
-        return HeapSequencedIterator.getLast(root, first, last).getElement();
+        return Node.getLast(sequenceRoot).getElement();
     }
 
     @NonNull
@@ -261,25 +295,34 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
         return iterator(false);
     }
 
-    /**
-     * Returns an iterator over the elements of this set, that optionally
-     * iterates in reversed direction.
-     *
-     * @param reversed whether to iterate in reverse direction
-     * @return an iterator
-     */
-    public @NonNull Iterator<E> iterator(boolean reversed) {
-        Iterator<E> i = BucketSequencedIterator.isSupported(size, first, last)
-                ? new BucketSequencedIterator<>(size, first, last, root, reversed,
-                this::iteratorRemove, SequencedElement::getElement)
-                : new HeapSequencedIterator<>(size, root, reversed,
-                this::iteratorRemove, SequencedElement::getElement);
-        return new FailFastIterator<>(i,
-                () -> ChampChampSequencedSet.this.modCount);
+    private @NonNull Iterator<E> iterator(boolean reversed) {
+        Enumerator<E> i;
+        if (reversed) {
+            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        } else {
+            i = new DataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        }
+        return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> ChampChampSequencedSet.this.modCount);
     }
 
-    private void iteratorRemove(SequencedElement<E> element) {
-        remove(element.getElement());
+    private @NonNull Spliterator<E> spliterator(boolean reversed) {
+        Spliterator<E> i;
+        if (reversed) {
+            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        } else {
+            i = new DataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        }
+        return i;
+    }
+
+    @Override
+    public @NonNull Spliterator<E> spliterator() {
+        return spliterator(false);
+    }
+
+    private void iteratorRemove(E element) {
+        mutator = null;
+        remove(element);
     }
 
     @Override
@@ -291,13 +334,18 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     @Override
     public boolean remove(Object o) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.remove(
-                getOrCreateMutator(), new SequencedElement<>((E) o),
+                mutator, new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
         if (details.isModified()) {
             size--;
             modCount++;
-            int seq = details.getData().getSequenceNumber();
+            var elem = details.getData();
+            int seq = elem.getSequenceNumber();
+            sequenceRoot = sequenceRoot.remove(mutator,
+                    elem,
+                    seqHash(seq), 0, details, Objects::equals);
             if (seq == last - 1) {
                 last--;
             }
@@ -311,19 +359,15 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
 
     @Override
     public E removeFirst() {
-        SequencedElement<E> k = HeapSequencedIterator.getFirst(root, first, last);
+        SequencedElement<E> k = Node.getFirst(sequenceRoot);
         remove(k.getElement());
-        first = k.getSequenceNumber();
-        renumber();
         return k.getElement();
     }
 
     @Override
     public E removeLast() {
-        SequencedElement<E> k = HeapSequencedIterator.getLast(root, first, last);
+        SequencedElement<E> k = Node.getLast(sequenceRoot);
         remove(k.getElement());
-        last = k.getSequenceNumber();
-        renumber();
         return k.getElement();
     }
 
@@ -333,9 +377,11 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (SequencedData.mustRenumber(size, first, last)) {
-            root = SequencedElement.renumber(size, root, getOrCreateMutator(),
+        if (ChampChampImmutableSequencedSet.mustRenumber(size, first, last)) {
+            IdentityObject mutator = getOrCreateIdentity();
+            root = SequencedElement.renumber(size, root, mutator,
                     Objects::hashCode, Objects::equals);
+            sequenceRoot = ChampChampImmutableSequencedSet.buildSequenceRoot(root, mutator);
             last = size;
             first = -1;
         }
@@ -345,7 +391,9 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     public SequencedSet<E> reversed() {
         return new SequencedSetFacade<>(
                 () -> iterator(true),
+                () -> spliterator(true),
                 () -> iterator(false),
+                () -> spliterator(false),
                 this::size,
                 this::contains,
                 this::clear,
@@ -363,7 +411,8 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
      */
     public @NonNull ChampChampImmutableSequencedSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ChampChampImmutableSequencedSet.of() : new ChampChampImmutableSequencedSet<>(root, sequenceRoot, size, first, last);
+        return size == 0 ? ChampChampImmutableSequencedSet.of() :
+                new ChampChampImmutableSequencedSet<>(root, sequenceRoot, size, first, last);
     }
 
     private @NonNull Object writeReplace() {
@@ -382,4 +431,5 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
             return new ChampChampSequencedSet<>(deserialized);
         }
     }
+
 }

@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -121,7 +121,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Node<D> remove(@Nullable UniqueId mutator, D data,
+    Node<D> remove(@Nullable IdentityObject mutator, D data,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
             if (equalsFunction.test((D) this.data[i], data)) {
@@ -152,7 +152,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Node<D> update(@Nullable UniqueId mutator, D data,
+    Node<D> update(@Nullable IdentityObject mutator, D data,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details,
                    @NonNull BiFunction<D, D, D> replaceFunction, @NonNull BiPredicate<D, D> equalsFunction,
                    @NonNull ToIntFunction<D> hashFunction) {

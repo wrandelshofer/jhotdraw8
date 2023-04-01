@@ -7,7 +7,9 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
@@ -22,7 +24,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.BiFunction;
 
 
@@ -41,8 +42,10 @@ import java.util.function.BiFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyAdd: O(1) amortized</li>
- *     <li>copyRemove: O(1)</li>
+ *     <li>copyAdd: O(1) amortized due to
+ *  *     renumbering</li>
+ *     <li>copyRemove: O(1) amortized due to
+ *  *     renumbering</li>
  *     <li>contains: O(1)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
@@ -74,7 +77,8 @@ import java.util.function.BiFunction;
  * field of each data entry. If the counter wraps around, it must renumber all
  * sequence numbers.
  * <p>
- * The renumbering is why the {@code add} is O(1) only in an amortized sense.
+ * The renumbering is why the {@code add} and {@code remove} methods are O(1)
+ * only in an amortized sense.
  * <p>
  * To support iteration, a second CHAMP trie is maintained. The second CHAMP
  * trie has the same contents as the first. However, we use the sequence number
@@ -107,10 +111,10 @@ public class ChampChampImmutableSequencedSet<E>
         implements Serializable, ImmutableSequencedSet<E> {
     private final static long serialVersionUID = 0L;
 
-    private static final ChampChampImmutableSequencedSet<?> EMPTY = new ChampChampImmutableSequencedSet<>(
+    private static final @NonNull ChampChampImmutableSequencedSet<?> EMPTY = new ChampChampImmutableSequencedSet<>(
             BitmapIndexedNode.emptyNode(), BitmapIndexedNode.emptyNode(), 0, -1, 0);
 
-    private final BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
+    final @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
 
     final int size;
 
@@ -129,29 +133,26 @@ public class ChampChampImmutableSequencedSet<E>
 
     ChampChampImmutableSequencedSet(
             @NonNull BitmapIndexedNode<SequencedElement<E>> root,
-            @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot, int size, int first, int last) {
-        super(root.nodeMap(), root.dataMap(), root.mixed);
-        assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
-        this.size = size;
-        this.first = first;
-        this.last = last;
-        this.sequenceRoot = sequenceRoot;
-    }
-
-    ChampChampImmutableSequencedSet(
-            @NonNull BitmapIndexedNode<SequencedElement<E>> root,
+            @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot,
             int size, int first, int last) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
         this.size = size;
         this.first = first;
         this.last = last;
-        this.sequenceRoot = buildSequenceRoot(root);
+        this.sequenceRoot = Objects.requireNonNull(sequenceRoot);
     }
 
-    // FIXME implement me
-    private BitmapIndexedNode<SequencedElement<E>> buildSequenceRoot(BitmapIndexedNode<SequencedElement<E>> root) {
-        return root;
+
+    static <E> BitmapIndexedNode<SequencedElement<E>> buildSequenceRoot(@NonNull BitmapIndexedNode<SequencedElement<E>> root, @NonNull IdentityObject mutator) {
+        BitmapIndexedNode<SequencedElement<E>> seqRoot = emptyNode();
+        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        for (KeyIterator<SequencedElement<E>> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+            SequencedElement<E> elem = i.next();
+            seqRoot = seqRoot.update(mutator, elem, ChampChampImmutableSequencedSet.seqHash(elem.getSequenceNumber()),
+                    0, details, (oldK, newK) -> oldK, Object::equals, ChampChampImmutableSequencedSet::seqHashCode);
+        }
+        return seqRoot;
     }
 
     /**
@@ -172,6 +173,25 @@ public class ChampChampImmutableSequencedSet<E>
         ChampChampSequencedSet<E> tr = new ChampChampSequencedSet<>(of());
         tr.addAll(iterable);
         return tr.toImmutable();
+    }
+
+    /**
+     * Returns true if the sequenced elements must be renumbered because
+     * {@code first} or {@code last} are at risk of overflowing.
+     * <p>
+     * {@code first} and {@code last} are estimates of the first and last
+     * sequence numbers in the trie. The estimated extent may be larger
+     * than the actual extent, but not smaller.
+     *
+     * @param size  the size of the trie
+     * @param first the estimated first sequence number
+     * @param last  the estimated last sequence number
+     * @return
+     */
+    static boolean mustRenumber(int size, int first, int last) {
+        return size == 0 && (first != -1 || last != 0)
+                || last > Integer.MAX_VALUE - 2
+                || first < Integer.MIN_VALUE + 2;
     }
 
 
@@ -247,73 +267,99 @@ public class ChampChampImmutableSequencedSet<E>
         return find(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
-    private @NonNull ChampChampImmutableSequencedSet<E> copyAddFirst(@Nullable E key,
+    private @NonNull ChampChampImmutableSequencedSet<E> copyAddFirst(@Nullable E e,
                                                                      boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        SequencedElement<E> elem = new SequencedElement<>(key, first - 1);
-        BitmapIndexedNode<SequencedElement<E>> root = update(null,
-                elem, Objects.hashCode(key), 0, details,
+        SequencedElement<E> newElem = new SequencedElement<>(e, first - 1);
+        var newRoot = update(null, newElem,
+                Objects.hashCode(e), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        BitmapIndexedNode<SequencedElement<E>> seqRoot = sequenceRoot;
-        if (details.isUpdated()) {
-            seqRoot = sequenceRoot.update(null,
-                    elem, seqHash(first - 1), 0, details,
+        var newSeqRoot = sequenceRoot;
+        int newSize = size;
+        int newFirst = first;
+        int newLast = last;
+        if (details.isModified()) {
+            IdentityObject mutator = new IdentityObject();
+            SequencedElement<E> oldElem = details.getData();
+            boolean isUpdated = details.isUpdated();
+            newSeqRoot = newSeqRoot.update(mutator,
+                    newElem, seqHash(first - 1), 0, details,
                     getUpdateFunction(),
                     Objects::equals, ChampChampImmutableSequencedSet::seqHashCode);
-            return moveToFirst
-                    ? renumber(root, seqRoot, size,
-                    details.getData().getSequenceNumber() == first ? first : first - 1,
-                    details.getData().getSequenceNumber() == last ? last - 1 : last)
-                    : new ChampChampImmutableSequencedSet<>(root, seqRoot, size, first, last);
+            if (isUpdated) {
+                newSeqRoot = newSeqRoot.remove(mutator,
+                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
+                        Objects::equals);
+
+                newFirst = details.getData().getSequenceNumber() == newFirst ? newFirst : newFirst - 1;
+                newLast = details.getData().getSequenceNumber() == newLast ? newLast - 1 : newLast;
+            } else {
+                newFirst--;
+                newSize++;
+            }
+            return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
-        return details.isModified() ? renumber(root, seqRoot, size + 1, first - 1, last) : this;
+        return this;
     }
 
-    private @NonNull ChampChampImmutableSequencedSet<E> copyAddLast(@Nullable E key,
+    private @NonNull ChampChampImmutableSequencedSet<E> copyAddLast(@Nullable E e,
                                                                     boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        SequencedElement<E> elem = new SequencedElement<>(key, last);
-        BitmapIndexedNode<SequencedElement<E>> root = update(null,
-                elem, Objects.hashCode(key), 0, details,
+        SequencedElement<E> newElem = new SequencedElement<>(e, last);
+        var newRoot = update(
+                null, newElem, Objects.hashCode(e), 0,
+                details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
-        BitmapIndexedNode<SequencedElement<E>> seqRoot = sequenceRoot;
-        if (details.isUpdated()) {
-            seqRoot = sequenceRoot.update(null,
-                    elem, seqHash(last), 0, details,
+        var newSeqRoot = sequenceRoot;
+        int newFirst = first;
+        int newLast = last;
+        int newSize = size;
+        if (details.isModified()) {
+            IdentityObject mutator = new IdentityObject();
+            SequencedElement<E> oldElem = details.getData();
+            boolean isUpdated = details.isUpdated();
+            newSeqRoot = newSeqRoot.update(mutator,
+                    newElem, seqHash(last), 0, details,
                     getUpdateFunction(),
                     Objects::equals, ChampChampImmutableSequencedSet::seqHashCode);
-            return moveToLast
-                    ? renumber(root, seqRoot, size,
-                    details.getData().getSequenceNumber() == first ? first + 1 : first,
-                    details.getData().getSequenceNumber() == last ? last : last + 1)
-                    : new ChampChampImmutableSequencedSet<>(root, seqRoot, size, first, last);
+            if (isUpdated) {
+                newSeqRoot = newSeqRoot.remove(mutator,
+                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
+                        Objects::equals);
+
+                newFirst = details.getData().getSequenceNumber() == newFirst - 1 ? newFirst - 1 : newFirst;
+                newLast = details.getData().getSequenceNumber() == newLast ? newLast : newLast + 1;
+            } else {
+                newSize++;
+                newLast++;
+            }
+            return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
-        return details.isModified() ? renumber(root, seqRoot, size + 1, first, last + 1) : this;
+        return this;
     }
 
     private @NonNull ChampChampImmutableSequencedSet<E> copyRemove(@Nullable E key, int newFirst, int newLast) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        BitmapIndexedNode<SequencedElement<E>> newRootNode = remove(null,
+        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
-        BitmapIndexedNode<SequencedElement<E>> seqRoot = sequenceRoot;
+        BitmapIndexedNode<SequencedElement<E>> newSeqRoot = sequenceRoot;
         if (details.isModified()) {
-            int seq = details.getData().getSequenceNumber();
-            seqRoot = seqRoot.remove(null,
-                    new SequencedElement<>(key, seq),
+            var oldElem = details.getData();
+            int seq = oldElem.getSequenceNumber();
+            newSeqRoot = newSeqRoot.remove(null,
+                    oldElem,
                     seqHash(seq), 0, details, Objects::equals);
-
             if (seq == newFirst) {
                 newFirst++;
             }
-
             if (seq == newLast - 1) {
                 newLast--;
             }
-            return renumber(newRootNode, seqRoot, size - 1, newFirst, newLast);
+            return renumber(newRoot, newSeqRoot, size - 1, newFirst, newLast);
         }
         return this;
     }
@@ -337,12 +383,12 @@ public class ChampChampImmutableSequencedSet<E>
 
     @Override
     public E getFirst() {
-        return HeapSequencedIterator.getFirst(this, first, last).getElement();
+        return Node.getFirst(sequenceRoot).getElement();
     }
 
     @Override
     public E getLast() {
-        return HeapSequencedIterator.getLast(this, first, last).getElement();
+        return Node.getLast(sequenceRoot).getElement();
     }
 
     @NonNull
@@ -370,25 +416,29 @@ public class ChampChampImmutableSequencedSet<E>
         return iterator(false);
     }
 
-    public @NonNull Spliterator<E> spliterator() {
-        return Spliterators.spliterator(iterator(false), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
+    private @NonNull Iterator<E> iterator(boolean reversed) {
+        Enumerator<E> i;
+        if (reversed) {
+            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+        } else {
+            i = new DataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+        }
+        return new IteratorFacade<>(i, null);
     }
 
+    private @NonNull Spliterator<E> spliterator(boolean reversed) {
+        Spliterator<E> i;
+        if (reversed) {
+            i = new ReversedDataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+        } else {
+            i = new DataEnumeratorSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+        }
+        return i;
+    }
 
-    /**
-     * Returns an iterator over the elements of this set, that optionally
-     * iterates in reversed direction.
-     *
-     * @param reversed whether to iterate in reverse direction
-     * @return an iterator
-     */
-
-    public @NonNull Iterator<E> iterator(boolean reversed) {
-        return BucketSequencedIterator.isSupported(size, first, last)
-                ? new BucketSequencedIterator<>(size, first, last, this, reversed,
-                null, SequencedElement::getElement)
-                : new HeapSequencedIterator<>(size, this, reversed,
-                null, SequencedElement::getElement);
+    @Override
+    public Spliterator<E> spliterator() {
+        return spliterator(false);
     }
 
     @Override
@@ -459,13 +509,18 @@ public class ChampChampImmutableSequencedSet<E>
 
     @NonNull
     private ChampChampImmutableSequencedSet<E> renumber(
-            BitmapIndexedNode<SequencedElement<E>> root, BitmapIndexedNode<SequencedElement<E>> seqRoot, int size, int first, int last) {
-        if (SequencedData.mustRenumber(size, first, last)) {
+            BitmapIndexedNode<SequencedElement<E>> root,
+            BitmapIndexedNode<SequencedElement<E>> seqRoot,
+            int size, int first, int last) {
+        if (mustRenumber(size, first, last)) {
+            IdentityObject mutator = new IdentityObject();
+            BitmapIndexedNode<SequencedElement<E>> renumberedRoot = SequencedElement.renumber(size, root, mutator, Objects::hashCode, Objects::equals);
+            BitmapIndexedNode<SequencedElement<E>> renumberedSeqRoot = buildSequenceRoot(renumberedRoot, mutator);
             return new ChampChampImmutableSequencedSet<>(
-                    SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
+                    renumberedRoot, renumberedSeqRoot,
                     size, -1, size);
         }
-        return new ChampChampImmutableSequencedSet<>(root, size, first, last);
+        return new ChampChampImmutableSequencedSet<>(root, seqRoot, size, first, last);
     }
 
     @Override
@@ -539,7 +594,7 @@ public class ChampChampImmutableSequencedSet<E>
      * @param sequenceNumber a sequence number
      * @return a hash code
      */
-    private static int seqHash(int sequenceNumber) {
+    static int seqHash(int sequenceNumber) {
         int u = sequenceNumber + Integer.MIN_VALUE;
         return (u >>> 27)
                 | ((u & 0b00000_11111_00000_00000_00000_00000_00) >>> 17)

@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -72,7 +72,7 @@ class SequencedElement<E> implements SequencedData {
      */
     public static <K> BitmapIndexedNode<SequencedElement<K>> renumber(int size,
                                                                       @NonNull BitmapIndexedNode<SequencedElement<K>> root,
-                                                                      @NonNull UniqueId mutator,
+                                                                      @NonNull IdentityObject mutator,
                                                                       @NonNull ToIntFunction<SequencedElement<K>> hashFunction,
                                                                       @NonNull BiPredicate<SequencedElement<K>, SequencedElement<K>> equalsFunction) {
         if (size == 0) {

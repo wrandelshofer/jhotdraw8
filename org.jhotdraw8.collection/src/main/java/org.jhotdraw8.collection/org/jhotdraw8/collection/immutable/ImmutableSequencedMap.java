@@ -27,6 +27,32 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
     @Override
     @NonNull ImmutableSequencedMap<K, V> put(@NonNull K key, @Nullable V value);
 
+    /**
+     * Creates an entry for the specified key and value and adds it to the front
+     * of the map if an entry for the specified key is not already present.
+     * If this map already contains an entry for the specified key, replaces the
+     * value and moves the entry to the front.
+     *
+     * @param key   the key
+     * @param value the value
+     * @return this map instance if no changes are needed, or a different map
+     * instance with the applied changes.
+     */
+    @NonNull ImmutableSequencedMap<K, V> putFirst(@NonNull K key, @Nullable V value);
+
+    /**
+     * Creates an entry for the specified key and value and adds it to the end
+     * of the map if an entry for the specified key is not already present.
+     * If this map already contains an entry for the specified key, replaces the
+     * value and moves the entry to the end.
+     *
+     * @param key   the key
+     * @param value the value
+     * @return this map instance if no changes are needed, or a different map
+     * instance with the applied changes.
+     */
+    @NonNull ImmutableSequencedMap<K, V> putLast(@NonNull K key, @Nullable V value);
+
     @Override
     @NonNull
     default ImmutableSequencedMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {

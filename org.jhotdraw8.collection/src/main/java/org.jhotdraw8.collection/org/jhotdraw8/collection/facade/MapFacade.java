@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
@@ -26,6 +27,7 @@ import java.util.function.Supplier;
  */
 public class MapFacade<K, V> extends AbstractMap<K, V> {
     protected final @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
+    protected final @NonNull Supplier<Spliterator<Entry<K, V>>> spliteratorFunction;
     protected final @NonNull IntSupplier sizeFunction;
     protected final @NonNull Predicate<Object> containsKeyFunction;
     protected final @NonNull Runnable clearFunction;
@@ -35,22 +37,23 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
 
 
     public MapFacade(@NonNull ReadOnlyMap<K, V> m) {
-        this(m::iterator, m::size, m::containsKey, m::get, null, null, null);
+        this(m::iterator, m::spliterator, m::size, m::containsKey, m::get, null, null, null);
     }
 
     public MapFacade(@NonNull Map<K, V> m) {
-        this(() -> m.entrySet().iterator(), m::size, m::containsKey, m::get, m::clear,
+        this(() -> m.entrySet().iterator(), () -> m.entrySet().spliterator(), m::size, m::containsKey, m::get, m::clear,
                 m::remove, m::put);
     }
 
     public MapFacade(@NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,
-                     @NonNull IntSupplier sizeFunction,
+                     @NonNull Supplier<Spliterator<Entry<K, V>>> spliteratorFunction, @NonNull IntSupplier sizeFunction,
                      @NonNull Predicate<Object> containsKeyFunction,
                      @NonNull Function<K, V> getFunction,
                      @Nullable Runnable clearFunction,
                      @Nullable Function<Object, V> removeFunction,
                      @Nullable BiFunction<K, V, V> putFunction) {
         this.iteratorFunction = iteratorFunction;
+        this.spliteratorFunction = spliteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsKeyFunction = containsKeyFunction;
         this.getFunction = getFunction;
@@ -104,7 +107,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
     public @NonNull Set<Entry<K, V>> entrySet() {
         return new SetFacade<Entry<K, V>>(
                 iteratorFunction,
-                sizeFunction,
+                spliteratorFunction, sizeFunction,
                 this::containsEntry,
                 clearFunction,
                 null,

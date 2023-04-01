@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
@@ -41,8 +41,8 @@ import java.util.function.BiFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyAdd: O(1) amortized</li>
- *     <li>copyRemove: O(1)</li>
+ *     <li>add: O(1) amortized, due to renumbering</li>
+ *     <li>remove: O(1) amortized, due to renumbering</li>
  *     <li>contains: O(1)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
@@ -98,7 +98,7 @@ public class ChampImmutableSequencedSet<E>
         extends BitmapIndexedNode<SequencedElement<E>>
         implements Serializable, ImmutableSequencedSet<E> {
     private final static long serialVersionUID = 0L;
-    private static final ChampImmutableSequencedSet<?> EMPTY = new ChampImmutableSequencedSet<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
+    private static final @NonNull ChampImmutableSequencedSet<?> EMPTY = new ChampImmutableSequencedSet<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
 
     final int size;
 
@@ -140,6 +140,29 @@ public class ChampImmutableSequencedSet<E>
         ChampSequencedSet<E> tr = new ChampSequencedSet<>(of());
         tr.addAll(iterable);
         return tr.toImmutable();
+    }
+
+    /**
+     * Returns true if the sequenced elements must be renumbered because
+     * {@code first} or {@code last} are at risk of overflowing, or the
+     * extent from {@code first - last} is not densely filled enough for an
+     * efficient bucket sort.
+     * <p>
+     * {@code first} and {@code last} are estimates of the first and last
+     * sequence numbers in the trie. The estimated extent may be larger
+     * than the actual extent, but not smaller.
+     *
+     * @param size  the size of the trie
+     * @param first the estimated first sequence number
+     * @param last  the estimated last sequence number
+     * @return
+     */
+    public static boolean mustRenumber(int size, int first, int last) {
+        long extent = (long) last - first;
+        return size == 0 && (first != -1 || last != 0)
+                || last > Integer.MAX_VALUE - 2
+                || first < Integer.MIN_VALUE + 2
+                || extent > 16 && extent > size * 4L;
     }
 
     /**
@@ -401,9 +424,9 @@ public class ChampImmutableSequencedSet<E>
      */
     @NonNull
     private ChampImmutableSequencedSet<E> renumber(BitmapIndexedNode<SequencedElement<E>> root, int size, int first, int last) {
-        if (SequencedData.mustRenumber(size, first, last)) {
+        if (mustRenumber(size, first, last)) {
             return new ChampImmutableSequencedSet<>(
-                    SequencedElement.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals),
+                    SequencedElement.renumber(size, root, new IdentityObject(), Objects::hashCode, Objects::equals),
                     size, -1, size);
         }
         return new ChampImmutableSequencedSet<>(root, size, first, last);

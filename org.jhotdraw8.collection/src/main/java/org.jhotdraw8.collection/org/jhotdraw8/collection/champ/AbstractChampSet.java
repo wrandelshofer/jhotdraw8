@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.io.Serializable;
@@ -33,7 +33,7 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
      * <p>
      * If this mutator id is null, then this set does not own any nodes.
      */
-    protected @Nullable UniqueId mutator;
+    protected @Nullable IdentityObject mutator;
 
     /**
      * The root of this CHAMP trie.
@@ -95,9 +95,9 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
      *
      * @return a new unique id or the existing unique id.
      */
-    protected @NonNull UniqueId getOrCreateMutator() {
+    protected @NonNull IdentityObject getOrCreateIdentity() {
         if (mutator == null) {
-            mutator = new UniqueId();
+            mutator = new IdentityObject();
         }
         return mutator;
     }

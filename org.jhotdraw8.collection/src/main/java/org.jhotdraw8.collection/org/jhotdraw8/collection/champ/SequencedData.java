@@ -38,26 +38,4 @@ interface SequencedData {
      */
     int getSequenceNumber();
 
-    /**
-     * Returns true if the sequenced elements must be renumbered because
-     * {@code first} or {@code last} are at risk of overflowing, or the
-     * extent from {@code first - last} is not densely filled enough for an
-     * efficient bucket sort.
-     * <p>
-     * {@code first} and {@code last} are estimates of the first and last
-     * sequence numbers in the trie. The estimated extent may be larger
-     * than the actual extent, but not smaller.
-     *
-     * @param size  the size of the trie
-     * @param first the estimated first sequence number
-     * @param last  the estimated last sequence number
-     * @return
-     */
-    static boolean mustRenumber(int size, int first, int last) {
-        long extent = (long) last - first;
-        return size == 0 && (first != -1 || last != 0)
-                || last > Integer.MAX_VALUE - 2
-                || first < Integer.MIN_VALUE + 2
-                || extent > 16 && extent > size * 4L;
-    }
 }

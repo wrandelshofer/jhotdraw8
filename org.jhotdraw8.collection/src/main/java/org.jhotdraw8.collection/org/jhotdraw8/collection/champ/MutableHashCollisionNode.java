@@ -6,19 +6,19 @@
 package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 
 class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
     private final static long serialVersionUID = 0L;
-    private final @NonNull UniqueId mutator;
+    private final @NonNull IdentityObject mutator;
 
-    MutableHashCollisionNode(@NonNull UniqueId mutator, int hash, Object @NonNull [] entries) {
+    MutableHashCollisionNode(@NonNull IdentityObject mutator, int hash, Object @NonNull [] entries) {
         super(hash, entries);
         this.mutator = mutator;
     }
 
     @Override
-    protected @NonNull UniqueId getMutator() {
+    protected @NonNull IdentityObject getMutator() {
         return mutator;
     }
 }

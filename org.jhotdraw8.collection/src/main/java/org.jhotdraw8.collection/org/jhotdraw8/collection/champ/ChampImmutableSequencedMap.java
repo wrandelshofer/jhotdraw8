@@ -6,7 +6,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
@@ -41,9 +41,9 @@ import java.util.function.ToIntFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyPut, copyPutFirst, copyPutLast: O(1) amortized due to
+ *     <li>{@link #put}, {@link #putFirst}, {@link #putLast): O(1) amortized due to
  *     renumbering</li>
- *     <li>copyRemove: O(1) amortized due to renumbering</li>
+ *     <li>remove: O(1) amortized due to renumbering</li>
  *     <li>containsKey: O(1)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in
  *     the mutable copy</li>
@@ -102,7 +102,7 @@ import java.util.function.ToIntFunction;
 @SuppressWarnings("exports")
 public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> implements ImmutableSequencedMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private static final ChampImmutableSequencedMap<?, ?> EMPTY = new ChampImmutableSequencedMap<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
+    private static final @NonNull ChampImmutableSequencedMap<?, ?> EMPTY = new ChampImmutableSequencedMap<>(BitmapIndexedNode.emptyNode(), 0, -1, 0);
     /**
      * Counter for the sequence number of the last entry.
      * The counter is incremented after a new entry is added to the end of the
@@ -188,8 +188,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
                 getEqualsFunction()) != Node.NO_DATA;
     }
 
-    //@Override
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPutFirst(@NonNull K key, @Nullable V value) {
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> putFirst(@NonNull K key, @Nullable V value) {
         return copyPutFirst(key, value, true);
     }
 
@@ -212,7 +212,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         return details.isModified() ? renumber(newRootNode, size + 1, first - 1, last) : this;
     }
 
-    public @NonNull ChampImmutableSequencedMap<K, V> copyPutLast(@NonNull K key, @Nullable V value) {
+    @Override
+    public @NonNull ChampImmutableSequencedMap<K, V> putLast(@NonNull K key, @Nullable V value) {
         return copyPutLast(key, value, true);
     }
 
@@ -317,7 +318,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         return size == 0;
     }
 
-    public @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
+    private @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
         @SuppressWarnings("unchecked")// Java 17 requires this suppression
         Function<SequencedEntry<K, V>, Map.Entry<K, V>> castEntry = Map.Entry.class::<K, V>cast;
         return BucketSequencedIterator.isSupported(size, first, last)
@@ -402,8 +403,8 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @NonNull
     private ChampImmutableSequencedMap<K, V> renumber(BitmapIndexedNode<SequencedEntry<K, V>> root, int size, int first, int last) {
-        if (SequencedData.mustRenumber(size, first, last)) {
-            root = SequencedEntry.renumber(size, root, new UniqueId(), Objects::hashCode, Objects::equals);
+        if (ChampImmutableSequencedSet.mustRenumber(size, first, last)) {
+            root = SequencedEntry.renumber(size, root, new IdentityObject(), Objects::hashCode, Objects::equals);
             return new ChampImmutableSequencedMap<>(root, size, -1, size);
         }
         return new ChampImmutableSequencedMap<>(root, size, first, last);

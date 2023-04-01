@@ -12,6 +12,8 @@ import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -25,6 +27,7 @@ import java.util.stream.Stream;
  */
 public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
+    protected final @NonNull Supplier<Spliterator<E>> spliteratorFunction;
     protected final @NonNull IntSupplier sizeFunction;
     protected final @NonNull Predicate<Object> containsFunction;
     protected final @NonNull Predicate<E> addFunction;
@@ -32,28 +35,33 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     protected final @NonNull Predicate<Object> removeFunction;
 
     public SetFacade(@NonNull ReadOnlySet<E> backingSet) {
-        this(backingSet::iterator, backingSet::size,
+        this(backingSet::iterator, backingSet::spliterator, backingSet::size,
                 backingSet::contains, null, null, null);
     }
 
     public SetFacade(@NonNull Set<E> backingSet) {
-        this(backingSet::iterator, backingSet::size,
+        this(backingSet::iterator,
+                backingSet::spliterator,
+                backingSet::size,
                 backingSet::contains, backingSet::clear, backingSet::add, backingSet::remove);
     }
 
     public SetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
                      @NonNull IntSupplier sizeFunction,
                      @NonNull Predicate<Object> containsFunction) {
-        this(iteratorFunction, sizeFunction, containsFunction, null, null, null);
+        this(iteratorFunction,
+                () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
+                sizeFunction, containsFunction, null, null, null);
     }
-
     public SetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                     @NonNull Supplier<Spliterator<E>> spliteratorFunction,
                      @NonNull IntSupplier sizeFunction,
                      @NonNull Predicate<Object> containsFunction,
                      @Nullable Runnable clearFunction,
                      @Nullable Predicate<E> addFunction,
                      @Nullable Predicate<Object> removeFunction) {
         this.iteratorFunction = iteratorFunction;
+        this.spliteratorFunction = spliteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsFunction = containsFunction;
         this.clearFunction = clearFunction == null ? () -> {
@@ -79,7 +87,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
 
     @Override
     public Spliterator<E> spliterator() {
-        return super.spliterator();
+        return spliteratorFunction.get();
     }
 
     @Override
@@ -92,11 +100,10 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         return iteratorFunction.get();
     }
 
-    /*
-    //@Override  since 11
+    @Override
     public <T> T[] toArray(IntFunction<T[]> generator) {
         return super.toArray(generator);
-    }*/
+    }
 
     @Override
     public int size() {

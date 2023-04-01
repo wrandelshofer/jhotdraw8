@@ -38,8 +38,8 @@ import java.util.function.ToIntFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyPut: O(1)</li>
- *     <li>copyRemove: O(1)</li>
+ *     <li>put: O(1)</li>
+ *     <li>remove: O(1)</li>
  *     <li>containsKey: O(1)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
@@ -83,7 +83,7 @@ import java.util.function.ToIntFunction;
 public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
     private final static long serialVersionUID = 0L;
-    private static final ChampImmutableMap<?, ?> EMPTY = new ChampImmutableMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final @NonNull ChampImmutableMap<?, ?> EMPTY = new ChampImmutableMap<>(BitmapIndexedNode.emptyNode(), 0);
     private final int size;
 
     ChampImmutableMap(@NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root, int size) {

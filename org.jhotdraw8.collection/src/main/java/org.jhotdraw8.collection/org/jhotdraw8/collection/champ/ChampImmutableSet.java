@@ -40,8 +40,8 @@ import java.util.function.ToIntFunction;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyAdd: O(1)</li>
- *     <li>copyRemove: O(1)</li>
+ *     <li>add: O(1)</li>
+ *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
@@ -80,7 +80,7 @@ import java.util.function.ToIntFunction;
 @SuppressWarnings("exports")
 public class ChampImmutableSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private final static long serialVersionUID = 0L;
-    private static final ChampImmutableSet<?> EMPTY = new ChampImmutableSet<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final @NonNull ChampImmutableSet<?> EMPTY = new ChampImmutableSet<>(BitmapIndexedNode.emptyNode(), 0);
     final int size;
 
     ChampImmutableSet(@NonNull BitmapIndexedNode<E> root, int size) {

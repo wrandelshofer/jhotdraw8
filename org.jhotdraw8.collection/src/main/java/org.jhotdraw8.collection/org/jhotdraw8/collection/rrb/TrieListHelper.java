@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.rrb;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.UniqueId;
 
 import java.util.Arrays;
 
@@ -18,7 +18,7 @@ class TrieListHelper {
     static final int BIT_MASK = (1 << BIT_PARTITION_SIZE) - 1;
     static final int M = 1 << BIT_PARTITION_SIZE;
 
-    static <E> @NonNull LeafNode<E> merge(@Nullable UniqueId mutator, @NonNull LeafNode<E> left, @NonNull LeafNode<E> right) {
+    static <E> @NonNull LeafNode<E> merge(@Nullable IdentityObject mutator, @NonNull LeafNode<E> left, @NonNull LeafNode<E> right) {
         E[] leftData = left.data;
         E[] rightData = right.data;
         E[] mergedData = Arrays.copyOf(leftData, leftData.length + rightData.length);
@@ -26,7 +26,7 @@ class TrieListHelper {
         return newLeafNode(mutator, mergedData);
     }
 
-    static <E> @NonNull InternalNode<E> newAbove(@Nullable UniqueId mutator, @Nullable InternalNode<E> left, @Nullable InternalNode<E> centre, @Nullable InternalNode<E> right) {
+    static <E> @NonNull InternalNode<E> newAbove(@Nullable IdentityObject mutator, @Nullable InternalNode<E> left, @Nullable InternalNode<E> centre, @Nullable InternalNode<E> right) {
         int leftLen = left == null ? 0 : left.children.length - 1;
         int centreLen = centre == null ? 0 : centre.children.length;
         int rightLen = right == null ? 0 : right.children.length - 1;
@@ -49,18 +49,18 @@ class TrieListHelper {
         return newInternalNode(mutator, mergedSizes, mergedChildren);
     }
 
-    static <E> @NonNull InternalNode<E> newAbove1(@Nullable UniqueId mutator, @NonNull Node<E> child) {
+    static <E> @NonNull InternalNode<E> newAbove1(@Nullable IdentityObject mutator, @NonNull Node<E> child) {
         int[] sizes = new int[]{child.getLength()};
         @SuppressWarnings({"unchecked", "rawtypes"}) Node<E>[] children = new Node[]{child};
         return newInternalNode(mutator, sizes, children);
     }
 
-    static <E> @NonNull InternalNode<E> newInternalNode(@Nullable UniqueId mutator,
+    static <E> @NonNull InternalNode<E> newInternalNode(@Nullable IdentityObject mutator,
                                                         @NonNull int[] sizes, @NonNull Node<E>[] children) {
         return mutator == null ? new InternalNode<E>(sizes, children) : new MutableInternalNode<E>(mutator, sizes, children);
     }
 
-    static <E> @NonNull LeafNode<E> newLeafNode(@Nullable UniqueId mutator, @NonNull E[] data) {
+    static <E> @NonNull LeafNode<E> newLeafNode(@Nullable IdentityObject mutator, @NonNull E[] data) {
         return mutator == null ? new LeafNode<E>(data) : new MutableLeafNode<E>(mutator, data);
     }
 
@@ -93,7 +93,7 @@ class TrieListHelper {
         private final @NonNull LeafNode<E> head;
         private final @NonNull LeafNode<E> tail;
         private InternalNode<E> root;
-        private final @Nullable UniqueId mutator = new UniqueId();
+        private final @Nullable IdentityObject mutator = new IdentityObject();
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         public RrbTree() {
@@ -121,16 +121,16 @@ class TrieListHelper {
     static abstract class Node<E> {
         protected abstract int getLength();
 
-        @Nullable UniqueId getMutator() {
+        @Nullable IdentityObject getMutator() {
             return null;
         }
 
-        boolean isAllowedToEdit(@Nullable UniqueId y) {
-            UniqueId x = getMutator();
+        boolean isAllowedToEdit(@Nullable IdentityObject y) {
+            IdentityObject x = getMutator();
             return x != null && x == y;
         }
 
-        protected abstract @NonNull Node<E> @NonNull [] insert(@Nullable UniqueId mutator,
+        protected abstract @NonNull Node<E> @NonNull [] insert(@Nullable IdentityObject mutator,
                                                                @Nullable E[] elements,
                                                                int index,
                                                                int shift);
@@ -144,7 +144,7 @@ class TrieListHelper {
             this.data = newData;
         }
 
-        @NonNull LeafNode<E> dec(@Nullable UniqueId mutator) {
+        @NonNull LeafNode<E> dec(@Nullable IdentityObject mutator) {
             E[] newData = Arrays.copyOf(data, data.length - 1);
             if (isAllowedToEdit(mutator)) {
                 data = newData;
@@ -161,7 +161,7 @@ class TrieListHelper {
 
         @Override
         @SuppressWarnings({"unchecked", "rawtypes"})
-        protected @NonNull Node<E> @NonNull [] insert(@Nullable UniqueId mutator,
+        protected @NonNull Node<E> @NonNull [] insert(@Nullable IdentityObject mutator,
                                                       E @NonNull [] elements,
                                                       int index,
                                                       int shift) {
@@ -188,7 +188,7 @@ class TrieListHelper {
 
         @Override
         @SuppressWarnings({"unchecked", "rawtypes"})
-        protected @NonNull Node<E> @NonNull [] insert(@Nullable UniqueId mutator,
+        protected @NonNull Node<E> @NonNull [] insert(@Nullable IdentityObject mutator,
                                                       E @NonNull [] elements,
                                                       int index,
                                                       int shift) {
@@ -229,29 +229,29 @@ class TrieListHelper {
     }
 
     static class MutableLeafNode<E> extends LeafNode<E> {
-        private final @NonNull UniqueId mutator;
+        private final @NonNull IdentityObject mutator;
 
-        MutableLeafNode(@NonNull UniqueId mutator, @NonNull E[] data) {
+        MutableLeafNode(@NonNull IdentityObject mutator, @NonNull E[] data) {
             super(data);
             this.mutator = mutator;
         }
 
         @Override
-        @NonNull UniqueId getMutator() {
+        @NonNull IdentityObject getMutator() {
             return mutator;
         }
     }
 
     static class MutableInternalNode<E> extends InternalNode<E> {
-        private final @NonNull UniqueId mutator;
+        private final @NonNull IdentityObject mutator;
 
-        MutableInternalNode(@NonNull UniqueId mutator, @NonNull int[] sizes, @NonNull Node<E>[] children) {
+        MutableInternalNode(@NonNull IdentityObject mutator, @NonNull int[] sizes, @NonNull Node<E>[] children) {
             super(sizes, children);
             this.mutator = mutator;
         }
 
         @Override
-        @NonNull UniqueId getMutator() {
+        @NonNull IdentityObject getMutator() {
             return mutator;
         }
     }

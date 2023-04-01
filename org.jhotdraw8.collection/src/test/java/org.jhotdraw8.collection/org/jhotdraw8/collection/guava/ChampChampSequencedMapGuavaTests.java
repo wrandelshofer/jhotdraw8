@@ -12,7 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.champ.ChampSequencedMap;
+import org.jhotdraw8.collection.champ.ChampChampSequencedMap;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -21,17 +21,17 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Tests {@link ChampSequencedMap} with the Guava test suite.
+ * Tests {@link ChampChampSequencedMap} with the Guava test suite.
  */
 
-public class SequencedChampMapGuavaTests {
+public class ChampChampSequencedMapGuavaTests {
 
     public static Test suite() {
-        return new SequencedChampMapGuavaTests().allTests();
+        return new ChampChampSequencedMapGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(ChampSequencedMap.class.getSimpleName());
+        TestSuite suite = new TestSuite(ChampChampSequencedMap.class.getSimpleName());
         suite.addTest(testsForLinkedTrieMap());
         return suite;
     }
@@ -41,10 +41,10 @@ public class SequencedChampMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new ChampSequencedMap<String, String>(Arrays.asList(entries));
+                                return new ChampChampSequencedMap<String, String>(Arrays.asList(entries));
                             }
                         })
-                .named(ChampSequencedMap.class.getSimpleName())
+                .named(ChampChampSequencedMap.class.getSimpleName())
                 .withFeatures(
                         MapFeature.GENERAL_PURPOSE,
                         MapFeature.ALLOWS_NULL_KEYS,

@@ -7,8 +7,9 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.UniqueId;
+import org.jhotdraw8.collection.IdentityObject;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -83,11 +84,53 @@ public abstract class Node<D> {
         return 1 << mask;
     }
 
+    public static <E> @NonNull E getFirst(@NonNull Node<E> node) {
+        while (node instanceof BitmapIndexedNode<E> bxn) {
+            int nodeMap = bxn.nodeMap();
+            int dataMap = bxn.dataMap();
+            if ((nodeMap | dataMap) == 0) {
+                break;
+            }
+            int firstNodeBit = Integer.numberOfTrailingZeros(nodeMap);
+            int firstDataBit = Integer.numberOfTrailingZeros(dataMap);
+            if (nodeMap != 0 && firstNodeBit < firstDataBit) {
+                node = node.getNode(0);
+            } else {
+                return node.getData(0);
+            }
+        }
+        if (node instanceof HashCollisionNode<E> hcn) {
+            return hcn.getData(0);
+        }
+        throw new NoSuchElementException();
+    }
+
+    public static <E> @NonNull E getLast(@NonNull Node<E> node) {
+        while (node instanceof BitmapIndexedNode<E> bxn) {
+            int nodeMap = bxn.nodeMap();
+            int dataMap = bxn.dataMap();
+            if ((nodeMap | dataMap) == 0) {
+                break;
+            }
+            int lastNodeBit = 32 - Integer.numberOfLeadingZeros(nodeMap);
+            int lastDataBit = 32 - Integer.numberOfLeadingZeros(dataMap);
+            if (lastNodeBit > lastDataBit) {
+                node = node.getNode(node.nodeArity() - 1);
+            } else {
+                return node.getData(node.dataArity() - 1);
+            }
+        }
+        if (node instanceof HashCollisionNode<E> hcn) {
+            return hcn.getData(hcn.dataArity() - 1);
+        }
+        throw new NoSuchElementException();
+    }
+
     static int mask(int dataHash, int shift) {
         return (dataHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(UniqueId mutator,
+    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(IdentityObject mutator,
                                                             K k0, int keyHash0,
                                                             K k1, int keyHash1,
                                                             int shift) {
@@ -154,7 +197,7 @@ public abstract class Node<D> {
 
     abstract @Nullable D getData(int index);
 
-    @Nullable UniqueId getMutator() {
+    @Nullable IdentityObject getMutator() {
         return null;
     }
 
@@ -166,8 +209,8 @@ public abstract class Node<D> {
 
     abstract boolean hasNodes();
 
-    boolean isAllowedToUpdate(@Nullable UniqueId y) {
-        UniqueId x = getMutator();
+    boolean isAllowedToUpdate(@Nullable IdentityObject y) {
+        IdentityObject x = getMutator();
         return x != null && x == y;
     }
 
@@ -190,7 +233,7 @@ public abstract class Node<D> {
      * @param equalsFunction a function that tests data objects for equality
      * @return the updated trie
      */
-    abstract @NonNull Node<D> remove(@Nullable UniqueId mutator, D data,
+    abstract @NonNull Node<D> remove(@Nullable IdentityObject mutator, D data,
                                      int dataHash, int shift,
                                      @NonNull ChangeEvent<D> details,
                                      @NonNull BiPredicate<D, D> equalsFunction);
@@ -224,7 +267,7 @@ public abstract class Node<D> {
      *                        object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> update(@Nullable UniqueId mutator, D data,
+    abstract @NonNull Node<D> update(@Nullable IdentityObject mutator, D data,
                                      int dataHash, int shift, @NonNull ChangeEvent<D> details,
                                      @NonNull BiFunction<D, D, D> replaceFunction,
                                      @NonNull BiPredicate<D, D> equalsFunction,
