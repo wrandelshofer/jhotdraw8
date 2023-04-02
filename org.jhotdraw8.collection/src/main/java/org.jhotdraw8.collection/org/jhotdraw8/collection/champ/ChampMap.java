@@ -186,7 +186,6 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return size == 0;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return Spliterators.iterator(spliterator());
@@ -194,16 +193,12 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
 
     @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
-        int keyHash = Objects.hashCode(key);
-        ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        BitmapIndexedNode<SimpleImmutableEntry<K, V>> newRootNode = update(null, new SimpleImmutableEntry<>(key, value),
-                keyHash, 0, details,
+        var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
+        var newRootNode = update(null, new SimpleImmutableEntry<>(key, value),
+                Objects.hashCode(key), 0, details,
                 getUpdateFunction(), ChampMap::keyEquals, ChampMap::keyHash);
         if (details.isModified()) {
-            if (details.isReplaced()) {
-                return new ChampMap<>(newRootNode, size);
-            }
-            return new ChampMap<>(newRootNode, size + 1);
+            return new ChampMap<>(newRootNode, details.isReplaced() ? size : size + 1);
         }
         return this;
     }
@@ -222,8 +217,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         var t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            var details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
-            modified |= details.isModified();
+            modified |= t.putAndGiveDetails(entry.getKey(), entry.getValue()).isModified();
         }
         return modified ? t.toImmutable() : this;
     }
@@ -231,8 +225,8 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     @Override
     public @NonNull ChampMap<K, V> remove(@NonNull K key) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        BitmapIndexedNode<SimpleImmutableEntry<K, V>> newRootNode =
+        var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
+        var newRootNode =
                 remove(null, new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         ChampMap::keyEquals);
         if (details.isModified()) {
@@ -246,11 +240,10 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         if (isEmpty()) {
             return this;
         }
-        MutableChampMap<K, V> t = this.toMutable();
+        var t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
-            ChangeEvent<SimpleImmutableEntry<K, V>> details = t.removeAndGiveDetails(key);
-            modified |= details.isModified();
+            modified |= t.removeAndGiveDetails(key).isModified();
         }
         return modified ? t.toImmutable() : this;
     }
@@ -263,7 +256,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         if (c.isEmpty()) {
             return of();
         }
-        MutableChampMap<K, V> t = this.toMutable();
+        var t = this.toMutable();
         boolean modified = false;
         for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {
