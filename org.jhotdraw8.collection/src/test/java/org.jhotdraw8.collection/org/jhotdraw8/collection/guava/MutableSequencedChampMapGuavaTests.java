@@ -24,10 +24,10 @@ import java.util.Map;
  * Tests {@link MutableSequencedChampMap} with the Guava test suite.
  */
 
-public class SequencedChampMapGuavaTests {
+public class MutableSequencedChampMapGuavaTests {
 
     public static Test suite() {
-        return new SequencedChampMapGuavaTests().allTests();
+        return new MutableSequencedChampMapGuavaTests().allTests();
     }
 
     public Test allTests() {

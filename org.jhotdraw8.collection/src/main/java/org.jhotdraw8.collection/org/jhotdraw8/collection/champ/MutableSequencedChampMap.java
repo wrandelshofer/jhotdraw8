@@ -28,10 +28,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.champ.SequencedChampSet.seqHash;
+import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 
 /**
  * Implements a mutable map using two Compressed Hash-Array Mapped Prefix-trees
@@ -233,7 +231,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         K key = (K) o;
         return Node.NO_DATA != root.find(new SequencedEntry<>(key),
                 Objects.hashCode(key), 0,
-                getEqualsFunction());
+                SequencedEntry::keyEquals);
     }
 
     private @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
@@ -296,19 +294,11 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     public V get(Object o) {
         Object result = root.find(
                 new SequencedEntry<>((K) o),
-                Objects.hashCode(o), 0, getEqualsFunction());
+                Objects.hashCode(o), 0, SequencedEntry::keyEquals);
         return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
     }
 
-    @NonNull
-    private BiPredicate<SequencedEntry<K, V>, SequencedEntry<K, V>> getEqualsFunction() {
-        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    }
 
-    @NonNull
-    private ToIntFunction<SequencedEntry<K, V>> getHashFunction() {
-        return (a) -> Objects.hashCode(a.getKey());
-    }
 
     @NonNull
     private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToFirstFunction() {
@@ -392,18 +382,18 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
-                getEqualsFunction(), getHashFunction());
+                SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
             boolean isReplaced = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(first), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, SequencedChampMap::seqHashCode);
+                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isReplaced) {
                 sequenceRoot = sequenceRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        Objects::equals);
+                        SequencedData::seqEquals);
 
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
@@ -431,18 +421,18 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
-                getEqualsFunction(), getHashFunction());
+                SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
             boolean isReplaced = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, SequencedChampMap::seqHashCode);
+                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isReplaced) {
                 sequenceRoot = sequenceRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        Objects::equals);
+                        SequencedData::seqEquals);
 
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
@@ -484,7 +474,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         IdentityObject mutator = getOrCreateMutator();
         root = root.remove(mutator,
                 new SequencedEntry<>(key), Objects.hashCode(key), 0, details,
-                getEqualsFunction());
+                SequencedEntry::keyEquals);
         if (details.isModified()) {
             size--;
             modCount++;
@@ -492,7 +482,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
             int seq = elem.getSequenceNumber();
             sequenceRoot = sequenceRoot.remove(mutator,
                     elem,
-                    seqHash(seq), 0, details, Objects::equals);
+                    seqHash(seq), 0, details, SequencedData::seqEquals);
             if (seq == last - 1) {
                 last--;
             }
@@ -511,9 +501,11 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (SequencedChampSet.mustRenumber(size, first, last)) {
-            root = SequencedEntry.renumber(size, root, sequenceRoot, getOrCreateMutator(),
-                    getHashFunction(), getEqualsFunction());
+        if (SequencedData.mustRenumber(size, first, last)) {
+            root = SequencedData.renumber(size, root, sequenceRoot, getOrCreateMutator(),
+                    SequencedEntry::keyHash, SequencedEntry::keyEquals,
+                    (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
+            sequenceRoot = SequencedData.buildSequenceRoot(root, mutator);
             last = size;
             first = -1;
         }

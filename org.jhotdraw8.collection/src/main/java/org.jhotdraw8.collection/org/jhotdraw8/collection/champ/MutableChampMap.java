@@ -21,9 +21,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -151,7 +149,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     public boolean containsKey(@Nullable Object o) {
         return root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0,
-                getEqualsFunction()) != Node.NO_DATA;
+                ChampMap::keyEquals) != Node.NO_DATA;
     }
 
     @Override
@@ -177,19 +175,10 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
         Object result = root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
-                Objects.hashCode(o), 0, getEqualsFunction());
+                Objects.hashCode(o), 0, ChampMap::keyEquals);
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
-    @NonNull
-    private BiPredicate<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getEqualsFunction() {
-        return (a, b) -> Objects.equals(a.getKey(), b.getKey());
-    }
-
-    @NonNull
-    private ToIntFunction<AbstractMap.SimpleImmutableEntry<K, V>> getHashFunction() {
-        return (a) -> Objects.hashCode(a.getKey());
-    }
 
     @NonNull
     private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
@@ -219,8 +208,8 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.update(getOrCreateMutator(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
                 getUpdateFunction(),
-                getEqualsFunction(),
-                getHashFunction());
+                ChampMap::keyEquals,
+                ChampMap::keyHash);
         if (details.isModified() && !details.isReplaced()) {
             size += 1;
             modCount++;
@@ -239,7 +228,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         int keyHash = Objects.hashCode(key);
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.remove(getOrCreateMutator(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
-                getEqualsFunction());
+                ChampMap::keyEquals);
         if (details.isModified()) {
             size = size - 1;
             modCount++;

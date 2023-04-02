@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
@@ -134,8 +133,6 @@ public abstract class Node<D> {
                                                             K k0, int keyHash0,
                                                             K k1, int keyHash1,
                                                             int shift) {
-        assert !Objects.equals(k0, k1);
-
         if (shift >= HASH_CODE_LENGTH) {
             Object[] entries = new Object[2];
             entries[0] = k0;

@@ -21,8 +21,6 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.ToIntFunction;
 
 
 /**
@@ -128,7 +126,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     public @NonNull ChampSet<E> add(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, details, getUpdateFunction(), getEqualsFunction(), getHashFunction());
+        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, details, getUpdateFunction(), Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size + 1);
         }
@@ -160,7 +158,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return find((E) o, Objects.hashCode(o), 0, getEqualsFunction()) != Node.NO_DATA;
+        return find((E) o, Objects.hashCode(o), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -176,16 +174,6 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
             return size == that.size && equivalent(that);
         }
         return ReadOnlySet.setEquals(this, other);
-    }
-
-    @NonNull
-    private BiPredicate<E, E> getEqualsFunction() {
-        return Objects::equals;
-    }
-
-    @NonNull
-    private ToIntFunction<E> getHashFunction() {
-        return Objects::hashCode;
     }
 
     @NonNull
@@ -211,7 +199,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     public @NonNull ChampSet<E> remove(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, getEqualsFunction());
+        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size - 1);
         }

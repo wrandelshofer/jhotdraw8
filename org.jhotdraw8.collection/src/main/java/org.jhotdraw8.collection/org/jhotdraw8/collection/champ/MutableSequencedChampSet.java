@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 
-import static org.jhotdraw8.collection.champ.SequencedChampSet.seqHash;
+import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -192,11 +192,11 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(first), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, SequencedChampSet::seqHashCode);
+                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isUpdated) {
                 sequenceRoot = sequenceRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        Objects::equals);
+                        SequencedData::seqEquals);
 
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
@@ -230,11 +230,11 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, SequencedChampSet::seqHashCode);
+                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isUpdated) {
                 sequenceRoot = sequenceRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        Objects::equals);
+                        SequencedData::seqEquals);
 
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
@@ -353,7 +353,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
             int seq = elem.getSequenceNumber();
             sequenceRoot = sequenceRoot.remove(mutator,
                     elem,
-                    seqHash(seq), 0, details, Objects::equals);
+                    seqHash(seq), 0, details, SequencedData::seqEquals);
             if (seq == last - 1) {
                 last--;
             }
@@ -380,15 +380,14 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
     }
 
     /**
-     * Renumbers the sequence numbers if they have overflown,
-     * or if the extent of the sequence numbers is more than
-     * 4 times the size of the set.
+     * Renumbers the sequence numbers if they have overflown.
      */
     private void renumber() {
-        if (SequencedChampSet.mustRenumber(size, first, last)) {
+        if (SequencedData.mustRenumber(size, first, last)) {
             IdentityObject mutator = getOrCreateIdentity();
-            root = SequencedElement.renumber(size, root, sequenceRoot, mutator,
-                    Objects::hashCode, Objects::equals);
+            root = SequencedData.renumber(size, root, sequenceRoot, mutator,
+                    Objects::hashCode, Objects::equals,
+                    (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             sequenceRoot = SequencedChampSet.buildSequenceRoot(root, mutator);
             last = size;
             first = -1;

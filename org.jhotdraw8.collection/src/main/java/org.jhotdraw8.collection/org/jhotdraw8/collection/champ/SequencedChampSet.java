@@ -26,6 +26,9 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 
+import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
+import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
+
 
 /**
  * Implements a mutable set using two Compressed Hash-Array Mapped Prefix-trees
@@ -152,8 +155,8 @@ public class SequencedChampSet<E>
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         for (KeyIterator<SequencedElement<E>> i = new KeyIterator<>(root, null); i.hasNext(); ) {
             SequencedElement<E> elem = i.next();
-            seqRoot = seqRoot.update(mutator, elem, SequencedChampSet.seqHash(elem.getSequenceNumber()),
-                    0, details, (oldK, newK) -> oldK, Object::equals, SequencedChampSet::seqHashCode);
+            seqRoot = seqRoot.update(mutator, elem, SequencedData.seqHash(elem.getSequenceNumber()),
+                    0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
         }
         return seqRoot;
     }
@@ -178,24 +181,7 @@ public class SequencedChampSet<E>
         return tr.toImmutable();
     }
 
-    /**
-     * Returns true if the sequenced elements must be renumbered because
-     * {@code first} or {@code last} are at risk of overflowing.
-     * <p>
-     * {@code first} and {@code last} are estimates of the first and last
-     * sequence numbers in the trie. The estimated extent may be larger
-     * than the actual extent, but not smaller.
-     *
-     * @param size  the size of the trie
-     * @param first the estimated first sequence number
-     * @param last  the estimated last sequence number
-     * @return
-     */
-    static boolean mustRenumber(int size, int first, int last) {
-        return size == 0 && (first != -1 || last != 0)
-                || last > Integer.MAX_VALUE - 2
-                || first < Integer.MIN_VALUE + 2;
-    }
+
 
 
     /**
@@ -231,7 +217,7 @@ public class SequencedChampSet<E>
 
     @Override
     public @NonNull SequencedChampSet<E> add(@Nullable E key) {
-        return copyAddLast(key, false);
+        return addLast(key, false);
     }
 
     @Override
@@ -252,11 +238,11 @@ public class SequencedChampSet<E>
     }
 
     public @NonNull SequencedChampSet<E> addFirst(@Nullable E key) {
-        return copyAddFirst(key, true);
+        return addFirst(key, true);
     }
 
     public @NonNull SequencedChampSet<E> addLast(@Nullable E key) {
-        return copyAddLast(key, true);
+        return addLast(key, true);
     }
 
     @Override
@@ -270,8 +256,8 @@ public class SequencedChampSet<E>
         return find(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
-    private @NonNull SequencedChampSet<E> copyAddFirst(@Nullable E e,
-                                                       boolean moveToFirst) {
+    private @NonNull SequencedChampSet<E> addFirst(@Nullable E e,
+                                                   boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         SequencedElement<E> newElem = new SequencedElement<>(e, first);
         var newRoot = update(null, newElem,
@@ -289,11 +275,11 @@ public class SequencedChampSet<E>
             newSeqRoot = newSeqRoot.update(mutator,
                     newElem, seqHash(first), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, SequencedChampSet::seqHashCode);
+                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isUpdated) {
                 newSeqRoot = newSeqRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        Objects::equals);
+                        SequencedData::seqEquals);
 
                 newFirst = details.getData().getSequenceNumber() == newFirst ? newFirst : newFirst - 1;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast - 1 : newLast;
@@ -306,8 +292,8 @@ public class SequencedChampSet<E>
         return this;
     }
 
-    private @NonNull SequencedChampSet<E> copyAddLast(@Nullable E e,
-                                                      boolean moveToLast) {
+    private @NonNull SequencedChampSet<E> addLast(@Nullable E e,
+                                                  boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         SequencedElement<E> newElem = new SequencedElement<>(e, last);
         var newRoot = update(
@@ -326,11 +312,11 @@ public class SequencedChampSet<E>
             newSeqRoot = newSeqRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, SequencedChampSet::seqHashCode);
+                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isUpdated) {
                 newSeqRoot = newSeqRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        Objects::equals);
+                        SequencedData::seqEquals);
 
                 newFirst = details.getData().getSequenceNumber() == newFirst - 1 ? newFirst - 1 : newFirst;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast : newLast + 1;
@@ -343,7 +329,7 @@ public class SequencedChampSet<E>
         return this;
     }
 
-    private @NonNull SequencedChampSet<E> copyRemove(@Nullable E key, int newFirst, int newLast) {
+    private @NonNull SequencedChampSet<E> remove(@Nullable E key, int newFirst, int newLast) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
@@ -355,7 +341,7 @@ public class SequencedChampSet<E>
             int seq = oldElem.getSequenceNumber();
             newSeqRoot = newSeqRoot.remove(null,
                     oldElem,
-                    seqHash(seq), 0, details, Objects::equals);
+                    seqHash(seq), 0, details, SequencedData::seqEquals);
             if (seq == newFirst) {
                 newFirst++;
             }
@@ -458,7 +444,7 @@ public class SequencedChampSet<E>
 
     @Override
     public @NonNull SequencedChampSet<E> remove(@Nullable E key) {
-        return copyRemove(key, first, last);
+        return remove(key, first, last);
     }
 
     @SuppressWarnings("unchecked")
@@ -489,13 +475,13 @@ public class SequencedChampSet<E>
     @Override
     public SequencedChampSet<E> removeFirst() {
         SequencedElement<E> k = Node.getFirst(sequenceRoot);
-        return copyRemove(k.getElement(), k.getSequenceNumber() + 1, last);
+        return remove(k.getElement(), k.getSequenceNumber() + 1, last);
     }
 
     @Override
     public SequencedChampSet<E> removeLast() {
         SequencedElement<E> k = Node.getLast(sequenceRoot);
-        return copyRemove(k.getElement(), first, k.getSequenceNumber());
+        return remove(k.getElement(), first, k.getSequenceNumber());
     }
 
 
@@ -516,7 +502,9 @@ public class SequencedChampSet<E>
             int size, int first, int last) {
         if (mustRenumber(size, first, last)) {
             IdentityObject mutator = new IdentityObject();
-            BitmapIndexedNode<SequencedElement<E>> renumberedRoot = SequencedElement.renumber(size, root, seqRoot, mutator, Objects::hashCode, Objects::equals);
+            BitmapIndexedNode<SequencedElement<E>> renumberedRoot = SequencedData.renumber(
+                    size, root, seqRoot, mutator, Objects::hashCode, Objects::equals,
+                    (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             BitmapIndexedNode<SequencedElement<E>> renumberedSeqRoot = buildSequenceRoot(renumberedRoot, mutator);
             return new SequencedChampSet<>(
                     renumberedRoot, renumberedSeqRoot,
@@ -585,29 +573,4 @@ public class SequencedChampSet<E>
     }
 
 
-    /**
-     * Computes a hash code from the sequence number, so that we can
-     * use it for iteration in a CHAMP trie.
-     * <p>
-     * Convert the sequence number to unsigned 32 by adding Integer.MIN_VALUE.
-     * Then reorders its bits from 66666555554444433333222221111100 to
-     * 00111112222233333444445555566666.
-     *
-     * @param sequenceNumber a sequence number
-     * @return a hash code
-     */
-    static int seqHash(int sequenceNumber) {
-        int u = sequenceNumber + Integer.MIN_VALUE;
-        return (u >>> 27)
-                | ((u & 0b00000_11111_00000_00000_00000_00000_00) >>> 17)
-                | ((u & 0b00000_00000_11111_00000_00000_00000_00) >>> 7)
-                | ((u & 0b00000_00000_00000_11111_00000_00000_00) << 3)
-                | ((u & 0b00000_00000_00000_00000_11111_00000_00) << 13)
-                | ((u & 0b00000_00000_00000_00000_00000_11111_00) << 23)
-                | ((u & 0b00000_00000_00000_00000_00000_00000_11) << 30);
-    }
-
-    static <E> int seqHashCode(SequencedElement<E> e) {
-        return seqHash(e.getSequenceNumber());
-    }
 }
