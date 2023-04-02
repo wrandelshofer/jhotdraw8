@@ -149,11 +149,17 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
         return (ChampMap<K, V>) of().putAll(entries);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NonNull ImmutableMap<K, V> clear() {
+    public @NonNull ChampMap<K, V> clear() {
         return isEmpty() ? this : of();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(@Nullable Object o) {
@@ -313,6 +319,11 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
         return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
+    /**
+     * Creates a mutable copy of this map.
+     *
+     * @return a mutable CHAMP map
+     */
     @Override
     public @NonNull MutableChampMap<K, V> toMutable() {
         return new MutableChampMap<>(this);

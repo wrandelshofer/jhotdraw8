@@ -7,6 +7,12 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
+/**
+ * A spliterator that fails when a provided modification counter does not have an
+ * expected value.
+ *
+ * @param <E> the element type
+ */
 public class FailFastSpliterator<E> implements Spliterator<E> {
     private final @NonNull Spliterator<? extends E> s;
     private int expectedModCount;

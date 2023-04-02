@@ -248,6 +248,9 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
         return details.isModified();
     }
 
+    /**
+     * Removes all elements from this set.
+     */
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();

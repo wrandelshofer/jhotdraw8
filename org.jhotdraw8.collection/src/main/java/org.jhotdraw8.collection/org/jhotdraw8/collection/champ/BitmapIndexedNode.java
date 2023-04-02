@@ -38,7 +38,7 @@ class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull BitmapIndexedNode<K> emptyNode() {
+    static <K> @NonNull BitmapIndexedNode<K> emptyNode() {
         return (BitmapIndexedNode<K>) EMPTY_NODE;
     }
 
@@ -109,13 +109,13 @@ class BitmapIndexedNode<D> extends Node<D> {
         return Integer.bitCount(dataMap & (bitpos - 1));
     }
 
-    public int dataMap() {
+    int dataMap() {
         return dataMap;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean equivalent(@NonNull Object other) {
+    boolean equivalent(@NonNull Object other) {
         if (this == other) {
             return true;
         }
@@ -133,7 +133,7 @@ class BitmapIndexedNode<D> extends Node<D> {
 
 
     @Override
-    public @Nullable Object find(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
+    @Nullable Object find(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
         int bitpos = bitpos(mask(dataHash, shift));
         if ((nodeMap & bitpos) != 0) {
             return nodeAt(bitpos).find(key, dataHash, shift + BIT_PARTITION_SIZE, equalsFunction);
@@ -199,15 +199,15 @@ class BitmapIndexedNode<D> extends Node<D> {
         return Integer.bitCount(nodeMap & (bitpos - 1));
     }
 
-    public int nodeMap() {
+    int nodeMap() {
         return nodeMap;
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<D> remove(@Nullable IdentityObject mutator,
-                                                D data,
-                                                int dataHash, int shift,
-                                                @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
+    @NonNull BitmapIndexedNode<D> remove(@Nullable IdentityObject mutator,
+                                         D data,
+                                         int dataHash, int shift,
+                                         @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
@@ -257,13 +257,13 @@ class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<D> update(@Nullable IdentityObject mutator,
-                                                @Nullable D data,
-                                                int dataHash, int shift,
-                                                @NonNull ChangeEvent<D> details,
-                                                @NonNull BiFunction<D, D, D> replaceFunction,
-                                                @NonNull BiPredicate<D, D> equalsFunction,
-                                                @NonNull ToIntFunction<D> hashFunction) {
+    @NonNull BitmapIndexedNode<D> update(@Nullable IdentityObject mutator,
+                                         @Nullable D data,
+                                         int dataHash, int shift,
+                                         @NonNull ChangeEvent<D> details,
+                                         @NonNull BiFunction<D, D, D> replaceFunction,
+                                         @NonNull BiPredicate<D, D> equalsFunction,
+                                         @NonNull ToIntFunction<D> hashFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {

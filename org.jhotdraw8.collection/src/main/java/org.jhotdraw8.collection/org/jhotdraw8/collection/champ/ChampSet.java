@@ -150,8 +150,11 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return modified ? t.toImmutable() : this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NonNull ImmutableSet<E> clear() {
+    public @NonNull ChampSet<E> clear() {
         return isEmpty() ? this : of();
     }
 
@@ -258,6 +261,11 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return size;
     }
 
+    /**
+     * Creates a mutable copy of this set.
+     *
+     * @return a mutable CHAMP set
+     */
     @Override
     public @NonNull MutableChampSet<E> toMutable() {
         return new MutableChampSet<>(this);

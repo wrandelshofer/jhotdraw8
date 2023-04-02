@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.function.IntSupplier;
 
 /**
- * An iterator that fails fast if a modification counter does not have an
+ * An iterator that fails when a provided modification counter does not have an
  * expected value.
  *
  * @param <E> the element type

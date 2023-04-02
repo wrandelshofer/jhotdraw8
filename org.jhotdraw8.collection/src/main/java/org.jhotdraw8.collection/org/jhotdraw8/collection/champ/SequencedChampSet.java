@@ -245,6 +245,9 @@ public class SequencedChampSet<E>
         return addLast(key, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NonNull SequencedChampSet<E> clear() {
         return isEmpty() ? this : of();
@@ -545,6 +548,11 @@ public class SequencedChampSet<E>
         return size;
     }
 
+    /**
+     * Creates a mutable copy of this set.
+     *
+     * @return a mutable sequenced CHAMP set
+     */
     @Override
     public @NonNull MutableSequencedChampSet<E> toMutable() {
         return new MutableSequencedChampSet<>(this);

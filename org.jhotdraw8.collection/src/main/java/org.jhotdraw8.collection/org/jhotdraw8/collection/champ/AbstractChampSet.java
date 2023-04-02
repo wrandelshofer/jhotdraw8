@@ -95,7 +95,7 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
      *
      * @return a new unique id or the existing unique id.
      */
-    protected @NonNull IdentityObject getOrCreateIdentity() {
+    @NonNull IdentityObject getOrCreateIdentity() {
         if (mutator == null) {
             mutator = new IdentityObject();
         }

@@ -125,6 +125,9 @@ public class MutableChampSet<E> extends AbstractChampSet<E, E> {
         return details.isModified();
     }
 
+    /**
+     * Removes all elements from this set.
+     */
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();

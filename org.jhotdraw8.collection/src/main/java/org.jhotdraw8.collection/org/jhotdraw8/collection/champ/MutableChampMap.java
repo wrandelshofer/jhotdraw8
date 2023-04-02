@@ -128,6 +128,9 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         }
     }
 
+    /**
+     * Removes all mappings from this map.
+     */
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -152,6 +155,11 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
                 ChampMap::keyEquals) != Node.NO_DATA;
     }
 
+    /**
+     * Returns a {@link Set} view of the mappings contained in this map.
+     *
+     * @return a view of the mappings contained in this map
+     */
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
@@ -171,6 +179,13 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         );
     }
 
+    /**
+     * Returns the value to which the specified key is mapped,
+     * or {@code null} if this map contains no mapping for the key.
+     *
+     * @param o the key whose associated value is to be returned
+     * @return the associated value or null
+     */
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
@@ -206,7 +221,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     @NonNull ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> putAndGiveDetails(@Nullable K key, @Nullable V val) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.update(getOrCreateMutator(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
+        root = root.update(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
                 getUpdateFunction(),
                 ChampMap::keyEquals,
                 ChampMap::keyHash);
@@ -227,7 +242,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     @NonNull ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.remove(getOrCreateMutator(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
+        root = root.remove(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                 ChampMap::keyEquals);
         if (details.isModified()) {
             size = size - 1;

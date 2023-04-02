@@ -45,13 +45,13 @@ import java.util.function.ToIntFunction;
  *
  * @param <D> the type of the data objects that are stored in this trie
  */
-public abstract class Node<D> {
+abstract class Node<D> {
     /**
      * Represents no data.
      * We can not use {@code null}, because we allow storing null-data in the
      * trie.
      */
-    public static final Object NO_DATA = new Object();
+    static final Object NO_DATA = new Object();
     static final int HASH_CODE_LENGTH = 32;
     /**
      * Bit partition size in the range [1,5].

@@ -40,8 +40,24 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
                 : defaultValue;
     }
 
+    /**
+     * Returns {@code true} if this map contains a mapping for the specified
+     * key.
+     *
+     * @param key a key
+     * @return {@code true} if this map contains a mapping for the specified
+     * key
+     */
     boolean containsKey(@Nullable Object key);
 
+    /**
+     * Returns {@code true} if this map maps one or more keys to the
+     * specified value.
+     *
+     * @param value
+     * @return {@code true} if this map maps one or more keys to the
+     * specified value
+     */
     default boolean containsValue(@Nullable Object value) {
         for (Map.Entry<K, V> entry : this) {
             if (Objects.equals(value, entry.getValue())) {

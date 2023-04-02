@@ -204,6 +204,9 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NonNull SequencedChampMap<K, V> clear() {
         return isEmpty() ? this : of();
@@ -506,6 +509,11 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
         return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
     }
 
+    /**
+     * Creates a mutable copy of this map.
+     *
+     * @return a mutable sequenced CHAMP map
+     */
     @Override
     public @NonNull MutableSequencedChampMap<K, V> toMutable() {
         return new MutableSequencedChampMap<>(this);

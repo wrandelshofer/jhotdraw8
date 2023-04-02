@@ -26,6 +26,7 @@ import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
 
@@ -207,6 +208,9 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         }
     }
 
+    /**
+     * Removes all mappings from this map.
+     */
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
@@ -263,11 +267,21 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         return entrySpliterator(false);
     }
 
+    /**
+     * Returns a {@link Set} view of the mappings contained in this map.
+     *
+     * @return a view of the mappings contained in this map
+     */
     @Override
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
         return sequencedEntrySet();
     }
 
+    /**
+     * Returns a {@link SequencedSet} view of the mappings contained in this map.
+     *
+     * @return a view of the mappings contained in this map
+     */
     @Override
     public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
@@ -289,6 +303,13 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         return isEmpty() ? null : Node.getFirst(sequenceRoot);
     }
 
+    /**
+     * Returns the value to which the specified key is mapped,
+     * or {@code null} if this map contains no mapping for the key.
+     *
+     * @param o the key whose associated value is to be returned
+     * @return the associated value or null
+     */
     @Override
     @SuppressWarnings("unchecked")
     public V get(Object o) {
@@ -378,7 +399,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
                                                                 boolean moveToFirst) {
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         SequencedEntry<K, V> newElem = new SequencedEntry<>(key, val, first);
-        IdentityObject mutator = getOrCreateMutator();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
@@ -417,7 +438,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
             final K key, V val, boolean moveToLast) {
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         SequencedEntry<K, V> newElem = new SequencedEntry<>(key, val, last);
-        IdentityObject mutator = getOrCreateMutator();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
@@ -471,7 +492,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
 
     @NonNull ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        IdentityObject mutator = getOrCreateMutator();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.remove(mutator,
                 new SequencedEntry<>(key), Objects.hashCode(key), 0, details,
                 SequencedEntry::keyEquals);
@@ -502,7 +523,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
      */
     private void renumber() {
         if (SequencedData.mustRenumber(size, first, last)) {
-            root = SequencedData.renumber(size, root, sequenceRoot, getOrCreateMutator(),
+            root = SequencedData.renumber(size, root, sequenceRoot, getOrCreateIdentity(),
                     SequencedEntry::keyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             sequenceRoot = SequencedData.buildSequenceRoot(root, mutator);
