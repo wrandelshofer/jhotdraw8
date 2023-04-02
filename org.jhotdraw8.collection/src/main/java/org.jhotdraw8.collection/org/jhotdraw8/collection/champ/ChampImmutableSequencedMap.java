@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
@@ -202,7 +203,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
                 keyHash, 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
-        if (details.isUpdated()) {
+        if (details.isReplaced()) {
             return moveToFirst
                     ? renumber(newRootNode, size,
                     details.getData().getSequenceNumber() == first ? first : first - 1,
@@ -226,7 +227,7 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
                 keyHash, 0, details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
-        if (details.isUpdated()) {
+        if (details.isReplaced()) {
             return moveToLast
                     ? renumber(newRootNode, size,
                     details.getData().getSequenceNumber() == first ? first + 1 : first,
@@ -335,6 +336,10 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
         return iterator(false);
     }
 
+    @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+        return iterator(true);
+    }
+
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
         return Spliterators.spliterator(iterator(false), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
     }
@@ -380,7 +385,15 @@ public class ChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Sequence
 
     @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return this;//FIXME implement me
+        return new ReadOnlySequencedMapFacade<>(
+                this::reverseIterator,
+                this::iterator,
+                this::size,
+                this::containsKey,
+                this::get,
+                this::lastEntry,
+                this::firstEntry
+        );
     }
 
     @Override

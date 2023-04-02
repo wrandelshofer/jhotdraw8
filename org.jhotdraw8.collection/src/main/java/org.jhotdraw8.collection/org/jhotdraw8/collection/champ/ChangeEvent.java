@@ -53,7 +53,7 @@ class ChangeEvent<D> {
     }
 
     /**
-     * Call this method to indicate that an element has been added.
+     * Call this method to indicate that a data element has been added.
      */
     void setAdded() {
         this.type = Type.ADDED;
@@ -67,9 +67,9 @@ class ChangeEvent<D> {
     }
 
     /**
-     * Returns true if the value of an element has been updated.
+     * Returns true if the data element has been replaced.
      */
-    boolean isUpdated() {
+    boolean isReplaced() {
         return type == Type.REPLACED;
     }
 }

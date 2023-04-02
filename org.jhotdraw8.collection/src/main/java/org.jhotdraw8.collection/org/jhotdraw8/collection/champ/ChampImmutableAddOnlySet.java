@@ -34,7 +34,7 @@ public abstract class ChampImmutableAddOnlySet<E> implements ImmutableAddOnlySet
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
     /**
-     * Creates a new empty set.
+     * Constructs a new empty set.
      */
     ChampImmutableAddOnlySet() {
     }

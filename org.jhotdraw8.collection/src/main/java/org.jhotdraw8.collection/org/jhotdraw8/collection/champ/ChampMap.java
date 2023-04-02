@@ -89,6 +89,9 @@ import java.util.function.ToIntFunction;
 public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
     private final static long serialVersionUID = 0L;
 
+    /**
+     * Constructs a new empty map.
+     */
     public ChampMap() {
         root = BitmapIndexedNode.emptyNode();
     }
@@ -218,7 +221,7 @@ public class ChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImm
                 getUpdateFunction(),
                 getEqualsFunction(),
                 getHashFunction());
-        if (details.isModified() && !details.isUpdated()) {
+        if (details.isModified() && !details.isReplaced()) {
             size += 1;
             modCount++;
         }

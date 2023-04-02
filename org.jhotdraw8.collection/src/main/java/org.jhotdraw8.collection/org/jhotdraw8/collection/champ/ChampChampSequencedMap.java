@@ -140,6 +140,9 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
     private @NonNull BitmapIndexedNode<SequencedEntry<K, V>> sequenceRoot;
 
 
+    /**
+     * Constructs a new empty map.
+     */
     public ChampChampSequencedMap() {
         root = BitmapIndexedNode.emptyNode();
         sequenceRoot = BitmapIndexedNode.emptyNode();
@@ -350,7 +353,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
         if (isEmpty()) {
             return null;
         }
-        SequencedEntry<K, V> entry = HeapSequencedIterator.getFirst(root, first, last);
+        SequencedEntry<K, V> entry = Node.getFirst(sequenceRoot);
         remove(entry.getKey());
         first = entry.getSequenceNumber();
         renumber();
@@ -362,7 +365,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
         if (isEmpty()) {
             return null;
         }
-        SequencedEntry<K, V> entry = HeapSequencedIterator.getLast(root, first, last);
+        SequencedEntry<K, V> entry = Node.getLast(sequenceRoot);
         remove(entry.getKey());
         last = entry.getSequenceNumber();
         renumber();
@@ -392,7 +395,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
                 getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(first - 1), 0, details,
                     getUpdateFunction(),
@@ -431,7 +434,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
                 getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),

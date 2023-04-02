@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
-import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
+import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
@@ -128,6 +128,9 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
      */
     final int first;
     final transient int size;
+    /**
+     * The root of the CHAMP trie for the sequence numbers.
+     */
     final @NonNull BitmapIndexedNode<SequencedEntry<K, V>> sequenceRoot;
 
     ChampChampImmutableSequencedMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
@@ -233,7 +236,7 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
         if (details.isModified()) {
             IdentityObject mutator = new IdentityObject();
             SequencedEntry<K, V> oldEntry = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             newSeqRoot = newSeqRoot.update(mutator,
                     newEntry, seqHash(first - 1), 0, details,
                     getUpdateFunction(),
@@ -281,7 +284,7 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
         if (details.isModified()) {
             IdentityObject mutator = new IdentityObject();
             SequencedEntry<K, V> oldEntry = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             newSeqRoot = newSeqRoot.update(mutator,
                     newEntry, seqHash(last), 0, details,
                     getUpdateFunction(),
@@ -389,23 +392,18 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
         return size == 0;
     }
 
-    private @NonNull Iterator<Map.Entry<K, V>> iterator(boolean reversed) {
-        Enumerator<Map.Entry<K, V>> i;
-        if (reversed) {
-            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
-        } else {
-            i = new KeyEnumeratorSpliterator<>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
-        }
-        return new IteratorFacade<>(i, null);
-    }
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return iterator(false);
+        return new IteratorFacade<>(new KeyEnumeratorSpliterator<SequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
+    }
+
+    @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+        return new IteratorFacade<>(new ReversedKeyEnumeratorSpliterator<SequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return Spliterators.spliterator(iterator(false), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
+        return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT);
     }
 
     @Override
@@ -449,7 +447,15 @@ public class ChampChampImmutableSequencedMap<K, V> extends BitmapIndexedNode<Seq
 
     @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return this;//FIXME implement me
+        return new ReadOnlySequencedMapFacade<>(
+                this::reverseIterator,
+                this::iterator,
+                this::size,
+                this::containsKey,
+                this::get,
+                this::lastEntry,
+                this::firstEntry
+        );
     }
 
     @Override

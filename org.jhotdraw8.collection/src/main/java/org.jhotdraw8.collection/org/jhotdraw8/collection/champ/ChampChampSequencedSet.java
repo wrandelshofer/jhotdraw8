@@ -47,9 +47,9 @@ import static org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet.seq
  *     this set</li>
  *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     set and in the clone</li>
- *     <li>iterator creation: O(N)</li>
+ *     <li>iterator creation: O(1)</li>
  *     <li>iterator.next: O(1) with bucket sort, O(log N) with heap sort</li>
- *     <li>getFirst, getLast: O(N)</li>
+ *     <li>getFirst, getLast: O(1)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -84,9 +84,17 @@ import static org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet.seq
  * <p>
  * The renumbering is why the {@code add} is O(1) only in an amortized sense.
  * <p>
- * The iterator of the set is a priority queue, that orders the entries by
- * their stored insertion counter value. This is why {@code iterator.next()}
- * is O(log n).
+ * To support iteration, a second CHAMP trie is maintained. The second CHAMP
+ * trie has the same contents as the first. However, we use the sequence number
+ * for computing the hash code of an element.
+ * <p>
+ * In this implementation, a hash code has a length of
+ * 32 bits, and is split up in little-endian order into 7 parts of
+ * 5 bits (the last part contains the remaining bits).
+ * <p>
+ * We convert the sequence number to unsigned 32 by adding Integer.MIN_VALUE
+ * to it. And then we reorder its bits from
+ * 66666555554444433333222221111100 to 00111112222233333444445555566666.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access this set concurrently, and at least
@@ -128,7 +136,7 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
     private @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
 
     /**
-     * Constructs an empty set.
+     * Constructs a new empty set.
      */
     public ChampChampSequencedSet() {
         root = BitmapIndexedNode.emptyNode();
@@ -180,7 +188,7 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             SequencedElement<E> oldElem = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(first - 1), 0, details,
                     getUpdateFunction(),
@@ -218,7 +226,7 @@ public class ChampChampSequencedSet<E> extends AbstractChampSet<E, SequencedElem
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             SequencedElement<E> oldElem = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),

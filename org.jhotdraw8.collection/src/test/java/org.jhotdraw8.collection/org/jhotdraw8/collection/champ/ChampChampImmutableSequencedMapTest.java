@@ -14,28 +14,28 @@ import java.util.Map;
 
 public class ChampChampImmutableSequencedMapTest extends AbstractImmutableSequencedMapTest {
     @Override
-    protected <K, V> @NonNull ChampChampImmutableSequencedMap<K, V> newInstance() {
-        return ChampChampImmutableSequencedMap.of();
+    protected <K, V> @NonNull LinkedChampChampMap<K, V> newInstance() {
+        return LinkedChampChampMap.of();
     }
 
 
     @Override
-    protected <K, V> @NonNull ChampChampImmutableSequencedMap<K, V> newInstance(@NonNull Map<K, V> map) {
-        return ChampChampImmutableSequencedMap.<K, V>of().putAll(map);
+    protected <K, V> @NonNull LinkedChampChampMap<K, V> newInstance(@NonNull Map<K, V> map) {
+        return LinkedChampChampMap.<K, V>of().putAll(map);
     }
 
     @Override
-    protected <K, V> @NonNull ChampChampImmutableSequencedMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
-        return ChampChampImmutableSequencedMap.<K, V>of().putAll(map);
+    protected <K, V> @NonNull LinkedChampChampMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
+        return LinkedChampChampMap.<K, V>of().putAll(map);
     }
 
     @Override
-    protected @NonNull <K, V> ChampChampImmutableSequencedMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return ChampChampImmutableSequencedMap.<K, V>copyOf(m);
+    protected @NonNull <K, V> LinkedChampChampMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
+        return LinkedChampChampMap.<K, V>copyOf(m);
     }
 
     @Override
-    protected <K, V> @NonNull ChampChampImmutableSequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
-        return ChampChampImmutableSequencedMap.<K, V>of().putAll(entries);
+    protected <K, V> @NonNull LinkedChampChampMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
+        return LinkedChampChampMap.<K, V>of().putAll(entries);
     }
 }

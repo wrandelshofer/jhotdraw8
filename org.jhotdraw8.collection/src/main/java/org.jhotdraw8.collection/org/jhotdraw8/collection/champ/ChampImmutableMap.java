@@ -224,7 +224,7 @@ public class ChampImmutableMap<K, V> extends BitmapIndexedNode<AbstractMap.Simpl
                 keyHash, 0, details,
                 getUpdateFunction(), getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            if (details.isReplaced()) {
                 return new ChampImmutableMap<>(newRootNode, size);
             }
             return new ChampImmutableMap<>(newRootNode, size + 1);

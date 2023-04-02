@@ -122,6 +122,9 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
      */
     private int first = -1;
 
+    /**
+     * Constructs a new empty map.
+     */
     public ChampSequencedMap() {
         root = BitmapIndexedNode.emptyNode();
     }
@@ -349,7 +352,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            if (details.isReplaced()) {
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -377,7 +380,7 @@ public class ChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEnt
                 getEqualsFunction(), getHashFunction());
 
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            if (details.isReplaced()) {
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
             } else {

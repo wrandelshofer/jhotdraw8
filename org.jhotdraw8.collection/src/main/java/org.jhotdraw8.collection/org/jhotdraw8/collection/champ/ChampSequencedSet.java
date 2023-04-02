@@ -120,7 +120,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     private int first = -1;
 
     /**
-     * Constructs an empty set.
+     * Constructs a new empty set.
      */
     public ChampSequencedSet() {
         root = BitmapIndexedNode.emptyNode();
@@ -166,7 +166,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            if (details.isReplaced()) {
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -192,7 +192,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            if (details.isUpdated()) {
+            if (details.isReplaced()) {
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
             } else {

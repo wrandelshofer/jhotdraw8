@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-import org.jhotdraw8.collection.champ.ChampChampImmutableSequencedMap;
+import org.jhotdraw8.collection.champ.LinkedChampChampMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -45,12 +45,12 @@ public class ChampChampImmutableSequencedMapJmh {
     private final int mask = ~64;
 
     private BenchmarkData data;
-    private ChampChampImmutableSequencedMap<Key, Boolean> mapA;
+    private LinkedChampChampMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ChampChampImmutableSequencedMap.of();
+        mapA = LinkedChampChampMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }
@@ -66,13 +66,13 @@ public class ChampChampImmutableSequencedMapJmh {
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedMap<Key, Boolean> mRemoveThenAdd() {
+    public LinkedChampChampMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedMap<Key, Boolean> mPut() {
+    public LinkedChampChampMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.put(key, Boolean.FALSE);
     }
@@ -95,12 +95,12 @@ public class ChampChampImmutableSequencedMapJmh {
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedMap<Key, Boolean> mTail() {
+    public LinkedChampChampMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedMap<Key, Boolean> mCopyOf() {
-        return ChampChampImmutableSequencedMap.<Key, Boolean>copyOf(data.mapA);
+    public LinkedChampChampMap<Key, Boolean> mCopyOf() {
+        return LinkedChampChampMap.<Key, Boolean>copyOf(data.mapA);
     }
 }

@@ -114,6 +114,9 @@ public class ChampChampImmutableSequencedSet<E>
     private static final @NonNull ChampChampImmutableSequencedSet<?> EMPTY = new ChampChampImmutableSequencedSet<>(
             BitmapIndexedNode.emptyNode(), BitmapIndexedNode.emptyNode(), 0, -1, 0);
 
+    /**
+     * The root of the CHAMP trie for the sequence numbers.
+     */
     final @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
 
     final int size;
@@ -282,7 +285,7 @@ public class ChampChampImmutableSequencedSet<E>
         if (details.isModified()) {
             IdentityObject mutator = new IdentityObject();
             SequencedElement<E> oldElem = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             newSeqRoot = newSeqRoot.update(mutator,
                     newElem, seqHash(first - 1), 0, details,
                     getUpdateFunction(),
@@ -319,7 +322,7 @@ public class ChampChampImmutableSequencedSet<E>
         if (details.isModified()) {
             IdentityObject mutator = new IdentityObject();
             SequencedElement<E> oldElem = details.getData();
-            boolean isUpdated = details.isUpdated();
+            boolean isUpdated = details.isReplaced();
             newSeqRoot = newSeqRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),
@@ -506,7 +509,6 @@ public class ChampChampImmutableSequencedSet<E>
      * @param last    the estimated last sequence number
      * @return a new {@link ChampChampImmutableSequencedSet} instance
      */
-
     @NonNull
     private ChampChampImmutableSequencedSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,

@@ -85,7 +85,7 @@ public class ChampSet<E> extends AbstractChampSet<E, E> {
     private final static long serialVersionUID = 0L;
 
     /**
-     * Constructs an empty set.
+     * Constructs a new empty set.
      */
     public ChampSet() {
         root = BitmapIndexedNode.emptyNode();
