@@ -10,7 +10,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
+import org.jhotdraw8.collection.champ.ChampSet;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.manager.StylesheetsManager;
@@ -116,7 +116,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     @Override
     public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
-            return ChampImmutableSequencedSet.of();
+            return ChampSet.of();
         }
         return new ReadOnlySetFacade<>(layoutObservers);
     }

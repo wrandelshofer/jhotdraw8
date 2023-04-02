@@ -17,7 +17,7 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
-import org.jhotdraw8.collection.champ.ChampImmutableMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 
@@ -145,7 +145,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
         // Open the file
         try {
-            v.read(uri, format, ChampImmutableMap.of(), false, workState).whenComplete((actualFormat, exception) -> {
+            v.read(uri, format, ChampMap.of(), false, workState).whenComplete((actualFormat, exception) -> {
                 if (exception instanceof CancellationException) {
                     v.removeDisabler(workState);
                     v.setURI(oldUri);

@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class ChampImmutableAddOnlySetTest {
+public class AddOnlyChampSetTest {
 
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTests() {
@@ -57,8 +57,8 @@ public class ChampImmutableAddOnlySetTest {
     private void testCopyAddAndOfWith0Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
-        ChampImmutableAddOnlySet<HashCollider> actual = ChampImmutableAddOnlySet.of();
-        ChampImmutableAddOnlySet<HashCollider> newActual;
+        AddOnlyChampSet<HashCollider> actual = AddOnlyChampSet.of();
+        AddOnlyChampSet<HashCollider> newActual;
 
         // GIVEN: a set with values1
         for (HashCollider v : values1) {
@@ -77,8 +77,8 @@ public class ChampImmutableAddOnlySetTest {
     private void testCopyAddAndOfWith1Arg(LinkedHashSet<HashCollider> values1, LinkedHashSet<HashCollider> values2) {
         HashCollider firstValue1 = values1.iterator().next();
         HashCollider firstValue2 = values2.iterator().next();
-        ChampImmutableAddOnlySet<HashCollider> actual = ChampImmutableAddOnlySet.<HashCollider>of().add(firstValue1);
-        ChampImmutableAddOnlySet<HashCollider> newActual;
+        AddOnlyChampSet<HashCollider> actual = AddOnlyChampSet.<HashCollider>of().add(firstValue1);
+        AddOnlyChampSet<HashCollider> newActual;
 
         // GIVEN: a set with values1
         for (HashCollider v : values1) {

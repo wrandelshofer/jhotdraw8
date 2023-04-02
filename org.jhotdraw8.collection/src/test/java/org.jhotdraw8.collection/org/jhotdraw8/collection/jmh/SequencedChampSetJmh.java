@@ -1,7 +1,7 @@
 package org.jhotdraw8.collection.jmh;
 
 
-import org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet;
+import org.jhotdraw8.collection.champ.SequencedChampSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class ChampChampImmutableSequencedSetJmh {
+public class SequencedChampSetJmh {
     @Param({"1000000"})
     private int size;
 
@@ -45,12 +45,12 @@ public class ChampChampImmutableSequencedSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private ChampChampImmutableSequencedSet<Key> setA;
+    private SequencedChampSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = ChampChampImmutableSequencedSet.copyOf(data.setA);
+        setA = SequencedChampSet.copyOf(data.setA);
     }
 
     @Benchmark
@@ -63,7 +63,7 @@ public class ChampChampImmutableSequencedSetJmh {
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedSet<Key> mRemoveThenAdd() {
+    public SequencedChampSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
@@ -74,7 +74,7 @@ public class ChampChampImmutableSequencedSetJmh {
     }
 
     @Benchmark
-    public ChampChampImmutableSequencedSet<Key> mTail() {
+    public SequencedChampSet<Key> mTail() {
         return setA.remove(setA.getFirst());
     }
 

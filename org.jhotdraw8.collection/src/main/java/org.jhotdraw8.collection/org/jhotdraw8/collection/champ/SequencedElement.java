@@ -72,6 +72,7 @@ class SequencedElement<E> implements SequencedData {
      */
     public static <K> BitmapIndexedNode<SequencedElement<K>> renumber(int size,
                                                                       @NonNull BitmapIndexedNode<SequencedElement<K>> root,
+                                                                      @NonNull BitmapIndexedNode<SequencedElement<K>> sequenceRoot,
                                                                       @NonNull IdentityObject mutator,
                                                                       @NonNull ToIntFunction<SequencedElement<K>> hashFunction,
                                                                       @NonNull BiPredicate<SequencedElement<K>, SequencedElement<K>> equalsFunction) {
@@ -81,8 +82,9 @@ class SequencedElement<E> implements SequencedData {
         BitmapIndexedNode<SequencedElement<K>> newRoot = root;
         ChangeEvent<SequencedElement<K>> details = new ChangeEvent<>();
         int seq = 0;
-        for (HeapSequencedIterator<SequencedElement<K>, K> i = new HeapSequencedIterator<>(size, root, false, null, SequencedElement::getElement); i.hasNext(); ) {
-            K e = i.next();
+
+        for (var i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, 0, 0); i.moveNext(); ) {
+            K e = i.current();
             SequencedElement<K> newElement = new SequencedElement<>(e, seq);
             newRoot = newRoot.update(mutator,
                     newElement,

@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
-import org.jhotdraw8.collection.champ.ChampImmutableMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 
@@ -81,7 +81,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
             view.clear().handle((ignored, throwable) -> handler.apply(null, throwable));
         } else {
             view.read(uri, dataFormat,
-                            ChampImmutableMap.of(), false, workState)
+                            ChampMap.of(), false, workState)
                     .handle(handler);
         }
     }

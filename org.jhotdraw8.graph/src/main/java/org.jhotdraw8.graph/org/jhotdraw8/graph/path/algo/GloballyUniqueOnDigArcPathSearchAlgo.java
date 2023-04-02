@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.champ.ChampImmutableAddOnlySet;
+import org.jhotdraw8.collection.champ.AddOnlyChampSet;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
@@ -153,7 +153,7 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
         final Queue<ArcBackLinkWithAncestorSet<V, A>> queue = new ArrayDeque<>(16);
         final Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new ArcBackLinkWithAncestorSet<>(startVertex, null, null, ChampImmutableAddOnlySet.of(startVertex)));
+        queue.add(new ArcBackLinkWithAncestorSet<>(startVertex, null, null, AddOnlyChampSet.of(startVertex)));
 
         ArcBackLinkWithAncestorSet<V, A> found = null;
         while (!queue.isEmpty()) {
@@ -165,9 +165,9 @@ public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Compa
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
-                ChampImmutableAddOnlySet<V> uAncestors = u.removeAncestors();
+                AddOnlyChampSet<V> uAncestors = u.removeAncestors();
                 for (final Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    final ChampImmutableAddOnlySet<V> vAncestors = uAncestors.add(v.getEnd());
+                    final AddOnlyChampSet<V> vAncestors = uAncestors.add(v.getEnd());
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
                             final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getArrow(), u, vAncestors);

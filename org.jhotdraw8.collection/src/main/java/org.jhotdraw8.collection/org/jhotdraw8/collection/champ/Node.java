@@ -84,17 +84,17 @@ public abstract class Node<D> {
         return 1 << mask;
     }
 
-    public static <E> @NonNull E getFirst(@NonNull Node<E> node) {
-        while (node instanceof BitmapIndexedNode<E> bxn) {
-            int nodeMap = bxn.nodeMap();
-            int dataMap = bxn.dataMap();
-            if ((nodeMap | dataMap) == 0) {
-                break;
-            }
-            int firstNodeBit = Integer.numberOfTrailingZeros(nodeMap);
-            int firstDataBit = Integer.numberOfTrailingZeros(dataMap);
-            if (nodeMap != 0 && firstNodeBit < firstDataBit) {
-                node = node.getNode(0);
+     static <E> @NonNull E getFirst(@NonNull Node<E> node) {
+         while (node instanceof BitmapIndexedNode<E> bxn) {
+             int nodeMap = bxn.nodeMap();
+             int dataMap = bxn.dataMap();
+             if ((nodeMap | dataMap) == 0) {
+                 break;
+             }
+             int firstNodeBit = Integer.numberOfTrailingZeros(nodeMap);
+             int firstDataBit = Integer.numberOfTrailingZeros(dataMap);
+             if (nodeMap != 0 && firstNodeBit < firstDataBit) {
+                 node = node.getNode(0);
             } else {
                 return node.getData(0);
             }
@@ -105,7 +105,7 @@ public abstract class Node<D> {
         throw new NoSuchElementException();
     }
 
-    public static <E> @NonNull E getLast(@NonNull Node<E> node) {
+    static <E> @NonNull E getLast(@NonNull Node<E> node) {
         while (node instanceof BitmapIndexedNode<E> bxn) {
             int nodeMap = bxn.nodeMap();
             int dataMap = bxn.dataMap();

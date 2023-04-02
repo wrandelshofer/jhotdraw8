@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
+import org.jhotdraw8.collection.champ.SequencedChampSet;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
@@ -145,7 +145,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     @Override
     public ImmutableSequencedSet<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return ChampImmutableSequencedSet.of();
+            return SequencedChampSet.of();
         } else {
             tt.pushBack();
         }
@@ -181,7 +181,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return ChampImmutableSequencedSet.copyOf(list);
+        return SequencedChampSet.copyOf(list);
     }
 
     @Override
@@ -222,7 +222,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
 
     @Override
     public @Nullable ImmutableSequencedSet<T> getDefaultValue() {
-        return ChampImmutableSequencedSet.of();
+        return SequencedChampSet.of();
     }
 
     @Override

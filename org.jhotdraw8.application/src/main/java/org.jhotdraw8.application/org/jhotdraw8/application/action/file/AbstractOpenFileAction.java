@@ -20,7 +20,7 @@ import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
-import org.jhotdraw8.collection.champ.ChampImmutableMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
@@ -123,7 +123,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         v.setDataFormat(chosenFormat);
 
         // Open the file
-        v.read(uri, chosenFormat, ChampImmutableMap.copyOf(options), false, workState).whenComplete((actualFormat, exception) -> {
+        v.read(uri, chosenFormat, ChampMap.copyOf(options), false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {

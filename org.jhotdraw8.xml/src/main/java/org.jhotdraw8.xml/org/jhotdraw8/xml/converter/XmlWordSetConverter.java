@@ -9,8 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
-import org.jhotdraw8.collection.champ.ChampImmutableSet;
+import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.champ.SequencedChampSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 
 import java.io.IOException;
@@ -19,7 +19,6 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * WordSetConverter converts an Set of Strings from/to a
@@ -80,23 +79,20 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
     @Override
     public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        if (buf == null) {
-            return ChampImmutableSet.of();
-        }
         String[] strings = buf.toString().split("\\s+");
-        List<String> words = new ArrayList<>(strings.length);
+
+        // If there is a comparator, we do not need to use a sequenced set,
+        // because we are going to sort the set in method toString() anyway.
+        ImmutableSet<String> words = comparator == null ? SequencedChampSet.of() : ChampSet.of();
         for (String str : strings) {
-            words.add(Normalizer.normalize(str, Normalizer.Form.NFC));
-        }
-        if (comparator != null) {
-            words.sort(comparator);
+            words = words.add(Normalizer.normalize(str, Normalizer.Form.NFC));
         }
         buf.position(buf.length());// consume buffer
-        return ChampImmutableSequencedSet.copyOf(words);
+        return words;
     }
 
     @Override
     public ImmutableSet<String> getDefaultValue() {
-        return ChampImmutableSet.of();
+        return SequencedChampSet.of();
     }
 }

@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.champ.ChampSequencedSet;
+import org.jhotdraw8.collection.champ.MutableSequencedChampSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -21,16 +21,16 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Tests {@link ChampSequencedSet} with the Guava test suite.
+ * Tests {@link MutableSequencedChampSet} with the Guava test suite.
  */
-public class ChampSequencedSetGuavaTests {
+public class MutableSequencedChampSetGuavaTests {
 
     public static Test suite() {
-        return new ChampSequencedSetGuavaTests().allTests();
+        return new MutableSequencedChampSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(ChampSequencedSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableSequencedChampSet.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -40,10 +40,10 @@ public class ChampSequencedSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new ChampSequencedSet<>(MinimalCollection.of(elements));
+                                return new MutableSequencedChampSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(ChampSequencedSet.class.getSimpleName())
+                .named(MutableSequencedChampSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.KNOWN_ORDER,

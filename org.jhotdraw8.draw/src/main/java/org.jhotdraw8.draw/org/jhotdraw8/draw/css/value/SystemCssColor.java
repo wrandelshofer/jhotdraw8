@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 
 import java.util.LinkedHashMap;
@@ -125,7 +125,7 @@ public class SystemCssColor extends CssColor {
         m.put(WINDOW_FRAME.getName(), WINDOW_FRAME);
         m.put(WINDOW_TEXT.getName(), WINDOW_TEXT);
 
-        SYSTEM_COLORS = ChampImmutableSequencedMap.copyOf(m);
+        SYSTEM_COLORS = ChampMap.copyOf(m);
     }
 
     /**

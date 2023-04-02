@@ -1,7 +1,7 @@
 package org.jhotdraw8.collection.jmh;
 
 
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
+import org.jhotdraw8.collection.champ.ChampSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -22,22 +22,22 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                   (mask)   (size)  Mode  Cnt         Score   Error  Units
- * ContainsFound        -65  1000000  avgt    2       204.253          ns/op
- * ContainsNotFound     -65  1000000  avgt    2       204.079          ns/op
- * Head                 -65  1000000  avgt    2  30313036.380          ns/op
- * Iterate              -65  1000000  avgt    2  60016917.215          ns/op
- * RemoveThenAdd        -65  1000000  avgt    2       625.272          ns/op
- * Tail                 -65  1000000  avgt    2  18838851.234          ns/op
+ *                    (mask)   (size)  Mode  Cnt         Score   Error  Units
+ * mContainsFound        -65  1000000  avgt            188.427          ns/op
+ * mContainsNotFound     -65  1000000  avgt            191.026          ns/op
+ * mHead                 -65  1000000  avgt             26.244          ns/op
+ * mIterate              -65  1000000  avgt       38966616.650          ns/op
+ * mRemoveThenAdd        -65  1000000  avgt            583.167          ns/op
+ * mTail                 -65  1000000  avgt            117.821          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 2)
-@Warmup(iterations = 2)
+@Measurement(iterations = 1)
+@Warmup(iterations = 1)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class ChampImmutableSequencedSetJmh {
+public class ChampSetJmh {
     @Param({"1000000"})
     private int size;
 
@@ -45,12 +45,12 @@ public class ChampImmutableSequencedSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private ChampImmutableSequencedSet<Key> setA;
+    private ChampSet<Key> setA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = ChampImmutableSequencedSet.copyOf(data.setA);
+        setA = ChampSet.copyOf(data.setA);
     }
 
     @Benchmark
@@ -63,7 +63,7 @@ public class ChampImmutableSequencedSetJmh {
     }
 
     @Benchmark
-    public ChampImmutableSequencedSet<Key> mRemoveThenAdd() {
+    public ChampSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
@@ -74,8 +74,8 @@ public class ChampImmutableSequencedSetJmh {
     }
 
     @Benchmark
-    public ChampImmutableSequencedSet<Key> mTail() {
-        return setA.remove(setA.getFirst());
+    public ChampSet<Key> mTail() {
+        return setA.remove(setA.iterator().next());
     }
 
     @Benchmark

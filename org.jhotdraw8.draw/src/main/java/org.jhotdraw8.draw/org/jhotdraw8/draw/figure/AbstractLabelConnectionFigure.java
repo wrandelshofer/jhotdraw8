@@ -12,7 +12,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
+import org.jhotdraw8.collection.champ.ChampSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -176,7 +176,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? ChampImmutableSequencedSet.of() : ChampImmutableSequencedSet.of(labelTarget);
+        return labelTarget == null ? ChampSet.of() : ChampSet.of(labelTarget);
     }
 
     public boolean isConnected() {

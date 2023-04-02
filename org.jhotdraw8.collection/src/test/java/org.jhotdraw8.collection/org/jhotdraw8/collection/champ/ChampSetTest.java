@@ -18,12 +18,12 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ChampImmutableSetTest extends AbstractImmutableSetTest {
+public class ChampSetTest extends AbstractImmutableSetTest {
 
 
     @Override
     protected <E> @NonNull ImmutableSet<E> newInstance() {
-        return ChampImmutableSet.of();
+        return ChampSet.of();
     }
 
 
@@ -34,17 +34,17 @@ public class ChampImmutableSetTest extends AbstractImmutableSetTest {
 
     @Override
     protected <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m) {
-        return ((ChampSet<E>) m).toImmutable();
+        return ((MutableChampSet<E>) m).toImmutable();
     }
 
     @Override
     protected <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
-        return ChampImmutableSet.copyOf(m.asSet());
+        return ChampSet.copyOf(m.asSet());
     }
 
     @Override
     protected <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m) {
-        return ChampImmutableSet.copyOf(m);
+        return ChampSet.copyOf(m);
     }
 
     @ParameterizedTest
@@ -52,7 +52,7 @@ public class ChampImmutableSetTest extends AbstractImmutableSetTest {
     public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = newInstance(data.c);
-        ChampSet<HashCollider> mutableInstance = (ChampSet<HashCollider>) instance.toMutable();
+        MutableChampSet<HashCollider> mutableInstance = (MutableChampSet<HashCollider>) instance.toMutable();
         assertTrue(mutableInstance.addAll(instance2));
 
         LinkedHashSet<HashCollider> expected = new LinkedHashSet<>(data.a.asSet());
@@ -63,7 +63,7 @@ public class ChampImmutableSetTest extends AbstractImmutableSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testOfArrayArgShouldYieldExpectedResult(@NonNull SetData data) throws Exception {
-        ImmutableSet<HashCollider> instance = ChampImmutableSet.of(data.a().toArray(new HashCollider[0]));
+        ImmutableSet<HashCollider> instance = ChampSet.of(data.a().toArray(new HashCollider[0]));
         assertEqualSet(data.a, instance);
     }
 }

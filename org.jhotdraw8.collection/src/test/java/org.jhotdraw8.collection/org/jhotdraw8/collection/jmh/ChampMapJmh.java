@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -22,14 +22,14 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  *                    (size)  Mode  Cnt     _     Score   Error  Units
- * ContainsFound     1000000  avgt          _   190.401          ns/op
- * ContainsNotFound  1000000  avgt          _   189.662          ns/op
- * CopyOf            1000000  avgt       316_462143.781          ns/op
- * Head              1000000  avgt        35_253418.518          ns/op
- * Iterate           1000000  avgt        81_542559.057          ns/op
- * Put               1000000  avgt          _   355.011          ns/op
- * RemoveThenAdd     1000000  avgt          _   571.975          ns/op
- * Tail              1000000  avgt        34_213526.290          ns/op
+ * ContainsFound     1000000  avgt          _   302.832          ns/op
+ * ContainsNotFound  1000000  avgt          _   287.420          ns/op
+ * CopyOf            1000000  avgt       327_098884.613          ns/op
+ * Head              1000000  avgt          _    26.058          ns/op
+ * Iterate           1000000  avgt        52_071503.316          ns/op
+ * Put               1000000  avgt          _   359.388          ns/op
+ * RemoveThenAdd     1000000  avgt          _   555.861          ns/op
+ * Tail              1000000  avgt          _   109.163          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -38,19 +38,19 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class ChampImmutableSequencedMapJmh {
+public class ChampMapJmh {
     @Param({"1000000"})
     private int size;
 
     private final int mask = ~64;
 
     private BenchmarkData data;
-    private ChampImmutableSequencedMap<Key, Boolean> mapA;
+    private ChampMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ChampImmutableSequencedMap.of();
+        mapA = ChampMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }
@@ -66,15 +66,20 @@ public class ChampImmutableSequencedMapJmh {
     }
 
     @Benchmark
-    public ChampImmutableSequencedMap<Key, Boolean> mRemoveThenAdd() {
+    public ChampMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public ChampImmutableSequencedMap<Key, Boolean> mPut() {
+    public ChampMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.put(key, Boolean.FALSE);
+    }
+
+    @Benchmark
+    public ChampMap<Key, Boolean> mCopyOf() {
+        return ChampMap.<Key, Boolean>copyOf(data.mapA);
     }
 
     @Benchmark
@@ -95,12 +100,7 @@ public class ChampImmutableSequencedMapJmh {
     }
 
     @Benchmark
-    public ChampImmutableSequencedMap<Key, Boolean> mTail() {
+    public ChampMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
-    }
-
-    @Benchmark
-    public ChampImmutableSequencedMap<Key, Boolean> mCopyOf() {
-        return ChampImmutableSequencedMap.<Key, Boolean>copyOf(data.mapA);
     }
 }

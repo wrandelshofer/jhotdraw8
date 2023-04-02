@@ -1,5 +1,5 @@
 /*
- * @(#)SeqChampSetGuavaTests.java
+ * @(#)ChampSetGuavaTests.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.champ.ChampChampSequencedSet;
+import org.jhotdraw8.collection.champ.MutableChampSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -21,16 +21,17 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Tests {@link ChampChampSequencedSet} with the Guava test suite.
+ * Tests {@link MutableChampSet} with the Guava test suite.
  */
-public class ChampChampSequencedSetGuavaTests {
+
+public class MutableChampSetGuavaTests {
 
     public static Test suite() {
-        return new ChampChampSequencedSetGuavaTests().allTests();
+        return new MutableChampSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(ChampChampSequencedSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableChampSet.class.getSimpleName());
         suite.addTest(testsForTrieSet());
         return suite;
     }
@@ -40,13 +41,12 @@ public class ChampChampSequencedSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new ChampChampSequencedSet<>(MinimalCollection.of(elements));
+                                return new MutableChampSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(ChampChampSequencedSet.class.getSimpleName())
+                .named(MutableChampSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
-                        CollectionFeature.KNOWN_ORDER,
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.SERIALIZABLE,
@@ -59,6 +59,5 @@ public class ChampChampSequencedSetGuavaTests {
     protected Collection<Method> suppressForTrieSet() {
         return Collections.emptySet();
     }
-
 
 }

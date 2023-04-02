@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.champ.ChampImmutableSequencedSet;
+import org.jhotdraw8.collection.champ.SequencedChampSet;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -28,7 +28,7 @@ public class WordSetStyleableKey extends SetStyleableKey<String> {
      * @param name The name of the key.
      */
     public WordSetStyleableKey(@NonNull String name) {
-        this(name, ChampImmutableSequencedSet.of());
+        this(name, SequencedChampSet.of());
     }
 
     /**

@@ -8,6 +8,9 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
+import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
@@ -18,8 +21,9 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.BiFunction;
+
+import static org.jhotdraw8.collection.champ.SequencedChampSet.seqHash;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -43,9 +47,9 @@ import java.util.function.BiFunction;
  *     this set</li>
  *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     set and in the clone</li>
- *     <li>iterator creation: O(N)</li>
+ *     <li>iterator creation: O(1)</li>
  *     <li>iterator.next: O(1) with bucket sort, O(log N) with heap sort</li>
- *     <li>getFirst, getLast: O(N)</li>
+ *     <li>getFirst, getLast: O(1)</li>
  * </ul>
  * <p>
  * Implementation details:
@@ -80,9 +84,17 @@ import java.util.function.BiFunction;
  * <p>
  * The renumbering is why the {@code add} is O(1) only in an amortized sense.
  * <p>
- * The iterator of the set is a priority queue, that orders the entries by
- * their stored insertion counter value. This is why {@code iterator.next()}
- * is O(log n).
+ * To support iteration, a second CHAMP trie is maintained. The second CHAMP
+ * trie has the same contents as the first. However, we use the sequence number
+ * for computing the hash code of an element.
+ * <p>
+ * In this implementation, a hash code has a length of
+ * 32 bits, and is split up in little-endian order into 7 parts of
+ * 5 bits (the last part contains the remaining bits).
+ * <p>
+ * We convert the sequence number to unsigned 32 by adding Integer.MIN_VALUE
+ * to it. And then we reorder its bits from
+ * 66666555554444433333222221111100 to 00111112222233333444445555566666.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong>
  * If multiple threads access this set concurrently, and at least
@@ -104,7 +116,7 @@ import java.util.function.BiFunction;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     private final static long serialVersionUID = 0L;
 
@@ -118,12 +130,17 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * decrement before a new entry is added to the start of the sequence.
      */
     private int first = -1;
+    /**
+     * The root of the CHAMP trie for the sequence numbers.
+     */
+    private @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
 
     /**
      * Constructs a new empty set.
      */
-    public ChampSequencedSet() {
+    public MutableSequencedChampSet() {
         root = BitmapIndexedNode.emptyNode();
+        sequenceRoot = BitmapIndexedNode.emptyNode();
     }
 
     /**
@@ -133,18 +150,20 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public ChampSequencedSet(Iterable<? extends E> c) {
-        if (c instanceof ChampSequencedSet<?>) {
-            c = ((ChampSequencedSet<? extends E>) c).toImmutable();
+    public MutableSequencedChampSet(Iterable<? extends E> c) {
+        if (c instanceof MutableSequencedChampSet<?>) {
+            c = ((MutableSequencedChampSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof ChampImmutableSequencedSet<?>) {
-            ChampImmutableSequencedSet<E> that = (ChampImmutableSequencedSet<E>) c;
+        if (c instanceof SequencedChampSet<?>) {
+            SequencedChampSet<E> that = (SequencedChampSet<E>) c;
             this.root = that;
             this.size = that.size;
             this.first = that.first;
             this.last = that.last;
+            this.sequenceRoot = that.sequenceRoot;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
+            this.sequenceRoot = BitmapIndexedNode.emptyNode();
             addAll(c);
         }
     }
@@ -161,12 +180,24 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        root = root.update(getOrCreateIdentity(), new SequencedElement<>(e, first - 1),
+        SequencedElement<E> newElem = new SequencedElement<>(e, first);
+        IdentityObject mutator = getOrCreateIdentity();
+        root = root.update(mutator, newElem,
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            if (details.isReplaced()) {
+            SequencedElement<E> oldElem = details.getData();
+            boolean isUpdated = details.isReplaced();
+            sequenceRoot = sequenceRoot.update(mutator,
+                    newElem, seqHash(first), 0, details,
+                    getUpdateFunction(),
+                    Objects::equals, SequencedChampSet::seqHashCode);
+            if (isUpdated) {
+                sequenceRoot = sequenceRoot.remove(mutator,
+                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
+                        Objects::equals);
+
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -186,13 +217,25 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        SequencedElement<E> newElem = new SequencedElement<>(e, last);
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.update(
-                getOrCreateIdentity(), new SequencedElement<>(e, last), Objects.hashCode(e), 0,
+                mutator, newElem, Objects.hashCode(e), 0,
                 details,
                 moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            if (details.isReplaced()) {
+            SequencedElement<E> oldElem = details.getData();
+            boolean isUpdated = details.isReplaced();
+            sequenceRoot = sequenceRoot.update(mutator,
+                    newElem, seqHash(last), 0, details,
+                    getUpdateFunction(),
+                    Objects::equals, SequencedChampSet::seqHashCode);
+            if (isUpdated) {
+                sequenceRoot = sequenceRoot.remove(mutator,
+                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
+                        Objects::equals);
+
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
             } else {
@@ -208,6 +251,7 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     @Override
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
+        sequenceRoot = BitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
         first = -1;
@@ -218,8 +262,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull ChampSequencedSet<E> clone() {
-        return (ChampSequencedSet<E>) super.clone();
+    public @NonNull MutableSequencedChampSet<E> clone() {
+        return (MutableSequencedChampSet<E>) super.clone();
     }
 
     @Override
@@ -231,12 +275,12 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     @Override
     public E getFirst() {
-        return HeapSequencedIterator.getFirst(root, first, last).getElement();
+        return Node.getFirst(sequenceRoot).getElement();
     }
 
     @Override
     public E getLast() {
-        return HeapSequencedIterator.getLast(root, first, last).getElement();
+        return Node.getLast(sequenceRoot).getElement();
     }
 
     @NonNull
@@ -260,18 +304,33 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     }
 
     private @NonNull Iterator<E> iterator(boolean reversed) {
-        Iterator<E> i = BucketSequencedIterator.isSupported(size, first, last)
-                ? new BucketSequencedIterator<>(size, first, last, root, reversed,
-                this::iteratorRemove, SequencedElement::getElement)
-                : new HeapSequencedIterator<>(size, root, reversed,
-                this::iteratorRemove, SequencedElement::getElement);
-        return new FailFastIterator<>(i,
-                () -> ChampSequencedSet.this.modCount);
+        Enumerator<E> i;
+        if (reversed) {
+            i = new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        } else {
+            i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        }
+        return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> MutableSequencedChampSet.this.modCount);
     }
 
-    private void iteratorRemove(SequencedElement<E> element) {
+    private @NonNull Spliterator<E> spliterator(boolean reversed) {
+        Spliterator<E> i;
+        if (reversed) {
+            i = new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        } else {
+            i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        }
+        return i;
+    }
+
+    @Override
+    public @NonNull Spliterator<E> spliterator() {
+        return spliterator(false);
+    }
+
+    private void iteratorRemove(E element) {
         mutator = null;
-        remove(element.getElement());
+        remove(element);
     }
 
     @Override
@@ -283,13 +342,18 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     @Override
     public boolean remove(Object o) {
         ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.remove(
-                getOrCreateIdentity(), new SequencedElement<>((E) o),
+                mutator, new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
         if (details.isModified()) {
             size--;
             modCount++;
-            int seq = details.getData().getSequenceNumber();
+            var elem = details.getData();
+            int seq = elem.getSequenceNumber();
+            sequenceRoot = sequenceRoot.remove(mutator,
+                    elem,
+                    seqHash(seq), 0, details, Objects::equals);
             if (seq == last - 1) {
                 last--;
             }
@@ -303,14 +367,14 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
     @Override
     public E removeFirst() {
-        SequencedElement<E> k = HeapSequencedIterator.getFirst(root, first, last);
+        SequencedElement<E> k = Node.getFirst(sequenceRoot);
         remove(k.getElement());
         return k.getElement();
     }
 
     @Override
     public E removeLast() {
-        SequencedElement<E> k = HeapSequencedIterator.getLast(root, first, last);
+        SequencedElement<E> k = Node.getLast(sequenceRoot);
         remove(k.getElement());
         return k.getElement();
     }
@@ -321,9 +385,11 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (ChampImmutableSequencedSet.mustRenumber(size, first, last)) {
-            root = SequencedElement.renumber(size, root, getOrCreateIdentity(),
+        if (SequencedChampSet.mustRenumber(size, first, last)) {
+            IdentityObject mutator = getOrCreateIdentity();
+            root = SequencedElement.renumber(size, root, sequenceRoot, mutator,
                     Objects::hashCode, Objects::equals);
+            sequenceRoot = SequencedChampSet.buildSequenceRoot(root, mutator);
             last = size;
             first = -1;
         }
@@ -333,9 +399,9 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
     public SequencedSet<E> reversed() {
         return new SequencedSetFacade<>(
                 () -> iterator(true),
-                () -> Spliterators.spliterator(iterator(true), size(), Spliterator.DISTINCT | Spliterator.ORDERED),
+                () -> spliterator(true),
                 () -> iterator(false),
-                () -> Spliterators.spliterator(iterator(false), size(), Spliterator.DISTINCT | Spliterator.ORDERED),
+                () -> spliterator(false),
                 this::size,
                 this::contains,
                 this::clear,
@@ -351,9 +417,10 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
      *
      * @return an immutable copy
      */
-    public @NonNull ChampImmutableSequencedSet<E> toImmutable() {
+    public @NonNull SequencedChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ChampImmutableSequencedSet.of() : new ChampImmutableSequencedSet<>(root, size, first, last);
+        return size == 0 ? SequencedChampSet.of() :
+                new SequencedChampSet<>(root, sequenceRoot, size, first, last);
     }
 
     private @NonNull Object writeReplace() {
@@ -369,7 +436,8 @@ public class ChampSequencedSet<E> extends AbstractChampSet<E, SequencedElement<E
 
         @Override
         protected @NonNull Object readResolve() {
-            return new ChampSequencedSet<>(deserialized);
+            return new MutableSequencedChampSet<>(deserialized);
         }
     }
+
 }

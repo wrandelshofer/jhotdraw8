@@ -9,7 +9,7 @@ import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.collection.champ.ChampImmutableMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Clipping;
@@ -72,7 +72,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    private @NonNull ImmutableMap<Key<?>, Object> options = ChampImmutableMap.of();
+    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     /**
      * Specifies the number of characters that should be used for indentation.

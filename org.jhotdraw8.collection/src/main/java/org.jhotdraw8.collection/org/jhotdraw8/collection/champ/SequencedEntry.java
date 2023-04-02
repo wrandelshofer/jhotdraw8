@@ -11,7 +11,6 @@ import org.jhotdraw8.collection.IdentityObject;
 
 import java.util.AbstractMap;
 import java.util.Objects;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -53,25 +52,27 @@ class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
      * @param mutator the mutator which will own all nodes of the trie
      * @return the new root
      */
-    public static <K, V> BitmapIndexedNode<SequencedEntry<K, V>> renumber(int size, @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, @NonNull IdentityObject mutator,
+    public static <K, V> BitmapIndexedNode<SequencedEntry<K, V>> renumber(int size,
+                                                                          @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
+                                                                          @NonNull BitmapIndexedNode<SequencedEntry<K, V>> sequenceRoot,
+                                                                          @NonNull IdentityObject mutator,
                                                                           @NonNull ToIntFunction<SequencedEntry<K, V>> hashFunction,
                                                                           @NonNull BiPredicate<SequencedEntry<K, V>,
                                                                                   SequencedEntry<K, V>> equalsFunction) {
         if (size == 0) {
             return root;
         }
-
         BitmapIndexedNode<SequencedEntry<K, V>> newRoot = root;
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         int seq = 0;
-        BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> updateFunction = (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk;
-        for (HeapSequencedIterator<SequencedEntry<K, V>, SequencedEntry<K, V>> i = new HeapSequencedIterator<>(size, root, false, null, Function.identity()); i.hasNext(); ) {
-            SequencedEntry<K, V> e = i.next();
+
+        for (var i = new KeySpliterator<>(sequenceRoot, Function.identity(), 0, 0); i.moveNext(); ) {
+            SequencedEntry<K, V> e = i.current();
             SequencedEntry<K, V> newElement = new SequencedEntry<>(e.getKey(), e.getValue(), seq);
             newRoot = newRoot.update(mutator,
                     newElement,
-                    Objects.hashCode(e.getKey()), 0, details,
-                    updateFunction,
+                    Objects.hashCode(e), 0, details,
+                    (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk,
                     equalsFunction, hashFunction);
             seq++;
         }

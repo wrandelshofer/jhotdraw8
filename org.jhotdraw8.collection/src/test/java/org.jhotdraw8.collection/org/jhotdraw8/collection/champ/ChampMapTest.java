@@ -12,30 +12,30 @@ import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.util.Map;
 
-public class ChampImmutableMapTest extends AbstractImmutableMapTest {
+public class ChampMapTest extends AbstractImmutableMapTest {
     @Override
-    protected <K, V> @NonNull ChampImmutableMap<K, V> newInstance() {
-        return ChampImmutableMap.of();
+    protected <K, V> @NonNull ChampMap<K, V> newInstance() {
+        return ChampMap.of();
     }
 
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Map<K, V> map) {
-        return ChampImmutableMap.<K, V>of().putAll(map);
+        return ChampMap.<K, V>of().putAll(map);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> map) {
-        return ChampImmutableMap.<K, V>of().putAll(map);
+        return ChampMap.<K, V>of().putAll(map);
     }
 
     @Override
     protected @NonNull <K, V> ImmutableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return ChampImmutableMap.<K, V>copyOf(m);
+        return ChampMap.<K, V>copyOf(m);
     }
 
     @Override
     protected <K, V> @NonNull ImmutableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> entries) {
-        return ChampImmutableMap.<K, V>of().putAll(entries);
+        return ChampMap.<K, V>of().putAll(entries);
     }
 }

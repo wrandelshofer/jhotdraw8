@@ -31,7 +31,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet.seqHash;
+import static org.jhotdraw8.collection.champ.SequencedChampSet.seqHash;
 
 /**
  * Implements a mutable map using two Compressed Hash-Array Mapped Prefix-trees
@@ -120,7 +120,7 @@ import static org.jhotdraw8.collection.champ.ChampChampImmutableSequencedSet.seq
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
+public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
     private final static long serialVersionUID = 0L;
     /**
@@ -143,7 +143,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
     /**
      * Constructs a new empty map.
      */
-    public ChampChampSequencedMap() {
+    public MutableSequencedChampMap() {
         root = BitmapIndexedNode.emptyNode();
         sequenceRoot = BitmapIndexedNode.emptyNode();
     }
@@ -154,10 +154,10 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
      *
      * @param m a map
      */
-    public ChampChampSequencedMap(@NonNull Map<? extends K, ? extends V> m) {
-        if (m instanceof ChampChampSequencedMap<?, ?>) {
+    public MutableSequencedChampMap(@NonNull Map<? extends K, ? extends V> m) {
+        if (m instanceof MutableSequencedChampMap<?, ?>) {
             @SuppressWarnings("unchecked")
-            ChampChampSequencedMap<K, V> that = (ChampChampSequencedMap<K, V>) m;
+            MutableSequencedChampMap<K, V> that = (MutableSequencedChampMap<K, V>) m;
             this.mutator = null;
             that.mutator = null;
             this.root = that.root;
@@ -179,7 +179,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
      *
      * @param m an iterable
      */
-    public ChampChampSequencedMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public MutableSequencedChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.root = BitmapIndexedNode.emptyNode();
         this.sequenceRoot = BitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
@@ -193,10 +193,10 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
      *
      * @param m a read-only map
      */
-    public ChampChampSequencedMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
-        if (m instanceof ChampChampImmutableSequencedMap) {
+    public MutableSequencedChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
+        if (m instanceof SequencedChampMap) {
             @SuppressWarnings("unchecked")
-            ChampChampImmutableSequencedMap<K, V> that = (ChampChampImmutableSequencedMap<K, V>) m;
+            SequencedChampMap<K, V> that = (SequencedChampMap<K, V>) m;
             this.root = that;
             this.size = that.size;
             this.first = that.first;
@@ -223,8 +223,8 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
      * Returns a shallow copy of this map.
      */
     @Override
-    public @NonNull ChampChampSequencedMap<K, V> clone() {
-        return (ChampChampSequencedMap<K, V>) super.clone();
+    public @NonNull MutableSequencedChampMap<K, V> clone() {
+        return (MutableSequencedChampMap<K, V>) super.clone();
     }
 
     @Override
@@ -239,24 +239,24 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
     private @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
         Enumerator<Entry<K, V>> i;
         if (reversed) {
-            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot,
+            i = new ReversedKeySpliterator<>(sequenceRoot,
                     e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                     Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         } else {
-            i = new KeyEnumeratorSpliterator<>(sequenceRoot,
+            i = new KeySpliterator<>(sequenceRoot,
                     e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                     Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         }
-        return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> ChampChampSequencedMap.this.modCount);
+        return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> MutableSequencedChampMap.this.modCount);
     }
 
 
     private @NonNull Spliterator<Entry<K, V>> entrySpliterator(boolean reversed) {
         Spliterator<Entry<K, V>> i;
         if (reversed) {
-            i = new ReversedKeyEnumeratorSpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new ReversedKeySpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         } else {
-            i = new KeyEnumeratorSpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+            i = new KeySpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
         }
         return i;
     }
@@ -395,12 +395,12 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
                 getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
-            boolean isUpdated = details.isReplaced();
+            boolean isReplaced = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
-                    newElem, seqHash(first - 1), 0, details,
+                    newElem, seqHash(first), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, ChampChampImmutableSequencedMap::seqHashCode);
-            if (isUpdated) {
+                    Objects::equals, SequencedChampMap::seqHashCode);
+            if (isReplaced) {
                 sequenceRoot = sequenceRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
                         Objects::equals);
@@ -434,12 +434,12 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
                 getEqualsFunction(), getHashFunction());
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
-            boolean isUpdated = details.isReplaced();
+            boolean isReplaced = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
                     getUpdateFunction(),
-                    Objects::equals, ChampChampImmutableSequencedMap::seqHashCode);
-            if (isUpdated) {
+                    Objects::equals, SequencedChampMap::seqHashCode);
+            if (isReplaced) {
                 sequenceRoot = sequenceRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
                         Objects::equals);
@@ -511,8 +511,8 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (ChampImmutableSequencedSet.mustRenumber(size, first, last)) {
-            root = SequencedEntry.renumber(size, root, getOrCreateMutator(),
+        if (SequencedChampSet.mustRenumber(size, first, last)) {
+            root = SequencedEntry.renumber(size, root, sequenceRoot, getOrCreateMutator(),
                     getHashFunction(), getEqualsFunction());
             last = size;
             first = -1;
@@ -542,9 +542,9 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
      *
      * @return an immutable copy
      */
-    public @NonNull ChampChampImmutableSequencedMap<K, V> toImmutable() {
+    public @NonNull SequencedChampMap<K, V> toImmutable() {
         mutator = null;
-        return size == 0 ? ChampChampImmutableSequencedMap.of() : new ChampChampImmutableSequencedMap<>(root, sequenceRoot, size, first, last);
+        return size == 0 ? SequencedChampMap.of() : new SequencedChampMap<>(root, sequenceRoot, size, first, last);
     }
 
     @Override
@@ -565,7 +565,7 @@ public class ChampChampSequencedMap<K, V> extends AbstractChampMap<K, V, Sequenc
 
         @Override
         protected @NonNull Object readResolve() {
-            return new ChampChampSequencedMap<>(deserialized);
+            return new MutableSequencedChampMap<>(deserialized);
         }
     }
 }

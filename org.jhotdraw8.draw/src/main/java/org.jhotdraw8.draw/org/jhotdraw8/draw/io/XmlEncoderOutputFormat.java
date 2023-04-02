@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampImmutableMap;
+import org.jhotdraw8.collection.champ.ChampMap;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
@@ -24,7 +24,7 @@ import java.net.URI;
  */
 public class XmlEncoderOutputFormat implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
-    private @NonNull ImmutableMap<Key<?>, Object> options = ChampImmutableMap.of();
+    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     public XmlEncoderOutputFormat() {
     }
