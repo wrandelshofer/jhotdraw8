@@ -26,7 +26,7 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  */
 class IntArrayList extends AbstractList<Integer> {
-    private final static int[] EMPTY = new int[0];
+    private static final int[] EMPTY = new int[0];
     private int[] items;
 
     /**

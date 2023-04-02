@@ -63,17 +63,6 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    @NonNull ImmutableMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
-
-
-    /**
-     * Returns a copy of this map that contains all entries
-     * of this map with entries from the specified map added or updated.
-     *
-     * @param m another map
-     * @return this map instance if it already contains the same entries, or
-     * a different map instance with the entries added or updated
-     */
     @NonNull ImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
 
     /**
@@ -93,21 +82,6 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
         return that;
     }
 
-    /**
-     * Returns a copy of this map that contains all entries
-     * of this map with entries from the specified map added or updated.
-     *
-     * @param map another map
-     * @return this map instance if it already contains the same entries, or
-     * a different map instance with the entries added or updated
-     */
-    @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        if (this.isEmpty() && getClass().isInstance(map)) {
-            return getClass().cast(map);
-        }
-        return putAll((Iterable<? extends Map.Entry<? extends K, ? extends V>>) map);
-    }
 
     /**
      * Returns a copy of this map that contains all entries
@@ -149,9 +123,6 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with entries removed
      */
     default @NonNull ImmutableMap<K, V> retainAll(@NonNull ReadOnlyCollection<? extends K> c) {
-        if (c == this) {
-            return this;
-        }
         return retainAll(c.asCollection());
     }
 

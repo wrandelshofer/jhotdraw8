@@ -82,7 +82,7 @@ import java.util.Set;
  * @param <E> the element type
  */
 public class MutableChampSet<E> extends AbstractChampSet<E, E> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     /**
      * Constructs a new empty set.
@@ -190,7 +190,7 @@ public class MutableChampSet<E> extends AbstractChampSet<E, E> {
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(@NonNull Set<E> target) {
             super(target);

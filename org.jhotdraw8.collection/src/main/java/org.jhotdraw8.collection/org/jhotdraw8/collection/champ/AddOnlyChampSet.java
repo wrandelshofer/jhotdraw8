@@ -52,7 +52,6 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
         assert !(key0.equals(key1));
 
         if (shift >= HASH_CODE_LENGTH) {
-            @SuppressWarnings({"unchecked"})
             HashCollisionNode<K> unchecked = new HashCollisionNode<>(keyHash0, key0, key1);
             return unchecked;
         }
@@ -115,7 +114,8 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
 
     private static final class BitmapIndexedNode<K> extends AddOnlyChampSet<K> {
         private static final @NonNull AddOnlyChampSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
-        @NonNull Object[] nodes;
+        @NonNull
+        final Object[] nodes;
         /**
          * We use char as an unsigned short.
          */

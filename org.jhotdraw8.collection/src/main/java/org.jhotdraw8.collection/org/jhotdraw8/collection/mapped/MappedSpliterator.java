@@ -25,7 +25,7 @@ public class MappedSpliterator<E, F> implements Spliterator<E> {
     @Override
     public Spliterator<E> trySplit() {
         Spliterator<? extends F> split = s.trySplit();
-        return split == null ? null : new MappedSpliterator<E, F>(split, mappingFunction, characteristics);
+        return split == null ? null : new MappedSpliterator<>(split, mappingFunction, characteristics);
     }
 
     @Override

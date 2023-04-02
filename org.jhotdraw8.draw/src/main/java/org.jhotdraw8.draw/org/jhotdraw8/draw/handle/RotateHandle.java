@@ -10,10 +10,20 @@ import javafx.geometry.Point3D;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -30,7 +40,9 @@ import org.jhotdraw8.geom.Points;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.jhotdraw8.draw.figure.TransformableFigure.*;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
+import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
 
 /**
  * A Handle to rotate a TransformableFigure around the center of its bounds in
@@ -237,7 +249,7 @@ public class RotateHandle extends AbstractHandle {
         p = FXTransforms.transform(t, p);
 
         // rotates the node:
-        Double rotate = o.getStyledNonNull(ROTATE);
+        double rotate = o.getStyledNonNull(ROTATE);
         pickNode.setRotate(rotate);
         Point3D rotationAxis = o.getStyled(ROTATION_AXIS);
         pickNode.setRotationAxis(rotationAxis);

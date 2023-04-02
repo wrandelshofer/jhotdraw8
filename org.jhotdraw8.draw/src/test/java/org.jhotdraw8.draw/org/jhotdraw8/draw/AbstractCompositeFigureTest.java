@@ -114,7 +114,7 @@ public class AbstractCompositeFigureTest {
     /**
      * Mock class.
      */
-    public class AbstractCompositeFigureImpl extends AbstractCompositeFigure implements NonTransformableFigure {
+    public static class AbstractCompositeFigureImpl extends AbstractCompositeFigure implements NonTransformableFigure {
 
         private static final long serialVersionUID = 1L;
 

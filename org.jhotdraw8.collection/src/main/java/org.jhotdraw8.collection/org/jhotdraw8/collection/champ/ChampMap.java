@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
@@ -78,18 +78,17 @@ import java.util.function.BiFunction;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>>
+public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
     private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private final int size;
 
-    ChampMap(@NonNull BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> root, int size) {
+    ChampMap(@NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
 
-
     /**
      * Returns an immutable copy of the provided map.
      *
@@ -98,9 +97,8 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
      * @param <V> the value type
      * @return an immutable copy
      */
-    @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ChampMap<K, V> copyOf(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ChampMap<K, V>) ((ChampMap<K, V>) ChampMap.EMPTY).putAll(map);
+    public static <K, V> @NonNull ChampMap<K, V> copyOf(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
+        return ChampMap.<K, V>of().putAll(map);
     }
 
     /**
@@ -111,16 +109,15 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
      * @param <V> the value type
      * @return an immutable copy
      */
-    @SuppressWarnings("unchecked")
     public static <K, V> @NonNull ChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return ((ChampMap<K, V>) ChampMap.EMPTY).putAll(map);
+        return ChampMap.<K, V>of().putAll(map);
     }
 
-    static <V, K> boolean keyEquals(AbstractMap.SimpleImmutableEntry<K, V> a, AbstractMap.SimpleImmutableEntry<K, V> b) {
+    static <V, K> boolean keyEquals(SimpleImmutableEntry<K, V> a, SimpleImmutableEntry<K, V> b) {
         return Objects.equals(a.getKey(), b.getKey());
     }
 
-    static <V, K> int keyHash(AbstractMap.SimpleImmutableEntry<K, V> e) {
+    static <V, K> int keyHash(SimpleImmutableEntry<K, V> e) {
         return Objects.hashCode(e.getKey());
     }
 
@@ -137,19 +134,6 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
     }
 
     /**
-     * Returns an immutable map that contains the provided entries.
-     *
-     * @param entries map entries
-     * @param <K>     the key type
-     * @param <V>     the value type
-     * @return an immutable map of the provided entries
-     */
-    @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ChampMap<K, V> ofEntries(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        return (ChampMap<K, V>) of().putAll(entries);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -160,41 +144,35 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return find(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
+        return find(new SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
                 ChampMap::keyEquals) != Node.NO_DATA;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(@Nullable Object other) {
         if (other == this) {
             return true;
         }
-        if (other == null) {
-            return false;
-        }
         if (other instanceof ChampMap) {
             ChampMap<?, ?> that = (ChampMap<?, ?>) other;
             return size == that.size && equivalent(that);
-        } else {
-            return ReadOnlyMap.mapEquals(this, other);
         }
+        return ReadOnlyMap.mapEquals(this, other);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public V get(Object o) {
-        K key = (K) o;
-        Object result = find(new AbstractMap.SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0, ChampMap::keyEquals);
-        return result == Node.NO_DATA || result == null ? null : ((AbstractMap.SimpleImmutableEntry<K, V>) result).getValue();
+        Object result = find(
+                new SimpleImmutableEntry<>((K) o, null), Objects.hashCode(o), 0, ChampMap::keyEquals);
+        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
     @NonNull
-    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
+    private BiFunction<SimpleImmutableEntry<K, V>, SimpleImmutableEntry<K, V>, SimpleImmutableEntry<K, V>> getUpdateFunction() {
         return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 
@@ -211,14 +189,14 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) new KeyIterator<>(this, null);
+        return Spliterators.iterator(spliterator());
     }
 
     @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode = update(null, new AbstractMap.SimpleImmutableEntry<>(key, value),
+        ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SimpleImmutableEntry<K, V>> newRootNode = update(null, new SimpleImmutableEntry<>(key, value),
                 keyHash, 0, details,
                 getUpdateFunction(), ChampMap::keyEquals, ChampMap::keyHash);
         if (details.isModified()) {
@@ -231,45 +209,31 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @NonNull ChampMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
-        if (isEmpty() && (m instanceof MutableChampMap)) {
-            return ((MutableChampMap<K, V>) m).toImmutable();
-        }
-        return putAll(m.entrySet());
+        return (ChampMap<K, V>) ImmutableMap.super.putAll(m);
     }
 
-    @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ChampMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        if (m instanceof ChampMap) {
-            ChampMap<K, V> b = (ChampMap<K, V>) m;
-            if (b.size() > size()) {
-                return b.putAll(readOnlyEntrySet());
-            }
-        }
-        return putAll(m.readOnlyEntrySet());
-    }
-
     @Override
     public @NonNull ChampMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        MutableChampMap<K, V> t = this.toMutable();
+        if (isEmpty() && (entries instanceof ChampMap<?, ?> that)) {
+            return (ChampMap<K, V>) that;
+        }
+        var t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details =
-                    t.putAndGiveDetails(entry.getKey(), entry.getValue());
+            var details = t.putAndGiveDetails(entry.getKey(), entry.getValue());
             modified |= details.isModified();
         }
         return modified ? t.toImmutable() : this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampMap<K, V> remove(@NonNull K key) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        BitmapIndexedNode<AbstractMap.SimpleImmutableEntry<K, V>> newRootNode =
-                remove(null, new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
+        ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+        BitmapIndexedNode<SimpleImmutableEntry<K, V>> newRootNode =
+                remove(null, new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         ChampMap::keyEquals);
         if (details.isModified()) {
             return new ChampMap<>(newRootNode, size - 1);
@@ -279,13 +243,13 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
 
     @Override
     public @NonNull ChampMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
-        if (this.isEmpty()) {
+        if (isEmpty()) {
             return this;
         }
         MutableChampMap<K, V> t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
-            ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = t.removeAndGiveDetails(key);
+            ChangeEvent<SimpleImmutableEntry<K, V>> details = t.removeAndGiveDetails(key);
             modified |= details.isModified();
         }
         return modified ? t.toImmutable() : this;
@@ -316,7 +280,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.DISTINCT);
+        return new KeySpliterator<>(this, e -> e, Spliterator.IMMUTABLE | Spliterator.DISTINCT, size());
     }
 
     /**
@@ -339,7 +303,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<AbstractMap.SimpleImmutabl
     }
 
     static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         SerializationProxy(Map<K, V> target) {
             super(target);

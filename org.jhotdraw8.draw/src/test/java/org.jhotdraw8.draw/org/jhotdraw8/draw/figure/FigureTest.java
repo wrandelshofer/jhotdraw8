@@ -55,7 +55,7 @@ public class FigureTest {
         assertEquals(figureKeys, intersection);
     }
 
-    public class FigureImpl extends AbstractStyleablePropertyBean implements Figure {
+    public static class FigureImpl extends AbstractStyleablePropertyBean implements Figure {
 
         @Override
         public void removeLayoutSubject(Figure targetFigure) {

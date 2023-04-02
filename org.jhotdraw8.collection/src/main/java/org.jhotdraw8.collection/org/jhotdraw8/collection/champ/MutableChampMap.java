@@ -85,7 +85,7 @@ import java.util.function.Function;
  * @param <V> the value type
  */
 public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     /**
      * Constructs a new empty map.
@@ -277,7 +277,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);

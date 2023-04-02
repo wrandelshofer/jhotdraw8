@@ -16,7 +16,7 @@ public class ReversedListEnumeratorSpliterator<E> extends AbstractListEnumerator
     private final int fromInclusive;
     private final int toExclusive;
     private E current;
-    private @NonNull List<E> list;
+    private final @NonNull List<E> list;
 
     public ReversedListEnumeratorSpliterator(@NonNull List<E> list, int fromInclusive, int toExclusive) {
         this.index = toExclusive - 1;

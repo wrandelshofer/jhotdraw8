@@ -78,8 +78,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private Button removeButton;
 
     @SuppressWarnings("unchecked")
-    private @NonNull
-    final WordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
+    private final @NonNull WordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;

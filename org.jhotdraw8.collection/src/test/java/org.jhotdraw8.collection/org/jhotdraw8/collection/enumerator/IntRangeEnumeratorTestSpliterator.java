@@ -38,10 +38,10 @@ public class IntRangeEnumeratorTestSpliterator {
         int[] a = {0, 1, 2, 3, 4, 5};
         final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(6);
         assertEquals(a.length, instance.estimateSize());
-        for (int i = 0; i < a.length; i++) {
+        for (int j : a) {
             assertTrue(instance.moveNext());
-            assertEquals(a[i], instance.current());
-            assertEquals(a[i], instance.currentAsInt());
+            assertEquals(j, instance.current());
+            assertEquals(j, instance.currentAsInt());
         }
         assertFalse(instance.moveNext());
     }
@@ -60,10 +60,10 @@ public class IntRangeEnumeratorTestSpliterator {
         int[] a = {1, 2, 3, 4, 5};
         final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(1, 6);
         assertEquals(a.length, instance.estimateSize());
-        for (int i = 0; i < a.length; i++) {
+        for (int j : a) {
             assertTrue(instance.moveNext());
-            assertEquals(a[i], instance.current());
-            assertEquals(a[i], instance.currentAsInt());
+            assertEquals(j, instance.current());
+            assertEquals(j, instance.currentAsInt());
         }
         assertFalse(instance.moveNext());
     }
@@ -82,10 +82,10 @@ public class IntRangeEnumeratorTestSpliterator {
         int[] a = {1, 2, 3, 4, 5};
         final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(i -> i + 1, 0, 5);
         assertEquals(a.length, instance.estimateSize());
-        for (int i = 0; i < a.length; i++) {
+        for (int j : a) {
             assertTrue(instance.moveNext());
-            assertEquals(a[i], instance.current());
-            assertEquals(a[i], instance.currentAsInt());
+            assertEquals(j, instance.current());
+            assertEquals(j, instance.currentAsInt());
         }
         assertFalse(instance.moveNext());
     }
@@ -103,9 +103,9 @@ public class IntRangeEnumeratorTestSpliterator {
         final IntRangeEnumeratorSpliterator instance = new IntRangeEnumeratorSpliterator(1, 6);
         assertEquals(a.length, instance.estimateSize());
         int[] element = new int[1];
-        for (int i = 0; i < a.length; i++) {
+        for (int j : a) {
             assertTrue(instance.tryAdvance((IntConsumer) e -> element[0] = e));
-            assertEquals(a[i], element[0]);
+            assertEquals(j, element[0]);
         }
         assertFalse(instance.tryAdvance((IntConsumer) e -> element[0] = e));
     }

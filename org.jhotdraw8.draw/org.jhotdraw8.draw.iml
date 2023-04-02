@@ -14,6 +14,7 @@
     <orderEntry type="module" module-name="org.jhotdraw8.application" />
     <orderEntry type="module" module-name="org.jhotdraw8.base" />
     <orderEntry type="module" module-name="org.jhotdraw8.collection" />
+    <orderEntry type="library" name="Maven: org.openjdk.jol:jol-core:0.17" level="project" />
     <orderEntry type="module" module-name="org.jhotdraw8.css" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:20" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:20" level="project" />

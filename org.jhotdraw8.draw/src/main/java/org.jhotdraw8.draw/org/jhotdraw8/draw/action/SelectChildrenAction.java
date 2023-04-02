@@ -48,9 +48,7 @@ public class SelectChildrenAction extends AbstractDrawingViewAction {
     public static void selectChildren(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
         List<Figure> selectedChildren = new ArrayList<>();
         for (Figure f : figures) {
-            for (Figure child : f.getChildren()) {
-                selectedChildren.add(child);
-            }
+            selectedChildren.addAll(f.getChildren());
         }
         view.getSelectedFigures().clear();
         view.getSelectedFigures().addAll(selectedChildren);

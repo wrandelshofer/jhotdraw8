@@ -26,7 +26,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    final public @NonNull String toString() {
+    public final @NonNull String toString() {
         return ReadOnlyMap.mapToString(this);
     }
 }

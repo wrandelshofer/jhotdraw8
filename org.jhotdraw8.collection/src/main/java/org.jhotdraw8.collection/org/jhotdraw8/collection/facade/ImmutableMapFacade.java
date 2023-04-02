@@ -53,15 +53,6 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
         return new ImmutableMapFacade<>(clone, cloneFunction);
     }
 
-    @Override
-    public @NonNull ImmutableMapFacade<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m) {
-        Map<K, V> clone = cloneFunction.apply(target);
-        clone.putAll(m.asMap());
-        if (clone.equals(target)) {
-            return this;
-        }
-        return new ImmutableMapFacade<>(clone, cloneFunction);
-    }
 
     @Override
     public @NonNull ImmutableMapFacade<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {

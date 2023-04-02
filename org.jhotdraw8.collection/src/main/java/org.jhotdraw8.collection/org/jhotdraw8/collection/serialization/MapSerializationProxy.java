@@ -58,7 +58,7 @@ import java.util.Map;
 public abstract class MapSerializationProxy<K, V> implements Serializable {
     private final transient Map<K, V> serialized;
     protected transient List<Map.Entry<K, V>> deserialized;
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     protected MapSerializationProxy(Map<K, V> serialized) {
         this.serialized = serialized;

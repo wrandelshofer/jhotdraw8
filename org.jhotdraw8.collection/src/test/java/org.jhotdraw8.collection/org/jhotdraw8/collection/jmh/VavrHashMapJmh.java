@@ -101,6 +101,6 @@ public class VavrHashMapJmh {
 
     @Benchmark
     public HashMap<Key, Boolean> mCopyOf() {
-        return HashMap.<Key, Boolean>ofAll(data.mapA);
+        return HashMap.ofAll(data.mapA);
     }
 }

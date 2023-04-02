@@ -4,7 +4,15 @@
  */
 package org.jhotdraw8.draw.constrain;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -28,7 +36,11 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ViewBoxableDrawing;
 
-import static java.lang.Math.*;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.round;
 
 /**
  * GridConstrainer.
@@ -391,16 +403,13 @@ public class GridConstrainer extends AbstractConstrainer {
         if (drawing instanceof ViewBoxableDrawing) {
             dx = drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_X).getConvertedValue();
             dy = drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_Y).getConvertedValue();
-            dw = drawing.getNonNull(ViewBoxableDrawing.WIDTH).getConvertedValue();
-            dh = drawing.getNonNull(ViewBoxableDrawing.HEIGHT).getConvertedValue();
         } else {
             dx = 0;
             dy = 0;
+        }
             dw = drawing.getNonNull(Drawing.WIDTH).getConvertedValue();
             dh = drawing.getNonNull(Drawing.HEIGHT).getConvertedValue();
-        }
         Bounds visibleRect = drawingView.viewToWorld(drawingView.getVisibleRect());
-        //Bounds visibleRect = FXGeom.intersection(drawingView.viewToWorld(drawingView.getVisibleRect()), new BoundingBox(-dx,-dy,dw,dh));
 
         if (drawGrid.get()) {
             Transform t = drawingView.getWorldToView();

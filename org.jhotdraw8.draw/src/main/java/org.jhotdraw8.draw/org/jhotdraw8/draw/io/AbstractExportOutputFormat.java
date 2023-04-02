@@ -185,7 +185,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
                 slices.add((Slice) f);
             }
         }
-        final Double slicesDpi = EXPORT_SLICES_DPI_KEY.get(getOptions());
+        final double slicesDpi = EXPORT_SLICES_DPI_KEY.get(getOptions());
         writeSlices(dir, drawing, slices, "", slicesDpi);
         if (!isResolutionIndependent()) {
             if (EXPORT_SLICES_RESOLUTION_2X_KEY.get(getOptions())) {

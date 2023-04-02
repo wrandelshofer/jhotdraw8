@@ -10,7 +10,14 @@ import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Spliterator;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
@@ -20,7 +27,7 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  */
 public class ByteArrayList extends AbstractList<Byte> implements ByteList {
-    private final static byte[] EMPTY = new byte[0];
+    private static final byte[] EMPTY = new byte[0];
     private byte[] items;
 
     /**
@@ -145,7 +152,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(int @NonNull [] a, int offset) {
+    public void copyInto(byte @NonNull [] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 

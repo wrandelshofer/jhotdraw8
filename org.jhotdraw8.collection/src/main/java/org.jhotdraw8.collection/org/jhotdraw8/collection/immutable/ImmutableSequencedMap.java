@@ -8,7 +8,6 @@ package org.jhotdraw8.collection.immutable;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
 import java.util.Collection;
@@ -56,23 +55,9 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      */
     @NonNull ImmutableSequencedMap<K, V> putLast(@NonNull K key, @Nullable V value);
 
-    @Override
-    @NonNull
-    default ImmutableSequencedMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.putAll(m);
-    }
-
-    @Override
-    @NonNull ImmutableSequencedMap<K, V> putAll(@NonNull ImmutableMap<? extends K, ? extends V> m);
 
     @Override
     @NonNull ImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
-
-    @Override
-    @NonNull
-    default ImmutableSequencedMap<K, V> putAll(@NonNull ReadOnlyMap<? extends K, ? extends V> map) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.putAll(map);
-    }
 
     @Override
     @NonNull

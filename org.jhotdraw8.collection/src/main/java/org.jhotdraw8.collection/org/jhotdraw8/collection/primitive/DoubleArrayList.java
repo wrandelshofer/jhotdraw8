@@ -10,7 +10,16 @@ import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
@@ -20,7 +29,7 @@ import java.util.stream.DoubleStream;
  * @author Werner Randelshofer
  */
 public class DoubleArrayList extends AbstractList<Double> implements DoubleList {
-    private final static double[] EMPTY = new double[0];
+    private static final double[] EMPTY = new double[0];
     private double[] items;
 
     /**
@@ -145,7 +154,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(int @NonNull [] a, int offset) {
+    public void copyInto(double @NonNull [] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 

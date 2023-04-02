@@ -151,12 +151,11 @@ abstract class Node<D> {
             if (mask0 < mask1) {
                 entries[0] = k0;
                 entries[1] = k1;
-                return NodeFactory.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             } else {
                 entries[0] = k1;
                 entries[1] = k0;
-                return NodeFactory.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             }
+            return NodeFactory.newBitmapIndexedNode(mutator, (0), dataMap, entries);
         } else {
             Node<K> node = mergeTwoDataEntriesIntoNode(mutator,
                     k0, keyHash0,

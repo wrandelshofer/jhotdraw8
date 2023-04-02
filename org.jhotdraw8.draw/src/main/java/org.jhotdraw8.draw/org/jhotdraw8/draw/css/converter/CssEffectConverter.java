@@ -92,7 +92,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements CssConverter<Effect> {
-    private final static ImmutableList<String> examples = ImmutableArrayList.of(
+    private static final ImmutableList<String> examples = ImmutableArrayList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",

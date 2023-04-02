@@ -289,18 +289,18 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         /**
          * An item occupies {@value #ITEM_SIZE} array entries.
          */
-        private final static int ITEM_SIZE = 2;
+        private static final int ITEM_SIZE = 2;
         /**
          * An array entry with offset {@value #ITEM_NODE_OFFSET}
          * contains a {@link Node}.
          */
-        private final static int ITEM_NODE_OFFSET = 0;
+        private static final int ITEM_NODE_OFFSET = 0;
         /**
          * An array entry with offset {@value #ITEM_ARROW_OFFSET}
          * contains a {@code A}.
          */
-        private final static int ITEM_ARROW_OFFSET = 1;
-        private final static @NonNull Object[] EMPTY_ARRAY = new Object[0];
+        private static final int ITEM_ARROW_OFFSET = 1;
+        private static final @NonNull Object[] EMPTY_ARRAY = new Object[0];
         /**
          * Item array.
          */

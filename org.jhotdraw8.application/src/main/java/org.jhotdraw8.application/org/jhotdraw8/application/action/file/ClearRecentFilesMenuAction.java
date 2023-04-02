@@ -36,37 +36,10 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     public ClearRecentFilesMenuAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);
-        //     updateEnabled();
     }
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
         app.getRecentUris().clear();
     }
-
-    /**
-     * Installs listeners on the application object. /
-     *
-     * @Override protected void installApplicationListeners(Application app) {
-     * super.installApplicationListeners(app); if (applicationListener == null)
-     * { applicationListener = createApplicationListener(); }
-     * app.addPropertyChangeListener(applicationListener); } private
-     * PropertyChangeListener createApplicationListener() { return new
-     * PropertyChangeListener() {
-     * @Override public void propertyChange(PropertyChangeEvent evt) { if
-     * (evt.getPropertyName() == Application.RECENT_URIS_PROPERTY) { // Strings
-     * get interned updateEnabled(); } } }; } /** Installs listeners on the
-     * application object. /
-     * @Override protected void uninstallApplicationListeners(Application app) {
-     * super.uninstallApplicationListeners(app);
-     * app.removePropertyChangeListener(applicationListener); }
-     *
-     * @Override public void actionPerformed(ActionEvent e) {
-     * getApplication().clearRecentURIs(); }
-     *
-     * private void updateEnabled() {
-     * setEnabled(getApplication().getRecentURIs().size() > 0);
-     *
-     * }
-     */
 }

@@ -76,7 +76,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     @SuppressWarnings({"SuspiciousMethodCalls"})
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
-        return new SequencedSetFacade<K>(
+        return new SequencedSetFacade<>(
                 () -> new MappedIterator<>(m.sequencedEntrySet().iterator(), Entry::getKey),
                 () -> new MappedSpliterator<>(m.sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
                 () -> new MappedIterator<>(m.reversed().sequencedEntrySet().iterator(), Entry::getKey),

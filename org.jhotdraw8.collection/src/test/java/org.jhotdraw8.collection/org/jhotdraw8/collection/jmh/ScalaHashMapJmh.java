@@ -11,6 +11,8 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jol.info.ClassLayout;
+import org.openjdk.jol.vm.VM;
 import scala.Tuple2;
 import scala.collection.immutable.HashMap;
 import scala.collection.mutable.ReusableBuilder;
@@ -57,6 +59,20 @@ public class ScalaHashMapJmh {
             b.addOne(new Tuple2<>(key, Boolean.TRUE));
         }
         mapA = b.result();
+
+        estimateMemoryUsage(mapA, mapA.head());
+    }
+
+    private void estimateMemoryUsage(HashMap<Key, Boolean> mapA, Tuple2<Key, Boolean> head) {
+        VM.current();
+        long instanceSize = ClassLayout.parseInstance(mapA).instanceSize();
+        long elementSize = ClassLayout.parseInstance(head).instanceSize();
+        long dataSize = elementSize * mapA.size();
+        long dataStructureSize = instanceSize - dataSize;
+        System.out.println("\ninstance size           : " + instanceSize);
+        System.out.println("element size            : " + elementSize);
+        System.out.println("data size               : " + dataSize);
+        System.out.println("data structure size     : " + dataStructureSize + " " + (100 * dataStructureSize / instanceSize) + "%");
     }
 
     @Benchmark

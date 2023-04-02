@@ -29,7 +29,7 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
      * application.
      *
      * @param activity The activity. If activity is null then the action acts on
-     *                 the active activity of the application. Otherwise it will act on the
+     *                 the active activity of the application. Otherwise, it will act on the
      *                 specified activity.
      */
     public AbstractActivityAction(@NonNull A activity) {

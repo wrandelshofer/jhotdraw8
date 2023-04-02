@@ -62,9 +62,9 @@ public abstract class AbstractImmutableMapTest {
         );
     }
 
-    private final static MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
-    private final static MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
-    private final static MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
+    private static final MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
+    private static final MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
 
 
     protected <K, V> void assertEqualMap(ReadOnlyMap<K, V> expected, ImmutableMap<K, V> actual) {
@@ -168,7 +168,6 @@ public abstract class AbstractImmutableMapTest {
         assertFalse(instance.containsKey(new Object()));
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testReadOnlyEntrySetContainsShouldYieldExpectedValue(MapData data) {
@@ -377,7 +376,6 @@ public abstract class AbstractImmutableMapTest {
         assertEqualMap(expected, instance2);
     }
 
-    @SuppressWarnings({"CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyPutAllWithSelfShouldReturnThis(MapData data) throws Exception {

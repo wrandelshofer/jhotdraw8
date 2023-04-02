@@ -84,13 +84,6 @@ public class InputDialog<R> extends Dialog<R> {
         this.resultSupplier = resultSupplier;
     }
 
-
-    /**************************************************************************
-     *
-     * Private Implementation
-     *
-     **************************************************************************/
-
     private void updateGrid() {
         getDialogPane().setContent(inputForm);
 

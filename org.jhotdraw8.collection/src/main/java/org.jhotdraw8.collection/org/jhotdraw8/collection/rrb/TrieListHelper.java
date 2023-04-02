@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.ListHelper;
 import java.util.Arrays;
 
 class TrieListHelper {
-    final static LeafNode<?> EMPTY_LEAF = new LeafNode<>(new Object[0]);
+    static final LeafNode<?> EMPTY_LEAF = new LeafNode<>(new Object[0]);
     static final int BIT_PARTITION_SIZE = 2;
     static final int BIT_MASK = (1 << BIT_PARTITION_SIZE) - 1;
     static final int M = 1 << BIT_PARTITION_SIZE;
@@ -32,7 +32,7 @@ class TrieListHelper {
         int rightLen = right == null ? 0 : right.children.length - 1;
 
         int[] mergedSizes = new int[leftLen + centreLen + rightLen];
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"unchecked"})
         Node<E>[] mergedChildren = (Node<E>[]) new Node[leftLen + centreLen + rightLen];
         if (left != null) {
             System.arraycopy(left.sizes, 0, mergedSizes, 0, leftLen);
@@ -51,17 +51,17 @@ class TrieListHelper {
 
     static <E> @NonNull InternalNode<E> newAbove1(@Nullable IdentityObject mutator, @NonNull Node<E> child) {
         int[] sizes = new int[]{child.getLength()};
-        @SuppressWarnings({"unchecked", "rawtypes"}) Node<E>[] children = new Node[]{child};
+        @SuppressWarnings({"unchecked"}) Node<E>[] children = new Node[]{child};
         return newInternalNode(mutator, sizes, children);
     }
 
     static <E> @NonNull InternalNode<E> newInternalNode(@Nullable IdentityObject mutator,
                                                         @NonNull int[] sizes, @NonNull Node<E>[] children) {
-        return mutator == null ? new InternalNode<E>(sizes, children) : new MutableInternalNode<E>(mutator, sizes, children);
+        return mutator == null ? new InternalNode<>(sizes, children) : new MutableInternalNode<>(mutator, sizes, children);
     }
 
     static <E> @NonNull LeafNode<E> newLeafNode(@Nullable IdentityObject mutator, @NonNull E[] data) {
-        return mutator == null ? new LeafNode<E>(data) : new MutableLeafNode<E>(mutator, data);
+        return mutator == null ? new LeafNode<>(data) : new MutableLeafNode<>(mutator, data);
     }
 
     /**
@@ -95,7 +95,7 @@ class TrieListHelper {
         private InternalNode<E> root;
         private final @Nullable IdentityObject mutator = new IdentityObject();
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"unchecked"})
         public RrbTree() {
             head = tail = (LeafNode<E>) EMPTY_LEAF;
             root = newInternalNode(mutator, new int[]{0}, new LeafNode[]{EMPTY_LEAF});
@@ -118,7 +118,7 @@ class TrieListHelper {
         }
     }
 
-    static abstract class Node<E> {
+    abstract static class Node<E> {
         protected abstract int getLength();
 
         @Nullable IdentityObject getMutator() {
@@ -160,7 +160,7 @@ class TrieListHelper {
         }
 
         @Override
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"unchecked"})
         protected @NonNull Node<E> @NonNull [] insert(@Nullable IdentityObject mutator,
                                                       E @NonNull [] elements,
                                                       int index,
@@ -187,7 +187,7 @@ class TrieListHelper {
         }
 
         @Override
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"unchecked"})
         protected @NonNull Node<E> @NonNull [] insert(@Nullable IdentityObject mutator,
                                                       E @NonNull [] elements,
                                                       int index,
@@ -266,7 +266,7 @@ class TrieListHelper {
     static class InnerTrieNode<E> extends TrieNode<E> {
         private final TrieNode<E>[] children;
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
+        @SuppressWarnings({"unchecked"})
         InnerTrieNode(int size, int shift) {
             int nodeCapacity = M << (shift);
             int childShift = shift - BIT_PARTITION_SIZE;

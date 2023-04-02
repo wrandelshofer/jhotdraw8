@@ -157,8 +157,7 @@ public class ListViewUtil {
             }
         };
 
-        private @NonNull
-        final EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {

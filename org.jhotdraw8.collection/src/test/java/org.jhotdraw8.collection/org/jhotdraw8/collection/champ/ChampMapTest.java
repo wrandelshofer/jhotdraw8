@@ -31,7 +31,7 @@ public class ChampMapTest extends AbstractImmutableMapTest {
 
     @Override
     protected @NonNull <K, V> ImmutableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return ChampMap.<K, V>copyOf(m);
+        return ChampMap.copyOf(m);
     }
 
     @Override

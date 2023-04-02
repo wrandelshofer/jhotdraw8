@@ -60,7 +60,7 @@ class HashCollisionNode<D> extends Node<D> {
         for (Object key : data) {
             for (int j = 0; j < remainingLength; j += 1) {
                 Object todoKey = thatEntriesCloned[j];
-                if (Objects.equals((D) todoKey, (D) key)) {
+                if (Objects.equals(todoKey, key)) {
                     // We have found an equal entry. We do not need to compare
                     // this entry again. So we replace it with the last entry
                     // from the array and reduce the remaining length.

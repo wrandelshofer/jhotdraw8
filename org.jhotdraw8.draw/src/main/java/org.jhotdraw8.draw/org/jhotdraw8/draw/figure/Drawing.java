@@ -167,22 +167,6 @@ public interface Drawing extends Figure {
         // IdentityMap is slower for insertion than an equality-based map.
         SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, false);
         graphBuilder.setOrdered(false);
-        //  SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, false);
-        /*
-                SimpleMutableDirectedGraph<Figure, Figure> graphBuilder3 = new SimpleMutableDirectedGraph<>(1024, 1024, true);
-
-         */
-        /*for (Figure f : postorderIterable()) {
-            graphBuilder.addVertex(f);
-            for (Figure obs : f.getReadOnlyLayoutObservers()) {
-                graphBuilder.addVertex(obs);
-                graphBuilder.addArrow(f, obs, null);
-            }
-            for (Figure child : f.getChildren()) {
-                graphBuilder.addVertex(child);
-                graphBuilder.addArrow(f, child, f);
-            }
-        }*/
         for (Figure f : preorderIterable()) {
             graphBuilder.addVertex(f);
             for (Figure subj : f.getLayoutSubjects()) {

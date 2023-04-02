@@ -48,7 +48,7 @@ public final class MapData {
         aPlusB.addAll(b.readOnlyEntrySet().asSet());
         aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2)
                 .iterator().forEachRemaining(e -> someAPlusSomeB.put(e.getKey(), e.getValue()));
-        this.someAPlusSomeB = new ReadOnlyMapFacade<HashCollider, HashCollider>(someAPlusSomeB);
+        this.someAPlusSomeB = new ReadOnlyMapFacade<>(someAPlusSomeB);
 
     }
 

@@ -163,7 +163,7 @@ public class UriUtil {
         return map;
     }
 
-    static public @NonNull URI relativize(@Nullable URI base, @NonNull URI uri) {
+    public static @NonNull URI relativize(@Nullable URI base, @NonNull URI uri) {
         URI relativized = uri;
         // Paths is better at relativizing URIs than URI.relativize().
         if (base == null) {
@@ -195,7 +195,7 @@ public class UriUtil {
         return relativized;
     }
 
-    static public @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri) {
+    public static @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri) {
         if (base == null) {
             return uri;
         }
@@ -224,7 +224,7 @@ public class UriUtil {
         return absolutized;
     }
 
-    static public @NonNull URI getParent(@NonNull URI uri) {
+    public static @NonNull URI getParent(@NonNull URI uri) {
         if ("jar".equals(uri.getScheme())) {
             try {
                 final String str = uri.toString();

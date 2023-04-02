@@ -112,7 +112,7 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 public class SequencedChampSet<E>
         extends BitmapIndexedNode<SequencedElement<E>>
         implements Serializable, ImmutableSequencedSet<E> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     private static final @NonNull SequencedChampSet<?> EMPTY = new SequencedChampSet<>(
             BitmapIndexedNode.emptyNode(), BitmapIndexedNode.emptyNode(), 0, -1, 0);
@@ -564,11 +564,11 @@ public class SequencedChampSet<E>
     }
 
     private @NonNull Object writeReplace() {
-        return new SerializationProxy<E>(toMutable());
+        return new SerializationProxy<>(toMutable());
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Set<E> target) {
             super(target);

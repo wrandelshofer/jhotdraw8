@@ -98,7 +98,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
 
     @Override
     public SequencedCollection<E> reversed() {
-        return new SequencedCollectionFacade<E>(
+        return new SequencedCollectionFacade<>(
                 reversedIteratorFunction,
                 iteratorFunction,
                 sizeFunction,

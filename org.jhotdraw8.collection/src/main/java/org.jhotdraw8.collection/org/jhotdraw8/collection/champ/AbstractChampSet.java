@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  */
 abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     /**
      * The current mutator id of this set.

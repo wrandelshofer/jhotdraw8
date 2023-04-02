@@ -75,7 +75,7 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
 
     @Override
     public long estimateSize() {
-        return (long) (fence - index);
+        return fence - index;
     }
 
     @Override

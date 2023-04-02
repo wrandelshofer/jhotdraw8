@@ -57,10 +57,10 @@ public abstract class AbstractImmutableSetTest {
         );
     }
 
-    private final static SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private final static SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private final static SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private final static SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
 
     private static int createNewValue(@NonNull Random rng, @NonNull Set<Integer> usedValues, int bound) {
         int value;
@@ -176,7 +176,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(data.a().asSet(), clone);
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testContainsShouldYieldExpectedValue(@NonNull SetData data) {
@@ -255,7 +254,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(instance, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEqualsWithCloneShouldYieldTrue(@NonNull SetData data) throws Exception {
@@ -265,7 +263,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(instance, clone);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddWithNewElementShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -280,7 +277,6 @@ public abstract class AbstractImmutableSetTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddWithContainedElementShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -293,7 +289,6 @@ public abstract class AbstractImmutableSetTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithNewElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -305,7 +300,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(expected, instance2.asSet());
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithContainedElementsShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -315,7 +309,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(data.a.asSet(), instance2.asSet());
     }
 
-    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSelfShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -325,7 +318,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(data.a.asSet(), instance2.asSet());
     }
 
-    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithCloneShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -336,7 +328,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(data.a.asSet(), instance3.asSet());
     }
 
-    @SuppressWarnings({"unchecked", "CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithCloneToMutableShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -347,7 +338,6 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(data.a.asSet(), instance3.asSet());
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testEqualsWithObjectShouldYieldFalse(@NonNull SetData data) throws Exception {
@@ -355,7 +345,6 @@ public abstract class AbstractImmutableSetTest {
         assertNotEquals(instance, new Object());
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveWithNewElementShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -367,7 +356,6 @@ public abstract class AbstractImmutableSetTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveWithContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -382,7 +370,6 @@ public abstract class AbstractImmutableSetTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithNewKeyShouldReturnSameInstance(@NonNull SetData data) throws Exception {
@@ -392,7 +379,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(data.a, instance);
     }
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -402,7 +388,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(Collections.emptySet(), instance2);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -412,7 +397,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(data.a, instance);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithSetWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -422,7 +406,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(data.a, instance);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyRemoveAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -435,7 +418,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(expected, instance2);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSomeNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -448,7 +430,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(expected, instance2);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -473,7 +454,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(expected, instance3);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
@@ -487,7 +467,6 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(expected, instance3);
     }
 
-    @SuppressWarnings({"unchecked", "SlowAbstractSetRemoveAll"})
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testCopyAddAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {

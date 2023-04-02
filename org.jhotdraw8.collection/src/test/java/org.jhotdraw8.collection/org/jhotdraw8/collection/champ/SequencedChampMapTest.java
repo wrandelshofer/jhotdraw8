@@ -31,7 +31,7 @@ public class SequencedChampMapTest extends AbstractImmutableSequencedMapTest {
 
     @Override
     protected @NonNull <K, V> SequencedChampMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m) {
-        return SequencedChampMap.<K, V>copyOf(m);
+        return SequencedChampMap.copyOf(m);
     }
 
     @Override

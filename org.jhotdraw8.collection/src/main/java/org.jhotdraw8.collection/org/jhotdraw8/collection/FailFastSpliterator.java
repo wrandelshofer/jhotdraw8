@@ -15,7 +15,7 @@ import java.util.function.IntSupplier;
  */
 public class FailFastSpliterator<E> implements Spliterator<E> {
     private final @NonNull Spliterator<? extends E> s;
-    private int expectedModCount;
+    private final int expectedModCount;
     private final @NonNull IntSupplier modCountSupplier;
 
     public FailFastSpliterator(@NonNull Spliterator<? extends E> s, @NonNull IntSupplier modCountSupplier) {

@@ -41,7 +41,7 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private final Iterator<F> i = backingSet.iterator();
 
             @Override

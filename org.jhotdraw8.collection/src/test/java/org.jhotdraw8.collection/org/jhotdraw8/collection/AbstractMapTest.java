@@ -32,9 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractMapTest {
 
-    private final static MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
-    private final static MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
-    private final static MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
+    private static final MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
+    private static final MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
 
     public static Stream<MapData> dataProvider() {
         return Stream.of(
@@ -383,7 +383,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void testKeySetRemoveAllWithEmptyMapShouldReturnFalse(@NonNull MapData data) throws Exception {
         Map<HashCollider, HashCollider> instance = newInstance(data.a);
-        assertFalse(instance.keySet().removeAll(Collections.emptySet()));
+        assertFalse(instance.keySet().removeAll(Collections.<HashCollider>emptySet()));
         assertEqualMap(data.a(), instance);
     }
 

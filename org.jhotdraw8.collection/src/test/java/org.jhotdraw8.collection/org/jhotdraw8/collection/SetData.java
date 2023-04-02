@@ -40,7 +40,7 @@ public final class SetData {
         aPlusB.addAll(a.asSet());
         aPlusB.addAll(b.asSet());
         someAPlusSomeB.addAll(aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2));
-        this.someAPlusSomeB = new ReadOnlySetFacade<HashCollider>(someAPlusSomeB);
+        this.someAPlusSomeB = new ReadOnlySetFacade<>(someAPlusSomeB);
     }
 
     public ReadOnlySet<HashCollider> a() {

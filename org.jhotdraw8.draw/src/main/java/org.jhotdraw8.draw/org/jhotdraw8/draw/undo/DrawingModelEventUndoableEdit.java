@@ -8,7 +8,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 public class DrawingModelEventUndoableEdit extends AbstractUndoableEdit {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private final @NonNull DrawingModelEvent event;
 
     public DrawingModelEventUndoableEdit(@NonNull DrawingModelEvent event) {

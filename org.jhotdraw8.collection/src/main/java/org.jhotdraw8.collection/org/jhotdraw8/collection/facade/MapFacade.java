@@ -107,7 +107,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
 
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
-        return new SetFacade<Entry<K, V>>(
+        return new SetFacade<>(
                 iteratorFunction,
                 spliteratorFunction, sizeFunction,
                 this::containsEntry,

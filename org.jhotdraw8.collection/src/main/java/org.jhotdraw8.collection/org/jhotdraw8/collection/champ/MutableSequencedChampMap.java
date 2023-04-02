@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.BiFunction;
 
 import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 
@@ -121,7 +120,7 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 @SuppressWarnings("exports")
 public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     /**
      * Counter for the sequence number of the last element. The counter is
      * incremented after a new entry is added to the end of the sequence.
@@ -319,23 +318,24 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
     }
 
-
-
     @NonNull
-    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToFirstFunction() {
-        return (oldK, newK) -> (Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1) ? oldK : newK;
+    private static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
+        return Objects.equals(oldK.getValue(), newK.getValue())
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
     }
 
-    @NonNull
-    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateAndMoveToLastFunction() {
-        return (oldK, newK) -> (Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1) ? oldK : newK;
-    }
 
     @NonNull
-    private BiFunction<SequencedEntry<K, V>, SequencedEntry<K, V>, SequencedEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    private static <K, V> SequencedEntry<K, V> updateAndMoveToLast(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
+        return Objects.equals(oldK.getValue(), newK.getValue())
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
+    }
+
+
+    @NonNull
+    private static <K, V> SequencedEntry<K, V> update(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
+        return Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
+                new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber());
     }
 
     private void iteratorPutIfPresent(@NonNull K k, V v) {
@@ -397,19 +397,19 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
 
     private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val,
                                                                 boolean moveToFirst) {
-        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        SequencedEntry<K, V> newElem = new SequencedEntry<>(key, val, first);
+        var details = new ChangeEvent<SequencedEntry<K, V>>();
+        var newElem = new SequencedEntry<>(key, val, first);
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
-                moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
+                moveToFirst ? MutableSequencedChampMap::updateAndMoveToFirst : MutableSequencedChampMap::update,
                 SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
             boolean isReplaced = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(first), 0, details,
-                    getUpdateFunction(),
+                    MutableSequencedChampMap::update,
                     SequencedData::seqEquals, SequencedData::seqHash);
             if (isReplaced) {
                 sequenceRoot = sequenceRoot.remove(mutator,
@@ -441,14 +441,14 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
-                moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
+                moveToLast ? MutableSequencedChampMap::updateAndMoveToLast : MutableSequencedChampMap::update,
                 SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
             boolean isReplaced = details.isReplaced();
             sequenceRoot = sequenceRoot.update(mutator,
                     newElem, seqHash(last), 0, details,
-                    getUpdateFunction(),
+                    MutableSequencedChampMap::update,
                     SequencedData::seqEquals, SequencedData::seqHash);
             if (isReplaced) {
                 sequenceRoot = sequenceRoot.remove(mutator,
@@ -523,7 +523,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
      */
     private void renumber() {
         if (SequencedData.mustRenumber(size, first, last)) {
-            root = SequencedData.renumber(size, root, sequenceRoot, getOrCreateIdentity(),
+            IdentityObject mutator = getOrCreateIdentity();
+            root = SequencedData.renumber(size, root, sequenceRoot, mutator,
                     SequencedEntry::keyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             sequenceRoot = SequencedData.buildSequenceRoot(root, mutator);
@@ -570,7 +571,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);

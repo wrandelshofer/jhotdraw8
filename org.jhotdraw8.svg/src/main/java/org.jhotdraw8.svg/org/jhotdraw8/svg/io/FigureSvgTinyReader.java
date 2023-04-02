@@ -97,11 +97,11 @@ public class FigureSvgTinyReader {
     /**
      * Maps from an attribute name to an accessor.
      */
-    private final static @NonNull Map<String, Map<String, MapAccessor<?>>> accessorMap;
+    private static final @NonNull Map<String, Map<String, MapAccessor<?>>> accessorMap;
     /**
      * Maps from an element name to a figure factory.
      */
-    private final static @NonNull Map<QName, Supplier<Figure>> figureMap;
+    private static final @NonNull Map<QName, Supplier<Figure>> figureMap;
 
     /**
      * Converts a CSS size string into a CssSize value.
@@ -120,7 +120,7 @@ public class FigureSvgTinyReader {
     /**
      * Maps from a type to a converter.
      */
-    private final static @NonNull Map<Type, Converter<?>> converterMap;
+    private static final @NonNull Map<Type, Converter<?>> converterMap;
 
     static {
         final LinkedHashMap<String, Map<String, MapAccessor<?>>> mutableAccessorMap = new LinkedHashMap<>();

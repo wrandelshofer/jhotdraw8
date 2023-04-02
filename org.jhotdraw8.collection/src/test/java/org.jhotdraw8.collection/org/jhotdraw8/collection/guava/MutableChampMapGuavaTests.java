@@ -40,7 +40,7 @@ public class MutableChampMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableChampMap<String, String>(Arrays.asList(entries));
+                                return new MutableChampMap<>(Arrays.asList(entries));
                             }
                         })
                 .named(MutableChampMap.class.getSimpleName())

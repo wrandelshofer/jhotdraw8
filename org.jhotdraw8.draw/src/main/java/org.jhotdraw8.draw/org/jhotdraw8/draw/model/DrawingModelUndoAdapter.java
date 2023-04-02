@@ -22,8 +22,7 @@ import javax.swing.undo.UndoableEdit;
  * Emits {@link UndoableEditEvent}s.
  */
 public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
-    private @NonNull
-    final Listener<DrawingModelEvent> drawingModelListener = new Listener<DrawingModelEvent>() {
+    private final @NonNull Listener<DrawingModelEvent> drawingModelListener = new Listener<DrawingModelEvent>() {
         @Override
         public void handle(DrawingModelEvent event) {
             UndoableEdit edit = switch (event.getEventType()) {

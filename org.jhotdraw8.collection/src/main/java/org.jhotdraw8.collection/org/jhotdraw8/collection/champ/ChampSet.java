@@ -77,7 +77,7 @@ import java.util.function.BiFunction;
  */
 @SuppressWarnings("exports")
 public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     final int size;
 
@@ -191,7 +191,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new KeyIterator<E>(this, null);
+        return new KeyIterator<>(this, null);
     }
 
     public @NonNull Spliterator<E> spliterator() {
@@ -277,11 +277,11 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     private @NonNull Object writeReplace() {
-        return new SerializationProxy<E>(this.toMutable());
+        return new SerializationProxy<>(this.toMutable());
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(@NonNull Set<E> target) {
             super(target);

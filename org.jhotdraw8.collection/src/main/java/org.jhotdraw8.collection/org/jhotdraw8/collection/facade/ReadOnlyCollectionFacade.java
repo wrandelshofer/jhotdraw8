@@ -49,7 +49,7 @@ public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private final Iterator<? extends E> i = iteratorFunction.get();
 
             @Override

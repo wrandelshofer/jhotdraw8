@@ -79,7 +79,7 @@ public class ChampMapJmh {
 
     @Benchmark
     public ChampMap<Key, Boolean> mCopyOf() {
-        return ChampMap.<Key, Boolean>copyOf(data.mapA);
+        return ChampMap.copyOf(data.mapA);
     }
 
     @Benchmark

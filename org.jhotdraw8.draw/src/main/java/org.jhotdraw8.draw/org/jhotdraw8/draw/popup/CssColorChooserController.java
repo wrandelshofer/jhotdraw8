@@ -49,8 +49,7 @@ public class CssColorChooserController {
 
     }
 
-    private @NonNull
-    final ObjectProperty<CssColor> color = new SimpleObjectProperty<>(this, "color");
+    private final @NonNull ObjectProperty<CssColor> color = new SimpleObjectProperty<>(this, "color");
 
     public @NonNull ObjectProperty<CssColor> colorProperty() {
         return color;

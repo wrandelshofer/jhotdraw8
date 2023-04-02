@@ -10,7 +10,16 @@ import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
@@ -20,7 +29,7 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  */
 public class IntArrayList extends AbstractList<Integer> implements IntList {
-    private final static int[] EMPTY = new int[0];
+    private static final int[] EMPTY = new int[0];
     private int[] items;
 
     /**

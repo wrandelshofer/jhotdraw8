@@ -11,7 +11,7 @@ import java.io.Serializable;
  * An object with a unique identity within this VM.
  */
 public class IdentityObject implements Serializable {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     public IdentityObject() {
     }

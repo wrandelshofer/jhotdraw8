@@ -41,7 +41,7 @@ public class Iterators {
     }
 
     public static <E> @NonNull Iterator<E> unmodifiableIterator(@NonNull Iterator<E> iterator) {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             @Override
             public boolean hasNext() {
                 return iterator.hasNext();

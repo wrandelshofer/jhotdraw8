@@ -18,8 +18,8 @@ public class ImmutableMapFacadeTest extends AbstractImmutableMapTest {
     @SuppressWarnings("unchecked")
     @Override
     protected <K, V> @NonNull ImmutableMapFacade<K, V> newInstance() {
-        Function<Map<K, V>, Map<K, V>> cloneFunction = t -> (Map<K, V>) (Map<?, ?>) ((LinkedHashMap<K, V>) t).clone();
-        return new ImmutableMapFacade<K, V>(new LinkedHashMap<K, V>(),
+        Function<Map<K, V>, Map<K, V>> cloneFunction = t -> (Map<K, V>) ((LinkedHashMap<K, V>) t).clone();
+        return new ImmutableMapFacade<>(new LinkedHashMap<>(),
                 cloneFunction);
     }
 

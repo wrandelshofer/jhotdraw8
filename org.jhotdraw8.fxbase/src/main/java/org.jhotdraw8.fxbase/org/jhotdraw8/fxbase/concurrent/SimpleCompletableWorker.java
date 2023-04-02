@@ -26,7 +26,7 @@ import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
  * @param <V> the result type
  */
 public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
-    private final static @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
+    private static final @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
     private final WorkState<V> workState;
     private final CompletableFuture<V> completableFuture = new CompletableFuture<>();
     private final @NonNull ReadOnlyObjectWrapper<Worker.State> state = new ReadOnlyObjectWrapper<>(this, "state", Worker.State.READY);

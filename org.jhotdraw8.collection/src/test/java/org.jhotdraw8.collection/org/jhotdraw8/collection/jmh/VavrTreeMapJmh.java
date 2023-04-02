@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class VavrSortedMapJmh {
+public class VavrTreeMapJmh {
     @Param({"1000000"})
     private int size;
 
@@ -101,6 +101,6 @@ public class VavrSortedMapJmh {
 
     @Benchmark
     public TreeMap<Key, Boolean> mCopyOf() {
-        return TreeMap.<Key, Boolean>ofAll(data.mapA);
+        return TreeMap.ofAll(data.mapA);
     }
 }

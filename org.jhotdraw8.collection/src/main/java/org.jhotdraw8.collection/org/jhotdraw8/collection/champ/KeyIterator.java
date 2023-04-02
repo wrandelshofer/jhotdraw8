@@ -32,8 +32,8 @@ class KeyIterator<K> implements Iterator<K> {
     private @Nullable K current;
     private boolean canRemove = false;
     private final @Nullable Consumer<K> removeFunction;
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
+    @SuppressWarnings({"unchecked"})
+    private final Node<K> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Constructs a new instance.

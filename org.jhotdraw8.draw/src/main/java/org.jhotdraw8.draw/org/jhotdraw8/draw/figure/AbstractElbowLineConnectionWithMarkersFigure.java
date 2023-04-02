@@ -279,8 +279,6 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             set(END, new CssPoint2D(end));
         }
 
-        //ObservableList<Double> points = path.getPoints();
-        // points.clear();
         CssSize elbowOffsetSize = getElbowOffset();
         if (elbowOffset == 0 || endDerivative == null || FXGeom.squaredMagnitude(endDerivative) < 1e-7) {
             points.addAll(start.getX(), start.getY());

@@ -113,7 +113,7 @@ public class ListFacade<E> extends AbstractList<E>
 
     @Override
     public SequencedCollection<E> reversed() {
-        return new SequencedCollectionFacade<E>(
+        return new SequencedCollectionFacade<>(
                 () -> new ReversedListEnumeratorSpliterator<>(this, 0, size()),
                 this::iterator,
                 sizeFunction,

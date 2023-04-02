@@ -666,8 +666,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         @Override
         public @NonNull Iterator<K> iterator() {
             return new Iterator<K>() {
-                private @NonNull
-                final Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
+                private final @NonNull Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K lastKey;
@@ -807,8 +806,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         public @NonNull Iterator<V> iterator() {
             return new Iterator<V>() {
 
-                private @NonNull
-                final Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
+                private final @NonNull Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K lastKey;

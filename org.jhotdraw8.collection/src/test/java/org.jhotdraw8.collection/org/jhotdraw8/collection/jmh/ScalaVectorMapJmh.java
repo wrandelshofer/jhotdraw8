@@ -59,8 +59,8 @@ public class ScalaVectorMapJmh {
         mapA = b.result();
     }
 
-    /*
-        @Benchmark
+
+    @Benchmark
         public int mIterate() {
             int sum = 0;
             for (var i = mapA.keysIterator(); i.hasNext(); ) {
@@ -80,15 +80,15 @@ public class ScalaVectorMapJmh {
             Key key = data.nextKeyInA();
             return mapA.$plus(new Tuple2<>(key, Boolean.FALSE));
         }
-    */
+
     @Benchmark
     public boolean mContainsFound() {
         Key key = data.nextKeyInA();
         return mapA.contains(key);
     }
 
-    /*
-        @Benchmark
+
+    @Benchmark
         public boolean mContainsNotFound() {
             Key key = data.nextKeyInB();
             return mapA.contains(key);
@@ -103,7 +103,7 @@ public class ScalaVectorMapJmh {
         public VectorMap<Key, Boolean> mTail() {
             return mapA.tail();
         }
-    */
+
     @Benchmark
     public VectorMap<Key, Boolean> mCopyOf() {
         Builder<Tuple2<Key, Boolean>, VectorMap<Key, Boolean>> b = VectorMap.newBuilder();

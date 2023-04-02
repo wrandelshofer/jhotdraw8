@@ -77,7 +77,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
      * Number of array elements used to store the vertex data
      * in the {@link #prev} and {@link #next} arrays.
      */
-    private final static int VERTEX_DATA_SIZE = 2;
+    private static final int VERTEX_DATA_SIZE = 2;
 
     /**
      * Creates a new instance.

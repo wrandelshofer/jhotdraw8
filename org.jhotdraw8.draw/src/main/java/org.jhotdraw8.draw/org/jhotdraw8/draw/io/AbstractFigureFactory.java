@@ -385,7 +385,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
             defaultValue = key.getDefaultValue();
         }
 
-        return defaultValue == null ? value == null : (value != null && defaultValue.equals(value));
+        return Objects.equals(defaultValue, value);
     }
 
     @Override

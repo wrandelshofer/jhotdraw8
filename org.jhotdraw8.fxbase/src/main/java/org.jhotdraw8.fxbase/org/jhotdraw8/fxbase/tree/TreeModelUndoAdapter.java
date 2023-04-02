@@ -34,13 +34,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TreeModelUndoAdapter<E> {
     public static final @NonNull String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
     private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
-    private @NonNull
-    final Listener<TreeModelEvent<E>> treeModelListener = new Listener<TreeModelEvent<E>>() {
+    private final @NonNull Listener<TreeModelEvent<E>> treeModelListener = new Listener<TreeModelEvent<E>>() {
         @Override
         public void handle(@NonNull TreeModelEvent<E> event) {
             UndoableEdit edit = switch (event.getEventType()) {
-                case ROOT_CHANGED ->
-                        new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
+                case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
                 case SUBTREE_NODES_CHANGED,
                         NODE_ADDED_TO_TREE,
                         NODE_REMOVED_FROM_TREE,

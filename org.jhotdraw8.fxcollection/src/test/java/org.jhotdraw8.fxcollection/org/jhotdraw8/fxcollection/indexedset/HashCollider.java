@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Allowing to run the same test with many or few hash collisions.
  */
 public class HashCollider implements Serializable {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private final int value;
     private final int hash;
     private final int hashBitMask;

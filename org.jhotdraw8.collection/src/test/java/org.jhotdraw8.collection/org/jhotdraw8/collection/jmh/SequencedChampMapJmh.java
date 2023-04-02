@@ -101,6 +101,6 @@ public class SequencedChampMapJmh {
 
     @Benchmark
     public SequencedChampMap<Key, Boolean> mCopyOf() {
-        return SequencedChampMap.<Key, Boolean>copyOf(data.mapA);
+        return SequencedChampMap.copyOf(data.mapA);
     }
 }

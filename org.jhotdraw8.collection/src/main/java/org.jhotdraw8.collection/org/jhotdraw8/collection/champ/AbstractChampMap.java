@@ -22,7 +22,7 @@ import java.util.Iterator;
  */
 abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     /**
      * The current mutator id of this map.

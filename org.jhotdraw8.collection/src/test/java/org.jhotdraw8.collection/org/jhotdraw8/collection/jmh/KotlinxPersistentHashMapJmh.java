@@ -57,7 +57,7 @@ public class KotlinxPersistentHashMapJmh {
         }
     }
 
-    /*
+
         @Benchmark
         public int mIterate() {
             int sum = 0;
@@ -99,7 +99,7 @@ public class KotlinxPersistentHashMapJmh {
         public PersistentMap<Key, Boolean> mTail() {
             return mapA.remove(mapA.keySet().iterator().next());
         }
-    */
+
     @Benchmark
     public PersistentMap<Key, Boolean> mCopyOf() {
         PersistentMap<Key, Boolean> map = ExtensionsKt.persistentHashMapOf();
@@ -108,9 +108,9 @@ public class KotlinxPersistentHashMapJmh {
         }
         return map;
     }
-    /*
+
     @Benchmark
     public PersistentMap<Key, Boolean> mCopyOfX() {
         return ExtensionsKt.toPersistentHashMap(data.mapA);
-    }*/
+    }
 }

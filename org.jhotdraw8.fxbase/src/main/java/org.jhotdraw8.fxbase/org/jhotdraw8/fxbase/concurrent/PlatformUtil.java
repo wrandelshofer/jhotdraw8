@@ -21,7 +21,7 @@ public class PlatformUtil {
     /**
      * This object is used to coalesce multiple updates.
      */
-    final static @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
+    static final @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
 
     /**
      * Don't let anyone instantiate this class.

@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractSetTest {
-    private final static SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private final static SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private final static SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private final static SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
 
 
     public static @NonNull Stream<SetData> dataProvider() {
@@ -249,7 +249,6 @@ public abstract class AbstractSetTest {
         }
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testContainsAllShouldYieldExpectedValue(@NonNull SetData data) {
@@ -259,7 +258,6 @@ public abstract class AbstractSetTest {
         assertFalse(instance.containsAll(data.someAPlusSomeB().asSet()));
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testHashCodeShouldYieldExpectedValue(@NonNull SetData data) {
@@ -358,7 +356,6 @@ public abstract class AbstractSetTest {
     }
 
 
-    @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void toArrayWithTemplateArgShouldYieldElements(@NonNull SetData data) {

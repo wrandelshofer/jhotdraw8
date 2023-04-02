@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.collection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
-
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * Abstract base class for {@link ReadOnlyList}s.
@@ -18,11 +17,6 @@ public abstract class AbstractReadOnlyList<E> extends AbstractReadOnlyCollection
     public AbstractReadOnlyList() {
     }
 
-
-    @Override
-    public Object @NonNull [] toArray() {
-        return super.toArray();
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -38,7 +32,7 @@ public abstract class AbstractReadOnlyList<E> extends AbstractReadOnlyCollection
         while (e1.hasNext() && e2.hasNext()) {
             E o1 = e1.next();
             Object o2 = e2.next();
-            if (!(o1 == null ? o2 == null : o1.equals(o2))) {
+            if (!(Objects.equals(o1, o2))) {
                 return false;
             }
         }

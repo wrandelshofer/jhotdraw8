@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         implements SequencedData {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private final int sequenceNumber;
 
     public SequencedEntry(@Nullable K key) {

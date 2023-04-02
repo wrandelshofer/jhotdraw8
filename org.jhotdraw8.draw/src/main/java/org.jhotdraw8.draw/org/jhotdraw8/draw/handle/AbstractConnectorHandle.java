@@ -57,8 +57,6 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     protected final @NonNull MapAccessor<Figure> targetKey;
     protected @Nullable Point2D connectorLocation;
     protected Point2D pickLocation;
-    // private final Region connectorNode;
-    // private final javafx.scene.Group groupNode;
     private boolean isConnected;
     private boolean isDragging;
     private boolean editable = true;

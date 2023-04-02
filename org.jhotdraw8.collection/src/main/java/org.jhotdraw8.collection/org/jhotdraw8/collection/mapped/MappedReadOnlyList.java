@@ -51,7 +51,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private final Iterator<F> i = backingList.iterator();
 
             @Override
@@ -72,7 +72,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     }
 
     @NonNull Iterator<E> reversedIterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private int i = size() - 1;
 
             @Override

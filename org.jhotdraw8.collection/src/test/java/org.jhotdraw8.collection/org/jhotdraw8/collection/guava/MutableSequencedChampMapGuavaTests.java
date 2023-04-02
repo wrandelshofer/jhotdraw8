@@ -41,7 +41,7 @@ public class MutableSequencedChampMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableSequencedChampMap<String, String>(Arrays.asList(entries));
+                                return new MutableSequencedChampMap<>(Arrays.asList(entries));
                             }
                         })
                 .named(MutableSequencedChampMap.class.getSimpleName())

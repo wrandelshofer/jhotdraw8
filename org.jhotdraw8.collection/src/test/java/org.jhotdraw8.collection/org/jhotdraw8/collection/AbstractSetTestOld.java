@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * Abstract base class for testing classes that implement the {@link Set} interface.
  */
-@SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "EqualsWithItself", "SimplifiableAssertion"})
+@SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked"})
 public abstract class AbstractSetTestOld {
 
     public static final HashCollider ZERO = new HashCollider(0, -1);

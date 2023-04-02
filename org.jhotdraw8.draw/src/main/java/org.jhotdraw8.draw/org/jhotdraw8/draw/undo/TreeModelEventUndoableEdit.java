@@ -8,7 +8,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
 public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private final @NonNull TreeModelEvent<T> event;
 
     public TreeModelEventUndoableEdit(@NonNull TreeModelEvent<T> event) {

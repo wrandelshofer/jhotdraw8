@@ -39,7 +39,6 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-@SuppressWarnings("unchecked")
 public class ScalaHashSetJmh {
     @Param({"1000000"})
     private int size;

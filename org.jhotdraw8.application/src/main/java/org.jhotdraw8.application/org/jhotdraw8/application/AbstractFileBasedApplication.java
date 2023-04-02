@@ -127,8 +127,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     private boolean isSystemMenuSupported;
 
 
-    private @NonNull
-    final ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
+    private final @NonNull ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
     {

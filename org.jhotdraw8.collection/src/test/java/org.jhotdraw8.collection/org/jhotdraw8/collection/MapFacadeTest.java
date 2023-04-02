@@ -9,22 +9,22 @@ import java.util.Map;
 public class MapFacadeTest extends AbstractMapTest {
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance() {
-        return new MapFacade<K, V>(new HashMap<>());
+        return new MapFacade<>(new HashMap<>());
     }
 
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance(int numElements, float loadFactor) {
-        return new MapFacade<K, V>(new HashMap<>((int) (numElements / loadFactor), loadFactor));
+        return new MapFacade<>(new HashMap<>((int) (numElements / loadFactor), loadFactor));
     }
 
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance(Map<K, V> m) {
-        return new MapFacade<K, V>(new HashMap<>(m));
+        return new MapFacade<>(new HashMap<>(m));
     }
 
     @Override
     protected <K, V> @NonNull Map<K, V> toClonedInstance(Map<K, V> m) {
-        return new MapFacade<K, V>(new HashMap<>(m));
+        return new MapFacade<>(new HashMap<>(m));
     }
 
     @Override
@@ -33,6 +33,6 @@ public class MapFacadeTest extends AbstractMapTest {
         for (Map.Entry<K, V> e : m) {
             i.put(e.getKey(), e.getValue());
         }
-        return new MapFacade<K, V>(i);
+        return new MapFacade<>(i);
     }
 }

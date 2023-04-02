@@ -54,7 +54,7 @@ import java.util.Set;
  * @param <E> the element type
  */
 public abstract class SetSerializationProxy<E> implements Serializable {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
     private final transient Set<E> serialized;
     protected transient List<E> deserialized;
 

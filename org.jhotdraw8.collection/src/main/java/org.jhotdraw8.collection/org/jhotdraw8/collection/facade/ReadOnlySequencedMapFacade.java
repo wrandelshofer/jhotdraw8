@@ -31,7 +31,7 @@ public class ReadOnlySequencedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
     private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> reversedIteratorFunction;
 
     public ReadOnlySequencedMapFacade(@NonNull SequencedMap<K, V> target) {
-        super((Map<K, V>) target);
+        super(target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
         this.reversedIteratorFunction = () -> target.reversed().sequencedEntrySet().iterator();

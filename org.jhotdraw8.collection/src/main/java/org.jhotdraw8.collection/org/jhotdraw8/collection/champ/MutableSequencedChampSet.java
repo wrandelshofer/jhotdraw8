@@ -118,7 +118,7 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 @SuppressWarnings("exports")
 public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
-    private final static long serialVersionUID = 0L;
+    private static final long serialVersionUID = 0L;
 
     /**
      * Counter for the sequence number of the last element. The counter is
@@ -273,7 +273,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
         return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
-                Objects.hashCode((E) o), 0, Objects::equals);
+                Objects.hashCode(o), 0, Objects::equals);
     }
 
     @Override
@@ -430,7 +430,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
-        private final static long serialVersionUID = 0L;
+        private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Set<E> target) {
             super(target);

@@ -259,11 +259,10 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             final double iconWidth = iconSize.getWidth().getConvertedValue(units);
             final double gap = getStyledNonNull(ICON_TEXT_GAP).getConvertedValue(units);
             width = textBounds.getWidth() + iconWidth + gap;
-            height = textBounds.getHeight();
         } else {
             width = textBounds.getWidth();
-            height = textBounds.getHeight();
         }
+            height = textBounds.getHeight();
 
         final double originX = getNonNull(ORIGIN_X).getConvertedValue(units);
         final double originY = getNonNull(ORIGIN_Y).getConvertedValue(units);

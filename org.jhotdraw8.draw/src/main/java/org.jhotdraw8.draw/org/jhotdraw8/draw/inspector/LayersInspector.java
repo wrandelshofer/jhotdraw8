@@ -80,8 +80,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private final @NonNull HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
-    private @Nullable
-    final ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
+    private final @Nullable ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
         int changedRecursion = 0;
 
         @Override
@@ -94,18 +93,17 @@ public class LayersInspector extends AbstractDrawingInspector {
             changedRecursion--;
         }
     };
-    private @Nullable
-    final Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
+    private final @Nullable Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
         @Override
         public void handle(@NonNull TreeModelEvent<Figure> event) {
             boolean fire = false;
             Figure root = event.getSource().getRoot();
             switch (event.getEventType()) {
 
-            case ROOT_CHANGED:
-                fire = true;
-                break;
-            case SUBTREE_NODES_CHANGED:
+                case ROOT_CHANGED:
+                    fire = true;
+                    break;
+                case SUBTREE_NODES_CHANGED:
                 if (event.getNode() == root) {
                     fire = true;
                 }
@@ -131,8 +129,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     };
 
 
-    private @NonNull
-    final InvalidationListener selectionInvalidationListener = new InvalidationListener() {
+    private final @NonNull InvalidationListener selectionInvalidationListener = new InvalidationListener() {
         @Override
         public void invalidated(Observable observable) {
             onSelectionChanged();
@@ -369,8 +366,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             this.io = io;
         }
 
-        private @NonNull
-        final EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {

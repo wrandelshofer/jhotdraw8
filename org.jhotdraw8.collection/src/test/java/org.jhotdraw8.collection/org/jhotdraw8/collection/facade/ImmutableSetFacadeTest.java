@@ -20,8 +20,8 @@ public class ImmutableSetFacadeTest extends AbstractImmutableSetTest {
     @SuppressWarnings("unchecked")
     @Override
     protected <E> @NonNull ImmutableSet<E> newInstance() {
-        Function<Set<E>, Set<E>> cloneFunction = (Function<Set<E>, Set<E>>) e ->
-                (Set<E>) (Set<?>) ((LinkedHashSet<?>) e).clone();
+        Function<Set<E>, Set<E>> cloneFunction = e ->
+                (Set<E>) ((LinkedHashSet<?>) e).clone();
         return new ImmutableSetFacade<>(new LinkedHashSet<>(), cloneFunction);
     }
 
@@ -34,24 +34,24 @@ public class ImmutableSetFacadeTest extends AbstractImmutableSetTest {
     @SuppressWarnings("unchecked")
     @Override
     protected <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m) {
-        Function<Set<E>, Set<E>> cloneFunction = (Function<Set<E>, Set<E>>) e ->
-                (Set<E>) (Set<?>) ((LinkedHashSet<?>) e).clone();
+        Function<Set<E>, Set<E>> cloneFunction = e ->
+                (Set<E>) ((LinkedHashSet<?>) e).clone();
         return new ImmutableSetFacade<>(m, cloneFunction);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
-        Function<Set<E>, Set<E>> cloneFunction = (Function<Set<E>, Set<E>>) e ->
-                (Set<E>) (Set<?>) ((LinkedHashSet<?>) e).clone();
+        Function<Set<E>, Set<E>> cloneFunction = e ->
+                (Set<E>) ((LinkedHashSet<?>) e).clone();
         return new ImmutableSetFacade<>(m.toMutable(), cloneFunction);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m) {
-        Function<Set<E>, Set<E>> cloneFunction = (Function<Set<E>, Set<E>>) e ->
-                (Set<E>) (Set<?>) ((LinkedHashSet<?>) e).clone();
+        Function<Set<E>, Set<E>> cloneFunction = e ->
+                (Set<E>) ((LinkedHashSet<?>) e).clone();
         if (m instanceof ReadOnlySet<E>) {
             return new ImmutableSetFacade<>(new LinkedHashSet<>(((ReadOnlySet<E>) m).asSet()), cloneFunction);
         }

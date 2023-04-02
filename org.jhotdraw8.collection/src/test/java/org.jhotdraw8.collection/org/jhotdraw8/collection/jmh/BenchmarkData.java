@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-@SuppressWarnings("JmhInspections")
 public class BenchmarkData {
     /**
      * List 'a'.
