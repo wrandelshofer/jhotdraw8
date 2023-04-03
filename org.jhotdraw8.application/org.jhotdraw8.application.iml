@@ -13,7 +13,6 @@
     <orderEntry type="module" module-name="org.jhotdraw8.annotation" />
     <orderEntry type="module" module-name="org.jhotdraw8.base" />
     <orderEntry type="module" module-name="org.jhotdraw8.collection" />
-    <orderEntry type="library" name="Maven: org.openjdk.jol:jol-core:0.17" level="project" />
     <orderEntry type="module" module-name="org.jhotdraw8.fxbase" />
     <orderEntry type="module" module-name="org.jhotdraw8.fxcollection" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:20" level="project" />

@@ -111,9 +111,7 @@ abstract class Node<D> {
             if ((nodeMap | dataMap) == 0) {
                 break;
             }
-            int lastNodeBit = 32 - Integer.numberOfLeadingZeros(nodeMap);
-            int lastDataBit = 32 - Integer.numberOfLeadingZeros(dataMap);
-            if (lastNodeBit > lastDataBit) {
+            if (Integer.compareUnsigned(nodeMap, dataMap) > 0) {
                 node = node.getNode(node.nodeArity() - 1);
             } else {
                 return node.getData(node.dataArity() - 1);

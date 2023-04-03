@@ -4,6 +4,9 @@ import org.jhotdraw8.collection.champ.ChampSet;
 import org.jhotdraw8.collection.jmh.Key;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 /**
  * <pre>
  * copyOf
@@ -40,8 +43,26 @@ import org.junit.jupiter.api.Test;
  */
 public class ChampSetJol extends AbstractJol {
 
+    /**
+     * <pre>
+     * class org.jhotdraw8.collection.champ.ChampSet with 1000 elements.
+     * total size              : 47168
+     * element size            : 24
+     * data size               : 24000 50%
+     * data structure size     : 23168 49%
+     * ----footprint---
+     * org.jhotdraw8.collection.champ.ChampSet@895e367d footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *        359        32     11664   [Ljava.lang.Object;
+     *          1        16        16   org.jhotdraw8.collection.IdentityObject
+     *          1        32        32   org.jhotdraw8.collection.champ.ChampSet
+     *        358        32     11456   org.jhotdraw8.collection.champ.MutableBitmapIndexedNode
+     *       1000        24     24000   org.jhotdraw8.collection.jmh.Key
+     *       1719               47168   (total)
+     * </pre>
+     */
     @Test
-    public void estimateMemoryUsageCopyOf() {
+    public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
         var data = generateSet(size, mask);
@@ -49,15 +70,36 @@ public class ChampSetJol extends AbstractJol {
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
+    /**
+     * <pre>
+     * class org.jhotdraw8.collection.champ.ChampSet with 250 elements.
+     * total size              : 11760
+     * element size            : 24
+     * data size               : 6000 51%
+     * data structure size     : 5760 48%
+     * ----footprint---
+     * org.jhotdraw8.collection.champ.ChampSet@1b266842d footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *         89        32      2880   [Ljava.lang.Object;
+     *          2        16        32   org.jhotdraw8.collection.IdentityObject
+     *          1        32        32   org.jhotdraw8.collection.champ.ChampSet
+     *         88        32      2816   org.jhotdraw8.collection.champ.MutableBitmapIndexedNode
+     *        250        24      6000   org.jhotdraw8.collection.jmh.Key
+     *        430               11760   (total)
+     * </pre>
+     */
     @Test
-    public void estimateMemoryUsageOneByOne() {
+    public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;
         var data = generateSet(size, mask);
-        ChampSet<Key> setA = ChampSet.of();
-        for (var d : data) {
-            setA = setA.add(d);
-        }
+        ChampSet<Key> setA = ChampSet.copyOf(data);
+
+        ArrayList<Key> keys = new ArrayList<>(data);
+        Collections.shuffle(keys);
+        setA = setA.removeAll(keys.subList(0, (int) (keys.size() * 0.75)));
+
+
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 

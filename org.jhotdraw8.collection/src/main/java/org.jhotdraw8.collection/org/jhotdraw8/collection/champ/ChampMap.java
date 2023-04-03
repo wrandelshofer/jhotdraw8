@@ -178,7 +178,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iterableToHashCode(iterator());
+        return ReadOnlyMap.iteratorToHashCode(iterator());
     }
 
     @Override

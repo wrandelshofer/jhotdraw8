@@ -147,7 +147,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     /**
-     * Constructs a map containing the same mappings as in the specified
+     * Constructs a map containing the same entries as in the specified
      * {@link Map}.
      *
      * @param m a map
@@ -172,7 +172,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     /**
-     * Constructs a map containing the same mappings as in the specified
+     * Constructs a map containing the same entries as in the specified
      * {@link Iterable}.
      *
      * @param m an iterable
@@ -186,7 +186,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     /**
-     * Constructs a map containing the same mappings as in the specified
+     * Constructs a map containing the same entries as in the specified
      * {@link ReadOnlyMap}.
      *
      * @param m a read-only map
@@ -208,7 +208,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     /**
-     * Removes all mappings from this map.
+     * Removes all entries from this map.
      */
     @Override
     public void clear() {
@@ -267,9 +267,9 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     /**
-     * Returns a {@link Set} view of the mappings contained in this map.
+     * Returns a {@link Set} view of the entries contained in this map.
      *
-     * @return a view of the mappings contained in this map
+     * @return a view of the entries contained in this map
      */
     @Override
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
@@ -277,9 +277,9 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
     /**
-     * Returns a {@link SequencedSet} view of the mappings contained in this map.
+     * Returns a {@link SequencedSet} view of the entries contained in this map.
      *
-     * @return a view of the mappings contained in this map
+     * @return a view of the entries contained in this map
      */
     @Override
     public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
@@ -304,7 +304,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
 
     /**
      * Returns the value to which the specified key is mapped,
-     * or {@code null} if this map contains no mapping for the key.
+     * or {@code null} if this map contains no entry for the key.
      *
      * @param o the key whose associated value is to be returned
      * @return the associated value or null
@@ -318,25 +318,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
     }
 
-    @NonNull
-    private static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
-        return Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
-    }
 
-
-    @NonNull
-    private static <K, V> SequencedEntry<K, V> updateAndMoveToLast(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
-        return Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
-    }
-
-
-    @NonNull
-    private static <K, V> SequencedEntry<K, V> update(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
-        return Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
-                new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber());
-    }
 
     private void iteratorPutIfPresent(@NonNull K k, V v) {
         if (containsKey(k)) {
@@ -402,20 +384,12 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
-                moveToFirst ? MutableSequencedChampMap::updateAndMoveToFirst : MutableSequencedChampMap::update,
+                moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
-            boolean isReplaced = details.isReplaced();
-            sequenceRoot = sequenceRoot.update(mutator,
-                    newElem, seqHash(first), 0, details,
-                    MutableSequencedChampMap::update,
-                    SequencedData::seqEquals, SequencedData::seqHash);
-            if (isReplaced) {
-                sequenceRoot = sequenceRoot.remove(mutator,
-                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        SequencedData::seqEquals);
-
+            if (details.isReplaced()) {
+                sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, oldElem, details);
                 first = details.getData().getSequenceNumber() == first ? first : first - 1;
                 last = details.getData().getSequenceNumber() == last ? last - 1 : last;
             } else {
@@ -423,6 +397,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
                 first--;
                 size++;
             }
+            sequenceRoot = SequencedData.seqUpdate(sequenceRoot, mutator, newElem, details, SequencedEntry::update);
             renumber();
         }
         return details;
@@ -441,20 +416,12 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newElem, Objects.hashCode(key), 0, details,
-                moveToLast ? MutableSequencedChampMap::updateAndMoveToLast : MutableSequencedChampMap::update,
+                moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             SequencedEntry<K, V> oldElem = details.getData();
-            boolean isReplaced = details.isReplaced();
-            sequenceRoot = sequenceRoot.update(mutator,
-                    newElem, seqHash(last), 0, details,
-                    MutableSequencedChampMap::update,
-                    SequencedData::seqEquals, SequencedData::seqHash);
-            if (isReplaced) {
-                sequenceRoot = sequenceRoot.remove(mutator,
-                        oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
-                        SequencedData::seqEquals);
-
+            if (details.isReplaced()) {
+                sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, oldElem, details);
                 first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
                 last = details.getData().getSequenceNumber() == last ? last : last + 1;
             } else {
@@ -462,6 +429,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
                 size++;
                 last++;
             }
+            sequenceRoot = SequencedData.seqUpdate(sequenceRoot, mutator, newElem, details, SequencedEntry::update);
             renumber();
         }
         return details;
@@ -527,7 +495,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
             root = SequencedData.renumber(size, root, sequenceRoot, mutator,
                     SequencedEntry::keyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
-            sequenceRoot = SequencedData.buildSequenceRoot(root, mutator);
+            sequenceRoot = SequencedData.buildSequencedTrie(root, mutator);
             last = size;
             first = -1;
         }

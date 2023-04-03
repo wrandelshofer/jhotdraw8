@@ -22,7 +22,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iterableToHashCode(iterator());
+        return ReadOnlyMap.iteratorToHashCode(iterator());
     }
 
     @Override

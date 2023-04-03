@@ -129,7 +129,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     }
 
     /**
-     * Removes all mappings from this map.
+     * Removes all entries from this map.
      */
     @Override
     public void clear() {
@@ -156,9 +156,9 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     }
 
     /**
-     * Returns a {@link Set} view of the mappings contained in this map.
+     * Returns a {@link Set} view of the entries contained in this map.
      *
-     * @return a view of the mappings contained in this map
+     * @return a view of the entries contained in this map
      */
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
@@ -181,7 +181,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
 
     /**
      * Returns the value to which the specified key is mapped,
-     * or {@code null} if this map contains no mapping for the key.
+     * or {@code null} if this map contains no entry for the key.
      *
      * @param o the key whose associated value is to be returned
      * @return the associated value or null

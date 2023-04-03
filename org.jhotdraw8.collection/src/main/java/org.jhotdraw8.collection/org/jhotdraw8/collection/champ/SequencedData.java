@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 
 import java.util.Objects;
@@ -41,13 +42,16 @@ interface SequencedData {
      */
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
-    /**
-     * Gets the sequence number of the data.
-     *
-     * @return sequence number in the range from {@link Integer#MIN_VALUE}
-     * (exclusive) to {@link Integer#MAX_VALUE} (inclusive).
-     */
-    int getSequenceNumber();
+    static <K extends SequencedData> BitmapIndexedNode<K> buildSequencedTrie(@NonNull BitmapIndexedNode<K> root, @NonNull IdentityObject mutator) {
+        BitmapIndexedNode<K> seqRoot = emptyNode();
+        ChangeEvent<K> details = new ChangeEvent<>();
+        for (KeyIterator<K> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+            K elem = i.next();
+            seqRoot = seqRoot.update(mutator, elem, seqHash(elem.getSequenceNumber()),
+                    0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
+        }
+        return seqRoot;
+    }
 
     /**
      * Returns true if the sequenced elements must be renumbered because
@@ -113,25 +117,13 @@ interface SequencedData {
         return newRoot;
     }
 
-    static <K extends SequencedData> BitmapIndexedNode<K> buildSequenceRoot(@NonNull BitmapIndexedNode<K> root, @NonNull IdentityObject mutator) {
-        BitmapIndexedNode<K> seqRoot = emptyNode();
-        ChangeEvent<K> details = new ChangeEvent<>();
-        for (KeyIterator<K> i = new KeyIterator<>(root, null); i.hasNext(); ) {
-            K elem = i.next();
-            seqRoot = seqRoot.update(mutator, elem, SequencedData.seqHash(elem.getSequenceNumber()),
-                    0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
-        }
-        return seqRoot;
-    }
-
     static <K extends SequencedData> boolean seqEquals(@NonNull K a, @NonNull K b) {
         return a.getSequenceNumber() == b.getSequenceNumber();
     }
 
     static <K extends SequencedData> int seqHash(K e) {
-        return SequencedData.seqHash(e.getSequenceNumber());
+        return seqHash(e.getSequenceNumber());
     }
-
 
     /**
      * Computes a hash code from the sequence number, so that we can
@@ -154,5 +146,30 @@ interface SequencedData {
                 | ((u & 0b00000_00000_00000_00000_00000_11111_00) << 23)
                 | ((u & 0b00000_00000_00000_00000_00000_00000_11) << 30);
     }
+
+    static <K extends SequencedData> BitmapIndexedNode<K> seqRemove(@NonNull BitmapIndexedNode<K> seqRoot, @Nullable IdentityObject mutator,
+                                                                    @NonNull K key, @NonNull ChangeEvent<K> details) {
+        return seqRoot.remove(mutator,
+                key, seqHash(key.getSequenceNumber()), 0, details,
+                SequencedData::seqEquals);
+    }
+
+    static <K extends SequencedData> BitmapIndexedNode<K> seqUpdate(@NonNull BitmapIndexedNode<K> seqRoot, @Nullable IdentityObject mutator,
+                                                                    @NonNull K key, @NonNull ChangeEvent<K> details,
+                                                                    @NonNull BiFunction<K, K, K> replaceFunction) {
+        return seqRoot.update(mutator,
+                key, seqHash(key.getSequenceNumber()), 0, details,
+                replaceFunction,
+                SequencedData::seqEquals, SequencedData::seqHash);
+    }
+
+    /**
+     * Gets the sequence number of the data.
+     *
+     * @return sequence number in the range from {@link Integer#MIN_VALUE}
+     * (exclusive) to {@link Integer#MAX_VALUE} (inclusive).
+     */
+    int getSequenceNumber();
+
 
 }

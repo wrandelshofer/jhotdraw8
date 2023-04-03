@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
-import java.util.function.Function;
 
 import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
 import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
@@ -141,17 +140,6 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
         this.sequenceRoot = Objects.requireNonNull(sequenceRoot);
     }
 
-    static <K, V> BitmapIndexedNode<SequencedEntry<K, V>> buildSequenceRoot(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root, @NonNull IdentityObject mutator) {
-        BitmapIndexedNode<SequencedEntry<K, V>> seqRoot = emptyNode();
-        var details = new ChangeEvent<SequencedEntry<K, V>>();
-        for (var i = new KeySpliterator<>(root, Function.identity(), 0, 0); i.moveNext(); ) {
-            SequencedEntry<K, V> elem = i.current();
-            seqRoot = seqRoot.update(mutator, elem, seqHash(elem.getSequenceNumber()),
-                    0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
-        }
-        return seqRoot;
-    }
-
     /**
      * Returns an immutable copy of the provided map.
      *
@@ -186,24 +174,6 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     @SuppressWarnings("unchecked")
     public static <K, V> @NonNull SequencedChampMap<K, V> of() {
         return (SequencedChampMap<K, V>) SequencedChampMap.EMPTY;
-    }
-
-    @NonNull
-    private static <K, V> SequencedEntry<K, V> update(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
-        return Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
-                new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber());
-    }
-
-    @NonNull
-    private static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
-        return Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
-    }
-
-    @NonNull
-    private static <K, V> SequencedEntry<K, V> updateAndMoveToLast(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
-        return Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
     }
 
     /**
@@ -245,7 +215,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iterableToHashCode(iterator());
+        return ReadOnlyMap.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -290,7 +260,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
         var newRoot = update(null,
                 newEntry,
                 Objects.hashCode(key), 0, details,
-                moveToFirst ? SequencedChampMap::updateAndMoveToFirst : SequencedChampMap::update,
+                moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             var newSeqRoot = sequenceRoot;
@@ -300,19 +270,14 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             var mutator = new IdentityObject();
             if (details.isReplaced()) {
                 var oldEntry = details.getData();
-                newSeqRoot = newSeqRoot.remove(mutator,
-                        oldEntry, seqHash(oldEntry.getSequenceNumber()), 0, details,
-                        SequencedData::seqEquals);
+                newSeqRoot = SequencedData.seqRemove(newSeqRoot, mutator, oldEntry, details);
                 newFirst = details.getData().getSequenceNumber() == newFirst ? newFirst : newFirst - 1;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast - 1 : newLast;
             } else {
                 newFirst--;
                 newSize++;
             }
-            newSeqRoot = newSeqRoot.update(mutator,
-                    newEntry, seqHash(first - 1), 0, details,
-                    SequencedChampMap::update,
-                    SequencedData::seqEquals, SequencedData::seqHash);
+            newSeqRoot = SequencedData.seqUpdate(newSeqRoot, mutator, newEntry, details, SequencedEntry::update);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
         return this;
@@ -330,7 +295,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
         var newRoot = update(null,
                 newEntry,
                 Objects.hashCode(key), 0, details,
-                moveToLast ? SequencedChampMap::updateAndMoveToLast : SequencedChampMap::update,
+                moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::keyHash);
         if (details.isModified()) {
             var newSeqRoot = sequenceRoot;
@@ -340,19 +305,15 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             var mutator = new IdentityObject();
             if (details.isReplaced()) {
                 var oldEntry = details.getData();
-                newSeqRoot = newSeqRoot.remove(mutator,
-                        oldEntry, seqHash(oldEntry.getSequenceNumber()), 0, details,
-                        SequencedData::seqEquals);
+                newSeqRoot = SequencedData.seqRemove(newSeqRoot, mutator, oldEntry, details);
                 newFirst = details.getData().getSequenceNumber() == newFirst - 1 ? newFirst - 1 : newFirst;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast : newLast + 1;
             } else {
                 newSize++;
                 newLast++;
             }
-            newSeqRoot = newSeqRoot.update(mutator,
-                    newEntry, seqHash(last), 0, details,
-                    SequencedChampMap::update,
-                    SequencedData::seqEquals, SequencedData::seqHash);
+            newSeqRoot = SequencedData.seqUpdate(newSeqRoot, mutator, newEntry, details,
+                    SequencedEntry::update);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
         return this;
@@ -429,7 +390,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
                     size, root, seqRoot, mutator,
                     SequencedEntry::keyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
-            BitmapIndexedNode<SequencedEntry<K, V>> renumberedSeqRoot = buildSequenceRoot(renumberedRoot, mutator);
+            BitmapIndexedNode<SequencedEntry<K, V>> renumberedSeqRoot = SequencedData.buildSequencedTrie(renumberedRoot, mutator);
             return new SequencedChampMap<>(renumberedRoot, renumberedSeqRoot,
                     size, -1, size);
         }

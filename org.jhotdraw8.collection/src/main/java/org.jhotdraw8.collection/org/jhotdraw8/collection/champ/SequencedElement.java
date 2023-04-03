@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection.champ;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
@@ -28,6 +29,21 @@ class SequencedElement<E> implements SequencedData {
     public SequencedElement(@Nullable E element, int sequenceNumber) {
         this.element = element;
         this.sequenceNumber = sequenceNumber;
+    }
+
+    @NonNull
+    static <E> SequencedElement<E> update(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+        return oldK;
+    }
+
+    @NonNull
+    static <E> SequencedElement<E> updateAndMoveToFirst(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+        return oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
+    }
+
+    @NonNull
+    static <E> SequencedElement<E> updateAndMoveToLast(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+        return oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
     }
 
     @Override

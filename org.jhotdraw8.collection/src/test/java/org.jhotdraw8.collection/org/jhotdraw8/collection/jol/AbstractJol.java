@@ -12,6 +12,8 @@ import java.util.Random;
 import java.util.Set;
 
 public class AbstractJol {
+  private static final boolean PRINT = false;
+
   protected static Map<Key, Key> generateMap(int size, int mask) {
     Random rng = new Random(0);
     Map<Key, Key> map = new LinkedHashMap<>();
@@ -41,24 +43,26 @@ public class AbstractJol {
   }
 
   protected static void estimateMemoryUsage(Object collection, Map.Entry<?, ?> head, int size) {
-    System.out.println(VM.current().details());
-    GraphLayout graphLayout = GraphLayout.parseInstance(collection);
-    long totalSize = graphLayout.totalSize();
-    long elementSize = GraphLayout.parseInstance(head.getKey()).totalSize()
-            + GraphLayout.parseInstance(head.getValue()).totalSize();
-    long dataSize = elementSize * size;
-    long dataStructureSize = totalSize - dataSize;
-    System.out.println(collection.getClass() + " with " + size + " elements.");
-    System.out.println("total size              : " + totalSize);
-    System.out.println("element size            : " + elementSize);
-    System.out.println("data size               : " + dataSize + " " + (100 * dataSize / totalSize) + "%");
-    System.out.println("data structure size     : " + dataStructureSize + " " + (100 * dataStructureSize / totalSize) + "%");
+    if (PRINT) {
+      System.out.println(VM.current().details());
+      GraphLayout graphLayout = GraphLayout.parseInstance(collection);
+      long totalSize = graphLayout.totalSize();
+      long elementSize = GraphLayout.parseInstance(head.getKey()).totalSize()
+              + GraphLayout.parseInstance(head.getValue()).totalSize();
+      long dataSize = elementSize * size;
+      long dataStructureSize = totalSize - dataSize;
+      System.out.println(collection.getClass() + " with " + size + " elements.");
+      System.out.println("total size              : " + totalSize);
+      System.out.println("element size            : " + elementSize);
+      System.out.println("data size               : " + dataSize + " " + (100 * dataSize / totalSize) + "%");
+      System.out.println("data structure size     : " + dataStructureSize + " " + (100 * dataStructureSize / totalSize) + "%");
 
-    System.out.println("----footprint---");
-    System.out.println(graphLayout.toFootprint());
-    if (size <= 10) {
-      System.out.println("----printable---");
-      System.out.println(graphLayout.toPrintable());
+      System.out.println("----footprint---");
+      System.out.println(graphLayout.toFootprint());
+      if (size <= 10) {
+        System.out.println("----printable---");
+        System.out.println(graphLayout.toPrintable());
+      }
     }
   }
 

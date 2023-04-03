@@ -11,27 +11,50 @@ import org.jhotdraw8.collection.facade.ReadOnlyCollectionFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
 
+import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
 
 /**
  * Read-only interface for a map.
- * <p>
- * This interface does not guarantee 'read-only', it actually guarantees
- * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <K> the key type
  * @param <V> the value type
  */
 public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
+    /**
+     * Returns {@code true} if this map contains no entries.
+     *
+     * @return {@code true} if empty
+     */
     boolean isEmpty();
 
+    /**
+     * Returns the number of entries contained in this map..
+     *
+     * @return the number of entries
+     */
     int size();
 
+    /**
+     * Returns the value to which the key is mapped, or {@code null} if this map
+     * contains no entry for the key.
+     *
+     * @param key a key
+     * @return the mapped value or {@code null}
+     */
     @Nullable V get(Object key);
 
+    /**
+     * Returns the value to which the key is mapped, or the specified default
+     * value if this map contains no entry for the key.
+     *
+     * @param key          a key
+     * @param defaultValue a default value
+     * @return the mapped value or the specified default value
+     */
     @SuppressWarnings("unchecked")
     default @Nullable V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
         V v;
@@ -41,17 +64,17 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     }
 
     /**
-     * Returns {@code true} if this map contains a mapping for the specified
+     * Returns {@code true} if this map contains a entry for the specified
      * key.
      *
      * @param key a key
-     * @return {@code true} if this map contains a mapping for the specified
+     * @return {@code true} if this map contains a entry for the specified
      * key
      */
     boolean containsKey(@Nullable Object key);
 
     /**
-     * Returns {@code true} if this map maps one or more keys to the
+     * Returns {@code true} if this map contains one or more keys to the
      * specified value.
      *
      * @param value
@@ -82,6 +105,12 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return false;
     }
 
+    /**
+     * Returns a {@link ReadOnlySet} view to the entries contained
+     * in this map.
+     *
+     * @return a read-only view
+     */
     default @NonNull ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new ReadOnlySetFacade<>(
                 this::iterator,
@@ -90,6 +119,12 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         );
     }
 
+    /**
+     * Returns a {@link ReadOnlySet} view to the keys contained
+     * in this map.
+     *
+     * @return a read-only view
+     */
     default @NonNull ReadOnlySet<K> readOnlyKeySet() {
         return new ReadOnlySetFacade<>(
                 () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getKey),
@@ -98,6 +133,12 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         );
     }
 
+    /**
+     * Returns a {@link ReadOnlyCollection} view to the values contained
+     * in this map.
+     *
+     * @return a read-only view
+     */
     default @NonNull ReadOnlyCollection<V> readOnlyValues() {
         return new ReadOnlyCollectionFacade<>(
                 () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getValue),
@@ -107,7 +148,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     }
 
     /**
-     * Wraps this map in the Map interface - without copying.
+     * Wraps this map in the {@link Map} interface - without copying.
      *
      * @return the wrapped map
      */
@@ -115,6 +156,17 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return new MapFacade<>(this);
     }
 
+    /**
+     * Returns a string representation of the specified map.
+     * <p>
+     * The string representation is consistent with the one produced
+     * by {@link AbstractMap#toString()}.
+     *
+     * @param map a map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return a string representation
+     */
     static <K, V> @NonNull String mapToString(final @NonNull ReadOnlyMap<K, V> map) {
         Iterator<Map.Entry<K, V>> i = map.iterator();
         if (!i.hasNext()) {
@@ -140,7 +192,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     /**
      * Compares a read-only map with an object for equality.  Returns
      * {@code true} if the given object is also a read-only map and the two maps
-     * represent the same mappings.
+     * represent the same entries.
      *
      * @param map a map
      * @param o   an object
@@ -189,7 +241,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @return the sum of the hash codes of the elements in the set
      * @see Map#hashCode()
      */
-    static <K, V> int iterableToHashCode(@NonNull Iterator<Map.Entry<K, V>> entries) {
+    static <K, V> int iteratorToHashCode(@NonNull Iterator<Map.Entry<K, V>> entries) {
         return ReadOnlySet.iteratorToHashCode(entries);
     }
 
@@ -197,7 +249,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * Compares the specified object with this map for equality.
      * <p>
      * Returns {@code true} if the given object is also a read-only map and the
-     * two maps represent the same mappings, ignorig the sequence of the
+     * two maps represent the same entries, ignorig the sequence of the
      * map entries.
      *
      * @param o an object
@@ -213,4 +265,23 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @see Map#hashCode()
      */
     int hashCode();
+
+    /**
+     * Returns an iterator over the entries contained in this map.
+     *
+     * @return an iterator
+     */
+    @Override
+    @NonNull Iterator<Map.Entry<K, V>> iterator();
+
+    /**
+     * Returns a spliterator over the entries contained in this map.
+     *
+     * @return a spliterator
+     */
+    @NonNull
+    @Override
+    default Spliterator<Map.Entry<K, V>> spliterator() {
+        return Iterable.super.spliterator();
+    }
 }
