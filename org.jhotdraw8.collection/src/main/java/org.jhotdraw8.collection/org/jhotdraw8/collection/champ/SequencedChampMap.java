@@ -23,6 +23,9 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Function;
 
+import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
+import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
+
 /**
  * Implements an immutable map using two Compressed Hash-Array Mapped Prefix-trees
  * (CHAMP), with predictable iteration order.
@@ -143,7 +146,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         for (var i = new KeySpliterator<>(root, Function.identity(), 0, 0); i.moveNext(); ) {
             SequencedEntry<K, V> elem = i.current();
-            seqRoot = seqRoot.update(mutator, elem, SequencedData.seqHash(elem.getSequenceNumber()),
+            seqRoot = seqRoot.update(mutator, elem, seqHash(elem.getSequenceNumber()),
                     0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
         }
         return seqRoot;
@@ -298,7 +301,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             if (details.isReplaced()) {
                 var oldEntry = details.getData();
                 newSeqRoot = newSeqRoot.remove(mutator,
-                        oldEntry, SequencedData.seqHash(oldEntry.getSequenceNumber()), 0, details,
+                        oldEntry, seqHash(oldEntry.getSequenceNumber()), 0, details,
                         SequencedData::seqEquals);
                 newFirst = details.getData().getSequenceNumber() == newFirst ? newFirst : newFirst - 1;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast - 1 : newLast;
@@ -307,7 +310,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
                 newSize++;
             }
             newSeqRoot = newSeqRoot.update(mutator,
-                    newEntry, SequencedData.seqHash(first - 1), 0, details,
+                    newEntry, seqHash(first - 1), 0, details,
                     SequencedChampMap::update,
                     SequencedData::seqEquals, SequencedData::seqHash);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
@@ -338,7 +341,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             if (details.isReplaced()) {
                 var oldEntry = details.getData();
                 newSeqRoot = newSeqRoot.remove(mutator,
-                        oldEntry, SequencedData.seqHash(oldEntry.getSequenceNumber()), 0, details,
+                        oldEntry, seqHash(oldEntry.getSequenceNumber()), 0, details,
                         SequencedData::seqEquals);
                 newFirst = details.getData().getSequenceNumber() == newFirst - 1 ? newFirst - 1 : newFirst;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast : newLast + 1;
@@ -347,7 +350,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
                 newLast++;
             }
             newSeqRoot = newSeqRoot.update(mutator,
-                    newEntry, SequencedData.seqHash(last), 0, details,
+                    newEntry, seqHash(last), 0, details,
                     SequencedChampMap::update,
                     SequencedData::seqEquals, SequencedData::seqHash);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
@@ -384,7 +387,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             int seq = oldEntry.getSequenceNumber();
             newSeqRoot = newSeqRoot.remove(null,
                     oldEntry,
-                    SequencedData.seqHash(seq), 0, details, SequencedData::seqEquals);
+                    seqHash(seq), 0, details, SequencedData::seqEquals);
             if (seq == newFirst) {
                 newFirst++;
             }
@@ -420,7 +423,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             BitmapIndexedNode<SequencedEntry<K, V>> root,
             BitmapIndexedNode<SequencedEntry<K, V>> seqRoot,
             int size, int first, int last) {
-        if (SequencedData.mustRenumber(size, first, last)) {
+        if (mustRenumber(size, first, last)) {
             IdentityObject mutator = new IdentityObject();
             BitmapIndexedNode<SequencedEntry<K, V>> renumberedRoot = SequencedData.renumber(
                     size, root, seqRoot, mutator,

@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * Interface for an immutable sequenced map.
@@ -75,8 +76,8 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * Returns a copy of this map that contains all entries
      * of this map except the first.
      *
-     * @return this map instance if it is already empty, or
-     * a different map instance with the first entry removed
+     * @return a new map instance with the first element removed
+     * @throws NoSuchElementException if this map is empty
      */
     default @NonNull ImmutableSequencedMap<K, V> removeFirst() {
         Map.Entry<K, V> e = firstEntry();
@@ -87,8 +88,8 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * Returns a copy of this map that contains all entries
      * of this map except the last.
      *
-     * @return this map instance if it is already empty, or
-     * a different map instance with the last entry removed
+     * @return a new map instance with the last element removed
+     * @throws NoSuchElementException if this set is empty
      */
     default @NonNull ImmutableSequencedMap<K, V> removeLast() {
         Map.Entry<K, V> e = lastEntry();

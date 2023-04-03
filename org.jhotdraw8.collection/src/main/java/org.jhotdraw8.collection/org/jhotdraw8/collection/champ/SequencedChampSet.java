@@ -8,7 +8,7 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.BiFunction;
 
 import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
 import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
@@ -265,7 +264,7 @@ public class SequencedChampSet<E>
         SequencedElement<E> newElem = new SequencedElement<>(e, first);
         var newRoot = update(null, newElem,
                 Objects.hashCode(e), 0, details,
-                moveToFirst ? getUpdateAndMoveToFirstFunction() : getUpdateFunction(),
+                moveToFirst ? SequencedChampSet::updateAndMoveToFirst : SequencedChampSet::update,
                 Objects::equals, Objects::hashCode);
         var newSeqRoot = sequenceRoot;
         int newSize = size;
@@ -275,10 +274,6 @@ public class SequencedChampSet<E>
             IdentityObject mutator = new IdentityObject();
             SequencedElement<E> oldElem = details.getData();
             boolean isUpdated = details.isReplaced();
-            newSeqRoot = newSeqRoot.update(mutator,
-                    newElem, seqHash(first), 0, details,
-                    getUpdateFunction(),
-                    SequencedData::seqEquals, SequencedData::seqHash);
             if (isUpdated) {
                 newSeqRoot = newSeqRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
@@ -290,6 +285,10 @@ public class SequencedChampSet<E>
                 newFirst--;
                 newSize++;
             }
+            newSeqRoot = newSeqRoot.update(mutator,
+                    newElem, seqHash(first), 0, details,
+                    SequencedChampSet::update,
+                    SequencedData::seqEquals, SequencedData::seqHash);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
         return this;
@@ -297,36 +296,34 @@ public class SequencedChampSet<E>
 
     private @NonNull SequencedChampSet<E> addLast(@Nullable E e,
                                                   boolean moveToLast) {
-        ChangeEvent<SequencedElement<E>> details = new ChangeEvent<>();
-        SequencedElement<E> newElem = new SequencedElement<>(e, last);
+        var details = new ChangeEvent<SequencedElement<E>>();
+        var newElem = new SequencedElement<E>(e, last);
         var newRoot = update(
                 null, newElem, Objects.hashCode(e), 0,
                 details,
-                moveToLast ? getUpdateAndMoveToLastFunction() : getUpdateFunction(),
+                moveToLast ? SequencedChampSet::updateAndMoveToLast : SequencedChampSet::update,
                 Objects::equals, Objects::hashCode);
-        var newSeqRoot = sequenceRoot;
-        int newFirst = first;
-        int newLast = last;
-        int newSize = size;
         if (details.isModified()) {
-            IdentityObject mutator = new IdentityObject();
-            SequencedElement<E> oldElem = details.getData();
-            boolean isUpdated = details.isReplaced();
-            newSeqRoot = newSeqRoot.update(mutator,
-                    newElem, seqHash(last), 0, details,
-                    getUpdateFunction(),
-                    SequencedData::seqEquals, SequencedData::seqHash);
-            if (isUpdated) {
+            var newSeqRoot = sequenceRoot;
+            int newFirst = first;
+            int newLast = last;
+            int newSize = size;
+            var mutator = new IdentityObject();
+            var oldElem = details.getData();
+            if (details.isReplaced()) {
                 newSeqRoot = newSeqRoot.remove(mutator,
                         oldElem, seqHash(oldElem.getSequenceNumber()), 0, details,
                         SequencedData::seqEquals);
-
                 newFirst = details.getData().getSequenceNumber() == newFirst - 1 ? newFirst - 1 : newFirst;
                 newLast = details.getData().getSequenceNumber() == newLast ? newLast : newLast + 1;
             } else {
                 newSize++;
                 newLast++;
             }
+            newSeqRoot = newSeqRoot.update(mutator,
+                    newElem, seqHash(last), 0, details,
+                    SequencedChampSet::update,
+                    SequencedData::seqEquals, SequencedData::seqHash);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
         return this;
@@ -384,18 +381,18 @@ public class SequencedChampSet<E>
     }
 
     @NonNull
-    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToFirstFunction() {
-        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
+    private static <E> SequencedElement<E> updateAndMoveToFirst(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+        return oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
     }
 
     @NonNull
-    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateAndMoveToLastFunction() {
-        return (oldK, newK) -> oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
+    private static <E> SequencedElement<E> updateAndMoveToLast(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+        return oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
     }
 
     @NonNull
-    private BiFunction<SequencedElement<E>, SequencedElement<E>, SequencedElement<E>> getUpdateFunction() {
-        return (oldK, newK) -> oldK;
+    private static <E> SequencedElement<E> update(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+        return oldK;
     }
 
     @Override
@@ -405,32 +402,16 @@ public class SequencedChampSet<E>
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return iterator(false);
+        return new IteratorFacade<>(spliterator(), null);
     }
 
-    private @NonNull Iterator<E> iterator(boolean reversed) {
-        Enumerator<E> i;
-        if (reversed) {
-            i = new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
-        } else {
-            i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
-        }
-        return new IteratorFacade<>(i, null);
-    }
-
-    private @NonNull Spliterator<E> spliterator(boolean reversed) {
-        Spliterator<E> i;
-        if (reversed) {
-            i = new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
-        } else {
-            i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
-        }
-        return i;
+    private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
+        return new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
 
     @Override
-    public Spliterator<E> spliterator() {
-        return spliterator(false);
+    public EnumeratorSpliterator<E> spliterator() {
+        return new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
 
     @Override
@@ -540,7 +521,7 @@ public class SequencedChampSet<E>
     }
 
     public @NonNull Iterator<E> reversedIterator() {
-        return iterator(true);
+        return new IteratorFacade<>(reversedSpliterator(), null);
     }
 
     @Override
@@ -579,6 +560,4 @@ public class SequencedChampSet<E>
             return SequencedChampSet.copyOf(deserialized);
         }
     }
-
-
 }

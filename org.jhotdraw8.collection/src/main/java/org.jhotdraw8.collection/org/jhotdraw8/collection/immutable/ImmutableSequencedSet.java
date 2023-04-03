@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 
 /**
  * Interface for an immutable sequenced set.
@@ -45,22 +46,22 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      * Returns a copy of this set that contains all elements
      * of this set except the first.
      *
-     * @return this set instanceif it is already empty, or
-     * a different set instance with the first element removed
+     * @return a new set instance with the first element removed
+     * @throws NoSuchElementException if this set is empty
      */
     default ImmutableSequencedSet<E> removeFirst() {
-        return isEmpty() ? this : remove(getFirst());
+        return remove(getFirst());
     }
 
     /**
      * Returns a copy of this set that contains all elements
      * of this set except the last.
      *
-     * @return this set instance if it is already empty, or
-     * a different set instance with the last element removed
+     * @return a new set instance with the last element removed
+     * @throws NoSuchElementException if this set is empty
      */
     default ImmutableSequencedSet<E> removeLast() {
-        return isEmpty() ? this : remove(getLast());
+        return remove(getLast());
     }
 
     @Override
