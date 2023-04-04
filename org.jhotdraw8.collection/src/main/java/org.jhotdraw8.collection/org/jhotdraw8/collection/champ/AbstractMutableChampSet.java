@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  * @param <E> the element type of the set
  * @param <X> the key type of the CHAMP trie
  */
-abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
+abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     private static final long serialVersionUID = 0L;
 
@@ -77,8 +77,8 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
         if (o == this) {
             return true;
         }
-        if (o instanceof AbstractChampSet<?, ?>) {
-            AbstractChampSet<?, ?> that = (AbstractChampSet<?, ?>) o;
+        if (o instanceof AbstractMutableChampSet<?, ?>) {
+            AbstractMutableChampSet<?, ?> that = (AbstractMutableChampSet<?, ?>) o;
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
@@ -135,10 +135,10 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractChampSet<E, X> clone() {
+    public @NonNull AbstractMutableChampSet<E, X> clone() {
         try {
             mutator = null;
-            return (AbstractChampSet<E, X>) super.clone();
+            return (AbstractMutableChampSet<E, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

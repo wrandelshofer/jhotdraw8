@@ -273,7 +273,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return new KeySpliterator<>(this, e -> e, Spliterator.IMMUTABLE | Spliterator.DISTINCT, size());
+        return new KeySpliterator<>(this, null, Spliterator.IMMUTABLE | Spliterator.DISTINCT, size());
     }
 
     /**

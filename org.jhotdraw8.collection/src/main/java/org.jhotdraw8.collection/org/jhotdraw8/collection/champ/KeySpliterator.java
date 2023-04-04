@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.function.Function;
 
@@ -15,8 +16,12 @@ import java.util.function.Function;
  * to deal with structural changes of the trie.
  */
 class KeySpliterator<K, E> extends AbstractKeySpliterator<K, E> {
-    public KeySpliterator(@NonNull Node<K> root, @NonNull Function<K, E> mappingFunction, int characteristics, long size) {
+    KeySpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         super(root, mappingFunction, characteristics, size);
+    }
+
+    KeySpliterator(@NonNull Node<K> root) {
+        super(root, null, 0, Long.MAX_VALUE);
     }
 
     @Override

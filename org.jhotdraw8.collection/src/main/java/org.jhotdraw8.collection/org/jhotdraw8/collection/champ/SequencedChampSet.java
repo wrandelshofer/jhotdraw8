@@ -206,20 +206,16 @@ public class SequencedChampSet<E>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked"})
     public @NonNull SequencedChampSet<E> addAll(@NonNull Iterable<? extends E> set) {
         if (set == this || isEmpty() && (set instanceof SequencedChampSet<?>)) {
             return (SequencedChampSet<E>) set;
         }
-        if (isEmpty() && (set instanceof MutableSequencedChampSet)) {
-            return ((MutableSequencedChampSet<E>) set).toImmutable();
+        if (isEmpty() && (set instanceof MutableSequencedChampSet<?> t)) {
+            return (SequencedChampSet<E>) t.toImmutable();
         }
-        MutableSequencedChampSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (E key : set) {
-            modified |= t.add(key);
-        }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.addAll(set) ? t.toImmutable() : this;
     }
 
     public @NonNull SequencedChampSet<E> addFirst(@Nullable E key) {
@@ -385,29 +381,18 @@ public class SequencedChampSet<E>
         return remove(key, first, last);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull SequencedChampSet<E> removeAll(@NonNull Iterable<?> set) {
-        if (this.isEmpty()
-                || (set instanceof Collection) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection) && ((ReadOnlyCollection<?>) set).isEmpty()) {
-            return this;
-        }
         if (set == this) {
             return of();
         }
-        MutableSequencedChampSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (Object key : set) {
-            if (t.remove((E) key)) {
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
-            }
-
+        if (isEmpty()
+                || (set instanceof Collection<?> c) && c.isEmpty()
+                || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            return this;
         }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.removeAll(set) ? t.toImmutable() : this;
     }
 
     @Override
@@ -453,25 +438,14 @@ public class SequencedChampSet<E>
 
     @Override
     public @NonNull SequencedChampSet<E> retainAll(@NonNull Collection<?> set) {
-        if (this.isEmpty()) {
+        if (isEmpty()) {
             return this;
         }
         if (set.isEmpty()) {
             return of();
         }
-
-        MutableSequencedChampSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (E key : this) {
-            if (!set.contains(key)) {
-                t.remove(key);
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.retainAll(set) ? t.toImmutable() : this;
     }
 
     public @NonNull Iterator<E> reversedIterator() {

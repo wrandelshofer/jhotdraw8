@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -169,7 +168,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
                         () -> this.modCount),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
                 () -> new FailFastSpliterator<>(
-                        new KeySpliterator<>(root, Function.identity(), Spliterator.SIZED | Spliterator.DISTINCT, size()),
+                        new KeySpliterator<>(root, null, Spliterator.SIZED | Spliterator.DISTINCT, size()),
                         () -> this.modCount),
                 MutableChampMap.this::size,
                 MutableChampMap.this::containsEntry,

@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 
 import java.util.ArrayDeque;
@@ -56,12 +57,13 @@ abstract class AbstractKeySpliterator<K, E> implements EnumeratorSpliterator<E> 
     private final int characteristics;
     private final @NonNull Function<K, E> mappingFunction;
 
-    public AbstractKeySpliterator(@NonNull Node<K> root, @NonNull Function<K, E> mappingFunction, int characteristics, long size) {
+    public AbstractKeySpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         if (root.nodeArity() + root.dataArity() > 0) {
             stack.push(new StackElement<>(root, isReverse()));
         }
         this.characteristics = characteristics;
-        this.mappingFunction = mappingFunction;
+        //noinspection unchecked
+        this.mappingFunction = mappingFunction == null ? i -> (E) i : mappingFunction;
         this.size = size;
     }
 

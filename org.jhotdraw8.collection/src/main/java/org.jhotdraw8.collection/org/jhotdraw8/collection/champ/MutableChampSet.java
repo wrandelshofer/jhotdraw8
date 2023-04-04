@@ -81,7 +81,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class MutableChampSet<E> extends AbstractChampSet<E, E> {
+public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     private static final long serialVersionUID = 0L;
 
     /**
@@ -157,7 +157,7 @@ public class MutableChampSet<E> extends AbstractChampSet<E, E> {
     }
 
     private void iteratorRemove(E e) {
-        mutator = null;
+        mutator = null;//XXX we should do this only once!
         remove(e);
     }
 

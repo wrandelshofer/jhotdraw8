@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
 import org.jhotdraw8.collection.IdentityObject;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
@@ -113,7 +113,7 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     private static final long serialVersionUID = 0L;
 
@@ -208,7 +208,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, last);
-        IdentityObject mutator = getOrCreateIdentity();
+        var mutator = getOrCreateIdentity();
         root = root.update(
                 mutator, newElem, Objects.hashCode(e), 0,
                 details,
@@ -272,32 +272,24 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return iterator(false);
+        return new FailFastIterator<>(new IteratorFacade<>(spliterator(),
+                this::iteratorRemove), () -> modCount);
     }
 
-    private @NonNull Iterator<E> iterator(boolean reversed) {
-        Enumerator<E> i;
-        if (reversed) {
-            i = new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        } else {
-            i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        }
-        return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> MutableSequencedChampSet.this.modCount);
+    private @NonNull Iterator<E> reversedIterator() {
+        return new FailFastIterator<>(new IteratorFacade<>(reversedSpliterator(),
+                this::iteratorRemove), () -> modCount);
     }
 
-    private @NonNull Spliterator<E> spliterator(boolean reversed) {
-        Spliterator<E> i;
-        if (reversed) {
-            i = new ReversedKeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        } else {
-            i = new KeySpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        }
-        return i;
+    private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
+        return new ReversedKeySpliterator<>(sequenceRoot,
+                SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
-        return spliterator(false);
+    public @NonNull EnumeratorSpliterator<E> spliterator() {
+        return new KeySpliterator<>(sequenceRoot,
+                SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     private void iteratorRemove(E element) {
@@ -314,7 +306,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        IdentityObject mutator = getOrCreateIdentity();
+        var mutator = getOrCreateIdentity();
         root = root.remove(
                 mutator, new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
@@ -337,16 +329,16 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
 
     @Override
     public E removeFirst() {
-        SequencedElement<E> k = Node.getFirst(sequenceRoot);
-        remove(k.getElement());
-        return k.getElement();
+        var e = Node.getFirst(sequenceRoot).getElement();
+        remove(e);
+        return e;
     }
 
     @Override
     public E removeLast() {
-        SequencedElement<E> k = Node.getLast(sequenceRoot);
-        remove(k.getElement());
-        return k.getElement();
+        var e = Node.getLast(sequenceRoot).getElement();
+        remove(e);
+        return e;
     }
 
     /**
@@ -367,10 +359,10 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
     @Override
     public SequencedSet<E> reversed() {
         return new SequencedSetFacade<>(
-                () -> iterator(true),
-                () -> spliterator(true),
-                () -> iterator(false),
-                () -> spliterator(false),
+                this::reversedIterator,
+                this::reversedSpliterator,
+                this::iterator,
+                this::spliterator,
                 this::size,
                 this::contains,
                 this::clear,
@@ -408,5 +400,4 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedEl
             return new MutableSequencedChampSet<>(deserialized);
         }
     }
-
 }

@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.Spliterators;
 import java.util.function.BiFunction;
 
 
@@ -139,15 +138,11 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         if (set == this || isEmpty() && (set instanceof ChampSet<?>)) {
             return (ChampSet<E>) set;
         }
-        if (isEmpty() && (set instanceof MutableChampSet)) {
-            return ((MutableChampSet<E>) set).toImmutable();
+        if (isEmpty() && (set instanceof MutableChampSet<?> t)) {
+            return (ChampSet<E>) t.toImmutable();
         }
-        MutableChampSet<E> t = toMutable();
-        boolean modified = false;
-        for (E key : set) {
-            modified |= t.add(key);
-        }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.addAll(set) ? t.toImmutable() : this;
     }
 
     /**
@@ -195,7 +190,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     public @NonNull Spliterator<E> spliterator() {
-        return Spliterators.spliterator(iterator(), size, Spliterator.IMMUTABLE | Spliterator.DISTINCT);
+        return new KeySpliterator<>(this, null, Spliterator.IMMUTABLE | Spliterator.DISTINCT, size);
     }
 
     @Override
@@ -212,25 +207,15 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     public @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> set) {
         if (isEmpty()
-                || (set instanceof Collection<?>) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection<?>) && ((ReadOnlyCollection<?>) set).isEmpty()) {
+                || (set instanceof Collection<?> c) && c.isEmpty()
+                || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
             return this;
         }
         if (set == this) {
             return of();
         }
-        MutableChampSet<E> t = toMutable();
-        boolean modified = false;
-        for (Object key : set) {
-            //noinspection SuspiciousMethodCalls
-            if (t.remove(key)) {
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.removeAll(set) ? t.toImmutable() : this;
     }
 
     @Override
@@ -241,19 +226,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         if (set.isEmpty()) {
             return of();
         }
-        MutableChampSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (Object key : this) {
-            if (!set.contains(key)) {
-                //noinspection SuspiciousMethodCalls
-                t.remove(key);
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
-            }
-        }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.retainAll(set) ? t.toImmutable() : this;
     }
 
     @Override
