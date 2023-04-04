@@ -113,7 +113,7 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class MutableSequencedChampSet<E> extends AbstractChampSet3<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class MutableSequencedChampSet<E> extends AbstractChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     private static final long serialVersionUID = 0L;
 
@@ -178,7 +178,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet3<E, SequencedE
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, first);
-        IdentityObject mutator = createIdentity();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator, newElem,
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
@@ -208,7 +208,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet3<E, SequencedE
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, last);
-        IdentityObject mutator = createIdentity();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.update(
                 mutator, newElem, Objects.hashCode(e), 0,
                 details,
@@ -314,7 +314,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet3<E, SequencedE
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        IdentityObject mutator = createIdentity();
+        IdentityObject mutator = getOrCreateIdentity();
         root = root.remove(
                 mutator, new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
@@ -354,7 +354,7 @@ public class MutableSequencedChampSet<E> extends AbstractChampSet3<E, SequencedE
      */
     private void renumber() {
         if (SequencedData.mustRenumber(size, first, last)) {
-            IdentityObject mutator = createIdentity();
+            IdentityObject mutator = getOrCreateIdentity();
             root = SequencedData.renumber(size, root, sequenceRoot, mutator,
                     Objects::hashCode, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
