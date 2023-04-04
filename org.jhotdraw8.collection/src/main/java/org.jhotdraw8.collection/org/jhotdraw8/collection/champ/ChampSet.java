@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -20,7 +21,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.BiFunction;
 
 
 /**
@@ -67,7 +67,6 @@ import java.util.function.BiFunction;
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
- *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -123,31 +122,43 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @Override
-    public @NonNull ChampSet<E> add(@NonNull E key) {
-        int keyHash = Objects.hashCode(key);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, details, getUpdateFunction(), Objects::equals, Objects::hashCode);
-        if (details.isModified()) {
-            return new ChampSet<>(newRootNode, size + 1);
-        }
-        return this;
+    public @NonNull ChampSet<E> add(@Nullable E key) {
+        return add(key, null);
+    }
+
+    @NonNull ChampSet<E> add(@Nullable E key, @Nullable IdentityObject mutator) {
+        var updated = update(mutator, key, Objects.hashCode(key), 0, new ChangeEvent<>(), ChampSet::updateFunction, Objects::equals, Objects::hashCode);
+        return wrap(updated, size + 1);
+    }
+
+    @NonNull
+    private ChampSet<E> wrap(@NonNull BitmapIndexedNode<E> updated, int size) {
+        return updated != this ? new ChampSet<>(updated, size) : this;
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
     public @NonNull ChampSet<E> addAll(@NonNull Iterable<? extends E> set) {
+        return addAll(set, new IdentityObject());
+    }
+
+    @SuppressWarnings("unchecked")
+    @NonNull ChampSet<E> addAll(@NonNull Iterable<? extends E> set, @Nullable IdentityObject mutator) {
         if (set == this || isEmpty() && (set instanceof ChampSet<?>)) {
             return (ChampSet<E>) set;
         }
         if (isEmpty() && (set instanceof MutableChampSet)) {
             return ((MutableChampSet<E>) set).toImmutable();
         }
-        MutableChampSet<E> t = toMutable();
-        boolean modified = false;
+        BitmapIndexedNode<E> updated = this;
+        int updatedSize = size;
+        var details = new ChangeEvent<E>();
         for (E key : set) {
-            modified |= t.add(key);
+            updated = updated.update(mutator, key, Objects.hashCode(key), 0, details, ChampSet::updateFunction, Objects::equals, Objects::hashCode);
+            if (details.popModified()) {
+                updatedSize++;
+            }
         }
-        return modified ? t.toImmutable() : this;
+        return wrap(updated, updatedSize);
     }
 
     /**
@@ -180,13 +191,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @NonNull
-    private BiFunction<E, E, E> getUpdateFunction() {
-        return (oldk, newk) -> oldk;
-    }
-
-    @Override
-    public int hashCode() {
-        return ReadOnlySet.iteratorToHashCode(iterator());
+    private static <E> E updateFunction(@NonNull E oldk, @NonNull E newk) {
+        return oldk;
     }
 
     @Override
@@ -200,37 +206,37 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
 
     @Override
     public @NonNull ChampSet<E> remove(@NonNull E key) {
-        int keyHash = Objects.hashCode(key);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
-        if (details.isModified()) {
-            return new ChampSet<>(newRootNode, size - 1);
-        }
-        return this;
+        return remove(key, null);
+    }
+
+    @NonNull ChampSet<E> remove(@NonNull E key, @Nullable IdentityObject mutator) {
+        var updated = remove(mutator, key, Objects.hashCode(key), 0, new ChangeEvent<>(), Objects::equals);
+        return wrap(updated, size - 1);
     }
 
     @Override
     public @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> set) {
-        if (isEmpty()
-                || (set instanceof Collection<?>) && ((Collection<?>) set).isEmpty()
-                || (set instanceof ReadOnlyCollection<?>) && ((ReadOnlyCollection<?>) set).isEmpty()) {
+        return removeAll(set, new IdentityObject());
+    }
+
+    @SuppressWarnings("unchecked")
+    @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> set, @NonNull IdentityObject mutator) {
+        if (isEmpty()) {
             return this;
         }
         if (set == this) {
             return of();
         }
-        MutableChampSet<E> t = toMutable();
-        boolean modified = false;
+        BitmapIndexedNode<E> updated = this;
+        int updatedSize = size;
+        ChangeEvent<E> details = new ChangeEvent<>();
         for (Object key : set) {
-            //noinspection SuspiciousMethodCalls
-            if (t.remove(key)) {
-                modified = true;
-                if (t.isEmpty()) {
-                    break;
-                }
+            updated = updated.remove(mutator, (E) key, Objects.hashCode(key), 0, details, Objects::equals);
+            if (details.popModified()) {
+                updatedSize--;
             }
         }
-        return modified ? t.toImmutable() : this;
+        return wrap(updated, updatedSize);
     }
 
     @Override
@@ -241,19 +247,23 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         if (set.isEmpty()) {
             return of();
         }
-        MutableChampSet<E> t = this.toMutable();
-        boolean modified = false;
-        for (Object key : this) {
+        BitmapIndexedNode<E> updated = this;
+        int updatedSize = size;
+        // We must create a new mutator, because our iterator fails if
+        // we change its underlying data structure!
+        var mutator = new IdentityObject();
+        ChangeEvent<E> details = new ChangeEvent<>();
+        for (E key : this) {
             if (!set.contains(key)) {
-                //noinspection SuspiciousMethodCalls
-                t.remove(key);
-                modified = true;
-                if (t.isEmpty()) {
+                updated = updated.remove(mutator, key, Objects.hashCode(key), 0, details, Objects::equals);
+                updatedSize--;
+                details.popModified();
+                if (updatedSize == 0) {
                     break;
                 }
             }
         }
-        return modified ? t.toImmutable() : this;
+        return wrap(updated, updatedSize);
     }
 
     @Override
@@ -271,11 +281,6 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return new MutableChampSet<>(this);
     }
 
-    @Override
-    public @NonNull String toString() {
-        return ReadOnlyCollection.iterableToString(this);
-    }
-
     private @NonNull Object writeReplace() {
         return new SerializationProxy<>(this.toMutable());
     }
@@ -291,5 +296,20 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         protected @NonNull Object readResolve() {
             return ChampSet.copyOf(deserialized);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return ReadOnlySet.iteratorToHashCode(iterator());
+    }
+
+    /**
+     * Returns a string representation of this set.
+     *
+     * @return a string representation of this set
+     */
+    @Override
+    public @NonNull String toString() {
+        return ReadOnlyCollection.iterableToString(this);
     }
 }

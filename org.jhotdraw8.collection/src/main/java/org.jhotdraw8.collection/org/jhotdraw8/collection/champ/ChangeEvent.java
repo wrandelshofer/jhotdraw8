@@ -24,6 +24,13 @@ class ChangeEvent<D> {
     public ChangeEvent() {
     }
 
+    public boolean popModified() {
+        boolean modified = isModified();
+        type = Type.UNCHANGED;
+        data = null;
+        return modified;
+    }
+
     void found(D data) {
         this.data = data;
     }

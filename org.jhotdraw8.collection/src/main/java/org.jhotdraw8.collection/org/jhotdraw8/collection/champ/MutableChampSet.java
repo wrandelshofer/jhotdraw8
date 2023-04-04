@@ -1,8 +1,3 @@
-/*
- * @(#)ChampSet.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -10,8 +5,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -81,14 +76,14 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public class MutableChampSet<E> extends AbstractChampSet<E, E> {
+public class MutableChampSet<E> extends AbstractMutableChampSet<E> {
     private static final long serialVersionUID = 0L;
+    private @NonNull ChampSet<E> set = ChampSet.of();
 
     /**
      * Constructs a new empty set.
      */
     public MutableChampSet() {
-        root = BitmapIndexedNode.emptyNode();
     }
 
     /**
@@ -99,30 +94,49 @@ public class MutableChampSet<E> extends AbstractChampSet<E, E> {
     @SuppressWarnings("unchecked")
     public MutableChampSet(@NonNull Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?>) {
-            c = ((MutableChampSet<? extends E>) c).toImmutable();
+            set = ((MutableChampSet<E>) c).toImmutable();
         }
         if (c instanceof ChampSet<?>) {
-            ChampSet<E> that = (ChampSet<E>) c;
-            this.root = that;
-            this.size = that.size;
+            set = (ChampSet<E>) c;
         } else {
-            this.root = BitmapIndexedNode.emptyNode();
             addAll(c);
         }
     }
 
     @Override
     public boolean add(@Nullable E e) {
-        ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.update(getOrCreateIdentity(),
-                e, Objects.hashCode(e), 0, details,
-                (oldKey, newKey) -> oldKey,
-                Objects::equals, Objects::hashCode);
-        if (details.isModified()) {
-            size++;
+        var oldSet = set;
+        set = set.add(e, createIdentity());
+        return wrap(oldSet);
+    }
+
+    private boolean wrap(ChampSet<E> oldSet) {
+        if (oldSet != set) {
             modCount++;
+            return true;
         }
-        return details.isModified();
+        return false;
+    }
+
+    @Override
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        var oldSet = set;
+        set = set.addAll(c, createIdentity());
+        return wrap(oldSet);
+    }
+
+    @Override
+    public boolean removeAll(@NonNull Iterable<?> c) {
+        var oldSet = set;
+        set = set.removeAll(c, createIdentity());
+        return wrap(oldSet);
+    }
+
+    @Override
+    public boolean retainAll(@NonNull Collection<?> c) {
+        var oldSet = set;
+        set = set.retainAll(c);
+        return wrap(oldSet);
     }
 
     /**
@@ -130,50 +144,46 @@ public class MutableChampSet<E> extends AbstractChampSet<E, E> {
      */
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
-        size = 0;
+        set = ChampSet.of();
         modCount++;
     }
 
-    /**
-     * Returns a shallow copy of this set.
-     */
     @Override
-    public @NonNull MutableChampSet<E> clone() {
+    public MutableChampSet<E> clone() {
         return (MutableChampSet<E>) super.clone();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.find((E) o, Objects.hashCode(o), 0, Objects::equals);
+    public boolean contains(Object o) {
+        return set.contains(o);
     }
 
+
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new KeyIterator<>(root, this::iteratorRemove),
+                new KeyIterator<>(set, this::iteratorRemove),
                 () -> this.modCount);
     }
 
-    private void iteratorRemove(E e) {
+    void iteratorRemove(E e) {
         mutator = null;
         remove(e);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean remove(Object o) {
-        ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.remove(
-                getOrCreateIdentity(), (E) o, Objects.hashCode(o), 0, details,
-                Objects::equals);
-        if (details.isModified()) {
-            size--;
-            modCount++;
-        }
-        return details.isModified();
+    public boolean remove(@Nullable Object e) {
+        var oldSet = set;
+        set = set.remove((E) e, createIdentity());
+        return wrap(oldSet);
     }
+
+    @Override
+    public int size() {
+        return set.size();
+    }
+
 
     /**
      * Returns an immutable copy of this set.
@@ -182,11 +192,11 @@ public class MutableChampSet<E> extends AbstractChampSet<E, E> {
      */
     public @NonNull ChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ChampSet.of() : new ChampSet<>(root, size);
+        return set;
     }
 
     private @NonNull Object writeReplace() {
-        return new SerializationProxy<>(this);
+        return new MutableChampSet.SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {

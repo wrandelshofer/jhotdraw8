@@ -1,13 +1,9 @@
-/*
- * @(#)AbstractChampSet.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.io.Serializable;
@@ -15,14 +11,8 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-/**
- * Abstract base class for CHAMP sets.
- *
- * @param <E> the element type of the set
- * @param <X> the key type of the CHAMP trie
- */
-abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
-        ReadOnlySet<E> {
+abstract class AbstractMutableChampSet<E> extends AbstractSet<E>
+        implements Serializable, Cloneable, ReadOnlySet<E> {
     private static final long serialVersionUID = 0L;
 
     /**
@@ -36,22 +26,13 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
     protected @Nullable IdentityObject mutator;
 
     /**
-     * The root of this CHAMP trie.
-     */
-    protected BitmapIndexedNode<X> root;
-
-    /**
-     * The number of elements in this set.
-     */
-    protected int size;
-
-    /**
      * The number of times this set has been structurally modified.
      */
     protected transient int modCount;
 
+
     @Override
-    public boolean addAll(@NonNull Collection<? extends E> c) {
+    public final boolean addAll(@NonNull Collection<? extends E> c) {
         return addAll((Iterable<? extends E>) c);
     }
 
@@ -72,30 +53,13 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
         return modified;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (o instanceof AbstractChampSet<?, ?>) {
-            AbstractChampSet<?, ?> that = (AbstractChampSet<?, ?>) o;
-            return size == that.size && root.equivalent(that.root);
-        }
-        return super.equals(o);
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
     /**
      * Gets the mutator id of this set. Creates a new id, if this
      * set has no mutator id.
      *
      * @return a new unique id or the existing unique id.
      */
-    @NonNull IdentityObject getOrCreateIdentity() {
+    @NonNull IdentityObject createIdentity() {
         if (mutator == null) {
             mutator = new IdentityObject();
         }
@@ -103,7 +67,7 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
     }
 
     @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
+    public final boolean removeAll(@NonNull Collection<?> c) {
         return removeAll((Iterable<?>) c);
     }
 
@@ -134,11 +98,29 @@ abstract class AbstractChampSet<E, X> extends AbstractSet<E> implements Serializ
     }
 
     @Override
+    public int hashCode() {
+        return ReadOnlySet.iteratorToHashCode(iterator());
+    }
+
+    /**
+     * Returns a string representation of this set.
+     *
+     * @return a string representation of this set
+     */
+    @Override
+    public @NonNull String toString() {
+        return ReadOnlyCollection.iterableToString(this);
+    }
+
+    /**
+     * Returns a shallow copy of this set.
+     */
+    @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractChampSet<E, X> clone() {
+    public @NonNull AbstractMutableChampSet<E> clone() {
         try {
             mutator = null;
-            return (AbstractChampSet<E, X>) super.clone();
+            return (AbstractMutableChampSet<E>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
