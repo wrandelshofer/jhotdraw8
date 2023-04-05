@@ -49,7 +49,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
             return null;
         }
         try {
-            return new StreamCssTokenizer(str).toTokenList();
+            return new StreamCssTokenizer(str, null).toTokenList();
         } catch (IOException e) {
             throw new RuntimeException("unexpected exception", e);
         }

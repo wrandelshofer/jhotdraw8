@@ -868,6 +868,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 for (StyleRule rule : matchedInfo.getValue()) {
                     buf.append("\n    ");
                     rule.getSelectorGroup().produceTokens(token -> buf.append(token.fromToken()));
+                    var sourceLocator = rule.getSourceLocator();
+                    if (sourceLocator != null && sourceLocator.lineNumber() >= 0) {
+                        buf.append(" line: ").append(sourceLocator.lineNumber());
+                    }
                 }
             }
             buf.append("\n*/");

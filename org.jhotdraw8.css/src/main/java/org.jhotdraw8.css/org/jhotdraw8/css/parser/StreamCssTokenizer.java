@@ -6,9 +6,11 @@ package org.jhotdraw8.css.parser;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.ast.SourceLocator;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URI;
 
 import static org.jhotdraw8.css.parser.CssTokenType.TT_AT_KEYWORD;
 import static org.jhotdraw8.css.parser.CssTokenType.TT_BAD_COMMENT;
@@ -151,17 +153,31 @@ public class StreamCssTokenizer implements CssTokenizer {
     private int lineNumber;
     private int startPosition;
     private int endPosition;
+    private final @Nullable URI uri;
+
+    public StreamCssTokenizer(CharSequence charSequence, @Nullable URI uri) {
+        this(new CharSequenceCssScanner(charSequence), uri);
+    }
 
     public StreamCssTokenizer(CharSequence charSequence) {
-        this(new CharSequenceCssScanner(charSequence));
+        this(new CharSequenceCssScanner(charSequence), null);
+    }
+
+    public StreamCssTokenizer(Reader reader, @Nullable URI uri) {
+        this(new ReaderCssScanner(reader), uri);
     }
 
     public StreamCssTokenizer(Reader reader) {
-        this(new ReaderCssScanner(reader));
+        this(new ReaderCssScanner(reader), null);
+    }
+
+    public StreamCssTokenizer(CssScanner reader, @Nullable URI uri) {
+        in = reader;
+        this.uri = uri;
     }
 
     public StreamCssTokenizer(CssScanner reader) {
-        in = reader;
+        this(reader, null);
     }
 
     @Override
@@ -520,6 +536,11 @@ public class StreamCssTokenizer implements CssTokenizer {
     @Override
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    @Override
+    public @Nullable SourceLocator getSourceLocator() {
+        return new SourceLocator(startPosition, lineNumber, uri);
     }
 
     /**

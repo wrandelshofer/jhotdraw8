@@ -55,12 +55,12 @@ import java.util.ResourceBundle;
  * The property name modifier "os" is defined by default. It can assume the
  * values "win", "mac" and "other". Its fallback chain is "default".
  * <p>
- * The format type can be optinally specified after a comma. The following
+ * The format type can be optionally specified after a comma. The following
  * format types are supported:
  * <ul>
  * <li>{@code string} This is the default format.</li>
- * <li>{@code accelerator} This format replaces all occurences of the keywords
- * shift, control, ctrl, meta, alt, altGraph by getProperties which start with
+ * <li>{@code accelerator} This format replaces all occurrences of the keywords
+ * shift, control, ctrl, meta, alt, altGraph by properties which start with
  * {@code accelerator.}. For example, shift is replaced by
  * {@code accelerator.shift}.
  * </li>

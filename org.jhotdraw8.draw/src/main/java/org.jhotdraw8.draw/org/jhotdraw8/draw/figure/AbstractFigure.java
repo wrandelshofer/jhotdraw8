@@ -57,7 +57,6 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
             int index = 0;
 
             Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
-            //Map<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
             Map<Key<?>, Integer> m = new KeyMap(accessors.size());
             for (MapAccessor<?> accessor : accessors) {
                 if (accessor instanceof Key<?>) {

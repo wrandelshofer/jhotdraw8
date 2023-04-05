@@ -22,7 +22,11 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.DoubleSupplier;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Provides bindings with conversion functions.
@@ -133,7 +137,8 @@ public class CustomBinding {
     /**
      * Binds property 'a' to property 'b'. Property 'b' is provided by 'mediatorB'.
      * <p>
-     * When 'a' is unbound from 'b', its value is set to null.
+     * When 'a' is unbound from 'b', its value is set to the value that
+     * 'a' had, when this method was invoked.
      *
      * @param <T>       the type of properties 'a' and 'b'
      * @param <M>       the type of the mediator property
@@ -143,7 +148,7 @@ public class CustomBinding {
      */
     public static <T, M> void bind(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediatorB, @NonNull Function<M, ObservableValue<T>> propertyB) {
-        bind(propertyA, mediatorB, propertyB, null);
+        bind(propertyA, mediatorB, propertyB, propertyA.getValue());
     }
 
     /**

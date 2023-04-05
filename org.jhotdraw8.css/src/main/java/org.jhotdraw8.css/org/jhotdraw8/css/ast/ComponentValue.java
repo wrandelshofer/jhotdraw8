@@ -13,5 +13,6 @@ package org.jhotdraw8.css.ast;
 public abstract class ComponentValue extends AbstractSyntaxTree {
 
     public ComponentValue() {
+        super(null);
     }
 }

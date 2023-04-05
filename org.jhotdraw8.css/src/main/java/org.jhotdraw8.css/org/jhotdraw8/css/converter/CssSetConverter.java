@@ -90,7 +90,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
 
     private static List<CssToken> parseDelim(@Nullable String delim) {
         try {
-            return delim == null ? List.of() : new StreamCssTokenizer(delim).toTokenList();
+            return delim == null ? List.of() : new StreamCssTokenizer(delim, null).toTokenList();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

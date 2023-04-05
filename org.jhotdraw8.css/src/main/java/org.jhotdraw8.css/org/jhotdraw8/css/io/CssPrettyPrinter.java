@@ -61,7 +61,7 @@ public class CssPrettyPrinter implements Appendable {
     }
 
     public void print(CharSequence str) throws IOException {
-        StreamCssTokenizer tt = new StreamCssTokenizer(str);
+        StreamCssTokenizer tt = new StreamCssTokenizer(str, null);
         print(tt);
     }
 

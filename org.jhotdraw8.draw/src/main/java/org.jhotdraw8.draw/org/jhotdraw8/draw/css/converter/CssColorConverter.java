@@ -241,7 +241,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
         }
-        StreamCssTokenizer tt = new StreamCssTokenizer(value.getName());
+        StreamCssTokenizer tt = new StreamCssTokenizer(value.getName(), null);
         try {
             while (tt.next() != CssTokenType.TT_EOF) {
                 out.accept(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));

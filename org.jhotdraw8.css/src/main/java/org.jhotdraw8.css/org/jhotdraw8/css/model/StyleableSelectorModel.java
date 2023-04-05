@@ -129,7 +129,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
             if (attributeName.equals(item.getProperty())) {
                 Object value = item.getStyleableProperty(element).getValue();
                 try {
-                    return value == null ? null : new StreamCssTokenizer(value.toString()).toTokenList();
+                    return value == null ? null : new StreamCssTokenizer(value.toString(), null).toTokenList();
                 } catch (IOException e) {
                     throw new RuntimeException("unexpected io exception", e);
                 }

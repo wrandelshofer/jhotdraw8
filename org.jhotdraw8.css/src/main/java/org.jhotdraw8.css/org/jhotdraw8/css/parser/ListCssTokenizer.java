@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.css.ast.SourceLocator;
 
 import java.util.List;
 
@@ -52,6 +53,11 @@ public class ListCssTokenizer implements CssTokenizer {
     @Override
     public int getLineNumber() {
         return current.getLineNumber();
+    }
+
+    @Override
+    public @Nullable SourceLocator getSourceLocator() {
+        return new SourceLocator(getStartPosition(), getLineNumber(), null);
     }
 
     @Override

@@ -6,6 +6,7 @@ package org.jhotdraw8.css.parser;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.css.ast.SourceLocator;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -141,6 +142,8 @@ public interface CssTokenizer {
     int current();
 
     int getLineNumber();
+
+    @Nullable SourceLocator getSourceLocator();
 
     int getStartPosition();
 

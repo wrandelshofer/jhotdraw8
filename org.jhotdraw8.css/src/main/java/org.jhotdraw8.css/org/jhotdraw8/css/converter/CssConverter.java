@@ -129,7 +129,7 @@ public interface CssConverter<T> extends Converter<T> {
     @Override
     default T fromString(@NonNull CharSequence buf, @Nullable IdResolver idResolver) throws ParseException {
         try {
-            StreamCssTokenizer tt = new StreamCssTokenizer(buf);
+            StreamCssTokenizer tt = new StreamCssTokenizer(buf, null);
             return parse(tt, idResolver);
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception", e);
@@ -140,7 +140,7 @@ public interface CssConverter<T> extends Converter<T> {
     default T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         try {
             int startPos = buf.position();
-            StreamCssTokenizer tt = new StreamCssTokenizer(buf);
+            StreamCssTokenizer tt = new StreamCssTokenizer(buf, null);
             T value = parse(tt, idResolver);
             buf.position(startPos + tt.getNextPosition());
             return value;

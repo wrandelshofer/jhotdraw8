@@ -4,7 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.annotation.Nullable;
+
 public abstract class Rule extends AbstractSyntaxTree {
-    public Rule() {
+    public Rule(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 }

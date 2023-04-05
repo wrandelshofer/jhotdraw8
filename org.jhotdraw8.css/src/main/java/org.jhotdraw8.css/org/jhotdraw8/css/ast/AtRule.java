@@ -5,6 +5,7 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
@@ -26,12 +27,14 @@ public class AtRule extends Rule {
     /**
      * Creates a new instance.
      *
-     * @param atKeyword the "at-keyword"
-     * @param header    the list of header tokens
-     * @param body      the list of body tokens
+     * @param atKeyword     the "at-keyword"
+     * @param header        the list of header tokens
+     * @param body          the list of body tokens
+     * @param sourceLocator
      */
     public AtRule(@NonNull String atKeyword,
-                  @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body) {
+                  @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body, @Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
         this.atKeyword = atKeyword;
         this.header = ImmutableArrayList.copyOf(header);
         this.body = ImmutableArrayList.copyOf(body);

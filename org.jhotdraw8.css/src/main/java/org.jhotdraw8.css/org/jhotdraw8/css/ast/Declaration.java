@@ -27,6 +27,7 @@ public class Declaration extends AbstractSyntaxTree {
     private final int lineNumber;
 
     public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos, int lineNumber) {
+        super(null);
         this.namespace = namespace;
         this.propertyName = propertyName;
         this.terms = ImmutableArrayList.copyOf(terms);

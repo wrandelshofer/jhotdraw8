@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.parser.CssToken;
 
 import java.util.function.Consumer;
@@ -14,7 +15,10 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public abstract class AbstractSyntaxTree {
-    public AbstractSyntaxTree() {
+    private final @Nullable SourceLocator sourceLocator;
+
+    public AbstractSyntaxTree(@Nullable SourceLocator sourceLocator) {
+        this.sourceLocator = sourceLocator;
     }
 
     /**
@@ -23,5 +27,9 @@ public abstract class AbstractSyntaxTree {
      * @param consumer a consumer for the tokens
      */
     public void produceTokens(Consumer<CssToken> consumer) {
+    }
+
+    public @Nullable SourceLocator getSourceLocator() {
+        return sourceLocator;
     }
 }

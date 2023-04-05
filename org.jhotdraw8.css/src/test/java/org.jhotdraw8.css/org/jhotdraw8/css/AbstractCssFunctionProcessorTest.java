@@ -49,7 +49,7 @@ abstract class AbstractCssFunctionProcessorTest {
         elem.setAttribute("rearBrakes", "Drum");
         doc.appendChild(elem);
 
-        StreamCssTokenizer tt = new StreamCssTokenizer(expression);
+        StreamCssTokenizer tt = new StreamCssTokenizer(expression, null);
         StringBuilder buf = new StringBuilder();
         Consumer<CssToken> consumer = t -> buf.append(t.fromToken());
 

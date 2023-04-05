@@ -17,6 +17,7 @@ public abstract class Selector extends AbstractSyntaxTree {
 
 
     public Selector() {
+        super(null);
     }
 
     /**

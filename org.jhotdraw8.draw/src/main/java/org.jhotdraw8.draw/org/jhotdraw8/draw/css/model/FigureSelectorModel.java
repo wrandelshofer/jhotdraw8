@@ -389,7 +389,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             }
         } else {
             try {
-                CssTokenizer tt = new StreamCssTokenizer(converter.toString(element.getStyled(origin, key)));
+                CssTokenizer tt = new StreamCssTokenizer(converter.toString(element.getStyled(origin, key)), null);
                 return tt.toTokenList();
             } catch (IOException e) {
                 throw new RuntimeException("unexpected exception", e);

@@ -256,13 +256,13 @@ public class CssParser {
         }
         List<CssToken> body = new ArrayList<>();
         if (tt.current() == ';') {
-            return new AtRule(atKeyword, header, body);
+            return new AtRule(atKeyword, header, body, tt.getSourceLocator());
         } else {
             tt.pushBack();
             parseCurlyBlock(tt, body);
             body.remove(0);
             body.remove(body.size() - 1);
-            return new AtRule(atKeyword, header, body);
+            return new AtRule(atKeyword, header, body, tt.getSourceLocator());
         }
     }
 
@@ -471,7 +471,7 @@ public class CssParser {
      */
     public @NonNull List<Declaration> parseDeclarationList(Reader css) throws IOException {
         exceptions = new ArrayList<>();
-        CssTokenizer tt = new StreamCssTokenizer(css);
+        CssTokenizer tt = new StreamCssTokenizer(css, null);
         try {
             return parseDeclarationList(tt);
         } catch (ParseException ex) {
@@ -720,7 +720,7 @@ public class CssParser {
         if (tt.current() != '}') {
             throw tt.createParseException("StyleRule: '}' expected.");
         }
-        return new StyleRule(selectorGroup, declarations);
+        return new StyleRule(selectorGroup, declarations, tt.getSourceLocator());
     }
 
     /**
@@ -761,7 +761,7 @@ public class CssParser {
      */
     public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         exceptions = new ArrayList<>();
-        CssTokenizer tt = new StreamCssTokenizer(css);
+        CssTokenizer tt = new StreamCssTokenizer(css, stylesheetUri);
         return parseStylesheet(tt, stylesheetUri, stylesheetHome);
     }
 

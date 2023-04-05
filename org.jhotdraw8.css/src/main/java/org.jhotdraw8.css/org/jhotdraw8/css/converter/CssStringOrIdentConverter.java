@@ -29,7 +29,7 @@ public class CssStringOrIdentConverter implements Converter<String> {
 
     @Override
     public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
+        StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf), null);
         if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
             throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
         }
