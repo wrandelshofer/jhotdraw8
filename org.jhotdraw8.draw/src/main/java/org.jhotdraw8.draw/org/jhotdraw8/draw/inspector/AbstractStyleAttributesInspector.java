@@ -850,7 +850,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     final List<StyleRule> matchingRules = styleManager.getMatchingRulesForElement(info.getStylesheet(), f);
                     if (!matchingRules.isEmpty()) {
                         matchedInfos.computeIfAbsent(info, k -> new LinkedHashSet<>()).addAll(matchingRules);
-                        break;
                     }
                 }
             }
