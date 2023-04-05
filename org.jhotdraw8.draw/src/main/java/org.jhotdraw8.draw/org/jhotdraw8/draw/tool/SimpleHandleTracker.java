@@ -55,6 +55,8 @@ public class SimpleHandleTracker extends AbstractTracker implements HandleTracke
         stopCompositeEdit(dv);
         handle.onMousePressed(event, dv);
         node.setCursor(handle.getCursor());
+        node.setAccessibleHelp(handle.getNode(dv).getAccessibleHelp());
+        node.setAccessibleText(handle.getNode(dv).getAccessibleText());
     }
 
     @Override

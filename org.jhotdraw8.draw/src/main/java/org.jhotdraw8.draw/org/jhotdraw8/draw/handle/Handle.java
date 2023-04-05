@@ -12,6 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.tool.HandleTracker;
 
 /**
  * Handle.
@@ -41,6 +42,10 @@ public interface Handle {
      * in the {@code DrawingView}. This is why, unlike {@code Figure}, we only
      * need this method instead of a {@code createNode} and an
      * {@code updateNode} method.
+     * <p>
+     * A {@link HandleTracker} will use the {@link Node#accessibleTextProperty()}
+     * and {@link Node#accessibleHelpProperty()} to provide a help text to
+     * the user.
      *
      * @param view the drawing view
      * @return the node
