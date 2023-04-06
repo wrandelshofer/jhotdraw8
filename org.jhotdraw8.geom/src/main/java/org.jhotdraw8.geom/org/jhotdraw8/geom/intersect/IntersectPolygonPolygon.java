@@ -16,6 +16,9 @@ public class IntersectPolygonPolygon {
 
     /**
      * Computes the intersection between two polygons.
+     * <p>
+     * The polygons must be closed. That is: the first and the last point of
+     * each polygon must be equal.
      *
      * @param points1 the points of the first polygon
      * @param points2 the points of the second polygon

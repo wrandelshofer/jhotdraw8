@@ -412,23 +412,23 @@ public class CssToken {
     }
 
     private @Nullable String fromINCLUDE_MATCH() {
-        return stringValue;
+        return "~=";
     }
 
     private @Nullable String fromDASH_MATCH() {
-        return stringValue;
+        return "|=";
     }
 
     private @Nullable String fromPREFIX_MATCH() {
-        return stringValue;
+        return "^=";
     }
 
     private @Nullable String fromSUFFIX_MATCH() {
-        return stringValue;
+        return "$=";
     }
 
     private @Nullable String fromSUBSTRING_MATCH() {
-        return stringValue;
+        return "*=";
     }
 
     private @Nullable String fromCOLUMN() {

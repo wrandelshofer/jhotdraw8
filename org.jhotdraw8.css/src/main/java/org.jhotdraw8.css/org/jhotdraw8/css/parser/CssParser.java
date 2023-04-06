@@ -241,6 +241,7 @@ public class CssParser {
     }
 
     private @NonNull AtRule parseAtRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
+        var sourceLocator = tt.getSourceLocator();
         if (tt.nextNoSkip() != CssTokenType.TT_AT_KEYWORD) {
             throw tt.createParseException("AtRule: At-Keyword expected.");
         }
@@ -256,13 +257,13 @@ public class CssParser {
         }
         List<CssToken> body = new ArrayList<>();
         if (tt.current() == ';') {
-            return new AtRule(atKeyword, header, body, tt.getSourceLocator());
+            return new AtRule(atKeyword, header, body, sourceLocator);
         } else {
             tt.pushBack();
             parseCurlyBlock(tt, body);
             body.remove(0);
             body.remove(body.size() - 1);
-            return new AtRule(atKeyword, header, body, tt.getSourceLocator());
+            return new AtRule(atKeyword, header, body, sourceLocator);
         }
     }
 
@@ -703,6 +704,7 @@ public class CssParser {
         SelectorGroup selectorGroup;
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
+        var sourceLocator = tt.getSourceLocator();
         if (tt.current() == '{') {
             tt.pushBack();
             selectorGroup = new SelectorGroup(new UniversalSelector());
@@ -720,7 +722,7 @@ public class CssParser {
         if (tt.current() != '}') {
             throw tt.createParseException("StyleRule: '}' expected.");
         }
-        return new StyleRule(selectorGroup, declarations, tt.getSourceLocator());
+        return new StyleRule(selectorGroup, declarations, sourceLocator);
     }
 
     /**

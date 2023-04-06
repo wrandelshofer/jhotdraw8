@@ -50,6 +50,7 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
             }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
+        consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeName));
         consumer.accept(new CssToken(CssTokenType.TT_INCLUDE_MATCH));
         consumer.accept(new CssToken(CssTokenType.TT_STRING, word));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_SQUARE_BRACKET));

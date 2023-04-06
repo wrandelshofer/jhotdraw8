@@ -51,6 +51,7 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
             }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
+            consumer.accept(new CssToken(CssTokenType.TT_IDENT, attributeName));
         consumer.accept(new CssToken(CssTokenType.TT_SUBSTRING_MATCH));
         consumer.accept(new CssToken(CssTokenType.TT_STRING, substring));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_SQUARE_BRACKET));
