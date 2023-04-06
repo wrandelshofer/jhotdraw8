@@ -131,7 +131,7 @@ public class SelectionTool extends AbstractTool {
 
         // HandleTracker may capture mouse event!
         Handle h = view.findHandle(vx, vy);
-        if (h != null && h.isEditable()) {
+        if (h != null) {
             if (updateCursor) {
                 node.setCursor(h.getCursor());
             }
@@ -259,7 +259,7 @@ public class SelectionTool extends AbstractTool {
         double vx = event.getX();
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
-        if (h != null && h.getOwner().isEditable()) {
+        if (h != null) {
             if (updateCursor) {
                 node.setCursor(h.getCursor());
             }
