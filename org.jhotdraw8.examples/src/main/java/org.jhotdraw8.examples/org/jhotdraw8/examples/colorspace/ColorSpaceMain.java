@@ -18,18 +18,18 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.color.tmp.CieLabColorSpace;
-import org.jhotdraw8.color.tmp.CieLchColorSpace;
-import org.jhotdraw8.color.tmp.HlsColorSpace;
-import org.jhotdraw8.color.tmp.HlsPhysiologicColorSpace;
-import org.jhotdraw8.color.tmp.HlsuvColorSpace;
-import org.jhotdraw8.color.tmp.HpluvColorSpace;
-import org.jhotdraw8.color.tmp.HsbColorSpace;
-import org.jhotdraw8.color.tmp.HsvColorSpace;
-import org.jhotdraw8.color.tmp.HsvPhysiologicColorSpace;
-import org.jhotdraw8.color.tmp.LinearSrgbColorSpace;
-import org.jhotdraw8.color.tmp.NamedColorSpace;
-import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.CieLabColorSpace;
+import org.jhotdraw8.color.CieLchColorSpace;
+import org.jhotdraw8.color.HlsColorSpace;
+import org.jhotdraw8.color.HlsPhysiologicColorSpace;
+import org.jhotdraw8.color.HlsuvColorSpace;
+import org.jhotdraw8.color.HpluvColorSpace;
+import org.jhotdraw8.color.HsbColorSpace;
+import org.jhotdraw8.color.HsvColorSpace;
+import org.jhotdraw8.color.HsvPhysiologicColorSpace;
+import org.jhotdraw8.color.LinearSrgbColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpaceAdapter;
 
 import java.awt.color.ColorSpace;
 import java.util.Arrays;
@@ -43,9 +43,9 @@ public class ColorSpaceMain extends Application {
     public void start(Stage stage) throws Exception {
         stage.setTitle("ColorSpace Demo");
 
-        ComboBox<ColorSpace> colorSpace1ComboBox = createColorSpaceBox();
-        ComboBox<ColorSpace> colorSpace2ComboBox = createColorSpaceBox();
-        ComboBox<ColorSpace> visualisationColorSpace = createColorSpaceBox();
+        ComboBox<NamedColorSpace> colorSpace1ComboBox = createColorSpaceBox();
+        ComboBox<NamedColorSpace> colorSpace2ComboBox = createColorSpaceBox();
+        ComboBox<NamedColorSpace> visualisationColorSpace = createColorSpaceBox();
         colorSpace1ComboBox.setValue(colorSpace1ComboBox.getItems().get(0));
         colorSpace2ComboBox.setValue(colorSpace1ComboBox.getItems().get(1));
         visualisationColorSpace.setValue(new HsvColorSpace());
@@ -96,7 +96,7 @@ public class ColorSpaceMain extends Application {
         colorRect.colorSpaceProperty().bind(colorSpace2ComboBox.valueProperty());
         colorRect.baseColorProperty().bind(Bindings.createObjectBinding(
                 () -> {
-                    ColorSpace value = colorSpace2ComboBox.getValue();
+                    NamedColorSpace value = colorSpace2ComboBox.getValue();
                     if (value == null) {
                         return new float[]{1, 1, 1};
                     }
@@ -127,14 +127,14 @@ public class ColorSpaceMain extends Application {
     }
 
     @NonNull
-    private static ObjectBinding<String> createColorLabelBinding(ComboBox<ColorSpace> colorSpace1ComboBox, ColorPicker fromPicker) {
-        ObjectProperty<ColorSpace> colorSpaceProperty = colorSpace1ComboBox.valueProperty();
+    private static ObjectBinding<String> createColorLabelBinding(ComboBox<NamedColorSpace> colorSpace1ComboBox, ColorPicker fromPicker) {
+        ObjectProperty<NamedColorSpace> colorSpaceProperty = colorSpace1ComboBox.valueProperty();
         return Bindings.createObjectBinding(new Callable<String>() {
                                                 @Override
                                                 public String call() throws Exception {
-                                                    ColorSpace value = colorSpace1ComboBox.getValue();
+                                                    NamedColorSpace value = colorSpace1ComboBox.getValue();
                                                     return
-                                                            (colorSpaceProperty.get() instanceof NamedColorSpace n ? n.getName() : colorSpaceProperty.get().getClass().getSimpleName())
+                                                            colorSpaceProperty.get().getName()
                                                                     + ": "
                                                                     + (value == null ? "null" : Arrays.toString(value.fromRGB(
                                                                     new float[]{
@@ -148,7 +148,7 @@ public class ColorSpaceMain extends Application {
                 colorSpaceProperty);
     }
 
-    private void updateComponentsVBox(VBox vbox, ColorSpace cs) {
+    private void updateComponentsVBox(VBox vbox, NamedColorSpace cs) {
         vbox.getChildren().clear();
         for (int c = 0, n = cs.getNumComponents(); c < n; c++) {
             ColorStrip strip = new ColorStrip();
@@ -161,9 +161,9 @@ public class ColorSpaceMain extends Application {
     }
 
     @Nullable
-    private static ComboBox<ColorSpace> createColorSpaceBox() {
-        var colorSpaceBox = new ComboBox<ColorSpace>();
-        ObservableList<ColorSpace> list = FXCollections.observableArrayList();
+    private static ComboBox<NamedColorSpace> createColorSpaceBox() {
+        var colorSpaceBox = new ComboBox<NamedColorSpace>();
+        ObservableList<NamedColorSpace> list = FXCollections.observableArrayList();
         list.addAll(
                 new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)),
                 new NamedColorSpaceAdapter("RGB Linear (Java)", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)),
@@ -179,18 +179,15 @@ public class ColorSpaceMain extends Application {
                 new HsvPhysiologicColorSpace()
         );
         colorSpaceBox.setItems(list);
-        colorSpaceBox.setValue(ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB));
-        colorSpaceBox.setConverter(new StringConverter<ColorSpace>() {
+        colorSpaceBox.setValue(new NamedColorSpaceAdapter("linear RGB", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)));
+        colorSpaceBox.setConverter(new StringConverter<NamedColorSpace>() {
             @Override
-            public String toString(ColorSpace object) {
-                if (object instanceof NamedColorSpace ncs) {
-                    return ncs.getName();
-                }
-                return object == null ? "null" : object.getClass().getSimpleName();
+            public String toString(NamedColorSpace object) {
+                return object.getName();
             }
 
             @Override
-            public ColorSpace fromString(String string) {
+            public NamedColorSpace fromString(String string) {
                 return null;
             }
         });

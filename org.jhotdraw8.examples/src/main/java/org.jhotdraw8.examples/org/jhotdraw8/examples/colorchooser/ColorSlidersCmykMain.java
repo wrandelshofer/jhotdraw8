@@ -12,8 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.AbstractNamedColorSpace;
-import org.jhotdraw8.color.tmp.CmykNominalColorSpace;
+import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.CmykNominalColorSpace;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.util.List;

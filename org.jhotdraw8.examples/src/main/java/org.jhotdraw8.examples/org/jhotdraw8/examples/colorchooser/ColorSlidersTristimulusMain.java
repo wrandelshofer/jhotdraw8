@@ -10,8 +10,8 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.AbstractNamedColorSpace;
-import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpaceAdapter;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.awt.color.ColorSpace;

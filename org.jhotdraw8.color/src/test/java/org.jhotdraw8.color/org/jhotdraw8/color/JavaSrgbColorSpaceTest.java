@@ -1,9 +1,6 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.NamedColorSpace;
-import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
-import org.jhotdraw8.color.tmp.SrgbColorSpace;
 import org.junit.jupiter.api.Disabled;
 
 import java.awt.color.ColorSpace;

@@ -1,11 +1,11 @@
 /* @(#)HSLColorSpace.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
 
-import static org.jhotdraw8.color.tmp.MathUtil.clamp;
+import static org.jhotdraw8.color.MathUtil.clamp;
 
 /**
  * An HSL color space with additive complements in the hue color wheel: red is

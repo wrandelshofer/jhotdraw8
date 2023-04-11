@@ -36,8 +36,8 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.color.tmp.AbstractNamedColorSpace;
-import org.jhotdraw8.color.tmp.HsvColorSpace;
+import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.HsvColorSpace;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 
 import java.io.IOException;

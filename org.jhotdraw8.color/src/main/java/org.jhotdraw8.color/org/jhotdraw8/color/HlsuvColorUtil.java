@@ -3,11 +3,11 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import javafx.scene.paint.Color;
 
-import static org.jhotdraw8.color.tmp.MathUtil.clamp;
+import static org.jhotdraw8.color.MathUtil.clamp;
 
 
 public class HlsuvColorUtil {

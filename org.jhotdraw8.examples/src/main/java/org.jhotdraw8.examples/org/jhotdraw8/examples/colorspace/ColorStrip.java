@@ -10,13 +10,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.tmp.ColorSpaceUtil;
-import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.SrgbColorSpace;
 
-import java.awt.color.ColorSpace;
 
 public class ColorStrip extends HBox {
-    private final ObjectProperty<ColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", SrgbColorSpace.getInstance()));
     private final ObjectProperty<float[]> color = new SimpleObjectProperty<>(new float[3]);
     private final IntegerProperty component = new SimpleIntegerProperty(0);
     private final Canvas canvas = new Canvas();
@@ -40,7 +40,7 @@ public class ColorStrip extends HBox {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         PixelWriter pw = gc.getPixelWriter();
 
-        ColorSpace cs = colorSpace.get();
+        NamedColorSpace cs = colorSpace.get();
         int comp = component.get();
         float maxValueCX = cs.getMaxValue(comp);
         float minValueCX = cs.getMinValue(comp);
@@ -51,7 +51,7 @@ public class ColorStrip extends HBox {
         for (int x = 0; x < w; x++) {
             float cx = extentCX * x / w + minValueCX;
             colorValue[comp] = cx;
-            float[] rgbValue = ColorSpaceUtil.CStoRGB(cs, colorValue, rgb);
+            float[] rgbValue = cs.toRGB(colorValue, rgb);
             Color color = new Color(rgbValue[0], rgbValue[1], rgbValue[2], 1);
             for (int y = 0; y < h; y++) {
                 pw.setColor(x, y, color);
@@ -59,15 +59,15 @@ public class ColorStrip extends HBox {
         }
     }
 
-    public ColorSpace getColorSpace() {
+    public NamedColorSpace getColorSpace() {
         return colorSpace.get();
     }
 
-    public ObjectProperty<ColorSpace> colorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> colorSpaceProperty() {
         return colorSpace;
     }
 
-    public void setColorSpace(ColorSpace colorSpace) {
+    public void setColorSpace(NamedColorSpace colorSpace) {
         this.colorSpace.set(colorSpace);
     }
 

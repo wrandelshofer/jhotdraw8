@@ -14,9 +14,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.AbstractNamedColorSpace;
-import org.jhotdraw8.color.tmp.CieLabColorSpace;
-import org.jhotdraw8.color.tmp.OKLabColorSpace;
+import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.CieLabColorSpace;
+import org.jhotdraw8.color.OKLabColorSpace;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorRectangleSlider;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 

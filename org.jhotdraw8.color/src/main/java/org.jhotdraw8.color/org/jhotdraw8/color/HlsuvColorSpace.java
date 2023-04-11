@@ -1,4 +1,4 @@
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
 
@@ -6,8 +6,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * HPLuv is a human-friendly alternative to HLS.
- * It can only produce pastel colors.
+ * HLSuv is a human-friendly alternative to HLS.
  * <p>
  * References:
  * <dl>
@@ -17,26 +16,26 @@ import static java.lang.Math.min;
  *
  * @author Werner Randelshofer
  */
-public class HpluvColorSpace extends AbstractNamedColorSpace {
+public class HlsuvColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HpluvColorSpace instance;
+    private static HlsuvColorSpace instance;
 
-    public static HpluvColorSpace getInstance() {
+    public static HlsuvColorSpace getInstance() {
         if (instance == null) {
-            instance = new HpluvColorSpace();
+            instance = new HlsuvColorSpace();
         }
         return instance;
     }
 
-    public HpluvColorSpace() {
+    public HlsuvColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);
     }
 
     @Override
-    public float[] toRGB(float[] hpluv, float[] sRgb) {
-        double[] sRgbD = HlsuvColorConverter.hpluvToRgb(new double[]{hpluv[0],
-                hpluv[1], hpluv[2]});
+    public float[] toRGB(float[] hlsuv, float[] sRgb) {
+        double[] sRgbD = HlsuvColorConverter.hlsuvToRgb(new double[]{hlsuv[0],
+                hlsuv[1], hlsuv[2]});
         sRgb[0] = (float) sRgbD[0];
         sRgb[1] = (float) sRgbD[1];
         sRgb[2] = (float) sRgbD[2];
@@ -44,20 +43,18 @@ public class HpluvColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] fromRGB(float[] sRgb, float[] hpluv) {
-        double[] hsluv = HlsuvColorConverter.rgbToHpluv(new double[]{sRgb[0], sRgb[1], sRgb[2]});
-        hpluv[0] = (float) hsluv[0];
-        hpluv[1] = (float) hsluv[1];
-        hpluv[2] = (float) hsluv[2];
-        return hpluv;
+    public float[] fromRGB(float[] sRgb, float[] hlsuv) {
+        double[] hlsuvD = HlsuvColorConverter.rgbToHlsuv(new double[]{sRgb[0], sRgb[1], sRgb[2]});
+        hlsuv[0] = (float) hlsuvD[0];
+        hlsuv[1] = (float) hlsuvD[1];
+        hlsuv[2] = (float) hlsuvD[2];
+        return hlsuv;
     }
+
 
     @Override
     public float getMaxValue(int component) {
-        if (component == 0) {
-            return 360;
-        }
-        return 100;
+        return component == 0 ? 360 : 100;
     }
 
     @Override
@@ -67,7 +64,7 @@ public class HpluvColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public String getName() {
-        return "HPLuv";
+        return "HSLuv";
     }
 
     private static float clamp(float v, float minv, float maxv) {

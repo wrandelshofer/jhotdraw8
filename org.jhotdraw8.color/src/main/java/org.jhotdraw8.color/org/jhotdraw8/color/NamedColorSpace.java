@@ -1,7 +1,7 @@
 /* @(#)NamedColorSpace.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
 
@@ -52,6 +52,23 @@ public interface NamedColorSpace {
      * Faster fromCIEXYZ method which uses the provided output array.
      */
     float[] fromCIEXYZ(float[] xyz, float[] colorvalue);
+
+    default float[] fromRGB(float[] rgb) {
+        return fromRGB(rgb, new float[getNumComponents()]);
+    }
+
+    default float[] toCIEXYZ(float[] colorvalue) {
+        return toCIEXYZ(colorvalue, new float[3]);
+    }
+
+    default float[] toRGB(float[] colorvalue) {
+        return toRGB(colorvalue, new float[3]);
+    }
+
+    default float[] fromCIEXYZ(float[] colorvalue) {
+        return fromCIEXYZ(colorvalue, new float[getNumComponents()]);
+    }
+
 
     default float[] fromRgb24(int rgb, float[] rgbf, float[] componentf) {
         rgbf[0] = ((rgb >>> 16) & 0xff) / 255f;

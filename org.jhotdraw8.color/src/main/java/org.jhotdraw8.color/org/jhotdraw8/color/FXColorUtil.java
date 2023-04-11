@@ -3,11 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import javafx.scene.paint.Color;
-
-import java.awt.color.ColorSpace;
 
 
 public class FXColorUtil {
@@ -25,7 +23,7 @@ public class FXColorUtil {
      * @param c          the color
      * @return the color components in the specified color space
      */
-    public static float[] fromColor(ColorSpace colorSpace, Color c) {
+    public static float[] fromColor(NamedColorSpace colorSpace, Color c) {
         return colorSpace.fromRGB(new float[]{(float) c.getRed(), (float) c.getGreen(), (float) c.getBlue()});
     }
 
@@ -36,7 +34,7 @@ public class FXColorUtil {
      * @param components the color components
      * @return the color components in the specified color space
      */
-    public static Color toColor(ColorSpace colorSpace, float[] components) {
+    public static Color toColor(NamedColorSpace colorSpace, float[] components) {
         float[] srgb = colorSpace.toRGB(components);
         return new Color(MathUtil.clamp(srgb[0], 0, 1), MathUtil.clamp(srgb[1], 0, 1), MathUtil.clamp(srgb[2], 0, 1), 1);
     }

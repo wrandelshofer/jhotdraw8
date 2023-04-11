@@ -6,8 +6,6 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.LinearSrgbColorSpace;
-import org.jhotdraw8.color.tmp.NamedColorSpace;
 import org.junit.jupiter.api.Test;
 
 import java.awt.color.ColorSpace;

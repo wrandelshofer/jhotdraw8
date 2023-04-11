@@ -1,4 +1,4 @@
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;

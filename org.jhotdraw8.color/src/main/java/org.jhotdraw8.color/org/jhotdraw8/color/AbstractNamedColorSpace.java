@@ -4,7 +4,7 @@
  * license agreement you entered into with the copyright holders. For details
  * see accompanying license terms.
  */
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
 import java.util.Objects;

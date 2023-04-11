@@ -8,14 +8,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.tmp.FXColorInterpolator;
-import org.jhotdraw8.color.tmp.FXColorUtil;
-import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.FXColorInterpolator;
+import org.jhotdraw8.color.FXColorUtil;
+import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.SrgbColorSpace;
 
-import java.awt.color.ColorSpace;
 
 public class ColorInterpolationStrip extends HBox {
-    private final ObjectProperty<ColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", SrgbColorSpace.getInstance()));
     private final ObjectProperty<Color> fromColor = new SimpleObjectProperty<>(Color.BLACK);
     private final ObjectProperty<Color> toColor = new SimpleObjectProperty<>(Color.WHITE);
     private final Canvas canvas = new Canvas();
@@ -41,7 +42,7 @@ public class ColorInterpolationStrip extends HBox {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         PixelWriter pw = gc.getPixelWriter();
 
-        ColorSpace cs = colorSpace.get();
+        NamedColorSpace cs = colorSpace.get();
         FXColorInterpolator interpolator = new FXColorInterpolator(cs,
                 FXColorUtil.fromColor(cs, fromColor.get()),
                 FXColorUtil.fromColor(cs, toColor.get()));
@@ -56,15 +57,15 @@ public class ColorInterpolationStrip extends HBox {
         }
     }
 
-    public ColorSpace getColorSpace() {
+    public NamedColorSpace getColorSpace() {
         return colorSpace.get();
     }
 
-    public ObjectProperty<ColorSpace> colorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> colorSpaceProperty() {
         return colorSpace;
     }
 
-    public void setColorSpace(ColorSpace colorSpace) {
+    public void setColorSpace(NamedColorSpace colorSpace) {
         this.colorSpace.set(colorSpace);
     }
 

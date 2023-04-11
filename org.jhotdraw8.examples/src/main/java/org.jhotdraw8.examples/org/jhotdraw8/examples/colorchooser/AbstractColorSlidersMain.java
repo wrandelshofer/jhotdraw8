@@ -10,8 +10,8 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
 import javafx.util.converter.FloatStringConverter;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.AbstractNamedColorSpace;
-import org.jhotdraw8.color.tmp.RgbBitDepthConverters;
+import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.RgbBitDepthConverters;
 
 import java.util.ArrayList;
 import java.util.Arrays;

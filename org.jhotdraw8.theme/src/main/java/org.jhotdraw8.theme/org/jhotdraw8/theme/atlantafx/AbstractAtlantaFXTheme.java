@@ -6,12 +6,12 @@
 package org.jhotdraw8.theme.atlantafx;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.tmp.HlsuvColorUtil;
+import org.jhotdraw8.color.HlsuvColorUtil;
 import org.jhotdraw8.theme.AbstractTheme;
 import org.jhotdraw8.theme.Theme;
 import org.jhotdraw8.theme.ThemeParameters;
 
-import static org.jhotdraw8.color.tmp.FXColorUtil.toWebColor;
+import static org.jhotdraw8.color.FXColorUtil.toWebColor;
 
 
 /**

@@ -1,8 +1,6 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.tmp.NamedColorSpace;
-import org.jhotdraw8.color.tmp.RgbBitDepthConverters;
 import org.junit.jupiter.api.Test;
 
 import java.awt.color.ColorSpace;
@@ -10,7 +8,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static org.jhotdraw8.color.tmp.MathUtil.almostEqual;
+import static org.jhotdraw8.color.MathUtil.almostEqual;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

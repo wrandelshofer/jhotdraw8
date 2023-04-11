@@ -3,7 +3,7 @@
  * Copyright © 2023 Werner Randelshofer, Switzerland. MIT License.
  */
 
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 public class RgbBitDepthConverters {
     private static final float EPSILON = 1f / 512;

@@ -10,7 +10,7 @@ import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.color.tmp.AbstractNamedColorSpace;
+import org.jhotdraw8.color.AbstractNamedColorSpace;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;

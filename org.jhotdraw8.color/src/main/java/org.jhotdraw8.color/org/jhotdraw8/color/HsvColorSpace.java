@@ -1,89 +1,50 @@
-/* @(#)HSVPhysiologicColorSpace.java
+/* @(#)HSVColorSpace.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
 
 /**
- * A HSV color space with physiologic opposites in the hue color wheel:
- * red is opposite green and yellow is opposite blue.
+ * An HSV color space with additive complements in the hue color wheel: red is
+ * opposite cyan, magenta is opposite green, blue is opposite yellow.
+ * <p>
+ * A color with maximal lightness is analogous to shining a white light on a colored object.
+ * <p>
+ * A color with maximal lightness is analogous to shining no light on a colored object
+ * (yields pure black).
  *
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class HsvPhysiologicColorSpace extends AbstractNamedColorSpace {
+public class HsvColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HsvPhysiologicColorSpace instance;
+    private static HsvColorSpace instance;
 
-    public static HsvPhysiologicColorSpace getInstance() {
+    public static HsvColorSpace getInstance() {
         if (instance == null) {
-            instance = new HsvPhysiologicColorSpace();
+            instance = new HsvColorSpace();
         }
         return instance;
     }
 
-    public HsvPhysiologicColorSpace() {
+    public HsvColorSpace() {
         super(ColorSpace.TYPE_HSV, 3);
     }
 
     @Override
     public float[] toRGB(float[] components, float[] rgb) {
-        float hue = components[0];
+        float hue = components[0] * 360f;
         float saturation = components[1];
         float value = components[2];
 
 
-        // normalize hue
-        hue = hue - (float) Math.floor(hue);
-        if (hue < 0) {
-            hue -= 1f;
-        }
-        // normalize saturation
-        if (saturation > 1f) {
-            saturation = 1f;
-        } else if (saturation < 0f) {
-            saturation = 0f;
-        }
-        // normalize value
-        if (value > 1f) {
-            value = 1f;
-        } else if (value < 0f) {
-            value = 0f;
-        }
-
-
         // compute hi and f from hue
-        int hi;
-        float f;
-        float hueDeg = hue * 360f;
-        if (hueDeg < 120f) { // red to yellow
-            hi = 0;
-            f = (hueDeg / 120f);
+        int hi = (int) (Math.floor(hue / 60f) % 6);
+        float f = (float) (hue / 60f - Math.floor(hue / 60f));
 
-        } else if (hueDeg < 160f) { // yellow to green
-            hi = 1;
-            f = (hueDeg - 120f) / 40f;
-
-        } else if (hueDeg < 220f) { // green to cyan
-            hi = 2;
-            f = (hueDeg - 160f) / 60f;
-
-        } else if (hueDeg < 280f) { // cyan to blue
-            hi = 3;
-            f = (hueDeg - 220f) / 60f;
-
-        } else if (hueDeg < 340f) { // blue to purple
-            hi = 4;
-            f = (hueDeg - 280f) / 60f;
-
-        } else { // purple to red
-            f = (hueDeg - 340f) / 20f;
-            hi = 5;
-        }
-
-        // compute p, q, t from saturation
+        // compute p and q from saturation
         float p = value * (1 - saturation);
         float q = value * (1 - f * saturation);
         float t = value * (1 - (1 - f) * saturation);
@@ -132,6 +93,7 @@ public class HsvPhysiologicColorSpace extends AbstractNamedColorSpace {
             break;
         }
 
+
         rgb[0] = red;
         rgb[1] = green;
         rgb[2] = blue;
@@ -153,18 +115,14 @@ public class HsvPhysiologicColorSpace extends AbstractNamedColorSpace {
 
         if (max == min) {
             hue = 0;
-        } else if (max == r && g >= b) { // red to yellow
-            hue = 120f * (g - b) / (max - min);
-        } else if (max == r) { // red to purple
-            hue = 20f * (g - b) / (max - min) + 360f;
-        } else if (max == g && r >= b) { // yellow to green
-            hue = 40f * (b - r) / (max - min) + 120f + 40f;
-        } else if (max == g) { // green to cyan
-            hue = 60f * (b - r) / (max - min) + 120f + 40f;
-        } else if (g >= r) { // cyan to blue
-            hue = 60f * (r - g) / (max - min) + 240f + 40f;
-        } else { // blue to purple
-            hue = 60f * (r - g) / (max - min) + 240f + 40f;
+        } else if (max == r && g >= b) {
+            hue = 60f * (g - b) / (max - min);
+        } else if (max == r && g < b) {
+            hue = 60f * (g - b) / (max - min) + 360f;
+        } else if (max == g) {
+            hue = 60f * (b - r) / (max - min) + 120f;
+        } else /*if (max == b)*/ {
+            hue = 60f * (r - g) / (max - min) + 240f;
         }
 
         value = max;
@@ -181,8 +139,20 @@ public class HsvPhysiologicColorSpace extends AbstractNamedColorSpace {
         return component;
     }
 
+
+
+    @Override
+    public float getMaxValue(int component) {
+        return component == 0 ? 360f : 1f;
+    }
+
+    @Override
+    public float getMinValue(int component) {
+        return 0f;
+    }
+
     @Override
     public String getName() {
-        return "HSV Physiological";
+        return "HSV";
     }
 }

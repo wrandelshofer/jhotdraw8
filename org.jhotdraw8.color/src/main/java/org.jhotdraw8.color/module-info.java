@@ -14,5 +14,4 @@ module org.jhotdraw8.color {
 
     exports org.jhotdraw8.color;
     exports org.jhotdraw8.color.linalg;
-    exports org.jhotdraw8.color.tmp;
 }

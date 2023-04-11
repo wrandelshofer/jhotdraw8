@@ -1,4 +1,4 @@
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;

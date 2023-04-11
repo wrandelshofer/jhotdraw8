@@ -2,7 +2,6 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.color.linalg.Matrix3x3;
-import org.jhotdraw8.color.tmp.GenericLinearRGBColorSpace;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

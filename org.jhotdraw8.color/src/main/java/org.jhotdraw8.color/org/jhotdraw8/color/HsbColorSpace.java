@@ -1,7 +1,7 @@
 /* @(#)HSBColorSpace.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.color.tmp;
+package org.jhotdraw8.color;
 
 import java.awt.*;
 
