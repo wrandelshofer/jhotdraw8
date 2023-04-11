@@ -281,4 +281,33 @@ public interface PathBuilder<T> {
      * Some implementations may guarantee a non-null return value.
      */
     @Nullable T build();
+
+    /**
+     * Adds a circle to the path winding in clockwise direction.
+     *
+     * @param radius the radius of the circle
+     * @param cx     the x-coordinate of the center of the circle
+     * @param cy     the y-coordinate of the center of the circle
+     */
+    default void circle(double radius, double cx, double cy) {
+        moveTo(cx - radius, cy);
+        arcTo(radius, radius, 0, cx + radius, cy, false, false);
+        arcTo(radius, radius, 0, cx - radius, cy, false, false);
+        closePath();
+    }
+
+    /**
+     * Adds a circle to the path winding in counter-clockwise direction.
+     *
+     * @param radius the radius of the circle
+     * @param cx     the x-coordinate of the center of the circle
+     * @param cy     the y-coordinate of the center of the circle
+     */
+    default void counterClockwiseCircle(double radius, double cx, double cy) {
+        moveTo(cx + radius, cy);
+        arcTo(radius, radius, 0, cx - radius, cy, false, false);
+        arcTo(radius, radius, 0, cx + radius, cy, false, false);
+        closePath();
+    }
+
 }

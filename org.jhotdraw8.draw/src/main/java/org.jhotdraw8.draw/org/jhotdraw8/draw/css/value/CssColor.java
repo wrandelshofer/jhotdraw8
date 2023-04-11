@@ -20,6 +20,12 @@ import java.util.Objects;
  * Abstract base class for a color specified in a specific color system.
  * <p>
  * FIXME - make this class abstract and implement subclasses for each color system
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>CSS Color Module Level 4, Editor’s Draft, 30 March 2023</dt>
+ *     <dd><a href="https://drafts.csswg.org/css-color-4/">csswg.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */

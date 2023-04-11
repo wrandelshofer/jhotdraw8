@@ -10,8 +10,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.ColorSpaceUtil;
-import org.jhotdraw8.color.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.tmp.ColorSpaceUtil;
+import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
 
 import java.awt.color.ColorSpace;
 

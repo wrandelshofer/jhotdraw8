@@ -21,4 +21,5 @@ module org.jhotdraw8.examples {
 
     exports org.jhotdraw8.examples.fxml to javafx.graphics, javafx.fxml;
     opens org.jhotdraw8.examples.fxml to javafx.fxml;
+    exports org.jhotdraw8.examples.colorchooser to javafx.fxml, javafx.graphics;
 }

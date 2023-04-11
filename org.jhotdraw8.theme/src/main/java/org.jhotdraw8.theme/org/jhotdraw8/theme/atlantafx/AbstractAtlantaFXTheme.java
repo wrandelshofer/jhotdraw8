@@ -6,12 +6,12 @@
 package org.jhotdraw8.theme.atlantafx;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.HSLuvColorUtil;
+import org.jhotdraw8.color.tmp.HlsuvColorUtil;
 import org.jhotdraw8.theme.AbstractTheme;
 import org.jhotdraw8.theme.Theme;
 import org.jhotdraw8.theme.ThemeParameters;
 
-import static org.jhotdraw8.color.FXColorUtil.toWebColor;
+import static org.jhotdraw8.color.tmp.FXColorUtil.toWebColor;
 
 
 /**
@@ -38,7 +38,7 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
         buf.append(".root {\n");
         buf.append("-fx-font-size:" + params.getFontSize() + "px;\n");
         Color accentColor = params.getAccentColor() == null ? Color.BLACK : params.getAccentColor();
-        HSLuvColorUtil hsLuvColorUtil = new HSLuvColorUtil();
+        HlsuvColorUtil hsLuvColorUtil = new HlsuvColorUtil();
         switch (getAppearance()) {
 
             case "Light" -> {

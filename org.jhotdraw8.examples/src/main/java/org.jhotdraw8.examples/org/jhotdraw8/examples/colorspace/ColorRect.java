@@ -10,15 +10,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.ColorSpaceUtil;
-import org.jhotdraw8.color.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.tmp.NamedColorSpace;
+import org.jhotdraw8.color.tmp.NamedColorSpaceAdapter;
 
 import java.awt.color.ColorSpace;
 
 import static org.jhotdraw8.base.util.MathUtil.clamp;
 
 public class ColorRect extends HBox {
-    private final ObjectProperty<ColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
     private final ObjectProperty<float[]> baseColor = new SimpleObjectProperty<>(new float[3]);
     private final IntegerProperty xComponent = new SimpleIntegerProperty(0);
     private final IntegerProperty yComponent = new SimpleIntegerProperty(1);
@@ -30,7 +30,10 @@ public class ColorRect extends HBox {
         heightProperty().addListener(invalidationListener);
         colorSpaceProperty().addListener(invalidationListener);
         baseColorProperty().addListener(invalidationListener);
+        layoutBoundsProperty().addListener(invalidationListener);
         getChildren().add(canvas);
+        setMinWidth(10);
+        setMinHeight(10);
     }
 
 
@@ -41,10 +44,11 @@ public class ColorRect extends HBox {
         canvas.setWidth(w);
         canvas.setHeight(h);
 
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
         PixelWriter pw = gc.getPixelWriter();
 
-        ColorSpace cs = colorSpace.get();
+        NamedColorSpace cs = colorSpace.get();
         if (cs == null) {
             return;
         }
@@ -65,7 +69,7 @@ public class ColorRect extends HBox {
             for (int y = 0; y < h; y++) {
                 float cy = extentCY * y / h + minValueCY;
                 colorValue[yComp] = cy;
-                float[] rgbValue = ColorSpaceUtil.CStoRGB(cs, colorValue, rgb);
+                float[] rgbValue = cs.toRGB(colorValue, rgb);
                 Color color = new Color(clamp(rgbValue[0], 0, 1),
                         clamp(rgbValue[1], 0, 1), clamp(rgbValue[2], 0, 1), 1);
                 pw.setColor(x, y, color);
@@ -74,15 +78,15 @@ public class ColorRect extends HBox {
 
     }
 
-    public ColorSpace getColorSpace() {
+    public NamedColorSpace getColorSpace() {
         return colorSpace.get();
     }
 
-    public ObjectProperty<ColorSpace> colorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> colorSpaceProperty() {
         return colorSpace;
     }
 
-    public void setColorSpace(ColorSpace colorSpace) {
+    public void setColorSpace(NamedColorSpace colorSpace) {
         this.colorSpace.set(colorSpace);
     }
 

@@ -73,4 +73,6 @@ public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>
     protected void doQuadTo(double x, double y, double x0, double y0) {
         elements.add(new QuadCurveTo(x, y, x0, y0));
     }
+
+
 }

@@ -53,7 +53,7 @@ public class FxmlUtil {
         };
     }
 
-    public static @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, ResourceBundle resourceBundle) {
+    public static @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, @Nullable ResourceBundle resourceBundle) {
         return () -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(resourceBundle);
@@ -63,5 +63,16 @@ public class FxmlUtil {
                 throw new InternalError(ex);
             }
         };
+    }
+
+    public static FXMLLoader load(@Nullable URL fxml, @Nullable ResourceBundle resourceBundle) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setResources(resourceBundle);
+        try (InputStream in = fxml.openStream()) {
+            loader.load(in);
+        } catch (IOException ex) {
+            throw new InternalError(ex);
+        }
+        return loader;
     }
 }
