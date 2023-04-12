@@ -14,7 +14,7 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
-import org.jhotdraw8.color.RgbBitDepthConverters;
+import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -186,7 +186,7 @@ public class ColorSlider extends AbstractColorSlider {
                 for (int x = 0; x < width; x += blockSize) {
                     float xval = Math.min(width, x + (blockSize >>> 1)) * invWidth + xmin;
                     colorValue[xIndex] = xval;
-                    int argb = RgbBitDepthConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));//| 0xff_000000;
+                    int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));//| 0xff_000000;
                     argb = filter.applyAsInt(argb);
                     Arrays.fill(array, x + xy, Math.min(xy + width, x + xy + blockSize), argb);
                     //array[x + xy] = argb;
@@ -233,7 +233,7 @@ public class ColorSlider extends AbstractColorSlider {
                 for (int x = 0; x < width; x++) {
                     float xval = x * invWidth + xmin;
                     colorValue[xIndex] = xval;
-                    int argb = RgbBitDepthConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
+                    int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
                     argb = filter.applyAsInt(argb);
                     array[x + xy] = argb;
                 }
@@ -271,7 +271,7 @@ public class ColorSlider extends AbstractColorSlider {
                 }
                 float xval = (height - y) * invHeight + xmin;
                 colorValue[xIndex] = xval;
-                int argb = RgbBitDepthConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
+                int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
                 argb = filter.applyAsInt(argb);
                 Arrays.fill(array, xy, Math.min(xy + width * blockSize, arrayLength), argb);
             }
@@ -309,7 +309,7 @@ public class ColorSlider extends AbstractColorSlider {
                 }
                 float xval = (height - y) * invHeight + xmin;
                 colorValue[xIndex] = xval;
-                int argb = RgbBitDepthConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
+                int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
                 argb = filter.applyAsInt(argb);
                 Arrays.fill(array, xy, xy + width, argb);
             }

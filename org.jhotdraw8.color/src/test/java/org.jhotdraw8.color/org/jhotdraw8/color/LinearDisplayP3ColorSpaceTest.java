@@ -12,6 +12,6 @@ public class LinearDisplayP3ColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
     protected @NonNull NamedColorSpace getInstance() {
-        return GenericGammaCorrectedRGBColorSpace.LINEAR_DISPLAY_P3_INSTANCE;
+        return new DisplayP3ColorSpace().getLinearColorSpace();
     }
 }

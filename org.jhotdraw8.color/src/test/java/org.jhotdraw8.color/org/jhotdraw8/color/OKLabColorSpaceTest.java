@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class OKLabColorSpaceTest extends AbstractNamedColorSpaceTest {
     @Override
     protected @NonNull OKLabColorSpace getInstance() {
-        return OKLabColorSpace.getInstance();
+        return new OKLabColorSpace();
     }
 
     /**
@@ -41,7 +41,7 @@ public class OKLabColorSpaceTest extends AbstractNamedColorSpaceTest {
             "0.000,0.000,1.000,	0.153,-1.415,-0.449"
     })
     public void shouldConvertFromXYZ(float x, float y, float z, float l, float a, float b) {
-        OKLabColorSpace instance = OKLabColorSpace.getInstance();
+        OKLabColorSpace instance = getInstance();
         float[] actualLab = instance.fromCIEXYZ(new float[]{x, y, z});
         assertEquals(l, actualLab[0], 1e-2f, "L");
         assertEquals(a, actualLab[1], 1e-2f, "a");
@@ -80,7 +80,7 @@ public class OKLabColorSpaceTest extends AbstractNamedColorSpaceTest {
             "0.502, 0.0, 0.502, 0.421, 0.41,-0.25",
     })
     public void shouldConvertFromRGB(float R, float G, float B, float l, float a, float b) {
-        OKLabColorSpace instance = OKLabColorSpace.getInstance();
+        OKLabColorSpace instance = getInstance();
         float[] actualLab = instance.fromRGB(new float[]{R, G, B});
         assertEquals(l, actualLab[0], 1e-2f, "L");
         assertEquals(a, actualLab[1], 1e-2f, "a");

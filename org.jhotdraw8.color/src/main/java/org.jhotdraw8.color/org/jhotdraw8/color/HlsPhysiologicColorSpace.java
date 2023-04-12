@@ -16,15 +16,6 @@ import java.awt.color.ColorSpace;
 public class HlsPhysiologicColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HlsPhysiologicColorSpace instance;
-
-    public static HlsPhysiologicColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HlsPhysiologicColorSpace();
-        }
-        return instance;
-    }
-
     public HlsPhysiologicColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);
     }

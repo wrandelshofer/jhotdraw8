@@ -3,9 +3,9 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.color;
+package org.jhotdraw8.color.util;
 
-class MathUtil {
+public class MathUtil {
     /**
      * Don't let anyone instantiate this class.
      */
@@ -48,6 +48,10 @@ class MathUtil {
     }
 
     public static boolean almostEqual(float a, float b, float eps) {
+        return Math.abs(a - b) < eps;
+    }
+
+    public static boolean almostEqual(double a, double b, double eps) {
         return Math.abs(a - b) < eps;
     }
 }

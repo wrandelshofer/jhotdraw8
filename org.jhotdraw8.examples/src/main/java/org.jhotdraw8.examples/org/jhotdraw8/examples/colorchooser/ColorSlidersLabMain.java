@@ -62,8 +62,8 @@ public class ColorSlidersLabMain extends AbstractColorSlidersMain {
         colorRectangleSlider.c2Property().bindBidirectional(c2);
 
         ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
-                CieLabColorSpace.getInstance(),
-                OKLabColorSpace.getInstance()
+                new CieLabColorSpace(),
+                new OKLabColorSpace()
         );
         colorRectangleSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
         colorSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());

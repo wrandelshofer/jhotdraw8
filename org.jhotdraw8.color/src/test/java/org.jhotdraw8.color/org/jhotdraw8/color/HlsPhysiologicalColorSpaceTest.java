@@ -4,6 +4,6 @@ import org.jhotdraw8.annotation.NonNull;
 
 public class HlsPhysiologicalColorSpaceTest extends AbstractNamedColorSpaceTest {
     protected @NonNull HlsPhysiologicColorSpace getInstance() {
-        return HlsPhysiologicColorSpace.getInstance();
+        return new HlsPhysiologicColorSpace();
     }
 }

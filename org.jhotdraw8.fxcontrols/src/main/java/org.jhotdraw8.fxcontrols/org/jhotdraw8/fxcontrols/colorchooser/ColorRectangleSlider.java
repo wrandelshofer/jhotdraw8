@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -184,7 +185,8 @@ public class ColorRectangleSlider extends AbstractColorSlider {
                     colorValue[xIndex] = xval;
                     colorValue[yIndex] = yval;
 
-                    int argb = cs.toRgb24(colorValue, rgbValue);
+                    cs.toRGB(colorValue, rgbValue);
+                    int argb = RgbBitConverters.rgbFloatToArgb32(rgbValue);
                     argb = filter.applyAsInt(argb);
 
                     Arrays.fill(array, x + xy, Math.min(xy + width, x + xy + blockSize), argb);
@@ -238,7 +240,8 @@ public class ColorRectangleSlider extends AbstractColorSlider {
                     colorValue[xIndex] = xval;
                     colorValue[yIndex] = yval;
 
-                    int argb = cs.toRgb24(colorValue, rgbValue);
+                    cs.toRGB(colorValue, rgbValue);
+                    int argb = RgbBitConverters.rgbFloatToArgb32(rgbValue);
                     argb = filter.applyAsInt(argb);
                     array[x + xy] = argb;
                 }

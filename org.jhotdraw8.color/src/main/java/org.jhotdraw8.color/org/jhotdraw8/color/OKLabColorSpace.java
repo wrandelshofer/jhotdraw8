@@ -21,22 +21,18 @@ import java.awt.color.ColorSpace;
  */
 public class OKLabColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
-    private static @NonNull OKLabColorSpace instance = new OKLabColorSpace();
-
-    private static LinearSrgbColorSpace linearRgb = LinearSrgbColorSpace.getInstance();
+    private static @NonNull
+    final NamedColorSpace linearSrgb = new SrgbColorSpace().getLinearColorSpace();
 
     public OKLabColorSpace() {
         super(ColorSpace.TYPE_Lab, 3);
 
     }
 
-    public static OKLabColorSpace getInstance() {
-        return instance;
-    }
 
     @Override
     public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
-        return fromLinearRGB(linearRgb.fromCIEXYZ(xyz, colorvalue), colorvalue);
+        return fromLinearRGB(linearSrgb.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
     public float[] fromLinearRGB(float[] rgb, float[] colorvalue) {
@@ -60,7 +56,22 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] fromRGB(float[] srgbvalue, float[] colorvalue) {
-        return fromLinearRGB(GenericGammaCorrectedRGBColorSpace.toLinear(srgbvalue, colorvalue), colorvalue);
+        return fromLinearRGB(toLinear(srgbvalue, colorvalue), colorvalue);
+    }
+
+    protected float[] fromLinear(float linear[], float corrected[]) {
+        corrected[0] = SrgbColorSpace.fromLinear(linear[0]);
+        corrected[1] = SrgbColorSpace.fromLinear(linear[1]);
+        corrected[2] = SrgbColorSpace.fromLinear(linear[2]);
+        return corrected;
+    }
+
+
+    protected float[] toLinear(float corrected[], float linear[]) {
+        linear[0] = SrgbColorSpace.toLinear(corrected[0]);
+        linear[1] = SrgbColorSpace.toLinear(corrected[1]);
+        linear[2] = SrgbColorSpace.toLinear(corrected[2]);
+        return linear;
     }
 
     @Override
@@ -94,7 +105,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
-        return linearRgb.toCIEXYZ(toLinearRGB(colorvalue, xyz), xyz);
+        return linearSrgb.toCIEXYZ(toLinearRGB(colorvalue, xyz), xyz);
     }
 
     protected float[] toLinearRGB(float[] colorvalue, float[] rgb) {
@@ -118,7 +129,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] toRGB(float[] colorvalue, float[] rgb) {
-        return GenericGammaCorrectedRGBColorSpace.fromLinear(toLinearRGB(colorvalue, rgb), rgb);
+        return fromLinear(toLinearRGB(colorvalue, rgb), rgb);
     }
 
 }

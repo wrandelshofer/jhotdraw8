@@ -7,7 +7,7 @@ package org.jhotdraw8.color;
 
 import javafx.scene.paint.Color;
 
-import static org.jhotdraw8.color.MathUtil.clamp;
+import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 
 public class HlsuvColorUtil {

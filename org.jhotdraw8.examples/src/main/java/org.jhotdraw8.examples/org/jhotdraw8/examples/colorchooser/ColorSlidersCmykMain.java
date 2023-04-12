@@ -80,7 +80,7 @@ public class ColorSlidersCmykMain extends AbstractColorSlidersMain {
 
         ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
 
-                CmykNominalColorSpace.getInstance()//,
+                new CmykNominalColorSpace()//,
                 //new NamedColorSpaceAdapter("CMYK generic",CMYKGenericColorSpace.getInstance())
         );
         sliderC.colorSpaceProperty().bind(colorSpaceBox.valueProperty());

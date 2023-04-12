@@ -20,14 +20,6 @@ import java.awt.color.ColorSpace;
 public class HsvColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HsvColorSpace instance;
-
-    public static HsvColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HsvColorSpace();
-        }
-        return instance;
-    }
 
     public HsvColorSpace() {
         super(ColorSpace.TYPE_HSV, 3);

@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-
 /**
  * The 1976 CIE {@code L*a*b*} color space (CIELAB).
  * <p>
@@ -35,21 +32,10 @@ import org.jhotdraw8.annotation.Nullable;
  * @version $Id$
  */
 public class CieLabColorSpace extends AbstractNamedColorSpace {
-    private static @Nullable CieLabColorSpace instance;
 
-    public static @NonNull CieLabColorSpace getInstance() {
-        if (instance == null) {
-            instance = new CieLabColorSpace();
-        }
-        return instance;
-    }
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The XYZ coordinates of the CIE Standard Illuminant D65 reference white.
-     */
-    private static final double[] D65 = {0.9505d, 1d, 1.0890d};
     /**
      * The X coordinate of the reference white.
      */
@@ -68,22 +54,38 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     private static final double eps = 216d / 24389d;
     private static final double k = 24389d / 27d;
 
+    /**
+     * Creates a new instance with the  XYZ coordinates of the
+     * CIE Standard Illuminant D65 reference white.
+     */
     public CieLabColorSpace() {
+        this(0.9505d, 1d, 1.0890d);
+    }
+
+    /**
+     * Creates a new instance with the given XYZ coordinates of the
+     * reference white.
+     *
+     * @param Xw X coordinate of the reference white
+     * @param Yw Y coordinate of the reference white
+     * @param Zw Z coordinate of the reference white
+     */
+    public CieLabColorSpace(double Xw, double Yw, double Zw) {
         super(TYPE_Lab, 3);
 
-        Xw = D65[0];
-        Yw = D65[1];
-        Zw = D65[2];
+        this.Xw = Xw;
+        this.Yw = Yw;
+        this.Zw = Zw;
     }
 
     @Override
     public float[] toRGB(float[] colorvalue, float[] rgb) {
-        return SrgbColorSpace.getInstance().fromCIEXYZ(toCIEXYZ(colorvalue, rgb), rgb);
+        return new SrgbColorSpace().fromCIEXYZ(toCIEXYZ(colorvalue, rgb), rgb);
     }
 
     @Override
     public float[] fromRGB(float[] rgb, float[] component) {
-        return fromCIEXYZ(SrgbColorSpace.getInstance().toCIEXYZ(rgb, component), component);
+        return fromCIEXYZ(new SrgbColorSpace().toCIEXYZ(rgb, component), component);
     }
 
     /**

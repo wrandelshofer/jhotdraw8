@@ -19,14 +19,6 @@ import static java.lang.Math.min;
 public class HlsuvColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HlsuvColorSpace instance;
-
-    public static HlsuvColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HlsuvColorSpace();
-        }
-        return instance;
-    }
 
     public HlsuvColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);

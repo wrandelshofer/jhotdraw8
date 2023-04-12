@@ -4,6 +4,6 @@ import org.jhotdraw8.annotation.NonNull;
 
 public class OKLchColorSpaceTest extends AbstractNamedColorSpaceTest {
     protected @NonNull OKLchColorSpace getInstance() {
-        return OKLchColorSpace.getInstance();
+        return new OKLchColorSpace();
     }
 }

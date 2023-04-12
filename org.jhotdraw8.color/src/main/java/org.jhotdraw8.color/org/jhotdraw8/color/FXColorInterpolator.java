@@ -6,6 +6,7 @@
 package org.jhotdraw8.color;
 
 import javafx.scene.paint.Color;
+import org.jhotdraw8.color.util.MathUtil;
 
 import java.awt.color.ColorSpace;
 

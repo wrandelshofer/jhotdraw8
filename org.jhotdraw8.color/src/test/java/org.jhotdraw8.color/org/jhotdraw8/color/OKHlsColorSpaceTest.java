@@ -7,6 +7,6 @@ import org.junit.jupiter.api.Disabled;
 public class OKHlsColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     protected @NonNull OKHlsColorSpace getInstance() {
-        return OKHlsColorSpace.getInstance();
+        return new OKHlsColorSpace();
     }
 }

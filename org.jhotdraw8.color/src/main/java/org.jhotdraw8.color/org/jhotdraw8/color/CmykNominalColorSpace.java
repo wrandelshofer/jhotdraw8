@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-
 import java.awt.color.ColorSpace;
 
 /**
@@ -21,14 +18,7 @@ import java.awt.color.ColorSpace;
 public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static @Nullable CmykNominalColorSpace instance;
 
-    public static @NonNull CmykNominalColorSpace getInstance() {
-        if (instance == null) {
-            instance = new CmykNominalColorSpace();
-        }
-        return instance;
-    }
 
     public CmykNominalColorSpace() {
         super(ColorSpace.TYPE_CMYK, 4);
@@ -99,6 +89,6 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public String getName() {
-        return "nominal CMYK";
+        return "Nominal CMYK";
     }
 }

@@ -15,14 +15,6 @@ import java.awt.*;
 public class HsbColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HsbColorSpace instance;
-
-    public static HsbColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HsbColorSpace();
-        }
-        return instance;
-    }
 
     public HsbColorSpace() {
         super(NamedColorSpace.TYPE_HSB, 3);
@@ -50,12 +42,12 @@ public class HsbColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
-        return SrgbColorSpace.getInstance().toCIEXYZ(toRGB(colorvalue, xyz), xyz);
+        return new SrgbColorSpace().toCIEXYZ(toRGB(colorvalue, xyz), xyz);
     }
 
     @Override
     public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
-        return fromRGB(SrgbColorSpace.getInstance().fromCIEXYZ(xyz, colorvalue), colorvalue);
+        return fromRGB(new SrgbColorSpace().fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
     @Override

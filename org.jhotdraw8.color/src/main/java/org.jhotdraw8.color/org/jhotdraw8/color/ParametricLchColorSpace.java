@@ -23,13 +23,13 @@ import static java.lang.Math.PI;
  *
  * @author Werner Randelshofer
  */
-public class AbstractLchColorSpace extends AbstractNamedColorSpace {
+public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull AbstractNamedColorSpace labColorSpace;
+    private final @NonNull NamedColorSpace labColorSpace;
     private final @NonNull String name;
 
-    public AbstractLchColorSpace(String name, AbstractNamedColorSpace labColorSpace) {
+    public ParametricLchColorSpace(String name, NamedColorSpace labColorSpace) {
         super(TYPE_LCH, 3);
         this.name = name;
         this.labColorSpace = labColorSpace;
@@ -88,7 +88,7 @@ public class AbstractLchColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public String getName() {
-        return "CIE 1976 L*CHa*b*";
+        return name;
     }
 
     @Override

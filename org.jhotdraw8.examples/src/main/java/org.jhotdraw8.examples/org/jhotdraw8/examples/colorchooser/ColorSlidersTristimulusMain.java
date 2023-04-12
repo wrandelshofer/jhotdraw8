@@ -62,7 +62,6 @@ public class ColorSlidersTristimulusMain extends AbstractColorSlidersMain {
         sliderB.c2Property().bindBidirectional(blue);
 
         ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
-                LinearRGBColorSpaceOld.getInstance(),
                 new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)),
                 new NamedColorSpaceAdapter("CIE XYZ", ColorSpace.getInstance(ColorSpace.CS_CIEXYZ)),
                 new NamedColorSpaceAdapter("PYCC", ColorSpace.getInstance(ColorSpace.CS_PYCC))

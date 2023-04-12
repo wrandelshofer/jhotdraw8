@@ -6,15 +6,10 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
-public class OKLchColorSpace extends AbstractLchColorSpace {
-    private static @NonNull OKLchColorSpace instance = new OKLchColorSpace();
-
-    public static @NonNull OKLchColorSpace getInstance() {
-        return instance;
-    }
+public class OKLchColorSpace extends ParametricLchColorSpace {
 
     public OKLchColorSpace() {
-        super("OKLCH", OKLabColorSpace.getInstance());
+        super("OKLCH", new OKLabColorSpace());
     }
 
     @NonNull

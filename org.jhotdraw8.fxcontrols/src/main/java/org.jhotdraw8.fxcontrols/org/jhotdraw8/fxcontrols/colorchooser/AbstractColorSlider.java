@@ -74,7 +74,7 @@ public abstract class AbstractColorSlider extends Pane {
     /**
      * The color space.
      */
-    private final @NonNull ObjectProperty<AbstractNamedColorSpace> colorSpace = new SimpleObjectProperty(this, "colorSpace", HsvColorSpace.getInstance());
+    private final @NonNull ObjectProperty<AbstractNamedColorSpace> colorSpace = new SimpleObjectProperty(this, "colorSpace", new HsvColorSpace());
     /**
      * Set this value to true when the user is adjusting a value in another control.
      * <p>

@@ -15,14 +15,6 @@ import java.awt.color.ColorSpace;
 public class HsvPhysiologicColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HsvPhysiologicColorSpace instance;
-
-    public static HsvPhysiologicColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HsvPhysiologicColorSpace();
-        }
-        return instance;
-    }
 
     public HsvPhysiologicColorSpace() {
         super(ColorSpace.TYPE_HSV, 3);

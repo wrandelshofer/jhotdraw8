@@ -1,6 +1,7 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.color.util.FloatFunction;
 import org.junit.jupiter.api.Test;
 
 import java.awt.color.ColorSpace;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static org.jhotdraw8.color.MathUtil.almostEqual;
+import static org.jhotdraw8.color.util.MathUtil.almostEqual;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -56,6 +57,45 @@ public abstract class AbstractNamedColorSpaceTest {
     }
 
     @Test
+    public void shouldBijectWithTransferFunction() {
+        if (!(getInstance() instanceof ParametricNonLinearRgbColorSpace cs)) {
+            return;
+        }
+        FloatFunction toLinear = cs.getToLinear();
+        FloatFunction fromLinear = cs.getFromLinear();
+
+        // should biject with values in range
+        for (int i = 0; i < 256; i++) {
+            float value = i / 255f;
+
+            float linear = toLinear.apply(value);
+            float actualValue = fromLinear.apply(linear);
+
+            assertEquals(value, actualValue, 1e-6, "i=" + i + " linear=" + linear);
+        }
+
+        // should biject with values out of positive range
+        for (int i = 256; i < 512; i++) {
+            float value = i / 255f;
+
+            float linear = toLinear.apply(value);
+            float actualValue = fromLinear.apply(linear);
+
+            assertEquals(value, actualValue, 1e-6, "i=" + i + " linear=" + linear);
+        }
+
+        // should biject with values out of negative range
+        for (int i = -512; i < 0; i++) {
+            float value = i / 255f;
+
+            float linear = toLinear.apply(value);
+            float actualValue = fromLinear.apply(linear);
+
+            assertEquals(value, actualValue, 1e-6, "i=" + i + " linear=" + linear);
+        }
+    }
+
+    @Test
     public void shouldBijectWithSrgb() {
         NamedColorSpace cs = getInstance();
         AtomicInteger failures = new AtomicInteger();
@@ -64,10 +104,11 @@ public abstract class AbstractNamedColorSpaceTest {
                     float[] rgbf = new float[3];
                     float[] actualRgbf = new float[3];
                     float[] componentf = new float[cs.getNumComponents()];
-                    RgbBitDepthConverters.rgb24ToRgbFloat(rgb, rgbf);
-                    cs.fromRgb24(rgb, rgbf, componentf);
-                    cs.toRgb24(componentf, actualRgbf);
-                    int actualRgb = RgbBitDepthConverters.rgbFloatToArgb32(actualRgbf);
+                    RgbBitConverters.rgb24ToRgbFloat(rgb, rgbf);
+                    cs.fromRGB(rgbf, componentf);
+                    cs.toRGB(componentf, actualRgbf);
+                    RgbBitConverters.rgbFloatToArgb32(actualRgbf);
+                    int actualRgb = RgbBitConverters.rgbFloatToArgb32(actualRgbf);
                     try {
                         assertEquals(rgb | 0xff000000, actualRgb);
                         //assertArrayEquals(rgbf, actualRgbf, EPSILON);
@@ -99,8 +140,9 @@ public abstract class AbstractNamedColorSpaceTest {
                     float[] componentf = new float[cs.getNumComponents()];
                     float[] actualComponentf = new float[cs.getNumComponents()];
                     float[] xyzf = new float[3];
-                    RgbBitDepthConverters.rgb24ToRgbFloat(rgb, rgbf);
-                    cs.fromRgb24(rgb, rgbf, componentf);
+                    RgbBitConverters.rgb24ToRgbFloat(rgb, rgbf);
+                    RgbBitConverters.rgb24ToRgbFloat(rgb, rgbf);
+                    cs.fromRGB(rgbf, componentf);
 
                     cs.toCIEXYZ(componentf, xyzf);
                     cs.fromCIEXYZ(xyzf, actualComponentf);
@@ -161,7 +203,7 @@ public abstract class AbstractNamedColorSpaceTest {
                         } else {
                             assertEquals(componentf[0], actualComponentf[0], eps0, cs.getName(0));
                         }
-                        int actualRgb = RgbBitDepthConverters.rgbFloatToRgb24(actualRgbf);
+                        int actualRgb = RgbBitConverters.rgbFloatToRgb24(actualRgbf);
                         assertEquals(rgb, actualRgb, "RGB");
                     } catch (AssertionError e) {
                         if (failures.get() < 10) {
@@ -172,7 +214,7 @@ public abstract class AbstractNamedColorSpaceTest {
                                             + "\nxyz: " + Arrays.toString(xyzf)
                                             + "\nactual  componentf: " + Arrays.toString(actualComponentf)
                                             + "\nactual  rgbf: " + Arrays.toString(actualRgbf)
-                                            + "\nactual  rgb: " + Integer.toHexString(RgbBitDepthConverters.rgbFloatToRgb24(actualRgbf))
+                                            + "\nactual  rgb: " + Integer.toHexString(RgbBitConverters.rgbFloatToRgb24(actualRgbf))
                                             + "\n" + e.getMessage();
                             System.out.println(message);
                         }

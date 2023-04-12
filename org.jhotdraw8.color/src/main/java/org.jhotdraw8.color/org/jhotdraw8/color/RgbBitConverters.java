@@ -5,13 +5,18 @@
 
 package org.jhotdraw8.color;
 
-public class RgbBitDepthConverters {
+import org.jhotdraw8.color.util.MathUtil;
+
+/**
+ * Provides conversion functions between RGB bit representations.
+ */
+public class RgbBitConverters {
     private static final float EPSILON = 1f / 512;
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private RgbBitDepthConverters() {
+    private RgbBitConverters() {
 
     }
 
@@ -169,7 +174,7 @@ public class RgbBitDepthConverters {
     public static int rgbFloatToArgb32(float[] rgb) {
         // If the color is not displayable in RGB, we return transparent black.
         if (rgb[0] < -EPSILON || rgb[1] < -EPSILON || rgb[2] < -EPSILON
-                || rgb[0] - 1f > EPSILON || rgb[1] - 1f > EPSILON || rgb[2] - 1f > EPSILON) {
+                || rgb[0] > EPSILON + 1 || rgb[1] > EPSILON + 1 || rgb[2] > EPSILON + 1) {
             return 0;
         }
         return 0xff000000 | rgbFloatToRgb24(rgb);

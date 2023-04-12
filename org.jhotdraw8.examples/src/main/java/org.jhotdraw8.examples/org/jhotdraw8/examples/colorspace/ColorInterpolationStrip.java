@@ -16,7 +16,7 @@ import org.jhotdraw8.color.SrgbColorSpace;
 
 
 public class ColorInterpolationStrip extends HBox {
-    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", SrgbColorSpace.getInstance()));
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", new SrgbColorSpace()));
     private final ObjectProperty<Color> fromColor = new SimpleObjectProperty<>(Color.BLACK);
     private final ObjectProperty<Color> toColor = new SimpleObjectProperty<>(Color.WHITE);
     private final Canvas canvas = new Canvas();

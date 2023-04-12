@@ -4,6 +4,6 @@ import org.jhotdraw8.annotation.NonNull;
 
 public class HpluvColorSpaceTest extends AbstractNamedColorSpaceTest {
     protected @NonNull HpluvColorSpace getInstance() {
-        return HpluvColorSpace.getInstance();
+        return new HpluvColorSpace();
     }
 }

@@ -27,9 +27,9 @@ import org.jhotdraw8.color.HpluvColorSpace;
 import org.jhotdraw8.color.HsbColorSpace;
 import org.jhotdraw8.color.HsvColorSpace;
 import org.jhotdraw8.color.HsvPhysiologicColorSpace;
-import org.jhotdraw8.color.LinearSrgbColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.SrgbColorSpace;
 
 import java.awt.color.ColorSpace;
 import java.util.Arrays;
@@ -167,7 +167,7 @@ public class ColorSpaceMain extends Application {
         list.addAll(
                 new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)),
                 new NamedColorSpaceAdapter("RGB Linear (Java)", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)),
-                LinearSrgbColorSpace.getInstance(),
+                new SrgbColorSpace().getLinearColorSpace(),
                 new HpluvColorSpace(),
                 new HlsuvColorSpace(),
                 new CieLabColorSpace(),

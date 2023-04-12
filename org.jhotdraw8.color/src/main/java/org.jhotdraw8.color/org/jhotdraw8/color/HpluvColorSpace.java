@@ -20,14 +20,6 @@ import static java.lang.Math.min;
 public class HpluvColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HpluvColorSpace instance;
-
-    public static HpluvColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HpluvColorSpace();
-        }
-        return instance;
-    }
 
     public HpluvColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);

@@ -6,6 +6,8 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.color.linalg.Matrix3;
+import org.jhotdraw8.color.linalg.Matrix3Double;
 import org.junit.jupiter.api.Test;
 
 import java.awt.color.ColorSpace;
@@ -18,8 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class LinearSrgbColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
-    protected @NonNull NamedColorSpace getInstance() {
-        return LinearSrgbColorSpace.getInstance();
+    protected @NonNull ParametricLinearRgbColorSpace getInstance() {
+        return (ParametricLinearRgbColorSpace) new SrgbColorSpace().getLinearColorSpace();
+    }
+
+    @Test
+    public void shouldHaveExpectedMatrix() {
+        ParametricLinearRgbColorSpace instance = getInstance();
+        Matrix3 actual = instance.getToXyzMatrix();
+        Matrix3Double expected = new Matrix3Double(0.4124, 0.3576, 0.1805, 0.2126, 0.7152, 0.0722, 0.0193, 0.1192, 0.9505);
+        assertTrue(expected.equals(actual, 1e-4));
     }
 
     @Test
@@ -30,7 +40,8 @@ public class LinearSrgbColorSpaceTest extends AbstractNamedColorSpaceTest {
         float[] actualComponentf = new float[cs.getNumComponents()];
         int failures = 0;
         for (int rgb = 0; rgb < (1 << 24); rgb++) {
-            cs.fromRgb24(rgb, rgbf, actualComponentf);
+            RgbBitConverters.rgb24ToRgbFloat(rgb, rgbf);
+            cs.fromRGB(rgbf, actualComponentf);
             float[] expectedComponentF = reference.fromRGB(rgbf);
             try {
                 assertArrayEquals(expectedComponentF, actualComponentf, 1e-3f);

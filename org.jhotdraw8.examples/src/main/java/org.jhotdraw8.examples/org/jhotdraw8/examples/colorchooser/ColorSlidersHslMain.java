@@ -63,9 +63,9 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
         colorRectangleSlider.c2Property().bindBidirectional(c2);
 
         ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
-                HlsColorSpace.getInstance(),
-                HlsPhysiologicColorSpace.getInstance(),
-                OKHlsColorSpace.getInstance()
+                new HlsColorSpace(),
+                new HlsPhysiologicColorSpace(),
+                new OKHlsColorSpace()
         );
         colorRectangleSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
         colorSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());

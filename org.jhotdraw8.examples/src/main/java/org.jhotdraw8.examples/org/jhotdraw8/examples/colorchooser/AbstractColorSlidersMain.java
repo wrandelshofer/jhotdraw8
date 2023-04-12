@@ -11,7 +11,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.FloatStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
-import org.jhotdraw8.color.RgbBitDepthConverters;
+import org.jhotdraw8.color.RgbBitConverters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,16 +31,16 @@ public abstract class AbstractColorSlidersMain extends Application {
         map.put("24", argb -> argb);
         map.put("16", argb ->
                 (argb & 0xff_00_00_00)
-                        | RgbBitDepthConverters.rgb16to24(RgbBitDepthConverters.rgb24to16(argb)));
+                        | RgbBitConverters.rgb16to24(RgbBitConverters.rgb24to16(argb)));
         map.put("15", argb ->
                 (argb & 0xff_00_00_00)
-                        | RgbBitDepthConverters.rgb15to24(RgbBitDepthConverters.rgb24to15(argb)));
+                        | RgbBitConverters.rgb15to24(RgbBitConverters.rgb24to15(argb)));
         map.put("12", argb ->
                 (argb & 0xff_00_00_00)
-                        | RgbBitDepthConverters.rgb12to24(RgbBitDepthConverters.rgb24to12(argb)));
+                        | RgbBitConverters.rgb12to24(RgbBitConverters.rgb24to12(argb)));
         map.put("6", argb ->
                 (argb & 0xff_00_00_00)
-                        | RgbBitDepthConverters.rgb6to24(RgbBitDepthConverters.rgb24to6(argb)));
+                        | RgbBitConverters.rgb6to24(RgbBitConverters.rgb24to6(argb)));
 
         Map<ToIntFunction<Integer>, String> inverseMap = map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
         comboBox.setItems(FXCollections.observableArrayList(map.values()));

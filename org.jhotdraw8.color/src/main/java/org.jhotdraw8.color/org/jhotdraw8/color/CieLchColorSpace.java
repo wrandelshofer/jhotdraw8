@@ -3,9 +3,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
-
 /**
  * The 1976 CIE L*CHa*b* color space (CIELCH).
  * <p>
@@ -21,16 +18,7 @@ import org.jhotdraw8.annotation.Nullable;
  *
  * @author Werner Randelshofer
  */
-public class CieLchColorSpace extends AbstractLchColorSpace {
-    private static @Nullable CieLchColorSpace instance;
-
-    public static @NonNull CieLchColorSpace getInstance() {
-        if (instance == null) {
-            instance = new CieLchColorSpace();
-        }
-        return instance;
-    }
-
+public class CieLchColorSpace extends ParametricLchColorSpace {
 
     public CieLchColorSpace() {
         super("CIELCH", new CieLabColorSpace());

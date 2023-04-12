@@ -16,7 +16,7 @@ import org.jhotdraw8.color.SrgbColorSpace;
 
 
 public class ColorStrip extends HBox {
-    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", SrgbColorSpace.getInstance()));
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", new SrgbColorSpace()));
     private final ObjectProperty<float[]> color = new SimpleObjectProperty<>(new float[3]);
     private final IntegerProperty component = new SimpleIntegerProperty(0);
     private final Canvas canvas = new Canvas();

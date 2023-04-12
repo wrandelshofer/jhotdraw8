@@ -44,12 +44,12 @@ public abstract class AbstractNamedColorSpace extends ColorSpace implements Name
 
     @Override
     public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
-        return SrgbColorSpace.getInstance().toCIEXYZ(toRGB(colorvalue, xyz), xyz);
+        return new SrgbColorSpace().toCIEXYZ(toRGB(colorvalue, xyz), xyz);
     }
 
     @Override
     public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
-        return fromRGB(SrgbColorSpace.getInstance().fromCIEXYZ(xyz, colorvalue), colorvalue);
+        return fromRGB(new SrgbColorSpace().fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
 

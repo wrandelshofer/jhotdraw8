@@ -5,7 +5,7 @@ package org.jhotdraw8.color;
 
 import java.awt.color.ColorSpace;
 
-import static org.jhotdraw8.color.MathUtil.clamp;
+import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 /**
  * An HSL color space with additive complements in the hue color wheel: red is
@@ -21,14 +21,7 @@ import static org.jhotdraw8.color.MathUtil.clamp;
 public class HlsColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-    private static HlsColorSpace instance;
 
-    public static HlsColorSpace getInstance() {
-        if (instance == null) {
-            instance = new HlsColorSpace();
-        }
-        return instance;
-    }
 
     public HlsColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);

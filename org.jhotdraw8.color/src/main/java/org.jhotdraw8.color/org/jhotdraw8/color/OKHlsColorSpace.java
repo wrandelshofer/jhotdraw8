@@ -21,12 +21,7 @@ import java.awt.color.ColorSpace;
  * @version $Id$
  */
 public class OKHlsColorSpace extends AbstractNamedColorSpace {
-    private final static OKLabColorSpace oklab = OKLabColorSpace.getInstance();
-    private final static OKHlsColorSpace instance = new OKHlsColorSpace();
-
-    public static OKHlsColorSpace getInstance() {
-        return instance;
-    }
+    private final static @NonNull OKLabColorSpace oklab = new OKLabColorSpace();
 
     public OKHlsColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);

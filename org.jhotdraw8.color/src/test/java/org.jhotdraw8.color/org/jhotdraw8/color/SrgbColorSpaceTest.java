@@ -12,6 +12,6 @@ public class SrgbColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
     protected @NonNull NamedColorSpace getInstance() {
-        return SrgbColorSpace.getInstance();
+        return new SrgbColorSpace();
     }
 }
