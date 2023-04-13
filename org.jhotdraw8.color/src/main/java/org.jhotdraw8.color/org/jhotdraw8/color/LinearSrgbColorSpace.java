@@ -19,7 +19,9 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
                 new Point2D(0.64, 0.33),
                 new Point2D(0.3, 0.6),
                 new Point2D(0.15, 0.06),
-                ParametricLinearRgbColorSpace.ILLUMINANT_D65, 0f, 1f);
+                ParametricLinearRgbColorSpace.ILLUMINANT_D65,
+                ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ,
+                0f, 1f);
     }
 
     @Override
@@ -66,6 +68,15 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
         return 12.92f * linear;
     }
 
+    public static double fromLinearAsDouble(double linear) {
+        double sign = Math.signum(linear);
+        double abs = Math.abs(linear);
+        if (abs > 0.0031308) {
+            return sign * (1.055 * (float) Math.pow(abs, 1 / 2.4d) - 0.055);
+        }
+        return 12.92 * linear;
+    }
+
     /**
      * "Gamma" transfer function.
      * <p>
@@ -84,5 +95,14 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
             return nonlinear / 12.92f;
         }
         return sign * (float) (Math.pow((abs + 0.055f) / 1.055f, 2.4));
+    }
+
+    public static double toLinearAsDouble(double nonlinear) {
+        double sign = Math.signum(nonlinear);
+        double abs = Math.abs(nonlinear);
+        if (abs < 0.04045) {
+            return nonlinear / 12.92;
+        }
+        return sign * (Math.pow((abs + 0.055) / 1.055, 2.4));
     }
 }

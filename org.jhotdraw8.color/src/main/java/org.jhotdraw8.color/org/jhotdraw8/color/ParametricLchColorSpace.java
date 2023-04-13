@@ -98,15 +98,7 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float getMinValue(int component) {
-        switch (component) {
-            case 0:
                 return 0f;
-            case 1:
-                return 0f;
-            case 2:
-                return 0f;
-        }
-        throw new IllegalArgumentException("Illegal component:" + component);
     }
 
     @Override
@@ -115,7 +107,7 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
         case 0:
             return 100f;
         case 1:
-            return 127f;
+            return 150f;
         case 2:
             return 360f;
         }

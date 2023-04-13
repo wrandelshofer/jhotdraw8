@@ -10,7 +10,7 @@ import org.jhotdraw8.color.linalg.Matrix3;
 import org.jhotdraw8.color.linalg.Matrix3Float;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 
 public class DisplayP3ColorSpaceTest extends AbstractNamedColorSpaceTest {
@@ -34,17 +34,18 @@ public class DisplayP3ColorSpaceTest extends AbstractNamedColorSpaceTest {
     public void shouldHaveExpectedMatrix() {
         ParametricLinearRgbColorSpace instance = (ParametricLinearRgbColorSpace) getInstance().getLinearColorSpace();
         Matrix3 actual = instance.getToXyzMatrix();
-        Matrix3 expected = new Matrix3Float(
-                608311 / 1250200f, 189793 / 714400f, 198249 / 1000160f,
-                35783 / 156275f, 247089 / 357200f, 198249 / 2500400f,
-                0 / 1f, 32229 / 714400f, 5220557 / 5000800f);
-        assertTrue(expected.equals(actual, 1e-4));
+        Matrix3 expected = ParametricLinearRgbColorSpace.FROM_D65_TO_D50
+                .mul(new Matrix3Float(
+                        608311 / 1250200f, 189793 / 714400f, 198249 / 1000160f,
+                        35783 / 156275f, 247089 / 357200f, 198249 / 2500400f,
+                        0 / 1f, 32229 / 714400f, 5220557 / 5000800f));
+        assertArrayEquals(expected.toDoubleArray(), actual.toDoubleArray(), 1e-3);
         Matrix3 actualInverse = instance.getToXyzMatrix().inv();
         Matrix3 expectedInverse = new Matrix3Float(
                 446124 / 178915f, -333277 / 357830f, -72051 / 178915f,
                 -14852 / 17905f, 63121 / 35810f, 423 / 17905f,
                 11844 / 330415f, -50337 / 660830f, 316169 / 330415f
-        );
-        assertTrue(expectedInverse.equals(actualInverse, 1e-3));
+        ).mul(ParametricLinearRgbColorSpace.FROM_D50_XYZ_TO_D65_XYZ);
+        assertArrayEquals(expectedInverse.toDoubleArray(), actualInverse.toDoubleArray(), 1e-3);
     }
 }

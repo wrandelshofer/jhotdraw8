@@ -12,8 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.AbstractNamedColorSpace;
 import org.jhotdraw8.color.CmykNominalColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.util.List;
@@ -78,7 +78,7 @@ public class ColorSlidersCmykMain extends AbstractColorSlidersMain {
         sliderK.c2Property().bind(yellow);
         sliderK.c3Property().bindBidirectional(black);
 
-        ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
+        ComboBox<NamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
 
                 new CmykNominalColorSpace()//,
                 //new NamedColorSpaceAdapter("CMYK generic",CMYKGenericColorSpace.getInstance())

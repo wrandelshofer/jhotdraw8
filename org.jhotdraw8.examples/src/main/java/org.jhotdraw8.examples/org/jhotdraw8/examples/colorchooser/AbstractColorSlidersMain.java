@@ -10,7 +10,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
 import javafx.util.converter.FloatStringConverter;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
@@ -59,23 +58,23 @@ public abstract class AbstractColorSlidersMain extends Application {
         return comboBox;
     }
 
-    protected @NonNull ComboBox<AbstractNamedColorSpace> createColorSpaceComboBox(AbstractNamedColorSpace... colorSpaces) {
-        TreeMap<String, AbstractNamedColorSpace> map =
+    protected @NonNull ComboBox<NamedColorSpace> createColorSpaceComboBox(NamedColorSpace... colorSpaces) {
+        Map<String, NamedColorSpace> map =
                 Arrays.asList(colorSpaces)
                         .stream()
-                        .collect(Collectors.toMap(AbstractNamedColorSpace::getName, Function.identity(), (a, b) -> b, TreeMap::new));
+                        .collect(Collectors.toMap(NamedColorSpace::getName, Function.identity(), (a, b) -> b, LinkedHashMap::new));
 
-        ComboBox<AbstractNamedColorSpace> comboBox = new ComboBox<>(FXCollections.observableArrayList(
+        ComboBox<NamedColorSpace> comboBox = new ComboBox<>(FXCollections.observableArrayList(
                 map.values())
         );
-        comboBox.setConverter(new StringConverter<AbstractNamedColorSpace>() {
+        comboBox.setConverter(new StringConverter<NamedColorSpace>() {
             @Override
-            public String toString(AbstractNamedColorSpace object) {
+            public String toString(NamedColorSpace object) {
                 return object.getName();
             }
 
             @Override
-            public AbstractNamedColorSpace fromString(String string) {
+            public NamedColorSpace fromString(String string) {
                 return map.get(string);
             }
         });

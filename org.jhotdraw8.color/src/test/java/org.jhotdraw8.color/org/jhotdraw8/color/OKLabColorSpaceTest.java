@@ -42,15 +42,19 @@ public class OKLabColorSpaceTest extends AbstractNamedColorSpaceTest {
     })
     public void shouldConvertFromXYZ(float x, float y, float z, float l, float a, float b) {
         OKLabColorSpace instance = getInstance();
-        float[] actualLab = instance.fromCIEXYZ(new float[]{x, y, z});
+        float[] xyzD65 = {x, y, z};
+        D65XyzColorSpace d65cs = new D65XyzColorSpace();
+        float[] xyzD50 = d65cs.toCIEXYZ(xyzD65);
+        float[] actualLab = instance.fromCIEXYZ(xyzD50);
         assertEquals(l, actualLab[0], 1e-2f, "L");
         assertEquals(a, actualLab[1], 1e-2f, "a");
         assertEquals(b, actualLab[2], 1e-2f, "b");
 
-        float[] actualXYZ = instance.toCIEXYZ(new float[]{l, a, b});
-        assertEquals(x, actualXYZ[0], 1e-2f, "X");
-        assertEquals(y, actualXYZ[1], 1e-2f, "Y");
-        assertEquals(z, actualXYZ[2], 1e-2f, "Z");
+        float[] actualXyzD50 = instance.toCIEXYZ(new float[]{l, a, b});
+        float[] actualXyzD65 = d65cs.fromCIEXYZ(actualXyzD50);
+        assertEquals(x, actualXyzD65[0], 1e-2f, "X");
+        assertEquals(y, actualXyzD65[1], 1e-2f, "Y");
+        assertEquals(z, actualXyzD65[2], 1e-2f, "Z");
     }
 
     /**

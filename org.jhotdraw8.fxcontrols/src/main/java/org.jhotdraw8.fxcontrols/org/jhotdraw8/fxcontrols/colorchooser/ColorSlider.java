@@ -4,8 +4,10 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  * Sample Skeleton for 'HueSaturationPane.fxml' Controller Class
  */
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Orientation;
@@ -14,7 +16,7 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
@@ -24,17 +26,30 @@ import java.util.function.ToIntFunction;
 
 
 /**
- * This slider shows one component dimension of an {@link AbstractNamedColorSpace}
+ * This slider shows one component dimension of an {@link NamedColorSpace}
  * in a rectangular shape.
  */
 public class ColorSlider extends AbstractColorSlider {
     /**
      * The index of the color space component that is displayed along the extent of the rectangle.
+     * <p>
+     * Alpha has index 4.
      */
     private final @NonNull IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
 
 
     private final @NonNull ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
+
+    /**
+     * The unit distance between tick marks.
+     * <p>
+     * This must be a double property (and not float) so that we do not run into rounding issues.
+     */
+    private final @NonNull DoubleProperty tickUnit = new SimpleDoubleProperty(this, "tickUnit", 1d / 255);
+
+    public ColorSlider() {
+        load();
+    }
 
     @Override
     void initialize() {
@@ -59,7 +74,7 @@ public class ColorSlider extends AbstractColorSlider {
 
         double width = getWidth();
         double height = getHeight();
-        AbstractNamedColorSpace cs = getColorSpace();
+        NamedColorSpace cs = getColorSpace();
         float vmax = cs.getMaxValue(componentIndex.get());
         float vmin = cs.getMinValue(componentIndex.get());
         switch (getOrientation()) {
@@ -78,6 +93,7 @@ public class ColorSlider extends AbstractColorSlider {
     @Override
     protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
+                getDisplayColorSpace(),
                 getColorSpace(), getC0(), getC1(), getC2(), getC3(), getComponentIndex(), -1, getRgbFilter()), getOrientation());
     }
 
@@ -87,16 +103,16 @@ public class ColorSlider extends AbstractColorSlider {
         float height = (float) getHeight();
         float x = MathUtil.clamp((float) mouseEvent.getX(), 0, width);
         float y = MathUtil.clamp((float) mouseEvent.getY(), 0, height);
-        AbstractNamedColorSpace cs = getColorSpace();
+        NamedColorSpace cs = getColorSpace();
 
         float vmax = cs.getMaxValue(componentIndex.get());
         float vmin = cs.getMinValue(componentIndex.get());
         switch (getOrientation()) {
             case HORIZONTAL -> {
-                setComponent(x * (vmax - vmin) / width + vmin);
+                setComponent(maybeSnapToTicks(x * (vmax - vmin) / width + vmin, getTickUnit()));
             }
             case VERTICAL -> {
-                setComponent((height - y) * (vmax - vmin) / height + vmin);
+                setComponent(maybeSnapToTicks((height - y) * (vmax - vmin) / height + vmin, getTickUnit()));
             }
         }
     }
@@ -131,19 +147,19 @@ public class ColorSlider extends AbstractColorSlider {
 
         public void accept(@NonNull TileTask.Tile tile) {
             if (orientation == Orientation.HORIZONTAL) {
-                fillFineHorizontal(tile);
+                fillHorizontal(tile);
             } else {
-                fillFineVertical(tile);
+                fillVertical(tile);
             }
         }
 
 
-        public void fillFineHorizontal(@NonNull TileTask.Tile tile) {
+        public void fillHorizontal(@NonNull TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
-            int height = pixelBuffer.getHeight();
             IntBuffer b = pixelBuffer.getBuffer();
-            AbstractNamedColorSpace cs = record.colorSpace();
+            NamedColorSpace cs = record.colorSpace();
+            NamedColorSpace dcs = record.displayColorSpace();
             int xIndex = record.xIndex();
             float xmin = cs.getMinValue(xIndex);
             float xmax = cs.getMaxValue(xIndex);
@@ -167,7 +183,7 @@ public class ColorSlider extends AbstractColorSlider {
             for (int x = xfrom; x < xto; x++) {
                 float xval = x * invWidth + xmin;
                 colorValue[xIndex] = xval;
-                int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
+                int argb = RgbBitConverters.rgbFloatToArgb32(dcs.fromRGB(cs.toRGB(colorValue, rgbValue), rgbValue));
                 argb = filter.applyAsInt(argb);
                 array[x + xy] = argb;
             }
@@ -176,16 +192,16 @@ public class ColorSlider extends AbstractColorSlider {
             }
         }
 
-        public void fillFineVertical(@NonNull TileTask.Tile tile) {
+        public void fillVertical(@NonNull TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
             IntBuffer b = pixelBuffer.getBuffer();
-            AbstractNamedColorSpace cs = record.colorSpace();
+            NamedColorSpace cs = record.colorSpace();
+            NamedColorSpace dcs = record.displayColorSpace();
             int xIndex = record.xIndex();
             float xmin = cs.getMinValue(xIndex);
             float xmax = cs.getMaxValue(xIndex);
-            int yIndex = record.yIndex();
             float invHeight = (xmax - xmin) / (height);
             float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
             colorValue[0] = record.c0();
@@ -205,7 +221,7 @@ public class ColorSlider extends AbstractColorSlider {
             for (int y = yfrom, xy = yfrom * width; y < yto; y++, xy += width) {
                 float xval = (height - y) * invHeight + xmin;
                 colorValue[xIndex] = xval;
-                int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
+                int argb = RgbBitConverters.rgbFloatToArgb32(dcs.fromRGB(cs.toRGB(colorValue, rgbValue), rgbValue));
                 argb = filter.applyAsInt(argb);
                 Arrays.fill(array, xy + xfrom, xy + xto, argb);
             }
@@ -235,5 +251,18 @@ public class ColorSlider extends AbstractColorSlider {
     public void setOrientation(@NonNull Orientation orientation) {
         this.orientation.set(orientation);
     }
+
+    public double getTickUnit() {
+        return tickUnit.get();
+    }
+
+    public @NonNull DoubleProperty tickUnitProperty() {
+        return tickUnit;
+    }
+
+    public void setTickUnit(double tickUnit) {
+        this.tickUnit.set(tickUnit);
+    }
+
 }
 

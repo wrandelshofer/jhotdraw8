@@ -27,7 +27,7 @@ public class ParametricXyzColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
-        return fromXyzMatrix.mul(colorvalue, xyz);
+        return fromXyzMatrix.mul(xyz, colorvalue);
     }
 
     @Override

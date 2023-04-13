@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.color.util.MathUtil;
+import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 /**
  * Provides conversion functions between RGB bit representations.
@@ -172,12 +172,16 @@ public class RgbBitConverters {
      * @return 32-bit ARGB color value
      */
     public static int rgbFloatToArgb32(float[] rgb) {
+        return rgbFloatToArgb32(rgb, 1f);
+    }
+
+    public static int rgbFloatToArgb32(float[] rgb, float alpha) {
         // If the color is not displayable in RGB, we return transparent black.
         if (rgb[0] < -EPSILON || rgb[1] < -EPSILON || rgb[2] < -EPSILON
                 || rgb[0] > EPSILON + 1 || rgb[1] > EPSILON + 1 || rgb[2] > EPSILON + 1) {
             return 0;
         }
-        return 0xff000000 | rgbFloatToRgb24(rgb);
+        return (clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(rgb);
     }
 
     /**
@@ -187,8 +191,26 @@ public class RgbBitConverters {
      * @return 24-bit RGB color value
      */
     public static int rgbFloatToRgb24(float[] rgb) {
-        return (MathUtil.clamp((int) ((rgb[0] + 1f / 512) * 255f), 0, 255) << 16)
-                | (MathUtil.clamp((int) ((rgb[1] + 1f / 512) * 255f), 0, 255) << 8)
-                | MathUtil.clamp((int) ((rgb[2] + 1f / 512) * 255f), 0, 255);
+        return (clamp((int) ((rgb[0] + 1f / 512) * 255f), 0, 255) << 16)
+                | (clamp((int) ((rgb[1] + 1f / 512) * 255f), 0, 255) << 8)
+                | clamp((int) ((rgb[2] + 1f / 512) * 255f), 0, 255);
     }
+
+    /**
+     * Converts from 32 bit ARGB to 32 bit pre-multiplied ARGB.
+     *
+     * @param argb an ARGB value
+     * @return the corresponding pre-multiplied ARGB value
+     */
+    public static int argb32ToPreArgb32(int argb) {
+        int alpha = argb >>> 24;
+        int red = (argb >>> 16) & 0xff;
+        int green = (argb >>> 8) & 0xff;
+        int blue = argb & 0xff;
+        int pred = (red * alpha >>> 8) + 1;
+        int pgreen = (green * alpha >>> 8) + 1;
+        int pblue = (blue * alpha >>> 8) + 1;
+        return (alpha << 24) | (pred << 16) | (pgreen << 8) | pblue;
+    }
+
 }

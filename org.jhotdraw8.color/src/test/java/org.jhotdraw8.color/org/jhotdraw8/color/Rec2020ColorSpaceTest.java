@@ -11,7 +11,6 @@ import org.jhotdraw8.color.linalg.Matrix3Double;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // BROKEN: fromLinear/toLinear are not correct!
 
@@ -36,18 +35,19 @@ public class Rec2020ColorSpaceTest extends AbstractNamedColorSpaceTest {
     public void shouldHaveExpectedMatrix() {
         ParametricLinearRgbColorSpace instance = (ParametricLinearRgbColorSpace) getInstance().getLinearColorSpace();
         Matrix3 actual = instance.getToXyzMatrix();
-        Matrix3 expected = new Matrix3Double(
-                63426534 / 99577255d, 20160776 / 139408157d, 47086771 / 278816314d,
-                26158966 / 99577255d, 472592308 / 697040785d, 8267143 / 139408157d,
-                0 / 1d, 19567812 / 697040785d, 295819943 / 278816314d
-        );
+        Matrix3 expected = ParametricLinearRgbColorSpace.FROM_D65_TO_D50
+                .mul(new Matrix3Double(
+                        63426534 / 99577255d, 20160776 / 139408157d, 47086771 / 278816314d,
+                        26158966 / 99577255d, 472592308 / 697040785d, 8267143 / 139408157d,
+                        0 / 1d, 19567812 / 697040785d, 295819943 / 278816314d
+                ));
         assertArrayEquals(expected.toDoubleArray(), actual.toDoubleArray(), 1e-3);
         Matrix3 actualInverse = instance.getToXyzMatrix().inv();
         Matrix3 expectedInverse = new Matrix3Double(
                 30757411 / 17917100d, -6372589 / 17917100d, -4539589 / 17917100d,
                 -19765991 / 29648200d, 47925759 / 29648200d, 467509 / 29648200d,
                 792561 / 44930125d, -1921689 / 44930125d, 42328811 / 44930125d
-        );
-        assertTrue(expectedInverse.equals(actualInverse, 1e-3));
+        ).mul(ParametricLinearRgbColorSpace.FROM_D50_XYZ_TO_D65_XYZ);
+        assertArrayEquals(expectedInverse.toDoubleArray(), actualInverse.toDoubleArray(), 1e-3);
     }
 }

@@ -10,7 +10,7 @@ import org.jhotdraw8.color.linalg.Matrix3;
 import org.jhotdraw8.color.linalg.Matrix3Float;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 
 public class A98RgbColorSpaceTest extends AbstractNamedColorSpaceTest {
@@ -34,18 +34,19 @@ public class A98RgbColorSpaceTest extends AbstractNamedColorSpaceTest {
     public void shouldHaveExpectedMatrix() {
         ParametricLinearRgbColorSpace instance = (ParametricLinearRgbColorSpace) getInstance().getLinearColorSpace();
         Matrix3 actual = instance.getToXyzMatrix();
-        Matrix3 expected = new Matrix3Float(
-                573536 / 994567f, 263643 / 1420810f, 187206 / 994567f,
-                591459 / 1989134f, 6239551 / 9945670f, 374412 / 4972835f,
-                53769 / 1989134f, 351524 / 4972835f, 4929758 / 4972835f
-        );
-        assertTrue(expected.equals(actual, 1e-4));
+        Matrix3 expected = ParametricLinearRgbColorSpace.FROM_D65_TO_D50.mul(
+                new Matrix3Float(
+                        573536 / 994567f, 263643 / 1420810f, 187206 / 994567f,
+                        591459 / 1989134f, 6239551 / 9945670f, 374412 / 4972835f,
+                        53769 / 1989134f, 351524 / 4972835f, 4929758 / 4972835f
+                ));
+        assertArrayEquals(expected.toDoubleArray(), actual.toDoubleArray(), 1e-3);
         Matrix3 actualInverse = instance.getToXyzMatrix().inv();
         Matrix3 expectedInverse = new Matrix3Float(
                 1829569 / 896150f, -506331 / 896150f, -308931 / 896150f,
                 -851781 / 878810f, 1648619 / 878810f, 36519 / 878810f,
                 16779 / 1248040f, -147721 / 1248040f, 1266979 / 1248040f
-        );
-        assertTrue(expectedInverse.equals(actualInverse, 1e-3));
+        ).mul(ParametricLinearRgbColorSpace.FROM_D50_XYZ_TO_D65_XYZ);
+        assertArrayEquals(expectedInverse.toDoubleArray(), actualInverse.toDoubleArray(), 1e-3);
     }
 }

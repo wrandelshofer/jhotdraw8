@@ -11,8 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.color.A98RgbColorSpace;
 import org.jhotdraw8.color.CieRgbColorSpace;
-import org.jhotdraw8.color.CieXyzColorSpace;
 import org.jhotdraw8.color.CmykNominalColorSpace;
+import org.jhotdraw8.color.D50XyzColorSpace;
 import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.LinearSrgbColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
@@ -34,7 +34,7 @@ public class ChromaticityDiagramMain extends Application {
                 //new CieLabColorSpace(),
                 //new CieLchColorSpace(),
                 new CieRgbColorSpace(),
-                new CieXyzColorSpace(),
+                new D50XyzColorSpace(),
                 new CmykNominalColorSpace(),
                 //new D50XyzColorSpace(),
                 new DisplayP3ColorSpace(),

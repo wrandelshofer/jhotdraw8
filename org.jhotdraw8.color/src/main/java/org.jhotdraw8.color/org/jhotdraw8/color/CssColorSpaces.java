@@ -26,7 +26,7 @@ public class CssColorSpaces {
     public final static Map<String, NamedColorSpace> COLOR_SPACES;
 
     static {
-        CieXyzColorSpace cieXyzColorSpace = new CieXyzColorSpace();
+        D50XyzColorSpace cieXyzColorSpace = new D50XyzColorSpace();
         COLOR_SPACES = Map.of(
                 "srgb", new SrgbColorSpace(),
                 "srgb-linear", new LinearSrgbColorSpace(),
@@ -35,7 +35,7 @@ public class CssColorSpaces {
                 "prophoto-rgb", new ProPhotoRgbColorSpace(),
                 "rec2020", new Rec2020ColorSpace(),
                 "xyz", cieXyzColorSpace,
-                "xyz-d50", new D50XyzColorSpace(),
+                "xyz-d50", new D65XyzColorSpace(),
                 "xyz-d65", cieXyzColorSpace
         );
     }

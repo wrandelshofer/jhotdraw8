@@ -4,14 +4,16 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  * Sample Skeleton for 'HueSaturationPane.fxml' Controller Class
  */
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
@@ -20,18 +22,31 @@ import java.util.function.ToIntFunction;
 
 
 /**
- * This slider shows two component dimension of an {@link AbstractNamedColorSpace}
+ * This slider shows two component dimension of an {@link NamedColorSpace}
  * in a rectangular shape.
  */
 public class ColorRectangleSlider extends AbstractColorSlider {
     /**
      * The index of the color space component that is displayed along the x-axis of the rectangle.
      */
-    private IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
+    private final @NonNull IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
     /**
      * The index of the color space component that is displayed along the y-axis of the rectangle.
      */
-    private IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
+    private final @NonNull IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
+
+    /**
+     * The unit distance between tick marks on the x-axis.
+     */
+    private final @NonNull DoubleProperty xTickUnit = new SimpleDoubleProperty(this, "xTickUnit", 1f / 255);
+    /**
+     * The unit distance between tick marks on the y-axis.
+     */
+    private final @NonNull DoubleProperty yTickUnit = new SimpleDoubleProperty(this, "yTickUnit", 1f / 255);
+
+    public ColorRectangleSlider() {
+        load();
+    }
 
     @Override
     void initialize() {
@@ -41,8 +56,6 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         c2Property().addListener(o -> this.onComponentValueChanged(2));
         c3Property().addListener(o -> this.onComponentValueChanged(3));
 
-        xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
-        yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
 
         xComponentIndex.addListener(o -> invalidateImage());
         yComponentIndex.addListener(o -> invalidateImage());
@@ -60,7 +73,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
 
         double width = getWidth();
         double height = getHeight();
-        AbstractNamedColorSpace cs = getColorSpace();
+        NamedColorSpace cs = getColorSpace();
         float xmax = cs.getMaxValue(xComponentIndex.get());
         float xmin = cs.getMinValue(xComponentIndex.get());
         float ymax = cs.getMaxValue(yComponentIndex.get());
@@ -72,6 +85,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     @Override
     protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
+                getDisplayColorSpace(),
                 getColorSpace(), getC0(), getC1(), getC2(), getC3(), getXComponentIndex(), getYComponentIndex(),
                 getRgbFilter()));
     }
@@ -82,13 +96,13 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         float height = (float) getHeight();
         float x = MathUtil.clamp((float) mouseEvent.getX(), 0, width);
         float y = MathUtil.clamp((float) mouseEvent.getY(), 0, height);
-        AbstractNamedColorSpace cs = getColorSpace();
+        NamedColorSpace cs = getColorSpace();
         float xmax = cs.getMaxValue(xComponentIndex.get());
         float xmin = cs.getMinValue(xComponentIndex.get());
         float ymax = cs.getMaxValue(yComponentIndex.get());
         float ymin = cs.getMinValue(yComponentIndex.get());
-        setXComponent(x * (xmax - xmin) / width + xmin);
-        setYComponent((height - y) * (ymax - ymin) / height + ymin);
+        setXComponent(maybeSnapToTicks(x * (xmax - xmin) / width + xmin, getXTickUnit()));
+        setYComponent(maybeSnapToTicks((height - y) * (ymax - ymin) / height + ymin, getYTickUnit()));
     }
 
     private void setYComponent(float v) {
@@ -138,7 +152,8 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
             IntBuffer b = pixelBuffer.getBuffer();
-            AbstractNamedColorSpace cs = record.colorSpace();
+            NamedColorSpace cs = record.colorSpace();
+            NamedColorSpace dcs = record.displayColorSpace();
             int xIndex = record.xIndex();
             float xmin = cs.getMinValue(xIndex);
             float xmax = cs.getMaxValue(xIndex);
@@ -172,7 +187,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
                     colorValue[xIndex] = xval;
                     colorValue[yIndex] = yval;
 
-                    cs.toRGB(colorValue, rgbValue);
+                    dcs.fromRGB(cs.toRGB(colorValue, rgbValue), rgbValue);
                     int argb = RgbBitConverters.rgbFloatToArgb32(rgbValue);
                     argb = filter.applyAsInt(argb);
                     array[x + xy] = argb;
@@ -205,5 +220,31 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     public void setYComponentIndex(int yComponentIndex) {
         this.yComponentIndex.set(yComponentIndex);
     }
+
+    public double getXTickUnit() {
+        return xTickUnit.get();
+    }
+
+    public @NonNull DoubleProperty xTickUnitProperty() {
+        return xTickUnit;
+    }
+
+    public void setXTickUnit(double xTickUnit) {
+        this.xTickUnit.set(xTickUnit);
+    }
+
+    public double getYTickUnit() {
+        return yTickUnit.get();
+    }
+
+    public @NonNull DoubleProperty yTickUnitProperty() {
+        return yTickUnit;
+    }
+
+    public void setYTickUnit(double yTickUnit) {
+        this.yTickUnit.set(yTickUnit);
+    }
+
+
 }
 

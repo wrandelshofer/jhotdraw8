@@ -10,7 +10,7 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
@@ -61,7 +61,7 @@ public class ColorSlidersTristimulusMain extends AbstractColorSlidersMain {
         sliderB.c1Property().bind(green);
         sliderB.c2Property().bindBidirectional(blue);
 
-        ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
+        ComboBox<NamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
                 new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)),
                 new NamedColorSpaceAdapter("CIE XYZ", ColorSpace.getInstance(ColorSpace.CS_CIEXYZ)),
                 new NamedColorSpaceAdapter("PYCC", ColorSpace.getInstance(ColorSpace.CS_PYCC))

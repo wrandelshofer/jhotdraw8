@@ -129,7 +129,7 @@ public abstract class AbstractNamedColorSpaceTest {
         assertTrue(failures.get() < 1, "too many failures=" + failures.get());
     }
 
-
+@Test
     public void shouldBijectWithXyzForAllSrgbValues() {
         NamedColorSpace cs = getInstance();
         AtomicInteger failures = new AtomicInteger();
@@ -184,6 +184,24 @@ public abstract class AbstractNamedColorSpaceTest {
                             assertTrue(almostEqual(cs.getMinValue(0), actualComponentf[0], eps0)
                                     || almostEqual(cs.getMaxValue(0), actualComponentf[0], eps0), cs.getName(0));
 
+                        } else if (cs.getType() == NamedColorSpace.TYPE_HSL
+                                && (almostEqual(cs.getMinValue(2), componentf[2], eps1)
+                                || almostEqual(cs.getMaxValue(2), componentf[2], eps1))) {
+                            // When lightness is almost min or almost max, then hue and saturation are powerless and can be ignored.
+                            assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
+                        } else if (cs.getType() == NamedColorSpace.TYPE_HSL && almostEqual(cs.getMinValue(1), componentf[1], eps2)) {
+                            // When saturation is almost min, then hue is powerless and can be ignored.
+                            assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
+                            assertEquals(componentf[2], actualComponentf[2], eps2, cs.getName(2));
+                        } else if (cs.getType() == NamedColorSpace.TYPE_HSL
+                                && (almostEqual(cs.getMinValue(0), componentf[0], eps0) || almostEqual(cs.getMaxValue(0), componentf[0], eps0))) {
+                            // When hue is almost at max it is acceptable if it is at almost at min
+                            assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
+                            assertEquals(componentf[2], actualComponentf[2], eps2, cs.getName(2));
+                            assertTrue(almostEqual(componentf[0], actualComponentf[0], eps0)
+                                    || almostEqual(cs.getMinValue(0), actualComponentf[0], eps0)
+                                    || almostEqual(cs.getMaxValue(0), actualComponentf[0], eps0), cs.getName(0));
+
                         } else if (cs.getType() == ColorSpace.TYPE_HLS
                                 && (almostEqual(cs.getMinValue(1), componentf[1], eps1)
                                 || almostEqual(cs.getMaxValue(1), componentf[1], eps1))) {
@@ -222,6 +240,32 @@ public abstract class AbstractNamedColorSpaceTest {
                         failures.incrementAndGet();
                     }
                 });
-        assertTrue(failures.get() == 0, "too many failures=" + failures.get());
+    assertTrue(failures.get() == 0, "too many failures=" + failures.get());
+}
+
+    @Test
+    public void shouldHaveExpectedXYZValues() {
+        float[] red = {1f, 0, 0};
+        float[] green = {0, 1f, 0};
+        float[] blue = {0, 0, 1f};
+        float[] white = {1f, 1f, 1f};
+        ColorSpace referenceCs = ColorSpace.getInstance(ColorSpace.CS_sRGB);
+        float[] expectedRedXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(red));
+        float[] expectedGreenXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(green));
+        float[] expectedBlueXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(blue));
+        float[] expectedWhiteXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(white));
+
+        NamedColorSpace instance = getInstance();
+        float[] redColorValue = instance.fromRGB(red);
+        float[] actualRedXYZ = instance.toCIEXYZ(redColorValue);
+        float[] actualGreenXYZ = instance.toCIEXYZ(instance.fromRGB(green));
+        float[] actualBlueXYZ = instance.toCIEXYZ(instance.fromRGB(blue));
+        float[] actualWhiteXYZ = instance.toCIEXYZ(instance.fromRGB(white));
+
+        assertArrayEquals(expectedRedXYZ, actualRedXYZ, 1e-3f, "red");
+        assertArrayEquals(expectedGreenXYZ, actualGreenXYZ, 1e-3f, "green");
+        assertArrayEquals(expectedBlueXYZ, actualBlueXYZ, 1e-3f, "blue");
+        assertArrayEquals(expectedWhiteXYZ, actualWhiteXYZ, 1e-3f, "white");
     }
+
 }

@@ -13,9 +13,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.AbstractNamedColorSpace;
 import org.jhotdraw8.color.HsvColorSpace;
 import org.jhotdraw8.color.HsvPhysiologicColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorRectangleSlider;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
@@ -60,7 +60,7 @@ public class ColorSlidersHsvMain extends AbstractColorSlidersMain {
         colorRectangleSlider.c2Property().bindBidirectional(c2);
 
 
-        ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
+        ComboBox<NamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
                 new HsvColorSpace(),
                 new HsvPhysiologicColorSpace()
         );

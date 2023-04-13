@@ -25,29 +25,19 @@ public class CssLegacySrgbColorSpace extends ParametricNonLinearRgbColorSpace {
         );
     }
 
-    @Override
-    public float[] toRGB(float[] colorvalue, float[] rgb) {
-        System.arraycopy(colorvalue, 0, rgb, 0, 3);
-        return rgb;
-    }
 
-    @Override
-    public float[] fromRGB(float[] rgb, float[] colorvalue) {
-        System.arraycopy(rgb, 0, colorvalue, 0, 3);
-        return colorvalue;
-    }
 
     /**
      * Inverse "Gamma" transfer function.
      */
     public static float fromLinear(float linear) {
-        return LinearSrgbColorSpace.fromLinear(linear);
+        return (float) (LinearSrgbColorSpace.fromLinearAsDouble(linear / 255d) * 255d);
     }
 
     /**
      * "Gamma" transfer function.
      */
     public static float toLinear(float corrected) {
-        return LinearSrgbColorSpace.toLinear(corrected);
+        return (float) (LinearSrgbColorSpace.toLinearAsDouble(corrected / 255d) * 255d);
     }
 }
