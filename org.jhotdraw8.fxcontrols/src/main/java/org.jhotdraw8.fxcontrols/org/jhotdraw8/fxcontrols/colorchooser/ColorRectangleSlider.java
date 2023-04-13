@@ -9,12 +9,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
@@ -27,11 +27,11 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     /**
      * The index of the color space component that is displayed along the x-axis of the rectangle.
      */
-    private final @NonNull IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
+    private IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
     /**
      * The index of the color space component that is displayed along the y-axis of the rectangle.
      */
-    private final @NonNull IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
+    private IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
 
     @Override
     void initialize() {
@@ -40,11 +40,17 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         c1Property().addListener(o -> this.onComponentValueChanged(1));
         c2Property().addListener(o -> this.onComponentValueChanged(2));
         c3Property().addListener(o -> this.onComponentValueChanged(3));
+
+        xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
+        yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
+
+        xComponentIndex.addListener(o -> invalidateImage());
+        yComponentIndex.addListener(o -> invalidateImage());
     }
 
     private void onComponentValueChanged(int i) {
         if (i != getXComponentIndex() && i != getYComponentIndex()) {
-            updateImage();
+            invalidateImage();
         }
     }
 
@@ -60,11 +66,11 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         float ymax = cs.getMaxValue(yComponentIndex.get());
         float ymin = cs.getMinValue(yComponentIndex.get());
         sliderThumb.setTranslateX((getXComponent() - xmin) * width / (xmax - xmin) - sliderThumb.getWidth() * 0.5);
-        sliderThumb.setTranslateY((getYComponent() - ymin) * height / (ymax - ymin) - sliderThumb.getHeight() * 0.5);
+        sliderThumb.setTranslateY(height - (getYComponent() - ymin) * height / (ymax - ymin) - sliderThumb.getHeight() * 0.5);
     }
 
     @Override
-    protected @NonNull AbstractColorSlider.AbstractFillTask createFillTask() {
+    protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getColorSpace(), getC0(), getC1(), getC2(), getC3(), getXComponentIndex(), getYComponentIndex(),
                 getRgbFilter()));
@@ -82,20 +88,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         float ymax = cs.getMaxValue(yComponentIndex.get());
         float ymin = cs.getMinValue(yComponentIndex.get());
         setXComponent(x * (xmax - xmin) / width + xmin);
-        setYComponent(y * (ymax - ymin) / height + ymin);
-    }
-
-    @Override
-    protected boolean needsUpdate(float[] oldValue, float[] newValue) {
-
-        int xIndex = getXComponentIndex();
-        int yIndex = getYComponentIndex();
-        for (int i = 0; i < oldValue.length; i++) {
-            if (i != xIndex && i != yIndex) {
-                if (oldValue[i] != newValue[i]) return true;
-            }
-        }
-        return false;
+        setYComponent((height - y) * (ymax - ymin) / height + ymin);
     }
 
     private void setYComponent(float v) {
@@ -140,17 +133,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             super(record);
         }
 
-        @Override
-        public void fill(int blockSize) {
-            if (blockSize <= 1) fillFine();
-            else fillBlocks(blockSize);
-        }
-
-        public void fillBlocks(int blockSize) {
-            if (isCancelled()) {
-                return;
-            }
-
+        public void accept(TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -172,69 +155,18 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             colorValue[3] = record.c3();
             float[] rgbValue = new float[3];
             int[] array = b.array();
+
             ToIntFunction<Integer> filter = record.rgbFilter();
 
-            // Fill blocks
-            for (int y = 0, xy = 0; y < height; y += blockSize, xy += width * blockSize) {
-                if (isCancelled()) {
-                    return;
-                }
-                for (int x = 0; x < width; x += blockSize) {
-                    float xval = Math.min(width, x + (blockSize >>> 1)) * invWidth + xmin;
-                    float yval = Math.min(height, y + (blockSize >>> 1)) * invHeight + ybase;
-                    colorValue[xIndex] = xval;
-                    colorValue[yIndex] = yval;
-
-                    cs.toRGB(colorValue, rgbValue);
-                    int argb = RgbBitConverters.rgbFloatToArgb32(rgbValue);
-                    argb = filter.applyAsInt(argb);
-
-                    Arrays.fill(array, x + xy, Math.min(xy + width, x + xy + blockSize), argb);
-                }
-
-                for (int i = 1; i < blockSize; i <<= 1) {
-                    if (y < height - i) {
-                        System.arraycopy(array, xy, array, xy + width * i, width * Math.min(i, height - y - i));
-                    }
-                }
-            }
-        }
-
-        public void fillFine() {
-            if (isCancelled()) {
-                return;
-            }
-
-            PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
-            int width = pixelBuffer.getWidth();
-            int height = pixelBuffer.getHeight();
-            IntBuffer b = pixelBuffer.getBuffer();
-            AbstractNamedColorSpace cs = record.colorSpace();
-            int xIndex = record.xIndex();
-            float xmin = cs.getMinValue(xIndex);
-            float xmax = cs.getMaxValue(xIndex);
-            int yIndex = record.yIndex();
-            float ymin = cs.getMinValue(yIndex);
-            float ymax = cs.getMaxValue(yIndex);
-            float ybase = ymax;
-            float invWidth = (xmax - xmin) / (width);
-            float invHeight = -(ymax - ymin) / (height);
-            float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
-            colorValue[0] = record.c0();
-            colorValue[1] = record.c1();
-            colorValue[2] = record.c2();
-            colorValue[3] = record.c3();
-            float[] rgbValue = new float[3];
-            int[] array = b.array();
-            ToIntFunction<Integer> filter = record.rgbFilter();
+            int yfrom = tile.yfrom();
+            int yto = tile.yto();
+            int xfrom = tile.xfrom();
+            int xto = tile.xto();
 
 
             // Fill every single pixel
-            for (int y = 0, xy = 0; y < height; y++, xy += width) {
-                if ((y & 31) == 0 && isCancelled()) {
-                    return;
-                }
-                for (int x = 0; x < width; x++) {
+            for (int y = yfrom, xy = yfrom * width; y < yto; y++, xy += width) {
+                for (int x = xfrom; x < xto; x++) {
                     float xval = x * invWidth + xmin;
                     float yval = y * invHeight + ybase;
                     colorValue[xIndex] = xval;
@@ -246,6 +178,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
                     array[x + xy] = argb;
                 }
             }
+
         }
     }
 

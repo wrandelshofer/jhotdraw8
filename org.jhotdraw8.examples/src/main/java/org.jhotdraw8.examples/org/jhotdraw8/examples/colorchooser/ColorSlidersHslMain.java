@@ -2,6 +2,7 @@ package org.jhotdraw8.examples.colorchooser;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -14,12 +15,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
+import org.jhotdraw8.color.CssHslColorSpace;
 import org.jhotdraw8.color.HlsColorSpace;
 import org.jhotdraw8.color.HlsPhysiologicColorSpace;
-import org.jhotdraw8.color.OKHlsColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.OKHSLColorSpace;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorRectangleSlider;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
+import java.awt.color.ColorSpace;
 import java.util.List;
 
 /**
@@ -54,8 +58,6 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
 
         ColorRectangleSlider colorRectangleSlider = new ColorRectangleSlider();
         ColorSlider colorSlider = new ColorSlider();
-        colorSlider.setC2(0.5f);//FIXME set to center of C2 range on color space change!
-
         colorSlider.c0Property().bindBidirectional(c0);
         colorRectangleSlider.c0Property().bind(c0);
         colorRectangleSlider.adjustingProperty().bind(colorSlider.pressedProperty());
@@ -63,9 +65,10 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
         colorRectangleSlider.c2Property().bindBidirectional(c2);
 
         ComboBox<AbstractNamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
+                new CssHslColorSpace(),
                 new HlsColorSpace(),
                 new HlsPhysiologicColorSpace(),
-                new OKHlsColorSpace()
+                new OKHSLColorSpace()
         );
         colorRectangleSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
         colorSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
@@ -82,6 +85,38 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
         componentsHBox.getChildren().addAll(fields);
         vbox.getChildren().addAll(colorRectangleSlider, colorSlider, componentsHBox, bitDepthBox);
 
+        ChangeListener<AbstractNamedColorSpace> csListener = (o, oldv, newv) -> {
+
+            switch (newv.getType()) {
+                case ColorSpace.TYPE_HSV -> {
+                    colorSlider.setC1(1.0f);//saturation
+                    colorSlider.setC2(1.0f);//value
+                    colorRectangleSlider.setXComponentIndex(1);
+                    colorRectangleSlider.setYComponentIndex(2);
+                }
+                case ColorSpace.TYPE_HLS -> {
+                    colorSlider.setC1(0.5f);//lightness
+                    colorSlider.setC2(1.0f);//saturation
+                    colorRectangleSlider.setXComponentIndex(2);
+                    colorRectangleSlider.setYComponentIndex(1);
+                }
+                default -> {
+                    colorSlider.setC1(1f);//?
+                    colorSlider.setC2(1f);//?
+                    colorRectangleSlider.setXComponentIndex(1);
+                    colorRectangleSlider.setYComponentIndex(2);
+                }
+                case NamedColorSpace.TYPE_HSL -> {
+                    colorSlider.setC1(1.0f);//saturation
+                    colorSlider.setC2(0.5f);//ligthness
+                    colorRectangleSlider.setXComponentIndex(1);
+                    colorRectangleSlider.setYComponentIndex(2);
+                }
+            }
+        };
+        colorSpaceBox.valueProperty().addListener(csListener);
+        colorSpaceBox.setValue(colorSpaceBox.getItems().get(0));
+        csListener.changed(colorSpaceBox.valueProperty(), colorSpaceBox.getValue(), colorSpaceBox.getValue());
 
         Scene scene = new Scene(vbox, 300, 250);
 

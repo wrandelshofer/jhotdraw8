@@ -12,6 +12,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
@@ -48,7 +49,7 @@ public class ColorSlider extends AbstractColorSlider {
 
     private void onComponentValueChanged(int i) {
         if (i != getComponentIndex()) {
-            updateImage();
+            invalidateImage();
         }
     }
 
@@ -75,7 +76,7 @@ public class ColorSlider extends AbstractColorSlider {
     }
 
     @Override
-    protected @NonNull AbstractColorSlider.AbstractFillTask createFillTask() {
+    protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getColorSpace(), getC0(), getC1(), getC2(), getC3(), getComponentIndex(), -1, getRgbFilter()), getOrientation());
     }
@@ -98,18 +99,6 @@ public class ColorSlider extends AbstractColorSlider {
                 setComponent((height - y) * (vmax - vmin) / height + vmin);
             }
         }
-    }
-
-    @Override
-    protected boolean needsUpdate(float[] oldValue, float[] newValue) {
-
-        int index = getComponentIndex();
-        for (int i = 0; i < oldValue.length; i++) {
-            if (i != index) {
-                if (oldValue[i] != newValue[i]) return true;
-            }
-        }
-        return false;
     }
 
 
@@ -140,71 +129,16 @@ public class ColorSlider extends AbstractColorSlider {
             this.orientation = orientation;
         }
 
-        @Override
-        public void fill(int blockSize) {
-            switch (orientation) {
-
-                case HORIZONTAL -> {
-                    if (blockSize <= 1) fillFineHorizontal();
-                    else fillBlocksHorizontal(blockSize);
-                }
-                case VERTICAL -> {
-                    if (blockSize <= 1) fillFineVertical();
-                    else fillBlocksVertical(blockSize);
-                }
+        public void accept(@NonNull TileTask.Tile tile) {
+            if (orientation == Orientation.HORIZONTAL) {
+                fillFineHorizontal(tile);
+            } else {
+                fillFineVertical(tile);
             }
         }
 
-        public void fillBlocksHorizontal(int blockSize) {
-            if (isCancelled()) {
-                return;
-            }
 
-            PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
-            int width = pixelBuffer.getWidth();
-            int height = pixelBuffer.getHeight();
-            IntBuffer b = pixelBuffer.getBuffer();
-            AbstractNamedColorSpace cs = record.colorSpace();
-            int xIndex = record.xIndex();
-            float xmin = cs.getMinValue(xIndex);
-            float xmax = cs.getMaxValue(xIndex);
-            float invWidth = (xmax - xmin) / (width);
-            float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
-            colorValue[0] = record.c0();
-            colorValue[1] = record.c1();
-            colorValue[2] = record.c2();
-            colorValue[3] = record.c3();
-            ToIntFunction<Integer> filter = record.rgbFilter();
-            float[] rgbValue = new float[3];
-            int[] array = b.array();
-
-            // Fill blocks
-            for (int y = 0, xy = 0; y < height; y += blockSize, xy += width * blockSize) {
-                if (isCancelled()) {
-                    return;
-                }
-                for (int x = 0; x < width; x += blockSize) {
-                    float xval = Math.min(width, x + (blockSize >>> 1)) * invWidth + xmin;
-                    colorValue[xIndex] = xval;
-                    int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));//| 0xff_000000;
-                    argb = filter.applyAsInt(argb);
-                    Arrays.fill(array, x + xy, Math.min(xy + width, x + xy + blockSize), argb);
-                    //array[x + xy] = argb;
-                }
-
-                for (int i = 1; i < blockSize; i <<= 1) {
-                    if (y < height - i) {
-                        System.arraycopy(array, xy, array, xy + width * i, width * Math.min(i, height - y - i));
-                    }
-                }
-            }
-        }
-
-        public void fillFineHorizontal() {
-            if (isCancelled()) {
-                return;
-            }
-
+        public void fillFineHorizontal(@NonNull TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -224,64 +158,25 @@ public class ColorSlider extends AbstractColorSlider {
             int[] array = b.array();
             ToIntFunction<Integer> filter = record.rgbFilter();
 
+            int yfrom = tile.yfrom();
+            int yto = tile.yto();
+            int xfrom = tile.xfrom();
+            int xto = tile.xto();
 
-            // Fill every single pixel
-            for (int y = 0, xy = 0; y < height; y++, xy += width) {
-                if ((y & 31) == 0 && isCancelled()) {
-                    return;
-                }
-                for (int x = 0; x < width; x++) {
-                    float xval = x * invWidth + xmin;
-                    colorValue[xIndex] = xval;
-                    int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
-                    argb = filter.applyAsInt(argb);
-                    array[x + xy] = argb;
-                }
-            }
-        }
-
-        public void fillBlocksVertical(int blockSize) {
-            if (isCancelled()) {
-                return;
-            }
-
-            PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
-            int width = pixelBuffer.getWidth();
-            int height = pixelBuffer.getHeight();
-            IntBuffer b = pixelBuffer.getBuffer();
-            AbstractNamedColorSpace cs = record.colorSpace();
-            int xIndex = record.xIndex();
-            float xmin = cs.getMinValue(xIndex);
-            float xmax = cs.getMaxValue(xIndex);
-            float invHeight = (xmax - xmin) / (height);
-            float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
-            colorValue[0] = record.c0();
-            colorValue[1] = record.c1();
-            colorValue[2] = record.c2();
-            colorValue[3] = record.c3();
-            ToIntFunction<Integer> filter = record.rgbFilter();
-            float[] rgbValue = new float[3];
-            int[] array = b.array();
-            int arrayLength = array.length;
-
-            // Fill blocks
-            for (int y = 0, xy = 0; y < height; y += blockSize, xy += width * blockSize) {
-                if (isCancelled()) {
-                    return;
-                }
-                float xval = (height - y) * invHeight + xmin;
+            int xy = yfrom * width;
+            for (int x = xfrom; x < xto; x++) {
+                float xval = x * invWidth + xmin;
                 colorValue[xIndex] = xval;
                 int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
                 argb = filter.applyAsInt(argb);
-                Arrays.fill(array, xy, Math.min(xy + width * blockSize, arrayLength), argb);
+                array[x + xy] = argb;
+            }
+            for (int y = yfrom + 1; y < yto; y++) {
+                System.arraycopy(array, xfrom + xy, array, xfrom + xy + y * width, xto - xfrom);
             }
         }
 
-        public void fillFineVertical() {
-            if (isCancelled()) {
-                return;
-            }
-
+        public void fillFineVertical(@NonNull TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -301,17 +196,18 @@ public class ColorSlider extends AbstractColorSlider {
             int[] array = b.array();
             ToIntFunction<Integer> filter = record.rgbFilter();
 
+            int yfrom = tile.yfrom();
+            int yto = tile.yto();
+            int xfrom = tile.xfrom();
+            int xto = tile.xto();
 
             // Fill every single pixel
-            for (int y = 0, xy = 0; y < height; y++, xy += width) {
-                if ((y & 31) == 0 && isCancelled()) {
-                    return;
-                }
+            for (int y = yfrom, xy = yfrom * width; y < yto; y++, xy += width) {
                 float xval = (height - y) * invHeight + xmin;
                 colorValue[xIndex] = xval;
                 int argb = RgbBitConverters.rgbFloatToArgb32(cs.toRGB(colorValue, rgbValue));
                 argb = filter.applyAsInt(argb);
-                Arrays.fill(array, xy, xy + width, argb);
+                Arrays.fill(array, xy + xfrom, xy + xto, argb);
             }
         }
     }

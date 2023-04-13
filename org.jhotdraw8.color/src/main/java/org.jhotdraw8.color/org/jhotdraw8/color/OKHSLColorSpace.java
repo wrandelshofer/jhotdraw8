@@ -2,8 +2,6 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.color.ColorSpace;
-
 /**
  * The OK HSL Color Space.
  * <p>
@@ -20,11 +18,11 @@ import java.awt.color.ColorSpace;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class OKHlsColorSpace extends AbstractNamedColorSpace {
+public class OKHSLColorSpace extends AbstractNamedColorSpace {
     private final static @NonNull OKLabColorSpace oklab = new OKLabColorSpace();
 
-    public OKHlsColorSpace() {
-        super(ColorSpace.TYPE_HLS, 3);
+    public OKHSLColorSpace() {
+        super(NamedColorSpace.TYPE_HSL, 3);
     }
 
     @Override
@@ -34,13 +32,13 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] toRGB(float[] hsl, float[] rgb) {
-        return okhls_to_srgb(hsl, rgb);
+        return okhsl_to_srgb(hsl, rgb);
     }
 
-    private float[] okhls_to_srgb(float[] hsl, float[] rgb) {
+    private float[] okhsl_to_srgb(float[] hsl, float[] rgb) {
         double h = hsl[0];
-        double l = hsl[1];
-        double s = hsl[2];
+        double s = hsl[1];
+        double l = hsl[2];
 
         if (l == 1.0) {
             rgb[0] = 1;
@@ -253,10 +251,10 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float[] fromRGB(float[] rgb, float[] colorvalue) {
-        return srgb_to_okhls(rgb, colorvalue);
+        return srgb_to_okhsl(rgb, colorvalue);
     }
 
-    private float[] srgb_to_okhls(float[] rgb, float[] hsl) {
+    private float[] srgb_to_okhsl(float[] rgb, float[] hsl) {
         float[] lab = oklab.fromRGB(rgb, hsl);
         double labL = lab[0];
         double laba = lab[1];
@@ -297,8 +295,8 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
 
         double l = toe(L);
         hsl[0] = (float) h;
-        hsl[1] = (float) l;
-        hsl[2] = (float) s;
+        hsl[1] = (float) s;
+        hsl[2] = (float) l;
         return hsl;
 
     }

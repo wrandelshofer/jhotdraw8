@@ -27,8 +27,8 @@ public class DisplayP3ColorSpace extends ParametricNonLinearRgbColorSpace {
                         new Point2D(0.68, 0.32),
                         new Point2D(0.265, 0.69),
                         new Point2D(0.15, 0.06),
-                        ILLUMINANT_D65
-                ), SrgbColorSpace::toLinear,
+                        ILLUMINANT_D65,
+                        0f, 1f), SrgbColorSpace::toLinear,
                 SrgbColorSpace::fromLinear
         );
     }

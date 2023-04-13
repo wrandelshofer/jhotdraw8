@@ -71,6 +71,8 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * The name of the color space.
      */
     private final @NonNull String name;
+    private final float maxValue;
+    private final float minValue;
 
     /**
      * Creates a new instance.
@@ -78,17 +80,21 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param name          the name of the color space
      * @param toXyzMatrix   the matrix for conversion to CIE XYZ
      * @param fromXyzMatrix the matrix for conversion from CIE XYZ
+     * @param minValue
+     * @param maxValue
      */
     public ParametricLinearRgbColorSpace(@NonNull String name,
                                          @NonNull Matrix3 toXyzMatrix,
-                                         @NonNull Matrix3 fromXyzMatrix
-    ) {
+                                         @NonNull Matrix3 fromXyzMatrix,
+                                         float minValue, float maxValue) {
         super(ColorSpace.TYPE_RGB, 3);
         this.name = name;
         this.toXyzMatrix = toXyzMatrix;
         this.fromXyzMatrix = fromXyzMatrix;
         this.toLinearSrgbMatrix = XYZ_TO_LINEAR_SRGB_MATRIX.mul(toXyzMatrix).toFloat();
         this.fromLinearSrgbMatrix = fromXyzMatrix.toDouble().mul(LINEAR_SRGB_TO_XYZ_MATRIX).toFloat();
+        this.maxValue = maxValue;
+        this.minValue = minValue;
     }
 
     /**
@@ -99,15 +105,19 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param green      the CIE chroma (x,y) green primary
      * @param blue       the CIE chroma (x,y) blue primary
      * @param whitePoint the white point (x,y)
+     * @param minValue
+     * @param maxValue
      */
     public ParametricLinearRgbColorSpace(@NonNull String name,
                                          @NonNull Point2D red,
                                          @NonNull Point2D green,
                                          @NonNull Point2D blue,
-                                         @NonNull Point2D whitePoint
-    ) {
+                                         @NonNull Point2D whitePoint,
+                                         float minValue, float maxValue) {
         super(ColorSpace.TYPE_RGB, 3);
         this.name = name;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
 
         Matrix3Double toXyzMatrixDouble = computeToXyzMatrix(red, green, blue, whitePoint);
         Matrix3Double fromXyzMatrixDouble = toXyzMatrixDouble.inv();
@@ -127,7 +137,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param whitePoint the white point (x,y)
      */
     @NonNull
-    private static Matrix3Double computeToXyzMatrix(@NonNull Point2D red, @NonNull Point2D green, @NonNull Point2D blue, @NonNull Point2D whitePoint) {
+    public static Matrix3Double computeToXyzMatrix(@NonNull Point2D red, @NonNull Point2D green, @NonNull Point2D blue, @NonNull Point2D whitePoint) {
         // matrix M
         // [xr xg xb]
         // [yr yg yb]
@@ -205,5 +215,15 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
     public float[] toRGB(float[] colorvalue, float[] rgb) {
         return LinearSrgbColorSpace.fromLinear(toLinearSrgbMatrix.mul(colorvalue, rgb), rgb);
         // return SRGB_COLOR_SPACE.fromCIEXYZ(toCIEXYZ(colorvalue, rgb), rgb);
+    }
+
+    @Override
+    public float getMinValue(int component) {
+        return minValue;
+    }
+
+    @Override
+    public float getMaxValue(int component) {
+        return maxValue;
     }
 }

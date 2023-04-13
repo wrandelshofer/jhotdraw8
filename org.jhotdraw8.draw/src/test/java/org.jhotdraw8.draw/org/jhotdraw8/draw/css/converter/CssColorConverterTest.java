@@ -62,6 +62,5 @@ public class CssColorConverterTest {
                 dynamicTest("13", () -> testFromString(new CssColor("hsba(10,20%,30%,0.8)", Color.hsb(10, 0.20, 0.30, 0.8)), "hsba(10,20%,30%,0.8)")),
                 dynamicTest("opacity 0.2 cannot be represented with a float", () -> testFromString(new CssColor("rgba(0%,0%,0%,0.2)", Color.rgb(0, 0, 0, 0.2)), "rgba(0%,0%,0%,0.2)"))
         );
-
     }
 }

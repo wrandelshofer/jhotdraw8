@@ -19,7 +19,7 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
                 new Point2D(0.64, 0.33),
                 new Point2D(0.3, 0.6),
                 new Point2D(0.15, 0.06),
-                ParametricLinearRgbColorSpace.ILLUMINANT_D65);
+                ParametricLinearRgbColorSpace.ILLUMINANT_D65, 0f, 1f);
     }
 
     @Override

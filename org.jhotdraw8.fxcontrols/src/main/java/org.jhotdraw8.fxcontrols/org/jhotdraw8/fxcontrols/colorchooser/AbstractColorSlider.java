@@ -36,6 +36,7 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.AbstractNamedColorSpace;
 import org.jhotdraw8.color.HsvColorSpace;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
@@ -45,8 +46,8 @@ import java.net.URL;
 import java.nio.IntBuffer;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
 
 /**
@@ -88,8 +89,9 @@ public abstract class AbstractColorSlider extends Pane {
     );
 
     @Nullable
-    protected PixelBuffer<IntBuffer> pixelBuffer;
-    private @Nullable AbstractColorSlider.AbstractFillTask fillTask;
+    private PixelBuffer<IntBuffer> pixelBuffer;
+
+    private @Nullable CompletableFuture<Void> fillFuture;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -113,6 +115,9 @@ public abstract class AbstractColorSlider extends Pane {
         assert sliderArea != null : "fx:id=\"sliderArea\" was not injected: check your FXML file 'AbstractColorSlider.fxml'.";
         assert sliderThumb != null : "fx:id=\"sliderThumb\" was not injected: check your FXML file 'AbstractColorSlider.fxml'.";
 
+        sliderArea.setPreserveRatio(false);
+
+
         Path path = new Path();
         var b = new FXPathElementsBuilder(path.getElements());
         b.circle(5, 0, 0);
@@ -123,56 +128,32 @@ public abstract class AbstractColorSlider extends Pane {
                 null, null)));
         sliderThumb.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, null)));
 
-        layoutBoundsProperty().addListener(o -> this.recreateImage());
         setOnMousePressed(this::onMousePressedOrDragged);
         setOnMouseDragged(this::onMousePressedOrDragged);
         // setOnMouseReleased(this::onMouseReleased);
         adjustingProperty().addListener(this::onAdjusting);
 
-        InvalidationListener propertyListener = o -> updateImage();
+        InvalidationListener propertyListener = o -> invalidateImage();
         rgbFilterProperty().addListener(propertyListener);
         colorSpaceProperty().addListener(propertyListener);
-
-        InvalidationListener onComponentValueChanged = o -> this.requestLayout();
-        c0Property().addListener(onComponentValueChanged);
-        c1Property().addListener(onComponentValueChanged);
-        c2Property().addListener(onComponentValueChanged);
-        c3Property().addListener(onComponentValueChanged);
+        c0Property().addListener(propertyListener);
+        c1Property().addListener(propertyListener);
+        c2Property().addListener(propertyListener);
+        c3Property().addListener(propertyListener);
 
     }
 
     private void onAdjusting(Observable observable) {
-        if (!isPressed() && !isAdjusting()) {
-            updateImage();
-        }
+        // if (!isPressed() && !isAdjusting()) {
+        invalidateImage();
+        // }
     }
 
     protected abstract void onMousePressedOrDragged(MouseEvent mouseEvent);
 
-    private final @NonNull float[] oldValue = new float[4];
-    private final @NonNull float[] newValue = new float[4];
-
-
-    private void recreateImage() {
-        int width = Math.max(1, (int) getWidth());
-        int height = Math.max(1, (int) getHeight());
-
-        fillValue(newValue);
-        //boolean needsUpdate = (!drawCoarsenedImage && !(isAdjusting()||isPressed()))||needsUpdate(oldValue, newValue);
-        boolean needsUpdate = needsUpdate(oldValue, newValue);
-        if (pixelBuffer == null || pixelBuffer.getWidth() != width || pixelBuffer.getHeight() != height) {
-            IntBuffer intBuffer = IntBuffer.allocate(width * height);
-            PixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
-            pixelBuffer = new PixelBuffer<>(width, height, intBuffer, pixelFormat);
-            Image img = new WritableImage(pixelBuffer);
-            sliderArea.setFitWidth(width);
-            sliderArea.setFitHeight(height);
-            sliderArea.setViewport(new Rectangle2D(0, 0, width, height));
-            sliderArea.setImage(img);
-            needsUpdate = true;
-        }
-        if (needsUpdate) {
-            updateImage();
+    private void validateImage() {
+        if (invalid) {
+            drawImage();
         }
     }
 
@@ -182,8 +163,6 @@ public abstract class AbstractColorSlider extends Pane {
         v[BLOCK_SIZE_FINE] = getC2();
         v[3] = getC3();
     }
-
-    protected abstract boolean needsUpdate(float[] oldValue, float[] newValue);
 
     public AbstractColorSlider() {
         try {
@@ -204,35 +183,133 @@ public abstract class AbstractColorSlider extends Pane {
     @Override
     protected void layoutChildren() {
         super.layoutChildren();
-        recreateImage();
+
+        int width = Math.max(1, (int) getWidth());
+        int height = Math.max(1, (int) getHeight());
+        invalid |= pixelBuffer == null
+                || pixelBuffer.getWidth() != width
+                || pixelBuffer.getHeight() != height;
+
+        validateImage();
     }
 
-    protected void updateImage() {
-        if (fillTask != null) {
-            fillTask.cancel();
-        }
-        fillValue(oldValue);
-        boolean drawFine = !isAdjusting();
+    protected void drawImage() {
+        int width = Math.max(1, (int) getWidth());
+        int height = Math.max(1, (int) getHeight());
+        boolean resize = pixelBuffer == null
+                || pixelBuffer.getWidth() != width
+                || pixelBuffer.getHeight() != height;
+        Image newImage;
+        PixelBuffer<IntBuffer> newPixelBuffer;
+        if (resize) {
+            IntBuffer intBuffer = IntBuffer.allocate(width * height);
+            PixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
+            newPixelBuffer = new PixelBuffer<>(width, height, intBuffer, pixelFormat);
+            newImage = new WritableImage(newPixelBuffer);
 
-        if (pixelBuffer != null) {
-            // If the image is large, we fill it asynchronously
-            AbstractNamedColorSpace cs = colorSpace.get();
-            fillTask = createFillTask();
-            if (pixelBuffer.getWidth() * pixelBuffer.getHeight() <= 640000) {
-                fillTask.fill(BLOCK_SIZE_FINE);
-                pixelBuffer.updateBuffer(_ignore -> null);
-            } else {
-                fillTask.fill(BLOCK_SIZE_COARSE);
-                pixelBuffer.updateBuffer(_ignore -> null);
-                if (drawFine) {
-                    ForkJoinPool.commonPool().execute(fillTask);
-                }
+            // We do not set the new image immediately, because we have not drawn on it yet.
+            // We stretch the existing image instead.
+            // This gives immediate user feedback when the window is being resized.
+            sliderArea.setFitWidth(width);
+            sliderArea.setFitHeight(height);
+            invalid = true;
+
+            // Cancel the fill task, because it draws into an old pixel buffer.
+            if (fillFuture != null) {
+                fillFuture.cancel(false);
             }
+        } else {
+            newImage = sliderArea.getImage();
+            newPixelBuffer = pixelBuffer;
         }
+
+        if (fillFuture != null) {
+            return;
+        }
+
+        if (invalid) {
+            invalid = false;
+            AbstractFillTask newFillTask = createFillTask(newPixelBuffer);
+            fillFuture = TileTask.fork(0, 0, width, height, 64, newFillTask);
+            fillFuture.handle((v, e) -> {
+                Platform.runLater(() -> {
+                    // Only update image, if we have not been cancelled
+                    if (e == null) {
+                        if (sliderArea.getImage() != newImage) {
+                            sliderArea.setImage(newImage);
+                            sliderArea.setViewport(new Rectangle2D(0, 0, newImage.getWidth(), newImage.getHeight()));
+                        }
+                        newPixelBuffer.updateBuffer(b -> null);
+                        pixelBuffer = newPixelBuffer;
+                    }
+
+                    // If the image became invalid while we were drawing it,
+                    // we have to go at it again.
+                    if (invalid) {
+                        requestLayout();
+                    }
+
+                    // Fill future is done
+                    fillFuture = null;
+                });
+                return null;
+            });
+        }
+            /*
+        Platform.runLater(() -> {
+                newFillTask.done.set(true);
+                if (!newFillTask.isCancelled()) {
+                    newPixelBuffer.updateBuffer(b -> null);
+                }
+                inFlight--;
+                long end = System.nanoTime();
+                System.out.println("elapsed " + (end - start) / 1000_000_000.0
+                        + " currentCount=" + updatedCount + " modCount:" + invalid);
+                if (updatedCount != invalid) invalidateImage();
+            });
+        }).start();
+        /*
+        //newFillTask.acceptAsInt(0,height);
+        ForkJoinPool.commonPool().execute(() -> {
+                    try {
+                        RangeTask.forEach(0, height, 32, newFillTask);
+                    } finally {
+                        Platform.runLater(() -> {
+                            newFillTask.done.set(true);
+                            if (!newFillTask.isCancelled()) {
+                                if (newPixelBuffer!=pixelBuffer){
+                                    System.out.println("NOOO!");
+                                }
+                                newPixelBuffer.updateBuffer(b -> null);
+                            }
+                        });
+                    }
+                }
+        );*/
+        // fillTask.done.set(true);
+        // pixelBuffer.updateBuffer(b -> null);
+
+        /*
+        rangeTask=new RangeTask(0,height,128,newFillTask);
+        rangeTask.compute();
+         */
+        /*
+        if(resize) {
+            newFillTask.fill(BLOCK_SIZE_COARSE);
+            pixelBuffer.updateBuffer(b -> null);
+        }
+        if (!oldFillTaskIsDone) {
+            invalidateImage();
+        } else {
+            rangeTask=new RangeTask(0,height,128,newFillTask);
+            rangeTask.compute();
+            //fillTask = newFillTask;
+           // ForkJoinPool.commonPool().execute(fillTask);
+        }*/
     }
 
 
-    protected abstract @NonNull AbstractColorSlider.AbstractFillTask createFillTask();
+    protected abstract AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer);
 
     record FillTaskRecord(@NonNull PixelBuffer<IntBuffer> pixelBuffer,
                           @NonNull AbstractNamedColorSpace colorSpace,
@@ -241,33 +318,11 @@ public abstract class AbstractColorSlider extends Pane {
                           @NonNull ToIntFunction<Integer> rgbFilter) {
     }
 
-    abstract static class AbstractFillTask implements Runnable {
-        private final @NonNull AtomicBoolean cancelled = new AtomicBoolean();
+    abstract static class AbstractFillTask implements Consumer<TileTask.Tile> {
         protected final @NonNull FillTaskRecord record;
 
         public AbstractFillTask(@NonNull FillTaskRecord record) {
             this.record = record;
-        }
-
-        public void cancel() {
-            cancelled.set(true);
-        }
-
-        public void fill(int blockSize) {
-        }
-
-        protected boolean isCancelled() {
-            return cancelled.get();
-        }
-
-        @Override
-        public void run() {
-            fill(BLOCK_SIZE_FINE);
-            Platform.runLater(() -> {
-                if (!isCancelled()) {
-                    record.pixelBuffer().updateBuffer(_ignore -> null);
-                }
-            });
         }
     }
 
@@ -353,5 +408,14 @@ public abstract class AbstractColorSlider extends Pane {
 
     public void setRgbFilter(ToIntFunction<Integer> rgbFilter) {
         this.rgbFilter.set(rgbFilter);
+    }
+
+    private boolean invalid;
+
+    public void invalidateImage() {
+        if (!invalid) {
+            invalid = true;
+            requestLayout();
+        }
     }
 }

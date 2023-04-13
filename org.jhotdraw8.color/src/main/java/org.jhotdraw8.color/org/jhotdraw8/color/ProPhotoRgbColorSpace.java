@@ -10,6 +10,8 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D50;
  * The ProPhoto RGB color space, also known as ROMM RGB (Reference Output Medium Metric), is an output referred RGB
  * color space developed by Kodak. It offers an especially large gamut designed for use with photographic output in
  * mind.
+ * <p>
+ * References:
  * <dl>
  *     <dt>Wikipedia: ProPhoto RGB color space.</dt>
  *     <dd><a href="https://en.wikipedia.org/wiki/ProPhoto_RGB_color_space">wikipedia</a></dd>
@@ -28,8 +30,8 @@ public class ProPhotoRgbColorSpace extends ParametricNonLinearRgbColorSpace {
                         new Point2D(0.734699, 0.265301),
                         new Point2D(0.159597, 0.840403),
                         new Point2D(0.036598, 0.000105),
-                        ILLUMINANT_D50
-                ),
+                        ILLUMINANT_D50,
+                        0f, 1f),
                 ProPhotoRgbColorSpace::toLinear,
                 ProPhotoRgbColorSpace::fromLinear
         );

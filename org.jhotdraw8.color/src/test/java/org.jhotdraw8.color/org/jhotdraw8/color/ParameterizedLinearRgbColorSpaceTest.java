@@ -21,8 +21,8 @@ public class ParameterizedLinearRgbColorSpaceTest {
                 new Point2D(0.67, 0.33),
                 new Point2D(0.21, 0.71),
                 new Point2D(0.14, 0.08),
-                ParametricLinearRgbColorSpace.ILLUMINANT_E
-        );
+                ParametricLinearRgbColorSpace.ILLUMINANT_E,
+                0f, 1f);
         Matrix3Double expectedMatrix = new Matrix3Double(
                 0.6611, 0.1711, 0.1678,
                 0.3256, 0.5785, 0.0959,
@@ -38,8 +38,8 @@ public class ParameterizedLinearRgbColorSpaceTest {
                 new Point2D(0.67, 0.33),
                 new Point2D(0.21, 0.71),
                 new Point2D(0.14, 0.08),
-                ParametricLinearRgbColorSpace.ILLUMINANT_C
-        );
+                ParametricLinearRgbColorSpace.ILLUMINANT_C,
+                0f, 1f);
         Matrix3Double expectedMatrix = new Matrix3Double(
                 0.6070, 0.1734, 0.2006,
                 0.2990, 0.5864, 0.1146,
@@ -55,8 +55,8 @@ public class ParameterizedLinearRgbColorSpaceTest {
                 new Point2D(0.64, 0.33),
                 new Point2D(0.3, 0.6),
                 new Point2D(0.15, 0.06),
-                ParametricLinearRgbColorSpace.ILLUMINANT_D65
-        );
+                ParametricLinearRgbColorSpace.ILLUMINANT_D65,
+                0f, 1f);
         Matrix3Double expectedMatrix = new Matrix3Double(
                 0.4124, 0.3576, 0.1805,
                 0.2126, 0.7152, 0.0722,

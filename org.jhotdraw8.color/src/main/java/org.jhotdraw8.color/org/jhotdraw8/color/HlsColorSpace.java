@@ -21,8 +21,6 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
 public class HlsColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
 
-
-
     public HlsColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);
     }
@@ -100,7 +98,6 @@ public class HlsColorSpace extends AbstractNamedColorSpace {
         } else {
             blue = p;
         }
-
 
         rgb[0] = clamp(red, 0, 1);
         rgb[1] = clamp(green, 0, 1);

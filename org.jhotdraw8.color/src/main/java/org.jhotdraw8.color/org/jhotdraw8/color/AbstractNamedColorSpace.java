@@ -69,6 +69,7 @@ public abstract class AbstractNamedColorSpace extends ColorSpace implements Name
             compName = switch (getType()) {
                 case NamedColorSpace.TYPE_LCH -> new String[]{"Lightness", "Chroma", "Hue"};
                 case NamedColorSpace.TYPE_HSB -> new String[]{"Hue", "Saturation", "Brightness"};
+                case NamedColorSpace.TYPE_HSL -> new String[]{"Hue", "Saturation", "Lightness"};
                 default -> {
                     String[] tmp = new String[getNumComponents()];
                     for (int i = 0; i < tmp.length; i++) {

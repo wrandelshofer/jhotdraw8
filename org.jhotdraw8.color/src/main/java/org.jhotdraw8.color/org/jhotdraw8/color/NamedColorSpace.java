@@ -20,6 +20,10 @@ public interface NamedColorSpace {
      * A color space with Luminance, Chroma, Hue components.
      */
     int TYPE_LCH = 32;
+    /**
+     * A color space with Hue, Saturation, Lightness components.
+     */
+    int TYPE_HSL = 34;
 
     /**
      * Faster fromCIEXYZ method which uses the provided output array.

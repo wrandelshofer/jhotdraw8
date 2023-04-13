@@ -75,4 +75,14 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
     public float[] toRGB(float[] colorvalue, float[] rgb) {
         return linearCS.toRGB(toLinear(colorvalue, rgb), rgb);
     }
+
+    @Override
+    public float getMinValue(int component) {
+        return linearCS.getMinValue(component);
+    }
+
+    @Override
+    public float getMaxValue(int component) {
+        return linearCS.getMaxValue(component);
+    }
 }

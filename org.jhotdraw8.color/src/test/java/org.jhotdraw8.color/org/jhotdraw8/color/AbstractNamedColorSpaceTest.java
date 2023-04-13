@@ -39,6 +39,7 @@ public abstract class AbstractNamedColorSpaceTest {
                     "Black"};
             case ColorSpace.TYPE_CMY -> new String[]{"Cyan", "Magenta", "Yellow"};
             case NamedColorSpace.TYPE_HSB -> new String[]{"Hue", "Saturation", "Brightness"};
+            case NamedColorSpace.TYPE_HSL -> new String[]{"Hue", "Saturation", "Lightness"};
             case NamedColorSpace.TYPE_LCH -> new String[]{"Lightness", "Chroma", "Hue"};
             default -> {
                 String[] tmp = new String[cs.getNumComponents()];

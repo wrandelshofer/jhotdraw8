@@ -4,10 +4,17 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
+import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jhotdraw8.base.converter.NumberConverter;
+import org.jhotdraw8.color.CssColorSpaces;
+import org.jhotdraw8.color.CssHslColorSpace;
+import org.jhotdraw8.color.CssLegacySrgbColorSpace;
+import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.SrgbColorSpace;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -25,7 +32,11 @@ import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+
+import static org.jhotdraw8.base.util.MathUtil.clamp;
 
 /**
  * CssColorConverter.
@@ -34,18 +45,61 @@ import java.util.function.Consumer;
  * </p>
  * <pre>
  * CssColor ::= NamedColor | HexColor | ColorFunction  ;
- * NamedColor ::= TT_IDENT;
+ *
+ * NamedColor ::= 'none' | TT_IDENT;
+ *
  * HexColor ::= ('#'|'0x') , ( hexdigit * 3 | hexdigit * 4 | hexdigit * 6 | hexdigit * 8 );
- * ColorFunction ::= RGBFunction | RGBAFunction | HSBFunction | HSBAFunction ;
- * RGBFunction ::= "rgb(" , (number, number, number | percentage, percentage, percentage ), ")";
- * RGBAFunction ::= "rgba(" ,(number, number, number | percentage, percentage, percentage ),number ")";
- * HSBFunction ::= "hsb(" , number,  percentage, percentage, ")";
- * HSBAFunction ::= "hsba(" , number,  percentage, percentage, number ")";
+ *
+ * ColorFunction ::= RGBFunction | RGBAFunction
+ *                 | HSLFunction | HSLAFunction
+ *                 | HWBFunction
+ *                 | LABFunction
+ *                 | LCHFunction
+ *                 | OKLABFunction
+ *                 | OKLCHFunction
+ *                 | COLORFunction
+ *                 ;
+ * RGBFunction   ::= 'rgb('   , color-params , ')' ;
+ * RGBAFunction  ::= 'rgba('  , color-params , ')' ;
+ * HSLFunction   ::= 'hsl('   , color-params , ')' ;
+ * HSLAFunction  ::= 'hsla('  , color-params , ')' ;
+ * HWBFunction   ::= 'hwb('   , color-params , ')' ;
+ * LABFunction   ::= 'lab('   , color-params , ')' ;
+ * OKLABFunction ::= 'oklab(' , color-params , ')' ;
+ * OKLCHFunction ::= 'oklch(' , color-params , ')' ;
+ * COLORFunction ::= 'color(' ,  color-params , ')' ;
+ *
+ * color-params  ::= [ color-space-param ] , ( ( number | angle | percentage | 'none' ) , [ "," ] ) * 3 , alpha-param ;
+ * alpha-param   ::= [ [ '/' ] ( number | percentage | 'none' ) ] ;
+ * color-space-param ::= 'srgb'
+ *                     | 'srgb-linear'
+ *                     | 'display-p3'
+ *                     | 'a98-rgb'
+ *                     | 'prophoto-rgb'
+ *                     | 'rec2020'
+ *                     | 'xyz'
+ *                     | 'xyz-d50'
+ *                     | 'xyz-d65'
+ *                     ;
  * </pre>
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>CSS Color Module Level 4. 4. Representing Colors: the <color> type.</dt>
+ *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
+ *
+ *     <dt>CSS Color Module Level 4. 4. Representing Colors: the <color> type.  4.1 The <color> syntax.</dt>
+ *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-syntax">w3.org</a></dd>
+ *
+ *     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>
+ *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#rgb-functions">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
  */
 public class CssColorConverter implements CssConverter<CssColor> {
+    private final static @NonNull NumberConverter number = new NumberConverter();
+
     boolean nullable;
 
     public CssColorConverter() {
@@ -54,6 +108,44 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
     public CssColorConverter(boolean nullable) {
         this.nullable = nullable;
+    }
+
+    private String colorParamToRGBString(List<Double> params) {
+        StringBuilder buf = new StringBuilder(16);
+        for (int i = 0; i < 3; i++) {
+            if (i > 0) {
+                buf.append(' ');
+            }
+            double cp = params.get(i);
+            buf.append(number.toString(cp));
+        }
+        if (params.size() == 4) {
+            double clampedAlpha = clamp(params.get(3), 0, 1);
+            if (clampedAlpha != 1) {
+                buf.append(" / ");
+                buf.append(number.toString(clampedAlpha));
+            }
+        }
+        return buf.toString();
+    }
+
+    private String colorParamToHSLString(List<Double> params) {
+        StringBuilder buf = new StringBuilder(16);
+        buf.append(number.toString(params.get(0)));
+        for (int i = 1; i < 3; i++) {
+            buf.append(' ');
+            double cp = params.get(i);
+            buf.append(number.toString(cp * 100));
+            buf.append('%');
+        }
+        if (params.size() == 4) {
+            double clampedAlpha = clamp(params.get(3), 0, 1);
+            if (clampedAlpha != 1) {
+                buf.append(" / ");
+                buf.append(number.toString(clampedAlpha));
+            }
+        }
+        return buf.toString();
     }
 
     @Override
@@ -73,6 +165,285 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
     @Override
     public @Nullable CssColor parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+        // CssColor ::= NamedColor | HexColor | ColorFunction  ;
+
+        return switch (tt.next()) {
+            case CssTokenType.TT_IDENT -> {
+                tt.pushBack();
+                yield parseNamedColor(tt);
+            }
+            case CssTokenType.TT_DIMENSION, CssTokenType.TT_HASH -> {
+                tt.pushBack();
+                yield parseHexColor(tt);
+            }
+            case CssTokenType.TT_FUNCTION -> {
+                tt.pushBack();
+                yield switch (tt.currentStringNonNull()) {
+                    case "rgb", "rgba" -> {
+                        yield parseRGBFunction(tt);
+                    }
+                    case "hsl", "hsla" -> {
+                        yield parseHSLFunction(tt);
+                    }
+                    case "hwb" -> {
+                        yield null;
+                    }
+                    case "lab" -> {
+                        yield null;
+                    }
+                    case "oklab" -> {
+                        yield null;
+                    }
+                    case "oklch" -> {
+                        yield null;
+                    }
+                    case "color" -> parseColorFunction(tt);
+                    default ->
+                            throw tt.createParseException("CssColor: unsupported function: " + tt.currentStringNonNull() + "().");
+                };
+            }
+            default -> throw tt.createParseException("CssColor: named color, hex color or color function expected.");
+        };
+    }
+
+    private @Nullable CssColor parseColorFunction(CssTokenizer tt) throws ParseException, IOException {
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "CssColor: function expected.");
+        String functionName = tt.currentStringNonNull();
+
+        String colorSpaceParam = "srgb";
+        if ("color".equals(functionName)) {
+            if (tt.next() == CssTokenType.TT_IDENT) {
+                colorSpaceParam = tt.currentStringNonNull().toLowerCase();
+                if ("xyz".equals(colorSpaceParam)) colorSpaceParam = "xyz-d65";
+            } else {
+                tt.pushBack();
+            }
+        }
+        NamedColorSpace cs = CssColorSpaces.COLOR_SPACES.get(colorSpaceParam);
+        if (cs == null) {
+            throw tt.createParseException("CssColor: unsupported color space: '" + colorSpaceParam + "'.");
+        }
+
+
+        List<Double> params = parseParams(tt, cs);
+        if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+            throw tt.createParseException("CssColor: right bracket expected.");
+        }
+        float[] rgb = clampColors(CSS_LEGACY_SRGB_COLOR_SPACE, params);
+        return new CssColor(
+                "color("
+                        + colorSpaceParam + " "
+                        + colorParamToRGBString(params)
+                        + ")",
+                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3), 0, 1) : 1.0));
+    }
+
+    @NonNull
+    private static List<Double> parseParams(CssTokenizer tt, NamedColorSpace cs) throws IOException, ParseException {
+        List<Double> params = new ArrayList<>();
+        while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
+            switch (tt.current()) {
+                case CssTokenType.TT_DIMENSION -> {
+                    if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                    float min = cs.getMinValue(params.size());
+                    float max = cs.getMaxValue(params.size());
+                    switch (tt.currentStringNonNull()) {
+                        case "deg" -> {
+                            params.add(((tt.currentNumberNonNull().doubleValue() % 360.0) * (max - min) / 360.0 + min));
+                        }
+                        case "grad" -> {
+                            params.add(((tt.currentNumberNonNull().doubleValue() % 400.0) * (max - min) / 400.0 + min));
+                        }
+                        case "rad" -> {
+                            params.add(((tt.currentNumberNonNull().doubleValue() % (2 * Math.PI)) * (max - min) * 0.5 / Math.PI + min));
+                        }
+                        case "turn" -> {
+                            params.add(((tt.currentNumberNonNull().doubleValue() % 1.0) * (max - min) + min));
+                        }
+                        default ->
+                                throw tt.createParseException("CssColor: unsupported dimension: '" + tt.currentStringNonNull() + "'.");
+                    }
+                }
+                case CssTokenType.TT_PERCENTAGE -> {
+                    if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                    if (params.size() == 3) {
+                        // alpha
+                        params.add((tt.currentNumberNonNull().doubleValue() / 100.0));
+                    } else {
+                        float min = cs.getMinValue(params.size());
+                        float max = cs.getMaxValue(params.size());
+                        params.add((tt.currentNumberNonNull().doubleValue() * (max - min) / 100.0 + min));
+                    }
+                }
+                case CssTokenType.TT_NUMBER -> {
+                    if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                    params.add((tt.currentNumberNonNull().doubleValue()));
+                }
+                case ',', '/' -> {
+                }
+                case CssTokenType.TT_IDENT -> {
+                    switch (tt.currentStringNonNull()) {
+                        case "none" -> {
+                            if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                            params.add(0.0);
+                        }
+                        default -> {
+                            throw tt.createParseException("CssColor: 'none' expected.");
+                        }
+                    }
+                }
+            }
+        }
+        if (params.size() < 3) {
+            throw tt.createParseException("CssColor: not enough parameters.");
+        }
+        return params;
+    }
+
+    private final static CssLegacySrgbColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new CssLegacySrgbColorSpace();
+    private final static SrgbColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private final static CssHslColorSpace CSS_HSL_COLOR_SPACE = new CssHslColorSpace();
+
+    @NonNull
+    private @Nullable CssColor parseRGBFunction(CssTokenizer tt) throws ParseException, IOException {
+        List<Double> params = parseParams(tt, CSS_LEGACY_SRGB_COLOR_SPACE);
+        float[] rgb = clampColors(CSS_SRGB_COLOR_SPACE, CSS_LEGACY_SRGB_COLOR_SPACE.toRGB(toFloat(params)));
+        return new CssColor(
+                "rgb(" + colorParamToRGBString(params) + ")",
+                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3), 0, 1) : 1.0));
+    }
+
+    @NonNull
+    private @Nullable CssColor parseHSLFunction(CssTokenizer tt) throws ParseException, IOException {
+        List<Double> params = parseParams(tt, CSS_HSL_COLOR_SPACE);
+        float[] rgb = clampColors(CSS_SRGB_COLOR_SPACE, CSS_HSL_COLOR_SPACE.toRGB(toFloat(params)));
+        return new CssColor(
+                "hsl(" + colorParamToHSLString(params) + ")",
+                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3), 0, 1) : 1.0));
+    }
+
+    private static float[] toFloat(double[] params) {
+        float[] floats = new float[3];
+        for (int i = 0; i < 3; i++) {
+            floats[i] = (float) params[i];
+        }
+        return floats;
+    }
+
+    private static float[] toFloat(List<Double> params) {
+        float[] floats = new float[3];
+        for (int i = 0; i < 3; i++) {
+            Double value = params.get(i);
+            floats[i] = value == null ? 0 : value.floatValue();
+        }
+        return floats;
+    }
+
+    /**
+     * FIXME Implement gamut mapping!
+     * <p>
+     * <a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#css-gamut-mapping">w3.org</a>
+     *
+     * @param param
+     * @param params
+     * @return
+     */
+    private static float[] clampColors(NamedColorSpace param, double[] params) {
+        return clampColors(param, toFloat(params));
+    }
+
+    private static float[] clampColors(NamedColorSpace param, List<Double> params) {
+        return clampColors(param, toFloat(params));
+    }
+
+    private static float[] clampColors(NamedColorSpace param, float[] params) {
+        float[] rgb1 = new float[3];
+        for (int i = 0; i < params.length; i++) {
+            rgb1[i] = (float) params[i];
+        }
+        float[] rgb = param.toRGB(rgb1, rgb1);
+        for (int i = 0; i < rgb.length; i++) {
+            rgb[i] = clamp(rgb[i], 0, 1);
+        }
+        return rgb;
+    }
+
+
+    private @NonNull CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
+        try {
+            int v = (int) Long.parseLong(hexdigits, 16);
+            int r, g, b, a;
+            switch (hexdigits.length()) {
+                case 3:
+                    r = (((v & 0xf00) >>> 4) | (v & 0xf00) >>> 8);
+                    g = (((v & 0x0f0)) | (v & 0x0f0) >>> 4);
+                    b = ((v & 0x00f) << 4) | (v & 0x00f);
+                    a = 255;
+                    return new Uint4HexSrgbaCssColor(r, g, b, a);
+                case 4:
+                    r = (((v & 0xf000) >>> 8) | (v & 0xf000) >>> 12);
+                    g = (((v & 0x0f00) >>> 4) | (v & 0x0f00) >>> 8);
+                    b = (((v & 0x00f0)) | (v & 0x00f0) >>> 4);
+                    a = ((v & 0x000f) << 4) | (v & 0x000f);
+                    return new Uint4HexSrgbaCssColor(r, g, b, a);
+                case 6:
+                    r = (v & 0xff0000) >>> 16;
+                    g = (v & 0x00ff00) >>> 8;
+                    b = (v & 0x0000ff);
+                    a = 255;
+                    return new Uint8HexSrgbaCssColor(r, g, b, a);
+                case 8:
+                    r = (v & 0xff000000) >>> 24;
+                    g = (v & 0x00ff0000) >>> 16;
+                    b = (v & 0x0000ff00) >>> 8;
+                    a = (v & 0xff);
+                    return new Uint8HexSrgbaCssColor(r, g, b, a);
+                default:
+                    throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
+            }
+        } catch (NumberFormatException e) {
+            ParseException pe = new ParseException("<hex-digits>: expected a hex-digit. Found:" + hexdigits, startpos);
+            pe.initCause(e);
+            throw pe;
+        }
+    }
+
+    private @NonNull CssColor parseHexColor(CssTokenizer tt) throws ParseException, IOException {
+        return switch (tt.next()) {
+            case CssTokenType.TT_DIMENSION -> {
+                // If the color is written with a leading "0xabcdef", then the
+                // color value is tokenized into a TT_DIMENSION. The unit
+                // contains the leading 'x' and the color value 'abcdef'.
+                if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
+                        && tt.currentStringNonNull().startsWith("x")) {
+                    yield parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
+                } else {
+                    throw tt.createParseException("CssColor: hex color expected.");
+                }
+            }
+            case CssTokenType.TT_HASH -> {
+                yield parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
+            }
+            default -> throw tt.createParseException("CssColor: hex color expected.");
+        };
+    }
+
+    private @Nullable CssColor parseNamedColor(CssTokenizer tt) throws ParseException, IOException {
+        tt.requireNextToken(CssTokenType.TT_IDENT, "CssColor: identifier expected.");
+        String ident = tt.currentString();
+        if ("none".equals(ident)) {
+            return null;
+        }
+        CssColor color = NamedCssColor.of(tt.currentStringNonNull());
+        if (color == null) {
+            color = SystemCssColor.of(tt.currentStringNonNull());
+        }
+        return color;
+    }
+
+    //@Override
+    public @Nullable CssColor parseOld(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws
+            ParseException, IOException {
         CssColor color = null;
 
         if (nullable) {
@@ -84,48 +455,47 @@ public class CssColorConverter implements CssConverter<CssColor> {
         }
 
         switch (tt.next()) {
-        case CssTokenType.TT_DIMENSION:
-            // If the color is written with a leading "0xabcdef", then the
-            // color value is is tokenized into a TT_DIMENSION. The unit
-            // contains the leading 'x' and the color value 'abcdef'.
-            if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
-                    && tt.currentStringNonNull().startsWith("x")) {
-                color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
-            } else {
-                throw tt.createParseException("CssColor: hex color expected.");
-            }
-            break;
-        case CssTokenType.TT_HASH:
-            color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
-            break;
-        case CssTokenType.TT_IDENT:
-            color = NamedCssColor.of(tt.currentStringNonNull());
-            if (color == null) {
-                color = SystemCssColor.of(tt.currentStringNonNull());
-            }
-            break;
-        case CssTokenType.TT_FUNCTION:
-            double[] values = new double[4];
-            switch (tt.currentStringNonNull()) {
-            case "rgba":
-            case "rgb": {
-                color = parseSrgbaColor(tt);
+            case CssTokenType.TT_DIMENSION:
+                // If the color is written with a leading "0xabcdef", then the
+                // color value is tokenized into a TT_DIMENSION. The unit
+                // contains the leading 'x' and the color value 'abcdef'.
+                if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
+                        && tt.currentStringNonNull().startsWith("x")) {
+                    color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
+                } else {
+                    throw tt.createParseException("CssColor: hex color expected.");
+                }
                 break;
-            }
-            case "hsba":
-            case "hsb": {
-                color = parseShsbaColor(tt);
+            case CssTokenType.TT_HASH:
+                color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
                 break;
-            }
+            case CssTokenType.TT_IDENT:
+                color = NamedCssColor.of(tt.currentStringNonNull());
+                if (color == null) {
+                    color = SystemCssColor.of(tt.currentStringNonNull());
+                }
+                break;
+            case CssTokenType.TT_FUNCTION:
+                switch (tt.currentStringNonNull()) {
+                    case "rgba":
+                    case "rgb": {
+                        color = parseSrgbaColor(tt);
+                        break;
+                    }
+                    case "hsba":
+                    case "hsb": {
+                        color = parseShsbaColor(tt);
+                        break;
+                    }
+                    default:
+                        throw tt.createParseException("CssColor: color expected.");
+                }
+                if (tt.next() != ')') {
+                    throw tt.createParseException("CssColor: ')' expected.");
+                }
+                break;
             default:
                 throw tt.createParseException("CssColor: color expected.");
-            }
-            if (tt.next() != ')') {
-                throw tt.createParseException("CssColor: ')' expected.");
-            }
-            break;
-        default:
-            throw tt.createParseException("CssColor: color expected.");
         }
         return color;
     }
@@ -196,54 +566,16 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return color;
     }
 
-    private @NonNull CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
-        try {
-            int v = (int) Long.parseLong(hexdigits, 16);
-            int r, g, b, a;
-            switch (hexdigits.length()) {
-            case 3:
-                r = (((v & 0xf00) >>> 4) | (v & 0xf00) >>> 8);
-                g = (((v & 0x0f0)) | (v & 0x0f0) >>> 4);
-                b = ((v & 0x00f) << 4) | (v & 0x00f);
-                a = 255;
-                return new Uint4HexSrgbaCssColor(r, g, b, a);
-            case 4:
-                r = (((v & 0xf000) >>> 8) | (v & 0xf000) >>> 12);
-                g = (((v & 0x0f00) >>> 4) | (v & 0x0f00) >>> 8);
-                b = (((v & 0x00f0)) | (v & 0x00f0) >>> 4);
-                a = ((v & 0x000f) << 4) | (v & 0x000f);
-                return new Uint4HexSrgbaCssColor(r, g, b, a);
-            case 6:
-                r = (v & 0xff0000) >>> 16;
-                g = (v & 0x00ff00) >>> 8;
-                b = (v & 0x0000ff);
-                a = 255;
-                return new Uint8HexSrgbaCssColor(r, g, b, a);
-            case 8:
-                r = (v & 0xff000000) >>> 24;
-                g = (v & 0x00ff0000) >>> 16;
-                b = (v & 0x0000ff00) >>> 8;
-                a = (v & 0xff);
-                return new Uint8HexSrgbaCssColor(r, g, b, a);
-            default:
-                throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
-            }
-        } catch (NumberFormatException e) {
-            ParseException pe = new ParseException("<hex-digits>: expected a hex-digit. Found:" + hexdigits, startpos);
-            pe.initCause(e);
-            throw pe;
-        }
-    }
-
     @Override
-    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdSupplier
+            idSupplier, @NonNull Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
         }
         StreamCssTokenizer tt = new StreamCssTokenizer(value.getName(), null);
         try {
-            while (tt.next() != CssTokenType.TT_EOF) {
+            while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
                 out.accept(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
             }
         } catch (IOException e) {
