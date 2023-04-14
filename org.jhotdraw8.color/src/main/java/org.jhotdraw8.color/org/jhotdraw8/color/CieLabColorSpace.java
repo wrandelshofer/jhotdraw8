@@ -29,7 +29,7 @@ package org.jhotdraw8.color;
  * </dl>
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class CieLabColorSpace extends AbstractNamedColorSpace {
 

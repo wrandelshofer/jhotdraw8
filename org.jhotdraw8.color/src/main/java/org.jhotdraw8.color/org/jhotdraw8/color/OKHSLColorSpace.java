@@ -16,7 +16,7 @@ import org.jhotdraw8.annotation.NonNull;
  * </dl>
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class OKHSLColorSpace extends AbstractNamedColorSpace {
     private final static @NonNull OKLabColorSpace oklab = new OKLabColorSpace();

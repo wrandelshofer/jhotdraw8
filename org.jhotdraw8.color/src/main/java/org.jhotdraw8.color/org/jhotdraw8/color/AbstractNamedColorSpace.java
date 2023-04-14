@@ -13,7 +13,7 @@ import java.util.Objects;
  * {@code AbstractNamedColorSpace}.
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public abstract class AbstractNamedColorSpace extends ColorSpace implements NamedColorSpace {
     private static final long serialVersionUID = 1L;

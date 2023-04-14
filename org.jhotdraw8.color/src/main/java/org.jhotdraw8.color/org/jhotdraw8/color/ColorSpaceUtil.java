@@ -15,7 +15,7 @@ import java.io.IOException;
  * A utility class for {@code ColorSpace} objects.
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class ColorSpaceUtil {
 

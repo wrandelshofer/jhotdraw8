@@ -13,7 +13,7 @@ import java.awt.color.ColorSpace;
  * perfectly absorb the desired wavelenghts.
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;

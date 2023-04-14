@@ -10,7 +10,7 @@ import java.awt.color.ColorSpace;
  * red is opposite green and yellow is opposite blue.
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class HsvPhysiologicColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;

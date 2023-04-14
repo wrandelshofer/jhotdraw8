@@ -16,7 +16,7 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
  * A color with minimal lightness is pure black.
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class HlsColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;

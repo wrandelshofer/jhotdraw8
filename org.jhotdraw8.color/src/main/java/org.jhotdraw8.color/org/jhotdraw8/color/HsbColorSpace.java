@@ -10,7 +10,7 @@ import java.awt.*;
  * opposite cyan, magenta is opposite green, blue is opposite yellow.
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class HsbColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;

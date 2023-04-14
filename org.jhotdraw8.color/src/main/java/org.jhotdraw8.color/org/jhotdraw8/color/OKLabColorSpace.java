@@ -17,7 +17,7 @@ import java.awt.color.ColorSpace;
  * </dl>
  *
  * @author Werner Randelshofer
- * @version $Id$
+
  */
 public class OKLabColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
