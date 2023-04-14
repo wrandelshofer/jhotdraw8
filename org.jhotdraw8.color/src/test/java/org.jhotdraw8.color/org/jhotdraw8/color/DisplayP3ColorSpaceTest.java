@@ -6,8 +6,8 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.linalg.Matrix3;
-import org.jhotdraw8.color.linalg.Matrix3Float;
+import org.jhotdraw8.color.math.Matrix3;
+import org.jhotdraw8.color.math.Matrix3Float;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

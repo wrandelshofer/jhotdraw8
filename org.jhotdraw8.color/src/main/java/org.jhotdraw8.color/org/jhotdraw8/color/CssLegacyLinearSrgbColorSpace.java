@@ -2,8 +2,8 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.linalg.Matrix3;
-import org.jhotdraw8.color.linalg.Matrix3Double;
+import org.jhotdraw8.color.math.Matrix3;
+import org.jhotdraw8.color.math.Matrix3Double;
 
 import java.util.Arrays;
 

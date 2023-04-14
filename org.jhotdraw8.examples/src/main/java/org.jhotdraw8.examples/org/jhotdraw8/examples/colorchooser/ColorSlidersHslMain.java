@@ -6,6 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -37,9 +38,9 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorRectangleSlider;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.awt.color.ColorSpace;
+import java.util.Arrays;
 import java.util.List;
-
-import static org.jhotdraw8.base.util.MathUtil.clamp;
+import java.util.function.ToIntFunction;
 
 /**
  * Shows sliders for HSB/HSV color spaces.
@@ -115,25 +116,35 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
         alphaSlider.displayColorSpaceProperty().bind(displayColorSpace);
 
         var bitDepthBox = createBitDepthComboBox();
-        colorRectangleSlider.rgbFilterProperty().bind(bitDepthBox.valueProperty());
-        hueSlider.rgbFilterProperty().bind(bitDepthBox.valueProperty());
+        ObjectProperty<ToIntFunction<Integer>> bitDepth = bitDepthBox.valueProperty();
+        colorRectangleSlider.rgbFilterProperty().bind(bitDepth);
+        hueSlider.rgbFilterProperty().bind(bitDepth);
 
         VBox.setVgrow(colorRectangleSlider, Priority.ALWAYS);
         Region selectedColor = new Region();
+        Region selectedColorWithAlpha = new Region();
         Label hexRgbLabel = new Label();
         hexRgbLabel.setMinWidth(80);
         hexRgbLabel.setPrefWidth(80);
         hexRgbLabel.setMaxWidth(80);
-        selectedColor.setMinSize(40, 40);
-        selectedColor.setMaxSize(40, 40);
-        selectedColor.setPrefSize(40, 40);
+        selectedColorWithAlpha.setMinSize(20, 40);
+        selectedColorWithAlpha.setMaxSize(20, 40);
+        selectedColorWithAlpha.setPrefSize(20, 40);
+        selectedColor.setMinSize(20, 40);
+        selectedColor.setMaxSize(20, 40);
+        selectedColor.setPrefSize(20, 40);
         InvalidationListener updateSelectedColor = i -> {
             float[] component = {c0.floatValue(), c1.floatValue(), c2.floatValue()};
             float[] rgb = new float[3];
             displayColorSpace.get().fromRGB(colorSpace.get().toRGB(component, rgb), rgb);
-            Color color = new Color(clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1), alpha.floatValue());
-            selectedColor.setBackground(new Background(new BackgroundFill(color, null, null)));
-            String hexStr = "00000000" + Integer.toHexString(RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue()));
+            int argb = bitDepth.get().applyAsInt(RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue()));
+            Color previewColor = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, 1);
+            Color previewColorWithAlpha = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, alpha.floatValue());
+            //Color previewColor = new Color(clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1), 1);
+            //Color previewColorWithAlpha = new Color(clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1), alpha.floatValue());
+            selectedColor.setBackground(new Background(new BackgroundFill(previewColor, null, null)));
+            selectedColorWithAlpha.setBackground(new Background(new BackgroundFill(previewColorWithAlpha, null, null)));
+            String hexStr = "00000000" + Integer.toHexString(argb);
             hexStr = hexStr.substring(hexStr.length() - 8);
             hexRgbLabel.setText("#" + hexStr.substring(2) + hexStr.substring(0, 2));
         };
@@ -143,13 +154,16 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
         alpha.addListener(updateSelectedColor);
         displayColorSpace.addListener(updateSelectedColor);
         colorSpace.addListener(updateSelectedColor);
+        bitDepth.addListener(updateSelectedColor);
 
         List<TextField> fields = createTextFields(c0, c1, c2);
         HBox componentsHBox = new HBox();
-        componentsHBox.getChildren().addAll(selectedColor, hexRgbLabel, colorSpaceBox);
+        componentsHBox.setAlignment(Pos.BASELINE_LEFT);
+        componentsHBox.getChildren().addAll(selectedColorWithAlpha, selectedColor, hexRgbLabel, colorSpaceBox);
         componentsHBox.getChildren().addAll(fields);
         HBox displayHBox = new HBox();
         displayHBox.getChildren().addAll(new Label("Display:"), displayColorSpaceBox, new Label("Bit Depth:"), bitDepthBox);
+        displayHBox.setAlignment(Pos.BASELINE_LEFT);
         vbox.getChildren().addAll(colorRectangleSlider, hueSlider, alphaSlider, componentsHBox,
                 displayHBox);
 
@@ -158,6 +172,16 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
             hueSlider.c0Property().unbindBidirectional(c1);
             hueSlider.c0Property().unbindBidirectional(c2);
             hueSlider.c0Property().unbind();
+            hueSlider.c1Property().unbindBidirectional(c0);
+            hueSlider.c1Property().unbindBidirectional(c1);
+            hueSlider.c1Property().unbindBidirectional(c2);
+            hueSlider.c1Property().unbind();
+            hueSlider.c2Property().unbindBidirectional(c0);
+            hueSlider.c2Property().unbindBidirectional(c1);
+            hueSlider.c2Property().unbindBidirectional(c2);
+            hueSlider.c2Property().unbind();
+            colorRectangleSlider.c0Property().unbindBidirectional(c0);
+            colorRectangleSlider.c0Property().unbindBidirectional(c1);
             colorRectangleSlider.c0Property().unbindBidirectional(c2);
             colorRectangleSlider.c1Property().unbindBidirectional(c0);
             colorRectangleSlider.c1Property().unbindBidirectional(c1);
@@ -170,10 +194,12 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
             colorRectangleSlider.c2Property().unbind();
 
             float[] xyz = oldv.toCIEXYZ(new float[]{c0.floatValue(), c1.floatValue(), c2.floatValue()});
+            System.out.println(oldv + " setting to xyz " + Arrays.toString(xyz));
             float[] c = newv.fromCIEXYZ(xyz);
             c0.set(c[0]);
             c1.set(c[1]);
             c2.set(c[2]);
+
 
             switch (newv.getType()) {
                 case ColorSpace.TYPE_HSV -> {
@@ -183,6 +209,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
                     hueSlider.setC2(1.0f);//value
                     colorRectangleSlider.setXComponentIndex(1);//saturation
                     colorRectangleSlider.setYComponentIndex(2);//value
+                    colorRectangleSlider.c0Property().bind(c0);
                     colorRectangleSlider.c1Property().bindBidirectional(c1);
                     colorRectangleSlider.c2Property().bindBidirectional(c2);
                 }
@@ -193,6 +220,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
                     hueSlider.setC2(1.0f);//saturation
                     colorRectangleSlider.setYComponentIndex(1);//saturation
                     colorRectangleSlider.setXComponentIndex(2);//lightness
+                    colorRectangleSlider.c0Property().bind(c0);
                     colorRectangleSlider.c1Property().bindBidirectional(c1);
                     colorRectangleSlider.c2Property().bindBidirectional(c2);
                 }
@@ -205,6 +233,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
 
                     colorRectangleSlider.setXComponentIndex(1);//saturation
                     colorRectangleSlider.setYComponentIndex(2);//lightness
+                    colorRectangleSlider.c0Property().bind(c0);
                     colorRectangleSlider.c1Property().bindBidirectional(c1);
                     colorRectangleSlider.c2Property().bindBidirectional(c2);
                 }

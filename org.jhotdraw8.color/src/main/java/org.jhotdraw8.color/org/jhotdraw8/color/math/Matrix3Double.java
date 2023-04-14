@@ -1,7 +1,8 @@
-package org.jhotdraw8.color.linalg;
+package org.jhotdraw8.color.math;
 
 import javafx.geometry.Point3D;
 
+import static java.lang.Math.fma;
 import static org.jhotdraw8.color.util.MathUtil.almostEqual;
 
 /**
@@ -147,9 +148,12 @@ public record Matrix3Double(double a, double b, double c,
                 invdet * cd, invdet * -fd, invdet * id);
     }
 
-    /*
-     * References:<br>
-     * <a href="https://www.chilimath.com/lessons/advanced-algebra/determinant-3x3-matrix/">chilimath.com</a>
+    /**
+     * References:
+     * <dl>
+     *     <dt>Chilimath. The Formula of the Determinant of 3×3 Matrix.</dt>
+     *     <dd><a href="https://www.chilimath.com/lessons/advanced-algebra/determinant-3x3-matrix/">chilimath.com</a></dd>
+     * </dl>
      */
     private double det(double a, double b, double c,
                        double d, double e, double f,
@@ -160,16 +164,22 @@ public record Matrix3Double(double a, double b, double c,
     }
 
     /**
-     * References:<br>
-     * <a href="https://www.chilimath.com/lessons/advanced-algebra/determinant-2x2-matrix/">chilimath.com</a>
-     *
-     *
+     * Computes the determinant of a 2x2 matrix:
      * <pre>
-     *     [a b]
-     *     [c d]
+     *    | [a b] |
+     *    | [c d] | = a * d - b * c
      * </pre>
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>John D. Cook. Accurately computing a 2x2 determinant.</dt>
+     *     <dd><a href="https://www.johndcook.com/blog/2020/05/31/kahan-determinant/">johndcook.com</a></dd>
+     * </dl>
      */
     private double det(double a, double b, double c, double d) {
-        return a * d - b * c;
+        double w = b * c;
+        double e = fma(-b, c, w);
+        double f = fma(a, d, -w);
+        return (f + e);
     }
 }

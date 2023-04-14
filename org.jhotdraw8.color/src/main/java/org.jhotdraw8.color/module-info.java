@@ -13,6 +13,6 @@ module org.jhotdraw8.color {
     requires transitive org.jhotdraw8.annotation;
 
     exports org.jhotdraw8.color;
-    exports org.jhotdraw8.color.linalg;
+    exports org.jhotdraw8.color.math;
     exports org.jhotdraw8.color.util;
 }

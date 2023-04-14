@@ -1,4 +1,4 @@
-package org.jhotdraw8.color.linalg;
+package org.jhotdraw8.color.math;
 
 import javafx.geometry.Point3D;
 

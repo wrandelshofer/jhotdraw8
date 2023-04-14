@@ -15,7 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractNamedColorSpaceTest {
-    static final float EPSILON = 1f / 256;
+    /**
+     * Number of precision bits.
+     */
+    static final float EPSILON = 0x1p-10f;
 
     protected abstract @NonNull NamedColorSpace getInstance();
 
@@ -72,7 +75,7 @@ public abstract class AbstractNamedColorSpaceTest {
             float linear = toLinear.apply(value);
             float actualValue = fromLinear.apply(linear);
 
-            assertEquals(value, actualValue, 1e-6, "i=" + i + " linear=" + linear);
+            assertEquals(value, actualValue, EPSILON, "i=" + i + " linear=" + linear);
         }
 
         // should biject with values out of positive range
@@ -82,7 +85,7 @@ public abstract class AbstractNamedColorSpaceTest {
             float linear = toLinear.apply(value);
             float actualValue = fromLinear.apply(linear);
 
-            assertEquals(value, actualValue, 1e-6, "i=" + i + " linear=" + linear);
+            assertEquals(value, actualValue, EPSILON, "i=" + i + " linear=" + linear);
         }
 
         // should biject with values out of negative range
@@ -92,7 +95,7 @@ public abstract class AbstractNamedColorSpaceTest {
             float linear = toLinear.apply(value);
             float actualValue = fromLinear.apply(linear);
 
-            assertEquals(value, actualValue, 1e-6, "i=" + i + " linear=" + linear);
+            assertEquals(value, actualValue, EPSILON, "i=" + i + " linear=" + linear);
         }
     }
 
@@ -181,8 +184,10 @@ public abstract class AbstractNamedColorSpaceTest {
                             // When hue is almost at max it is acceptable if it is at almost at min
                             assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
                             assertEquals(componentf[2], actualComponentf[2], eps2, cs.getName(2));
-                            assertTrue(almostEqual(cs.getMinValue(0), actualComponentf[0], eps0)
-                                    || almostEqual(cs.getMaxValue(0), actualComponentf[0], eps0), cs.getName(0));
+                            assertTrue(almostEqual(componentf[0], actualComponentf[0], eps0)
+                                            || almostEqual(cs.getMinValue(0), actualComponentf[0], eps0)
+                                            || almostEqual(cs.getMaxValue(0), actualComponentf[0], eps0),
+                                    cs.getName(0) + " wrap around max/min");
 
                         } else if (cs.getType() == NamedColorSpace.TYPE_HSL
                                 && (almostEqual(cs.getMinValue(2), componentf[2], eps1)
@@ -262,10 +267,10 @@ public abstract class AbstractNamedColorSpaceTest {
         float[] actualBlueXYZ = instance.toCIEXYZ(instance.fromRGB(blue));
         float[] actualWhiteXYZ = instance.toCIEXYZ(instance.fromRGB(white));
 
-        assertArrayEquals(expectedRedXYZ, actualRedXYZ, 1e-3f, "red");
-        assertArrayEquals(expectedGreenXYZ, actualGreenXYZ, 1e-3f, "green");
-        assertArrayEquals(expectedBlueXYZ, actualBlueXYZ, 1e-3f, "blue");
-        assertArrayEquals(expectedWhiteXYZ, actualWhiteXYZ, 1e-3f, "white");
+        assertArrayEquals(expectedRedXYZ, actualRedXYZ, EPSILON, "red");
+        assertArrayEquals(expectedGreenXYZ, actualGreenXYZ, EPSILON, "green");
+        assertArrayEquals(expectedBlueXYZ, actualBlueXYZ, EPSILON, "blue");
+        assertArrayEquals(expectedWhiteXYZ, actualWhiteXYZ, EPSILON, "white");
     }
 
 }

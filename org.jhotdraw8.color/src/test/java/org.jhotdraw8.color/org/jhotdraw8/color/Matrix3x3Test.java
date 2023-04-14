@@ -1,6 +1,6 @@
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.color.linalg.Matrix3Double;
+import org.jhotdraw8.color.math.Matrix3Double;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;

@@ -1,4 +1,4 @@
-package org.jhotdraw8.color.linalg;
+package org.jhotdraw8.color.math;
 
 import javafx.geometry.Point3D;
 
@@ -59,7 +59,11 @@ public record Matrix3Float(float a, float b, float c,
 
     @Override
     public Point3D mul(double a1, double a2, double a3) {
-        return null;
+        return new Point3D(
+                a * a1 + b * a2 + c * a3,
+                d * a1 + e * a2 + f * a3,
+                g * a1 + h * a2 + i * a3
+        );
     }
 
     /**

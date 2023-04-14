@@ -1,7 +1,7 @@
 package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.linalg.Matrix3;
+import org.jhotdraw8.color.math.Matrix3;
 
 import java.awt.color.ColorSpace;
 

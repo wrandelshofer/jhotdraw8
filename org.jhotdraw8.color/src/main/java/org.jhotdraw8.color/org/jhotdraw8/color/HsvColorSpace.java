@@ -131,18 +131,6 @@ public class HsvColorSpace extends AbstractNamedColorSpace {
         return component;
     }
 
-
-
-    @Override
-    public float getMaxValue(int component) {
-        return component == 0 ? 360f : 1f;
-    }
-
-    @Override
-    public float getMinValue(int component) {
-        return 0f;
-    }
-
     @Override
     public String getName() {
         return "HSV";
