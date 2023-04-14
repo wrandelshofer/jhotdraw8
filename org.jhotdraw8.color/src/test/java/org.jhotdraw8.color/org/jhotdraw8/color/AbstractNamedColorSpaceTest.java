@@ -16,9 +16,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractNamedColorSpaceTest {
     /**
-     * Number of precision bits.
+     * Number of precision bits (used by most tests in this class).
      */
-    static final float EPSILON = 0x1p-10f;
+    static final float EPSILON = 0x1p-12f;
+    /**
+     * Number of precision bits (used for comparing the Java sRGB-ColorSpace implementation
+     * with the test instance).
+     */
+    private static final float EPSILON_EXPECTED_XYZ = 0x1p-10f;
 
     protected abstract @NonNull NamedColorSpace getInstance();
 
@@ -267,10 +272,10 @@ public abstract class AbstractNamedColorSpaceTest {
         float[] actualBlueXYZ = instance.toCIEXYZ(instance.fromRGB(blue));
         float[] actualWhiteXYZ = instance.toCIEXYZ(instance.fromRGB(white));
 
-        assertArrayEquals(expectedRedXYZ, actualRedXYZ, EPSILON, "red");
-        assertArrayEquals(expectedGreenXYZ, actualGreenXYZ, EPSILON, "green");
-        assertArrayEquals(expectedBlueXYZ, actualBlueXYZ, EPSILON, "blue");
-        assertArrayEquals(expectedWhiteXYZ, actualWhiteXYZ, EPSILON, "white");
+        assertArrayEquals(expectedRedXYZ, actualRedXYZ, EPSILON_EXPECTED_XYZ, "red");
+        assertArrayEquals(expectedGreenXYZ, actualGreenXYZ, EPSILON_EXPECTED_XYZ, "green");
+        assertArrayEquals(expectedBlueXYZ, actualBlueXYZ, EPSILON_EXPECTED_XYZ, "blue");
+        assertArrayEquals(expectedWhiteXYZ, actualWhiteXYZ, EPSILON_EXPECTED_XYZ, "white");
     }
 
 }

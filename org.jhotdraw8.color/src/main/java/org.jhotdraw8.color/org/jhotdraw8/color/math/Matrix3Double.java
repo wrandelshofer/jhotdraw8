@@ -80,31 +80,25 @@ public record Matrix3Double(double a, double b, double c,
         );
     }
 
-    /**
-     * Vector multiplication.
-     * <pre>
-     * x1       [a1]
-     * x2 = M * [a2]
-     * x3       [a3]
-     * </pre>
-     */
+   @Override
     public float[] mul(float[] x, float[] y) {
-        float x0 = x[0];
-        float x1 = x[1];
-        float x2 = x[2];
-        y[0] = (float) (a * x0 + b * x1 + c * x2);
-        y[1] = (float) (d * x0 + e * x1 + f * x2);
-        y[2] = (float) (g * x0 + h * x1 + i * x2);
-        return y;
-    }
+       float x0 = x[0];
+       float x1 = x[1];
+       float x2 = x[2];
+       y[0] = (float) fma(a, x0, fma(b, x1, c * x2));
+       y[1] = (float) fma(d, x0, fma(e, x1, f * x2));
+       y[2] = (float) fma(g, x0, fma(h, x1, i * x2));
+       return y;
+   }
 
+    @Override
     public double[] mul(double[] x, double[] y) {
         double x0 = x[0];
         double x1 = x[1];
         double x2 = x[2];
-        y[0] = (a * x0 + b * x1 + c * x2);
-        y[1] = (d * x0 + e * x1 + f * x2);
-        y[2] = (g * x0 + h * x1 + i * x2);
+        y[0] = fma(a, x0, fma(b, x1, c * x2));
+        y[1] = fma(d, x0, fma(e, x1, f * x2));
+        y[2] = fma(g, x0, fma(h, x1, i * x2));
         return y;
     }
 
@@ -112,24 +106,28 @@ public record Matrix3Double(double a, double b, double c,
     public Matrix3Double mul(Matrix3 M) {
         Matrix3Double that = M.toDouble();
         return new Matrix3Double(
-                a * that.a + b * that.d + c * that.g,
-                a * that.b + b * that.e + c * that.h,
-                a * that.c + b * that.f + c * that.i,
-
-                d * that.a + e * that.d + f * that.g,
-                d * that.b + e * that.e + f * that.h,
-                d * that.c + e * that.f + f * that.i,
-
-                g * that.a + h * that.d + i * that.g,
-                g * that.b + h * that.e + i * that.h,
-                g * that.c + h * that.f + i * that.i
+                fma(a, that.a, fma(b, that.d, c * that.g)),
+                fma(a, that.b, fma(b, that.e, c * that.h)),
+                fma(a, that.c, fma(b, that.f, c * that.i)),
+                fma(d, that.a, fma(e, that.d, f * that.g)),
+                fma(d, that.b, fma(e, that.e, f * that.h)),
+                fma(d, that.c, fma(e, that.f, f * that.i)),
+                fma(g, that.a, fma(h, that.d, i * that.g)),
+                fma(g, that.b, fma(h, that.e, i * that.h)),
+                fma(g, that.c, fma(h, that.f, i * that.i))
         );
     }
 
     /**
-     * References:<br>
-     * <a href="https://www.wikihow.com/Find-the-Inverse-of-a-3x3-Matrix">wikihow.com</a><br>
-     * <a href="https://www.chilimath.com/lessons/advanced-algebra/determinant-2x2-matrix/">chilimath.com</a>
+     * References:
+     * <dl>
+     *     <dt>Mario Banuelos. wikiHow. How to Find the Inverse of a 3x3 Matrix.</dt>
+     *     <dd><a href="https://www.wikihow.com/Find-the-Inverse-of-a-3x3-Matrix">wikihow.com</a></dd>
+     *
+     *     <dt>Chilimath. Determinant of a 2×2 Matrix.</dt>
+     *     <dd><a href="https://www.chilimath.com/lessons/advanced-algebra/determinant-2x2-matrix/">chilimath.com</a></dd>
+     *
+     * </dl>
      */
     public Matrix3Double inv() {
         double invdet = 1.0 / det();

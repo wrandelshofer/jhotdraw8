@@ -2,7 +2,6 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 
-import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D50;
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D50_XYZ;
 
 /**
@@ -31,8 +30,8 @@ public class ProPhotoRgbColorSpace extends ParametricNonLinearRgbColorSpace {
                         new Point2D(0.734699, 0.265301),
                         new Point2D(0.159597, 0.840403),
                         new Point2D(0.036598, 0.000105),
-                        ILLUMINANT_D50, ILLUMINANT_D50_XYZ,
-                        0f, 1f),
+                        ILLUMINANT_D50_XYZ
+                ),
                 ProPhotoRgbColorSpace::toLinear,
                 ProPhotoRgbColorSpace::fromLinear
         );

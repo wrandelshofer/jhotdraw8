@@ -15,15 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
  * </dl>
  */
 public class ParameterizedLinearRgbColorSpaceTest {
+    private static final double EPSILON = 0x1p-10;
+
     @Test
-    public void shouldYieldExpectedMatrixForNtscWithEWhitePoint() {
+    public void shouldYieldExpectedMatrixForNtscWithIlluminantE() {
         ParametricLinearRgbColorSpace cs = new ParametricLinearRgbColorSpace("NTSC EE",
                 new Point2D(0.67, 0.33),
                 new Point2D(0.21, 0.71),
                 new Point2D(0.14, 0.08),
-                ParametricLinearRgbColorSpace.ILLUMINANT_E,
-                ParametricLinearRgbColorSpace.ILLUMINANT_E_XYZ,
-                0f, 1f);
+                ParametricLinearRgbColorSpace.ILLUMINANT_E_XYZ
+        );
         Matrix3Double expectedMatrix =
                 ParametricLinearRgbColorSpace.computeChromaticAdaptationMatrix(ParametricLinearRgbColorSpace.ILLUMINANT_E_XYZ,
                         ParametricLinearRgbColorSpace.ILLUMINANT_D50_XYZ).mul(
@@ -33,18 +34,17 @@ public class ParameterizedLinearRgbColorSpaceTest {
                                 0, 0.0652, 0.9348
                         ));
         Matrix3 actualMatrix = cs.getToXyzMatrix();
-        assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), 1e-4);
+        assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), EPSILON);
     }
 
     @Test
-    public void shouldYieldExpectedMatrixForNtscWithCWhitePoint() {
+    public void shouldYieldExpectedMatrixForNtscWithIlluminantC() {
         ParametricLinearRgbColorSpace cs = new ParametricLinearRgbColorSpace("NTSC C",
                 new Point2D(0.67, 0.33),
                 new Point2D(0.21, 0.71),
                 new Point2D(0.14, 0.08),
-                ParametricLinearRgbColorSpace.ILLUMINANT_C,
-                ParametricLinearRgbColorSpace.ILLUMINANT_C_XYZ,
-                0f, 1f);
+                ParametricLinearRgbColorSpace.ILLUMINANT_C_XYZ
+        );
         Matrix3Double expectedMatrix =
                 ParametricLinearRgbColorSpace.computeChromaticAdaptationMatrix(ParametricLinearRgbColorSpace.ILLUMINANT_C_XYZ,
                         ParametricLinearRgbColorSpace.ILLUMINANT_D50_XYZ).mul(
@@ -54,18 +54,17 @@ public class ParameterizedLinearRgbColorSpaceTest {
                                 0, 0.0661, 1.1175
                         ));
         Matrix3 actualMatrix = cs.getToXyzMatrix();
-        assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), 1e-4);
+        assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), EPSILON);
     }
 
     @Test
-    public void shouldYieldExpectedMatrixForsRGbLinearWithD65WhitePoint() {
+    public void shouldYieldExpectedMatrixForsRGbLinearWithIlluminantD65() {
         ParametricLinearRgbColorSpace cs = new ParametricLinearRgbColorSpace("sRGB Linear",
                 new Point2D(0.64, 0.33),
                 new Point2D(0.3, 0.6),
                 new Point2D(0.15, 0.06),
-                ParametricLinearRgbColorSpace.ILLUMINANT_D65,
-                ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ,
-                0f, 1f);
+                ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ
+        );
         Matrix3Double expectedMatrix =
                 ParametricLinearRgbColorSpace.computeChromaticAdaptationMatrix(ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ,
                         ParametricLinearRgbColorSpace.ILLUMINANT_D50_XYZ).mul(
@@ -76,7 +75,7 @@ public class ParameterizedLinearRgbColorSpaceTest {
                         ));
         Matrix3 actualMatrix = cs.getToXyzMatrix();
 
-        assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), 1e-4);
+        assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), EPSILON);
     }
 
     /**
@@ -94,7 +93,7 @@ public class ParameterizedLinearRgbColorSpaceTest {
                     0.0122982, -0.0204830, 1.3299098
             );
             Matrix3 actualMatrix = mD65toD50;
-            assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), 1e-4);
+            assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), EPSILON);
         }
 
         {
@@ -108,7 +107,7 @@ public class ParameterizedLinearRgbColorSpaceTest {
             );
             Matrix3 actualMatrix = mD65toD50;
 
-            assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), 1e-4);
+            assertArrayEquals(expectedMatrix.toDoubleArray(), actualMatrix.toDoubleArray(), EPSILON);
         }
     }
 

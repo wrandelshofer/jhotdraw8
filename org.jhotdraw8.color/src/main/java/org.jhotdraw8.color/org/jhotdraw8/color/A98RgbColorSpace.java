@@ -2,7 +2,6 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 
-import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65;
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ;
 
 /**
@@ -26,8 +25,8 @@ public class A98RgbColorSpace extends ParametricNonLinearRgbColorSpace {
                 new Point2D(0.64, 0.33),
                 new Point2D(0.21, 0.71),
                 new Point2D(0.15, 0.06),
-                ILLUMINANT_D65, ILLUMINANT_D65_XYZ,
-                0f, 1f), A98RgbColorSpace::toLinear, A98RgbColorSpace::fromLinear);
+                ILLUMINANT_D65_XYZ
+        ), A98RgbColorSpace::toLinear, A98RgbColorSpace::fromLinear);
     }
 
     /**

@@ -15,7 +15,7 @@ public class CieRgbColorSpace extends ParametricLinearRgbColorSpace {
         super("Linear CIE RGB", new Point2D(0.73474284, 0.26525716),
                 new Point2D(0.27377903, 0.7174777),
                 new Point2D(0.16655563, 0.00891073),
-                ILLUMINANT_E, ILLUMINANT_E_XYZ,
-                0f, 1f);
+                ILLUMINANT_E_XYZ
+        );
     }
 }

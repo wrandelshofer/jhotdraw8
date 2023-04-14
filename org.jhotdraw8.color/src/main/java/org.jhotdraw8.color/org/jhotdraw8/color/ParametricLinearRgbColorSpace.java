@@ -63,19 +63,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">www.brucelindbloom.com</a>.
      */
     public static final Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
-    //new Matrix3Double(
-    //        1.0479298208405488, 0.022946793341019088, -0.05019222954313557,
-    //        0.029627815688159344, 0.990434484573249, -0.01707382502938514,
-    //        -0.009243058152591178, 0.015055144896577895, 0.7518742899580008
-    //);
-    /**
-     * The chromaticity coordinates (x,y) of the C white illuminant.
-     */
-    public final static @NonNull Point2D ILLUMINANT_C = new Point2D(0.310, 0.316);
-    /**
-     * The chromaticity coordinates (x,y) of the D50 white illuminant.
-     */
-    public final static @NonNull Point2D ILLUMINANT_D50 = new Point2D(0.3457, 0.3585);
+
     /**
      * The XYZ coordinates of the D50 white illuminant.
      */
@@ -96,10 +84,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * The chromaticity coordinates (x,y) of the D65 white illuminant.
      */
     public final static @NonNull Point2D ILLUMINANT_D65 = new Point2D(0.3127, 0.3290);
-    /**
-     * The chromaticity coordinates (x,y) of the equal energy white illuminant.
-     */
-    public final static @NonNull Point2D ILLUMINANT_E = new Point2D(1d / 3, 1d / 3);
+
     private static final @NonNull Matrix3Double FROM_LINEAR_SRGB_TO_D65_XYZ_MATRIX = computeToXyzMatrix(new Point2D(0.64, 0.33),
             new Point2D(0.3, 0.6),
             new Point2D(0.15, 0.06),
@@ -159,28 +144,25 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param red            the CIE chroma (x,y) red primary
      * @param green          the CIE chroma (x,y) green primary
      * @param blue           the CIE chroma (x,y) blue primary
-     * @param whitePoint_xy  the white point (x,y)
      * @param whitePoint_XYZ the white point (XYZ)
-     * @param minValue
-     * @param maxValue
      */
     public ParametricLinearRgbColorSpace(@NonNull String name,
                                          @NonNull Point2D red,
                                          @NonNull Point2D green,
                                          @NonNull Point2D blue,
-                                         @NonNull Point2D whitePoint_xy,
-                                         @NonNull Point3D whitePoint_XYZ,
-                                         float minValue, float maxValue) {
+                                         @NonNull Point3D whitePoint_XYZ) {
         super(ColorSpace.TYPE_RGB, 3);
         this.name = name;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+        this.minValue = 0;
+        this.maxValue = 1;
+
+        @NonNull Point2D whitePoint_xy = convertXYZToxy(whitePoint_XYZ);
 
         Matrix3Double toXyzMatrixDouble = computeToXyzMatrix(red, green, blue, whitePoint_xy);
 
         Matrix3Double toD50XyzMatrixDouble;
         Matrix3Double toLinearSrgbMatrixDouble;
-        if (!whitePoint_xy.equals(ILLUMINANT_D50)) {
+        if (!whitePoint_XYZ.equals(ILLUMINANT_D50_XYZ)) {
             Matrix3Double mA = computeChromaticAdaptationMatrix(whitePoint_XYZ, ILLUMINANT_D50_XYZ);
             toD50XyzMatrixDouble = mA.mul(toXyzMatrixDouble);
             toLinearSrgbMatrixDouble = FROM_D65_XYZ_TO_LINEAR_SRGB_MATRIX.mul(toXyzMatrixDouble);
@@ -193,6 +175,28 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
         this.fromXyzMatrix = toD50XyzMatrixDouble.inv();
         this.toLinearSrgbMatrix = toLinearSrgbMatrixDouble;
         this.fromLinearSrgbMatrix = toLinearSrgbMatrixDouble.inv();
+    }
+
+    /**
+     * Converts a point from XZY coordinates in to xyY.
+     * <pre>
+     *     x = X / (X + Y + Z)
+     *     y = Y / (X + Y + Z)
+     *     z = Z / (X + Y + Z) = 1 - x - y
+     *     Y = Y
+     * </pre>
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>CIE 1931 color space. CIE xy chromaticity diagram and the CIE xyY color space</dt>
+     *     <dd><a href="https://en.wikipedia.org/wiki/CIE_1931_color_space#CIE_xy_chromaticity_diagram_and_the_CIE_xyY_color_space>wikipedia.org</a></dd>
+     * </dl>
+     */
+    private Point2D convertXYZToxy(Point3D XYZ) {
+        double X = XYZ.getX();
+        double Y = XYZ.getY();
+        double sum = X + Y + XYZ.getZ();
+        return new Point2D(X / sum, Y / sum);
     }
 
     /**

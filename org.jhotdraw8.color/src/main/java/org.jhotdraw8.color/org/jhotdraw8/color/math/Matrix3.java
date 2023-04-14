@@ -30,9 +30,9 @@ public interface Matrix3 {
     /**
      * Vector multiplication.
      * <pre>
-     * x1       [a1]
-     * x2 = M * [a2]
-     * x3       [a3]
+     * y0       [x0]
+     * y1 = M * [x1]
+     * y2       [x2]
      * </pre>
      */
     float[] mul(float[] x, float[] y);
@@ -40,9 +40,9 @@ public interface Matrix3 {
     /**
      * Vector multiplication.
      * <pre>
-     * x1       [a1]
-     * x2 = M * [a2]
-     * x3       [a3]
+     * y0       [x0]
+     * y1 = M * [x1]
+     * y2       [x2]
      * </pre>
      */
     double[] mul(double[] x, double[] y);

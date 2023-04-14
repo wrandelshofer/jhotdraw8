@@ -2,7 +2,6 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 
-import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65;
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_XYZ;
 
 /**
@@ -27,8 +26,8 @@ public class Rec2020ColorSpace extends ParametricNonLinearRgbColorSpace {
                         new Point2D(0.708, 0.292),
                         new Point2D(0.170, 0.797),
                         new Point2D(0.131, 0.046),
-                        ILLUMINANT_D65, ILLUMINANT_D65_XYZ,
-                        0f, 1f),
+                        ILLUMINANT_D65_XYZ
+                ),
                 Rec2020ColorSpace::toLinear, Rec2020ColorSpace::fromLinear
         );
     }
