@@ -85,7 +85,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
 
         @Override
         public String getPresentationName() {
-            return getResourceBundle().getString("edit.Property");
+            return getResourceBundle().getString("edit.changePropertyValue");
         }
 
         @Override
