@@ -8,6 +8,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import org.jhotdraw8.annotation.NonNull;
@@ -15,11 +17,11 @@ import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+
+import static org.jhotdraw8.fxcontrols.colorchooser.HlsChooser.createCheckerboardPattern;
 
 public class AlphaChooser extends VBox {
     private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
@@ -69,16 +71,6 @@ public class AlphaChooser extends VBox {
 
     private AlphaSlider alphaSlider;
 
-    /**
-     * Keep strong references to bindings.
-     */
-    private List<Object> refs = new ArrayList<>();
-
-    private <T> T ref(T binding) {
-        refs.add(binding);
-        return binding;
-    }
-
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -86,8 +78,10 @@ public class AlphaChooser extends VBox {
 
         alphaSlider = new AlphaSlider();
         alphaPane.setCenter(alphaSlider);
+        Background checkerboardBackground = new Background(new BackgroundFill(createCheckerboardPattern(4, 0xffffffff, 0xffaaaaaa), null, null));
+        alphaSlider.setBackground(checkerboardBackground);
 
-        Via<ColorChooserPaneModel> viaModel = ref(new Via<>(model));
+        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
         alphaSlider.c0Property().bind(viaModel.via(ColorChooserPaneModel::c0Property).get());
         alphaSlider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
         alphaSlider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());

@@ -33,10 +33,11 @@
         <TextField fx:id="targetColorField" maxWidth="400.0" minWidth="100.0" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
         <ComboBox fx:id="displayDepthCombo" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
         <Label text="%colorchooser.chooser.text" GridPane.columnIndex="1"/>
-        <ComboBox fx:id="colorChooserCombo" prefWidth="150.0" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="chooserCombo" prefWidth="150.0" GridPane.columnIndex="2"/>
         <Region fx:id="targetColorRegion" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" translateY="4.0" GridPane.rowIndex="1"/>
         <ComboBox fx:id="targetSyntaxCombo" maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
         <Label fx:id="displayColorField" GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+        <Label fx:id="chooserColorField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.columnSpan="2"/>
       </children>
     </GridPane>
   </children>

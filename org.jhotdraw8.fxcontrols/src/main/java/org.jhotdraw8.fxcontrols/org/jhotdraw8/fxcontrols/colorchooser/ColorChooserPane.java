@@ -30,8 +30,6 @@ import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -50,6 +48,8 @@ public class ColorChooserPane extends VBox {
 
     @FXML // fx:id="displayColorField"
     private Label displayColorField; // Value injected by FXMLLoader
+    @FXML // fx:id="sourceColorField"
+    private Label sourceColorField; // Value injected by FXMLLoader
 
     @FXML // fx:id="displayColorSpaceCombo"
     private ComboBox<NamedColorSpace> displayColorSpaceCombo; // Value injected by FXMLLoader
@@ -67,8 +67,8 @@ public class ColorChooserPane extends VBox {
     private ComboBox<NamedColorSpace> targetColorSpaceCombo; // Value injected by FXMLLoader
     @FXML // fx:id="targetSyntaxCombo"
     private ComboBox<ColorChooserPaneModel.ColorSyntax> targetSyntaxCombo; // Value injected by FXMLLoader
-    @FXML // fx:id="colorChooserCombo"
-    private ComboBox<ColorChooserPaneModel.ChooserType> colorChooserCombo; // Value injected by FXMLLoader
+    @FXML // fx:id="chooserCombo"
+    private ComboBox<ColorChooserPaneModel.ChooserType> chooserCombo; // Value injected by FXMLLoader
 
     @FXML // fx:id="targetLabel"
     private Label targetLabel; // Value injected by FXMLLoader
@@ -96,16 +96,6 @@ public class ColorChooserPane extends VBox {
         }
     }
 
-    /**
-     * Keep strong references to bindings.
-     */
-    private List<Object> refs = new ArrayList<>();
-
-    private <T> T ref(T binding) {
-        refs.add(binding);
-        return binding;
-    }
-
     private static URL getFxml() {
         String name = "ColorChooserPane.fxml";
         return Objects.requireNonNull(ColorChooserPane.class.getResource(name), name);
@@ -115,19 +105,20 @@ public class ColorChooserPane extends VBox {
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert targetSyntaxCombo != null : "fx:id=\"targetSyntaxCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
-        assert colorChooserCombo != null : "fx:id=\"colorChooserCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
+        assert chooserCombo != null : "fx:id=\"chooserCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert choosersPane != null : "fx:id=\"alphaSliderPane\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert displayColorField != null : "fx:id=\"displayColorField\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert displayColorSpaceCombo != null : "fx:id=\"displayColorSpaceCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert displayDepthCombo != null : "fx:id=\"displayDepthCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert targetColorRegion != null : "fx:id=\"targetColorRegion\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert targetColorField != null : "fx:id=\"targetColorField\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
+        assert sourceColorField != null : "fx:id=\"sourceColorField\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert targetColorSpaceCombo != null : "fx:id=\"targetColorSpaceCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert targetLabel != null : "fx:id=\"targetLabel\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
 
         initSubPane();
 
-        Via<ColorChooserPaneModel> viaModel = ref(new Via<>(model));
+        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
         targetColorSpaceCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpacesProperty).get());
         targetColorSpaceCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
         displayColorSpaceCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpacesProperty).get());
@@ -136,9 +127,9 @@ public class ColorChooserPane extends VBox {
         displayDepthCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get());
         targetSyntaxCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSyntaxesProperty).get());
         targetSyntaxCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorSyntaxProperty).get());
-        colorChooserCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::colorChoosersProperty).get());
-        colorChooserCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chooserTypeProperty).get());
-        viaModel.via(ColorChooserPaneModel::previewColorProperty).get().addListener(this.<ChangeListener<? super Color>>ref(this::updatePreviewColor));
+        chooserCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::colorChoosersProperty).get());
+        chooserCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chooserTypeProperty).get());
+        viaModel.via(ColorChooserPaneModel::previewColorProperty).get().addListener((ChangeListener<? super Color>) this::updatePreviewColor);
     }
 
     private void initSubPane() {

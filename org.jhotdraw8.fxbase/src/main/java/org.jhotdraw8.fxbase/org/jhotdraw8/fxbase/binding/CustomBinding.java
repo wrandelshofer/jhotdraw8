@@ -179,21 +179,6 @@ public class CustomBinding {
         mediatorB.addListener(changeListener);
     }
 
-    /**
-     * Binds property 'a' to property 'b'. Property 'a' is provided by 'mediatorA'.
-     * <p>
-     * When 'a' is unbound from 'b', its value is set to 'null'.
-     *
-     * @param <T>       the type of properties 'a' and 'b'
-     * @param <M>       the type of the mediator property
-     * @param propertyA property 'a'
-     * @param mediatorA the mediator property
-     * @param propertyB property 'b'
-     */
-    public static <T, M> void bind(@NonNull ObservableValue<M> mediatorA,
-                                   @NonNull Function<M, Property<T>> propertyA, @NonNull ObservableValue<T> propertyB) {
-        bind(mediatorA, propertyA, propertyB, null);
-    }
 
     /**
      * Binds property 'a' to property 'b'. Property 'a' is provided by 'mediatorA'.

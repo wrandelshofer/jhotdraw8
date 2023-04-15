@@ -92,7 +92,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
                 getC0(), getC1(), getC2(), getC3(), getXComponentIndex(), getYComponentIndex(),
-                getRgbFilter() == null ? i -> i : getRgbFilter()));
+                getAlpha(), getRgbFilter() == null ? i -> i : getRgbFilter()));
     }
 
 
@@ -177,7 +177,8 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             float[] sRgb = new float[3];
             float[] tRgb = new float[3];
             float[] dRgb = new float[3];
-            float[] scratch = new float[3];
+            float[] pre = new float[3];
+            float alpha = record.alpha();
             int[] array = b.array();
 
             ToIntFunction<Integer> filter = record.rgbFilter();
@@ -196,13 +197,13 @@ public class ColorRectangleSlider extends AbstractColorSlider {
                     colorValue[xIndex] = xval;
                     colorValue[yIndex] = yval;
 
-                    int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch);
+                    int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre, alpha);
                     argb = filter.applyAsInt(argb);
                     array[x + xy] = argb;
                 }
             }
-
         }
+
     }
 
 

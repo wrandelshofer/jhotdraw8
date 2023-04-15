@@ -6,6 +6,9 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorChooserPane;
 
+/**
+ * Displays the ColorChooserPane in the primary stage.
+ */
 public class ColorChooserPaneMain extends Application {
 
     @Override
@@ -16,7 +19,7 @@ public class ColorChooserPaneMain extends Application {
 
         Scene scene = new Scene(root, 300, 250);
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("JHotDraw8 Color Chooser");
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();

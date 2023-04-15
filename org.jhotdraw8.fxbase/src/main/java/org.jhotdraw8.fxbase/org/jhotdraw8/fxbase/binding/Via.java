@@ -9,48 +9,111 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.lang.ref.WeakReference;
 import java.util.function.Function;
 
 /**
- * Provides a binding via another binding.
+ * Builder for bindings that go via multiple properties.
  * <p>
- * Keeps hard references between the bindings.
+ * Usage: Bind a text field to {@code person.address.city}.
+ * <pre>
+ *     TextField cityField;
+ *
+ *     Via via = new Via(personProperty);
+ *     cityField.textProperty().bindBidirectional(
+ *         via.via(Person::addressProperty)
+ *         .via(Address::cityProperty)
+ *         .get()
+ *     );
+ * </pre>
+ * <p>
+ * Creates change listeners that are strongly referenced from the root object.
+ * <p>
+ * When the root object is garbage collected, the change listeners unregister themselves.
  */
 public class Via<T> {
-    private final @NonNull Property<T> root;
-    private @Nullable List<ChangeListener<T>> hardReferences;
+    private final @NonNull WeakReference<Property<?>> weakReferenceToRoot;
+    private final @NonNull Property<T> intermediate;
 
-    public Via(@NonNull Property<T> root) {
-        this.root = Objects.requireNonNull(root, "mediator");
-
+    /**
+     * Creates a new via builder.
+     *
+     * @param weakReferenceToRoot the root property
+     */
+    public Via(@NonNull Property<T> weakReferenceToRoot) {
+        this.weakReferenceToRoot = new WeakReference<>(weakReferenceToRoot);
+        this.intermediate = weakReferenceToRoot;
     }
 
-    public <U> Via<U> via(Function<T, Property<U>> viaFunction) {
-        ObjectProperty<U> next = new SimpleObjectProperty<>();
-        final ChangeListener<T> changeListener = (o, oldv, newv) -> {
+    private Via(@NonNull WeakReference<Property<?>> weakReferenceToRoot, @NonNull Property<T> intermediate) {
+        this.weakReferenceToRoot = weakReferenceToRoot;
+        this.intermediate = intermediate;
+    }
+
+    /**
+     * Builds a new via step.
+     *
+     * @param viaFunction a function that returns the desired property
+     * @param <U>         the type of the property
+     * @return a via binding to the property
+     */
+    public <U> Via<U> via(@NonNull Function<T, Property<U>> viaFunction) {
+        // Create a change listener that has strong references to
+        // - the 'viaFunction' function
+        // - the intermediate 'next' property.
+        ViaChangeListener<T, U> changeListener = new ViaChangeListener<>(weakReferenceToRoot, intermediate, viaFunction);
+        changeListener.changed(intermediate, null, intermediate.getValue());
+
+        // Calling addListener creates a strong reference to 'changeListener'.
+        intermediate.addListener(changeListener);
+        return new Via<>(weakReferenceToRoot, changeListener.next);
+    }
+
+    /**
+     * Internally used change listener.
+     *
+     * @param <T>
+     * @param <U>
+     */
+    private static class ViaChangeListener<T, U> implements ChangeListener<T> {
+        private final @NonNull ObjectProperty<U> next = new SimpleObjectProperty<>();
+        private final @NonNull Function<T, Property<U>> viaFunction;
+        private final @NonNull WeakReference<Property<?>> weakReferenceToRoot;
+        final private @NonNull Property<T> intermediate;
+
+        private ViaChangeListener(@NonNull WeakReference<Property<?>> weakReferenceToRoot, @NonNull Property<T> intermediate, @NonNull Function<T, Property<U>> viaFunction) {
+            this.viaFunction = viaFunction;
+            this.weakReferenceToRoot = weakReferenceToRoot;
+            this.intermediate = intermediate;
+        }
+
+        @Override
+        public void changed(ObservableValue<? extends T> o, T oldv, T newv) {
             if (oldv != null) {
                 next.unbindBidirectional(viaFunction.apply(oldv));
+            }
+            if (weakReferenceToRoot.get() == null) {
+                // Removes the strong reference to this listener
+                intermediate.removeListener(this);
+                return;
             }
             if (newv != null) {
                 next.bindBidirectional(viaFunction.apply(newv));
             }
-        };
-        if (hardReferences == null) {
-            hardReferences = new ArrayList<>();
         }
-        hardReferences.add(changeListener);
-        changeListener.changed(root, null, root.getValue());
-        root.addListener(changeListener);
-        return new Via(next);
     }
 
+    ;
+
+    /**
+     * Gets the binding that was built.
+     *
+     * @return a binding
+     */
     public Property<T> get() {
-        return root;
+        return intermediate;
     }
 }

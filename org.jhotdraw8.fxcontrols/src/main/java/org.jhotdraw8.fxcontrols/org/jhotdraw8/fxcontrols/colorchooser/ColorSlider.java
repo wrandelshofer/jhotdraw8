@@ -5,9 +5,11 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  */
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Orientation;
@@ -36,6 +38,11 @@ public class ColorSlider extends AbstractColorSlider {
      */
     private final @NonNull IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
 
+    /**
+     * The slider value.
+     */
+    private final @NonNull FloatProperty value = new SimpleFloatProperty(this, "value", 0);
+
 
     private final @NonNull ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
 
@@ -57,6 +64,7 @@ public class ColorSlider extends AbstractColorSlider {
         c1Property().addListener(o -> this.onComponentValueChanged(1));
         c2Property().addListener(o -> this.onComponentValueChanged(2));
         c3Property().addListener(o -> this.onComponentValueChanged(3));
+        valueProperty().addListener(o -> this.requestLayout());
     }
 
     private void onComponentValueChanged(int i) {
@@ -100,7 +108,7 @@ public class ColorSlider extends AbstractColorSlider {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
                 getC0(), getC1(), getC2(), getC3(),
-                getComponentIndex(), -1, getRgbFilter() == null ? i -> i : getRgbFilter()),
+                getComponentIndex(), -1, 1, getRgbFilter() == null ? i -> i : getRgbFilter()),
                 getOrientation());
     }
 
@@ -129,21 +137,25 @@ public class ColorSlider extends AbstractColorSlider {
 
 
     private void setComponent(float v) {
+        /*
         switch (getComponentIndex()) {
             case 0 -> setC0(v);
             case 1 -> setC1(v);
             case 2 -> setC2(v);
             default -> setC3(v);
-        }
+        }*/
+        setValue(v);
     }
 
     private float getComponent() {
+        /*
         return switch (getComponentIndex()) {
             case 0 -> getC0();
             case 1 -> getC1();
             case 2 -> getC2();
             default -> getC3();
-        };
+        };*/
+        return getValue();
     }
 
 
@@ -198,7 +210,7 @@ public class ColorSlider extends AbstractColorSlider {
                 float xval = x * invWidth + vMin;
                 colorValue[vIndex] = xval;
 
-                int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch);
+                int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch, 1);
                 argb = outOfGamut(tRgb) ? 0 : argb;
                 array[x + xy] = argb;
             }
@@ -242,7 +254,7 @@ public class ColorSlider extends AbstractColorSlider {
                 float xval = (height - y) * invHeight + xmin;
                 colorValue[xIndex] = xval;
 
-                int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch);
+                int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch, 1);
                 argb = filter.applyAsInt(argb);
                 Arrays.fill(array, xy + xfrom, xy + xto, argb);
             }
@@ -285,5 +297,16 @@ public class ColorSlider extends AbstractColorSlider {
         this.tickUnit.set(tickUnit);
     }
 
+    public float getValue() {
+        return value.get();
+    }
+
+    public @NonNull FloatProperty valueProperty() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value.set(value);
+    }
 }
 

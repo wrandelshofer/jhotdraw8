@@ -39,11 +39,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] hsl, float @NonNull [] rgb) {
-        return okhls_to_srgb(hsl, rgb);
-    }
-
-    private float[] okhls_to_srgb(float[] hls, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] hls, float @NonNull [] rgb) {
         double h = hls[0];
         double s = hls[2];
         double l = hls[1];
@@ -60,8 +56,6 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
             return rgb;
         }
 
-        //double a_ = (double) Math.cos(2.0 * Math.PI * h);
-        //double b_ = (double) Math.sin(2.0 * Math.PI * h);
         double a_ = (double) Math.cos(h * Math.PI / 180.0);
         double b_ = (double) Math.sin(h * Math.PI / 180.0);
         double L = toe_inv(l);
@@ -259,12 +253,9 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         return S;
     }
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
-        return srgb_to_okhls(rgb, colorvalue);
-    }
-
-    private float[] srgb_to_okhls(float[] rgb, float[] hls) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] hls) {
         float[] lab = oklab.fromRGB(rgb, hls);
         double labL = lab[0];
         double laba = lab[1];
@@ -275,7 +266,6 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         double b_ = labb / C;
 
         double L = labL;
-        //double h = (double) (0.5 + 0.5 * Math.atan2(-labb, -laba) / Math.PI);
         double h = (double) (180 + 180 * Math.atan2(-labb, -laba) / Math.PI);
 
         Cs cs = get_Cs(L, a_, b_);

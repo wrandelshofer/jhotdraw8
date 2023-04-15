@@ -15,8 +15,6 @@ import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -79,16 +77,6 @@ public class SliderChooser extends VBox {
 
     private ColorSlider c2Slider;
 
-    /**
-     * Keep strong references to bindings.
-     */
-    private List<Object> refs = new ArrayList<>();
-
-    private <T> T ref(T binding) {
-        refs.add(binding);
-        return binding;
-    }
-
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -107,7 +95,8 @@ public class SliderChooser extends VBox {
         c1Slider.setComponentIndex(1);
         c2Slider.setComponentIndex(2);
 
-        Via<ColorChooserPaneModel> viaModel = ref(new Via<>(model));
+        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
+
         c0Slider.c0Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c0Property).get());
         c0Slider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
         c0Slider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());

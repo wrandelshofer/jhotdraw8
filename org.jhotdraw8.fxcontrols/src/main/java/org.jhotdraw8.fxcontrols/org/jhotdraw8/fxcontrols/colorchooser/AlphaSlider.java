@@ -16,7 +16,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.NamedColorSpace;
-import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -94,7 +93,7 @@ public class AlphaSlider extends AbstractColorSlider {
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
                 getC0(), getC1(), getC2(), getC3(), 4, -1,
-                getRgbFilter() == null ? i -> i : getRgbFilter()), getOrientation(), getAlphaMinValue(), getAlphaMaxValue());
+                1, getRgbFilter() == null ? i -> i : getRgbFilter()), getOrientation(), getAlphaMinValue(), getAlphaMaxValue());
     }
 
 
@@ -158,7 +157,7 @@ public class AlphaSlider extends AbstractColorSlider {
             float[] tRgb = new float[3];
             float[] dRgb = new float[3];
             float[] pre = new float[3];
-            getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre);
+            getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre, 1);
             int[] array = b.array();
             ToIntFunction<Integer> filter = record.rgbFilter();
 
@@ -179,10 +178,6 @@ public class AlphaSlider extends AbstractColorSlider {
             }
         }
 
-        private static int getPreArgb(NamedColorSpace dcs, float[] dRgb, float[] pre, float alpha) {
-            int argb = RgbBitConverters.rgbFloatToPreArgb32(dRgb, alpha, pre);
-            return argb;
-        }
 
         public void fillFineVertical(@NonNull TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
@@ -204,7 +199,7 @@ public class AlphaSlider extends AbstractColorSlider {
             colorValue[1] = record.c1();
             colorValue[2] = record.c2();
             colorValue[3] = record.c3();
-            getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre);
+            getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre, 1);
             int[] array = b.array();
             ToIntFunction<Integer> filter = record.rgbFilter();
 

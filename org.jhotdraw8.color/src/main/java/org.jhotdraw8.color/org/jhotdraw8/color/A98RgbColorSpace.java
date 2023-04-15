@@ -10,6 +10,8 @@ import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.ILLUMINANT_D65_X
  * The Adobe RGB (1998) color space or opRGB is a color space developed by Adobe Inc. in 1998.
  * It was designed to encompass most of the colors achievable on CMYK color printers, but by using RGB primary colors on
  * a device such as a computer display.
+ * <p>
+ * References:
  * <dl>
  *     <dt>Wikipedia: Adobe RGB color space.</dt>
  *     <dd><a href="https://en.wikipedia.org/wiki/Adobe_RGB_color_space">wikipedia</a></dd>

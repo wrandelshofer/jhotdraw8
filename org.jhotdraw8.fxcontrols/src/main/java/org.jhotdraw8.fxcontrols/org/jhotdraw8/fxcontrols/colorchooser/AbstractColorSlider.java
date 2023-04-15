@@ -18,7 +18,6 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -82,6 +81,7 @@ public abstract class AbstractColorSlider extends Pane {
      * The value of the color component with index 3.
      */
     protected final @NonNull FloatProperty c3 = new SimpleFloatProperty(this, "c3");
+    protected final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     /**
      * The color space of the components.
      */
@@ -195,9 +195,9 @@ public abstract class AbstractColorSlider extends Pane {
                     if (e == null) {
                         if (colorRect.getImage() != newImage) {
                             colorRect.setImage(newImage);
-                            colorRect.setViewport(new Rectangle2D(0, 0, newImage.getWidth(), newImage.getHeight()));
-                            colorRect.setFitWidth(newImage.getWidth());
-                            colorRect.setFitHeight(newImage.getHeight());
+                            colorRect.setViewport(null);//new Rectangle2D(0, 0, newImage.getWidth()+1, newImage.getHeight()+1));
+                            colorRect.setFitWidth(-1);
+                            colorRect.setFitHeight(-1);
                         }
                         newPixelBuffer.updateBuffer(b -> null);
                         pixelBuffer = newPixelBuffer;
@@ -303,6 +303,7 @@ public abstract class AbstractColorSlider extends Pane {
         c1Property().addListener(propertyListener);
         c2Property().addListener(propertyListener);
         c3Property().addListener(propertyListener);
+        alphaProperty().addListener(propertyListener);
 
 
         thumb.setId("color-rect-indicator");
@@ -405,7 +406,7 @@ public abstract class AbstractColorSlider extends Pane {
                           @NonNull NamedColorSpace displayColorSpace,
                           float c0, float c1, float c2, float c3,
                           int xIndex, int yIndex,
-                          @NonNull ToIntFunction<Integer> rgbFilter
+                          float alpha, @NonNull ToIntFunction<Integer> rgbFilter
     ) {
     }
 
@@ -431,7 +432,12 @@ public abstract class AbstractColorSlider extends Pane {
                 || rgb[2] < 0 || rgb[2] > 1;
     }
 
-    protected static int getArgb(NamedColorSpace scs, NamedColorSpace tcs, NamedColorSpace dcs, float[] colorValue, float[] sRgb, float[] tRgb, float[] dRgb, float[] scratch) {
+    protected static int getPreArgb(NamedColorSpace dcs, float[] dRgb, float[] pre, float alpha) {
+        int argb = RgbBitConverters.rgbFloatToPreArgb32(dRgb, alpha, pre);
+        return argb;
+    }
+
+    protected static int getArgb(NamedColorSpace scs, NamedColorSpace tcs, NamedColorSpace dcs, float[] colorValue, float[] sRgb, float[] tRgb, float[] dRgb, float[] scratch, float alpha) {
         scs.toRGB(colorValue, sRgb);
         tcs.fromRGB(sRgb, tRgb);
         dcs.fromRGB(sRgb, dRgb);
@@ -444,7 +450,7 @@ public abstract class AbstractColorSlider extends Pane {
         } else {
             System.arraycopy(dRgb, 0, scratch, 0, 3);
         }
-        int argb = RgbBitConverters.rgbFloatToPreArgb32(scratch, outOfTarget ? 0 : 1, scratch);
+        int argb = RgbBitConverters.rgbFloatToPreArgb32(scratch, outOfTarget ? 0 : alpha, scratch);
         return argb;
     }
 
@@ -474,5 +480,17 @@ public abstract class AbstractColorSlider extends Pane {
 
     public void setSourceColorSpace(NamedColorSpace sourceColorSpace) {
         this.sourceColorSpace.set(sourceColorSpace);
+    }
+
+    public float getAlpha() {
+        return alpha.get();
+    }
+
+    public @NonNull FloatProperty alphaProperty() {
+        return alpha;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha.set(alpha);
     }
 }
