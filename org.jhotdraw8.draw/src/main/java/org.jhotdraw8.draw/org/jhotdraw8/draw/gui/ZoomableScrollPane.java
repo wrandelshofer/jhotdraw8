@@ -37,6 +37,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -129,15 +130,15 @@ public class ZoomableScrollPane extends GridPane {
     private ScrollBar verticalScrollBar; // Value injected by FXMLLoader
 
     @FXML // fx:id="backgroundPane"
-    private StackPane background; // Value injected by FXMLLoader
+    private Pane background; // Value injected by FXMLLoader
 
     @FXML // fx:id="subScene"
     private SubScene subScene; // Value injected by FXMLLoader
 
 
-    private StackPane content;
+    private Pane content;
     @FXML // fx:id="foregroundPane"
-    private StackPane foreground; // Value injected by FXMLLoader
+    private Pane foreground; // Value injected by FXMLLoader
 
     public ZoomableScrollPane() {
     }
@@ -382,7 +383,7 @@ public class ZoomableScrollPane extends GridPane {
 
     private void initLayout() {
         // - Create the sub-scene pane.
-        content = new StackPane();
+        content = new Pane();
         content.setManaged(false);
         subScene.setRoot(content);
         Rectangle clipRect = new Rectangle();
@@ -518,7 +519,7 @@ public class ZoomableScrollPane extends GridPane {
 
 
     @FXML // fx:id="viewportPane"
-    private StackPane viewportPane; // Value injected by FXMLLoader
+    private Pane viewportPane; // Value injected by FXMLLoader
 
     public void setZoomFactor(double newValue) {
         zoomFactor.set(newValue);

@@ -5,7 +5,13 @@
   ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.scene.control.ScrollBar?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.Region?><?import javafx.scene.layout.RowConstraints?><?import javafx.scene.layout.StackPane?><?import javafx.scene.SubScene?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.SubScene?>
 <fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="GridPane"
          xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
@@ -19,17 +25,17 @@
     <children>
         <ScrollBar fx:id="horizontalScrollBar" GridPane.rowIndex="1"/>
         <ScrollBar fx:id="verticalScrollBar" orientation="VERTICAL" GridPane.columnIndex="1"/>
-        <StackPane fx:id="viewportPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                   minHeight="0.0" minWidth="0.0">
+        <Pane fx:id="viewportPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+          minHeight="0.0" minWidth="0.0">
             <children>
-                <StackPane fx:id="background" minHeight="0.0" minWidth="0.0"/>
+                <Pane fx:id="background" minHeight="0.0" minWidth="0.0"/>
                 <SubScene fx:id="subScene" height="10.0" width="10.0">
                     <root>
                         <Region/>
                     </root>
                 </SubScene>
-                <StackPane fx:id="foreground" minHeight="0.0" minWidth="0.0"/>
+                <Pane fx:id="foreground" minHeight="0.0" minWidth="0.0"/>
             </children>
-        </StackPane>
+        </Pane>
     </children>
 </fx:root>

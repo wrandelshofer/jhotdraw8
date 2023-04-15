@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.render;
 
-import javafx.animation.AnimationTimer;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -60,7 +59,18 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
 
-    private final @NonNull Group drawingPane = new Group();
+    /**
+     * This is the root node of the interactive drawing renderer.
+     * <p>
+     * This node must have its{@code managed} property set to true, so that its {@code layoutChildren}
+     * method is called by the parent node.
+     */
+    private final @NonNull Group drawingPane = new Group() {
+        @Override
+        protected void layoutChildren() {
+            paint();
+        }
+    };
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
@@ -84,16 +94,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     private final @NonNull NodeFinder nodeFinder = new NodeFinder();
 
-    private final @NonNull AnimationTimer repainter = new AnimationTimer() {
-        @Override
-        public void handle(long now) {
-            stop();
-            paint();
-        }
-    };
-
     public InteractiveDrawingRenderer() {
-        drawingPane.setManaged(false);
+        drawingPane.setManaged(true);
         model.addListener(this::onDrawingModelChanged);
         clipBounds.addListener(this::onClipBoundsChanged);
     }
@@ -597,7 +599,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             getModel().validate(getRenderContext());
             remainingLimit -= updateNodes(remainingLimit);
         }
-        repainter.stop();
         if (!dirtyFigureNodes.isEmpty()) {
             repaint();
         }
@@ -626,7 +627,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     public void repaint() {
-        repainter.start();
+        drawingPane.requestLayout();
     }
 
     /**
