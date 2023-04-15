@@ -426,10 +426,44 @@ public abstract class AbstractColorSlider extends Pane {
         return thumbTranslateX;
     }
 
+    /**
+     * If epsilon is 0, we get the best rendering with OK LCH: the shape is a triangle with a straight line
+     * from the bottom left to the right, and a curved line from the right to the top left. (as shown below).
+     * <p>
+     * However, with epsilon 0, pure white color converted from sRGB to Display P3 is out of gamut, because
+     * the converted color value is slightly greater than 1.0.
+     * <pre>
+     *     +---
+     *     |   ----
+     *     |       ------
+     *     |             --------
+     *     |             ----
+     *     |         ----
+     *     |    ----
+     *     +----
+     * </pre>
+     * <p>
+     * If epsilon is too large, we get wiggles in the OK LCH rendering: the shape wiggles at the bottom left
+     * before it goes to the right. The curved line from the right to the top left is still good.
+     * <pre>
+     *     +---
+     *     |   ----
+     *     |       ------
+     *     |             --------
+     *     |             ----
+     *     |         ----
+     *     |      ----
+     *     +----------
+     * </pre>
+     *
+     * @param rgb
+     * @return
+     */
     protected static boolean outOfGamut(float[] rgb) {
-        return rgb[0] < 0 || rgb[0] > 1
-                || rgb[1] < 0 || rgb[1] > 1
-                || rgb[2] < 0 || rgb[2] > 1;
+        float eps = 0x1p-10f;
+        return rgb[0] < 0 || rgb[0] > 1 + eps
+                || rgb[1] < 0 || rgb[1] > 1 + eps
+                || rgb[2] < 0 || rgb[2] > 1 + eps;
     }
 
     protected static int getPreArgb(NamedColorSpace dcs, float[] dRgb, float[] pre, float alpha) {
