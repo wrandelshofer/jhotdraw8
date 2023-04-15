@@ -108,9 +108,9 @@ public class QuadCurves {
      * @param tolerance distance (radius) at which the joined point may be off from x012,y012.
      * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2), null if joining failed
      */
-    public static @Nullable double[] merge(final double x0, final double y0, final double x01, final double y01,
-                                           final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
-                                           double tolerance) {
+    public static double @Nullable [] merge(final double x0, final double y0, final double x01, final double y01,
+                                            final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
+                                            double tolerance) {
         final Point2D.Double start = new Point2D.Double(x0, y0);
         @NonNull Point2D b0 = new Point2D.Double(x2, y2);
 
@@ -187,9 +187,9 @@ public class QuadCurves {
      * @param first  if not null, accepts the curve from x1,y1 to t
      * @param second if not null, accepts the curve from t to x3,y3
      */
-    public static void split(@NonNull double[] p, int o, double t,
-                             @Nullable double[] first, int offsetFirst,
-                             @Nullable double[] second, int offsetSecond) {
+    public static void split(double @NonNull [] p, int o, double t,
+                             double @Nullable [] first, int offsetFirst,
+                             double @Nullable [] second, int offsetSecond) {
         double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3], x2 = p[o + 4], y2 = p[o + 5];
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
@@ -223,9 +223,9 @@ public class QuadCurves {
      * @param ta where to split
      * @param tb where to split
      */
-    public static void subCurve(@NonNull double[] q, int offset,
+    public static void subCurve(double @NonNull [] q, int offset,
                                 double ta, double tb,
-                                @NonNull double[] first, int offsetFirst) {
+                                double @NonNull [] first, int offsetFirst) {
         double tab = ta / tb;
         split(q, offset,
                 tb, null, 0, first, offsetFirst);
@@ -248,7 +248,7 @@ public class QuadCurves {
      * @param b      the coordinates of the control points of the bézier curve
      * @param offset the offset of the first control point in {@code b}
      */
-    public static double arcLength(@NonNull double[] b, int offset) {
+    public static double arcLength(double @NonNull [] b, int offset) {
         return arcLength(b, offset, 1.0);
     }
 

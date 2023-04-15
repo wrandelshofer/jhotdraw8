@@ -15,6 +15,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
@@ -39,23 +40,25 @@ public class ConnectionTool extends AbstractTool {
      */
     private @Nullable ConnectingFigure figure;
 
-    private Supplier<ConnectingFigure> figureFactory;
-    private final Supplier<Layer> layerFactory;
+    private @NonNull Supplier<ConnectingFigure> figureFactory;
+    private final @NonNull Supplier<Layer> layerFactory;
 
     private @Nullable HandleType handleType = null;
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory) {
+    public ConnectionTool(@NonNull String name, @Nullable Resources rsrc, @NonNull Supplier<ConnectingFigure> figureFactory) {
         this(name, rsrc, figureFactory, LayerFigure::new);
     }
 
-    public ConnectionTool(String name, Resources rsrc, Supplier<ConnectingFigure> figureFactory,
-                          Supplier<Layer> layerFactory) {
+    public ConnectionTool(@NonNull String name, @Nullable Resources rsrc,
+                          @NonNull Supplier<ConnectingFigure> figureFactory,
+                          @NonNull Supplier<Layer> layerFactory) {
         this(name, rsrc, null, figureFactory, layerFactory);
 
     }
 
-    public ConnectionTool(String name, Resources rsrc, HandleType handleType, Supplier<ConnectingFigure> figureFactory,
-                          Supplier<Layer> layerFactory) {
+    public ConnectionTool(@NonNull String name, @Nullable Resources rsrc, @Nullable HandleType handleType,
+                          @NonNull Supplier<ConnectingFigure> figureFactory,
+                          @NonNull Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.handleType = handleType;
         this.figureFactory = figureFactory;
@@ -74,15 +77,19 @@ public class ConnectionTool extends AbstractTool {
      * @param newFigure the figure
      * @return a suitable layer for the figure
      */
-    protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
+    protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, @NonNull Figure newFigure) {
         // try to use the active layer
+        Drawing drawing = dv.getDrawing();
+        if (drawing == null) {
+            return null;
+        }
         Figure activeParent = dv.getActiveParent();
         if (activeParent != null && activeParent.isEditable() && activeParent.isAllowsChildren()) {
             return activeParent;
         }
         // search for a suitable layer front to back
         Layer layer = null;
-        for (Figure candidate : new ReversedList<>(dv.getDrawing().getChildren())) {
+        for (Figure candidate : new ReversedList<>(drawing.getChildren())) {
             if (candidate.isEditable() && candidate.isAllowsChildren()
                     && candidate.isSuitableChild(newFigure)
                     && newFigure.isSuitableParent(candidate)
@@ -94,7 +101,7 @@ public class ConnectionTool extends AbstractTool {
         // create a new layer if necessary
         if (layer == null) {
             layer = layerFactory.get();
-            dv.getModel().addChildTo(layer, dv.getDrawing());
+            dv.getModel().addChildTo(layer, drawing);
         }
         return layer;
     }

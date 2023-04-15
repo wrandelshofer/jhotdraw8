@@ -85,7 +85,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull Point3D value) {
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Point3D value) {
         if (value == null) {
             return remove(a);
         } else {

@@ -111,7 +111,7 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
-    default ReadOnlyProperty<String> idProperty() {
+    default @NonNull ReadOnlyProperty<String> idProperty() {
         return ID.readOnlyPropertyAt(getProperties());
     }
 }

@@ -91,9 +91,9 @@ public class CubicCurves {
      * @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
      * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if merging failed
      */
-    public static @Nullable double[] merge(double[] a, int offsetA,
-                                           double[] b, int offsetB,
-                                           double tolerance) {
+    public static double @Nullable [] merge(double[] a, int offsetA,
+                                            double[] b, int offsetB,
+                                            double tolerance) {
         if (Points.squaredDistance(a[offsetA + 6], a[offsetA + 7], b[offsetB], b[offsetB + 1]) > tolerance * tolerance) {
             return null;
         }
@@ -129,11 +129,11 @@ public class CubicCurves {
      * @param tolerance distance (radius) at which the joined point may be off from x0123,y0123.
      * @return the control points of the new curve (x0,y0)(x1,y1)(x2,y2)(x3,y3), null if merging failed
      */
-    public static @Nullable double[] merge(final double x0, final double y0, final double x01, final double y01,
-                                           final double x012, final double y012, final double x0123, final double y0123,
-                                           final double x123, final double y123,
-                                           final double x23, final double y23, final double x3, final double y3,
-                                           double tolerance) {
+    public static double @Nullable [] merge(final double x0, final double y0, final double x01, final double y01,
+                                            final double x012, final double y012, final double x0123, final double y0123,
+                                            final double x123, final double y123,
+                                            final double x23, final double y23, final double x3, final double y3,
+                                            double tolerance) {
 
         final double t = (x012 - x123 == 0) ? (y012 - y0123) / (y012 - y123) : (x012 - x0123) / (x012 - x123);
         final Point2D.Double ctrl1, ctrl2;
@@ -371,9 +371,9 @@ public class CubicCurves {
      * @param segmentOffset the index of the first curve parameter in segment
      */
 
-    public static void subCurve(@NonNull double[] q, int qOffset,
+    public static void subCurve(double @NonNull [] q, int qOffset,
                                 double ta, double tb,
-                                @NonNull double[] segment, int segmentOffset) {
+                                double @NonNull [] segment, int segmentOffset) {
         double tab = ta / tb;
         split(q, qOffset,
                 tb, null, 0, segment, segmentOffset);
@@ -438,7 +438,7 @@ public class CubicCurves {
      * @param t      the time
      * @return the point at time t
      */
-    public static double arcLength(@NonNull double[] p, int offset, double t) {
+    public static double arcLength(double @NonNull [] p, int offset, double t) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, 0.1);
     }
@@ -451,7 +451,7 @@ public class CubicCurves {
      * @param s      arc length
      * @return t at s
      */
-    public static double invArcLength(@NonNull double[] p, int offset, double s) {
+    public static double invArcLength(double @NonNull [] p, int offset, double s) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / arcLength(p, offset, 1));
     }

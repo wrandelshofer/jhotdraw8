@@ -94,11 +94,11 @@ public class TypeSelector extends SimpleSelector {
         return Objects.hash(namespacePattern, type);
     }
 
-    public String getNamespacePattern() {
+    public @Nullable String getNamespacePattern() {
         return namespacePattern;
     }
 
-    public String getType() {
+    public @NonNull String getType() {
         return type;
     }
 

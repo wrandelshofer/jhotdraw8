@@ -39,7 +39,7 @@ public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
     }
 
     @Override
-    protected String getText(RenderContext ctx) {
+    protected String getText(@NonNull RenderContext ctx) {
         return get(TEXT);
     }
 

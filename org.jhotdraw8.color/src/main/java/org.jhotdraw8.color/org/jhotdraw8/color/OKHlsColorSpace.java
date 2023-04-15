@@ -2,8 +2,17 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.awt.color.ColorSpace;
+
 /**
- * The OK HSL Color Space.
+ * The OK HLS Color Space.
+ * <p>
+ * Components:
+ * <dl>
+ *     <dt>hue</dt><dd>0 to 360 degrees</dd>
+ *     <dt>lightness</dt><dd>0 to 1 percentage</dd>
+ *     <dt>saturation</dt><dd>0 to 1 percentage</dd>
+ * </dl>
  * <p>
  * References:
  * <dl>
@@ -16,29 +25,28 @@ import org.jhotdraw8.annotation.NonNull;
  * </dl>
  *
  * @author Werner Randelshofer
-
  */
-public class OKHSLColorSpace extends AbstractNamedColorSpace {
+public class OKHlsColorSpace extends AbstractNamedColorSpace {
     private final static @NonNull OKLabColorSpace oklab = new OKLabColorSpace();
 
-    public OKHSLColorSpace() {
-        super(NamedColorSpace.TYPE_HSL, 3);
+    public OKHlsColorSpace() {
+        super(ColorSpace.TYPE_HLS, 3);
     }
 
     @Override
-    public String getName() {
-        return "OKHSL";
+    public @NonNull String getName() {
+        return "OKHLS";
     }
 
     @Override
-    public float[] toRGB(float[] hsl, float[] rgb) {
-        return okhsl_to_srgb(hsl, rgb);
+    public float @NonNull [] toRGB(float @NonNull [] hsl, float @NonNull [] rgb) {
+        return okhls_to_srgb(hsl, rgb);
     }
 
-    private float[] okhsl_to_srgb(float[] hsl, float[] rgb) {
-        double h = hsl[0];
-        double s = hsl[1];
-        double l = hsl[2];
+    private float[] okhls_to_srgb(float[] hls, float[] rgb) {
+        double h = hls[0];
+        double s = hls[2];
+        double l = hls[1];
 
         if (l == 1.0) {
             rgb[0] = 1;
@@ -52,8 +60,10 @@ public class OKHSLColorSpace extends AbstractNamedColorSpace {
             return rgb;
         }
 
-        double a_ = (double) Math.cos(2.0 * Math.PI * h);
-        double b_ = (double) Math.sin(2.0 * Math.PI * h);
+        //double a_ = (double) Math.cos(2.0 * Math.PI * h);
+        //double b_ = (double) Math.sin(2.0 * Math.PI * h);
+        double a_ = (double) Math.cos(h * Math.PI / 180.0);
+        double b_ = (double) Math.sin(h * Math.PI / 180.0);
         double L = toe_inv(l);
 
         Cs cs = get_Cs(L, a_, b_);
@@ -250,12 +260,12 @@ public class OKHSLColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] fromRGB(float[] rgb, float[] colorvalue) {
-        return srgb_to_okhsl(rgb, colorvalue);
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
+        return srgb_to_okhls(rgb, colorvalue);
     }
 
-    private float[] srgb_to_okhsl(float[] rgb, float[] hsl) {
-        float[] lab = oklab.fromRGB(rgb, hsl);
+    private float[] srgb_to_okhls(float[] rgb, float[] hls) {
+        float[] lab = oklab.fromRGB(rgb, hls);
         double labL = lab[0];
         double laba = lab[1];
         double labb = lab[2];
@@ -265,7 +275,8 @@ public class OKHSLColorSpace extends AbstractNamedColorSpace {
         double b_ = labb / C;
 
         double L = labL;
-        double h = (double) (0.5 + 0.5 * Math.atan2(-labb, -laba) / Math.PI);
+        //double h = (double) (0.5 + 0.5 * Math.atan2(-labb, -laba) / Math.PI);
+        double h = (double) (180 + 180 * Math.atan2(-labb, -laba) / Math.PI);
 
         Cs cs = get_Cs(L, a_, b_);
         double C_0 = cs.C_0;
@@ -294,10 +305,10 @@ public class OKHSLColorSpace extends AbstractNamedColorSpace {
         }
 
         double l = toe(L);
-        hsl[0] = (float) h;
-        hsl[1] = (float) s;
-        hsl[2] = (float) l;
-        return hsl;
+        hls[0] = (float) h;
+        hls[2] = (float) s;
+        hls[1] = (float) l;
+        return hls;
 
     }
 
@@ -418,5 +429,10 @@ public class OKHSLColorSpace extends AbstractNamedColorSpace {
         double k_2 = 0.03;
         double k_3 = (1.0 + k_1) / (1.0 + k_2);
         return (double) (0.5 * (k_3 * x - k_1 + Math.sqrt((k_3 * x - k_1) * (k_3 * x - k_1) + 4 * k_2 * k_3 * x)));
+    }
+
+    @Override
+    public float getMaxValue(int component) {
+        return component == 0 ? 360 : 1;
     }
 }

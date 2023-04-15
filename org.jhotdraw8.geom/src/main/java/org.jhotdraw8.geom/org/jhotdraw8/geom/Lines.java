@@ -192,7 +192,7 @@ public class Lines {
      * @param s      arc length
      * @return t at s
      */
-    public static double invArcLength(@NonNull double[] p, int offset, double s) {
+    public static double invArcLength(double @NonNull [] p, int offset, double s) {
         return s / arcLength(p[offset], p[offset + 1], p[offset + 2], p[offset + 3]);
     }
 
@@ -224,10 +224,10 @@ public class Lines {
     /**
      * Splits the provided line into two parts.
      */
-    public static void split(@NonNull double[] p, int o,
+    public static void split(double @NonNull [] p, int o,
                              double t,
-                             @Nullable double[] first, int offsetFirst,
-                             @Nullable double[] second, int offsetSecond) {
+                             double @Nullable [] first, int offsetFirst,
+                             double @Nullable [] second, int offsetSecond) {
         double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3];
         final double x12 = (x1 - x0) * t + x0;
         final double y12 = (y1 - y0) * t + y0;
@@ -249,9 +249,9 @@ public class Lines {
     /**
      * Extracts a sub-line.
      */
-    public static void subLine(@NonNull double[] p, int o,
+    public static void subLine(double @NonNull [] p, int o,
                                double t0, double t1,
-                               @NonNull double[] first, int offsetFirst) {
+                               double @NonNull [] first, int offsetFirst) {
         double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3];
         final double x11 = (x1 - x0) * t0 + x0;
         final double y11 = (y1 - y0) * t0 + y0;

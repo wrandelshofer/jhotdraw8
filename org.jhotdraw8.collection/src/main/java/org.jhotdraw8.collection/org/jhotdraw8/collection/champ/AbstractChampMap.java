@@ -85,12 +85,12 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
     }
 
     @Override
-    public V getOrDefault(Object key, V defaultValue) {
+    public V getOrDefault(@NonNull Object key, V defaultValue) {
         return super.getOrDefault(key, defaultValue);
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
+    public @NonNull Iterator<Entry<K, V>> iterator() {
         return entrySet().iterator();
     }
 

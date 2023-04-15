@@ -94,7 +94,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void reshapeInLocal(@NonNull Figure figure, CssPoint2D c1, CssPoint2D c2, @NonNull DrawingModel dm) {
+    protected void reshapeInLocal(@NonNull Figure figure, @NonNull CssPoint2D c1, @NonNull CssPoint2D c2, @NonNull DrawingModel dm) {
         dm.set(figure, p1, c1);
         dm.set(figure, p2, c2);
     }

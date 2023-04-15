@@ -30,7 +30,7 @@ public class StrongMapEntryProperty<K, V, T extends V> extends ObjectPropertyBas
      */
     private char changing;
 
-    public StrongMapEntryProperty(@NonNull ObservableMap<K, V> map, K key, Class<T> tClazz) {
+    public StrongMapEntryProperty(@NonNull ObservableMap<K, V> map, @NonNull K key, @NonNull Class<T> tClazz) {
         this.map = map;
         this.key = key;
 

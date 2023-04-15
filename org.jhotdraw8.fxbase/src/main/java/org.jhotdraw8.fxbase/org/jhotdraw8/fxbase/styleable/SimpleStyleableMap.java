@@ -52,7 +52,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     private final @NonNull Map<K, Integer> keyMap;
     private final @NonNull StyleOrigin origin;
     private final int originOrdinal;
-    private final @NonNull int[] sizes;
+    private final int @NonNull [] sizes;
 
     private Object[] values;
     private final @NonNull SimpleStyleableMap<K, V> originalMap;

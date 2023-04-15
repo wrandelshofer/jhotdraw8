@@ -32,7 +32,7 @@ public class FormatConverterAdapter extends Format {
     }
 
     @Override
-    public @NonNull StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, FieldPosition pos) {
+    public @NonNull StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, @NonNull FieldPosition pos) {
         toAppendTo.append(converter.toString(obj));
         return toAppendTo;
     }

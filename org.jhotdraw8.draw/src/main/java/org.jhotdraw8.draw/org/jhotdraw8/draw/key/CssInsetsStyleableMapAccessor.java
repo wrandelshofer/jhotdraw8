@@ -98,7 +98,7 @@ public class CssInsetsStyleableMapAccessor
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssInsets value) {
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable CssInsets value) {
         if (value == null) {
             return remove(a);
         } else {

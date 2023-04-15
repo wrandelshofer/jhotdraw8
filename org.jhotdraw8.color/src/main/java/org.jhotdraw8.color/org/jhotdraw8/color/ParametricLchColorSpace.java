@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import static java.lang.Math.PI;
 
 /**
- * The 1976 CIE L*CHa*b* color space (CIELCH).
+ * A parametric LCH color space based on a LAB color space.
  * <p>
  * The {@code L*} coordinate of an object is the lightness intensity as measured on a
  * scale from 0 to 100, where 0 represents black and 100 represents white.
@@ -29,8 +29,9 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
     private final @NonNull NamedColorSpace labColorSpace;
     private final @NonNull String name;
 
-    public ParametricLchColorSpace(String name, NamedColorSpace labColorSpace) {
+    public ParametricLchColorSpace(@NonNull String name, @NonNull NamedColorSpace labColorSpace) {
         super(TYPE_LCH, 3);
+        assert (labColorSpace.getType() == TYPE_Lab);
         this.name = name;
         this.labColorSpace = labColorSpace;
     }
@@ -42,12 +43,11 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
      * @return CIEXYZ color value.
      */
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         return labColorSpace.toCIEXYZ(lchToLab(colorvalue, xyz), xyz);
     }
 
-    @NonNull
-    protected float[] lchToLab(float[] lch, float[] lab) {
+    protected float @NonNull [] lchToLab(float[] lch, float[] lab) {
         double L = lch[0];
         double C = lch[1];
         double H = lch[2] * PI / 180;
@@ -67,7 +67,7 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
      * @return LCH color value.
      */
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] lch) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
         return labToLch(labColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
@@ -87,27 +87,21 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
     @Override
-    public float[] toRGB(float[] lch, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
         return labColorSpace.toRGB(lchToLab(lch, rgb), rgb);
-    }
-
-    @Override
-    public float getMinValue(int component) {
-                return 0f;
     }
 
     @Override
     public float getMaxValue(int component) {
         switch (component) {
         case 0:
-            return 100f;
         case 1:
-            return 150f;
+            return labColorSpace.getMaxValue(component);
         case 2:
             return 360f;
         }
@@ -116,7 +110,7 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
 
     @Override
-    public float[] fromRGB(float[] rgb, float[] lch) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
         return labToLch(labColorSpace.fromRGB(rgb, lch), lch);
     }
 }

@@ -70,7 +70,7 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull Point3D value) {
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Point3D value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -95,7 +95,7 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @Nullable ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         a = yKey.remove(a);
         return zKey.remove(a);

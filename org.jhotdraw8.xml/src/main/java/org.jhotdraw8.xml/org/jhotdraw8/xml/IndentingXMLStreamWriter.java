@@ -557,7 +557,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     @Override
-    public void writeCharacters(@NonNull char[] text, int start, int len) throws XMLStreamException {
+    public void writeCharacters(char @NonNull [] text, int start, int len) throws XMLStreamException {
         Objects.requireNonNull(text, "text");
         Objects.checkFromIndexSize(start, len, text.length);
         closeStartTagOrCloseEmptyElemTag();
@@ -937,11 +937,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             this.isEmpty = isEmpty;
         }
 
-        public String getLocalName() {
+        public @NonNull String getLocalName() {
             return localName;
         }
 
-        public String getPrefix() {
+        public @NonNull String getPrefix() {
             return prefix;
         }
 
@@ -976,7 +976,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             this.prefix = prefix;
         }
 
-        public String getLocalName() {
+        public @NonNull String getLocalName() {
             return localName;
         }
 

@@ -6,7 +6,6 @@ package org.jhotdraw8.application.action;
 
 import javafx.event.ActionEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 
@@ -22,7 +21,7 @@ import org.jhotdraw8.application.Application;
  */
 public abstract class AbstractActivityAction<A extends Activity> extends AbstractApplicationAction {
 
-    private final @Nullable A activity;
+    private final @NonNull A activity;
 
     /**
      * Creates a new instance which acts on the specified activity of the
@@ -37,7 +36,7 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
         this.activity = activity;
     }
 
-    public @Nullable A getActivity() {
+    public @NonNull A getActivity() {
         return activity;
     }
 

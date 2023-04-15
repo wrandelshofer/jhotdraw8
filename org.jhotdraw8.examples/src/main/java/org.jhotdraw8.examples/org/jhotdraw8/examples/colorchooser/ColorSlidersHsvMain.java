@@ -13,21 +13,22 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.color.HsvColorSpace;
-import org.jhotdraw8.color.HsvPhysiologicColorSpace;
+import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.ParametricHsvColorSpace;
+import org.jhotdraw8.color.SrgbColorSpace;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorRectangleSlider;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
 
 import java.util.List;
 
 /**
- * Shows sliders for HSB/HSV color spaces.
+ * Shows sliders for HSV color spaces.
  * <pre>
  *     saturation →
  * +-----------------+
  * |                 | ↑
- * |                 | brightness/value
+ * |                 | value
  * |                 |
  * +-----------------+
  *
@@ -61,11 +62,11 @@ public class ColorSlidersHsvMain extends AbstractColorSlidersMain {
 
 
         ComboBox<NamedColorSpace> colorSpaceBox = createColorSpaceComboBox(
-                new HsvColorSpace(),
-                new HsvPhysiologicColorSpace()
+                new ParametricHsvColorSpace("HSV sRGB", new SrgbColorSpace()),
+                new ParametricHsvColorSpace("HSV Display P3", new DisplayP3ColorSpace())
         );
-        colorRectangleSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        colorSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        colorRectangleSlider.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        colorSlider.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
 
         var bitDepthBox = createBitDepthComboBox();
         colorRectangleSlider.rgbFilterProperty().bind(bitDepthBox.valueProperty());

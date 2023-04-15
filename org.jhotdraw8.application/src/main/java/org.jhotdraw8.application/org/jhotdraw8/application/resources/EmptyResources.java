@@ -87,7 +87,7 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public void setParent(Resources parent) {
+    public void setParent(@Nullable Resources parent) {
         this.parent = parent;
     }
 }

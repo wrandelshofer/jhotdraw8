@@ -21,29 +21,29 @@ public class D50XyzColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         System.arraycopy(colorvalue, 0, xyz, 0, 3);
         return xyz;
     }
 
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
         System.arraycopy(xyz, 0, colorvalue, 0, 3);
         return colorvalue;
     }
 
     @Override
-    public float[] fromRGB(float[] rgb, float[] colorvalue) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
         return SRGB_COLOR_SPACE.toCIEXYZ(rgb, colorvalue);
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return "D50 XYZ";
     }
 
     @Override
-    public float[] toRGB(float[] colorvalue, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
         return SRGB_COLOR_SPACE.fromCIEXYZ(colorvalue, rgb);
     }
 }

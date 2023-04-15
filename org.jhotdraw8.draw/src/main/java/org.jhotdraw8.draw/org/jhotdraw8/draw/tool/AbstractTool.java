@@ -217,13 +217,6 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // Constructors
     // ---
 
-    /**
-     * Creates a new instance.
-     */
-    public AbstractTool() {
-        this(null, null);
-
-    }
 
     /**
      * Creates a new instance.
@@ -231,7 +224,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * @param name the id of the tool
      * @param rsrc iff nonnull, the resource is applied to the tool
      */
-    public AbstractTool(String name, @Nullable Resources rsrc) {
+    public AbstractTool(@NonNull String name, @Nullable Resources rsrc) {
         set(NAME, name);
         if (rsrc != null) {
             applyResources(rsrc);

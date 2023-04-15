@@ -123,7 +123,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public Iterator<Map.Entry<K, V>> iterator() {
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return Iterators.unmodifiableIterator(target.entrySet().iterator());
     }
 

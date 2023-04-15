@@ -38,7 +38,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private int startpos = -1, endpos = -1;
     private final @NonNull IntArrayList unread = new IntArrayList();
 
-    private @NonNull char[] buf = new char[20];
+    private char @NonNull [] buf = new char[20];
 
     /**
      * The next character to be considered by the next method. May also be
@@ -64,11 +64,11 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private boolean slashStarCommentsP = false;
 
     // rlw
-    private @NonNull char[] slashSlash = new char[]{'/', '/'};
-    private @NonNull char[] slashStar = new char[]{'/', '*'};
-    private @NonNull char[] starSlash = new char[]{'*', '/'};
+    private char @NonNull [] slashSlash = new char[]{'/', '/'};
+    private char @NonNull [] slashStar = new char[]{'/', '*'};
+    private char @NonNull [] starSlash = new char[]{'*', '/'};
 
-    private final @NonNull byte[] ctype = new byte[256];
+    private final byte @NonNull [] ctype = new byte[256];
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
     private static final byte CT_ALPHA = 4;
@@ -174,7 +174,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param r the reader
      */
-    public StreamPosTokenizer(Reader r) {
+    public StreamPosTokenizer(@NonNull Reader r) {
         this();
         reader = r;
     }
@@ -194,7 +194,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param r The reader
      */
-    public void setReader(Reader r) {
+    public void setReader(@NonNull Reader r) {
         this.reader = r;
         readpos = 0;
         unread.clear();

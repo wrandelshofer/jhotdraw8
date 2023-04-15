@@ -28,7 +28,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
     /**
      * Holds a String representation of the name.
      */
-    private final @Nullable String name;
+    private final @NonNull String name;
     /**
      * Holds the default value.
      */
@@ -50,7 +50,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractMapAccessor(String name, Class<T> type, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractMapAccessor(@NonNull String name, Class<T> type, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, type, null, subAccessors, defaultValue);
     }
 
@@ -65,7 +65,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      * @param subAccessors   sub accessors which are used by this accessor
      * @param defaultValue   The default value.
      */
-    public AbstractMapAccessor(@Nullable String name, @Nullable Class<?> type, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
+    public AbstractMapAccessor(@NonNull String name, @Nullable Class<?> type, @Nullable Class<?>[] typeParameters, @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(type, "clazz");
         Objects.requireNonNull(defaultValue, "defaultValue");

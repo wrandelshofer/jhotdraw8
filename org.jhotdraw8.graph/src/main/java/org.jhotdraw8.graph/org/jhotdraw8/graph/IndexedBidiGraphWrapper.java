@@ -56,7 +56,7 @@ public class IndexedBidiGraphWrapper implements BidiGraph<Integer, Integer> {
     }
 
     @Override
-    public int findIndexOfPrev(Integer v, @NonNull Integer u) {
+    public int findIndexOfPrev(@NonNull Integer v, @NonNull Integer u) {
         return graph.findIndexOfPrevAsInt(v, u);
     }
 

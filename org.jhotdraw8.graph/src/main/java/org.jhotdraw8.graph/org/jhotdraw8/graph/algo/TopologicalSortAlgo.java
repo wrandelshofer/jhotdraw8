@@ -63,7 +63,7 @@ public class TopologicalSortAlgo {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public @NonNull int @NonNull [] sortTopologicallyInt(@NonNull IndexedDirectedGraph model) {
+    public int @NonNull [] sortTopologicallyInt(@NonNull IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex

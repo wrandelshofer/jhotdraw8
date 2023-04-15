@@ -11,8 +11,8 @@ import java.awt.geom.PathIterator;
 public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     private int numCommands;
     private int numCoords;
-    private @NonNull byte[] commands = new byte[10];
-    private @NonNull double[] coords = new double[60];
+    private byte @NonNull [] commands = new byte[10];
+    private double @NonNull [] coords = new double[60];
     private final int windingRule;
 
     public PathIteratorPathBuilder() {

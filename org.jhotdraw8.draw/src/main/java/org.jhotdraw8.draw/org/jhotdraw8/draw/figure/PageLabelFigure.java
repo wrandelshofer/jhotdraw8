@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -68,7 +67,7 @@ public class PageLabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected String getText(@Nullable RenderContext ctx) {
+    protected String getText(@NonNull RenderContext ctx) {
         String text = getNonNull(TEXT_WITH_PLACEHOLDERS);
         final Integer pageNumber = ctx == null ? 0 : ctx.get(RenderContext.RENDER_PAGE_NUMBER);
         final Integer numPages = ctx == null ? 0 : ctx.get(RenderContext.RENDER_NUMBER_OF_PAGES);

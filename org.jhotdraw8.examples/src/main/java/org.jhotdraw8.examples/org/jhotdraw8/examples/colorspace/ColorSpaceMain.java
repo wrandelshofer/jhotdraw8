@@ -19,16 +19,9 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.color.CieLabColorSpace;
-import org.jhotdraw8.color.CieLchColorSpace;
-import org.jhotdraw8.color.HlsColorSpace;
-import org.jhotdraw8.color.HlsPhysiologicColorSpace;
-import org.jhotdraw8.color.HlsuvColorSpace;
-import org.jhotdraw8.color.HpluvColorSpace;
-import org.jhotdraw8.color.HsbColorSpace;
-import org.jhotdraw8.color.HsvColorSpace;
-import org.jhotdraw8.color.HsvPhysiologicColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
+import org.jhotdraw8.color.ParametricHsvColorSpace;
 import org.jhotdraw8.color.SrgbColorSpace;
 
 import java.awt.color.ColorSpace;
@@ -48,7 +41,7 @@ public class ColorSpaceMain extends Application {
         ComboBox<NamedColorSpace> visualisationColorSpace = createColorSpaceBox();
         colorSpace1ComboBox.setValue(colorSpace1ComboBox.getItems().get(0));
         colorSpace2ComboBox.setValue(colorSpace1ComboBox.getItems().get(1));
-        visualisationColorSpace.setValue(new HsvColorSpace());
+        visualisationColorSpace.setValue(new ParametricHsvColorSpace("HSV", new SrgbColorSpace()));
 
         ColorPicker fromPicker = new ColorPicker();
         ColorPicker toPicker = new ColorPicker();
@@ -168,15 +161,7 @@ public class ColorSpaceMain extends Application {
                 new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)),
                 new NamedColorSpaceAdapter("RGB Linear (Java)", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)),
                 new SrgbColorSpace().getLinearColorSpace(),
-                new HpluvColorSpace(),
-                new HlsuvColorSpace(),
-                new CieLabColorSpace(),
-                new CieLchColorSpace(),
-                new HsbColorSpace(),
-                new HlsColorSpace(),
-                new HlsPhysiologicColorSpace(),
-                new HsvColorSpace(),
-                new HsvPhysiologicColorSpace()
+                new CieLabColorSpace()
         );
         colorSpaceBox.setItems(list);
         colorSpaceBox.setValue(new NamedColorSpaceAdapter("linear RGB", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)));

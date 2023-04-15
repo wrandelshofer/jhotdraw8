@@ -31,7 +31,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
 
 
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
         return fromLinearRGB(linearSrgb.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
@@ -55,7 +55,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] fromRGB(float[] srgbvalue, float[] colorvalue) {
+    public float @NonNull [] fromRGB(float @NonNull [] srgbvalue, float @NonNull [] colorvalue) {
         return fromLinearRGB(toLinear(srgbvalue, colorvalue), colorvalue);
     }
 
@@ -99,12 +99,12 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return "OKLAB";
     }
 
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         return linearSrgb.toCIEXYZ(toLinearRGB(colorvalue, xyz), xyz);
     }
 
@@ -128,7 +128,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] toRGB(float[] colorvalue, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
         return fromLinear(toLinearRGB(colorvalue, rgb), rgb);
     }
 

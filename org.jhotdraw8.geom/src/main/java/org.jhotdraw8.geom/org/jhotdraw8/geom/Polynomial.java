@@ -6,7 +6,15 @@ import org.jhotdraw8.collection.primitive.DoubleArrayList;
 
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.cbrt;
+import static java.lang.Math.ceil;
+import static java.lang.Math.cos;
+import static java.lang.Math.fma;
+import static java.lang.Math.log;
+import static java.lang.Math.max;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 /**
  * A polynomial.
@@ -71,7 +79,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *                              sorted from lowest do highest degree.
      * @param coefs                 will be referenced
      */
-    public Polynomial(boolean highestToLowestDegree, @NonNull double... coefs) {
+    public Polynomial(boolean highestToLowestDegree, double @NonNull ... coefs) {
         if (highestToLowestDegree) {
             this.coefs = new double[coefs.length];
             for (int i = 0; i < coefs.length; i++) {
@@ -211,7 +219,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    private @NonNull double[] getCubicRoots() {
+    private double @NonNull [] getCubicRoots() {
         final double[] results = new double[4];
         int numResults = 0;
 
@@ -311,7 +319,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    private @NonNull double[] getLinearRoot() {
+    private double @NonNull [] getLinearRoot() {
         double[] result = new double[0];
         double a = this.coefs[1];
 
@@ -327,7 +335,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    private @NonNull double[] getQuadraticRoots() {
+    private double @NonNull [] getQuadraticRoots() {
         double a = this.coefs[2];
         double b = this.coefs[1] / a;
         double c = this.coefs[0] / a;
@@ -346,7 +354,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    public static @NonNull double[] getQuadraticRoots(double a, double b, double c) {
+    public static double @NonNull [] getQuadraticRoots(double a, double b, double c) {
         double d = b * b - 4 * c;
         if (d > 0) {
             double e = sqrt(d);
@@ -366,7 +374,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      *
      * @return the roots
      */
-    private @NonNull double[] getQuarticRoots() {
+    private double @NonNull [] getQuarticRoots() {
 
         double[] results = new double[4];
         int numResults = 0;
@@ -650,7 +658,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
      * @param a      the array
      * @return array of the specified length
      */
-    public static @NonNull double[] trim(int length, @NonNull double[] a) {
+    public static double @NonNull [] trim(int length, double @NonNull [] a) {
         if (length == a.length) {
             return a;
         }

@@ -364,7 +364,7 @@ public class BinaryPListParser {
 
     private static class PosByteArrayInputStream extends ByteArrayInputStream {
 
-        public PosByteArrayInputStream(@NonNull byte[] buf) {
+        public PosByteArrayInputStream(byte @NonNull [] buf) {
             super(buf);
         }
 

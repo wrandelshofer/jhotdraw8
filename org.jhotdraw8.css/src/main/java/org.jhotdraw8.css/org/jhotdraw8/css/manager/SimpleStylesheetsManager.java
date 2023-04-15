@@ -651,27 +651,27 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                 || !inlineList.isEmpty();
     }
 
-    public Supplier<CssParser> getParserFactory() {
+    public @NonNull Supplier<CssParser> getParserFactory() {
         return parserFactory;
     }
 
-    public void setParserFactory(Supplier<CssParser> parserFactory) {
+    public void setParserFactory(@NonNull Supplier<CssParser> parserFactory) {
         this.parserFactory = parserFactory;
     }
 
-    public UriResolver getUriResolver() {
+    public @NonNull UriResolver getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(UriResolver uriResolver) {
+    public void setUriResolver(@NonNull UriResolver uriResolver) {
         this.uriResolver = uriResolver;
     }
 
-    public String getDefaultNamespace() {
+    public @Nullable String getDefaultNamespace() {
         return defaultNamespace;
     }
 
-    public void setDefaultNamespace(String defaultNamespace) {
+    public void setDefaultNamespace(@Nullable String defaultNamespace) {
         this.defaultNamespace = defaultNamespace;
     }
 }

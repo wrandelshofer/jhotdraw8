@@ -63,7 +63,8 @@ public class ComputeTestcommon {
         try {
             CssColor parsed = colorConverter.fromString(specified);
             Color c = parsed.getColor();
-            String actualComputed = "rgb(" + number.toString(255 * c.getRed())
+            String actualComputed = (computed.startsWith("rgba(") ? "rgba(" : "rgb(")
+                    + number.toString(255 * c.getRed())
                     + ", " + number.toString(255 * c.getGreen())
                     + ", " + number.toString(255 * c.getBlue())
                     + (c.getOpacity() != 1 ? ", " + number.toString(c.getOpacity()) : "")

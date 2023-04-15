@@ -105,7 +105,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public final Set<Figure> getLayoutObservers() {
+    public final @NonNull Set<Figure> getLayoutObservers() {
         if (layoutObservers == null) {
             layoutObservers = Collections.newSetFromMap(new IdentityHashMap<>(1));
         }

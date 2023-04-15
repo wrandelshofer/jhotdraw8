@@ -8,10 +8,10 @@ package org.jhotdraw8.color;
 import org.jhotdraw8.annotation.NonNull;
 
 
-public class CssLegacySrgbColorSpaceTest extends AbstractNamedColorSpaceTest {
+public class ParametricScaledColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
     protected @NonNull NamedColorSpace getInstance() {
-        return new CssLegacySrgbColorSpace();
+        return new ParametricScaledColorSpace("sRGB*255", 255f, new SrgbColorSpace());
     }
 }

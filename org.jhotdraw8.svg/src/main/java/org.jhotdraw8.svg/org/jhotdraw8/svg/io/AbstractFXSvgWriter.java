@@ -145,7 +145,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                                                       FontRenderContext frc, @NonNull String
                                                               paragraph, @NonNull AttributedCharacterIterator styledText,
                                                       float verticalPos, float maxVerticalPos, float leftMargin,
-                                                      float rightMargin, @NonNull float[] tabStops, int tabCount,
+                                                      float rightMargin, float @NonNull [] tabStops, int tabCount,
                                                       @NonNull TextAlignment textAlignment, double lineSpacing) throws XMLStreamException {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,

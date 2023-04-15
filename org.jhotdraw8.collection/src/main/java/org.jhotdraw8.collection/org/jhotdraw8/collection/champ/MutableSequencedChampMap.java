@@ -230,7 +230,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean containsKey(@NonNull Object o) {
+    public boolean containsKey(@Nullable Object o) {
         K key = (K) o;
         return Node.NO_DATA != root.find(new SequencedEntry<>(key),
                 Objects.hashCode(key), 0,

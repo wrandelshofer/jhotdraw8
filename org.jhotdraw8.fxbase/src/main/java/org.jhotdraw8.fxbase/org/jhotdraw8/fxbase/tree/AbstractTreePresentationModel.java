@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 
@@ -22,7 +23,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     /**
      * Holds the underlying model.
      */
-    private final @Nullable NonNullObjectProperty<TreeModel<N>> treeModel //
+    private final @NonNull NonNullObjectProperty<TreeModel<N>> treeModel //
             = new NonNullObjectProperty<TreeModel<N>>(this, MODEL_PROPERTY, new SimpleTreeModel<>()) {
         private @Nullable TreeModel<N> oldValue = null;
 
@@ -39,7 +40,7 @@ public abstract class AbstractTreePresentationModel<N> implements TreePresentati
     }
 
     @Override
-    public @Nullable NonNullObjectProperty<TreeModel<N>> treeModelProperty() {
+    public @NonNull NonNullObjectProperty<TreeModel<N>> treeModelProperty() {
         return treeModel;
     }
 

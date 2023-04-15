@@ -58,7 +58,7 @@ public class LabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected String getText(RenderContext ctx) {
+    protected String getText(@NonNull RenderContext ctx) {
         return getStyled(TEXT);
     }
 

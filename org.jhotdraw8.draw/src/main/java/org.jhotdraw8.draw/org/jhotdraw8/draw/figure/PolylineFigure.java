@@ -157,7 +157,7 @@ public class PolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    public static @NonNull double[] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<? extends ImmutableList<Point2D>> key) {
+    public static double @NonNull [] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<? extends ImmutableList<Point2D>> key) {
         ImmutableList<Point2D> points = f.getNonNull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {

@@ -67,8 +67,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final @NonNull int @NonNull [] next;
-    protected final @NonNull int @NonNull [] prev;
+    protected final int @NonNull [] next;
+    protected final int @NonNull [] prev;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -86,8 +86,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final @NonNull int @NonNull [] nextOffset;
-    protected final @NonNull int @NonNull [] prevOffset;
+    protected final int @NonNull [] nextOffset;
+    protected final int @NonNull [] prevOffset;
 
     /**
      * Holds the arrow objects.

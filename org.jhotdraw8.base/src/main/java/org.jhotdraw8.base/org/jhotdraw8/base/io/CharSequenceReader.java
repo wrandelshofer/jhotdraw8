@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.base.io;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.Reader;
 
@@ -30,7 +32,7 @@ public class CharSequenceReader extends Reader {
     }
 
     @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
+    public int read(char @NonNull [] cbuf, int off, int len) throws IOException {
         len = Math.min(len, buf.length() - pos);
         for (int i = 0; i < len; i++) {
             cbuf[i] = buf.charAt(pos++);

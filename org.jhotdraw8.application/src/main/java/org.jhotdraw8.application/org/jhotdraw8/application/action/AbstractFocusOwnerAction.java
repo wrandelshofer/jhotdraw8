@@ -54,7 +54,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
      * @param app    the application
      * @param target the target node
      */
-    public AbstractFocusOwnerAction(@NonNull Application app, Node target) {
+    public AbstractFocusOwnerAction(@NonNull Application app, @Nullable Node target) {
         super(app);
         this.target = target;
 

@@ -56,7 +56,7 @@ class TrieListHelper {
     }
 
     static <E> @NonNull InternalNode<E> newInternalNode(@Nullable IdentityObject mutator,
-                                                        @NonNull int[] sizes, @NonNull Node<E>[] children) {
+                                                        int @NonNull [] sizes, @NonNull Node<E>[] children) {
         return mutator == null ? new InternalNode<>(sizes, children) : new MutableInternalNode<>(mutator, sizes, children);
     }
 
@@ -181,7 +181,7 @@ class TrieListHelper {
         private int[] sizes;
         private @NonNull Node<E>[] children;
 
-        public InternalNode(@NonNull int[] sizes, @NonNull Node<E>[] children) {
+        public InternalNode(int @NonNull [] sizes, @NonNull Node<E>[] children) {
             this.sizes = sizes;
             this.children = children;
         }
@@ -245,7 +245,7 @@ class TrieListHelper {
     static class MutableInternalNode<E> extends InternalNode<E> {
         private final @NonNull IdentityObject mutator;
 
-        MutableInternalNode(@NonNull IdentityObject mutator, @NonNull int[] sizes, @NonNull Node<E>[] children) {
+        MutableInternalNode(@NonNull IdentityObject mutator, int @NonNull [] sizes, @NonNull Node<E>[] children) {
             super(sizes, children);
             this.mutator = mutator;
         }

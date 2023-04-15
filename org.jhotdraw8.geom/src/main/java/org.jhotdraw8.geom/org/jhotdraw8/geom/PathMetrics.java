@@ -26,10 +26,10 @@ import java.util.Arrays;
  * </ul>
  */
 public class PathMetrics {
-    private final @NonNull byte[] commands;
-    private final @NonNull int[] offsets;
-    private final @NonNull double[] coords;
-    private final @NonNull double[] accumulatedLengths;
+    private final byte @NonNull [] commands;
+    private final int @NonNull [] offsets;
+    private final double @NonNull [] coords;
+    private final double @NonNull [] accumulatedLengths;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (byte) PathIterator.SEG_MOVETO;
@@ -39,7 +39,7 @@ public class PathMetrics {
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
 
 
-    public PathMetrics(@NonNull byte[] commands, @NonNull int[] offsets, @NonNull double[] coords, @NonNull double[] accumulatedLengths) {
+    public PathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] accumulatedLengths) {
         this.commands = commands;
         this.offsets = offsets;
         this.coords = coords;

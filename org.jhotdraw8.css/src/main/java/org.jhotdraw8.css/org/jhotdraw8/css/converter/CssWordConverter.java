@@ -25,7 +25,11 @@ public class CssWordConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull String value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
+        if (value == null) {
+            out.append("none");
+            return;
+        }
         for (char ch : value.toCharArray()) {
             if (Character.isWhitespace(ch)) {
                 break;

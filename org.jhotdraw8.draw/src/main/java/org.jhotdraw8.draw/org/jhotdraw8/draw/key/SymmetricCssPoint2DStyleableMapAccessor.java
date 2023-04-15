@@ -77,7 +77,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssPoint2D value) {
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable CssPoint2D value) {
         if (value == null) {
             return remove(a);
         } else {

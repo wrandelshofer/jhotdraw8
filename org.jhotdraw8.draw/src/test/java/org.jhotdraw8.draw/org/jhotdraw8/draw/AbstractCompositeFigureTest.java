@@ -179,7 +179,7 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public ReadOnlyProperty<String> idProperty() {
+        public @NonNull ReadOnlyProperty<String> idProperty() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

@@ -35,7 +35,7 @@ public abstract class AbstractStyleableMapAccessor<T>
     /**
      * Holds a String representation of the name.
      */
-    private final @Nullable String name;
+    private final @NonNull String name;
     /**
      * Holds the default value.
      */
@@ -44,7 +44,7 @@ public abstract class AbstractStyleableMapAccessor<T>
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    private final @Nullable Type type;
+    private final @NonNull Type type;
 
     private final @NonNull Set<MapAccessor<?>> subAccessors;
 
@@ -57,7 +57,7 @@ public abstract class AbstractStyleableMapAccessor<T>
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableMapAccessor(String name, Class<T> type, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractStyleableMapAccessor(@NonNull String name, @NonNull Class<T> type, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, type, null, subAccessors, defaultValue);
     }
 
@@ -68,11 +68,11 @@ public abstract class AbstractStyleableMapAccessor<T>
      * @param name           The name of the key.
      * @param type           The type of the value.
      * @param typeParameters The type parameters of the class. Specify "" if no
-     *                       type parameters are given. Otherwise specify them in arrow brackets.
+     *                       type parameters are given. Otherwise, specify them in arrow brackets.
      * @param subAccessors   sub accessors which are used by this accessor
      * @param defaultValue   The default value.
      */
-    public AbstractStyleableMapAccessor(@Nullable String name, @Nullable Class<?> type, @Nullable Class<?>[] typeParameters,
+    public AbstractStyleableMapAccessor(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters,
                                         @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(type, "clazz");

@@ -11,10 +11,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.NamedColorSpace;
-import org.jhotdraw8.color.RgbBitConverters;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
@@ -57,13 +57,13 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         c3Property().addListener(o -> this.onComponentValueChanged(3));
 
 
-        xComponentIndex.addListener(o -> invalidateImage());
-        yComponentIndex.addListener(o -> invalidateImage());
+        xComponentIndex.addListener(o -> invalidateColorRect());
+        yComponentIndex.addListener(o -> invalidateColorRect());
     }
 
     private void onComponentValueChanged(int i) {
         if (i != getXComponentIndex() && i != getYComponentIndex()) {
-            invalidateImage();
+            invalidateColorRect();
         }
     }
 
@@ -71,23 +71,28 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     protected void layoutChildren() {
         super.layoutChildren();
 
+        NamedColorSpace cs = getSourceColorSpace();
+        if (cs == null) return;
         double width = getWidth();
         double height = getHeight();
-        NamedColorSpace cs = getColorSpace();
         float xmax = cs.getMaxValue(xComponentIndex.get());
         float xmin = cs.getMinValue(xComponentIndex.get());
         float ymax = cs.getMaxValue(yComponentIndex.get());
         float ymin = cs.getMinValue(yComponentIndex.get());
-        sliderThumb.setTranslateX((getXComponent() - xmin) * width / (xmax - xmin) - sliderThumb.getWidth() * 0.5);
-        sliderThumb.setTranslateY(height - (getYComponent() - ymin) * height / (ymax - ymin) - sliderThumb.getHeight() * 0.5);
+        thumb.setTranslateX((getXComponent() - xmin) * width / (xmax - xmin) - thumb.getWidth() * 0.5
+                + thumbTranslateX.get());
+        thumb.setTranslateY(height - (getYComponent() - ymin) * height / (ymax - ymin) - thumb.getHeight() * 0.5
+                + thumbTranslateY.get());
     }
 
     @Override
-    protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+    protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+        if (getDisplayColorSpace() == null || getSourceColorSpace() == null || getTargetColorSpace() == null)
+            return null;
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
-                getDisplayColorSpace(),
-                getColorSpace(), getC0(), getC1(), getC2(), getC3(), getXComponentIndex(), getYComponentIndex(),
-                getRgbFilter()));
+                getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
+                getC0(), getC1(), getC2(), getC3(), getXComponentIndex(), getYComponentIndex(),
+                getRgbFilter() == null ? i -> i : getRgbFilter()));
     }
 
 
@@ -96,7 +101,8 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         float height = (float) getHeight();
         float x = MathUtil.clamp((float) mouseEvent.getX(), 0, width);
         float y = MathUtil.clamp((float) mouseEvent.getY(), 0, height);
-        NamedColorSpace cs = getColorSpace();
+        NamedColorSpace cs = getSourceColorSpace();
+        if (cs == null) return;
         float xmax = cs.getMaxValue(xComponentIndex.get());
         float xmin = cs.getMinValue(xComponentIndex.get());
         float ymax = cs.getMaxValue(yComponentIndex.get());
@@ -142,7 +148,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     }
 
 
-    class FillTask extends AbstractFillTask {
+    static class FillTask extends AbstractFillTask {
         public FillTask(@NonNull FillTaskRecord record) {
             super(record);
         }
@@ -152,23 +158,26 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
             IntBuffer b = pixelBuffer.getBuffer();
-            NamedColorSpace cs = record.colorSpace();
+            NamedColorSpace scs = record.sourceColorSpace();
+            NamedColorSpace tcs = record.targetColorSpace();
             NamedColorSpace dcs = record.displayColorSpace();
             int xIndex = record.xIndex();
-            float xmin = cs.getMinValue(xIndex);
-            float xmax = cs.getMaxValue(xIndex);
+            float xmin = scs.getMinValue(xIndex);
+            float xmax = scs.getMaxValue(xIndex);
             int yIndex = record.yIndex();
-            float ymin = cs.getMinValue(yIndex);
-            float ymax = cs.getMaxValue(yIndex);
-            float ybase = ymax;
+            float ymin = scs.getMinValue(yIndex);
+            float ymax = scs.getMaxValue(yIndex);
             float invWidth = (xmax - xmin) / (width);
             float invHeight = -(ymax - ymin) / (height);
-            float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
+            float[] colorValue = new float[Math.max(4, scs.getNumComponents())];
             colorValue[0] = record.c0();
             colorValue[1] = record.c1();
             colorValue[2] = record.c2();
             colorValue[3] = record.c3();
-            float[] rgbValue = new float[3];
+            float[] sRgb = new float[3];
+            float[] tRgb = new float[3];
+            float[] dRgb = new float[3];
+            float[] scratch = new float[3];
             int[] array = b.array();
 
             ToIntFunction<Integer> filter = record.rgbFilter();
@@ -183,12 +192,11 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             for (int y = yfrom, xy = yfrom * width; y < yto; y++, xy += width) {
                 for (int x = xfrom; x < xto; x++) {
                     float xval = x * invWidth + xmin;
-                    float yval = y * invHeight + ybase;
+                    float yval = y * invHeight + ymax;
                     colorValue[xIndex] = xval;
                     colorValue[yIndex] = yval;
 
-                    dcs.fromRGB(cs.toRGB(colorValue, rgbValue), rgbValue);
-                    int argb = RgbBitConverters.rgbFloatToArgb32(rgbValue);
+                    int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch);
                     argb = filter.applyAsInt(argb);
                     array[x + xy] = argb;
                 }
@@ -196,6 +204,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
 
         }
     }
+
 
     public int getXComponentIndex() {
         return xComponentIndex.get();

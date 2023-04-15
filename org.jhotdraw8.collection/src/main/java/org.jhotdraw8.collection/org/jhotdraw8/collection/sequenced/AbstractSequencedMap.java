@@ -149,7 +149,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    public V getOrDefault(Object key, V defaultValue) {
+    public V getOrDefault(@NonNull Object key, V defaultValue) {
         return SequencedMap.super.getOrDefault(key, defaultValue);
     }
 

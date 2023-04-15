@@ -68,8 +68,10 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
 
     public LabelConnectorHandle(@NonNull ConnectingFigure figure,
-                                NonNullMapAccessor<CssPoint2D> originKey, NonNullMapAccessor<CssPoint2D> pointKey,
-                                MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
+                                @NonNull NonNullMapAccessor<CssPoint2D> originKey,
+                                @NonNull NonNullMapAccessor<CssPoint2D> pointKey,
+                                @NonNull MapAccessor<Connector> connectorKey,
+                                @NonNull MapAccessor<Figure> targetKey) {
         super(figure, pointKey,
                 connectorKey, targetKey);
 

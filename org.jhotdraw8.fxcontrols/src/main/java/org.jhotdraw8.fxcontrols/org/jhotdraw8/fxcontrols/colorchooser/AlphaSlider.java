@@ -13,6 +13,7 @@ import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
@@ -53,9 +54,7 @@ public class AlphaSlider extends AbstractColorSlider {
     @Override
     void initialize() {
         super.initialize();
-        setC1(getColorSpace().getMaxValue(1));
-        setC2(getColorSpace().getMaxValue(2));
-        InvalidationListener handler = o -> invalidateImage();
+        InvalidationListener handler = o -> invalidateColorRect();
         c0Property().addListener(handler);
         c1Property().addListener(handler);
         c2Property().addListener(handler);
@@ -71,27 +70,31 @@ public class AlphaSlider extends AbstractColorSlider {
 
         double width = getWidth();
         double height = getHeight();
-        NamedColorSpace cs = getColorSpace();
         float vmax = getAlphaMaxValue();
         float vmin = getAlphaMinValue();
         switch (getOrientation()) {
 
             case HORIZONTAL -> {
-                sliderThumb.setTranslateX((getAlpha() - vmin) * width / (vmax - vmin) - sliderThumb.getWidth() * 0.5);
-                sliderThumb.setTranslateY((height - sliderThumb.getHeight()) * 0.5);
+                thumb.setTranslateX((getAlpha() - vmin) * width / (vmax - vmin) - thumb.getWidth() * 0.5
+                        + thumbTranslateX.get());
+                thumb.setTranslateY((height - thumb.getHeight()) * 0.5
+                        + thumbTranslateY.get());
             }
             case VERTICAL -> {
-                sliderThumb.setTranslateY(height - (getAlpha() - vmin) * height / (vmax - vmin) - sliderThumb.getHeight() * 0.5);
-                sliderThumb.setTranslateX((width - sliderThumb.getWidth()) * 0.5);
+                thumb.setTranslateY(height - (getAlpha() - vmin) * height / (vmax - vmin) - thumb.getHeight() * 0.5
+                        + thumbTranslateX.get());
+                thumb.setTranslateX((width - thumb.getWidth()) * 0.5 + thumbTranslateY.get());
             }
         }
     }
 
     @Override
-    protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+    protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+        if (getDisplayColorSpace() == null || getTargetColorSpace() == null) return null;
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
-                getDisplayColorSpace(),
-                getColorSpace(), getC0(), getC1(), getC2(), getC3(), 4, -1, getRgbFilter()), getOrientation(), getAlphaMinValue(), getAlphaMaxValue());
+                getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
+                getC0(), getC1(), getC2(), getC3(), 4, -1,
+                getRgbFilter() == null ? i -> i : getRgbFilter()), getOrientation(), getAlphaMinValue(), getAlphaMaxValue());
     }
 
 
@@ -113,9 +116,6 @@ public class AlphaSlider extends AbstractColorSlider {
         }
         requestLayout();
     }
-
-    private final static float[] gray = {0.8f, 0.8f, 0.8f};
-    private final static float[] white = {1f, 1f, 1f};
 
     static class FillTask extends AbstractFillTask {
         private final @NonNull Orientation orientation;
@@ -143,19 +143,22 @@ public class AlphaSlider extends AbstractColorSlider {
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
             IntBuffer b = pixelBuffer.getBuffer();
-            NamedColorSpace cs = record.colorSpace();
+            NamedColorSpace scs = record.sourceColorSpace();
+            NamedColorSpace tcs = record.targetColorSpace();
             NamedColorSpace dcs = record.displayColorSpace();
             float xmin = alphaMin;
             float xmax = alphaMax;
             float invWidth = (xmax - xmin) / (width);
-            float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
+            float[] colorValue = new float[Math.max(4, scs.getNumComponents())];
             colorValue[0] = record.c0();
             colorValue[1] = record.c1();
             colorValue[2] = record.c2();
             colorValue[3] = record.c3();
-            float[] rgbValue = new float[3];
-            float[] blendedRgb = new float[3];
-            RgbBitConverters.rgbFloatToRgb24(dcs.fromRGB(cs.toRGB(colorValue, rgbValue), rgbValue));
+            float[] sRgb = new float[3];
+            float[] tRgb = new float[3];
+            float[] dRgb = new float[3];
+            float[] pre = new float[3];
+            getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre);
             int[] array = b.array();
             ToIntFunction<Integer> filter = record.rgbFilter();
 
@@ -164,21 +167,21 @@ public class AlphaSlider extends AbstractColorSlider {
             int xfrom = tile.xfrom();
             int xto = tile.xto();
 
-            for (int y = yfrom, xy = yfrom * width; y < yto; y += 2, xy += width * 2) {
-                for (int x = xfrom; x < xto; x++) {
-                    float alpha = x * invWidth + xmin;
-                    float[] background = (((x >>> 1) + (y >>> 1)) & 1) == 0 ? white : gray;
-                    for (int i = 0; i < blendedRgb.length; i++) {
-                        blendedRgb[i] = rgbValue[i] * alpha + background[i] * (1 - alpha);
-                    }
-                    int argb = RgbBitConverters.rgbFloatToArgb32(blendedRgb);
-                    argb = filter.applyAsInt(argb);
-                    array[x + xy] = argb;
-                }
-                if (y < yto - 1) {
-                    System.arraycopy(array, xy + xfrom, array, xy + xfrom + width, xto - xfrom);
-                }
+            int xy = yfrom * width;
+            for (int x = xfrom; x < xto; x++) {
+                float alpha = x * invWidth + xmin;
+                int argb = getPreArgb(dcs, dRgb, pre, alpha);
+                argb = filter.applyAsInt(argb);
+                array[x + xy] = argb;
             }
+            for (int y = yfrom + 1, xyy = (yfrom + 1) * width; y < yto; y++, xyy += width) {
+                System.arraycopy(array, xy + xfrom, array, xyy + xfrom, xto - xfrom);
+            }
+        }
+
+        private static int getPreArgb(NamedColorSpace dcs, float[] dRgb, float[] pre, float alpha) {
+            int argb = RgbBitConverters.rgbFloatToPreArgb32(dRgb, alpha, pre);
+            return argb;
         }
 
         public void fillFineVertical(@NonNull TileTask.Tile tile) {
@@ -186,19 +189,22 @@ public class AlphaSlider extends AbstractColorSlider {
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
             IntBuffer b = pixelBuffer.getBuffer();
-            NamedColorSpace cs = record.colorSpace();
+            NamedColorSpace scs = record.sourceColorSpace();
+            NamedColorSpace tcs = record.targetColorSpace();
             NamedColorSpace dcs = record.displayColorSpace();
             float ymin = alphaMin;
             float ymax = alphaMax;
             float invHeight = (ymax - ymin) / (height);
-            float[] colorValue = new float[Math.max(4, cs.getNumComponents())];
-            float[] blendedRgb = new float[3];
+            float[] colorValue = new float[Math.max(4, scs.getNumComponents())];
+            float[] sRgb = new float[3];
+            float[] dRgb = new float[3];
+            float[] tRgb = new float[3];
+            float[] pre = new float[3];
             colorValue[0] = record.c0();
             colorValue[1] = record.c1();
             colorValue[2] = record.c2();
             colorValue[3] = record.c3();
-            float[] rgbValue = new float[3];
-            RgbBitConverters.rgbFloatToRgb24(dcs.fromRGB(cs.toRGB(colorValue, rgbValue), rgbValue));
+            getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, pre);
             int[] array = b.array();
             ToIntFunction<Integer> filter = record.rgbFilter();
 
@@ -210,11 +216,7 @@ public class AlphaSlider extends AbstractColorSlider {
             // Fill every single pixel
             for (int y = yfrom, xy = yfrom * width; y < yto; y++, xy += width) {
                 float alpha = (height - y) * invHeight + ymin;
-                float[] background = (((xfrom >>> 1) + (y >>> 1)) & 1) == 0 ? white : gray;
-                for (int i = 0; i < blendedRgb.length; i++) {
-                    blendedRgb[i] = rgbValue[i] * alpha + background[i] * (1 - alpha);
-                }
-                int argb = RgbBitConverters.rgbFloatToArgb32(blendedRgb);
+                int argb = getPreArgb(dcs, dRgb, pre, alpha);
                 argb = filter.applyAsInt(argb);
                 Arrays.fill(array, xy + xfrom, xy + xto, argb);
             }

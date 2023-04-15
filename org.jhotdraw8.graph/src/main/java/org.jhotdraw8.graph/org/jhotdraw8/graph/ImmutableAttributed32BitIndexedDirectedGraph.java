@@ -60,7 +60,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final @NonNull int @NonNull [] next;
+    protected final int @NonNull [] next;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -78,7 +78,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final @NonNull int @NonNull [] nextOffset;
+    protected final int @NonNull [] nextOffset;
 
     /**
      * Holds the arrow objects.

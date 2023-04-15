@@ -184,6 +184,18 @@ public class RgbBitConverters {
         return (clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(rgb);
     }
 
+    public static int rgbFloatToPreArgb32(float[] rgb, float alpha, float[] pre) {
+        // If the color is not displayable in RGB, we return transparent black.
+        if (rgb[0] < -EPSILON || rgb[1] < -EPSILON || rgb[2] < -EPSILON
+                || rgb[0] > EPSILON + 1 || rgb[1] > EPSILON + 1 || rgb[2] > EPSILON + 1) {
+            return 0;
+        }
+        pre[0] = rgb[0] * alpha;
+        pre[1] = rgb[1] * alpha;
+        pre[2] = rgb[2] * alpha;
+        return (clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(pre);
+    }
+
     /**
      * Converts from float to RGB with 24 bit color depth.
      *

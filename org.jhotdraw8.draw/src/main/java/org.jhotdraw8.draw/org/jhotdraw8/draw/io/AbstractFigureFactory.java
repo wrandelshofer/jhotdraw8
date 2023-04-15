@@ -347,7 +347,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return idFactory;
     }
 
-    public void setIdFactory(IdFactory idFactory) {
+    public void setIdFactory(@Nullable IdFactory idFactory) {
         this.idFactory = idFactory;
     }
 

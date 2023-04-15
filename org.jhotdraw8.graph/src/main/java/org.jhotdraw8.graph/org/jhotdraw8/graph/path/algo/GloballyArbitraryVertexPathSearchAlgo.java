@@ -75,7 +75,7 @@ public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Compara
                                                  @NonNull Predicate<V> goalPredicate,
                                                  @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                                                  @NonNull AddToSet<V> visited,
-                                                 @NonNull int maxDepth) {
+                                                 int maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<VertexBackLink<V>> queue = new ArrayDeque<>(16);

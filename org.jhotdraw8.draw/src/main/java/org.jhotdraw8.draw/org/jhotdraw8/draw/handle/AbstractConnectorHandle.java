@@ -43,11 +43,11 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
             this.connectedFigure = connectedFigure;
         }
 
-        public Connector getConnector() {
+        public @NonNull Connector getConnector() {
             return connector;
         }
 
-        public Figure getConnectedFigure() {
+        public @NonNull Figure getConnectedFigure() {
             return connectedFigure;
         }
     }

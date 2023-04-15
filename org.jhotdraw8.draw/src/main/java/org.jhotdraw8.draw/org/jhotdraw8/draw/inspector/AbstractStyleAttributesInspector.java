@@ -468,7 +468,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     protected abstract @NonNull Iterable<E> getEntities();
 
-    private @Nullable LookupEntry getLookupEntryAt(@NonNull int caretPosition) {
+    private @Nullable LookupEntry getLookupEntryAt(int caretPosition) {
         int insertionPoint = Collections.binarySearch(lookupTable, new LookupEntry(caretPosition, null, null));
         if (insertionPoint < 0) {
             insertionPoint = ~insertionPoint - 1;

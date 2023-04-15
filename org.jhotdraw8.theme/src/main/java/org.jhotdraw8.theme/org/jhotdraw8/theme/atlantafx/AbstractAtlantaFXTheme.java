@@ -6,7 +6,8 @@
 package org.jhotdraw8.theme.atlantafx;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.HlsuvColorUtil;
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.color.OKLchColorSpace;
 import org.jhotdraw8.theme.AbstractTheme;
 import org.jhotdraw8.theme.Theme;
 import org.jhotdraw8.theme.ThemeParameters;
@@ -32,23 +33,29 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
     }
 
     @Override
-    public String createUserAgentStylesheet(ThemeParameters params) {
+    public String createUserAgentStylesheet(@NonNull ThemeParameters params) {
         StringBuilder buf = new StringBuilder();
         buf.append("@import \"" + uaStylesheetUrl + "\";\n");
         buf.append(".root {\n");
         buf.append("-fx-font-size:" + params.getFontSize() + "px;\n");
         Color accentColor = params.getAccentColor() == null ? Color.BLACK : params.getAccentColor();
-        HlsuvColorUtil hsLuvColorUtil = new HlsuvColorUtil();
+        OKLchColorSpace cs = new OKLchColorSpace();
+        float[] lch = cs.fromRGB(new float[]{(float) accentColor.getRed(), (float) accentColor.getGreen(), (float) accentColor.getBlue()});
+        float[] rgb = new float[3];
         switch (getAppearance()) {
 
             case "Light" -> {
-                if (hsLuvColorUtil.getLightness(accentColor) > 0.4f) {
-                    accentColor = hsLuvColorUtil.adjustLightness(accentColor, 0.4f);
+                if (lch[0] > 0.4f) {
+                    lch[0] = 0.4f;
+                    cs.toRGB(lch, rgb);
+                    accentColor = new Color(rgb[0], rgb[1], rgb[2], 1.0);
                 }
             }
             case "Dark" -> {
-                if (hsLuvColorUtil.getLightness(accentColor) < 0.6f) {
-                    accentColor = hsLuvColorUtil.adjustLightness(accentColor, 0.6f);
+                if (lch[0] < 0.6f) {
+                    lch[0] = 0.6f;
+                    cs.toRGB(lch, rgb);
+                    accentColor = new Color(rgb[0], rgb[1], rgb[2], 1.0);
                 }
             }
         }
@@ -57,7 +64,10 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
         String accentColorStr = toWebColor(accentColor);
         buf.append("-fx-accent:" + accentColorStr + ";\n");
         for (int idx = 0, count = 10; idx < count; idx++) {
-            Color cc = hsLuvColorUtil.adjustLightness(accentColor, (float) (count + 1 - idx) / (count + 2));
+            lch[0] = (float) (count + 1 - idx) / (count + 2);
+            cs.toRGB(lch, rgb);
+            Color cc = new Color(rgb[0], rgb[1], rgb[2], 1.0);
+            ;
             buf.append("-color-accent-" + idx + ":" + toWebColor(cc) + ";\n");
         }
         buf.append("-color-accent-fg:" + accentColorStr + ";\n");

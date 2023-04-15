@@ -83,10 +83,10 @@ public class ColorSlidersCmykMain extends AbstractColorSlidersMain {
                 new CmykNominalColorSpace()//,
                 //new NamedColorSpaceAdapter("CMYK generic",CMYKGenericColorSpace.getInstance())
         );
-        sliderC.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        sliderM.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        sliderY.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        sliderK.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderC.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderM.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderY.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderK.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
 
         var bitDepthBox = createBitDepthComboBox();
         sliderC.rgbFilterProperty().bind(bitDepthBox.valueProperty());

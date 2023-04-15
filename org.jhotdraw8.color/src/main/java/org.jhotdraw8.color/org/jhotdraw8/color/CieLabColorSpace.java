@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.color;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * The 1976 CIE {@code L*a*b*} color space (CIELAB).
  * <p>
@@ -79,12 +81,12 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] toRGB(float[] colorvalue, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
         return new SrgbColorSpace().fromCIEXYZ(toCIEXYZ(colorvalue, rgb), rgb);
     }
 
     @Override
-    public float[] fromRGB(float[] rgb, float[] component) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] component) {
         return fromCIEXYZ(new SrgbColorSpace().toCIEXYZ(rgb, component), component);
     }
 
@@ -122,7 +124,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
      * @return CIEXYZ color value.
      */
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         double L = colorvalue[0];
         double a = colorvalue[1];
         double b = colorvalue[2];
@@ -196,7 +198,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
      * @return Lab color value.
      */
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] component) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] component) {
         double X = xyz[0];
         double Y = xyz[1];
         double Z = xyz[2];
@@ -233,7 +235,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return "CIE 1976 L*a*b*";
     }
 

@@ -252,38 +252,38 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
         return fromXyzMatrix.mul(xyz, colorvalue);
     }
 
     @Override
-    public float[] fromRGB(float[] rgb, float[] colorvalue) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
         return fromLinearSrgbMatrix.mul(LinearSrgbColorSpace.toLinear(rgb, colorvalue), colorvalue);
 
 
         // return fromCIEXYZ(SRGB_COLOR_SPACE.toCIEXYZ(rgb, colorvalue), colorvalue);
     }
 
-    public Matrix3 getToXyzMatrix() {
+    public @NonNull Matrix3 getToXyzMatrix() {
         return toXyzMatrix;
     }
 
-    protected Matrix3 getFromXyzMatrix() {
+    protected @NonNull Matrix3 getFromXyzMatrix() {
         return fromXyzMatrix;
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         return toXyzMatrix.mul(colorvalue, xyz);
     }
 
     @Override
-    public float[] toRGB(float[] colorvalue, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
         return LinearSrgbColorSpace.fromLinear(toLinearSrgbMatrix.mul(colorvalue, rgb), rgb);
         // return SRGB_COLOR_SPACE.fromCIEXYZ(toCIEXYZ(colorvalue, rgb), rgb);
     }

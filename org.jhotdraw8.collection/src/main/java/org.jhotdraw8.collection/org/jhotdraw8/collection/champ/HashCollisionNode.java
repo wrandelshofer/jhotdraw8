@@ -120,7 +120,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    @Nullable
+    @NonNull
     Node<D> remove(@Nullable IdentityObject mutator, D data,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
@@ -151,7 +151,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    @Nullable
+    @NonNull
     Node<D> update(@Nullable IdentityObject mutator, D data,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details,
                    @NonNull BiFunction<D, D, D> replaceFunction, @NonNull BiPredicate<D, D> equalsFunction,

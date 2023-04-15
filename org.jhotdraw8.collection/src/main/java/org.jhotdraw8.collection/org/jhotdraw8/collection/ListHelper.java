@@ -119,7 +119,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull double @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final double @NonNull [] items) {
+    public static double @NonNull [] grow(final int targetCapacity, final int itemSize, final double @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -135,7 +135,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull byte @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final byte @NonNull [] items) {
+    public static byte @NonNull [] grow(final int targetCapacity, final int itemSize, final byte @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -151,7 +151,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull short @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final short @NonNull [] items) {
+    public static short @NonNull [] grow(final int targetCapacity, final int itemSize, final short @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -167,7 +167,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull int @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final int @NonNull [] items) {
+    public static int @NonNull [] grow(final int targetCapacity, final int itemSize, final int @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -183,7 +183,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull long @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final long @NonNull [] items) {
+    public static long @NonNull [] grow(final int targetCapacity, final int itemSize, final long @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -199,7 +199,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull char @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final char @NonNull [] items) {
+    public static char @NonNull [] grow(final int targetCapacity, final int itemSize, final char @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -232,7 +232,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static @NonNull int @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final int @NonNull [] items) {
+    public static int @NonNull [] trimToSize(final int size, final int itemSize, final int @NonNull [] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -248,7 +248,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static @NonNull long @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final long @NonNull [] items) {
+    public static long @NonNull [] trimToSize(final int size, final int itemSize, final long @NonNull [] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -264,7 +264,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static @NonNull double @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final double @NonNull [] items) {
+    public static double @NonNull [] trimToSize(final int size, final int itemSize, final double @NonNull [] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -280,7 +280,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static @NonNull byte @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final byte @NonNull [] items) {
+    public static byte @NonNull [] trimToSize(final int size, final int itemSize, final byte @NonNull [] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;

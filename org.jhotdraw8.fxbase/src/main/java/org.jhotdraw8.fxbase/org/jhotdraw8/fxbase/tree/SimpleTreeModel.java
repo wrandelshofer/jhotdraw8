@@ -24,17 +24,17 @@ public class SimpleTreeModel<N> implements TreeModel<N> {
     }
 
     @Override
-    public @NonNull N getChild(N parent, int index) {
+    public @NonNull N getChild(@NonNull N parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int getChildCount(N node) {
+    public int getChildCount(@NonNull N node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public @NonNull List<N> getChildren(N node) {
+    public @NonNull List<N> getChildren(@NonNull N node) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -49,12 +49,12 @@ public class SimpleTreeModel<N> implements TreeModel<N> {
     }
 
     @Override
-    public void insertChildAt(N child, N parent, int index) {
+    public void insertChildAt(@NonNull N child, @NonNull N parent, int index) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void removeFromParent(N child) {
+    public void removeFromParent(@NonNull N child) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

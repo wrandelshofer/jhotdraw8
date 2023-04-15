@@ -7,6 +7,7 @@ package org.jhotdraw8.application.resources;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 
 public class ClasspathResources extends ResourceBundle implements Serializable, Resources {
     private static final Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -208,7 +210,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public void setParent(Resources parent) {
+    public void setParent(@Nullable Resources parent) {
         this.parent = parent;
     }
 }

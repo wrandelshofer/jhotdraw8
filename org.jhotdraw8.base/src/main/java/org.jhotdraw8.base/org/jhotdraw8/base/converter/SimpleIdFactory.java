@@ -66,7 +66,7 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public Object putIdAndObject(String id, Object object) {
+    public Object putIdAndObject(@NonNull String id, @NonNull Object object) {
         String oldId = objectToId.put(object, id);
         if (oldId != null) {
             idToObject.remove(oldId);
@@ -79,7 +79,7 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public Object putIdToObject(String id, Object object) {
+    public Object putIdToObject(@NonNull String id, @NonNull Object object) {
         Object oldObject = idToObject.put(id, object);
         if (oldObject != null) {
             objectToId.remove(oldObject);
@@ -104,7 +104,7 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public @Nullable String createId(Object object, @Nullable String prefix, @Nullable String suggestedId) {
+    public @Nullable String createId(@NonNull Object object, @Nullable String prefix, @Nullable String suggestedId) {
         String existingId = objectToId.get(object);
         if (existingId == null) {
             if (suggestedId != null && !idToObject.containsKey(suggestedId)) {

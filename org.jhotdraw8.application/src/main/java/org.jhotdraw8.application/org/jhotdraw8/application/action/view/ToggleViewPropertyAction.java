@@ -34,7 +34,7 @@ public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
         selectedProperty().bindBidirectional(property);
     }
 
-    public ToggleViewPropertyAction(@NonNull Application app, Activity view, Function<Activity, Node> nodeGetter, String id, @NonNull Resources labels) {
+    public ToggleViewPropertyAction(@NonNull Application app, Activity view, @Nullable Function<Activity, Node> nodeGetter, String id, @NonNull Resources labels) {
         super(view);
         labels.configureAction(this, id);
         this.property = null;

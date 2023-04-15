@@ -63,7 +63,7 @@ class SequencedElement<E> implements SequencedData {
         return Objects.hashCode(element);
     }
 
-    public E getElement() {
+    public @Nullable E getElement() {
         return element;
     }
 

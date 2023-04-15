@@ -222,7 +222,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @param editor the editor
      */
-    void deactivate(@Nullable DrawingEditor editor);
+    void deactivate(@NonNull DrawingEditor editor);
 
     /**
      * Activates the tool for the given editor. This method is called whenever

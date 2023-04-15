@@ -6,6 +6,8 @@
  */
 package org.jhotdraw8.color;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.awt.color.ColorSpace;
 import java.util.Objects;
 
@@ -23,32 +25,32 @@ public abstract class AbstractNamedColorSpace extends ColorSpace implements Name
     }
 
     @Override
-    public float[] fromCIEXYZ(float[] colorvalue) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] colorvalue) {
         return fromCIEXYZ(colorvalue, new float[getNumComponents()]);
     }
 
     @Override
-    public float[] toRGB(float[] colorvalue) {
+    public float @NonNull [] toRGB(float @NonNull [] colorvalue) {
         return toRGB(colorvalue, new float[3]);
     }
 
     @Override
-    public float[] fromRGB(float[] rgb) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb) {
         return fromRGB(rgb, new float[getNumComponents()]);
     }
 
     @Override
-    public float[] toCIEXYZ(float[] colorvalue) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue) {
         return toCIEXYZ(colorvalue, new float[3]);
     }
 
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         return new SrgbColorSpace().toCIEXYZ(toRGB(colorvalue, xyz), xyz);
     }
 
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
         return fromRGB(new SrgbColorSpace().fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
@@ -63,13 +65,11 @@ public abstract class AbstractNamedColorSpace extends ColorSpace implements Name
      */
     private transient volatile String[] compName;
 
-    public String getName(int component) {
+    public @NonNull String getName(int component) {
         Objects.checkIndex(component, getNumComponents());
         if (compName == null) {
             compName = switch (getType()) {
                 case NamedColorSpace.TYPE_LCH -> new String[]{"Lightness", "Chroma", "Hue"};
-                case NamedColorSpace.TYPE_HSB -> new String[]{"Hue", "Saturation", "Brightness"};
-                case NamedColorSpace.TYPE_HSL -> new String[]{"Hue", "Saturation", "Lightness"};
                 default -> {
                     String[] tmp = new String[getNumComponents()];
                     for (int i = 0; i < tmp.length; i++) {

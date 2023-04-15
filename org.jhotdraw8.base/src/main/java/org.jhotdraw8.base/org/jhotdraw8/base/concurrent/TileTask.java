@@ -29,7 +29,7 @@ public class TileTask extends CountedCompleter<Void> {
         this(null, tile, chunkSize, tileConsumer, future);
     }
 
-    TileTask(@Nullable TileTask parent, @NonNull Tile tile, int chunkSize, @NonNull Consumer<Tile> tileConsumer, CompletableFuture<Void> future) {
+    TileTask(@Nullable TileTask parent, @NonNull Tile tile, int chunkSize, @NonNull Consumer<Tile> tileConsumer, @NonNull CompletableFuture<Void> future) {
         super(parent, ((tile.xto - tile.xfrom + chunkSize - 1) / chunkSize) * ((tile.yto - tile.yfrom + chunkSize - 1) / chunkSize) - 1);
         this.chunkSize = chunkSize;
         this.tile = tile;

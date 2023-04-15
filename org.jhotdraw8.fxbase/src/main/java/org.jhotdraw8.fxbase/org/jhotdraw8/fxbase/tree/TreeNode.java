@@ -99,7 +99,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * this type is present. Returns {@code this} if this object is of type
      * {@literal <T>}.
      */
-    default @NonNull @Nullable <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
+    default @Nullable <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
         while (ancestor != null && !ancestorType.isInstance(ancestor)) {

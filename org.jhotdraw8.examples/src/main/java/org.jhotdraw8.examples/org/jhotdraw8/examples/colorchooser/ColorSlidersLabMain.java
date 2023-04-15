@@ -65,8 +65,8 @@ public class ColorSlidersLabMain extends AbstractColorSlidersMain {
                 new CieLabColorSpace(),
                 new OKLabColorSpace()
         );
-        colorRectangleSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        colorSlider.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        colorRectangleSlider.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        colorSlider.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
 
         var bitDepthBox = createBitDepthComboBox();
         colorRectangleSlider.rgbFilterProperty().bind(bitDepthBox.valueProperty());

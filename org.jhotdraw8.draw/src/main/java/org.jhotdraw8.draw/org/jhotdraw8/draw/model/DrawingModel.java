@@ -134,7 +134,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the getChildren.
      */
     @Override
-    default List<Figure> getChildren(@NonNull Figure figure) {
+    default @NonNull List<Figure> getChildren(@NonNull Figure figure) {
         return figure.getChildren();
     }
 
@@ -157,7 +157,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @return the child
      */
     @Override
-    default Figure getChild(@NonNull Figure parent, int index) {
+    default @NonNull Figure getChild(@NonNull Figure parent, int index) {
         return getChildren(parent).get(index);
     }
 
@@ -168,7 +168,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param child the figure
      */
     @Override
-    void removeFromParent(Figure child);
+    void removeFromParent(@NonNull Figure child);
 
     /**
      * Removes the specified child from its parent and fires appropriate
@@ -188,7 +188,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param index  the index
      */
     @Override
-    void insertChildAt(Figure child, Figure parent, int index);
+    void insertChildAt(@NonNull Figure child, @NonNull Figure parent, int index);
 
     /**
      * Adds the specified child to a parent and fires appropriate
@@ -198,7 +198,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param parent the parent.
      */
     @Override
-    default void addChildTo(Figure child, @NonNull Figure parent) {
+    default void addChildTo(@NonNull Figure child, @NonNull Figure parent) {
         insertChildAt(child, parent, getChildCount(parent));
     }
 
@@ -344,7 +344,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param f the figure
      */
     @Override
-    default void fireNodeInvalidated(Figure f) {
+    default void fireNodeInvalidated(@NonNull Figure f) {
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 

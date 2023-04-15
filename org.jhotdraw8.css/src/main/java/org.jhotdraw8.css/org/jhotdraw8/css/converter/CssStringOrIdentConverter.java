@@ -37,17 +37,21 @@ public class CssStringOrIdentConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull String value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
+        if (value == null) {
+            out.append("none");
+            return;
+        }
         StringBuffer buf = new StringBuffer();
         boolean isIdent = true;
         buf.append('"');
         for (char ch : value.toCharArray()) {
             switch (ch) {
-            case '"':
-                buf.append('\\');
-                buf.append('"');
-                isIdent = false;
-                break;
+                case '"':
+                    buf.append('\\');
+                    buf.append('"');
+                    isIdent = false;
+                    break;
             case ' ':
                 buf.append(ch);
                 isIdent = false;

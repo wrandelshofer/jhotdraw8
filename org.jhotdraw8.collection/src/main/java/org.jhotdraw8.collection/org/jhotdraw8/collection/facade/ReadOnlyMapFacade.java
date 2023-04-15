@@ -66,7 +66,7 @@ public class ReadOnlyMapFacade<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public Iterator<Map.Entry<K, V>> iterator() {
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return iteratorFunction.get();
     }
 

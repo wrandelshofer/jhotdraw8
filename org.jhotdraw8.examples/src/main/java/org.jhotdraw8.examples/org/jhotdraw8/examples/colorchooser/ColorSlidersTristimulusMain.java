@@ -66,9 +66,9 @@ public class ColorSlidersTristimulusMain extends AbstractColorSlidersMain {
                 new NamedColorSpaceAdapter("CIE XYZ", ColorSpace.getInstance(ColorSpace.CS_CIEXYZ)),
                 new NamedColorSpaceAdapter("PYCC", ColorSpace.getInstance(ColorSpace.CS_PYCC))
         );
-        sliderR.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        sliderG.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
-        sliderB.colorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderR.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderG.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
+        sliderB.targetColorSpaceProperty().bind(colorSpaceBox.valueProperty());
 
         var bitDepthBox = createBitDepthComboBox();
         sliderR.rgbFilterProperty().bind(bitDepthBox.valueProperty());

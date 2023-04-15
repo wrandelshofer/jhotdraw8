@@ -107,7 +107,7 @@ public class PreferencesStub
     }
 
     @Override
-    public @NonNull byte[] getByteArray(String key, byte[] def) {
+    public byte @NonNull [] getByteArray(String key, byte[] def) {
         return (byte[]) (map.getOrDefault(key, def));
     }
 

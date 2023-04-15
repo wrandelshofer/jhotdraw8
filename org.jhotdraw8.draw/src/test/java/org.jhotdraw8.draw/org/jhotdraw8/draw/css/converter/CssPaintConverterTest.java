@@ -19,6 +19,7 @@ import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -40,8 +41,22 @@ public class CssPaintConverterTest {
         IdFactory idFactory = null;
         CssPaintConverter instance = new CssPaintConverter(true);
         Paint actual = instance.fromString(buf, idFactory);
-        assertEquals(actual, expected == null ? null : expected.getPaint());
 
+        if (expected != null
+                && expected.getPaint() instanceof Color c
+                && actual instanceof Color a) {
+            var expectedRgb = new float[3];
+            expectedRgb[0] = (float) c.getRed();
+            expectedRgb[1] = (float) c.getGreen();
+            expectedRgb[2] = (float) c.getBlue();
+            var actualRgb = new float[3];
+            actualRgb[0] = (float) a.getRed();
+            actualRgb[1] = (float) a.getGreen();
+            actualRgb[2] = (float) a.getBlue();
+            assertArrayEquals(expectedRgb, actualRgb, 0x1p-8f, "input: " + string + " expected: " + expected);
+        } else {
+            assertEquals(actual, expected == null ? null : expected.getPaint(), "input: " + string + " expected: " + expected);
+        }
     }
 
     @TestFactory

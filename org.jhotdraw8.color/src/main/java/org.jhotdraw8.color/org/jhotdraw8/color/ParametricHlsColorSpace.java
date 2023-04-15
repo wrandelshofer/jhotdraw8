@@ -1,35 +1,78 @@
-/* @(#)HSLColorSpace.java
+/* @(#)CIELCHabColorSpace.java
  * Copyright © The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.color;
 
-import java.awt.color.ColorSpace;
+import org.jhotdraw8.annotation.NonNull;
 
 import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 /**
- * An HSL color space with additive complements in the hue color wheel: red is
- * opposite cyan, magenta is opposite green, blue is opposite yellow.
+ * A parametric HLS color space computed from an RGB color space.
  * <p>
- * A color with maximal lightness is pure white.
+ * Components:
+ * <dl>
+ *     <dt>hue</dt><dd>0 to 360 degrees</dd>
+ *     <dt>lightness</dt><dd>0 to 1 percentage</dd>
+ *     <dt>saturation</dt><dd>0 to 1 percentage</dd>
+ * </dl>
  * <p>
- * A color with minimal lightness is pure black.
+ * <p>
+ * A color with maximal {@code lightness} is pure white.
+ * <p>
+ * A color with minimal {@code lightness} is pure black.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>CSS Color Module Level 4. 7. HSL Colors: hsl() and hsla() functions.</dt>
+ *     <dd><a href="https://www.w3.org/TR/css-color-4/#the-hsl-notation">w3.org</a></dd>
+ * </dl>
  *
  * @author Werner Randelshofer
-
  */
-public class HlsColorSpace extends AbstractNamedColorSpace {
-    private static final long serialVersionUID = 1L;
+public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
 
-    public HlsColorSpace() {
-        super(ColorSpace.TYPE_HLS, 3);
+    private static final long serialVersionUID = 1L;
+    private final @NonNull NamedColorSpace labColorSpace;
+    private final @NonNull String name;
+
+    public ParametricHlsColorSpace(@NonNull String name, @NonNull NamedColorSpace labColorSpace) {
+        super(TYPE_HLS, 3);
+        assert (labColorSpace.getType() == TYPE_RGB);
+        this.name = name;
+        this.labColorSpace = labColorSpace;
+    }
+
+    /**
+     * XYZ to LCH.
+     *
+     * @param lch CIEXYZ color value.
+     * @return LCH color value.
+     */
+    @Override
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
+        return rgbToHls(labColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
     @Override
-    public float[] toRGB(float[] components, float[] rgb) {
-        float hue = components[0];
-        float lightness = components[1];
-        float saturation = components[2];
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
+        return rgbToHls(labColorSpace.fromRGB(rgb, lch), lch);
+    }
+
+    @Override
+    public float getMaxValue(int component) {
+        return component == 0 ? 360f : 1f;
+    }
+
+    @Override
+    public @NonNull String getName() {
+        return name;
+    }
+
+    protected float @NonNull [] hlsToRgb(float[] hls, float[] rgb) {
+        float hue = hls[0] / 360f;
+        float saturation = hls[2];
+        float lightness = hls[1];
 
         // compute p and q from saturation and lightness
         float q;
@@ -41,7 +84,8 @@ public class HlsColorSpace extends AbstractNamedColorSpace {
         float p = 2f * lightness - q;
 
         // normalize hue to -1..+1
-        float hk = hue - (float) Math.floor(hue); // / 360f;
+
+        float hk = hue - (float) Math.floor(hue);
 
         // compute red, green and blue
         float red = hk + 1f / 3f;
@@ -105,11 +149,10 @@ public class HlsColorSpace extends AbstractNamedColorSpace {
         return rgb;
     }
 
-    @Override
-    public float[] fromRGB(float[] rgbvalue, float[] component) {
-        float r = rgbvalue[0];
-        float g = rgbvalue[1];
-        float b = rgbvalue[2];
+    protected float[] rgbToHls(float[] rgb, float[] hls) {
+        float r = rgb[0];
+        float g = rgb[1];
+        float b = rgb[2];
 
         float max = Math.max(Math.max(r, g), b);
         float min = Math.min(Math.min(r, g), b);
@@ -120,10 +163,11 @@ public class HlsColorSpace extends AbstractNamedColorSpace {
 
         if (max == min) {
             hue = 0;
-        } else if (max == r && g >= b) {
+        } else if (max == r) {
             hue = 60f * (g - b) / (max - min);
-        } else if (max == r && g < b) {
-            hue = 60f * (g - b) / (max - min) + 360f;
+            if (g < b) {
+                hue += 360f;
+            }
         } else if (max == g) {
             hue = 60f * (b - r) / (max - min) + 120f;
         } else /*if (max == b)*/ {
@@ -140,14 +184,26 @@ public class HlsColorSpace extends AbstractNamedColorSpace {
             saturation = (max - min) / (2 - (max + min));
         }
 
-        component[0] = hue / 360f;
-        component[1] = luminance;
-        component[2] = saturation;
-        return component;
+        hls[0] = hue;
+        hls[2] = saturation;
+        hls[1] = luminance;
+        return hls;
+    }
+
+    /**
+     * LCH to XYZ.
+     *
+     * @param colorvalue LCH color value.
+     * @return CIEXYZ color value.
+     */
+    @Override
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+        return labColorSpace.toCIEXYZ(hlsToRgb(colorvalue, xyz), xyz);
     }
 
     @Override
-    public String getName() {
-        return "HLS";
+    public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
+        return labColorSpace.toRGB(hlsToRgb(lch, rgb), rgb);
     }
+
 }

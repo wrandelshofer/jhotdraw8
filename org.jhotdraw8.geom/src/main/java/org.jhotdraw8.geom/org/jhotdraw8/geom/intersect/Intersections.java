@@ -24,7 +24,7 @@ class Intersections {
     private Intersections() {
     }
 
-    private static @NonNull double[] addZeroAndOne(@NonNull double[] clampedRoots) {
+    private static double @NonNull [] addZeroAndOne(double @NonNull [] clampedRoots) {
         double[] roots = new double[clampedRoots.length + 2];
         int numRoots = 0;
         Arrays.sort(clampedRoots);

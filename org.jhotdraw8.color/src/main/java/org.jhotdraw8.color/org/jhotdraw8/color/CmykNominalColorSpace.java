@@ -3,6 +3,8 @@
  */
 package org.jhotdraw8.color;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.awt.color.ColorSpace;
 
 /**
@@ -10,10 +12,9 @@ import java.awt.color.ColorSpace;
  * nominally converted color components from/to an RGB color model.
  * <p>
  * This model may not be very useful. It assumes that the color components
- * perfectly absorb the desired wavelenghts.
+ * perfectly absorb the desired wavelengths.
  *
  * @author Werner Randelshofer
-
  */
 public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     private static final long serialVersionUID = 1L;
@@ -25,7 +26,7 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] toRGB(float[] component, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] component, float @NonNull [] rgb) {
         float cyan, magenta, yellow, black;
 
         cyan = component[0];
@@ -51,7 +52,7 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] fromRGB(float[] rgbvalue, float[] colorvalue) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgbvalue, float @NonNull [] colorvalue) {
         float r = rgbvalue[0];
         float g = rgbvalue[1];
         float b = rgbvalue[2];
@@ -88,7 +89,7 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return "Nominal CMYK";
     }
 }

@@ -91,7 +91,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable @NonNull CssFont value) {
+    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, CssFont value) {
         if (value == null) {
             return remove(a);
         } else {

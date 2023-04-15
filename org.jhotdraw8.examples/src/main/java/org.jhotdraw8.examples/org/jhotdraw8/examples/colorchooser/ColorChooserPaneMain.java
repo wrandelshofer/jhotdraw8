@@ -4,18 +4,21 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.fxcontrols.colorchooser.ColorChooser;
+import org.jhotdraw8.fxcontrols.colorchooser.ColorChooserPane;
 
-public class ColorChooserMain extends Application {
+public class ColorChooserPaneMain extends Application {
 
     @Override
     public void start(@NonNull Stage primaryStage) {
-        ColorChooser root = new ColorChooser();
+        ColorChooserPane root = new ColorChooserPane();
+
+        root.getModel().initWithDefaultValues();
 
         Scene scene = new Scene(root, 300, 250);
 
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
         primaryStage.show();
     }
 

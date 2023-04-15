@@ -11,10 +11,10 @@ import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.color.CssColorSpaces;
-import org.jhotdraw8.color.CssHslColorSpace;
-import org.jhotdraw8.color.CssLegacySrgbColorSpace;
-import org.jhotdraw8.color.HsbColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.ParametricHlsColorSpace;
+import org.jhotdraw8.color.ParametricHsvColorSpace;
+import org.jhotdraw8.color.ParametricScaledColorSpace;
 import org.jhotdraw8.color.SrgbColorSpace;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
@@ -97,6 +97,9 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  *
  *     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>
  *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#rgb-functions">w3.org</a></dd>
+ *
+ *     <dt>JavaFX 20. JavaFX CSS Reference Guide. Types. {@literal <color>}.</dt>
+ *     <dd><a href="https://openjfx.io/javadoc/20/javafx.graphics/javafx/scene/doc-files/cssref.html#typecolor">openjfx.io</a></dd>
  * </dl>
  *
  * @author Werner Randelshofer
@@ -114,61 +117,17 @@ public class CssColorConverter implements CssConverter<CssColor> {
         this.nullable = nullable;
     }
 
-    private String colorParamToRgbString(List<CssSize> params) {
+    private String colorParamToString(List<CssSize> params) {
         StringBuilder buf = new StringBuilder(16);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < params.size(); i++) {
             if (i > 0) {
-                buf.append(' ');
+                if (i == 3)
+                    buf.append(" / ");
+                else
+                    buf.append(' ');
             }
-            boolean asPercentage = "%".equals(params.get(0).getUnits());
-            double cp = params.get(i).getValue();
-            if (asPercentage) {
-                buf.append(number.toString(cp * 100d / 255d));
-                buf.append('%');
-            } else {
-                buf.append(number.toString(cp));
-            }
-        }
-        if (params.size() == 4) {
-            boolean asPercentage = "%".equals(params.get(3).getUnits());
-            double clampedAlpha = clamp(params.get(3).getValue(), 0, 1);
-            if (clampedAlpha != 1) {
-                buf.append(" / ");
-                if (asPercentage) {
-                    buf.append(number.toString(clampedAlpha * 100));
-                    buf.append('%');
-                } else {
-                    buf.append(number.toString(clampedAlpha));
-                }
-            }
-        }
-        return buf.toString();
-    }
-
-    private String colorParamToHslString(List<CssSize> params) {
-        StringBuilder buf = new StringBuilder(16);
-        buf.append(number.toString(params.get(0).getValue()));
-        for (int i = 1; i < 3; i++) {
-            buf.append(' ');
-            double cp = params.get(i).getValue();
-            if ("%".equals(params.get(i).getUnits())) {
-                buf.append(number.toString(cp * 100));
-                buf.append('%');
-            } else {
-                buf.append(number.toString(cp));
-            }
-        }
-        if (params.size() == 4) {
-            double clampedAlpha = clamp(params.get(3).getValue(), 0, 1);
-            if (clampedAlpha != 1) {
-                buf.append(" / ");
-                if ("%".equals(params.get(3).getUnits())) {
-                    buf.append(number.toString(clampedAlpha * 100));
-                    buf.append('%');
-                } else {
-                    buf.append(number.toString(clampedAlpha));
-                }
-            }
+            buf.append(number.toString(params.get(i).getValue()));
+            buf.append(params.get(i).getUnits());
         }
         return buf.toString();
     }
@@ -242,7 +201,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
         if ("color".equals(functionName)) {
             if (tt.next() == CssTokenType.TT_IDENT) {
                 colorSpaceParam = tt.currentStringNonNull().toLowerCase();
-                if ("xyz".equals(colorSpaceParam)) colorSpaceParam = "xyz-d65";
+
             } else {
                 tt.pushBack();
             }
@@ -261,7 +220,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return new CssColor(
                 "color("
                         + colorSpaceParam + " "
-                        + colorParamToRgbString(params)
+                        + colorParamToString(params)
                         + ")",
                 new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
     }
@@ -270,37 +229,9 @@ public class CssColorConverter implements CssConverter<CssColor> {
         List<CssSize> params = new ArrayList<>();
         while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             switch (tt.current()) {
-                case CssTokenType.TT_DIMENSION -> {
+                case CssTokenType.TT_DIMENSION, CssTokenType.TT_PERCENTAGE -> {
                     if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
-                    float min = cs.getMinValue(params.size());
-                    float max = cs.getMaxValue(params.size());
-                    switch (tt.currentStringNonNull()) {
-                        case "deg" -> {
-                            params.add(CssSize.of((tt.currentNumberNonNull().doubleValue() % 360.0) * (max - min) / 360.0 + min, "deg"));
-                        }
-                        case "grad" -> {
-                            params.add(CssSize.of(((tt.currentNumberNonNull().doubleValue() % 400.0) * (max - min) / 400.0 + min), "grad"));
-                        }
-                        case "rad" -> {
-                            params.add(CssSize.of(((tt.currentNumberNonNull().doubleValue() % (2 * Math.PI)) * (max - min) * 0.5 / Math.PI + min), "rad"));
-                        }
-                        case "turn" -> {
-                            params.add(CssSize.of(((tt.currentNumberNonNull().doubleValue() % 1.0) * (max - min) + min), "turn"));
-                        }
-                        default ->
-                                throw tt.createParseException("CssColor: unsupported dimension: '" + tt.currentStringNonNull() + "'.");
-                    }
-                }
-                case CssTokenType.TT_PERCENTAGE -> {
-                    if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
-                    if (params.size() == 3) {
-                        // alpha
-                        params.add(CssSize.of((tt.currentNumberNonNull().doubleValue() / 100.0), "%"));
-                    } else {
-                        float min = cs.getMinValue(params.size());
-                        float max = cs.getMaxValue(params.size());
-                        params.add(CssSize.of((tt.currentNumberNonNull().doubleValue() * (max - min) / 100.0 + min), "%"));
-                    }
+                    params.add(CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull()));
                 }
                 case CssTokenType.TT_NUMBER -> {
                     if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
@@ -327,40 +258,70 @@ public class CssColorConverter implements CssConverter<CssColor> {
         return params;
     }
 
-    private final static CssLegacySrgbColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new CssLegacySrgbColorSpace();
-    private final static SrgbColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
-    private final static CssHslColorSpace CSS_HSL_COLOR_SPACE = new CssHslColorSpace();
-    private final static HsbColorSpace HSB_COLOR_SPACE = new HsbColorSpace();
+    private static float toDeg(@NonNull CssSize size, @NonNull CssTokenizer tt) throws ParseException {
+        double v = size.getValue();
+        return (float) switch (size.getUnits()) {
+            case "", "deg" -> {
+                yield v;
+            }
+            case "grad" -> {
+                yield v * 360f / 400f;
+            }
+            case "rad" -> {
+                yield v * (360f / 2f) / Math.PI;
+            }
+            case "turn" -> {
+                yield v * 360f;
+            }
+            default -> throw tt.createParseException("CssColor: unsupported dimension: '" + size.getUnits() + "'.");
+        };
+    }
 
-    @NonNull
-    private @Nullable CssColor parseRgbFunction(CssTokenizer tt) throws ParseException, IOException {
+    private final static @NonNull NamedColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private final static @NonNull NamedColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new ParametricScaledColorSpace("CSS sRGB*255",
+            255f, CSS_SRGB_COLOR_SPACE);
+    private final static @NonNull NamedColorSpace CSS_HSL_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
+    private final static @NonNull NamedColorSpace JAVAFX_HSB_COLOR_SPACE = new ParametricHsvColorSpace("HSB", CSS_SRGB_COLOR_SPACE);
+
+    private @NonNull CssColor parseRgbFunction(CssTokenizer tt) throws ParseException, IOException {
         List<CssSize> params = parseParams(tt, CSS_LEGACY_SRGB_COLOR_SPACE);
-        float[] rgb = toFloat(params);
+        float[] rgb = {
+                toPercentage(params.get(0), 2.55, tt),
+                toPercentage(params.get(1), 2.55, tt),
+                toPercentage(params.get(2), 2.55, tt)
+        };
         for (int i = 0; i < rgb.length; i++) {
             rgb[i] = rgb[i] / 255f;
         }
-        clampColors(rgb);
+        var clamped = clampColors(rgb);
+        float alpha = params.size() == 4 ? clamp(toPercentage(params.get(3), 0.01, tt), 0, 1) : 1;
         return new CssColor(
-                "rgb(" + colorParamToRgbString(params) + ")",
-                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
+                "rgb(" + colorParamToString(params) + ")",
+                new Color(clamped[0], clamped[1], clamped[2], alpha));
     }
 
     @NonNull
-    private @Nullable CssColor parseHslFunction(CssTokenizer tt) throws ParseException, IOException {
+    private CssColor parseHslFunction(CssTokenizer tt) throws ParseException, IOException {
         List<CssSize> params = parseParams(tt, CSS_HSL_COLOR_SPACE);
         float[] rgb = clampColors(CSS_HSL_COLOR_SPACE.toRGB(toFloat(params)));
         return new CssColor(
-                "hsl(" + colorParamToHslString(params) + ")",
+                "hsl(" + colorParamToString(params) + ")",
                 new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
     }
 
     @NonNull
-    private @Nullable CssColor parseHsbFunction(CssTokenizer tt) throws ParseException, IOException {
-        List<CssSize> params = parseParams(tt, HSB_COLOR_SPACE);
-        float[] rgb = clampColors(HSB_COLOR_SPACE.toRGB(toFloat(params)));
+    private CssColor parseHsbFunction(CssTokenizer tt) throws ParseException, IOException {
+        List<CssSize> params = parseParams(tt, JAVAFX_HSB_COLOR_SPACE);
+        float[] hsb = {
+                toDeg(params.get(0), tt),
+                toPercentage(params.get(1), 0.01, tt),
+                toPercentage(params.get(2), 0.01, tt)
+        };
+        float[] rgb = JAVAFX_HSB_COLOR_SPACE.toRGB(hsb);
+        float[] clamped = clampColors(rgb);
         return new CssColor(
-                "hsb(" + colorParamToHslString(params) + ")",
-                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
+                "hsb(" + colorParamToString(params) + ")",
+                new Color(clamped[0], clamped[1], clamped[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
     }
 
     private static float[] toFloat(double[] params) {
@@ -378,6 +339,13 @@ public class CssColorConverter implements CssConverter<CssColor> {
             floats[i] = value == null ? 0 : (float) value.getValue();
         }
         return floats;
+    }
+
+    private static float toPercentage(CssSize param, double percentageConversionFactor, CssTokenizer tt) {
+        return switch (param.getUnits()) {
+            case "%" -> (float) (param.getValue() * percentageConversionFactor);
+            default -> (float) param.getValue();
+        };
     }
 
     /**
@@ -398,11 +366,11 @@ public class CssColorConverter implements CssConverter<CssColor> {
     }
 
     private static float[] clampColors(float[] params) {
-        float[] rgb = new float[3];
-        for (int i = 0; i < rgb.length; i++) {
-            rgb[i] = clamp(params[i], 0, 1);
+        float[] clamped = new float[3];
+        for (int i = 0; i < clamped.length; i++) {
+            clamped[i] = clamp(params[i], 0, 1);
         }
-        return rgb;
+        return clamped;
     }
 
 

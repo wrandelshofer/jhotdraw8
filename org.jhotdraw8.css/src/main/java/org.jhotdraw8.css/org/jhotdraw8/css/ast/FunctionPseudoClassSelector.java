@@ -38,7 +38,7 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
                 ? element : null;
     }
 
-    public String getFunctionIdentifier() {
+    public @NonNull String getFunctionIdentifier() {
         return functionIdentifier;
     }
 

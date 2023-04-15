@@ -3,6 +3,8 @@ package org.jhotdraw8.color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.util.FloatFunction;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.awt.color.ColorSpace;
 import java.util.Arrays;
@@ -19,6 +21,12 @@ public abstract class AbstractNamedColorSpaceTest {
      * Number of precision bits (used by most tests in this class).
      */
     static final float EPSILON = 0x1p-12f;
+    /**
+     * Smaller epsilon for component->XYZ->component round-trips.
+     * <p>
+     * The worst offender is {@link ParametricScaledColorSpace}.
+     */
+    static final float MINI_EPSILON = 0x1p-13f;
     /**
      * Number of precision bits (used for comparing the Java sRGB-ColorSpace implementation
      * with the test instance).
@@ -46,8 +54,6 @@ public abstract class AbstractNamedColorSpaceTest {
             case ColorSpace.TYPE_CMYK -> new String[]{"Cyan", "Magenta", "Yellow",
                     "Black"};
             case ColorSpace.TYPE_CMY -> new String[]{"Cyan", "Magenta", "Yellow"};
-            case NamedColorSpace.TYPE_HSB -> new String[]{"Hue", "Saturation", "Brightness"};
-            case NamedColorSpace.TYPE_HSL -> new String[]{"Hue", "Saturation", "Lightness"};
             case NamedColorSpace.TYPE_LCH -> new String[]{"Lightness", "Chroma", "Hue"};
             default -> {
                 String[] tmp = new String[cs.getNumComponents()];
@@ -137,7 +143,7 @@ public abstract class AbstractNamedColorSpaceTest {
         assertTrue(failures.get() < 1, "too many failures=" + failures.get());
     }
 
-@Test
+    @Test
     public void shouldBijectWithXyzForAllSrgbValues() {
         NamedColorSpace cs = getInstance();
         AtomicInteger failures = new AtomicInteger();
@@ -194,24 +200,6 @@ public abstract class AbstractNamedColorSpaceTest {
                                             || almostEqual(cs.getMaxValue(0), actualComponentf[0], eps0),
                                     cs.getName(0) + " wrap around max/min");
 
-                        } else if (cs.getType() == NamedColorSpace.TYPE_HSL
-                                && (almostEqual(cs.getMinValue(2), componentf[2], eps1)
-                                || almostEqual(cs.getMaxValue(2), componentf[2], eps1))) {
-                            // When lightness is almost min or almost max, then hue and saturation are powerless and can be ignored.
-                            assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
-                        } else if (cs.getType() == NamedColorSpace.TYPE_HSL && almostEqual(cs.getMinValue(1), componentf[1], eps2)) {
-                            // When saturation is almost min, then hue is powerless and can be ignored.
-                            assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
-                            assertEquals(componentf[2], actualComponentf[2], eps2, cs.getName(2));
-                        } else if (cs.getType() == NamedColorSpace.TYPE_HSL
-                                && (almostEqual(cs.getMinValue(0), componentf[0], eps0) || almostEqual(cs.getMaxValue(0), componentf[0], eps0))) {
-                            // When hue is almost at max it is acceptable if it is at almost at min
-                            assertEquals(componentf[1], actualComponentf[1], eps1, cs.getName(1));
-                            assertEquals(componentf[2], actualComponentf[2], eps2, cs.getName(2));
-                            assertTrue(almostEqual(componentf[0], actualComponentf[0], eps0)
-                                    || almostEqual(cs.getMinValue(0), actualComponentf[0], eps0)
-                                    || almostEqual(cs.getMaxValue(0), actualComponentf[0], eps0), cs.getName(0));
-
                         } else if (cs.getType() == ColorSpace.TYPE_HLS
                                 && (almostEqual(cs.getMinValue(1), componentf[1], eps1)
                                 || almostEqual(cs.getMaxValue(1), componentf[1], eps1))) {
@@ -250,32 +238,39 @@ public abstract class AbstractNamedColorSpaceTest {
                         failures.incrementAndGet();
                     }
                 });
-    assertTrue(failures.get() == 0, "too many failures=" + failures.get());
-}
+        assertTrue(failures.get() == 0, "too many failures=" + failures.get());
+    }
 
-    @Test
-    public void shouldHaveExpectedXYZValues() {
-        float[] red = {1f, 0, 0};
-        float[] green = {0, 1f, 0};
-        float[] blue = {0, 0, 1f};
-        float[] white = {1f, 1f, 1f};
+    @ParameterizedTest
+    @CsvSource({
+            // name r g b
+            "red,1,0,0",
+            "green,0,1,0",
+            "blue,0,0,1",
+            "white,1,1,1",
+    })
+    public void shouldHaveExpectedXYZValues(String name, float r, float g, float b) {
+        float[] inputRgb = {r, g, b};
+
         ColorSpace referenceCs = ColorSpace.getInstance(ColorSpace.CS_sRGB);
-        float[] expectedRedXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(red));
-        float[] expectedGreenXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(green));
-        float[] expectedBlueXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(blue));
-        float[] expectedWhiteXYZ = referenceCs.toCIEXYZ(referenceCs.fromRGB(white));
+        float[] referenceComponent = referenceCs.fromRGB(inputRgb);
+        float[] referenceXyz = referenceCs.toCIEXYZ(referenceComponent);
 
         NamedColorSpace instance = getInstance();
-        float[] redColorValue = instance.fromRGB(red);
-        float[] actualRedXYZ = instance.toCIEXYZ(redColorValue);
-        float[] actualGreenXYZ = instance.toCIEXYZ(instance.fromRGB(green));
-        float[] actualBlueXYZ = instance.toCIEXYZ(instance.fromRGB(blue));
-        float[] actualWhiteXYZ = instance.toCIEXYZ(instance.fromRGB(white));
+        float[] actualComponent = instance.fromRGB(inputRgb);
+        float[] actualXYZ = instance.toCIEXYZ(actualComponent);
+        assertArrayEquals(referenceXyz, actualXYZ, EPSILON_EXPECTED_XYZ, name + " rgb->component->XYZ");
 
-        assertArrayEquals(expectedRedXYZ, actualRedXYZ, EPSILON_EXPECTED_XYZ, "red");
-        assertArrayEquals(expectedGreenXYZ, actualGreenXYZ, EPSILON_EXPECTED_XYZ, "green");
-        assertArrayEquals(expectedBlueXYZ, actualBlueXYZ, EPSILON_EXPECTED_XYZ, "blue");
-        assertArrayEquals(expectedWhiteXYZ, actualWhiteXYZ, EPSILON_EXPECTED_XYZ, "white");
+        // check round-trip error
+        float[] roundtripComponent = instance.fromCIEXYZ(actualXYZ);
+        float[] roundtripRgb = instance.toRGB(roundtripComponent);
+        int type = instance.getType();
+        if (type != ColorSpace.TYPE_HSV
+                && type != ColorSpace.TYPE_HLS
+                && type != NamedColorSpace.TYPE_LCH) {
+            assertArrayEquals(actualComponent, roundtripComponent, MINI_EPSILON, name + " component->XYZ->component");
+        }
+        assertArrayEquals(inputRgb, roundtripRgb, EPSILON, name + " rgb->component->XYZ->component->rgb");
     }
 
 }

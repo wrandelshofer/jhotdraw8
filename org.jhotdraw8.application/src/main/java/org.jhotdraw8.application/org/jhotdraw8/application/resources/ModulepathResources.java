@@ -252,7 +252,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
     @Override
-    public Enumeration<String> getKeys() {
+    public @NonNull Enumeration<String> getKeys() {
         Set<String> keys = new LinkedHashSet<>();
 
         for (String key : (Iterable<String>) () -> resource.getKeys().asIterator()) {
@@ -273,7 +273,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     }
 
     @Override
-    public void setParent(Resources parent) {
+    public void setParent(@Nullable Resources parent) {
         this.parent = parent;
     }
 }

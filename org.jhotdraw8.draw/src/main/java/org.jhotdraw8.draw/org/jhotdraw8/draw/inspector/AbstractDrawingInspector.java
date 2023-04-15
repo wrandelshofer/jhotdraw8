@@ -93,7 +93,7 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
 
     }
 
-    public UndoableEditHelper getUndoHelper() {
+    public @NonNull UndoableEditHelper getUndoHelper() {
         return undoHelper;
     }
 }

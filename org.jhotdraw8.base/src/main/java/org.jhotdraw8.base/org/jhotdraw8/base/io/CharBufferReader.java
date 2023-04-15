@@ -37,7 +37,7 @@ public class CharBufferReader extends Reader {
     }
 
     @Override
-    public int read(@NonNull char[] cbuf, int off, int len) throws IOException {
+    public int read(char @NonNull [] cbuf, int off, int len) throws IOException {
         len = Math.min(len, buf.remaining());
         buf.get(cbuf, off, len);
         return len;

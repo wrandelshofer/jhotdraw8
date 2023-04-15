@@ -5,6 +5,9 @@ import org.jhotdraw8.color.math.Matrix3;
 
 import java.awt.color.ColorSpace;
 
+/**
+ * An XYZ color space with a linear transformation matrix from/to XYZ D50.
+ */
 public class ParametricXyzColorSpace extends AbstractNamedColorSpace {
     private final static @NonNull SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
 
@@ -21,27 +24,27 @@ public class ParametricXyzColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
+    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
         return toXyzMatrix.mul(colorvalue, xyz);
     }
 
     @Override
-    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
+    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
         return fromXyzMatrix.mul(xyz, colorvalue);
     }
 
     @Override
-    public float[] fromRGB(float[] rgb, float[] colorvalue) {
+    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
         return fromXyzMatrix.mul(SRGB_COLOR_SPACE.toCIEXYZ(rgb, colorvalue), colorvalue);
     }
 
     @Override
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
     @Override
-    public float[] toRGB(float[] colorvalue, float[] rgb) {
+    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
         return SRGB_COLOR_SPACE.fromCIEXYZ(toXyzMatrix.mul(colorvalue, rgb), rgb);
     }
 }

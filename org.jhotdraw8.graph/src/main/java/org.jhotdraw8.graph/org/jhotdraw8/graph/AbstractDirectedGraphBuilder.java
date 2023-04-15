@@ -449,7 +449,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
             private int index;
             private final int limit;
             private final int vidx;
-            private final int @Nullable [] arrows;
+            private final int @NonNull [] arrows;
 
             public MySpliterator(int vidx, int lo, int hi) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
@@ -466,11 +466,11 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
                         arrows[j - 1] = arrowHead_getVertex(nextArrowHeads, arrowPtr);
                     }
                 } else {
-                    arrows = null;
+                    arrows = new int[0];
                 }
             }
 
-            private MySpliterator(int vidx, int lo, int hi, int[] arrows) {
+            private MySpliterator(int vidx, int lo, int hi, int @NonNull [] arrows) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 this.vidx = vidx;
                 this.index = lo;
