@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.CharBuffer;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -18,16 +17,11 @@ import java.util.Locale;
 /**
  * Formats real numbers.
  * <p>
- * FIXME all fields should be final.
- * </p>
- * <p>
  * Supports clamping into a {@code [min,max]} range (inclusive), a scale factor
  * and a unit label.
- * </p>
  * <p>
  * Also allows to specify the minimum and maximum of integer digits, fraction
  * digits, as well as the minimum of negative and positive exponent.
- * </p>
  *
  * @author Werner Randelshofer
  */
@@ -36,24 +30,20 @@ public class NumberConverter implements Converter<Number> {
     /**
      * Specifies whether the formatter allows null values.
      */
-    private boolean allowsNullValue = false;
+    private final boolean allowsNullValue;
     @SuppressWarnings("rawtypes")
-    private Comparable min;
+    private final @NonNull Comparable min;
     @SuppressWarnings("rawtypes")
-    private Comparable max;
-    private String unit;
-    private DecimalFormat doubleDecimalFormat;
-    private DecimalFormat floatDecimalFormat;
-    private DecimalFormat scientificFormat;
-    private double factor = 1;
-    private int minIntDigits;
-    private int maxIntDigits;
-    private int minFractionDigits;
-    private int maxFractionDigits;
-    private int minNegativeExponent = -3;
-    private int minPositiveExponent = 8;
-    private boolean usesScientificNotation = true;
-    private Class<? extends Number> valueClass = Double.class;
+    private final @NonNull Comparable max;
+    private final @Nullable String unit;
+    private final @NonNull DecimalFormat decimalFormat;
+    private final @NonNull DecimalFormat scientificFormat;
+    private final double factor;
+
+    private final int minNegativeExponent = -3;
+    private final int minPositiveExponent = 7;
+    private final boolean usesScientificNotation = true;
+    private final @NonNull Class<? extends Number> valueClass;
 
     /**
      * Creates a <code>NumberFormatter</code> with the a default
@@ -62,14 +52,11 @@ public class NumberConverter implements Converter<Number> {
      */
     @SuppressWarnings("WeakerAccess")
     public NumberConverter() {
-        super();
-        initFormats();
+        this(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0);
     }
 
     public NumberConverter(Class<? extends Number> valueClass) {
-        super();
-        this.valueClass = valueClass;
-        initFormats();
+        this(valueClass, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0, false, null);
     }
 
     /**
@@ -81,7 +68,7 @@ public class NumberConverter implements Converter<Number> {
      */
     @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier) {
-        this(min, max, multiplier, false, null);
+        this(Double.class, min, max, multiplier, false, null);
     }
 
     /**
@@ -94,7 +81,7 @@ public class NumberConverter implements Converter<Number> {
      */
     @SuppressWarnings("WeakerAccess")
     public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue) {
-        this(min, max, multiplier, allowsNullValue, null);
+        this(Double.class, min, max, multiplier, allowsNullValue, null);
     }
 
     /**
@@ -107,9 +94,23 @@ public class NumberConverter implements Converter<Number> {
      * @param unit            the unit string
      */
     @SuppressWarnings("WeakerAccess")
-    public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+    public NumberConverter(Class<? extends Number> valueClass,
+                           double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+        this(valueClass, min, max, multiplier, allowsNullValue, unit,
+                valueClass == Float.class
+                        ? new DecimalFormat("#################0.########", new DecimalFormatSymbols(Locale.ENGLISH))
+                        : new DecimalFormat("#################0.#################", new DecimalFormatSymbols(Locale.ENGLISH)),
+                new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+    }
+
+    public NumberConverter(Class<? extends Number> valueClass, double min, double max, double multiplier, boolean allowsNullValue, String unit,
+                           DecimalFormat decimalFormat,
+                           DecimalFormat scientificFormat
+    ) {
         super();
-        initFormats();
+        this.valueClass = valueClass;
+        this.decimalFormat = decimalFormat;
+        this.scientificFormat = scientificFormat;
         this.min = min;
         this.max = max;
         this.factor = multiplier;
@@ -117,26 +118,10 @@ public class NumberConverter implements Converter<Number> {
         this.unit = unit;
     }
 
-    private void initFormats() {
-        DecimalFormatSymbols s = new DecimalFormatSymbols(Locale.ENGLISH);
-        doubleDecimalFormat = new DecimalFormat("#################0.#################", s);
-        floatDecimalFormat = new DecimalFormat("#################0.########", s);
-        scientificFormat = new DecimalFormat("0.0################E0", s);
+    public NumberConverter(double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+        this(Double.class, min, max, multiplier, allowsNullValue, unit);
     }
 
-    /**
-     * Sets the minimum permissible value. If the <code>valueClass</code> has
-     * not been specified, and <code>minimum</code> is non null, the
-     * <code>valueClass</code> will be set to that of the class of
-     * <code>minimum</code>.
-     *
-     * @param minimum Minimum legal value that can be input
-     * @see #setValueClass
-     */
-    @SuppressWarnings({"rawtypes", "unused"})
-    public void setMinimum(Comparable minimum) {
-        min = minimum;
-    }
 
     /**
      * Returns the minimum permissible value.
@@ -144,23 +129,10 @@ public class NumberConverter implements Converter<Number> {
      * @return Minimum legal value that can be input
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public Comparable getMinimum() {
+    public @NonNull Comparable getMinimum() {
         return min;
     }
 
-    /**
-     * Sets the maximum permissible value. If the <code>valueClass</code> has
-     * not been specified, and <code>max</code> is non null, the
-     * <code>valueClass</code> will be set to that of the class of
-     * <code>max</code>.
-     *
-     * @param max Maximum legal value that can be input
-     * @see #setValueClass
-     */
-    @SuppressWarnings({"rawtypes", "unused"})
-    public void setMaximum(Comparable max) {
-        this.max = max;
-    }
 
     /**
      * Returns the maximum permissible value.
@@ -168,7 +140,7 @@ public class NumberConverter implements Converter<Number> {
      * @return Maximum legal value that can be input
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public Comparable getMaximum() {
+    public @NonNull Comparable getMaximum() {
         return max;
     }
 
@@ -192,90 +164,14 @@ public class NumberConverter implements Converter<Number> {
     }
 
 
-    /**
-     * Returns the minimum fraction digits.
-     *
-     * @return the minimum fraction digits
-     */
-    @SuppressWarnings("unused")
-    public int getMinimumFractionDigits() {
-        return minFractionDigits;
-    }
-
     @Override
     public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, @Nullable Number value) throws IOException {
-        if (value == null && allowsNullValue) {
+        if (value == null) {
+            buf.append((allowsNullValue) ? "none" : "NaN");
             return;
         }
 
-        if (value instanceof Double) {
-            double v = (Double) value;
-            if (factor != 1.0) {
-                v = v * factor;
-            }
-            if (Double.isInfinite(v)) {
-                if (v < 0.0) {
-                    buf.append('-');
-                }
-                buf.append("INF");
-            } else if (Double.isNaN(v)) {
-                buf.append("NaN");
-            } else {
-                String str;
-                BigDecimal big = new BigDecimal(v);
-                int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-                if (!usesScientificNotation || exponent > minNegativeExponent
-                        && exponent < minPositiveExponent) {
-                    //str = big.toPlainString();
-                    str = doubleDecimalFormat.format(v);
-                    if (false) {
-                        str = Double.toString(v);
-                        if (str.endsWith(".0")) {
-                            str = str.substring(0, str.length() - 2);
-                        }
-                        if (str.indexOf('e') != -1) {
-                            str = doubleDecimalFormat.format(v);
-                        }
-                    }
-                } else {
-                    str = scientificFormat.format(v);
-                    //str = big.toEngineeringString();
-                }
-                buf.append(str);
-            }
-        } else if (value instanceof Float) {
-            float v = (Float) value;
-            if (factor != 1.0) {
-                v = (float) (v * factor);
-            }
-            if (Float.isInfinite(v)) {
-                if (v < 0.0) {
-                    buf.append('-');
-                }
-                buf.append("INF");
-            } else if (Float.isNaN(v)) {
-                buf.append("NaN");
-            } else {
-                String str;// = Float.toString(v);
-                BigDecimal big = new BigDecimal(v);
-                int exponent = big.scale() >= 0 ? big.precision() - big.scale() : -big.scale();
-                if (!usesScientificNotation || exponent > minNegativeExponent
-                        && exponent < minPositiveExponent) {
-                    // floatDecimalFormat creates too many digits, because it
-                    // promotes the float to a double before it converts it.
-                    str = Float.toString(v);
-                    if (str.endsWith(".0")) {
-                        str = str.substring(0, str.length() - 2);
-                    }
-                    if (str.indexOf('e') != -1) {
-                        str = floatDecimalFormat.format(v);
-                    }
-                } else {
-                    str = scientificFormat.format(v);
-                }
-                buf.append(str);
-            }
-        } else if (value instanceof Long) {
+        if (value instanceof Long) {
             long v = (Long) value;
             if (factor != 1.0) {
                 v = (long) (v * factor);
@@ -299,7 +195,65 @@ public class NumberConverter implements Converter<Number> {
                 v = (short) (v * factor);
             }
             buf.append(Short.toString(v));
+        } else if (value instanceof Float) {
+            float v = (Float) value;
+            if (factor != 1.0) {
+                v = (float) (v * factor);
+            }
+            if (Float.isInfinite(v)) {
+                if (v < 0.0) {
+                    buf.append('-');
+                }
+                buf.append("INF");
+            } else if (Float.isNaN(v)) {
+                buf.append("NaN");
+            } else {
+                String str;// = Float.toString(v);
+                double exponent = v == 0 ? 0 : Math.log10(Math.abs(v));
+                if (!usesScientificNotation || exponent > minNegativeExponent
+                        && exponent < minPositiveExponent) {
+                    // DecimalFormat produces too many digits, because it
+                    // promotes the float to a double before it converts it.
+                    str = Float.toString(v);
+                    int exponentIndex = str.indexOf('E');
+                    int pointIndex = str.indexOf('.');
+                    int fractionDigits = (exponentIndex == -1 ? str.length() : exponentIndex) - pointIndex;
+                    if (str.endsWith(".0")) {
+                        str = str.substring(0, str.length() - 2);
+                    }
+                    if (exponentIndex >= 0 || fractionDigits > decimalFormat.getMaximumFractionDigits()) {
+                        str = decimalFormat.format(v);
+                    }
+                } else {
+                    str = scientificFormat.format(v);
+                }
+                buf.append(str);
+            }
+        } else {
+            double v = value.doubleValue();
+            if (factor != 1.0) {
+                v = v * factor;
+            }
+            if (Double.isInfinite(v)) {
+                if (v < 0.0) {
+                    buf.append('-');
+                }
+                buf.append("INF");
+            } else if (Double.isNaN(v)) {
+                buf.append("NaN");
+            } else {
+                String str;
+                double exponent = v == 0 ? 1 : Math.log10(Math.abs(v));
+                if (!usesScientificNotation || exponent > minNegativeExponent
+                        && exponent < minPositiveExponent) {
+                    str = decimalFormat.format(v);
+                } else {
+                    str = scientificFormat.format(v);
+                }
+                buf.append(str);
+            }
         }
+
         if (value != null) {
             if (unit != null) {
                 buf.append(unit);
@@ -308,7 +262,8 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public @Nullable Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws
+            ParseException {
         if ((str.length() == 0) && getAllowsNullValue()) {
             return null;
         }
@@ -327,62 +282,62 @@ public class NumberConverter implements Converter<Number> {
             for (; end < remaining; end++) {
                 char c = str.charAt(end);// does not consume chars from CharBuffer!
                 switch (c) {
-                case '+':
-                case '-':
-                    if (noMoreSigns) {
+                    case '+':
+                    case '-':
+                        if (noMoreSigns) {
+                            break Outer;
+                        }
+                        noMoreSigns = true;
+                        break;
+                    case '.':
+                        if (noMorePoints) {
+                            break Outer;
+                        }
+                        noMoreSigns = true;
+                        noMorePoints = true;
+                        break;
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                        noMoreSigns = true;
+                        break;
+                    case 'e':
+                    case 'E':
+                        if (noMoreEs) {
+                            break Outer;
+                        }
+                        noMoreSigns = false;
+                        noMorePoints = false;
+                        noMoreEs = true;
+                        break;
+                    case 'I':// INF
+                    case 'N': // NaN
+                        end += 3;
                         break Outer;
-                    }
-                    noMoreSigns = true;
-                    break;
-                case '.':
-                    if (noMorePoints) {
+                    default:
                         break Outer;
-                    }
-                    noMoreSigns = true;
-                    noMorePoints = true;
-                    break;
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    noMoreSigns = true;
-                    break;
-                case 'e':
-                case 'E':
-                    if (noMoreEs) {
-                        break Outer;
-                    }
-                    noMoreSigns = false;
-                    noMorePoints = false;
-                    noMoreEs = true;
-                    break;
-                case 'I':// INF
-                case 'N': // NaN
-                    end += 3;
-                    break Outer;
-                default:
-                    break Outer;
                 }
             }
         }
 
         String text = str.subSequence(0, end).toString();
         switch (text) {
-        case "-INF":
-            str.position(str.position() + end);
-            return Double.NEGATIVE_INFINITY;
-        case "INF":
-            str.position(str.position() + end);
-            return Double.POSITIVE_INFINITY;
-        case "NaN":
-            str.position(str.position() + end);
-            return Double.NaN;
+            case "-INF":
+                str.position(str.position() + end);
+                return Double.NEGATIVE_INFINITY;
+            case "INF":
+                str.position(str.position() + end);
+                return Double.POSITIVE_INFINITY;
+            case "NaN":
+                str.position(str.position() + end);
+                return Double.NaN;
         }
 
         // Remove unit from text
@@ -493,34 +448,6 @@ public class NumberConverter implements Converter<Number> {
         return true;
     }
 
-    /**
-     * If non-null the unit string is appended to the value.
-     *
-     * @param value the unit string
-     */
-    public void setUnit(String value) {
-        unit = value;
-    }
-
-    /**
-     * If non-null the unit string is appended to the value.
-     *
-     * @return the unit string
-     */
-    public String getUnit() {
-        return unit;
-    }
-
-    /**
-     * Gets the minimum number of digits allowed in the integer portion of a
-     * number.
-     *
-     * @return the minimum integer digits
-     */
-    public int getMinimumIntegerDigits() {
-        return minIntDigits;
-    }
-
 
     /**
      * Gets the minimum negative exponent value for scientific notation.
@@ -532,15 +459,6 @@ public class NumberConverter implements Converter<Number> {
         return minNegativeExponent;
     }
 
-    /**
-     * Sets the minimum negative exponent value for scientific notation.
-     *
-     * @param newValue the minimum negative exponent
-     */
-    @SuppressWarnings("unused")
-    public void setMinimumNegativeExponent(int newValue) {
-        this.minNegativeExponent = newValue;
-    }
 
     /**
      * Gets the minimum positive exponent value for scientific notation.
@@ -552,15 +470,6 @@ public class NumberConverter implements Converter<Number> {
         return minPositiveExponent;
     }
 
-    /**
-     * Sets the minimum positive exponent value for scientific notation.
-     *
-     * @param newValue the maximum positive exponent
-     */
-    @SuppressWarnings("unused")
-    public void setMinimumPositiveExponent(int newValue) {
-        this.minPositiveExponent = newValue;
-    }
 
     /**
      * Returns true if scientific notation is used.
@@ -573,16 +482,6 @@ public class NumberConverter implements Converter<Number> {
     }
 
     /**
-     * Sets whether scientific notation is used.
-     *
-     * @param newValue true if scientific notation is used
-     */
-    @SuppressWarnings("unused")
-    public void setUsesScientificNotation(boolean newValue) {
-        this.usesScientificNotation = newValue;
-    }
-
-    /**
      * Gets the value class.
      *
      * @return the value class
@@ -591,14 +490,6 @@ public class NumberConverter implements Converter<Number> {
         return valueClass;
     }
 
-    /**
-     * Sets the value class.
-     *
-     * @param valueClass the value class
-     */
-    public void setValueClass(Class<? extends Number> valueClass) {
-        this.valueClass = valueClass;
-    }
 
     @Override
     public @NonNull Number getDefaultValue() {
