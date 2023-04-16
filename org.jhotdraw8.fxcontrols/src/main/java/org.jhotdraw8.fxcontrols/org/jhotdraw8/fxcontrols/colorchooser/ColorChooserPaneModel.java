@@ -76,7 +76,7 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
 public class ColorChooserPaneModel {
     private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
             new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
-            new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 
     public final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     public final @NonNull FloatProperty c0 = new SimpleFloatProperty(this, "c0");
@@ -115,6 +115,7 @@ public class ColorChooserPaneModel {
 
         ChangeListener<? super Object> changeListener = (o, oldv, newv) -> {
             updateTargetColor(o, oldv, newv);
+            updateTargetColorField(o, oldv, newv);
             updateSourceColorField(o, oldv, newv);
         };
         c0.addListener(changeListener);
@@ -482,21 +483,44 @@ public class ColorChooserPaneModel {
 
     private void updateSourceColorField(Observable o, Object oldv, Object newv) {
 
+        String text = toCssString(getSourceColorSpace(), getC0(), getC1(), getC2(), getAlpha());
+        setSourceColorField(text);
+    }
+
+    private void updateTargetColorField(Observable o, Object oldv, Object newv) {
+        NamedColorSpace tcs = getTargetColorSpace();
+        NamedColorSpace scs = getSourceColorSpace();
+        if (tcs != null && scs != null) {
+            float[] sComponent = {getC0(), getC1(), getC2()};
+            float[] tComponent;
+            if (tcs != scs) {
+                tComponent = tcs.fromCIEXYZ(scs.toCIEXYZ(sComponent));
+            } else {
+                tComponent = sComponent;
+            }
+            String text = toCssString(tcs, tComponent[0], tComponent[1], tComponent[2], getAlpha());
+            setTargetColorField(text);
+        }
+    }
+
+    @NonNull
+    private String toCssString(NamedColorSpace cs, float c0, float c1, float c2, float alpha) {
         StringBuilder b = new StringBuilder();
-        if (getSourceColorSpace() != null) {
+        if (cs != null) {
             b.append("color(\"");
-            b.append(getSourceColorSpace().getName());
+            b.append(cs.getName());
             b.append("\" ");
-            b.append(number.toString(getC0()));
+            b.append(number.toString(c0));
             b.append(' ');
-            b.append(number.toString(getC1()));
+            b.append(number.toString(c1));
             b.append(' ');
-            b.append(number.toString(getC2()));
+            b.append(number.toString(c2));
             b.append(" / ");
-            b.append(number.toString(getAlpha() * 100));
+            b.append(number.toString(alpha * 100));
             b.append("%)");
         }
-        setSourceColorField(b.toString());
+        String text = b.toString();
+        return text;
     }
 
     private void updateSourceColorSpace(Observable o, Object oldv, Object newv) {
@@ -617,14 +641,14 @@ public class ColorChooserPaneModel {
         }
 
         // compute target color
-        {
+        /*{
             targetCs.fromRGB(sourceCs.toRGB(component, rgb), rgb);
             int value = RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue());
             int argb = entry == null ? value : entry.getValue().applyAsInt(value);
             String hexStr = "00000000" + Integer.toHexString(argb);
             hexStr = hexStr.substring(hexStr.length() - 8);
             setTargetColorField("#" + hexStr);
-        }
+        }*/
         //hexRgbLabel.setText("#" + hexStr.substring(2) + hexStr.substring(0, 2));
     }
 

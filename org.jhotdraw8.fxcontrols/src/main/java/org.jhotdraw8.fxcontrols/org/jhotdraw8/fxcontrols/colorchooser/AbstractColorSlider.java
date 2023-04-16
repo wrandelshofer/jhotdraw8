@@ -483,14 +483,21 @@ public abstract class AbstractColorSlider extends Pane {
      * @return
      */
     protected static boolean outOfGamut(NamedColorSpace colorSpace, float[] component) {
-        //float eps = 0x1p-10f;
-        float eps = 0;
-        return component[0] < colorSpace.getMinValue(0) - eps
-                || component[0] > colorSpace.getMaxValue(0) + eps
-                || component[1] < colorSpace.getMinValue(1) - eps
-                || component[1] > colorSpace.getMaxValue(1) + eps
-                || component[2] < colorSpace.getMinValue(2) - eps
-                || component[2] > colorSpace.getMaxValue(2) + eps;
+        float epsMax;
+        float epsMin;
+        if (colorSpace.getType() == ColorSpace.TYPE_RGB) {
+            epsMax = 0x1p-10f;
+            epsMin = 0f;
+        } else {
+            epsMax = 0f;
+            epsMin = 0f;
+        }
+        return component[0] < colorSpace.getMinValue(0) - epsMin
+                || component[0] > colorSpace.getMaxValue(0) + epsMax
+                || component[1] < colorSpace.getMinValue(1) - epsMin
+                || component[1] > colorSpace.getMaxValue(1) + epsMax
+                || component[2] < colorSpace.getMinValue(2) - epsMin
+                || component[2] > colorSpace.getMaxValue(2) + epsMax;
     }
 
     protected static int getPreArgb(NamedColorSpace dcs, float[] dRgb, float[] pre, float alpha) {
@@ -500,10 +507,22 @@ public abstract class AbstractColorSlider extends Pane {
 
     protected static int getArgb(NamedColorSpace scs, NamedColorSpace tcs, NamedColorSpace dcs, float[] colorValue, float[] sRgb, float[] tComponent, float[] dComponent, float[] dRgb, float alpha) {
         scs.toRGB(colorValue, sRgb);
-        tcs.fromRGB(sRgb, tComponent);
-        dcs.fromRGB(sRgb, dComponent);
+        if (tcs == scs) {
+            System.arraycopy(colorValue, 0, tComponent, 0, 3);
+        } else {
+            tcs.fromRGB(sRgb, tComponent);
+        }
+        if (dcs == scs) {
+            System.arraycopy(colorValue, 0, dComponent, 0, 3);
+        } else {
+            dcs.fromRGB(sRgb, dComponent);
+        }
+
         boolean outOfDisplay = outOfGamut(dcs, dComponent);
         boolean outOfTarget = outOfGamut(tcs, tComponent);
+        if (outOfDisplay) {
+            //   System.out.println(Arrays.toString(dComponent));
+        }
         if (!outOfTarget && outOfDisplay) {
             dRgb[0] = .5f;
             dRgb[1] = .5f;

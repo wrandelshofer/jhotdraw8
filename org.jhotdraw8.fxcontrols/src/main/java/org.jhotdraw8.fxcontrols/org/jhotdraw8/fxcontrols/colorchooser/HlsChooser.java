@@ -93,6 +93,7 @@ public class HlsChooser extends HBox {
 
         Background checkerboardBackground = new Background(new BackgroundFill(CheckerboardFactory.createCheckerboardPattern(4, 0xffffffff, 0xffaaaaaa), null, null));
         colorRectPane.setBackground(checkerboardBackground);
+        huePane.setBackground(checkerboardBackground);
         colorRectSlider = new ColorRectangleSlider();
         hueSlider = new ColorSlider();
         colorRectPane.getChildren().add(colorRectSlider);
