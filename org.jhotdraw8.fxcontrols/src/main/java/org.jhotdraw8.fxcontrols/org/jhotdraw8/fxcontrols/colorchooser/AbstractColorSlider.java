@@ -314,15 +314,16 @@ public abstract class AbstractColorSlider extends Pane {
         // setOnMouseReleased(this::onMouseReleased);
         adjustingProperty().addListener(this::onAdjusting);
 
-        InvalidationListener propertyListener = o -> invalidateColorRect();
+        InvalidationListener propertyListener = o -> requestLayout();
         rgbFilterProperty().addListener(propertyListener);
         targetColorSpaceProperty().addListener(propertyListener);
         sourceColorSpaceProperty().addListener(propertyListener);
         displayColorSpaceProperty().addListener(propertyListener);
-        c0Property().addListener(propertyListener);
-        c1Property().addListener(propertyListener);
-        c2Property().addListener(propertyListener);
-        c3Property().addListener(propertyListener);
+        // c0Property().addListener(propertyListener);
+        // c1Property().addListener(propertyListener);
+        // c2Property().addListener(propertyListener);
+        // c3Property().addListener(propertyListener);
+        alphaProperty().addListener(propertyListener);
         alphaProperty().addListener(propertyListener);
 
 
