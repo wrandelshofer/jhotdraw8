@@ -8,7 +8,10 @@ import org.jhotdraw8.draw.css.converter.CssColorConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,7 +46,9 @@ public class ComputeTestcommon {
         }
     }
 
-    private final static NumberConverter number = new NumberConverter();
+    private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
+            new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
+            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 
     /**
      * <dl>
@@ -64,9 +69,9 @@ public class ComputeTestcommon {
             CssColor parsed = colorConverter.fromString(specified);
             Color c = parsed.getColor();
             String actualComputed = (computed.startsWith("rgba(") ? "rgba(" : "rgb(")
-                    + number.toString(255 * c.getRed())
-                    + ", " + number.toString(255 * c.getGreen())
-                    + ", " + number.toString(255 * c.getBlue())
+                    + Math.round(255 * c.getRed())
+                    + ", " + Math.round(255 * c.getGreen())
+                    + ", " + Math.round(255 * c.getBlue())
                     + (c.getOpacity() != 1 ? ", " + number.toString(c.getOpacity()) : "")
                     + ")";
             assertEquals(computed, actualComputed, message);

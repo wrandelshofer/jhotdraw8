@@ -24,6 +24,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.color.A98RgbColorSpace;
 import org.jhotdraw8.color.CieLabColorSpace;
+import org.jhotdraw8.color.D50XyzColorSpace;
+import org.jhotdraw8.color.D65XyzColorSpace;
 import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.NamedColor;
 import org.jhotdraw8.color.NamedColorSpace;
@@ -47,7 +49,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.base.util.MathUtil.clamp;
+import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 /**
  * Data flow:
@@ -74,8 +76,15 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * </pre>
  */
 public class ColorChooserPaneModel {
+    public static final CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
+    public static final OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
+    public static final OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
     private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
             new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
+            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+
+    private final static NumberConverter percentageNumber = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
+            new DecimalFormat("#################0.#", new DecimalFormatSymbols(Locale.ENGLISH)),
             new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 
     public final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
@@ -126,6 +135,7 @@ public class ColorChooserPaneModel {
         targetColorSpace.addListener(changeListener);
         displayColorSpace.addListener(changeListener);
         displayBitDepth.addListener(changeListener);
+        targetColorSyntax.addListener(changeListener);
     }
 
     public @NonNull FloatProperty alphaProperty() {
@@ -372,33 +382,41 @@ public class ColorChooserPaneModel {
         this.targetColorSyntaxes.set(targetColorSyntaxes);
     }
 
+    private final static SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private final static ParametricHlsColorSpace HLS_COLOR_SPACE = new ParametricHlsColorSpace("HSL", SRGB_COLOR_SPACE);
+    private final static ParametricHsvColorSpace HSV_COLOR_SPACE = new ParametricHsvColorSpace("HSV", SRGB_COLOR_SPACE);
+
     public void initWithDefaultValues() {
-        SrgbColorSpace srgbColorSpace = new SrgbColorSpace();
         DisplayP3ColorSpace displayP3ColorSpace = new DisplayP3ColorSpace();
         ProPhotoRgbColorSpace proPhotoRgbColorSpace = new ProPhotoRgbColorSpace();
         Rec2020ColorSpace rec2020ColorSpace = new Rec2020ColorSpace();
         displayColorSpaces.get().setAll(
-                srgbColorSpace,
+                SRGB_COLOR_SPACE,
                 displayP3ColorSpace,
                 // new A98RgbColorSpace(), -> not a display
                 rec2020ColorSpace,
                 proPhotoRgbColorSpace
         );
         targetColorSpaces.get().setAll(
-                srgbColorSpace,
+                // color()-function:
+                SRGB_COLOR_SPACE,
+                SRGB_COLOR_SPACE.getLinearColorSpace(),
                 displayP3ColorSpace,
-                rec2020ColorSpace,
+                new A98RgbColorSpace(),
                 proPhotoRgbColorSpace,
-                new OKLabColorSpace(),
-                new CieLabColorSpace(),
-                new A98RgbColorSpace()
+                rec2020ColorSpace,
+                new D50XyzColorSpace(),
+                new D65XyzColorSpace(),
+                // lab()-function:
+                OK_LAB_COLOR_SPACE,
+                CIE_LAB_COLOR_SPACE
         );
         targetColorSyntaxes.get().setAll(ColorSyntax.values());
         targetColorSyntax.set(ColorSyntax.HEX_COLOR);
         chooserTypes.get().setAll(ChooserType.values());
         chooserType.set(ChooserType.OK_HSL_SRGB);
-        displayColorSpace.set(srgbColorSpace);
-        targetColorSpace.set(srgbColorSpace);
+        displayColorSpace.set(SRGB_COLOR_SPACE);
+        targetColorSpace.set(SRGB_COLOR_SPACE);
         alpha.set(1f);
         var map = new LinkedHashMap<String, ToIntFunction<Integer>>();
         map.put("24", argb -> argb);
@@ -483,7 +501,7 @@ public class ColorChooserPaneModel {
 
     private void updateSourceColorField(Observable o, Object oldv, Object newv) {
 
-        String text = toCssString(getSourceColorSpace(), getC0(), getC1(), getC2(), getAlpha());
+        String text = toCssString(getSourceColorSpace(), getC0(), getC1(), getC2(), getAlpha(), ColorSyntax.AUTOMATIC);
         setSourceColorField(text);
     }
 
@@ -498,30 +516,170 @@ public class ColorChooserPaneModel {
             } else {
                 tComponent = sComponent;
             }
-            String text = toCssString(tcs, tComponent[0], tComponent[1], tComponent[2], getAlpha());
+            String text = toCssString(tcs, tComponent[0], tComponent[1], tComponent[2], getAlpha(), getTargetColorSyntax());
             setTargetColorField(text);
         }
     }
 
+    private final static Map<String, String> colorSpaceNameMap = Map.of(
+            "Display P3", "display-p3",
+
+            "sRGB", "srgb",
+            "sRGB Linear", "srgb-linear",
+            "display-p3", "display-p3",
+            "a98-rgb", "a98-rgb",
+            "ProPhoto RGB", "prophoto-rgb",
+            "Rec 2020", "rec2020",
+            "xyz", "xyz",
+            "xyz-d50", "xyz-d50",
+            "xyz-d65", "xyz-d65"
+    );
+
     @NonNull
-    private String toCssString(NamedColorSpace cs, float c0, float c1, float c2, float alpha) {
+    private String toCssString(NamedColorSpace cs, float c0, float c1, float c2, float alpha, ColorSyntax colorSyntax) {
         StringBuilder b = new StringBuilder();
-        if (cs != null) {
-            b.append("color(\"");
-            b.append(cs.getName());
-            b.append("\" ");
-            b.append(number.toString(c0));
-            b.append(' ');
-            b.append(number.toString(c1));
-            b.append(' ');
-            b.append(number.toString(c2));
-            b.append(" / ");
-            b.append(number.toString(alpha * 100));
-            b.append("%)");
+        if (cs == null) {
+            b.append("none");
+            return b.toString();
         }
-        String text = b.toString();
-        return text;
+
+        if (colorSyntax == ColorSyntax.AUTOMATIC) {
+            switch (cs.getType()) {
+                case NamedColorSpace.TYPE_LCH -> {
+                    colorSyntax = cs instanceof OKLchColorSpace ? ColorSyntax.OKLCH_FUNCTION : ColorSyntax.LCH_FUNCTION;
+                }
+                case ColorSpace.TYPE_HLS -> {
+                    colorSyntax = ColorSyntax.HSL_FUNCTION;
+                }
+                case ColorSpace.TYPE_RGB -> {
+                    colorSyntax = ColorSyntax.COLOR_FUNCTION;
+                }
+                case ColorSpace.TYPE_Lab -> {
+                    colorSyntax = cs instanceof OKLabColorSpace ? ColorSyntax.OKLAB_FUNCTION : ColorSyntax.LAB_FUNCTION;
+                }
+                default -> colorSyntax = ColorSyntax.COLOR_FUNCTION;
+            }
+        }
+
+        float[] components = {c0, c1, c2};
+        switch (colorSyntax) {
+
+            case NAMED_COLOR -> {
+                // TODO lookup components
+            }
+            case HEX_COLOR, RGB_FUNCTION -> {
+                // requires sRGB components
+                cs.toRGB(components, components);
+            }
+            case HSL_FUNCTION -> {
+                // requires HLS components
+                if (cs.getType() != ColorSpace.TYPE_HLS || cs instanceof ParametricHlsColorSpace hlsc
+                        && !hlsc.getRgbColorSpace().getName().equals("sRGB")) {
+                    HLS_COLOR_SPACE.fromCIEXYZ(cs.toCIEXYZ(components, components), components);
+                }
+            }
+            case HWB_FUNCTION -> {
+                // FIXME implement me
+            }
+            case LAB_FUNCTION -> {
+                // requires LAB components
+                if (cs.getType() != ColorSpace.TYPE_Lab || cs instanceof OKLabColorSpace) {
+                    CIE_LAB_COLOR_SPACE.fromCIEXYZ(cs.toCIEXYZ(components, components), components);
+                }
+            }
+            case OKLAB_FUNCTION -> {
+                // requires OKLAB components
+                if (!(cs instanceof OKLabColorSpace)) {
+                    CIE_LAB_COLOR_SPACE.fromCIEXYZ(cs.toCIEXYZ(components, components), components);
+                }
+            }
+            case LCH_FUNCTION -> {
+                // requires OKLCH components
+                if (!(cs instanceof OKLchColorSpace)) {
+                    OK_LCH_COLOR_SPACE.fromCIEXYZ(cs.toCIEXYZ(components, components), components);
+                }
+            }
+            case COLOR_FUNCTION -> {
+            }
+        }
+
+
+        switch (colorSyntax) {
+            case HEX_COLOR, NAMED_COLOR -> {
+                Map.Entry<String, ToIntFunction<Integer>> entry = displayBitDepth.get();
+                int value = RgbBitConverters.rgbFloatToArgb32(components, alpha);
+                int argb = entry == null ? value : entry.getValue().applyAsInt(value);
+                String hexStr = "00000000" + Integer.toHexString(argb);
+                hexStr = hexStr.substring(hexStr.length() - 8);
+                // FIXME if NAMED_COLOR lookup map of named colors
+                b.append(hexStr);
+            }
+            case RGB_FUNCTION -> {
+                b.append("rgb(");
+                components[0] = Math.round(255 * components[0]);
+                components[1] = Math.round(255 * components[1]);
+                components[2] = Math.round(255 * components[2]);
+            }
+            case HSL_FUNCTION -> {
+                if (cs instanceof OKHlsColorSpace) {
+                    b.append("okhsl(");
+                } else {
+                    b.append("hsl(");
+                }
+                b.append(number.toString(components[0]));
+                b.append(' ');
+                b.append(percentageNumber.toString(components[1] * 100));
+                b.append("% ");
+                b.append(percentageNumber.toString(components[2] * 100));
+                b.append("% / ");
+                b.append(number.toString(alpha * 100));
+                b.append("%)");
+            }
+            case HWB_FUNCTION -> {
+                b.append("hwb(");
+            }
+            case LAB_FUNCTION -> {
+                b.append("lab(");
+            }
+            case OKLAB_FUNCTION -> {
+                b.append("oklab(");
+            }
+            case LCH_FUNCTION -> {
+                b.append("lch(");
+            }
+            case OKLCH_FUNCTION -> {
+                b.append("oklch(");
+            }
+            case COLOR_FUNCTION -> {
+                b.append("color(");
+                b.append(colorSpaceNameMap.get(cs.getName()));
+                b.append(' ');
+            }
+            default -> {
+                b.append("color(\"");
+                b.append(cs.getName());
+                b.append("\" ");
+            }
+        }
+        switch (colorSyntax) {
+
+            case HEX_COLOR, NAMED_COLOR, HSL_FUNCTION -> {
+
+            }
+            default -> {
+                b.append(number.toString(components[0]));
+                b.append(' ');
+                b.append(number.toString(components[1]));
+                b.append(' ');
+                b.append(number.toString(components[2]));
+                b.append(" / ");
+                b.append(number.toString(alpha * 100));
+                b.append("%)");
+            }
+        }
+        return b.toString();
     }
+
 
     private void updateSourceColorSpace(Observable o, Object oldv, Object newv) {
         ChooserType ct = chooserType.get();
@@ -557,7 +715,7 @@ public class ColorChooserPaneModel {
                 sourceColorSpace.set(new ParametricHsvColorSpace(cs.getName() + " HSV", cs));
             }
             case CIE_LCH -> {
-                sourceColorSpace.set(new ParametricLchColorSpace("CIE LCH", new CieLabColorSpace()));
+                sourceColorSpace.set(new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE));
             }
             case OK_LCH -> {
                 sourceColorSpace.set(new OKLchColorSpace());
@@ -665,13 +823,16 @@ public class ColorChooserPaneModel {
     }
 
     public enum ColorSyntax {
+        AUTOMATIC,
         HEX_COLOR,
         NAMED_COLOR,
         RGB_FUNCTION,
         HSL_FUNCTION,
         HWB_FUNCTION,
         LAB_FUNCTION,
+        OKLAB_FUNCTION,
         LCH_FUNCTION,
+        OKLCH_FUNCTION,
         COLOR_FUNCTION,
     }
 

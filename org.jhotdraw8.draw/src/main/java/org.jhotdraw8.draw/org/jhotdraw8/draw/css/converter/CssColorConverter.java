@@ -32,9 +32,12 @@ import org.jhotdraw8.draw.css.value.Uint4HexSrgbaCssColor;
 import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import static org.jhotdraw8.base.util.MathUtil.clamp;
@@ -105,7 +108,9 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * @author Werner Randelshofer
  */
 public class CssColorConverter implements CssConverter<CssColor> {
-    private final static @NonNull NumberConverter number = new NumberConverter();
+    private final static @NonNull NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
+            new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
+            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 
     boolean nullable;
 
@@ -280,7 +285,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
     private final static @NonNull NamedColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
     private final static @NonNull NamedColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new ParametricScaledColorSpace("CSS sRGB*255",
             255f, CSS_SRGB_COLOR_SPACE);
-    private final static @NonNull NamedColorSpace CSS_HSL_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
+    private final static @NonNull NamedColorSpace CSS_HLS_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
     private final static @NonNull NamedColorSpace JAVAFX_HSB_COLOR_SPACE = new ParametricHsvColorSpace("HSB", CSS_SRGB_COLOR_SPACE);
 
     private @NonNull CssColor parseRgbFunction(CssTokenizer tt) throws ParseException, IOException {
@@ -302,8 +307,13 @@ public class CssColorConverter implements CssConverter<CssColor> {
 
     @NonNull
     private CssColor parseHslFunction(CssTokenizer tt) throws ParseException, IOException {
-        List<CssSize> params = parseParams(tt, CSS_HSL_COLOR_SPACE);
-        float[] rgb = clampColors(CSS_HSL_COLOR_SPACE.toRGB(toFloat(params)));
+        List<CssSize> params = parseParams(tt, CSS_HLS_COLOR_SPACE);
+        float[] hls = {
+                toDeg(params.get(0), tt),
+                toPercentage(params.get(2), 1 / 100d, tt),
+                toPercentage(params.get(1), 1 / 100d, tt)
+        };
+        float[] rgb = clampColors(CSS_HLS_COLOR_SPACE.toRGB(hls));
         return new CssColor(
                 "hsl(" + colorParamToString(params) + ")",
                 new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));

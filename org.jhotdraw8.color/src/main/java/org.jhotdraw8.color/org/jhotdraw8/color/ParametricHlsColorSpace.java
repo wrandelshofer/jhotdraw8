@@ -52,6 +52,10 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
         this.rgbColorSpace = rgbColorSpace;
     }
 
+    public NamedColorSpace getRgbColorSpace() {
+        return rgbColorSpace;
+    }
+
     /**
      * XYZ to LCH.
      *
@@ -79,96 +83,96 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
     }
 
     protected float @NonNull [] hlsToRgb(float[] hls, float[] rgb) {
-        float hue = hls[0] / 360f;
-        float saturation = hls[2];
-        float lightness = hls[1];
+        double hue = hls[0] / 360.0;
+        double saturation = hls[2];
+        double lightness = hls[1];
 
         // compute p and q from saturation and lightness
-        float q;
-        if (lightness < 0.5f) {
-            q = lightness * (1f + saturation);
+        double q;
+        if (lightness < 0.5) {
+            q = lightness * (1 + saturation);
         } else {
             q = lightness + saturation - (lightness * saturation);
         }
-        float p = 2f * lightness - q;
+        double p = 2 * lightness - q;
 
         // normalize hue to -1..+1
 
-        float hk = hue - (float) Math.floor(hue);
+        double hk = hue - Math.floor(hue);
 
         // compute red, green and blue
-        float red = hk + 1f / 3f;
-        float green = hk;
-        float blue = hk - 1f / 3f;
+        double red = hk + 1 / 3.0;
+        double green = hk;
+        double blue = hk - 1 / 3.0;
 
         // normalize rgb values
         if (red < 0) {
-            red = red + 1f;
+            red = red + 1;
         } else if (red > 1) {
-            red = red - 1f;
+            red = red - 1;
         }
 
         if (green < 0) {
-            green = green + 1f;
+            green = green + 1;
         } else if (green > 1) {
-            green = green - 1f;
+            green = green - 1;
         }
 
         if (blue < 0) {
-            blue = blue + 1f;
+            blue = blue + 1;
         } else if (blue > 1) {
-            blue = blue - 1f;
+            blue = blue - 1;
         }
 
 
         // adjust rgb values
-        if (red < 1f / 6f) {
+        if (red < 1 / 6d) {
             red = p + ((q - p) * 6 * red);
-        } else if (red < 0.5f) {
+        } else if (red < 0.5d) {
             red = q;
-        } else if (red < 2f / 3f) {
-            red = p + ((q - p) * 6 * (2f / 3f - red));
+        } else if (red < 2d / 3d) {
+            red = p + ((q - p) * 6 * (2d / 3d - red));
         } else {
             red = p;
         }
 
-        if (green < 1f / 6f) {
+        if (green < 1d / 6d) {
             green = p + ((q - p) * 6 * green);
-        } else if (green < 0.5f) {
+        } else if (green < 0.5d) {
             green = q;
-        } else if (green < 2f / 3f) {
-            green = p + ((q - p) * 6 * (2f / 3f - green));
+        } else if (green < 2d / 3d) {
+            green = p + ((q - p) * 6 * (2d / 3d - green));
         } else {
             green = p;
         }
 
-        if (blue < 1f / 6f) {
+        if (blue < 1d / 6d) {
             blue = p + ((q - p) * 6 * blue);
-        } else if (blue < 0.5f) {
+        } else if (blue < 0.5d) {
             blue = q;
-        } else if (blue < 2f / 3f) {
-            blue = p + ((q - p) * 6 * (2f / 3f - blue));
+        } else if (blue < 2d / 3d) {
+            blue = p + ((q - p) * 6 * (2d / 3d - blue));
         } else {
             blue = p;
         }
 
-        rgb[0] = clamp(red, 0, 1);
-        rgb[1] = clamp(green, 0, 1);
-        rgb[2] = clamp(blue, 0, 1);
+        rgb[0] = (float) clamp(red, 0d, 1d);
+        rgb[1] = (float) clamp(green, 0d, 1d);
+        rgb[2] = (float) clamp(blue, 0d, 1d);
         return rgb;
     }
 
     protected float[] rgbToHls(float[] rgb, float[] hls) {
-        float r = rgb[0];
-        float g = rgb[1];
-        float b = rgb[2];
+        double r = rgb[0];
+        double g = rgb[1];
+        double b = rgb[2];
 
-        float max = Math.max(Math.max(r, g), b);
-        float min = Math.min(Math.min(r, g), b);
+        double max = Math.max(Math.max(r, g), b);
+        double min = Math.min(Math.min(r, g), b);
 
-        float hue;
-        float saturation;
-        float luminance;
+        double hue;
+        double saturation;
+        double luminance;
 
         if (max == min) {
             hue = 0;
@@ -193,9 +197,9 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
             saturation = (max - min) / (2 - (max + min));
         }
 
-        hls[0] = hue;
-        hls[2] = saturation;
-        hls[1] = luminance;
+        hls[0] = (float) hue;
+        hls[2] = (float) saturation;
+        hls[1] = (float) luminance;
         return hls;
     }
 
