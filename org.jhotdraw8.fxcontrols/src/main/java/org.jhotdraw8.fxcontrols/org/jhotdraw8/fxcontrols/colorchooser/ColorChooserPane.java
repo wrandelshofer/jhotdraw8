@@ -129,6 +129,9 @@ public class ColorChooserPane extends VBox {
         targetSyntaxCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorSyntaxProperty).get());
         chooserCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::colorChoosersProperty).get());
         chooserCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chooserTypeProperty).get());
+        targetColorField.textProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorFieldProperty).get());
+        sourceColorField.textProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::sourceColorFieldProperty).get());
+        displayColorField.textProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::displayColorFieldProperty).get());
         viaModel.via(ColorChooserPaneModel::previewColorProperty).get().addListener((ChangeListener<? super Color>) this::updatePreviewColor);
     }
 
@@ -136,9 +139,10 @@ public class ColorChooserPane extends VBox {
         HlsChooser hlsChooser = new HlsChooser();
         SliderChooser sliderChooser = new SliderChooser();
         AlphaChooser alphaChooser = new AlphaChooser();
-        hlsChooser.setModel(getModel());//FIXME That model can change any time!
-        sliderChooser.setModel(getModel());//FIXME That model can change any time!
-        alphaChooser.setModel(getModel());//FIXME That model can change any time!
+
+        hlsChooser.modelProperty().bind(model);
+        sliderChooser.modelProperty().bind(model);
+        alphaChooser.modelProperty().bind(model);
 
         choosersPane.getChildren().setAll(hlsChooser, alphaChooser);
         //choosersPane.getChildren().setAll(sliderChooser,alphaChooser);

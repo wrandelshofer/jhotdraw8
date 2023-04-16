@@ -39,12 +39,15 @@ import org.jhotdraw8.color.RgbBitConverters;
 import org.jhotdraw8.color.SrgbColorSpace;
 
 import java.awt.color.ColorSpace;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.base.util.MathUtil.clamp;
 
 /**
  * Data flow:
@@ -71,11 +74,17 @@ import java.util.function.ToIntFunction;
  * </pre>
  */
 public class ColorChooserPaneModel {
-    private final static NumberConverter number = new NumberConverter();
+    private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
+            new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
+            new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+
     public final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     public final @NonNull FloatProperty c0 = new SimpleFloatProperty(this, "c0");
     public final @NonNull FloatProperty c1 = new SimpleFloatProperty(this, "c1");
     public final @NonNull FloatProperty c2 = new SimpleFloatProperty(this, "c2");
+    public final @NonNull FloatProperty hue = new SimpleFloatProperty(this, "hue");
+    public final @NonNull FloatProperty chroma = new SimpleFloatProperty(this, "chroma");
+    public final @NonNull FloatProperty lightness = new SimpleFloatProperty(this, "lightness");
     public final @NonNull FloatProperty c3 = new SimpleFloatProperty(this, "c3");
     public final @NonNull ObjectProperty<NamedColor> sourceColor = new SimpleObjectProperty<>(this, "chooserColor");
     public final @NonNull ObjectProperty<ChooserType> chooserType = new SimpleObjectProperty<>(this, "ChooserType");
@@ -87,6 +96,8 @@ public class ColorChooserPaneModel {
     public final @NonNull ListProperty<NamedColorSpace> displayColorSpaces = new SimpleListProperty<>(this, "displayColorSpaces", FXCollections.observableArrayList());
     public final @NonNull ObjectProperty<Color> previewColor = new SimpleObjectProperty<>(this, "previewColor");
     public final @NonNull StringProperty sourceColorField = new SimpleStringProperty(this, "sourceColorField");
+    public final @NonNull StringProperty targetColorField = new SimpleStringProperty(this, "targetColorField");
+    public final @NonNull StringProperty displayColorField = new SimpleStringProperty(this, "displayColorField");
     public final @NonNull ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "chooserColorSpace");
     public final @NonNull IntegerProperty sourceColorSpaceHueIndex = new SimpleIntegerProperty(this, "sourceColorSpaceHueIndex");
     public final @NonNull IntegerProperty sourceColorSpaceLightnessValueIndex = new SimpleIntegerProperty(this, "sourceColorSpaceLightnessValueIndex");
@@ -96,13 +107,16 @@ public class ColorChooserPaneModel {
     public final @NonNull ListProperty<NamedColorSpace> targetColorSpaces = new SimpleListProperty<>(this, "targetColorSpaces", FXCollections.observableArrayList());
     public final @NonNull ObjectProperty<ColorSyntax> targetColorSyntax = new SimpleObjectProperty<>(this, "ColorSyntax");
     public final @NonNull ListProperty<ColorSyntax> targetColorSyntaxes = new SimpleListProperty<>(this, "ColorSyntaxes", FXCollections.observableArrayList());
-    private final List<Object> refs = new ArrayList<>();
 
     public ColorChooserPaneModel() {
         sourceColorSpace.addListener(this::updateSourceColorSpaceProperties);
         chooserType.addListener(this::updateSourceColorSpace);
         targetColorSpace.addListener(this::updateSourceColorSpace);
-        ChangeListener<? super Object> changeListener = this.<ChangeListener<? super Object>>ref(this::updateTargetColor);
+
+        ChangeListener<? super Object> changeListener = (o, oldv, newv) -> {
+            updateTargetColor(o, oldv, newv);
+            updateSourceColorField(o, oldv, newv);
+        };
         c0.addListener(changeListener);
         c1.addListener(changeListener);
         c2.addListener(changeListener);
@@ -407,11 +421,6 @@ public class ColorChooserPaneModel {
         return previewColor;
     }
 
-    private <T> T ref(T binding) {
-        refs.add(binding);
-        return binding;
-    }
-
     public @NonNull StringProperty sourceColorFieldProperty() {
         return sourceColorField;
     }
@@ -423,6 +432,15 @@ public class ColorChooserPaneModel {
             case 2 -> c2.set(value);
             default -> c3.setValue(value);
         }
+    }
+
+    public float getComponent(int i) {
+        return switch (i) {
+            case 0 -> c0.get();
+            case 1 -> c1.get();
+            case 2 -> c2.get();
+            default -> c3.getValue();
+        };
     }
 
 
@@ -464,6 +482,21 @@ public class ColorChooserPaneModel {
 
     private void updateSourceColorField(Observable o, Object oldv, Object newv) {
 
+        StringBuilder b = new StringBuilder();
+        if (getSourceColorSpace() != null) {
+            b.append("color(\"");
+            b.append(getSourceColorSpace().getName());
+            b.append("\" ");
+            b.append(number.toString(getC0()));
+            b.append(' ');
+            b.append(number.toString(getC1()));
+            b.append(' ');
+            b.append(number.toString(getC2()));
+            b.append(" / ");
+            b.append(number.toString(getAlpha() * 100));
+            b.append("%)");
+        }
+        setSourceColorField(b.toString());
     }
 
     private void updateSourceColorSpace(Observable o, Object oldv, Object newv) {
@@ -473,6 +506,7 @@ public class ColorChooserPaneModel {
             sourceColorSpace.set(null);
             return;
         }
+        NamedColorSpace oldScs = sourceColorSpace.get();
         switch (ct) {
             case OK_HSL_SRGB -> {
                 sourceColorSpace.set(new OKHlsColorSpace());
@@ -480,19 +514,42 @@ public class ColorChooserPaneModel {
             case SLIDERS, SWATCHES -> {
                 sourceColorSpace.set(tcs);
             }
-            case HSL_SRGB -> {
-                sourceColorSpace.set(new ParametricHlsColorSpace("HSL", new SrgbColorSpace()));
+            case HSL -> {
+                NamedColorSpace cs;
+                if (tcs.getType() == ColorSpace.TYPE_RGB) {
+                    cs = tcs;
+                } else {
+                    cs = new SrgbColorSpace();
+                }
+                sourceColorSpace.set(new ParametricHlsColorSpace(cs.getName() + " HSL", cs));
             }
-            case HSV_SRGB -> {
-                sourceColorSpace.set(new ParametricHsvColorSpace("HSV", new SrgbColorSpace()));
+            case HSV -> {
+                NamedColorSpace cs;
+                if (tcs.getType() == ColorSpace.TYPE_RGB) {
+                    cs = tcs;
+                } else {
+                    cs = new SrgbColorSpace();
+                }
+                sourceColorSpace.set(new ParametricHsvColorSpace(cs.getName() + " HSV", cs));
             }
             case CIE_LCH -> {
-                sourceColorSpace.set(new ParametricLchColorSpace("LCH", new CieLabColorSpace()));
+                sourceColorSpace.set(new ParametricLchColorSpace("CIE LCH", new CieLabColorSpace()));
             }
             case OK_LCH -> {
                 sourceColorSpace.set(new OKLchColorSpace());
             }
             default -> sourceColorSpace.set(tcs);
+        }
+        NamedColorSpace newScs = sourceColorSpace.get();
+
+        // convert color components
+        if (oldScs != null && newScs != null) {
+            float[] oldComponents = {getC0(), getC1(), getC2()};
+            float[] xyz = oldScs.toCIEXYZ(oldComponents);
+            float[] newComponents = newScs.fromCIEXYZ(xyz);
+            setC0(newComponents[0]);
+            setC1(newComponents[1]);
+            setC2(newComponents[2]);
         }
     }
 
@@ -500,21 +557,40 @@ public class ColorChooserPaneModel {
         NamedColorSpace ncs = sourceColorSpace.get();
         if (ncs == null) return;
 
+        hue.unbindBidirectional(c0);
+        hue.unbindBidirectional(c1);
+        hue.unbindBidirectional(c2);
+        chroma.unbindBidirectional(c0);
+        chroma.unbindBidirectional(c1);
+        chroma.unbindBidirectional(c2);
+        lightness.unbindBidirectional(c0);
+        lightness.unbindBidirectional(c1);
+        lightness.unbindBidirectional(c2);
+
         switch (ncs.getType()) {
             default -> {
                 sourceColorSpaceHueIndex.set(0);
                 sourceColorSpaceSaturationChromaIndex.set(1);
                 sourceColorSpaceLightnessValueIndex.set(2);
+                hue.bindBidirectional(c0);
+                lightness.bindBidirectional(c1);
+                chroma.bindBidirectional(c2);
             }
             case ColorSpace.TYPE_HLS -> {
                 sourceColorSpaceHueIndex.set(0);
                 sourceColorSpaceSaturationChromaIndex.set(2);
                 sourceColorSpaceLightnessValueIndex.set(1);
+                hue.bindBidirectional(c0);
+                lightness.bindBidirectional(c1);
+                chroma.bindBidirectional(c2);
             }
             case NamedColorSpace.TYPE_LCH -> {
                 sourceColorSpaceHueIndex.set(2);
                 sourceColorSpaceSaturationChromaIndex.set(1);
                 sourceColorSpaceLightnessValueIndex.set(0);
+                lightness.bindBidirectional(c0);
+                chroma.bindBidirectional(c1);
+                hue.bindBidirectional(c2);
             }
         }
     }
@@ -527,15 +603,41 @@ public class ColorChooserPaneModel {
         NamedColorSpace targetCs = targetColorSpace.get();
         if (displayCs == null || targetCs == null) return;
         Map.Entry<String, ToIntFunction<Integer>> entry = displayBitDepth.get();
-        displayCs.fromRGB(sourceCs.toRGB(component, rgb), rgb);
-        int value = RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue());
-        int argb = entry == null ? value : entry.getValue().applyAsInt(value);
-        Color previewColorValue = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, alpha.floatValue());
-        String hexStr = "00000000" + Integer.toHexString(argb);
-        hexStr = hexStr.substring(hexStr.length() - 8);
-        previewColor.set(previewColorValue);
+
+        // compute display color
+        {
+            displayCs.fromRGB(sourceCs.toRGB(component, rgb), rgb);
+            int value = RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue());
+            int argb = entry == null ? value : entry.getValue().applyAsInt(value);
+            Color previewColorValue = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, clamp(alpha.floatValue(), 0, 1));
+            String hexStr = "00000000" + Integer.toHexString(argb);
+            hexStr = hexStr.substring(hexStr.length() - 8);
+            previewColor.set(previewColorValue);
+            setDisplayColorField("#" + hexStr);
+        }
+
+        // compute target color
+        {
+            targetCs.fromRGB(sourceCs.toRGB(component, rgb), rgb);
+            int value = RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue());
+            int argb = entry == null ? value : entry.getValue().applyAsInt(value);
+            String hexStr = "00000000" + Integer.toHexString(argb);
+            hexStr = hexStr.substring(hexStr.length() - 8);
+            setTargetColorField("#" + hexStr);
+        }
         //hexRgbLabel.setText("#" + hexStr.substring(2) + hexStr.substring(0, 2));
-        updateSourceColorField(o, oldv, newv);
+    }
+
+    public String getTargetColorField() {
+        return targetColorField.get();
+    }
+
+    public @NonNull StringProperty targetColorFieldProperty() {
+        return targetColorField;
+    }
+
+    public void setTargetColorField(String targetColorField) {
+        this.targetColorField.set(targetColorField);
     }
 
     public enum ColorSyntax {
@@ -553,9 +655,58 @@ public class ColorChooserPaneModel {
         OK_HSL_SRGB,
         SLIDERS,
         SWATCHES,
-        HSL_SRGB,
-        HSV_SRGB,
+        HSL,
+
+        HSV,
         OK_LCH,
         CIE_LCH,
+    }
+
+    public String getDisplayColorField() {
+        return displayColorField.get();
+    }
+
+    public @NonNull StringProperty displayColorFieldProperty() {
+        return displayColorField;
+    }
+
+    public void setDisplayColorField(String displayColorField) {
+        this.displayColorField.set(displayColorField);
+    }
+
+    public float getHue() {
+        return hue.get();
+    }
+
+    public @NonNull FloatProperty hueProperty() {
+        return hue;
+    }
+
+    public void setHue(float hue) {
+        this.hue.set(hue);
+    }
+
+    public float getChroma() {
+        return chroma.get();
+    }
+
+    public @NonNull FloatProperty chromaProperty() {
+        return chroma;
+    }
+
+    public void setChroma(float chroma) {
+        this.chroma.set(chroma);
+    }
+
+    public float getLightness() {
+        return lightness.get();
+    }
+
+    public @NonNull FloatProperty lightnessProperty() {
+        return lightness;
+    }
+
+    public void setLightness(float lightness) {
+        this.lightness.set(lightness);
     }
 }

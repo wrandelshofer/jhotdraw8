@@ -25,7 +25,7 @@ public class CssColorConverterTest {
                 DynamicTest.dynamicTest("reddish", () -> testSvgColor(
                         "#cfffff", Color.web("#cfffff"))),
                 DynamicTest.dynamicTest("greenish", () -> testSvgColor(
-                        "rgb(20%,73.333%,20%)", Color.web("#33bb33")))
+                        "rgb(20% 73.333% 20%)", Color.web("#33bb33")))
         )
                 ;
 
@@ -38,7 +38,6 @@ public class CssColorConverterTest {
         CssColor cssColorRecreatedFromJavaFXColor = new CssColor(actual.getColor());
         String recreatedActualStr = cssColorRecreatedFromJavaFXColor.getName();
         CssColor recreatedColor = c.fromString(recreatedActualStr);
-        Color recreated = recreatedColor.getColor();
 
         assertEquals(expected.toString(), actual.getColor().toString());
         assertEquals(inputStr, actualStr);

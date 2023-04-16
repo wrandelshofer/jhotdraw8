@@ -41,8 +41,8 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
     @Override
     public float @NonNull [] toRGB(float @NonNull [] hls, float @NonNull [] rgb) {
         double h = hls[0];
-        double s = hls[2];
         double l = hls[1];
+        double s = hls[2];
 
         if (l == 1.0) {
             rgb[0] = 1;
@@ -296,8 +296,8 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
 
         double l = toe(L);
         hls[0] = (float) h;
-        hls[2] = (float) s;
         hls[1] = (float) l;
+        hls[2] = (float) s;
         return hls;
 
     }

@@ -14,16 +14,18 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.concurrent.TileTask;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.NamedColorSpace;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.base.util.MathUtil.clamp;
 
 
 /**
@@ -51,7 +53,8 @@ public class ColorSlider extends AbstractColorSlider {
      * <p>
      * This must be a double property (and not float) so that we do not run into rounding issues.
      */
-    private final @NonNull DoubleProperty tickUnit = new SimpleDoubleProperty(this, "tickUnit", 1d / 255);
+    private final @NonNull DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 1d / 255);
+    private final @NonNull DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 1d / 255);
 
     public ColorSlider() {
         load();
@@ -65,6 +68,38 @@ public class ColorSlider extends AbstractColorSlider {
         c2Property().addListener(o -> this.onComponentValueChanged(2));
         c3Property().addListener(o -> this.onComponentValueChanged(3));
         valueProperty().addListener(o -> this.requestLayout());
+    }
+
+    @Override
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        NamedColorSpace cs = getSourceColorSpace();
+        if (cs == null) return;
+        final double tickUnit = (keyEvent.isAltDown()) ? getMinorTickUnit() : getMajorTickUnit();
+        float v = getValue();
+        double vSnappedToTick = Math.round(v / tickUnit) * tickUnit;
+        int i = getComponentIndex();
+        float vMin = cs.getMinValue(i);
+        float vMax = cs.getMaxValue(i);
+        switch (keyEvent.getCode()) {
+            // increment by tick unit
+            case UP, RIGHT -> {
+                keyEvent.consume();
+                setValue(clamp((float) (vSnappedToTick + tickUnit), vMin, vMax));
+            }
+
+            // decrement by tick unit
+            case DOWN, LEFT -> {
+                keyEvent.consume();
+                setValue(clamp((float) (vSnappedToTick - tickUnit), vMin, vMax));
+            }
+
+            // snap to tick unit
+            case SPACE -> {
+                keyEvent.consume();
+                setValue(clamp((float) vSnappedToTick, vMin, vMax));
+            }
+        }
+        ;
     }
 
     private void onComponentValueChanged(int i) {
@@ -86,13 +121,13 @@ public class ColorSlider extends AbstractColorSlider {
         switch (getOrientation()) {
 
             case HORIZONTAL -> {
-                thumb.setTranslateX((getComponent() - vMin) * width / (vMax - vMin) - thumb.getWidth() * 0.5
+                thumb.setTranslateX((getValue() - vMin) * width / (vMax - vMin) - thumb.getWidth() * 0.5
                         + thumbTranslateX.get());
                 thumb.setTranslateY((height - thumb.getHeight()) * 0.5
                         + thumbTranslateY.get());
             }
             case VERTICAL -> {
-                thumb.setTranslateY(height - (getComponent() - vMin) * height / (vMax - vMin) - thumb.getHeight() * 0.5
+                thumb.setTranslateY(height - (getValue() - vMin) * height / (vMax - vMin) - thumb.getHeight() * 0.5
                         + thumbTranslateX.get());
                 thumb.setTranslateX((width - thumb.getWidth()) * 0.5 + thumbTranslateY.get()
                         + thumbTranslateX.get());
@@ -114,10 +149,11 @@ public class ColorSlider extends AbstractColorSlider {
 
 
     protected void onMousePressedOrDragged(MouseEvent mouseEvent) {
+        requestFocus();
         float width = (float) getWidth();
         float height = (float) getHeight();
-        float x = MathUtil.clamp((float) mouseEvent.getX(), 0, width);
-        float y = MathUtil.clamp((float) mouseEvent.getY(), 0, height);
+        float x = clamp((float) mouseEvent.getX(), 0, width);
+        float y = clamp((float) mouseEvent.getY(), 0, height);
         NamedColorSpace cs = getSourceColorSpace();
         if (cs == null) return;
 
@@ -126,36 +162,13 @@ public class ColorSlider extends AbstractColorSlider {
         switch (getOrientation()) {
             case HORIZONTAL -> {
                 float value = x * (vmax - vmin) / width + vmin;
-                setComponent(maybeSnapToTicks(value, getTickUnit()));
+                setValue(maybeSnapToTicks(value, getMinorTickUnit(), mouseEvent));
             }
             case VERTICAL -> {
                 float value = (height - y) * (vmax - vmin) / height + vmin;
-                setComponent(maybeSnapToTicks(value, getTickUnit()));
+                setValue(maybeSnapToTicks(value, getMinorTickUnit(), mouseEvent));
             }
         }
-    }
-
-
-    private void setComponent(float v) {
-        /*
-        switch (getComponentIndex()) {
-            case 0 -> setC0(v);
-            case 1 -> setC1(v);
-            case 2 -> setC2(v);
-            default -> setC3(v);
-        }*/
-        setValue(v);
-    }
-
-    private float getComponent() {
-        /*
-        return switch (getComponentIndex()) {
-            case 0 -> getC0();
-            case 1 -> getC1();
-            case 2 -> getC2();
-            default -> getC3();
-        };*/
-        return getValue();
     }
 
 
@@ -211,7 +224,7 @@ public class ColorSlider extends AbstractColorSlider {
                 colorValue[vIndex] = xval;
 
                 int argb = getArgb(scs, tcs, dcs, colorValue, sRgb, tRgb, dRgb, scratch, 1);
-                argb = outOfGamut(tRgb) ? 0 : argb;
+                argb = outOfGamut(tcs, tRgb) ? 0 : argb;
                 array[x + xy] = argb;
             }
             for (int y = yfrom + 1; y < yto; y++) {
@@ -285,16 +298,16 @@ public class ColorSlider extends AbstractColorSlider {
         this.orientation.set(orientation);
     }
 
-    public double getTickUnit() {
-        return tickUnit.get();
+    public double getMinorTickUnit() {
+        return minorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty tickUnitProperty() {
-        return tickUnit;
+    public @NonNull DoubleProperty minorTickUnitProperty() {
+        return minorTickUnit;
     }
 
-    public void setTickUnit(double tickUnit) {
-        this.tickUnit.set(tickUnit);
+    public void setMinorTickUnit(double minorTickUnit) {
+        this.minorTickUnit.set(minorTickUnit);
     }
 
     public float getValue() {
@@ -307,6 +320,18 @@ public class ColorSlider extends AbstractColorSlider {
 
     public void setValue(float value) {
         this.value.set(value);
+    }
+
+    public double getMajorTickUnit() {
+        return majorTickUnit.get();
+    }
+
+    public @NonNull DoubleProperty majorTickUnitProperty() {
+        return majorTickUnit;
+    }
+
+    public void setMajorTickUnit(double majorTickUnit) {
+        this.majorTickUnit.set(majorTickUnit);
     }
 }
 

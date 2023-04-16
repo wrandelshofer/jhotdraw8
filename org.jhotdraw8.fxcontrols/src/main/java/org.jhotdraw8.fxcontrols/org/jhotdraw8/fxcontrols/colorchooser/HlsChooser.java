@@ -10,23 +10,16 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
-import javafx.scene.image.PixelBuffer;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.ImagePattern;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.IntBuffer;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -98,7 +91,7 @@ public class HlsChooser extends HBox {
         assert huePane != null : "fx:id=\"huePane\" was not injected: check your FXML file 'HlsChooser.fxml'.";
         assert colorRectPane != null : "fx:id=\"colorRectPane\" was not injected: check your FXML file 'HlsChooser.fxml'.";
 
-        Background checkerboardBackground = new Background(new BackgroundFill(createCheckerboardPattern(4, 0xffffffff, 0xffaaaaaa), null, null));
+        Background checkerboardBackground = new Background(new BackgroundFill(CheckerboardFactory.createCheckerboardPattern(4, 0xffffffff, 0xffaaaaaa), null, null));
         colorRectPane.setBackground(checkerboardBackground);
         colorRectSlider = new ColorRectangleSlider();
         hueSlider = new ColorSlider();
@@ -118,74 +111,32 @@ public class HlsChooser extends HBox {
         hueSlider.c2Property().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get().map((NamedColorSpace v) ->
                 0.5f * (v.getMaxValue(2) - v.getMinValue(2)) + v.getMinValue(2)
         ));
-        hueSlider.valueProperty().addListener((o, oldv, newv) -> {
-            ColorChooserPaneModel m = model.get();
-            if (m != null && newv != null) {
-                m.setComponent(m.getSourceColorSpaceHueIndex(), newv.floatValue());
-            }
-        });
+        hueSlider.setMinorTickUnit(0.1);
+        hueSlider.setMajorTickUnit(1);
+
         hueSlider.componentIndexProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceHueIndexProperty).get());
         hueSlider.sourceColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get());
         hueSlider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
         hueSlider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
         hueSlider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
+        hueSlider.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::hueProperty).get());
 
-        colorRectSlider.c0Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c0Property).get());
-        colorRectSlider.c1Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c1Property).get());
-        colorRectSlider.c2Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c2Property).get());
-        colorRectSlider.c3Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c3Property).get());
-        colorRectSlider.alphaProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::alphaProperty).get());
+        colorRectSlider.c0Property().bind(viaModel.via(ColorChooserPaneModel::c0Property).get());
+        colorRectSlider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
+        colorRectSlider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());
+        colorRectSlider.c3Property().bind(viaModel.via(ColorChooserPaneModel::c3Property).get());
+        colorRectSlider.alphaProperty().bind(viaModel.via(ColorChooserPaneModel::alphaProperty).get());
         colorRectSlider.sourceColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get());
         colorRectSlider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
         colorRectSlider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
         colorRectSlider.xComponentIndexProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceSaturationChromaIndexProperty).get());
         colorRectSlider.yComponentIndexProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceLightnessValueIndexProperty).get());
         colorRectSlider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
-
+        colorRectSlider.xValueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chromaProperty).get());
+        colorRectSlider.yValueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::lightnessProperty).get());
 
     }
 
-    /**
-     * Creates a checkerboard image pattern.
-     *
-     * @param size     size of a checkerboard tile
-     * @param evenArgb color for even tiles
-     * @param oddArgb  color for odd tiles
-     * @return the image pattern
-     */
-    public static ImagePattern createCheckerboardPattern(int size, int evenArgb, int oddArgb) {
-        var p = checkerboardPattern;
-        if (p == null || p.getWidth() != size * 2) {
-            int width = size * 2;
-            int height = width;
-            PixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
-            IntBuffer intBuffer = IntBuffer.allocate(width * height);
-            var pixelBuffer = new PixelBuffer<>(width, height, intBuffer, pixelFormat);
-            WritableImage image = new WritableImage(pixelBuffer);
-            int[] a = intBuffer.array();
-
-            // fill first even line
-            Arrays.fill(a, 0, size, evenArgb);
-            Arrays.fill(a, size, size * 2, oddArgb);
-
-            // fill first odd line
-            int xy = size * width;
-            Arrays.fill(a, xy, xy + size, oddArgb);
-            Arrays.fill(a, xy + size, xy + size * 2, evenArgb);
-
-            for (int y = 1; y < size; y++) {
-                xy = width * y;
-                System.arraycopy(a, 0, a, xy, width);
-                System.arraycopy(a, size * width, a, xy + size * width, width);
-            }
-
-            p = new ImagePattern(image, 0, 0, width, height, false);
-            checkerboardPattern = p;
-        }
-        return p;
-    }
-
-    private static @Nullable ImagePattern checkerboardPattern;
 
     public ColorChooserPaneModel getModel() {
         return model.get();

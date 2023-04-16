@@ -79,10 +79,12 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
         double C = Math.sqrt(a * a + b * b);
         double H = Math.atan2(b, a);
+        if (H < 0) H += Math.PI * 2;
 
         lch[0] = (float) L;
         lch[1] = (float) C;
         lch[2] = (float) (H * 180 / PI);
+
         return lch;
     }
 

@@ -234,7 +234,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
                 case NamedColorSpace.TYPE_LCH -> {
                     hueSlider.setComponentIndex(2);//hue
                     hueSlider.c2Property().bindBidirectional(c2);
-                    hueSlider.setTickUnit(0.1f);
+                    hueSlider.setMinorTickUnit(0.1f);
                     if (newv.getName().contains("OKLCH")) {
                         hueSlider.setC1(newv.getMaxValue(1) * 0.25f);//chroma
                         hueSlider.setC0(newv.getMaxValue(0) * 0.6f);//ligthness

@@ -18,6 +18,7 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -25,10 +26,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -41,6 +46,7 @@ import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 
+import java.awt.color.ColorSpace;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.IntBuffer;
@@ -289,8 +295,22 @@ public abstract class AbstractColorSlider extends Pane {
         //sliderThumb.setBorder(new Border(new BorderStroke(Color.rgb(128, 128, 128), BorderStrokeStyle.SOLID, null, null)));
         // sliderThumb.setEffect(new DropShadow(BlurType.GAUSSIAN,Color.BLACK,3,4,0,1));
         thumb.setEffect(new DropShadow(BlurType.THREE_PASS_BOX, Color.BLACK, 2, 0.0, 0, 1));
+
+        // XXX this should be done by a stylesheet
+        focusedProperty().addListener((o, oldv, newv) -> {
+            if (newv) {
+                thumb.setBorder(new Border(
+                        new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, null, new Insets(-1, -1, -1, -1))//,
+                        // new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID,null,null,new Insets(2,2,2,2))
+                ));
+            } else {
+                thumb.setBorder(null);
+            }
+        });
+
         setOnMousePressed(this::onMousePressedOrDragged);
         setOnMouseDragged(this::onMousePressedOrDragged);
+        setOnKeyPressed(this::onKeyPressed);
         // setOnMouseReleased(this::onMouseReleased);
         adjustingProperty().addListener(this::onAdjusting);
 
@@ -310,6 +330,8 @@ public abstract class AbstractColorSlider extends Pane {
         getStyleClass().add("color-rect-pane");
 
     }
+
+    protected abstract void onKeyPressed(KeyEvent keyEvent);
 
     public void invalidateColorRect() {
         if (!invalid) {
@@ -361,8 +383,8 @@ public abstract class AbstractColorSlider extends Pane {
         }
     }
 
-    protected float maybeSnapToTicks(float value, double tickUnit) {
-        return isSnapToTicks()
+    protected float maybeSnapToTicks(float value, double tickUnit, MouseEvent mouseEvent) {
+        return !mouseEvent.isAltDown() && isSnapToTicks()
                 ? (float) (Math.round(value / tickUnit) * tickUnit)
                 : value;
     }
@@ -456,14 +478,18 @@ public abstract class AbstractColorSlider extends Pane {
      *     +----------
      * </pre>
      *
-     * @param rgb
+     * @param colorSpace
+     * @param component
      * @return
      */
-    protected static boolean outOfGamut(float[] rgb) {
+    protected static boolean outOfGamut(NamedColorSpace colorSpace, float[] component) {
         float eps = 0x1p-10f;
-        return rgb[0] < 0 || rgb[0] > 1 + eps
-                || rgb[1] < 0 || rgb[1] > 1 + eps
-                || rgb[2] < 0 || rgb[2] > 1 + eps;
+        return component[0] < colorSpace.getMinValue(0) - eps
+                || component[0] > colorSpace.getMaxValue(0) + eps
+                || component[1] < colorSpace.getMinValue(1) - eps
+                || component[1] > colorSpace.getMaxValue(1) + eps
+                || component[2] < colorSpace.getMinValue(2) - eps
+                || component[2] > colorSpace.getMaxValue(2) + eps;
     }
 
     protected static int getPreArgb(NamedColorSpace dcs, float[] dRgb, float[] pre, float alpha) {
@@ -471,20 +497,24 @@ public abstract class AbstractColorSlider extends Pane {
         return argb;
     }
 
-    protected static int getArgb(NamedColorSpace scs, NamedColorSpace tcs, NamedColorSpace dcs, float[] colorValue, float[] sRgb, float[] tRgb, float[] dRgb, float[] scratch, float alpha) {
+    protected static int getArgb(NamedColorSpace scs, NamedColorSpace tcs, NamedColorSpace dcs, float[] colorValue, float[] sRgb, float[] tComponent, float[] dComponent, float[] dRgb, float alpha) {
         scs.toRGB(colorValue, sRgb);
-        tcs.fromRGB(sRgb, tRgb);
-        dcs.fromRGB(sRgb, dRgb);
-        boolean outOfDisplay = outOfGamut(dRgb);
-        boolean outOfTarget = outOfGamut(tRgb);
+        tcs.fromRGB(sRgb, tComponent);
+        dcs.fromRGB(sRgb, dComponent);
+        boolean outOfDisplay = outOfGamut(dcs, dComponent);
+        boolean outOfTarget = outOfGamut(tcs, tComponent);
         if (!outOfTarget && outOfDisplay) {
-            scratch[0] = .5f;
-            scratch[1] = .5f;
-            scratch[2] = .5f;
+            dRgb[0] = .5f;
+            dRgb[1] = .5f;
+            dRgb[2] = .5f;
         } else {
-            System.arraycopy(dRgb, 0, scratch, 0, 3);
+            if (dcs.getType() == ColorSpace.TYPE_RGB) {
+                System.arraycopy(dComponent, 0, dRgb, 0, 3);
+            } else {
+                dcs.toRGB(dComponent, dRgb);
+            }
         }
-        int argb = RgbBitConverters.rgbFloatToPreArgb32(scratch, outOfTarget ? 0 : alpha, scratch);
+        int argb = RgbBitConverters.rgbFloatToPreArgb32(dRgb, outOfTarget ? 0 : alpha, dRgb);
         return argb;
     }
 

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static org.jhotdraw8.fxcontrols.colorchooser.HlsChooser.createCheckerboardPattern;
+import static org.jhotdraw8.fxcontrols.colorchooser.CheckerboardFactory.createCheckerboardPattern;
 
 public class AlphaChooser extends VBox {
     private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");

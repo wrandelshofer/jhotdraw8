@@ -5,12 +5,15 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  */
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -41,9 +44,13 @@ public class AlphaSlider extends AbstractColorSlider {
     private final @NonNull FloatProperty alphaMinValue = new SimpleFloatProperty(this, "alphaMinValue", 0.0f);
 
     /**
-     * The unit distance between tick marks.
+     * The minor unit distance between tick marks.
      */
-    private final @NonNull FloatProperty tickUnit = new SimpleFloatProperty(this, "tickUnit", 1f / 255);
+    private final @NonNull DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 0.001);
+    /**
+     * The major unit distance between tick marks.
+     */
+    private final @NonNull DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 0.01);
 
 
     public AlphaSlider() {
@@ -98,6 +105,7 @@ public class AlphaSlider extends AbstractColorSlider {
 
 
     protected void onMousePressedOrDragged(MouseEvent mouseEvent) {
+        requestFocus();
         float width = (float) getWidth();
         float height = (float) getHeight();
         float x = clamp((float) mouseEvent.getX(), 0, width);
@@ -107,10 +115,10 @@ public class AlphaSlider extends AbstractColorSlider {
         float vmin = getAlphaMinValue();
         switch (getOrientation()) {
             case HORIZONTAL -> {
-                setAlpha(maybeSnapToTicks(x * (vmax - vmin) / width + vmin, getTickUnit()));
+                setAlpha(maybeSnapToTicks(x * (vmax - vmin) / width + vmin, getMinorTickUnit(), mouseEvent));
             }
             case VERTICAL -> {
-                setAlpha(maybeSnapToTicks((height - y) * (vmax - vmin) / height + vmin, getTickUnit()));
+                setAlpha(maybeSnapToTicks((height - y) * (vmax - vmin) / height + vmin, getMinorTickUnit(), mouseEvent));
             }
         }
         requestLayout();
@@ -232,16 +240,16 @@ public class AlphaSlider extends AbstractColorSlider {
         this.orientation.set(orientation);
     }
 
-    public float getTickUnit() {
-        return tickUnit.get();
+    public double getMinorTickUnit() {
+        return minorTickUnit.get();
     }
 
-    public @NonNull FloatProperty tickUnitProperty() {
-        return tickUnit;
+    public @NonNull DoubleProperty minorTickUnitProperty() {
+        return minorTickUnit;
     }
 
-    public void setTickUnit(float tickUnit) {
-        this.tickUnit.set(tickUnit);
+    public void setMinorTickUnit(double minorTickUnit) {
+        this.minorTickUnit.set(minorTickUnit);
     }
 
     public float getAlpha() {
@@ -278,6 +286,49 @@ public class AlphaSlider extends AbstractColorSlider {
 
     public void setAlphaMinValue(float alphaMinValue) {
         this.alphaMinValue.set(alphaMinValue);
+    }
+
+    @Override
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        NamedColorSpace cs = getSourceColorSpace();
+        if (cs == null) return;
+        final double tickUnit = (keyEvent.isAltDown()) ? getMinorTickUnit() : getMajorTickUnit();
+        float v = getAlpha();
+        double vSnappedToTick = Math.round(v / tickUnit) * tickUnit;
+        float vMin = 0;
+        float vMax = 1;
+        switch (keyEvent.getCode()) {
+            // increment by tick unit
+            case UP, RIGHT -> {
+                keyEvent.consume();
+                setAlpha(clamp((float) (vSnappedToTick + tickUnit), vMin, vMax));
+            }
+
+            // decrement by tick unit
+            case DOWN, LEFT -> {
+                keyEvent.consume();
+                setAlpha(clamp((float) (vSnappedToTick - tickUnit), vMin, vMax));
+            }
+
+            // snap to tick unit
+            case SPACE -> {
+                keyEvent.consume();
+                setAlpha(clamp((float) vSnappedToTick, vMin, vMax));
+            }
+        }
+        ;
+    }
+
+    public double getMajorTickUnit() {
+        return majorTickUnit.get();
+    }
+
+    public @NonNull DoubleProperty majorTickUnitProperty() {
+        return majorTickUnit;
+    }
+
+    public void setMajorTickUnit(double majorTickUnit) {
+        this.majorTickUnit.set(majorTickUnit);
     }
 }
 
