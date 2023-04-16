@@ -5,6 +5,8 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.awt.color.ColorSpace;
+
 import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 /**
@@ -33,14 +35,21 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
 public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull NamedColorSpace labColorSpace;
+    private final @NonNull NamedColorSpace rgbColorSpace;
     private final @NonNull String name;
 
-    public ParametricHlsColorSpace(@NonNull String name, @NonNull NamedColorSpace labColorSpace) {
+    /**
+     * Creates a new instance that is based on the provided RGB color space.
+     *
+     * @param name          the name of the created color space
+     * @param rgbColorSpace the base RGB color space
+     * @throws IllegalArgumentException if {@code rgbColorSpace} has not type {@link ColorSpace#TYPE_RGB}.
+     */
+    public ParametricHlsColorSpace(@NonNull String name, @NonNull NamedColorSpace rgbColorSpace) {
         super(TYPE_HLS, 3);
-        assert (labColorSpace.getType() == TYPE_RGB);
+        assert (rgbColorSpace.getType() == TYPE_RGB);
         this.name = name;
-        this.labColorSpace = labColorSpace;
+        this.rgbColorSpace = rgbColorSpace;
     }
 
     /**
@@ -51,12 +60,12 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
      */
     @Override
     public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
-        return rgbToHls(labColorSpace.fromCIEXYZ(xyz, lch), lch);
+        return rgbToHls(rgbColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
     @Override
     public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
-        return rgbToHls(labColorSpace.fromRGB(rgb, lch), lch);
+        return rgbToHls(rgbColorSpace.fromRGB(rgb, lch), lch);
     }
 
     @Override
@@ -198,12 +207,12 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
      */
     @Override
     public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
-        return labColorSpace.toCIEXYZ(hlsToRgb(colorvalue, xyz), xyz);
+        return rgbColorSpace.toCIEXYZ(hlsToRgb(colorvalue, xyz), xyz);
     }
 
     @Override
     public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
-        return labColorSpace.toRGB(hlsToRgb(lch, rgb), rgb);
+        return rgbColorSpace.toRGB(hlsToRgb(lch, rgb), rgb);
     }
 
 }

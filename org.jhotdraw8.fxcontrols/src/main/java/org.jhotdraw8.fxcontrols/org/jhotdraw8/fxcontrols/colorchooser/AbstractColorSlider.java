@@ -483,7 +483,8 @@ public abstract class AbstractColorSlider extends Pane {
      * @return
      */
     protected static boolean outOfGamut(NamedColorSpace colorSpace, float[] component) {
-        float eps = 0x1p-10f;
+        //float eps = 0x1p-10f;
+        float eps = 0;
         return component[0] < colorSpace.getMinValue(0) - eps
                 || component[0] > colorSpace.getMaxValue(0) + eps
                 || component[1] < colorSpace.getMinValue(1) - eps

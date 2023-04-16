@@ -5,6 +5,8 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.awt.color.ColorSpace;
+
 /**
  * A parametric HSV color space computed from an RGB color space.
  * <p>
@@ -32,14 +34,21 @@ import org.jhotdraw8.annotation.NonNull;
 public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull NamedColorSpace labColorSpace;
+    private final @NonNull NamedColorSpace rgbColorSpace;
     private final @NonNull String name;
 
-    public ParametricHsvColorSpace(@NonNull String name, @NonNull NamedColorSpace labColorSpace) {
+    /**
+     * Creates a new instance that is based on the provided RGB color space.
+     *
+     * @param name          the name of the created color space
+     * @param rgbColorSpace the base RGB color space
+     * @throws IllegalArgumentException if {@code rgbColorSpace} has not type {@link ColorSpace#TYPE_RGB}.
+     */
+    public ParametricHsvColorSpace(@NonNull String name, @NonNull NamedColorSpace rgbColorSpace) {
         super(TYPE_HSV, 3);
-        assert (labColorSpace.getType() == TYPE_RGB);
+        assert (rgbColorSpace.getType() == TYPE_RGB);
         this.name = name;
-        this.labColorSpace = labColorSpace;
+        this.rgbColorSpace = rgbColorSpace;
     }
 
     /**
@@ -50,12 +59,12 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
      */
     @Override
     public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
-        return rgbToHsv(labColorSpace.fromCIEXYZ(xyz, lch), lch);
+        return rgbToHsv(rgbColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
     @Override
     public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
-        return rgbToHsv(labColorSpace.fromRGB(rgb, lch), lch);
+        return rgbToHsv(rgbColorSpace.fromRGB(rgb, lch), lch);
     }
 
     @Override
@@ -168,12 +177,12 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
      */
     @Override
     public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
-        return labColorSpace.toCIEXYZ(hsvToRgb(colorvalue, xyz), xyz);
+        return rgbColorSpace.toCIEXYZ(hsvToRgb(colorvalue, xyz), xyz);
     }
 
     @Override
     public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
-        return labColorSpace.toRGB(hsvToRgb(lch, rgb), rgb);
+        return rgbColorSpace.toRGB(hsvToRgb(lch, rgb), rgb);
     }
 
 }
