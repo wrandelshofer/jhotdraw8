@@ -72,7 +72,9 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         xValue.addListener(o -> requestLayout());
         yValue.addListener(o -> requestLayout());
         xComponentIndex.addListener(o -> invalidateColorRect());
-        yComponentIndex.addListener(o -> invalidateColorRect());
+        xComponentIndex.addListener(o -> invalidateColorRect());
+        alpha.addListener(o -> invalidateColorRect());
+
     }
 
     private void onComponentValueChanged(int i) {

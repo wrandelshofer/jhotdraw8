@@ -95,29 +95,29 @@ public class SliderChooser extends VBox {
         c1Slider.setComponentIndex(1);
         c2Slider.setComponentIndex(2);
 
-        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
 
-        c0Slider.c0Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c0Property).get());
-        c0Slider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
-        c0Slider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());
-        c0Slider.c3Property().bind(viaModel.via(ColorChooserPaneModel::c3Property).get());
-        c0Slider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        c0Slider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        c0Slider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
-        c1Slider.c0Property().bind(viaModel.via(ColorChooserPaneModel::c0Property).get());
-        c1Slider.c1Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c1Property).get());
-        c1Slider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());
-        c1Slider.c3Property().bind(viaModel.via(ColorChooserPaneModel::c3Property).get());
-        c1Slider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        c1Slider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        c1Slider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
-        c2Slider.c0Property().bind(viaModel.via(ColorChooserPaneModel::c0Property).get());
-        c2Slider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
-        c2Slider.c2Property().bindBidirectional(viaModel.via(ColorChooserPaneModel::c2Property).get());
-        c2Slider.c3Property().bind(viaModel.via(ColorChooserPaneModel::c3Property).get());
-        c2Slider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        c2Slider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        c2Slider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
+        c0Slider.c1Property().bind(model.flatMap(ColorChooserPaneModel::c1Property));
+        c0Slider.c2Property().bind(model.flatMap(ColorChooserPaneModel::c2Property));
+        c0Slider.c3Property().bind(model.flatMap(ColorChooserPaneModel::c3Property));
+        c0Slider.targetColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpaceProperty));
+        c0Slider.displayColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpaceProperty));
+        c0Slider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
+        c1Slider.c0Property().bind(model.flatMap(ColorChooserPaneModel::c0Property));
+        c1Slider.c2Property().bind(model.flatMap(ColorChooserPaneModel::c2Property));
+        c1Slider.c3Property().bind(model.flatMap(ColorChooserPaneModel::c3Property));
+        c1Slider.targetColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpaceProperty));
+        c1Slider.displayColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpaceProperty));
+        c1Slider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
+        c2Slider.c0Property().bind(model.flatMap(ColorChooserPaneModel::c0Property));
+        c2Slider.c1Property().bind(model.flatMap(ColorChooserPaneModel::c1Property));
+        c2Slider.c3Property().bind(model.flatMap(ColorChooserPaneModel::c3Property));
+        c2Slider.targetColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpaceProperty));
+        c2Slider.displayColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpaceProperty));
+        c2Slider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
+
+        c0Slider.c0Property().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::c0Property).get());
+        c1Slider.c1Property().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::c1Property).get());
+        c2Slider.c2Property().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::c2Property).get());
     }
 
 }

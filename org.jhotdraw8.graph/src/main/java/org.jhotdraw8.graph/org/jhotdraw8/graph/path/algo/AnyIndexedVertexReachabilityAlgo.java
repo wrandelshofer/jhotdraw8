@@ -18,13 +18,13 @@ import java.util.function.IntPredicate;
 
 
 /**
- * See {@link GloballyArbitraryArcPathSearchAlgo} for a description of this
+ * See {@link AnyArcPathSearchAlgo} for a description of this
  * algorithm.
  * <p>
  * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
  */
-public class GloballyArbitraryIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
-    public GloballyArbitraryIndexedVertexReachabilityAlgo() {
+public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
+    public AnyIndexedVertexReachabilityAlgo() {
     }
 
     /**

@@ -56,8 +56,8 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class GloballyUniqueOnDagArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
-    public GloballyUniqueOnDagArcPathSearchAlgo() {
+public class UniqueOnDagArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+    public UniqueOnDagArcPathSearchAlgo() {
     }
 
     /**

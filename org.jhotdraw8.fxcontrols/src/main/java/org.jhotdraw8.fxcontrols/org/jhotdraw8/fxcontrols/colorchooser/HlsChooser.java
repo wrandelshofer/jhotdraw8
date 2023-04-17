@@ -99,42 +99,41 @@ public class HlsChooser extends HBox {
         colorRectPane.getChildren().add(colorRectSlider);
         huePane.getChildren().add(hueSlider);
 
-        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
 
         hueSlider.setThumbTranslateX(1);
         hueSlider.setOrientation(Orientation.VERTICAL);
-        hueSlider.c0Property().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get().map((NamedColorSpace v) ->
+        hueSlider.c0Property().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty).map((NamedColorSpace v) ->
                 0.5f * (v.getMaxValue(0) - v.getMinValue(0)) + v.getMinValue(0)
         ));
-        hueSlider.c1Property().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get().map((NamedColorSpace v) ->
+        hueSlider.c1Property().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty).map((NamedColorSpace v) ->
                 0.5f * (v.getMaxValue(1) - v.getMinValue(1)) + v.getMinValue(1)
         ));
-        hueSlider.c2Property().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get().map((NamedColorSpace v) ->
+        hueSlider.c2Property().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty).map((NamedColorSpace v) ->
                 0.5f * (v.getMaxValue(2) - v.getMinValue(2)) + v.getMinValue(2)
         ));
         hueSlider.setMinorTickUnit(0.1);
         hueSlider.setMajorTickUnit(1);
 
-        hueSlider.componentIndexProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceHueIndexProperty).get());
-        hueSlider.sourceColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get());
-        hueSlider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        hueSlider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        hueSlider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
-        hueSlider.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::hueProperty).get());
+        hueSlider.componentIndexProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceHueIndexProperty));
+        hueSlider.sourceColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty));
+        hueSlider.targetColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpaceProperty));
+        hueSlider.displayColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpaceProperty));
+        hueSlider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
+        colorRectSlider.c0Property().bind(model.flatMap(ColorChooserPaneModel::c0Property));
+        colorRectSlider.c1Property().bind(model.flatMap(ColorChooserPaneModel::c1Property));
+        colorRectSlider.c2Property().bind(model.flatMap(ColorChooserPaneModel::c2Property));
+        colorRectSlider.c3Property().bind(model.flatMap(ColorChooserPaneModel::c3Property));
+        colorRectSlider.alphaProperty().bind(model.flatMap(ColorChooserPaneModel::alphaProperty));
+        colorRectSlider.sourceColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty));
+        colorRectSlider.targetColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpaceProperty));
+        colorRectSlider.displayColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpaceProperty));
+        colorRectSlider.xComponentIndexProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceSaturationChromaIndexProperty));
+        colorRectSlider.yComponentIndexProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceLightnessValueIndexProperty));
+        colorRectSlider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
 
-        colorRectSlider.c0Property().bind(viaModel.via(ColorChooserPaneModel::c0Property).get());
-        colorRectSlider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
-        colorRectSlider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());
-        colorRectSlider.c3Property().bind(viaModel.via(ColorChooserPaneModel::c3Property).get());
-        colorRectSlider.alphaProperty().bind(viaModel.via(ColorChooserPaneModel::alphaProperty).get());
-        colorRectSlider.sourceColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get());
-        colorRectSlider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        colorRectSlider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        colorRectSlider.xComponentIndexProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceSaturationChromaIndexProperty).get());
-        colorRectSlider.yComponentIndexProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceLightnessValueIndexProperty).get());
-        colorRectSlider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
-        colorRectSlider.xValueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chromaProperty).get());
-        colorRectSlider.yValueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::lightnessProperty).get());
+        hueSlider.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::hueProperty).get());
+        colorRectSlider.xValueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::chromaProperty).get());
+        colorRectSlider.yValueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::lightnessProperty).get());
 
     }
 

@@ -81,16 +81,15 @@ public class AlphaChooser extends VBox {
         Background checkerboardBackground = new Background(new BackgroundFill(createCheckerboardPattern(4, 0xffffffff, 0xffaaaaaa), null, null));
         alphaSlider.setBackground(checkerboardBackground);
 
-        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
-        alphaSlider.c0Property().bind(viaModel.via(ColorChooserPaneModel::c0Property).get());
-        alphaSlider.c1Property().bind(viaModel.via(ColorChooserPaneModel::c1Property).get());
-        alphaSlider.c2Property().bind(viaModel.via(ColorChooserPaneModel::c2Property).get());
-        alphaSlider.c3Property().bind(viaModel.via(ColorChooserPaneModel::c3Property).get());
-        alphaSlider.alphaProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::alphaProperty).get());
-        alphaSlider.sourceColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::sourceColorSpaceProperty).get());
-        alphaSlider.targetColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        alphaSlider.displayColorSpaceProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        alphaSlider.rgbFilterProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().map(Map.Entry::getValue));
-    }
+        alphaSlider.c0Property().bind(model.flatMap(ColorChooserPaneModel::c0Property));
+        alphaSlider.c1Property().bind(model.flatMap(ColorChooserPaneModel::c1Property));
+        alphaSlider.c2Property().bind(model.flatMap(ColorChooserPaneModel::c2Property));
+        alphaSlider.c3Property().bind(model.flatMap(ColorChooserPaneModel::c3Property));
+        alphaSlider.sourceColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty));
+        alphaSlider.targetColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpaceProperty));
+        alphaSlider.displayColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpaceProperty));
 
+        alphaSlider.alphaProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::alphaProperty).get());
+        alphaSlider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
+    }
 }

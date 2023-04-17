@@ -116,7 +116,7 @@ public class ArbitraryArcPathSearchAlgoTest {
         CombinedSequenceFinder<Integer, Double, Integer> instance = SimpleCombinedSequenceFinder.newIntCostInstance(
                 graph::getNextArcs,
                 costFunction,
-                new GloballyArbitraryArcPathSearchAlgo<>());
+                new AnyArcPathSearchAlgo<>());
         return instance;
     }
 

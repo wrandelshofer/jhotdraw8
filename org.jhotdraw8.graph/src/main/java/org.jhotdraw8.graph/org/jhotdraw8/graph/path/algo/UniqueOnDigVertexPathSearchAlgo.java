@@ -23,16 +23,16 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * See {@link GloballyUniqueOnDigArcPathSearchAlgo} for a description of this
+ * See {@link UniqueOnDigArcPathSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public class GloballyUniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
-    public GloballyUniqueOnDigVertexPathSearchAlgo() {
+    public UniqueOnDigVertexPathSearchAlgo() {
     }
 
     /**

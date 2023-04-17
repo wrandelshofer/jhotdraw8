@@ -32,9 +32,9 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  *
  * @author Werner Randelshofer
  */
-public class ShortestUniqueArcPathSearchAlgoTest {
+public class UniqueShortestArcPathSearchAlgoTest {
 
-    public ShortestUniqueArcPathSearchAlgoTest() {
+    public UniqueShortestArcPathSearchAlgoTest() {
     }
 
     private @NonNull DirectedGraph<Integer, Double> createGraph() {
@@ -150,7 +150,7 @@ public class ShortestUniqueArcPathSearchAlgoTest {
     private CombinedSequenceFinder<Integer, Double, Double> newInstance(@NonNull DirectedGraph<Integer, Double> graph) {
         TriFunction<Integer, Integer, Double, Double> costf = (a, b, arg) -> arg;
         CombinedSequenceFinder<Integer, Double, Double> instance = SimpleCombinedSequenceFinder.newDoubleCostInstance(
-                graph::getNextArcs, costf, new ShortestUniqueArcPathSearchAlgo<>());
+                graph::getNextArcs, costf, new UniqueShortestArcPathSearchAlgo<>());
         return instance;
     }
 

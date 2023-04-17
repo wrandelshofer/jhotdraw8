@@ -123,7 +123,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         TriFunction<Integer, Integer, Double, Double> costf = (v1, v2, arg) -> arg;
         CombinedSequenceFinder<Integer, Double, Double> instance = SimpleCombinedSequenceFinder.newDoubleCostInstance(
                 graph::getNextArcs, costf,
-                new ShortestArbitraryArcPathSearchAlgo<>());
+                new AnyShortestArcPathSearchAlgo<>());
         return instance;
     }
 

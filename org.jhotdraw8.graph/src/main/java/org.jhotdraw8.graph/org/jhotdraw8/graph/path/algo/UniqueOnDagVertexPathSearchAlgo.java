@@ -19,14 +19,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * See {@link GloballyUniqueOnDagArcPathSearchAlgo} for a description of this
+ * See {@link UniqueOnDagArcPathSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public class GloballyUniqueOnDagVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
-    public GloballyUniqueOnDagVertexPathSearchAlgo() {
+public class UniqueOnDagVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+    public UniqueOnDagVertexPathSearchAlgo() {
     }
 
     /**

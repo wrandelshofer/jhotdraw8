@@ -57,10 +57,10 @@ import java.util.stream.StreamSupport;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class GloballyUniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
-    public GloballyUniqueOnDigArcPathSearchAlgo() {
+    public UniqueOnDigArcPathSearchAlgo() {
     }
 
     /**

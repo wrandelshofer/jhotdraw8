@@ -18,14 +18,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * See {@link GloballyArbitraryArcPathSearchAlgo} for a description of this
+ * See {@link AnyArcPathSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public class GloballyArbitraryVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
-    public GloballyArbitraryVertexPathSearchAlgo() {
+public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+    public AnyVertexPathSearchAlgo() {
     }
 
     /**

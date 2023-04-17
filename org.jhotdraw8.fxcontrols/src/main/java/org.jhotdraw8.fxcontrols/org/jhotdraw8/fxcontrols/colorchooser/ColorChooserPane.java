@@ -118,21 +118,21 @@ public class ColorChooserPane extends VBox {
 
         initSubPane();
 
-        Via<ColorChooserPaneModel> viaModel = new Via<>(model);
-        targetColorSpaceCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSpacesProperty).get());
-        targetColorSpaceCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get());
-        displayColorSpaceCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::displayColorSpacesProperty).get());
-        displayColorSpaceCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get());
-        displayDepthCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::displayBitDepthsProperty).get());
-        displayDepthCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get());
-        targetSyntaxCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::targetColorSyntaxesProperty).get());
-        targetSyntaxCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorSyntaxProperty).get());
-        chooserCombo.itemsProperty().bind(viaModel.via(ColorChooserPaneModel::colorChoosersProperty).get());
-        chooserCombo.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chooserTypeProperty).get());
-        targetColorField.textProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::targetColorFieldProperty).get());
-        sourceColorField.textProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::sourceColorFieldProperty).get());
-        displayColorField.textProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::displayColorFieldProperty).get());
-        viaModel.via(ColorChooserPaneModel::previewColorProperty).get().addListener((ChangeListener<? super Color>) this::updatePreviewColor);
+        targetColorSpaceCombo.itemsProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSpacesProperty));
+        displayColorSpaceCombo.itemsProperty().bind(model.flatMap(ColorChooserPaneModel::displayColorSpacesProperty));
+        displayDepthCombo.itemsProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthsProperty));
+        targetSyntaxCombo.itemsProperty().bind(model.flatMap(ColorChooserPaneModel::targetColorSyntaxesProperty));
+        chooserCombo.itemsProperty().bind(model.flatMap(ColorChooserPaneModel::colorChoosersProperty));
+
+        targetColorSpaceCombo.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::targetColorSpaceProperty).get());
+        displayColorSpaceCombo.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::displayColorSpaceProperty).get());
+        displayDepthCombo.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::displayBitDepthProperty).get());
+        targetSyntaxCombo.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::targetColorSyntaxProperty).get());
+        chooserCombo.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::chooserTypeProperty).get());
+        targetColorField.textProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::targetColorFieldProperty).get());
+        sourceColorField.textProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::sourceColorFieldProperty).get());
+        displayColorField.textProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::displayColorFieldProperty).get());
+        model.flatMap(ColorChooserPaneModel::previewColorProperty).addListener((ChangeListener<? super Color>) this::updatePreviewColor);
     }
 
     private void initSubPane() {

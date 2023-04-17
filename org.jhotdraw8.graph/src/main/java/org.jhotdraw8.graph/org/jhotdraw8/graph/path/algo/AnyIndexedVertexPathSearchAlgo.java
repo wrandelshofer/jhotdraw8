@@ -21,16 +21,16 @@ import java.util.function.IntPredicate;
 
 
 /**
- * See {@link GloballyArbitraryArcPathSearchAlgo} for a description of this
+ * See {@link AnyArcPathSearchAlgo} for a description of this
  * algorithm.
  * <p>
  * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
  *
  * @param <C> the cost number type
  */
-public class GloballyArbitraryIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
+public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
         implements IndexedVertexPathSearchAlgo<C> {
-    public GloballyArbitraryIndexedVertexPathSearchAlgo() {
+    public AnyIndexedVertexPathSearchAlgo() {
     }
 
     private static class MyIntConsumer implements IntConsumer {
