@@ -456,7 +456,11 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         List<WritableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
         if (ks != null) {
             for (WritableStyleableMapAccessor<Object> k : ks) {
-                if (value == null || isInitial(value)) {
+                if (value == null || isInitialRevertOrUnset(value)) {
+                    // FIXME: When "initial" is requested, we must set the property to its initial value
+                    // When value is nul, we remove the key from this origin.
+                    // When 'revert is requested, we remove the key from this origin.
+                    // When 'unset is requested, we remove the key from this origin.
                     elem.remove(origin, k);
                 } else {
                     @SuppressWarnings("unchecked")
@@ -485,28 +489,30 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     /**
-     * XXX All selector models must treat the keywords "initial","inherit","revert","unset".
+     * FIXME All selector models must support the keywords "initial","inherit","revert","unset".
      *
      * @param value the token
      * @return true if the value is "initial".
      */
-    protected boolean isInitial(@Nullable ReadOnlyList<CssToken> value) {
+    protected boolean isInitialRevertOrUnset(@Nullable ReadOnlyList<CssToken> value) {
         if (value != null) {
             boolean isInitial = false;
             Loop:
             for (CssToken token : value) {
 
                 switch (token.getType()) {
-                case CssTokenType.TT_IDENT:
-                    if ("initial".equals(token.getStringValue())) {
-                        isInitial = true;
-                    }
-                    break;
-                case CssTokenType.TT_S:
-                    break;
-                default:
-                    isInitial = false;
-                    break Loop;
+                    case CssTokenType.TT_IDENT:
+                        if ("initial".equals(token.getStringValue())
+                                || "revert".equals(token.getStringValue())
+                                || "unset".equals(token.getStringValue())) {
+                            isInitial = true;
+                        }
+                        break;
+                    case CssTokenType.TT_S:
+                        break;
+                    default:
+                        isInitial = false;
+                        break Loop;
                 }
             }
             return isInitial;
