@@ -86,6 +86,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         } else if (key == END_CONNECTOR) {
             updateConnectedProperty();
         }
+        super.onPropertyChanged(key, oldValue, newValue, wasAdded, wasRemoved);
     }
 
     @Override

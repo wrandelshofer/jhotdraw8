@@ -114,6 +114,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         } else if (key == LABEL_CONNECTOR) {
             updateConnectedProperty();
         }
+        super.onPropertyChanged(key, oldValue, newValue, wasAdded, wasRemoved);
     }
 
     @Override

@@ -238,6 +238,16 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         //invalidateTransforms();
     }
 
+    /**
+     * Overrides of this method must call super!
+     *
+     * @param key        the changed key
+     * @param oldValue   the old value
+     * @param newValue   the new value
+     * @param wasAdded
+     * @param wasRemoved
+     * @param <T>
+     */
     @Override
     protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
         firePropertyChangeEvent(this, key, oldValue, newValue, wasAdded, wasRemoved);
