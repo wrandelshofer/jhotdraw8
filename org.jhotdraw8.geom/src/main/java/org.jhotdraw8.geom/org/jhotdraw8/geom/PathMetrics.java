@@ -1,3 +1,8 @@
+/*
+ * @(#)PathMetrics.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -200,8 +205,7 @@ public class PathMetrics {
                 case SEG_MOVETO -> b.moveTo(coords[offset], coords[offset + 1]);
                 case SEG_LINETO -> b.lineTo(coords[offset], coords[offset + 1]);
                 case SEG_QUADTO -> b.quadTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3]);
-                case SEG_CUBICTO ->
-                        b.curveTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3], coords[offset + 4], coords[offset + 5]);
+                case SEG_CUBICTO -> b.curveTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3], coords[offset + 4], coords[offset + 5]);
                 default -> throw new IllegalStateException("unexpected command=" + commands[i] + " at index=" + i);
             }
         }

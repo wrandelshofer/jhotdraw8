@@ -1,3 +1,8 @@
+/*
+ * @(#)Matrix3.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.color.math;
 
 import javafx.geometry.Point3D;

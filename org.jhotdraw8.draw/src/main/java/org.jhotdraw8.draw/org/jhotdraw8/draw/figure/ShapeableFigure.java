@@ -1,6 +1,6 @@
 /*
  * @(#)ShapeableFigure.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
 
@@ -10,9 +10,17 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
+import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
+import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AwtPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXRectangles;
+import org.jhotdraw8.geom.NineRegionsScalingBuilder;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.Path2D;
 import java.text.ParseException;

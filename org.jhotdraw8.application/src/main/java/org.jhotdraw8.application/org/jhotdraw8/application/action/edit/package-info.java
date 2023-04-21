@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Provides editing actions for the currently focused user interface control.

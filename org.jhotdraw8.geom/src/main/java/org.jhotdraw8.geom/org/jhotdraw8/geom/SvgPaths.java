@@ -1,6 +1,6 @@
 /*
  * @(#)SvgPaths.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.geom;
@@ -14,7 +14,7 @@ import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.IllegalPathStateException;

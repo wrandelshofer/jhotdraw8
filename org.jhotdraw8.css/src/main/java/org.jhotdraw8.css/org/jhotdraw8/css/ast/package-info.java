@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Provides a representation of a parsed style sheet (CSS 3) as an abstract

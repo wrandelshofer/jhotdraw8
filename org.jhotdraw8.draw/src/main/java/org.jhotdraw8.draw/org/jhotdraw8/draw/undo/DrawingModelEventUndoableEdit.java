@@ -1,3 +1,8 @@
+/*
+ * @(#)DrawingModelEventUndoableEdit.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.draw.undo;
 
 import org.jhotdraw8.annotation.NonNull;

@@ -2,10 +2,12 @@
 
 <!--
   ~ @(#)StyleClassCell.fxml
-  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.geometry.Insets?><?import javafx.scene.control.Button?><?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <padding>
     <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>

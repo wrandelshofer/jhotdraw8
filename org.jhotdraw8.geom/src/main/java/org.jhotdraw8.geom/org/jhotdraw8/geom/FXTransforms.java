@@ -1,11 +1,20 @@
 /*
  * @(#)FXTransforms.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom;
 
-import javafx.geometry.*;
-import javafx.scene.transform.*;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
@@ -14,7 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Double.isNaN;
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sqrt;
 
 /**
  * Transforms.

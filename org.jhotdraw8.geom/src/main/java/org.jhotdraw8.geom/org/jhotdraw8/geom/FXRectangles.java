@@ -1,6 +1,15 @@
+/*
+ * @(#)FXRectangles.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.geom;
 
-import javafx.geometry.*;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 

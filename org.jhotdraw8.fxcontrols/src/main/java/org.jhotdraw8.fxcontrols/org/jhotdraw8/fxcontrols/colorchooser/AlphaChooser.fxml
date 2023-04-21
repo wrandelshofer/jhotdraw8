@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 
+<!--
+  ~ @(#)AlphaChooser.fxml
+  ~ Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+  -->
+
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0" type="VBox" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">

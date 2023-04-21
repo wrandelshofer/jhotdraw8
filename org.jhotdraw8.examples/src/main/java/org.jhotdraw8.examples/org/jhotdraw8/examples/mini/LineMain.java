@@ -1,6 +1,6 @@
 /*
  * @(#)LineMain.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.examples.mini;
@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.SvgPaths;
 
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.stream.Collectors;
 

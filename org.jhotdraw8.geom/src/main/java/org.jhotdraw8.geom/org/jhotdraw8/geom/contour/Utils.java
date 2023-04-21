@@ -1,12 +1,16 @@
 /*
  * @(#)Utils.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Lines;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.List;

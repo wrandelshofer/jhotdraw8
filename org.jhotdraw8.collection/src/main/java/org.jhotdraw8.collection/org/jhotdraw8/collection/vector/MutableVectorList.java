@@ -50,8 +50,8 @@ import java.util.stream.Stream;
  * <p>
  * This class has been derived from Vavr Vector.java.
  * <dl>
- *     <dt>Vector.java. Copyright 2023 (c) vavr. Apache License Version 2.0.</dt>
- *     <dd><a href="https://github.com/vavr-io/vavr/blob/e524924375e2a63406159db14c4223c3cb39a977/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
+ *     <dt>Vector.java. Copyright 2023 (c) vavr. MIT License.</dt>
+ *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
  * </dl>
  *
  * @param <E> the element type

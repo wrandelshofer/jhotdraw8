@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Defines a programming model for document oriented applications and provides default

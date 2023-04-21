@@ -1,3 +1,8 @@
+/*
+ * @(#)D65XyzColorSpace.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.color;
 
 import static org.jhotdraw8.color.ParametricLinearRgbColorSpace.FROM_D50_XYZ_TO_D65_XYZ;

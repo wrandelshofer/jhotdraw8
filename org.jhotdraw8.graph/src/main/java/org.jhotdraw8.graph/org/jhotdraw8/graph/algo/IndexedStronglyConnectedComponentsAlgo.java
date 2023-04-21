@@ -1,6 +1,6 @@
 /*
  * @(#)IndexedStronglyConnectedComponentsAlgo.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph.algo;
 
@@ -13,7 +13,11 @@ import org.jhotdraw8.collection.primitive.IntDeque;
 import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
 import java.util.function.Function;
 
 import static java.lang.Math.min;

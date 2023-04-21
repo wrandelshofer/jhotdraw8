@@ -1,6 +1,6 @@
 /*
  * @(#)BezierArcLengthExampleMain.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.examples.mini;
@@ -11,14 +11,28 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.CubicCurveCharacteristics;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.FXCubicCurves;
+import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXQuadCurves;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.Integrals;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.Solvers;
 
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;

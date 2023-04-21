@@ -1,6 +1,6 @@
 /*
  * @(#)OffsetPathExampleMain.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.examples.mini;
 
@@ -27,7 +27,11 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.OffsetPathBuilder;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PlineVertex;
 import org.jhotdraw8.geom.contour.PolyArcPath;

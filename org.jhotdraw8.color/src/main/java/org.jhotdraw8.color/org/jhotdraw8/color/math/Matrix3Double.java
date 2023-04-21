@@ -1,3 +1,8 @@
+/*
+ * @(#)Matrix3Double.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.color.math;
 
 import javafx.geometry.Point3D;
@@ -80,16 +85,16 @@ public record Matrix3Double(double a, double b, double c,
         );
     }
 
-   @Override
+    @Override
     public float[] mul(float[] x, float[] y) {
-       float x0 = x[0];
-       float x1 = x[1];
-       float x2 = x[2];
-       y[0] = (float) fma(a, x0, fma(b, x1, c * x2));
-       y[1] = (float) fma(d, x0, fma(e, x1, f * x2));
-       y[2] = (float) fma(g, x0, fma(h, x1, i * x2));
-       return y;
-   }
+        float x0 = x[0];
+        float x1 = x[1];
+        float x2 = x[2];
+        y[0] = (float) fma(a, x0, fma(b, x1, c * x2));
+        y[1] = (float) fma(d, x0, fma(e, x1, f * x2));
+        y[2] = (float) fma(g, x0, fma(h, x1, i * x2));
+        return y;
+    }
 
     @Override
     public double[] mul(double[] x, double[] y) {

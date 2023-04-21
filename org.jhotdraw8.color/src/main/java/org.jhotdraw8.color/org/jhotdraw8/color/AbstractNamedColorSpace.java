@@ -1,8 +1,6 @@
-/* @(#)AbstractNamedColorSpace.java
- * Copyright © The authors and contributors of JHotDraw.
- * You may not use, copy or modify this file, except in compliance with the
- * license agreement you entered into with the copyright holders. For details
- * see accompanying license terms.
+/*
+ * @(#)AbstractNamedColorSpace.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.color;
 

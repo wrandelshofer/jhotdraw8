@@ -2,10 +2,13 @@
 
 <!--
   ~ @(#)HierarchyInspector.fxml
-  ~ Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+  ~ Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<?import javafx.scene.control.TreeTableColumn?><?import javafx.scene.control.TreeTableView?><?import javafx.scene.layout.BorderPane?><?import java.lang.String?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import java.lang.String?>
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/10.0.1"
             xmlns:fx="http://javafx.com/fxml/1">
   <center>

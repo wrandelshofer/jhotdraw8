@@ -1,6 +1,6 @@
 /*
  * @(#)package-info.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
  * Provides {@link org.jhotdraw8.draw.handle.Handle}s for direct manipulation of

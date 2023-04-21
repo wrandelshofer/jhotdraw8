@@ -17,7 +17,7 @@ import java.io.Serializable;
  * <p>
  * This class has been derived from Vavr ArrayType.java.
  * <dl>
- *     <dt>ArrayType.java. Copyright 2023 (c) vavr. Apache License Version 2.0.</dt>
+ *     <dt>ArrayType.java. Copyright 2023 (c) vavr. MIT License.</dt>
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Array.java">github.com</a></dd>
  * </dl>
  */

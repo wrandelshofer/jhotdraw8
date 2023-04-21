@@ -1,13 +1,13 @@
 /*
  * @(#)PointAndDerivativeBuilder.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
