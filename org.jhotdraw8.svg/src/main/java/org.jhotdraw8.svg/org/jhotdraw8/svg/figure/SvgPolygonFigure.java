@@ -12,10 +12,9 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -30,7 +29,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -112,7 +110,7 @@ public class SvgPolygonFigure extends AbstractLeafFigure
                 t.add(transformed.getX());
                 t.add(transformed.getY());
             }
-            set(POINTS, new ImmutableArrayList<>(t));
+            set(POINTS, VectorList.copyOf(t));
         }
     }
 
@@ -129,7 +127,6 @@ public class SvgPolygonFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group g = (Group) node;
-        UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         ImmutableList<Double> points = get(POINTS);
         if (points == null || points.isEmpty() || points.size() % 2 == 1) {
             g.setVisible(false);
@@ -143,8 +140,8 @@ public class SvgPolygonFigure extends AbstractLeafFigure
         applyTransformableFigureProperties(ctx, node);
         applySvgDefaultableCompositingProperties(ctx, node);
         applySvgShapeProperties(ctx, n0, n1);
-        n0.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
-        n1.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
+        n0.getPoints().setAll(points.asList());
+        n1.getPoints().setAll(points.asList());
     }
 
     @Override

@@ -8,8 +8,8 @@ package org.jhotdraw8.draw.css.converter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.css.converter.CssStringConverter;
@@ -41,7 +41,7 @@ public class CssListConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), null);
-        instance.toString(out, idFactory, value == null ? null : ImmutableArrayList.copyOf(value));
+        instance.toString(out, idFactory, value == null ? null : VectorList.copyOf(value));
         String actual = out.toString();
         assertEquals(expected, actual);
     }

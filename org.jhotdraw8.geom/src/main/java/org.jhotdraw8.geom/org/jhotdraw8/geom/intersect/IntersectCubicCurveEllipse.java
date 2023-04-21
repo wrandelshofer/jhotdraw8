@@ -7,7 +7,12 @@ package org.jhotdraw8.geom.intersect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Polynomial;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -51,7 +56,7 @@ public class IntersectCubicCurveEllipse {
                 new Point2D.Double(x0, y0), new Point2D.Double(x1, y1), new Point2D.Double(x2, y2), new Point2D.Double(x3, y3),
                 new Point2D.Double(cx, cy), rx, ry, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             PointAndDerivative pat = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());

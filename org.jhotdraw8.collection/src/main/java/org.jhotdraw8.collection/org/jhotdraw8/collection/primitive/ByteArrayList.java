@@ -1,6 +1,6 @@
 /*
  * @(#)ByteArrayList.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.primitive;
 
@@ -514,7 +514,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
     }
 
     @Override
-    public SequencedCollection<Byte> reversed() {
+    public @NonNull SequencedCollection<Byte> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

@@ -29,8 +29,8 @@ import org.jhotdraw8.application.action.file.PrintFileAction;
 import org.jhotdraw8.application.action.view.ToggleBooleanAction;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingEditorPreferencesHandler;
 import org.jhotdraw8.draw.DrawingView;
@@ -532,7 +532,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private void applyUserAgentStylesheet(final @NonNull Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
-                    ImmutableArrayList.of(
+                    VectorList.of(
                             GrapherActivity.class.getResource("user-agent.css").toURI()));
             d.updateStyleManager();
             final SimpleRenderContext ctx = new SimpleRenderContext();

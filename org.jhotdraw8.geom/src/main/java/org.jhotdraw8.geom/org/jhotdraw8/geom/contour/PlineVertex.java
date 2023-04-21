@@ -24,7 +24,10 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.Utils.*;
+import static org.jhotdraw8.geom.contour.Utils.angle;
+import static org.jhotdraw8.geom.contour.Utils.closestPointOnLineSeg;
+import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
 
 public class PlineVertex implements Cloneable {
     private final double x;
@@ -301,10 +304,10 @@ public class PlineVertex implements Cloneable {
                 return new OrderedPair<>(withinSweep, p);
             };
 
-            if (intrResult.size() == 0) {
+            if (intrResult.intersections().size() == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
-            } else if (intrResult.size() == 1) {
-                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.getFirst().getArgumentA());
+            } else if (intrResult.intersections().size() == 1) {
+                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -312,9 +315,9 @@ public class PlineVertex implements Cloneable {
                     result.intrType = PlineSegIntrType.NoIntersect;
                 }
             } else {
-                assert intrResult.size() == 2 : "shouldn't get here without 2 intersects";
-                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.getFirst().getArgumentA());
-                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.getFirst().getArgumentA());
+                assert intrResult.intersections().size() == 2 : "shouldn't get here without 2 intersects";
+                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
+                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;
@@ -335,22 +338,22 @@ public class PlineVertex implements Cloneable {
         if (vIsLine && uIsLine) {
             IntersectionResultEx intrResult = ContourIntersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             switch (intrResult.getStatus()) {
-            case NO_INTERSECTION_PARALLEL:
-                result.intrType = PlineSegIntrType.NoIntersect;
-                break;
-            case INTERSECTION:
-                result.intrType = PlineSegIntrType.OneIntersect;
-                result.point1 = intrResult.getFirst();
-                break;
-            case NO_INTERSECTION:
-                result.intrType = PlineSegIntrType.SegmentOverlap;
-                // build points from parametric parameters (using second segment as defined by the function)
-                result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentA());
-                result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentB());
-                break;
-            case NO_INTERSECTION_COINCIDENT:
-                result.intrType = PlineSegIntrType.NoIntersect;
-                break;
+                case NO_INTERSECTION_PARALLEL:
+                    result.intrType = PlineSegIntrType.NoIntersect;
+                    break;
+                case INTERSECTION:
+                    result.intrType = PlineSegIntrType.OneIntersect;
+                    result.point1 = intrResult.intersections().getFirst();
+                    break;
+                case NO_INTERSECTION:
+                    result.intrType = PlineSegIntrType.SegmentOverlap;
+                    // build points from parametric parameters (using second segment as defined by the function)
+                    result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentA());
+                    result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentB());
+                    break;
+                case NO_INTERSECTION_COINCIDENT:
+                    result.intrType = PlineSegIntrType.NoIntersect;
+                    break;
             }
 
         } else if (vIsLine) {
@@ -375,32 +378,32 @@ public class PlineVertex implements Cloneable {
             IntersectionResult intrResult = ContourIntersections.intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 
             switch (intrResult.getStatus()) {
-            case NO_INTERSECTION_INSIDE:
-            case NO_INTERSECTION_OUTSIDE:
-                result.intrType = PlineSegIntrType.NoIntersect;
-                break;
-            case INTERSECTION:
-                if (intrResult.size() == 1) {
-                    if (bothArcsSweepPoint.test(intrResult.getFirst())) {
-                        result.intrType = PlineSegIntrType.OneIntersect;
-                        result.point1 = intrResult.getFirst();
+                case NO_INTERSECTION_INSIDE:
+                case NO_INTERSECTION_OUTSIDE:
+                    result.intrType = PlineSegIntrType.NoIntersect;
+                    break;
+                case INTERSECTION:
+                    if (intrResult.intersections().size() == 1) {
+                        if (bothArcsSweepPoint.test(intrResult.intersections().getFirst())) {
+                            result.intrType = PlineSegIntrType.OneIntersect;
+                            result.point1 = intrResult.intersections().getFirst();
+                        } else {
+                            result.intrType = PlineSegIntrType.NoIntersect;
+                        }
                     } else {
-                        result.intrType = PlineSegIntrType.NoIntersect;
-                    }
-                } else {
-                    assert intrResult.size() == 2 : "there must be 2 intersections";
-                    final boolean pt1InSweep = bothArcsSweepPoint.test(intrResult.getFirst());
-                    final boolean pt2InSweep = bothArcsSweepPoint.test(intrResult.getLast());
-                    if (pt1InSweep && pt2InSweep) {
-                        result.intrType = PlineSegIntrType.TwoIntersects;
-                        result.point1 = intrResult.getFirst();
-                        result.point2 = intrResult.getLast();
-                    } else if (pt1InSweep) {
-                        result.intrType = PlineSegIntrType.OneIntersect;
-                        result.point1 = intrResult.getFirst();
-                    } else if (pt2InSweep) {
-                        result.intrType = PlineSegIntrType.OneIntersect;
-                        result.point1 = intrResult.getLast();
+                        assert intrResult.intersections().size() == 2 : "there must be 2 intersections";
+                        final boolean pt1InSweep = bothArcsSweepPoint.test(intrResult.intersections().getFirst());
+                        final boolean pt2InSweep = bothArcsSweepPoint.test(intrResult.intersections().getLast());
+                        if (pt1InSweep && pt2InSweep) {
+                            result.intrType = PlineSegIntrType.TwoIntersects;
+                            result.point1 = intrResult.intersections().getFirst();
+                            result.point2 = intrResult.intersections().getLast();
+                        } else if (pt1InSweep) {
+                            result.intrType = PlineSegIntrType.OneIntersect;
+                            result.point1 = intrResult.intersections().getFirst();
+                        } else if (pt2InSweep) {
+                            result.intrType = PlineSegIntrType.OneIntersect;
+                            result.point1 = intrResult.intersections().getLast();
                     } else {
                         result.intrType = PlineSegIntrType.NoIntersect;
                     }

@@ -27,14 +27,14 @@ public class IntersectCirclePathIterator {
             case PathIterator.SEG_CLOSE:
                 inter = IntersectCircleLine.intersectLineCircleEx(lastx, lasty, firstx, firsty, cx, cy, r);
                 // FIXME add segment number to t
-                result.addAll(inter.asList());
+                result.addAll(inter.intersections().asList());
                 break;
             case PathIterator.SEG_CUBICTO:
                 x = seg[4];
                 y = seg[5];
                 inter = IntersectCircleCubicCurve.intersectCubicCurveCircleEx(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, cx, cy, r);
                 // FIXME add segment number to t
-                result.addAll(inter.asList());
+                result.addAll(inter.intersections().asList());
                 lastx = x;
                 lasty = y;
                 break;
@@ -43,7 +43,7 @@ public class IntersectCirclePathIterator {
                 y = seg[1];
                 inter = IntersectCircleLine.intersectLineCircleEx(lastx, lasty, x, y, cx, cy, r);
                 // FIXME add segment number to t
-                result.addAll(inter.asList());
+                result.addAll(inter.intersections().asList());
                 lastx = x;
                 lasty = y;
                 break;
@@ -56,7 +56,7 @@ public class IntersectCirclePathIterator {
                 y = seg[3];
                 inter = IntersectCircleQuadCurve.intersectQuadCurveCircleEx(lastx, lasty, seg[0], seg[1], x, y, cx, cy, r);
                 // FIXME add segment number to t
-                result.addAll(inter.asList());
+                result.addAll(inter.intersections().asList());
                 lastx = x;
                 lasty = y;
                 break;

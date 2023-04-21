@@ -11,9 +11,9 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssSizeConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -135,7 +135,7 @@ public interface SecondStrokableFigure extends Figure {
     ListStyleableKey<CssSize> SECOND_STROKE_DASH_ARRAY = new ListStyleableKey<>("second-stroke-dasharray",
             new TypeToken<ImmutableList<CssSize>>() {
             },
-            new CssSizeConverter(false), ImmutableArrayList.of());
+            new CssSizeConverter(false), VectorList.of());
 
     /**
      * Combined map accessor for all stroke style properties.

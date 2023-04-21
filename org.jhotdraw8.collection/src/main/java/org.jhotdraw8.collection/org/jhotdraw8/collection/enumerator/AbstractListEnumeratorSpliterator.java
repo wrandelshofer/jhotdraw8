@@ -1,6 +1,6 @@
 /*
- * @(#)AbstractListEnumerator.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)AbstractListEnumeratorSpliterator.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.collection.enumerator;

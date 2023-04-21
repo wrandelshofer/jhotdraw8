@@ -1,6 +1,6 @@
 /*
- * @(#)WrappedSequencedCollection.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SequencedCollectionFacade.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.facade;
 
@@ -97,7 +97,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     }
 
     @Override
-    public SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> reversed() {
         return new SequencedCollectionFacade<>(
                 reversedIteratorFunction,
                 iteratorFunction,

@@ -8,8 +8,8 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 
@@ -64,7 +64,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
-        return findArcSequence(ImmutableArrayList.of(start), goal::equals, maxDepth, costLimit, visited);
+        return findArcSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
 
@@ -83,7 +83,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             int maxDepth, @NonNull C costLimit) {
-        return findArcSequence(ImmutableArrayList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
+        return findArcSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
     /**
@@ -99,7 +99,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             @NonNull C costLimit) {
-        return findArcSequence(ImmutableArrayList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
+        return findArcSequence(VectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
 
@@ -189,9 +189,9 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
         }
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new OrderedPair<>(ImmutableArrayList.of(), zero);
+            return new OrderedPair<>(VectorList.of(), zero);
         }
 
-        return new OrderedPair<>(ImmutableArrayList.copyOf(sequence), sum);
+        return new OrderedPair<>(VectorList.copyOf(sequence), sum);
     }
 }

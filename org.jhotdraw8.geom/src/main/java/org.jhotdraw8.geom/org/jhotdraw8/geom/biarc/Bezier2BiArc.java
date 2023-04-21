@@ -78,7 +78,7 @@ public class Bezier2BiArc {
                 continue;
             }
 
-            IntersectionPointEx V = intersectionResultEx.getFirst();
+            IntersectionPointEx V = intersectionResultEx.intersections().getFirst();
 
             Point2D.Double P1 = new Point2D.Double(bezier.getX1(), bezier.getY1());
             Point2D.Double P2 = new Point2D.Double(bezier.getX2(), bezier.getY2());

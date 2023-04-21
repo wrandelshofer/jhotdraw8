@@ -6,8 +6,8 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
@@ -95,15 +95,15 @@ public class AllWalksSpliteratorTest {
 
         return Arrays.asList(
                 dynamicTest("1", () -> testFindAllPaths(graph, 1, 5, 4, Arrays.asList(
-                        ImmutableArrayList.of(1, 3, 5),
-                        ImmutableArrayList.of(1, 2, 3, 5),
-                        ImmutableArrayList.of(1, 3, 4, 5),
-                        ImmutableArrayList.of(1, 2, 3, 4, 5)
+                        VectorList.of(1, 3, 5),
+                        VectorList.of(1, 2, 3, 5),
+                        VectorList.of(1, 3, 4, 5),
+                        VectorList.of(1, 2, 3, 4, 5)
                 ))),
                 dynamicTest("2", () -> testFindAllPaths(graph, 1, 5, 3, Arrays.asList(
-                        ImmutableArrayList.of(1, 3, 5),
-                        ImmutableArrayList.of(1, 2, 3, 5),
-                        ImmutableArrayList.of(1, 3, 4, 5)
+                        VectorList.of(1, 3, 5),
+                        VectorList.of(1, 2, 3, 5),
+                        VectorList.of(1, 3, 4, 5)
                 )))
         );
     }

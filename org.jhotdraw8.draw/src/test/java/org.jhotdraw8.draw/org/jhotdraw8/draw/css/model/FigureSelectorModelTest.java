@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.css.model;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -49,7 +49,7 @@ public class FigureSelectorModelTest {
 
         assertEquals(null, instance.getAttributeAsString(figure, namespace, attrName), "no value has been set, must be null");
 
-        instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, ImmutableArrayList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+        instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, VectorList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 
         assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
 

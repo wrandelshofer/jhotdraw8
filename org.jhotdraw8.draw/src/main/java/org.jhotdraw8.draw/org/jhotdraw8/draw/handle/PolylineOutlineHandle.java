@@ -30,7 +30,11 @@ import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
-import org.jhotdraw8.geom.intersect.*;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
 import java.awt.geom.PathIterator;
 
@@ -139,7 +143,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
 
             IntersectionResultEx result = IntersectCircleLine.intersectLineCircleEx(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
             if (result.getAllArgumentsA().size() == 2) {
-                insertLocation = FXGeom.lerp(p1, p2, (result.getFirst().getArgumentA() + result.getLast().getArgumentA()) / 2);
+                insertLocation = FXGeom.lerp(p1, p2, (result.intersections().getFirst().getArgumentA() + result.intersections().getLast().getArgumentA()) / 2);
                 insertAt = i;
                 break;
             }

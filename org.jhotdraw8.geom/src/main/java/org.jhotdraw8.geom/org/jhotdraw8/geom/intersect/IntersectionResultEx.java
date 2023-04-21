@@ -5,15 +5,16 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
+import org.jhotdraw8.collection.vector.VectorList;
 
 import java.util.Collections;
 import java.util.List;
 
-public class IntersectionResultEx extends ImmutableArrayList<IntersectionPointEx> {
-
-    private final IntersectionStatus status;
+public class IntersectionResultEx {
+    private final @NonNull ImmutableList<IntersectionPointEx> intersections;
+    private final @NonNull IntersectionStatus status;
 
     public IntersectionResultEx(@NonNull List<IntersectionPointEx> intersections) {
         this(intersections.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION, intersections);
@@ -24,7 +25,7 @@ public class IntersectionResultEx extends ImmutableArrayList<IntersectionPointEx
     }
 
     public IntersectionResultEx(IntersectionStatus status, @NonNull List<IntersectionPointEx> intersections) {
-        super(intersections);
+        this.intersections = VectorList.copyOf(intersections);
         this.status = status;
     }
 
@@ -34,14 +35,18 @@ public class IntersectionResultEx extends ImmutableArrayList<IntersectionPointEx
     }
 
     public DoubleArrayList getAllArgumentsB() {
-        return stream()
+        return intersections.stream()
                 .mapToDouble(IntersectionPointEx::getArgumentB)
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
 
     public DoubleArrayList getAllArgumentsA() {
-        return stream()
+        return intersections.stream()
                 .mapToDouble(IntersectionPointEx::getArgumentA)
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
+    }
+
+    public ImmutableList<IntersectionPointEx> intersections() {
+        return intersections;
     }
 }

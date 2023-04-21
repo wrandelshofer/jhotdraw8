@@ -42,7 +42,7 @@ public class IntersectEllipseLineTest {
         Point2D a1 = new Point2D.Double(a.getStartX(), a.getStartY());
         Point2D a2 = new Point2D.Double(a.getEndX(), a.getEndY());
         IntersectionResult isec = IntersectEllipseLine.intersectLineEllipse(a1, a2, bc, brx, bry);
-        double[] actual = new double[isec.size()];
+        double[] actual = new double[isec.intersections().size()];
         for (int i = 0; i < actual.length; i++) {
             actual[i] = isec.getAllArgumentsA().get(i);
         }

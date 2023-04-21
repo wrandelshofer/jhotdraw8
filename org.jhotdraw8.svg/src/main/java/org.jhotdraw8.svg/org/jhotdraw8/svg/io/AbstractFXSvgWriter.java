@@ -51,8 +51,8 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.base.converter.XmlNumberConverter;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
@@ -1278,7 +1278,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke-miterlimit", nb.toString(shape.getStrokeMiterLimit()));
         }
         if (!shape.getStrokeDashArray().isEmpty()) {
-            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableArrayList.copyOf(shape.getStrokeDashArray())));
+            w.writeAttribute("stroke-dasharray", doubleList.toString(VectorList.copyOf(shape.getStrokeDashArray())));
         }
         if (shape.getStrokeDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(shape.getStrokeDashOffset()));
@@ -1342,7 +1342,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke-miterlimit", nb.toString(style.getMiterLimit()));
         }
         if (!style.getDashArray().isEmpty()) {
-            w.writeAttribute("stroke-dasharray", doubleList.toString(ImmutableArrayList.copyOf(style.getDashArray())));
+            w.writeAttribute("stroke-dasharray", doubleList.toString(VectorList.copyOf(style.getDashArray())));
         }
         if (style.getDashOffset() != 0) {
             w.writeAttribute("stroke-dashoffset", nb.toString(style.getDashOffset()));
@@ -1490,7 +1490,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull List<Transform> txs) throws XMLStreamException {
 
         if (txs.size() > 0) {
-            String value = tx.toString(ImmutableArrayList.copyOf(txs));
+            String value = tx.toString(VectorList.copyOf(txs));
             if (!value.isEmpty()) {
                 w.writeAttribute("transform", value);
             }

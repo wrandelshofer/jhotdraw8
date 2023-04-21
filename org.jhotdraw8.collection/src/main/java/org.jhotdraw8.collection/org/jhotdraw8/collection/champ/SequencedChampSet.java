@@ -1,6 +1,6 @@
 /*
- * @(#)ImmutableSequencedChampSet.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SequencedChampSet.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.champ;
 
@@ -464,6 +464,11 @@ public class SequencedChampSet<E>
      */
     @Override
     public @NonNull MutableSequencedChampSet<E> toMutable() {
+        return new MutableSequencedChampSet<>(this);
+    }
+
+    @Override
+    public @NonNull MutableSequencedChampSet<E> asSet() {
         return new MutableSequencedChampSet<>(this);
     }
 

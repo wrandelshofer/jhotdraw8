@@ -32,7 +32,7 @@ public class IntersectEllipsePolygon {
             Point2D.Double b2 = points.get((i + 1) % length);
             IntersectionResult inter = IntersectEllipseLine.intersectEllipseLine(c, rx, ry, b1, b2);
 
-            result.addAll(inter.asList());
+            result.addAll(inter.intersections().asList());
         }
 
         return new IntersectionResult(result.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION,

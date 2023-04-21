@@ -1,6 +1,6 @@
 /*
- * @(#)ImmutableChampSet.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ChampSet.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.champ;
 
@@ -242,6 +242,11 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      */
     @Override
     public @NonNull MutableChampSet<E> toMutable() {
+        return new MutableChampSet<>(this);
+    }
+
+    @Override
+    public @NonNull MutableChampSet<E> asSet() {
         return new MutableChampSet<>(this);
     }
 

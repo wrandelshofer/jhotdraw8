@@ -10,7 +10,7 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
@@ -73,19 +73,19 @@ public class CssStrokeConverterTest {
                         "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()")),
                 dynamicTest("3", () -> testStrokeStyle(
                         new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.ROUND, StrokeLineJoin.MITER, CssSize.of(3)
-                                , CssSize.of(4), ImmutableArrayList.of(CssSize.of(5), CssSize.of(6))),
+                                , CssSize.of(4), VectorList.of(CssSize.of(5), CssSize.of(6))),
                         "type(centered) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("4", () -> testStrokeStyle(
                         new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.of(3)
-                                , CssSize.of(4), ImmutableArrayList.of(CssSize.of(5), CssSize.of(6))),
+                                , CssSize.of(4), VectorList.of(CssSize.of(5), CssSize.of(6))),
                         "type(centered) linecap(butt) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("5", () -> testStrokeStyle(
                         new CssStrokeStyle(StrokeType.INSIDE, StrokeLineCap.ROUND, StrokeLineJoin.MITER, CssSize.of(3)
-                                , CssSize.of(4), ImmutableArrayList.of(CssSize.of(5), CssSize.of(6))),
+                                , CssSize.of(4), VectorList.of(CssSize.of(5), CssSize.of(6))),
                         "type(inside) linecap(round) linejoin(miter) miterlimit(3) dashoffset(4) dasharray(5 6)")),
                 dynamicTest("6", () -> testStrokeStyle(
                         new CssStrokeStyle(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.of(4)
-                                , CssSize.of(0), ImmutableArrayList.of()),
+                                , CssSize.of(0), VectorList.of()),
                         "type(centered) linecap(butt) linejoin(miter) miterlimit(4) dashoffset(0) dasharray()"))
         );
     }

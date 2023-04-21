@@ -1,6 +1,6 @@
 /*
- * @(#)WrappedReadOnlyList.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ReadOnlyListFacade.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.facade;
 
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  * Wraps {@code List} functions in the {@link ReadOnlyList} interface.
@@ -23,15 +24,21 @@ import java.util.function.IntSupplier;
 public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
     private final @NonNull IntSupplier sizeFunction;
     private final @NonNull IntFunction<E> getFunction;
+    private final @NonNull Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction;
 
     public ReadOnlyListFacade(@NonNull List<E> backingList) {
         this.sizeFunction = backingList::size;
         this.getFunction = backingList::get;
+        this.readOnlyReversedFunction = () -> new ReadOnlyListFacade<>(
+                sizeFunction,
+                index -> getFunction.apply(sizeFunction.getAsInt() - index),
+                () -> this);
     }
 
-    public ReadOnlyListFacade(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction) {
+    public ReadOnlyListFacade(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction, @NonNull Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction) {
         this.sizeFunction = sizeFunction;
         this.getFunction = getFunction;
+        this.readOnlyReversedFunction = readOnlyReversedFunction;
     }
 
     @Override
@@ -41,10 +48,7 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
 
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return new ReadOnlyListFacade<>(
-                sizeFunction,
-                index -> getFunction.apply(sizeFunction.getAsInt() - index)
-        );
+        return readOnlyReversedFunction.get();
     }
 
     @Override
@@ -53,8 +57,8 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
         Objects.checkFromToIndex(fromIndex, toIndex, length);
         return new ReadOnlyListFacade<>(
                 () -> toIndex - fromIndex,
-                i -> getFunction.apply(i - fromIndex)
-        );
+                i -> getFunction.apply(i - fromIndex),
+                readOnlyReversedFunction);
     }
 
     @Override

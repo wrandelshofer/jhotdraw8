@@ -6,9 +6,9 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.css.converter.CssBezierNodeListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
@@ -34,7 +34,7 @@ public class BezierNodeListStyleableKey
      * @param name The name of the key.
      */
     public BezierNodeListStyleableKey(@NonNull String name) {
-        this(name, ImmutableArrayList.of());
+        this(name, VectorList.of());
     }
 
     /**

@@ -59,10 +59,10 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
             case PathIterator.SEG_CUBICTO: {
                 IntersectionResult isect = IntersectCircleCubicCurve.intersectCubicCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], cx, cy, radius);
                 if (isect.getStatus() != IntersectionStatus.NO_INTERSECTION_INSIDE) {
-                    if (isect.isEmpty()) {
+                    if (isect.intersections().isEmpty()) {
                         out.curveTo(seg[0], seg[1], seg[2], seg[3], seg[4], seg[5]);
                     } else {
-                        CubicCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.getLast().getArgumentA(),
+                        CubicCurves.splitCubicCurveTo(x, y, seg[0], seg[1], seg[2], seg[3], seg[4], seg[5], isect.intersections().getLast().getArgumentA(),
                                 out::curveTo, null);
                     }
                 }
@@ -73,10 +73,10 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
             case PathIterator.SEG_LINETO: {
                 IntersectionResult isect = IntersectCircleLine.intersectLineCircle(x, y, seg[0], seg[1], cx, cy, radius);
                 if (isect.getStatus() != IntersectionStatus.NO_INTERSECTION_INSIDE) {
-                    if (isect.isEmpty()) {
+                    if (isect.intersections().isEmpty()) {
                         out.lineTo(seg[0], seg[1]);
                     } else {
-                        Lines.split(x, y, seg[0], seg[1], isect.getLast().getArgumentA(),
+                        Lines.split(x, y, seg[0], seg[1], isect.intersections().getLast().getArgumentA(),
                                 out::lineTo, null);
                     }
                 }
@@ -93,10 +93,10 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
             case PathIterator.SEG_QUADTO: {
                 IntersectionResult isect = IntersectCircleQuadCurve.intersectQuadCurveCircle(x, y, seg[0], seg[1], seg[2], seg[3], cx, cy, radius);
                 if (isect.getStatus() != IntersectionStatus.NO_INTERSECTION_INSIDE) {
-                    if (isect.isEmpty()) {
+                    if (isect.intersections().isEmpty()) {
                         out.quadTo(seg[0], seg[1], seg[2], seg[3]);
                     } else {
-                        QuadCurves.split(x, y, seg[0], seg[1], seg[2], seg[3], isect.getLast().getArgumentA(),
+                        QuadCurves.split(x, y, seg[0], seg[1], seg[2], seg[3], isect.intersections().getLast().getArgumentA(),
                                 out::quadTo, null);
                     }
                 }

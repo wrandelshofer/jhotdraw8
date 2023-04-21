@@ -83,7 +83,7 @@ public class IntersectCirclePoint {
     public static IntersectionResultEx intersectCirclePointEx(double cx, double cy, double cr, double px, double py, double pr, double epsilon) {
         IntersectionResult result = intersectCirclePoint(new Point2D.Double(cx, cy), cr, new Point2D.Double(px, py), pr, epsilon);
         List<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             list.add(new IntersectionPointEx(x, y,

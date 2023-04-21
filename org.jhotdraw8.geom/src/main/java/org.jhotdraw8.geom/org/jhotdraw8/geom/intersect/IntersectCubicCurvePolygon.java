@@ -34,7 +34,7 @@ public class IntersectCubicCurvePolygon {
             Point2D.Double a2 = points.get((i + 1) % length);
             IntersectionResult inter = IntersectCubicCurveLine.intersectCubicCurveLine(p0, p1, p2, p3, a1, a2);
 
-            result.addAll(inter.asList());
+            result.addAll(inter.intersections().asList());
         }
 
         return new IntersectionResult(

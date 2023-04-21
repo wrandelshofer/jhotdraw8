@@ -7,9 +7,9 @@ package org.jhotdraw8.draw.key;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.draw.css.converter.CssTransformConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -34,7 +34,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param name The name of the key.
      */
     public TransformListStyleableKey(@NonNull String name) {
-        this(name, ImmutableArrayList.of());
+        this(name, VectorList.of());
     }
 
     /**

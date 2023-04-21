@@ -12,9 +12,9 @@ import javafx.scene.paint.Stop;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.MappedConverter;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -76,7 +76,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
 
     public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new SimpleNonNullKey<ImmutableList<SvgStop>>("stops",
             new TypeToken<ImmutableList<SvgStop>>() {
-            }, ImmutableArrayList.of());
+            }, VectorList.of());
 
     public AbstractSvgGradientFigure() {
         set(VISIBLE, false);

@@ -117,7 +117,7 @@ public class IntersectEllipseEllipse {
     public static IntersectionResultEx intersectEllipseEllipseEx(double cx1, double cy1, double rx1, double ry1, double cx2, double cy2, double rx2, double ry2, double epsilon) {
         IntersectionResult result = intersectEllipseEllipse(cx1, cy1, rx1, ry1, cx2, cy2, rx2, ry2, epsilon);
         @NonNull List<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
             double py = ip.getY();
             list.add(new IntersectionPointEx(px, py,

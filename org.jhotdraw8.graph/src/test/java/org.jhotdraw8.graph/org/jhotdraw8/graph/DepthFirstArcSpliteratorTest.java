@@ -6,8 +6,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.iterator.ArcEnumeratorSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -101,7 +101,7 @@ public class DepthFirstArcSpliteratorTest {
                 } else if (path.get(path.size() - 1).equals(current.getStart())) {
                     path.add(current.getEnd());
                 } else {
-                    paths.add(ImmutableArrayList.copyOf(path));
+                    paths.add(VectorList.copyOf(path));
                     path = new ArrayList<>();
                     path.add(current.getStart());
                     path.add(current.getEnd());
@@ -109,7 +109,7 @@ public class DepthFirstArcSpliteratorTest {
             }
         }
         if (path != null) {
-            paths.add(ImmutableArrayList.copyOf(path));
+            paths.add(VectorList.copyOf(path));
         }
 
         String actual = paths.toString();

@@ -7,9 +7,11 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
 import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
@@ -57,19 +59,20 @@ public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
         }
         IntersectionResult i = IntersectCircleCubicCurve.intersectCubicCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, cx, cy, radius);
         switch (i.getStatus()) {
-        case INTERSECTION:
-            double t = i.getLast().getArgumentA();
-            out.moveTo(i.getLast().getX(), i.getLast().getY());
-            CubicCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
-            break;
-        case NO_INTERSECTION_INSIDE:
-            cx = x3;
-            cy = y3;
-            break;
-        case NO_INTERSECTION_OUTSIDE:
-        case NO_INTERSECTION_TANGENT:
-        default:
-            out.moveTo(getLastX(), getLastY());
+            case INTERSECTION:
+                ImmutableList<IntersectionPoint> intersections = i.intersections();
+                double t = intersections.getLast().getArgumentA();
+                out.moveTo(intersections.getLast().getX(), intersections.getLast().getY());
+                CubicCurves.splitCubicCurveTo(getLastX(), getLastY(), x1, y1, x2, y2, x3, y3, t, null, out::curveTo);
+                break;
+            case NO_INTERSECTION_INSIDE:
+                cx = x3;
+                cy = y3;
+                break;
+            case NO_INTERSECTION_OUTSIDE:
+            case NO_INTERSECTION_TANGENT:
+            default:
+                out.moveTo(getLastX(), getLastY());
             state = State.CUT_DONE;
             out.curveTo(x1, y1, x2, y2, x3, y3);
             break;
@@ -91,7 +94,7 @@ public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
         IntersectionResultEx i = IntersectCircleLine.intersectLineCircleEx(getLastX(), getLastY(), x, y, cx, cy, radius);
         switch (i.getStatus()) {
         case INTERSECTION:
-            Point2D p = i.getLast();
+            Point2D p = i.intersections().getLast();
             out.moveTo(p.getX(), p.getY());
             out.lineTo(x, y);
             state = State.CUT_DONE;
@@ -130,19 +133,20 @@ public class CutStartPathBuilder<T> extends AbstractPathBuilder<T> {
         }
         IntersectionResult i = IntersectCircleQuadCurve.intersectQuadCurveCircle(getLastX(), getLastY(), x1, y1, x2, y2, cx, cy, radius);
         switch (i.getStatus()) {
-        case INTERSECTION:
-            double t = i.getLast().getArgumentA();
-            out.moveTo(i.getLast().getX(), i.getLast().getY());
-            QuadCurves.split(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
-            state = State.CUT_DONE;
-            break;
-        case NO_INTERSECTION_INSIDE:
-            cx = x2;
-            cy = y2;
-            break;
-        case NO_INTERSECTION_OUTSIDE:
-        case NO_INTERSECTION_TANGENT:
-        default:
+            case INTERSECTION:
+                ImmutableList<IntersectionPoint> intersections = i.intersections();
+                double t = intersections.getLast().getArgumentA();
+                out.moveTo(intersections.getLast().getX(), intersections.getLast().getY());
+                QuadCurves.split(getLastX(), getLastY(), x1, y1, x2, y2, t, null, out::quadTo);
+                state = State.CUT_DONE;
+                break;
+            case NO_INTERSECTION_INSIDE:
+                cx = x2;
+                cy = y2;
+                break;
+            case NO_INTERSECTION_OUTSIDE:
+            case NO_INTERSECTION_TANGENT:
+            default:
             out.moveTo(getLastX(), getLastY());
             state = State.CUT_DONE;
             out.quadTo(x1, y1, x2, y2);

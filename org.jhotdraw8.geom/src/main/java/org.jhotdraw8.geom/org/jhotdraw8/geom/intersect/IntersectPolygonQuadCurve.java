@@ -40,7 +40,7 @@ public class IntersectPolygonQuadCurve {
             a1 = points.get((i + 1) % length);
             IntersectionResult inter = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, a0, a1);
 
-            result.addAll(inter.asList());
+            result.addAll(inter.intersections().asList());
         }
 
         return new IntersectionResult(result);

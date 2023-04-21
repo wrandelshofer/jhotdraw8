@@ -8,13 +8,22 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
-import javafx.scene.transform.*;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.css.converter.CssTranslate3DConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.key.*;
+import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
+import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
@@ -22,7 +31,11 @@ import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * A transformable figure supports the transformation of a figure.
@@ -91,7 +104,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     @NonNull
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
     @NonNull
-    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", ImmutableArrayList.of());
+    TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", VectorList.of());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
@@ -173,7 +186,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, ImmutableArrayList.of(p2l));
+            set(TRANSFORMS, VectorList.of(p2l));
         }
     }
 
@@ -349,7 +362,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
             ImmutableList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
-                set(TRANSFORMS, ImmutableArrayList.of(transform));
+                set(TRANSFORMS, VectorList.of(transform));
             } else {
                 int last = ts.size() - 1;
                 Transform concatenatedWithLast = FXTransforms.concat(ts.get(last), transform);
@@ -376,7 +389,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         } else {
             // FIXME we do not want to reshape!
             Transform combined = FXTransforms.concat(transform, getTransform());
-            set(TRANSFORMS, ImmutableArrayList.of(combined));
+            set(TRANSFORMS, VectorList.of(combined));
         }
     }
 
@@ -388,9 +401,9 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      */
     default void setTransforms(@NonNull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, ImmutableArrayList.of());
+            set(TRANSFORMS, VectorList.of());
         } else {
-            set(TRANSFORMS, ImmutableArrayList.of(transforms));
+            set(TRANSFORMS, VectorList.of(transforms));
         }
     }
 
@@ -399,7 +412,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         flattenTransforms();
         ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
-            set(TRANSFORMS, ImmutableArrayList.of(t));
+            set(TRANSFORMS, VectorList.of(t));
         } else {
             set(TRANSFORMS, transforms.add(t));
         }
@@ -424,7 +437,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             flattenTransforms();
             ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
-                set(TRANSFORMS, ImmutableArrayList.of(t));
+                set(TRANSFORMS, VectorList.of(t));
             } else {
                 set(TRANSFORMS, transforms.set(0, t));
             }

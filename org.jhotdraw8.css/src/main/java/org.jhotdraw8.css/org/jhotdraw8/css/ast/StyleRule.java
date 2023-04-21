@@ -6,8 +6,8 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class StyleRule extends Rule {
     public StyleRule(@NonNull SelectorGroup selectorGroup, @NonNull List<Declaration> declarations, @Nullable SourceLocator sourceLocator) {
         super(sourceLocator);
         this.selectorList = selectorGroup;
-        this.declarations = ImmutableArrayList.copyOf(declarations);
+        this.declarations = VectorList.copyOf(declarations);
     }
 
     @Override

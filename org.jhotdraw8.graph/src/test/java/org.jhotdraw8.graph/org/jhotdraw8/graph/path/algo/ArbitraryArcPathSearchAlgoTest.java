@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.ToIntTriFunction;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
@@ -91,9 +91,9 @@ public class ArbitraryArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindVertexPath_3args() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindVertexPath_3args(1, 5, ImmutableArrayList.of(1, 6, 5))),
-                dynamicTest("2", () -> testFindVertexPath_3args(1, 4, ImmutableArrayList.of(1, 2, 4))),
-                dynamicTest("3", () -> testFindVertexPath_3args(2, 6, ImmutableArrayList.of(2, 1, 6)))
+                dynamicTest("1", () -> testFindVertexPath_3args(1, 5, VectorList.of(1, 6, 5))),
+                dynamicTest("2", () -> testFindVertexPath_3args(1, 4, VectorList.of(1, 2, 4))),
+                dynamicTest("3", () -> testFindVertexPath_3args(2, 6, VectorList.of(2, 1, 6)))
         );
     }
 
@@ -129,10 +129,10 @@ public class ArbitraryArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 5), ImmutableArrayList.of(1, 6, 5))),
-                dynamicTest("2", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 4), ImmutableArrayList.of(1, 2, 4))),
-                dynamicTest("3", () -> testFindVertexPathOverWaypoints(Arrays.asList(2, 6), ImmutableArrayList.of(2, 1, 6))),
-                dynamicTest("4", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 6, 5), ImmutableArrayList.of(1, 6, 5)))
+                dynamicTest("1", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 5), VectorList.of(1, 6, 5))),
+                dynamicTest("2", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 4), VectorList.of(1, 2, 4))),
+                dynamicTest("3", () -> testFindVertexPathOverWaypoints(Arrays.asList(2, 6), VectorList.of(2, 1, 6))),
+                dynamicTest("4", () -> testFindVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VectorList.of(1, 6, 5)))
         );
     }
 

@@ -73,7 +73,7 @@ public class IntersectCircleCircleTest {
         IntersectionStatus actualStatus = isect.getStatus();
 
         assertEquals(expectedStatus, actualStatus);
-        List<IntersectionPointEx> points = isect.asList();
+        List<IntersectionPointEx> points = isect.intersections().asList();
         assertEquals(expected.length, points.size());
         for (int i = 0; i < points.size(); i++) {
             assertEquals(expected[i], points.get(i).getArgumentA(), 1e-6);
@@ -87,7 +87,7 @@ public class IntersectCircleCircleTest {
         IntersectionStatus actualStatus = isect.getStatus();
 
         assertEquals(expectedStatus, actualStatus);
-        List<IntersectionPoint> points = isect.asList();
+        List<IntersectionPoint> points = isect.intersections().asList();
         assertEquals(expected.length, points.size());
         for (int i = 0; i < points.size(); i++) {
             assertEquals(expected[i], points.get(i).getArgumentA(), 1e-6);

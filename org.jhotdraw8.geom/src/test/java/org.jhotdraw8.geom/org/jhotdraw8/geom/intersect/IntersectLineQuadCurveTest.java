@@ -43,7 +43,7 @@ public class IntersectLineQuadCurveTest {
 
         IntersectionResult isec = IntersectLineQuadCurve.intersectLineQuadCurve(a1, a2, b1, b2, b3);
 
-        double[] actual = new double[isec.size()];
+        double[] actual = new double[isec.intersections().size()];
         for (int i = 0; i < actual.length; i++) {
             actual[i] = isec.getAllArgumentsA().get(i);
         }

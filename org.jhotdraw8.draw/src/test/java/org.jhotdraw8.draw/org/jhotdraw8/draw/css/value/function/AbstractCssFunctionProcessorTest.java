@@ -6,8 +6,8 @@
 package org.jhotdraw8.draw.css.value.function;
 
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.DocumentSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -55,15 +55,15 @@ abstract class AbstractCssFunctionProcessorTest {
 
         DocumentSelectorModel model = new DocumentSelectorModel();
         Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
-        customProperties.put("--blarg", ImmutableArrayList.of(new CssToken(CssTokenType.TT_STRING, "blarg")));
-        customProperties.put("--recursion-base", ImmutableArrayList.of(new CssToken(CssTokenType.TT_STRING, "recursion base")));
-        customProperties.put("--recursive-1", ImmutableArrayList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
+        customProperties.put("--blarg", VectorList.of(new CssToken(CssTokenType.TT_STRING, "blarg")));
+        customProperties.put("--recursion-base", VectorList.of(new CssToken(CssTokenType.TT_STRING, "recursion base")));
+        customProperties.put("--recursive-1", VectorList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
                 new CssToken(CssTokenType.TT_IDENT, "--recursion-base"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
-        customProperties.put("--recursive-2", ImmutableArrayList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
+        customProperties.put("--recursive-2", VectorList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
                 new CssToken(CssTokenType.TT_IDENT, "--recursive-1"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
-        customProperties.put("--endless-recursion", ImmutableArrayList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
+        customProperties.put("--endless-recursion", VectorList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),
                 new CssToken(CssTokenType.TT_IDENT, "--endless-recursion"),
                 new CssToken(CssTokenType.TT_RIGHT_BRACKET)));
         CssFunctionProcessor<Element> instance = createInstance(model, customProperties);

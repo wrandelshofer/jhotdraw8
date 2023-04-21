@@ -17,7 +17,9 @@ import org.jhotdraw8.geom.intersect.IntersectEllipseLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
-import static org.jhotdraw8.draw.figure.StrokableFigure.*;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
 
 /**
  * EllipseConnector.
@@ -59,6 +61,6 @@ public class EllipseConnector extends LocatorConnector {
 
         IntersectionResultEx i = IntersectEllipseLine.intersectLineEllipseEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX() + bounds.getWidth() * 0.5, bounds.getMinY() + bounds.getHeight() * 0.5, bounds.getWidth() * 0.5, bounds.getHeight() * 0.5);
-        return i.peekLast();
+        return i.intersections().peekLast();
     }
 }

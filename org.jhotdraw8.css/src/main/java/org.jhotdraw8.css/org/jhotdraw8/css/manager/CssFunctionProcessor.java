@@ -5,9 +5,9 @@
 package org.jhotdraw8.css.manager;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -75,7 +75,7 @@ public interface CssFunctionProcessor<T> {
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception.", e);
         }
-        return ImmutableArrayList.copyOf(out);
+        return VectorList.copyOf(out);
     }
 
     /**

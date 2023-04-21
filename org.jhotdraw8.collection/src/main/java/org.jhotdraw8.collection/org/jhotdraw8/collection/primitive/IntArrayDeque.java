@@ -1,6 +1,6 @@
 /*
  * @(#)IntArrayDeque.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.primitive;
 
@@ -283,7 +283,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public SequencedCollection<Integer> reversed() {
+    public @NonNull SequencedCollection<Integer> reversed() {
         return null;
     }
 

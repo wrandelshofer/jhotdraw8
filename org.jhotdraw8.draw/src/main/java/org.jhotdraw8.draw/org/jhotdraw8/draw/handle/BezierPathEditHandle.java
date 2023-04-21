@@ -9,8 +9,8 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -44,12 +44,12 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
             BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
             Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
             IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
-            if (!intersectionResultEx.isEmpty()) {
-                IntersectionPoint intersectionPointEx = intersectionResultEx.get(0);
+            if (!intersectionResultEx.intersections().isEmpty()) {
+                IntersectionPoint intersectionPointEx = intersectionResultEx.intersections().get(0);
                 int segment = intersectionPointEx.getSegmentA();
                 path.getNodes().add(segment, new BezierNode(
                         pointInLocal));
-                view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+                view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
                 view.recreateHandles();
             }
         });

@@ -41,10 +41,10 @@ public class IntersectCubicCurveRectangle {
 
         final List<IntersectionPoint> result = new ArrayList<>();
 
-        result.addAll(inter1.asList());
-        result.addAll(inter2.asList());
-        result.addAll(inter3.asList());
-        result.addAll(inter4.asList());
+        result.addAll(inter1.intersections().asList());
+        result.addAll(inter2.intersections().asList());
+        result.addAll(inter3.intersections().asList());
+        result.addAll(inter4.intersections().asList());
 
         // FIXME compute inside/outside
         return new IntersectionResult(

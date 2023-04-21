@@ -103,6 +103,6 @@ public class IntersectLineLine {
             double b0x, double b0y, double b1x, double b1y) {
         IntersectionResultEx resultEx = intersectLineLineEx(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, REAL_THRESHOLD);
         return new IntersectionResult(resultEx.getStatus(),
-                resultEx);
+                resultEx.intersections());
     }
 }

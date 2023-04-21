@@ -6,9 +6,9 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -37,7 +37,7 @@ public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Im
      * @param converter String converter for a list element
      */
     public NullableListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableList<T>> converter) {
-        super(name, type, converter, ImmutableArrayList.of());
+        super(name, type, converter, VectorList.of());
     }
 
     /**
@@ -49,7 +49,7 @@ public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Im
      * @param converter String converter for a list element
      */
     public NullableListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
-        super(name, type.getType(), new CssListConverter<>(converter), ImmutableArrayList.of());
+        super(name, type.getType(), new CssListConverter<>(converter), VectorList.of());
     }
 
     /**

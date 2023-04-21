@@ -12,8 +12,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -47,7 +47,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
 
         try {
             final List<PathElement> pathElements = FXSvgPaths.pathElementsFromSvgString(svgPathString);
-            return ImmutableArrayList.copyOf(pathElements);
+            return VectorList.copyOf(pathElements);
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
             p.add(new MoveTo(0, 0));
@@ -55,7 +55,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
             p.add(new LineTo(10, 10));
             p.add(new LineTo(0, 10));
             p.add(new ClosePath());
-            return ImmutableArrayList.copyOf(p);
+            return VectorList.copyOf(p);
         }
     }
 
@@ -80,7 +80,7 @@ public class CssFXPathElementsConverter extends AbstractCssConverter<ImmutableLi
 
     @Override
     public @Nullable ImmutableList<PathElement> getDefaultValue() {
-        return isNullable() ? null : ImmutableArrayList.of();
+        return isNullable() ? null : VectorList.of();
     }
 
 

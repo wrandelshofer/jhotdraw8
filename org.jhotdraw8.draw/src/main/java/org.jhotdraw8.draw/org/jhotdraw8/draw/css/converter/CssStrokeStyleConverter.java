@@ -11,8 +11,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -24,7 +24,6 @@ import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -70,7 +69,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
         CssSize miterLimit = CssSize.of(4);
         CssSize dashOffset = CssSize.of(0);
-        ImmutableList<CssSize> dashArray = ImmutableArrayList.of();
+        ImmutableList<CssSize> dashArray = VectorList.of();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -185,7 +184,7 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
         }
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩: ⟨" + DASHARRAY + "⟩ right bracket expected.");
-        return new ImmutableArrayList<>(list);
+        return VectorList.copyOf(list);
     }
 
     private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
@@ -229,12 +228,12 @@ public class CssStrokeStyleConverter extends AbstractCssConverter<CssStrokeStyle
 
     @Override
     public @NonNull ImmutableList<String> getExamples() {
-        return new ImmutableArrayList<>(Arrays.asList(
+        return VectorList.of(
                 "type(inside)",
                 "type(centered)",
                 "type(outside)",
                 "linecap(round) linejoin(round)",
-                "dashoffset(2) dasharray(5 10)")
+                "dashoffset(2) dasharray(5 10)"
         );
     }
 

@@ -6,14 +6,20 @@ package org.jhotdraw8.geom.shape;
 
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
+import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.FlatteningPathIterator;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,7 +175,7 @@ public class BezierNodePath implements Shape {
 
     public boolean pathIntersects(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
-        return !isect.isEmpty();
+        return !isect.intersections().isEmpty();
     }
 
     public IntersectionResult pathIntersection(double x, double y, double tolerance) {
@@ -179,14 +185,15 @@ public class BezierNodePath implements Shape {
 
     public boolean split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
-        if (isect.size() == 1) {
-            int segment = (int) isect.getFirst().getArgumentA();
+        ImmutableList<IntersectionPoint> intersections = isect.intersections();
+        if (intersections.size() == 1) {
+            int segment = (int) intersections.getFirst().getArgumentA();
             final BezierNode middle;
-            Point2D.Double p = isect.get(0);
+            Point2D.Double p = intersections.get(0);
             final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
             BezierNode prev = nodes.get(prevSegment);
             BezierNode next = nodes.get(segment);
-            double t = isect.getFirst().getArgumentA() - segment;
+            double t = intersections.getFirst().getArgumentA() - segment;
             boolean pc2 = prev.isC2();
             boolean nc1 = next.isC1();
             if (pc2) {

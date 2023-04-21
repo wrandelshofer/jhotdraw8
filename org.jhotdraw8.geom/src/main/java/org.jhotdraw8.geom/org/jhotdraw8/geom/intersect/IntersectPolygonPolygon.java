@@ -34,7 +34,7 @@ public class IntersectPolygonPolygon {
             Point2D.Double a2 = points1.get((i + 1) % length);
             IntersectionResultEx inter = IntersectLinePolygon.intersectLinePolygonEx(a1, a2, points2);
 
-            result.addAll(inter.asList());
+            result.addAll(inter.intersections().asList());
         }
 
         return new IntersectionResultEx(result);

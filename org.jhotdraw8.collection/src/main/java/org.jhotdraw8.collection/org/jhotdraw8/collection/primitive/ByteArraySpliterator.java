@@ -1,3 +1,8 @@
+/*
+ * @(#)ByteArraySpliterator.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
 package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.base.function.ByteConsumer;

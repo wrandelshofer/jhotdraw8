@@ -1,9 +1,11 @@
 /*
  * @(#)SequencedCollection.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.collection.sequenced;
+
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -63,7 +65,7 @@ public interface SequencedCollection<E> extends Collection<E> {
      *
      * @return a reversed-order view of this collection
      */
-    SequencedCollection<E> reversed();
+    @NonNull SequencedCollection<E> reversed();
 
     /**
      * Removes the element at the front of this collection.

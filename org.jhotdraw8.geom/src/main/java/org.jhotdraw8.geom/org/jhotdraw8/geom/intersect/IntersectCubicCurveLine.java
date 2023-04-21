@@ -277,7 +277,7 @@ public class IntersectCubicCurveLine {
                 a0x, a0y, a1x, a1y,
                 epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             PointAndDerivative pdA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
@@ -304,7 +304,7 @@ public class IntersectCubicCurveLine {
                 b0x, b0y, b1x, b1y,
                 epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());

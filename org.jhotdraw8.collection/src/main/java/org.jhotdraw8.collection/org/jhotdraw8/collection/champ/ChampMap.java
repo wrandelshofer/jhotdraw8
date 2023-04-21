@@ -1,6 +1,6 @@
 /*
- * @(#)ImmutableChampMap.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ChampMap.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.champ;
 
@@ -283,6 +283,11 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
      */
     @Override
     public @NonNull MutableChampMap<K, V> toMutable() {
+        return new MutableChampMap<>(this);
+    }
+
+    @Override
+    public @NonNull MutableChampMap<K, V> asMap() {
         return new MutableChampMap<>(this);
     }
 

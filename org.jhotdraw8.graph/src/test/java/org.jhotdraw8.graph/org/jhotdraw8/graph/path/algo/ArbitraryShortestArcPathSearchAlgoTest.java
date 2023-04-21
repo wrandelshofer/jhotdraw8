@@ -8,8 +8,8 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
@@ -95,10 +95,10 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPath() {
         return Arrays.asList(
-                dynamicTest("0", () -> doFindShortestVertexPath(1, 1, ImmutableArrayList.of(1), 0.0)),
-                dynamicTest("1", () -> doFindShortestVertexPath(1, 5, ImmutableArrayList.of(1, 3, 6, 5), 20.0)),
-                dynamicTest("2", () -> doFindShortestVertexPath(1, 4, ImmutableArrayList.of(1, 3, 4), 20.0)),
-                dynamicTest("3", () -> doFindShortestVertexPath(2, 6, ImmutableArrayList.of(2, 3, 6), 12.0))
+                dynamicTest("0", () -> doFindShortestVertexPath(1, 1, VectorList.of(1), 0.0)),
+                dynamicTest("1", () -> doFindShortestVertexPath(1, 5, VectorList.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> doFindShortestVertexPath(1, 4, VectorList.of(1, 3, 4), 20.0)),
+                dynamicTest("3", () -> doFindShortestVertexPath(2, 6, VectorList.of(2, 3, 6), 12.0))
         );
     }
 
@@ -130,13 +130,13 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindShortestEdgeMultiGoalPath() throws Exception {
         return Arrays.asList(
-                dynamicTest("0", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(1, 6), ImmutableArrayList.of())),
-                dynamicTest("1", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 6), ImmutableArrayList.of(9.0, 2.0))),
-                dynamicTest("2", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(4, 5), ImmutableArrayList.of(9.0, 11.0))),
-                dynamicTest("3", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(3, 6), ImmutableArrayList.of(10.0))),
-                dynamicTest("4", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(6, 5), ImmutableArrayList.of(9.0, 2.0))),
-                dynamicTest("5", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 4), ImmutableArrayList.of(9.0, 11.0))),
-                dynamicTest("6", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(6, 3), ImmutableArrayList.of(10.0)))
+                dynamicTest("0", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(1, 6), VectorList.of())),
+                dynamicTest("1", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 6), VectorList.of(9.0, 2.0))),
+                dynamicTest("2", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(4, 5), VectorList.of(9.0, 11.0))),
+                dynamicTest("3", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(3, 6), VectorList.of(10.0))),
+                dynamicTest("4", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(6, 5), VectorList.of(9.0, 2.0))),
+                dynamicTest("5", () -> doFindShortestEdgeMultiGoalPath(1, Arrays.asList(5, 4), VectorList.of(9.0, 11.0))),
+                dynamicTest("6", () -> doFindShortestEdgeMultiGoalPath(2, Arrays.asList(6, 3), VectorList.of(10.0)))
         );
     }
 
@@ -148,7 +148,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find a path for each individual goal, and remember the shortest path
-        ImmutableList<Double> individualShortestPath = ImmutableArrayList.of();
+        ImmutableList<Double> individualShortestPath = VectorList.of();
         double individualShortestCost = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
             OrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal,
@@ -176,9 +176,9 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindShortestArrowPath() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindShortestArrowPath(1, 5, ImmutableArrayList.of(9.0, 2.0, 9.0))),
-                dynamicTest("2", () -> doFindShortestArrowPath(1, 4, ImmutableArrayList.of(9.0, 11.0))),
-                dynamicTest("3", () -> doFindShortestArrowPath(2, 6, ImmutableArrayList.of(10.0, 2.0)))
+                dynamicTest("1", () -> doFindShortestArrowPath(1, 5, VectorList.of(9.0, 2.0, 9.0))),
+                dynamicTest("2", () -> doFindShortestArrowPath(1, 4, VectorList.of(9.0, 11.0))),
+                dynamicTest("3", () -> doFindShortestArrowPath(2, 6, VectorList.of(10.0, 2.0)))
         );
     }
 
@@ -214,10 +214,10 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 5), ImmutableArrayList.of(1, 3, 6, 5), 20.0)),
-                dynamicTest("2", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), ImmutableArrayList.of(1, 3, 4), 20.0)),
-                dynamicTest("3", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), ImmutableArrayList.of(2, 3, 6), 12.0)),
-                dynamicTest("4", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), ImmutableArrayList.of(1, 3, 6, 5), 20.0))
+                dynamicTest("1", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 5), VectorList.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VectorList.of(1, 3, 4), 20.0)),
+                dynamicTest("3", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), VectorList.of(2, 3, 6), 12.0)),
+                dynamicTest("4", () -> doFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VectorList.of(1, 3, 6, 5), 20.0))
         );
     }
 
@@ -236,10 +236,10 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> testFindArrowPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 5), ImmutableArrayList.of(9.0, 2.0, 9.0), 20.0)),
-                dynamicTest("2", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 4), ImmutableArrayList.of(9.0, 11.0), 20.0)),
-                dynamicTest("3", () -> doFindArrowPathOverWaypoints(Arrays.asList(2, 6), ImmutableArrayList.of(10.0, 2.0), 12.0)),
-                dynamicTest("4", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 6, 5), ImmutableArrayList.of(9.0, 2.0, 9.0), 20.0))
+                dynamicTest("1", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 5), VectorList.of(9.0, 2.0, 9.0), 20.0)),
+                dynamicTest("2", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 4), VectorList.of(9.0, 11.0), 20.0)),
+                dynamicTest("3", () -> doFindArrowPathOverWaypoints(Arrays.asList(2, 6), VectorList.of(10.0, 2.0), 12.0)),
+                dynamicTest("4", () -> doFindArrowPathOverWaypoints(Arrays.asList(1, 6, 5), VectorList.of(9.0, 2.0, 9.0), 20.0))
         );
     }
 

@@ -129,6 +129,6 @@ public interface Connector {
                 new java.awt.geom.Point2D.Double(s.getX(), s.getY()),
                 new java.awt.geom.Point2D.Double(e.getX(), e.getY()),
                 new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()));
-        return i.peekLast();
+        return i.intersections().peekLast();
     }
 }

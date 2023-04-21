@@ -202,11 +202,11 @@ public class IntersectCubicCurveQuadCurve {
                 new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y),
                 new Point2D.Double(a3x, a3y), epsilon);
         List<IntersectionPoint> list = new ArrayList<>();
-        for (IntersectionPoint ip : resultB) {
+        for (IntersectionPoint ip : resultB.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             IntersectionResult resultA = IntersectCubicCurvePoint.intersectCubicCurvePoint(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, x, y, epsilon);
-            list.add(new IntersectionPoint(x, y, resultA.getFirst().getArgumentA()));
+            list.add(new IntersectionPoint(x, y, resultA.intersections().getFirst().getArgumentA()));
         }
 
         return new IntersectionResult(resultB.getStatus(), list);
@@ -226,13 +226,13 @@ public class IntersectCubicCurveQuadCurve {
                 new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y),
                 new Point2D.Double(a3x, a3y), epsilon);
         List<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : resultB) {
+        for (IntersectionPoint ip : resultB.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             IntersectionResultEx resultA = IntersectCubicCurvePoint.intersectCubicCurvePointEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, x, y, CURVE_A_B_TOLERANCE);
             // resultA should never by empty, but if this happen we rather have no intersection than a crash.
-            if (!resultA.isEmpty()) {
-                IntersectionPointEx firstA = resultA.getFirst();
+            if (!resultA.intersections().isEmpty()) {
+                IntersectionPointEx firstA = resultA.intersections().getFirst();
                 list.add(new IntersectionPointEx(ip, firstA.getArgumentA(), firstA.getDerivativeA(),
                         ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y,
                         ip.getArgumentA()).getDerivative(Point2D.Double::new)));
@@ -250,11 +250,11 @@ public class IntersectCubicCurveQuadCurve {
                 new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), new Point2D.Double(b2x, b2y),
                 new Point2D.Double(b3x, b3y), epsilon);
         List<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : resultA) {
+        for (IntersectionPoint ip : resultA.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             IntersectionResultEx resultB = IntersectCubicCurvePoint.intersectCubicCurvePointEx(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, x, y, epsilon);
-            IntersectionPointEx firstB = resultB.getFirst();
+            IntersectionPointEx firstB = resultB.intersections().getFirst();
             list.add(new IntersectionPointEx(ip,
                     ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA()).getDerivative(Point2D.Double::new),
                     firstB.getArgumentA(), firstB.getDerivativeA()

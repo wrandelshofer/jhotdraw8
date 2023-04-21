@@ -106,12 +106,12 @@ public class IntersectPathIteratorPoint {
             }
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
-                final IntersectionPoint first = boundaryCheck.getFirst();
+                final IntersectionPoint first = boundaryCheck.intersections().getFirst();
                 result.add(new IntersectionPoint(first.getX(), first.getY(), first.getArgumentA(), segment));
                 break;
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
-                for (IntersectionPointEx ip : rayCheck) {
+                for (IntersectionPointEx ip : rayCheck.intersections()) {
                     double ty = ip.getDerivativeB().getY();
                     if (Points.almostZero(ty)) {
                         // intersection point is tangential to ray - no crossing

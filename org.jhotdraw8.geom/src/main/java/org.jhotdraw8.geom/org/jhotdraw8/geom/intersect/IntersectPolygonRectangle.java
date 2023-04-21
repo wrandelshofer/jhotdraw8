@@ -38,10 +38,10 @@ public class IntersectPolygonRectangle {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
 
-        result.addAll(inter1.asList());
-        result.addAll(inter2.asList());
-        result.addAll(inter3.asList());
-        result.addAll(inter4.asList());
+        result.addAll(inter1.intersections().asList());
+        result.addAll(inter2.intersections().asList());
+        result.addAll(inter3.intersections().asList());
+        result.addAll(inter4.intersections().asList());
 
         return new IntersectionResultEx(result);
     }

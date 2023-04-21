@@ -116,10 +116,10 @@ public class QuadCurves {
 
         final IntersectionResultEx isect = IntersectRayRay.intersectRayRayEx(start, Points2D.subtract(new Point2D.Double(x01, y01), start),
                 b0, Points2D.subtract(new Point2D.Double(x12, y12), b0));
-        if (isect.isEmpty()) {
+        if (isect.intersections().isEmpty()) {
             return null;
         }
-        final Point2D.Double ctrl = isect.getLast();
+        final Point2D.Double ctrl = isect.intersections().getLast();
 
         final double t = start.distance(x01, y01) / start.distance(ctrl);
         final Point2D.Double joint01 = eval(x0, y0, ctrl.getX(), ctrl.getY(), x2, y2, t).getPoint(Point2D.Double::new);

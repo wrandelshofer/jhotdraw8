@@ -5,7 +5,11 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AABB;
+import org.jhotdraw8.geom.Angles;
+import org.jhotdraw8.geom.Lines;
+import org.jhotdraw8.geom.Points2D;
+import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -31,7 +35,7 @@ public class IntersectEllipseLine {
                                                                    @NonNull Point2D b0, @NonNull Point2D b1) {
         IntersectionResult result = intersectLineEllipse(b0, b1, ac, arx, ary);
         ArrayList<IntersectionPoint> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             list.add(new IntersectionPoint(
@@ -62,7 +66,7 @@ public class IntersectEllipseLine {
                                                                        double b0x, double b0y, double b1x, double b1y, double epsilon) {
         IntersectionResult result = intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             list.add(new IntersectionPointEx(
@@ -196,7 +200,7 @@ public class IntersectEllipseLine {
         IntersectionResult result = intersectLineEllipse(x0, y0, x1, y1, cx, cy, rx, ry, epsilon);
         double atx = x1 - x0, aty = y1 - y0;
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double barg = Angles.atan2Ellipse(cx, cy, rx, ry, ip.getX(), ip.getY());
             list.add(new IntersectionPointEx(ip.getX(), ip.getY(),
                     ip.getArgumentA(), atx, aty,

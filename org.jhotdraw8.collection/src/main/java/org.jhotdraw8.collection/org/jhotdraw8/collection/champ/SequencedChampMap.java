@@ -1,6 +1,6 @@
 /*
- * @(#)ImmutableSequencedChampMap.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)SequencedChampMap.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.champ;
 
@@ -436,6 +436,11 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
      */
     @Override
     public @NonNull MutableSequencedChampMap<K, V> toMutable() {
+        return new MutableSequencedChampMap<>(this);
+    }
+
+    @Override
+    public @NonNull MutableSequencedChampMap<K, V> asMap() {
         return new MutableSequencedChampMap<>(this);
     }
 

@@ -66,8 +66,8 @@ public abstract class AbstractIntSequencedCollectionTest {
         instance.addLastAllAsInt(new int[]{0, 6, 7}, 1, 2);
         assertEquals(1, instance.removeFirstAsInt());
         assertEquals(2, instance.removeFirstAsInt());
-        instance.addLastAllAsInt(new int[]{0, 8, 9, 0}, 1, 2);
-        instance.addLastAllAsInt(new int[]{0, 10, 11, 0}, 1, 2);
+        instance.addLastAllAsInt(new int[]{8, 9});
+        instance.addLastAllAsInt(new int[]{10, 11});
 
         IntSequencedCollection expected = newInstance();
         expected.addLastAllAsInt(new int[]{3, 4, 5, 6, 7, 8, 9, 10, 11});

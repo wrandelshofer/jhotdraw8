@@ -1,6 +1,6 @@
 /*
- * @(#)WrappedList.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * @(#)ListFacade.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.facade;
 
@@ -112,7 +112,7 @@ public class ListFacade<E> extends AbstractList<E>
     }
 
     @Override
-    public SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> reversed() {
         return new SequencedCollectionFacade<>(
                 () -> new ReversedListEnumeratorSpliterator<>(this, 0, size()),
                 this::iterator,

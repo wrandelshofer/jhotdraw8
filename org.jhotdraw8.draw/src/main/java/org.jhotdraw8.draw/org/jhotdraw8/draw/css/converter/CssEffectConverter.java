@@ -22,8 +22,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
 import org.jhotdraw8.css.parser.CssToken;
@@ -92,7 +92,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements CssConverter<Effect> {
-    private static final ImmutableList<String> examples = ImmutableArrayList.of(
+    private static final ImmutableList<String> examples = VectorList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",

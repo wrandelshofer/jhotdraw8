@@ -9,9 +9,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.collection.champ.SequencedChampSet;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
@@ -129,9 +129,9 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
                            @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = new ImmutableArrayList<>(delimiter);
-        this.prefix = new ImmutableArrayList<>(prefix);
-        this.suffix = new ImmutableArrayList<>(suffix);
+        this.delimiter = VectorList.copyOf(delimiter);
+        this.prefix = VectorList.copyOf(prefix);
+        this.suffix = VectorList.copyOf(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {

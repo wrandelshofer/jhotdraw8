@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
@@ -84,7 +84,7 @@ public class CssExample extends Application {
 
         ArrayList<URI> stylesheets = new ArrayList<>();
         stylesheets.add(CssExample.class.getResource("CssExample.css").toURI());
-        drawing.set(Drawing.USER_AGENT_STYLESHEETS, ImmutableArrayList.copyOf(stylesheets));
+        drawing.set(Drawing.USER_AGENT_STYLESHEETS, VectorList.copyOf(stylesheets));
 
         SimpleRenderContext ctx = new SimpleRenderContext();
         drawing.updateAllCss(ctx);

@@ -33,7 +33,7 @@ public class IntersectCirclePolygon {
             a1 = points.get((i + 1) % length);
 
             inter = IntersectCircleLine.intersectCircleLineEx(c, r, a0, a1);
-            result.addAll(inter.asList());
+            result.addAll(inter.intersections().toMutable());
         }
 
         IntersectionStatus status;

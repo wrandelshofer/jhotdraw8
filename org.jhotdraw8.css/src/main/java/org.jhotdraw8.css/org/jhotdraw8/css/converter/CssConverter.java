@@ -10,8 +10,8 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
@@ -159,7 +159,7 @@ public interface CssConverter<T> extends Converter<T> {
     @Nullable String getHelpText();
 
     default @NonNull ImmutableList<String> getExamples() {
-        return ImmutableArrayList.of();
+        return VectorList.of();
     }
 
     boolean isNullable();

@@ -57,7 +57,7 @@ public class IntersectCircleCubicCurve {
                                                                    double cx, double cy, double r, double epsilon) {
         IntersectionResult result = intersectCubicCurveCircle(x0, y0, x1, y1, x2, y2, x3, y3, cx, cy, r, epsilon);
         @NonNull List<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             PointAndDerivative pdA = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());

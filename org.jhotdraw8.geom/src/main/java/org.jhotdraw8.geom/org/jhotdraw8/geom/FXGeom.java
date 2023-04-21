@@ -13,6 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.intersect.IntersectLineLine;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
@@ -190,8 +191,9 @@ public class FXGeom {
                     ctr.getX(), ctr.getY());
 
             if (chop.getStatus() == IntersectionStatus.INTERSECTION) {
-                double x = chop.getFirst().getX();
-                double y = chop.getFirst().getY();
+                IntersectionPointEx firstIntersection = chop.intersections().getFirst();
+                double x = firstIntersection.getX();
+                double y = firstIntersection.getY();
                 double cl = Points.squaredDistance(x, y, p.getX(), p.getY());
                 if (cl < len) {
                     len = cl;

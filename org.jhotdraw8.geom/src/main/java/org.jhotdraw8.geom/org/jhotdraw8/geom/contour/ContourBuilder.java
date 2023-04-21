@@ -8,24 +8,52 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.QuintFunction;
 import org.jhotdraw8.base.function.TriConsumer;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.intersect.IntersectionPoint;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.ContourIntersections.*;
-import static org.jhotdraw8.geom.contour.PlineVertex.*;
+import static org.jhotdraw8.geom.contour.ContourIntersections.allSelfIntersects;
+import static org.jhotdraw8.geom.contour.ContourIntersections.findIntersects;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrCircle2Circle2;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2Circle2;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2LineSeg2;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrPlineSegs;
+import static org.jhotdraw8.geom.contour.PlineVertex.closestPointOnSeg;
+import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
+import static org.jhotdraw8.geom.contour.PlineVertex.segMidpoint;
+import static org.jhotdraw8.geom.contour.PlineVertex.splitAtPoint;
 import static org.jhotdraw8.geom.contour.PolyArcPath.createApproxSpatialIndex;
-import static org.jhotdraw8.geom.contour.Utils.*;
+import static org.jhotdraw8.geom.contour.Utils.angle;
+import static org.jhotdraw8.geom.contour.Utils.deltaAngle;
+import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.contour.Utils.realPrecision;
+import static org.jhotdraw8.geom.contour.Utils.sliceJoinThreshold;
+import static org.jhotdraw8.geom.contour.Utils.unitPerp;
 
 public class ContourBuilder {
 
@@ -145,23 +173,24 @@ public class ContourBuilder {
 
         final IntersectionResult intrResult = intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
         switch (intrResult.getStatus()) {
-        case NO_INTERSECTION_OUTSIDE:
-        case NO_INTERSECTION_INSIDE:
-            connectUsingArc.run();
-            break;
-        case INTERSECTION:
-            if (intrResult.size() == 1) {
-                processIntersect.accept(intrResult.getFirst());
-            } else {
-                assert intrResult.size() == 2 : "there must be 2 intersections";
-                double dist1 = intrResult.getFirst().distanceSq(s1.origV2Pos);
-                double dist2 = intrResult.getLast().distanceSq(s1.origV2Pos);
-                if (dist1 < dist2) {
-                    processIntersect.accept(intrResult.getFirst());
+            case NO_INTERSECTION_OUTSIDE:
+            case NO_INTERSECTION_INSIDE:
+                connectUsingArc.run();
+                break;
+            case INTERSECTION:
+                ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+                if (intersections.size() == 1) {
+                    processIntersect.accept(intersections.getFirst());
                 } else {
-                    processIntersect.accept(intrResult.getLast());
+                    assert intersections.size() == 2 : "there must be 2 intersections";
+                    double dist1 = intersections.getFirst().distanceSq(s1.origV2Pos);
+                    double dist2 = intersections.getLast().distanceSq(s1.origV2Pos);
+                    if (dist1 < dist2) {
+                        processIntersect.accept(intersections.getFirst());
+                    } else {
+                        processIntersect.accept(intersections.getLast());
+                    }
                 }
-            }
             break;
         case NO_INTERSECTION_COINCIDENT:
             // same constant arc radius and center, just add the vertex (nothing to trim/extend)
@@ -220,23 +249,24 @@ public class ContourBuilder {
         };
 
         IntersectionResult intrResult = intrLineSeg2Circle2(u1.pos(), u2.pos(), arc.radius, arc.center);
-        if (intrResult.size() == 0) {
+        ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+        if (intersections.size() == 0) {
             connectUsingArc.run();
-        } else if (intrResult.size() == 1) {
-            processIntersect.accept(intrResult.getFirst().getArgumentA(),
-                    pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentA()));
+        } else if (intersections.size() == 1) {
+            processIntersect.accept(intersections.getFirst().getArgumentA(),
+                    pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().getArgumentA()));
         } else {
-            assert intrResult.size() == 2 : "should have 2 intersects here";
+            assert intersections.size() == 2 : "should have 2 intersects here";
             final Point2D.Double origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
-            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getFirst().getArgumentA());
+            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().getArgumentA());
             double dist1 = i1.distanceSq(origPoint);
-            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.getLast().getArgumentA());
+            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intersections.getLast().getArgumentA());
             double dist2 = i2.distanceSq(origPoint);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intrResult.getFirst().getArgumentA(), i1);
+                processIntersect.accept(intersections.getFirst().getArgumentA(), i1);
             } else {
-                processIntersect.accept(intrResult.getLast().getArgumentA(), i2);
+                processIntersect.accept(intersections.getLast().getArgumentA(), i2);
             }
         }
     }
@@ -796,23 +826,24 @@ public class ContourBuilder {
         };
 
         IntersectionResult intrResult = intrLineSeg2Circle2(v1.pos(), v2.pos(), arc.radius, arc.center);
-        if (intrResult.size() == 0) {
+        ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+        if (intersections.size() == 0) {
             connectUsingArc.run();
-        } else if (intrResult.size() == 1) {
-            processIntersect.accept(intrResult.getFirst().getArgumentA(),
-                    intrResult.getFirst());
+        } else if (intersections.size() == 1) {
+            processIntersect.accept(intersections.getFirst().getArgumentA(),
+                    intersections.getFirst());
         } else {
-            assert intrResult.size() == 2 : "should have 2 intersects here";
+            assert intersections.size() == 2 : "should have 2 intersects here";
             // always use intersect closest to original point
-            Point2D.Double i1 = intrResult.getFirst();
+            Point2D.Double i1 = intersections.getFirst();
             double dist1 = i1.distanceSq(s1.origV2Pos);
-            Point2D.Double i2 = intrResult.getLast();
+            Point2D.Double i2 = intersections.getLast();
             double dist2 = i2.distanceSq(s1.origV2Pos);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intrResult.getFirst().getArgumentA(), i1);
+                processIntersect.accept(intersections.getFirst().getArgumentA(), i1);
             } else {
-                processIntersect.accept(intrResult.getLast().getArgumentA(), i2);
+                processIntersect.accept(intersections.getLast().getArgumentA(), i2);
             }
         }
     }
@@ -841,40 +872,45 @@ public class ContourBuilder {
         } else {
             IntersectionResultEx intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
 
+            ImmutableList<IntersectionPointEx> intersections = intrResult.intersections();
             switch (intrResult.getStatus()) {
-            case NO_INTERSECTION_PARALLEL:
-                // PATCH WR: If the path turns back on itself, we must join it
-                //           with an arc, to prevent that the path slice is
-                //           removed, because without the arc, the intersection
-                //           point of the segment may lie inside the shape.
+                case NO_INTERSECTION_PARALLEL:
+                    // PATCH WR: If the path turns back on itself, we must join it
+                    //           with an arc, to prevent that the path slice is
+                    //           removed, because without the arc, the intersection
+                    //           point of the segment may lie inside the shape.
+                    connectUsingArc.run();
+                    /*
                 if (true) {
                     connectUsingArc.run();
                 } else {
                     // just join with straight line
                     addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
                     addOrReplaceIfSamePos(result, u1);
-                }
-                break;
-            case INTERSECTION:
-                addOrReplaceIfSamePos(result, new PlineVertex(intrResult.getFirst(), 0.0));
-                break;
-            case NO_INTERSECTION_COINCIDENT:
-                addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
-                break;
-            case NO_INTERSECTION:
-                // PATCH WR: If the path turns by more than 180 degrees, we must
-                //           also join it with an arc, to prevent that the path
-                //           segment is removed, because without the arc,
-                //           the intersection point of the slice may lie
-                //           inside the shape.
-                if (true || intrResult.getFirst().getArgumentA() > 1.0 && falseIntersect(intrResult.getFirst().getArgumentB())) {
+                }*/
+                    break;
+                case INTERSECTION:
+                    addOrReplaceIfSamePos(result, new PlineVertex(intersections.getFirst(), 0.0));
+                    break;
+                case NO_INTERSECTION_COINCIDENT:
+                    addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
+                    break;
+                case NO_INTERSECTION:
+                    // PATCH WR: If the path turns by more than 180 degrees, we must
+                    //           also join it with an arc, to prevent that the path
+                    //           segment is removed, because without the arc,
+                    //           the intersection point of the slice may lie
+                    //           inside the shape.
+                    connectUsingArc.run();
+                    /*
+                if (true || intersections.getFirst().getArgumentA() > 1.0 && falseIntersect(intersections.getFirst().getArgumentB())) {
                     // extend and join the lines together using an arc
                     connectUsingArc.run();
                 } else {
                     addOrReplaceIfSamePos(result, new PlineVertex(v2.pos(), 0.0));
                     addOrReplaceIfSamePos(result, u1);
-                }
-                break;
+                }*/
+                    break;
             }
         }
     }
@@ -906,22 +942,23 @@ public class ContourBuilder {
             if (v1.bulgeIsZero()) {
                 IntersectionResult intrResult =
                         intrLineSeg2Circle2(v1.pos(), v2.pos(), circleRadius, circleCenter);
-                if (intrResult.size() == 0) {
+                ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+                if (intersections.size() == 0) {
                     continue;
-                } else if (intrResult.size() == 1) {
-                    if (validLineSegIntersect.test(intrResult.getFirst().getArgumentA())) {
+                } else if (intersections.size() == 1) {
+                    if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
                         output.add(new OrderedPair<>(sIndex,
-                                Arrays.asList(intrResult.getFirst())));
+                                Arrays.asList(intersections.getFirst())));
                     }
                 } else {
-                    assert intrResult.size() == 2 : "should be two intersects here";
-                    if (validLineSegIntersect.test(intrResult.getFirst().getArgumentA())) {
+                    assert intersections.size() == 2 : "should be two intersects here";
+                    if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
                         output.add(new OrderedPair<>(sIndex,
-                                Arrays.asList(intrResult.getFirst())));
+                                Arrays.asList(intersections.getFirst())));
                     }
-                    if (validLineSegIntersect.test(intrResult.getLast().getArgumentA())) {
+                    if (validLineSegIntersect.test(intersections.getLast().getArgumentA())) {
                         output.add(new OrderedPair<>(sIndex,
-                                Arrays.asList(intrResult.getLast())));
+                                Arrays.asList(intersections.getLast())));
                     }
                 }
             } else {
@@ -929,24 +966,25 @@ public class ContourBuilder {
                 IntersectionResult intrResult =
                         intrCircle2Circle2(arc.radius, arc.center, circleRadius, circleCenter);
                 switch (intrResult.getStatus()) {
-                case NO_INTERSECTION_OUTSIDE:
-                case NO_INTERSECTION_INSIDE:
-                    break;
-                case INTERSECTION:
-                    if (intrResult.size() == 1) {
-                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.getFirst())) {
-                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.getFirst())));
-                        }
-                    } else {
-                        assert intrResult.size() == 2 : "there must be 2 intersections";
+                    case NO_INTERSECTION_OUTSIDE:
+                    case NO_INTERSECTION_INSIDE:
+                        break;
+                    case INTERSECTION:
+                        ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+                        if (intersections.size() == 1) {
+                            if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getFirst())) {
+                                output.add(new OrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
+                            }
+                        } else {
+                            assert intersections.size() == 2 : "there must be 2 intersections";
 
-                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.getFirst())) {
-                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.getFirst())));
+                            if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getFirst())) {
+                                output.add(new OrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
+                            }
+                            if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getLast())) {
+                                output.add(new OrderedPair<>(sIndex, Arrays.asList(intersections.getLast())));
+                            }
                         }
-                        if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intrResult.getLast())) {
-                            output.add(new OrderedPair<>(sIndex, Arrays.asList(intrResult.getLast())));
-                        }
-                    }
                     break;
                 case NO_INTERSECTION_COINCIDENT:
                     break;

@@ -21,8 +21,8 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
@@ -223,7 +223,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            ImmutableList<Transform> oldTransforms = startTransforms == null ? ImmutableArrayList.of() : startTransforms;
+            ImmutableList<Transform> oldTransforms = startTransforms == null ? VectorList.of() : startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();
@@ -237,7 +237,7 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
             case 0:
-                model.set(owner, TRANSFORMS, ImmutableArrayList.of(transform));
+                model.set(owner, TRANSFORMS, VectorList.of(transform));
                 break;
             default:
                 int last = oldTransforms.size() - 1;

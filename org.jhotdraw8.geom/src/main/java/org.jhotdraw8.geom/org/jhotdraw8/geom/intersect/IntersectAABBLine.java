@@ -47,16 +47,16 @@ public class IntersectAABBLine {
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
 
         if (inter1.getStatus() == IntersectionStatus.INTERSECTION) {
-            result.addAll(inter1.asList());
+            result.addAll(inter1.intersections().asList());
         }
         if (inter2.getStatus() == IntersectionStatus.INTERSECTION) {
-            result.addAll(inter2.asList());
+            result.addAll(inter2.intersections().asList());
         }
         if (inter3.getStatus() == IntersectionStatus.INTERSECTION) {
-            result.addAll(inter3.asList());
+            result.addAll(inter3.intersections().asList());
         }
         if (inter4.getStatus() == IntersectionStatus.INTERSECTION) {
-            result.addAll(inter4.asList());
+            result.addAll(inter4.intersections().asList());
         }
 
         return new IntersectionResultEx(result);
@@ -88,10 +88,10 @@ public class IntersectAABBLine {
         inter4 = IntersectLineLine.intersectLineLineEx(topLeft, bottomLeft, a0, a1);
 
         List<IntersectionPointEx> result = new ArrayList<>();
-        result.addAll(inter1.asList());
-        result.addAll(inter2.asList());
-        result.addAll(inter3.asList());
-        result.addAll(inter4.asList());
+        result.addAll(inter1.intersections().asList());
+        result.addAll(inter2.intersections().asList());
+        result.addAll(inter3.intersections().asList());
+        result.addAll(inter4.intersections().asList());
         return new IntersectionResultEx(result);
     }
 }

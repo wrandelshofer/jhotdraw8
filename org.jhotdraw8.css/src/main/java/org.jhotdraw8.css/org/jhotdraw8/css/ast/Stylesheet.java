@@ -6,9 +6,9 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.collection.vector.VectorList;
 
 import java.net.URI;
 import java.util.List;
@@ -31,8 +31,8 @@ public class Stylesheet extends AbstractSyntaxTree {
     public Stylesheet(@Nullable URI uri, @NonNull List<Rule> rules) {
         super(null);
         this.uri = uri;
-        this.rules = ImmutableArrayList.copyOf(rules);
-        this.styleRules = ImmutableArrayList.copyOf(
+        this.rules = VectorList.copyOf(rules);
+        this.styleRules = VectorList.copyOf(
                 rules.stream()
                         .filter(r -> r instanceof StyleRule)
                         .map(r -> (StyleRule) r)

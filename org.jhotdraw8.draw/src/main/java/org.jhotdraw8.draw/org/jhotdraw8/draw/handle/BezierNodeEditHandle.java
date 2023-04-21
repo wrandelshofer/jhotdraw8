@@ -12,14 +12,25 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -33,7 +44,10 @@ import org.jhotdraw8.geom.shape.BezierNodePath;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.geom.shape.BezierNode.*;
+import static org.jhotdraw8.geom.shape.BezierNode.C0C1C2_MASK;
+import static org.jhotdraw8.geom.shape.BezierNode.C0C1_MASK;
+import static org.jhotdraw8.geom.shape.BezierNode.C0C2_MASK;
+import static org.jhotdraw8.geom.shape.BezierNode.C0_MASK;
 
 /**
  * Handle for the point ofCollection a figure.
@@ -156,7 +170,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
                         break;
                     }
                     path.getNodes().set(pointIndex, node);
-                    dv.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+                    dv.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
                     dv.recreateHandles();
                 }
             } else if (event.getClickCount() == 2) {
@@ -171,7 +185,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         if (owner.get(pointKey).size() > 2) {
             BezierNodePath path = new BezierNodePath(owner.get(pointKey));
             path.join(pointIndex, 1.0);
-            dv.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+            dv.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             dv.recreateHandles();
         }
     }
@@ -233,25 +247,25 @@ public class BezierNodeEditHandle extends AbstractHandle {
         noneRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         inRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C1_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         outRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C2_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
             BezierNode changedNode = bnode.setMask(C0C1C2_MASK);
             path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, ImmutableArrayList.copyOf(path.getNodes()));
+            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 

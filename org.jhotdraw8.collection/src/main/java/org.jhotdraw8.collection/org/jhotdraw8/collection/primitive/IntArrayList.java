@@ -1,6 +1,6 @@
 /*
  * @(#)IntArrayList.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.primitive;
 
@@ -504,7 +504,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     @Override
-    public SequencedCollection<Integer> reversed() {
+    public @NonNull SequencedCollection<Integer> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

@@ -11,9 +11,9 @@ import org.jhotdraw8.base.concurrent.CheckedRunnable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.collection.MapEntries;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssSizeConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
@@ -320,7 +320,7 @@ public class FigureSvgTinyReader {
                 secondPass.run();
             }
 
-            root.set(SvgDrawing.INLINE_STYLESHEETS, ImmutableArrayList.copyOf(ctx.stylesheets));
+            root.set(SvgDrawing.INLINE_STYLESHEETS, VectorList.copyOf(ctx.stylesheets));
 
 
             if (!(root instanceof SvgDrawing)) {

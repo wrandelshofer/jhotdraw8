@@ -42,7 +42,7 @@ public class IntersectCubicCurvePointTest {
                 a.getStartX(), a.getStartY(), a.getControlX1(), a.getControlY1(),
                 a.getControlX2(), a.getControlY2(), a.getEndX(), a.getEndY(),
                 b.getCenterX(), b.getCenterY(), b.getRadius());
-        double[] actual = new double[isec.size()];
+        double[] actual = new double[isec.intersections().size()];
         for (int i = 0; i < actual.length; i++) {
             actual[i] = isec.getAllArgumentsA().get(i);
         }

@@ -13,7 +13,9 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class IntersectLinePoint {
     private IntersectLinePoint() {
@@ -95,7 +97,7 @@ public class IntersectLinePoint {
     public static @NonNull IntersectionResultEx intersectLinePointEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
         IntersectionResult result = intersectLinePoint(x0, y0, x1, y1, cx, cy, r);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             list.add(new IntersectionPointEx(

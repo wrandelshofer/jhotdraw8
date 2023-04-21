@@ -1,6 +1,6 @@
 /*
  * @(#)DoubleArrayList.java
- * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.primitive;
 
@@ -505,7 +505,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
     }
 
     @Override
-    public SequencedCollection<Double> reversed() {
+    public @NonNull SequencedCollection<Double> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

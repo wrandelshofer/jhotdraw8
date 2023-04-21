@@ -15,9 +15,9 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
@@ -117,7 +117,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             new TypeToken<CssDefaultableValue<ImmutableList<String>>>() {
             }, new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
-            ImmutableArrayList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+            VectorList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
 
     /**

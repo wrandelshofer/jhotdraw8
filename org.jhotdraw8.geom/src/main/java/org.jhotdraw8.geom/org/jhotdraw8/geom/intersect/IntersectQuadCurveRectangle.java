@@ -42,10 +42,10 @@ public class IntersectQuadCurveRectangle {
         inter4 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, bottomLeft, topLeft);
 
         final List<IntersectionPoint> result = new ArrayList<>();
-        result.addAll(inter1.asList());
-        result.addAll(inter2.asList());
-        result.addAll(inter3.asList());
-        result.addAll(inter4.asList());
+        result.addAll(inter1.intersections().asList());
+        result.addAll(inter2.intersections().asList());
+        result.addAll(inter3.intersections().asList());
+        result.addAll(inter4.intersections().asList());
 
         return new IntersectionResult(result);
     }

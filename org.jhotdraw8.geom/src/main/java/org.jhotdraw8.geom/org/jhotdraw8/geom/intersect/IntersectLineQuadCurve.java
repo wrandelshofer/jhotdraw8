@@ -271,7 +271,7 @@ public class IntersectLineQuadCurve {
                                                                 double epsilon) {
         IntersectionResult result = intersectQuadCurveLine(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
             double py = ip.getY();
             PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
@@ -298,7 +298,7 @@ public class IntersectLineQuadCurve {
             double epsilon) {
         IntersectionResult result = intersectQuadCurveLine(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
             double py = ip.getY();
             PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());

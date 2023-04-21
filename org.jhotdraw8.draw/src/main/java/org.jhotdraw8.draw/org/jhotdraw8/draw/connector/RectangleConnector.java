@@ -17,7 +17,9 @@ import org.jhotdraw8.geom.intersect.IntersectAABBLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
-import static org.jhotdraw8.draw.figure.StrokableFigure.*;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
+import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
 
 /**
  * RectangleConnector.
@@ -60,6 +62,6 @@ public class RectangleConnector extends LocatorConnector {
 
         IntersectionResultEx i = IntersectAABBLine.intersectLineAABBEx(s.getX(), s.getY(), e.getX(), e.getY(),
                 bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
-        return i.peekLast();
+        return i.intersections().peekLast();
     }
 }

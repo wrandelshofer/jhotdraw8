@@ -12,8 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableArrayList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
@@ -112,7 +112,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
                 t.add(transformed.getX());
                 t.add(transformed.getY());
             }
-            set(POINTS, ImmutableArrayList.copyOf(t));
+            set(POINTS, VectorList.copyOf(t));
         }
     }
 

@@ -407,11 +407,11 @@ public class IntersectCubicCurveCubicCurve {
         IntersectionResult resultB = intersectCubicCurveCubicCurve(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, epsilon);
 
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ipA : resultA) {
+        for (IntersectionPoint ipA : resultA.intersections()) {
             double x = ipA.getX();
             double y = ipA.getY();
             double argumentB = Double.NaN;
-            for (IntersectionPoint ipB : resultB) {
+            for (IntersectionPoint ipB : resultB.intersections()) {
                 if (Points.almostEqual(ipA, ipB, CURVE_A_B_TOLERANCE)) {
                     argumentB = ipB.argumentA;
                     break;

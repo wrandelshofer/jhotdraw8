@@ -43,7 +43,7 @@ public class IntersectEllipseQuadCurve {
             double bcx, double bcy, double brx, double bry, double epsilon) {
         IntersectionResult result = intersectQuadCurveEllipse(new Point2D.Double(a0x, a0y), new Point2D.Double(a1x, a1y), new Point2D.Double(a2x, a2y), new Point2D.Double(bcx, bcy), brx, bry, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : result) {
+        for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
@@ -141,7 +141,7 @@ public class IntersectEllipseQuadCurve {
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
         IntersectionResult resultB = intersectQuadCurveEllipse(new Point2D.Double(b0x, b0y), new Point2D.Double(b1x, b1y), new Point2D.Double(b2x, b2y), new Point2D.Double(acx, acy), arx, ary);
         ArrayList<IntersectionPoint> list = new ArrayList<>();
-        for (IntersectionPoint ip : resultB) {
+        for (IntersectionPoint ip : resultB.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             list.add(new IntersectionPoint(
@@ -165,7 +165,7 @@ public class IntersectEllipseQuadCurve {
         IntersectionResultEx resultB = intersectQuadCurveEllipseEx(
                 b0x, b0y, b1x, b1y, b2x, b2y, acx, acy, arx, ary, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
-        for (IntersectionPoint ip : resultB) {
+        for (IntersectionPoint ip : resultB.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
             PointAndDerivative pdB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
