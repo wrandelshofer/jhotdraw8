@@ -6,7 +6,7 @@
 package org.jhotdraw8.collection.champ;
 
 /**
- * A tombstone is used by {@link VectorChampSet} to mark a deleted slot in its Vector.
+ * A tombstone is used by {@link VectorSet} to mark a deleted slot in its Vector.
  * <p>
  * A tombstone stores the minimal number of neighbors 'before' and 'after' it in the
  * Vector.
@@ -58,7 +58,8 @@ package org.jhotdraw8.collection.champ;
  * </pre>
  *
  * @param before minimal number of neighboring tombstones before this one
- * @param after  number of neighboring tombstones after this one
+ * @param after  minimal number of neighboring tombstones after this one
  */
 record Tombstone(int before, int after) {
+
 }

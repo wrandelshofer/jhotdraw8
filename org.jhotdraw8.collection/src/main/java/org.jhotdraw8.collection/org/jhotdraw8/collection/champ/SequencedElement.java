@@ -71,5 +71,11 @@ class SequencedElement<E> implements SequencedData {
         return sequenceNumber;
     }
 
-
+    @Override
+    public String toString() {
+        return "{" +
+                "" + element +
+                ", seq=" + sequenceNumber +
+                '}';
+    }
 }

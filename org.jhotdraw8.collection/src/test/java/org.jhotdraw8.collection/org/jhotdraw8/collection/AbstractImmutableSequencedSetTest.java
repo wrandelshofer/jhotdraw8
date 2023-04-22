@@ -37,7 +37,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
         ImmutableSequencedSet<HashCollider> instance = newInstance(data.a());
         instance = instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeLast);
@@ -45,7 +45,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         ImmutableSequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         assertEqualSequence(expected, instance, "new instance(data.a())");
@@ -60,7 +60,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         ImmutableSequencedSet<HashCollider> instance = newInstance();
         instance = instance.addAll(data.a.asSet());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());

@@ -143,6 +143,28 @@ class BitMappedTrie<T> implements Serializable {
         return result;
     }
 
+    BitMappedTrie<T> prepend(T t) {
+        BitMappedTrie<T> result = this;
+        int size = 1;
+        while (size > 0) {
+            Object array = result.array;
+            int shift = result.depthShift, offset = result.offset;
+            if (result.isFullLeft()) {
+                array = obj().copyUpdate(obj().empty(), BRANCHING_FACTOR - 1, array);
+                shift += BRANCHING_BASE;
+                offset = treeSize(BRANCHING_FACTOR - 1, shift);
+            }
+
+            final int index = offset - 1;
+            final int delta = Math.min(1, lastDigit(index) + 1);
+            size -= delta;
+
+            array = result.modify(array, shift, index, NodeModifier.COPY_NODE, prependToLeaf(t));
+            result = new BitMappedTrie<>(type, array, offset - delta, result.length + delta, shift);
+        }
+        return result;
+    }
+
     private boolean isFullLeft() {
         return offset == 0;
     }
@@ -153,6 +175,14 @@ class BitMappedTrie<T> implements Serializable {
             while (iterator.hasNext() && index >= 0) {
                 type.setAt(copy, index--, iterator.next());
             }
+            return copy;
+        };
+    }
+
+    private NodeModifier prependToLeaf(T t) {
+        return (array, index) -> {
+            final Object copy = type.copy(array, BRANCHING_FACTOR);
+            type.setAt(copy, index, t);
             return copy;
         };
     }

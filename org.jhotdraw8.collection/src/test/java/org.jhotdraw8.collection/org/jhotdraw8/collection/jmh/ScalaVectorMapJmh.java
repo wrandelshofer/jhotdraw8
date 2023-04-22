@@ -19,24 +19,26 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.28
+ * # JMH version: 1.36
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                    (size)  Mode  Cnt     _     Score   Error  Units
- * ContainsFound     1000000  avgt          _   252.756          ns/op
- * ContainsNotFound  1000000  avgt          _   259.589          ns/op
- * CopyOf            1000000  avgt       456_407771.682          ns/op
- * Head              1000000  avgt          _    27.189          ns/op
- * Iterate           1000000  avgt       311_329834.515          ns/op
- * Put               1000000  avgt          _   545.832          ns/op
- * RemoveThenAdd     1000000  avgt          _  1311.524          ns/op
- * Tail              1000000  avgt          _   228.130          ns/op
+ * implementation 'org.scala-lang:scala-library:2.13.11-M1'
+ *
+ * Benchmark                            (mask)   (size)  Mode  Cnt          Score   Error  Units
+ * ScalaVectorMapJmh.mContainsFound        -65  1000000  avgt             251.689          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65  1000000  avgt             269.800          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65  1000000  avgt       470588123.727          ns/op
+ * ScalaVectorMapJmh.mHead                 -65  1000000  avgt              35.886          ns/op
+ * ScalaVectorMapJmh.mIterate              -65  1000000  avgt       332692170.290          ns/op
+ * ScalaVectorMapJmh.mPut                  -65  1000000  avgt             532.145          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65  1000000  avgt            1269.680          ns/op
+ * ScalaVectorMapJmh.mTail                 -65  1000000  avgt             232.868          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
-@Warmup(iterations = 1)
+@Warmup(iterations = 2)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
@@ -44,7 +46,8 @@ public class ScalaVectorMapJmh {
     @Param({"1000000"})
     private int size;
 
-    private final int mask = ~64;
+    @Param({"-65"})
+    private int mask;
 
     private BenchmarkData data;
     private VectorMap<Key, Boolean> mapA;

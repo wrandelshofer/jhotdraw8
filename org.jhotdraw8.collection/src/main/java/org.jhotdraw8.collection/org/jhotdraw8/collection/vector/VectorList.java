@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection.vector;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
@@ -146,6 +147,16 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
+    public @NonNull VectorList<E> addFirst(@Nullable E key) {
+        return new VectorList<>(prepend(key), size + 1);
+    }
+
+    @Override
+    public @NonNull VectorList<E> addLast(@Nullable E key) {
+        return new VectorList<>(append(key), size + 1);
+    }
+
+    @Override
     public @NonNull VectorList<E> addAll(int index, @NonNull Iterable<? extends E> c) {
         Objects.requireNonNull(c, "elements is null");
         if (index >= 0 && index <= size) {
@@ -177,6 +188,21 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
+    public VectorList<E> removeFirst() {
+        return (VectorList<E>) ImmutableList.super.removeFirst();
+    }
+
+    @Override
+    public VectorList<E> removeLast() {
+        return (VectorList<E>) ImmutableList.super.removeLast();
+    }
+
+    @Override
+    public @NonNull VectorList<E> retainAll(@NonNull ReadOnlyCollection<?> c) {
+        return (VectorList<E>) ImmutableList.super.retainAll(c);
+    }
+
+    @Override
     public @NonNull VectorList<E> removeRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size + 1);
@@ -191,11 +217,11 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
-    public @NonNull VectorList<E> removeAll(@NonNull Iterable<? extends E> c) {
+    public @NonNull VectorList<E> removeAll(@NonNull Iterable<?> c) {
         if (isEmpty()) return this;
         VectorList<E> result = this;
         Outer:
-        for (E e : c) {
+        for (Object e : c) {
             for (int index = result.indexOf(e); index >= 0; index = result.indexOf(e, index)) {
                 result = result.removeAt(index);
                 if (result.isEmpty()) {
@@ -207,7 +233,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
-    public @NonNull VectorList<E> retainAll(@NonNull Collection<? extends E> c) {
+    public @NonNull VectorList<E> retainAll(@NonNull Collection<?> c) {
         if (isEmpty()) return this;
         if (c.isEmpty()) return of();
         VectorList<E> result = this;
@@ -313,4 +339,6 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     public String toString() {
         return ReadOnlyCollection.iterableToString(this);
     }
+
+
 }

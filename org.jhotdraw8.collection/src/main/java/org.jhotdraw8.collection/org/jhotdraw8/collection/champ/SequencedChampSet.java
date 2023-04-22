@@ -214,6 +214,9 @@ public class SequencedChampSet<E>
         if (isEmpty() && (set instanceof MutableSequencedChampSet<?> t)) {
             return (SequencedChampSet<E>) t.toImmutable();
         }
+        // XXX if the other set is a ChampSet, we should merge the trees
+        // See kotlinx collections:
+        // https://github.com/Kotlin/kotlinx.collections.immutable/blob/d7b83a13fed459c032dab1b4665eda20a04c740f/core/commonMain/src/implementations/immutableSet/TrieNode.kt#L338
         var t = toMutable();
         return t.addAll(set) ? t.toImmutable() : this;
     }

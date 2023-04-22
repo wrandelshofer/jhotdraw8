@@ -171,8 +171,49 @@ interface SequencedData {
                 SequencedData::seqEquals, SequencedData::seqHash);
     }
 
-    static <K extends SequencedData> VectorList<Object> vecRemove(VectorList<Object> newSeqRoot, IdentityObject mutator, K oldElem, ChangeEvent<K> details) {
-        return newSeqRoot;
+    final static Tombstone TOMB_ZERO_ZERO = new Tombstone(0, 0);
+
+    static <K extends SequencedData> VectorList<Object> vecRemove(VectorList<Object> vector, IdentityObject mutator, K oldElem, ChangeEvent<K> details, int offset) {
+        // If the element is the first, we can remove it and its neighboring tombstones from the vector.
+        int size = vector.size();
+        int index = oldElem.getSequenceNumber() + offset;
+        if (index == 0) {
+            if (size > 1) {
+                Object o = vector.get(1);
+                if (o instanceof Tombstone t) {
+                    return vector.removeRange(0, 2 + t.after());
+                }
+            }
+            return vector.removeFirst();
+        }
+
+        // If the element is the last , we can remove it and its neighboring tombstones from the vector.
+        if (index == size - 1) {
+            Object o = vector.get(size - 2);
+            if (o instanceof Tombstone t) {
+                return vector.removeRange(size - 2 - t.before(), size);
+            }
+            return vector.removeLast();
+        }
+
+        // Otherwise, we replace the element with a tombstone, and we update before/after skip counts
+        assert index > 0 && index < size - 1;
+        Object before = vector.get(index - 1);
+        Object after = vector.get(index + 1);
+        if (before instanceof Tombstone tb && after instanceof Tombstone ta) {
+            vector = vector.set(index - 1 - tb.before(), new Tombstone(0, 2 + tb.before() + ta.after()));
+            vector = vector.set(index, TOMB_ZERO_ZERO);
+            vector = vector.set(index + 1 + ta.after(), new Tombstone(2 + tb.before() + ta.after(), 0));
+        } else if (before instanceof Tombstone tb) {
+            vector = vector.set(index - 1 - tb.before(), new Tombstone(0, 1 + tb.before()));
+            vector = vector.set(index, new Tombstone(1 + tb.before(), 0));
+        } else if (after instanceof Tombstone ta) {
+            vector = vector.set(index, new Tombstone(0, 1 + ta.after()));
+            vector = vector.set(index + 1 + ta.after(), new Tombstone(1 + ta.after(), 0));
+        } else {
+            vector = vector.set(index, TOMB_ZERO_ZERO);
+        }
+        return vector;
     }
 
     static <K extends SequencedData> VectorList<Object> vecUpdate(VectorList<Object> newSeqRoot, IdentityObject mutator, K newElem, ChangeEvent<K> details,

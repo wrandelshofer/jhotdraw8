@@ -151,6 +151,28 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
+    public void addLastWithLastElementShouldBeIdempotent(@NonNull SetData data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        HashCollider e = expected.get(expected.size() - 1);
+        instance.addLast(e);
+        assertEqualSequence(expected, instance, "addLastIdempotent");
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addFirstWithFirstElementShouldBeIdempotent(@NonNull SetData data) throws Exception {
+        SequencedSet<HashCollider> instance = newInstance(data.a());
+        List<HashCollider> expected = new ArrayList<>(data.a().asSet());
+        HashCollider e = expected.get(0);
+        instance.addFirst(e);
+        assertEqualSequence(expected, instance, "addFirstIdempotent");
+
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
     public void reversedAddFirstWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());

@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
+import org.jhotdraw8.collection.vector.VectorList;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -19,6 +20,10 @@ import static org.jhotdraw8.collection.champ.NodeFactory.newHashCollisionNode;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
+ * <p>
+ * XXX hash-collision nodes may become a huge performance bottleneck.
+ * If the trie contains keys that implement {@link Comparable} then a hash-collision
+ * nodes should be b-tree. Otherwise, hash-collision node should be a bit mapped trie (aka {@link VectorList}.
  *
  * @param <D> the data type
  */

@@ -53,7 +53,7 @@ import java.util.Spliterator;
  * <p>
  * Implementation details:
  * <p>
- * See description at {@link VectorChampSet}.
+ * See description at {@link VectorSet}.
  * <p>
  * References:
  * <dl>
@@ -69,7 +69,8 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+@Deprecated//This class is not full implemented yet - don't use it!
+public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -88,7 +89,7 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
     /**
      * Constructs a new empty set.
      */
-    public MutableVectorChampSet() {
+    public MutableVectorSet() {
         root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
     }
@@ -100,12 +101,12 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public MutableVectorChampSet(Iterable<? extends E> c) {
-        if (c instanceof MutableVectorChampSet<?>) {
-            c = ((MutableVectorChampSet<? extends E>) c).toImmutable();
+    public MutableVectorSet(Iterable<? extends E> c) {
+        if (c instanceof MutableVectorSet<?>) {
+            c = ((MutableVectorSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof VectorChampSet<?>) {
-            VectorChampSet<E> that = (VectorChampSet<E>) c;
+        if (c instanceof VectorSet<?>) {
+            VectorSet<E> that = (VectorSet<E>) c;
             this.root = that;
             this.size = that.size;
             this.offset = that.offset;
@@ -129,7 +130,7 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
 
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var newElem = new SequencedElement<>(e, offset);
+        var newElem = new SequencedElement<>(e, -offset - 1);
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator, newElem,
                 Objects.hashCode(e), 0, details,
@@ -138,15 +139,14 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
         if (details.isModified()) {
             var oldElem = details.getData();
             if (details.isReplaced()) {
-                vector = SequencedData.vecRemove(vector, mutator, oldElem, details);
-                offset = details.getData().getSequenceNumber() == offset ? offset : offset - 1;
-                //last = details.getData().getSequenceNumber() == last ? last - 1 : last;
+                vector = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
+                offset++;
             } else {
                 modCount++;
-                offset--;
+                offset++;
                 size++;
             }
-            vector = SequencedData.vecUpdate(vector, mutator, newElem, details, SequencedElement::update);
+            vector = vector.addFirst(newElem);
             renumber();
         }
         return details.isModified();
@@ -169,15 +169,12 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
         if (details.isModified()) {
             var oldElem = details.getData();
             if (details.isReplaced()) {
-                vector = SequencedData.vecRemove(vector, mutator, oldElem, details);
-                offset = details.getData().getSequenceNumber() == offset - 1 ? offset - 1 : offset;
-                //last = details.getData().getSequenceNumber() == last ? last : last + 1;
+                vector = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
             } else {
                 modCount++;
                 size++;
-                //last++;
             }
-            vector = SequencedData.vecUpdate(vector, mutator, newElem, details, SequencedElement::update);
+            vector = vector.add(newElem);
             renumber();
         }
         return details.isModified();
@@ -199,8 +196,8 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull MutableVectorChampSet<E> clone() {
-        return (MutableVectorChampSet<E>) super.clone();
+    public @NonNull MutableVectorSet<E> clone() {
+        return (MutableVectorSet<E>) super.clone();
     }
 
     @Override
@@ -270,12 +267,9 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
             modCount++;
             var elem = details.getData();
             int seq = elem.getSequenceNumber();
-            vector = SequencedData.vecRemove(vector, mutator, elem, details);
-            /*if (seq == last - 1) {
-                last--;
-            }*/
-            if (seq == offset) {
-                offset++;
+            vector = SequencedData.vecRemove(vector, mutator, elem, details, offset);
+            if (seq == -offset) {
+                offset--;
             }
             renumber();
         }
@@ -334,10 +328,10 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
      *
      * @return an immutable copy
      */
-    public @NonNull VectorChampSet<E> toImmutable() {
+    public @NonNull VectorSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? VectorChampSet.of() :
-                new VectorChampSet<>(root, vector, size, offset);
+        return size == 0 ? VectorSet.of() :
+                new VectorSet<>(root, vector, size, offset);
     }
 
     @Serial
@@ -356,7 +350,7 @@ public class MutableVectorChampSet<E> extends AbstractMutableChampSet<E, Sequenc
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableVectorChampSet<>(deserialized);
+            return new MutableVectorSet<>(deserialized);
         }
     }
 }

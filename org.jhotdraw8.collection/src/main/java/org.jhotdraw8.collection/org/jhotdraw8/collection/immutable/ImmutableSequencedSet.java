@@ -22,15 +22,17 @@ import java.util.NoSuchElementException;
  *
  * @param <E> the element type
  */
-public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySequencedSet<E> {
+public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySequencedSet<E>, ImmutableSequencedCollection<E> {
     @Override
     @NonNull ImmutableSequencedSet<E> add(E element);
 
     @Override
     @NonNull ImmutableSequencedSet<E> addAll(@NonNull Iterable<? extends E> c);
 
+    @Override
     @NonNull ImmutableSequencedSet<E> addFirst(final @Nullable E key);
 
+    @Override
     @NonNull ImmutableSequencedSet<E> addLast(final @Nullable E key);
 
     @Override
@@ -49,6 +51,7 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      * @return a new set instance with the first element removed
      * @throws NoSuchElementException if this set is empty
      */
+    @Override
     default ImmutableSequencedSet<E> removeFirst() {
         return remove(getFirst());
     }
@@ -60,6 +63,7 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      * @return a new set instance with the last element removed
      * @throws NoSuchElementException if this set is empty
      */
+    @Override
     default ImmutableSequencedSet<E> removeLast() {
         return remove(getLast());
     }

@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 
@@ -20,14 +21,31 @@ import java.util.List;
  *
  * @param <E> the element type
  */
-public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E> {
+public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCollection<E> {
     /**
      * Returns a copy of this list that is empty.
      *
      * @return this list instance if it is already empty, or a different list
      * instance that is empty.
      */
+    @Override
     @NonNull ImmutableList<E> clear();
+
+    @Override
+    @NonNull ImmutableList<E> addFirst(@Nullable final E key);
+
+    @Override
+    @NonNull ImmutableList<E> addLast(@Nullable final E key);
+
+    @Override
+    default ImmutableList<E> removeFirst() {
+        return (ImmutableList<E>) ImmutableSequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    default ImmutableList<E> removeLast() {
+        return (ImmutableList<E>) ImmutableSequencedCollection.super.removeLast();
+    }
 
     /**
      * Returns a copy of this list that contains all elements
@@ -37,6 +55,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param element an element
      * @return a different list instance with the element added
      */
+    @Override
     @NonNull ImmutableList<E> add(@NonNull E element);
 
     /**
@@ -58,6 +77,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @param c a collection to be added to this list
      * @return a different list instance with the elements added
      */
+    @Override
     @NonNull ImmutableList<E> addAll(@NonNull Iterable<? extends E> c);
 
     /**
@@ -79,6 +99,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it already does not contain the element, or
      * a different list instance with the element removed
      */
+    @Override
     @NonNull ImmutableList<E> remove(@NonNull E element);
 
     /**
@@ -109,7 +130,8 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it already does not contain the elements, or
      * a different list instance with the elements removed
      */
-    @NonNull ImmutableList<E> removeAll(@NonNull Iterable<? extends E> c);
+    @Override
+    @NonNull ImmutableList<E> removeAll(@NonNull Iterable<?> c);
 
     /**
      * Returns a copy of this list that contains only elements
@@ -119,7 +141,8 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it has not changed, or
      * a different list instance with elements removed
      */
-    @NonNull ImmutableList<E> retainAll(@NonNull Collection<? extends E> c);
+    @Override
+    @NonNull ImmutableList<E> retainAll(@NonNull Collection<?> c);
 
     /**
      * Returns a copy of this list that contains only elements
@@ -129,7 +152,8 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableCollection<E
      * @return this list instance if it has not changed, or
      * a different list instance with elements removed
      */
-    default @NonNull ImmutableList<E> retainAll(final @NonNull ReadOnlyCollection<? extends E> c) {
+    @Override
+    default @NonNull ImmutableList<E> retainAll(final @NonNull ReadOnlyCollection<?> c) {
         if (c == this) {
             return this;
         }
