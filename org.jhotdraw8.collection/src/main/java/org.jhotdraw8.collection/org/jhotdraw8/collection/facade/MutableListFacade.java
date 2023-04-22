@@ -96,7 +96,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return new FailFastSpliterator<>(backingList.spliterator(), () -> this.modCount);
     }
 
@@ -282,7 +282,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
+    public @NonNull ListIterator<E> listIterator(int index) {
         Objects.checkIndex(index, size() + 1);
         return new FailFastListIterator<>(new MyListIterator(index), () -> this.modCount);
     }

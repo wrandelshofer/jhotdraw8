@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.nio.CharBuffer;
 import java.text.FieldPosition;
 import java.text.Format;
@@ -21,6 +22,7 @@ import java.text.ParsePosition;
  */
 public class FormatConverterAdapter extends Format {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull Converter<Object> converter;

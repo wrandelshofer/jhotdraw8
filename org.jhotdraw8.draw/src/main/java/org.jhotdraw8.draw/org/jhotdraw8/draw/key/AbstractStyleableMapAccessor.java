@@ -12,6 +12,7 @@ import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +31,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         implements WritableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
     private final @NonNull String cssName;
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

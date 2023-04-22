@@ -12,6 +12,8 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
+
 /**
  * SetStyleableKey.
  *
@@ -22,6 +24,7 @@ public class SetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSe
         implements WritableStyleableMapAccessor<ImmutableSequencedSet<T>>,
         NonNullKey<ImmutableSequencedSet<T>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

@@ -24,13 +24,13 @@ public class IntersectionResultEx {
         this(status, Collections.emptyList());
     }
 
-    public IntersectionResultEx(IntersectionStatus status, @NonNull List<IntersectionPointEx> intersections) {
+    public IntersectionResultEx(@NonNull IntersectionStatus status, @NonNull List<IntersectionPointEx> intersections) {
         this.intersections = VectorList.copyOf(intersections);
         this.status = status;
     }
 
 
-    public IntersectionStatus getStatus() {
+    public @NonNull IntersectionStatus getStatus() {
         return status;
     }
 

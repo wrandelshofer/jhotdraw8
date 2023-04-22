@@ -16,6 +16,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
+import org.jhotdraw8.collection.vector.VectorList;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,12 +27,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
-import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
-
 
 /**
- * Implements a mutable set using two Compressed Hash-Array Mapped Prefix-trees
- * (CHAMP), with predictable iteration order.
+ * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
+ * (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>
@@ -44,10 +43,13 @@ import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1) in an amortized sense, because we sometimes have to renumber the elements.</li>
- *     <li>remove: O(1) in an amortized sense, because we sometimes have to renumber the elements.</li>
+ *     <li>add: O(1) in an amortized sense, because we sometimes have to
+ *     renumber the elements.</li>
+ *     <li>remove: O(1) in an amortized sense, because we sometimes have to
+ *     renumber the elements.</li>
  *     <li>contains: O(1)</li>
- *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
+ *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in
+ *     the mutable copy</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator creation: O(1)</li>
  *     <li>iterator.next: O(1)</li>
@@ -80,17 +82,23 @@ import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
  * The renumbering is why the {@code add} and {@code remove} methods are O(1)
  * only in an amortized sense.
  * <p>
- * To support iteration, a second CHAMP trie is maintained. The second CHAMP
- * trie has the same contents as the first. However, we use the sequence number
- * for computing the hash code of an element.
+ * To support iteration, we use a Vector. The Vector has the same contents
+ * as the CHAMP trie. However, its elements are stored in insertion order.
  * <p>
- * In this implementation, a hash code has a length of
- * 32 bits, and is split up in little-endian order into 7 parts of
- * 5 bits (the last part contains the remaining bits).
+ * If an element is removed from the CHAMP trie that is not the first or the
+ * last element of the Vector, we replace its corresponding element in
+ * the Vector by a tombstone. If the element is at the start or end of the Vector,
+ * we remove the element and all its neighboring tombstones from the Vector.
  * <p>
- * We convert the sequence number to unsigned 32 by adding Integer.MIN_VALUE
- * to it. And then we reorder its bits from
- * 66666555554444433333222221111100 to 00111112222233333444445555566666.
+ * A tombstone can store the number of neighboring tombstones in ascending and in descending
+ * direction. We use these numbers to skip tombstones when we iterate over the vector.
+ * Since we only allow iteration in ascending or descending order from one of the ends of
+ * the vector, we do not need to keep the number of neighbors in all tombstones up to date.
+ * It is sufficient, if we update the neighbor with the lowest index and the one with the
+ * highest index.
+ * <p>
+ * If the number of tombstones exceeds half of the size of the collection, we renumber all
+ * sequence numbers, and we create a new Vector.
  * <p>
  * References:
  * <dl>
@@ -101,50 +109,47 @@ import static org.jhotdraw8.collection.champ.SequencedData.mustRenumber;
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ *
+ *      <dt>VectorMap.scala
+ *      <br>The Scala library. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+ *      <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a></dd>
+ *
  * </dl>
  *
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class SequencedChampSet<E>
+public class VectorChampSet<E>
         extends BitmapIndexedNode<SequencedElement<E>>
         implements Serializable, ImmutableSequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    private static final @NonNull SequencedChampSet<?> EMPTY = new SequencedChampSet<>(
-            BitmapIndexedNode.emptyNode(), BitmapIndexedNode.emptyNode(), 0, -1, 0);
+    private static final @NonNull VectorChampSet<?> EMPTY = new VectorChampSet<>(
+            BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
 
     /**
-     * The root of the CHAMP trie for the sequence numbers.
+     * In this vector we store the elements in the order in which they were inserted.
      */
-    final @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
+    final @NonNull VectorList<Object> vector;
 
     final int size;
 
     /**
-     * Counter for the sequence number of the last element. The counter is
-     * incremented after a new entry has been added to the end of the sequence.
+     * Offset of sequence numbers to vector indices.
+     *
+     * <pre>vector index = sequence number + offset</pre>
      */
-    final int last;
+    final int offset;
 
-
-    /**
-     * Counter for the sequence number of the first element. The counter is
-     * decrement after a new entry has been added to the start of the sequence.
-     */
-    final int first;
-
-    SequencedChampSet(
+    VectorChampSet(
             @NonNull BitmapIndexedNode<SequencedElement<E>> root,
-            @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot,
-            int size, int first, int last) {
+            @NonNull VectorList<Object> vector,
+            int size, int offset) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
-        assert (long) last - first >= size : "size=" + size + " first=" + first + " last=" + last;
         this.size = size;
-        this.first = first;
-        this.last = last;
-        this.sequenceRoot = Objects.requireNonNull(sequenceRoot);
+        this.offset = offset;
+        this.vector = Objects.requireNonNull(vector);
     }
 
 
@@ -157,13 +162,13 @@ public class SequencedChampSet<E>
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull SequencedChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        if (iterable instanceof SequencedChampSet) {
-            return (SequencedChampSet<E>) iterable;
-        } else if (iterable instanceof MutableSequencedChampSet) {
-            return ((MutableSequencedChampSet<E>) iterable).toImmutable();
+    public static <E> @NonNull VectorChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        if (iterable instanceof VectorChampSet) {
+            return (VectorChampSet<E>) iterable;
+        } else if (iterable instanceof MutableVectorChampSet) {
+            return ((MutableVectorChampSet<E>) iterable).toImmutable();
         }
-        MutableSequencedChampSet<E> tr = new MutableSequencedChampSet<>(of());
+        MutableVectorChampSet<E> tr = new MutableVectorChampSet<>(of());
         tr.addAll(iterable);
         return tr.toImmutable();
     }
@@ -177,8 +182,8 @@ public class SequencedChampSet<E>
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull SequencedChampSet<E> of() {
-        return ((SequencedChampSet<E>) SequencedChampSet.EMPTY);
+    public static <E> @NonNull VectorChampSet<E> of() {
+        return ((VectorChampSet<E>) VectorChampSet.EMPTY);
     }
 
 
@@ -192,37 +197,37 @@ public class SequencedChampSet<E>
 
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull SequencedChampSet<E> of(E @NonNull ... elements) {
+    public static <E> @NonNull VectorChampSet<E> of(E @NonNull ... elements) {
         if (elements.length == 0) {
-            return (SequencedChampSet<E>) SequencedChampSet.EMPTY;
+            return (VectorChampSet<E>) VectorChampSet.EMPTY;
         } else {
-            return ((SequencedChampSet<E>) SequencedChampSet.EMPTY).addAll(Arrays.asList(elements));
+            return ((VectorChampSet<E>) VectorChampSet.EMPTY).addAll(Arrays.asList(elements));
         }
     }
 
     @Override
-    public @NonNull SequencedChampSet<E> add(@Nullable E key) {
+    public @NonNull VectorChampSet<E> add(@Nullable E key) {
         return addLast(key, false);
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull SequencedChampSet<E> addAll(@NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof SequencedChampSet<?>)) {
-            return (SequencedChampSet<E>) set;
+    public @NonNull VectorChampSet<E> addAll(@NonNull Iterable<? extends E> set) {
+        if (set == this || isEmpty() && (set instanceof VectorChampSet<?>)) {
+            return (VectorChampSet<E>) set;
         }
-        if (isEmpty() && (set instanceof MutableSequencedChampSet<?> t)) {
-            return (SequencedChampSet<E>) t.toImmutable();
+        if (isEmpty() && (set instanceof MutableVectorChampSet<?> t)) {
+            return (VectorChampSet<E>) t.toImmutable();
         }
         var t = toMutable();
         return t.addAll(set) ? t.toImmutable() : this;
     }
 
-    public @NonNull SequencedChampSet<E> addFirst(@Nullable E key) {
+    public @NonNull VectorChampSet<E> addFirst(@Nullable E key) {
         return addFirst(key, true);
     }
 
-    public @NonNull SequencedChampSet<E> addLast(@Nullable E key) {
+    public @NonNull VectorChampSet<E> addLast(@Nullable E key) {
         return addLast(key, true);
     }
 
@@ -230,7 +235,7 @@ public class SequencedChampSet<E>
      * {@inheritDoc}
      */
     @Override
-    public @NonNull SequencedChampSet<E> clear() {
+    public @NonNull VectorChampSet<E> clear() {
         return isEmpty() ? this : of();
     }
 
@@ -240,81 +245,73 @@ public class SequencedChampSet<E>
         return find(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
-    private @NonNull SequencedChampSet<E> addFirst(@Nullable E e,
-                                                   boolean moveToFirst) {
+    private @NonNull VectorChampSet<E> addFirst(@Nullable E e,
+                                                boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var newElem = new SequencedElement<>(e, first);
+        var newElem = new SequencedElement<>(e, offset - 1);
         var newRoot = update(null, newElem,
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
-        var newSeqRoot = sequenceRoot;
+        VectorList<Object> newSeqRoot = vector;
         if (details.isModified()) {
             int newSize = size;
-            int newFirst = first;
-            int newLast = last;
+            int newOffset = offset + 1;
             IdentityObject mutator = new IdentityObject();
             if (details.isReplaced()) {
                 var oldElem = details.getData();
-                newSeqRoot = SequencedData.seqRemove(newSeqRoot, mutator, oldElem, details);
+                newSeqRoot = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details);
                 int seq = details.getData().getSequenceNumber();
-                newFirst = seq == newFirst ? newFirst : newFirst - 1;
-                newLast = seq == newLast ? newLast - 1 : newLast;
             } else {
-                newFirst--;
                 newSize++;
             }
-            newSeqRoot = SequencedData.seqUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
-            return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
+            newSeqRoot = SequencedData.vecUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
+            return renumber(newRoot, newSeqRoot, newSize, newOffset);
         }
         return this;
     }
 
-    private @NonNull SequencedChampSet<E> addLast(@Nullable E e,
-                                                  boolean moveToLast) {
+    private @NonNull VectorChampSet<E> addLast(@Nullable E e,
+                                               boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var newElem = new SequencedElement<E>(e, last);
+        var newElem = new SequencedElement<E>(e, vector.size() - offset);
         var newRoot = update(
                 null, newElem, Objects.hashCode(e), 0,
                 details,
                 moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var newSeqRoot = sequenceRoot;
-            int newFirst = first;
-            int newLast = last;
+            var newSeqRoot = vector;
+            int newOffset = offset;
             int newSize = size;
             var mutator = new IdentityObject();
             if (details.isReplaced()) {
                 var oldElem = details.getData();
-                newSeqRoot = SequencedData.seqRemove(newSeqRoot, mutator, oldElem, details);
+                newSeqRoot = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details);
                 int seq = details.getData().getSequenceNumber();
-                newFirst = seq == newFirst - 1 ? newFirst - 1 : newFirst;
-                newLast = seq == newLast ? newLast : newLast + 1;
+                newOffset = seq == newOffset - 1 ? newOffset - 1 : newOffset;
             } else {
                 newSize++;
-                newLast++;
             }
-            newSeqRoot = SequencedData.seqUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
-            return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
+            newSeqRoot = SequencedData.vecUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
+            return renumber(newRoot, newSeqRoot, newSize, newOffset);
         }
         return this;
     }
 
-    private @NonNull SequencedChampSet<E> remove(@Nullable E key, int newFirst, int newLast) {
+    private @NonNull VectorChampSet<E> remove(@Nullable E key, int newOffset) {
         int keyHash = Objects.hashCode(key);
         var details = new ChangeEvent<SequencedElement<E>>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
-        BitmapIndexedNode<SequencedElement<E>> newSeqRoot = sequenceRoot;
+        var newSeqRoot = vector;
         if (details.isModified()) {
             var oldElem = details.getData();
-            newSeqRoot = SequencedData.seqRemove(newSeqRoot, null, oldElem, details);
+            newSeqRoot = SequencedData.vecRemove(newSeqRoot, null, oldElem, details);
             int seq = oldElem.getSequenceNumber();
             return renumber(newRoot, newSeqRoot, size - 1,
-                    (seq == newFirst) ? newFirst + 1 : newFirst,
-                    (seq == newLast - 1) ? newLast - 1 : newLast);
+                    (seq == newOffset) ? newOffset + 1 : newOffset);
         }
         return this;
     }
@@ -327,22 +324,24 @@ public class SequencedChampSet<E>
         if (other == null) {
             return false;
         }
-        if (other instanceof SequencedChampSet) {
-            SequencedChampSet<?> that = (SequencedChampSet<?>) other;
+        if (other instanceof VectorChampSet) {
+            VectorChampSet<?> that = (VectorChampSet<?>) other;
             return size == that.size && equivalent(that);
         } else {
             return ReadOnlySet.setEquals(this, other);
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E getFirst() {
-        return Node.getFirst(sequenceRoot).getElement();
+        return ((SequencedElement<E>) vector.getFirst()).getElement();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public E getLast() {
-        return Node.getLast(sequenceRoot).getElement();
+        return ((SequencedElement<E>) vector.getLast()).getElement();
     }
 
     @Override
@@ -355,13 +354,19 @@ public class SequencedChampSet<E>
         return new IteratorFacade<>(spliterator(), null);
     }
 
+    @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ReverseChampSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+        return new ReverseVectorSpliterator<>(vector,
+                e -> ((SequencedElement<E>) e).getElement(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public EnumeratorSpliterator<E> spliterator() {
-        return new ChampSpliterator<>(sequenceRoot, SequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+        return new VectorSpliterator<>(vector,
+                e -> ((SequencedElement<E>) e).getElement(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
 
     @Override
@@ -377,12 +382,12 @@ public class SequencedChampSet<E>
     }
 
     @Override
-    public @NonNull SequencedChampSet<E> remove(@Nullable E key) {
-        return remove(key, first, last);
+    public @NonNull VectorChampSet<E> remove(@Nullable E key) {
+        return remove(key, -offset);
     }
 
     @Override
-    public @NonNull SequencedChampSet<E> removeAll(@NonNull Iterable<?> set) {
+    public @NonNull VectorChampSet<E> removeAll(@NonNull Iterable<?> set) {
         if (set == this) {
             return of();
         }
@@ -396,15 +401,22 @@ public class SequencedChampSet<E>
     }
 
     @Override
-    public SequencedChampSet<E> removeFirst() {
-        SequencedElement<E> k = Node.getFirst(sequenceRoot);
-        return remove(k.getElement(), k.getSequenceNumber() + 1, last);
+    public @NonNull MutableVectorChampSet<E> toMutable() {
+        return new MutableVectorChampSet<>(this);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public SequencedChampSet<E> removeLast() {
-        SequencedElement<E> k = Node.getLast(sequenceRoot);
-        return remove(k.getElement(), first, k.getSequenceNumber());
+    public VectorChampSet<E> removeFirst() {
+        SequencedElement<E> k = (SequencedElement<E>) vector.getFirst();
+        return remove(k.getElement(), k.getSequenceNumber() + 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public VectorChampSet<E> removeLast() {
+        SequencedElement<E> k = (SequencedElement<E>) vector.getLast();
+        return remove(k.getElement(), -offset);
     }
 
 
@@ -412,32 +424,35 @@ public class SequencedChampSet<E>
      * Renumbers the sequenced elements in the trie if necessary.
      *
      * @param root    the root of the trie
-     * @param seqRoot
+     * @param seqRoot the root of the vector
      * @param size    the size of the trie
-     * @param first   the estimated first sequence number
-     * @param last    the estimated last sequence number
-     * @return a new {@link SequencedChampSet} instance
+     * @param offset  the offset that must be added to a sequence number to get the index into the vector
+     * @return a new {@link VectorChampSet} instance
      */
     @NonNull
-    private SequencedChampSet<E> renumber(
+    private VectorChampSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,
-            BitmapIndexedNode<SequencedElement<E>> seqRoot,
-            int size, int first, int last) {
-        if (mustRenumber(size, first, last)) {
+            VectorList<Object> seqRoot,
+            int size, int offset) {
+        /*
+        if (vecMustRenumber(size, offset, vector.size())) {
             var mutator = new IdentityObject();
             var renumberedRoot = SequencedData.renumber(
                     size, root, seqRoot, mutator, Objects::hashCode, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             var renumberedSeqRoot = SequencedData.buildSequencedTrie(renumberedRoot, mutator);
-            return new SequencedChampSet<>(
+            return new VectorChampSet<>(
                     renumberedRoot, renumberedSeqRoot,
-                    size, -1, size);
+                    size, , -1);
         }
-        return new SequencedChampSet<>(root, seqRoot, size, first, last);
+        return new VectorChampSet<>(root, seqRoot, size, , first);
+
+         */
+        return this;
     }
 
     @Override
-    public @NonNull SequencedChampSet<E> retainAll(@NonNull Collection<?> set) {
+    public @NonNull VectorChampSet<E> retainAll(@NonNull Collection<?> set) {
         if (isEmpty()) {
             return this;
         }
@@ -458,10 +473,9 @@ public class SequencedChampSet<E>
     }
 
     @Override
-    public @NonNull MutableSequencedChampSet<E> toMutable() {
-        return new MutableSequencedChampSet<>(this);
+    public @NonNull MutableVectorChampSet<E> asSet() {
+        return new MutableVectorChampSet<>(this);
     }
-
 
     @Override
     public @NonNull String toString() {
@@ -484,7 +498,7 @@ public class SequencedChampSet<E>
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return SequencedChampSet.copyOf(deserialized);
+            return VectorChampSet.copyOf(deserialized);
         }
     }
 }

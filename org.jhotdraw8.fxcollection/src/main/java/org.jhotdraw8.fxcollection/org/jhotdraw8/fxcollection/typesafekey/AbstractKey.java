@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.reflect.TypeToken;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ import java.util.Objects;
  */
 public abstract class AbstractKey<T> implements Key<T> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final int ordinal;
     /**

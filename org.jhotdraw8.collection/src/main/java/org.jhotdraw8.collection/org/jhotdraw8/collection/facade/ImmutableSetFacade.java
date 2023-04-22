@@ -97,6 +97,4 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     public @NonNull Set<E> toMutable() {
         return cloneFunction.apply(target);
     }
-
-
 }

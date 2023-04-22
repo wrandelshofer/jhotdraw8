@@ -11,6 +11,7 @@ import org.jhotdraw8.draw.css.converter.CssAwtSvgPathConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 import java.awt.geom.Path2D;
+import java.io.Serial;
 
 /**
  * NullableAwtSvgPathStyleableKey.
@@ -19,6 +20,7 @@ import java.awt.geom.Path2D;
  */
 public class NullableAwtSvgPathStyleableKey extends AbstractStyleableKey<Path2D.Double> implements WritableStyleableMapAccessor<Path2D.Double> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull Converter<Path2D.Double> converter;

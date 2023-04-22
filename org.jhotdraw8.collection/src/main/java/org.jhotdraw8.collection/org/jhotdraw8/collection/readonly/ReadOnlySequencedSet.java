@@ -6,6 +6,8 @@
 package org.jhotdraw8.collection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.facade.SequencedSetFacade;
+import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 public interface ReadOnlySequencedSet<E> extends ReadOnlySet<E>, ReadOnlySequencedCollection<E> {
     /**
@@ -15,4 +17,9 @@ public interface ReadOnlySequencedSet<E> extends ReadOnlySet<E>, ReadOnlySequenc
      * @return a reversed-order view of this set
      */
     @NonNull ReadOnlySequencedSet<E> readOnlyReversed();
+
+    @Override
+    default @NonNull SequencedSet<E> asSet() {
+        return new SequencedSetFacade<>(this);
+    }
 }

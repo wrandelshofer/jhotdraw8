@@ -61,7 +61,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddFirstWithContainedElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void addFirstWithContainedElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
@@ -79,7 +79,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedAddLastWithContainedElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void reversedAddLastWithContainedElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
@@ -97,7 +97,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddFirstWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void addFirstWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
@@ -115,7 +115,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedAddLastWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void reversedAddLastWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
@@ -133,7 +133,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddLastWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addLastWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
@@ -151,7 +151,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedAddFirstWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void reversedAddFirstWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
@@ -169,7 +169,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddLastWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addLastWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
@@ -183,7 +183,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedAddFirstWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void reversedAddFirstWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
@@ -197,7 +197,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddWithContainedElementShouldNotMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addWithContainedElementShouldNotMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
@@ -211,7 +211,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithLastElementShouldNotChangeSequenc(@NonNull SetData data) throws Exception {
+    public void removeWithLastElementShouldNotChangeSequenc(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -222,7 +222,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -233,7 +233,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedRemoveLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void reversedRemoveLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -244,7 +244,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveFirstWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void removeFirstWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeFirst);
@@ -252,7 +252,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void removeLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeLast);
@@ -260,7 +260,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -271,7 +271,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance();
         instance.addAll(data.a.asSet());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
@@ -283,7 +283,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedRemoveFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void reversedRemoveFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -295,7 +295,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedContainsShouldYieldExpectedValue(@NonNull SetData data) {
+    public void reversedContainsShouldYieldExpectedValue(@NonNull SetData data) {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         for (HashCollider k : data.a()) {
             assertTrue(instance.reversed().contains(k));
@@ -319,7 +319,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithFirstElementShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeWithFirstElementShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -330,7 +330,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithMiddleElementShouldNotChangeSequenc(@NonNull SetData data) throws Exception {
+    public void removeWithMiddleElementShouldNotChangeSequenc(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -341,7 +341,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testAddWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
@@ -355,7 +355,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedAddWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void reversedAddWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
@@ -369,7 +369,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedOfReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
+    public void reversedOfReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         ArrayList<HashCollider> actual = new ArrayList<>(instance.reversed().reversed());
@@ -378,7 +378,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReversedShouldHaveReversedSequence(@NonNull SetData data) throws Exception {
+    public void reversedShouldHaveReversedSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         Collections.reverse(expected);
@@ -389,7 +389,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReadOnlyReversedOfReadOnlyReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
+    public void readOnlyReversedOfReadOnlyReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         if (instance instanceof ReadOnlySequencedSet<?>) {
             ReadOnlySequencedSet<HashCollider> readOnlyInstance = (ReadOnlySequencedSet<HashCollider>) instance;
@@ -402,7 +402,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReadOnlyReversedShouldHaveReversedSequence(@NonNull SetData data) throws Exception {
+    public void readOnlyReversedShouldHaveReversedSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         if (instance instanceof ReadOnlySequencedSet<?>) {
             ReadOnlySequencedSet<HashCollider> readOnlyInstance = (ReadOnlySequencedSet<HashCollider>) instance;

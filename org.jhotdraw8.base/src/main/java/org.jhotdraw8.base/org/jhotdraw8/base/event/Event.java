@@ -6,6 +6,7 @@ package org.jhotdraw8.base.event;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serial;
 import java.util.EventObject;
 
 /**
@@ -16,6 +17,7 @@ import java.util.EventObject;
  */
 public class Event<S> extends EventObject {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public Event(@NonNull S source) {

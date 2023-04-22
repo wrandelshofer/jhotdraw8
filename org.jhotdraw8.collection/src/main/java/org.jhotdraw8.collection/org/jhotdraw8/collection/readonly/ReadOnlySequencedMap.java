@@ -8,7 +8,9 @@ package org.jhotdraw8.collection.readonly;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
+import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
+import org.jhotdraw8.collection.sequenced.SequencedMap;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -124,5 +126,11 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                     return e.getValue();
                 }
         );
+    }
+
+    @Override
+    @NonNull
+    default SequencedMap<K, V> asMap() {
+        return new SequencedMapFacade<>(this);
     }
 }

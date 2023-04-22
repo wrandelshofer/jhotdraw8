@@ -9,6 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -20,6 +21,7 @@ import java.lang.reflect.Type;
 public class SimpleStyleableKey<T> extends AbstractReadOnlyStyleableKey<T>
         implements WritableStyleableMapAccessor<T> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

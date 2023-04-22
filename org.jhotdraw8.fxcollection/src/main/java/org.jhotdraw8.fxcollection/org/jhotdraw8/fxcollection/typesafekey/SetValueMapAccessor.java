@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
+import java.io.Serial;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -21,6 +22,7 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull MapAccessor<ImmutableSet<E>> setAccessor;
     private final @Nullable E value;

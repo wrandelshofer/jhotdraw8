@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -18,6 +19,7 @@ import java.lang.reflect.Type;
  * @param <T> the object type
  */
 public class ObjectStyleableKey<T> extends AbstractKey<T> implements WritableStyleableMapAccessor<T> {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     private final @NonNull Converter<T> converter;

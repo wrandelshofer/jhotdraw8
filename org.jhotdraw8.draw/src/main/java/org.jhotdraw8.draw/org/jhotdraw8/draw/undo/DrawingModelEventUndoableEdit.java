@@ -11,8 +11,10 @@ import org.jhotdraw8.draw.model.DrawingModelEvent;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import java.io.Serial;
 
 public class DrawingModelEventUndoableEdit extends AbstractUndoableEdit {
+    @Serial
     private static final long serialVersionUID = 0L;
     private final @NonNull DrawingModelEvent event;
 

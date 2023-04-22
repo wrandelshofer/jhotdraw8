@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.ObjectStreamException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Collection;
@@ -81,6 +82,7 @@ import java.util.function.BiFunction;
 public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
     private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
+    @Serial
     private static final long serialVersionUID = 0L;
     private final int size;
 
@@ -273,7 +275,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return new KeySpliterator<>(this, null, Spliterator.IMMUTABLE | Spliterator.DISTINCT, size());
+        return new ChampSpliterator<>(this, null, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT, size());
     }
 
     /**
@@ -296,17 +298,20 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return ReadOnlyMap.mapToString(this);
     }
 
+    @Serial
     private @NonNull Object writeReplace() throws ObjectStreamException {
         return new SerializationProxy<>(this.toMutable());
     }
 
     static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         SerializationProxy(Map<K, V> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return ChampMap.of().putAll(deserialized);

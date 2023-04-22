@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.math.Matrix3Double;
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 
 /**
  * The OK Lab Color Space.
@@ -115,6 +116,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     );
     private static @NonNull
     final NamedColorSpace linearSrgb = new SrgbColorSpace().getLinearColorSpace();
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public OKLabColorSpace() {

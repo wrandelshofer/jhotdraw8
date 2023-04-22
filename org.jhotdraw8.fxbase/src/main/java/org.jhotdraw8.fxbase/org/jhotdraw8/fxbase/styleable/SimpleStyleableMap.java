@@ -10,6 +10,7 @@ import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serial;
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
@@ -64,6 +65,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      */
     public SimpleStyleableMap() {
         this(new HashMap<K, Integer>() {
+            @Serial
             private static final long serialVersionUID = 0L;
 
             @SuppressWarnings("unchecked")

@@ -8,6 +8,7 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 
+import java.io.Serial;
 import java.util.ArrayList;
 
 /**
@@ -16,6 +17,7 @@ import java.util.ArrayList;
  * @param <E> the element type
  */
 public class ObservableArraySet<E> extends ArrayList<E> implements ObservableSet<E> {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public ObservableArraySet() {

@@ -11,6 +11,8 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
+
 /**
  * Convenience class for creating a {@link Key} for an enum type.
  *
@@ -20,6 +22,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
         implements WritableStyleableMapAccessor<T>, NonNullKey<T> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

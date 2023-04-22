@@ -7,6 +7,7 @@ package org.jhotdraw8.application.resources;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import java.util.spi.ResourceBundleProvider;
 
 public class ModulepathResources extends ResourceBundle implements Serializable, Resources {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(ModulepathResources.class.getName());
 

@@ -18,6 +18,7 @@ import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -27,6 +28,7 @@ import java.util.Map;
  */
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStrokeStyle> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

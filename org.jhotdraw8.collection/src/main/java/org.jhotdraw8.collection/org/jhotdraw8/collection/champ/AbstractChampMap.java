@@ -10,9 +10,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
-import java.util.Iterator;
 
 /**
  * Abstract base class for CHAMP maps.
@@ -22,6 +22,7 @@ import java.util.Iterator;
  */
 abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     /**
@@ -89,10 +90,6 @@ abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Se
         return super.getOrDefault(key, defaultValue);
     }
 
-    @Override
-    public @NonNull Iterator<Entry<K, V>> iterator() {
-        return entrySet().iterator();
-    }
 
     @SuppressWarnings("unchecked")
     boolean removeEntry(@Nullable Object o) {

@@ -12,6 +12,8 @@ import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
+
 /**
  * DoubleListStyleableKey.
  *
@@ -19,6 +21,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  */
 public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Converter<ImmutableList<Double>> converter;

@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,6 +58,7 @@ class BitMappedTrie<T> implements Serializable {
         return num & BRANCHING_MASK;
     }
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final BitMappedTrie<?> EMPTY = new BitMappedTrie<>(obj(), obj().empty(), 0, 0, 0);

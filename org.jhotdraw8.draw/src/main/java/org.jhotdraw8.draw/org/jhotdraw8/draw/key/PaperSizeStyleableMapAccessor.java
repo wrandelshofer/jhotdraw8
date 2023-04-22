@@ -15,6 +15,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssDimension2D> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Converter<CssDimension2D> converter = new CssPaperSizeConverter();
 

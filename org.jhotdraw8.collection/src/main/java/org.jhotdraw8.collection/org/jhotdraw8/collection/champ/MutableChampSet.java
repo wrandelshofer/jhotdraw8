@@ -8,11 +8,16 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
+import org.jhotdraw8.collection.FailFastSpliterator;
+import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
+import java.io.Serial;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.Function;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -41,32 +46,7 @@ import java.util.Set;
  * <p>
  * Implementation details:
  * <p>
- * This set performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
- * <p>
- * The CHAMP trie contains nodes that may be shared with other sets, and nodes
- * that are exclusively owned by this set.
- * <p>
- * If a write operation is performed on an exclusively owned node, then this
- * set is allowed to mutate the node (mutate-on-write).
- * If a write operation is performed on a potentially shared node, then this
- * set is forced to create an exclusive copy of the node and of all not (yet)
- * exclusively owned parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1) in either
- * case.
- * <p>
- * This set can create an immutable copy of itself in O(1) time and O(1) space
- * using method {@link #toImmutable()}. This set loses exclusive ownership of
- * all its tree nodes.
- * Thus, creating an immutable copy increases the constant cost of
- * subsequent writes, until all shared nodes have been gradually replaced by
- * exclusively owned nodes again.
- * <p>
- * <strong>Note that this implementation is not synchronized.</strong>
- * If multiple threads access this set concurrently, and at least
- * one of the threads modifies the set, it <em>must</em> be synchronized
- * externally.  This is typically accomplished by synchronizing on some
- * object that naturally encapsulates the set.
+ * See description at {@link ChampSet}.
  * <p>
  * References:
  * <dl>
@@ -82,6 +62,7 @@ import java.util.Set;
  * @param <E> the element type
  */
 public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     /**
@@ -152,8 +133,13 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new KeyIterator<>(root, this::iteratorRemove),
+                new IteratorFacade<>(new ChampSpliterator<>(root, Function.identity(), Spliterator.DISTINCT | Spliterator.SIZED, size), this::iteratorRemove),
                 () -> this.modCount);
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return new FailFastSpliterator<>(new ChampSpliterator<>(root, Function.identity(), Spliterator.DISTINCT | Spliterator.SIZED, size), () -> this.modCount);
     }
 
     private void iteratorRemove(E e) {
@@ -185,17 +171,20 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         return size == 0 ? ChampSet.of() : new ChampSet<>(root, size);
     }
 
+    @Serial
     private @NonNull Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(@NonNull Set<E> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return new MutableChampSet<>(deserialized);

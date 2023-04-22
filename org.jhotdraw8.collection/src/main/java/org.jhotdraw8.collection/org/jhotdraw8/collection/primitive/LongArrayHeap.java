@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.collection.primitive;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Arrays;
@@ -57,6 +58,7 @@ import java.util.Spliterators;
 public class LongArrayHeap extends AbstractCollection<Long>
         implements LongQueue, Serializable, Cloneable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

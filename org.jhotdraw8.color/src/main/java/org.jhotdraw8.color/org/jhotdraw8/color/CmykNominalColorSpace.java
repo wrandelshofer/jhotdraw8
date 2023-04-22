@@ -7,6 +7,7 @@ package org.jhotdraw8.color;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 
 /**
  * A {@code ColorSpace} for CMYK color components (cyan, magenta, yellow, black) with
@@ -18,6 +19,7 @@ import java.awt.color.ColorSpace;
  * @author Werner Randelshofer
  */
 public class CmykNominalColorSpace extends AbstractNamedColorSpace {
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

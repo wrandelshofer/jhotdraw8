@@ -15,6 +15,8 @@ import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
+
 /**
  * Point2DListStyleableKey.
  *
@@ -23,6 +25,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull ImmutableList<@NonNull Point2D>>
         implements WritableStyleableMapAccessor<@NonNull ImmutableList<@NonNull Point2D>>, NonNullKey<ImmutableList<@NonNull Point2D>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull Converter<ImmutableList<@NonNull Point2D>> converter;

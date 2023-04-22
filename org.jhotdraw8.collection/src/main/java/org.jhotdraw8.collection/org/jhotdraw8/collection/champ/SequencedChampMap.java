@@ -15,6 +15,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.ObjectStreamException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
@@ -40,9 +41,9 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>copyPut, copyPutFirst, copyPutLast: O(1) amortized, due to
+ *     <li>Put, copyPutFirst, copyPutLast: O(1) amortized, due to
  *     renumbering</li>
- *     <li>copyRemove: O(1) amortized, due to renumbering</li>
+ *     <li>remove: O(1) in an amortized sense, because we sometimes have to renumber the elements.</li>
  *     <li>containsKey: O(1)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in
  *     the mutable copy</li>
@@ -111,6 +112,7 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 @SuppressWarnings("exports")
 public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> implements ImmutableSequencedMap<K, V>, Serializable {
     private static final @NonNull SequencedChampMap<?, ?> EMPTY = new SequencedChampMap<>(BitmapIndexedNode.emptyNode(), BitmapIndexedNode.emptyNode(), 0, -1, 0);
+    @Serial
     private static final long serialVersionUID = 0L;
     /**
      * Counter for the sequence number of the first element. The counter is
@@ -225,7 +227,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return new IteratorFacade<>(new KeySpliterator<SequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
+        return new IteratorFacade<>(new ChampSpliterator<SequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
     }
 
     @Override
@@ -417,7 +419,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     }
 
     @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
-        return new IteratorFacade<>(new ReversedKeySpliterator<SequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
+        return new IteratorFacade<>(new ReverseChampSpliterator<SequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
     }
 
     @Override
@@ -426,7 +428,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return new KeySpliterator<>(this, e -> e, Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        return new ChampSpliterator<>(this, e -> e, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     /**
@@ -449,17 +451,20 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
         return ReadOnlyMap.mapToString(this);
     }
 
+    @Serial
     private @NonNull Object writeReplace() throws ObjectStreamException {
         return new SerializationProxy<>(this.toMutable());
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return SequencedChampMap.of().putAll(deserialized);

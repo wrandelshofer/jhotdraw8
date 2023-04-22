@@ -15,7 +15,9 @@ import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
+import java.io.Serial;
 import java.util.AbstractMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -48,26 +50,7 @@ import java.util.function.BiFunction;
  * <p>
  * Implementation details:
  * <p>
- * This map performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
- * <p>
- * The CHAMP trie contains nodes that may be shared with other maps, and nodes
- * that are exclusively owned by this map.
- * <p>
- * If a write operation is performed on an exclusively owned node, then this
- * map is allowed to mutate the node (mutate-on-write).
- * If a write operation is performed on a potentially shared node, then this
- * map is forced to create an exclusive copy of the node and of all not (yet)
- * exclusively owned parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1) in either
- * case.
- * <p>
- * This map can create an immutable copy of itself in O(1) time and O(1) space
- * using method {@link #toImmutable()}. This map loses exclusive ownership of
- * all its tree nodes.
- * Thus, creating an immutable copy increases the constant cost of
- * subsequent writes, until all shared nodes have been gradually replaced by
- * exclusively owned nodes again.
+ * See description at {@link ChampMap}.
  * <p>
  * References:
  * <dl>
@@ -84,6 +67,7 @@ import java.util.function.BiFunction;
  * @param <V> the value type
  */
 public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     /**
@@ -154,6 +138,22 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
                 ChampMap::keyEquals) != Node.NO_DATA;
     }
 
+    @Override
+    public @NonNull Iterator<Entry<K, V>> iterator() {
+        return new MappedIterator<>(new FailFastIterator<>(new ChampIterator<>(
+                root,
+                this::iteratorRemove),
+                () -> this.modCount),
+                e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()));
+    }
+
+    @Override
+    public @NonNull Spliterator<Entry<K, V>> spliterator() {
+        return new FailFastSpliterator<>(
+                new ChampSpliterator<>(root, null, Spliterator.SIZED | Spliterator.DISTINCT, size()),
+                () -> this.modCount);
+    }
+
     /**
      * Returns a {@link Set} view of the entries contained in this map.
      *
@@ -162,19 +162,13 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
-                () -> new MappedIterator<>(new FailFastIterator<>(new KeyIterator<>(
-                        root,
-                        this::iteratorRemove),
-                        () -> this.modCount),
-                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
-                () -> new FailFastSpliterator<>(
-                        new KeySpliterator<>(root, null, Spliterator.SIZED | Spliterator.DISTINCT, size()),
-                        () -> this.modCount),
-                MutableChampMap.this::size,
-                MutableChampMap.this::containsEntry,
-                MutableChampMap.this::clear,
+                this::iterator,
+                this::spliterator,
+                this::size,
+                this::containsEntry,
+                this::clear,
                 null,
-                MutableChampMap.this::removeEntry
+                this::removeEntry
         );
     }
 
@@ -271,17 +265,20 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         return size == 0 ? ChampMap.of() : new ChampMap<>(root, size);
     }
 
+    @Serial
     private @NonNull Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return new MutableChampMap<>(deserialized);

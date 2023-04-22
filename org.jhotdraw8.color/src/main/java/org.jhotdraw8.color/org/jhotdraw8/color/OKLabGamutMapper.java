@@ -18,7 +18,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class OKLabGamutMapper implements GamutMapper {
     @Override
-    public float[] map(@NonNull float[] value, @NonNull float[] mapped) {
+    public float @NonNull [] map(float @NonNull [] value, float @NonNull [] mapped) {
         return new float[0];
     }
 }

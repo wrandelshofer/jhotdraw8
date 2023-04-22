@@ -10,6 +10,8 @@ import org.jhotdraw8.draw.css.converter.CssColorConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
+
 /**
  * NullableCssColorStyleableKey.
  *
@@ -18,6 +20,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         implements WritableStyleableMapAccessor<CssColor> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Converter<CssColor> converter = new CssColorConverter(true);

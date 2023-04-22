@@ -14,6 +14,8 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.geom.shape.BezierNode;
 
+import java.io.Serial;
+
 /**
  * BezierNodeListStyleableKey.
  *
@@ -24,6 +26,7 @@ public class BezierNodeListStyleableKey
         implements WritableStyleableMapAccessor<@NonNull ImmutableList<BezierNode>>,
         NonNullKey<@NonNull ImmutableList<BezierNode>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.BiFunction;
 
 
@@ -76,6 +78,7 @@ import java.util.function.BiFunction;
  */
 @SuppressWarnings("exports")
 public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
+    @Serial
     private static final long serialVersionUID = 0L;
     private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     final int size;
@@ -186,11 +189,11 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new KeyIterator<>(this, null);
+        return Spliterators.iterator(spliterator());
     }
 
     public @NonNull Spliterator<E> spliterator() {
-        return new KeySpliterator<>(this, null, Spliterator.IMMUTABLE | Spliterator.DISTINCT, size);
+        return new ChampSpliterator<>(this, null, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT, size);
     }
 
     @Override
@@ -235,18 +238,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return size;
     }
 
-    /**
-     * Creates a mutable copy of this set.
-     *
-     * @return a mutable CHAMP set
-     */
     @Override
     public @NonNull MutableChampSet<E> toMutable() {
-        return new MutableChampSet<>(this);
-    }
-
-    @Override
-    public @NonNull MutableChampSet<E> asSet() {
         return new MutableChampSet<>(this);
     }
 
@@ -255,17 +248,20 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return ReadOnlyCollection.iterableToString(this);
     }
 
+    @Serial
     private @NonNull Object writeReplace() {
         return new SerializationProxy<>(this.toMutable());
     }
 
     private static class SerializationProxy<E> extends SetSerializationProxy<E> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(@NonNull Set<E> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return ChampSet.copyOf(deserialized);

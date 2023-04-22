@@ -14,6 +14,7 @@ import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -25,6 +26,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<@NonNull CssPoint2D>
         implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricCssPoint2DConverter();
 

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.graph.path;
 
+import java.io.Serial;
+
 /**
  * PathBuilderException.
  *
@@ -11,6 +13,7 @@ package org.jhotdraw8.graph.path;
  */
 public class PathBuilderException extends Exception {
 
+    @Serial
     private static final long serialVersionUID = 0L;
 
     public PathBuilderException(String message) {

@@ -6,6 +6,8 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serial;
+
 /**
  * A parametric color space with scaled components computed from an RGB color space
  * with component values in the range {@code [0, 1]}.
@@ -14,6 +16,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class ParametricScaledColorSpace extends AbstractNamedColorSpace {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull NamedColorSpace labColorSpace;
     private final @NonNull String name;

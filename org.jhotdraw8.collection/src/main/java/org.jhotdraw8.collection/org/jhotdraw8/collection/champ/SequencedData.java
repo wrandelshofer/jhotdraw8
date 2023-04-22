@@ -8,6 +8,7 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.vector.VectorList;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -45,7 +46,7 @@ interface SequencedData {
     static <K extends SequencedData> BitmapIndexedNode<K> buildSequencedTrie(@NonNull BitmapIndexedNode<K> root, @NonNull IdentityObject mutator) {
         BitmapIndexedNode<K> seqRoot = emptyNode();
         ChangeEvent<K> details = new ChangeEvent<>();
-        for (KeyIterator<K> i = new KeyIterator<>(root, null); i.hasNext(); ) {
+        for (ChampIterator<K> i = new ChampIterator<>(root, null); i.hasNext(); ) {
             K elem = i.next();
             seqRoot = seqRoot.update(mutator, elem, seqHash(elem.getSequenceNumber()),
                     0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
@@ -70,6 +71,13 @@ interface SequencedData {
         return size == 0 && (first != -1 || last != 0)
                 || last > Integer.MAX_VALUE - 2
                 || first < Integer.MIN_VALUE + 2;
+    }
+
+    static boolean vecMustRenumber(int size, int offset, int vectorSize) {
+        return size == 0
+                || vectorSize >= size
+                || vectorSize - offset > Integer.MAX_VALUE - 2
+                || offset < Integer.MIN_VALUE + -2;
     }
 
     /**
@@ -104,7 +112,7 @@ interface SequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         int seq = 0;
 
-        for (var i = new KeySpliterator<>(sequenceRoot, Function.identity(), 0, 0); i.moveNext(); ) {
+        for (var i = new ChampSpliterator<>(sequenceRoot, Function.identity(), 0, 0); i.moveNext(); ) {
             K e = i.current();
             K newElement = factoryFunction.apply(e, seq);
             newRoot = newRoot.update(mutator,
@@ -161,6 +169,15 @@ interface SequencedData {
                 key, seqHash(key.getSequenceNumber()), 0, details,
                 replaceFunction,
                 SequencedData::seqEquals, SequencedData::seqHash);
+    }
+
+    static <K extends SequencedData> VectorList<Object> vecRemove(VectorList<Object> newSeqRoot, IdentityObject mutator, K oldElem, ChangeEvent<K> details) {
+        return newSeqRoot;
+    }
+
+    static <K extends SequencedData> VectorList<Object> vecUpdate(VectorList<Object> newSeqRoot, IdentityObject mutator, K newElem, ChangeEvent<K> details,
+                                                                  @NonNull BiFunction<K, K, K> replaceFunction) {
+        return newSeqRoot;
     }
 
     /**

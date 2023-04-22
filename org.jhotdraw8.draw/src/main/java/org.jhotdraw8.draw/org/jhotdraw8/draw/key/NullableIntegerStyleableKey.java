@@ -10,6 +10,8 @@ import org.jhotdraw8.css.converter.CssIntegerConverter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
+
 /**
  * IntegerStyleableKey.
  *
@@ -17,6 +19,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  */
 public class NullableIntegerStyleableKey extends SimpleStyleableKey<Integer> implements WritableStyleableMapAccessor<Integer> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public NullableIntegerStyleableKey(@NonNull String name) {

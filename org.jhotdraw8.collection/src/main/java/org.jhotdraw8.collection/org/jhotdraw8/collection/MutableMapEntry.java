@@ -7,10 +7,12 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.function.BiConsumer;
 
 public class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
+    @Serial
     private static final long serialVersionUID = 0L;
     private final @NonNull BiConsumer<K, V> putFunction;
 

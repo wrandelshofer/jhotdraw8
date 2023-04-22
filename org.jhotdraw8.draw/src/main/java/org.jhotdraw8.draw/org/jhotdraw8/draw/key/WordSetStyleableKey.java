@@ -12,6 +12,8 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssSetConverter;
 import org.jhotdraw8.draw.css.converter.CssIdentConverter;
 
+import java.io.Serial;
+
 /**
  * WordSetStyleableKey.
  *
@@ -19,6 +21,7 @@ import org.jhotdraw8.draw.css.converter.CssIdentConverter;
  */
 public class WordSetStyleableKey extends SetStyleableKey<String> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

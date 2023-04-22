@@ -4,12 +4,14 @@
  */
 package org.jhotdraw8.base.converter;
 
+import java.io.Serial;
 import java.text.ParseException;
 
 /**
  * This parse exception can be thrown to indicate that an object id is illegal.
  */
 public class IllegalObjectIdParseException extends ParseException {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

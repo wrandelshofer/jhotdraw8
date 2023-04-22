@@ -43,7 +43,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testPutFirstWithContainedEntryShouldMoveEntryToFirst(MapData data) throws Exception {
+    public void putFirstWithContainedEntryShouldMoveEntryToFirst(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
@@ -57,7 +57,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testPutFirstWithNewElementShouldMoveElementToFirst(MapData data) throws Exception {
+    public void putFirstWithNewElementShouldMoveElementToFirst(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
@@ -74,7 +74,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testPutLastWithContainedElementShouldMoveElementToLast(MapData data) throws Exception {
+    public void putLastWithContainedElementShouldMoveElementToLast(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
@@ -91,7 +91,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testPutLastWithNewElementShouldMoveElementToLast(MapData data) throws Exception {
+    public void putLastWithNewElementShouldMoveElementToLast(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.c()) {
@@ -105,7 +105,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testPutWithContainedElementShouldNotMoveElementToLast(MapData data) throws Exception {
+    public void putWithContainedElementShouldNotMoveElementToLast(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
@@ -117,7 +117,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithLastElementShouldNotChangeSequenc(MapData data) throws Exception {
+    public void removeWithLastElementShouldNotChangeSequenc(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -129,7 +129,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveFirstShouldNotChangeSequence(MapData data) throws Exception {
+    public void removeFirstShouldNotChangeSequence(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -141,7 +141,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveFirstWithEmptySetShouldReturnNull(MapData data) throws Exception {
+    public void removeFirstWithEmptySetShouldReturnNull(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
             instance.remove(e.getKey());
@@ -151,7 +151,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastWithEmptySetShouldReturnNull(MapData data) throws Exception {
+    public void removeLastWithEmptySetShouldReturnNull(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
             instance.remove(e.getKey());
@@ -161,7 +161,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveLastShouldNotChangeSequence(MapData data) throws Exception {
+    public void removeLastShouldNotChangeSequence(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -172,7 +172,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithFirstElementShouldNotChangeSequence(MapData data) throws Exception {
+    public void removeWithFirstElementShouldNotChangeSequence(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -184,7 +184,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testRemoveWithMiddleElementShouldNotChangeSequenc(MapData data) throws Exception {
+    public void removeWithMiddleElementShouldNotChangeSequenc(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -196,7 +196,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testPutWithNewElementShouldMoveElementToLast(MapData data) throws Exception {
+    public void putWithNewElementShouldMoveElementToLast(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         for (Map.Entry<HashCollider, HashCollider> e : data.c()) {

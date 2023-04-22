@@ -7,6 +7,7 @@ package org.jhotdraw8.color;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 
 import static org.jhotdraw8.color.util.MathUtil.clamp;
 
@@ -35,6 +36,7 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
  */
 public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull NamedColorSpace rgbColorSpace;
     private final @NonNull String name;
@@ -53,7 +55,7 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
         this.rgbColorSpace = rgbColorSpace;
     }
 
-    public NamedColorSpace getRgbColorSpace() {
+    public @NonNull NamedColorSpace getRgbColorSpace() {
         return rgbColorSpace;
     }
 

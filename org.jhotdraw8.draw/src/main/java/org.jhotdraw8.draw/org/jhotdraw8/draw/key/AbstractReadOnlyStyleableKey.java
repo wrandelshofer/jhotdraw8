@@ -10,6 +10,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -20,6 +21,7 @@ import java.lang.reflect.Type;
  */
 public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
     private final @NonNull String cssName;
+    @Serial
     private static final long serialVersionUID = 1L;
 
     protected final @NonNull Converter<T> converter;

@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
  */
 abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     /**

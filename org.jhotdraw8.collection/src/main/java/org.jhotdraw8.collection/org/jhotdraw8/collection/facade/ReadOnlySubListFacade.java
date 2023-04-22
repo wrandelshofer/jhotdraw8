@@ -105,11 +105,11 @@ public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
         return indexOf(o) >= 0;
     }
 
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return listIterator();
     }
 
-    public ListIterator<E> listIterator(int index) {
+    public @NonNull ListIterator<E> listIterator(int index) {
         ensureUnmodified();
         Objects.checkIndex(index, size + 1);
 
@@ -194,7 +194,7 @@ public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
         };
     }
 
-    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size + 1);
         return new ReadOnlySubListFacade<>(this, fromIndex, toIndex);

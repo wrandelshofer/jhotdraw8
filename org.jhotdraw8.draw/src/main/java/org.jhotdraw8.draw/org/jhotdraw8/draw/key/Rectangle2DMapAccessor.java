@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
+import java.io.Serial;
 import java.util.Map;
 
 import static java.lang.Double.max;
@@ -22,6 +23,7 @@ import static java.lang.Double.max;
  */
 public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull MapAccessor<Double> xKey;

@@ -13,6 +13,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -273,11 +274,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         return new MutableVectorList<>(this);
     }
 
-    @Override
-    public @NonNull MutableVectorList<E> asList() {
-        return new MutableVectorList<>(this);
-    }
-
+    @Serial
     private @NonNull Object writeReplace() {
         return new VectorList.SerializationProxy<>(this.toMutable());
     }
@@ -288,12 +285,14 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(@NonNull List<E> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return VectorList.of().addAll(deserialized);

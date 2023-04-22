@@ -7,6 +7,8 @@ package org.jhotdraw8.draw.handle;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.event.Event;
 
+import java.io.Serial;
+
 /**
  * HandleEvent.
  *
@@ -14,6 +16,7 @@ import org.jhotdraw8.base.event.Event;
  */
 public class HandleEvent extends Event<Handle> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public enum EventType {

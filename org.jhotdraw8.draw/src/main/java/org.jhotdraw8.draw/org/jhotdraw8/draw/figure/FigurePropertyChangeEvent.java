@@ -9,6 +9,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Event;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
+import java.io.Serial;
+
 /**
  * FigurePropertyChangeEvent.
  *
@@ -16,6 +18,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
  */
 public class FigurePropertyChangeEvent extends Event<Figure> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull Key<?> key;
     private final @Nullable Object oldValue;

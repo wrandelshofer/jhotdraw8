@@ -9,6 +9,8 @@ import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.collection.vector.VectorList;
 
+import java.io.Serial;
+
 /**
  * A {@link Key} that stores a list of values.
  *
@@ -17,6 +19,7 @@ import org.jhotdraw8.collection.vector.VectorList;
  */
 public class SimpleNonNullListKey<E> extends SimpleNonNullKey<ImmutableList<E>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public SimpleNonNullListKey(@NonNull String key, @NonNull TypeToken<ImmutableList<E>> type) {

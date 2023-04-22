@@ -12,6 +12,8 @@ import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
+
 /**
  * Non-null CssDimension2DStyleableFigureKey.
  *
@@ -20,6 +22,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class CssDimension2DStyleableKey extends AbstractStyleableKey<@NonNull CssDimension2D>
         implements WritableStyleableMapAccessor<@NonNull CssDimension2D>, NonNullKey<@NonNull CssDimension2D> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Converter<@NonNull CssDimension2D> converter;
 

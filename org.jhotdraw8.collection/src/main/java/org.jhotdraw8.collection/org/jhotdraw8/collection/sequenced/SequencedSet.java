@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection.sequenced;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Set;
 
 /**
@@ -20,5 +22,6 @@ import java.util.Set;
  */
 public interface SequencedSet<E> extends Set<E>, SequencedCollection<E> {
     @Override
+    @NonNull
     SequencedSet<E> reversed();
 }

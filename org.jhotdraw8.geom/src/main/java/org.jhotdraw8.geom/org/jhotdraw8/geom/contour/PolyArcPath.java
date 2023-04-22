@@ -9,6 +9,7 @@ import org.jhotdraw8.geom.PathIteratorPathBuilder;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.BiPredicate;
@@ -17,6 +18,7 @@ import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox
 import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
 
 public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

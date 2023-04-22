@@ -6,6 +6,8 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serial;
+
 /**
  * The 1976 CIE {@code L*a*b*} color space (CIELAB).
  * <p>
@@ -37,6 +39,7 @@ import org.jhotdraw8.annotation.NonNull;
 public class CieLabColorSpace extends AbstractNamedColorSpace {
 
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

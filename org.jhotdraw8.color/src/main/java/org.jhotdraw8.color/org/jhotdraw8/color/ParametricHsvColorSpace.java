@@ -7,6 +7,7 @@ package org.jhotdraw8.color;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 
 /**
  * A parametric HSV color space computed from an RGB color space.
@@ -34,6 +35,7 @@ import java.awt.color.ColorSpace;
  */
 public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull NamedColorSpace rgbColorSpace;
     private final @NonNull String name;

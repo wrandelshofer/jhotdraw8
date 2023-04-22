@@ -6,6 +6,8 @@ package org.jhotdraw8.color;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serial;
+
 import static java.lang.Math.PI;
 
 /**
@@ -26,6 +28,7 @@ import static java.lang.Math.PI;
  */
 public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final @NonNull NamedColorSpace labColorSpace;
     private final @NonNull String name;

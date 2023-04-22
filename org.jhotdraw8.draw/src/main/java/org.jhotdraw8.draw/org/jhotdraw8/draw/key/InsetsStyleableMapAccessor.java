@@ -13,6 +13,7 @@ import org.jhotdraw8.draw.css.converter.InsetsConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Insets> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull MapAccessor<Double> topKey;

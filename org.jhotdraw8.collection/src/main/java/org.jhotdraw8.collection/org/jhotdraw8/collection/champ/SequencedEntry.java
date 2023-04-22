@@ -8,6 +8,7 @@ package org.jhotdraw8.collection.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
  */
 class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         implements SequencedData {
+    @Serial
     private static final long serialVersionUID = 0L;
     private final int sequenceNumber;
 

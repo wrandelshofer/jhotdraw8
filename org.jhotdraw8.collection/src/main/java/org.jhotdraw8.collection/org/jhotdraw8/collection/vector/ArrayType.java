@@ -8,6 +8,7 @@ package org.jhotdraw8.collection.vector;
    G E N E R A T O R   C R A F T E D
 \*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -152,6 +153,7 @@ interface ArrayType<T> {
 
 
     final class BooleanArrayType implements ArrayType<Boolean>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final BooleanArrayType INSTANCE = new BooleanArrayType();
         static final boolean[] EMPTY = new boolean[0];
@@ -204,6 +206,7 @@ interface ArrayType<T> {
     }
 
     final class ByteArrayType implements ArrayType<Byte>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final ByteArrayType INSTANCE = new ByteArrayType();
         static final byte[] EMPTY = new byte[0];
@@ -256,6 +259,7 @@ interface ArrayType<T> {
     }
 
     final class CharArrayType implements ArrayType<Character>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final CharArrayType INSTANCE = new CharArrayType();
         static final char[] EMPTY = new char[0];
@@ -308,6 +312,7 @@ interface ArrayType<T> {
     }
 
     final class DoubleArrayType implements ArrayType<Double>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final DoubleArrayType INSTANCE = new DoubleArrayType();
         static final double[] EMPTY = new double[0];
@@ -360,6 +365,7 @@ interface ArrayType<T> {
     }
 
     final class FloatArrayType implements ArrayType<Float>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final FloatArrayType INSTANCE = new FloatArrayType();
         static final float[] EMPTY = new float[0];
@@ -412,6 +418,7 @@ interface ArrayType<T> {
     }
 
     final class IntArrayType implements ArrayType<Integer>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final IntArrayType INSTANCE = new IntArrayType();
         static final int[] EMPTY = new int[0];
@@ -464,6 +471,7 @@ interface ArrayType<T> {
     }
 
     final class LongArrayType implements ArrayType<Long>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final LongArrayType INSTANCE = new LongArrayType();
         static final long[] EMPTY = new long[0];
@@ -516,6 +524,7 @@ interface ArrayType<T> {
     }
 
     final class ShortArrayType implements ArrayType<Short>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final ShortArrayType INSTANCE = new ShortArrayType();
         static final short[] EMPTY = new short[0];
@@ -568,6 +577,7 @@ interface ArrayType<T> {
     }
 
     final class ObjectArrayType implements ArrayType<Object>, Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
         static final ObjectArrayType INSTANCE = new ObjectArrayType();
         static final Object[] EMPTY = new Object[0];

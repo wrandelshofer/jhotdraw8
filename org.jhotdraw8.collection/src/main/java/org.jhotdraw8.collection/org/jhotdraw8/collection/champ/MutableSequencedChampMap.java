@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
 import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.MutableMapEntry;
-import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
@@ -23,6 +23,7 @@ import org.jhotdraw8.collection.sequenced.SequencedMap;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
+import java.io.Serial;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -46,8 +47,10 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>put, putFirst, putLast: O(1) amortized, due to renumbering</li>
- *     <li>remove: O(1) amortized, due to renumbering</li>
+ *     <li>put, putFirst, putLast: O(1) in an amortized sense, because we
+ *     sometimes have to renumber the elements.</li>
+ *     <li>remove: O(1) in an amortized sense, because we sometimes have to
+ *     renumber the elements.</li>
  *     <li>containsKey: O(1)</li>
  *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
  *     this mutable map</li>
@@ -60,48 +63,7 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
  * <p>
  * Implementation details:
  * <p>
- * This map performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
- * <p>
- * The CHAMP trie contains nodes that may be shared with other maps, and nodes
- * that are exclusively owned by this map.
- * <p>
- * If a write operation is performed on an exclusively owned node, then this
- * map is allowed to mutate the node (mutate-on-write).
- * If a write operation is performed on a potentially shared node, then this
- * map is forced to create an exclusive copy of the node and of all not (yet)
- * exclusively owned parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1) in either
- * case.
- * <p>
- * This map can create an immutable copy of itself in O(1) time and O(1) space
- * using method {@link #toImmutable()}. This map loses exclusive ownership of
- * all its tree nodes.
- * Thus, creating an immutable copy increases the constant cost of
- * subsequent writes, until all shared nodes have been gradually replaced by
- * exclusively owned nodes again.
- * <p>
- * Insertion Order:
- * <p>
- * This map uses a counter to keep track of the insertion order.
- * It stores the current value of the counter in the sequence number
- * field of each data entry. If the counter wraps around, it must renumber all
- * sequence numbers.
- * <p>
- * The renumbering is why the {@code put} and {@code remove} methods are
- * O(1) only in an amortized sense.
- * <p>
- * To support iteration, a second CHAMP trie is maintained. The second CHAMP
- * trie has the same contents as the first. However, we use the sequence number
- * for computing the hash code of an element.
- * <p>
- * In this implementation, a hash code has a length of
- * 32 bits, and is split up in little-endian order into 7 parts of
- * 5 bits (the last part contains the remaining bits).
- * <p>
- * We convert the sequence number to unsigned 32 by adding Integer.MIN_VALUE
- * to it. And then we reorder its bits from
- * 66666555554444433333222221111100 to 00111112222233333444445555566666.
+ * See description at {@link SequencedChampMap}.
  * <p>
  * References:
  * <dl>
@@ -120,6 +82,7 @@ import static org.jhotdraw8.collection.champ.SequencedData.seqHash;
 @SuppressWarnings("exports")
 public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
+    @Serial
     private static final long serialVersionUID = 0L;
     /**
      * Counter for the sequence number of the last element. The counter is
@@ -237,33 +200,32 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
                 SequencedEntry::keyEquals);
     }
 
-    private @NonNull Iterator<Entry<K, V>> entryIterator(boolean reversed) {
-        Enumerator<Entry<K, V>> i;
-        if (reversed) {
-            i = new ReversedKeySpliterator<>(sequenceRoot,
-                    e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                    Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        } else {
-            i = new KeySpliterator<>(sequenceRoot,
-                    e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                    Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        }
-        return new FailFastIterator<>(new IteratorFacade<>(i, this::iteratorRemove), () -> MutableSequencedChampMap.this.modCount);
+    @Override
+    public @NonNull Iterator<Entry<K, V>> iterator() {
+        return new FailFastIterator<>(
+                new IteratorFacade<>(spliterator(), this::iteratorRemove),
+                () -> MutableSequencedChampMap.this.modCount
+        );
     }
 
-
-    private @NonNull Spliterator<Entry<K, V>> entrySpliterator(boolean reversed) {
-        Spliterator<Entry<K, V>> i;
-        if (reversed) {
-            i = new ReversedKeySpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        } else {
-            i = new KeySpliterator<>(sequenceRoot, e -> e, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
-        }
-        return i;
+    private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
+        return new ReverseChampSpliterator<>(sequenceRoot,
+                e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
-    private @NonNull Spliterator<Entry<K, V>> entrySpliterator() {
-        return entrySpliterator(false);
+    private @NonNull Iterator<Entry<K, V>> reverseIterator() {
+        return new FailFastIterator<>(
+                new IteratorFacade<>(reverseSpliterator(), this::iteratorRemove),
+                () -> MutableSequencedChampMap.this.modCount
+        );
+    }
+
+    @Override
+    public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
+        return new ChampSpliterator<>(sequenceRoot,
+                e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     /**
@@ -284,10 +246,10 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     @Override
     public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
-                () -> entryIterator(false),
-                () -> entrySpliterator(false),
-                () -> entryIterator(true),
-                () -> entrySpliterator(false),
+                this::iterator,
+                this::spliterator,
+                this::reverseIterator,
+                this::reverseSpliterator,
                 this::size,
                 this::containsEntry,
                 this::clear,
@@ -319,9 +281,9 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     }
 
 
-
     private void iteratorPutIfPresent(@NonNull K k, V v) {
         if (containsKey(k)) {
+            mutator = null;
             put(k, v);
         }
     }
@@ -438,8 +400,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return new ReadOnlySequencedMapFacade<>(
-                () -> entryIterator(true),
-                () -> entryIterator(false),
+                this::iterator,
+                this::reverseIterator,
                 this::size,
                 this::containsKey,
                 this::get,
@@ -504,8 +466,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     @Override
     public @NonNull SequencedMap<K, V> reversed() {
         return new SequencedMapFacade<>(
-                () -> entryIterator(true),
-                () -> entryIterator(false),
+                this::reverseIterator,
+                this::iterator,
                 this::size,
                 this::containsKey,
                 this::get,
@@ -534,17 +496,20 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         return AbstractSequencedMap.createValues(this);
     }
 
+    @Serial
     private @NonNull Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
     private static class SerializationProxy<K, V> extends MapSerializationProxy<K, V> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(Map<K, V> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return new MutableSequencedChampMap<>(deserialized);

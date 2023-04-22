@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.facade;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.Collection;
@@ -29,6 +30,11 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     private final @NonNull Consumer<E> addFirstFunction;
     private final @NonNull Consumer<E> addLastFunction;
     private final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
+
+    public SequencedCollectionFacade(@NonNull ReadOnlySequencedCollection<E> backingCollection) {
+        this(backingCollection::iterator, () -> backingCollection.readOnlyReversed().iterator(), backingCollection::size,
+                backingCollection::contains, null, null, null, null, null, null);
+    }
 
     public SequencedCollectionFacade(@NonNull ReadOnlyCollection<E> backingCollection,
                                      @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {

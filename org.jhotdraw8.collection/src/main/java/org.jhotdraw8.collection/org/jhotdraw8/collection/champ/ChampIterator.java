@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-class KeyIterator<K> implements Iterator<K> {
+class ChampIterator<K> implements Iterator<K> {
 
     private final int[] nodeCursorsAndLengths = new int[Node.MAX_DEPTH * 2];
     private int nextValueCursor;
@@ -43,7 +43,7 @@ class KeyIterator<K> implements Iterator<K> {
      *                       the function must not change the trie that was passed
      *                       to this iterator
      */
-    public KeyIterator(@NonNull Node<K> root, @Nullable Consumer<K> removeFunction) {
+    public ChampIterator(@NonNull Node<K> root, @Nullable Consumer<K> removeFunction) {
         this.removeFunction = removeFunction;
         if (root.hasNodes()) {
             nextStackLevel = 0;

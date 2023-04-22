@@ -12,6 +12,8 @@ import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
+
 /**
  * Non-null CssPoint2DStyleableFigureKey.
  *
@@ -20,6 +22,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoint2D>
         implements WritableStyleableMapAccessor<@NonNull CssPoint2D>, NonNullKey<@NonNull CssPoint2D> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Converter<@NonNull CssPoint2D> converter;
 

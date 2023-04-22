@@ -9,6 +9,8 @@ import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 
+import java.io.Serial;
+
 /**
  * WordSetKey.
  *
@@ -16,6 +18,7 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
  */
 public class WordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

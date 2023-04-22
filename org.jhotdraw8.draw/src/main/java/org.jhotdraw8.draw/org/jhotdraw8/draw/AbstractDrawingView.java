@@ -28,6 +28,7 @@ import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -108,6 +109,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         } else {
             Map<DataFormat, Object> content = new LinkedHashMap<DataFormat, Object>() {
+                @Serial
                 private static final long serialVersionUID = 0L;
 
                 @Override

@@ -84,9 +84,10 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         clearFunction.run();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
-        return spliteratorFunction.get();
+        return (Spliterator<E>) spliteratorFunction.get();
     }
 
     @Override

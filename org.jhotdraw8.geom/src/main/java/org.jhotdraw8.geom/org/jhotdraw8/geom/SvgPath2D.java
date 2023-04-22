@@ -6,6 +6,7 @@ package org.jhotdraw8.geom;
 
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.io.Serial;
 
 /**
  * {@code SvgPath2D} adds an {@code arcTo} method to {@code Path2D.Double}.
@@ -14,6 +15,7 @@ import java.awt.geom.Point2D;
  */
 public class SvgPath2D extends Path2D.Double {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public SvgPath2D() {

@@ -7,6 +7,7 @@ package org.jhotdraw8.color;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -16,6 +17,7 @@ import java.util.Objects;
 
  */
 public abstract class AbstractNamedColorSpace extends ColorSpace implements NamedColorSpace {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public AbstractNamedColorSpace(int type, int numcomponents) {

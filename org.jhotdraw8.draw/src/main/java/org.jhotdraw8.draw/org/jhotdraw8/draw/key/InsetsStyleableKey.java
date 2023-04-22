@@ -10,6 +10,8 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.InsetsConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
+
 /**
  * InsetsStyleableKey.
  *
@@ -17,6 +19,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  */
 public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements WritableStyleableMapAccessor<Insets> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Converter<Insets> converter = new InsetsConverter(false);
 

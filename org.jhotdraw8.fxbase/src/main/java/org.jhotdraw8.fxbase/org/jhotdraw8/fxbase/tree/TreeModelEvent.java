@@ -9,6 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Event;
 
+import java.io.Serial;
+
 /**
  * TreeModelEvent.
  *
@@ -17,6 +19,7 @@ import org.jhotdraw8.base.event.Event;
  */
 public class TreeModelEvent<N> extends Event<TreeModel<N>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public enum EventType {

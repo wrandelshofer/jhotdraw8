@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import java.awt.geom.Point2D;
+import java.io.Serial;
 
 /**
  * Provides the coordinates and the argument value of one intersecting
@@ -15,6 +16,7 @@ import java.awt.geom.Point2D;
  * coordinates for equals and hashCode.
  */
 public class IntersectionPoint extends Point2D.Double {
+    @Serial
     private static final long serialVersionUID = 0L;
     protected final double argumentA;
     protected final int segmentA;

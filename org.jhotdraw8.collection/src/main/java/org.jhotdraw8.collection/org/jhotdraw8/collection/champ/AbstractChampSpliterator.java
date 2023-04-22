@@ -24,13 +24,8 @@ import java.util.function.Function;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-abstract class AbstractKeySpliterator<K, E> implements EnumeratorSpliterator<E> {
+abstract class AbstractChampSpliterator<K, E> implements EnumeratorSpliterator<E> {
     private final long size;
-
-    @Override
-    public Spliterator<E> trySplit() {
-        return null;
-    }
 
     @Override
     public long estimateSize() {
@@ -40,6 +35,12 @@ abstract class AbstractKeySpliterator<K, E> implements EnumeratorSpliterator<E> 
     @Override
     public int characteristics() {
         return characteristics;
+    }
+
+    @Override
+    public Spliterator<E> trySplit() {
+        // FIXME implement me by splitting the stack
+        return null;
     }
 
     static class StackElement<K> {
@@ -62,7 +63,7 @@ abstract class AbstractKeySpliterator<K, E> implements EnumeratorSpliterator<E> 
     private final int characteristics;
     private final @NonNull Function<K, E> mappingFunction;
 
-    public AbstractKeySpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
+    public AbstractChampSpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         if (root.nodeArity() + root.dataArity() > 0) {
             stack.push(new StackElement<>(root, isReverse()));
         }

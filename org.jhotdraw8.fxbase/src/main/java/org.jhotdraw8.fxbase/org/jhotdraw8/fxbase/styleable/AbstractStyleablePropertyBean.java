@@ -12,6 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
+import java.io.Serial;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,6 +62,7 @@ public abstract class AbstractStyleablePropertyBean
     protected @NonNull Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             IdentityHashMap<Key<?>, Integer> m = new IdentityHashMap<Key<?>, Integer>() {
+                @Serial
                 private static final long serialVersionUID = 0L;
                 final @NonNull AtomicInteger nextIndex = new AtomicInteger();
 

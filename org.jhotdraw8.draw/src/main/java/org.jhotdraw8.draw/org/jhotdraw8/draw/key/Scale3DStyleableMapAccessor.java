@@ -14,6 +14,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -24,6 +25,7 @@ import java.util.Map;
 public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Point3D>
         implements NonNullMapAccessor<@NonNull Point3D> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull MapAccessor<Double> xKey;

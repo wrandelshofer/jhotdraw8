@@ -15,6 +15,8 @@ import org.jhotdraw8.draw.css.converter.CssTransformConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
+
 /**
  * TransformListStyleableKey.
  *
@@ -23,6 +25,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
         implements WritableStyleableMapAccessor<ImmutableList<Transform>>, NonNullKey<ImmutableList<Transform>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Converter<ImmutableList<Transform>> converter;

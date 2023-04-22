@@ -11,6 +11,8 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
+import java.io.Serial;
+
 /**
  * DrawingModelEvent.
  *
@@ -18,6 +20,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
  */
 public class DrawingModelEvent extends Event<DrawingModel> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public enum EventType {

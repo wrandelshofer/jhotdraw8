@@ -29,6 +29,4 @@ public interface EnumeratorSpliterator<E> extends Enumerator<E>, Spliterator<E> 
         }
         return false;
     }
-
-
 }

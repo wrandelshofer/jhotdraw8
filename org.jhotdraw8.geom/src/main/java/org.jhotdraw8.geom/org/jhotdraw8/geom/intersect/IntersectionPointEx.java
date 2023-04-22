@@ -5,8 +5,10 @@
 package org.jhotdraw8.geom.intersect;
 
 import java.awt.geom.Point2D;
+import java.io.Serial;
 
 public class IntersectionPointEx extends IntersectionPoint {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     /**

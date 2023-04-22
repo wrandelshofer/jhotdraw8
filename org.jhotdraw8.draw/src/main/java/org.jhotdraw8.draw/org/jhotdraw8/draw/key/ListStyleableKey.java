@@ -14,6 +14,7 @@ import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -26,6 +27,7 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableL
         implements WritableStyleableMapAccessor<ImmutableList<T>>,
         NonNullKey<ImmutableList<T>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

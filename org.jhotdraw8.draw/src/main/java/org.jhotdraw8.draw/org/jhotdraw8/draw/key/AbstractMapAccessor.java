@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.Objects;
  */
 public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

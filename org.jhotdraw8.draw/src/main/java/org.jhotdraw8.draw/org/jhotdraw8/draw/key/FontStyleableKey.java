@@ -10,6 +10,8 @@ import org.jhotdraw8.draw.css.converter.CssFontConverter;
 import org.jhotdraw8.draw.css.value.CssFont;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
+
 /**
  * FontStyleableKey.
  *
@@ -17,6 +19,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  */
 public class FontStyleableKey extends AbstractStyleableKey<CssFont> implements WritableStyleableMapAccessor<CssFont> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Converter<CssFont> converter = new CssFontConverter(false);

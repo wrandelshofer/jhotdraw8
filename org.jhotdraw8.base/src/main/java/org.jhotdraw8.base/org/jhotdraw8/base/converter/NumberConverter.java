@@ -103,9 +103,9 @@ public class NumberConverter implements Converter<Number> {
                 new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
     }
 
-    public NumberConverter(Class<? extends Number> valueClass, double min, double max, double multiplier, boolean allowsNullValue, String unit,
-                           DecimalFormat decimalFormat,
-                           DecimalFormat scientificFormat
+    public NumberConverter(@NonNull Class<? extends Number> valueClass, double min, double max, double multiplier, boolean allowsNullValue, @Nullable String unit,
+                           @NonNull DecimalFormat decimalFormat,
+                           @NonNull DecimalFormat scientificFormat
     ) {
         super();
         this.valueClass = valueClass;
@@ -486,7 +486,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the value class
      */
-    public Class<? extends Number> getValueClass() {
+    public @NonNull Class<? extends Number> getValueClass() {
         return valueClass;
     }
 

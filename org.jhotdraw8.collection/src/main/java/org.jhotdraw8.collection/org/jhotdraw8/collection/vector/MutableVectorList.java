@@ -14,6 +14,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collection;
@@ -57,6 +58,7 @@ import java.util.stream.Stream;
  * @param <E> the element type
  */
 public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E> {
+    @Serial
     private static final long serialVersionUID = 0L;
     /**
      * The current mutator id of this list.
@@ -149,7 +151,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
 
-    public @NonNull boolean addAll(int index, @NonNull Iterable<? extends E> c) {
+    public boolean addAll(int index, @NonNull Iterable<? extends E> c) {
         Objects.checkIndex(index, size + 1);
         int oldSize = size;
         VectorList<E> immutable = toImmutable().addAll(index, c);
@@ -216,6 +218,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         return size == 0 ? VectorList.of() : new VectorList<>(root, size);
     }
 
+    @Serial
     private @NonNull Object writeReplace() {
         return new MutableVectorList.SerializationProxy<>(this);
     }
@@ -260,7 +263,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public Spliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return super.spliterator();
     }
 
@@ -277,12 +280,14 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         protected SerializationProxy(@NonNull List<E> target) {
             super(target);
         }
 
+        @Serial
         @Override
         protected @NonNull Object readResolve() {
             return new MutableVectorList<>(deserialized);

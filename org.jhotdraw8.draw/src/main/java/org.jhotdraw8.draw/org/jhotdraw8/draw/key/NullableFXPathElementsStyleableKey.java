@@ -13,6 +13,8 @@ import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.draw.css.converter.CssFXPathElementsConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
+import java.io.Serial;
+
 /**
  * NullableFXSvgPathStyleableKey.
  *
@@ -20,6 +22,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  */
 public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<ImmutableList<PathElement>> implements WritableStyleableMapAccessor<ImmutableList<PathElement>> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final @NonNull Converter<ImmutableList<PathElement>> converter;
