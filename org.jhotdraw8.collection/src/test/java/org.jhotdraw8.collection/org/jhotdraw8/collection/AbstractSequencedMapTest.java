@@ -6,8 +6,10 @@ import org.jhotdraw8.collection.sequenced.SequencedMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +119,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithLastElementShouldNotChangeSequenc(MapData data) throws Exception {
+    public void removeWithLastElementShouldNotChangeSequence(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -129,13 +131,13 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeFirstShouldNotChangeSequence(MapData data) throws Exception {
+    public void pollFirstShouldNotChangeSequence(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             Map.Entry<HashCollider, HashCollider> e = expected.remove(0);
             assertEquals(instance.pollFirstEntry(), e);
-            assertEqualSequence(expected, instance, "removeFirst");
+            assertEqualSequence(expected, instance, "pollFirstEntry");
         }
     }
 
@@ -151,7 +153,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeLastWithEmptySetShouldReturnNull(MapData data) throws Exception {
+    public void pollLastWithEmptySetShouldReturnNull(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
             instance.remove(e.getKey());
@@ -166,7 +168,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             assertEquals(instance.pollLastEntry(), expected.remove(expected.size() - 1));
-            assertEqualSequence(expected, instance, "removeLast");
+            assertEqualSequence(expected, instance, "pollLastEntry");
         }
     }
 
@@ -184,7 +186,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithMiddleElementShouldNotChangeSequenc(MapData data) throws Exception {
+    public void removeWithMiddleElementShouldNotChangeSequence(MapData data) throws Exception {
         SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
@@ -208,15 +210,37 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void putNewValueForExistingElementShouldNotChangeSequence(MapData data) throws Exception {
+        SequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
+        List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        ArrayList<Integer> indices = new ArrayList<>(data.a().size());
+        for (int i = 0; i < data.a().size(); i++) {
+            indices.add(i);
+        }
+        Collections.shuffle(indices);
+        for (int i : indices) {
+            HashCollider newValue = new HashCollider(i, -1);
+            Map.Entry<HashCollider, HashCollider> oldEntry = expected.get(i);
+            var newEntry = (AbstractMap.SimpleImmutableEntry<HashCollider, HashCollider>) new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
+
+            instance.put(oldEntry.getKey(), newValue);
+            expected.set(i, newEntry);
+            assertEqualSequence(expected, instance, "put " + i + " oldValue: " + oldEntry + " newValue: " + newEntry);
+        }
+    }
+
     protected <K, V> void assertEqualSequence(Collection<Map.Entry<K, V>> expected, SequencedMap<K, V> actual, String message) {
         ArrayList<Map.Entry<K, V>> expectedList = new ArrayList<>(expected);
+        assertEquals(expectedList, new ArrayList<>(actual.sequencedEntrySet()), message);
+
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.firstEntry(), message);
             assertEquals(expectedList.get(0), actual.sequencedEntrySet().iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.lastEntry(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().sequencedEntrySet().iterator().next(), message);
         }
-        assertEquals(expectedList, new ArrayList<>(actual.sequencedEntrySet()), message);
 
         LinkedHashMap<Object, Object> x = new LinkedHashMap<>();
         for (Map.Entry<K, V> e : expected) {

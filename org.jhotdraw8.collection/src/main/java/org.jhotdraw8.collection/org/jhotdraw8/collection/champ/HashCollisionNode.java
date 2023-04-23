@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.vector.VectorList;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -21,9 +20,10 @@ import static org.jhotdraw8.collection.champ.NodeFactory.newHashCollisionNode;
 /**
  * Represents a hash-collision node in a CHAMP trie.
  * <p>
- * XXX hash-collision nodes may become a huge performance bottleneck.
+ * XXX hash-collision nodes may become huge performance bottlenecks.
  * If the trie contains keys that implement {@link Comparable} then a hash-collision
- * nodes should be b-tree. Otherwise, hash-collision node should be a bit mapped trie (aka {@link VectorList}.
+ * nodes should be a sorted tree structure (for example a red-black tree).
+ * Otherwise, hash-collision node should be a vector (for example a bit mapped trie).
  *
  * @param <D> the data type
  */
@@ -157,34 +157,34 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> update(@Nullable IdentityObject mutator, D data,
+    Node<D> update(@Nullable IdentityObject mutator, D newData,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                   @NonNull BiFunction<D, D, D> replaceFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
                    @NonNull ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
         for (int i = 0; i < this.data.length; i++) {
-            D oldKey = (D) this.data[i];
-            if (equalsFunction.test(oldKey, data)) {
-                D updatedKey = replaceFunction.apply(oldKey, data);
-                if (updatedKey == oldKey) {
-                    details.found(data);
+            D oldData = (D) this.data[i];
+            if (equalsFunction.test(oldData, newData)) {
+                D updatedData = updateFunction.apply(oldData, newData);
+                if (updatedData == oldData) {
+                    details.found(oldData);
                     return this;
                 }
-                details.setReplaced(oldKey);
+                details.setReplaced(oldData, updatedData);
                 if (isAllowedToUpdate(mutator)) {
-                    this.data[i] = updatedKey;
+                    this.data[i] = updatedData;
                     return this;
                 }
-                final Object[] newKeys = ListHelper.copySet(this.data, i, updatedKey);
+                final Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
                 return newHashCollisionNode(mutator, dataHash, newKeys);
             }
         }
 
         // copy entries and add 1 more at the end
         Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
-        entriesNew[this.data.length] = data;
-        details.setAdded();
+        entriesNew[this.data.length] = newData;
+        details.setAdded(newData);
         if (isAllowedToUpdate(mutator)) {
             this.data = entriesNew;
             return this;

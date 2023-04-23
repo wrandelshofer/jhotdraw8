@@ -233,7 +233,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithLastElementShouldNotChangeSequenc(@NonNull SetData data) throws Exception {
+    public void removeWithLastElementShouldNotChangeSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {

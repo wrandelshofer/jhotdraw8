@@ -5,6 +5,11 @@
 
 package org.jhotdraw8.collection.champ;
 
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+
+import java.util.Objects;
+
 /**
  * This class is used to report a change (or no changes) of data in a CHAMP trie.
  *
@@ -18,27 +23,42 @@ class ChangeEvent<D> {
         REPLACED
     }
 
-    private Type type = Type.UNCHANGED;
-    private D data;
+    private @NonNull Type type = Type.UNCHANGED;
+    private @Nullable D oldData;
+    private @Nullable D newData;
 
     public ChangeEvent() {
     }
 
     void found(D data) {
-        this.data = data;
+        this.oldData = data;
     }
 
-    public D getData() {
-        return data;
+    public @Nullable D getOldData() {
+        return oldData;
+    }
+
+    public @Nullable D getNewData() {
+        return newData;
+    }
+
+    public @NonNull D getOldDataNonNull() {
+        return Objects.requireNonNull(oldData);
+    }
+
+    public @NonNull D getNewDataNonNull() {
+        return Objects.requireNonNull(newData);
     }
 
     /**
      * Call this method to indicate that the value of an element has changed.
      *
      * @param oldData the old value of the element
+     * @param newData the new value of the element
      */
-    void setReplaced(D oldData) {
-        this.data = oldData;
+    void setReplaced(@Nullable D oldData, @Nullable D newData) {
+        this.oldData = oldData;
+        this.newData = newData;
         this.type = Type.REPLACED;
     }
 
@@ -47,15 +67,16 @@ class ChangeEvent<D> {
      *
      * @param oldData the value of the removed element
      */
-    void setRemoved(D oldData) {
-        this.data = oldData;
+    void setRemoved(@Nullable D oldData) {
+        this.oldData = oldData;
         this.type = Type.REMOVED;
     }
 
     /**
      * Call this method to indicate that a data element has been added.
      */
-    void setAdded() {
+    void setAdded(@Nullable D newData) {
+        this.newData = newData;
         this.type = Type.ADDED;
     }
 

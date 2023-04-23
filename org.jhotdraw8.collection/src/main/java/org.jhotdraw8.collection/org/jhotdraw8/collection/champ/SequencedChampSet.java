@@ -258,9 +258,9 @@ public class SequencedChampSet<E>
             int newLast = last;
             IdentityObject mutator = new IdentityObject();
             if (details.isReplaced()) {
-                var oldElem = details.getData();
+                var oldElem = details.getOldData();
                 newSeqRoot = SequencedData.seqRemove(newSeqRoot, mutator, oldElem, details);
-                int seq = details.getData().getSequenceNumber();
+                int seq = details.getOldData().getSequenceNumber();
                 newFirst = seq == newFirst ? newFirst : newFirst - 1;
                 newLast = seq == newLast ? newLast - 1 : newLast;
             } else {
@@ -289,9 +289,9 @@ public class SequencedChampSet<E>
             int newSize = size;
             var mutator = new IdentityObject();
             if (details.isReplaced()) {
-                var oldElem = details.getData();
+                var oldElem = details.getOldData();
                 newSeqRoot = SequencedData.seqRemove(newSeqRoot, mutator, oldElem, details);
-                int seq = details.getData().getSequenceNumber();
+                int seq = details.getOldData().getSequenceNumber();
                 newFirst = seq == newFirst - 1 ? newFirst - 1 : newFirst;
                 newLast = seq == newLast ? newLast : newLast + 1;
             } else {
@@ -312,7 +312,7 @@ public class SequencedChampSet<E>
                 keyHash, 0, details, Objects::equals);
         BitmapIndexedNode<SequencedElement<E>> newSeqRoot = sequenceRoot;
         if (details.isModified()) {
-            var oldElem = details.getData();
+            var oldElem = details.getOldData();
             newSeqRoot = SequencedData.seqRemove(newSeqRoot, null, oldElem, details);
             int seq = oldElem.getSequenceNumber();
             return renumber(newRoot, newSeqRoot, size - 1,

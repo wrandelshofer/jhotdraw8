@@ -258,40 +258,40 @@ class BitmapIndexedNode<D> extends Node<D> {
 
     @Override
     @NonNull BitmapIndexedNode<D> update(@Nullable IdentityObject mutator,
-                                         @Nullable D data,
+                                         @Nullable D newData,
                                          int dataHash, int shift,
                                          @NonNull ChangeEvent<D> details,
-                                         @NonNull BiFunction<D, D, D> replaceFunction,
+                                         @NonNull BiFunction<D, D, D> updateFunction,
                                          @NonNull BiPredicate<D, D> equalsFunction,
                                          @NonNull ToIntFunction<D> hashFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
             final int dataIndex = dataIndex(bitpos);
-            final D oldKey = getData(dataIndex);
-            if (equalsFunction.test(oldKey, data)) {
-                D updatedKey = replaceFunction.apply(oldKey, data);
-                if (updatedKey == oldKey) {
-                    details.found(oldKey);
+            final D oldData = getData(dataIndex);
+            if (equalsFunction.test(oldData, newData)) {
+                D updatedKey = updateFunction.apply(oldData, newData);
+                if (updatedKey == oldData) {
+                    details.found(oldData);
                     return this;
                 }
-                details.setReplaced(oldKey);
+                details.setReplaced(oldData, updatedKey);
                 return copyAndSetData(mutator, dataIndex, updatedKey);
             }
             Node<D> updatedSubNode =
                     mergeTwoDataEntriesIntoNode(mutator,
-                            oldKey, hashFunction.applyAsInt(oldKey),
-                            data, dataHash, shift + BIT_PARTITION_SIZE);
-            details.setAdded();
+                            oldData, hashFunction.applyAsInt(oldData),
+                            newData, dataHash, shift + BIT_PARTITION_SIZE);
+            details.setAdded(newData);
             return copyAndMigrateFromDataToNode(mutator, bitpos, updatedSubNode);
         } else if ((nodeMap & bitpos) != 0) {
             Node<D> subNode = nodeAt(bitpos);
             Node<D> updatedSubNode = subNode
-                    .update(mutator, data, dataHash, shift + BIT_PARTITION_SIZE, details, replaceFunction, equalsFunction, hashFunction);
+                    .update(mutator, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
             return subNode == updatedSubNode ? this : copyAndSetNode(mutator, bitpos, updatedSubNode);
         }
-        details.setAdded();
-        return copyAndInsertData(mutator, bitpos, data);
+        details.setAdded(newData);
+        return copyAndInsertData(mutator, bitpos, newData);
     }
 
     @NonNull

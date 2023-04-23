@@ -34,6 +34,14 @@ class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         this.sequenceNumber = sequenceNumber;
     }
 
+    static <K, V> boolean keyEquals(@NonNull SequencedEntry<K, V> a, @NonNull SequencedEntry<K, V> b) {
+        return Objects.equals(a.getKey(), b.getKey());
+    }
+
+    static <V, K> int keyHash(@NonNull SequencedEntry<K, V> a) {
+        return Objects.hashCode(a.getKey());
+    }
+
     @NonNull
     static <K, V> SequencedEntry<K, V> update(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
@@ -54,13 +62,5 @@ class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
 
     public int getSequenceNumber() {
         return sequenceNumber;
-    }
-
-    static <K, V> boolean keyEquals(@NonNull SequencedEntry<K, V> a, @NonNull SequencedEntry<K, V> b) {
-        return Objects.equals(a.getKey(), b.getKey());
-    }
-
-    static <V, K> int keyHash(@NonNull SequencedEntry<K, V> a) {
-        return Objects.hashCode(a.getKey());
     }
 }

@@ -235,35 +235,35 @@ abstract class Node<D> {
     /**
      * Inserts or replaces a data object in the trie.
      *
-     * @param mutator         A non-null value means, that this method may update
-     *                        nodes that are marked with the same unique id,
-     *                        and that this method may create new mutable nodes
-     *                        with this unique id.
-     *                        A null value means, that this method must not update
-     *                        any node and may only create new immutable nodes.
-     * @param data            the data to be inserted,
-     *                        or to be used for merging if there is already
-     *                        a matching data object in the trie
-     * @param dataHash        the hash-code of the data object
-     * @param shift           the shift of the current node
-     * @param details         this method reports the changes that it performed
-     *                        in this object
-     * @param replaceFunction only used if there is a matching data object
-     *                        in the trie.
-     *                        Given the existing data object (first argument) and
-     *                        the new data object (second argument), yields a
-     *                        new data object or returns either of the two.
-     *                        In all cases, the update function must return
-     *                        a data object that has the same data hash
-     *                        as the existing data object.
-     * @param equalsFunction  a function that tests data objects for equality
-     * @param hashFunction    a function that computes the hash-code for a data
-     *                        object
+     * @param mutator        A non-null value means, that this method may update
+     *                       nodes that are marked with the same unique id,
+     *                       and that this method may create new mutable nodes
+     *                       with this unique id.
+     *                       A null value means, that this method must not update
+     *                       any node and may only create new immutable nodes.
+     * @param newData        the data to be inserted,
+     *                       or to be used for merging if there is already
+     *                       a matching data object in the trie
+     * @param dataHash       the hash-code of the data object
+     * @param shift          the shift of the current node
+     * @param details        this method reports the changes that it performed
+     *                       in this object
+     * @param updateFunction only used if there is a matching data object
+     *                       in the trie.
+     *                       Given the existing data object (first argument) and
+     *                       the new data object (second argument), yields a
+     *                       new data object or returns either of the two.
+     *                       In all cases, the update function must return
+     *                       a data object that has the same data hash
+     *                       as the existing data object.
+     * @param equalsFunction a function that tests data objects for equality
+     * @param hashFunction   a function that computes the hash-code for a data
+     *                       object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> update(@Nullable IdentityObject mutator, D data,
+    abstract @NonNull Node<D> update(@Nullable IdentityObject mutator, D newData,
                                      int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                                     @NonNull BiFunction<D, D, D> replaceFunction,
+                                     @NonNull BiFunction<D, D, D> updateFunction,
                                      @NonNull BiPredicate<D, D> equalsFunction,
                                      @NonNull ToIntFunction<D> hashFunction);
 }

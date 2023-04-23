@@ -140,11 +140,11 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
                 moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var oldElem = details.getData();
+            var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, oldElem, details);
-                first = details.getData().getSequenceNumber() == first ? first : first - 1;
-                last = details.getData().getSequenceNumber() == last ? last - 1 : last;
+                first = details.getOldData().getSequenceNumber() == first ? first : first - 1;
+                last = details.getOldData().getSequenceNumber() == last ? last - 1 : last;
             } else {
                 modCount++;
                 first--;
@@ -171,11 +171,11 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
                 moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var oldElem = details.getData();
+            var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, oldElem, details);
-                first = details.getData().getSequenceNumber() == first - 1 ? first - 1 : first;
-                last = details.getData().getSequenceNumber() == last ? last : last + 1;
+                first = details.getOldData().getSequenceNumber() == first - 1 ? first - 1 : first;
+                last = details.getOldData().getSequenceNumber() == last ? last : last + 1;
             } else {
                 modCount++;
                 size++;
@@ -269,7 +269,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
         if (details.isModified()) {
             size--;
             modCount++;
-            var elem = details.getData();
+            var elem = details.getOldData();
             int seq = elem.getSequenceNumber();
             sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, elem, details);
             if (seq == last - 1) {

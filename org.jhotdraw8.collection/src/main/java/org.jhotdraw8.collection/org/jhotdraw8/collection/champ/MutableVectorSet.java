@@ -137,7 +137,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
                 moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var oldElem = details.getData();
+            var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 vector = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
                 offset++;
@@ -167,7 +167,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
                 moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var oldElem = details.getData();
+            var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 vector = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
             } else {
@@ -265,7 +265,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (details.isModified()) {
             size--;
             modCount++;
-            var elem = details.getData();
+            var elem = details.getOldData();
             int seq = elem.getSequenceNumber();
             vector = SequencedData.vecRemove(vector, mutator, elem, details, offset);
             if (seq == -offset) {

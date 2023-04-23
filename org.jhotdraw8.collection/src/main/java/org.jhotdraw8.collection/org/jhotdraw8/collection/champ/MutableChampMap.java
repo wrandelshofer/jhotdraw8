@@ -207,7 +207,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
 
     @Override
     public V put(K key, V value) {
-        SimpleImmutableEntry<K, V> oldValue = putAndGiveDetails(key, value).getData();
+        SimpleImmutableEntry<K, V> oldValue = putAndGiveDetails(key, value).getOldData();
         return oldValue == null ? null : oldValue.getValue();
     }
 
@@ -228,7 +228,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        SimpleImmutableEntry<K, V> oldValue = removeAndGiveDetails(key).getData();
+        SimpleImmutableEntry<K, V> oldValue = removeAndGiveDetails(key).getOldData();
         return oldValue == null ? null : oldValue.getValue();
     }
 

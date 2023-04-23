@@ -263,9 +263,9 @@ public class VectorSet<E>
             int newOffset = offset + 1;
             IdentityObject mutator = new IdentityObject();
             if (details.isReplaced()) {
-                var oldElem = details.getData();
+                var oldElem = details.getOldData();
                 newSeqRoot = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details, offset);
-                int seq = details.getData().getSequenceNumber();
+                int seq = details.getOldData().getSequenceNumber();
             } else {
                 newSize++;
             }
@@ -290,9 +290,9 @@ public class VectorSet<E>
             int newSize = size;
             var mutator = new IdentityObject();
             if (details.isReplaced()) {
-                var oldElem = details.getData();
+                var oldElem = details.getOldData();
                 newSeqRoot = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details, offset);
-                int seq = details.getData().getSequenceNumber();
+                int seq = details.getOldData().getSequenceNumber();
                 newOffset = seq == newOffset - 1 ? newOffset - 1 : newOffset;
             } else {
                 newSize++;
@@ -311,7 +311,7 @@ public class VectorSet<E>
                 keyHash, 0, details, Objects::equals);
         var newSeqRoot = vector;
         if (details.isModified()) {
-            var oldElem = details.getData();
+            var oldElem = details.getOldData();
             newSeqRoot = SequencedData.vecRemove(newSeqRoot, null, oldElem, details, offset);
             int seq = oldElem.getSequenceNumber();
             return renumber(newRoot, newSeqRoot, size - 1,

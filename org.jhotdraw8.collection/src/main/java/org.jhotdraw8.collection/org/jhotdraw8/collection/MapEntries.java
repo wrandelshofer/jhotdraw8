@@ -403,7 +403,7 @@ public class MapEntries {
      * @param v   the value
      * @param <K> the key type
      * @param <V> the value type
-     * @return
+     * @return a new map entry
      */
     public static <K, V> Map.@NonNull Entry<K, V> entry(K k, V v) {
         return new AbstractMap.SimpleEntry<>(k, v);
