@@ -9,7 +9,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.ChampSet;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;

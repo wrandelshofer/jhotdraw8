@@ -29,7 +29,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.base.text.CachingCollator;
 import org.jhotdraw8.base.text.NaturalSortCollator;
-import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.ChampSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;

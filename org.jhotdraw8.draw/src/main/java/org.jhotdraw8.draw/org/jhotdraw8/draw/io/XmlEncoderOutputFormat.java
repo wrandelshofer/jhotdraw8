@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampMap;
+import org.jhotdraw8.collection.ChampMap;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.fxbase.concurrent.WorkState;

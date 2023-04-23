@@ -6,9 +6,9 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
-import org.jhotdraw8.collection.vector.VectorList;
 
 import java.net.URI;
 import java.util.List;

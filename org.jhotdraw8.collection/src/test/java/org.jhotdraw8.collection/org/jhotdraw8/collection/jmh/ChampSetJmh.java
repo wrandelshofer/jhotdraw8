@@ -1,7 +1,7 @@
 package org.jhotdraw8.collection.jmh;
 
 
-import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.ChampSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;

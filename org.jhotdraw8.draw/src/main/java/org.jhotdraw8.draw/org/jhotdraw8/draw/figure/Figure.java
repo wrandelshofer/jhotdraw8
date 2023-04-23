@@ -15,7 +15,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.ChampSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;

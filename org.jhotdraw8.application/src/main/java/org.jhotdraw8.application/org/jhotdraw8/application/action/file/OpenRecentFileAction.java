@@ -17,7 +17,7 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.net.UriUtil;
-import org.jhotdraw8.collection.champ.ChampMap;
+import org.jhotdraw8.collection.ChampMap;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 

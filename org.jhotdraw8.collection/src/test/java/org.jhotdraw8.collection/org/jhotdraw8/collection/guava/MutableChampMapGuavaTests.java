@@ -12,7 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.champ.MutableChampMap;
+import org.jhotdraw8.collection.MutableChampMap;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

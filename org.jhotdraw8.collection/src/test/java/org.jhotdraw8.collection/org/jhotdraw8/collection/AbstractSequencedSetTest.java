@@ -356,7 +356,9 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
-            assertTrue(instance.remove(expected.remove(expected.size() / 2)));
+            HashCollider removedElement = expected.remove(expected.size() / 2);
+            boolean hasRemoved = instance.remove(removedElement);
+            assertTrue(hasRemoved);
             assertEqualSequence(expected, instance, "removeMiddle");
         }
     }
@@ -437,13 +439,13 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     protected <E> void assertEqualSequence(Collection<E> expected, SequencedSet<E> actual, String message) {
         ArrayList<E> expectedList = new ArrayList<>(expected);
+        assertEquals(expectedList, new ArrayList<>(actual), message);
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.getFirst(), message);
             assertEquals(expectedList.get(0), actual.iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().iterator().next(), message);
         }
-        assertEquals(expectedList, new ArrayList<>(actual), message);
         assertEquals(expected.toString(), actual.toString(), message);
     }
 }

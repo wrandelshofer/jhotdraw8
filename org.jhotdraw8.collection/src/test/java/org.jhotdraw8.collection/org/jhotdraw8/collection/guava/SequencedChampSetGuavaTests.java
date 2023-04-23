@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.collection.champ.SequencedChampSet;
+import org.jhotdraw8.collection.SequencedChampSet;
 import org.jhotdraw8.collection.facade.MutableSetFacade;
 
 import java.lang.reflect.Method;

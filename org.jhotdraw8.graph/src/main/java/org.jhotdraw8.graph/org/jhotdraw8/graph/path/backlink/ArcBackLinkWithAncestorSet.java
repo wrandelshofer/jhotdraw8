@@ -8,7 +8,7 @@ package org.jhotdraw8.graph.path.backlink;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
-import org.jhotdraw8.collection.champ.AddOnlyChampSet;
+import org.jhotdraw8.collection.AddOnlyChampSet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

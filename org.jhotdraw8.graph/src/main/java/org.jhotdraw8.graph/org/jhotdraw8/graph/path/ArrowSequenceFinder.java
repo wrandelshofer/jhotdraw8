@@ -8,8 +8,8 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.ArrayList;

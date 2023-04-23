@@ -7,8 +7,8 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.path.SimpleVertexSequenceFinder;
 import org.jhotdraw8.graph.path.VertexSequenceFinder;

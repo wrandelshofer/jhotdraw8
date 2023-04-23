@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
-import org.jhotdraw8.collection.champ.ChampMap;
+import org.jhotdraw8.collection.ChampMap;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 

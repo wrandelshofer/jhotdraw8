@@ -9,8 +9,8 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.vector.VectorList;
 import org.jhotdraw8.css.value.CssSize;
 
 import java.util.Objects;

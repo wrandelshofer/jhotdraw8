@@ -53,7 +53,7 @@ import org.jhotdraw8.application.action.file.OpenRecentFileAction;
 import org.jhotdraw8.application.prefs.PreferencesUtil;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.text.NaturalSortCollator;
-import org.jhotdraw8.collection.champ.ChampMap;
+import org.jhotdraw8.collection.ChampMap;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;

@@ -8,7 +8,7 @@ import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.ChampSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;

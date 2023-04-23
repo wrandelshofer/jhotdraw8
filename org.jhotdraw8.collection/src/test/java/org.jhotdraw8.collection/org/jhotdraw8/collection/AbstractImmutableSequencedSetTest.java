@@ -76,13 +76,13 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     protected <E> void assertEqualSequence(Collection<E> expected, ReadOnlySequencedSet<E> actual, String message) {
         ArrayList<E> expectedList = new ArrayList<>(expected);
+        assertEquals(expectedList, new ArrayList<>(actual.asSet()), message);
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.getFirst(), message);
             assertEquals(expectedList.get(0), actual.iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message);
             //assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().iterator().next(), message);
         }
-        assertEquals(expectedList, new ArrayList<>(actual.asSet()), message);
         assertEquals(expected.toString(), actual.toString(), message);
     }
 }

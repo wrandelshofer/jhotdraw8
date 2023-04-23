@@ -9,8 +9,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
-import org.jhotdraw8.collection.vector.VectorList;
 
 public class SimpleDockable extends AbstractDockable {
     private final Node node;

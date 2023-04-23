@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.css.model;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.vector.VectorList;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.draw.css.value.Paintable;

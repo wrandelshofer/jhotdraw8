@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.champ.SequencedChampSet;
+import org.jhotdraw8.collection.SequencedChampSet;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;

@@ -81,17 +81,17 @@ public abstract class AbstractImmutableSetTest {
     }
 
     protected void assertEqualSet(@NonNull Set<HashCollider> expected, @NonNull ImmutableSet<HashCollider> actual) {
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected.isEmpty(), actual.isEmpty());
-        assertEquals(expected.hashCode(), actual.hashCode());
-        assertEquals(expected, actual.asSet());
-        assertEquals(actual.asSet(), expected);
-
         ArrayList<HashCollider> expectedValues = new ArrayList<>(expected);
         ArrayList<HashCollider> actualValues = new ArrayList<>(actual.asSet());
         expectedValues.sort(Comparator.comparing(HashCollider::getValue));
         actualValues.sort(Comparator.comparing(HashCollider::getValue));
         assertEquals(expectedValues, actualValues);
+
+        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.isEmpty(), actual.isEmpty());
+        assertEquals(expected.hashCode(), actual.hashCode());
+        assertEquals(expected, actual.asSet());
+        assertEquals(actual.asSet(), expected);
     }
 
     protected void assertNotEqualSet(Set<HashCollider> expected, @NonNull ImmutableSet<HashCollider> actual) {

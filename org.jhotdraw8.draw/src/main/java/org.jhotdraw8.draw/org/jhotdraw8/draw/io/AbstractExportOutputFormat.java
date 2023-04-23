@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.collection.champ.ChampMap;
+import org.jhotdraw8.collection.ChampMap;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;

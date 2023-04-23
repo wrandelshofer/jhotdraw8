@@ -5,9 +5,9 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
-import org.jhotdraw8.collection.vector.VectorList;
 
 import java.io.Serial;
 

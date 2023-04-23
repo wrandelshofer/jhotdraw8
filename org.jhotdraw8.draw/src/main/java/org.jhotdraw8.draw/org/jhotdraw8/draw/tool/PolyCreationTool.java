@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.collection.vector.VectorList;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;

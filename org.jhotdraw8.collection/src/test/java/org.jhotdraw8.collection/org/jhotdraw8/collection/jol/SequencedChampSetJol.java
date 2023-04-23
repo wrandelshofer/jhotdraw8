@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jol;
 
-import org.jhotdraw8.collection.champ.SequencedChampSet;
+import org.jhotdraw8.collection.SequencedChampSet;
 import org.jhotdraw8.collection.jmh.Key;
 import org.junit.jupiter.api.Test;
 

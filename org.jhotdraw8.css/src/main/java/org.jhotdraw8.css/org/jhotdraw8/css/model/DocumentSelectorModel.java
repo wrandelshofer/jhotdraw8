@@ -7,7 +7,7 @@ package org.jhotdraw8.css.model;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.champ.ChampSet;
+import org.jhotdraw8.collection.ChampSet;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.ast.TypeSelector;
