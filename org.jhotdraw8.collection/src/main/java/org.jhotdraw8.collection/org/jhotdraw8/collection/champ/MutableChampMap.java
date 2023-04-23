@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.BiFunction;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -187,12 +186,6 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
-
-    @NonNull
-    private BiFunction<AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>, AbstractMap.SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
-    }
-
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
         if (containsKey(k)) {
             mutator = null;
@@ -215,7 +208,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         int keyHash = Objects.hashCode(key);
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.update(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
-                getUpdateFunction(),
+                ChampMap::updateEntry,
                 ChampMap::keyEquals,
                 ChampMap::keyHash);
         if (details.isModified() && !details.isReplaced()) {

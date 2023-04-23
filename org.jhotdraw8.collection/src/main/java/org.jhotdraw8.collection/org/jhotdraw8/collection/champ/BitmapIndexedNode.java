@@ -270,13 +270,13 @@ class BitmapIndexedNode<D> extends Node<D> {
             final int dataIndex = dataIndex(bitpos);
             final D oldData = getData(dataIndex);
             if (equalsFunction.test(oldData, newData)) {
-                D updatedKey = updateFunction.apply(oldData, newData);
-                if (updatedKey == oldData) {
+                D updatedData = updateFunction.apply(oldData, newData);
+                if (updatedData == oldData) {
                     details.found(oldData);
                     return this;
                 }
-                details.setReplaced(oldData, updatedKey);
-                return copyAndSetData(mutator, dataIndex, updatedKey);
+                details.setReplaced(oldData, updatedData);
+                return copyAndSetData(mutator, dataIndex, updatedData);
             }
             Node<D> updatedSubNode =
                     mergeTwoDataEntriesIntoNode(mutator,

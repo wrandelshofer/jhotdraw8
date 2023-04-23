@@ -373,8 +373,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
         return oldValue == null ? null : oldValue.getValue();
     }
 
-    @NonNull ChangeEvent<SequencedEntry<K, V>> putLast(
-            final K key, V val, boolean moveToLast) {
+    @NonNull ChangeEvent<SequencedEntry<K, V>> putLast(final K key, V val, boolean moveToLast) {
         ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
         SequencedEntry<K, V> newEntry = new SequencedEntry<>(key, val, last);
         IdentityObject mutator = getOrCreateIdentity();

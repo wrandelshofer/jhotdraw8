@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.BiFunction;
 
 /**
  * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -173,9 +172,9 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
-    @NonNull
-    private BiFunction<SimpleImmutableEntry<K, V>, SimpleImmutableEntry<K, V>, SimpleImmutableEntry<K, V>> getUpdateFunction() {
-        return (oldv, newv) -> Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    @Nullable
+    static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
+        return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 
     @Override
@@ -198,7 +197,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
         var newRootNode = update(null, new SimpleImmutableEntry<>(key, value),
                 Objects.hashCode(key), 0, details,
-                getUpdateFunction(), ChampMap::keyEquals, ChampMap::keyHash);
+                ChampMap::updateEntry, ChampMap::keyEquals, ChampMap::keyHash);
         if (details.isModified()) {
             return new ChampMap<>(newRootNode, details.isReplaced() ? size : size + 1);
         }
