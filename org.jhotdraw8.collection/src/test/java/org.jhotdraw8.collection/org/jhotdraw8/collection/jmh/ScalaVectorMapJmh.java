@@ -25,25 +25,65 @@ import java.util.concurrent.TimeUnit;
  *
  * implementation 'org.scala-lang:scala-library:2.13.11-M1'
  *
- * Benchmark                            (mask)   (size)  Mode  Cnt          Score   Error  Units
- * ScalaVectorMapJmh.mContainsFound        -65  1000000  avgt             251.689          ns/op
- * ScalaVectorMapJmh.mContainsNotFound     -65  1000000  avgt             269.800          ns/op
- * ScalaVectorMapJmh.mCopyOf               -65  1000000  avgt       470588123.727          ns/op
- * ScalaVectorMapJmh.mHead                 -65  1000000  avgt              35.886          ns/op
- * ScalaVectorMapJmh.mIterate              -65  1000000  avgt       332692170.290          ns/op
- * ScalaVectorMapJmh.mPut                  -65  1000000  avgt             532.145          ns/op
- * ScalaVectorMapJmh.mRemoveThenAdd        -65  1000000  avgt            1269.680          ns/op
- * ScalaVectorMapJmh.mTail                 -65  1000000  avgt             232.868          ns/op
+ * Benchmark                            (mask)   (size)  Mode  Cnt     _     Score   Error  Units
+ * ScalaVectorMapJmh.mContainsFound        -65       10  avgt    2     _     6.529          ns/op
+ * ScalaVectorMapJmh.mContainsFound        -65      100  avgt    2     _    11.084          ns/op
+ * ScalaVectorMapJmh.mContainsFound        -65     1000  avgt    2     _    20.634          ns/op
+ * ScalaVectorMapJmh.mContainsFound        -65    10000  avgt    2     _    36.600          ns/op
+ * ScalaVectorMapJmh.mContainsFound        -65   100000  avgt    2     _   100.555          ns/op
+ * ScalaVectorMapJmh.mContainsFound        -65  1000000  avgt    2     _   269.156          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65       10  avgt    2     _     7.007          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65      100  avgt    2     _    11.134          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65     1000  avgt    2     _    20.664          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65    10000  avgt    2     _    35.706          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65   100000  avgt    2     _   104.273          ns/op
+ * ScalaVectorMapJmh.mContainsNotFound     -65  1000000  avgt    2     _   254.167          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65       10  avgt    2     _   847.698          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65      100  avgt    2     _  8552.204          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65     1000  avgt    2     _145905.646          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65    10000  avgt    2    1_495972.812          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65   100000  avgt    2   25_365742.926          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65  1000000  avgt    2  469_077151.250          ns/op
+ * ScalaVectorMapJmh.mHead                 -65       10  avgt    2     _     7.234          ns/op
+ * ScalaVectorMapJmh.mHead                 -65      100  avgt    2     _    21.065          ns/op
+ * ScalaVectorMapJmh.mHead                 -65     1000  avgt    2     _    25.789          ns/op
+ * ScalaVectorMapJmh.mHead                 -65    10000  avgt    2     _    25.612          ns/op
+ * ScalaVectorMapJmh.mHead                 -65   100000  avgt    2     _    26.300          ns/op
+ * ScalaVectorMapJmh.mHead                 -65  1000000  avgt    2     _    35.969          ns/op
+ * ScalaVectorMapJmh.mIterate              -65       10  avgt    2     _    90.502          ns/op
+ * ScalaVectorMapJmh.mIterate              -65      100  avgt    2     _  1609.942          ns/op
+ * ScalaVectorMapJmh.mIterate              -65     1000  avgt    2     _ 24484.242          ns/op
+ * ScalaVectorMapJmh.mIterate              -65    10000  avgt    2     _487208.667          ns/op
+ * ScalaVectorMapJmh.mIterate              -65   100000  avgt    2    9_449481.765          ns/op
+ * ScalaVectorMapJmh.mIterate              -65  1000000  avgt    2  330_425467.570          ns/op
+ * ScalaVectorMapJmh.mPut                  -65       10  avgt    2     _    32.974          ns/op
+ * ScalaVectorMapJmh.mPut                  -65      100  avgt    2     _    60.249          ns/op
+ * ScalaVectorMapJmh.mPut                  -65     1000  avgt    2     _    92.300          ns/op
+ * ScalaVectorMapJmh.mPut                  -65    10000  avgt    2     _   133.474          ns/op
+ * ScalaVectorMapJmh.mPut                  -65   100000  avgt    2     _   230.001          ns/op
+ * ScalaVectorMapJmh.mPut                  -65  1000000  avgt    2     _   501.866          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65       10  avgt    2     _   153.322          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65      100  avgt    2     _   228.369          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65     1000  avgt    2     _   392.195          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65    10000  avgt    2     _   454.382          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65   100000  avgt    2     _   676.448          ns/op
+ * ScalaVectorMapJmh.mRemoveThenAdd        -65  1000000  avgt    2     _  1229.155          ns/op
+ * ScalaVectorMapJmh.mTail                 -65       10  avgt    2     _    58.791          ns/op
+ * ScalaVectorMapJmh.mTail                 -65      100  avgt    2     _   101.469          ns/op
+ * ScalaVectorMapJmh.mTail                 -65     1000  avgt    2     _   133.833          ns/op
+ * ScalaVectorMapJmh.mTail                 -65    10000  avgt    2     _   117.610          ns/op
+ * ScalaVectorMapJmh.mTail                 -65   100000  avgt    2     _   155.144          ns/op
+ * ScalaVectorMapJmh.mTail                 -65  1000000  avgt    2     _   220.500          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
+@Measurement(iterations = 2)
 @Warmup(iterations = 2)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaVectorMapJmh {
-    @Param({"1000000"})
+    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
     private int size;
 
     @Param({"-65"})
