@@ -21,29 +21,71 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.28
+ * # JMH version: 1.36
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                    (size)  Mode  Cnt     _     Score   Error  Units
- * ContainsFound     1000000  avgt          _   383.583          ns/op
- * ContainsNotFound  1000000  avgt          _   376.334          ns/op
- * CopyOf            1000000  avgt       389_558025.654          ns/op
- * Head              1000000  avgt          _    26.078          ns/op
- * Iterate           1000000  avgt        42_105638.475          ns/op
- * Put               1000000  avgt          _   410.023          ns/op
- * RemoveThenAdd     1000000  avgt          _   684.607          ns/op
- * Tail              1000000  avgt          _   117.174          ns/op
+ * Benchmark                           (size)  Mode  Cnt     _     Score   Error  Units
+ * ScalaHashMapJmh.mContainsFound          10  avgt    2     _     6.293          ns/op
+ * ScalaHashMapJmh.mContainsFound         100  avgt    2     _    11.190          ns/op
+ * ScalaHashMapJmh.mContainsFound        1000  avgt    2     _    19.242          ns/op
+ * ScalaHashMapJmh.mContainsFound       10000  avgt    2     _    37.319          ns/op
+ * ScalaHashMapJmh.mContainsFound      100000  avgt    2     _    61.474          ns/op
+ * ScalaHashMapJmh.mContainsFound     1000000  avgt    2     _   236.853          ns/op
+ * ScalaHashMapJmh.mContainsNotFound       10  avgt    2     _     6.142          ns/op
+ * ScalaHashMapJmh.mContainsNotFound      100  avgt    2     _    11.060          ns/op
+ * ScalaHashMapJmh.mContainsNotFound     1000  avgt    2     _    18.948          ns/op
+ * ScalaHashMapJmh.mContainsNotFound    10000  avgt    2     _    36.833          ns/op
+ * ScalaHashMapJmh.mContainsNotFound   100000  avgt    2     _    62.170          ns/op
+ * ScalaHashMapJmh.mContainsNotFound  1000000  avgt    2     _   236.771          ns/op
+ * ScalaHashMapJmh.mCopyOf                 10  avgt    2     _   427.623          ns/op
+ * ScalaHashMapJmh.mCopyOf                100  avgt    2     _  6041.627          ns/op
+ * ScalaHashMapJmh.mCopyOf               1000  avgt    2     _116621.624          ns/op
+ * ScalaHashMapJmh.mCopyOf              10000  avgt    2    1_214286.106          ns/op
+ * ScalaHashMapJmh.mCopyOf             100000  avgt    2   19_659581.694          ns/op
+ * ScalaHashMapJmh.mCopyOf            1000000  avgt    2  378_301523.574          ns/op
+ * ScalaHashMapJmh.mHead                   10  avgt    2     _     1.703          ns/op
+ * ScalaHashMapJmh.mHead                  100  avgt    2     _     8.889          ns/op
+ * ScalaHashMapJmh.mHead                 1000  avgt    2     _     9.973          ns/op
+ * ScalaHashMapJmh.mHead                10000  avgt    2     _    17.188          ns/op
+ * ScalaHashMapJmh.mHead               100000  avgt    2     _    17.328          ns/op
+ * ScalaHashMapJmh.mHead              1000000  avgt    2     _    23.052          ns/op
+ * ScalaHashMapJmh.mIterate                10  avgt    2     _     9.738          ns/op
+ * ScalaHashMapJmh.mIterate               100  avgt    2     _   333.533          ns/op
+ * ScalaHashMapJmh.mIterate              1000  avgt    2     _  3001.226          ns/op
+ * ScalaHashMapJmh.mIterate             10000  avgt    2     _ 41247.895          ns/op
+ * ScalaHashMapJmh.mIterate            100000  avgt    2    1_035473.760          ns/op
+ * ScalaHashMapJmh.mIterate           1000000  avgt    2   41_417461.544          ns/op
+ * ScalaHashMapJmh.mPut                    10  avgt    2     _    19.341          ns/op
+ * ScalaHashMapJmh.mPut                   100  avgt    2     _    38.989          ns/op
+ * ScalaHashMapJmh.mPut                  1000  avgt    2     _    60.961          ns/op
+ * ScalaHashMapJmh.mPut                 10000  avgt    2     _    92.897          ns/op
+ * ScalaHashMapJmh.mPut                100000  avgt    2     _   159.113          ns/op
+ * ScalaHashMapJmh.mPut               1000000  avgt    2     _   391.962          ns/op
+ * ScalaHashMapJmh.mRemoveThenAdd          10  avgt    2     _    87.681          ns/op
+ * ScalaHashMapJmh.mRemoveThenAdd         100  avgt    2     _   128.919          ns/op
+ * ScalaHashMapJmh.mRemoveThenAdd        1000  avgt    2     _   265.190          ns/op
+ * ScalaHashMapJmh.mRemoveThenAdd       10000  avgt    2     _   269.952          ns/op
+ * ScalaHashMapJmh.mRemoveThenAdd      100000  avgt    2     _   350.621          ns/op
+ * ScalaHashMapJmh.mRemoveThenAdd     1000000  avgt    2     _   670.761          ns/op
+ * ScalaHashMapJmh.mTail                   10  avgt    2     _    36.535          ns/op
+ * ScalaHashMapJmh.mTail                  100  avgt    2     _    44.574          ns/op
+ * ScalaHashMapJmh.mTail                 1000  avgt    2     _    72.841          ns/op
+ * ScalaHashMapJmh.mTail                10000  avgt    2     _    92.309          ns/op
+ * ScalaHashMapJmh.mTail               100000  avgt    2     _    90.661          ns/op
+ * ScalaHashMapJmh.mTail              1000000  avgt    2     _   113.395          ns/op
+ *
+ * Process finished with exit code 0
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
-@Fork(value = 1)
+@Measurement(iterations = 0)
+@Warmup(iterations = 0)
+@Fork(value = 0)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaHashMapJmh {
-    @Param({"1000000"})
+    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
     private int size;
 
     private final int mask = ~64;
@@ -60,7 +102,7 @@ public class ScalaHashMapJmh {
         }
         mapA = b.result();
 
-        estimateMemoryUsage(mapA, mapA.head());
+        //estimateMemoryUsage(mapA, mapA.head());
     }
 
     private void estimateMemoryUsage(HashMap<Key, Boolean> mapA, Tuple2<Key, Boolean> head) {

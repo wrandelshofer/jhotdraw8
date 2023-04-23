@@ -17,29 +17,71 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.28
+ * # JMH version: 1.36
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- *                    (size)  Mode  Cnt     _     Score   Error  Units
- * ContainsFound     1000000  avgt          _   302.832          ns/op
- * ContainsNotFound  1000000  avgt          _   287.420          ns/op
- * CopyOf            1000000  avgt       327_098884.613          ns/op
- * Head              1000000  avgt          _    26.058          ns/op
- * Iterate           1000000  avgt        52_071503.316          ns/op
- * Put               1000000  avgt          _   359.388          ns/op
- * RemoveThenAdd     1000000  avgt          _   555.861          ns/op
- * Tail              1000000  avgt          _   109.163          ns/op
+ * Benchmark                       (size)  Mode  Cnt     _     Score   Error  Units
+ * ChampMapJmh.mContainsFound          10  avgt    2     _     5.597          ns/op
+ * ChampMapJmh.mContainsFound         100  avgt    2     _    11.256          ns/op
+ * ChampMapJmh.mContainsFound        1000  avgt    2     _    18.196          ns/op
+ * ChampMapJmh.mContainsFound       10000  avgt    2     _    33.694          ns/op
+ * ChampMapJmh.mContainsFound      100000  avgt    2     _    62.333          ns/op
+ * ChampMapJmh.mContainsFound     1000000  avgt    2     _   195.234          ns/op
+ * ChampMapJmh.mContainsNotFound       10  avgt    2     _     5.415          ns/op
+ * ChampMapJmh.mContainsNotFound      100  avgt    2     _    10.863          ns/op
+ * ChampMapJmh.mContainsNotFound     1000  avgt    2     _    17.988          ns/op
+ * ChampMapJmh.mContainsNotFound    10000  avgt    2     _    33.044          ns/op
+ * ChampMapJmh.mContainsNotFound   100000  avgt    2     _    59.870          ns/op
+ * ChampMapJmh.mContainsNotFound  1000000  avgt    2     _   189.715          ns/op
+ * ChampMapJmh.mCopyOf                 10  avgt    2     _   390.873          ns/op
+ * ChampMapJmh.mCopyOf                100  avgt    2     _  5541.839          ns/op
+ * ChampMapJmh.mCopyOf               1000  avgt    2     _ 98498.383          ns/op
+ * ChampMapJmh.mCopyOf              10000  avgt    2    1_134498.063          ns/op
+ * ChampMapJmh.mCopyOf             100000  avgt    2   16_766068.600          ns/op
+ * ChampMapJmh.mCopyOf            1000000  avgt    2  309_862370.167          ns/op
+ * ChampMapJmh.mHead                   10  avgt    2     _    19.239          ns/op
+ * ChampMapJmh.mHead                  100  avgt    2     _    32.538          ns/op
+ * ChampMapJmh.mHead                 1000  avgt    2     _    33.179          ns/op
+ * ChampMapJmh.mHead                10000  avgt    2     _    40.673          ns/op
+ * ChampMapJmh.mHead               100000  avgt    2     _    49.164          ns/op
+ * ChampMapJmh.mHead              1000000  avgt    2     _    58.482          ns/op
+ * ChampMapJmh.mIterate                10  avgt    2     _   129.451          ns/op
+ * ChampMapJmh.mIterate               100  avgt    2     _  1760.090          ns/op
+ * ChampMapJmh.mIterate              1000  avgt    2     _ 18662.487          ns/op
+ * ChampMapJmh.mIterate             10000  avgt    2     _195351.055          ns/op
+ * ChampMapJmh.mIterate            100000  avgt    2    2_960985.104          ns/op
+ * ChampMapJmh.mIterate           1000000  avgt    2   62_507410.945          ns/op
+ * ChampMapJmh.mPut                    10  avgt    2     _    28.167          ns/op
+ * ChampMapJmh.mPut                   100  avgt    2     _    45.893          ns/op
+ * ChampMapJmh.mPut                  1000  avgt    2     _    69.583          ns/op
+ * ChampMapJmh.mPut                 10000  avgt    2     _   101.107          ns/op
+ * ChampMapJmh.mPut                100000  avgt    2     _   167.333          ns/op
+ * ChampMapJmh.mPut               1000000  avgt    2     _   365.301          ns/op
+ * ChampMapJmh.mRemoveThenAdd          10  avgt    2     _    75.010          ns/op
+ * ChampMapJmh.mRemoveThenAdd         100  avgt    2         118.792          ns/op
+ * ChampMapJmh.mRemoveThenAdd        1000  avgt    2         185.133          ns/op
+ * ChampMapJmh.mRemoveThenAdd       10000  avgt    2         270.122          ns/op
+ * ChampMapJmh.mRemoveThenAdd      100000  avgt    2         331.028          ns/op
+ * ChampMapJmh.mRemoveThenAdd     1000000  avgt    2         576.545          ns/op
+ * ChampMapJmh.mTail                   10  avgt    2          52.106          ns/op
+ * ChampMapJmh.mTail                  100  avgt    2          84.184          ns/op
+ * ChampMapJmh.mTail                 1000  avgt    2          84.854          ns/op
+ * ChampMapJmh.mTail                10000  avgt    2         107.165          ns/op
+ * ChampMapJmh.mTail               100000  avgt    2         131.376          ns/op
+ * ChampMapJmh.mTail              1000000  avgt    2         159.669          ns/op
+ *
+ * Process finished with exit code 0
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
-@Fork(value = 1)
+@Measurement(iterations = 0)
+@Warmup(iterations = 0)
+@Fork(value = 0)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampMapJmh {
-    @Param({"1000000"})
+    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
     private int size;
 
     private final int mask = ~64;
