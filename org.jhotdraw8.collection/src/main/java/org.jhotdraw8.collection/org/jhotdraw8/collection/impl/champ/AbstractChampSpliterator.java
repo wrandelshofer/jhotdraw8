@@ -7,11 +7,10 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
@@ -24,57 +23,32 @@ import java.util.function.Function;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-abstract class AbstractChampSpliterator<K, E> implements EnumeratorSpliterator<E> {
-    private final long size;
-
-    @Override
-    public long estimateSize() {
-        return size;
-    }
-
-    @Override
-    public int characteristics() {
-        return characteristics;
-    }
-
-    @Override
-    public Spliterator<E> trySplit() {
-        // FIXME implement me by splitting the stack
-        return null;
-    }
-
-    static class StackElement<K> {
-        final @NonNull Node<K> node;
-        int index;
-        final int size;
-        int map;
-
-        public StackElement(@NonNull Node<K> node, boolean reverse) {
-            this.node = node;
-            this.size = node.nodeArity() + node.dataArity();
-            this.index = reverse ? size - 1 : 0;
-            this.map = (node instanceof BitmapIndexedNode<K> bin)
-                    ? (bin.dataMap() | bin.nodeMap()) : 0;
-        }
-    }
-
+abstract class AbstractChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
+    private final @NonNull Function<K, E> mappingFunction;
     private final @NonNull Deque<StackElement<K>> stack = new ArrayDeque<>(Node.MAX_DEPTH);
     private K current;
-    private final int characteristics;
-    private final @NonNull Function<K, E> mappingFunction;
 
     public AbstractChampSpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
+        super(size, characteristics);
         if (root.nodeArity() + root.dataArity() > 0) {
             stack.push(new StackElement<>(root, isReverse()));
         }
-        this.characteristics = characteristics;
         //noinspection unchecked
         this.mappingFunction = mappingFunction == null ? i -> (E) i : mappingFunction;
-        this.size = size;
     }
+
+    @Override
+    public E current() {
+        return mappingFunction.apply(current);
+    }
+
+    abstract int getNextBitpos(StackElement<K> elem);
+
+    abstract boolean isDone(@NonNull StackElement<K> elem);
 
     abstract boolean isReverse();
 
+    abstract int moveIndex(@NonNull StackElement<K> elem);
 
     @Override
     public boolean moveNext() {
@@ -106,14 +80,18 @@ abstract class AbstractChampSpliterator<K, E> implements EnumeratorSpliterator<E
         return false;
     }
 
-    abstract int getNextBitpos(StackElement<K> elem);
+    static class StackElement<K> {
+        final @NonNull Node<K> node;
+        final int size;
+        int index;
+        int map;
 
-    abstract int moveIndex(@NonNull StackElement<K> elem);
-
-    abstract boolean isDone(@NonNull StackElement<K> elem);
-
-    @Override
-    public E current() {
-        return mappingFunction.apply(current);
+        public StackElement(@NonNull Node<K> node, boolean reverse) {
+            this.node = node;
+            this.size = node.nodeArity() + node.dataArity();
+            this.index = reverse ? size - 1 : 0;
+            this.map = (node instanceof BitmapIndexedNode<K> bin)
+                    ? (bin.dataMap() | bin.nodeMap()) : 0;
+        }
     }
 }
