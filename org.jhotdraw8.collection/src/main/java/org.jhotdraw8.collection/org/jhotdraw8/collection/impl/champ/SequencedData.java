@@ -142,11 +142,10 @@ public interface SequencedData {
      * Afterwards the sequence number for the next inserted entry must be
      * set to the value {@code size};
      *
-     * @param sequenceRoot    the sequence root of the trie
      * @param <K>
      * @param size            the size of the trie
      * @param root            the root of the trie
-     * @param vector
+     * @param vector          the sequence root of the trie
      * @param mutator         the mutator that will own the renumbered trie
      * @param hashFunction    the hash function for data elements
      * @param equalsFunction  the equals function for data elements
