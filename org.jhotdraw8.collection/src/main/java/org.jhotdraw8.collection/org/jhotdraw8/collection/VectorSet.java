@@ -14,10 +14,10 @@ import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.ReverseSeqVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SeqVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedElement;
-import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -446,7 +446,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ReverseVectorSpliterator<>(vector,
+        return new ReverseSeqVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
@@ -459,7 +459,7 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public EnumeratorSpliterator<E> spliterator() {
-        return new VectorSpliterator<>(vector,
+        return new SeqVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }

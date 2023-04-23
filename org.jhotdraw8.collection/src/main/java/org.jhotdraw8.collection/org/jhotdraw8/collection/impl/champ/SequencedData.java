@@ -48,8 +48,8 @@ public interface SequencedData {
     static <K extends SequencedData> BitmapIndexedNode<K> buildSequencedTrie(@NonNull BitmapIndexedNode<K> root, @NonNull IdentityObject mutator) {
         BitmapIndexedNode<K> seqRoot = emptyNode();
         ChangeEvent<K> details = new ChangeEvent<>();
-        for (ChampIterator<K> i = new ChampIterator<>(root, null); i.hasNext(); ) {
-            K elem = i.next();
+        for (ChampSpliterator<K, K> i = new ChampSpliterator<K, K>(root, null, 0, 0); i.moveNext(); ) {
+            K elem = i.current();
             seqRoot = seqRoot.update(mutator, elem, seqHash(elem.getSequenceNumber()),
                     0, details, (oldK, newK) -> oldK, SequencedData::seqEquals, SequencedData::seqHash);
         }
@@ -166,7 +166,7 @@ public interface SequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         int seq = 0;
 
-        for (var i = new VectorSpliterator<K>(vector, o -> (K) o, 0, 0); i.moveNext(); ) {
+        for (var i = new SeqVectorSpliterator<K>(vector, o -> (K) o, 0, 0); i.moveNext(); ) {
             K e = i.current();
             K newElement = factoryFunction.apply(e, seq);
             newRoot = newRoot.update(mutator,

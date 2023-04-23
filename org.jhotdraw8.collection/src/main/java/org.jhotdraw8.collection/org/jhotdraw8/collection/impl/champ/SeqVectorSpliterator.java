@@ -12,12 +12,12 @@ import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 
 import java.util.function.Function;
 
-public class VectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class SeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull BitMappedTrie.MySpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;
     private int index;
 
-    public VectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
+    public SeqVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = new BitMappedTrie.MySpliterator<>(vector, 0, 0);
         this.mapper = mapper;

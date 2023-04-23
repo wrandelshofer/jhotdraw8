@@ -7,14 +7,14 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.SetFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractChampMap;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampIterator;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
@@ -141,18 +141,21 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
 
     @Override
     public @NonNull Iterator<Entry<K, V>> iterator() {
-        return new MappedIterator<>(new FailFastIterator<>(new ChampIterator<>(
-                root,
-                this::iteratorRemove),
-                () -> this.modCount),
-                e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()));
+        return new FailFastIterator<>(
+                new IteratorFacade<>(new ChampSpliterator<>(root,
+                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
+                        Spliterator.SIZED | Spliterator.DISTINCT, size()), this::iteratorRemove),
+                this::getModCount
+        );
     }
 
     @Override
-    public @NonNull Spliterator<Entry<K, V>> spliterator() {
+    public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
         return new FailFastSpliterator<>(
-                new ChampSpliterator<>(root, null, Spliterator.SIZED | Spliterator.DISTINCT, size()),
-                () -> this.modCount);
+                new ChampSpliterator<>(root,
+                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
+                        Spliterator.SIZED | Spliterator.DISTINCT, size()),
+                this::getModCount);
     }
 
     /**
@@ -195,7 +198,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
         }
     }
 
-    private void iteratorRemove(AbstractMap.SimpleImmutableEntry<K, V> entry) {
+    private void iteratorRemove(Map.Entry<K, V> entry) {
         mutator = null;
         remove(entry.getKey());
     }
@@ -207,7 +210,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     }
 
     @NonNull
-    public ChangeEvent<SimpleImmutableEntry<K, V>> putAndGiveDetails(@Nullable K key, @Nullable V val) {
+    ChangeEvent<SimpleImmutableEntry<K, V>> putAndGiveDetails(@Nullable K key, @Nullable V val) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.update(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
@@ -229,7 +232,7 @@ public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.Si
     }
 
     @NonNull
-    public ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
+    ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.remove(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,

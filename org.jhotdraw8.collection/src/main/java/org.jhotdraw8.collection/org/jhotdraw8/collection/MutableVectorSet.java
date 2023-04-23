@@ -15,10 +15,10 @@ import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.ReverseSeqVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SeqVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedElement;
-import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -237,14 +237,14 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ReverseVectorSpliterator<>(vector,
+        return new ReverseSeqVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new VectorSpliterator<>(vector,
+        return new SeqVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 

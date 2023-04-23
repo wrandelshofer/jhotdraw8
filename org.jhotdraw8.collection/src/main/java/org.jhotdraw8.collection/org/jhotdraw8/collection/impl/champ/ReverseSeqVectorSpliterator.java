@@ -11,12 +11,12 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
 import java.util.function.Function;
 
-public class ReverseVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class ReverseSeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull VectorList<Object> vector;
     private final @NonNull Function<Object, K> mapper;
     private int index;
 
-    public ReverseVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
+    public ReverseSeqVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;

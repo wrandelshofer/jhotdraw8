@@ -92,6 +92,10 @@ public abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implem
         return super.getOrDefault(key, defaultValue);
     }
 
+    protected int getModCount() {
+        return modCount;
+    }
+
 
     @SuppressWarnings("unchecked")
     protected boolean removeEntry(@Nullable Object o) {

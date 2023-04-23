@@ -207,29 +207,34 @@ public class MutableSequencedChampMap<K, V> extends AbstractChampMap<K, V, Seque
     @Override
     public @NonNull Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
-                new IteratorFacade<>(spliterator(), this::iteratorRemove),
-                () -> MutableSequencedChampMap.this.modCount
+                new IteratorFacade<>(new ChampSpliterator<>(sequenceRoot,
+                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
+                        Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()), this::iteratorRemove),
+                this::getModCount
         );
     }
 
     private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
-        return new ReverseChampSpliterator<>(sequenceRoot,
+        return new FailFastSpliterator<>(new ReverseChampSpliterator<>(sequenceRoot,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()),
+                this::getModCount);
     }
 
     private @NonNull Iterator<Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(
-                new IteratorFacade<>(reverseSpliterator(), this::iteratorRemove),
-                () -> MutableSequencedChampMap.this.modCount
+                new IteratorFacade<>(new ReverseChampSpliterator<>(sequenceRoot,
+                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
+                        Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()), this::iteratorRemove),
+                this::getModCount
         );
     }
-
     @Override
     public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
-        return new ChampSpliterator<>(sequenceRoot,
+        return new FailFastSpliterator<>(new ChampSpliterator<>(sequenceRoot,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()),
+                () -> this.modCount);
     }
 
     /**

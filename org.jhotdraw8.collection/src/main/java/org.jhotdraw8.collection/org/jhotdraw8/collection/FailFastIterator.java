@@ -6,9 +6,11 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
 /**
@@ -21,15 +23,17 @@ public class FailFastIterator<E> implements Iterator<E> {
     private final @NonNull Iterator<? extends E> i;
     private int expectedModCount;
     private final @NonNull IntSupplier modCountSupplier;
-    private final @NonNull Runnable removeFunction;
+    private final @NonNull Consumer<E> removeFunction;
+    private @Nullable E current;
+    private boolean canRemove;
 
     public FailFastIterator(@NonNull Iterator<? extends E> i, @NonNull IntSupplier modCountSupplier) {
-        this(i, modCountSupplier, i::remove);
+        this(i, modCountSupplier, (e) -> i.remove());
     }
 
     public FailFastIterator(@NonNull Iterator<? extends E> i,
                             @NonNull IntSupplier modCountSupplier,
-                            @NonNull Runnable removeFunction) {
+                            @NonNull Consumer<E> removeFunction) {
         this.i = i;
         this.modCountSupplier = modCountSupplier;
         this.expectedModCount = modCountSupplier.getAsInt();
@@ -45,7 +49,9 @@ public class FailFastIterator<E> implements Iterator<E> {
     @Override
     public E next() {
         ensureUnmodified();
-        return i.next();
+        current = i.next();
+        canRemove = true;
+        return current;
     }
 
     protected void ensureUnmodified() {
@@ -56,8 +62,13 @@ public class FailFastIterator<E> implements Iterator<E> {
 
     @Override
     public void remove() {
-        ensureUnmodified();
-        removeFunction.run();
-        expectedModCount = modCountSupplier.getAsInt();
+        if (canRemove) {
+            ensureUnmodified();
+            removeFunction.accept(current);
+            expectedModCount = modCountSupplier.getAsInt();
+            canRemove = false;
+        } else {
+            throw new IllegalStateException();
+        }
     }
 }
