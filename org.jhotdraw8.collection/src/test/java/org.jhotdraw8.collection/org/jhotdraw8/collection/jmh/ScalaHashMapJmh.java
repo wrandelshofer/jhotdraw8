@@ -62,6 +62,12 @@ import java.util.concurrent.TimeUnit;
  * ScalaHashMapJmh.mPut                 10000  avgt    2     _    92.897          ns/op
  * ScalaHashMapJmh.mPut                100000  avgt    2     _   159.113          ns/op
  * ScalaHashMapJmh.mPut               1000000  avgt    2     _   391.962          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne         10  avgt    2     _   441.767          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne        100  avgt    2     _  7415.323          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne       1000  avgt    2     _140417.525          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne      10000  avgt    2    2_060235.621          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne     100000  avgt    2   46_879170.225          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne    1000000  avgt    2  673_877913.567          ns/op
  * ScalaHashMapJmh.mRemoveThenAdd          10  avgt    2     _    87.681          ns/op
  * ScalaHashMapJmh.mRemoveThenAdd         100  avgt    2     _   128.919          ns/op
  * ScalaHashMapJmh.mRemoveThenAdd        1000  avgt    2     _   265.190          ns/op
@@ -88,7 +94,8 @@ public class ScalaHashMapJmh {
     @Param({"10", "100", "1000", "10000", "100000", "1000000"})
     private int size;
 
-    private final int mask = ~64;
+    @Param({"-65"})
+    private int mask;
 
     private BenchmarkData data;
     private HashMap<Key, Boolean> mapA;
@@ -127,6 +134,16 @@ public class ScalaHashMapJmh {
     }
 
     @Benchmark
+    public HashMap<Key, Boolean> mRemoveOneByOne() {
+        HashMap<Key, Boolean> map = mapA;
+        for (var e : data.listA) {
+            map = map.removed(e);
+        }
+        if (!map.isEmpty()) throw new AssertionError("map: " + map);
+        return map;
+    }
+
+    @Benchmark
     public Object mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.$minus(key).$plus(new Tuple2<>(key, Boolean.TRUE));
@@ -159,7 +176,6 @@ public class ScalaHashMapJmh {
     public HashMap<Key, Boolean> mTail() {
         return mapA.tail();
     }
-
     @Benchmark
     public HashMap<Key, Boolean> mCopyOf() {
         ReusableBuilder<Tuple2<Key, Boolean>, HashMap<Key, Boolean>> b = HashMap.newBuilder();

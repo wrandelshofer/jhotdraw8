@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * # JMH version: 1.28
+ * # JMH version: 1.36
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
@@ -30,19 +30,28 @@ import java.util.concurrent.TimeUnit;
  * RemoveThenAdd     1000000  avgt         _  1098.002          ns/op
  * Tail              1000000  avgt         _   374.473          ns/op
  * CopyOf            1000000  avgt      557_146914.833          ns/op
+ *
+ * Benchmark                             (mask)   (size)  Mode  Cnt           Score   Error  Units
+ * SequencedChampMapJmh.mRemoveOneByOne     -65       10  avgt    2        1730.694          ns/op
+ * SequencedChampMapJmh.mRemoveOneByOne     -65      100  avgt    2       22698.385          ns/op
+ * SequencedChampMapJmh.mRemoveOneByOne     -65     1000  avgt    2      327728.657          ns/op
+ * SequencedChampMapJmh.mRemoveOneByOne     -65    10000  avgt    2     5297112.835          ns/op
+ * SequencedChampMapJmh.mRemoveOneByOne     -65   100000  avgt    2    90622107.730          ns/op
+ * SequencedChampMapJmh.mRemoveOneByOne     -65  1000000  avgt    2  1321807143.938          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
-@Fork(value = 1)
+@Measurement(iterations = 0)
+@Warmup(iterations = 0)
+@Fork(value = 0)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class SequencedChampMapJmh {
-    @Param({"1000000"})
+    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
     private int size;
 
-    private final int mask = ~64;
+    @Param({"-65"})
+    private int mask;
 
     private BenchmarkData data;
     private SequencedChampMap<Key, Boolean> mapA;
@@ -102,5 +111,15 @@ public class SequencedChampMapJmh {
     @Benchmark
     public SequencedChampMap<Key, Boolean> mCopyOf() {
         return SequencedChampMap.copyOf(data.mapA);
+    }
+
+    @Benchmark
+    public SequencedChampMap<Key, Boolean> mRemoveOneByOne() {
+        var map = mapA;
+        for (var e : data.listA) {
+            map = map.remove(e);
+        }
+        if (!map.isEmpty()) throw new AssertionError("map: " + map);
+        return map;
     }
 }

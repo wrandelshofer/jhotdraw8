@@ -143,7 +143,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (details.isModified()) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    vector = SequencedData.vecRemove(vector, mutator, details.getOldDataNonNull(), details, offset);
+                    var result = SequencedData.vecRemove(vector, mutator, details.getOldDataNonNull(), details, offset);
+                    vector = result.first();
                 }
             } else {
                 size++;
@@ -173,7 +174,9 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (details.isModified()) {
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
-                vector = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
+                var result = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
+                vector = result.first();
+                offset = result.second();
             } else {
                 modCount++;
                 size++;
@@ -272,10 +275,9 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
             modCount++;
             var elem = details.getOldData();
             int seq = elem.getSequenceNumber();
-            vector = SequencedData.vecRemove(vector, mutator, elem, details, offset);
-            if (seq == -offset) {
-                offset--;
-            }
+            var result = SequencedData.vecRemove(vector, mutator, elem, details, offset);
+            vector = result.first();
+            offset = result.second();
             renumber();
         }
         return modified;
@@ -301,10 +303,11 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private void renumber() {
         if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
             IdentityObject mutator = getOrCreateIdentity();
-            root = SequencedData.vecRenumber(size, root, vector, mutator,
+            var result = SequencedData.vecRenumber(size, root, vector, mutator,
                     Objects::hashCode, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            vector = SequencedData.vecBuildSequencedTrie(root, mutator, size);
+            root = result.first();
+            vector = result.second();
             offset = 0;
         }
     }

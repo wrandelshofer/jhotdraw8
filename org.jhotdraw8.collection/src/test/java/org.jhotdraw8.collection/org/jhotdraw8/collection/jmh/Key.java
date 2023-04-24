@@ -21,6 +21,13 @@ public class Key implements Comparable<Key> {
     }
 
     @Override
+    public String toString() {
+        return "Key{" +
+                "" + value +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

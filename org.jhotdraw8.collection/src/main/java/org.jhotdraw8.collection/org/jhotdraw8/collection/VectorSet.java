@@ -234,16 +234,16 @@ public class VectorSet<E>
         if (details.isModified()) {
             var newSeqRoot = vector;
             int newSize = size;
-            int newOffset = offset + 1;
             IdentityObject mutator = new IdentityObject();
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    newSeqRoot = SequencedData.vecRemove(newSeqRoot, mutator, details.getOldData(), details, offset);
-                    newOffset--;
+                    var result = SequencedData.vecRemove(newSeqRoot, mutator, details.getOldData(), details, offset);
+                    newSeqRoot = result.first();
                 }
             } else {
                 newSize++;
             }
+            int newOffset = offset + 1;
             newSeqRoot = SequencedData.vecUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
             return renumber(newRoot, newSeqRoot, newSize, newOffset);
         }
@@ -271,9 +271,9 @@ public class VectorSet<E>
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    newSeqRoot = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details, offset);
-                    int seq = details.getOldData().getSequenceNumber();
-                    newOffset = seq == -newOffset + 1 ? newOffset - 1 : newOffset;
+                    var result = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details, newOffset);
+                    newSeqRoot = result.first();
+                    newOffset = result.second();
                 }
             } else {
                 newSize++;
@@ -360,13 +360,11 @@ public class VectorSet<E>
         BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
-        var newSeqRoot = vector;
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
-            newSeqRoot = SequencedData.vecRemove(newSeqRoot, null, oldElem, details, offset);
-            int seq = oldElem.getSequenceNumber();
-            return renumber(newRoot, newSeqRoot, size - 1,
-                    (seq == -offset) ? offset - 1 : offset);
+            var result = SequencedData.vecRemove(vector, null, oldElem, details, offset);
+            return renumber(newRoot, result.first(), size - 1,
+                    result.second());
         }
         return this;
     }
@@ -417,12 +415,11 @@ public class VectorSet<E>
 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var mutator = new IdentityObject();
-            var renumberedRoot = SequencedData.<SequencedElement<E>>vecRenumber(
+            var result = SequencedData.<SequencedElement<E>>vecRenumber(
                     size, root, vector, mutator, Objects::hashCode, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            var renumberedSeqRoot = SequencedData.vecBuildSequencedTrie(renumberedRoot, mutator, size);
             return new VectorSet<>(
-                    renumberedRoot, renumberedSeqRoot,
+                    result.first(), result.second(),
                     size, 0);
         }
         return new VectorSet<>(root, vector, size, offset);

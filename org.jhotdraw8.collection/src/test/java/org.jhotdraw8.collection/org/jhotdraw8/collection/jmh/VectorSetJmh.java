@@ -22,55 +22,61 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- * Benchmark                       (mask)   (size)  Mode  Cnt     _     Score   Error  Units
- * VectorSetJmh.mAdd                  -65       10  avgt    2     _     5.726          ns/op
- * VectorSetJmh.mAdd                  -65      100  avgt    2     _    18.807          ns/op
- * VectorSetJmh.mAdd                  -65     1000  avgt    2     _    28.747          ns/op
- * VectorSetJmh.mAdd                  -65    10000  avgt    2     _    46.049          ns/op
- * VectorSetJmh.mAdd                  -65   100000  avgt    2     _    66.678          ns/op
- * VectorSetJmh.mAdd                  -65  1000000  avgt    2     _   214.538          ns/op
- * VectorSetJmh.mContainsFound        -65       10  avgt    2     _     4.855          ns/op
- * VectorSetJmh.mContainsFound        -65      100  avgt    2     _    11.401          ns/op
- * VectorSetJmh.mContainsFound        -65     1000  avgt    2     _    16.816          ns/op
- * VectorSetJmh.mContainsFound        -65    10000  avgt    2     _    33.466          ns/op
- * VectorSetJmh.mContainsFound        -65   100000  avgt    2     _    52.787          ns/op
- * VectorSetJmh.mContainsFound        -65  1000000  avgt    2     _   196.904          ns/op
- * VectorSetJmh.mContainsNotFound     -65       10  avgt    2     _     4.865          ns/op
- * VectorSetJmh.mContainsNotFound     -65      100  avgt    2     _    11.634          ns/op
- * VectorSetJmh.mContainsNotFound     -65     1000  avgt    2     _    17.090          ns/op
- * VectorSetJmh.mContainsNotFound     -65    10000  avgt    2     _    33.270          ns/op
- * VectorSetJmh.mContainsNotFound     -65   100000  avgt    2     _    52.320          ns/op
- * VectorSetJmh.mContainsNotFound     -65  1000000  avgt    2     _   184.913          ns/op
- * VectorSetJmh.mCopyOf               -65       10  avgt    2     _   633.977          ns/op
- * VectorSetJmh.mCopyOf               -65      100  avgt    2     _  8836.761          ns/op
- * VectorSetJmh.mCopyOf               -65     1000  avgt    2     _146829.800          ns/op
- * VectorSetJmh.mCopyOf               -65    10000  avgt    2    1_817203.463          ns/op
- * VectorSetJmh.mCopyOf               -65   100000  avgt    2   28_280057.915          ns/op
- * VectorSetJmh.mCopyOf               -65  1000000  avgt    2  426_404007.542          ns/op
- * VectorSetJmh.mHead                 -65       10  avgt    2     _    13.308          ns/op
- * VectorSetJmh.mHead                 -65      100  avgt    2     _    14.934          ns/op
- * VectorSetJmh.mHead                 -65     1000  avgt    2     _    14.815          ns/op
- * VectorSetJmh.mHead                 -65    10000  avgt    2     _    17.173          ns/op
- * VectorSetJmh.mHead                 -65   100000  avgt    2     _    18.056          ns/op
- * VectorSetJmh.mHead                 -65  1000000  avgt    2     _    18.003          ns/op
- * VectorSetJmh.mIterate              -65       10  avgt    2     _    62.979          ns/op
- * VectorSetJmh.mIterate              -65      100  avgt    2     _   553.592          ns/op
- * VectorSetJmh.mIterate              -65     1000  avgt    2     _  6405.368          ns/op
- * VectorSetJmh.mIterate              -65    10000  avgt    2     _ 88916.951          ns/op
- * VectorSetJmh.mIterate              -65   100000  avgt    2    1_680524.019          ns/op
- * VectorSetJmh.mIterate              -65  1000000  avgt    2   62_789974.700          ns/op
- * VectorSetJmh.mRemoveThenAdd        -65       10  avgt    2     _   107.353          ns/op
- * VectorSetJmh.mRemoveThenAdd        -65      100  avgt    2     _   167.282          ns/op
- * VectorSetJmh.mRemoveThenAdd        -65     1000  avgt    2     _   254.792          ns/op
- * VectorSetJmh.mRemoveThenAdd        -65    10000  avgt    2     _   351.577          ns/op
- * VectorSetJmh.mRemoveThenAdd        -65   100000  avgt    2     _   477.388          ns/op
- * VectorSetJmh.mRemoveThenAdd        -65  1000000  avgt    2     _   924.429          ns/op
- * VectorSetJmh.mTail                 -65       10  avgt    2     _    38.555          ns/op
- * VectorSetJmh.mTail                 -65      100  avgt    2     _    59.958          ns/op
- * VectorSetJmh.mTail                 -65     1000  avgt    2     _    63.800          ns/op
- * VectorSetJmh.mTail                 -65    10000  avgt    2     _   121.382          ns/op
- * VectorSetJmh.mTail                 -65   100000  avgt    2     _   114.062          ns/op
- * VectorSetJmh.mTail                 -65  1000000  avgt    2     _   137.438          ns/op
+ * Benchmark                       (mask)   (size)  Mode  Cnt      _     Score   Error  Units
+ * VectorSetJmh.mAdd                  -65       10  avgt    2      _     5.726          ns/op
+ * VectorSetJmh.mAdd                  -65      100  avgt    2      _    18.807          ns/op
+ * VectorSetJmh.mAdd                  -65     1000  avgt    2      _    28.747          ns/op
+ * VectorSetJmh.mAdd                  -65    10000  avgt    2      _    46.049          ns/op
+ * VectorSetJmh.mAdd                  -65   100000  avgt    2      _    66.678          ns/op
+ * VectorSetJmh.mAdd                  -65  1000000  avgt    2      _   214.538          ns/op
+ * VectorSetJmh.mContainsFound        -65       10  avgt    2      _     4.855          ns/op
+ * VectorSetJmh.mContainsFound        -65      100  avgt    2      _    11.401          ns/op
+ * VectorSetJmh.mContainsFound        -65     1000  avgt    2      _    16.816          ns/op
+ * VectorSetJmh.mContainsFound        -65    10000  avgt    2      _    33.466          ns/op
+ * VectorSetJmh.mContainsFound        -65   100000  avgt    2      _    52.787          ns/op
+ * VectorSetJmh.mContainsFound        -65  1000000  avgt    2      _   196.904          ns/op
+ * VectorSetJmh.mContainsNotFound     -65       10  avgt    2      _     4.865          ns/op
+ * VectorSetJmh.mContainsNotFound     -65      100  avgt    2      _    11.634          ns/op
+ * VectorSetJmh.mContainsNotFound     -65     1000  avgt    2      _    17.090          ns/op
+ * VectorSetJmh.mContainsNotFound     -65    10000  avgt    2      _    33.270          ns/op
+ * VectorSetJmh.mContainsNotFound     -65   100000  avgt    2      _    52.320          ns/op
+ * VectorSetJmh.mContainsNotFound     -65  1000000  avgt    2      _   184.913          ns/op
+ * VectorSetJmh.mCopyOf               -65       10  avgt    2      _   633.977          ns/op
+ * VectorSetJmh.mCopyOf               -65      100  avgt    2      _  8836.761          ns/op
+ * VectorSetJmh.mCopyOf               -65     1000  avgt    2      _146829.800          ns/op
+ * VectorSetJmh.mCopyOf               -65    10000  avgt    2     1_817203.463          ns/op
+ * VectorSetJmh.mCopyOf               -65   100000  avgt    2    28_280057.915          ns/op
+ * VectorSetJmh.mCopyOf               -65  1000000  avgt    2   426_404007.542          ns/op
+ * VectorSetJmh.mHead                 -65       10  avgt    2      _    13.308          ns/op
+ * VectorSetJmh.mHead                 -65      100  avgt    2      _    14.934          ns/op
+ * VectorSetJmh.mHead                 -65     1000  avgt    2      _    14.815          ns/op
+ * VectorSetJmh.mHead                 -65    10000  avgt    2      _    17.173          ns/op
+ * VectorSetJmh.mHead                 -65   100000  avgt    2      _    18.056          ns/op
+ * VectorSetJmh.mHead                 -65  1000000  avgt    2      _    18.003          ns/op
+ * VectorSetJmh.mIterate              -65       10  avgt    2      _    62.979          ns/op
+ * VectorSetJmh.mIterate              -65      100  avgt    2      _   553.592          ns/op
+ * VectorSetJmh.mIterate              -65     1000  avgt    2      _  6405.368          ns/op
+ * VectorSetJmh.mIterate              -65    10000  avgt    2      _ 88916.951          ns/op
+ * VectorSetJmh.mIterate              -65   100000  avgt    2     1_680524.019          ns/op
+ * VectorSetJmh.mIterate              -65  1000000  avgt    2    62_789974.700          ns/op
+ * VectorSetJmh.mRemoveOneByOne       -65       10  avgt    2      _  1155.171          ns/op
+ * VectorSetJmh.mRemoveOneByOne       -65      100  avgt    2      _ 25438.120          ns/op
+ * VectorSetJmh.mRemoveOneByOne       -65     1000  avgt    2      _403014.802          ns/op
+ * VectorSetJmh.mRemoveOneByOne       -65    10000  avgt    2     6_901789.117          ns/op
+ * VectorSetJmh.mRemoveOneByOne       -65   100000  avgt    2   121_582468.066          ns/op
+ * VectorSetJmh.mRemoveOneByOne       -65  1000000  avgt    2  1957_646140.417          ns/op
+ * VectorSetJmh.mRemoveThenAdd        -65       10  avgt    2      _   107.353          ns/op
+ * VectorSetJmh.mRemoveThenAdd        -65      100  avgt    2      _   167.282          ns/op
+ * VectorSetJmh.mRemoveThenAdd        -65     1000  avgt    2      _   254.792          ns/op
+ * VectorSetJmh.mRemoveThenAdd        -65    10000  avgt    2      _   351.577          ns/op
+ * VectorSetJmh.mRemoveThenAdd        -65   100000  avgt    2      _   477.388          ns/op
+ * VectorSetJmh.mRemoveThenAdd        -65  1000000  avgt    2      _   924.429          ns/op
+ * VectorSetJmh.mTail                 -65       10  avgt    2      _    38.555          ns/op
+ * VectorSetJmh.mTail                 -65      100  avgt    2      _    59.958          ns/op
+ * VectorSetJmh.mTail                 -65     1000  avgt    2      _    63.800          ns/op
+ * VectorSetJmh.mTail                 -65    10000  avgt    2      _   121.382          ns/op
+ * VectorSetJmh.mTail                 -65   100000  avgt    2      _   114.062          ns/op
+ * VectorSetJmh.mTail                 -65  1000000  avgt    2      _   137.438          ns/op
  *
  * Process finished with exit code 0
  * </pre>
@@ -144,4 +150,16 @@ public class VectorSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
+
+    @Benchmark
+    public VectorSet<Key> mRemoveOneByOne() {
+        var map = setA;
+        for (var e : data.listA) {
+            map = map.remove(e);
+        }
+        if (!map.isEmpty()) throw new AssertionError("map: " + map);
+        return map;
+    }
+
+
 }
