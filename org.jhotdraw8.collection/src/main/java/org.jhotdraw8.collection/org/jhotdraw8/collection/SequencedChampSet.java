@@ -124,24 +124,24 @@ public class SequencedChampSet<E>
     /**
      * The root of the CHAMP trie for the sequence numbers.
      */
-    public final @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
+    final @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot;
 
-    public final int size;
+    final int size;
 
     /**
      * Counter for the sequence number of the last element. The counter is
      * incremented after a new entry has been added to the end of the sequence.
      */
-    public final int last;
+    final int last;
 
 
     /**
      * Counter for the sequence number of the first element. The counter is
      * decrement after a new entry has been added to the start of the sequence.
      */
-    public final int first;
+    final int first;
 
-    public SequencedChampSet(
+    SequencedChampSet(
             @NonNull BitmapIndexedNode<SequencedElement<E>> root,
             @NonNull BitmapIndexedNode<SequencedElement<E>> sequenceRoot,
             int size, int first, int last) {

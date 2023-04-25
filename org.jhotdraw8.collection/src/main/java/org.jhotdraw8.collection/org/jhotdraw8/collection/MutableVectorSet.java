@@ -15,7 +15,7 @@ import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseSeqVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.ReversedSeqVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SeqVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedElement;
@@ -52,7 +52,7 @@ import java.util.Spliterator;
  *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     set and in the clone</li>
  *     <li>iterator creation: O(1)</li>
- *     <li>iterator.next: O(1) with bucket sort, O(log N) with heap sort</li>
+ *     <li>iterator.next: O(1)</li>
  *     <li>getFirst, getLast: O(1)</li>
  * </ul>
  * <p>
@@ -140,7 +140,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
-        if (details.isModified()) {
+        boolean modified = details.isModified();
+        if (modified) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
                     var result = SequencedData.vecRemove(vector, mutator, details.getOldDataNonNull(), details, offset);
@@ -154,7 +155,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
             vector = vector.addFirst(newElem);
             renumber();
         }
-        return details.isModified();
+        return modified;
     }
 
     @Override
@@ -171,7 +172,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
                 details,
                 moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
-        if (details.isModified()) {
+        boolean modified = details.isModified();
+        if (modified) {
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 var result = SequencedData.vecRemove(vector, mutator, oldElem, details, offset);
@@ -184,7 +186,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
             vector = vector.add(newElem);
             renumber();
         }
-        return details.isModified();
+        return modified;
     }
 
     /**
@@ -240,15 +242,17 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ReverseSeqVectorSpliterator<>(vector,
-                (Object o) -> ((SequencedElement<E>) o).getElement(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+        return new ReversedSeqVectorSpliterator<>(vector,
+                (Object o) -> ((SequencedElement<E>) o).getElement(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new SeqVectorSpliterator<>(vector,
-                (Object o) -> ((SequencedElement<E>) o).getElement(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                (Object o) -> ((SequencedElement<E>) o).getElement(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 
     private void iteratorRemove(E element) {
@@ -271,11 +275,9 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
                 Objects.hashCode(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
         if (modified) {
+            var result = SequencedData.vecRemove(vector, mutator, details.getOldDataNonNull(), details, offset);
             size--;
             modCount++;
-            var elem = details.getOldData();
-            int seq = elem.getSequenceNumber();
-            var result = SequencedData.vecRemove(vector, mutator, elem, details, offset);
             vector = result.first();
             offset = result.second();
             renumber();

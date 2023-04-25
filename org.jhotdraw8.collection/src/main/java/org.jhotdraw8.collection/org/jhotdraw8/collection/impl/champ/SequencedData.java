@@ -151,19 +151,21 @@ public interface SequencedData {
             @NonNull ToIntFunction<K> hashFunction,
             @NonNull BiPredicate<K, K> equalsFunction,
             @NonNull BiFunction<K, Integer, K> factoryFunction) {
+        if (size == 0) {
+            new OrderedPair<>(root, vector);
+        }
         BitmapIndexedNode<K> renumberedRoot = root;
         VectorList<Object> renumberedVector = VectorList.of();
-        if (size != 0) {
-            ChangeEvent<K> details = new ChangeEvent<>();
-            BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
-            int seq = 0;
-            for (var i = new SeqVectorSpliterator<K>(vector, o -> (K) o, Long.MAX_VALUE, 0); i.moveNext(); ) {
-                K current = i.current();
-                K data = factoryFunction.apply(current, seq++);
-                renumberedVector = renumberedVector.add(data);
-                renumberedRoot = renumberedRoot.update(mutator, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
+        ChangeEvent<K> details = new ChangeEvent<>();
+        BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
+        int seq = 0;
+        for (var i = new SeqVectorSpliterator<K>(vector, o -> (K) o, Long.MAX_VALUE, 0); i.moveNext(); ) {
+            K current = i.current();
+            K data = factoryFunction.apply(current, seq++);
+            renumberedVector = renumberedVector.add(data);
+            renumberedRoot = renumberedRoot.update(mutator, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
             }
-        }
+
         return new OrderedPair<>(renumberedRoot, renumberedVector);
     }
 
@@ -256,11 +258,6 @@ public interface SequencedData {
             vector = vector.set(index, TOMB_ZERO_ZERO);
         }
         return new OrderedPair<>(vector, offset);
-    }
-
-    static <K extends SequencedData> VectorList<Object> vecUpdate(VectorList<Object> newSeqRoot, IdentityObject mutator, K newElem, ChangeEvent<K> details,
-                                                                  @NonNull BiFunction<K, K, K> replaceFunction) {
-        return newSeqRoot;
     }
 
     /**

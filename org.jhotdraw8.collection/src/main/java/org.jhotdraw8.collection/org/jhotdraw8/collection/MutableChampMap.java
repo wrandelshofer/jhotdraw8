@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.SetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractChampMap;
+import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
@@ -67,7 +67,7 @@ import java.util.Spliterator;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class MutableChampMap<K, V> extends AbstractChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
+public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
     @Serial
     private static final long serialVersionUID = 0L;
 

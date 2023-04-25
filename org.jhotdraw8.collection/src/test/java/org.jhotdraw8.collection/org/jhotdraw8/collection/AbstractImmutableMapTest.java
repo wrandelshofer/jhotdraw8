@@ -72,6 +72,8 @@ public abstract class AbstractImmutableMapTest {
     }
 
     protected <K, V> void assertEqualMap(Map<K, V> expected, ImmutableMap<K, V> actual) {
+        assertEquals(new LinkedHashSet<>(expected.values()),
+                new LinkedHashSet<>(actual.readOnlyValues().asCollection()));
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
         assertEquals(expected.hashCode(), actual.hashCode());
@@ -79,8 +81,6 @@ public abstract class AbstractImmutableMapTest {
         assertEquals(actual.asMap(), expected);
         assertEquals(expected.entrySet(), actual.readOnlyEntrySet().asSet());
         assertEquals(expected.keySet(), actual.readOnlyKeySet().asSet());
-        assertEquals(new LinkedHashSet<>(expected.values()),
-                new LinkedHashSet<>(actual.readOnlyValues().asCollection()));
     }
 
     protected <K, V> void assertNotEqualMap(Map<K, V> expected, ImmutableMap<K, V> actual) {

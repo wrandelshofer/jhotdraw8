@@ -13,6 +13,8 @@ import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Abstract base class for CHAMP maps.
@@ -20,7 +22,7 @@ import java.util.AbstractMap;
  * @param <K> the key type of the map
  * @param <V> the value typeof the map
  */
-public abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -61,10 +63,10 @@ public abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implem
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractChampMap<K, V, X> clone() {
+    public @NonNull AbstractMutableChampMap<K, V, X> clone() {
         try {
             mutator = null;
-            return (AbstractChampMap<K, V, X>) super.clone();
+            return (AbstractMutableChampMap<K, V, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
@@ -80,8 +82,8 @@ public abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implem
         if (o == this) {
             return true;
         }
-        if (o instanceof AbstractChampMap<?, ?, ?>) {
-            AbstractChampMap<?, ?, ?> that = (AbstractChampMap<?, ?, ?>) o;
+        if (o instanceof AbstractMutableChampMap<?, ?, ?>) {
+            AbstractMutableChampMap<?, ?, ?> that = (AbstractMutableChampMap<?, ?, ?>) o;
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
@@ -96,6 +98,23 @@ public abstract class AbstractChampMap<K, V, X> extends AbstractMap<K, V> implem
         return modCount;
     }
 
+    /**
+     * Adds all specified elements that are not already in this set.
+     *
+     * @param c an iterable of elements
+     * @return {@code true} if this set changed
+     */
+    public boolean putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        if (c == this) {
+            return false;
+        }
+        boolean modified = false;
+        for (var e : c) {
+            var oldValue = put(e.getKey(), e.getValue());
+            modified = modified || !Objects.equals(oldValue, e);
+        }
+        return modified;
+    }
 
     @SuppressWarnings("unchecked")
     protected boolean removeEntry(@Nullable Object o) {

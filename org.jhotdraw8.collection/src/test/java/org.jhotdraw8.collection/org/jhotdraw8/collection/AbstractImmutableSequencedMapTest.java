@@ -40,12 +40,13 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractImmutabl
     public void putFirstWithContainedEntryShouldMoveEntryToFirst(MapData data) throws Exception {
         ImmutableSequencedMap<HashCollider, HashCollider> instance = newInstance(data.a());
         List<Map.Entry<HashCollider, HashCollider>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        assertEqualSequence(expected, instance, "initial");
         for (Map.Entry<HashCollider, HashCollider> e : data.a()) {
             instance = instance.putFirst(e.getKey(), e.getValue());
-            assertEquals(e, instance.firstEntry());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "putFirst");
+            assertEquals(e, instance.firstEntry());
         }
     }
 

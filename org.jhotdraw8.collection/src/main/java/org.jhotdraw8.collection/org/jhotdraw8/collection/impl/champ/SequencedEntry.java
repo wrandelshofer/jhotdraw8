@@ -51,13 +51,19 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
     @NonNull
     public static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() + 1
+                ? oldK
+                : newK.getSequenceNumber() == oldK.getSequenceNumber() - 1
+                ? new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber()) : newK;
     }
 
     @NonNull
     public static <K, V> SequencedEntry<K, V> updateAndMoveToLast(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue())
-                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
+                && oldK.getSequenceNumber() == newK.getSequenceNumber() - 1
+                ? oldK
+                : newK.getSequenceNumber() == oldK.getSequenceNumber() + 1
+                ? new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber()) : newK;
     }
 
     public int getSequenceNumber() {

@@ -85,6 +85,9 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
+    /**
+     * The size of the set.
+     */
     final int size;
 
     ChampSet(@NonNull BitmapIndexedNode<E> root, int size) {

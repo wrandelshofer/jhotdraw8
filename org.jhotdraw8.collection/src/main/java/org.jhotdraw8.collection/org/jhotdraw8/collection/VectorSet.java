@@ -14,7 +14,7 @@ import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseSeqVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.ReversedSeqVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SeqVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedElement;
@@ -136,12 +136,15 @@ public class VectorSet<E>
      *
      * <pre>vector index = sequence number + offset</pre>
      */
-    public final int offset;
-    public final int size;
+    final int offset;
+    /**
+     * The size of the set.
+     */
+    final int size;
     /**
      * In this vector we store the elements in the order in which they were inserted.
      */
-    public final @NonNull VectorList<Object> vector;
+    final @NonNull VectorList<Object> vector;
 
     VectorSet(
             @NonNull BitmapIndexedNode<SequencedElement<E>> root,
@@ -164,7 +167,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return ((VectorSet<E>) VectorSet.EMPTY).addAll(iterable);
+        return VectorSet.<E>of().addAll(iterable);
     }
 
 
@@ -226,26 +229,26 @@ public class VectorSet<E>
 
     private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var newElem = new SequencedElement<>(e, offset - 1);
+        var newElem = new SequencedElement<>(e, -offset - 1);
         var newRoot = update(null, newElem,
                 Objects.hashCode(e), 0, details,
                 moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var newSeqRoot = vector;
+            var newVector = vector;
             int newSize = size;
             IdentityObject mutator = new IdentityObject();
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = SequencedData.vecRemove(newSeqRoot, mutator, details.getOldData(), details, offset);
-                    newSeqRoot = result.first();
+                    var result = SequencedData.vecRemove(newVector, mutator, details.getOldDataNonNull(), details, offset);
+                    newVector = result.first();
                 }
             } else {
                 newSize++;
             }
             int newOffset = offset + 1;
-            newSeqRoot = SequencedData.vecUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
-            return renumber(newRoot, newSeqRoot, newSize, newOffset);
+            newVector = newVector.addFirst(newElem);
+            return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
     }
@@ -258,28 +261,27 @@ public class VectorSet<E>
                                           boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<E>(e, vector.size() - offset);
-        var newRoot = update(
-                null, newElem, Objects.hashCode(e), 0,
-                details,
+        var newRoot = update(null, newElem,
+                Objects.hashCode(e), 0, details,
                 moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            var newSeqRoot = vector;
+            var newVector = vector;
             int newOffset = offset;
             int newSize = size;
             var mutator = new IdentityObject();
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    var result = SequencedData.vecRemove(newSeqRoot, mutator, oldElem, details, newOffset);
-                    newSeqRoot = result.first();
+                    var result = SequencedData.vecRemove(newVector, mutator, oldElem, details, newOffset);
+                    newVector = result.first();
                     newOffset = result.second();
                 }
             } else {
                 newSize++;
             }
-            newSeqRoot = SequencedData.vecUpdate(newSeqRoot, mutator, newElem, details, SequencedElement::update);
-            return renumber(newRoot, newSeqRoot, newSize, newOffset);
+            newVector = newVector.addLast(newElem);
+            return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
     }
@@ -443,7 +445,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ReverseSeqVectorSpliterator<>(vector,
+        return new ReversedSeqVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
@@ -455,7 +457,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public EnumeratorSpliterator<E> spliterator() {
+    public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new SeqVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());

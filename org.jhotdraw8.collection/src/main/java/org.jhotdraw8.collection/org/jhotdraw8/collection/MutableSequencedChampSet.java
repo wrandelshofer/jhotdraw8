@@ -52,7 +52,7 @@ import java.util.Spliterator;
  *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     set and in the clone</li>
  *     <li>iterator creation: O(1)</li>
- *     <li>iterator.next: O(1) with bucket sort, O(log N) with heap sort</li>
+ *     <li>iterator.next: O(1)</li>
  *     <li>getFirst, getLast: O(1)</li>
  * </ul>
  * <p>
