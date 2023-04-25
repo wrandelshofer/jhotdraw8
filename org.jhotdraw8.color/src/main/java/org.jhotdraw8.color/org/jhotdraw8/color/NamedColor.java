@@ -14,7 +14,7 @@ import org.jhotdraw8.annotation.NonNull;
  * <p>
  * References:
  * <dl>
- *      <dt>CSS Color Module Level 4. 4. Representing Colors: the <color> type.</dt>
+ *      <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.</dt>
  *      <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
  *  </dl>
  *

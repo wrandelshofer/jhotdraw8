@@ -16,7 +16,7 @@ import java.util.Collection;
  * {@link Handle} of a figure to the {@link SelectionTool}.
  * <p>
  * A {@link HandleTracker} should set the {@link Node#accessibleTextProperty()}
- * and {@link Node#accessibleHelpProperty()} of its own {@link Node, to the
+ * and {@link Node#accessibleHelpProperty()} of its own {@link Node}, to the
  * values of the corresponding properties in the {@link Node provided
  * by the current {@link Handle}.
  *

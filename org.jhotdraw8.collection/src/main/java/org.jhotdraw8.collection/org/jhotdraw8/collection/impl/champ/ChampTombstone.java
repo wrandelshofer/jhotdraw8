@@ -62,6 +62,6 @@ import org.jhotdraw8.collection.VectorSet;
  * @param before minimal number of neighboring tombstones before this one
  * @param after  minimal number of neighboring tombstones after this one
  */
-public record Tombstone(int before, int after) {
+public record ChampTombstone(int before, int after) {
 
 }

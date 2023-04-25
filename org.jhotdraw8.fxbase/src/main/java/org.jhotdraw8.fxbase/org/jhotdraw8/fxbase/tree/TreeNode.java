@@ -283,6 +283,8 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
+     * Ancestor iterator.
+     *
      * @param <T> the type of the tree nodes
      */
     class AncestorIterator<T extends TreeNode<T>> implements Iterator<T> {

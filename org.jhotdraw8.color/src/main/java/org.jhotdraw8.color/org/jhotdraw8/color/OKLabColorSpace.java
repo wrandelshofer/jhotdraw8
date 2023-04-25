@@ -24,9 +24,9 @@ import java.io.Serial;
  * </pre>
  * A non-linearity  is applied
  * <pre>
- *    [ l' ]    [ l<sup>1/3</sup> ]
- *    [ m' ] =  [ m<sup>1/3</sup> ]
- *    [ s' ]    [ s<sup>1/3</sup> ]
+ *    [ l' ]    [ ∛l ]
+ *    [ m' ] =  [ ∛m ]
+ *    [ s' ]    [ ∛s ]
  * </pre>
  * Finally, this is transformed into the LabLab-coordinates:
  * <pre>

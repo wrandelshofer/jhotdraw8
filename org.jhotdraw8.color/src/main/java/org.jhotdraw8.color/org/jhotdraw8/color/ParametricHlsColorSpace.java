@@ -21,7 +21,6 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
  *     <dt>saturation</dt><dd>0 to 1 percentage</dd>
  * </dl>
  * <p>
- * <p>
  * A color with maximal {@code lightness} is pure white.
  * <p>
  * A color with minimal {@code lightness} is pure black.

@@ -23,12 +23,12 @@ import java.util.function.Function;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-abstract class AbstractChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
+abstract class ChampAbstractChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     private final @NonNull Function<K, E> mappingFunction;
-    private final @NonNull Deque<StackElement<K>> stack = new ArrayDeque<>(Node.MAX_DEPTH);
+    private final @NonNull Deque<StackElement<K>> stack = new ArrayDeque<>(ChampNode.MAX_DEPTH);
     private K current;
 
-    public AbstractChampSpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
+    public ChampAbstractChampSpliterator(@NonNull ChampNode<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         super(size, characteristics);
         if (root.nodeArity() + root.dataArity() > 0) {
             stack.push(new StackElement<>(root, isReverse()));
@@ -54,15 +54,15 @@ abstract class AbstractChampSpliterator<K, E> extends AbstractEnumeratorSplitera
     public boolean moveNext() {
         while (!stack.isEmpty()) {
             StackElement<K> elem = stack.peek();
-            Node<K> node = elem.node;
+            ChampNode<K> node = elem.node;
 
-            if (node instanceof HashCollisionNode<K> hcn) {
+            if (node instanceof ChampHashCollisionNode<K> hcn) {
                 current = hcn.getData(moveIndex(elem));
                 if (isDone(elem)) {
                     stack.pop();
                 }
                 return true;
-            } else if (node instanceof BitmapIndexedNode<K> bin) {
+            } else if (node instanceof ChampBitmapIndexedNode<K> bin) {
                 int bitpos = getNextBitpos(elem);
                 elem.map ^= bitpos;
                 moveIndex(elem);
@@ -81,16 +81,16 @@ abstract class AbstractChampSpliterator<K, E> extends AbstractEnumeratorSplitera
     }
 
     static class StackElement<K> {
-        final @NonNull Node<K> node;
+        final @NonNull ChampNode<K> node;
         final int size;
         int index;
         int map;
 
-        public StackElement(@NonNull Node<K> node, boolean reverse) {
+        public StackElement(@NonNull ChampNode<K> node, boolean reverse) {
             this.node = node;
             this.size = node.nodeArity() + node.dataArity();
             this.index = reverse ? size - 1 : 0;
-            this.map = (node instanceof BitmapIndexedNode<K> bin)
+            this.map = (node instanceof ChampBitmapIndexedNode<K> bin)
                     ? (bin.dataMap() | bin.nodeMap()) : 0;
         }
     }

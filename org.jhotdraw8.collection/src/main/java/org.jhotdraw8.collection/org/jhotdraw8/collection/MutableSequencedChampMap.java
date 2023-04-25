@@ -12,14 +12,14 @@ import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampAbstractMutableChampMap;
+import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
+import org.jhotdraw8.collection.impl.champ.ChampNode;
+import org.jhotdraw8.collection.impl.champ.ChampReversedChampSpliterator;
+import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
+import org.jhotdraw8.collection.impl.champ.ChampSequencedEntry;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedEntry;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
-import static org.jhotdraw8.collection.impl.champ.SequencedData.seqHash;
+import static org.jhotdraw8.collection.impl.champ.ChampSequencedData.seqHash;
 
 /**
  * Implements a mutable map using two Compressed Hash-Array Mapped Prefix-trees
@@ -84,7 +84,7 @@ import static org.jhotdraw8.collection.impl.champ.SequencedData.seqHash;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
+public class MutableSequencedChampMap<K, V> extends ChampAbstractMutableChampMap<K, V, ChampSequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -102,15 +102,15 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     /**
      * The root of the CHAMP trie for the sequence numbers.
      */
-    private @NonNull BitmapIndexedNode<SequencedEntry<K, V>> sequenceRoot;
+    private @NonNull ChampBitmapIndexedNode<ChampSequencedEntry<K, V>> sequenceRoot;
 
 
     /**
      * Constructs a new empty map.
      */
     public MutableSequencedChampMap() {
-        root = BitmapIndexedNode.emptyNode();
-        sequenceRoot = BitmapIndexedNode.emptyNode();
+        root = ChampBitmapIndexedNode.emptyNode();
+        sequenceRoot = ChampBitmapIndexedNode.emptyNode();
     }
 
     /**
@@ -132,8 +132,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
             this.last = that.last;
             this.sequenceRoot = Objects.requireNonNull(that.sequenceRoot);
         } else {
-            this.root = BitmapIndexedNode.emptyNode();
-            this.sequenceRoot = BitmapIndexedNode.emptyNode();
+            this.root = ChampBitmapIndexedNode.emptyNode();
+            this.sequenceRoot = ChampBitmapIndexedNode.emptyNode();
             this.putAll(m);
         }
     }
@@ -145,8 +145,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
      * @param m an iterable
      */
     public MutableSequencedChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
-        this.root = BitmapIndexedNode.emptyNode();
-        this.sequenceRoot = BitmapIndexedNode.emptyNode();
+        this.root = ChampBitmapIndexedNode.emptyNode();
+        this.sequenceRoot = ChampBitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
         }
@@ -168,8 +168,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
             this.last = that.last;
             this.sequenceRoot = that.sequenceRoot;
         } else {
-            this.root = BitmapIndexedNode.emptyNode();
-            this.sequenceRoot = BitmapIndexedNode.emptyNode();
+            this.root = ChampBitmapIndexedNode.emptyNode();
+            this.sequenceRoot = ChampBitmapIndexedNode.emptyNode();
             this.putAll(m.asMap());
         }
     }
@@ -179,8 +179,8 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
      */
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
-        sequenceRoot = BitmapIndexedNode.emptyNode();
+        root = ChampBitmapIndexedNode.emptyNode();
+        sequenceRoot = ChampBitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
         first = -1;
@@ -199,9 +199,9 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
         K key = (K) o;
-        return Node.NO_DATA != root.find(new SequencedEntry<>(key),
+        return ChampNode.NO_DATA != root.find(new ChampSequencedEntry<>(key),
                 Objects.hashCode(key), 0,
-                SequencedEntry::keyEquals);
+                ChampSequencedEntry::keyEquals);
     }
 
     @Override
@@ -215,7 +215,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     }
 
     private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
-        return new FailFastSpliterator<>(new ReverseChampSpliterator<>(sequenceRoot,
+        return new FailFastSpliterator<>(new ChampReversedChampSpliterator<>(sequenceRoot,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()),
                 this::getModCount);
@@ -223,7 +223,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
 
     private @NonNull Iterator<Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(
-                new IteratorFacade<>(new ReverseChampSpliterator<>(sequenceRoot,
+                new IteratorFacade<>(new ChampReversedChampSpliterator<>(sequenceRoot,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                         Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()), this::iteratorRemove),
                 this::getModCount
@@ -270,7 +270,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
 
     @Override
     public @Nullable Entry<K, V> firstEntry() {
-        return isEmpty() ? null : Node.getFirst(sequenceRoot);
+        return isEmpty() ? null : ChampNode.getFirst(sequenceRoot);
     }
 
     /**
@@ -284,9 +284,9 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     @SuppressWarnings("unchecked")
     public V get(Object o) {
         Object result = root.find(
-                new SequencedEntry<>((K) o),
-                Objects.hashCode(o), 0, SequencedEntry::keyEquals);
-        return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
+                new ChampSequencedEntry<>((K) o),
+                Objects.hashCode(o), 0, ChampSequencedEntry::keyEquals);
+        return (result instanceof ChampSequencedEntry<?, ?>) ? ((ChampSequencedEntry<K, V>) result).getValue() : null;
     }
 
 
@@ -309,7 +309,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
 
     @Override
     public @Nullable Entry<K, V> lastEntry() {
-        return isEmpty() ? null : Node.getLast(sequenceRoot);
+        return isEmpty() ? null : ChampNode.getLast(sequenceRoot);
     }
 
     @Override
@@ -317,7 +317,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
         if (isEmpty()) {
             return null;
         }
-        SequencedEntry<K, V> entry = Node.getFirst(sequenceRoot);
+        ChampSequencedEntry<K, V> entry = ChampNode.getFirst(sequenceRoot);
         remove(entry.getKey());
         first = entry.getSequenceNumber();
         renumber();
@@ -329,7 +329,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
         if (isEmpty()) {
             return null;
         }
-        SequencedEntry<K, V> entry = Node.getLast(sequenceRoot);
+        ChampSequencedEntry<K, V> entry = ChampNode.getLast(sequenceRoot);
         remove(entry.getKey());
         last = entry.getSequenceNumber();
         renumber();
@@ -353,27 +353,27 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
         return oldData == null ? null : oldData.getValue();
     }
 
-    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val,
-                                                                boolean moveToFirst) {
-        var details = new ChangeEvent<SequencedEntry<K, V>>();
-        var newEntry = new SequencedEntry<>(key, val, first);
+    private @NonNull ChampChangeEvent<ChampSequencedEntry<K, V>> putFirst(K key, V val,
+                                                                          boolean moveToFirst) {
+        var details = new ChampChangeEvent<ChampSequencedEntry<K, V>>();
+        var newEntry = new ChampSequencedEntry<>(key, val, first);
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newEntry, Objects.hashCode(key), 0, details,
-                moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
-                SequencedEntry::keyEquals, SequencedEntry::keyHash);
+                moveToFirst ? ChampSequencedEntry::updateAndMoveToFirst : ChampSequencedEntry::update,
+                ChampSequencedEntry::keyEquals, ChampSequencedEntry::keyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
-            sequenceRoot = SequencedData.seqUpdate(sequenceRoot, null, details.getNewDataNonNull(), details,
-                    SequencedEntry::update);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, null, details.getNewDataNonNull(), details,
+                    ChampSequencedEntry::update);
             return details;
         }
         if (details.isModified()) {
-            var seqDetails = new ChangeEvent<SequencedEntry<K, V>>();
+            var seqDetails = new ChampChangeEvent<ChampSequencedEntry<K, V>>();
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    SequencedEntry<K, V> oldEntry = details.getOldDataNonNull();
-                    sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, oldEntry, seqDetails);
+                    ChampSequencedEntry<K, V> oldEntry = details.getOldDataNonNull();
+                    sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, mutator, oldEntry, seqDetails);
                     last = oldEntry.getSequenceNumber() == last - 1 ? last - 1 : last;
                     first--;
                     modCount++;
@@ -383,7 +383,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
                 first--;
                 modCount++;
             }
-            sequenceRoot = SequencedData.seqUpdate(sequenceRoot, mutator, details.getNewDataNonNull(), seqDetails, SequencedEntry::update);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, mutator, details.getNewDataNonNull(), seqDetails, ChampSequencedEntry::update);
             renumber();
         }
         return details;
@@ -396,26 +396,26 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     }
 
     @NonNull
-    public ChangeEvent<SequencedEntry<K, V>> putLast(final K key, V val, boolean moveToLast) {
-        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
-        SequencedEntry<K, V> newEntry = new SequencedEntry<>(key, val, last);
+    public ChampChangeEvent<ChampSequencedEntry<K, V>> putLast(final K key, V val, boolean moveToLast) {
+        ChampChangeEvent<ChampSequencedEntry<K, V>> details = new ChampChangeEvent<>();
+        ChampSequencedEntry<K, V> newEntry = new ChampSequencedEntry<>(key, val, last);
         IdentityObject mutator = getOrCreateIdentity();
         root = root.update(mutator,
                 newEntry, Objects.hashCode(key), 0, details,
-                moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
-                SequencedEntry::keyEquals, SequencedEntry::keyHash);
+                moveToLast ? ChampSequencedEntry::updateAndMoveToLast : ChampSequencedEntry::update,
+                ChampSequencedEntry::keyEquals, ChampSequencedEntry::keyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
-            sequenceRoot = SequencedData.seqUpdate(sequenceRoot, null, details.getNewDataNonNull(), details,
-                    SequencedEntry::update);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, null, details.getNewDataNonNull(), details,
+                    ChampSequencedEntry::update);
             return details;
         }
         if (details.isModified()) {
-            var seqDetails = new ChangeEvent<SequencedEntry<K, V>>();
+            var seqDetails = new ChampChangeEvent<ChampSequencedEntry<K, V>>();
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldEntry = details.getOldDataNonNull();
-                    sequenceRoot = SequencedData.seqRemove(sequenceRoot, mutator, oldEntry, seqDetails);
+                    sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, mutator, oldEntry, seqDetails);
                     first = oldEntry.getSequenceNumber() == first + 1 ? first + 1 : first;
                     last++;
                     modCount++;
@@ -425,7 +425,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
                 size++;
                 modCount++;
             }
-            sequenceRoot = SequencedData.seqUpdate(sequenceRoot, mutator, details.getNewDataNonNull(), seqDetails, SequencedEntry::update);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, mutator, details.getNewDataNonNull(), seqDetails, ChampSequencedEntry::update);
             renumber();
         }
         return details;
@@ -447,7 +447,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
+        ChampChangeEvent<ChampSequencedEntry<K, V>> details = removeAndGiveDetails(key);
         if (details.isModified() && details.getOldData() != null) {
             return details.getOldData().getValue();
         }
@@ -455,12 +455,12 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
     }
 
     @NonNull
-    ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
-        ChangeEvent<SequencedEntry<K, V>> details = new ChangeEvent<>();
+    ChampChangeEvent<ChampSequencedEntry<K, V>> removeAndGiveDetails(K key) {
+        ChampChangeEvent<ChampSequencedEntry<K, V>> details = new ChampChangeEvent<>();
         IdentityObject mutator = getOrCreateIdentity();
         root = root.remove(mutator,
-                new SequencedEntry<>(key), Objects.hashCode(key), 0, details,
-                SequencedEntry::keyEquals);
+                new ChampSequencedEntry<>(key), Objects.hashCode(key), 0, details,
+                ChampSequencedEntry::keyEquals);
         if (details.isModified()) {
             size--;
             modCount++;
@@ -468,7 +468,7 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
             int seq = elem.getSequenceNumber();
             sequenceRoot = sequenceRoot.remove(mutator,
                     elem,
-                    seqHash(seq), 0, details, SequencedData::seqEquals);
+                    seqHash(seq), 0, details, ChampSequencedData::seqEquals);
             if (seq == last - 1) {
                 last--;
             }
@@ -487,12 +487,12 @@ public class MutableSequencedChampMap<K, V> extends AbstractMutableChampMap<K, V
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (SequencedData.mustRenumber(size, first, last)) {
+        if (ChampSequencedData.mustRenumber(size, first, last)) {
             IdentityObject mutator = getOrCreateIdentity();
-            root = SequencedData.renumber(size, root, sequenceRoot, mutator,
-                    SequencedEntry::keyHash, SequencedEntry::keyEquals,
-                    (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
-            sequenceRoot = SequencedData.buildSequencedTrie(root, mutator);
+            root = ChampSequencedData.renumber(size, root, sequenceRoot, mutator,
+                    ChampSequencedEntry::keyHash, ChampSequencedEntry::keyEquals,
+                    (e, seq) -> new ChampSequencedEntry<>(e.getKey(), e.getValue(), seq));
+            sequenceRoot = ChampSequencedData.buildSequencedTrie(root, mutator);
             last = size;
             first = -1;
         }

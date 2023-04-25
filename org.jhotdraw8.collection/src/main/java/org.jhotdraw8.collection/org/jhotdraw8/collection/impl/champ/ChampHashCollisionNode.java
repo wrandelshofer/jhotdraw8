@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.NodeFactory.newHashCollisionNode;
+import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollisionNode;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -27,11 +27,11 @@ import static org.jhotdraw8.collection.impl.champ.NodeFactory.newHashCollisionNo
  *
  * @param <D> the data type
  */
-class HashCollisionNode<D> extends Node<D> {
+class ChampHashCollisionNode<D> extends ChampNode<D> {
     private final int hash;
     @NonNull Object[] data;
 
-    HashCollisionNode(int hash, Object @NonNull [] data) {
+    ChampHashCollisionNode(int hash, Object @NonNull [] data) {
         this.data = data;
         this.hash = hash;
     }
@@ -52,7 +52,7 @@ class HashCollisionNode<D> extends Node<D> {
         if (this == other) {
             return true;
         }
-        HashCollisionNode<?> that = (HashCollisionNode<?>) other;
+        ChampHashCollisionNode<?> that = (ChampHashCollisionNode<?>) other;
         @NonNull Object[] thatEntries = that.data;
         if (hash != that.hash || thatEntries.length != data.length) {
             return false;
@@ -102,7 +102,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @Override
     @NonNull
-    Node<D> getNode(int index) {
+    ChampNode<D> getNode(int index) {
         throw new IllegalStateException("Is leaf node.");
     }
 
@@ -126,20 +126,20 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> remove(@Nullable IdentityObject mutator, D data,
-                   int dataHash, int shift, @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
+    ChampNode<D> remove(@Nullable IdentityObject mutator, D data,
+                        int dataHash, int shift, @NonNull ChampChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
             if (equalsFunction.test((D) this.data[i], data)) {
                 @SuppressWarnings("unchecked") D currentVal = (D) this.data[i];
                 details.setRemoved(currentVal);
 
                 if (this.data.length == 1) {
-                    return BitmapIndexedNode.emptyNode();
+                    return ChampBitmapIndexedNode.emptyNode();
                 } else if (this.data.length == 2) {
                     // Create root node with singleton element.
                     // This node will be a) either be the new root
                     // returned, or b) unwrapped and inlined.
-                    return NodeFactory.newBitmapIndexedNode(mutator, 0, bitpos(mask(dataHash, 0)),
+                    return ChampNodeFactory.newBitmapIndexedNode(mutator, 0, bitpos(mask(dataHash, 0)),
                             new Object[]{getData(idx ^ 1)});
                 }
                 // copy keys and remove 1 element at position idx
@@ -157,10 +157,10 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> update(@Nullable IdentityObject mutator, D newData,
-                   int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
-                   @NonNull ToIntFunction<D> hashFunction) {
+    ChampNode<D> update(@Nullable IdentityObject mutator, D newData,
+                        int dataHash, int shift, @NonNull ChampChangeEvent<D> details,
+                        @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                        @NonNull ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
         for (int i = 0; i < this.data.length; i++) {

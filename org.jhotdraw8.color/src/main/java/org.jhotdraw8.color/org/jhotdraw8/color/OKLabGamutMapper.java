@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  * References:
  * <dl>
  *     <dt>Björn Ottoson. sRGB gamut clipping.</dt>
- *     <dd><a href="https://bottosson.github.io/posts/gamutclipping/">github.io</dd>
+ *     <dd><a href="https://bottosson.github.io/posts/gamutclipping/">github.io</a></dd>
  * </dl>
  */
 public class OKLabGamutMapper implements GamutMapper {

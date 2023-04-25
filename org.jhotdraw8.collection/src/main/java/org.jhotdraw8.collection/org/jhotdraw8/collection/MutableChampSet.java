@@ -8,11 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampAbstractMutableChampSet;
+import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
+import org.jhotdraw8.collection.impl.champ.ChampNode;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
@@ -64,7 +64,7 @@ import java.util.function.Function;
  *
  * @param <E> the element type
  */
-public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
+public class MutableChampSet<E> extends ChampAbstractMutableChampSet<E, E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -72,7 +72,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * Constructs a new empty set.
      */
     public MutableChampSet() {
-        root = BitmapIndexedNode.emptyNode();
+        root = ChampBitmapIndexedNode.emptyNode();
     }
 
     /**
@@ -90,14 +90,14 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             this.root = that;
             this.size = that.size;
         } else {
-            this.root = BitmapIndexedNode.emptyNode();
+            this.root = ChampBitmapIndexedNode.emptyNode();
             addAll(c);
         }
     }
 
     @Override
     public boolean add(@Nullable E e) {
-        ChangeEvent<E> details = new ChangeEvent<>();
+        ChampChangeEvent<E> details = new ChampChangeEvent<>();
         root = root.update(getOrCreateIdentity(),
                 e, Objects.hashCode(e), 0, details,
                 (oldKey, newKey) -> oldKey,
@@ -114,7 +114,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      */
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
+        root = ChampBitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
     }
@@ -130,7 +130,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.find((E) o, Objects.hashCode(o), 0, Objects::equals);
+        return ChampNode.NO_DATA != root.find((E) o, Objects.hashCode(o), 0, Objects::equals);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean remove(Object o) {
-        ChangeEvent<E> details = new ChangeEvent<>();
+        ChampChangeEvent<E> details = new ChampChangeEvent<>();
         root = root.remove(
                 getOrCreateIdentity(), (E) o, Objects.hashCode(o), 0, details,
                 Objects::equals);

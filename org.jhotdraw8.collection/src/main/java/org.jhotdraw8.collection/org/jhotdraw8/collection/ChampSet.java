@@ -8,10 +8,10 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
+import org.jhotdraw8.collection.impl.champ.ChampNode;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -81,8 +81,8 @@ import java.util.function.BiFunction;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
-    private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
+public class ChampSet<E> extends ChampBitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
+    private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(ChampBitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     /**
@@ -90,7 +90,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      */
     final int size;
 
-    ChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
+    ChampSet(@NonNull ChampBitmapIndexedNode<E> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
@@ -134,8 +134,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     public @NonNull ChampSet<E> add(@Nullable E key) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, details, getUpdateFunction(), Objects::equals, Objects::hashCode);
+        ChampChangeEvent<E> details = new ChampChangeEvent<>();
+        ChampBitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, details, getUpdateFunction(), Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size + 1);
         }
@@ -169,7 +169,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return find((E) o, Objects.hashCode(o), 0, Objects::equals) != Node.NO_DATA;
+        return find((E) o, Objects.hashCode(o), 0, Objects::equals) != ChampNode.NO_DATA;
     }
 
     @Override
@@ -205,8 +205,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     public @NonNull ChampSet<E> remove(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
+        ChampChangeEvent<E> details = new ChampChangeEvent<>();
+        ChampBitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size - 1);
         }

@@ -10,11 +10,11 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.SetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampAbstractMutableChampMap;
+import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
+import org.jhotdraw8.collection.impl.champ.ChampNode;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
@@ -67,7 +67,7 @@ import java.util.Spliterator;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
+public class MutableChampMap<K, V> extends ChampAbstractMutableChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -75,7 +75,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
      * Constructs a new empty map.
      */
     public MutableChampMap() {
-        root = BitmapIndexedNode.emptyNode();
+        root = ChampBitmapIndexedNode.emptyNode();
     }
 
     public MutableChampMap(@NonNull Map<? extends K, ? extends V> m) {
@@ -88,13 +88,13 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
             this.size = that.size;
             this.modCount = 0;
         } else {
-            this.root = BitmapIndexedNode.emptyNode();
+            this.root = ChampBitmapIndexedNode.emptyNode();
             this.putAll(m);
         }
     }
 
     public MutableChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
-        this.root = BitmapIndexedNode.emptyNode();
+        this.root = ChampBitmapIndexedNode.emptyNode();
         for (Entry<? extends K, ? extends V> e : m) {
             this.put(e.getKey(), e.getValue());
         }
@@ -107,7 +107,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
             this.root = that;
             this.size = that.size();
         } else {
-            this.root = BitmapIndexedNode.emptyNode();
+            this.root = ChampBitmapIndexedNode.emptyNode();
             this.putAll(m.asMap());
         }
     }
@@ -117,7 +117,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
      */
     @Override
     public void clear() {
-        root = BitmapIndexedNode.emptyNode();
+        root = ChampBitmapIndexedNode.emptyNode();
         size = 0;
         modCount++;
     }
@@ -136,7 +136,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     public boolean containsKey(@Nullable Object o) {
         return root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0,
-                ChampMap::keyEquals) != Node.NO_DATA;
+                ChampMap::keyEquals) != ChampNode.NO_DATA;
     }
 
     @Override
@@ -188,7 +188,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     public @Nullable V get(Object o) {
         Object result = root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
                 Objects.hashCode(o), 0, ChampMap::keyEquals);
-        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        return result == ChampNode.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
@@ -210,9 +210,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     }
 
     @NonNull
-    ChangeEvent<SimpleImmutableEntry<K, V>> putAndGiveDetails(@Nullable K key, @Nullable V val) {
+    ChampChangeEvent<SimpleImmutableEntry<K, V>> putAndGiveDetails(@Nullable K key, @Nullable V val) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+        ChampChangeEvent<SimpleImmutableEntry<K, V>> details = new ChampChangeEvent<>();
         root = root.update(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
                 ChampMap::updateEntry,
                 ChampMap::keyEquals,
@@ -232,9 +232,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     }
 
     @NonNull
-    ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
+    ChampChangeEvent<SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
         int keyHash = Objects.hashCode(key);
-        ChangeEvent<AbstractMap.SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
+        ChampChangeEvent<SimpleImmutableEntry<K, V>> details = new ChampChangeEvent<>();
         root = root.remove(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                 ChampMap::keyEquals);
         if (details.isModified()) {

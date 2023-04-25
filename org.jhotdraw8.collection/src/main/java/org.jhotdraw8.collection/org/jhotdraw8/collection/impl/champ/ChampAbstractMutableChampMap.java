@@ -22,7 +22,7 @@ import java.util.Objects;
  * @param <K> the key type of the map
  * @param <V> the value typeof the map
  */
-public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
+public abstract class ChampAbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -41,7 +41,7 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<X> root;
+    protected ChampBitmapIndexedNode<X> root;
 
     /**
      * The number of entries in this map.
@@ -63,10 +63,10 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampMap<K, V, X> clone() {
+    public @NonNull ChampAbstractMutableChampMap<K, V, X> clone() {
         try {
             mutator = null;
-            return (AbstractMutableChampMap<K, V, X>) super.clone();
+            return (ChampAbstractMutableChampMap<K, V, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
@@ -82,8 +82,8 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
         if (o == this) {
             return true;
         }
-        if (o instanceof AbstractMutableChampMap<?, ?, ?>) {
-            AbstractMutableChampMap<?, ?, ?> that = (AbstractMutableChampMap<?, ?, ?>) o;
+        if (o instanceof ChampAbstractMutableChampMap<?, ?, ?>) {
+            ChampAbstractMutableChampMap<?, ?, ?> that = (ChampAbstractMutableChampMap<?, ?, ?>) o;
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);

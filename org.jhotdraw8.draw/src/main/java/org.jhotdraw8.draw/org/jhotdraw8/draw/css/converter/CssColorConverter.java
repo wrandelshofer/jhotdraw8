@@ -92,10 +92,10 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * <p>
  * References:
  * <dl>
- *     <dt>CSS Color Module Level 4. 4. Representing Colors: the <color> type.</dt>
+ *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.</dt>
  *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
  *
- *     <dt>CSS Color Module Level 4. 4. Representing Colors: the <color> type.  4.1 The <color> syntax.</dt>
+ *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.  4.1 The <color> syntax.</dt>
  *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-syntax">w3.org</a></dd>
  *
  *     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>

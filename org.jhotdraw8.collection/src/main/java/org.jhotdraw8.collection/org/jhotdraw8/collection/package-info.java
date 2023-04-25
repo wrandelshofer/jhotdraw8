@@ -3,6 +3,6 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
- * Provides building blocks for collections.
+ * Provides mutable and immutable collections.
  */
 package org.jhotdraw8.collection;

@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * @param <E> the element type of the set
  * @param <X> the key type of the CHAMP trie
  */
-public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
+public abstract class ChampAbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -40,7 +40,7 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<X> root;
+    protected ChampBitmapIndexedNode<X> root;
 
     /**
      * The number of elements in this set.
@@ -79,8 +79,8 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
         if (o == this) {
             return true;
         }
-        if (o instanceof AbstractMutableChampSet<?, ?>) {
-            AbstractMutableChampSet<?, ?> that = (AbstractMutableChampSet<?, ?>) o;
+        if (o instanceof ChampAbstractMutableChampSet<?, ?>) {
+            ChampAbstractMutableChampSet<?, ?> that = (ChampAbstractMutableChampSet<?, ?>) o;
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
@@ -138,10 +138,10 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampSet<E, X> clone() {
+    public @NonNull ChampAbstractMutableChampSet<E, X> clone() {
         try {
             mutator = null;
-            return (AbstractMutableChampSet<E, X>) super.clone();
+            return (ChampAbstractMutableChampSet<E, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

@@ -12,12 +12,12 @@ import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 
 import java.util.function.Function;
 
-public class SeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class ChampSeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull BitMappedTrie.MySpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;
     private int index;
 
-    public SeqVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
+    public ChampSeqVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = new BitMappedTrie.MySpliterator<>(vector, 0, 0);
         this.mapper = mapper;
@@ -27,7 +27,7 @@ public class SeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     public boolean moveNext() {
         boolean success = vector.moveNext();
         if (!success) return false;
-        if (vector.current() instanceof Tombstone t) {
+        if (vector.current() instanceof ChampTombstone t) {
             vector.skip(t.after());
             vector.moveNext();
         }

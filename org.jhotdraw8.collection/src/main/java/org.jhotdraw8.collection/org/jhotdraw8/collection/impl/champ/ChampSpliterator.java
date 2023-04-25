@@ -20,8 +20,8 @@ import java.util.function.Function;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-public class ChampSpliterator<K, E> extends AbstractChampSpliterator<K, E> {
-    public ChampSpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
+public class ChampSpliterator<K, E> extends ChampAbstractChampSpliterator<K, E> {
+    public ChampSpliterator(@NonNull ChampNode<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         super(root, mappingFunction, characteristics, size);
     }
 

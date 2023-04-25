@@ -11,12 +11,12 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
 import java.util.function.Function;
 
-public class ReversedSeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class ChampReversedSequenceVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull VectorList<Object> vector;
     private final @NonNull Function<Object, K> mapper;
     private int index;
 
-    public ReversedSeqVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
+    public ChampReversedSequenceVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;
@@ -29,7 +29,7 @@ public class ReversedSeqVectorSpliterator<K> extends AbstractEnumeratorSpliterat
             return false;
         }
         Object o = vector.get(index--);
-        if (o instanceof Tombstone t) {
+        if (o instanceof ChampTombstone t) {
             index -= t.before();
             o = vector.get(index--);
         }

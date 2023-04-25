@@ -19,8 +19,8 @@ import java.util.function.Function;
  * create a new version of the trie, so that iterator does not have
  * to deal with structural changes of the trie.
  */
-public class ReverseChampSpliterator<K, E> extends AbstractChampSpliterator<K, E> {
-    public ReverseChampSpliterator(@NonNull Node<K> root, @NonNull Function<K, E> mappingFunction, int characteristics, long size) {
+public class ChampReversedChampSpliterator<K, E> extends ChampAbstractChampSpliterator<K, E> {
+    public ChampReversedChampSpliterator(@NonNull ChampNode<K> root, @NonNull Function<K, E> mappingFunction, int characteristics, long size) {
         super(root, mappingFunction, characteristics, size);
     }
 
@@ -30,7 +30,7 @@ public class ReverseChampSpliterator<K, E> extends AbstractChampSpliterator<K, E
     }
 
     @Override
-    boolean isDone(AbstractChampSpliterator.@NonNull StackElement<K> elem) {
+    boolean isDone(ChampAbstractChampSpliterator.@NonNull StackElement<K> elem) {
         return elem.index < 0;
     }
 
