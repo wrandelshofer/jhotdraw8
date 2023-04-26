@@ -6,6 +6,7 @@
 package org.jhotdraw8.draw.gui;
 
 import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
@@ -279,8 +280,8 @@ public class ZoomableScrollPane extends GridPane {
 
         // - Only show the scrollbars if their visible amount is less than their
         //   extent (we can use the max value here, because we let min=0).
-        onlyShowScrollBarIfNeeded(horizontalScrollBar, this.getRowConstraints().get(1), hbarPolicyProperty());
-        onlyShowScrollBarIfNeeded(verticalScrollBar, this.getColumnConstraints().get(1), vbarPolicyProperty());
+        onlyShowHorizontalScrollBarIfNeeded(horizontalScrollBar, this.getRowConstraints().get(1), hbarPolicyProperty());
+        onlyShowVerticalScrollBarIfNeeded(verticalScrollBar, this.getColumnConstraints().get(1), vbarPolicyProperty());
 
 
         contentToView.bind(CustomBinding.compute(() -> {
@@ -360,23 +361,47 @@ public class ZoomableScrollPane extends GridPane {
         }
     }
 
-    private void onlyShowScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull RowConstraints rowConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
+    private void onlyShowHorizontalScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull RowConstraints rowConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
         BooleanBinding visibilityBinding;
-        visibilityBinding =
-                scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.NEVER).not()
-                        .and(scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.ALWAYS)
-                                .or(scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty())));
+        visibilityBinding = Bindings.createBooleanBinding(() -> {
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.NEVER)
+                        return false;
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.ALWAYS)
+                        return true;
+                    return contentWidthProperty().get() > getWidth()
+                            || contentHeightProperty().get() > getHeight()
+                            && contentWidthProperty().get() > getWidth() - verticalScrollBar.getWidth();
+                },
+                scrollBarPolicy,
+                contentHeightProperty(),
+                contentWidthProperty(),
+                heightProperty(),
+                widthProperty(),
+                verticalScrollBar.prefWidthProperty()
+        );
         scrollBar.visibleProperty().bind(visibilityBinding);
         rowConstraints.prefHeightProperty().bind(
                 CustomBinding.convert(visibilityBinding, b -> b ? ScrollBar.USE_COMPUTED_SIZE : 0));
     }
 
-    private void onlyShowScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull ColumnConstraints colConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
+    private void onlyShowVerticalScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull ColumnConstraints colConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
         BooleanBinding visibilityBinding;
-        visibilityBinding =
-                scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.NEVER).not()
-                        .and(scrollBarPolicy.isEqualTo(ScrollPane.ScrollBarPolicy.ALWAYS)
-                                .or(scrollBar.visibleAmountProperty().lessThan(scrollBar.maxProperty())));
+        visibilityBinding = Bindings.createBooleanBinding(() -> {
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.NEVER)
+                        return false;
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.ALWAYS)
+                        return true;
+                    return contentHeightProperty().get() > getHeight()
+                            || contentWidthProperty().get() > getWidth()
+                            && contentHeightProperty().get() > getHeight() - horizontalScrollBar.getHeight();
+                },
+                scrollBarPolicy,
+                contentHeightProperty(),
+                contentWidthProperty(),
+                heightProperty(),
+                widthProperty(),
+                verticalScrollBar.prefWidthProperty()
+        );
         scrollBar.visibleProperty().bind(visibilityBinding);
         colConstraints.prefWidthProperty().bind(
                 CustomBinding.convert(visibilityBinding, b -> b ? ScrollBar.USE_COMPUTED_SIZE : 0));
