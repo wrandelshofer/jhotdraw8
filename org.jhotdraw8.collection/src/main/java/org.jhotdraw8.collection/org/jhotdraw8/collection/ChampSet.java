@@ -25,7 +25,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.BiFunction;
 
 
 /**
@@ -127,15 +126,16 @@ public class ChampSet<E> extends ChampBitmapIndexedNode<E> implements ImmutableS
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ChampSet<E> of(E @Nullable ... elements) {
-        return ((ChampSet<E>) ChampSet.EMPTY).addAll(Arrays.asList(elements));
+    public static <E> @NonNull ChampSet<E> of(@NonNull E @Nullable ... elements) {
+        Objects.requireNonNull(elements, "elements is null");
+        return ChampSet.<E>of().addAll(Arrays.asList(elements));
     }
 
     @Override
-    public @NonNull ChampSet<E> add(@Nullable E key) {
-        int keyHash = Objects.hashCode(key);
+    public @NonNull ChampSet<E> add(@Nullable E element) {
+        int keyHash = Objects.hashCode(element);
         ChampChangeEvent<E> details = new ChampChangeEvent<>();
-        ChampBitmapIndexedNode<E> newRootNode = update(null, key, keyHash, 0, details, getUpdateFunction(), Objects::equals, Objects::hashCode);
+        ChampBitmapIndexedNode<E> newRootNode = update(null, element, keyHash, 0, details, ChampSet::updateFunction, Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size + 1);
         }
@@ -187,9 +187,16 @@ public class ChampSet<E> extends ChampBitmapIndexedNode<E> implements ImmutableS
         return ReadOnlySet.setEquals(this, other);
     }
 
-    @NonNull
-    private BiFunction<E, E, E> getUpdateFunction() {
-        return (oldk, newk) -> oldk;
+    /**
+     * Update function for a set: we always keep the old element.
+     *
+     * @param oldElement the old element
+     * @param newElement the new element
+     * @param <E>        the element type
+     * @return always returns the old element
+     */
+    private static <E> E updateFunction(E oldElement, E newElement) {
+        return oldElement;
     }
 
     @Override
