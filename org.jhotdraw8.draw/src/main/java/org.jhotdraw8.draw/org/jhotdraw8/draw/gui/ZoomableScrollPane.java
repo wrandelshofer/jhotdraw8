@@ -229,16 +229,21 @@ public class ZoomableScrollPane extends GridPane {
 
         visibleContentRect.bind(CustomBinding.compute(() -> {
                     double invf = 1 / zoomFactor.get();
+                    final Bounds layoutBounds = horizontalScrollBar.getParent().getLayoutBounds();
+                    final double width = verticalScrollBar.isVisible() ? horizontalScrollBar.getVisibleAmount() : layoutBounds.getWidth();
+                    final double height = horizontalScrollBar.isVisible() ? verticalScrollBar.getVisibleAmount() : layoutBounds.getHeight();
                     return new BoundingBox(
                             contentTranslateXBinding.get() * invf,
                             contentTranslateYBinding.get() * invf,
-                            horizontalScrollBar.getVisibleAmount() * invf,
-                            verticalScrollBar.getVisibleAmount() * invf
+                            width * invf,
+                            height * invf
                     );
                 },
                 contentTranslateXBinding,
                 contentTranslateYBinding,
+                horizontalScrollBar.visibleProperty(),
                 horizontalScrollBar.visibleAmountProperty(),
+                verticalScrollBar.visibleProperty(),
                 verticalScrollBar.visibleAmountProperty(),
                 zoomFactor));
 

@@ -47,23 +47,22 @@ public class CssScale3DConverter extends AbstractCssConverter<Point3D> {
         final double x, y, z;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
-        if (tt.next() == CssTokenType.TT_EOF) {
-            y = x;
-            z = 1;
-        } else {
-            tt.skipIfPresent(CssTokenType.TT_COMMA);
-            tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨y⟩ expected.");
+        tt.skipIfPresent(CssTokenType.TT_COMMA);
+        if (tt.next() == CssTokenType.TT_NUMBER) {
             y = tt.currentNumberNonNull().doubleValue();
-
-            if (tt.next() == CssTokenType.TT_EOF) {
-                z = 1;
-            } else {
-                tt.skipIfPresent(CssTokenType.TT_COMMA);
-                tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨z⟩ expected.");
-                z = tt.currentNumberNonNull().doubleValue();
-            }
-
+        } else {
+            y = x;
+            tt.pushBack();
         }
+
+        tt.skipIfPresent(CssTokenType.TT_COMMA);
+        if (tt.next() == CssTokenType.TT_NUMBER) {
+            z = tt.currentNumberNonNull().doubleValue();
+        } else {
+            z = 1;
+            tt.pushBack();
+        }
+
 
         return new Point3D(x, y, z);
     }
