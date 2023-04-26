@@ -275,7 +275,7 @@ public class ZoomableScrollPane extends GridPane {
         verticalScrollBar.minProperty().bind(
                 CustomBinding.compute(() -> -getInsets().getTop(), insetsProperty()));
 
-        // - Adjust the scrollbar visibleAmount whe the viewport is resized.
+        // - Adjust the scrollbar visibleAmount when the viewport is resized.
         horizontalScrollBar.visibleAmountProperty().bind(viewportWidthProperty());
         verticalScrollBar.visibleAmountProperty().bind(viewportHeightProperty());
         horizontalScrollBar.blockIncrementProperty().bind(viewportWidthProperty());

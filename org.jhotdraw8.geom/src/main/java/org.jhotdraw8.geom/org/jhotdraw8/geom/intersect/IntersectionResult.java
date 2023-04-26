@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import java.util.Collection;
 
 public class IntersectionResult {
-    private final IntersectionStatus status;
+    private final @NonNull IntersectionStatus status;
     private final @NonNull ImmutableList<IntersectionPoint> intersections;
 
     public IntersectionResult(@NonNull IntersectionStatus status, @NonNull Collection<? extends IntersectionPoint> copyItems) {
@@ -31,17 +31,17 @@ public class IntersectionResult {
                 copyItems);
     }
 
-    public IntersectionStatus getStatus() {
+    public @NonNull IntersectionStatus getStatus() {
         return status;
     }
 
-    public DoubleArrayList getAllArgumentsA() {
+    public @NonNull DoubleArrayList getAllArgumentsA() {
         return intersections.stream()
                 .mapToDouble(IntersectionPoint::getArgumentA)
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
 
-    public ImmutableList<IntersectionPoint> intersections() {
+    public @NonNull ImmutableList<IntersectionPoint> intersections() {
         return intersections;
     }
 }
