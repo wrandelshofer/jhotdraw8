@@ -41,14 +41,15 @@ import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1)</li>
- *     <li>set: O(1)</li>
+ *     <li>add: O(log N)</li>
+ *     <li>set: O(log N)</li>
  *     <li>remove: O(n)</li>
- *     <li>contains: O(1)</li>
+ *     <li>contains: O(log N)</li>
  *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in
  *     the mutable copy</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(1)</li>
+ *     <li>iterator.next(): O(log N)</li>
+ *     <li>getFirst, getLast: O(log N)</li>
  * </ul>
  * <p>
  * References:
