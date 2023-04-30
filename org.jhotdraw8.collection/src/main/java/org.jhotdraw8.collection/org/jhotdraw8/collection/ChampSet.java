@@ -71,11 +71,11 @@ import java.util.*;
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a></dd>
  *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
- *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a></dd>
  * </dl>
  *
  * @param <E> the element type
@@ -136,7 +136,7 @@ public class ChampSet<E> extends ChampBitmapIndexedNode<E> implements ImmutableS
     public @NonNull ChampSet<E> add(@Nullable E element) {
         int keyHash = Objects.hashCode(element);
         ChampChangeEvent<E> details = new ChampChangeEvent<>();
-        ChampBitmapIndexedNode<E> newRootNode = update(null, element, keyHash, 0, details, ChampSet::updateFunction, Objects::equals, Objects::hashCode);
+        ChampBitmapIndexedNode<E> newRootNode = update(null, element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size + 1);
         }
@@ -196,7 +196,7 @@ public class ChampSet<E> extends ChampBitmapIndexedNode<E> implements ImmutableS
      * @param <E>        the element type
      * @return always returns the old element
      */
-    private static <E> E updateFunction(E oldElement, E newElement) {
+    private static <E> E updateElement(E oldElement, E newElement) {
         return oldElement;
     }
 

@@ -59,7 +59,7 @@ import java.util.*;
  * with this map, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>
- * All operations on this set can be performed concurrently, without a need for
+ * All operations on this map can be performed concurrently, without a need for
  * synchronisation.
  * <p>
  * The immutable version of this map extends from the non-public class
@@ -179,7 +179,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
     }
 
     @Nullable
-    public static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
+    static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
         return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 
