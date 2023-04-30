@@ -62,6 +62,11 @@ import java.util.*;
  * All operations on this set can be performed concurrently, without a need for
  * synchronisation.
  * <p>
+ * The immutable version of this map extends from the non-public class
+ * {@code ChampBitmapIndexNode}. This design safes 16 bytes for every instance,
+ * and reduces the number of redirections for finding an element in the
+ * collection by 1.
+ * <p>
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
