@@ -4,14 +4,7 @@
  */
 package org.jhotdraw8.application;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.ReadOnlyMapWrapper;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
@@ -83,7 +76,6 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
 
         // We must unlink the entire scene because there is a memory
         // leaks in Scene.dirtyNodes
-        // https://bugs.openjdk.java.net/browse/JDK-8274022
         // https://bugs.openjdk.java.net/browse/JDK-8269907
         List<Node> nodes = new ArrayList<>();
         new PreorderSpliterator<>(n ->
