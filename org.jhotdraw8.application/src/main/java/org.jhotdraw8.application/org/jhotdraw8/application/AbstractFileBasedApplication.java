@@ -17,12 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.KeyCombination;
@@ -39,17 +34,8 @@ import org.jhotdraw8.application.action.Actions;
 import org.jhotdraw8.application.action.ScreenMenuBarProxyAction;
 import org.jhotdraw8.application.action.app.AboutAction;
 import org.jhotdraw8.application.action.app.ExitAction;
-import org.jhotdraw8.application.action.edit.ClearSelectionAction;
-import org.jhotdraw8.application.action.edit.CopyAction;
-import org.jhotdraw8.application.action.edit.CutAction;
-import org.jhotdraw8.application.action.edit.DeleteAction;
-import org.jhotdraw8.application.action.edit.PasteAction;
-import org.jhotdraw8.application.action.edit.SelectAllAction;
-import org.jhotdraw8.application.action.file.ClearRecentFilesMenuAction;
-import org.jhotdraw8.application.action.file.CloseFileAction;
-import org.jhotdraw8.application.action.file.NewFileAction;
-import org.jhotdraw8.application.action.file.OpenFileAction;
-import org.jhotdraw8.application.action.file.OpenRecentFileAction;
+import org.jhotdraw8.application.action.edit.*;
+import org.jhotdraw8.application.action.file.*;
 import org.jhotdraw8.application.prefs.PreferencesUtil;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.text.NaturalSortCollator;
@@ -66,18 +52,7 @@ import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
@@ -321,7 +296,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         activity.titleProperty().addListener(this::onTitleChanged);
         activity.set(STAGE_KEY, stage);
 
-        // XXX Use weak reference because of memory leak in JavaFX
+        // XXX Check if we do still need weak references here, because JDK-8274022 has been fixed.
         // https://bugs.openjdk.java.net/browse/JDK-8274022
         WeakReference<AbstractFileBasedApplication> appRef = new WeakReference<>(this);
         WeakReference<FileBasedActivity> activityRef = new WeakReference<>(activity);
@@ -468,6 +443,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         BorderPane borderPane = (BorderPane) scene.getRoot();
         MenuBar menuBar = (MenuBar) borderPane.getTop();
 
+        // XXX Check if the following workaround is still needed, because JDK-8274022 has been fixed in JavaFX 18.
         // Workaround for memory leak in ControlAcceleratorSupport
         // https://bugs.openjdk.java.net/browse/JDK-8274022
         // Unlink all bindings to menu items in the system menu bar,

@@ -12,7 +12,8 @@ import org.jhotdraw8.annotation.NonNull;
  * <p>
  * References:
  * <dl>
- *     <dt>Björn Ottoson. sRGB gamut clipping.</dt>
+ *     <dt>Björn Ottoson. sRGB gamut clipping.
+ *     <a href="https://github.com/bottosson/bottosson.github.io/blob/3d3f17644d7f346e1ce1ca08eb8b01782eea97af/misc/colorpicker/License.txt">MIT License</a></dt>
  *     <dd><a href="https://bottosson.github.io/posts/gamutclipping/">github.io</a></dd>
  * </dl>
  */

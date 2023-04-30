@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
-    <output url="file://$MODULE_DIR$/target/classes" />
-    <output-test url="file://$MODULE_DIR$/target/test-classes" />
-    <content url="file://$MODULE_DIR$">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java/org.jhotdraw8.teddy" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java/org.jhotdraw8.teddy" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="org.jhotdraw8.annotation" />
-    <orderEntry type="module" module-name="org.jhotdraw8.application" />
-    <orderEntry type="module" module-name="org.jhotdraw8.base" />
-    <orderEntry type="module" module-name="org.jhotdraw8.collection" />
-    <orderEntry type="module" module-name="org.jhotdraw8.fxbase" />
-    <orderEntry type="module" module-name="org.jhotdraw8.fxcollection" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:20" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:20" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:20" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:20" level="project" />
-    <orderEntry type="module" module-name="org.jhotdraw8.fxcontrols" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:20" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:20" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:20" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:20" level="project" />
-    <orderEntry type="module" module-name="org.jhotdraw8.color" />
-    <orderEntry type="module" module-name="org.jhotdraw8.geom" />
   </component>
 </module>

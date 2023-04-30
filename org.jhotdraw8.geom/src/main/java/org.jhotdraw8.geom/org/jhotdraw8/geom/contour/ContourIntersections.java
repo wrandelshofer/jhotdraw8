@@ -16,25 +16,14 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
-import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectLineLine;
-import org.jhotdraw8.geom.intersect.IntersectionPoint;
-import org.jhotdraw8.geom.intersect.IntersectionPointEx;
-import org.jhotdraw8.geom.intersect.IntersectionResult;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.*;
 
 import java.awt.geom.Point2D;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.DoubleFunction;
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
@@ -42,6 +31,18 @@ import static org.jhotdraw8.geom.contour.PlineVertex.splitAtPoint;
 import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
 import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
 
+/**
+ * ContourIntersections.
+ * <p>
+ * References:
+ * <p>
+ * This code has been derived from CavalierContours.
+ * <dl>
+ *     <dt>CavalierCoutours. Copyright (c) 2019 Jedidiah Buck McCready.
+ *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
+ *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
+ * </dl>
+ */
 public class ContourIntersections {
     /**
      * Don't let anyone instantiate this class.
@@ -259,20 +260,20 @@ public class ContourIntersections {
                         if (!Points.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
                             output.add(new PlineIntersect(i, j, intrResult.point1));
                         }
-                    break;
-                case TwoIntersects:
-                    if (!Points.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
+                        break;
+                    case TwoIntersects:
+                        if (!Points.almostEqual(intrResult.point1, v2.pos(), Utils.realPrecision)) {
+                            output.add(new PlineIntersect(i, j, intrResult.point1));
+                        }
+                        if (!Points.almostEqual(intrResult.point2, v2.pos(), Utils.realPrecision)) {
+                            output.add(new PlineIntersect(i, j, intrResult.point2));
+                        }
+                        break;
+                    case SegmentOverlap:
+                    case ArcOverlap:
+                        // coincident
                         output.add(new PlineIntersect(i, j, intrResult.point1));
-                    }
-                    if (!Points.almostEqual(intrResult.point2, v2.pos(), Utils.realPrecision)) {
-                        output.add(new PlineIntersect(i, j, intrResult.point2));
-                    }
-                    break;
-                case SegmentOverlap:
-                case ArcOverlap:
-                    // coincident
-                    output.add(new PlineIntersect(i, j, intrResult.point1));
-                    break;
+                        break;
                 }
             }
         };
@@ -337,24 +338,24 @@ public class ContourIntersections {
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(v1, v2, u1, u2);
                 switch (intrResult.intrType) {
-                case NoIntersect:
-                    break;
-                case TangentIntersect:
-                case OneIntersect:
-                    if (!intrAtStartPt.test(intrResult.point1)) {
-                        output.add(new PlineIntersect(i, hitIndexStart, intrResult.point1));
-                    }
-                    break;
-                case TwoIntersects:
-                case SegmentOverlap:
-                case ArcOverlap:
-                    if (!intrAtStartPt.test(intrResult.point1)) {
-                        output.add(new PlineIntersect(i, hitIndexStart, intrResult.point1));
-                    }
-                    if (!intrAtStartPt.test(intrResult.point2)) {
-                        output.add(new PlineIntersect(i, hitIndexStart, intrResult.point2));
-                    }
-                    break;
+                    case NoIntersect:
+                        break;
+                    case TangentIntersect:
+                    case OneIntersect:
+                        if (!intrAtStartPt.test(intrResult.point1)) {
+                            output.add(new PlineIntersect(i, hitIndexStart, intrResult.point1));
+                        }
+                        break;
+                    case TwoIntersects:
+                    case SegmentOverlap:
+                    case ArcOverlap:
+                        if (!intrAtStartPt.test(intrResult.point1)) {
+                            output.add(new PlineIntersect(i, hitIndexStart, intrResult.point1));
+                        }
+                        if (!intrAtStartPt.test(intrResult.point2)) {
+                            output.add(new PlineIntersect(i, hitIndexStart, intrResult.point2));
+                        }
+                        break;
                 }
 
                 // visit the entire query
@@ -411,22 +412,22 @@ public class ContourIntersections {
 
                 IntrPlineSegsResult intrResult = intrPlineSegs(p1v1, p1v2, p2v1, p2v2);
                 switch (intrResult.intrType) {
-                case NoIntersect:
-                    break;
-                case TangentIntersect:
-                case OneIntersect:
-                    if (!intrAtStartPt.test(intrResult.point1)) {
-                        intrs.add(new PlineIntersect(i1, i2, intrResult.point1));
-                    }
-                    break;
-                case TwoIntersects:
-                    if (!intrAtStartPt.test(intrResult.point1)) {
-                        intrs.add(new PlineIntersect(i1, i2, intrResult.point1));
-                    }
-                    if (!intrAtStartPt.test(intrResult.point2)) {
-                        intrs.add(new PlineIntersect(i1, i2, intrResult.point2));
-                    }
-                    break;
+                    case NoIntersect:
+                        break;
+                    case TangentIntersect:
+                    case OneIntersect:
+                        if (!intrAtStartPt.test(intrResult.point1)) {
+                            intrs.add(new PlineIntersect(i1, i2, intrResult.point1));
+                        }
+                        break;
+                    case TwoIntersects:
+                        if (!intrAtStartPt.test(intrResult.point1)) {
+                            intrs.add(new PlineIntersect(i1, i2, intrResult.point1));
+                        }
+                        if (!intrAtStartPt.test(intrResult.point2)) {
+                            intrs.add(new PlineIntersect(i1, i2, intrResult.point2));
+                        }
+                        break;
                     case SegmentOverlap:
                     case ArcOverlap:
                         coincidentIntrs.add(new PlineCoincidentIntersect(i1, i2, intrResult.point1, intrResult.point2));
@@ -550,7 +551,7 @@ public class ContourIntersections {
                     break;
                 case NO_INTERSECTION:
                     result.intrType = PlineSegIntrType.NoIntersect;
-                break;
+                    break;
             }
 
         } else if (vIsLine) {
@@ -601,68 +602,68 @@ public class ContourIntersections {
                         } else if (pt2InSweep) {
                             result.intrType = PlineSegIntrType.OneIntersect;
                             result.point1 = intersections.getLast();
-                    } else {
-                        result.intrType = PlineSegIntrType.NoIntersect;
-                    }
-                }
-                break;
-            case NO_INTERSECTION_COINCIDENT:
-                // determine if arcs overlap along their sweep
-                // start and sweep angles
-                OrderedPairNonNull<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
-                // we have the arcs go the same direction to simplify checks
-                OrderedPairNonNull<Double, Double> arc2StartAndSweep = ((Supplier<OrderedPairNonNull<Double, Double>>) () -> {
-                    if (v1.bulgeIsNeg() == u1.bulgeIsNeg()) {
-                        return startAndSweepAngle.apply(u1.pos(), arc2.center, u1.bulge());
-                    }
-                    return startAndSweepAngle.apply(u2.pos(), arc2.center, -u1.bulge());
-                }).get();
-                // end angles (start + sweep)
-                double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
-                double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
-
-                if (Points.almostEqual(arc1StartAndSweep.first(), arc2End)) {
-                    // only end points touch at start of arc1
-                    result.intrType = PlineSegIntrType.OneIntersect;
-                    result.point1 = v1.pos();
-                } else if (Points.almostEqual(arc2StartAndSweep.first(), arc1End)) {
-                    // only end points touch at start of arc2
-                    result.intrType = PlineSegIntrType.OneIntersect;
-                    result.point1 = u1.pos();
-                } else {
-                    final boolean arc2StartsInArc1Sweep = Utils.angleIsWithinSweep(
-                            arc1StartAndSweep.first(), arc1StartAndSweep.second(), arc2StartAndSweep.first());
-                    final boolean arc2EndsInArc1Sweep =
-                            Utils.angleIsWithinSweep(arc1StartAndSweep.first(), arc1StartAndSweep.second(), arc2End);
-                    if (arc2StartsInArc1Sweep && arc2EndsInArc1Sweep) {
-                        // arc2 is fully overlapped by arc1
-                        result.intrType = PlineSegIntrType.ArcOverlap;
-                        result.point1 = u1.pos();
-                        result.point2 = u2.pos();
-                    } else if (arc2StartsInArc1Sweep) {
-                        // overlap from arc2 start to arc1 end
-                        result.intrType = PlineSegIntrType.ArcOverlap;
-                        result.point1 = u1.pos();
-                        result.point2 = v2.pos();
-                    } else if (arc2EndsInArc1Sweep) {
-                        // overlap from arc1 start to arc2 end
-                        result.intrType = PlineSegIntrType.ArcOverlap;
-                        result.point1 = v1.pos();
-                        result.point2 = u2.pos();
-                    } else {
-                        final boolean arc1StartsInArc2Sweep = Utils.angleIsWithinSweep(
-                                arc2StartAndSweep.first(), arc2StartAndSweep.second(), arc1StartAndSweep.first());
-                        if (arc1StartsInArc2Sweep) {
-                            result.intrType = PlineSegIntrType.ArcOverlap;
-                            result.point1 = v1.pos();
-                            result.point2 = v2.pos();
                         } else {
                             result.intrType = PlineSegIntrType.NoIntersect;
                         }
                     }
-                }
+                    break;
+                case NO_INTERSECTION_COINCIDENT:
+                    // determine if arcs overlap along their sweep
+                    // start and sweep angles
+                    OrderedPairNonNull<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
+                    // we have the arcs go the same direction to simplify checks
+                    OrderedPairNonNull<Double, Double> arc2StartAndSweep = ((Supplier<OrderedPairNonNull<Double, Double>>) () -> {
+                        if (v1.bulgeIsNeg() == u1.bulgeIsNeg()) {
+                            return startAndSweepAngle.apply(u1.pos(), arc2.center, u1.bulge());
+                        }
+                        return startAndSweepAngle.apply(u2.pos(), arc2.center, -u1.bulge());
+                    }).get();
+                    // end angles (start + sweep)
+                    double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
+                    double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                break;
+                    if (Points.almostEqual(arc1StartAndSweep.first(), arc2End)) {
+                        // only end points touch at start of arc1
+                        result.intrType = PlineSegIntrType.OneIntersect;
+                        result.point1 = v1.pos();
+                    } else if (Points.almostEqual(arc2StartAndSweep.first(), arc1End)) {
+                        // only end points touch at start of arc2
+                        result.intrType = PlineSegIntrType.OneIntersect;
+                        result.point1 = u1.pos();
+                    } else {
+                        final boolean arc2StartsInArc1Sweep = Utils.angleIsWithinSweep(
+                                arc1StartAndSweep.first(), arc1StartAndSweep.second(), arc2StartAndSweep.first());
+                        final boolean arc2EndsInArc1Sweep =
+                                Utils.angleIsWithinSweep(arc1StartAndSweep.first(), arc1StartAndSweep.second(), arc2End);
+                        if (arc2StartsInArc1Sweep && arc2EndsInArc1Sweep) {
+                            // arc2 is fully overlapped by arc1
+                            result.intrType = PlineSegIntrType.ArcOverlap;
+                            result.point1 = u1.pos();
+                            result.point2 = u2.pos();
+                        } else if (arc2StartsInArc1Sweep) {
+                            // overlap from arc2 start to arc1 end
+                            result.intrType = PlineSegIntrType.ArcOverlap;
+                            result.point1 = u1.pos();
+                            result.point2 = v2.pos();
+                        } else if (arc2EndsInArc1Sweep) {
+                            // overlap from arc1 start to arc2 end
+                            result.intrType = PlineSegIntrType.ArcOverlap;
+                            result.point1 = v1.pos();
+                            result.point2 = u2.pos();
+                        } else {
+                            final boolean arc1StartsInArc2Sweep = Utils.angleIsWithinSweep(
+                                    arc2StartAndSweep.first(), arc2StartAndSweep.second(), arc1StartAndSweep.first());
+                            if (arc1StartsInArc2Sweep) {
+                                result.intrType = PlineSegIntrType.ArcOverlap;
+                                result.point1 = v1.pos();
+                                result.point2 = v2.pos();
+                            } else {
+                                result.intrType = PlineSegIntrType.NoIntersect;
+                            }
+                        }
+                    }
+
+                    break;
             }
         }
 

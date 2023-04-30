@@ -11,13 +11,7 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
-import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
-import org.jhotdraw8.collection.impl.champ.ChampNode;
-import org.jhotdraw8.collection.impl.champ.ChampReversedSequenceVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChampSeqVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedElement;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -25,12 +19,7 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 
 /**
@@ -112,7 +101,7 @@ import java.util.Spliterator;
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
  *
  *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
  *
  *      <dt>VectorMap.scala

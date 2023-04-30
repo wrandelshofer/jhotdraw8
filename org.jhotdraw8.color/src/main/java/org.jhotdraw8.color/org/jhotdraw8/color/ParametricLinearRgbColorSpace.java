@@ -36,7 +36,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
     /**
      * The Bradford XYZ to Cone Response Domain Matrix [M<sub>A</sub>].
      * <p>
-     * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brudelindbloom.com</a>
+     * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brucelindbloom.com</a>
      */
     public final static Matrix3Double BRADFORD_XYZ_TO_CONE_RESPONSE_DOMAIN = new Matrix3Double(
             0.8951000, 0.2664000, -0.1614000,
@@ -45,7 +45,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
     /**
      * The inverse Bradford XYZ to Cone Response Domain Matrix [M<sub>A</sub>]<sup>-1</sup>.
      * <p>
-     * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brudelindbloom.com</a>
+     * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brucelindbloom.com</a>
      */
     public final static Matrix3Double BRADFORD_CONE_RESPONSE_DOMAIN_TO_XYZ = BRADFORD_XYZ_TO_CONE_RESPONSE_DOMAIN.inv();
 
@@ -65,7 +65,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * - scale components from one reference white to another
      * - convert back to XYZ
      * <p>
-     * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">www.brucelindbloom.com</a>.
+     * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brucelindbloom.com</a>.
      */
     public static final Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
 

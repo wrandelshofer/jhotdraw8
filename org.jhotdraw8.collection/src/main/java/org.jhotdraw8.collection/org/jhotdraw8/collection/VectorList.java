@@ -17,12 +17,7 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
 
@@ -56,7 +51,7 @@ import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
  * <p>
  * This class has been derived from Vavr Vector.java.
  * <dl>
- *     <dt>Vector.java. Copyright 2023 (c) vavr. MIT License.</dt>
+ *     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
  * </dl>
  *

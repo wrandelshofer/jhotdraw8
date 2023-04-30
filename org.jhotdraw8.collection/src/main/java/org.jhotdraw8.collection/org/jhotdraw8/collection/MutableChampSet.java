@@ -8,11 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
-import org.jhotdraw8.collection.impl.champ.ChampAbstractMutableChampSet;
-import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
-import org.jhotdraw8.collection.impl.champ.ChampNode;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
@@ -58,7 +54,7 @@ import java.util.function.Function;
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
  *
  *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
  * </dl>
  *

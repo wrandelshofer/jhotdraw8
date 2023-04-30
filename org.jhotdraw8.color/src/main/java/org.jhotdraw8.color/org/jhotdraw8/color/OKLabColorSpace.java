@@ -50,7 +50,8 @@ import java.io.Serial;
  * <p>
  * References:
  * <dl>
- *     <dt>Börn Ottosson, A perceptual color space for image processing, Converting from linear sRGB to Oklab/dt>
+ *     <dt>Börn Ottosson, A perceptual color space for image processing, Converting from linear sRGB to Oklab.
+ *     <a href="https://github.com/bottosson/bottosson.github.io/blob/3d3f17644d7f346e1ce1ca08eb8b01782eea97af/misc/colorpicker/License.txt">MIT License</a></dt>
  *     <dd><a href="https://bottosson.github.io/posts/oklab/#converting-from-linear-srgb-to-oklab">github.io</a></dd>
  * </dl>
  *

@@ -12,14 +12,7 @@ import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.ChampAbstractMutableChampMap;
-import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
-import org.jhotdraw8.collection.impl.champ.ChampNode;
-import org.jhotdraw8.collection.impl.champ.ChampReversedSequenceVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChampSeqVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedEntry;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
@@ -28,11 +21,7 @@ import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -72,7 +61,7 @@ import java.util.Spliterator;
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
  *      <dt>The Capsule Hash Trie Collections Library.
- *      <br>Copyright (c) Michael Steindorfer. BSD-2-Clause License</dt>
+ *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
  * </dl>
  *
