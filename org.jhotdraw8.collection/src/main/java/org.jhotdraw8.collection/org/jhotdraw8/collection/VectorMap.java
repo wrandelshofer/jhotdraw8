@@ -99,13 +99,17 @@ import java.util.*;
  * References:
  * <p>
  * Portions of the code in this class has been derived from 'vavr' Vector.java.
+ * <p>
+ * The design of this class is inspired by 'VectorMap.scala'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      </dd>
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ *      </dd>
  * </dl>
  *
  * @param <K> the key type

@@ -12,6 +12,11 @@ import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 
 import java.util.function.Function;
 
+/**
+ * A spliterator for a {@code VectorMap} or {@code VectorSet}.
+ *
+ * @param <K> the key type
+ */
 public class ChampSeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull BitMappedTrie.MySpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;

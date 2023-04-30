@@ -42,6 +42,15 @@ import java.util.function.ToIntFunction;
  * In this implementation, a hash code has a length of
  * {@value #HASH_CODE_LENGTH} bits, and is split up in little-endian order into parts of
  * {@value #BIT_PARTITION_SIZE} bits (the last part contains the remaining bits).
+ * <p>
+ * References:
+ * <p>
+ * This class has been derived from 'The Capsule Hash Trie Collections Library'.
+ * <dl>
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
  *
  * @param <D> the type of the data objects that are stored in this trie
  */

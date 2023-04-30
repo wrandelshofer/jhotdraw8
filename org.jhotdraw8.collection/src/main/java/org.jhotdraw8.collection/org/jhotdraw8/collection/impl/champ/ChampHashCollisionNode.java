@@ -24,6 +24,15 @@ import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollis
  * If the trie contains keys that implement {@link Comparable} then a hash-collision
  * nodes should be a sorted tree structure (for example a red-black tree).
  * Otherwise, hash-collision node should be a vector (for example a bit mapped trie).
+ * <p>
+ * References:
+ * <p>
+ * This class has been derived from 'The Capsule Hash Trie Collections Library'.
+ * <dl>
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
  *
  * @param <D> the data type
  */

@@ -11,6 +11,9 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
 import java.util.function.Function;
 
+/**
+ * @param <K>
+ */
 public class ChampReversedSequenceVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull VectorList<Object> vector;
     private final @NonNull Function<Object, K> mapper;

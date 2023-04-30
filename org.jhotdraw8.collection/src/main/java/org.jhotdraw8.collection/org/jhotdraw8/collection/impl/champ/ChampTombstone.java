@@ -58,6 +58,15 @@ import org.jhotdraw8.collection.VectorSet;
  *
  * After deletion of element 9:          'a' 'b' 'c' 'd' 'e'
  * </pre>
+ * References:
+ * <p>
+ * The design of this class is inspired by 'VectorMap.scala'.
+ * <dl>
+ *      <dt>VectorMap.scala
+ *      <br>The Scala library. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+ *      <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
+ *      </dd>
+ * </dl>
  *
  * @param before minimal number of neighboring tombstones before this one
  * @param after  minimal number of neighboring tombstones after this one
