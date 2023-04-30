@@ -68,6 +68,8 @@ import java.util.*;
  * collection by 1.
  * <p>
  * References:
+ * <p>
+ * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>

@@ -92,6 +92,8 @@ import static org.jhotdraw8.collection.impl.champ.ChampSequencedData.seqHash;
  * 66666555554444433333222221111100 to 00111112222233333444445555566666.
  * <p>
  * References:
+ * <p>
+ * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>

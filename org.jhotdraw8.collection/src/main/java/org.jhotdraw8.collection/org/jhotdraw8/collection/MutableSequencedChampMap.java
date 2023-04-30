@@ -60,6 +60,8 @@ import static org.jhotdraw8.collection.impl.champ.ChampSequencedData.seqHash;
  * See description at {@link SequencedChampMap}.
  * <p>
  * References:
+ * <p>
+ * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
