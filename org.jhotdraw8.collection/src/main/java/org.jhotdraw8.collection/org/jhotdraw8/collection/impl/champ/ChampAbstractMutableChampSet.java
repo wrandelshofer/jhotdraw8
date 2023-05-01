@@ -63,16 +63,8 @@ public abstract class ChampAbstractMutableChampSet<E, X> extends AbstractSet<E> 
      * @param c an iterable of elements
      * @return {@code true} if this set changed
      */
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c == this) {
-            return false;
-        }
-        boolean modified = false;
-        for (E e : c) {
-            modified |= add(e);
-        }
-        return modified;
-    }
+    @SuppressWarnings("unchecked")
+    public abstract boolean addAll(@NonNull Iterable<? extends E> c);
 
     @Override
     public boolean equals(Object o) {

@@ -49,8 +49,8 @@ import java.util.*;
  * <p>
  * Implementation details:
  * <p>
- * This map performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
+ * This map performs read and write operations of single elements in O(log N) time,
+ * and in O(log N) space, where N is the number of elements in the set.
  * <p>
  * The CHAMP trie contains nodes that may be shared with other maps.
  * <p>
@@ -128,13 +128,13 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
      */
     final int offset;
     /**
-     * In this vector we store the elements in the order in which they were inserted.
-     */
-    final @NonNull VectorList<Object> vector;
-    /**
      * The size of the map.
      */
     final int size;
+    /**
+     * In this vector we store the elements in the order in which they were inserted.
+     */
+    final @NonNull VectorList<Object> vector;
 
     VectorMap(@NonNull ChampBitmapIndexedNode<ChampSequencedEntry<K, V>> root,
               @NonNull VectorList<Object> vector,
@@ -207,6 +207,16 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
         } else {
             return ReadOnlyMap.mapEquals(this, other);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public @Nullable Map.Entry<K, V> firstEntry() {
+        return isEmpty() ? null : (Map.Entry<K, V>) vector.getFirst();
+    }
+
+    @SuppressWarnings("unchecked")
+    public @Nullable Map.Entry<K, V> lastEntry() {
+        return isEmpty() ? null : (Map.Entry<K, V>) vector.getLast();
     }
 
     @Override
@@ -368,16 +378,8 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
 
     @Override
     public @NonNull VectorMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
-        if (this.isEmpty()) {
-            return this;
-        }
-        var t = this.toMutable();
-        boolean modified = false;
-        for (K key : c) {
-            ChampChangeEvent<ChampSequencedEntry<K, V>> details = t.removeAndGiveDetails(key);
-            modified |= details.isModified();
-        }
-        return modified ? t.toImmutable() : this;
+        var t = toMutable();
+        return t.removeAll(c) ? t.toImmutable() : this;
     }
 
     @NonNull
@@ -423,9 +425,9 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reversedSpliterator() {
-        return new ChampReversedSequenceVectorSpliterator<>(vector,
+        return new ChampReversedSequencedVectorSpliterator<>(vector,
                 e -> ((ChampSequencedEntry<K, V>) e),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
 
@@ -435,9 +437,9 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
     }
 
     public @NonNull EnumeratorSpliterator<Map.Entry<K, V>> spliterator() {
-        return new ChampSeqVectorSpliterator<>(vector,
+        return new ChampSequencedVectorSpliterator<>(vector,
                 e -> ((Map.Entry<K, V>) e),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
     /**

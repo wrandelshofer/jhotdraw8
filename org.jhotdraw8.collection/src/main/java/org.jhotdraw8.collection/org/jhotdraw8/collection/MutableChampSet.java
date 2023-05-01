@@ -108,6 +108,31 @@ public class MutableChampSet<E> extends ChampAbstractMutableChampSet<E, E> {
     }
 
     /**
+     * Adds all specified elements that are not already in this set.
+     *
+     * @param c an iterable of elements
+     * @return {@code true} if this set changed
+     */
+    @SuppressWarnings("unchecked")
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        if (c == this || c == root) {
+            return false;
+        }
+        if (isEmpty() && (c instanceof ChampSet<?> cc)) {
+            root = (ChampBitmapIndexedNode<E>) cc;
+            size = cc.size();
+            modCount++;
+            return true;
+        }
+        boolean modified = false;
+        for (E e : c) {
+            modified |= add(e);
+        }
+        return modified;
+    }
+
+
+    /**
      * Removes all elements from this set.
      */
     @Override
@@ -169,7 +194,9 @@ public class MutableChampSet<E> extends ChampAbstractMutableChampSet<E, E> {
      */
     public @NonNull ChampSet<E> toImmutable() {
         mutator = null;
-        return size == 0 ? ChampSet.of() : new ChampSet<>(root, size);
+        return size == 0
+                ? ChampSet.of()
+                : root instanceof ChampSet<E> c ? c : new ChampSet<>(root, size);
     }
 
     @Serial

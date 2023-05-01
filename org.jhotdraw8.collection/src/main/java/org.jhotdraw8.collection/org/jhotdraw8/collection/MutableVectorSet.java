@@ -120,6 +120,26 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
         return addLast(e, false);
     }
 
+    @SuppressWarnings("unchecked")
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        if (c == this || c == root) {
+            return false;
+        }
+        if (isEmpty() && (c instanceof VectorSet<?> cc)) {
+            root = (ChampBitmapIndexedNode<ChampSequencedElement<E>>) (ChampBitmapIndexedNode<?>) cc;
+            vector = cc.vector;
+            offset = cc.offset;
+            size = cc.size();
+            modCount++;
+            return true;
+        }
+        boolean modified = false;
+        for (E e : c) {
+            modified |= add(e);
+        }
+        return modified;
+    }
+
     @Override
     public void addFirst(@Nullable E e) {
         addFirst(e, true);
@@ -235,17 +255,17 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ChampReversedSequenceVectorSpliterator<>(vector,
+        return new ChampReversedSequencedVectorSpliterator<>(vector,
                 (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampSeqVectorSpliterator<>(vector,
+        return new ChampSequencedVectorSpliterator<>(vector,
                 (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
     private void iteratorRemove(E element) {

@@ -224,7 +224,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
         var t = this.toMutable();
         boolean modified = false;
         for (Map.Entry<? extends K, ? extends V> entry : entries) {
-            modified |= t.putAndGiveDetails(entry.getKey(), entry.getValue()).isModified();
+            modified |= t.putEntry(entry.getKey(), entry.getValue()).isModified();
         }
         return modified ? t.toImmutable() : this;
     }
@@ -250,7 +250,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
         var t = this.toMutable();
         boolean modified = false;
         for (K key : c) {
-            modified |= t.removeAndGiveDetails(key).isModified();
+            modified |= t.removeKey(key).isModified();
         }
         return modified ? t.toImmutable() : this;
     }
@@ -267,7 +267,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
         boolean modified = false;
         for (K key : readOnlyKeySet()) {
             if (!c.contains(key)) {
-                t.removeAndGiveDetails(key);
+                t.removeKey(key);
                 modified = true;
             }
         }

@@ -170,19 +170,19 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<Entry<K, V>> reversedSpliterator() {
-        return new ChampReversedSequenceVectorSpliterator<Entry<K, V>>(vector,
+        return new ChampReversedSequencedVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((ChampSequencedEntry<K, V>) e).getKey(), ((ChampSequencedEntry<K, V>) e).getValue()),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
-        return new ChampSeqVectorSpliterator<Entry<K, V>>(vector,
+        return new ChampSequencedVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((ChampSequencedEntry<K, V>) e).getKey(), ((ChampSequencedEntry<K, V>) e).getValue()),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
 
@@ -402,6 +402,17 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
         return details;
     }
 
+    boolean removeAll(@NonNull Iterable<? extends K> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        boolean modified = false;
+        for (K key : c) {
+            ChampChangeEvent<ChampSequencedEntry<K, V>> details = removeAndGiveDetails(key);
+            modified |= details.isModified();
+        }
+        return modified;
+    }
 
     /**
      * Renumbers the sequence numbers if they have overflown,

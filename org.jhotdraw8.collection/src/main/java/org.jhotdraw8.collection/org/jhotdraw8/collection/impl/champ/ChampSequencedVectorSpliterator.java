@@ -17,14 +17,13 @@ import java.util.function.Function;
  *
  * @param <K> the key type
  */
-public class ChampSeqVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
-    private final @NonNull BitMappedTrie.MySpliterator<Object> vector;
+public class ChampSequencedVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+    private final @NonNull BitMappedTrie.BitMappedTrieSpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;
-    private int index;
 
-    public ChampSeqVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
+    public ChampSequencedVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
-        this.vector = new BitMappedTrie.MySpliterator<>(vector, 0, 0);
+        this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, 0, 0);
         this.mapper = mapper;
     }
 

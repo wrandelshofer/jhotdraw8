@@ -409,15 +409,15 @@ public class BitMappedTrie<T> implements Serializable {
 
 
     @NonNull EnumeratorSpliterator<T> spliterator(int fromIndex, int characteristics) {
-        return new MySpliterator<>(this, fromIndex, characteristics);
+        return new BitMappedTrieSpliterator<>(this, fromIndex, characteristics);
     }
 
     @NonNull
     public Iterator<T> iterator(int fromIndex) {
-        return new MyIterator<>(this, fromIndex);
+        return new BitMappedTrieIterator<>(this, fromIndex);
     }
 
-    public static class MySpliterator<T> extends AbstractEnumeratorSpliterator<T> {
+    public static class BitMappedTrieSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
         private final int globalLength;
         private int globalIndex;
 
@@ -426,7 +426,7 @@ public class BitMappedTrie<T> implements Serializable {
         private int length;
         private final @NonNull BitMappedTrie<T> root;
 
-        public MySpliterator(@NonNull BitMappedTrie<T> root, int fromIndex, int characteristics) {
+        public BitMappedTrieSpliterator(@NonNull BitMappedTrie<T> root, int fromIndex, int characteristics) {
             super(root.length - fromIndex, characteristics);
             this.root = root;
             globalLength = root.length;
@@ -465,7 +465,7 @@ public class BitMappedTrie<T> implements Serializable {
 
     }
 
-    private static class MyIterator<T> implements Iterator<T> {
+    private static class BitMappedTrieIterator<T> implements Iterator<T> {
         private final int globalLength;
         private int globalIndex;
 
@@ -474,7 +474,7 @@ public class BitMappedTrie<T> implements Serializable {
         private int length;
         private final @NonNull BitMappedTrie<T> root;
 
-        public MyIterator(@NonNull BitMappedTrie<T> root, int fromIndex) {
+        public BitMappedTrieIterator(@NonNull BitMappedTrie<T> root, int fromIndex) {
             this.root = root;
             globalLength = root.length;
             globalIndex = fromIndex;
@@ -486,13 +486,6 @@ public class BitMappedTrie<T> implements Serializable {
         @Override
         public boolean hasNext() {
             return globalIndex < globalLength;
-        }
-
-        public void skip(int count) {
-            globalIndex += count;
-            index = lastDigit(root.offset + globalIndex);
-            leaf = root.getLeaf(globalIndex);
-            length = root.type.lengthOf(leaf);
         }
 
         @Override

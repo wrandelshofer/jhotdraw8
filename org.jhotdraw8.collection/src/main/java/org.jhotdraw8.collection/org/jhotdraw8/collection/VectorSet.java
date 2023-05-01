@@ -52,8 +52,8 @@ import java.util.*;
  * <p>
  * Implementation details:
  * <p>
- * This set performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
+ * This set performs read and write operations of single elements in O(log N) time,
+ * and in O(log N) space, where N is the number of elements in the set.
  * <p>
  * The CHAMP trie contains nodes that may be shared with other sets.
  * <p>
@@ -387,15 +387,13 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public VectorSet<E> removeFirst() {
-        ChampSequencedElement<E> k = (ChampSequencedElement<E>) vector.getFirst();
-        return remove(k.getElement());
+        return remove(getFirst());
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public VectorSet<E> removeLast() {
-        ChampSequencedElement<E> k = (ChampSequencedElement<E>) vector.getLast();
-        return remove(k.getElement());
+        return remove(getLast());
     }
 
     /**
@@ -415,7 +413,7 @@ public class VectorSet<E>
 
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var mutator = new IdentityObject();
-            var result = ChampSequencedData.<ChampSequencedElement<E>>vecRenumber(
+            var result = ChampSequencedData.vecRenumber(
                     size, root, vector, mutator, Objects::hashCode, Objects::equals,
                     (e, seq) -> new ChampSequencedElement<>(e.getElement(), seq));
             return new VectorSet<>(
@@ -443,9 +441,9 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ChampReversedSequenceVectorSpliterator<>(vector,
+        return new ChampReversedSequencedVectorSpliterator<>(vector,
                 e -> ((ChampSequencedElement<E>) e).getElement(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
     @Override
@@ -456,9 +454,9 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampSeqVectorSpliterator<>(vector,
+        return new ChampSequencedVectorSpliterator<>(vector,
                 e -> ((ChampSequencedElement<E>) e).getElement(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
     @Override

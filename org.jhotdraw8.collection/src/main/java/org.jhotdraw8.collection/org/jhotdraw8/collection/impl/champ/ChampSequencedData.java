@@ -129,7 +129,7 @@ public interface ChampSequencedData {
     /**
      * Renumbers the sequence numbers in all nodes from {@code 0} to {@code size}.
      * <p>
-     * Afterwards the sequence number for the next inserted entry must be
+     * Afterward, the sequence number for the next inserted entry must be
      * set to the value {@code size};
      *
      * @param <K>
@@ -140,7 +140,7 @@ public interface ChampSequencedData {
      * @param hashFunction    the hash function for data elements
      * @param equalsFunction  the equals function for data elements
      * @param factoryFunction the factory function for data elements
-     * @return a new renumbered root
+     * @return a new renumbered root and a new vector with matching entries
      */
     @SuppressWarnings("unchecked")
     static <K extends ChampSequencedData> OrderedPair<ChampBitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
@@ -159,7 +159,7 @@ public interface ChampSequencedData {
         ChampChangeEvent<K> details = new ChampChangeEvent<>();
         BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
         int seq = 0;
-        for (var i = new ChampSeqVectorSpliterator<K>(vector, o -> (K) o, Long.MAX_VALUE, 0); i.moveNext(); ) {
+        for (var i = new ChampSequencedVectorSpliterator<K>(vector, o -> (K) o, Long.MAX_VALUE, 0); i.moveNext(); ) {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);

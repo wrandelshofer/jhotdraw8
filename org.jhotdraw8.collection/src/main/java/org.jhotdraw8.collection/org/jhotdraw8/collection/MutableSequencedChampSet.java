@@ -127,6 +127,27 @@ public class MutableSequencedChampSet<E> extends ChampAbstractMutableChampSet<E,
         return addLast(e, false);
     }
 
+    @SuppressWarnings("unchecked")
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        if (c == this || c == root) {
+            return false;
+        }
+        if (isEmpty() && (c instanceof SequencedChampSet<?> cc)) {
+            root = (ChampBitmapIndexedNode<ChampSequencedElement<E>>) (ChampBitmapIndexedNode<?>) cc;
+            sequenceRoot = (ChampBitmapIndexedNode<ChampSequencedElement<E>>) (ChampBitmapIndexedNode<?>) cc.sequenceRoot;
+            first = cc.first;
+            last = cc.last;
+            size = cc.size();
+            modCount++;
+            return true;
+        }
+        boolean modified = false;
+        for (E e : c) {
+            modified |= add(e);
+        }
+        return modified;
+    }
+
     @Override
     public void addFirst(@Nullable E e) {
         addFirst(e, true);

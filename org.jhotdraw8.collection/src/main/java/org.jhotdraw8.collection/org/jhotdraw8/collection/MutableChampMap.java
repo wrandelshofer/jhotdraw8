@@ -198,12 +198,12 @@ public class MutableChampMap<K, V> extends ChampAbstractMutableChampMap<K, V, Ab
 
     @Override
     public V put(K key, V value) {
-        SimpleImmutableEntry<K, V> oldValue = putAndGiveDetails(key, value).getOldData();
+        SimpleImmutableEntry<K, V> oldValue = putEntry(key, value).getOldData();
         return oldValue == null ? null : oldValue.getValue();
     }
 
     @NonNull
-    ChampChangeEvent<SimpleImmutableEntry<K, V>> putAndGiveDetails(@Nullable K key, @Nullable V val) {
+    ChampChangeEvent<SimpleImmutableEntry<K, V>> putEntry(@Nullable K key, @Nullable V val) {
         int keyHash = Objects.hashCode(key);
         ChampChangeEvent<SimpleImmutableEntry<K, V>> details = new ChampChangeEvent<>();
         root = root.update(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
@@ -220,12 +220,12 @@ public class MutableChampMap<K, V> extends ChampAbstractMutableChampMap<K, V, Ab
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        SimpleImmutableEntry<K, V> oldValue = removeAndGiveDetails(key).getOldData();
+        SimpleImmutableEntry<K, V> oldValue = removeKey(key).getOldData();
         return oldValue == null ? null : oldValue.getValue();
     }
 
     @NonNull
-    ChampChangeEvent<SimpleImmutableEntry<K, V>> removeAndGiveDetails(K key) {
+    ChampChangeEvent<SimpleImmutableEntry<K, V>> removeKey(K key) {
         int keyHash = Objects.hashCode(key);
         ChampChangeEvent<SimpleImmutableEntry<K, V>> details = new ChampChangeEvent<>();
         root = root.remove(getOrCreateIdentity(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
