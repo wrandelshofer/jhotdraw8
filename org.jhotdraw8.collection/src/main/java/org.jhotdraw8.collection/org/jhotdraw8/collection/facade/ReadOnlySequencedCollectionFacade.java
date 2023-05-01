@@ -25,7 +25,7 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
 
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
-    final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
+    final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
 
     public ReadOnlySequencedCollectionFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
@@ -39,7 +39,7 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
     }
 
     public ReadOnlySequencedCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                             @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
+                                             @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
                                              @NonNull IntSupplier sizeFunction,
                                              @NonNull Predicate<Object> containsFunction,
                                              @NonNull Supplier<E> getFirstFunction,
@@ -47,7 +47,7 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
         super(iteratorFunction, sizeFunction, containsFunction);
         this.getFirstFunction = getFirstFunction;
         this.getLastFunction = getLastFunction;
-        this.reversedIteratorFunction = reversedIteratorFunction;
+        this.reverseIteratorFunction = reverseIteratorFunction;
     }
 
 
@@ -64,7 +64,7 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlySequencedCollectionFacade<>(
-                reversedIteratorFunction,
+                reverseIteratorFunction,
                 iteratorFunction,
                 sizeFunction,
                 containsFunction,

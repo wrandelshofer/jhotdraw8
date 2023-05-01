@@ -7,23 +7,13 @@ package org.jhotdraw8.fxcollection.indexedset;
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.ReversedListEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.ReverseListEnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.fxcollection.precondition.Preconditions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.lang.Math.max;
@@ -816,7 +806,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<E>(
-                () -> new ReversedListEnumeratorSpliterator<>(this, 0, size),
+                () -> new ReverseListEnumeratorSpliterator<>(this, 0, size),
                 this::iterator,
                 this::size,
                 this::contains,

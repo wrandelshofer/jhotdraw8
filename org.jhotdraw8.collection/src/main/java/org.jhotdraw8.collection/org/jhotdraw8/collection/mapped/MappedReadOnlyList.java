@@ -71,7 +71,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
         };
     }
 
-    @NonNull Iterator<E> reversedIterator() {
+    @NonNull Iterator<E> reverseIterator() {
         return new Iterator<>() {
             private int i = size() - 1;
 
@@ -98,7 +98,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlySequencedCollectionFacade<>(
-                this::reversedIterator,
+                this::reverseIterator,
                 this::iterator,
                 this::size,
                 this::contains,

@@ -248,14 +248,14 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
                 this::iteratorRemove), () -> modCount);
     }
 
-    private @NonNull Iterator<E> reversedIterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(reversedSpliterator(),
+    private @NonNull Iterator<E> reverseIterator() {
+        return new FailFastIterator<>(new IteratorFacade<>(reverseSpliterator(),
                 this::iteratorRemove), () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ChampReversedSequencedVectorSpliterator<>(vector,
+    private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
+        return new ChampReverseSequencedVectorSpliterator<>(vector,
                 (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
@@ -330,8 +330,8 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     @Override
     public @NonNull SequencedSet<E> reversed() {
         return new SequencedSetFacade<>(
-                this::reversedIterator,
-                this::reversedSpliterator,
+                this::reverseIterator,
+                this::reverseSpliterator,
                 this::iterator,
                 this::spliterator,
                 this::size,

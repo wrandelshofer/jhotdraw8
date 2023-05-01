@@ -28,18 +28,18 @@ public class ReadOnlySequencedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
         implements ReadOnlySequencedMap<K, V> {
     private final @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction;
     private final @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction;
-    private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> reversedIteratorFunction;
+    private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction;
 
     public ReadOnlySequencedMapFacade(@NonNull SequencedMap<K, V> target) {
         super(target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
-        this.reversedIteratorFunction = () -> target.reversed().sequencedEntrySet().iterator();
+        this.reverseIteratorFunction = () -> target.reversed().sequencedEntrySet().iterator();
     }
 
     public ReadOnlySequencedMapFacade(
             @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
-            @NonNull Supplier<Iterator<Map.Entry<K, V>>> reversedIteratorFunction,
+            @NonNull Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction,
             @NonNull IntSupplier sizeFunction,
             @NonNull Predicate<Object> containsKeyFunction,
             @NonNull Function<K, V> getFunction,
@@ -48,13 +48,13 @@ public class ReadOnlySequencedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
         super(iteratorFunction, sizeFunction, containsKeyFunction, getFunction);
         this.firstEntryFunction = firstEntryFunction;
         this.lastEntryFunction = lastEntryFunction;
-        this.reversedIteratorFunction = reversedIteratorFunction;
+        this.reverseIteratorFunction = reverseIteratorFunction;
     }
 
     @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return new ReadOnlySequencedMapFacade<>(
-                reversedIteratorFunction,
+                reverseIteratorFunction,
                 iteratorFunction,
                 sizeFunction,
                 containsKeyFunction,

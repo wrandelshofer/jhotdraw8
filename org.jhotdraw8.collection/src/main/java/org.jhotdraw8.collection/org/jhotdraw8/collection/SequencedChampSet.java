@@ -357,8 +357,8 @@ public class SequencedChampSet<E>
         return new IteratorFacade<>(spliterator(), null);
     }
 
-    private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ChampReversedChampSpliterator<>(sequenceRoot, ChampSequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+    private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
+        return new ChampReverseChampSpliterator<>(sequenceRoot, ChampSequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
     }
 
     @Override
@@ -369,7 +369,7 @@ public class SequencedChampSet<E>
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
-                this::reversedIterator,
+                this::reverseIterator,
                 this::iterator,
                 this::size,
                 this::contains,
@@ -450,8 +450,8 @@ public class SequencedChampSet<E>
         return t.retainAll(set) ? t.toImmutable() : this;
     }
 
-    public @NonNull Iterator<E> reversedIterator() {
-        return new IteratorFacade<>(reversedSpliterator(), null);
+    public @NonNull Iterator<E> reverseIterator() {
+        return new IteratorFacade<>(reverseSpliterator(), null);
     }
 
     @Override

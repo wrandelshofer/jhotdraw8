@@ -14,16 +14,8 @@ import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedMap;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.IntSupplier;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Wraps {@code Map} functions into the {@link SequencedMap} interface.
@@ -37,8 +29,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     private final @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction;
     private final @NonNull BiFunction<K, V, V> putFirstFunction;
     private final @NonNull BiFunction<K, V, V> putLastFunction;
-    private final @NonNull Supplier<Iterator<Entry<K, V>>> reversedIteratorFunction;
-    private final @NonNull Supplier<Spliterator<Entry<K, V>>> reversedSpliteratorFunction;
+    private final @NonNull Supplier<Iterator<Entry<K, V>>> reverseIteratorFunction;
+    private final @NonNull Supplier<Spliterator<Entry<K, V>>> reverseSpliteratorFunction;
 
     public SequencedMapFacade(@NonNull ReadOnlySequencedMap<K, V> m) {
         super(m);
@@ -50,8 +42,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
         this.putLastFunction = (k, v) -> {
             throw new UnsupportedOperationException();
         };
-        this.reversedIteratorFunction = () -> m.readOnlyReversed().iterator();
-        this.reversedSpliteratorFunction = () -> m.readOnlyReversed().spliterator();
+        this.reverseIteratorFunction = () -> m.readOnlyReversed().iterator();
+        this.reverseSpliteratorFunction = () -> m.readOnlyReversed().spliterator();
     }
 
     public SequencedMapFacade(@NonNull SequencedMap<K, V> m) {
@@ -60,13 +52,13 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
         this.lastEntryFunction = m::lastEntry;
         this.putFirstFunction = m::putFirst;
         this.putLastFunction = m::putLast;
-        this.reversedIteratorFunction = () -> m.reversed().sequencedEntrySet().iterator();
-        this.reversedSpliteratorFunction = () -> m.reversed().sequencedEntrySet().spliterator();
+        this.reverseIteratorFunction = () -> m.reversed().sequencedEntrySet().iterator();
+        this.reverseSpliteratorFunction = () -> m.reversed().sequencedEntrySet().spliterator();
     }
 
     public SequencedMapFacade(
             @NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,
-            @NonNull Supplier<Iterator<Entry<K, V>>> reversedIteratorFunction,
+            @NonNull Supplier<Iterator<Entry<K, V>>> reverseIteratorFunction,
             @NonNull IntSupplier sizeFunction,
             @NonNull Predicate<Object> containsKeyFunction,
             @NonNull Function<K, V> getFunction,
@@ -79,8 +71,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
             @Nullable BiFunction<K, V, V> putLastFunction) {
         this(iteratorFunction,
                 () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
-                reversedIteratorFunction,
-                () -> Spliterators.spliterator(reversedIteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
+                reverseIteratorFunction,
+                () -> Spliterators.spliterator(reverseIteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
                 sizeFunction, containsKeyFunction,
                 getFunction, clearFunction, removeFunction, firstEntryFunction, lastEntryFunction,
                 putFunction, putFirstFunction, putLastFunction);
@@ -89,8 +81,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     public SequencedMapFacade(
             @NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,
             @NonNull Supplier<Spliterator<Entry<K, V>>> spliteratorFunction,
-            @NonNull Supplier<Iterator<Entry<K, V>>> reversedIteratorFunction,
-            @NonNull Supplier<Spliterator<Entry<K, V>>> reversedSpliteratorFunction,
+            @NonNull Supplier<Iterator<Entry<K, V>>> reverseIteratorFunction,
+            @NonNull Supplier<Spliterator<Entry<K, V>>> reverseSpliteratorFunction,
             @NonNull IntSupplier sizeFunction,
             @NonNull Predicate<Object> containsKeyFunction,
             @NonNull Function<K, V> getFunction,
@@ -111,15 +103,15 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
         this.putLastFunction = putLastFunction == null ? (k, v) -> {
             throw new UnsupportedOperationException();
         } : putLastFunction;
-        this.reversedIteratorFunction = reversedIteratorFunction;
-        this.reversedSpliteratorFunction = reversedSpliteratorFunction;
+        this.reverseIteratorFunction = reverseIteratorFunction;
+        this.reverseSpliteratorFunction = reverseSpliteratorFunction;
     }
 
     @Override
     public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
                 iteratorFunction, spliteratorFunction,
-                reversedIteratorFunction, reversedSpliteratorFunction,
+                reverseIteratorFunction, reverseSpliteratorFunction,
                 sizeFunction,
                 this::containsEntry,
                 clearFunction,
@@ -138,7 +130,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
         return new SequencedSetFacade<>(
                 () -> new MappedIterator<>(iteratorFunction.get(), Map.Entry::getKey),
                 () -> new MappedSpliterator<>(spliteratorFunction.get(), Map.Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
-                () -> new MappedIterator<>(reversedIteratorFunction.get(), Map.Entry::getKey),
+                () -> new MappedIterator<>(reverseIteratorFunction.get(), Map.Entry::getKey),
                 () -> new MappedSpliterator<>(spliteratorFunction.get(), Map.Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
                 sizeFunction,
                 this::containsKey,
@@ -175,7 +167,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     @Override
     public @NonNull SequencedMap<K, V> reversed() {
         return new SequencedMapFacade<>(
-                reversedIteratorFunction,
+                reverseIteratorFunction,
                 iteratorFunction,
                 sizeFunction,
                 containsKeyFunction,
@@ -194,7 +186,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     public @NonNull SequencedCollection<V> sequencedValues() {
         return new SequencedCollectionFacade<>(
                 () -> new MappedIterator<>(iteratorFunction.get(), Map.Entry::getValue),
-                () -> new MappedIterator<>(reversedIteratorFunction.get(), Map.Entry::getValue),
+                () -> new MappedIterator<>(reverseIteratorFunction.get(), Map.Entry::getValue),
                 sizeFunction,
                 this::containsKey,
                 clearFunction,

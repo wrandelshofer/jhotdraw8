@@ -206,7 +206,7 @@ public class MutableSequencedChampMap<K, V> extends ChampAbstractMutableChampMap
     }
 
     private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
-        return new FailFastSpliterator<>(new ChampReversedChampSpliterator<>(sequenceRoot,
+        return new FailFastSpliterator<>(new ChampReverseChampSpliterator<>(sequenceRoot,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()),
                 this::getModCount);
@@ -214,7 +214,7 @@ public class MutableSequencedChampMap<K, V> extends ChampAbstractMutableChampMap
 
     private @NonNull Iterator<Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(
-                new IteratorFacade<>(new ChampReversedChampSpliterator<>(sequenceRoot,
+                new IteratorFacade<>(new ChampReverseChampSpliterator<>(sequenceRoot,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                         Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size()), this::iteratorRemove),
                 this::getModCount

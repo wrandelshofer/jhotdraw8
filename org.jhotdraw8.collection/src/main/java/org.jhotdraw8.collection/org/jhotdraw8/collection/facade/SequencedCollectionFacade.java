@@ -29,7 +29,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
 
     private final @NonNull Consumer<E> addFirstFunction;
     private final @NonNull Consumer<E> addLastFunction;
-    private final @NonNull Supplier<Iterator<E>> reversedIteratorFunction;
+    private final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
 
     public SequencedCollectionFacade(@NonNull ReadOnlySequencedCollection<E> backingCollection) {
         this(backingCollection::iterator, () -> backingCollection.readOnlyReversed().iterator(), backingCollection::size,
@@ -37,27 +37,27 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     }
 
     public SequencedCollectionFacade(@NonNull ReadOnlyCollection<E> backingCollection,
-                                     @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
-        this(backingCollection::iterator, reversedIteratorFunction, backingCollection::size,
+                                     @NonNull Supplier<Iterator<E>> reverseIteratorFunction) {
+        this(backingCollection::iterator, reverseIteratorFunction, backingCollection::size,
                 backingCollection::contains, null, null, null, null, null, null);
     }
 
     public SequencedCollectionFacade(@NonNull Collection<E> backingCollection,
-                                     @NonNull Supplier<Iterator<E>> reversedIteratorFunction) {
-        this(backingCollection::iterator, reversedIteratorFunction, backingCollection::size,
+                                     @NonNull Supplier<Iterator<E>> reverseIteratorFunction) {
+        this(backingCollection::iterator, reverseIteratorFunction, backingCollection::size,
                 backingCollection::contains, backingCollection::clear, backingCollection::remove,
                 null, null, null, null);
     }
 
     public SequencedCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                     @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
+                                     @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
                                      @NonNull IntSupplier sizeFunction,
                                      @NonNull Predicate<Object> containsFunction) {
-        this(iteratorFunction, reversedIteratorFunction, sizeFunction, containsFunction, null, null, null, null, null, null);
+        this(iteratorFunction, reverseIteratorFunction, sizeFunction, containsFunction, null, null, null, null, null, null);
     }
 
     public SequencedCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                     @NonNull Supplier<Iterator<E>> reversedIteratorFunction,
+                                     @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
                                      @NonNull IntSupplier sizeFunction,
                                      @NonNull Predicate<Object> containsFunction,
                                      @Nullable Runnable clearFunction,
@@ -79,7 +79,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
         this.addLastFunction = addLastFunction == null ? e -> {
             throw new UnsupportedOperationException();
         } : addLastFunction;
-        this.reversedIteratorFunction = reversedIteratorFunction;
+        this.reverseIteratorFunction = reverseIteratorFunction;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     @Override
     public @NonNull SequencedCollection<E> reversed() {
         return new SequencedCollectionFacade<>(
-                reversedIteratorFunction,
+                reverseIteratorFunction,
                 iteratorFunction,
                 sizeFunction,
                 containsFunction,

@@ -435,7 +435,7 @@ public class SequencedChampMap<K, V> extends ChampBitmapIndexedNode<ChampSequenc
     }
 
     @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
-        return new IteratorFacade<>(new ChampReversedChampSpliterator<ChampSequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
+        return new IteratorFacade<>(new ChampReverseChampSpliterator<ChampSequencedEntry<K, V>, Map.Entry<K, V>>(sequenceRoot, Map.Entry.class::cast, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size()), null);
     }
 
     @Override

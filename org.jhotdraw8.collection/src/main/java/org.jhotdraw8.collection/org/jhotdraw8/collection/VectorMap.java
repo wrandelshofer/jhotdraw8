@@ -350,7 +350,7 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
     @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return new ReadOnlySequencedMapFacade<>(
-                this::reversedIterator,
+                this::reverseIterator,
                 this::iterator,
                 this::size,
                 this::containsKey,
@@ -419,13 +419,13 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
         return modified ? t.toImmutable() : this;
     }
 
-    public @NonNull Iterator<Map.Entry<K, V>> reversedIterator() {
-        return new IteratorFacade<>(reversedSpliterator(), null);
+    public @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+        return new IteratorFacade<>(reverseSpliterator(), null);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reversedSpliterator() {
-        return new ChampReversedSequencedVectorSpliterator<>(vector,
+    private @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reverseSpliterator() {
+        return new ChampReverseSequencedVectorSpliterator<>(vector,
                 e -> ((ChampSequencedEntry<K, V>) e),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

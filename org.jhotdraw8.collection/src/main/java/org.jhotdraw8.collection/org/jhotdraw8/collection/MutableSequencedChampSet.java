@@ -269,7 +269,7 @@ public class MutableSequencedChampSet<E> extends ChampAbstractMutableChampSet<E,
     }
 
     private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ChampReversedChampSpliterator<>(sequenceRoot,
+        return new ChampReverseChampSpliterator<>(sequenceRoot,
                 ChampSequencedElement::getElement, Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, size());
     }
 

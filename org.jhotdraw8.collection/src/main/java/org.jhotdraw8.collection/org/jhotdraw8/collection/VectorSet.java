@@ -344,7 +344,7 @@ public class VectorSet<E>
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
-                this::reversedIterator,
+                this::reverseIterator,
                 this::iterator,
                 this::size,
                 this::contains,
@@ -435,13 +435,13 @@ public class VectorSet<E>
         return t.retainAll(set) ? t.toImmutable() : this;
     }
 
-    public @NonNull Iterator<E> reversedIterator() {
-        return new IteratorFacade<>(reversedSpliterator(), null);
+    public @NonNull Iterator<E> reverseIterator() {
+        return new IteratorFacade<>(reverseSpliterator(), null);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<E> reversedSpliterator() {
-        return new ChampReversedSequencedVectorSpliterator<>(vector,
+    private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
+        return new ChampReverseSequencedVectorSpliterator<>(vector,
                 e -> ((ChampSequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

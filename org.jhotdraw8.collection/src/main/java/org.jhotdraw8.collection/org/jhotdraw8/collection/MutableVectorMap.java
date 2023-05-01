@@ -163,14 +163,14 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
                 this::iteratorRemove), () -> modCount);
     }
 
-    private @NonNull Iterator<Map.Entry<K, V>> reversedIterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(reversedSpliterator(),
+    private @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+        return new FailFastIterator<>(new IteratorFacade<>(reverseSpliterator(),
                 this::iteratorRemove), () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<Entry<K, V>> reversedSpliterator() {
-        return new ChampReversedSequencedVectorSpliterator<Entry<K, V>>(vector,
+    private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
+        return new ChampReverseSequencedVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((ChampSequencedEntry<K, V>) e).getKey(), ((ChampSequencedEntry<K, V>) e).getValue()),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
@@ -206,8 +206,8 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
         return new SequencedSetFacade<>(
                 this::iterator,
                 this::spliterator,
-                this::reversedIterator,
-                this::reversedSpliterator,
+                this::reverseIterator,
+                this::reverseSpliterator,
                 this::size,
                 this::containsEntry,
                 this::clear,
@@ -365,7 +365,7 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return new ReadOnlySequencedMapFacade<>(
                 this::iterator,
-                this::reversedIterator,
+                this::reverseIterator,
                 this::size,
                 this::containsKey,
                 this::get,
@@ -434,7 +434,7 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
     @Override
     public @NonNull SequencedMap<K, V> reversed() {
         return new SequencedMapFacade<>(
-                this::reversedIterator,
+                this::reverseIterator,
                 this::iterator,
                 this::size,
                 this::containsKey,
