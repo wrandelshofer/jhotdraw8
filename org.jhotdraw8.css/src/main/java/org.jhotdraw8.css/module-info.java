@@ -23,4 +23,5 @@ module org.jhotdraw8.css {
     exports org.jhotdraw8.css.model;
     exports org.jhotdraw8.css.parser;
     exports org.jhotdraw8.css.value;
+    exports org.jhotdraw8.css.util;
 }
