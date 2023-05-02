@@ -170,7 +170,7 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
-        return new ChampReverseSequencedVectorSpliterator<Entry<K, V>>(vector,
+        return new ChampReverseVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((ChampSequencedEntry<K, V>) e).getKey(), ((ChampSequencedEntry<K, V>) e).getValue()),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
@@ -179,7 +179,7 @@ public class MutableVectorMap<K, V> extends ChampAbstractMutableChampMap<K, V, C
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
-        return new ChampSequencedVectorSpliterator<Entry<K, V>>(vector,
+        return new ChampVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((ChampSequencedEntry<K, V>) e).getKey(), ((ChampSequencedEntry<K, V>) e).getValue()),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);

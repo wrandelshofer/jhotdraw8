@@ -255,7 +255,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ChampReverseSequencedVectorSpliterator<>(vector,
+        return new ChampReverseVectorSpliterator<>(vector,
                 (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
@@ -263,7 +263,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampSequencedVectorSpliterator<>(vector,
+        return new ChampVectorSpliterator<>(vector,
                 (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }

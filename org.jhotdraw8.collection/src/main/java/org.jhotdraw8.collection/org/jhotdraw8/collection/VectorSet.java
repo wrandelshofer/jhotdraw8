@@ -441,7 +441,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ChampReverseSequencedVectorSpliterator<>(vector,
+        return new ChampReverseVectorSpliterator<>(vector,
                 e -> ((ChampSequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -454,7 +454,7 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampSequencedVectorSpliterator<>(vector,
+        return new ChampVectorSpliterator<>(vector,
                 e -> ((ChampSequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

@@ -425,7 +425,7 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reverseSpliterator() {
-        return new ChampReverseSequencedVectorSpliterator<>(vector,
+        return new ChampReverseVectorSpliterator<>(vector,
                 e -> ((ChampSequencedEntry<K, V>) e),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -437,7 +437,7 @@ public class VectorMap<K, V> extends ChampBitmapIndexedNode<ChampSequencedEntry<
     }
 
     public @NonNull EnumeratorSpliterator<Map.Entry<K, V>> spliterator() {
-        return new ChampSequencedVectorSpliterator<>(vector,
+        return new ChampVectorSpliterator<>(vector,
                 e -> ((Map.Entry<K, V>) e),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
