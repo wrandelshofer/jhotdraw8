@@ -26,7 +26,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     private static final byte SEG_QUADTO = (int) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
-    double lastMoveToX, lastMoveToY;
+
 
     @Override
     protected void doClosePath() {
@@ -35,7 +35,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
                 && commands.getLastAsByte() != SEG_CLOSE) {
             // Only add SEG_CLOSE if it actually closes a path
 
-            // Add a missing SEG_LINETO if necessary 
+            // Add a missing SEG_LINETO if necessary
             double length = Points.distance(lastMoveToX, lastMoveToY, getLastX(), getLastY());
             if (length > 0) {
                 commands.addAsByte(SEG_LINETO);
@@ -89,9 +89,6 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     protected void doMoveTo(double x, double y) {
-        lastMoveToX = x;
-        lastMoveToY = y;
-
         if (!commands.isEmpty() && commands.getLastAsByte() == SEG_MOVETO) {
             // Coalesce multiple consecutive SEG_MOVETO into one
             coords.setAsDouble(coords.size() - 2, x);
