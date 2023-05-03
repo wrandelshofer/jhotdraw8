@@ -16,8 +16,9 @@ import java.awt.geom.Point2D;
  */
 public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 
-    private double lastX, lastY;
-    private double lastCX, lastCY;
+    protected double lastX, lastY;
+    protected double lastMoveToX, lastMoveToY;
+    protected double lastCX, lastCY;
 
     private int numCommands = 0;
 
@@ -100,6 +101,15 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
         return lastY;
     }
 
+    public double getLastMoveToX() {
+        return lastMoveToX;
+    }
+
+
+    public double getLastMoveToY() {
+        return lastMoveToY;
+    }
+
     @Override
     public double getLastCX() {
         return lastCX;
@@ -129,6 +139,8 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
         doMoveTo(x, y);
         lastX = x;
         lastY = y;
+        lastMoveToX = x;
+        lastMoveToY = y;
         lastCX = x;
         lastCY = y;
     }
