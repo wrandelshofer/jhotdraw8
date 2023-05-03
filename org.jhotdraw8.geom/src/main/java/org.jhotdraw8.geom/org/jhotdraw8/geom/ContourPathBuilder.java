@@ -20,10 +20,16 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private final @NonNull PathBuilder<T> consumer;
     private final @NonNull PolyArcPathBuilder papb = new PolyArcPathBuilder();
+    private final double eps2;
 
     public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset) {
+        this(consumer, offset, 0);
+    }
+
+    public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset, double epsilon) {
         this.offset = offset;
         this.consumer = consumer;
+        this.eps2 = epsilon * epsilon;
     }
 
     @Override
@@ -55,7 +61,9 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
 
     @Override
     protected void doMoveTo(double x, double y) {
-        papb.moveTo(x, y);
+        if (eps2 > 0 && (lastX - x) * (lastX - x) + (lastY - y) * (lastY - y) > eps2) {
+            papb.moveTo(x, y);
+        }
     }
 
     @Override

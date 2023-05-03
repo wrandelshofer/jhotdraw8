@@ -24,14 +24,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.OffsetPathBuilder;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PlineVertex;
 import org.jhotdraw8.geom.contour.PolyArcPath;
@@ -43,7 +39,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class OffsetPathExampleMain extends Application {
+public class ContourPathExampleMain extends Application {
     private final javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
             110, 200,
             160, 180,
@@ -52,7 +48,6 @@ public class OffsetPathExampleMain extends Application {
             310, 200);
     private final Path offsetPath1 = new Path();
     private final Path offsetPath2 = new Path();
-    private final Path offsetPath3 = new Path();
     StackPane canvas = new StackPane();
     private final DoubleProperty offset = new SimpleDoubleProperty(0.0);
     private final BooleanProperty closed = new SimpleBooleanProperty();
@@ -83,18 +78,14 @@ public class OffsetPathExampleMain extends Application {
         polyline.setManaged(false);
         offsetPath1.setManaged(false);
         offsetPath2.setManaged(false);
-        offsetPath3.setManaged(false);
         offsetPath1.setMouseTransparent(true);
         offsetPath2.setMouseTransparent(true);
-        offsetPath3.setMouseTransparent(true);
         polyline.setMouseTransparent(true);
         offsetPath2.setStroke(Color.BLUE);
         offsetPath2.getStrokeDashArray().addAll(3.0, 3.0);
-        offsetPath3.setStroke(Color.PINK);
         polyline.setStroke(Color.LIGHTGRAY);
         canvas.getChildren().add(offsetPath1);
         canvas.getChildren().add(offsetPath2);
-        canvas.getChildren().add(offsetPath3);
         canvas.getChildren().add(polyline);
         offset.addListener(this::onPropertyChanged);
         closed.addListener(this::onPropertyChanged);
@@ -185,30 +176,11 @@ public class OffsetPathExampleMain extends Application {
     private void updatePath() {
 
         doOffsetPath(polyline, offsetPath1, offset.get());
-        doOffsetPathWithOldAlgo(polyline, offsetPath3, -offset.get());
-        // doRawOffsetPath(polyline,offsetPath2,offset.get());
         doOffsetPath(polyline, offsetPath2, -offset.get());
         offsetPath1.setStrokeWidth(3.0);
         offsetPath2.setVisible(true);
     }
 
-    private void doOffsetPathWithOldAlgo(javafx.scene.shape.Polyline polyline, Path path, double offset) {
-        ObservableList<PathElement> elements = path.getElements();
-        elements.clear();
-        if (closed.get()) {
-            Polygon poly = new Polygon();
-            poly.getPoints().addAll(polyline.getPoints());
-            SvgPaths.buildFromPathIterator(
-                    new OffsetPathBuilder<>(new FXPathElementsBuilder(elements), offset),
-                    FXShapes.awtShapeFromFX(poly).getPathIterator(null)
-            );
-        } else {
-            SvgPaths.buildFromPathIterator(
-                    new OffsetPathBuilder<>(new FXPathElementsBuilder(elements), offset),
-                    FXShapes.awtShapeFromFX(polyline).getPathIterator(null)
-            );
-        }
-    }
 
     private void doOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
         PolyArcPath pap = createPline(polyline);
@@ -231,21 +203,6 @@ public class OffsetPathExampleMain extends Application {
         }
         pap.isClosed(closed.get());
         return pap;
-    }
-
-    private void doRawOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
-        PolyArcPath pap = createPline(polyline);
-        pap.isClosed(closed.get());
-        ContourBuilder papb = new ContourBuilder();
-        ObservableList<PathElement> elements = path.getElements();
-        elements.clear();
-        PolyArcPath offPap = papb.createRawOffsetPline(pap, offset);
-        elements.addAll(
-                FXShapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
-
-        offPap = papb.createRawOffsetPline(pap, -offset);
-        elements.addAll(
-                FXShapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
     }
 
 
