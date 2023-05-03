@@ -7,10 +7,10 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
-import org.jhotdraw8.collection.impl.champ.ChampBitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampChangeEvent;
-import org.jhotdraw8.collection.impl.champ.ChampNode;
+import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
+import org.jhotdraw8.collection.impl.champ.ChangeEvent;
+import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
@@ -18,7 +18,12 @@ import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -84,14 +89,14 @@ import java.util.*;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<K, V>>
+public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
-    private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(ChampBitmapIndexedNode.emptyNode(), 0);
+    private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     private final int size;
 
-    ChampMap(@NonNull ChampBitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
+    ChampMap(@NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
@@ -155,7 +160,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         return find(new SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
-                ChampMap::keyEquals) != ChampNode.NO_DATA;
+                ChampMap::keyEquals) != Node.NO_DATA;
     }
 
     @Override
@@ -175,7 +180,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
     public V get(Object o) {
         Object result = find(
                 new SimpleImmutableEntry<>((K) o, null), Objects.hashCode(o), 0, ChampMap::keyEquals);
-        return result == ChampNode.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
     @Nullable
@@ -200,7 +205,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
 
     @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
-        var details = new ChampChangeEvent<SimpleImmutableEntry<K, V>>();
+        var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
         var newRootNode = update(null, new SimpleImmutableEntry<>(key, value),
                 Objects.hashCode(key), 0, details,
                 ChampMap::updateEntry, ChampMap::keyEquals, ChampMap::keyHash);
@@ -232,7 +237,7 @@ public class ChampMap<K, V> extends ChampBitmapIndexedNode<SimpleImmutableEntry<
     @Override
     public @NonNull ChampMap<K, V> remove(@NonNull K key) {
         int keyHash = Objects.hashCode(key);
-        var details = new ChampChangeEvent<SimpleImmutableEntry<K, V>>();
+        var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
         var newRootNode =
                 remove(null, new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         ChampMap::keyEquals);

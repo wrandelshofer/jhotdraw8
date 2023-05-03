@@ -11,7 +11,13 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
-import org.jhotdraw8.collection.impl.champ.*;
+import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
+import org.jhotdraw8.collection.impl.champ.ChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.ChangeEvent;
+import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedElement;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -19,7 +25,12 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Spliterator;
 
 
 /**
@@ -123,10 +134,10 @@ import java.util.*;
  */
 @SuppressWarnings("exports")
 public class VectorSet<E>
-        extends ChampBitmapIndexedNode<ChampSequencedElement<E>>
+        extends BitmapIndexedNode<SequencedElement<E>>
         implements Serializable, ImmutableSequencedSet<E> {
     private static final @NonNull VectorSet<?> EMPTY = new VectorSet<>(
-            ChampBitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
+            BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
     /**
@@ -145,7 +156,7 @@ public class VectorSet<E>
     final @NonNull VectorList<Object> vector;
 
     VectorSet(
-            @NonNull ChampBitmapIndexedNode<ChampSequencedElement<E>> root,
+            @NonNull BitmapIndexedNode<SequencedElement<E>> root,
             @NonNull VectorList<Object> vector,
             int size, int offset) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
@@ -208,15 +219,6 @@ public class VectorSet<E>
     @Override
     @SuppressWarnings({"unchecked"})
     public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> set) {
-        if (set == this || isEmpty() && (set instanceof VectorSet<?>)) {
-            return (VectorSet<E>) set;
-        }
-        if (isEmpty() && (set instanceof MutableVectorSet<?> t)) {
-            return (VectorSet<E>) t.toImmutable();
-        }
-        // XXX if the other set is a VectorSet, we should merge the trees
-        // See kotlinx collections:
-        // https://github.com/Kotlin/kotlinx.collections.immutable/blob/d7b83a13fed459c032dab1b4665eda20a04c740f/core/commonMain/src/implementations/immutableSet/TrieNode.kt#L338
         var t = toMutable();
         return t.addAll(set) ? t.toImmutable() : this;
     }
@@ -226,19 +228,19 @@ public class VectorSet<E>
     }
 
     private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
-        var details = new ChampChangeEvent<ChampSequencedElement<E>>();
-        var newElem = new ChampSequencedElement<>(e, -offset - 1);
+        var details = new ChangeEvent<SequencedElement<E>>();
+        var newElem = new SequencedElement<>(e, -offset - 1);
         var newRoot = update(null, newElem,
                 Objects.hashCode(e), 0, details,
-                moveToFirst ? ChampSequencedElement::updateAndMoveToFirst : ChampSequencedElement::update,
+                moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             var newVector = vector;
             int newSize = size;
-            IdentityObject mutator = new IdentityObject();
+            IdentityObject owner = new IdentityObject();
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, mutator, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(newVector, owner, details.getOldDataNonNull(), details, offset);
                     newVector = result.first();
                 }
             } else {
@@ -257,21 +259,21 @@ public class VectorSet<E>
 
     private @NonNull VectorSet<E> addLast(@Nullable E e,
                                           boolean moveToLast) {
-        var details = new ChampChangeEvent<ChampSequencedElement<E>>();
-        var newElem = new ChampSequencedElement<E>(e, vector.size() - offset);
+        var details = new ChangeEvent<SequencedElement<E>>();
+        var newElem = new SequencedElement<E>(e, vector.size() - offset);
         var newRoot = update(null, newElem,
                 Objects.hashCode(e), 0, details,
-                moveToLast ? ChampSequencedElement::updateAndMoveToLast : ChampSequencedElement::update,
+                moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         if (details.isModified()) {
             var newVector = vector;
             int newOffset = offset;
             int newSize = size;
-            var mutator = new IdentityObject();
+            var owner = new IdentityObject();
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    var result = ChampSequencedData.vecRemove(newVector, mutator, oldElem, details, newOffset);
+                    var result = ChampSequencedData.vecRemove(newVector, owner, oldElem, details, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -300,7 +302,7 @@ public class VectorSet<E>
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return find(new ChampSequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != ChampNode.NO_DATA;
+        return find(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -322,13 +324,13 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public E getFirst() {
-        return ((ChampSequencedElement<E>) vector.getFirst()).getElement();
+        return ((SequencedElement<E>) vector.getFirst()).getElement();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public E getLast() {
-        return ((ChampSequencedElement<E>) vector.getLast()).getElement();
+        return ((SequencedElement<E>) vector.getLast()).getElement();
     }
 
     @Override
@@ -356,13 +358,13 @@ public class VectorSet<E>
     @Override
     public @NonNull VectorSet<E> remove(@Nullable E key) {
         int keyHash = Objects.hashCode(key);
-        var details = new ChampChangeEvent<ChampSequencedElement<E>>();
-        ChampBitmapIndexedNode<ChampSequencedElement<E>> newRoot = remove(null,
-                new ChampSequencedElement<>(key),
+        var details = new ChangeEvent<SequencedElement<E>>();
+        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
+                new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
-            var oldElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, null, oldElem, details, offset);
+            var removedElem = details.getOldDataNonNull();
+            var result = ChampSequencedData.vecRemove(vector, null, removedElem, details, offset);
             return renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
@@ -407,15 +409,15 @@ public class VectorSet<E>
      */
     @NonNull
     private VectorSet<E> renumber(
-            ChampBitmapIndexedNode<ChampSequencedElement<E>> root,
+            BitmapIndexedNode<SequencedElement<E>> root,
             VectorList<Object> vector,
             int size, int offset) {
 
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
-            var mutator = new IdentityObject();
+            var owner = new IdentityObject();
             var result = ChampSequencedData.vecRenumber(
-                    size, root, vector, mutator, Objects::hashCode, Objects::equals,
-                    (e, seq) -> new ChampSequencedElement<>(e.getElement(), seq));
+                    size, root, vector, owner, Objects::hashCode, Objects::equals,
+                    (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return new VectorSet<>(
                     result.first(), result.second(),
                     size, 0);
@@ -441,8 +443,8 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ChampReverseVectorSpliterator<>(vector,
-                e -> ((ChampSequencedElement<E>) e).getElement(),
+        return new ReverseChampVectorSpliterator<>(vector,
+                e -> ((SequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -455,7 +457,7 @@ public class VectorSet<E>
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new ChampVectorSpliterator<>(vector,
-                e -> ((ChampSequencedElement<E>) e).getElement(),
+                e -> ((SequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 

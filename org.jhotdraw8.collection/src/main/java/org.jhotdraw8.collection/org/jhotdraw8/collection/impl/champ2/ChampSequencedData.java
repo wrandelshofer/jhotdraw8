@@ -3,11 +3,10 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.impl.champ;
+package org.jhotdraw8.collection.impl.champ2;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.VectorList;
 
@@ -17,7 +16,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.BitmapIndexedNode.emptyNode;
+import static org.jhotdraw8.collection.impl.champ2.BitmapIndexedNode.emptyNode;
 
 /**
  * A {@code SequencedData} stores a sequence number plus some data.
@@ -44,12 +43,12 @@ public interface ChampSequencedData {
      */
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> buildSequencedTrie(@NonNull BitmapIndexedNode<K> root, @NonNull IdentityObject owner) {
+    static <K extends ChampSequencedData> BitmapIndexedNode<K> buildSequencedTrie(@NonNull BitmapIndexedNode<K> root) {
         BitmapIndexedNode<K> seqRoot = emptyNode();
         ChangeEvent<K> details = new ChangeEvent<>();
         for (ChampSpliterator<K, K> i = new ChampSpliterator<K, K>(root, null, 0, 0); i.moveNext(); ) {
             K elem = i.current();
-            seqRoot = seqRoot.update(owner, elem, seqHash(elem.getSequenceNumber()),
+            seqRoot = seqRoot.update(elem, seqHash(elem.getSequenceNumber()),
                     0, details, (oldK, newK) -> oldK, ChampSequencedData::seqEquals, ChampSequencedData::seqHash);
         }
         return seqRoot;
@@ -87,20 +86,18 @@ public interface ChampSequencedData {
      * Afterwards the sequence number for the next inserted entry must be
      * set to the value {@code size};
      *
+     * @param <K>
      * @param size            the size of the trie
      * @param root            the root of the trie
      * @param sequenceRoot    the sequence root of the trie
-     * @param owner           the owner that will own the renumbered trie
      * @param hashFunction    the hash function for data elements
      * @param equalsFunction  the equals function for data elements
      * @param factoryFunction the factory function for data elements
-     * @param <K>
      * @return a new renumbered root
      */
     static <K extends ChampSequencedData> BitmapIndexedNode<K> renumber(int size,
                                                                         @NonNull BitmapIndexedNode<K> root,
                                                                         @NonNull BitmapIndexedNode<K> sequenceRoot,
-                                                                        @NonNull IdentityObject owner,
                                                                         @NonNull ToIntFunction<K> hashFunction,
                                                                         @NonNull BiPredicate<K, K> equalsFunction,
                                                                         @NonNull BiFunction<K, Integer, K> factoryFunction
@@ -116,7 +113,7 @@ public interface ChampSequencedData {
         for (var i = new ChampSpliterator<>(sequenceRoot, Function.identity(), 0, 0); i.moveNext(); ) {
             K e = i.current();
             K newElement = factoryFunction.apply(e, seq);
-            newRoot = newRoot.update(owner,
+            newRoot = newRoot.update(
                     newElement,
                     Objects.hashCode(e), 0, details,
                     (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk,
@@ -136,7 +133,6 @@ public interface ChampSequencedData {
      * @param size            the size of the trie
      * @param root            the root of the trie
      * @param vector          the sequence root of the trie
-     * @param owner           the owner that will own the renumbered trie
      * @param hashFunction    the hash function for data elements
      * @param equalsFunction  the equals function for data elements
      * @param factoryFunction the factory function for data elements
@@ -147,7 +143,6 @@ public interface ChampSequencedData {
             int size,
             @NonNull BitmapIndexedNode<K> root,
             @NonNull VectorList<Object> vector,
-            @NonNull IdentityObject owner,
             @NonNull ToIntFunction<K> hashFunction,
             @NonNull BiPredicate<K, K> equalsFunction,
             @NonNull BiFunction<K, Integer, K> factoryFunction) {
@@ -163,7 +158,7 @@ public interface ChampSequencedData {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);
-            renumberedRoot = renumberedRoot.update(owner, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
+            renumberedRoot = renumberedRoot.update(data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
         }
 
         return new OrderedPair<>(renumberedRoot, renumberedVector);
@@ -199,17 +194,17 @@ public interface ChampSequencedData {
                 | ((u & 0b00000_00000_00000_00000_00000_00000_11) << 30);
     }
 
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> seqRemove(@NonNull BitmapIndexedNode<K> seqRoot, @Nullable IdentityObject owner,
+    static <K extends ChampSequencedData> BitmapIndexedNode<K> seqRemove(@NonNull BitmapIndexedNode<K> seqRoot,
                                                                          @Nullable K key, @NonNull ChangeEvent<K> details) {
-        return seqRoot.remove(owner,
+        return seqRoot.remove(
                 key, seqHash(key.getSequenceNumber()), 0, details,
                 ChampSequencedData::seqEquals);
     }
 
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> seqUpdate(@NonNull BitmapIndexedNode<K> seqRoot, @Nullable IdentityObject owner,
+    static <K extends ChampSequencedData> BitmapIndexedNode<K> seqUpdate(@NonNull BitmapIndexedNode<K> seqRoot,
                                                                          @Nullable K key, @NonNull ChangeEvent<K> details,
                                                                          @NonNull BiFunction<K, K, K> replaceFunction) {
-        return seqRoot.update(owner,
+        return seqRoot.update(
                 key, seqHash(key.getSequenceNumber()), 0, details,
                 replaceFunction,
                 ChampSequencedData::seqEquals, ChampSequencedData::seqHash);
@@ -217,7 +212,7 @@ public interface ChampSequencedData {
 
     final static ChampTombstone TOMB_ZERO_ZERO = new ChampTombstone(0, 0);
 
-    static <K extends ChampSequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, IdentityObject owner, K oldElem, ChangeEvent<K> details, int offset) {
+    static <K extends ChampSequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, ChangeEvent<K> details, int offset) {
         // If the element is the first, we can remove it and its neighboring tombstones from the vector.
         int size = vector.size();
         int index = oldElem.getSequenceNumber() + offset;

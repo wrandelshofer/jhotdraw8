@@ -8,11 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ2.AbstractMutableChampSet;
+import org.jhotdraw8.collection.impl.champ2.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ2.ChampSpliterator;
+import org.jhotdraw8.collection.impl.champ2.ChangeEvent;
+import org.jhotdraw8.collection.impl.champ2.Node;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
@@ -49,7 +49,7 @@ import java.util.function.Function;
  * <p>
  * Implementation details:
  * <p>
- * See description at {@link ChampSet}.
+ * See description at {@link ChampSet2}.
  * <p>
  * References:
  * <p>
@@ -58,7 +58,6 @@ import java.util.function.Function;
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
- *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -66,14 +65,14 @@ import java.util.function.Function;
  *
  * @param <E> the element type
  */
-public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
+public class MutableChampSet2<E> extends AbstractMutableChampSet<E, E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
     /**
      * Constructs a new empty set.
      */
-    public MutableChampSet() {
+    public MutableChampSet2() {
         root = BitmapIndexedNode.emptyNode();
     }
 
@@ -83,12 +82,12 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public MutableChampSet(@NonNull Iterable<? extends E> c) {
-        if (c instanceof MutableChampSet<?>) {
-            c = ((MutableChampSet<? extends E>) c).toImmutable();
+    public MutableChampSet2(@NonNull Iterable<? extends E> c) {
+        if (c instanceof MutableChampSet2<?>) {
+            c = ((MutableChampSet2<? extends E>) c).toImmutable();
         }
-        if (c instanceof ChampSet<?>) {
-            ChampSet<E> that = (ChampSet<E>) c;
+        if (c instanceof ChampSet2<?>) {
+            ChampSet2<E> that = (ChampSet2<E>) c;
             this.root = that;
             this.size = that.size;
         } else {
@@ -100,7 +99,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.update(getOrCreateOwner(),
+        root = root.update(
                 e, Objects.hashCode(e), 0, details,
                 (oldKey, newKey) -> oldKey,
                 Objects::equals, Objects::hashCode);
@@ -122,7 +121,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         if (c == this || c == root) {
             return false;
         }
-        if (isEmpty() && (c instanceof ChampSet<?> cc)) {
+        if (isEmpty() && (c instanceof ChampSet2<?> cc)) {
             root = (BitmapIndexedNode<E>) cc;
             size = cc.size();
             modCount++;
@@ -150,8 +149,8 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull MutableChampSet<E> clone() {
-        return (MutableChampSet<E>) super.clone();
+    public @NonNull MutableChampSet2<E> clone() {
+        return (MutableChampSet2<E>) super.clone();
     }
 
     @Override
@@ -173,7 +172,6 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     private void iteratorRemove(E e) {
-        owner = null;//XXX we should do this only once!
         remove(e);
     }
 
@@ -182,7 +180,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
         root = root.remove(
-                getOrCreateOwner(), (E) o, Objects.hashCode(o), 0, details,
+                (E) o, Objects.hashCode(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             size--;
@@ -196,11 +194,10 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      *
      * @return an immutable copy
      */
-    public @NonNull ChampSet<E> toImmutable() {
-        owner = null;
+    public @NonNull ChampSet2<E> toImmutable() {
         return size == 0
-                ? ChampSet.of()
-                : root instanceof ChampSet<E> c ? c : new ChampSet<>(root, size);
+                ? ChampSet2.of()
+                : root instanceof ChampSet2<E> c ? c : new ChampSet2<>(root, size);
     }
 
     @Serial
@@ -219,7 +216,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableChampSet<>(deserialized);
+            return new MutableChampSet2<>(deserialized);
         }
     }
 }

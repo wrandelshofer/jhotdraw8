@@ -16,33 +16,33 @@ import java.util.Objects;
  * {@code hashCode} and {@code equals} are based on the element - the sequence
  * number is not included.
  */
-public class ChampSequencedElement<E> implements ChampSequencedData {
+public class SequencedElement<E> implements ChampSequencedData {
 
     private final @Nullable E element;
     private final int sequenceNumber;
 
-    public ChampSequencedElement(@Nullable E element) {
+    public SequencedElement(@Nullable E element) {
         this.element = element;
         this.sequenceNumber = NO_SEQUENCE_NUMBER;
     }
 
-    public ChampSequencedElement(@Nullable E element, int sequenceNumber) {
+    public SequencedElement(@Nullable E element, int sequenceNumber) {
         this.element = element;
         this.sequenceNumber = sequenceNumber;
     }
 
     @NonNull
-    public static <E> ChampSequencedElement<E> update(@NonNull ChampSequencedElement<E> oldK, @NonNull ChampSequencedElement<E> newK) {
+    public static <E> SequencedElement<E> update(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
         return oldK;
     }
 
     @NonNull
-    public static <E> ChampSequencedElement<E> updateAndMoveToFirst(@NonNull ChampSequencedElement<E> oldK, @NonNull ChampSequencedElement<E> newK) {
+    public static <E> SequencedElement<E> updateAndMoveToFirst(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
         return oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
     }
 
     @NonNull
-    public static <E> ChampSequencedElement<E> updateAndMoveToLast(@NonNull ChampSequencedElement<E> oldK, @NonNull ChampSequencedElement<E> newK) {
+    public static <E> SequencedElement<E> updateAndMoveToLast(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
         return oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
     }
 
@@ -54,7 +54,7 @@ public class ChampSequencedElement<E> implements ChampSequencedData {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ChampSequencedElement<?> that = (ChampSequencedElement<?>) o;
+        SequencedElement<?> that = (SequencedElement<?>) o;
         return Objects.equals(element, that.element);
     }
 

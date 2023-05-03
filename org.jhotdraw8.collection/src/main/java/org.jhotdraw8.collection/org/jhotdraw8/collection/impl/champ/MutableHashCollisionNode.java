@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IdentityObject;
 
 /**
- * A {@link ChampHashCollisionNode} that provides storage space for a 'mutator' identity.
+ * A {@link HashCollisionNode} that provides storage space for a 'owner' identity.
  * <p>
  * References:
  * <p>
@@ -22,17 +22,17 @@ import org.jhotdraw8.collection.IdentityObject;
  *
  * @param <K>
  */
-class ChampMutableHashCollisionNode<K> extends ChampHashCollisionNode<K> {
+class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
     private static final long serialVersionUID = 0L;
-    private final @NonNull IdentityObject mutator;
+    private final @NonNull IdentityObject ownedBy;
 
-    ChampMutableHashCollisionNode(@NonNull IdentityObject mutator, int hash, Object @NonNull [] entries) {
+    MutableHashCollisionNode(@NonNull IdentityObject ownedBy, int hash, Object @NonNull [] entries) {
         super(hash, entries);
-        this.mutator = mutator;
+        this.ownedBy = ownedBy;
     }
 
     @Override
     protected @NonNull IdentityObject getMutator() {
-        return mutator;
+        return ownedBy;
     }
 }

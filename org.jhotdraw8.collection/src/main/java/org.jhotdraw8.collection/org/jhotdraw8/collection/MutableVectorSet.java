@@ -11,7 +11,14 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.*;
+import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
+import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
+import org.jhotdraw8.collection.impl.champ.ChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.ChangeEvent;
+import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedElement;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -67,7 +74,7 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -87,7 +94,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
      * Constructs a new empty set.
      */
     public MutableVectorSet() {
-        root = ChampBitmapIndexedNode.emptyNode();
+        root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
     }
 
@@ -109,7 +116,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
             this.offset = that.offset;
             this.vector = that.vector;
         } else {
-            this.root = ChampBitmapIndexedNode.emptyNode();
+            this.root = BitmapIndexedNode.emptyNode();
             this.vector = VectorList.of();
             addAll(c);
         }
@@ -126,7 +133,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
             return false;
         }
         if (isEmpty() && (c instanceof VectorSet<?> cc)) {
-            root = (ChampBitmapIndexedNode<ChampSequencedElement<E>>) (ChampBitmapIndexedNode<?>) cc;
+            root = (BitmapIndexedNode<SequencedElement<E>>) (BitmapIndexedNode<?>) cc;
             vector = cc.vector;
             offset = cc.offset;
             size = cc.size();
@@ -146,18 +153,18 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     }
 
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
-        var details = new ChampChangeEvent<ChampSequencedElement<E>>();
-        var newElem = new ChampSequencedElement<>(e, -offset - 1);
-        IdentityObject mutator = getOrCreateIdentity();
-        root = root.update(mutator, newElem,
+        var details = new ChangeEvent<SequencedElement<E>>();
+        var newElem = new SequencedElement<>(e, -offset - 1);
+        IdentityObject owner = getOrCreateOwner();
+        root = root.update(owner, newElem,
                 Objects.hashCode(e), 0, details,
-                moveToFirst ? ChampSequencedElement::updateAndMoveToFirst : ChampSequencedElement::update,
+                moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         boolean modified = details.isModified();
         if (modified) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(vector, mutator, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), details, offset);
                     vector = result.first();
                 }
             } else {
@@ -177,19 +184,19 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     }
 
     private boolean addLast(@Nullable E e, boolean moveToLast) {
-        var details = new ChampChangeEvent<ChampSequencedElement<E>>();
-        var newElem = new ChampSequencedElement<>(e, offset + vector.size());
-        var mutator = getOrCreateIdentity();
+        var details = new ChangeEvent<SequencedElement<E>>();
+        var newElem = new SequencedElement<>(e, offset + vector.size());
+        var owner = getOrCreateOwner();
         root = root.update(
-                mutator, newElem, Objects.hashCode(e), 0,
+                owner, newElem, Objects.hashCode(e), 0,
                 details,
-                moveToLast ? ChampSequencedElement::updateAndMoveToLast : ChampSequencedElement::update,
+                moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
                 Objects::equals, Objects::hashCode);
         boolean modified = details.isModified();
         if (modified) {
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
-                var result = ChampSequencedData.vecRemove(vector, mutator, oldElem, details, offset);
+                var result = ChampSequencedData.vecRemove(vector, owner, oldElem, details, offset);
                 vector = result.first();
                 offset = result.second();
             } else {
@@ -207,7 +214,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
      */
     @Override
     public void clear() {
-        root = ChampBitmapIndexedNode.emptyNode();
+        root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
         size = 0;
         modCount++;
@@ -225,20 +232,20 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return ChampNode.NO_DATA != root.find(new ChampSequencedElement<>((E) o),
+        return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, Objects::equals);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public E getFirst() {
-        return ((ChampSequencedElement<E>) vector.getFirst()).getElement();
+        return ((SequencedElement<E>) vector.getFirst()).getElement();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public E getLast() {
-        return ((ChampSequencedElement<E>) vector.getLast()).getElement();
+        return ((SequencedElement<E>) vector.getLast()).getElement();
     }
 
 
@@ -255,8 +262,8 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ChampReverseVectorSpliterator<>(vector,
-                (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
+        return new ReverseChampVectorSpliterator<>(vector,
+                (Object o) -> ((SequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
@@ -264,12 +271,12 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new ChampVectorSpliterator<>(vector,
-                (Object o) -> ((ChampSequencedElement<E>) o).getElement(),
+                (Object o) -> ((SequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
     private void iteratorRemove(E element) {
-        mutator = null;
+        owner = null;
         remove(element);
     }
 
@@ -281,14 +288,14 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
-        var details = new ChampChangeEvent<ChampSequencedElement<E>>();
-        var mutator = getOrCreateIdentity();
+        var details = new ChangeEvent<SequencedElement<E>>();
+        var owner = getOrCreateOwner();
         root = root.remove(
-                mutator, new ChampSequencedElement<>((E) o),
+                owner, new SequencedElement<>((E) o),
                 Objects.hashCode(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
         if (modified) {
-            var result = ChampSequencedData.vecRemove(vector, mutator, details.getOldDataNonNull(), details, offset);
+            var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), details, offset);
             size--;
             modCount++;
             vector = result.first();
@@ -317,10 +324,10 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
      */
     private void renumber() {
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            IdentityObject mutator = getOrCreateIdentity();
-            var result = ChampSequencedData.vecRenumber(size, root, vector, mutator,
+            IdentityObject owner = getOrCreateOwner();
+            var result = ChampSequencedData.vecRenumber(size, root, vector, owner,
                     Objects::hashCode, Objects::equals,
-                    (e, seq) -> new ChampSequencedElement<>(e.getElement(), seq));
+                    (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();
             vector = result.second();
             offset = 0;
@@ -350,7 +357,7 @@ public class MutableVectorSet<E> extends ChampAbstractMutableChampSet<E, ChampSe
      * @return an immutable copy
      */
     public @NonNull VectorSet<E> toImmutable() {
-        mutator = null;
+        owner = null;
         return size == 0 ? VectorSet.of() :
                 new VectorSet<>(root, vector, size, offset);
     }

@@ -23,6 +23,23 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  * Benchmark                       (mask)   (size)  Mode  Cnt      _     Score   Error  Units
+ * Benchmark                     (mask)    (size)  Mode  Cnt            Score   Error  Units
+ * VectorSetJmh.mAddAll             -65        10  avgt               589.748          ns/op
+ * VectorSetJmh.mAddAll             -65      1000  avgt            151761.757          ns/op
+ * VectorSetJmh.mAddAll             -65    100000  avgt          29689246.202          ns/op
+ * VectorSetJmh.mAddAll             -65  10000000  avgt        6178976642.500          ns/op
+ * VectorSetJmh.mAddOneByOne        -65        10  avgt               525.763          ns/op
+ * VectorSetJmh.mAddOneByOne        -65      1000  avgt            156192.942          ns/op
+ * VectorSetJmh.mAddOneByOne        -65    100000  avgt          34718717.062          ns/op
+ * VectorSetJmh.mAddOneByOne        -65  10000000  avgt        7709154901.000          ns/op
+ * VectorSetJmh.mRemoveAll          -65        10  avgt               919.188          ns/op
+ * VectorSetJmh.mRemoveAll          -65      1000  avgt            312538.372          ns/op
+ * VectorSetJmh.mRemoveAll          -65    100000  avgt          76711177.870          ns/op
+ * VectorSetJmh.mRemoveAll          -65  10000000  avgt       17359777764.000          ns/op
+ * VectorSetJmh.mRemoveOneByOne     -65        10  avgt               949.667          ns/op
+ * VectorSetJmh.mRemoveOneByOne     -65      1000  avgt            316088.023          ns/op
+ * VectorSetJmh.mRemoveOneByOne     -65    100000  avgt          82652359.041          ns/op
+ * VectorSetJmh.mRemoveOneByOne     -65  10000000  avgt       19951656484.000          ns/op
  * VectorSetJmh.mAdd                  -65       10  avgt    2      _     5.726          ns/op
  * VectorSetJmh.mAdd                  -65      100  avgt    2      _    18.807          ns/op
  * VectorSetJmh.mAdd                  -65     1000  avgt    2      _    28.747          ns/op
@@ -82,13 +99,13 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 0)
-@Warmup(iterations = 0)
-@Fork(value = 0)
+@Measurement(iterations = 1)
+@Warmup(iterations = 1)
+@Fork(value = 1, jvmArgsAppend = {"-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class VectorSetJmh {
-    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
+    @Param({"10", "1000", "100000", "10000000"})
     private int size;
 
     @Param({"-65"})
@@ -104,10 +121,35 @@ public class VectorSetJmh {
     }
 
     @Benchmark
-    public VectorSet<Key> mCopyOf() {
+    public VectorSet<Key> mAddAll() {
         return VectorSet.copyOf(data.setA);
     }
 
+    @Benchmark
+    public VectorSet<Key> mAddOneByOne() {
+        VectorSet<Key> set = VectorSet.of();
+        for (Key key : data.listA) {
+            set = set.add(key);
+        }
+        return set;
+    }
+
+    @Benchmark
+    public VectorSet<Key> mRemoveOneByOne() {
+        var map = setA;
+        for (var e : data.listA) {
+            map = map.remove(e);
+        }
+        if (!map.isEmpty()) throw new AssertionError("map: " + map);
+        return map;
+    }
+
+    @Benchmark
+    public VectorSet<Key> mRemoveAll() {
+        VectorSet<Key> set = setA;
+        return set.removeAll(data.listA);
+    }
+/*
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -151,15 +193,6 @@ public class VectorSetJmh {
         return setA.contains(key);
     }
 
-    @Benchmark
-    public VectorSet<Key> mRemoveOneByOne() {
-        var map = setA;
-        for (var e : data.listA) {
-            map = map.remove(e);
-        }
-        if (!map.isEmpty()) throw new AssertionError("map: " + map);
-        return map;
-    }
-
+*/
 
 }

@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 
 /**
- * Provides factory methods for {@link ChampNode}s.
+ * Provides factory methods for {@link Node}s.
  */
 class ChampNodeFactory {
 
@@ -20,18 +20,18 @@ class ChampNodeFactory {
     private ChampNodeFactory() {
     }
 
-    static <K> @NonNull ChampBitmapIndexedNode<K> newBitmapIndexedNode(
-            @Nullable IdentityObject mutator, int nodeMap,
+    static <K> @NonNull BitmapIndexedNode<K> newBitmapIndexedNode(
+            @Nullable IdentityObject owner, int nodeMap,
             int dataMap, @NonNull Object[] nodes) {
-        return mutator == null
-                ? new ChampBitmapIndexedNode<>(nodeMap, dataMap, nodes)
-                : new ChampMutableBitmapIndexedNode<>(mutator, nodeMap, dataMap, nodes);
+        return owner == null
+                ? new BitmapIndexedNode<>(nodeMap, dataMap, nodes)
+                : new MutableBitmapIndexedNode<>(owner, nodeMap, dataMap, nodes);
     }
 
-    static <K> @NonNull ChampHashCollisionNode<K> newHashCollisionNode(
-            @Nullable IdentityObject mutator, int hash, @NonNull Object @NonNull [] entries) {
-        return mutator == null
-                ? new ChampHashCollisionNode<>(hash, entries)
-                : new ChampMutableHashCollisionNode<>(mutator, hash, entries);
+    static <K> @NonNull HashCollisionNode<K> newHashCollisionNode(
+            @Nullable IdentityObject owner, int hash, @NonNull Object @NonNull [] entries) {
+        return owner == null
+                ? new HashCollisionNode<>(hash, entries)
+                : new MutableHashCollisionNode<>(owner, hash, entries);
     }
 }

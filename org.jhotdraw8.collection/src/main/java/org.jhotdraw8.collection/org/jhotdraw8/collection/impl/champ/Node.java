@@ -34,9 +34,9 @@ import java.util.function.ToIntFunction;
  * path to a data object in the tree.
  * <p>
  * If the hash code of a data object in the set is not unique, then it is
- * stored in a {@link ChampHashCollisionNode}, otherwise it is stored in a
- * {@link ChampBitmapIndexedNode}. Since the hash codes have a fixed length,
- * all {@link ChampHashCollisionNode}s are located at the same, maximal depth
+ * stored in a {@link HashCollisionNode}, otherwise it is stored in a
+ * {@link BitmapIndexedNode}. Since the hash codes have a fixed length,
+ * all {@link HashCollisionNode}s are located at the same, maximal depth
  * of the tree.
  * <p>
  * In this implementation, a hash code has a length of
@@ -54,7 +54,7 @@ import java.util.function.ToIntFunction;
  *
  * @param <D> the type of the data objects that are stored in this trie
  */
-public abstract class ChampNode<D> {
+public abstract class Node<D> {
     /**
      * Represents no data.
      * We can not use {@code null}, because we allow storing null-data in the
@@ -73,7 +73,7 @@ public abstract class ChampNode<D> {
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
 
 
-    ChampNode() {
+    Node() {
     }
 
     /**
@@ -92,8 +92,8 @@ public abstract class ChampNode<D> {
         return 1 << mask;
     }
 
-    public static <E> @NonNull E getFirst(@NonNull ChampNode<E> node) {
-        while (node instanceof ChampBitmapIndexedNode<E> bxn) {
+    public static <E> @NonNull E getFirst(@NonNull Node<E> node) {
+        while (node instanceof BitmapIndexedNode<E> bxn) {
             int nodeMap = bxn.nodeMap();
             int dataMap = bxn.dataMap();
             if ((nodeMap | dataMap) == 0) {
@@ -107,14 +107,14 @@ public abstract class ChampNode<D> {
                 return node.getData(0);
             }
         }
-        if (node instanceof ChampHashCollisionNode<E> hcn) {
+        if (node instanceof HashCollisionNode<E> hcn) {
             return hcn.getData(0);
         }
         throw new NoSuchElementException();
     }
 
-    public static <E> @NonNull E getLast(@NonNull ChampNode<E> node) {
-        while (node instanceof ChampBitmapIndexedNode<E> bxn) {
+    public static <E> @NonNull E getLast(@NonNull Node<E> node) {
+        while (node instanceof BitmapIndexedNode<E> bxn) {
             int nodeMap = bxn.nodeMap();
             int dataMap = bxn.dataMap();
             if ((nodeMap | dataMap) == 0) {
@@ -126,7 +126,7 @@ public abstract class ChampNode<D> {
                 return node.getData(node.dataArity() - 1);
             }
         }
-        if (node instanceof ChampHashCollisionNode<E> hcn) {
+        if (node instanceof HashCollisionNode<E> hcn) {
             return hcn.getData(hcn.dataArity() - 1);
         }
         throw new NoSuchElementException();
@@ -136,15 +136,15 @@ public abstract class ChampNode<D> {
         return (dataHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    static <K> @NonNull ChampNode<K> mergeTwoDataEntriesIntoNode(IdentityObject mutator,
-                                                                 K k0, int keyHash0,
-                                                                 K k1, int keyHash1,
-                                                                 int shift) {
+    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
+                                                            K k0, int keyHash0,
+                                                            K k1, int keyHash1,
+                                                            int shift) {
         if (shift >= HASH_CODE_LENGTH) {
             Object[] entries = new Object[2];
             entries[0] = k0;
             entries[1] = k1;
-            return ChampNodeFactory.newHashCollisionNode(mutator, keyHash0, entries);
+            return ChampNodeFactory.newHashCollisionNode(owner, keyHash0, entries);
         }
 
         int mask0 = mask(keyHash0, shift);
@@ -162,16 +162,16 @@ public abstract class ChampNode<D> {
                 entries[0] = k1;
                 entries[1] = k0;
             }
-            return ChampNodeFactory.newBitmapIndexedNode(mutator, (0), dataMap, entries);
+            return ChampNodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
         } else {
-            ChampNode<K> node = mergeTwoDataEntriesIntoNode(mutator,
+            Node<K> node = mergeTwoDataEntriesIntoNode(owner,
                     k0, keyHash0,
                     k1, keyHash1,
                     shift + BIT_PARTITION_SIZE);
             // values fit on next level
 
             int nodeMap = bitpos(mask0);
-            return ChampNodeFactory.newBitmapIndexedNode(mutator, nodeMap, (0), new Object[]{node});
+            return ChampNodeFactory.newBitmapIndexedNode(owner, nodeMap, (0), new Object[]{node});
         }
     }
 
@@ -204,7 +204,7 @@ public abstract class ChampNode<D> {
         return null;
     }
 
-    abstract @NonNull ChampNode<D> getNode(int index);
+    abstract @NonNull Node<D> getNode(int index);
 
     abstract boolean hasData();
 
@@ -222,7 +222,7 @@ public abstract class ChampNode<D> {
     /**
      * Removes a data object from the trie.
      *
-     * @param mutator        A non-null value means, that this method may update
+     * @param owner          A non-null value means, that this method may update
      *                       nodes that are marked with the same unique id,
      *                       and that this method may create new mutable nodes
      *                       with this unique id.
@@ -236,15 +236,15 @@ public abstract class ChampNode<D> {
      * @param equalsFunction a function that tests data objects for equality
      * @return the updated trie
      */
-    abstract @NonNull ChampNode<D> remove(@Nullable IdentityObject mutator, D data,
-                                          int dataHash, int shift,
-                                          @NonNull ChampChangeEvent<D> details,
-                                          @NonNull BiPredicate<D, D> equalsFunction);
+    abstract @NonNull Node<D> remove(@Nullable IdentityObject owner, D data,
+                                     int dataHash, int shift,
+                                     @NonNull ChangeEvent<D> details,
+                                     @NonNull BiPredicate<D, D> equalsFunction);
 
     /**
      * Inserts or replaces a data object in the trie.
      *
-     * @param mutator        A non-null value means, that this method may update
+     * @param owner        A non-null value means, that this method may update
      *                       nodes that are marked with the same unique id,
      *                       and that this method may create new mutable nodes
      *                       with this unique id.
@@ -270,9 +270,9 @@ public abstract class ChampNode<D> {
      *                       object
      * @return the updated trie
      */
-    abstract @NonNull ChampNode<D> update(@Nullable IdentityObject mutator, D newData,
-                                          int dataHash, int shift, @NonNull ChampChangeEvent<D> details,
-                                          @NonNull BiFunction<D, D, D> updateFunction,
-                                          @NonNull BiPredicate<D, D> equalsFunction,
-                                          @NonNull ToIntFunction<D> hashFunction);
+    abstract @NonNull Node<D> update(@Nullable IdentityObject owner, D newData,
+                                     int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                                     @NonNull BiFunction<D, D, D> updateFunction,
+                                     @NonNull BiPredicate<D, D> equalsFunction,
+                                     @NonNull ToIntFunction<D> hashFunction);
 }

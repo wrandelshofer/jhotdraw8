@@ -3,19 +3,22 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.impl.champ;
+package org.jhotdraw8.collection.impl.champ2;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollisionNode;
+import static org.jhotdraw8.collection.impl.champ2.ChampNodeFactory.newHashCollisionNode;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -36,11 +39,11 @@ import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollis
  *
  * @param <D> the data type
  */
-class ChampHashCollisionNode<D> extends ChampNode<D> {
+class HashCollisionNode<D> extends Node<D> {
     private final int hash;
     @NonNull Object[] data;
 
-    ChampHashCollisionNode(int hash, Object @NonNull [] data) {
+    HashCollisionNode(int hash, Object @NonNull [] data) {
         this.data = data;
         this.hash = hash;
     }
@@ -61,7 +64,7 @@ class ChampHashCollisionNode<D> extends ChampNode<D> {
         if (this == other) {
             return true;
         }
-        ChampHashCollisionNode<?> that = (ChampHashCollisionNode<?>) other;
+        HashCollisionNode<?> that = (HashCollisionNode<?>) other;
         @NonNull Object[] thatEntries = that.data;
         if (hash != that.hash || thatEntries.length != data.length) {
             return false;
@@ -111,7 +114,7 @@ class ChampHashCollisionNode<D> extends ChampNode<D> {
 
     @Override
     @NonNull
-    ChampNode<D> getNode(int index) {
+    Node<D> getNode(int index) {
         throw new IllegalStateException("Is leaf node.");
     }
 
@@ -135,29 +138,25 @@ class ChampHashCollisionNode<D> extends ChampNode<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    ChampNode<D> remove(@Nullable IdentityObject mutator, D data,
-                        int dataHash, int shift, @NonNull ChampChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
+    Node<D> remove(D data,
+                   int dataHash, int shift, @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
             if (equalsFunction.test((D) this.data[i], data)) {
                 @SuppressWarnings("unchecked") D currentVal = (D) this.data[i];
                 details.setRemoved(currentVal);
 
                 if (this.data.length == 1) {
-                    return ChampBitmapIndexedNode.emptyNode();
+                    return BitmapIndexedNode.emptyNode();
                 } else if (this.data.length == 2) {
                     // Create root node with singleton element.
                     // This node will be a) either be the new root
                     // returned, or b) unwrapped and inlined.
-                    return ChampNodeFactory.newBitmapIndexedNode(mutator, 0, bitpos(mask(dataHash, 0)),
+                    return ChampNodeFactory.newBitmapIndexedNode(0, bitpos(mask(dataHash, 0)),
                             new Object[]{getData(idx ^ 1)});
                 }
                 // copy keys and remove 1 element at position idx
                 Object[] entriesNew = ListHelper.copyComponentRemove(this.data, idx, 1);
-                if (isAllowedToUpdate(mutator)) {
-                    this.data = entriesNew;
-                    return this;
-                }
-                return newHashCollisionNode(mutator, dataHash, entriesNew);
+                return newHashCollisionNode(dataHash, entriesNew);
             }
         }
         return this;
@@ -166,10 +165,10 @@ class ChampHashCollisionNode<D> extends ChampNode<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    ChampNode<D> update(@Nullable IdentityObject mutator, D newData,
-                        int dataHash, int shift, @NonNull ChampChangeEvent<D> details,
-                        @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
-                        @NonNull ToIntFunction<D> hashFunction) {
+    Node<D> update(D newData,
+                   int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                   @NonNull ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
         for (int i = 0; i < this.data.length; i++) {
@@ -181,12 +180,8 @@ class ChampHashCollisionNode<D> extends ChampNode<D> {
                     return this;
                 }
                 details.setReplaced(oldData, updatedData);
-                if (isAllowedToUpdate(mutator)) {
-                    this.data[i] = updatedData;
-                    return this;
-                }
                 final Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
-                return newHashCollisionNode(mutator, dataHash, newKeys);
+                return newHashCollisionNode(dataHash, newKeys);
             }
         }
 
@@ -194,10 +189,58 @@ class ChampHashCollisionNode<D> extends ChampNode<D> {
         Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
         entriesNew[this.data.length] = newData;
         details.setAdded(newData);
-        if (isAllowedToUpdate(mutator)) {
-            this.data = entriesNew;
+        return newHashCollisionNode(dataHash, entriesNew);
+    }
+
+
+    @Override
+    protected int calculateSize() {
+        return dataArity();
+    }
+
+    @Override
+    protected @NonNull Node<D> addAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+        HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
+        if (that == this) {
+            bulkChange.inBothCollections += dataArity();
             return this;
         }
-        return newHashCollisionNode(mutator, dataHash, entriesNew);
+
+        List<Object> list = new ArrayList<>(this.dataArity() + that.dataArity());
+
+        // Step 1: Add all this.data to list
+        list.addAll(Arrays.asList(this.data));
+
+        // Step 2: Add all that.keys to list which are not in this.keys
+        //         This is quadratic.
+        //         If the sets are disjoint, we can do nothing about it.
+        //         If the sets intersect, we can mark those which are
+        //         equal in a bitset, so that we do not need to check
+        //         them over and over again.
+        BitSet bs = new BitSet(that.data.length);
+        outer:
+        for (int j = 0; j < that.data.length; j++) {
+            @SuppressWarnings("unchecked")
+            D thatKey = (D) that.data[j];
+            for (int i = bs.nextClearBit(0); i >= 0 && i < this.data.length; i = bs.nextClearBit(i + 1)) {
+                @SuppressWarnings("unchecked")
+                D thisKey = (D) this.data[i];
+                if (equalsFunction.test(thatKey, thisKey)) {
+                    list.set(i, updateFunction.apply(thisKey, thatKey));
+                    bs.set(i);
+                    bulkChange.inBothCollections++;
+                    continue outer;
+                }
+            }
+            list.add(thatKey);
+        }
+
+        if (list.size() > this.data.length) {
+            @SuppressWarnings("unchecked")
+            HashCollisionNode<D> unchecked = newHashCollisionNode(hash, list.toArray());
+            return unchecked;
+        }
+
+        return this;
     }
 }

@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.IdentityObject;
 
 /**
- * A {@link ChampBitmapIndexedNode} that provides storage space for a 'mutator' identity.
+ * A {@link BitmapIndexedNode} that provides storage space for a 'owner' identity.
  * <p>
  * References:
  * <p>
@@ -22,17 +22,17 @@ import org.jhotdraw8.collection.IdentityObject;
  *
  * @param <K>
  */
-class ChampMutableBitmapIndexedNode<K> extends ChampBitmapIndexedNode<K> {
+class MutableBitmapIndexedNode<K> extends BitmapIndexedNode<K> {
     private static final long serialVersionUID = 0L;
-    private final @NonNull IdentityObject mutator;
+    private final @NonNull IdentityObject ownedBy;
 
-    ChampMutableBitmapIndexedNode(@NonNull IdentityObject mutator, int nodeMap, int dataMap, @NonNull Object @NonNull [] nodes) {
+    MutableBitmapIndexedNode(@NonNull IdentityObject ownedBy, int nodeMap, int dataMap, @NonNull Object @NonNull [] nodes) {
         super(nodeMap, dataMap, nodes);
-        this.mutator = mutator;
+        this.ownedBy = ownedBy;
     }
 
     @Override
     protected @NonNull IdentityObject getMutator() {
-        return mutator;
+        return ownedBy;
     }
 }

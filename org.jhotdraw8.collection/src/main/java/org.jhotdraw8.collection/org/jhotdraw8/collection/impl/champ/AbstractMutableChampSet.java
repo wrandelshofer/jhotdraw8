@@ -22,25 +22,25 @@ import java.util.stream.Stream;
  * @param <E> the element type of the set
  * @param <X> the key type of the CHAMP trie
  */
-public abstract class ChampAbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
     /**
-     * The current mutator id of this set.
+     * The current owner id of this set.
      * <p>
-     * All nodes that have the same non-null mutator id, are exclusively owned
+     * All nodes that have the same non-null owner id, are exclusively owned
      * by this set, and therefore can be mutated without affecting other sets.
      * <p>
-     * If this mutator id is null, then this set does not own any nodes.
+     * If this owner id is null, then this set does not own any nodes.
      */
-    protected @Nullable IdentityObject mutator;
+    protected @Nullable IdentityObject owner;
 
     /**
      * The root of this CHAMP trie.
      */
-    protected ChampBitmapIndexedNode<X> root;
+    protected BitmapIndexedNode<X> root;
 
     /**
      * The number of elements in this set.
@@ -71,8 +71,8 @@ public abstract class ChampAbstractMutableChampSet<E, X> extends AbstractSet<E> 
         if (o == this) {
             return true;
         }
-        if (o instanceof ChampAbstractMutableChampSet<?, ?>) {
-            ChampAbstractMutableChampSet<?, ?> that = (ChampAbstractMutableChampSet<?, ?>) o;
+        if (o instanceof AbstractMutableChampSet<?, ?>) {
+            AbstractMutableChampSet<?, ?> that = (AbstractMutableChampSet<?, ?>) o;
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
@@ -84,17 +84,17 @@ public abstract class ChampAbstractMutableChampSet<E, X> extends AbstractSet<E> 
     }
 
     /**
-     * Gets the mutator id of this set. Creates a new id, if this
-     * set has no mutator id.
+     * Gets the owner id of this set. Creates a new id, if this
+     * set has no owner id.
      *
      * @return a new unique id or the existing unique id.
      */
     @NonNull
-    protected IdentityObject getOrCreateIdentity() {
-        if (mutator == null) {
-            mutator = new IdentityObject();
+    protected IdentityObject getOrCreateOwner() {
+        if (owner == null) {
+            owner = new IdentityObject();
         }
-        return mutator;
+        return owner;
     }
 
     @Override
@@ -130,10 +130,10 @@ public abstract class ChampAbstractMutableChampSet<E, X> extends AbstractSet<E> 
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ChampAbstractMutableChampSet<E, X> clone() {
+    public @NonNull AbstractMutableChampSet<E, X> clone() {
         try {
-            mutator = null;
-            return (ChampAbstractMutableChampSet<E, X>) super.clone();
+            owner = null;
+            return (AbstractMutableChampSet<E, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

@@ -8,10 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ2.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ2.BulkChangeEvent;
+import org.jhotdraw8.collection.impl.champ2.ChampSpliterator;
+import org.jhotdraw8.collection.impl.champ2.ChangeEvent;
+import org.jhotdraw8.collection.impl.champ2.Node;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -25,6 +26,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.Stack;
 
 
 /**
@@ -87,8 +89,8 @@ import java.util.Spliterators;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
-    private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
+public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
+    private static final @NonNull ChampSet2<?> EMPTY = new ChampSet2<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     /**
@@ -96,7 +98,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      */
     final int size;
 
-    ChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
+    ChampSet2(@NonNull BitmapIndexedNode<E> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
     }
@@ -109,8 +111,26 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return ((ChampSet<E>) ChampSet.EMPTY).addAll(iterable);
+    public static <E> @NonNull ChampSet2<E> copyOf(@NonNull Iterable<? extends E> iterable) {
+        Stack<ChampSet2<E>> stack = new Stack<ChampSet2<E>>();
+        ChampSet2<E> s = ChampSet2.of();
+        for (E e : iterable) {
+            s = s.add(e);
+            if (s.size == 32) {
+                if (stack.isEmpty()) {
+                    stack.push(s);
+                } else {
+                    do {
+                        s = stack.pop().addAll(s);
+                    } while (!stack.isEmpty() && stack.peek().size <= s.size);
+                }
+                s = ChampSet2.of();
+            }
+        }
+        while (!stack.isEmpty()) {
+            s = stack.pop().addAll(s);
+        }
+        return s;
     }
 
     /**
@@ -120,8 +140,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampSet<E> of() {
-        return ((ChampSet<E>) ChampSet.EMPTY);
+    public static <E> @NonNull ChampSet2<E> of() {
+        return ((ChampSet2<E>) ChampSet2.EMPTY);
     }
 
     /**
@@ -133,33 +153,56 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      */
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ChampSet<E> of(@NonNull E @Nullable ... elements) {
+    public static <E> @NonNull ChampSet2<E> of(@NonNull E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return ChampSet.<E>of().addAll(Arrays.asList(elements));
+        return ChampSet2.<E>of().addAll(Arrays.asList(elements));
     }
 
     @Override
-    public @NonNull ChampSet<E> add(@Nullable E element) {
+    public @NonNull ChampSet2<E> add(@Nullable E element) {
         int keyHash = Objects.hashCode(element);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(null, element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, Objects::hashCode);
+        BitmapIndexedNode<E> newRootNode = update(element, keyHash, 0, details, ChampSet2::updateElement, Objects::equals, Objects::hashCode);
         if (details.isModified()) {
-            return new ChampSet<>(newRootNode, size + 1);
+            return new ChampSet2<>(newRootNode, size + 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull ChampSet<E> addAll(@NonNull Iterable<? extends E> elements) {
+    @SuppressWarnings("unchecked")
+    public @NonNull ChampSet2<E> addAll(@NonNull Iterable<? extends E> elements) {
+        ChampSet2<E> that;
+        if (elements instanceof Collection<? extends E> c && c.isEmpty()) return this;
+        if (elements instanceof ReadOnlyCollection<? extends E> c && c.isEmpty()) return this;
+        if (!(elements instanceof ChampSet2<?> c)) {
+            that = ChampSet2.copyOf(elements);
+        } else {
+            that = (ChampSet2<E>) c;
+        }
+        if (this.isEmpty()) {
+            return that;
+        }
+
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newRootNode = addAll(that, 0, bulkChange, ChampSet2::updateElement, Objects::equals, Objects::hashCode, new ChangeEvent<>());
+        if (bulkChange.inBothCollections == that.size()) {
+            return this;
+        } else {
+            return new ChampSet2<>(newRootNode, size + that.size - bulkChange.inBothCollections);
+        }
+        /*
         var t = toMutable();
         return t.addAll(elements) ? t.toImmutable() : this;
+         */
     }
+
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ChampSet<E> clear() {
+    public @NonNull ChampSet2<E> clear() {
         return isEmpty() ? this : of();
     }
 
@@ -177,8 +220,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         if (other == null) {
             return false;
         }
-        if (other instanceof ChampSet) {
-            ChampSet<?> that = (ChampSet<?>) other;
+        if (other instanceof ChampSet2) {
+            ChampSet2<?> that = (ChampSet2<?>) other;
             return size == that.size && equivalent(that);
         }
         return ReadOnlySet.setEquals(this, other);
@@ -207,18 +250,18 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @Override
-    public @NonNull ChampSet<E> remove(@NonNull E key) {
+    public @NonNull ChampSet2<E> remove(@NonNull E key) {
         int keyHash = Objects.hashCode(key);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
+        BitmapIndexedNode<E> newRootNode = remove(key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
-            return new ChampSet<>(newRootNode, size - 1);
+            return new ChampSet2<>(newRootNode, size - 1);
         }
         return this;
     }
 
     @Override
-    public @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> set) {
+    public @NonNull ChampSet2<E> removeAll(@NonNull Iterable<?> set) {
         if (isEmpty()
                 || (set instanceof Collection<?> c) && c.isEmpty()
                 || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
@@ -232,7 +275,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @Override
-    public @NonNull ChampSet<E> retainAll(@NonNull Collection<?> set) {
+    public @NonNull ChampSet2<E> retainAll(@NonNull Collection<?> set) {
         if (isEmpty()) {
             return this;
         }
@@ -253,8 +296,8 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @Override
-    public @NonNull MutableChampSet<E> toMutable() {
-        return new MutableChampSet<>(this);
+    public @NonNull MutableChampSet2<E> toMutable() {
+        return new MutableChampSet2<>(this);
     }
 
     @Override
@@ -278,7 +321,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return ChampSet.copyOf(deserialized);
+            return ChampSet2.copyOf(deserialized);
         }
     }
 }

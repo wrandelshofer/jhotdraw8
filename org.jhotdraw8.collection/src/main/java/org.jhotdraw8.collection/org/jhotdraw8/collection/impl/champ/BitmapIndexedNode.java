@@ -17,6 +17,7 @@ import java.util.function.ToIntFunction;
 
 import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newBitmapIndexedNode;
 
+
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
  * <p>
@@ -29,17 +30,17 @@ import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newBitmapInde
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
  * </dl>
  *
- * @param <D> the data type
+ * @param <K> the data type
  */
-public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
-    static final @NonNull ChampBitmapIndexedNode<?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});
+public class BitmapIndexedNode<K> extends Node<K> {
+    static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = newBitmapIndexedNode(null, (0), (0), new Object[]{});
 
     public final Object @NonNull [] mixed;
     private final int nodeMap;
     private final int dataMap;
 
-    protected ChampBitmapIndexedNode(int nodeMap,
-                                     int dataMap, @NonNull Object @NonNull [] mixed) {
+    protected BitmapIndexedNode(int nodeMap,
+                                int dataMap, @NonNull Object @NonNull [] mixed) {
         this.nodeMap = nodeMap;
         this.dataMap = dataMap;
         this.mixed = mixed;
@@ -47,20 +48,20 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull ChampBitmapIndexedNode<K> emptyNode() {
-        return (ChampBitmapIndexedNode<K>) EMPTY_NODE;
+    public static <K> @NonNull BitmapIndexedNode<K> emptyNode() {
+        return (BitmapIndexedNode<K>) EMPTY_NODE;
     }
 
-    @NonNull ChampBitmapIndexedNode<D> copyAndInsertData(@Nullable IdentityObject mutator, int bitpos,
-                                                         D data) {
+    @NonNull BitmapIndexedNode<K> copyAndInsertData(@Nullable IdentityObject owner, int bitpos,
+                                                    K data) {
         int idx = dataIndex(bitpos);
         Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
         dst[idx] = data;
-        return newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap, dataMap | bitpos, dst);
     }
 
-    @NonNull ChampBitmapIndexedNode<D> copyAndMigrateFromDataToNode(@Nullable IdentityObject mutator,
-                                                                    int bitpos, ChampNode<D> node) {
+    @NonNull BitmapIndexedNode<K> copyAndMigrateFromDataToNode(@Nullable IdentityObject owner,
+                                                               int bitpos, Node<K> node) {
 
         int idxOld = dataIndex(bitpos);
         int idxNew = this.mixed.length - 1 - nodeIndex(bitpos);
@@ -74,11 +75,11 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
         System.arraycopy(src, idxOld + 1, dst, idxOld, idxNew - idxOld);
         System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
         dst[idxNew] = node;
-        return newBitmapIndexedNode(mutator, nodeMap | bitpos, dataMap ^ bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap | bitpos, dataMap ^ bitpos, dst);
     }
 
-    @NonNull ChampBitmapIndexedNode<D> copyAndMigrateFromNodeToData(@Nullable IdentityObject mutator,
-                                                                    int bitpos, @NonNull ChampNode<D> node) {
+    @NonNull BitmapIndexedNode<K> copyAndMigrateFromNodeToData(@Nullable IdentityObject owner,
+                                                               int bitpos, @NonNull Node<K> node) {
         int idxOld = this.mixed.length - 1 - nodeIndex(bitpos);
         int idxNew = dataIndex(bitpos);
 
@@ -91,21 +92,21 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
         System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
         System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
         dst[idxNew] = node.getData(0);
-        return newBitmapIndexedNode(mutator, nodeMap ^ bitpos, dataMap | bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap ^ bitpos, dataMap | bitpos, dst);
     }
 
-    @NonNull ChampBitmapIndexedNode<D> copyAndSetNode(@Nullable IdentityObject mutator, int bitpos,
-                                                      ChampNode<D> node) {
+    @NonNull BitmapIndexedNode<K> copyAndSetNode(@Nullable IdentityObject owner, int bitpos,
+                                                 Node<K> node) {
 
         int idx = this.mixed.length - 1 - nodeIndex(bitpos);
-        if (isAllowedToUpdate(mutator)) {
+        if (isAllowedToUpdate(owner)) {
             // no copying if already editable
             this.mixed[idx] = node;
             return this;
         } else {
             // copy 'src' and set 1 element(s) at position 'idx'
             final Object[] dst = ListHelper.copySet(this.mixed, idx, node);
-            return newBitmapIndexedNode(mutator, nodeMap, dataMap, dst);
+            return newBitmapIndexedNode(owner, nodeMap, dataMap, dst);
         }
     }
 
@@ -128,7 +129,7 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
         if (this == other) {
             return true;
         }
-        ChampBitmapIndexedNode<?> that = (ChampBitmapIndexedNode<?>) other;
+        BitmapIndexedNode<?> that = (BitmapIndexedNode<?>) other;
         Object[] thatNodes = that.mixed;
         // nodes array: we compare local data from 0 to splitAt (excluded)
         // and then we compare the nested nodes from splitAt to length (excluded)
@@ -137,19 +138,19 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
                 && dataMap() == that.dataMap()
                 && Arrays.equals(mixed, 0, splitAt, thatNodes, 0, splitAt)
                 && Arrays.equals(mixed, splitAt, mixed.length, thatNodes, splitAt, thatNodes.length,
-                (a, b) -> ((ChampNode<D>) a).equivalent(b) ? 0 : 1);
+                (a, b) -> ((Node<K>) a).equivalent(b) ? 0 : 1);
     }
 
 
     @Override
     @Nullable
-    public Object find(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
+    public Object find(K key, int dataHash, int shift, @NonNull BiPredicate<K, K> equalsFunction) {
         int bitpos = bitpos(mask(dataHash, shift));
         if ((nodeMap & bitpos) != 0) {
             return nodeAt(bitpos).find(key, dataHash, shift + BIT_PARTITION_SIZE, equalsFunction);
         }
         if ((dataMap & bitpos) != 0) {
-            D k = getData(dataIndex(bitpos));
+            K k = getData(dataIndex(bitpos));
             if (equalsFunction.test(k, key)) {
                 return k;
             }
@@ -161,16 +162,16 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
     @Override
     @SuppressWarnings("unchecked")
     @NonNull
-    D getData(int index) {
-        return (D) mixed[index];
+    K getData(int index) {
+        return (K) mixed[index];
     }
 
 
     @Override
     @SuppressWarnings("unchecked")
     @NonNull
-    ChampNode<D> getNode(int index) {
-        return (ChampNode<D>) mixed[mixed.length - 1 - index];
+    Node<K> getNode(int index) {
+        return (Node<K>) mixed[mixed.length - 1 - index];
     }
 
     @Override
@@ -195,14 +196,14 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
 
     @SuppressWarnings("unchecked")
     @NonNull
-    ChampNode<D> nodeAt(int bitpos) {
-        return (ChampNode<D>) mixed[mixed.length - 1 - nodeIndex(bitpos)];
+    Node<K> nodeAt(int bitpos) {
+        return (Node<K>) mixed[mixed.length - 1 - nodeIndex(bitpos)];
     }
 
     @SuppressWarnings("unchecked")
     @NonNull
-    D dataAt(int bitpos) {
-        return (D) mixed[dataIndex(bitpos)];
+    K dataAt(int bitpos) {
+        return (K) mixed[dataIndex(bitpos)];
     }
 
     int nodeIndex(int bitpos) {
@@ -215,104 +216,104 @@ public class ChampBitmapIndexedNode<D> extends ChampNode<D> {
 
     @Override
     @NonNull
-    public ChampBitmapIndexedNode<D> remove(@Nullable IdentityObject mutator,
-                                            D data,
-                                            int dataHash, int shift,
-                                            @NonNull ChampChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
+    public BitmapIndexedNode<K> remove(@Nullable IdentityObject owner,
+                                       K data,
+                                       int dataHash, int shift,
+                                       @NonNull ChangeEvent<K> details, @NonNull BiPredicate<K, K> equalsFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
-            return removeData(mutator, data, dataHash, shift, details, bitpos, equalsFunction);
+            return removeData(owner, data, dataHash, shift, details, bitpos, equalsFunction);
         }
         if ((nodeMap & bitpos) != 0) {
-            return removeSubNode(mutator, data, dataHash, shift, details, bitpos, equalsFunction);
+            return removeSubNode(owner, data, dataHash, shift, details, bitpos, equalsFunction);
         }
         return this;
     }
 
-    private @NonNull ChampBitmapIndexedNode<D> removeData(@Nullable IdentityObject mutator, D data, int dataHash, int shift, @NonNull ChampChangeEvent<D> details, int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
+    private @NonNull BitmapIndexedNode<K> removeData(@Nullable IdentityObject owner, K data, int dataHash, int shift, @NonNull ChangeEvent<K> details, int bitpos, @NonNull BiPredicate<K, K> equalsFunction) {
         int dataIndex = dataIndex(bitpos);
         int entryLength = 1;
         if (!equalsFunction.test(getData(dataIndex), data)) {
             return this;
         }
-        D currentVal = getData(dataIndex);
+        K currentVal = getData(dataIndex);
         details.setRemoved(currentVal);
         if (dataArity() == 2 && !hasNodes()) {
             int newDataMap =
                     (shift == 0) ? (dataMap ^ bitpos) : bitpos(mask(dataHash, 0));
             Object[] nodes = {getData(dataIndex ^ 1)};
-            return newBitmapIndexedNode(mutator, 0, newDataMap, nodes);
+            return newBitmapIndexedNode(owner, 0, newDataMap, nodes);
         }
         int idx = dataIndex * entryLength;
         Object[] dst = ListHelper.copyComponentRemove(this.mixed, idx, entryLength);
-        return newBitmapIndexedNode(mutator, nodeMap, dataMap ^ bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap, dataMap ^ bitpos, dst);
     }
 
-    private @NonNull ChampBitmapIndexedNode<D> removeSubNode(@Nullable IdentityObject mutator, D data, int dataHash, int shift,
-                                                             @NonNull ChampChangeEvent<D> details,
-                                                             int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
-        ChampNode<D> subNode = nodeAt(bitpos);
-        ChampNode<D> updatedSubNode =
-                subNode.remove(mutator, data, dataHash, shift + BIT_PARTITION_SIZE, details, equalsFunction);
+    private @NonNull BitmapIndexedNode<K> removeSubNode(@Nullable IdentityObject owner, K data, int dataHash, int shift,
+                                                        @NonNull ChangeEvent<K> details,
+                                                        int bitpos, @NonNull BiPredicate<K, K> equalsFunction) {
+        Node<K> subNode = nodeAt(bitpos);
+        Node<K> updatedSubNode =
+                subNode.remove(owner, data, dataHash, shift + BIT_PARTITION_SIZE, details, equalsFunction);
         if (subNode == updatedSubNode) {
             return this;
         }
         if (!updatedSubNode.hasNodes() && updatedSubNode.hasDataArityOne()) {
             if (!hasData() && nodeArity() == 1) {
-                return (ChampBitmapIndexedNode<D>) updatedSubNode;
+                return (BitmapIndexedNode<K>) updatedSubNode;
             }
-            return copyAndMigrateFromNodeToData(mutator, bitpos, updatedSubNode);
+            return copyAndMigrateFromNodeToData(owner, bitpos, updatedSubNode);
         }
-        return copyAndSetNode(mutator, bitpos, updatedSubNode);
+        return copyAndSetNode(owner, bitpos, updatedSubNode);
     }
 
     @Override
     @NonNull
-    public ChampBitmapIndexedNode<D> update(@Nullable IdentityObject mutator,
-                                            @Nullable D newData,
-                                            int dataHash, int shift,
-                                            @NonNull ChampChangeEvent<D> details,
-                                            @NonNull BiFunction<D, D, D> updateFunction,
-                                            @NonNull BiPredicate<D, D> equalsFunction,
-                                            @NonNull ToIntFunction<D> hashFunction) {
+    public BitmapIndexedNode<K> update(@Nullable IdentityObject owner,
+                                       @Nullable K newData,
+                                       int dataHash, int shift,
+                                       @NonNull ChangeEvent<K> details,
+                                       @NonNull BiFunction<K, K, K> updateFunction,
+                                       @NonNull BiPredicate<K, K> equalsFunction,
+                                       @NonNull ToIntFunction<K> hashFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
             final int dataIndex = dataIndex(bitpos);
-            final D oldData = getData(dataIndex);
+            final K oldData = getData(dataIndex);
             if (equalsFunction.test(oldData, newData)) {
-                D updatedData = updateFunction.apply(oldData, newData);
+                K updatedData = updateFunction.apply(oldData, newData);
                 if (updatedData == oldData) {
                     details.found(oldData);
                     return this;
                 }
                 details.setReplaced(oldData, updatedData);
-                return copyAndSetData(mutator, dataIndex, updatedData);
+                return copyAndSetData(owner, dataIndex, updatedData);
             }
-            ChampNode<D> updatedSubNode =
-                    mergeTwoDataEntriesIntoNode(mutator,
+            Node<K> updatedSubNode =
+                    mergeTwoDataEntriesIntoNode(owner,
                             oldData, hashFunction.applyAsInt(oldData),
                             newData, dataHash, shift + BIT_PARTITION_SIZE);
             details.setAdded(newData);
-            return copyAndMigrateFromDataToNode(mutator, bitpos, updatedSubNode);
+            return copyAndMigrateFromDataToNode(owner, bitpos, updatedSubNode);
         } else if ((nodeMap & bitpos) != 0) {
-            ChampNode<D> subNode = nodeAt(bitpos);
-            ChampNode<D> updatedSubNode = subNode
-                    .update(mutator, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
-            return subNode == updatedSubNode ? this : copyAndSetNode(mutator, bitpos, updatedSubNode);
+            Node<K> subNode = nodeAt(bitpos);
+            Node<K> updatedSubNode = subNode
+                    .update(owner, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
+            return subNode == updatedSubNode ? this : copyAndSetNode(owner, bitpos, updatedSubNode);
         }
         details.setAdded(newData);
-        return copyAndInsertData(mutator, bitpos, newData);
+        return copyAndInsertData(owner, bitpos, newData);
     }
 
     @NonNull
-    private ChampBitmapIndexedNode<D> copyAndSetData(@Nullable IdentityObject mutator, int dataIndex, D updatedData) {
-        if (isAllowedToUpdate(mutator)) {
+    private BitmapIndexedNode<K> copyAndSetData(@Nullable IdentityObject owner, int dataIndex, K updatedData) {
+        if (isAllowedToUpdate(owner)) {
             this.mixed[dataIndex] = updatedData;
             return this;
         }
         Object[] newMixed = ListHelper.copySet(this.mixed, dataIndex, updatedData);
-        return newBitmapIndexedNode(mutator, nodeMap, dataMap, newMixed);
+        return newBitmapIndexedNode(owner, nodeMap, dataMap, newMixed);
     }
 }

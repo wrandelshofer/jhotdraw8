@@ -100,7 +100,7 @@ public class VavrTreeMapJmh {
     }
 
     @Benchmark
-    public TreeMap<Key, Boolean> mCopyOf() {
+    public TreeMap<Key, Boolean> mAddAllf() {
         return TreeMap.ofAll(data.mapA);
     }
 }

@@ -16,7 +16,12 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
@@ -56,14 +61,14 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Serial
     private static final long serialVersionUID = 0L;
     /**
-     * The current mutator id of this list.
+     * The current owner id of this list.
      * <p>
-     * All nodes that have the same non-null mutator id, are exclusively owned
+     * All nodes that have the same non-null owner id, are exclusively owned
      * by this list, and therefore can be mutated without affecting other list.
      * <p>
-     * If this mutator id is null, then this list does not own any nodes.
+     * If this owner id is null, then this list does not own any nodes.
      */
-    protected @Nullable IdentityObject mutator;
+    protected @Nullable IdentityObject owner;
 
     private @NonNull BitMappedTrie<E> root;
     private int size;
@@ -209,7 +214,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @NonNull
     public VectorList<E> toImmutable() {
-        mutator = null;
+        owner = null;
         return size == 0 ? VectorList.of() : new VectorList<>(root, size);
     }
 

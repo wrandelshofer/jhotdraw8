@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection.jmh;
 
 
+
 import org.jhotdraw8.collection.ChampSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -32,13 +33,13 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
-@Fork(value = 1)
+@Measurement(iterations = 0)
+@Warmup(iterations = 0)
+@Fork(value = 0, jvmArgsAppend = {"-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampSetJmh {
-    @Param({"1000000"})
+    @Param({"10", "1000", "100000", "10000000"})
     private int size;
 
     @Param({"-65"})
@@ -51,6 +52,35 @@ public class ChampSetJmh {
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = ChampSet.copyOf(data.setA);
+    }
+
+    @Benchmark
+    public ChampSet<Key> mAddAll() {
+        return ChampSet.copyOf(data.listA);
+    }
+
+    @Benchmark
+    public ChampSet<Key> mAddOneByOne() {
+        ChampSet<Key> set = ChampSet.of();
+        for (Key key : data.listA) {
+            set = set.add(key);
+        }
+        return set;
+    }
+
+    @Benchmark
+    public ChampSet<Key> mRemoveOneByOne() {
+        ChampSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.remove(key);
+        }
+        return set;
+    }
+
+    @Benchmark
+    public ChampSet<Key> mRemoveAll() {
+        ChampSet<Key> set = setA;
+        return set.removeAll(data.listA);
     }
 
     @Benchmark

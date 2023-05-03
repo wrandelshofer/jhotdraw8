@@ -11,12 +11,15 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
-import org.openjdk.jol.info.ClassLayout;
-import org.openjdk.jol.vm.VM;
 import scala.Tuple2;
+import scala.collection.Iterator;
 import scala.collection.immutable.HashMap;
-import scala.collection.mutable.ReusableBuilder;
+import scala.collection.immutable.Map;
+import scala.collection.immutable.Vector;
+import scala.collection.mutable.Builder;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,6 +29,22 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  * Benchmark                           (size)  Mode  Cnt     _     Score   Error  Units
+ * ScalaHashMapJmh.mAddAll               -65        10  avgt               467.142          ns/op
+ * ScalaHashMapJmh.mAddAll               -65      1000  avgt            114499.940          ns/op
+ * ScalaHashMapJmh.mAddAll               -65    100000  avgt          23510614.310          ns/op
+ * ScalaHashMapJmh.mAddAll               -65  10000000  avgt        7447239207.500          ns/op
+ * ScalaHashMapJmh.mAddOneByOne          -65        10  avgt               432.536          ns/op
+ * ScalaHashMapJmh.mAddOneByOne          -65      1000  avgt            138463.447          ns/op
+ * ScalaHashMapJmh.mAddOneByOne          -65    100000  avgt          35389172.339          ns/op
+ * ScalaHashMapJmh.mAddOneByOne          -65  10000000  avgt       10663694719.000          ns/op
+ * ScalaHashMapJmh.mRemoveAll            -65        10  avgt               384.790          ns/op
+ * ScalaHashMapJmh.mRemoveAll            -65      1000  avgt            126641.616          ns/op
+ * ScalaHashMapJmh.mRemoveAll            -65    100000  avgt          32877551.174          ns/op
+ * ScalaHashMapJmh.mRemoveAll            -65  10000000  avgt       14457074260.000          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne       -65        10  avgt               373.129          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne       -65      1000  avgt            134244.683          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne       -65    100000  avgt          34034988.668          ns/op
+ * ScalaHashMapJmh.mRemoveOneByOne       -65  10000000  avgt       12629623452.000          ns/op
  * ScalaHashMapJmh.mContainsFound          10  avgt    2     _     6.293          ns/op
  * ScalaHashMapJmh.mContainsFound         100  avgt    2     _    11.190          ns/op
  * ScalaHashMapJmh.mContainsFound        1000  avgt    2     _    19.242          ns/op
@@ -38,12 +57,6 @@ import java.util.concurrent.TimeUnit;
  * ScalaHashMapJmh.mContainsNotFound    10000  avgt    2     _    36.833          ns/op
  * ScalaHashMapJmh.mContainsNotFound   100000  avgt    2     _    62.170          ns/op
  * ScalaHashMapJmh.mContainsNotFound  1000000  avgt    2     _   236.771          ns/op
- * ScalaHashMapJmh.mCopyOf                 10  avgt    2     _   427.623          ns/op
- * ScalaHashMapJmh.mCopyOf                100  avgt    2     _  6041.627          ns/op
- * ScalaHashMapJmh.mCopyOf               1000  avgt    2     _116621.624          ns/op
- * ScalaHashMapJmh.mCopyOf              10000  avgt    2    1_214286.106          ns/op
- * ScalaHashMapJmh.mCopyOf             100000  avgt    2   19_659581.694          ns/op
- * ScalaHashMapJmh.mCopyOf            1000000  avgt    2  378_301523.574          ns/op
  * ScalaHashMapJmh.mHead                   10  avgt    2     _     1.703          ns/op
  * ScalaHashMapJmh.mHead                  100  avgt    2     _     8.889          ns/op
  * ScalaHashMapJmh.mHead                 1000  avgt    2     _     9.973          ns/op
@@ -62,12 +75,6 @@ import java.util.concurrent.TimeUnit;
  * ScalaHashMapJmh.mPut                 10000  avgt    2     _    92.897          ns/op
  * ScalaHashMapJmh.mPut                100000  avgt    2     _   159.113          ns/op
  * ScalaHashMapJmh.mPut               1000000  avgt    2     _   391.962          ns/op
- * ScalaHashMapJmh.mRemoveOneByOne         10  avgt    2     _   441.767          ns/op
- * ScalaHashMapJmh.mRemoveOneByOne        100  avgt    2     _  7415.323          ns/op
- * ScalaHashMapJmh.mRemoveOneByOne       1000  avgt    2     _140417.525          ns/op
- * ScalaHashMapJmh.mRemoveOneByOne      10000  avgt    2    2_060235.621          ns/op
- * ScalaHashMapJmh.mRemoveOneByOne     100000  avgt    2   46_879170.225          ns/op
- * ScalaHashMapJmh.mRemoveOneByOne    1000000  avgt    2  673_877913.567          ns/op
  * ScalaHashMapJmh.mRemoveThenAdd          10  avgt    2     _    87.681          ns/op
  * ScalaHashMapJmh.mRemoveThenAdd         100  avgt    2     _   128.919          ns/op
  * ScalaHashMapJmh.mRemoveThenAdd        1000  avgt    2     _   265.190          ns/op
@@ -91,7 +98,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaHashMapJmh {
-    @Param({"10", "100", "1000", "10000", "100000", "1000000"})
+    @Param({"10", "1000", "100000", "10000000"})
     private int size;
 
     @Param({"-65"})
@@ -99,60 +106,85 @@ public class ScalaHashMapJmh {
 
     private BenchmarkData data;
     private HashMap<Key, Boolean> mapA;
+    private Vector<Tuple2<Key, Boolean>> listA;
+    private Vector<Key> listAKeys;
+    private Method appended;
 
+
+    @SuppressWarnings("unchecked")
     @Setup
-    public void setup() {
+    public void setup() throws InvocationTargetException, IllegalAccessException {
+        try {
+            appended = Vector.class.getDeclaredMethod("appended", Object.class);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
         data = new BenchmarkData(size, mask);
-        ReusableBuilder<Tuple2<Key, Boolean>, HashMap<Key, Boolean>> b = HashMap.newBuilder();
+        Builder<Tuple2<Key, Boolean>, HashMap<Key, Boolean>> b = HashMap.newBuilder();
         for (Key key : data.setA) {
-            b.addOne(new Tuple2<>(key, Boolean.TRUE));
+            Tuple2<Key, Boolean> elem = new Tuple2<>(key, Boolean.TRUE);
+            b.addOne(elem);
+        }
+        listA = Vector.<Tuple2<Key, Boolean>>newBuilder().result();
+        listAKeys = Vector.<Key>newBuilder().result();
+        for (Key key : data.listA) {
+            Tuple2<Key, Boolean> elem = new Tuple2<>(key, Boolean.TRUE);
+            listA = (Vector<Tuple2<Key, Boolean>>) appended.invoke(listA, elem);
+            listAKeys = (Vector<Key>) appended.invoke(listAKeys, key);
         }
         mapA = b.result();
 
-        //estimateMemoryUsage(mapA, mapA.head());
     }
 
-    private void estimateMemoryUsage(HashMap<Key, Boolean> mapA, Tuple2<Key, Boolean> head) {
-        VM.current();
-        long instanceSize = ClassLayout.parseInstance(mapA).instanceSize();
-        long elementSize = ClassLayout.parseInstance(head).instanceSize();
-        long dataSize = elementSize * mapA.size();
-        long dataStructureSize = instanceSize - dataSize;
-        System.out.println("\ninstance size           : " + instanceSize);
-        System.out.println("element size            : " + elementSize);
-        System.out.println("data size               : " + dataSize);
-        System.out.println("data structure size     : " + dataStructureSize + " " + (100 * dataStructureSize / instanceSize) + "%");
+    @Benchmark
+    public HashMap<Key, Boolean> mAddAll() {
+        return HashMap.from(listA);
+    }
+
+    @Benchmark
+    public HashMap<Key, Boolean> mAddOneByOne() {
+        HashMap<Key, Boolean> set = HashMap.<Key, Boolean>newBuilder().result();
+        for (Key key : data.listA) {
+            set = set.updated(key, Boolean.TRUE);
+        }
+        return set;
+    }
+
+    @Benchmark
+    public HashMap<Key, Boolean> mRemoveOneByOne() {
+        HashMap<Key, Boolean> set = mapA;
+        for (Key key : data.listA) {
+            set = set.removed(key);
+        }
+        return set;
+    }
+
+    @Benchmark
+    public Map<Key, Boolean> mRemoveAll() {
+        HashMap<Key, Boolean> set = mapA;
+        return set.removedAll(listAKeys);
     }
 
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (var i = mapA.keysIterator(); i.hasNext(); ) {
+        for (Iterator<Key> i = mapA.keysIterator(); i.hasNext(); ) {
             sum += i.next().value;
         }
         return sum;
     }
 
     @Benchmark
-    public HashMap<Key, Boolean> mRemoveOneByOne() {
-        HashMap<Key, Boolean> map = mapA;
-        for (var e : data.listA) {
-            map = map.removed(e);
-        }
-        if (!map.isEmpty()) throw new AssertionError("map: " + map);
-        return map;
+    public void mRemoveThenAdd() {
+        Key key = data.nextKeyInA();
+        mapA.$minus(key).$plus(new Tuple2<>(key, Boolean.TRUE));
     }
 
     @Benchmark
-    public Object mRemoveThenAdd() {
+    public void mPut() {
         Key key = data.nextKeyInA();
-        return mapA.$minus(key).$plus(new Tuple2<>(key, Boolean.TRUE));
-    }
-
-    @Benchmark
-    public Object mPut() {
-        Key key = data.nextKeyInA();
-        return mapA.$plus(new Tuple2<>(key, Boolean.FALSE));
+        mapA.$plus(new Tuple2<>(key, Boolean.FALSE));
     }
 
     @Benchmark
@@ -176,12 +208,5 @@ public class ScalaHashMapJmh {
     public HashMap<Key, Boolean> mTail() {
         return mapA.tail();
     }
-    @Benchmark
-    public HashMap<Key, Boolean> mCopyOf() {
-        ReusableBuilder<Tuple2<Key, Boolean>, HashMap<Key, Boolean>> b = HashMap.newBuilder();
-        for (Key key : data.setA) {
-            b.addOne(new Tuple2<>(key, Boolean.TRUE));
-        }
-        return b.result();
-    }
+
 }

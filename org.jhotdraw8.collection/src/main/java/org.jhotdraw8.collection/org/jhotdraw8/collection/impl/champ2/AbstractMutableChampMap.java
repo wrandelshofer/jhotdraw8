@@ -3,17 +3,15 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.impl.champ;
+package org.jhotdraw8.collection.impl.champ2;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -22,26 +20,16 @@ import java.util.Objects;
  * @param <K> the key type of the map
  * @param <V> the value typeof the map
  */
-public abstract class ChampAbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 
-    /**
-     * The current mutator id of this map.
-     * <p>
-     * All nodes that have the same non-null mutator id, are exclusively owned
-     * by this map, and therefore can be mutated without affecting other map.
-     * <p>
-     * If this mutator id is null, then this map does not own any nodes.
-     */
-    @Nullable
-    protected IdentityObject mutator;
 
     /**
      * The root of this CHAMP trie.
      */
-    protected ChampBitmapIndexedNode<X> root;
+    protected BitmapIndexedNode<X> root;
 
     /**
      * The number of entries in this map.
@@ -53,20 +41,11 @@ public abstract class ChampAbstractMutableChampMap<K, V, X> extends AbstractMap<
      */
     protected int modCount;
 
-    @NonNull
-    protected IdentityObject getOrCreateIdentity() {
-        if (mutator == null) {
-            mutator = new IdentityObject();
-        }
-        return mutator;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ChampAbstractMutableChampMap<K, V, X> clone() {
+    public @NonNull AbstractMutableChampMap<K, V, X> clone() {
         try {
-            mutator = null;
-            return (ChampAbstractMutableChampMap<K, V, X>) super.clone();
+            return (AbstractMutableChampMap<K, V, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
@@ -82,8 +61,8 @@ public abstract class ChampAbstractMutableChampMap<K, V, X> extends AbstractMap<
         if (o == this) {
             return true;
         }
-        if (o instanceof ChampAbstractMutableChampMap<?, ?, ?>) {
-            ChampAbstractMutableChampMap<?, ?, ?> that = (ChampAbstractMutableChampMap<?, ?, ?>) o;
+        if (o instanceof AbstractMutableChampMap<?, ?, ?>) {
+            AbstractMutableChampMap<?, ?, ?> that = (AbstractMutableChampMap<?, ?, ?>) o;
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);
@@ -104,7 +83,7 @@ public abstract class ChampAbstractMutableChampMap<K, V, X> extends AbstractMap<
      * @param c an iterable of elements
      * @return {@code true} if this set changed
      */
-    public boolean putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c == this) {
             return false;
         }

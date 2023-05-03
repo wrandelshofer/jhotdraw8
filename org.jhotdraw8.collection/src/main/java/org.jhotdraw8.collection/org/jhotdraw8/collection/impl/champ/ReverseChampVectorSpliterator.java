@@ -14,12 +14,12 @@ import java.util.function.Function;
 /**
  * @param <K>
  */
-public class ChampReverseVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class ReverseChampVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull VectorList<Object> vector;
     private final @NonNull Function<Object, K> mapper;
     private int index;
 
-    public ChampReverseVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
+    public ReverseChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;

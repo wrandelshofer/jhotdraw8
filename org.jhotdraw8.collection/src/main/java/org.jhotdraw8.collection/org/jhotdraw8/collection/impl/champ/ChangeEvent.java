@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @param <D> the data type
  */
-public class ChampChangeEvent<D> {
+public class ChangeEvent<D> {
     enum Type {
         UNCHANGED,
         ADDED,
@@ -27,7 +27,7 @@ public class ChampChangeEvent<D> {
     private @Nullable D oldData;
     private @Nullable D newData;
 
-    public ChampChangeEvent() {
+    public ChangeEvent() {
     }
 
     void found(D data) {

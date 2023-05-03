@@ -1,0 +1,203 @@
+/*
+ * @(#)HashCollisionNode.java
+ * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ */
+
+package org.jhotdraw8.collection.impl.champ;
+
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.ListHelper;
+
+import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollisionNode;
+
+/**
+ * Represents a hash-collision node in a CHAMP trie.
+ * <p>
+ * XXX hash-collision nodes may become huge performance bottlenecks.
+ * If the trie contains keys that implement {@link Comparable} then a hash-collision
+ * nodes should be a sorted tree structure (for example a red-black tree).
+ * Otherwise, hash-collision node should be a vector (for example a bit mapped trie).
+ * <p>
+ * References:
+ * <p>
+ * This class has been derived from 'The Capsule Hash Trie Collections Library'.
+ * <dl>
+ *      <dt>The Capsule Hash Trie Collections Library.
+ *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
+ *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
+ * </dl>
+ *
+ * @param <D> the data type
+ */
+class HashCollisionNode<D> extends Node<D> {
+    private final int hash;
+    @NonNull Object[] data;
+
+    HashCollisionNode(int hash, Object @NonNull [] data) {
+        this.data = data;
+        this.hash = hash;
+    }
+
+    @Override
+    int dataArity() {
+        return data.length;
+    }
+
+    @Override
+    boolean hasDataArityOne() {
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    boolean equivalent(@NonNull Object other) {
+        if (this == other) {
+            return true;
+        }
+        HashCollisionNode<?> that = (HashCollisionNode<?>) other;
+        @NonNull Object[] thatEntries = that.data;
+        if (hash != that.hash || thatEntries.length != data.length) {
+            return false;
+        }
+
+        // Linear scan for each key, because of arbitrary element order.
+        @NonNull Object[] thatEntriesCloned = thatEntries.clone();
+        int remainingLength = thatEntriesCloned.length;
+        outerLoop:
+        for (Object key : data) {
+            for (int j = 0; j < remainingLength; j += 1) {
+                Object todoKey = thatEntriesCloned[j];
+                if (Objects.equals(todoKey, key)) {
+                    // We have found an equal entry. We do not need to compare
+                    // this entry again. So we replace it with the last entry
+                    // from the array and reduce the remaining length.
+                    System.arraycopy(thatEntriesCloned, remainingLength - 1, thatEntriesCloned, j, 1);
+                    remainingLength -= 1;
+
+                    continue outerLoop;
+                }
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @Nullable
+    Object find(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
+        for (Object entry : data) {
+            if (equalsFunction.test(key, (D) entry)) {
+                return entry;
+            }
+        }
+        return NO_DATA;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    @NonNull
+    D getData(int index) {
+        return (D) data[index];
+    }
+
+    @Override
+    @NonNull
+    Node<D> getNode(int index) {
+        throw new IllegalStateException("Is leaf node.");
+    }
+
+
+    @Override
+    boolean hasData() {
+        return true;
+    }
+
+    @Override
+    boolean hasNodes() {
+        return false;
+    }
+
+    @Override
+    int nodeArity() {
+        return 0;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @NonNull
+    Node<D> remove(@Nullable IdentityObject owner, D data,
+                   int dataHash, int shift, @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
+        for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
+            if (equalsFunction.test((D) this.data[i], data)) {
+                @SuppressWarnings("unchecked") D currentVal = (D) this.data[i];
+                details.setRemoved(currentVal);
+
+                if (this.data.length == 1) {
+                    return BitmapIndexedNode.emptyNode();
+                } else if (this.data.length == 2) {
+                    // Create root node with singleton element.
+                    // This node will either be the new root
+                    // returned, or be unwrapped and inlined.
+                    return ChampNodeFactory.newBitmapIndexedNode(owner, 0, bitpos(mask(dataHash, 0)),
+                            new Object[]{getData(idx ^ 1)});
+                }
+                // copy keys and remove 1 element at position idx
+                Object[] entriesNew = ListHelper.copyComponentRemove(this.data, idx, 1);
+                if (isAllowedToUpdate(owner)) {
+                    this.data = entriesNew;
+                    return this;
+                }
+                return newHashCollisionNode(owner, dataHash, entriesNew);
+            }
+        }
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @NonNull
+    Node<D> update(@Nullable IdentityObject owner, D newData,
+                   int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                   @NonNull ToIntFunction<D> hashFunction) {
+        assert this.hash == dataHash;
+
+        for (int i = 0; i < this.data.length; i++) {
+            D oldData = (D) this.data[i];
+            if (equalsFunction.test(oldData, newData)) {
+                D updatedData = updateFunction.apply(oldData, newData);
+                if (updatedData == oldData) {
+                    details.found(oldData);
+                    return this;
+                }
+                details.setReplaced(oldData, updatedData);
+                if (isAllowedToUpdate(owner)) {
+                    this.data[i] = updatedData;
+                    return this;
+                }
+                final Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
+                return newHashCollisionNode(owner, dataHash, newKeys);
+            }
+        }
+
+        // copy entries and add 1 more at the end
+        Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
+        entriesNew[this.data.length] = newData;
+        details.setAdded(newData);
+        if (isAllowedToUpdate(owner)) {
+            this.data = entriesNew;
+            return this;
+        }
+        return newHashCollisionNode(owner, dataHash, entriesNew);
+    }
+}
