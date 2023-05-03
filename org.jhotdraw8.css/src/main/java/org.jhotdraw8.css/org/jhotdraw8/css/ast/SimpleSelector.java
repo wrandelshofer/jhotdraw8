@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * Abstract superclass for "simple selector"s.
  *
@@ -11,6 +13,7 @@ package org.jhotdraw8.css.ast;
  */
 public abstract class SimpleSelector extends Selector {
 
-    public SimpleSelector() {
+    public SimpleSelector(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 }

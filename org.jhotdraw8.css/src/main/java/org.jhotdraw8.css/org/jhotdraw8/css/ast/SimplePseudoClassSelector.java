@@ -23,7 +23,8 @@ public class SimplePseudoClassSelector extends PseudoClassSelector {
 
     private final @NonNull String pseudoClass;
 
-    public SimplePseudoClassSelector(@NonNull String pseudoClass) {
+    public SimplePseudoClassSelector(@Nullable SourceLocator sourceLocator, @NonNull String pseudoClass) {
+        super(sourceLocator);
         this.pseudoClass = pseudoClass;
     }
 

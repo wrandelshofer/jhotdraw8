@@ -27,7 +27,8 @@ public class DashMatchSelector extends AbstractAttributeSelector {
     private final @NonNull String attributeName;
     private final @NonNull String substring;
 
-    public DashMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+    public DashMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.substring = substring;

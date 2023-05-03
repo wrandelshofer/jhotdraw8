@@ -23,7 +23,8 @@ public class ClassSelector extends SimpleSelector {
 
     private final @NonNull String clazz;
 
-    public ClassSelector(@NonNull String clazz) {
+    public ClassSelector(@Nullable SourceLocator sourceLocator, @NonNull String clazz) {
+        super(sourceLocator);
         this.clazz = clazz;
     }
 

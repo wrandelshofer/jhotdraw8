@@ -23,7 +23,8 @@ public class ExistsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespace;
     private final @NonNull String attributeName;
 
-    public ExistsMatchSelector(@Nullable String namespace, @NonNull String attributeName) {
+    public ExistsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
     }

@@ -25,7 +25,8 @@ public class SuffixMatchSelector extends AbstractAttributeSelector {
     private final @NonNull String attributeName;
     private final @NonNull String substring;
 
-    public SuffixMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+    public SuffixMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.substring = substring;

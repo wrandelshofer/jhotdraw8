@@ -18,7 +18,8 @@ import org.jhotdraw8.css.model.SelectorModel;
  */
 public class SelectNothingSelector extends SimpleSelector {
 
-    public SelectNothingSelector() {
+    public SelectNothingSelector(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 
     @Override

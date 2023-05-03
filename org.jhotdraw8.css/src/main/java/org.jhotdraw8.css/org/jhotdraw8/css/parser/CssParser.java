@@ -158,7 +158,7 @@ public class CssParser {
             case "not":
                 final SimpleSelector simpleSelector = parseSimpleSelector(tt);
                 tt.requireNextToken(')', ":not() Selector: ')' expected.");
-                return new NegationPseudoClassSelector(ident, simpleSelector);
+                return new NegationPseudoClassSelector(tt.getSourceLocator(), ident, simpleSelector);
             default:
                 Loop:
                 while (tt.next() != CssTokenType.TT_EOF) {
@@ -176,7 +176,7 @@ public class CssParser {
                     }
                 }
                 tt.requireNextToken(')', ":" + ident + "() Selector ')' expected.");
-                return new FunctionPseudoClassSelector(ident);
+                return new FunctionPseudoClassSelector(tt.getSourceLocator(), ident);
         }
     }
 
@@ -224,13 +224,13 @@ public class CssParser {
         }
         List<CssToken> body = new ArrayList<>();
         if (tt.current() == ';') {
-            return new AtRule(atKeyword, header, body, sourceLocator);
+            return new AtRule(sourceLocator, atKeyword, header, body);
         } else {
             tt.pushBack();
             parseCurlyBlock(tt, body);
             body.remove(0);
             body.remove(body.size() - 1);
-            return new AtRule(atKeyword, header, body, sourceLocator);
+            return new AtRule(sourceLocator, atKeyword, header, body);
         }
     }
 
@@ -258,13 +258,14 @@ public class CssParser {
             tt.pushBack();
         }
         AbstractAttributeSelector selector;
+        final SourceLocator sourceLocator = tt.getSourceLocator();
         switch (tt.nextNoSkip()) {
             case '=':
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
                         && tt.current() != CssTokenType.TT_STRING) {
                     throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
-                selector = new EqualsMatchSelector(namespace, attributeName, tt.currentStringNonNull());
+                selector = new EqualsMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_INCLUDE_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -272,7 +273,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
-                selector = new IncludeMatchSelector(namespace, attributeName, tt.currentStringNonNull());
+                selector = new IncludeMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_DASH_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -280,7 +281,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
-                selector = new DashMatchSelector(namespace, attributeName, tt.currentStringNonNull());
+                selector = new DashMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_PREFIX_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -288,7 +289,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
-                selector = new PrefixMatchSelector(namespace, attributeName, tt.currentStringNonNull());
+                selector = new PrefixMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_SUFFIX_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -296,7 +297,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
-                selector = new SuffixMatchSelector(namespace, attributeName, tt.currentStringNonNull());
+                selector = new SuffixMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_SUBSTRING_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -304,10 +305,10 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("AttributeSelector: identifier, string or number expected. Line:" + tt.getLineNumber() + ".");
                 }
-                selector = new SubstringMatchSelector(namespace, attributeName, tt.currentStringNonNull());
+                selector = new SubstringMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
                 break;
             case ']':
-                selector = new ExistsMatchSelector(namespace, attributeName);
+                selector = new ExistsMatchSelector(sourceLocator, namespace, attributeName);
                 tt.pushBack();
                 break;
             default:
@@ -415,7 +416,7 @@ public class CssParser {
         List<CssToken> terms = parseTerms(tt);
         int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.get(terms.size() - 1).getEndPos();
 
-        return new Declaration(namespace, name, terms, startPos, endPos, lineNumber);
+        return new Declaration(tt.getSourceLocator(), namespace, name, terms, startPos, endPos, lineNumber);
 
     }
 
@@ -515,7 +516,7 @@ public class CssParser {
             return createFunctionPseudoClassSelector(tt);
         } else {
 
-            return new SimplePseudoClassSelector(tt.currentString());
+            return new SimplePseudoClassSelector(tt.getSourceLocator(), tt.currentString());
         }
     }
 
@@ -551,22 +552,23 @@ public class CssParser {
                     || tt.current() == '{' || tt.current() == ',') {
                 break;
             }
+            final SourceLocator sourceLocator = tt.getSourceLocator();
             switch (tt.current()) {
                 case CssTokenType.TT_GREATER_THAN:
-                    selector = new ChildCombinator(simpleSelector, parseSelector(tt));
+                    selector = new ChildCombinator(sourceLocator, simpleSelector, parseSelector(tt));
                     break;
                 case CssTokenType.TT_PLUS:
-                    selector = new AdjacentSiblingCombinator(simpleSelector, parseSelector(tt));
+                    selector = new AdjacentSiblingCombinator(sourceLocator, simpleSelector, parseSelector(tt));
                     break;
                 case CssTokenType.TT_TILDE:
-                    selector = new GeneralSiblingCombinator(simpleSelector, parseSelector(tt));
+                    selector = new GeneralSiblingCombinator(sourceLocator, simpleSelector, parseSelector(tt));
                     break;
                 default:
                     tt.pushBack();
                     if (potentialDescendantCombinator) {
-                        selector = new DescendantCombinator(simpleSelector, parseSelector(tt));
+                        selector = new DescendantCombinator(sourceLocator, simpleSelector, parseSelector(tt));
                     } else {
-                        selector = new AndCombinator(simpleSelector, parseSelector(tt));
+                        selector = new AndCombinator(sourceLocator, simpleSelector, parseSelector(tt));
                     }
                     break;
             }
@@ -590,7 +592,7 @@ public class CssParser {
             selectors.add(parseSelector(tt));
         }
         tt.pushBack();
-        return new SelectorGroup(selectors);
+        return new SelectorGroup(tt.getSourceLocator(), selectors);
     }
 
     private @NonNull SimpleSelector parseSimpleSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
@@ -603,34 +605,35 @@ public class CssParser {
         skipWhitespaceAndComments(tt);
 
         try {
+            final SourceLocator sourceLocator = tt.getSourceLocator();
             switch (tt.current()) {
                 case '*':
                     if (tt.nextNoSkip() == '|') {
                         tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after *|");
-                        return new TypeSelector(TypeSelector.ANY_NAMESPACE, tt.currentStringNonNull());
+                        return new TypeSelector(sourceLocator, TypeSelector.ANY_NAMESPACE, tt.currentStringNonNull());
                     } else {
                         tt.pushBack();
-                        return new UniversalSelector();
+                        return new UniversalSelector(sourceLocator);
                     }
                 case '|':
                     tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after |");
-                    return new TypeSelector(TypeSelector.WITHOUT_NAMESPACE, tt.currentStringNonNull());
+                    return new TypeSelector(sourceLocator, TypeSelector.WITHOUT_NAMESPACE, tt.currentStringNonNull());
                 case CssTokenType.TT_IDENT:
                     String typeOrPrefix = tt.currentStringNonNull();
                     if (tt.nextNoSkip() == '|') {
                         tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after " + typeOrPrefix + "|");
-                        return new TypeSelector(resolveNamespacePrefix(typeOrPrefix, tt), tt.currentStringNonNull());
+                        return new TypeSelector(sourceLocator, resolveNamespacePrefix(typeOrPrefix, tt), tt.currentStringNonNull());
                     } else {
                         tt.pushBack();
-                        return new TypeSelector(resolveNamespacePrefix(DEFAULT_NAMESPACE, tt), typeOrPrefix);
+                        return new TypeSelector(sourceLocator, resolveNamespacePrefix(DEFAULT_NAMESPACE, tt), typeOrPrefix);
                     }
                 case CssTokenType.TT_HASH:
-                    return new IdSelector(tt.currentString());
+                    return new IdSelector(sourceLocator, tt.currentString());
                 case '.':
                     if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
                         throw tt.createParseException("SimpleSelector: identifier expected.");
                     }
-                    return new ClassSelector(tt.currentString());
+                    return new ClassSelector(sourceLocator, tt.currentString());
                 case ':':
                     tt.pushBack();
                     return parsePseudoClassSelector(tt);
@@ -646,7 +649,7 @@ public class CssParser {
             }
         } catch (ParseException e) {
             exceptions.add(e);
-            return new SelectNothingSelector();
+            return new SelectNothingSelector(tt.getSourceLocator());
         }
     }
 
@@ -674,7 +677,7 @@ public class CssParser {
         var sourceLocator = tt.getSourceLocator();
         if (tt.current() == '{') {
             tt.pushBack();
-            selectorGroup = new SelectorGroup(new UniversalSelector());
+            selectorGroup = new SelectorGroup(sourceLocator, new UniversalSelector(sourceLocator));
         } else {
             tt.pushBack();
             selectorGroup = parseSelectorGroup(tt);
@@ -689,7 +692,7 @@ public class CssParser {
         if (tt.current() != '}') {
             throw tt.createParseException("StyleRule: '}' expected.");
         }
-        return new StyleRule(selectorGroup, declarations, sourceLocator);
+        return new StyleRule(sourceLocator, selectorGroup, declarations);
     }
 
     /**

@@ -23,7 +23,8 @@ public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
     private final @NonNull String functionIdentifier;
 
-    public FunctionPseudoClassSelector(@NonNull String functionIdentifier) {
+    public FunctionPseudoClassSelector(@Nullable SourceLocator sourceLocator, @NonNull String functionIdentifier) {
+        super(sourceLocator);
         this.functionIdentifier = functionIdentifier;
     }
 

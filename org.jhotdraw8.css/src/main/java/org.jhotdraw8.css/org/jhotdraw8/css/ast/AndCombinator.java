@@ -22,11 +22,12 @@ public class AndCombinator extends Combinator {
     /**
      * Creates a new instance.
      *
-     * @param first  the first selector
-     * @param second the second selector
+     * @param sourceLocator
+     * @param first         the first selector
+     * @param second        the second selector
      */
-    public AndCombinator(SimpleSelector first, Selector second) {
-        super(first, second);
+    public AndCombinator(@Nullable SourceLocator sourceLocator, @NonNull SimpleSelector first, @NonNull Selector second) {
+        super(sourceLocator, first, second);
     }
 
     @Override

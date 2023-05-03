@@ -23,7 +23,8 @@ public class IdSelector extends SimpleSelector {
 
     private final @NonNull String id;
 
-    public IdSelector(@NonNull String id) {
+    public IdSelector(@Nullable SourceLocator sourceLocator, @NonNull String id) {
+        super(sourceLocator);
         this.id = id;
     }
 

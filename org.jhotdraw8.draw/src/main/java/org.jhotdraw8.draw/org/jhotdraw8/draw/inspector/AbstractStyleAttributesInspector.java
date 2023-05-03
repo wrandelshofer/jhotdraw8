@@ -6,15 +6,7 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyMapProperty;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleMapProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleSetProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
@@ -25,29 +17,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.ast.AndCombinator;
-import org.jhotdraw8.css.ast.ClassSelector;
-import org.jhotdraw8.css.ast.Declaration;
-import org.jhotdraw8.css.ast.IdSelector;
-import org.jhotdraw8.css.ast.Selector;
-import org.jhotdraw8.css.ast.SelectorGroup;
-import org.jhotdraw8.css.ast.SimplePseudoClassSelector;
-import org.jhotdraw8.css.ast.SimpleSelector;
-import org.jhotdraw8.css.ast.StyleRule;
-import org.jhotdraw8.css.ast.Stylesheet;
-import org.jhotdraw8.css.ast.TypeSelector;
+import org.jhotdraw8.css.ast.*;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.io.CssPrettyPrinter;
 import org.jhotdraw8.css.manager.StylesheetsManager;
@@ -60,14 +37,7 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssFont;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.TextFontableFigure;
-import org.jhotdraw8.draw.popup.BooleanPicker;
-import org.jhotdraw8.draw.popup.CssColorPicker;
-import org.jhotdraw8.draw.popup.CssFontPicker;
-import org.jhotdraw8.draw.popup.EnumPicker;
-import org.jhotdraw8.draw.popup.ExamplesPicker;
-import org.jhotdraw8.draw.popup.FontFamilyPicker;
-import org.jhotdraw8.draw.popup.PaintablePicker;
-import org.jhotdraw8.draw.popup.Picker;
+import org.jhotdraw8.draw.popup.*;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
@@ -78,20 +48,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.prefs.Preferences;
@@ -418,26 +375,26 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         List<SimpleSelector> selectors = new ArrayList<>();
         if (type != null && !type.getName().isEmpty()) {
-            selectors.add(new TypeSelector(TypeSelector.ANY_NAMESPACE, type.getName()));
+            selectors.add(new TypeSelector(null, TypeSelector.ANY_NAMESPACE, type.getName()));
         }
         if (id != null && id.length() > 0) {
-            selectors.add(new IdSelector(id));
+            selectors.add(new IdSelector(null, id));
         }
         for (String clazz : styleClasses) {
-            selectors.add(new ClassSelector(clazz));
+            selectors.add(new ClassSelector(null, clazz));
         }
-        selectors.add(new SimplePseudoClassSelector("selected"));
+        selectors.add(new SimplePseudoClassSelector(null, "selected"));
 
         Selector prev = null;
         Collections.reverse(selectors);
         for (SimpleSelector s : selectors) {
             if (prev != null) {
-                prev = new AndCombinator(s, prev);
+                prev = new AndCombinator(null, s, prev);
             } else {
                 prev = s;
             }
         }
-        return new SelectorGroup(Arrays.asList(prev));
+        return new SelectorGroup(null, Arrays.asList(prev));
     }
 
     /**
@@ -646,15 +603,15 @@ public abstract class AbstractStyleAttributesInspector<E> {
             Stylesheet s = parser.parseStylesheet(textArea.getText(), null, null);
             if (!parser.getParseExceptions().isEmpty()) {
                 System.err.println("StyleAttributesInspector:\n" + parser.getParseExceptions().toString().replace(',', '\n'));
-                return new SelectorGroup(Collections.emptyList());
+                return new SelectorGroup(null, Collections.emptyList());
             }
             for (StyleRule styleRule : s.getStyleRules()) {
                 return styleRule.getSelectorGroup();
             }
 
-            return new SelectorGroup(Collections.emptyList());
+            return new SelectorGroup(null, Collections.emptyList());
         } catch (IOException e) {
-            return new SelectorGroup(Collections.emptyList());
+            return new SelectorGroup(null, Collections.emptyList());
         }
     }
 

@@ -25,7 +25,8 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
     private final @NonNull String attributeName;
     private final @NonNull String word;
 
-    public IncludeMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
+    public IncludeMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.word = word;

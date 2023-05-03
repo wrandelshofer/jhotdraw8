@@ -21,8 +21,8 @@ import java.util.function.Consumer;
  */
 public class DescendantCombinator extends Combinator {
 
-    public DescendantCombinator(SimpleSelector first, Selector second) {
-        super(first, second);
+    public DescendantCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
+        super(sourceLocator, first, second);
     }
 
     @Override

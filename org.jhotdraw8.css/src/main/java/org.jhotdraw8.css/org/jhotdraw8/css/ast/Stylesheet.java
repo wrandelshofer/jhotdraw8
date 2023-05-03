@@ -29,7 +29,7 @@ public class Stylesheet extends AbstractSyntaxTree {
     private final @NonNull ImmutableList<StyleRule> styleRules;
 
     public Stylesheet(@Nullable URI uri, @NonNull List<Rule> rules) {
-        super(null);
+        super(new SourceLocator(0, 0, uri));
         this.uri = uri;
         this.rules = VectorList.copyOf(rules);
         this.styleRules = VectorList.copyOf(

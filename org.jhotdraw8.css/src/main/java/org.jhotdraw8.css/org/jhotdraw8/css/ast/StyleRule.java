@@ -21,7 +21,7 @@ public class StyleRule extends Rule {
     private final @NonNull SelectorGroup selectorList;
     private final @NonNull ImmutableList<Declaration> declarations;
 
-    public StyleRule(@NonNull SelectorGroup selectorGroup, @NonNull List<Declaration> declarations, @Nullable SourceLocator sourceLocator) {
+    public StyleRule(@Nullable SourceLocator sourceLocator, @NonNull SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
         super(sourceLocator);
         this.selectorList = selectorGroup;
         this.declarations = VectorList.copyOf(declarations);

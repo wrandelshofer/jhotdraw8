@@ -25,7 +25,8 @@ public class SubstringMatchSelector extends AbstractAttributeSelector {
     private final @NonNull String attributeName;
     private final @NonNull String substring;
 
-    public SubstringMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+    public SubstringMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.substring = substring;

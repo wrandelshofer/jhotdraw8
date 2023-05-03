@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * An abstract "attribute selector" matches an element based on its attributes.
  *
@@ -11,7 +13,8 @@ package org.jhotdraw8.css.ast;
  */
 public abstract class AbstractAttributeSelector extends SimpleSelector {
 
-    public AbstractAttributeSelector() {
+    public AbstractAttributeSelector(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 
     @Override

@@ -27,8 +27,8 @@ public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
     private final @NonNull SimpleSelector selector;
 
-    public NegationPseudoClassSelector(@NonNull String functionIdentifier, @NonNull SimpleSelector selector) {
-        super(functionIdentifier);
+    public NegationPseudoClassSelector(@Nullable SourceLocator sourceLocator, @NonNull String functionIdentifier, @NonNull SimpleSelector selector) {
+        super(sourceLocator, functionIdentifier);
         this.selector = selector;
     }
 

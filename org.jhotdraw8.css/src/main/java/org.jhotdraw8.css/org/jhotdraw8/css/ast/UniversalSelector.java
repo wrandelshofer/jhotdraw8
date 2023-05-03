@@ -19,7 +19,8 @@ import java.util.function.Consumer;
  */
 public class UniversalSelector extends SimpleSelector {
 
-    public UniversalSelector() {
+    public UniversalSelector(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 
     @Override

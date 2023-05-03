@@ -24,11 +24,12 @@ public class AdjacentSiblingCombinator extends Combinator {
     /**
      * Creates a new instance.
      *
-     * @param first  the first selector
-     * @param second the second selector
+     * @param sourceLocator
+     * @param first         the first selector
+     * @param second        the second selector
      */
-    public AdjacentSiblingCombinator(SimpleSelector first, Selector second) {
-        super(first, second);
+    public AdjacentSiblingCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
+        super(sourceLocator, first, second);
     }
 
     @Override

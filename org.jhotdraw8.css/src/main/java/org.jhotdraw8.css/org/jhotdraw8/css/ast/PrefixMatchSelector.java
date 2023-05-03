@@ -25,7 +25,8 @@ public class PrefixMatchSelector extends AbstractAttributeSelector {
     private final @NonNull String attributeName;
     private final @NonNull String substring;
 
-    public PrefixMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+    public PrefixMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String substring) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.substring = substring;

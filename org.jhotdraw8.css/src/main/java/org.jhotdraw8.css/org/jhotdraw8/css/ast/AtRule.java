@@ -27,13 +27,13 @@ public class AtRule extends Rule {
     /**
      * Creates a new instance.
      *
+     * @param sourceLocator
      * @param atKeyword     the "at-keyword"
      * @param header        the list of header tokens
      * @param body          the list of body tokens
-     * @param sourceLocator
      */
-    public AtRule(@NonNull String atKeyword,
-                  @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body, @Nullable SourceLocator sourceLocator) {
+    public AtRule(@Nullable SourceLocator sourceLocator, @NonNull String atKeyword,
+                  @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body) {
         super(sourceLocator);
         this.atKeyword = atKeyword;
         this.header = VectorList.copyOf(header);

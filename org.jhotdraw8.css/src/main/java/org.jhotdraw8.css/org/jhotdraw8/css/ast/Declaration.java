@@ -26,8 +26,8 @@ public class Declaration extends AbstractSyntaxTree {
     private final int endPos;
     private final int lineNumber;
 
-    public Declaration(@Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos, int lineNumber) {
-        super(null);
+    public Declaration(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos, int lineNumber) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.propertyName = propertyName;
         this.terms = VectorList.copyOf(terms);

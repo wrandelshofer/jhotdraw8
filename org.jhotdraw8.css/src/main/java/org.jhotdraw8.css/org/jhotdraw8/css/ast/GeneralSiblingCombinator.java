@@ -21,8 +21,8 @@ import java.util.function.Consumer;
  */
 public class GeneralSiblingCombinator extends Combinator {
 
-    public GeneralSiblingCombinator(SimpleSelector first, Selector second) {
-        super(first, second);
+    public GeneralSiblingCombinator(@Nullable SourceLocator sourceLocator, @NonNull SimpleSelector first, @NonNull Selector second) {
+        super(sourceLocator, first, second);
     }
 
     @Override

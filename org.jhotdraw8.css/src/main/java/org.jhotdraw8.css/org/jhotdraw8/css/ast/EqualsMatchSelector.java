@@ -24,7 +24,8 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
     private final @NonNull String attributeName;
     private final @NonNull String attributeValue;
 
-    public EqualsMatchSelector(@Nullable String namespace, @NonNull String attributeName, @NonNull String attributeValue) {
+    public EqualsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String attributeValue) {
+        super(sourceLocator);
         this.namespace = namespace;
         this.attributeName = attributeName;
         this.attributeValue = attributeValue;

@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.css.ast;
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * A ComponentValue is the abstract base class of CssToken, CurlyBlock,
  * RoundBlock, SquareBlock and FunctionBlock.
@@ -12,7 +14,7 @@ package org.jhotdraw8.css.ast;
  */
 public abstract class ComponentValue extends AbstractSyntaxTree {
 
-    public ComponentValue() {
-        super(null);
+    public ComponentValue(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 }

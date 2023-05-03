@@ -16,8 +16,8 @@ import org.jhotdraw8.css.model.SelectorModel;
 public abstract class Selector extends AbstractSyntaxTree {
 
 
-    public Selector() {
-        super(null);
+    public Selector(@Nullable SourceLocator sourceLocator) {
+        super(sourceLocator);
     }
 
     /**

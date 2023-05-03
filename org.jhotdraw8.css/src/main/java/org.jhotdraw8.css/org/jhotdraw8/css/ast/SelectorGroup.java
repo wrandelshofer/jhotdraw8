@@ -26,11 +26,13 @@ public class SelectorGroup extends Selector {
 
     private final @NonNull ReadOnlyList<Selector> selectors;
 
-    public SelectorGroup(@NonNull Selector selector) {
+    public SelectorGroup(@Nullable SourceLocator sourceLocator, @NonNull Selector selector) {
+        super(sourceLocator);
         this.selectors = VectorList.of(selector);
     }
 
-    public SelectorGroup(@NonNull List<Selector> selectors) {
+    public SelectorGroup(@Nullable SourceLocator sourceLocator, @NonNull List<Selector> selectors) {
+        super(sourceLocator);
         this.selectors = VectorList.copyOf(selectors);
     }
 
