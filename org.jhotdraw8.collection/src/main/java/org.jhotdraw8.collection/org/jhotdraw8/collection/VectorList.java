@@ -83,6 +83,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @SuppressWarnings("unchecked")
+    @SafeVarargs
     public static <T> VectorList<T> of(T... t) {
         return ((VectorList<T>) EMPTY).addAll(Arrays.asList(t));
 
