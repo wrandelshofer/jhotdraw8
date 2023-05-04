@@ -56,14 +56,14 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
 
     @Override
     protected void doLineTo(double x, double y) {
-        papb.lineTo(x, y);
+        if (eps2 > 0 && (lastX - x) * (lastX - x) + (lastY - y) * (lastY - y) > eps2) {
+            papb.lineTo(x, y);
+        }
     }
 
     @Override
     protected void doMoveTo(double x, double y) {
-        if (eps2 > 0 && (lastX - x) * (lastX - x) + (lastY - y) * (lastY - y) > eps2) {
-            papb.moveTo(x, y);
-        }
+        papb.moveTo(x, y);
     }
 
     @Override
