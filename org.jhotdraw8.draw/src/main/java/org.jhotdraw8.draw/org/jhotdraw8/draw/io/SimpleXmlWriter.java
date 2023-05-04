@@ -33,20 +33,10 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * SimpleXmlWriter.
@@ -173,7 +163,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     protected void write(@Nullable URI documentHome, @NonNull Writer out, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
-        IndentingXMLStreamWriter w = createXmlStreamWriter(out);
+        XMLStreamWriter w = createXmlStreamWriter(out);
         workState.updateProgress(0.0);
         try {
             writeDocument(w, documentHome, drawing);
@@ -186,7 +176,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     @Override
     public void write(@NonNull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
-        IndentingXMLStreamWriter w = createXmlStreamWriter(sw);
+        XMLStreamWriter w = createXmlStreamWriter(sw);
         URI documentHome = null;
         try {
             if (selection == null || selection.isEmpty()) {
@@ -202,7 +192,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
 
-    private @NonNull IndentingXMLStreamWriter createXmlStreamWriter(Writer sw) {
+    private @NonNull XMLStreamWriter createXmlStreamWriter(Writer sw) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
         w.setIndentation(" ".repeat(INDENT_AMOUNT.get(options)));
         return w;
