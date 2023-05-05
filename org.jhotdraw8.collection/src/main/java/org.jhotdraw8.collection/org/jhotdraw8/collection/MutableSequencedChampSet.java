@@ -164,10 +164,10 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, first);
         IdentityObject owner = getOrCreateOwner();
-        root = root.update(owner, newElem,
-                Objects.hashCode(e), 0, details,
-                moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
-                Objects::equals, Objects::hashCode);
+        root = root.put(owner, newElem,
+                SequencedElement.keyHash(e), 0, details,
+                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
+                Objects::equals, SequencedElement::keyHash);
         boolean modified = details.isModified();
         if (modified) {
             var oldElem = details.getOldData();
@@ -184,7 +184,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
                 size++;
                 modCount++;
             }
-            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, owner, newElem, details, SequencedElement::update);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, owner, newElem, details, SequencedElement::put);
             renumber();
         }
         return modified;
@@ -199,11 +199,11 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, last);
         var owner = getOrCreateOwner();
-        root = root.update(
-                owner, newElem, Objects.hashCode(e), 0,
+        root = root.put(
+                owner, newElem, SequencedElement.keyHash(e), 0,
                 details,
-                moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
-                Objects::equals, Objects::hashCode);
+                moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
+                Objects::equals, SequencedElement::keyHash);
         boolean modified = details.isModified();
         if (modified) {
             var oldElem = details.getOldData();
@@ -219,7 +219,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
                 last++;
                 modCount++;
             }
-            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, owner, newElem, details, SequencedElement::update);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, owner, newElem, details, SequencedElement::put);
             renumber();
         }
         return modified;
@@ -250,7 +250,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
         return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
-                Objects.hashCode(o), 0, Objects::equals);
+                SequencedElement.keyHash(o), 0, Objects::equals);
     }
 
     @Override
@@ -303,7 +303,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
         var owner = getOrCreateOwner();
         root = root.remove(
                 owner, new SequencedElement<>((E) o),
-                Objects.hashCode(o), 0, details, Objects::equals);
+                SequencedElement.keyHash(o), 0, details, Objects::equals);
         if (details.isModified()) {
             size--;
             modCount++;
@@ -342,7 +342,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
         if (ChampSequencedData.mustRenumber(size, first, last)) {
             IdentityObject owner = getOrCreateOwner();
             root = ChampSequencedData.renumber(size, root, sequenceRoot, owner,
-                    Objects::hashCode, Objects::equals,
+                    SequencedElement::keyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             sequenceRoot = ChampSequencedData.buildSequencedTrie(sequenceRoot, owner);
             last = size;

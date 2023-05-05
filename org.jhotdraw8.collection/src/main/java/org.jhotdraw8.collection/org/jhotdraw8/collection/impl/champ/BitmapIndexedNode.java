@@ -144,14 +144,14 @@ public class BitmapIndexedNode<K> extends Node<K> {
 
     @Override
     @Nullable
-    public Object find(K key, int dataHash, int shift, @NonNull BiPredicate<K, K> equalsFunction) {
-        int bitpos = bitpos(mask(dataHash, shift));
+    public Object find(K data, int keyHash, int shift, @NonNull BiPredicate<K, K> equalsFunction) {
+        int bitpos = bitpos(mask(keyHash, shift));
         if ((nodeMap & bitpos) != 0) {
-            return nodeAt(bitpos).find(key, dataHash, shift + BIT_PARTITION_SIZE, equalsFunction);
+            return nodeAt(bitpos).find(data, keyHash, shift + BIT_PARTITION_SIZE, equalsFunction);
         }
         if ((dataMap & bitpos) != 0) {
             K k = getData(dataIndex(bitpos));
-            if (equalsFunction.test(k, key)) {
+            if (equalsFunction.test(k, data)) {
                 return k;
             }
         }
@@ -270,13 +270,13 @@ public class BitmapIndexedNode<K> extends Node<K> {
 
     @Override
     @NonNull
-    public BitmapIndexedNode<K> update(@Nullable IdentityObject owner,
-                                       @Nullable K newData,
-                                       int dataHash, int shift,
-                                       @NonNull ChangeEvent<K> details,
-                                       @NonNull BiFunction<K, K, K> updateFunction,
-                                       @NonNull BiPredicate<K, K> equalsFunction,
-                                       @NonNull ToIntFunction<K> hashFunction) {
+    public BitmapIndexedNode<K> put(@Nullable IdentityObject owner,
+                                    @Nullable K newData,
+                                    int dataHash, int shift,
+                                    @NonNull ChangeEvent<K> details,
+                                    @NonNull BiFunction<K, K, K> updateFunction,
+                                    @NonNull BiPredicate<K, K> equalsFunction,
+                                    @NonNull ToIntFunction<K> hashFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
@@ -300,7 +300,7 @@ public class BitmapIndexedNode<K> extends Node<K> {
         } else if ((nodeMap & bitpos) != 0) {
             Node<K> subNode = nodeAt(bitpos);
             Node<K> updatedSubNode = subNode
-                    .update(owner, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
+                    .put(owner, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
             return subNode == updatedSubNode ? this : copyAndSetNode(owner, bitpos, updatedSubNode);
         }
         details.setAdded(newData);

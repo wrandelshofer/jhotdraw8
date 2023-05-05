@@ -30,7 +30,6 @@ import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 import java.io.Serial;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
@@ -164,7 +163,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
         return Node.NO_DATA != root.find(new SequencedEntry<>((K) o),
-                Objects.hashCode(o), 0,
+                SequencedEntry.keyHash(o), 0,
                 SequencedEntry::keyEquals);
     }
 
@@ -246,7 +245,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     public V get(Object o) {
         Object result = root.find(
                 new SequencedEntry<>((K) o),
-                Objects.hashCode(o), 0, SequencedEntry::keyEquals);
+                SequencedEntry.keyHash(o), 0, SequencedEntry::keyEquals);
         return (result instanceof SequencedEntry<?, ?>) ? ((SequencedEntry<K, V>) result).getValue() : null;
     }
 
@@ -311,10 +310,10 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, val, -offset - 1);
         var owner = getOrCreateOwner();
-        root = root.update(owner, newEntry,
-                Objects.hashCode(key), 0, details,
+        root = root.put(owner, newEntry,
+                SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
-                SequencedEntry::keyEquals, SequencedEntry::keyHash);
+                SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
             vector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
@@ -348,10 +347,10 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
         var owner = getOrCreateOwner();
-        root = root.update(owner, newEntry,
-                Objects.hashCode(key), 0, details,
+        root = root.put(owner, newEntry,
+                SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
-                SequencedEntry::keyEquals, SequencedEntry::keyHash);
+                SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
             vector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
@@ -400,7 +399,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         root = root.remove(null,
                 new SequencedEntry<>(key),
-                Objects.hashCode(key), 0, details, SequencedEntry::keyEquals);
+                SequencedEntry.keyHash(key), 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
             var result = ChampSequencedData.vecRemove(vector, null, oldElem, new ChangeEvent<>(), offset);
@@ -434,7 +433,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
             IdentityObject owner = getOrCreateOwner();
             var result = ChampSequencedData.vecRenumber(size, root, vector, owner,
-                    SequencedEntry::keyHash, SequencedEntry::keyEquals,
+                    SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             root = result.first();
             vector = result.second();

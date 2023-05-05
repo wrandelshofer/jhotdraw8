@@ -208,6 +208,14 @@ public abstract class Node<D> {
 
     abstract boolean hasData();
 
+    boolean isEmpty() {
+        return !hasData() && !hasNodes();
+    }
+
+    boolean hasMany() {
+        return hasNodes() || dataArity() > 1;
+    }
+
     abstract boolean hasDataArityOne();
 
     abstract boolean hasNodes();
@@ -258,18 +266,68 @@ public abstract class Node<D> {
      *                       object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> update(D newData,
-                                     int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                                     @NonNull BiFunction<D, D, D> updateFunction,
-                                     @NonNull BiPredicate<D, D> equalsFunction,
-                                     @NonNull ToIntFunction<D> hashFunction);
+    abstract @NonNull Node<D> put(D newData,
+                                  int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                  @NonNull ToIntFunction<D> hashFunction);
 
-    protected abstract @NonNull Node<D> addAll(Node<D> otherNode, int shift,
-                                               @NonNull BulkChangeEvent intersectionSizeRef,
+    /**
+     * Inserts or replaces data elements from the specified other trie in this trie.
+     *
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#inBoth}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> putAll(Node<D> otherNode, int shift,
+                                               @NonNull BulkChangeEvent bulkChange,
                                                @NonNull BiFunction<D, D, D> updateFunction,
                                                @NonNull BiPredicate<D, D> equalsFunction,
                                                @NonNull ToIntFunction<D> hashFunction,
                                                @NonNull ChangeEvent<D> details);
+
+    /**
+     * Removes data elements in the specified other trie from this trie.
+     *
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#removed}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> removeAll(Node<D> otherNode, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange,
+                                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                                  @NonNull ToIntFunction<D> hashFunction,
+                                                  @NonNull ChangeEvent<D> details);
+
+    /**
+     * Retains data elements in this trie that are also in the other trie - removes the rest.
+     *
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#removed}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> retainAll(Node<D> otherNode, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange,
+                                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                                  @NonNull ToIntFunction<D> hashFunction,
+                                                  @NonNull ChangeEvent<D> details);
 
     protected abstract int calculateSize();
 }

@@ -32,17 +32,26 @@ public class SequencedElement<E> implements ChampSequencedData {
     }
 
     @NonNull
-    public static <E> SequencedElement<E> update(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+    public static <E> SequencedElement<E> put(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
         return oldK;
     }
 
+    public static int keyHash(@Nullable Object a) {
+        return Objects.hashCode(a);
+    }
+
+    public static <K> int elementKeyHash(@NonNull SequencedElement<K> a) {
+        return Objects.hashCode(a.getElement());
+    }
+
+
     @NonNull
-    public static <E> SequencedElement<E> updateAndMoveToFirst(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+    public static <E> SequencedElement<E> putAndMoveToFirst(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
         return oldK.getSequenceNumber() == newK.getSequenceNumber() + 1 ? oldK : newK;
     }
 
     @NonNull
-    public static <E> SequencedElement<E> updateAndMoveToLast(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
+    public static <E> SequencedElement<E> putAndMoveToLast(@NonNull SequencedElement<E> oldK, @NonNull SequencedElement<E> newK) {
         return oldK.getSequenceNumber() == newK.getSequenceNumber() - 1 ? oldK : newK;
     }
 

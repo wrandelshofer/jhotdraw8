@@ -22,7 +22,6 @@ import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
@@ -137,7 +136,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
         return root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
-                Objects.hashCode(o), 0,
+                ChampMap.keyHash(o), 0,
                 ChampMap::keyEquals) != Node.NO_DATA;
     }
 
@@ -189,7 +188,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
         Object result = root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
-                Objects.hashCode(o), 0, ChampMap::keyEquals);
+                ChampMap.keyHash(o), 0, ChampMap::keyEquals);
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
@@ -213,12 +212,12 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
 
     @NonNull
     ChangeEvent<SimpleImmutableEntry<K, V>> putEntry(@Nullable K key, @Nullable V val) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = ChampMap.keyHash(key);
         ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.update(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
+        root = root.put(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
                 ChampMap::updateEntry,
                 ChampMap::keyEquals,
-                ChampMap::keyHash);
+                ChampMap::entryKeyHash);
         if (details.isModified() && !details.isReplaced()) {
             size += 1;
             modCount++;
@@ -235,7 +234,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
 
     @NonNull
     ChangeEvent<SimpleImmutableEntry<K, V>> removeKey(K key) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = ChampMap.keyHash(key);
         ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
         root = root.remove(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                 ChampMap::keyEquals);

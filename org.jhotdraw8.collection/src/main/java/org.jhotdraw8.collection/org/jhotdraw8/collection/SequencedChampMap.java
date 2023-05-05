@@ -199,7 +199,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return find(new SequencedEntry<>(key), Objects.hashCode(key), 0,
+        return find(new SequencedEntry<>(key), SequencedEntry.keyHash(key), 0,
                 SequencedEntry::keyEquals) != Node.NO_DATA;
     }
 
@@ -221,7 +221,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     public V get(Object o) {
         Object result = find(
                 new SequencedEntry<>((K) o),
-                Objects.hashCode(o), 0, SequencedEntry::keyEquals);
+                SequencedEntry.keyHash(o), 0, SequencedEntry::keyEquals);
         return (V) ((result instanceof SequencedEntry<?, ?> entry) ? entry.getValue() : null);
     }
 
@@ -269,11 +269,11 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     private SequencedChampMap<K, V> putFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, first);
-        var newRoot = update(null,
+        var newRoot = put(null,
                 newEntry,
-                Objects.hashCode(key), 0, details,
+                SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
-                SequencedEntry::keyEquals, SequencedEntry::keyHash);
+                SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
             var newSeqRoot = ChampSequencedData.seqUpdate(sequenceRoot, null, details.getNewDataNonNull(), details,
@@ -312,11 +312,11 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     private SequencedChampMap<K, V> putLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, last);
-        var newRoot = update(null,
+        var newRoot = put(null,
                 newEntry,
-                Objects.hashCode(key), 0, details,
+                SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
-                SequencedEntry::keyEquals, SequencedEntry::keyHash);
+                SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
             var newSeqRoot = ChampSequencedData.seqUpdate(sequenceRoot, null, details.getNewDataNonNull(), details,
@@ -366,7 +366,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
     }
 
     private @NonNull SequencedChampMap<K, V> remove(@NonNull K key, int newFirst, int newLast) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = SequencedEntry.keyHash(key);
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRoot =
                 remove(null, new SequencedEntry<>(key), keyHash, 0, details, SequencedEntry::keyEquals);
@@ -383,7 +383,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             if (seq == newLast - 1) {
                 newLast--;
             }
-            return renumber(newRoot, newSeqRoot, size - 1, newFirst, newLast);
+            return size == 1 ? SequencedChampMap.of() : renumber(newRoot, newSeqRoot, size - 1, newFirst, newLast);
         }
         return this;
     }
@@ -416,7 +416,7 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
             IdentityObject owner = new IdentityObject();
             BitmapIndexedNode<SequencedEntry<K, V>> renumberedRoot = ChampSequencedData.renumber(
                     size, root, seqRoot, owner,
-                    SequencedEntry::keyHash, SequencedEntry::keyEquals,
+                    SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             BitmapIndexedNode<SequencedEntry<K, V>> renumberedSeqRoot = ChampSequencedData.buildSequencedTrie(renumberedRoot, owner);
             return new SequencedChampMap<>(renumberedRoot, renumberedSeqRoot,

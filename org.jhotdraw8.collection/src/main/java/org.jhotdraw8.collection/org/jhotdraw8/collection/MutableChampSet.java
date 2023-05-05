@@ -100,10 +100,10 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.update(getOrCreateOwner(),
-                e, Objects.hashCode(e), 0, details,
+        root = root.put(getOrCreateOwner(),
+                e, ChampSet.keyHash(e), 0, details,
                 (oldKey, newKey) -> oldKey,
-                Objects::equals, Objects::hashCode);
+                Objects::equals, ChampSet::keyHash);
         if (details.isModified()) {
             size++;
             modCount++;
@@ -157,7 +157,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.find((E) o, Objects.hashCode(o), 0, Objects::equals);
+        return Node.NO_DATA != root.find((E) o, ChampSet.keyHash(o), 0, Objects::equals);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
         root = root.remove(
-                getOrCreateOwner(), (E) o, Objects.hashCode(o), 0, details,
+                getOrCreateOwner(), (E) o, ChampSet.keyHash(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             size--;

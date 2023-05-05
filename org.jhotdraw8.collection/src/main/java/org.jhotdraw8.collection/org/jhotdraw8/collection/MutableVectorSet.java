@@ -156,10 +156,10 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
         IdentityObject owner = getOrCreateOwner();
-        root = root.update(owner, newElem,
-                Objects.hashCode(e), 0, details,
-                moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
-                Objects::equals, Objects::hashCode);
+        root = root.put(owner, newElem,
+                SequencedElement.keyHash(e), 0, details,
+                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
+                Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
             if (details.isReplaced()) {
@@ -187,11 +187,11 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset + vector.size());
         var owner = getOrCreateOwner();
-        root = root.update(
-                owner, newElem, Objects.hashCode(e), 0,
+        root = root.put(
+                owner, newElem, SequencedElement.keyHash(e), 0,
                 details,
-                moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
-                Objects::equals, Objects::hashCode);
+                moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
+                Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
             var oldElem = details.getOldData();
@@ -233,7 +233,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
         return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
-                Objects.hashCode(o), 0, Objects::equals);
+                SequencedElement.keyHash(o), 0, Objects::equals);
     }
 
     @SuppressWarnings("unchecked")
@@ -292,7 +292,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         var owner = getOrCreateOwner();
         root = root.remove(
                 owner, new SequencedElement<>((E) o),
-                Objects.hashCode(o), 0, details, Objects::equals);
+                SequencedElement.keyHash(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
         if (modified) {
             var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), details, offset);
@@ -326,7 +326,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
             IdentityObject owner = getOrCreateOwner();
             var result = ChampSequencedData.vecRenumber(size, root, vector, owner,
-                    Objects::hashCode, Objects::equals,
+                    SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();
             vector = result.second();

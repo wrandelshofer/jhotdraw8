@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
@@ -79,7 +80,6 @@ import java.util.Spliterators;
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
- *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -94,6 +94,10 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
+    /**
+     * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
+     */
+    static final int SALT = new Random().nextInt();
     private final int size;
 
     ChampMap(@NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
@@ -129,8 +133,12 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return Objects.equals(a.getKey(), b.getKey());
     }
 
-    public static <V, K> int keyHash(SimpleImmutableEntry<K, V> e) {
-        return Objects.hashCode(e.getKey());
+    static <V, K> int keyHash(Object e) {
+        return SALT ^ Objects.hashCode(e);
+    }
+
+    static <V, K> int entryKeyHash(SimpleImmutableEntry<K, V> e) {
+        return SALT ^ Objects.hashCode(e.getKey());
     }
 
     /**
@@ -159,7 +167,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return find(new SimpleImmutableEntry<>(key, null), Objects.hashCode(key), 0,
+        return find(new SimpleImmutableEntry<>(key, null), keyHash(key), 0,
                 ChampMap::keyEquals) != Node.NO_DATA;
     }
 
@@ -179,7 +187,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     @SuppressWarnings("unchecked")
     public V get(Object o) {
         Object result = find(
-                new SimpleImmutableEntry<>((K) o, null), Objects.hashCode(o), 0, ChampMap::keyEquals);
+                new SimpleImmutableEntry<>((K) o, null), keyHash(o), 0, ChampMap::keyEquals);
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
@@ -206,9 +214,9 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
         var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
-        var newRootNode = update(null, new SimpleImmutableEntry<>(key, value),
-                Objects.hashCode(key), 0, details,
-                ChampMap::updateEntry, ChampMap::keyEquals, ChampMap::keyHash);
+        var newRootNode = put(null, new SimpleImmutableEntry<>(key, value),
+                keyHash(key), 0, details,
+                ChampMap::updateEntry, ChampMap::keyEquals, ChampMap::entryKeyHash);
         if (details.isModified()) {
             return new ChampMap<>(newRootNode, details.isReplaced() ? size : size + 1);
         }
@@ -236,13 +244,13 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
 
     @Override
     public @NonNull ChampMap<K, V> remove(@NonNull K key) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = keyHash(key);
         var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
         var newRootNode =
                 remove(null, new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         ChampMap::keyEquals);
         if (details.isModified()) {
-            return new ChampMap<>(newRootNode, size - 1);
+            return size == 1 ? ChampMap.of() : new ChampMap<>(newRootNode, size - 1);
         }
         return this;
     }

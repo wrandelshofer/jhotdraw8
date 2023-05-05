@@ -38,7 +38,11 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         return Objects.equals(a.getKey(), b.getKey());
     }
 
-    public static <V, K> int keyHash(@NonNull SequencedEntry<K, V> a) {
+    public static <V, K> int keyHash(@NonNull Object a) {
+        return Objects.hashCode(a);
+    }
+
+    public static <V, K> int entryKeyHash(@NonNull SequencedEntry<K, V> a) {
         return Objects.hashCode(a.getKey());
     }
 

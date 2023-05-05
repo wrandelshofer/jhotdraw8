@@ -190,13 +190,13 @@ public abstract class Node<D> {
      * object and data hash.
      *
      * @param data           the provided data object
-     * @param dataHash       the hash code of the provided data
+     * @param keyHash        the hash code of the provided data
      * @param shift          the shift for this node
      * @param equalsFunction a function that tests data objects for equality
      * @return the found data, returns {@link #NO_DATA} if no data in the trie
      * matches the provided data.
      */
-    abstract Object find(D data, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction);
+    abstract Object find(D data, int keyHash, int shift, @NonNull BiPredicate<D, D> equalsFunction);
 
     abstract @Nullable D getData(int index);
 
@@ -270,9 +270,9 @@ public abstract class Node<D> {
      *                       object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> update(@Nullable IdentityObject owner, D newData,
-                                     int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                                     @NonNull BiFunction<D, D, D> updateFunction,
-                                     @NonNull BiPredicate<D, D> equalsFunction,
-                                     @NonNull ToIntFunction<D> hashFunction);
+    abstract @NonNull Node<D> put(@Nullable IdentityObject owner, D newData,
+                                  int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                  @NonNull ToIntFunction<D> hashFunction);
 }

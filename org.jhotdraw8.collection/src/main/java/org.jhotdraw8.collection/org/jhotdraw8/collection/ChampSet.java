@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -89,6 +90,10 @@ import java.util.Spliterators;
 @SuppressWarnings("exports")
 public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>, Serializable {
     private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
+    /**
+     * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
+     */
+    static final int SALT = new Random().nextInt();
     @Serial
     private static final long serialVersionUID = 0L;
     /**
@@ -138,11 +143,15 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return ChampSet.<E>of().addAll(Arrays.asList(elements));
     }
 
+    static <V, K> int keyHash(Object e) {
+        return SALT ^ Objects.hashCode(e);
+    }
+
     @Override
     public @NonNull ChampSet<E> add(@Nullable E element) {
-        int keyHash = Objects.hashCode(element);
+        int keyHash = keyHash(element);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(null, element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, Objects::hashCode);
+        BitmapIndexedNode<E> newRootNode = put(null, element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size + 1);
         }
@@ -166,7 +175,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return find((E) o, Objects.hashCode(o), 0, Objects::equals) != Node.NO_DATA;
+        return find((E) o, keyHash(o), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -208,7 +217,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
 
     @Override
     public @NonNull ChampSet<E> remove(@NonNull E key) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = keyHash(key);
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {

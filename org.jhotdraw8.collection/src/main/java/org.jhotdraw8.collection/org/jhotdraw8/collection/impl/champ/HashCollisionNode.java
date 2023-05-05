@@ -93,7 +93,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
-    Object find(D key, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
+    Object find(D key, int keyHash, int shift, @NonNull BiPredicate<D, D> equalsFunction) {
         for (Object entry : data) {
             if (equalsFunction.test(key, (D) entry)) {
                 return entry;
@@ -166,10 +166,10 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> update(@Nullable IdentityObject owner, D newData,
-                   int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
-                   @NonNull ToIntFunction<D> hashFunction) {
+    Node<D> put(@Nullable IdentityObject owner, D newData,
+                int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                @NonNull ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
         for (int i = 0; i < this.data.length; i++) {

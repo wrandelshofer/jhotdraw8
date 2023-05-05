@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.VectorList;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -48,7 +47,7 @@ public interface ChampSequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         for (ChampSpliterator<K, K> i = new ChampSpliterator<K, K>(root, null, 0, 0); i.moveNext(); ) {
             K elem = i.current();
-            seqRoot = seqRoot.update(elem, seqHash(elem.getSequenceNumber()),
+            seqRoot = seqRoot.put(elem, seqHash(elem.getSequenceNumber()),
                     0, details, (oldK, newK) -> oldK, ChampSequencedData::seqEquals, ChampSequencedData::seqHash);
         }
         return seqRoot;
@@ -113,9 +112,9 @@ public interface ChampSequencedData {
         for (var i = new ChampSpliterator<>(sequenceRoot, Function.identity(), 0, 0); i.moveNext(); ) {
             K e = i.current();
             K newElement = factoryFunction.apply(e, seq);
-            newRoot = newRoot.update(
+            newRoot = newRoot.put(
                     newElement,
-                    Objects.hashCode(e), 0, details,
+                    hashFunction.applyAsInt(e), 0, details,
                     (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk,
                     equalsFunction, hashFunction);
             seq++;
@@ -158,7 +157,7 @@ public interface ChampSequencedData {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);
-            renumberedRoot = renumberedRoot.update(data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
+            renumberedRoot = renumberedRoot.put(data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
         }
 
         return new OrderedPair<>(renumberedRoot, renumberedVector);
@@ -204,7 +203,7 @@ public interface ChampSequencedData {
     static <K extends ChampSequencedData> BitmapIndexedNode<K> seqUpdate(@NonNull BitmapIndexedNode<K> seqRoot,
                                                                          @Nullable K key, @NonNull ChangeEvent<K> details,
                                                                          @NonNull BiFunction<K, K, K> replaceFunction) {
-        return seqRoot.update(
+        return seqRoot.put(
                 key, seqHash(key.getSequenceNumber()), 0, details,
                 replaceFunction,
                 ChampSequencedData::seqEquals, ChampSequencedData::seqHash);

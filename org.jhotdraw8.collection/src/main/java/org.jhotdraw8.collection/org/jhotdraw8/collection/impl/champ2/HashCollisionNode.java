@@ -165,10 +165,10 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> update(D newData,
-                   int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                   @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
-                   @NonNull ToIntFunction<D> hashFunction) {
+    Node<D> put(D newData,
+                int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
+                @NonNull ToIntFunction<D> hashFunction) {
         assert this.hash == dataHash;
 
         for (int i = 0; i < this.data.length; i++) {
@@ -199,10 +199,10 @@ class HashCollisionNode<D> extends Node<D> {
     }
 
     @Override
-    protected @NonNull Node<D> addAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull Node<D> putAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
         if (that == this) {
-            bulkChange.inBothCollections += dataArity();
+            bulkChange.inBoth += dataArity();
             return this;
         }
 
@@ -228,7 +228,7 @@ class HashCollisionNode<D> extends Node<D> {
                 if (equalsFunction.test(thatKey, thisKey)) {
                     list.set(i, updateFunction.apply(thisKey, thatKey));
                     bs.set(i);
-                    bulkChange.inBothCollections++;
+                    bulkChange.inBoth++;
                     continue outer;
                 }
             }
@@ -242,5 +242,15 @@ class HashCollisionNode<D> extends Node<D> {
         }
 
         return this;
+    }
+
+    @Override
+    protected @NonNull Node<D> removeAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+        return null;
+    }
+
+    @Override
+    protected @NonNull Node<D> retainAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+        return null;
     }
 }

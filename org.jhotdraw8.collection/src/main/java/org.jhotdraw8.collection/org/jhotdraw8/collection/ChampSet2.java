@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -94,6 +95,10 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
     @Serial
     private static final long serialVersionUID = 0L;
     /**
+     * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
+     */
+    static final int SALT = new Random().nextInt();
+    /**
      * The size of the set.
      */
     final int size;
@@ -101,6 +106,12 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
     ChampSet2(@NonNull BitmapIndexedNode<E> root, int size) {
         super(root.nodeMap(), root.dataMap(), root.mixed);
         this.size = size;
+    }
+
+    // Overriden because JVM throws IllegalAccessError if we don't
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
     }
 
     /**
@@ -160,9 +171,9 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
 
     @Override
     public @NonNull ChampSet2<E> add(@Nullable E element) {
-        int keyHash = Objects.hashCode(element);
+        int keyHash = keyHash(element);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = update(element, keyHash, 0, details, ChampSet2::updateElement, Objects::equals, Objects::hashCode);
+        BitmapIndexedNode<E> newRootNode = put(element, keyHash, 0, details, ChampSet2::updateElement, Objects::equals, ChampSet2::keyHash);
         if (details.isModified()) {
             return new ChampSet2<>(newRootNode, size + 1);
         }
@@ -173,8 +184,10 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
     @SuppressWarnings("unchecked")
     public @NonNull ChampSet2<E> addAll(@NonNull Iterable<? extends E> elements) {
         ChampSet2<E> that;
-        if (elements instanceof Collection<? extends E> c && c.isEmpty()) return this;
-        if (elements instanceof ReadOnlyCollection<? extends E> c && c.isEmpty()) return this;
+        if (elements instanceof Collection<?> c && c.isEmpty()
+                || elements instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return this;
+        }
         if (!(elements instanceof ChampSet2<?> c)) {
             that = ChampSet2.copyOf(elements);
         } else {
@@ -185,16 +198,12 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
         }
 
         BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode<E> newRootNode = addAll(that, 0, bulkChange, ChampSet2::updateElement, Objects::equals, Objects::hashCode, new ChangeEvent<>());
-        if (bulkChange.inBothCollections == that.size()) {
+        BitmapIndexedNode<E> newRootNode = putAll(that, 0, bulkChange, ChampSet2::updateElement, Objects::equals, ChampSet2::keyHash, new ChangeEvent<>());
+        if (bulkChange.inBoth == that.size()) {
             return this;
         } else {
-            return new ChampSet2<>(newRootNode, size + that.size - bulkChange.inBothCollections);
+            return new ChampSet2<>(newRootNode, size + that.size - bulkChange.inBoth);
         }
-        /*
-        var t = toMutable();
-        return t.addAll(elements) ? t.toImmutable() : this;
-         */
     }
 
 
@@ -209,7 +218,7 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {
-        return find((E) o, Objects.hashCode(o), 0, Objects::equals) != Node.NO_DATA;
+        return find((E) o, keyHash(o), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -249,13 +258,17 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
         return Spliterators.iterator(spliterator());
     }
 
+    static <V, K> int keyHash(Object e) {
+        return SALT ^ Objects.hashCode(e);
+    }
+
     @Override
     public @NonNull ChampSet2<E> remove(@NonNull E key) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = keyHash(key);
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = remove(key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
-            return new ChampSet2<>(newRootNode, size - 1);
+            return size == 1 ? ChampSet2.of() : new ChampSet2<>(newRootNode, size - 1);
         }
         return this;
     }
