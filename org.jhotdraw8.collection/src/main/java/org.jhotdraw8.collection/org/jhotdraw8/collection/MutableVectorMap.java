@@ -252,13 +252,11 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     private void iteratorPutIfPresent(@NonNull K k, V v) {
         if (containsKey(k)) {
-            owner = null;
-            put(k, v);
+                        put(k, v);
         }
     }
 
     private void iteratorRemove(Entry<K, V> entry) {
-        owner = null;
         remove(entry.getKey());
     }
 
@@ -309,8 +307,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, val, -offset - 1);
-        var owner = getOrCreateOwner();
-        root = root.put(owner, newEntry,
+        root = root.put(newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -322,7 +319,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         if (details.isModified()) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), new ChangeEvent<SequencedEntry<K, V>>(), offset);
+                    var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), new ChangeEvent<SequencedEntry<K, V>>(), offset);
                     vector = result.first();
                 }
             } else {
@@ -346,8 +343,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     ChangeEvent<SequencedEntry<K, V>> putLast(final K key, V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
-        var owner = getOrCreateOwner();
-        root = root.put(owner, newEntry,
+        root = root.put(newEntry,
                 SequencedEntry.keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -358,7 +354,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         }
         if (details.isModified()) {
             if (details.isReplaced()) {
-                var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), new ChangeEvent<SequencedEntry<K, V>>(), offset);
+                var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), new ChangeEvent<SequencedEntry<K, V>>(), offset);
                 vector = result.first();
                 offset = result.second();
             } else {
@@ -397,12 +393,12 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @NonNull
     ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        root = root.remove(null,
+        root = root.remove(
                 new SequencedEntry<>(key),
                 SequencedEntry.keyHash(key), 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, null, oldElem, new ChangeEvent<>(), offset);
+            var result = ChampSequencedData.vecRemove(vector, oldElem, new ChangeEvent<>(), offset);
             vector = result.first();
             offset = result.second();
             size--;
@@ -431,8 +427,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      */
     private void renumber() {
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            IdentityObject owner = getOrCreateOwner();
-            var result = ChampSequencedData.vecRenumber(size, root, vector, owner,
+            var result = ChampSequencedData.vecRenumber(size, root, vector,
                     SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             root = result.first();
@@ -465,7 +460,6 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @return an immutable copy
      */
     public @NonNull VectorMap<K, V> toImmutable() {
-        owner = null;
         return size == 0 ? VectorMap.of() : new VectorMap<>(root, vector, size, offset);
     }
 

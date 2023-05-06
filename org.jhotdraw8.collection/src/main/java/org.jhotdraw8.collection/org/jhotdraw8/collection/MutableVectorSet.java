@@ -155,16 +155,15 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-        IdentityObject owner = getOrCreateOwner();
-        root = root.put(owner, newElem,
-                SequencedElement.keyHash(e), 0, details,
-                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
-                Objects::equals, SequencedElement::elementKeyHash);
+                root = root.put(newElem,
+                        SequencedElement.keyHash(e), 0, details,
+                        moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
+                        Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), details, offset);
                     vector = result.first();
                 }
             } else {
@@ -186,9 +185,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset + vector.size());
-        var owner = getOrCreateOwner();
         root = root.put(
-                owner, newElem, SequencedElement.keyHash(e), 0,
+                newElem, SequencedElement.keyHash(e), 0,
                 details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -196,7 +194,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (modified) {
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
-                var result = ChampSequencedData.vecRemove(vector, owner, oldElem, details, offset);
+                var result = ChampSequencedData.vecRemove(vector, oldElem, details, offset);
                 vector = result.first();
                 offset = result.second();
             } else {
@@ -276,7 +274,6 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     private void iteratorRemove(E element) {
-        owner = null;
         remove(element);
     }
 
@@ -289,13 +286,12 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var owner = getOrCreateOwner();
         root = root.remove(
-                owner, new SequencedElement<>((E) o),
+                new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
         if (modified) {
-            var result = ChampSequencedData.vecRemove(vector, owner, details.getOldDataNonNull(), details, offset);
+            var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), details, offset);
             size--;
             modCount++;
             vector = result.first();
@@ -324,8 +320,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      */
     private void renumber() {
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            IdentityObject owner = getOrCreateOwner();
-            var result = ChampSequencedData.vecRenumber(size, root, vector, owner,
+            var result = ChampSequencedData.vecRenumber(size, root, vector,
                     SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();
@@ -357,7 +352,6 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      * @return an immutable copy
      */
     public @NonNull VectorSet<E> toImmutable() {
-        owner = null;
         return size == 0 ? VectorSet.of() :
                 new VectorSet<>(root, vector, size, offset);
     }

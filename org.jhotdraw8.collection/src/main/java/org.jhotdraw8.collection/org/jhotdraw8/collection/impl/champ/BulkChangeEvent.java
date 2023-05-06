@@ -1,4 +1,4 @@
-package org.jhotdraw8.collection.impl.champ2;
+package org.jhotdraw8.collection.impl.champ;
 
 public class BulkChangeEvent {
     public int inBoth;

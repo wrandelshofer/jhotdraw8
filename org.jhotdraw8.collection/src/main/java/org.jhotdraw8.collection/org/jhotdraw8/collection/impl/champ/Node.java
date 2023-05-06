@@ -71,6 +71,7 @@ public abstract class Node<D> {
     static final int BIT_PARTITION_SIZE = 5;
     static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
+    static final int MAX_SHIFT = HASH_CODE_LENGTH - HASH_CODE_LENGTH % BIT_PARTITION_SIZE;
 
 
     Node() {
@@ -136,15 +137,14 @@ public abstract class Node<D> {
         return (dataHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
-                                                            K k0, int keyHash0,
+    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(K k0, int keyHash0,
                                                             K k1, int keyHash1,
                                                             int shift) {
         if (shift >= HASH_CODE_LENGTH) {
             Object[] entries = new Object[2];
             entries[0] = k0;
             entries[1] = k1;
-            return ChampNodeFactory.newHashCollisionNode(owner, keyHash0, entries);
+            return ChampNodeFactory.newHashCollisionNode(keyHash0, entries);
         }
 
         int mask0 = mask(keyHash0, shift);
@@ -162,16 +162,16 @@ public abstract class Node<D> {
                 entries[0] = k1;
                 entries[1] = k0;
             }
-            return ChampNodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
+            return ChampNodeFactory.newBitmapIndexedNode((0), dataMap, entries);
         } else {
-            Node<K> node = mergeTwoDataEntriesIntoNode(owner,
+            Node<K> node = mergeTwoDataEntriesIntoNode(
                     k0, keyHash0,
                     k1, keyHash1,
                     shift + BIT_PARTITION_SIZE);
             // values fit on next level
 
             int nodeMap = bitpos(mask0);
-            return ChampNodeFactory.newBitmapIndexedNode(owner, nodeMap, (0), new Object[]{node});
+            return ChampNodeFactory.newBitmapIndexedNode(nodeMap, (0), new Object[]{node});
         }
     }
 
@@ -190,13 +190,13 @@ public abstract class Node<D> {
      * object and data hash.
      *
      * @param data           the provided data object
-     * @param keyHash        the hash code of the provided data
+     * @param dataHash       the hash code of the provided data
      * @param shift          the shift for this node
      * @param equalsFunction a function that tests data objects for equality
      * @return the found data, returns {@link #NO_DATA} if no data in the trie
      * matches the provided data.
      */
-    abstract Object find(D data, int keyHash, int shift, @NonNull BiPredicate<D, D> equalsFunction);
+    abstract Object find(D data, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction);
 
     abstract @Nullable D getData(int index);
 
@@ -207,6 +207,14 @@ public abstract class Node<D> {
     abstract @NonNull Node<D> getNode(int index);
 
     abstract boolean hasData();
+
+    boolean isNodeEmpty() {
+        return !hasData() && !hasNodes();
+    }
+
+    boolean hasMany() {
+        return hasNodes() || dataArity() > 1;
+    }
 
     abstract boolean hasDataArityOne();
 
@@ -222,12 +230,6 @@ public abstract class Node<D> {
     /**
      * Removes a data object from the trie.
      *
-     * @param owner          A non-null value means, that this method may update
-     *                       nodes that are marked with the same unique id,
-     *                       and that this method may create new mutable nodes
-     *                       with this unique id.
-     *                       A null value means, that this method must not update
-     *                       any node and may only create new immutable nodes.
      * @param data           the data to be removed
      * @param dataHash       the hash-code of the data object
      * @param shift          the shift of the current node
@@ -236,7 +238,7 @@ public abstract class Node<D> {
      * @param equalsFunction a function that tests data objects for equality
      * @return the updated trie
      */
-    abstract @NonNull Node<D> remove(@Nullable IdentityObject owner, D data,
+    abstract @NonNull Node<D> remove(D data,
                                      int dataHash, int shift,
                                      @NonNull ChangeEvent<D> details,
                                      @NonNull BiPredicate<D, D> equalsFunction);
@@ -244,12 +246,6 @@ public abstract class Node<D> {
     /**
      * Inserts or replaces a data object in the trie.
      *
-     * @param owner        A non-null value means, that this method may update
-     *                       nodes that are marked with the same unique id,
-     *                       and that this method may create new mutable nodes
-     *                       with this unique id.
-     *                       A null value means, that this method must not update
-     *                       any node and may only create new immutable nodes.
      * @param newData        the data to be inserted,
      *                       or to be used for merging if there is already
      *                       a matching data object in the trie
@@ -270,9 +266,68 @@ public abstract class Node<D> {
      *                       object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> put(@Nullable IdentityObject owner, D newData,
+    abstract @NonNull Node<D> put(D newData,
                                   int dataHash, int shift, @NonNull ChangeEvent<D> details,
                                   @NonNull BiFunction<D, D, D> updateFunction,
                                   @NonNull BiPredicate<D, D> equalsFunction,
                                   @NonNull ToIntFunction<D> hashFunction);
+
+    /**
+     * Inserts or replaces data elements from the specified other trie in this trie.
+     *
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#inBoth}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> putAll(Node<D> otherNode, int shift,
+                                               @NonNull BulkChangeEvent bulkChange,
+                                               @NonNull BiFunction<D, D, D> updateFunction,
+                                               @NonNull BiPredicate<D, D> equalsFunction,
+                                               @NonNull ToIntFunction<D> hashFunction,
+                                               @NonNull ChangeEvent<D> details);
+
+    /**
+     * Removes data elements in the specified other trie from this trie.
+     *
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#removed}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> removeAll(Node<D> otherNode, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange,
+                                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                                  @NonNull ToIntFunction<D> hashFunction,
+                                                  @NonNull ChangeEvent<D> details);
+
+    /**
+     * Retains data elements in this trie that are also in the other trie - removes the rest.
+     *
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#removed}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> retainAll(Node<D> otherNode, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange,
+                                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                                  @NonNull ToIntFunction<D> hashFunction,
+                                                  @NonNull ChangeEvent<D> details);
+
+    protected abstract int calculateSize();
 }

@@ -231,17 +231,17 @@ public class VectorSet<E>
     private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-        var newRoot = put(null, newElem,
+        var newRoot = put(newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
         if (details.isModified()) {
             var newVector = vector;
             int newSize = size;
-            IdentityObject owner = new IdentityObject();
+
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, owner, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), details, offset);
                     newVector = result.first();
                 }
             } else {
@@ -262,7 +262,7 @@ public class VectorSet<E>
                                           boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<E>(e, vector.size() - offset);
-        var newRoot = put(null, newElem,
+        var newRoot = put(newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -274,7 +274,7 @@ public class VectorSet<E>
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    var result = ChampSequencedData.vecRemove(newVector, owner, oldElem, details, newOffset);
+                    var result = ChampSequencedData.vecRemove(newVector, oldElem, details, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -360,12 +360,12 @@ public class VectorSet<E>
     public @NonNull VectorSet<E> remove(@Nullable E key) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
-        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
+        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, null, removedElem, details, offset);
+            var result = ChampSequencedData.vecRemove(vector, removedElem, details, offset);
             return size == 1 ? VectorSet.of() : renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
@@ -417,7 +417,7 @@ public class VectorSet<E>
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = ChampSequencedData.vecRenumber(
-                    size, root, vector, owner, SequencedElement::elementKeyHash, Objects::equals,
+                    size, root, vector, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return new VectorSet<>(
                     result.first(), result.second(),
@@ -506,4 +506,5 @@ public class VectorSet<E>
             return VectorSet.copyOf(deserialized);
         }
     }
+
 }

@@ -163,17 +163,16 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, first);
-        IdentityObject owner = getOrCreateOwner();
-        root = root.put(owner, newElem,
-                SequencedElement.keyHash(e), 0, details,
-                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
-                Objects::equals, SequencedElement::keyHash);
+                root = root.put(newElem,
+                        SequencedElement.keyHash(e), 0, details,
+                        moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
+                        Objects::equals, SequencedElement::keyHash);
         boolean modified = details.isModified();
         if (modified) {
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, owner, oldElem, details);
+                    sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, oldElem, details);
                     first = details.getOldData().getSequenceNumber() == first ? first : first - 1;
                     last = oldElem.getSequenceNumber() == last - 1 ? last - 1 : last;
                     first--;
@@ -184,7 +183,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
                 size++;
                 modCount++;
             }
-            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, owner, newElem, details, SequencedElement::put);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, newElem, details, SequencedElement::put);
             renumber();
         }
         return modified;
@@ -198,9 +197,8 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, last);
-        var owner = getOrCreateOwner();
         root = root.put(
-                owner, newElem, SequencedElement.keyHash(e), 0,
+                newElem, SequencedElement.keyHash(e), 0,
                 details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
                 Objects::equals, SequencedElement::keyHash);
@@ -209,7 +207,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
                 if (moveToLast) {
-                    sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, owner, oldElem, details);
+                    sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, oldElem, details);
                     first = oldElem.getSequenceNumber() == first - 1 ? first - 1 : first;
                     last++;
                     modCount++;
@@ -219,7 +217,7 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
                 last++;
                 modCount++;
             }
-            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, owner, newElem, details, SequencedElement::put);
+            sequenceRoot = ChampSequencedData.seqUpdate(sequenceRoot, newElem, details, SequencedElement::put);
             renumber();
         }
         return modified;
@@ -287,7 +285,6 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
     }
 
     private void iteratorRemove(E element) {
-        owner = null;
         remove(element);
     }
 
@@ -300,16 +297,15 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var owner = getOrCreateOwner();
         root = root.remove(
-                owner, new SequencedElement<>((E) o),
+                new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, details, Objects::equals);
         if (details.isModified()) {
             size--;
             modCount++;
             var elem = details.getOldData();
             int seq = elem.getSequenceNumber();
-            sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, owner, elem, details);
+            sequenceRoot = ChampSequencedData.seqRemove(sequenceRoot, elem, details);
             if (seq == last - 1) {
                 last--;
             }
@@ -340,11 +336,10 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
      */
     private void renumber() {
         if (ChampSequencedData.mustRenumber(size, first, last)) {
-            IdentityObject owner = getOrCreateOwner();
-            root = ChampSequencedData.renumber(size, root, sequenceRoot, owner,
+            root = ChampSequencedData.renumber(size, root, sequenceRoot,
                     SequencedElement::keyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            sequenceRoot = ChampSequencedData.buildSequencedTrie(sequenceRoot, owner);
+            sequenceRoot = ChampSequencedData.buildSequencedTrie(sequenceRoot);
             last = size;
             first = -1;
         }
@@ -373,7 +368,6 @@ public class MutableSequencedChampSet<E> extends AbstractMutableChampSet<E, Sequ
      * @return an immutable copy
      */
     public @NonNull SequencedChampSet<E> toImmutable() {
-        owner = null;
         return size == 0 ? SequencedChampSet.of() :
                 new SequencedChampSet<>(root, sequenceRoot, size, first, last);
     }

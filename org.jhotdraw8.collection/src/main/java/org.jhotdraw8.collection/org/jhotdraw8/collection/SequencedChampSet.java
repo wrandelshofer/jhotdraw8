@@ -256,7 +256,7 @@ public class SequencedChampSet<E>
                                                    boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, first);
-        var newRoot = put(null, newElem,
+        var newRoot = put(newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -265,11 +265,11 @@ public class SequencedChampSet<E>
             int newSize = size;
             int newFirst = first;
             int newLast = last;
-            IdentityObject owner = new IdentityObject();
+
             if (details.isReplaced()) {
                 if (moveToFirst) {
                     var oldElem = details.getOldDataNonNull();
-                    newSeqRoot = ChampSequencedData.seqRemove(newSeqRoot, owner, oldElem, details);
+                    newSeqRoot = ChampSequencedData.seqRemove(newSeqRoot, oldElem, details);
                     newLast = oldElem.getSequenceNumber() == newLast - 1 ? newLast - 1 : newLast;
                     newFirst--;
                 }
@@ -277,7 +277,7 @@ public class SequencedChampSet<E>
                 newFirst--;
                 newSize++;
             }
-            newSeqRoot = ChampSequencedData.seqUpdate(newSeqRoot, owner, details.getNewDataNonNull(), details, SequencedElement::put);
+            newSeqRoot = ChampSequencedData.seqUpdate(newSeqRoot, details.getNewDataNonNull(), details, SequencedElement::put);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
         return this;
@@ -288,7 +288,7 @@ public class SequencedChampSet<E>
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<E>(e, last);
         var newRoot = put(
-                null, newElem, SequencedElement.keyHash(e), 0,
+                newElem, SequencedElement.keyHash(e), 0,
                 details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -301,7 +301,7 @@ public class SequencedChampSet<E>
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldDataNonNull();
-                    newSeqRoot = ChampSequencedData.seqRemove(newSeqRoot, owner, oldElem, details);
+                    newSeqRoot = ChampSequencedData.seqRemove(newSeqRoot, oldElem, details);
                     newFirst = oldElem.getSequenceNumber() == newFirst + 1 ? newFirst + 1 : newFirst;
                     newLast++;
                 }
@@ -309,7 +309,7 @@ public class SequencedChampSet<E>
                 newSize++;
                 newLast++;
             }
-            newSeqRoot = ChampSequencedData.seqUpdate(newSeqRoot, owner, details.getNewDataNonNull(), details, SequencedElement::put);
+            newSeqRoot = ChampSequencedData.seqUpdate(newSeqRoot, details.getNewDataNonNull(), details, SequencedElement::put);
             return renumber(newRoot, newSeqRoot, newSize, newFirst, newLast);
         }
         return this;
@@ -319,13 +319,13 @@ public class SequencedChampSet<E>
     private @NonNull SequencedChampSet<E> remove(@Nullable E key, int newFirst, int newLast) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
-        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
+        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         BitmapIndexedNode<SequencedElement<E>> newSeqRoot = sequenceRoot;
         if (details.isModified()) {
             var oldElem = details.getOldData();
-            newSeqRoot = ChampSequencedData.seqRemove(newSeqRoot, null, oldElem, details);
+            newSeqRoot = ChampSequencedData.seqRemove(newSeqRoot, oldElem, details);
             int seq = oldElem.getSequenceNumber();
             return size == 1 ? SequencedChampSet.of() : renumber(newRoot, newSeqRoot, size - 1,
                     (seq == newFirst) ? newFirst + 1 : newFirst,
@@ -447,9 +447,9 @@ public class SequencedChampSet<E>
         if (mustRenumber(size, first, last)) {
             var owner = new IdentityObject();
             var renumberedRoot = ChampSequencedData.renumber(
-                    size, root, seqRoot, owner, SequencedElement::elementKeyHash, Objects::equals,
+                    size, root, seqRoot, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            var renumberedSeqRoot = ChampSequencedData.buildSequencedTrie(renumberedRoot, owner);
+            var renumberedSeqRoot = ChampSequencedData.buildSequencedTrie(renumberedRoot);
             return new SequencedChampSet<>(
                     renumberedRoot, renumberedSeqRoot,
                     size, -1, size);

@@ -10,12 +10,15 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.BulkChangeEvent;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -40,10 +43,8 @@ import java.util.function.Function;
  *     <li>add: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
- *     this set</li>
- *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
- *     set and in the clone</li>
+ *     <li>toImmutable: O(1)</li>
+ *     <li>clone: O(1)</li>
  *     <li>iterator.next: O(1)</li>
  * </ul>
  * <p>
@@ -58,7 +59,6 @@ import java.util.function.Function;
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
- *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -100,7 +100,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.put(getOrCreateOwner(),
+        root = root.put(
                 e, ChampSet.keyHash(e), 0, details,
                 (oldKey, newKey) -> oldKey,
                 Objects::equals, ChampSet::keyHash);
@@ -119,22 +119,83 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      */
     @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c == this || c == root) {
+        ChampSet<E> that = ChampSet.copyOf(c);
+        if (that.isEmpty()) {
             return false;
         }
-        if (isEmpty() && (c instanceof ChampSet<?> cc)) {
-            root = (BitmapIndexedNode<E>) cc;
-            size = cc.size();
+        if (isEmpty()) {
+            root = that;
+            size = that.size;
             modCount++;
             return true;
         }
-        boolean modified = false;
-        for (E e : c) {
-            modified |= add(e);
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newRootNode = root.putAll(that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+        if (bulkChange.inBoth == that.size()) {
+            return false;
         }
-        return modified;
+        root = newRootNode;
+        size += that.size - bulkChange.inBoth;
+        modCount++;
+        return true;
     }
 
+    @Override
+    public boolean removeAll(@NonNull Collection<?> c) {
+        return removeAll((Iterable<?>) c);
+    }
+
+    @Override
+    public boolean removeAll(@NonNull Iterable<?> c) {
+        if (isEmpty()
+                || (c instanceof Collection<?> cc) && cc.isEmpty()
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            return false;
+        }
+        if (c == this) {
+            clear();
+            return true;
+        }
+        if (c instanceof MutableChampSet<?> m) {
+            c = m.toImmutable();
+        }
+        if (c instanceof ChampSet<?> that) {
+            BulkChangeEvent bulkChange = new BulkChangeEvent();
+            BitmapIndexedNode<E> newRootNode = root.removeAll((BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            if (bulkChange.removed == 0) {
+                return false;
+            }
+            root = newRootNode;
+            size -= bulkChange.removed;
+            modCount++;
+            return true;
+        }
+        return super.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(@NonNull Collection<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if (c.isEmpty()) {
+            clear();
+            return true;
+        }
+        if (c instanceof MutableChampSet<?> m) {
+            ChampSet<?> that = m.toImmutable();
+            BulkChangeEvent bulkChange = new BulkChangeEvent();
+            BitmapIndexedNode<E> newRootNode = root.retainAll((BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            if (bulkChange.removed == 0) {
+                return false;
+            }
+            root = newRootNode;
+            size -= bulkChange.removed;
+            modCount++;
+            return true;
+        }
+        return super.retainAll(c);
+    }
 
     /**
      * Removes all elements from this set.
@@ -173,7 +234,6 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     private void iteratorRemove(E e) {
-        owner = null;//XXX we should do this only once!
         remove(e);
     }
 
@@ -182,7 +242,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
         root = root.remove(
-                getOrCreateOwner(), (E) o, ChampSet.keyHash(o), 0, details,
+                (E) o, ChampSet.keyHash(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             size--;
@@ -197,7 +257,6 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * @return an immutable copy
      */
     public @NonNull ChampSet<E> toImmutable() {
-        owner = null;
         return size == 0
                 ? ChampSet.of()
                 : root instanceof ChampSet<E> c ? c : new ChampSet<>(root, size);

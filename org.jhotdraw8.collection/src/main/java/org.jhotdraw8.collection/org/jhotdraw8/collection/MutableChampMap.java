@@ -83,8 +83,6 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         if (m instanceof MutableChampMap) {
             @SuppressWarnings("unchecked")
             MutableChampMap<K, V> that = (MutableChampMap<K, V>) m;
-            this.owner = null;
-            that.owner = null;
             this.root = that.root;
             this.size = that.size;
             this.modCount = 0;
@@ -194,13 +192,11 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
 
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
         if (containsKey(k)) {
-            owner = null;
             put(k, v);
         }
     }
 
     private void iteratorRemove(Map.Entry<K, V> entry) {
-        owner = null;
         remove(entry.getKey());
     }
 
@@ -214,7 +210,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     ChangeEvent<SimpleImmutableEntry<K, V>> putEntry(@Nullable K key, @Nullable V val) {
         int keyHash = ChampMap.keyHash(key);
         ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.put(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
+        root = root.put(new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
                 ChampMap::updateEntry,
                 ChampMap::keyEquals,
                 ChampMap::entryKeyHash);
@@ -236,7 +232,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     ChangeEvent<SimpleImmutableEntry<K, V>> removeKey(K key) {
         int keyHash = ChampMap.keyHash(key);
         ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.remove(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
+        root = root.remove(new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                 ChampMap::keyEquals);
         if (details.isModified()) {
             size = size - 1;
@@ -262,7 +258,6 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
      * @return an immutable copy
      */
     public @NonNull ChampMap<K, V> toImmutable() {
-        owner = null;
         return size == 0 ? ChampMap.of() : new ChampMap<>(root, size);
     }
 

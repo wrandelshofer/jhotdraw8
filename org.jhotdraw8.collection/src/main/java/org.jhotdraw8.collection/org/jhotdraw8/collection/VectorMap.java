@@ -291,7 +291,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     private VectorMap<K, V> putFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, -offset - 1);
-        var newRoot = put(null, newEntry,
+        var newRoot = put(newEntry,
                 keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -303,10 +303,10 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         if (details.isModified()) {
             var newVector = vector;
             int newSize = size;
-            IdentityObject owner = new IdentityObject();
+
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, owner, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), details, offset);
                     newVector = result.first();
                 }
             } else {
@@ -328,7 +328,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     private VectorMap<K, V> putLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
-        var newRoot = put(null, newEntry,
+        var newRoot = put(newEntry,
                 keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -345,7 +345,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldDataNonNull();
-                    var result = ChampSequencedData.vecRemove(newVector, owner, oldElem, details, newOffset);
+                    var result = ChampSequencedData.vecRemove(newVector, oldElem, details, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -380,12 +380,12 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     public @NonNull VectorMap<K, V> remove(@NonNull K key) {
         int keyHash = keyHash(key);
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        BitmapIndexedNode<SequencedEntry<K, V>> newRoot = remove(null,
+        BitmapIndexedNode<SequencedEntry<K, V>> newRoot = remove(
                 new SequencedEntry<>(key),
                 keyHash, 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, null, oldElem, details, offset);
+            var result = ChampSequencedData.vecRemove(vector, oldElem, details, offset);
             return size == 1 ? VectorMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
         }
         return this;
@@ -407,7 +407,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = ChampSequencedData.<SequencedEntry<K, V>>vecRenumber(
-                    size, root, vector, owner, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
+                    size, root, vector, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             return new VectorMap<>(
                     result.first(), result.second(),

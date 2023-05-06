@@ -39,14 +39,4 @@ public class VectorSetTest extends AbstractImmutableSequencedSetTest {
     protected <E> @NonNull VectorSet<E> newInstance(Iterable<E> m) {
         return VectorSet.copyOf(m);
     }
-
-    @Override
-    public void copyRemoveWithContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
-        super.copyRemoveWithContainedKeyShouldReturnNewInstance(data);
-    }
-
-    @Override
-    public void copyAddWithNewElementShouldReturnNewInstance(@NonNull SetData data) throws Exception {
-        super.copyAddWithNewElementShouldReturnNewInstance(data);
-    }
 }
