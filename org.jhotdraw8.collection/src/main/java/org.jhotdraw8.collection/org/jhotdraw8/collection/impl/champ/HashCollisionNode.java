@@ -15,8 +15,6 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollisionNode;
-
 /**
  * Represents a hash-collision node in a CHAMP trie.
  * <p>
@@ -149,12 +147,12 @@ class HashCollisionNode<D> extends Node<D> {
                     // Create root node with singleton element.
                     // This node will be a) either be the new root
                     // returned, or b) unwrapped and inlined.
-                    return ChampNodeFactory.newBitmapIndexedNode(0, bitpos(mask(dataHash, 0)),
-                            new Object[]{getData(idx ^ 1)});
+                    @NonNull Object[] nodes = new Object[]{getData(idx ^ 1)};
+                    return new BitmapIndexedNode<>(0, bitpos(mask(dataHash, 0)), nodes);
                 }
                 // copy keys and remove 1 element at position idx
                 Object[] entriesNew = ListHelper.copyComponentRemove(this.data, idx, 1);
-                return newHashCollisionNode(dataHash, entriesNew);
+                return new HashCollisionNode<>(dataHash, entriesNew);
             }
         }
         return this;
@@ -179,7 +177,7 @@ class HashCollisionNode<D> extends Node<D> {
                 }
                 details.setReplaced(oldData, updatedData);
                 final Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
-                return newHashCollisionNode(dataHash, newKeys);
+                return new HashCollisionNode<>(dataHash, newKeys);
             }
         }
 
@@ -187,7 +185,7 @@ class HashCollisionNode<D> extends Node<D> {
         Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
         entriesNew[this.data.length] = newData;
         details.setAdded(newData);
-        return newHashCollisionNode(dataHash, entriesNew);
+        return new HashCollisionNode<>(dataHash, entriesNew);
     }
 
 
@@ -280,7 +278,7 @@ class HashCollisionNode<D> extends Node<D> {
             if (buffer.length != size) {
                 buffer = Arrays.copyOf(buffer, size);
             }
-            return newHashCollisionNode(hash, buffer);
+            return new HashCollisionNode<>(hash, buffer);
         }
         return this;
     }

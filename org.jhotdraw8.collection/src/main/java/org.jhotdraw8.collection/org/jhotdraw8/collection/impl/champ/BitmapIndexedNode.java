@@ -14,8 +14,6 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newBitmapIndexedNode;
-
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
  * <p>
@@ -31,7 +29,7 @@ import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newBitmapInde
  * @param <D> the data type
  */
 public class BitmapIndexedNode<D> extends Node<D> {
-    static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = newBitmapIndexedNode((0), (0), new Object[]{});
+    static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = new BitmapIndexedNode<>((0), (0), new Object[]{});
 
     public final Object @NonNull [] mixed;
     private final int nodeMap;
@@ -55,7 +53,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
         int idx = dataIndex(bitpos);
         Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
         dst[idx] = data;
-        return newBitmapIndexedNode(nodeMap, dataMap | bitpos, dst);
+        return new BitmapIndexedNode<>(nodeMap, dataMap | bitpos, dst);
     }
 
     @NonNull BitmapIndexedNode<D> copyAndMigrateFromDataToNode(int bitpos, Node<D> node) {
@@ -72,7 +70,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
         System.arraycopy(src, idxOld + 1, dst, idxOld, idxNew - idxOld);
         System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
         dst[idxNew] = node;
-        return newBitmapIndexedNode(nodeMap | bitpos, dataMap ^ bitpos, dst);
+        return new BitmapIndexedNode<>(nodeMap | bitpos, dataMap ^ bitpos, dst);
     }
 
     @NonNull BitmapIndexedNode<D> copyAndMigrateFromNodeToData(int bitpos, @NonNull Node<D> node) {
@@ -88,7 +86,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
         System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
         System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
         dst[idxNew] = node.getData(0);
-        return newBitmapIndexedNode(nodeMap ^ bitpos, dataMap | bitpos, dst);
+        return new BitmapIndexedNode<>(nodeMap ^ bitpos, dataMap | bitpos, dst);
     }
 
     @NonNull BitmapIndexedNode<D> copyAndSetNode(int bitpos,
@@ -97,7 +95,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
         int idx = this.mixed.length - 1 - nodeIndex(bitpos);
         // copy 'src' and set 1 element(s) at position 'idx'
         final Object[] dst = ListHelper.copySet(this.mixed, idx, node);
-        return newBitmapIndexedNode(nodeMap, dataMap, dst);
+        return new BitmapIndexedNode<>(nodeMap, dataMap, dst);
     }
 
     @Override
@@ -236,11 +234,11 @@ public class BitmapIndexedNode<D> extends Node<D> {
             int newDataMap =
                     (shift == 0) ? (dataMap ^ bitpos) : bitpos(mask(dataHash, 0));
             Object[] nodes = {getData(dataIndex ^ 1)};
-            return newBitmapIndexedNode(0, newDataMap, nodes);
+            return new BitmapIndexedNode<>(0, newDataMap, nodes);
         }
         int idx = dataIndex * entryLength;
         Object[] dst = ListHelper.copyComponentRemove(this.mixed, idx, entryLength);
-        return newBitmapIndexedNode(nodeMap, dataMap ^ bitpos, dst);
+        return new BitmapIndexedNode<>(nodeMap, dataMap ^ bitpos, dst);
     }
 
     private @NonNull BitmapIndexedNode<D> removeSubNode(D data, int dataHash, int shift,
@@ -302,7 +300,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     @NonNull
     private BitmapIndexedNode<D> copyAndSetData(int dataIndex, D updatedData) {
         Object[] newMixed = ListHelper.copySet(this.mixed, dataIndex, updatedData);
-        return newBitmapIndexedNode(nodeMap, dataMap, newMixed);
+        return new BitmapIndexedNode<>(nodeMap, dataMap, newMixed);
     }
 
 
@@ -388,7 +386,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 }
             }
         }
-        return newBitmapIndexedNode(newNodeMap, newDataMap, buffer);
+        return new BitmapIndexedNode<>(newNodeMap, newDataMap, buffer);
     }
 
     @Override
@@ -492,7 +490,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             System.arraycopy(temp, 0, buffer, 0, dataCount);
             System.arraycopy(temp, temp.length - nodeCount, buffer, dataCount, nodeCount);
         }
-        return newBitmapIndexedNode(newNodeMap, newDataMap, buffer);
+        return new BitmapIndexedNode<>(newNodeMap, newDataMap, buffer);
     }
 
     @Override
