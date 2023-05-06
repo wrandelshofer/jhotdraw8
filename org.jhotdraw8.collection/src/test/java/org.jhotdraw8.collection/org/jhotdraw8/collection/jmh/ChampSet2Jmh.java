@@ -22,6 +22,24 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
+ * Benchmark                                             (mask)    (size)  Mode  Cnt           Score   Error  Units
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65        10  avgt              147.653          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65      1000  avgt            23100.685          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65    100000  avgt          6009955.037          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65  10000000  avgt       1804056131.333          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65        10  avgt              372.448          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65      1000  avgt           111671.874          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65    100000  avgt         18915557.098          ns/op
+ * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65  10000000  avgt       4638025326.000          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65        10  avgt               78.882          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65      1000  avgt            12330.410          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65    100000  avgt          1453222.280          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65  10000000  avgt        172299159.271          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65        10  avgt               73.580          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65      1000  avgt             7961.729          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65    100000  avgt          1340840.568          ns/op
+ * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65  10000000  avgt        337861810.700          ns/op
+ *
  * Benchmark                       (mask)    (size)  Mode  Cnt           Score   Error  Units
  * ChampSet2Jmh.mAddAll               -65        10  avgt              274.325          ns/op
  * ChampSet2Jmh.mAddAll               -65      1000  avgt            90300.208          ns/op
@@ -77,7 +95,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)
-@Fork(value = 1, jvmArgsAppend = {"-Xmx28g"})
+@Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampSet2Jmh {
@@ -89,42 +107,101 @@ public class ChampSet2Jmh {
 
     private BenchmarkData data;
     private ChampSet2<Key> setA;
+    private ChampSet2<Key> setB;
+    private ChampSet2<Key> setAA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = ChampSet2.copyOf(data.setA);
+        setB = ChampSet2.copyOf(data.listB);
+        setAA = ChampSet2.copyOf(data.listA);
     }
 
-    @Benchmark
-    public ChampSet2<Key> mAddAll() {
-        return ChampSet2.copyOf(data.listA);
-    }
-
-    @Benchmark
-    public ChampSet2<Key> mAddOneByOne() {
-        ChampSet2<Key> set = ChampSet2.of();
-        for (Key key : data.listA) {
-            set = set.add(key);
+    /*
+        @Benchmark
+        public ChampSet2<Key> mAddAll() {
+            ChampSet2<Key> set = ChampSet2.copyOf(data.listA);
+            assert set.size()==data.listA.size();
+            return set;
         }
-        return set;
+
+        @Benchmark
+        public ChampSet2<Key> mAddOneByOne() {
+            ChampSet2<Key> set = ChampSet2.of();
+            for (Key key : data.listA) {
+                set = set.add(key);
+            }
+            assert set.size()==data.listA.size();
+            return set;
+        }
+
+        @Benchmark
+        public ChampSet2<Key> mRemoveOneByOne() {
+            ChampSet2<Key> set = setA;
+            for (Key key : data.listA) {
+                set = set.remove(key);
+            }
+            assert set.isEmpty();
+            return set;
+        }
+
+        @Benchmark
+        public ChampSet2<Key> mRemoveAllFromDifferentType() {
+            ChampSet2<Key> set = setA;
+            ChampSet2<Key> updated = set.removeAll(data.setA);
+            assert updated.isEmpty();
+            return updated;
+        }
+        @Benchmark
+        public ChampSet2<Key> mRemoveAllFromSameType() {
+            ChampSet2<Key> set = setA;
+            ChampSet2<Key> updated = set.removeAll(setAA);
+            assert updated.isEmpty();
+            return updated;
+        }
+
+     */
+    @Benchmark
+    public ChampSet2<Key> mRetainAllFromDifferentTypeAllRetained() {
+        ChampSet2<Key> set = setA;
+        ChampSet2<Key> updated = set.retainAll(data.setA);
+        assert updated == setA;
+        return updated;
+    }
+
+    @Benchmark
+    public ChampSet2<Key> mRetainAllFromDifferentTypeNoneRetained() {
+        ChampSet2<Key> set = setA;
+        ChampSet2<Key> updated = set.retainAll(data.setB);
+        assert updated.isEmpty();
+        return updated;
+    }
+
+    @Benchmark
+    public ChampSet2<Key> mRetainAllFromSameTypeAllRetained() {
+        ChampSet2<Key> set = setA;
+        ChampSet2<Key> updated = set.retainAll(setAA);
+        assert updated == setA;
+        return updated;
+    }
+
+    /*
+public static void main(String... args){
+    ChampSet2Jmh jmh = new ChampSet2Jmh();
+    jmh.size=100000;
+    jmh.mask=-65;
+    jmh.setup();
+    System.out.println(jmh.mRetainAllFromSameTypeAllRetained().size());
+}*/
+    @Benchmark
+    public ChampSet2<Key> mRetainAllFromSameTypeNoneRetained() {
+        ChampSet2<Key> set = setA;
+        ChampSet2<Key> updated = set.retainAll(setB);
+        assert updated.isEmpty();
+        return updated;
     }
 /*
-    @Benchmark
-    public ChampSet2<Key> mRemoveOneByOne() {
-        ChampSet2<Key> set = setA;
-        for (Key key : data.listA) {
-            set = set.remove(key);
-        }
-        return set;
-    }
-
-    @Benchmark
-    public ChampSet2<Key> mRemoveAll() {
-        ChampSet2<Key> set = setA;
-        return set.removeAll(data.listA);
-    }
-
     @Benchmark
     public int mIterate() {
         int sum = 0;

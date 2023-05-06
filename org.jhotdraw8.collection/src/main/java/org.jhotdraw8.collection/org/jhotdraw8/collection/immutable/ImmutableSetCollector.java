@@ -49,13 +49,12 @@ public class ImmutableSetCollector<T, S extends ImmutableSet<T>> implements Cons
     public void accept(T t) {
         s = s.add(t);
         if (s.size() == 32) {
-            if (stack.isEmpty()) {
-                stack.push(s);
-            } else {
+            if (!stack.isEmpty()) {
                 do {
                     s = stack.pop().addAll(s);
                 } while (!stack.isEmpty() && stack.peek().size() <= s.size());
             }
+            stack.push(s);
             s = s.clear();
         }
     }

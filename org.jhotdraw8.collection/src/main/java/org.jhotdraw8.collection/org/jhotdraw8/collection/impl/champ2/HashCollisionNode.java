@@ -205,38 +205,39 @@ class HashCollisionNode<D> extends Node<D> {
         }
         HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
 
-        // Unfortunately this is a quadratic operation. Hashing is not possible - that's why we are in a hash collision node.
-        // The buffer has enough capacity for all data elements from this node and that node.
         // The buffer initially contains all data elements from this node.
         // Every time we find a matching data element in both nodes, we do not need to ever look at that data element again.
-        // So, we swap it out with a data element from the end of thisSize, and subtract 1 from thisSize.
+        // So, we swap it out with a data element from the end of unprocessed data elements, and subtract 1 from unprocessedSize.
         // If that node contains a data element that is not in this node, we add it to the end, and add 1 to bufferSize.
-        int thisSize = this.dataArity();
-        int thatSize = that.dataArity();
-        int bufferSize = thisSize;
+        // Buffer content:
+        // 0..unprocessedSize-1 = unprocessed data elements from this node
+        // unprocessedSize..resultSize-1 = data elements that we have updated from that node, or that we have added from that node.
+        final int thisSize = this.dataArity();
+        final int thatSize = that.dataArity();
         Object[] buffer = Arrays.copyOf(this.data, thisSize + thatSize);
         System.arraycopy(this.data, 0, buffer, 0, this.data.length);
         Object[] thatArray = that.data;
+        int resultSize = thisSize;
+        int unprocessedSize = thisSize;
         boolean updated = false;
         outer:
-        for (int i = thatSize - 1; i >= 0 && thisSize > 0; i--) {
+        for (int i = 0; i < thatSize; i++) {
             D thatData = (D) thatArray[i];
-            for (int j = thisSize - 1; j >= 0; j--) {
+            for (int j = 0; j < unprocessedSize; j++) {
                 D thisData = (D) buffer[j];
                 if (equalsFunction.test(thatData, thisData)) {
-                    thisSize--;
-                    D swap = (D) buffer[thisSize];
+                    D swap = (D) buffer[--unprocessedSize];
                     D updatedData = updateFunction.apply(thisData, thatData);
                     updated |= updatedData != thisData;
-                    buffer[thisSize] = updatedData;
+                    buffer[unprocessedSize] = updatedData;
                     buffer[j] = swap;
                     bulkChange.inBoth++;
                     continue outer;
                 }
             }
-            buffer[bufferSize++] = thatData;
+            buffer[resultSize++] = thatData;
         }
-        return newCroppedHashCollisionNode(updated | bufferSize != thisSize, buffer, bufferSize);
+        return newCroppedHashCollisionNode(updated | resultSize != thisSize, buffer, resultSize);
     }
 
     @SuppressWarnings("unchecked")
@@ -248,36 +249,36 @@ class HashCollisionNode<D> extends Node<D> {
         }
         HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
 
-        // Unfortunately this is a quadratic operation. Hashing is not possible - that's why we are in a hash collision node.
         // The buffer initially contains all data elements from this node.
-        // Every time we find a matching data element in both nodes, we do not need to ever look at that data element again.
-        // So, we replace it with a data element from the end of thisSize, and subtract 1 from thisSize.
-        int thisSize = this.dataArity();
-        int thatSize = that.dataArity();
-        int bufferSize = thisSize;
-        Object[] buffer = Arrays.copyOf(this.data, this.data.length);
+        // Every time we find a data element that must be removed, we replace it with the last element from the
+        // result part of the buffer, and reduce resultSize by 1.
+        // Buffer content:
+        // 0..resultSize-1 = data elements from this node that have not been removed
+        final int thisSize = this.dataArity();
+        final int thatSize = that.dataArity();
+        int resultSize = thisSize;
+        Object[] buffer = this.data.clone();
         Object[] thatArray = that.data;
         outer:
-        for (int i = thatSize - 1; i >= 0 && thisSize > 0; i--) {
+        for (int i = 0; i < thatSize && resultSize > 0; i++) {
             D thatData = (D) thatArray[i];
-            for (int j = thisSize - 1; j >= 0; j--) {
+            for (int j = 0; j < resultSize; j++) {
                 D thisData = (D) buffer[j];
                 if (equalsFunction.test(thatData, thisData)) {
-                    bufferSize--;
-                    buffer[j] = buffer[bufferSize];
+                    buffer[j] = buffer[--resultSize];
                     bulkChange.removed++;
                     continue outer;
                 }
             }
         }
-        return newCroppedHashCollisionNode(thisSize != bufferSize, buffer, bufferSize);
+        return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
     }
 
     @NonNull
-    private HashCollisionNode<D> newCroppedHashCollisionNode(boolean changed, Object[] buffer, int bufferSize1) {
+    private HashCollisionNode<D> newCroppedHashCollisionNode(boolean changed, Object[] buffer, int size) {
         if (changed) {
-            if (buffer.length != bufferSize1) {
-                buffer = Arrays.copyOf(buffer, bufferSize1);
+            if (buffer.length != size) {
+                buffer = Arrays.copyOf(buffer, size);
             }
             return newHashCollisionNode(hash, buffer);
         }
@@ -293,30 +294,29 @@ class HashCollisionNode<D> extends Node<D> {
         }
         HashCollisionNode<D> that = (HashCollisionNode<D>) otherNode;
 
-        // Unfortunately this is a quadratic operation. Hashing is not possible - that's why we are in a hash collision node.
-        // The buffer is initially empty.
-        // Every time we find a matching data element in both nodes, we do not need to ever look at that data element again.
-        // So, we remove it from that array, and subtract 1 from thisSize.
-        int thisSize = this.dataArity();
-        int thatSize = that.dataArity();
-        int bufferSize = 0;
-        Object[] buffer = new Object[this.data.length];
-        Object[] thatArray = Arrays.copyOf(that.data, that.data.length);
-        Object[] thisArray = this.data;
+        // The buffer initially contains all data elements from this node.
+        // Every time we find a data element that must be retained, we swap it into the result-part of the buffer.
+        // 0..resultSize-1 = data elements from this node that must be retained
+        // resultSize..thisSize-1 = data elements that might need to be retained
+        final int thisSize = this.dataArity();
+        final int thatSize = that.dataArity();
+        int resultSize = 0;
+        Object[] buffer = this.data.clone();
+        Object[] thatArray = that.data;
         outer:
-        for (int i = 0; i < thatSize && thisSize > 0; i++) {
+        for (int i = 0; i < thatSize && thisSize != resultSize; i++) {
             D thatData = (D) thatArray[i];
-            for (int j = 0; j < thisSize; j++) {
-                D thisData = (D) thisArray[i];
+            for (int j = resultSize; j < thisSize; j++) {
+                D thisData = (D) buffer[j];
                 if (equalsFunction.test(thatData, thisData)) {
-                    thisSize--;
-                    thisArray[j] = thisArray[thisSize];
-                    buffer[bufferSize++] = thisData;
-                    bulkChange.inBoth++;
+                    D swap = (D) buffer[resultSize];
+                    buffer[resultSize++] = thisData;
+                    buffer[j] = swap;
                     continue outer;
                 }
             }
+            bulkChange.removed++;
         }
-        return newCroppedHashCollisionNode(thisSize != bufferSize, buffer, bufferSize);
+        return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
     }
 }

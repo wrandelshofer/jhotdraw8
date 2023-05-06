@@ -308,12 +308,13 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull BitmapIndexedNode<D> putAll(Node<D> other, int shift,
-                                                   @NonNull BulkChangeEvent bulkChange,
-                                                   @NonNull BiFunction<D, D, D> updateFunction,
-                                                   @NonNull BiPredicate<D, D> equalsFunction,
-                                                   @NonNull ToIntFunction<D> hashFunction,
-                                                   @NonNull ChangeEvent<D> details) {
+    @NonNull
+    public BitmapIndexedNode<D> putAll(Node<D> other, int shift,
+                                       @NonNull BulkChangeEvent bulkChange,
+                                       @NonNull BiFunction<D, D, D> updateFunction,
+                                       @NonNull BiPredicate<D, D> equalsFunction,
+                                       @NonNull ToIntFunction<D> hashFunction,
+                                       @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -391,7 +392,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-    protected @NonNull BitmapIndexedNode<D> removeAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    @NonNull
+    public BitmapIndexedNode<D> removeAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -494,7 +496,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-    protected @NonNull BitmapIndexedNode<D> retainAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    @NonNull
+    public BitmapIndexedNode<D> retainAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
