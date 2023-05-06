@@ -7,11 +7,9 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 
-import java.util.Collection;
 import java.util.NoSuchElementException;
 
 /**
@@ -27,7 +25,9 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     @NonNull ImmutableSequencedSet<E> add(E element);
 
     @Override
-    @NonNull ImmutableSequencedSet<E> addAll(@NonNull Iterable<? extends E> c);
+    default @NonNull ImmutableSequencedSet<E> addAll(@NonNull Iterable<? extends E> c) {
+        return (ImmutableSequencedSet<E>) ImmutableSet.super.addAll(c);
+    }
 
     @Override
     @NonNull ImmutableSequencedSet<E> addFirst(final @Nullable E key);
@@ -42,7 +42,9 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     @NonNull ImmutableSequencedSet<E> remove(E element);
 
     @Override
-    @NonNull ImmutableSequencedSet<E> removeAll(@NonNull Iterable<?> c);
+    default @NonNull ImmutableSequencedSet<E> removeAll(@NonNull Iterable<?> c) {
+        return (ImmutableSequencedSet<E>) ImmutableSet.super.removeAll(c);
+    }
 
     /**
      * Returns a copy of this set that contains all elements
@@ -69,11 +71,7 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     }
 
     @Override
-    @NonNull ImmutableSequencedSet<E> retainAll(@NonNull Collection<?> c);
-
-    @Override
-    @NonNull
-    default ImmutableSequencedSet<E> retainAll(final @NonNull ReadOnlyCollection<?> c) {
+    default @NonNull ImmutableSequencedSet<E> retainAll(@NonNull Iterable<?> c) {
         return (ImmutableSequencedSet<E>) ImmutableSet.super.retainAll(c);
     }
 

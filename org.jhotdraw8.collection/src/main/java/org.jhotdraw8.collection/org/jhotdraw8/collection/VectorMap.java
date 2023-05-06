@@ -17,6 +17,7 @@ import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.SequencedEntry;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
@@ -25,6 +26,7 @@ import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -414,19 +416,28 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         return new VectorMap<>(root, vector, size, offset);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorMap<K, V> retainAll(@NonNull Collection<? extends K> c) {
+    public @NonNull VectorMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
-        if (c.isEmpty()) {
-            return of();
+        final Collection<K> set;
+        if (c instanceof Collection<?> cc) {
+            if (cc.isEmpty()) return of();
+            set = (Collection<K>) cc;
+        } else if (c instanceof ReadOnlyCollection<?> rc) {
+            if (rc.isEmpty()) return of();
+            set = (Collection<K>) rc.asCollection();
+        } else {
+            set = new HashSet<>();
+            c.forEach(e -> set.add((K) e));
         }
         var t = this.toMutable();
         boolean modified = false;
         for (K key : readOnlyKeySet()) {
-            if (!c.contains(key)) {
-                t.removeAndGiveDetails(key);
+            if (!set.contains(key)) {
+                t.remove(key);
                 modified = true;
             }
         }

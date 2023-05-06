@@ -7,7 +7,6 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
 import java.util.Collection;
@@ -58,10 +57,7 @@ public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>,
         return remove(getLast());
     }
 
-    @NonNull ImmutableSequencedCollection<E> retainAll(@NonNull Collection<?> c);
-
-    @NonNull
-    ImmutableSequencedCollection<E> retainAll(final @NonNull ReadOnlyCollection<?> c);
+    @NonNull ImmutableSequencedCollection<E> retainAll(@NonNull Iterable<?> c);
 
     @NonNull Collection<E> toMutable();
 }

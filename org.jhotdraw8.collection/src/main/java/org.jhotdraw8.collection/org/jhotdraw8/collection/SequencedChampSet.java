@@ -27,6 +27,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -395,18 +396,24 @@ public class SequencedChampSet<E>
         return remove(key, first, last);
     }
 
+    @SuppressWarnings({"unchecked", "SuspiciousMethodCalls"})
     @Override
     public @NonNull SequencedChampSet<E> removeAll(@NonNull Iterable<?> set) {
-        if (set == this) {
-            return of();
-        }
-        if (isEmpty()
-                || (set instanceof Collection<?> c) && c.isEmpty()
-                || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+        if (isEmpty()) {
             return this;
         }
+        if (set instanceof Collection<?> c) {
+            if (c.isEmpty()) return of();
+        } else if (set instanceof ReadOnlyCollection<?> c) {
+            if (c.isEmpty()) return of();
+            set = c.asCollection();
+        } else {
+            HashSet<E> s = new HashSet<>();
+            set.forEach(e -> s.add((E) e));
+            set = s;
+        }
         var t = toMutable();
-        return t.removeAll(set) ? t.toImmutable() : this;
+        return t.removeAll((Collection<?>) set) ? t.toImmutable() : this;
     }
 
     @Override
@@ -450,16 +457,24 @@ public class SequencedChampSet<E>
         return new SequencedChampSet<>(root, seqRoot, size, first, last);
     }
 
+    @SuppressWarnings({"unchecked", "SuspiciousMethodCalls"})
     @Override
-    public @NonNull SequencedChampSet<E> retainAll(@NonNull Collection<?> set) {
+    public @NonNull SequencedChampSet<E> retainAll(@NonNull Iterable<?> set) {
         if (isEmpty()) {
             return this;
         }
-        if (set.isEmpty()) {
-            return of();
+        if (set instanceof Collection<?> c) {
+            if (c.isEmpty()) return of();
+        } else if (set instanceof ReadOnlyCollection<?> c) {
+            if (c.isEmpty()) return of();
+            set = c.asCollection();
+        } else {
+            HashSet<E> s = new HashSet<>();
+            set.forEach(e -> s.add((E) e));
+            set = s;
         }
         var t = toMutable();
-        return t.retainAll(set) ? t.toImmutable() : this;
+        return t.retainAll((Collection<?>) set) ? t.toImmutable() : this;
     }
 
     public @NonNull Iterator<E> reverseIterator() {

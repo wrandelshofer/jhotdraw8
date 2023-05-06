@@ -8,6 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
+import org.jhotdraw8.collection.immutable.ImmutableSetCollector;
 import org.jhotdraw8.collection.impl.champ2.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ2.BulkChangeEvent;
 import org.jhotdraw8.collection.impl.champ2.ChampSpliterator;
@@ -27,7 +28,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.Stack;
+import java.util.stream.Stream;
 
 
 /**
@@ -48,7 +49,7 @@ import java.util.Stack;
  *     <li>add: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
+ *     <li>toMutable: O(1)</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
@@ -63,11 +64,6 @@ import java.util.Stack;
  * If a write operation is performed on a node, then this set creates a
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).
  * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
- * <p>
- * This set can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}}. The mutable copy shares its nodes
- * with this set, until it has gradually replaced the nodes with exclusively
- * owned nodes.
  * <p>
  * The immutable version of this set extends from the non-public class
  * {@code ChampBitmapIndexNode}. This design safes 16 bytes for every instance,
@@ -123,25 +119,23 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
      */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull ChampSet2<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        Stack<ChampSet2<E>> stack = new Stack<ChampSet2<E>>();
-        ChampSet2<E> s = ChampSet2.of();
-        for (E e : iterable) {
-            s = s.add(e);
-            if (s.size == 32) {
-                if (stack.isEmpty()) {
-                    stack.push(s);
-                } else {
-                    do {
-                        s = stack.pop().addAll(s);
-                    } while (!stack.isEmpty() && stack.peek().size <= s.size);
-                }
-                s = ChampSet2.of();
-            }
+        if (iterable instanceof ChampSet2<? extends E>) {
+            return (ChampSet2<E>) iterable;
         }
-        while (!stack.isEmpty()) {
-            s = stack.pop().addAll(s);
-        }
-        return s;
+        var c = new ImmutableSetCollector<E, ChampSet2<E>>(ChampSet2.of());
+        iterable.forEach(c);
+        return c.build();
+    }
+
+    /**
+     * Returns an immutable set that contains the provided elements.
+     *
+     * @param stream a stream
+     * @param <E>    the element type
+     * @return an immutable set of the provided elements
+     */
+    public static <E> @NonNull ChampSet2<E> copyOf(@NonNull Stream<? extends E> stream) {
+        return stream.collect(new ImmutableSetCollector<>(ChampSet2.of()));
     }
 
     /**
@@ -162,7 +156,7 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
      * @param <E>      the element type
      * @return an immutable set of the provided elements
      */
-    @SuppressWarnings({"unchecked", "varargs"})
+    @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> @NonNull ChampSet2<E> of(@NonNull E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
@@ -193,17 +187,12 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
         } else {
             that = (ChampSet2<E>) c;
         }
-        if (this.isEmpty()) {
+        if (isEmpty()) {
             return that;
         }
-
         BulkChangeEvent bulkChange = new BulkChangeEvent();
         BitmapIndexedNode<E> newRootNode = putAll(that, 0, bulkChange, ChampSet2::updateElement, Objects::equals, ChampSet2::keyHash, new ChangeEvent<>());
-        if (bulkChange.inBoth == that.size()) {
-            return this;
-        } else {
-            return new ChampSet2<>(newRootNode, size + that.size - bulkChange.inBoth);
-        }
+        return bulkChange.inBoth == that.size() ? this : new ChampSet2<>(newRootNode, size + that.size - bulkChange.inBoth);
     }
 
 
@@ -258,7 +247,7 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
         return Spliterators.iterator(spliterator());
     }
 
-    static <V, K> int keyHash(Object e) {
+    static int keyHash(Object e) {
         return SALT ^ Objects.hashCode(e);
     }
 
@@ -273,6 +262,7 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampSet2<E> removeAll(@NonNull Iterable<?> set) {
         if (isEmpty()
@@ -283,20 +273,35 @@ public class ChampSet2<E> extends BitmapIndexedNode<E> implements ImmutableSet<E
         if (set == this) {
             return of();
         }
-        var t = toMutable();
-        return t.removeAll(set) ? t.toImmutable() : this;
+        if (set instanceof MutableChampSet2<?> m) {
+            set = m.toImmutable();
+        } else {
+            set = ChampSet2.copyOf(set);
+        }
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newRootNode = removeAll((BitmapIndexedNode<E>) set, 0, bulkChange, ChampSet2::updateElement, Objects::equals, ChampSet2::keyHash, new ChangeEvent<>());
+        return bulkChange.removed == 0 ? this : size == bulkChange.removed ? of() : new ChampSet2<>(newRootNode, size - bulkChange.removed);
     }
 
+
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampSet2<E> retainAll(@NonNull Collection<?> set) {
+    public @NonNull ChampSet2<E> retainAll(@NonNull Iterable<?> set) {
         if (isEmpty()) {
             return this;
         }
-        if (set.isEmpty()) {
+        if ((set instanceof Collection<?> c) && c.isEmpty()
+                || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
             return of();
         }
-        var t = toMutable();
-        return t.retainAll(set) ? t.toImmutable() : this;
+        if (set instanceof MutableChampSet2<?> m) {
+            set = m.toImmutable();
+        } else {
+            return (ChampSet2<E>) ImmutableSet.super.retainAll(set);
+        }
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newRootNode = retainAll((BitmapIndexedNode<E>) set, 0, bulkChange, ChampSet2::updateElement, Objects::equals, ChampSet2::keyHash, new ChangeEvent<>());
+        return bulkChange.removed == 0 ? this : size == bulkChange.removed ? of() : new ChampSet2<>(newRootNode, size - bulkChange.removed);
     }
 
     @Override

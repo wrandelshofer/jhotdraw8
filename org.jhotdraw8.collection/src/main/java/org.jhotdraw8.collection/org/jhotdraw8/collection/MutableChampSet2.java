@@ -40,10 +40,8 @@ import java.util.function.Function;
  *     <li>add: O(1)</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
- *     this set</li>
- *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
- *     set and in the clone</li>
+ *     <li>toImmutable: O(1)</li>
+ *     <li>clone: O(1)</li>
  *     <li>iterator.next: O(1)</li>
  * </ul>
  * <p>

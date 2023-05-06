@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -112,7 +111,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it has not changed, or
      * a different map instance with entries removed
      */
-    @NonNull ImmutableMap<K, V> retainAll(@NonNull Collection<? extends K> c);
+    @NonNull ImmutableMap<K, V> retainAll(@NonNull Iterable<? extends K> c);
 
     /**
      * Returns a copy of this map that contains only entries

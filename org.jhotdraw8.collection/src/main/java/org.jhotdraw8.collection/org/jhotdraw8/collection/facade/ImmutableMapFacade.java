@@ -10,8 +10,10 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.Iterators;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlyMap;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
@@ -103,18 +105,19 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> retainAll(@NonNull Collection<? extends K> c) {
-        if (isEmpty()) {
-            return this;
-        }
-        if (c.isEmpty()) {
-            return clear();
-        }
+    public @NonNull ImmutableMapFacade<K, V> retainAll(@NonNull Iterable<? extends K> c) {
+        if (isEmpty()) return this;
         Map<K, V> clone = cloneFunction.apply(target);
-        if (clone.keySet().retainAll(c)) {
-            return new ImmutableMapFacade<>(clone, cloneFunction);
+        Collection<K> collection;
+        if (c instanceof ReadOnlyCollection<?> rc) {
+            collection = (Collection<K>) rc.asCollection();
+        } else if (c instanceof Collection<?> cc) {
+            collection = (Collection<K>) cc;
+        } else {
+            collection = new HashSet<K>();
+            c.forEach(e -> collection.add((K) e));
         }
-        return this;
+        return clone.keySet().retainAll(collection) ? new ImmutableMapFacade<>(clone, cloneFunction) : this;
     }
 
     @Override

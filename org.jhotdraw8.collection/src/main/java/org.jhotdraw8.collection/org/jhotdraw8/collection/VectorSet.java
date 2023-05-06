@@ -27,6 +27,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -425,16 +426,31 @@ public class VectorSet<E>
         return new VectorSet<>(root, vector, size, offset);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorSet<E> retainAll(@NonNull Collection<?> set) {
+    public @NonNull VectorSet<E> retainAll(@NonNull Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
-        if (set.isEmpty()) {
-            return of();
+        final Collection<E> set;
+        if (c instanceof Collection<?> cc) {
+            set = (Collection<E>) cc;
+        } else if (c instanceof ReadOnlyCollection<?> rc) {
+            set = (Collection<E>) rc.asCollection();
+        } else {
+            set = new HashSet<>();
+            c.forEach(e -> set.add((E) e));
         }
-        var t = toMutable();
-        return t.retainAll(set) ? t.toImmutable() : this;
+        if (set.isEmpty()) return of();
+        var t = this.toMutable();
+        boolean modified = false;
+        for (E key : this) {
+            if (!set.contains(key)) {
+                t.remove(key);
+                modified = true;
+            }
+        }
+        return modified ? t.toImmutable() : this;
     }
 
     public @NonNull Iterator<E> reverseIterator() {

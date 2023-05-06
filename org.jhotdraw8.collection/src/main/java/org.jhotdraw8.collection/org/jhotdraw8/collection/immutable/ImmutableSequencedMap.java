@@ -7,10 +7,8 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -97,13 +95,7 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
     }
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> retainAll(@NonNull Collection<? extends K> c);
-
-    @Override
-    @NonNull
-    default ImmutableSequencedMap<K, V> retainAll(@NonNull ReadOnlyCollection<? extends K> c) {
-        return (ImmutableSequencedMap<K, V>) ImmutableMap.super.retainAll(c);
-    }
+    @NonNull ImmutableSequencedMap<K, V> retainAll(@NonNull Iterable<? extends K> c);
 
     @Override
     @NonNull Map<K, V> toMutable();

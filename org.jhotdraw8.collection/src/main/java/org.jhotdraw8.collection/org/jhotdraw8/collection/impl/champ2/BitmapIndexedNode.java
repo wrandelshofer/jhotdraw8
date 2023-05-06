@@ -311,7 +311,9 @@ public class BitmapIndexedNode<D> extends Node<D> {
     protected @NonNull BitmapIndexedNode<D> putAll(Node<D> other, int shift,
                                                    @NonNull BulkChangeEvent bulkChange,
                                                    @NonNull BiFunction<D, D, D> updateFunction,
-                                                   @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+                                                   @NonNull BiPredicate<D, D> equalsFunction,
+                                                   @NonNull ToIntFunction<D> hashFunction,
+                                                   @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -349,6 +351,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 // add a new node that joins this node and that node
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
+                details.reset();
                 buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.putAll(thatNode, shift + BIT_PARTITION_SIZE, bulkChange, updateFunction, equalsFunction, hashFunction, details);
             } else if (thisIsData && thatIsNode) {
                 // add a new node that joins this data and that node
@@ -379,17 +382,16 @@ public class BitmapIndexedNode<D> extends Node<D> {
                     buffer[index(newDataMap, bitpos)] = thisData;
                 } else {
                     newDataMap ^= bitpos;
-                    newNodeMap |= bitpos;
+                    newNodeMap ^= bitpos;
                     buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = mergeTwoDataEntriesIntoNode(thisData, hashFunction.applyAsInt(thisData), thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE);
                 }
             }
         }
-        // XXX return this if nothing has changed!
         return newBitmapIndexedNode(newNodeMap, newDataMap, buffer);
     }
 
     @Override
-    protected @NonNull Node<D> removeAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull BitmapIndexedNode<D> removeAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -398,8 +400,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
         var newBitMap = nodeMap | dataMap;
         var buffer = new Object[Integer.bitCount(newBitMap)];
-        int newDataMap = this.dataMap | that.dataMap;
-        int newNodeMap = this.nodeMap | that.nodeMap;
+        int newDataMap = this.dataMap;
+        int newNodeMap = this.nodeMap;
         for (int mapToDo = newBitMap; mapToDo != 0; mapToDo ^= Integer.lowestOneBit(mapToDo)) {
             int mask = Integer.numberOfTrailingZeros(mapToDo);
             int bitpos = bitpos(mask);
@@ -430,6 +432,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                     buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
                 } else {
                     newNodeMap ^= bitpos;
+                    newDataMap ^= bitpos;
                     buffer[index(newDataMap, bitpos)] = result.getData(0);
                 }
             } else if (thisIsData && thatIsNode) {
@@ -491,7 +494,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @Override
-    protected @NonNull Node<D> retainAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull BitmapIndexedNode<D> retainAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -500,8 +503,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
         var newBitMap = nodeMap | dataMap;
         var buffer = new Object[Integer.bitCount(newBitMap)];
-        int newDataMap = this.dataMap | that.dataMap;
-        int newNodeMap = this.nodeMap | that.nodeMap;
+        int newDataMap = this.dataMap;
+        int newNodeMap = this.nodeMap;
         for (int mapToDo = newBitMap; mapToDo != 0; mapToDo ^= Integer.lowestOneBit(mapToDo)) {
             int mask = Integer.numberOfTrailingZeros(mapToDo);
             int bitpos = bitpos(mask);
@@ -534,6 +537,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                     buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
                 } else {
                     newNodeMap ^= bitpos;
+                    newDataMap ^= bitpos;
                     buffer[index(newDataMap, bitpos)] = result.getData(0);
                 }
             } else if (thisIsData && thatIsNode) {
@@ -543,6 +547,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 Object result = thatNode.find(thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, equalsFunction);
                 if (result == NO_DATA) {
                     newDataMap ^= bitpos;
+                    bulkChange.removed++;
                 } else {
                     buffer[index(newDataMap, bitpos)] = thisData;
                 }
@@ -553,6 +558,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 Object result = thisNode.find(thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, equalsFunction);
                 if (result == NO_DATA) {
                     bulkChange.removed += this.getNode(this.nodeIndex(bitpos)).calculateSize();
+                    newNodeMap ^= bitpos;
                 } else {
                     newDataMap ^= bitpos;
                     newNodeMap ^= bitpos;

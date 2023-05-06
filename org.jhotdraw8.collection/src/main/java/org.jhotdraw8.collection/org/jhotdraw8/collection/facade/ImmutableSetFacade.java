@@ -9,8 +9,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.Iterators;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlySet;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Function;
@@ -71,11 +73,21 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
         return changed ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableSet<E> retainAll(@NonNull Collection<?> c) {
+    public @NonNull ImmutableSet<E> retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) return this;
         Set<E> clone = cloneFunction.apply(target);
-        return clone.retainAll(c) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
+        Collection<E> collection;
+        if (c instanceof ReadOnlyCollection<?> rc) {
+            collection = (Collection<E>) rc.asCollection();
+        } else if (c instanceof Collection<?> cc) {
+            collection = (Collection<E>) cc;
+        } else {
+            collection = new HashSet<E>();
+            c.forEach(e -> collection.add((E) e));
+        }
+        return clone.retainAll(collection) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override

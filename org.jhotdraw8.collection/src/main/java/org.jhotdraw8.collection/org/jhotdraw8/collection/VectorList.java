@@ -17,7 +17,13 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
 
@@ -195,9 +201,31 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         return (VectorList<E>) ImmutableList.super.removeLast();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorList<E> retainAll(@NonNull ReadOnlyCollection<?> c) {
-        return (VectorList<E>) ImmutableList.super.retainAll(c);
+    public @NonNull VectorList<E> retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return this;
+        }
+        final Collection<E> set;
+        if (c instanceof Collection<?> cc) {
+            set = (Collection<E>) cc;
+        } else if (c instanceof ReadOnlyCollection<?> rc) {
+            set = (Collection<E>) rc.asCollection();
+        } else {
+            set = new HashSet<>();
+            c.forEach(e -> set.add((E) e));
+        }
+        if (set.isEmpty()) return of();
+        var t = this.toMutable();
+        boolean modified = false;
+        for (E key : this) {
+            if (!set.contains(key)) {
+                t.remove(key);
+                modified = true;
+            }
+        }
+        return modified ? t.toImmutable() : this;
     }
 
     @Override
@@ -225,19 +253,6 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
                 if (result.isEmpty()) {
                     break Outer;
                 }
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public @NonNull VectorList<E> retainAll(@NonNull Collection<?> c) {
-        if (isEmpty()) return this;
-        if (c.isEmpty()) return of();
-        VectorList<E> result = this;
-        for (E e : this) {
-            if (!c.contains(e)) {
-                result = result.remove(e);
             }
         }
         return result;
