@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 /**
@@ -314,6 +315,25 @@ class HashCollisionNode<D> extends Node<D> {
                 }
             }
             bulkChange.removed++;
+        }
+        return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected @NonNull Node<D> filterAll(Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
+        final int thisSize = this.dataArity();
+        int resultSize = 0;
+        Object[] buffer = new Object[thisSize];
+        Object[] thisArray = this.data;
+        outer:
+        for (int i = 0; i < thisSize; i++) {
+            D thisData = (D) thisArray[i];
+            if (predicate.test(thisData)) {
+                buffer[resultSize++] = thisData;
+            } else {
+                bulkChange.removed++;
+            }
         }
         return newCroppedHashCollisionNode(thisSize != resultSize, buffer, resultSize);
     }

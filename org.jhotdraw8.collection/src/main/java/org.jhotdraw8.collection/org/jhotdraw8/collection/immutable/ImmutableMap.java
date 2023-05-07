@@ -10,6 +10,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -58,11 +60,25 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * Returns a copy of this map that contains all entries
      * of this map with entries from the specified map added or updated.
      *
-     * @param m another map
+     * @param c another map
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    @NonNull ImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> m);
+    @SuppressWarnings("unchecked")
+    default @NonNull ImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        if (c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return this;
+        }
+        if (isEmpty() && c.getClass() == this.getClass()) {
+            return (ImmutableMap<K, V>) c;
+        }
+        var s = this;
+        for (var e : c) {
+            s = s.put(e.getKey(), e.getValue());
+        }
+        return s;
+    }
 
     /**
      * Returns a copy of this map that contains all entries
@@ -101,7 +117,18 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already does not contain the entries, or
      * a different map instance with the entries removed
      */
-    @NonNull ImmutableMap<K, V> removeAll(@NonNull Iterable<? extends K> c);
+    default @NonNull ImmutableMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
+        if (isEmpty()
+                || c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return this;
+        }
+        var s = this;
+        for (var k : c) {
+            s = s.remove(k);
+        }
+        return s;
+    }
 
     /**
      * Returns a copy of this map that contains only entries
@@ -111,7 +138,42 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it has not changed, or
      * a different map instance with entries removed
      */
-    @NonNull ImmutableMap<K, V> retainAll(@NonNull Iterable<? extends K> c);
+    @SuppressWarnings("unchecked")
+    default @NonNull ImmutableMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
+        if (isEmpty()
+                || c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return this;
+        }
+        if (c instanceof ReadOnlyCollection<?> co) {
+            if (co.isEmpty()) {
+                return clear();
+            }
+            var s = this;
+            for (var e : this) {
+                if (!co.contains(e)) {
+                    s = s.remove((K) e);
+                }
+            }
+            return s;
+        }
+        if (!(c instanceof Collection<?>)) {
+            HashSet<K> hm = new HashSet<>();
+            c.forEach(hm::add);
+            c = hm;
+        }
+        var cc = (Collection<?>) c;
+        if (cc.isEmpty()) {
+            return clear();
+        }
+        var s = this;
+        for (var e : this) {
+            if (!cc.contains(e)) {
+                s = s.remove((K) e);
+            }
+        }
+        return s;
+    }
 
     /**
      * Returns a copy of this map that contains only entries

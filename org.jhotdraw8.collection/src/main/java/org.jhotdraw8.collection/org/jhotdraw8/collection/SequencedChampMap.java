@@ -254,13 +254,13 @@ public class SequencedChampMap<K, V> extends BitmapIndexedNode<SequencedEntry<K,
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull SequencedChampMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> entries) {
-        if (isEmpty() && (entries instanceof SequencedChampMap<?, ?> that)) {
+    public @NonNull SequencedChampMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        if (isEmpty() && (c instanceof SequencedChampMap<?, ?> that)) {
             return (SequencedChampMap<K, V>) that;
         }
         var t = this.toMutable();
         boolean modified = false;
-        for (Map.Entry<? extends K, ? extends V> entry : entries) {
+        for (Map.Entry<? extends K, ? extends V> entry : c) {
             var details = t.putLast(entry.getKey(), entry.getValue(), false);
             modified |= details.isModified();
         }

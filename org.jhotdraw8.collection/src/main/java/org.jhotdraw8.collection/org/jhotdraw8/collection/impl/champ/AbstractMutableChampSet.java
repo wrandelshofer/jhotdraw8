@@ -6,12 +6,16 @@
 package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -52,7 +56,49 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
      * @return {@code true} if this set changed
      */
     @SuppressWarnings("unchecked")
-    public abstract boolean addAll(@NonNull Iterable<? extends E> c);
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        boolean added = false;
+        for (E e : c) {
+            added |= add(e);
+        }
+        return added;
+    }
+
+    /**
+     * Retains all specified elements that are in this set.
+     *
+     * @param c an iterable of elements
+     * @return {@code true} if this set changed
+     */
+    public boolean retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if ((c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            clear();
+            return true;
+        }
+        Predicate<E> predicate;
+        if (c instanceof Collection<?> that) {
+            predicate = that::contains;
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            predicate = that::contains;
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            predicate = that::contains;
+        }
+        boolean removed = false;
+        for (Iterator<E> i = iterator(); i.hasNext(); ) {
+            E e = i.next();
+            if (!predicate.test(e)) {
+                i.remove();
+                removed = true;
+            }
+        }
+        return removed;
+    }
 
     @Override
     public boolean equals(Object o) {

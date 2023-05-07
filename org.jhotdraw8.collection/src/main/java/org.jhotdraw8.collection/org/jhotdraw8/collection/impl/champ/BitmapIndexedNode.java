@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.ListHelper;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 /**
@@ -350,15 +351,20 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 // add a new node that joins this node and that node
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
-                details.reset();
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.putAll(thatNode, shift + BIT_PARTITION_SIZE, bulkChange, updateFunction, equalsFunction, hashFunction, details);
+                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.putAll(thatNode, shift + BIT_PARTITION_SIZE, bulkChange,
+                        updateFunction, equalsFunction, hashFunction, details);
             } else if (thisIsData && thatIsNode) {
                 // add a new node that joins this data and that node
                 D thisData = this.getData(this.dataIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
                 details.reset();
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thatNode.put(thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
-                if (!details.isModified()) {
+                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thatNode.put(thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, details,
+                        (a, b) -> updateFunction.apply(b, a),
+                        equalsFunction, hashFunction);
+                if (details.isUnchanged()) {
+                    bulkChange.inBoth++;
+                } else if (details.isReplaced()) {
+                    bulkChange.replaced = true;
                     bulkChange.inBoth++;
                 }
                 newDataMap ^= bitpos;
@@ -378,7 +384,9 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 D thatData = that.getData(that.dataIndex(bitpos));
                 if (equalsFunction.test(thisData, thatData)) {
                     bulkChange.inBoth++;
-                    buffer[index(newDataMap, bitpos)] = thisData;
+                    D updated = updateFunction.apply(thisData, thatData);
+                    buffer[index(newDataMap, bitpos)] = updated;
+                    bulkChange.replaced |= updated != thisData;
                 } else {
                     newDataMap ^= bitpos;
                     newNodeMap ^= bitpos;
@@ -581,6 +589,41 @@ public class BitmapIndexedNode<D> extends Node<D> {
         return newCroppedBitmapIndexedNode(buffer, newDataMap, newNodeMap);
     }
 
+    @Override
+    @NonNull
+    public BitmapIndexedNode<D> filterAll(Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
+        var newBitMap = nodeMap | dataMap;
+        var buffer = new Object[Integer.bitCount(newBitMap)];
+        int newDataMap = this.dataMap;
+        int newNodeMap = this.nodeMap;
+        for (int mapToDo = newBitMap; mapToDo != 0; mapToDo ^= Integer.lowestOneBit(mapToDo)) {
+            int mask = Integer.numberOfTrailingZeros(mapToDo);
+            int bitpos = bitpos(mask);
+            boolean thisIsNode = (this.nodeMap & bitpos) != 0;
+            if (thisIsNode) {
+                Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
+                Node<D> result = thisNode.filterAll(predicate, shift + BIT_PARTITION_SIZE, bulkChange);
+                if (result.isNodeEmpty()) {
+                    newNodeMap ^= bitpos;
+                } else if (result.hasMany()) {
+                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
+                } else {
+                    newNodeMap ^= bitpos;
+                    newDataMap ^= bitpos;
+                    buffer[index(newDataMap, bitpos)] = result.getData(0);
+                }
+            } else {
+                D thisData = this.getData(this.dataIndex(bitpos));
+                if (predicate.test(thisData)) {
+                    buffer[index(newDataMap, bitpos)] = thisData;
+                } else {
+                    newDataMap ^= bitpos;
+                    bulkChange.removed++;
+                }
+            }
+        }
+        return newCroppedBitmapIndexedNode(buffer, newDataMap, newNodeMap);
+    }
 
     protected int calculateSize() {
         int size = dataArity();

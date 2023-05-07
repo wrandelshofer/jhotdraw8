@@ -22,74 +22,22 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- * Benchmark                                             (mask)    (size)  Mode  Cnt           Score   Error  Units
- * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65        10  avgt              147.653          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65      1000  avgt            23100.685          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65    100000  avgt          6009955.037          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeAllRetained      -65  10000000  avgt       1804056131.333          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65        10  avgt              372.448          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65      1000  avgt           111671.874          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65    100000  avgt         18915557.098          ns/op
- * ChampSet2Jmh.mRetainAllFromDifferentTypeNoneRetained     -65  10000000  avgt       4638025326.000          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65        10  avgt               78.882          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65      1000  avgt            12330.410          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65    100000  avgt          1453222.280          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeAllRetained           -65  10000000  avgt        172299159.271          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65        10  avgt               73.580          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65      1000  avgt             7961.729          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65    100000  avgt          1340840.568          ns/op
- * ChampSet2Jmh.mRetainAllFromSameTypeNoneRetained          -65  10000000  avgt        337861810.700          ns/op
- *
- * Benchmark                       (mask)    (size)  Mode  Cnt           Score   Error  Units
- * ChampSet2Jmh.mAddAll               -65        10  avgt              274.325          ns/op
- * ChampSet2Jmh.mAddAll               -65      1000  avgt            90300.208          ns/op
- * ChampSet2Jmh.mAddAll               -65    100000  avgt         13388451.599          ns/op
- * ChampSet2Jmh.mAddAll               -65  10000000  avgt       2365112655.200          ns/op
- * ChampSet2Jmh.mAddOneByOne          -65        10  avgt              288.286          ns/op
- * ChampSet2Jmh.mAddOneByOne          -65      1000  avgt            95478.077          ns/op
- * ChampSet2Jmh.mAddOneByOne          -65    100000  avgt         26756657.203          ns/op
- * ChampSet2Jmh.mAddOneByOne          -65  10000000  avgt       7163838121.500          ns/op
- * Benchmark                       (mask)    (size)  Mode  Cnt           Score   Error  Units
- * ChampSetJmh2.mAddAll               -65        10  avgt              299.029          ns/op
- * ChampSetJmh2.mAddAll               -65      1000  avgt           101661.056          ns/op
- * ChampSetJmh2.mAddAll               -65    100000  avgt         28510783.276          ns/op
- * ChampSetJmh2.mAddAll               -65  10000000  avgt       7867896525.500          ns/op
- * ChampSetJmh2.mAddOneByOne          -65        10  avgt              386.462          ns/op
- * ChampSetJmh2.mAddOneByOne          -65      1000  avgt            95329.003          ns/op
- * ChampSetJmh2.mAddOneByOne          -65    100000  avgt         26094557.031          ns/op
- * ChampSetJmh2.mAddOneByOne          -65  10000000  avgt       8582859814.000          ns/op
- * ChampSetJmh2.mContainsFound        -65        10  avgt                5.341          ns/op
- * ChampSetJmh2.mContainsFound        -65      1000  avgt               20.362          ns/op
- * ChampSetJmh2.mContainsFound        -65    100000  avgt              101.872          ns/op
- * ChampSetJmh2.mContainsFound        -65  10000000  avgt              408.755          ns/op
- * ChampSetJmh2.mContainsNotFound     -65        10  avgt                6.483          ns/op
- * ChampSetJmh2.mContainsNotFound     -65      1000  avgt               21.479          ns/op
- * ChampSetJmh2.mContainsNotFound     -65    100000  avgt              108.947          ns/op
- * ChampSetJmh2.mContainsNotFound     -65  10000000  avgt              408.480          ns/op
- * ChampSetJmh2.mHead                 -65        10  avgt               20.987          ns/op
- * ChampSetJmh2.mHead                 -65      1000  avgt               38.869          ns/op
- * ChampSetJmh2.mHead                 -65    100000  avgt               56.003          ns/op
- * ChampSetJmh2.mHead                 -65  10000000  avgt               69.059          ns/op
- * ChampSetJmh2.mIterate              -65        10  avgt               82.528          ns/op
- * ChampSetJmh2.mIterate              -65      1000  avgt            15732.755          ns/op
- * ChampSetJmh2.mIterate              -65    100000  avgt          3162080.575          ns/op
- * ChampSetJmh2.mIterate              -65  10000000  avgt        741951114.286          ns/op
- * ChampSetJmh2.mRemoveAll            -65        10  avgt              349.331          ns/op
- * ChampSetJmh2.mRemoveAll            -65      1000  avgt            96891.189          ns/op
- * ChampSetJmh2.mRemoveAll            -65    100000  avgt         27901980.554          ns/op
- * ChampSetJmh2.mRemoveAll            -65  10000000  avgt       7407686125.000          ns/op
- * ChampSetJmh2.mRemoveOneByOne       -65        10  avgt              348.263          ns/op
- * ChampSetJmh2.mRemoveOneByOne       -65      1000  avgt           100670.795          ns/op
- * ChampSetJmh2.mRemoveOneByOne       -65    100000  avgt         27430586.644          ns/op
- * ChampSetJmh2.mRemoveOneByOne       -65  10000000  avgt       7717383428.500          ns/op
- * ChampSetJmh2.mRemoveThenAdd        -65        10  avgt               75.306          ns/op
- * ChampSetJmh2.mRemoveThenAdd        -65      1000  avgt              190.574          ns/op
- * ChampSetJmh2.mRemoveThenAdd        -65    100000  avgt              371.420          ns/op
- * ChampSetJmh2.mRemoveThenAdd        -65  10000000  avgt              892.006          ns/op
- * ChampSetJmh2.mTail                 -65        10  avgt               47.406          ns/op
- * ChampSetJmh2.mTail                 -65      1000  avgt               94.677          ns/op
- * ChampSetJmh2.mTail                 -65    100000  avgt              146.932          ns/op
- * ChampSetJmh2.mTail                 -65  10000000  avgt              185.135          ns/op
+ * Benchmark                                            (mask)  (size)  Mode  Cnt         Score   Error  Units
+ * mContainsFound                              -65  100000  avgt             47.409          ns/op
+ * mContainsNotFound                           -65  100000  avgt             50.258          ns/op
+ * mCopyOf                                     -65  100000  avgt       22060427.183          ns/op
+ * mCopyOnyByOne                               -65  100000  avgt       23095396.228          ns/op
+ * mHead                                       -65  100000  avgt             54.405          ns/op
+ * mIterate                                    -65  100000  avgt        1982330.715          ns/op
+ * mRemoveAllFromDifferentType                 -65  100000  avgt       23654089.570          ns/op
+ * mRemoveAllFromSameType                      -65  100000  avgt        1306590.703          ns/op
+ * mRemoveOneByOne                             -65  100000  avgt       22885024.760          ns/op
+ * mRemoveThenAdd                              -65  100000  avgt            306.514          ns/op
+ * mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt        5723422.425          ns/op
+ * mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt        3957123.029          ns/op
+ * mRetainAllFromSameTypeAllRetained           -65  100000  avgt        1516977.856          ns/op
+ * mRetainAllFromSameTypeNoneRetained          -65  100000  avgt        1414259.172          ns/op
+ * mTail                                       -65  100000  avgt            137.540          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -99,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampSetJmh {
-    @Param({"10", "1000", "100000", "10000000"})
+    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
     private int size;
 
     @Param({"-65"})
@@ -116,52 +64,56 @@ public class ChampSetJmh {
         setA = ChampSet.copyOf(data.setA);
         setB = ChampSet.copyOf(data.listB);
         setAA = ChampSet.copyOf(data.listA);
+        assert setA.size() == size;
+        assert setB.size() == size;
+        assert setAA.size() == size;
     }
 
-    /*
-        @Benchmark
-        public ChampSet<Key> mAddAll() {
-            ChampSet<Key> set = ChampSet.copyOf(data.listA);
-            assert set.size()==data.listA.size();
-            return set;
-        }
+    @Benchmark
+    public ChampSet<Key> mCopyOf() {
+        ChampSet<Key> set = ChampSet.copyOf(data.listA);
+        assert set.size() == data.listA.size();
+        return set;
+    }
 
-        @Benchmark
-        public ChampSet<Key> mAddOneByOne() {
-            ChampSet<Key> set = ChampSet.of();
-            for (Key key : data.listA) {
-                set = set.add(key);
-            }
-            assert set.size()==data.listA.size();
-            return set;
-        }
 
-        @Benchmark
-        public ChampSet<Key> mRemoveOneByOne() {
-            ChampSet<Key> set = setA;
-            for (Key key : data.listA) {
-                set = set.remove(key);
-            }
-            assert set.isEmpty();
-            return set;
+    @Benchmark
+    public ChampSet<Key> mCopyOnyByOne() {
+        ChampSet<Key> set = ChampSet.of();
+        for (Key key : data.listA) {
+            set = set.add(key);
         }
+        assert set.size() == data.listA.size();
+        return set;
+    }
 
-        @Benchmark
-        public ChampSet<Key> mRemoveAllFromDifferentType() {
-            ChampSet<Key> set = setA;
-            ChampSet<Key> updated = set.removeAll(data.setA);
-            assert updated.isEmpty();
-            return updated;
+    @Benchmark
+    public ChampSet<Key> mRemoveOneByOne() {
+        ChampSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.remove(key);
         }
-        @Benchmark
-        public ChampSet<Key> mRemoveAllFromSameType() {
-            ChampSet<Key> set = setA;
-            ChampSet<Key> updated = set.removeAll(setAA);
-            assert updated.isEmpty();
-            return updated;
-        }
+        assert set.isEmpty();
+        return set;
+    }
 
-     */
+    @Benchmark
+    public ChampSet<Key> mRemoveAllFromDifferentType() {
+        ChampSet<Key> set = setA;
+        ChampSet<Key> updated = set.removeAll(data.setA);
+        assert updated.isEmpty();
+        return updated;
+    }
+
+    @Benchmark
+    public ChampSet<Key> mRemoveAllFromSameType() {
+        ChampSet<Key> set = setA;
+        ChampSet<Key> updated = set.removeAll(setAA);
+        assert updated.isEmpty();
+        return updated;
+    }
+
+
     @Benchmark
     public ChampSet<Key> mRetainAllFromDifferentTypeAllRetained() {
         ChampSet<Key> set = setA;
@@ -186,14 +138,7 @@ public class ChampSetJmh {
         return updated;
     }
 
-    /*
-public static void main(String... args){
-    ChampSet2Jmh jmh = new ChampSet2Jmh();
-    jmh.size=100000;
-    jmh.mask=-65;
-    jmh.setup();
-    System.out.println(jmh.mRetainAllFromSameTypeAllRetained().size());
-}*/
+
     @Benchmark
     public ChampSet<Key> mRetainAllFromSameTypeNoneRetained() {
         ChampSet<Key> set = setA;
@@ -201,7 +146,7 @@ public static void main(String... args){
         assert updated.isEmpty();
         return updated;
     }
-/*
+
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -237,6 +182,15 @@ public static void main(String... args){
     public boolean mContainsNotFound() {
         Key key = data.nextKeyInB();
         return setA.contains(key);
+    }
+
+/*
+    public static void main(String... args){
+        ChampSetJmh jmh = new ChampSetJmh();
+        jmh.size=70;
+        jmh.mask=-65;
+        jmh.setup();
+        System.out.println(jmh.mRetainAllFromSameTypeAllRetained().size());
     }
 
  */

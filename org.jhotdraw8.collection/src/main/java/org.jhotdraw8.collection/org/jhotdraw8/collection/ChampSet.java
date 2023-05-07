@@ -8,9 +8,7 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
-import org.jhotdraw8.collection.immutable.ImmutableSetCollector;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.BulkChangeEvent;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
@@ -21,14 +19,12 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.stream.Stream;
 
 
 /**
@@ -113,32 +109,13 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     /**
      * Returns an immutable set that contains the provided elements.
      *
-     * @param iterable an iterable
-     * @param <E>      the element type
+     * @param c   an iterable
+     * @param <E> the element type
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        if (iterable instanceof MutableChampSet<? extends E> m) {
-            return (ChampSet<E>) m.toImmutable();
-        }
-        if (iterable instanceof ChampSet<? extends E>) {
-            return (ChampSet<E>) iterable;
-        }
-        var c = new ImmutableSetCollector<E, ChampSet<E>>(ChampSet.of());
-        iterable.forEach(c);
-        return c.build();
-    }
-
-    /**
-     * Returns an immutable set that contains the provided elements.
-     *
-     * @param stream a stream
-     * @param <E>    the element type
-     * @return an immutable set of the provided elements
-     */
-    public static <E> @NonNull ChampSet<E> copyOf(@NonNull Stream<? extends E> stream) {
-        return stream.collect(new ImmutableSetCollector<>(ChampSet.of()));
+    public static <E> @NonNull ChampSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+        return ChampSet.<E>of().addAll(c);
     }
 
     /**
@@ -180,16 +157,9 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     @SuppressWarnings("unchecked")
     public @NonNull ChampSet<E> addAll(@NonNull Iterable<? extends E> c) {
-        ChampSet<E> that = ChampSet.copyOf(c);
-        if (that.isEmpty()) {
-            return this;
-        }
-        if (isEmpty()) {
-            return that;
-        }
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode<E> newRootNode = putAll(that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
-        return bulkChange.inBoth == that.size() ? this : new ChampSet<>(newRootNode, size + that.size - bulkChange.inBoth);
+        var m = toMutable();
+        m.addAll(c);
+        return m.toImmutable();
     }
 
 
@@ -262,45 +232,18 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> c) {
-        if (isEmpty()
-                || (c instanceof Collection<?> cc) && cc.isEmpty()
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
-            return this;
-        }
-        if (c == this) {
-            return clear();
-        }
-        if (c instanceof MutableChampSet<?> m) {
-            c = m.toImmutable();
-        }
-        if (c instanceof ChampSet<?> that) {
-            BulkChangeEvent bulkChange = new BulkChangeEvent();
-            BitmapIndexedNode<E> newRootNode = removeAll((BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
-            return bulkChange.removed == 0 ? this : size == bulkChange.removed ? of() : new ChampSet<>(newRootNode, size - bulkChange.removed);
-        }
-        return (ChampSet<E>) ImmutableSet.super.removeAll(c);
+        var m = toMutable();
+        m.removeAll(c);
+        return m.toImmutable();
     }
 
 
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampSet<E> retainAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) {
-            return this;
-        }
-        if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
-            return of();
-        }
-        if (c instanceof MutableChampSet<?> m) {
-            c = m.toImmutable();
-        }
-        if (c instanceof ChampSet<?> that) {
-            BulkChangeEvent bulkChange = new BulkChangeEvent();
-            BitmapIndexedNode<E> newRootNode = retainAll((BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
-            return bulkChange.removed == 0 ? this : size == bulkChange.removed ? of() : new ChampSet<>(newRootNode, size - bulkChange.removed);
-        }
-        return (ChampSet<E>) ImmutableSet.super.retainAll(c);
+        var m = toMutable();
+        m.retainAll(c);
+        return m.toImmutable();
     }
 
     @Override

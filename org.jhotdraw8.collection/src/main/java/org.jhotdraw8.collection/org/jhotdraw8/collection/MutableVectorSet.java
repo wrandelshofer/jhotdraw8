@@ -127,26 +127,6 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         return addLast(e, false);
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c == this || c == root) {
-            return false;
-        }
-        if (isEmpty() && (c instanceof VectorSet<?> cc)) {
-            root = (BitmapIndexedNode<SequencedElement<E>>) (BitmapIndexedNode<?>) cc;
-            vector = cc.vector;
-            offset = cc.offset;
-            size = cc.size();
-            modCount++;
-            return true;
-        }
-        boolean modified = false;
-        for (E e : c) {
-            modified |= add(e);
-        }
-        return modified;
-    }
-
     @Override
     public void addFirst(@Nullable E e) {
         addFirst(e, true);
@@ -352,8 +332,9 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      * @return an immutable copy
      */
     public @NonNull VectorSet<E> toImmutable() {
-        return size == 0 ? VectorSet.of() :
-                new VectorSet<>(root, vector, size, offset);
+        return size == 0
+                ? VectorSet.of()
+                : root instanceof VectorSet<E> c ? c : new VectorSet<>(root, vector, size, offset);
     }
 
     @Serial

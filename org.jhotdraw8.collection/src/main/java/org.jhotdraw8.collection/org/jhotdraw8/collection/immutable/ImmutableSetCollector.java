@@ -48,7 +48,7 @@ public class ImmutableSetCollector<T, S extends ImmutableSet<T>> implements Cons
     @Override
     public void accept(T t) {
         s = s.add(t);
-        if (s.size() == 32) {
+        if (s.size() >= 16384) {
             if (!stack.isEmpty()) {
                 do {
                     s = stack.pop().addAll(s);

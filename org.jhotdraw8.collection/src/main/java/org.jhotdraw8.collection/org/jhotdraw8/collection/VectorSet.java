@@ -26,8 +26,6 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -170,14 +168,14 @@ public class VectorSet<E>
     /**
      * Returns an immutable set that contains the provided elements.
      *
-     * @param iterable an iterable
-     * @param <E>      the element type
+     * @param c   an iterable
+     * @param <E> the element type
      * @return an immutable set of the provided elements
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return VectorSet.<E>of().addAll(iterable);
+    public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+        return VectorSet.<E>of().addAll(c);
     }
 
 
@@ -205,11 +203,8 @@ public class VectorSet<E>
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> @NonNull VectorSet<E> of(E @Nullable ... elements) {
-        if (elements.length == 0) {
-            return (VectorSet<E>) VectorSet.EMPTY;
-        } else {
-            return ((VectorSet<E>) VectorSet.EMPTY).addAll(Arrays.asList(elements));
-        }
+        Objects.requireNonNull(elements, "elements is null");
+        return VectorSet.<E>of().addAll(Arrays.asList(elements));
     }
 
     @Override
@@ -219,9 +214,10 @@ public class VectorSet<E>
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> set) {
-        var t = toMutable();
-        return t.addAll(set) ? t.toImmutable() : this;
+    public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> c) {
+        var m = toMutable();
+        m.addAll(c);
+        return m.toImmutable();
     }
 
     public @NonNull VectorSet<E> addFirst(@Nullable E key) {
@@ -374,17 +370,10 @@ public class VectorSet<E>
 
 
     @Override
-    public @NonNull VectorSet<E> removeAll(@NonNull Iterable<?> set) {
-        if (set == this) {
-            return of();
-        }
-        if (isEmpty()
-                || (set instanceof Collection<?> c) && c.isEmpty()
-                || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
-            return this;
-        }
-        var t = toMutable();
-        return t.removeAll(set) ? t.toImmutable() : this;
+    public @NonNull VectorSet<E> removeAll(@NonNull Iterable<?> c) {
+        var m = toMutable();
+        m.removeAll(c);
+        return m.toImmutable();
     }
 
     @SuppressWarnings("unchecked")
@@ -429,28 +418,9 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull VectorSet<E> retainAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) {
-            return this;
-        }
-        final Collection<E> set;
-        if (c instanceof Collection<?> cc) {
-            set = (Collection<E>) cc;
-        } else if (c instanceof ReadOnlyCollection<?> rc) {
-            set = (Collection<E>) rc.asCollection();
-        } else {
-            set = new HashSet<>();
-            c.forEach(e -> set.add((E) e));
-        }
-        if (set.isEmpty()) return of();
-        var t = this.toMutable();
-        boolean modified = false;
-        for (E key : this) {
-            if (!set.contains(key)) {
-                t.remove(key);
-                modified = true;
-            }
-        }
-        return modified ? t.toImmutable() : this;
+        var m = toMutable();
+        m.retainAll(c);
+        return m.toImmutable();
     }
 
     public @NonNull Iterator<E> reverseIterator() {

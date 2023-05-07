@@ -408,18 +408,6 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         return details;
     }
 
-    boolean removeAll(@NonNull Iterable<? extends K> c) {
-        if (isEmpty()) {
-            return false;
-        }
-        boolean modified = false;
-        for (K key : c) {
-            ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
-            modified |= details.isModified();
-        }
-        return modified;
-    }
-
     /**
      * Renumbers the sequence numbers if they have overflown,
      * or if the extent of the sequence numbers is more than
@@ -460,7 +448,8 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @return an immutable copy
      */
     public @NonNull VectorMap<K, V> toImmutable() {
-        return size == 0 ? VectorMap.of() : new VectorMap<>(root, vector, size, offset);
+        return size == 0 ? VectorMap.of()
+                : root instanceof VectorMap<K, V> m ? m : new VectorMap<>(root, vector, size, offset);
     }
 
     @Override

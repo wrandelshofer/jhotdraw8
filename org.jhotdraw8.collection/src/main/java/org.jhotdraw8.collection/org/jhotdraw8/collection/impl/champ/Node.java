@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.IdentityObject;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 /**
@@ -328,6 +329,17 @@ public abstract class Node<D> {
                                                   @NonNull BiPredicate<D, D> equalsFunction,
                                                   @NonNull ToIntFunction<D> hashFunction,
                                                   @NonNull ChangeEvent<D> details);
+
+    /**
+     * Retains data elements in this trie for which the provided predicate returns true.
+     *
+     * @param predicate  a predicate that returns true for data elements that should be retained
+     * @param shift      the shift of this node and the other node
+     * @param bulkChange updates the field {@link BulkChangeEvent#removed}
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> filterAll(Predicate<D> predicate, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange);
 
     protected abstract int calculateSize();
 }

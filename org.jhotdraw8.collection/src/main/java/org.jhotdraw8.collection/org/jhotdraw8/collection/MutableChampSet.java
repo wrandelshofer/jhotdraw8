@@ -19,6 +19,7 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -119,25 +120,21 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      */
     @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Iterable<? extends E> c) {
-        ChampSet<E> that = ChampSet.copyOf(c);
-        if (that.isEmpty()) {
-            return false;
+        if (c instanceof MutableChampSet<?> m) {
+            c = (Iterable<? extends E>) m.toImmutable();
         }
-        if (isEmpty()) {
-            root = that;
-            size = that.size;
+        if (c instanceof ChampSet<?> that) {
+            var bulkChange = new BulkChangeEvent();
+            var newRootNode = root.putAll((Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            if (bulkChange.inBoth == that.size()) {
+                return false;
+            }
+            root = newRootNode;
+            size += that.size - bulkChange.inBoth;
             modCount++;
             return true;
         }
-        BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode<E> newRootNode = root.putAll(that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
-        if (bulkChange.inBoth == that.size()) {
-            return false;
-        }
-        root = newRootNode;
-        size += that.size - bulkChange.inBoth;
-        modCount++;
-        return true;
+        return super.addAll(c);
     }
 
     @Override
@@ -195,6 +192,42 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             return true;
         }
         return super.retainAll(c);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public boolean retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if ((c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            clear();
+            return true;
+        }
+        if (c instanceof MutableChampSet<?> m) {
+            c = m.toImmutable();
+        }
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newRootNode;
+        if (c instanceof ChampSet<?> that) {
+            newRootNode = root.retainAll((BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+        } else if (c instanceof Collection<?> that) {
+            newRootNode = root.filterAll(that::contains, 0, bulkChange);
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            newRootNode = root.filterAll(that::contains, 0, bulkChange);
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            newRootNode = root.filterAll(that::contains, 0, bulkChange);
+        }
+        if (bulkChange.removed == 0) {
+            return false;
+        }
+        root = newRootNode;
+        size -= bulkChange.removed;
+        modCount++;
+        return true;
     }
 
     /**
