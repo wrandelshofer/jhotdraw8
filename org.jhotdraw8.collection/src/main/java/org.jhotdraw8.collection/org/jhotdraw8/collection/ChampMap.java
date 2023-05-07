@@ -95,7 +95,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final int SALT = 0;//new Random().nextInt();
+    static final int SALT = new java.util.Random().nextInt();
     final int size;
 
     ChampMap(@NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
@@ -128,7 +128,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return ChampMap.<K, V>of().putAll(map);
     }
 
-    public static <V, K> boolean entryKeyEquals(SimpleImmutableEntry<K, V> a, SimpleImmutableEntry<K, V> b) {
+    static <V, K> boolean entryKeyEquals(SimpleImmutableEntry<K, V> a, SimpleImmutableEntry<K, V> b) {
         return Objects.equals(a.getKey(), b.getKey());
     }
 
