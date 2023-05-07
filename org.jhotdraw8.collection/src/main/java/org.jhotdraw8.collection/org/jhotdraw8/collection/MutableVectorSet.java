@@ -333,6 +333,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      * @return an immutable copy
      */
     public @NonNull VectorSet<E> toImmutable() {
+        owner = null;
         return size == 0
                 ? VectorSet.of()
                 : root instanceof VectorSet<E> c ? c : new VectorSet<>(root, vector, size, offset);

@@ -32,7 +32,7 @@ class MutableBitmapIndexedNode<K> extends BitmapIndexedNode<K> {
     }
 
     @Override
-    protected @NonNull IdentityObject getMutator() {
+    protected @NonNull IdentityObject getOwner() {
         return ownedBy;
     }
 }

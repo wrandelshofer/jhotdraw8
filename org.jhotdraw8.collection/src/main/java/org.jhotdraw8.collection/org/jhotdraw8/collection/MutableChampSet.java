@@ -125,6 +125,14 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         if (c instanceof MutableChampSet<?> m) {
             c = (Iterable<? extends E>) m.toImmutable();
         }
+        if (c == root) {
+            return false;
+        }
+        if (isEmpty() && (c instanceof ChampSet<?> cc)) {
+            root = (BitmapIndexedNode<E>) cc;
+            size = cc.size;
+            return true;
+        }
         if (c instanceof ChampSet<?> that) {
             var bulkChange = new BulkChangeEvent();
             var newRootNode = root.putAll(getOrCreateOwner(), (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
@@ -293,6 +301,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * @return an immutable copy
      */
     public @NonNull ChampSet<E> toImmutable() {
+        owner = null;
         return size == 0
                 ? ChampSet.of()
                 : root instanceof ChampSet<E> c ? c : new ChampSet<>(root, size);

@@ -24,10 +24,11 @@ import java.util.function.Predicate;
 /**
  * Abstract base class for CHAMP maps.
  *
- * @param <K> the key type of the map
- * @param <V> the value typeof the map
+ * @param <K>    the key type of the map
+ * @param <V>    the value typeof the map
+ * @param <SELF> the self type
  */
-public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampMap<K, V, SELF> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -46,7 +47,7 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<X> root;
+    protected BitmapIndexedNode<SELF> root;
 
     /**
      * The number of entries in this map.
@@ -68,10 +69,10 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampMap<K, V, X> clone() {
+    public @NonNull AbstractMutableChampMap<K, V, SELF> clone() {
         try {
             owner = null;
-            return (AbstractMutableChampMap<K, V, X>) super.clone();
+            return (AbstractMutableChampMap<K, V, SELF>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

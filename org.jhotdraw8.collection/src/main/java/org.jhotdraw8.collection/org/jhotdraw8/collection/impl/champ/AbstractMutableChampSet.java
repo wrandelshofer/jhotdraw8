@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 /**
  * Abstract base class for CHAMP sets.
  *
- * @param <E> the element type of the set
- * @param <X> the key type of the CHAMP trie
+ * @param <E>    the element type of the set
+ * @param <SELF> the self type
  */
-public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -44,7 +44,7 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<X> root;
+    protected BitmapIndexedNode<SELF> root;
 
     /**
      * The number of elements in this set.
@@ -176,10 +176,10 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampSet<E, X> clone() {
+    public @NonNull AbstractMutableChampSet<E, SELF> clone() {
         try {
             owner = null;
-            return (AbstractMutableChampSet<E, X>) super.clone();
+            return (AbstractMutableChampSet<E, SELF>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

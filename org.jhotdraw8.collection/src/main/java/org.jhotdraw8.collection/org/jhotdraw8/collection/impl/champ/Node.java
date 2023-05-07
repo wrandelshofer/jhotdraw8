@@ -202,7 +202,7 @@ public abstract class Node<D> {
 
     abstract @Nullable D getData(int index);
 
-    @Nullable IdentityObject getMutator() {
+    @Nullable IdentityObject getOwner() {
         return null;
     }
 
@@ -223,7 +223,7 @@ public abstract class Node<D> {
     abstract boolean hasNodes();
 
     boolean isAllowedToUpdate(@Nullable IdentityObject y) {
-        IdentityObject x = getMutator();
+        IdentityObject x = getOwner();
         return x != null && x == y;
     }
 

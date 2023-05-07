@@ -322,6 +322,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
      * @return an immutable copy
      */
     public @NonNull ChampMap<K, V> toImmutable() {
+        owner = null;
         return size == 0 ? ChampMap.of()
                 : root instanceof ChampMap<K, V> m ? m : new ChampMap<>(root, size);
     }

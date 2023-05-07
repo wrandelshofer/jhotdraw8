@@ -450,6 +450,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @return an immutable copy
      */
     public @NonNull VectorMap<K, V> toImmutable() {
+        owner = null;
         return size == 0 ? VectorMap.of()
                 : root instanceof VectorMap<K, V> m ? m : new VectorMap<>(root, vector, size, offset);
     }
