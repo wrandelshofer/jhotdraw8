@@ -10,7 +10,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.collection.ChampSet;
-import org.jhotdraw8.collection.SequencedChampSet;
+import org.jhotdraw8.collection.VectorSet;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
         // If there is a comparator, we do not need to use a sequenced set,
         // because we are going to sort the set in method toString() anyway.
-        ImmutableSet<String> words = comparator == null ? SequencedChampSet.of() : ChampSet.of();
+        ImmutableSet<String> words = comparator == null ? VectorSet.of() : ChampSet.of();
         for (String str : strings) {
             words = words.add(Normalizer.normalize(str, Normalizer.Form.NFC));
         }
@@ -93,6 +93,6 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
 
     @Override
     public ImmutableSet<String> getDefaultValue() {
-        return SequencedChampSet.of();
+        return VectorSet.of();
     }
 }

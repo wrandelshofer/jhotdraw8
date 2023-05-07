@@ -22,21 +22,19 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  * Benchmark                            (mask)  (size)  Mode  Cnt         Score   Error  Units
- * VectorMapJmh.mContainsFound             -65  100000  avgt             76.360          ns/op
- * VectorMapJmh.mContainsNotFound          -65  100000  avgt             85.191          ns/op
- * VectorMapJmh.mCopyOf                    -65  100000  avgt       32084830.000          ns/op
- * VectorMapJmh.mCopyOnyByOne              -65  100000  avgt       35018448.514          ns/op
- * VectorMapJmh.mHead                      -65  100000  avgt             18.888          ns/op
- * VectorMapJmh.mIterate                   -65  100000  avgt        1550377.775          ns/op
- * VectorMapJmh.mPut                       -65  100000  avgt            285.683          ns/op
- * VectorMapJmh.mRemoveAll                 -65  100000  avgt       34053992.390          ns/op
- * VectorMapJmh.mRemoveOneByOne            -65  100000  avgt       91181719.291          ns/op
- * VectorMapJmh.mRemoveThenAdd             -65  100000  avgt            576.359          ns/op
- * VectorMapJmh.mRetainAllAllRetained      -65  100000  avgt        4092770.462          ns/op
- * VectorMapJmh.mRetainAllNoneRetained     -65  100000  avgt       31815206.200          ns/op
- * VectorMapJmh.mTail                      -65  100000  avgt            141.658          ns/op
- *
- * Process finished with exit code 0
+ * VectorMapJmh.mContainsFound             -65  100000  avgt             69.008          ns/op
+ * VectorMapJmh.mContainsNotFound          -65  100000  avgt             62.151          ns/op
+ * VectorMapJmh.mCopyOf                    -65  100000  avgt       29209592.309          ns/op
+ * VectorMapJmh.mCopyOnyByOne              -65  100000  avgt       33329504.498          ns/op
+ * VectorMapJmh.mHead                      -65  100000  avgt             28.013          ns/op
+ * VectorMapJmh.mIterate                   -65  100000  avgt        1591652.712          ns/op
+ * VectorMapJmh.mPut                       -65  100000  avgt            279.123          ns/op
+ * VectorMapJmh.mRemoveAll                 -65  100000  avgt       27430212.184          ns/op
+ * VectorMapJmh.mRemoveOneByOne            -65  100000  avgt       78633296.148          ns/op
+ * VectorMapJmh.mRemoveThenAdd             -65  100000  avgt            551.835          ns/op
+ * VectorMapJmh.mRetainAllAllRetained      -65  100000  avgt        3308725.090          ns/op
+ * VectorMapJmh.mRetainAllNoneRetained     -65  100000  avgt       33450610.485          ns/op
+ * VectorMapJmh.mTail                      -65  100000  avgt            145.555          ns/op *
  * </pre>
  */
 @State(Scope.Benchmark)

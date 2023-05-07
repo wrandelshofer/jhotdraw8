@@ -6,6 +6,8 @@
 package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
@@ -28,6 +30,16 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
         ReadOnlySet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
+
+    /**
+     * The current owner id of this set.
+     * <p>
+     * All nodes that have the same non-null owner id, are exclusively owned
+     * by this set, and therefore can be mutated without affecting other sets.
+     * <p>
+     * If this owner id is null, then this set does not own any nodes.
+     */
+    protected @Nullable IdentityObject owner;
 
     /**
      * The root of this CHAMP trie.
@@ -117,6 +129,20 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
         return size;
     }
 
+    /**
+     * Gets the owner id of this set. Creates a new id, if this
+     * set has no owner id.
+     *
+     * @return a new unique id or the existing unique id.
+     */
+    @NonNull
+    protected IdentityObject getOrCreateOwner() {
+        if (owner == null) {
+            owner = new IdentityObject();
+        }
+        return owner;
+    }
+
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
         return removeAll((Iterable<?>) c);
@@ -152,6 +178,7 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
     @SuppressWarnings("unchecked")
     public @NonNull AbstractMutableChampSet<E, X> clone() {
         try {
+            owner = null;
             return (AbstractMutableChampSet<E, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

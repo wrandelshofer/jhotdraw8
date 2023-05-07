@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
@@ -31,6 +32,16 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
     @Serial
     private static final long serialVersionUID = 0L;
 
+    /**
+     * The current owner id of this map.
+     * <p>
+     * All nodes that have the same non-null owner id, are exclusively owned
+     * by this map, and therefore can be mutated without affecting other map.
+     * <p>
+     * If this owner id is null, then this map does not own any nodes.
+     */
+    @Nullable
+    protected IdentityObject owner;
 
     /**
      * The root of this CHAMP trie.
@@ -47,10 +58,19 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
      */
     protected int modCount;
 
+    @NonNull
+    protected IdentityObject getOrCreateOwner() {
+        if (owner == null) {
+            owner = new IdentityObject();
+        }
+        return owner;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public @NonNull AbstractMutableChampMap<K, V, X> clone() {
         try {
+            owner = null;
             return (AbstractMutableChampMap<K, V, X>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);

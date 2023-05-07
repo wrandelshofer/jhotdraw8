@@ -227,7 +227,7 @@ public class VectorSet<E>
     private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-        var newRoot = put(newElem,
+        var newRoot = put(null, newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -258,7 +258,7 @@ public class VectorSet<E>
                                           boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<E>(e, vector.size() - offset);
-        var newRoot = put(newElem,
+        var newRoot = put(null, newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
                 Objects::equals, SequencedElement::elementKeyHash);
@@ -356,7 +356,7 @@ public class VectorSet<E>
     public @NonNull VectorSet<E> remove(@Nullable E key) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
-        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(
+        BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
@@ -406,7 +406,7 @@ public class VectorSet<E>
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = ChampSequencedData.vecRenumber(
-                    size, root, vector, SequencedElement::elementKeyHash, Objects::equals,
+                    new IdentityObject(), size, root, vector, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return new VectorSet<>(
                     result.first(), result.second(),

@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
 
 import java.util.Arrays;
@@ -14,6 +15,9 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newBitmapIndexedNode;
+
 
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
@@ -30,7 +34,7 @@ import java.util.function.ToIntFunction;
  * @param <D> the data type
  */
 public class BitmapIndexedNode<D> extends Node<D> {
-    static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = new BitmapIndexedNode<>((0), (0), new Object[]{});
+    static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0, new Object[]{});
 
     public final Object @NonNull [] mixed;
     private final int nodeMap;
@@ -45,19 +49,20 @@ public class BitmapIndexedNode<D> extends Node<D> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K> @NonNull BitmapIndexedNode<K> emptyNode() {
-        return (BitmapIndexedNode<K>) EMPTY_NODE;
+    public static <D> @NonNull BitmapIndexedNode<D> emptyNode() {
+        return (BitmapIndexedNode<D>) EMPTY_NODE;
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndInsertData(int bitpos,
+    @NonNull BitmapIndexedNode<D> copyAndInsertData(@Nullable IdentityObject owner, int bitpos,
                                                     D data) {
         int idx = dataIndex(bitpos);
         Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
         dst[idx] = data;
-        return new BitmapIndexedNode<>(nodeMap, dataMap | bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap, dataMap | bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndMigrateFromDataToNode(int bitpos, Node<D> node) {
+    @NonNull BitmapIndexedNode<D> copyAndMigrateFromDataToNode(@Nullable IdentityObject owner,
+                                                               int bitpos, Node<D> node) {
 
         int idxOld = dataIndex(bitpos);
         int idxNew = this.mixed.length - 1 - nodeIndex(bitpos);
@@ -71,10 +76,11 @@ public class BitmapIndexedNode<D> extends Node<D> {
         System.arraycopy(src, idxOld + 1, dst, idxOld, idxNew - idxOld);
         System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
         dst[idxNew] = node;
-        return new BitmapIndexedNode<>(nodeMap | bitpos, dataMap ^ bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap | bitpos, dataMap ^ bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndMigrateFromNodeToData(int bitpos, @NonNull Node<D> node) {
+    @NonNull BitmapIndexedNode<D> copyAndMigrateFromNodeToData(@Nullable IdentityObject owner,
+                                                               int bitpos, @NonNull Node<D> node) {
         int idxOld = this.mixed.length - 1 - nodeIndex(bitpos);
         int idxNew = dataIndex(bitpos);
 
@@ -87,16 +93,22 @@ public class BitmapIndexedNode<D> extends Node<D> {
         System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
         System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
         dst[idxNew] = node.getData(0);
-        return new BitmapIndexedNode<>(nodeMap ^ bitpos, dataMap | bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap ^ bitpos, dataMap | bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<D> copyAndSetNode(int bitpos,
+    @NonNull BitmapIndexedNode<D> copyAndSetNode(@Nullable IdentityObject owner, int bitpos,
                                                  Node<D> node) {
 
         int idx = this.mixed.length - 1 - nodeIndex(bitpos);
-        // copy 'src' and set 1 element(s) at position 'idx'
-        final Object[] dst = ListHelper.copySet(this.mixed, idx, node);
-        return new BitmapIndexedNode<>(nodeMap, dataMap, dst);
+        if (isAllowedToUpdate(owner)) {
+            // no copying if already editable
+            this.mixed[idx] = node;
+            return this;
+        } else {
+            // copy 'src' and set 1 element(s) at position 'idx'
+            final Object[] dst = ListHelper.copySet(this.mixed, idx, node);
+            return newBitmapIndexedNode(owner, nodeMap, dataMap, dst);
+        }
     }
 
     @Override
@@ -209,21 +221,22 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @Override
     @NonNull
-    public BitmapIndexedNode<D> remove(D data,
+    public BitmapIndexedNode<D> remove(@Nullable IdentityObject owner,
+                                       D data,
                                        int dataHash, int shift,
                                        @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         int mask = mask(dataHash, shift);
         int bitpos = bitpos(mask);
         if ((dataMap & bitpos) != 0) {
-            return removeData(data, dataHash, shift, details, bitpos, equalsFunction);
+            return removeData(owner, data, dataHash, shift, details, bitpos, equalsFunction);
         }
         if ((nodeMap & bitpos) != 0) {
-            return removeSubNode(data, dataHash, shift, details, bitpos, equalsFunction);
+            return removeSubNode(owner, data, dataHash, shift, details, bitpos, equalsFunction);
         }
         return this;
     }
 
-    private @NonNull BitmapIndexedNode<D> removeData(D data, int dataHash, int shift, @NonNull ChangeEvent<D> details, int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
+    private @NonNull BitmapIndexedNode<D> removeData(@Nullable IdentityObject owner, D data, int dataHash, int shift, @NonNull ChangeEvent<D> details, int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
         int dataIndex = dataIndex(bitpos);
         int entryLength = 1;
         if (!equalsFunction.test(getData(dataIndex), data)) {
@@ -235,19 +248,19 @@ public class BitmapIndexedNode<D> extends Node<D> {
             int newDataMap =
                     (shift == 0) ? (dataMap ^ bitpos) : bitpos(mask(dataHash, 0));
             Object[] nodes = {getData(dataIndex ^ 1)};
-            return new BitmapIndexedNode<>(0, newDataMap, nodes);
+            return newBitmapIndexedNode(owner, 0, newDataMap, nodes);
         }
         int idx = dataIndex * entryLength;
         Object[] dst = ListHelper.copyComponentRemove(this.mixed, idx, entryLength);
-        return new BitmapIndexedNode<>(nodeMap, dataMap ^ bitpos, dst);
+        return newBitmapIndexedNode(owner, nodeMap, dataMap ^ bitpos, dst);
     }
 
-    private @NonNull BitmapIndexedNode<D> removeSubNode(D data, int dataHash, int shift,
+    private @NonNull BitmapIndexedNode<D> removeSubNode(@Nullable IdentityObject owner, D data, int dataHash, int shift,
                                                         @NonNull ChangeEvent<D> details,
                                                         int bitpos, @NonNull BiPredicate<D, D> equalsFunction) {
         Node<D> subNode = nodeAt(bitpos);
         Node<D> updatedSubNode =
-                subNode.remove(data, dataHash, shift + BIT_PARTITION_SIZE, details, equalsFunction);
+                subNode.remove(owner, data, dataHash, shift + BIT_PARTITION_SIZE, details, equalsFunction);
         if (subNode == updatedSubNode) {
             return this;
         }
@@ -255,14 +268,15 @@ public class BitmapIndexedNode<D> extends Node<D> {
             if (!hasData() && nodeArity() == 1) {
                 return (BitmapIndexedNode<D>) updatedSubNode;
             }
-            return copyAndMigrateFromNodeToData(bitpos, updatedSubNode);
+            return copyAndMigrateFromNodeToData(owner, bitpos, updatedSubNode);
         }
-        return copyAndSetNode(bitpos, updatedSubNode);
+        return copyAndSetNode(owner, bitpos, updatedSubNode);
     }
 
     @Override
     @NonNull
-    public BitmapIndexedNode<D> put(@Nullable D newData,
+    public BitmapIndexedNode<D> put(@Nullable IdentityObject owner,
+                                    @Nullable D newData,
                                     int dataHash, int shift,
                                     @NonNull ChangeEvent<D> details,
                                     @NonNull BiFunction<D, D, D> updateFunction,
@@ -280,35 +294,39 @@ public class BitmapIndexedNode<D> extends Node<D> {
                     return this;
                 }
                 details.setReplaced(oldData, updatedData);
-                return copyAndSetData(dataIndex, updatedData);
+                return copyAndSetData(owner, dataIndex, updatedData);
             }
             Node<D> updatedSubNode =
-                    mergeTwoDataEntriesIntoNode(
+                    mergeTwoDataEntriesIntoNode(owner,
                             oldData, hashFunction.applyAsInt(oldData),
                             newData, dataHash, shift + BIT_PARTITION_SIZE);
             details.setAdded(newData);
-            return copyAndMigrateFromDataToNode(bitpos, updatedSubNode);
+            return copyAndMigrateFromDataToNode(owner, bitpos, updatedSubNode);
         } else if ((nodeMap & bitpos) != 0) {
             Node<D> subNode = nodeAt(bitpos);
             Node<D> updatedSubNode = subNode
-                    .put(newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
-            return subNode == updatedSubNode ? this : copyAndSetNode(bitpos, updatedSubNode);
+                    .put(owner, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
+            return subNode == updatedSubNode ? this : copyAndSetNode(owner, bitpos, updatedSubNode);
         }
         details.setAdded(newData);
-        return copyAndInsertData(bitpos, newData);
+        return copyAndInsertData(owner, bitpos, newData);
     }
 
     @NonNull
-    private BitmapIndexedNode<D> copyAndSetData(int dataIndex, D updatedData) {
+    private BitmapIndexedNode<D> copyAndSetData(@Nullable IdentityObject owner, int dataIndex, D updatedData) {
+        if (isAllowedToUpdate(owner)) {
+            this.mixed[dataIndex] = updatedData;
+            return this;
+        }
         Object[] newMixed = ListHelper.copySet(this.mixed, dataIndex, updatedData);
-        return new BitmapIndexedNode<>(nodeMap, dataMap, newMixed);
+        return newBitmapIndexedNode(owner, nodeMap, dataMap, newMixed);
     }
 
 
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    public BitmapIndexedNode<D> putAll(Node<D> other, int shift,
+    public BitmapIndexedNode<D> putAll(IdentityObject owner, Node<D> other, int shift,
                                        @NonNull BulkChangeEvent bulkChange,
                                        @NonNull BiFunction<D, D, D> updateFunction,
                                        @NonNull BiPredicate<D, D> equalsFunction,
@@ -351,14 +369,14 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 // add a new node that joins this node and that node
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.putAll(thatNode, shift + BIT_PARTITION_SIZE, bulkChange,
+                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.putAll(owner, thatNode, shift + BIT_PARTITION_SIZE, bulkChange,
                         updateFunction, equalsFunction, hashFunction, details);
             } else if (thisIsData && thatIsNode) {
                 // add a new node that joins this data and that node
                 D thisData = this.getData(this.dataIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
                 details.reset();
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thatNode.put(thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, details,
+                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thatNode.put(null, thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, details,
                         (a, b) -> updateFunction.apply(b, a),
                         equalsFunction, hashFunction);
                 if (details.isUnchanged()) {
@@ -373,7 +391,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 D thatData = that.getData(that.dataIndex(bitpos));
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 details.reset();
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.put(thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
+                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.put(owner, thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
                 if (!details.isModified()) {
                     bulkChange.inBoth++;
                 }
@@ -390,7 +408,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 } else {
                     newDataMap ^= bitpos;
                     newNodeMap ^= bitpos;
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = mergeTwoDataEntriesIntoNode(thisData, hashFunction.applyAsInt(thisData), thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE);
+                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = mergeTwoDataEntriesIntoNode(owner, thisData, hashFunction.applyAsInt(thisData), thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE);
                 }
             }
         }
@@ -399,7 +417,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @Override
     @NonNull
-    public BitmapIndexedNode<D> removeAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    public BitmapIndexedNode<D> removeAll(@Nullable IdentityObject owner, Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -433,7 +451,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 // remove all in that node from all in this node
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
-                Node<D> result = thisNode.removeAll(thatNode, shift + BIT_PARTITION_SIZE, bulkChange, updateFunction, equalsFunction, hashFunction, details);
+                Node<D> result = thisNode.removeAll(owner, thatNode, shift + BIT_PARTITION_SIZE, bulkChange, updateFunction, equalsFunction, hashFunction, details);
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {
@@ -459,7 +477,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 D thatData = that.getData(that.dataIndex(bitpos));
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 details.reset();
-                Node<D> result = thisNode.remove(thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, details, equalsFunction);
+                Node<D> result = thisNode.remove(owner, thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, details, equalsFunction);
                 if (details.isModified()) {
                     bulkChange.removed++;
                 }
@@ -503,7 +521,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @Override
     @NonNull
-    public BitmapIndexedNode<D> retainAll(Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    public BitmapIndexedNode<D> retainAll(IdentityObject owner, Node<D> other, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         var that = (BitmapIndexedNode<D>) other;
         if (this == that) {
             bulkChange.inBoth += this.calculateSize();
@@ -539,7 +557,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 // retain all in that node from all in this node
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
-                Node<D> result = thisNode.retainAll(thatNode, shift + BIT_PARTITION_SIZE, bulkChange, updateFunction, equalsFunction, hashFunction, details);
+                Node<D> result = thisNode.retainAll(owner, thatNode, shift + BIT_PARTITION_SIZE, bulkChange, updateFunction, equalsFunction, hashFunction, details);
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {
@@ -591,7 +609,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @Override
     @NonNull
-    public BitmapIndexedNode<D> filterAll(Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
+    public BitmapIndexedNode<D> filterAll(@Nullable IdentityObject owner, Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
         var newBitMap = nodeMap | dataMap;
         var buffer = new Object[Integer.bitCount(newBitMap)];
         int newDataMap = this.dataMap;
@@ -602,7 +620,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             boolean thisIsNode = (this.nodeMap & bitpos) != 0;
             if (thisIsNode) {
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
-                Node<D> result = thisNode.filterAll(predicate, shift + BIT_PARTITION_SIZE, bulkChange);
+                Node<D> result = thisNode.filterAll(owner, predicate, shift + BIT_PARTITION_SIZE, bulkChange);
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {

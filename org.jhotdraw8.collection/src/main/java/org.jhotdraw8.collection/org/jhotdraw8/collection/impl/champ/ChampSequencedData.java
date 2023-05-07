@@ -7,15 +7,13 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.VectorList;
 
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.Function;
 import java.util.function.ToIntFunction;
-
-import static org.jhotdraw8.collection.impl.champ.BitmapIndexedNode.emptyNode;
 
 /**
  * A {@code SequencedData} stores a sequence number plus some data.
@@ -42,35 +40,6 @@ public interface ChampSequencedData {
      */
     int NO_SEQUENCE_NUMBER = Integer.MIN_VALUE;
 
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> buildSequencedTrie(@NonNull BitmapIndexedNode<K> root) {
-        BitmapIndexedNode<K> seqRoot = emptyNode();
-        ChangeEvent<K> details = new ChangeEvent<>();
-        for (ChampSpliterator<K, K> i = new ChampSpliterator<K, K>(root, null, 0, 0); i.moveNext(); ) {
-            K elem = i.current();
-            seqRoot = seqRoot.put(elem, seqHash(elem.getSequenceNumber()),
-                    0, details, (oldK, newK) -> oldK, ChampSequencedData::seqEquals, ChampSequencedData::seqHash);
-        }
-        return seqRoot;
-    }
-
-    /**
-     * Returns true if the sequenced elements must be renumbered because
-     * {@code first} or {@code last} are at risk of overflowing.
-     * <p>
-     * {@code first} and {@code last} are estimates of the first and last
-     * sequence numbers in the trie. The estimated extent may be larger
-     * than the actual extent, but not smaller.
-     *
-     * @param size  the size of the trie
-     * @param first the estimated first sequence number
-     * @param last  the estimated last sequence number
-     * @return
-     */
-    static boolean mustRenumber(int size, int first, int last) {
-        return size == 0 && (first != -1 || last != 0)
-                || last > Integer.MAX_VALUE - 2
-                || first < Integer.MIN_VALUE + 2;
-    }
 
     static boolean vecMustRenumber(int size, int offset, int vectorSize) {
         return size == 0
@@ -82,53 +51,11 @@ public interface ChampSequencedData {
     /**
      * Renumbers the sequence numbers in all nodes from {@code 0} to {@code size}.
      * <p>
-     * Afterwards the sequence number for the next inserted entry must be
-     * set to the value {@code size};
-     *
-     * @param <K>
-     * @param size            the size of the trie
-     * @param root            the root of the trie
-     * @param sequenceRoot    the sequence root of the trie
-     * @param hashFunction    the hash function for data elements
-     * @param equalsFunction  the equals function for data elements
-     * @param factoryFunction the factory function for data elements
-     * @return a new renumbered root
-     */
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> renumber(int size,
-                                                                        @NonNull BitmapIndexedNode<K> root,
-                                                                        @NonNull BitmapIndexedNode<K> sequenceRoot,
-                                                                        @NonNull ToIntFunction<K> hashFunction,
-                                                                        @NonNull BiPredicate<K, K> equalsFunction,
-                                                                        @NonNull BiFunction<K, Integer, K> factoryFunction
-
-    ) {
-        if (size == 0) {
-            return root;
-        }
-        BitmapIndexedNode<K> newRoot = root;
-        ChangeEvent<K> details = new ChangeEvent<>();
-        int seq = 0;
-
-        for (var i = new ChampSpliterator<>(sequenceRoot, Function.identity(), 0, 0); i.moveNext(); ) {
-            K e = i.current();
-            K newElement = factoryFunction.apply(e, seq);
-            newRoot = newRoot.put(
-                    newElement,
-                    hashFunction.applyAsInt(e), 0, details,
-                    (oldk, newk) -> oldk.getSequenceNumber() == newk.getSequenceNumber() ? oldk : newk,
-                    equalsFunction, hashFunction);
-            seq++;
-        }
-        return newRoot;
-    }
-
-    /**
-     * Renumbers the sequence numbers in all nodes from {@code 0} to {@code size}.
-     * <p>
      * Afterward, the sequence number for the next inserted entry must be
      * set to the value {@code size};
      *
      * @param <K>
+     * @param owner
      * @param size            the size of the trie
      * @param root            the root of the trie
      * @param vector          the sequence root of the trie
@@ -139,7 +66,7 @@ public interface ChampSequencedData {
      */
     @SuppressWarnings("unchecked")
     static <K extends ChampSequencedData> OrderedPair<BitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
-            int size,
+            @Nullable IdentityObject owner, int size,
             @NonNull BitmapIndexedNode<K> root,
             @NonNull VectorList<Object> vector,
             @NonNull ToIntFunction<K> hashFunction,
@@ -157,57 +84,13 @@ public interface ChampSequencedData {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);
-            renumberedRoot = renumberedRoot.put(data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
+            renumberedRoot = renumberedRoot.put(owner, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
         }
 
         return new OrderedPair<>(renumberedRoot, renumberedVector);
     }
 
-    static <K extends ChampSequencedData> boolean seqEquals(@NonNull K a, @NonNull K b) {
-        return a.getSequenceNumber() == b.getSequenceNumber();
-    }
 
-    static <K extends ChampSequencedData> int seqHash(K e) {
-        return seqHash(e.getSequenceNumber());
-    }
-
-    /**
-     * Computes a hash code from the sequence number, so that we can
-     * use it for iteration in a CHAMP trie.
-     * <p>
-     * Convert the sequence number to unsigned 32 by adding Integer.MIN_VALUE.
-     * Then reorders its bits from 66666555554444433333222221111100 to
-     * 00111112222233333444445555566666.
-     *
-     * @param sequenceNumber a sequence number
-     * @return a hash code
-     */
-    static int seqHash(int sequenceNumber) {
-        int u = sequenceNumber + Integer.MIN_VALUE;
-        return (u >>> 27)
-                | ((u & 0b00000_11111_00000_00000_00000_00000_00) >>> 17)
-                | ((u & 0b00000_00000_11111_00000_00000_00000_00) >>> 7)
-                | ((u & 0b00000_00000_00000_11111_00000_00000_00) << 3)
-                | ((u & 0b00000_00000_00000_00000_11111_00000_00) << 13)
-                | ((u & 0b00000_00000_00000_00000_00000_11111_00) << 23)
-                | ((u & 0b00000_00000_00000_00000_00000_00000_11) << 30);
-    }
-
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> seqRemove(@NonNull BitmapIndexedNode<K> seqRoot,
-                                                                         @Nullable K key, @NonNull ChangeEvent<K> details) {
-        return seqRoot.remove(
-                key, seqHash(key.getSequenceNumber()), 0, details,
-                ChampSequencedData::seqEquals);
-    }
-
-    static <K extends ChampSequencedData> BitmapIndexedNode<K> seqUpdate(@NonNull BitmapIndexedNode<K> seqRoot,
-                                                                         @Nullable K key, @NonNull ChangeEvent<K> details,
-                                                                         @NonNull BiFunction<K, K, K> replaceFunction) {
-        return seqRoot.put(
-                key, seqHash(key.getSequenceNumber()), 0, details,
-                replaceFunction,
-                ChampSequencedData::seqEquals, ChampSequencedData::seqHash);
-    }
 
     final static ChampTombstone TOMB_ZERO_ZERO = new ChampTombstone(0, 0);
 

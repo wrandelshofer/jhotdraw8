@@ -293,7 +293,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     private VectorMap<K, V> putFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, -offset - 1);
-        var newRoot = put(newEntry,
+        var newRoot = put(null, newEntry,
                 keyHash(key), 0, details,
                 moveToFirst ? SequencedEntry::updateAndMoveToFirst : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -330,7 +330,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     private VectorMap<K, V> putLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
-        var newRoot = put(newEntry,
+        var newRoot = put(null, newEntry,
                 keyHash(key), 0, details,
                 moveToLast ? SequencedEntry::updateAndMoveToLast : SequencedEntry::update,
                 SequencedEntry::keyEquals, SequencedEntry::entryKeyHash);
@@ -382,7 +382,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     public @NonNull VectorMap<K, V> remove(@NonNull K key) {
         int keyHash = keyHash(key);
         var details = new ChangeEvent<SequencedEntry<K, V>>();
-        BitmapIndexedNode<SequencedEntry<K, V>> newRoot = remove(
+        BitmapIndexedNode<SequencedEntry<K, V>> newRoot = remove(null,
                 new SequencedEntry<>(key),
                 keyHash, 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
@@ -410,7 +410,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = ChampSequencedData.<SequencedEntry<K, V>>vecRenumber(
-                    size, root, vector, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
+                    new IdentityObject(), size, root, vector, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             return new VectorMap<>(
                     result.first(), result.second(),

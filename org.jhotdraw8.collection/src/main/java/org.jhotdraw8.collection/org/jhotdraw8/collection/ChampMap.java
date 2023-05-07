@@ -213,7 +213,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
         var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
-        var newRootNode = put(new SimpleImmutableEntry<>(key, value),
+        var newRootNode = put(null, new SimpleImmutableEntry<>(key, value),
                 keyHash(key), 0, details,
                 ChampMap::updateEntry, ChampMap::entryKeyEquals, ChampMap::entryKeyHash);
         if (details.isModified()) {
@@ -240,7 +240,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         int keyHash = keyHash(key);
         var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
         var newRootNode =
-                remove(new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
+                remove(null, new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                         ChampMap::entryKeyEquals);
         if (details.isModified()) {
             return size == 1 ? ChampMap.of() : new ChampMap<>(newRootNode, size - 1);

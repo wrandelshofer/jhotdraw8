@@ -23,21 +23,21 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  * Benchmark                                            (mask)  (size)  Mode  Cnt         Score   Error  Units
- * mContainsFound                              -65  100000  avgt             47.409          ns/op
- * mContainsNotFound                           -65  100000  avgt             50.258          ns/op
- * mCopyOf                                     -65  100000  avgt       22060427.183          ns/op
- * mCopyOnyByOne                               -65  100000  avgt       23095396.228          ns/op
- * mHead                                       -65  100000  avgt             54.405          ns/op
- * mIterate                                    -65  100000  avgt        1982330.715          ns/op
- * mRemoveAllFromDifferentType                 -65  100000  avgt       23654089.570          ns/op
- * mRemoveAllFromSameType                      -65  100000  avgt        1306590.703          ns/op
- * mRemoveOneByOne                             -65  100000  avgt       22885024.760          ns/op
- * mRemoveThenAdd                              -65  100000  avgt            306.514          ns/op
- * mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt        5723422.425          ns/op
- * mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt        3957123.029          ns/op
- * mRetainAllFromSameTypeAllRetained           -65  100000  avgt        1516977.856          ns/op
- * mRetainAllFromSameTypeNoneRetained          -65  100000  avgt        1414259.172          ns/op
- * mTail                                       -65  100000  avgt            137.540          ns/op
+ * ChampSetJmh.mContainsFound                              -65  100000  avgt             52.576          ns/op
+ * ChampSetJmh.mContainsNotFound                           -65  100000  avgt             60.258          ns/op
+ * ChampSetJmh.mCopyOf                                     -65  100000  avgt       14986801.283          ns/op
+ * ChampSetJmh.mCopyOnyByOne                               -65  100000  avgt       23692842.288          ns/op
+ * ChampSetJmh.mHead                                       -65  100000  avgt             55.770          ns/op
+ * ChampSetJmh.mIterate                                    -65  100000  avgt        1877353.796          ns/op
+ * ChampSetJmh.mRemoveAllFromDifferentType                 -65  100000  avgt       17936675.235          ns/op
+ * ChampSetJmh.mRemoveAllFromSameType                      -65  100000  avgt        1363740.078          ns/op
+ * ChampSetJmh.mRemoveOneByOne                             -65  100000  avgt       25836920.216          ns/op
+ * ChampSetJmh.mRemoveThenAdd                              -65  100000  avgt            348.779          ns/op
+ * ChampSetJmh.mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt        5828475.459          ns/op
+ * ChampSetJmh.mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt        4298284.677          ns/op
+ * ChampSetJmh.mRetainAllFromSameTypeAllRetained           -65  100000  avgt        1525086.025          ns/op
+ * ChampSetJmh.mRetainAllFromSameTypeNoneRetained          -65  100000  avgt        1452778.074          ns/op
+ * ChampSetJmh.mTail                                       -65  100000  avgt            141.728          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)

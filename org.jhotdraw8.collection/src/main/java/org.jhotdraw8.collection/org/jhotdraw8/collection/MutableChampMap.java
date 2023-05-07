@@ -196,11 +196,13 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
 
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
         if (containsKey(k)) {
+            owner = null;
             put(k, v);
         }
     }
 
     private void iteratorRemove(Map.Entry<K, V> entry) {
+        owner = null;
         remove(entry.getKey());
     }
 
@@ -218,7 +220,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         }
         if (c instanceof ChampMap<?, ?> that) {
             var bulkChange = new BulkChangeEvent();
-            var newRootNode = root.putAll((Node<SimpleImmutableEntry<K, V>>) (Node<?>) that, 0, bulkChange, ChampMap::updateEntry, ChampMap::entryKeyEquals,
+            var newRootNode = root.putAll(getOrCreateOwner(), (Node<SimpleImmutableEntry<K, V>>) (Node<?>) that, 0, bulkChange, ChampMap::updateEntry, ChampMap::entryKeyEquals,
                     ChampMap::entryKeyHash, new ChangeEvent<>());
             if (bulkChange.inBoth == that.size() && !bulkChange.replaced) {
                 return false;
@@ -235,7 +237,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     ChangeEvent<SimpleImmutableEntry<K, V>> putEntry(@Nullable K key, @Nullable V val) {
         int keyHash = ChampMap.keyHash(key);
         ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.put(new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
+        root = root.put(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
                 ChampMap::updateEntry,
                 ChampMap::entryKeyEquals,
                 ChampMap::entryKeyHash);
@@ -273,13 +275,13 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         BulkChangeEvent bulkChange = new BulkChangeEvent();
         BitmapIndexedNode<SimpleImmutableEntry<K, V>> newRootNode;
         if (c instanceof Collection<?> that) {
-            newRootNode = root.filterAll(e -> that.contains(e.getKey()), 0, bulkChange);
+            newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
         } else if (c instanceof ReadOnlyCollection<?> that) {
-            newRootNode = root.filterAll(e -> that.contains(e.getKey()), 0, bulkChange);
+            newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
         } else {
             HashSet<Object> that = new HashSet<>();
             c.forEach(that::add);
-            newRootNode = root.filterAll(that::contains, 0, bulkChange);
+            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
         }
         if (bulkChange.removed == 0) {
             return false;
@@ -294,7 +296,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     ChangeEvent<SimpleImmutableEntry<K, V>> removeKey(K key) {
         int keyHash = ChampMap.keyHash(key);
         ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.remove(new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
+        root = root.remove(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
                 ChampMap::entryKeyEquals);
         if (details.isModified()) {
             size = size - 1;

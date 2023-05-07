@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.ListHelper;
 
 import java.util.Arrays;
@@ -15,6 +16,8 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
+
+import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollisionNode;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -135,7 +138,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> remove(D data,
+    Node<D> remove(@Nullable IdentityObject owner, D data,
                    int dataHash, int shift, @NonNull ChangeEvent<D> details, @NonNull BiPredicate<D, D> equalsFunction) {
         for (int idx = 0, i = 0; i < this.data.length; i += 1, idx++) {
             if (equalsFunction.test((D) this.data[i], data)) {
@@ -146,14 +149,18 @@ class HashCollisionNode<D> extends Node<D> {
                     return BitmapIndexedNode.emptyNode();
                 } else if (this.data.length == 2) {
                     // Create root node with singleton element.
-                    // This node will be a) either be the new root
-                    // returned, or b) unwrapped and inlined.
-                    @NonNull Object[] nodes = new Object[]{getData(idx ^ 1)};
-                    return new BitmapIndexedNode<>(0, bitpos(mask(dataHash, 0)), nodes);
+                    // This node will either be the new root
+                    // returned, or be unwrapped and inlined.
+                    return ChampNodeFactory.newBitmapIndexedNode(owner, 0, bitpos(mask(dataHash, 0)),
+                            new Object[]{getData(idx ^ 1)});
                 }
                 // copy keys and remove 1 element at position idx
                 Object[] entriesNew = ListHelper.copyComponentRemove(this.data, idx, 1);
-                return new HashCollisionNode<>(dataHash, entriesNew);
+                if (isAllowedToUpdate(owner)) {
+                    this.data = entriesNew;
+                    return this;
+                }
+                return newHashCollisionNode(owner, dataHash, entriesNew);
             }
         }
         return this;
@@ -162,7 +169,7 @@ class HashCollisionNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @Override
     @NonNull
-    Node<D> put(D newData,
+    Node<D> put(@Nullable IdentityObject owner, D newData,
                 int dataHash, int shift, @NonNull ChangeEvent<D> details,
                 @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction,
                 @NonNull ToIntFunction<D> hashFunction) {
@@ -177,8 +184,12 @@ class HashCollisionNode<D> extends Node<D> {
                     return this;
                 }
                 details.setReplaced(oldData, updatedData);
+                if (isAllowedToUpdate(owner)) {
+                    this.data[i] = updatedData;
+                    return this;
+                }
                 final Object[] newKeys = ListHelper.copySet(this.data, i, updatedData);
-                return new HashCollisionNode<>(dataHash, newKeys);
+                return newHashCollisionNode(owner, dataHash, newKeys);
             }
         }
 
@@ -186,9 +197,12 @@ class HashCollisionNode<D> extends Node<D> {
         Object[] entriesNew = ListHelper.copyComponentAdd(this.data, this.data.length, 1);
         entriesNew[this.data.length] = newData;
         details.setAdded(newData);
-        return new HashCollisionNode<>(dataHash, entriesNew);
+        if (isAllowedToUpdate(owner)) {
+            this.data = entriesNew;
+            return this;
+        }
+        return newHashCollisionNode(owner, dataHash, entriesNew);
     }
-
 
     @Override
     protected int calculateSize() {
@@ -197,7 +211,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> putAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.inBoth += dataArity();
             return this;
@@ -241,7 +255,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> removeAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull Node<D> removeAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.removed += dataArity();
             return (Node<D>) EMPTY;
@@ -286,7 +300,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> retainAll(Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull Node<D> retainAll(IdentityObject owner, Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.removed += dataArity();
             return (Node<D>) EMPTY;
@@ -321,7 +335,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> filterAll(Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
+    protected @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
         final int thisSize = this.dataArity();
         int resultSize = 0;
         Object[] buffer = new Object[thisSize];

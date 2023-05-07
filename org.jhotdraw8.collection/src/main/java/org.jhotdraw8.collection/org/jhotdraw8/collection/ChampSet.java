@@ -147,7 +147,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     public @NonNull ChampSet<E> add(@Nullable E element) {
         int keyHash = keyHash(element);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = put(element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
+        BitmapIndexedNode<E> newRootNode = put(null, element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
         if (details.isModified()) {
             return new ChampSet<>(newRootNode, size + 1);
         }
@@ -222,7 +222,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     public @NonNull ChampSet<E> remove(@NonNull E key) {
         int keyHash = keyHash(key);
         ChangeEvent<E> details = new ChangeEvent<>();
-        BitmapIndexedNode<E> newRootNode = remove(key, keyHash, 0, details, Objects::equals);
+        BitmapIndexedNode<E> newRootNode = remove(null, key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             return size == 1 ? ChampSet.of() : new ChampSet<>(newRootNode, size - 1);
         }

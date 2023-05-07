@@ -135,7 +135,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-                root = root.put(newElem,
+                root = root.put(getOrCreateOwner(), newElem,
                         SequencedElement.keyHash(e), 0, details,
                         moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
                         Objects::equals, SequencedElement::elementKeyHash);
@@ -165,7 +165,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset + vector.size());
-        root = root.put(
+        root = root.put(getOrCreateOwner(),
                 newElem, SequencedElement.keyHash(e), 0,
                 details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
@@ -254,6 +254,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     private void iteratorRemove(E element) {
+        owner = null;
         remove(element);
     }
 
@@ -266,7 +267,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        root = root.remove(
+        root = root.remove(getOrCreateOwner(),
                 new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
@@ -300,7 +301,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      */
     private void renumber() {
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = ChampSequencedData.vecRenumber(size, root, vector,
+            var result = ChampSequencedData.vecRenumber(getOrCreateOwner(), size, root, vector,
                     SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();
