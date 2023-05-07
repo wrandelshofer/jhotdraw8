@@ -132,10 +132,6 @@ public abstract class AbstractMutableChampMap<K, V, SELF> extends AbstractMap<K,
         if (isEmpty()) {
             return false;
         }
-        if (c == this) {
-            clear();
-            return true;
-        }
         boolean modified = false;
         for (Object o : c) {
             if (containsKey(o)) {

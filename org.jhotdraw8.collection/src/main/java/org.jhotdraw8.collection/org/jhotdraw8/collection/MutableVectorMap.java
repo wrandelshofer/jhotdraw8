@@ -335,6 +335,26 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         return details;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
+        if (c instanceof MutableVectorMap<?, ?> that) {
+            c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toImmutable();
+        }
+        if (isEmpty() && c instanceof VectorMap<?, ?> that) {
+            if (that.isEmpty()) {
+                return false;
+            }
+            root = (BitmapIndexedNode<SequencedEntry<K, V>>) (BitmapIndexedNode<?>) that;
+            vector = that.vector;
+            offset = that.offset;
+            size = that.size;
+            modCount++;
+            return true;
+        }
+        return super.putAll(c);
+    }
+
     @Override
     public V putLast(K key, V value) {
         var oldData = putLast(key, value, true).getOldData();

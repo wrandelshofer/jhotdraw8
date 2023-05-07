@@ -272,21 +272,6 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         var m = toMutable();
         m.putAll(c);
         return m.toImmutable();
-        /*
-        if (isEmpty() && (c instanceof VectorMap<?, ?> that)) {
-            return (VectorMap<K, V>) that;
-        }
-        // XXX if the other set is a VectorSet, we should merge the trees
-        // See kotlinx collections:
-        // https://github.com/Kotlin/kotlinx.collections.immutable/blob/d7b83a13fed459c032dab1b4665eda20a04c740f/core/commonMain/src/implementations/immutableSet/TrieNode.kt#L338
-        var t = this.toMutable();
-        boolean modified = false;
-        for (Map.Entry<? extends K, ? extends V> entry : c) {
-            var details = t.putLast(entry.getKey(), entry.getValue(), false);
-            modified |= details.isModified();
-        }
-        return modified ? t.toImmutable() : this;
-         */
     }
 
     @NonNull

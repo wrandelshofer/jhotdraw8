@@ -218,6 +218,15 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         if (c instanceof MutableChampMap<?, ?> m) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) m.toImmutable();
         }
+        if (isEmpty() && c instanceof ChampMap<?, ?> that) {
+            if (that.isEmpty()) {
+                return false;
+            }
+            root = (BitmapIndexedNode<SimpleImmutableEntry<K, V>>) (BitmapIndexedNode<?>) that;
+            size = that.size;
+            modCount++;
+            return true;
+        }
         if (c instanceof ChampMap<?, ?> that) {
             var bulkChange = new BulkChangeEvent();
             var newRootNode = root.putAll(getOrCreateOwner(), (Node<SimpleImmutableEntry<K, V>>) (Node<?>) that, 0, bulkChange, ChampMap::updateEntry, ChampMap::entryKeyEquals,
@@ -323,7 +332,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
      */
     public @NonNull ChampMap<K, V> toImmutable() {
         owner = null;
-        return size == 0 ? ChampMap.of()
+        return isEmpty() ? ChampMap.of()
                 : root instanceof ChampMap<K, V> m ? m : new ChampMap<>(root, size);
     }
 
