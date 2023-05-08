@@ -1,5 +1,5 @@
 /*
- * @(#)IntUShortArrayEnumeratorSpliterator.java
+ * @(#)IntCharArrayEnumeratorSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -8,14 +8,14 @@ package org.jhotdraw8.collection.enumerator;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * An {@link IntEnumeratorSpliterator} over an unsigned short array.
+ * An integer enumerator/spliterator over a char array.
  */
-public class IntUShortArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class IntCharArraySpliterator extends AbstractIntEnumeratorSpliterator {
     private final int limit;
-    private final short[] arrows;
+    private final char[] arrows;
     private int index;
 
-    public IntUShortArrayEnumeratorSpliterator(int lo, int hi, short[] arrows) {
+    public IntCharArraySpliterator(int lo, int hi, char[] arrows) {
         super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = hi;
         index = lo;
@@ -25,17 +25,22 @@ public class IntUShortArrayEnumeratorSpliterator extends AbstractIntEnumeratorSp
     @Override
     public boolean moveNext() {
         if (index < limit) {
-            current = arrows[index++] & 0xffff;
+            current = arrows[index++];
             return true;
         }
         return false;
     }
 
     @Override
-    public @Nullable IntUShortArrayEnumeratorSpliterator trySplit() {
+    public long estimateSize() {
+        return limit - index;
+    }
+
+    @Override
+    public @Nullable IntCharArraySpliterator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new IntUShortArrayEnumeratorSpliterator(lo, index = mid, arrows);
+                new IntCharArraySpliterator(lo, index = mid, arrows);
     }
 
 }

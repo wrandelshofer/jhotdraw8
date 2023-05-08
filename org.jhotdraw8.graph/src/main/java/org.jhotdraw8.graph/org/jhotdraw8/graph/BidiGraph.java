@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.graph.algo.AddToSet;
-import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -115,7 +115,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return breadth first search
      */
     default @NonNull EnumeratorSpliterator<V> searchPrevVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
-        return new VertexEnumeratorSpliterator<V>(this::getPrevVertices, start, visited, dfs);
+        return new BfsDfsVertexSpliterator<V>(this::getPrevVertices, start, visited, dfs);
     }
 
 }

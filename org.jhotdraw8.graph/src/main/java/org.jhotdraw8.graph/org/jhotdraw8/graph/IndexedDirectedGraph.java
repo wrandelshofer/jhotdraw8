@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IntRangeEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IntRangeSpliterator;
+import org.jhotdraw8.collection.enumerator.IntSpliterator;
 
 /**
  * Provides indexed read access to a directed graph {@code G = (V, A) }.
@@ -105,7 +105,7 @@ public interface IndexedDirectedGraph {
      * @param v a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull IntEnumeratorSpliterator nextVerticesEnumerator(int v) {
-        return new IntRangeEnumeratorSpliterator(i -> getNextAsInt(v, i), 0, getNextCount(v));
+    default @NonNull IntSpliterator nextVerticesEnumerator(int v) {
+        return new IntRangeSpliterator(i -> getNextAsInt(v, i), 0, getNextCount(v));
     }
 }

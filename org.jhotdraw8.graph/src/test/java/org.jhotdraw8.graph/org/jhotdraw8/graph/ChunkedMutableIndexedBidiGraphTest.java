@@ -7,17 +7,12 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
-import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -103,12 +98,12 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
         ChunkedMutableIndexedBidiGraph a = (ChunkedMutableIndexedBidiGraph) actual;
         for (Integer v : expected.getVertices()) {
             {
-                Set<Integer> expectedBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<Integer>(expected::getNextVertices, v, false), false).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> expectedBfs = StreamSupport.stream(new BfsDfsVertexSpliterator<Integer>(expected::getNextVertices, v, false), false).collect(Collectors.toCollection(LinkedHashSet::new));
                 Set<Integer> actualBfs = StreamSupport.stream(a.searchNextVertexData(v, false, new DenseIntSet8Bit(a.getVertexCount())::addAsInt), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }
             {
-                Set<Integer> expectedBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<Integer>(expected::getPrevVertices, v, false), false).collect(Collectors.toCollection(LinkedHashSet::new));
+                Set<Integer> expectedBfs = StreamSupport.stream(new BfsDfsVertexSpliterator<Integer>(expected::getPrevVertices, v, false), false).collect(Collectors.toCollection(LinkedHashSet::new));
                 Set<Integer> actualBfs = StreamSupport.stream(a.searchPrevVertexData(v, false, new DenseIntSet8Bit(a.getVertexCount())::addAsInt), false).map(Long::intValue).collect(Collectors.toCollection(LinkedHashSet::new));
                 assertEquals(expectedBfs, actualBfs);
             }

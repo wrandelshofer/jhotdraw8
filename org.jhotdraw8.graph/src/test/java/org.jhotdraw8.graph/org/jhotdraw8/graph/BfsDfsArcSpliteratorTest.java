@@ -8,20 +8,16 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.graph.iterator.ArcEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsArcSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class DepthFirstArcSpliteratorTest {
+public class BfsDfsArcSpliteratorTest {
     protected @NonNull DirectedGraph<Integer, Integer> createDoubleVertexGraph() {
         final SimpleMutableDirectedGraph<Integer, Integer> builder = new SimpleMutableDirectedGraph<>();
 
@@ -63,7 +59,7 @@ public class DepthFirstArcSpliteratorTest {
         Set<Integer> goals = new HashSet<>(waypoints);
         StringBuilder buf = new StringBuilder();
         for (Integer root : waypoints) {
-            ArcEnumeratorSpliterator<Integer, Integer> itr = new ArcEnumeratorSpliterator<>(graph::getNextArcs, root, true);
+            BfsDfsArcSpliterator<Integer, Integer> itr = new BfsDfsArcSpliterator<>(graph::getNextArcs, root, true);
             while (itr.moveNext()) {
                 Arc<Integer, Integer> current = itr.current();
                 if (buf.length() > 0) {
@@ -91,7 +87,7 @@ public class DepthFirstArcSpliteratorTest {
         List<ImmutableList<Integer>> paths = new ArrayList<>();
         List<Integer> path = null;
         for (Integer root : waypoints) {
-            ArcEnumeratorSpliterator<Integer, Integer> itr = new ArcEnumeratorSpliterator<>(graph::getNextArcs, root, true);
+            BfsDfsArcSpliterator<Integer, Integer> itr = new BfsDfsArcSpliterator<>(graph::getNextArcs, root, true);
             while (itr.moveNext()) {
                 Arc<Integer, Integer> current = itr.current();
                 if (path == null) {

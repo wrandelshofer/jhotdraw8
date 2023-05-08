@@ -20,7 +20,7 @@ import java.util.function.LongConsumer;
  *
  * @author Werner Randelshofer
  */
-public interface LongEnumeratorSpliterator extends EnumeratorSpliterator<Long>, Spliterator.OfLong {
+public interface LongSpliterator extends EnumeratorSpliterator<Long>, Spliterator.OfLong {
 
     /**
      * {@inheritDoc}

@@ -7,17 +7,11 @@ package org.jhotdraw8.collection.readonly;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.ReadOnlyListEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.ReadOnlyListSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Read-only interface for a list. The state of the
@@ -114,7 +108,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     @Override
     default @NonNull Iterator<E> iterator() {
-        return new ReadOnlyListEnumeratorSpliterator<>(this);
+        return new ReadOnlyListSpliterator<>(this);
     }
 
     /**
@@ -124,7 +118,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     @Override
     default @NonNull Spliterator<E> spliterator() {
-        return new ReadOnlyListEnumeratorSpliterator<>(this);
+        return new ReadOnlyListSpliterator<>(this);
     }
 
     /**
@@ -133,7 +127,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return an iterator.
      */
     default @NonNull EnumeratorSpliterator<E> enumerator() {
-        return new ReadOnlyListEnumeratorSpliterator<>(this);
+        return new ReadOnlyListSpliterator<>(this);
     }
 
     /**
@@ -142,7 +136,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator() {
-        return new ReadOnlyListEnumeratorSpliterator<>(this);
+        return new ReadOnlyListSpliterator<>(this);
     }
 
     /**
@@ -153,7 +147,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return a list iterator.
      */
     default @NonNull ListIterator<E> listIterator(int index) {
-        return new ReadOnlyListEnumeratorSpliterator<>(this, index, size());
+        return new ReadOnlyListSpliterator<>(this, index, size());
     }
 
     /**

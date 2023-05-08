@@ -21,7 +21,7 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class VertexEnumeratorSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
+public class BfsDfsVertexSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
 
     private final @NonNull Function<V, Iterable<V>> nextFunction;
     private final @NonNull Deque<V> deque;
@@ -35,7 +35,7 @@ public class VertexEnumeratorSpliterator<V> extends AbstractEnumeratorSpliterato
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
-    public VertexEnumeratorSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, boolean dfs) {
+    public BfsDfsVertexSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, boolean dfs) {
         this(nextFunction, root, new HashSet<>()::add, dfs);
     }
 
@@ -46,7 +46,7 @@ public class VertexEnumeratorSpliterator<V> extends AbstractEnumeratorSpliterato
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
-    public VertexEnumeratorSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
+    public BfsDfsVertexSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");

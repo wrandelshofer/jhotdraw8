@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.SpliteratorIterable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.ListEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.ListSpliterator;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -143,7 +143,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     @NonNull List<T> getChildren();
 
     default @NonNull EnumeratorSpliterator<T> getChildEnumerator() {
-        return new ListEnumeratorSpliterator<>(getChildren());
+        return new ListSpliterator<>(getChildren());
     }
 
     /**

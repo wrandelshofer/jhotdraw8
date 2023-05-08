@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 /**
  * An integer enumerator/spliterator over an integer array.
  */
-public class IntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class IntArraySpliterator extends AbstractIntEnumeratorSpliterator {
     private final int limit;
     private final int[] a;
     private int index;
@@ -23,7 +23,7 @@ public class IntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSplitera
      * @param from the start index of the range (inclusive)
      * @param to   the end index of the range (exclusive)
      */
-    public IntArrayEnumeratorSpliterator(int[] a, int from, int to) {
+    public IntArraySpliterator(int[] a, int from, int to) {
         super(to - from, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = to;
         index = from;
@@ -45,11 +45,11 @@ public class IntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSplitera
     }
 
     @Override
-    public @Nullable IntArrayEnumeratorSpliterator trySplit() {
+    public @Nullable IntArraySpliterator trySplit() {
         // divide range in half unless too small
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null
-                : new IntArrayEnumeratorSpliterator(a, lo, index = mid);
+                : new IntArraySpliterator(a, lo, index = mid);
     }
 
 }

@@ -7,16 +7,10 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
-import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IntSpliterator;
 import org.jhotdraw8.collection.facade.SetFacade;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -150,7 +144,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         int vidx = vertexMap.get(v);
         int uidx = vertexMap.get(u);
         int index = 0;
-        for (IntEnumeratorSpliterator it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
+        for (IntSpliterator it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
             int widx = it.currentAsInt();
             if (uidx == widx && Objects.equals(a, this.getNextArrow(vidx, index))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
@@ -165,7 +159,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     public void removeArrow(@NonNull V v, @NonNull V u) {
         Integer vidx = vertexMap.get(v);
         int index = 0;
-        for (IntEnumeratorSpliterator it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
+        for (IntSpliterator it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
             int uidx = it.currentAsInt();
             if (u.equals(vertices.get(uidx))) {
                 int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);

@@ -8,8 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.AbstractLongEnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.LongEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IntSpliterator;
+import org.jhotdraw8.collection.enumerator.LongSpliterator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.precondition.Preconditions;
@@ -170,8 +170,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @param visited the set of visited vertices
      * @return the enumerator provides the vertex index
      */
-    public @NonNull IntEnumeratorSpliterator searchPrevVertices(final int vidx, boolean dfs, final @NonNull AddToIntSet visited) {
-        return new SearchVertexEnumeratorSpliterator(vidx, prevChunks, dfs, visited);
+    public @NonNull IntSpliterator searchPrevVertices(final int vidx, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexSpliterator(vidx, prevChunks, dfs, visited);
     }
 
     /**
@@ -183,8 +183,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the enumerator provides the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator searchPrevVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
-        return new SearchVertexDataEnumeratorSpliterator(v, prevChunks, dfs, visited);
+    public @NonNull LongSpliterator searchPrevVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexDataSpliterator(v, prevChunks, dfs, visited);
     }
 
     /**
@@ -195,8 +195,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @param visited the set of visited vertices
      * @return the enumerator provides the vertex index
      */
-    public @NonNull IntEnumeratorSpliterator searchNextVertices(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
-        return new SearchVertexEnumeratorSpliterator(v, nextChunks, dfs, visited);
+    public @NonNull IntSpliterator searchNextVertices(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexSpliterator(v, nextChunks, dfs, visited);
     }
 
     /**
@@ -208,8 +208,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the enumerator provides the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public @NonNull LongEnumeratorSpliterator searchNextVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
-        return new SearchVertexDataEnumeratorSpliterator(v, nextChunks, dfs, visited);
+    public @NonNull LongSpliterator searchNextVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+        return new SearchVertexDataSpliterator(v, nextChunks, dfs, visited);
     }
 
     /**
@@ -368,14 +368,14 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         getPrevChunk(v).setVertexData(v, data);
     }
 
-    private class SearchVertexDataEnumeratorSpliterator extends AbstractLongEnumeratorSpliterator {
+    private class SearchVertexDataSpliterator extends AbstractLongEnumeratorSpliterator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
         private final boolean dfs;
 
-        protected SearchVertexDataEnumeratorSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
+        protected SearchVertexDataSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -406,14 +406,14 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         }
     }
 
-    private class SearchVertexEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+    private class SearchVertexSpliterator extends AbstractIntEnumeratorSpliterator {
 
         private final GraphChunk[] chunks;
         private final @NonNull IntArrayDeque deque = new IntArrayDeque();
         private final @NonNull AddToIntSet visited;
         private final boolean dfs;
 
-        protected SearchVertexEnumeratorSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
+        protected SearchVertexSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;

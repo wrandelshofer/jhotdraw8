@@ -15,15 +15,15 @@ import java.util.Spliterator;
  *
  * @param <E> the element type
  */
-public class EmptyEnumeratorSpliterator<E> implements EnumeratorSpliterator<E> {
-    private static final EmptyEnumeratorSpliterator<Object> singleton = new EmptyEnumeratorSpliterator<>();
+public class EmptySpliterator<E> implements EnumeratorSpliterator<E> {
+    private static final EmptySpliterator<Object> singleton = new EmptySpliterator<>();
 
     @SuppressWarnings("unchecked")
     public static <T> @NonNull EnumeratorSpliterator<T> emptyEnumerator() {
         return (EnumeratorSpliterator<T>) singleton;
     }
 
-    private EmptyEnumeratorSpliterator() {
+    private EmptySpliterator() {
 
     }
 

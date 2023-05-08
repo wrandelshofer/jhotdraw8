@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IntSpliterator;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.algo.AddToIntSet;
@@ -15,13 +15,14 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * BreadthFirstSpliterator for graphs with indexed vertices.
+ * Enumerates vertices in a graph with indexed vertices starting from a root vertex in
+ * breadth-first-order or in depth-first-order.
  *
  * @author Werner Randelshofer
  */
-public class IndexedVertexEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumeratorSpliterator {
 
-    private final @NonNull Function<Integer, IntEnumeratorSpliterator> nextFunction;
+    private final @NonNull Function<Integer, IntSpliterator> nextFunction;
     private final @NonNull IntArrayDeque deque;
     private final @NonNull AddToIntSet visited;
     private final boolean dfs;
@@ -34,9 +35,9 @@ public class IndexedVertexEnumeratorSpliterator extends AbstractIntEnumeratorSpl
      * @param vertexCount  the vertex count
      * @param dfs
      */
-    public IndexedVertexEnumeratorSpliterator(@NonNull Function<Integer, IntEnumeratorSpliterator> nextFunction,
-                                              int root,
-                                              int vertexCount, boolean dfs) {
+    public BfsDfsIndexedVertexSpliterator(@NonNull Function<Integer, IntSpliterator> nextFunction,
+                                          int root,
+                                          int vertexCount, boolean dfs) {
         this(nextFunction, root, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
@@ -47,7 +48,7 @@ public class IndexedVertexEnumeratorSpliterator extends AbstractIntEnumeratorSpl
      * @param root         the root vertex
      * @param dfs
      */
-    public IndexedVertexEnumeratorSpliterator(@NonNull Function<Integer, IntEnumeratorSpliterator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
+    public BfsDfsIndexedVertexSpliterator(@NonNull Function<Integer, IntSpliterator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");
@@ -65,7 +66,7 @@ public class IndexedVertexEnumeratorSpliterator extends AbstractIntEnumeratorSpl
             return false;
         }
         current = dfs ? deque.removeLastAsInt() : deque.removeFirstAsInt();
-        for (IntEnumeratorSpliterator it = nextFunction.apply(current); it.moveNext(); ) {
+        for (IntSpliterator it = nextFunction.apply(current); it.moveNext(); ) {
             int next = it.currentAsInt();
             if (visited.addAsInt(next)) {
                 deque.addLastAsInt(next);

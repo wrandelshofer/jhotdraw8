@@ -12,14 +12,10 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
-import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Spliterators;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -103,7 +99,7 @@ public class DepthFirstSpliteratorTest {
      */
     static void testIterate(Integer start, Integer goal, List<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
-        VertexEnumeratorSpliterator<Integer> instance = new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, true);
+        BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, true);
         List<Integer> result = new ArrayList<>();
         Iterator<Integer> iter = Spliterators.iterator(instance);
         while (iter.hasNext()) {

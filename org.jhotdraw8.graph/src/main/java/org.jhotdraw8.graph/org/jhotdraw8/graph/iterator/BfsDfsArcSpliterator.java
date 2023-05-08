@@ -17,12 +17,13 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * DepthFirstArcSpliterator.
+ * Enumerates arcs in a graph starting from a root vertex in
+ * breadth-first-order or in depth-first-order.
  *
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class ArcEnumeratorSpliterator<V, A> extends AbstractEnumeratorSpliterator<Arc<V, A>> {
+public class BfsDfsArcSpliterator<V, A> extends AbstractEnumeratorSpliterator<Arc<V, A>> {
 
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextFunction;
     private final @NonNull Deque<Arc<V, A>> deque;
@@ -36,7 +37,7 @@ public class ArcEnumeratorSpliterator<V, A> extends AbstractEnumeratorSpliterato
      * @param root             the root vertex
      * @param dfs
      */
-    public ArcEnumeratorSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
+    public BfsDfsArcSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
         this(nextArcsFunction, root, new HashSet<>()::add, dfs);
     }
 
@@ -49,7 +50,7 @@ public class ArcEnumeratorSpliterator<V, A> extends AbstractEnumeratorSpliterato
      * @param visited      a predicate with side effect. The predicate returns true
      * @param dfs
      */
-    public ArcEnumeratorSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
+    public BfsDfsArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");

@@ -8,19 +8,19 @@ package org.jhotdraw8.collection.enumerator;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * A {@link LongEnumeratorSpliterator} over a {@code int}-array.
+ * A {@link LongSpliterator} over a {@code int}-array.
  * Supports shifting and masking of the {@code int}-values.
  *
  * @author Werner Randelshofer
  */
-public class LongIntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class LongIntArraySpliterator extends AbstractIntEnumeratorSpliterator {
     private final int limit;
     private final long[] a;
     private int index;
     private final int shift;
     private final long mask;
 
-    public LongIntArrayEnumeratorSpliterator(long[] a, int from, int to, int shift, long mask) {
+    public LongIntArraySpliterator(long[] a, int from, int to, int shift, long mask) {
         super(to - from, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = to;
         index = from;
@@ -43,10 +43,10 @@ public class LongIntArrayEnumeratorSpliterator extends AbstractIntEnumeratorSpli
     }
 
     @Override
-    public @Nullable LongIntArrayEnumeratorSpliterator trySplit() {
+    public @Nullable LongIntArraySpliterator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new LongIntArrayEnumeratorSpliterator(a, lo, index = mid, shift, mask);
+                new LongIntArraySpliterator(a, lo, index = mid, shift, mask);
     }
 
 }

@@ -7,19 +7,13 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.io.GraphvizWriter;
-import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -81,8 +75,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
                 assertEquals(expected.findIndexOfPrev(u, v),
                         actual.findIndexOfPrev(u, v));
             }
-            List<Integer> expectedBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<>(expected::getNextVertices, v, false), false).collect(Collectors.toList());
-            List<Integer> actualBfs = StreamSupport.stream(new VertexEnumeratorSpliterator<>(actual::getNextVertices, v, false), false).collect(Collectors.toList());
+            List<Integer> expectedBfs = StreamSupport.stream(new BfsDfsVertexSpliterator<>(expected::getNextVertices, v, false), false).collect(Collectors.toList());
+            List<Integer> actualBfs = StreamSupport.stream(new BfsDfsVertexSpliterator<>(actual::getNextVertices, v, false), false).collect(Collectors.toList());
             assertEquals(expectedBfs, actualBfs);
         }
     }

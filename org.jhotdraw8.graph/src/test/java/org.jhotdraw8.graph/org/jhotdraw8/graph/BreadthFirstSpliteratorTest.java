@@ -6,18 +6,10 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
-import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Queue;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -87,7 +79,7 @@ public class BreadthFirstSpliteratorTest {
     }
 
     static void testIterate(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        VertexEnumeratorSpliterator<Integer> instance = new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, false);
+        BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
         List<Integer> result = new ArrayList<>();
         Iterator<Integer> iter = Spliterators.iterator(instance);
         while (iter.hasNext()) {
@@ -109,7 +101,7 @@ public class BreadthFirstSpliteratorTest {
     }
 
     public void testTryAdvance(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, List<Integer> expResult) throws Exception {
-        VertexEnumeratorSpliterator<Integer> instance = new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, false);
+        BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
         List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size() - 1).equals(goal)) {
@@ -131,7 +123,7 @@ public class BreadthFirstSpliteratorTest {
     public void testTrySplit(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, Integer goal, @NonNull List<Integer> expResult) throws Exception {
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
-        splits.add(new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, false));
+        splits.add(new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false));
         List<Integer> result = new ArrayList<>();
         while (!splits.isEmpty()) {
             Spliterator<Integer> instance = splits.remove();
@@ -164,7 +156,7 @@ public class BreadthFirstSpliteratorTest {
 
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
-        final VertexEnumeratorSpliterator<Integer> instance = new VertexEnumeratorSpliterator<>(graph::getNextVertices, start, false);
+        final BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
         List<Integer> result = new ArrayList<>();
         instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
         result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));

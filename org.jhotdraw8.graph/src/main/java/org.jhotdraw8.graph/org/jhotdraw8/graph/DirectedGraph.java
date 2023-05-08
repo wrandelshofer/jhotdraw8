@@ -9,14 +9,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.graph.algo.AddToSet;
-import org.jhotdraw8.graph.iterator.VertexEnumeratorSpliterator;
+import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Adds convenience methods to the interface defined in {@link BareDirectedGraph}.
@@ -191,6 +186,6 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return breadth first search
      */
     default @NonNull EnumeratorSpliterator<V> searchNextVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
-        return new VertexEnumeratorSpliterator<V>(this::getNextVertices, start, visited, dfs);
+        return new BfsDfsVertexSpliterator<V>(this::getNextVertices, start, visited, dfs);
     }
 }

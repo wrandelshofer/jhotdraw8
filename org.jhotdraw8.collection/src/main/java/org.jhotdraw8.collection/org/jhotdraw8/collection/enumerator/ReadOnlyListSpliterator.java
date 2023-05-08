@@ -21,17 +21,17 @@ import java.util.function.Consumer;
  *
  * @param <E> the element type
  */
-public class ReadOnlyListEnumeratorSpliterator<E> extends AbstractListEnumeratorSpliterator<E> {
+public class ReadOnlyListSpliterator<E> extends AbstractListEnumeratorSpliterator<E> {
     private final @NonNull ReadOnlyList<E> list;
     private int index;
     private final int size;
     private E current;
 
-    public ReadOnlyListEnumeratorSpliterator(@NonNull ReadOnlyList<E> list) {
+    public ReadOnlyListSpliterator(@NonNull ReadOnlyList<E> list) {
         this(list, 0, list.size());
     }
 
-    public ReadOnlyListEnumeratorSpliterator(@NonNull ReadOnlyList<E> list, int index, int size) {
+    public ReadOnlyListSpliterator(@NonNull ReadOnlyList<E> list, int index, int size) {
         this.list = list;
         this.size = size;
         this.index = index;
@@ -86,7 +86,7 @@ public class ReadOnlyListEnumeratorSpliterator<E> extends AbstractListEnumerator
         int lo = index, mid = (lo + getSize()) >>> 1;
         return (lo >= mid)
                 ? null
-                : new ReadOnlyListEnumeratorSpliterator<>(list, lo, index = mid);
+                : new ReadOnlyListSpliterator<>(list, lo, index = mid);
     }
 
     @Override

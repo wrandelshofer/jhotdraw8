@@ -11,7 +11,7 @@ import org.jhotdraw8.collection.function.IntToIntFunction;
 /**
  * Enumerates integers in a given range.
  */
-public class IntRangeEnumeratorSpliterator extends AbstractIntEnumeratorSpliterator {
+public class IntRangeSpliterator extends AbstractIntEnumeratorSpliterator {
     private int next;
     private final int to;
     private final @NonNull IntToIntFunction f;
@@ -21,7 +21,7 @@ public class IntRangeEnumeratorSpliterator extends AbstractIntEnumeratorSplitera
      *
      * @param endExclusive the end of the range + 1
      */
-    public IntRangeEnumeratorSpliterator(int endExclusive) {
+    public IntRangeSpliterator(int endExclusive) {
         this(i -> i, 0, endExclusive);
     }
 
@@ -31,7 +31,7 @@ public class IntRangeEnumeratorSpliterator extends AbstractIntEnumeratorSplitera
      * @param startInclusive the start of the range
      * @param endExclusive   the end of the range + 1
      */
-    public IntRangeEnumeratorSpliterator(int startInclusive, int endExclusive) {
+    public IntRangeSpliterator(int startInclusive, int endExclusive) {
         this(i -> i, startInclusive, endExclusive);
     }
 
@@ -41,7 +41,7 @@ public class IntRangeEnumeratorSpliterator extends AbstractIntEnumeratorSplitera
      * @param startInclusive the start of the range
      * @param endExclusive   the end of the range + 1
      */
-    public IntRangeEnumeratorSpliterator(@NonNull IntToIntFunction f, int startInclusive, int endExclusive) {
+    public IntRangeSpliterator(@NonNull IntToIntFunction f, int startInclusive, int endExclusive) {
         super(endExclusive - startInclusive, NONNULL | DISTINCT | ORDERED | SIZED | SUBSIZED);
         this.f = f;
         this.next = startInclusive;
@@ -64,9 +64,9 @@ public class IntRangeEnumeratorSpliterator extends AbstractIntEnumeratorSplitera
     }
 
     @Override
-    public @Nullable IntRangeEnumeratorSpliterator trySplit() {
+    public @Nullable IntRangeSpliterator trySplit() {
         int lo = next, mid = (lo + to) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new IntRangeEnumeratorSpliterator(f, lo, next = mid);
+                new IntRangeSpliterator(f, lo, next = mid);
     }
 }

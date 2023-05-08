@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IntEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.IntSpliterator;
 
 import java.util.Arrays;
 
@@ -411,7 +411,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
     }
 
     @Override
-    public @NonNull IntEnumeratorSpliterator nextVerticesEnumerator(int v) {
+    public @NonNull IntSpliterator nextVerticesEnumerator(int v) {
         if (ordered) {
             return getNextVerticesOrdered(v);
         } else {
@@ -419,7 +419,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         }
     }
 
-    public @NonNull IntEnumeratorSpliterator getNextVerticesUnordered(int vidx) {
+    public @NonNull IntSpliterator getNextVerticesUnordered(int vidx) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int arrowPtr;
 
@@ -444,7 +444,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         return new MySpliterator(vidx, 0, getNextCount(vidx));
     }
 
-    public @NonNull IntEnumeratorSpliterator getNextVerticesOrdered(int vidx) {
+    public @NonNull IntSpliterator getNextVerticesOrdered(int vidx) {
         class MySpliterator extends AbstractIntEnumeratorSpliterator {
             private int index;
             private final int limit;

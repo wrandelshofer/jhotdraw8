@@ -10,7 +10,7 @@ package org.jhotdraw8.collection.enumerator;
  *
  * @param <E> the element type
  */
-public interface PushBackEnumeratorSpliterator<E> extends EnumeratorSpliterator<E> {
+public interface PushBackSpliterator<E> extends EnumeratorSpliterator<E> {
     /**
      * Pushes the current element back into the enumeration.
      * <p>

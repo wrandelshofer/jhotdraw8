@@ -24,7 +24,7 @@ public class ListEnumeratorTestSpliterator {
             list.add(i);
         }
 
-        List<Integer> actual = StreamSupport.stream(new ListEnumeratorSpliterator<>(list), false).collect(Collectors.toList());
+        List<Integer> actual = StreamSupport.stream(new ListSpliterator<>(list), false).collect(Collectors.toList());
         assertEquals(list, actual);
     }
 
@@ -35,7 +35,7 @@ public class ListEnumeratorTestSpliterator {
             list.add(i);
         }
         List<Integer> actual = new ArrayList<>();
-        for (ListEnumeratorSpliterator<Integer> i = new ListEnumeratorSpliterator<>(list); i.moveNext(); ) {
+        for (ListSpliterator<Integer> i = new ListSpliterator<>(list); i.moveNext(); ) {
             actual.add(i.current());
         }
         assertEquals(list, actual);
@@ -48,7 +48,7 @@ public class ListEnumeratorTestSpliterator {
             list.add(i);
         }
         List<Integer> expected = iterativelySplitList(list.spliterator());
-        List<Integer> actual = iterativelySplitList(new ListEnumeratorSpliterator<>(list));
+        List<Integer> actual = iterativelySplitList(new ListSpliterator<>(list));
         assertEquals(expected, actual);
     }
 
