@@ -112,7 +112,7 @@ public class ListFacade<E> extends AbstractList<E>
     }
 
     @Override
-    public @NonNull SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> _reversed() {
         return new SequencedCollectionFacade<>(
                 () -> new ReverseListEnumeratorSpliterator<>(this, 0, size()),
                 this::iterator,
@@ -125,5 +125,15 @@ public class ListFacade<E> extends AbstractList<E>
                 this::addLast,
                 this::addFirst
         );
+    }
+
+    @Override
+    public E removeFirst() {
+        return SequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    public E removeLast() {
+        return SequencedCollection.super.removeLast();
     }
 }

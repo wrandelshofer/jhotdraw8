@@ -90,7 +90,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> _reversed() {
         return new ListFacade<E>(
                 this::size,
                 index -> get(size - 1 - index),
@@ -281,5 +281,15 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         protected @NonNull Object readResolve() {
             return new MutableVectorList<>(deserialized);
         }
+    }
+
+    @Override
+    public E removeFirst() {
+        return SequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    public E removeLast() {
+        return SequencedCollection.super.removeLast();
     }
 }

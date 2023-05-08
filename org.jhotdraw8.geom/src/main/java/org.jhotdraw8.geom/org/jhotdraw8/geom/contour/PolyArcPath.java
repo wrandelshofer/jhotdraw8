@@ -69,8 +69,8 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
         return windingRule;
     }
 
-    public void removeLast() {
-        remove(size() - 1);
+    public PlineVertex removeLast() {
+        return remove(size() - 1);
     }
 
     /// Iterate the segement indices of the polyline. visitor function is invoked for each segment

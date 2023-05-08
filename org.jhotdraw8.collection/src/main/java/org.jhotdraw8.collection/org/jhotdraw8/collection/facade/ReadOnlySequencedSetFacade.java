@@ -32,7 +32,7 @@ public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>
     }
 
     public ReadOnlySequencedSetFacade(@NonNull SequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
+        this(backingSet::iterator, () -> backingSet._reversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 

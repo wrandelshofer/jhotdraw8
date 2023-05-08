@@ -260,7 +260,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(reversed());
+        return new ReadOnlySequencedSetFacade<>(this._reversed());
     }
 
     @SuppressWarnings("unchecked")
@@ -284,14 +284,14 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @Override
     public E removeFirst() {
-        var e = getFirst();
+        var e = this.getFirst();
         remove(e);
         return e;
     }
 
     @Override
     public E removeLast() {
-        var e = getLast();
+        var e = this.getLast();
         remove(e);
         return e;
     }
@@ -311,7 +311,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     @Override
-    public @NonNull SequencedSet<E> reversed() {
+    public @NonNull SequencedSet<E> _reversed() {
         return new SequencedSetFacade<>(
                 this::reverseIterator,
                 this::reverseSpliterator,

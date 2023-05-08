@@ -14,7 +14,13 @@ import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
@@ -44,7 +50,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> _reversed() {
         return new SequencedCollectionFacade<E>(
                 this::reverseIterator,
                 this::iterator,
@@ -279,5 +285,15 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     public @NonNull ListIterator<E> listIterator(int index) {
         Objects.checkIndex(index, size() + 1);
         return new FailFastListIterator<>(new MyListIterator(index), () -> this.modCount);
+    }
+
+    @Override
+    public E removeFirst() {
+        return SequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    public E removeLast() {
+        return SequencedCollection.super.removeLast();
     }
 }

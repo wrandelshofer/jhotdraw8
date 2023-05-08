@@ -203,7 +203,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      */
     @Override
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
-        return sequencedEntrySet();
+        return _sequencedEntrySet();
     }
 
     /**
@@ -212,7 +212,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @return a view of the entries contained in this map
      */
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+    public @NonNull SequencedSet<Entry<K, V>> _sequencedEntrySet() {
         return new SequencedSetFacade<>(
                 this::iterator,
                 this::spliterator,
@@ -263,7 +263,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @Override
-    public @NonNull SequencedSet<K> sequencedKeySet() {
+    public @NonNull SequencedSet<K> _sequencedKeySet() {
         return AbstractSequencedMap.createKeySet(this);
     }
 
@@ -447,7 +447,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @Override
-    public @NonNull SequencedMap<K, V> reversed() {
+    public @NonNull SequencedMap<K, V> _reversed() {
         return new SequencedMapFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -476,7 +476,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @Override
-    public @NonNull SequencedCollection<V> sequencedValues() {
+    public @NonNull SequencedCollection<V> _sequencedValues() {
         return AbstractSequencedMap.createValues(this);
     }
 

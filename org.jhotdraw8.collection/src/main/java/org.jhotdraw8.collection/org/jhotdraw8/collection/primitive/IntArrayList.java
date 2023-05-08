@@ -504,10 +504,12 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     @Override
-    public @NonNull SequencedCollection<Integer> reversed() {
+    public @NonNull SequencedCollection<Integer> _reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)
         );
     }
+
+
 }

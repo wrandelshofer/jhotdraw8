@@ -34,7 +34,7 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
     }
 
     public ReadOnlySequencedCollectionFacade(@NonNull SequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
+        this(backingSet::iterator, () -> backingSet._reversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 

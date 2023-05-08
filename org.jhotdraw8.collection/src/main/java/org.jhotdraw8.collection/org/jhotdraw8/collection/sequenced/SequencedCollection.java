@@ -40,7 +40,7 @@ public interface SequencedCollection<E> extends Collection<E> {
      * @throws java.util.NoSuchElementException if the collection is empty
      */
     default E getLast() {
-        return reversed().iterator().next();
+        return _reversed().iterator().next();
     }
 
     /**
@@ -65,7 +65,7 @@ public interface SequencedCollection<E> extends Collection<E> {
      *
      * @return a reversed-order view of this collection
      */
-    @NonNull SequencedCollection<E> reversed();
+    @NonNull SequencedCollection<E> _reversed();
 
     /**
      * Removes the element at the front of this collection.
@@ -87,7 +87,7 @@ public interface SequencedCollection<E> extends Collection<E> {
      * @throws NoSuchElementException if this set is empty
      */
     default E removeLast() {
-        Iterator<E> i = reversed().iterator();
+        Iterator<E> i = _reversed().iterator();
         E e = i.next();
         i.remove();
         return e;

@@ -82,4 +82,34 @@ public interface ByteList extends List<Byte>, ByteSequencedCollection {
     default boolean isEmpty() {
         return size() == 0;
     }
+
+    @Override
+    default void addFirst(Byte e) {
+        ByteSequencedCollection.super.addFirst(e);
+    }
+
+    @Override
+    default void addLast(Byte e) {
+        ByteSequencedCollection.super.addLast(e);
+    }
+
+    @Override
+    default Byte getFirst() {
+        return ByteSequencedCollection.super.getFirst();
+    }
+
+    @Override
+    default Byte getLast() {
+        return ByteSequencedCollection.super.getLast();
+    }
+
+    @Override
+    default Byte removeFirst() {
+        return ByteSequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    default Byte removeLast() {
+        return ByteSequencedCollection.super.removeLast();
+    }
 }

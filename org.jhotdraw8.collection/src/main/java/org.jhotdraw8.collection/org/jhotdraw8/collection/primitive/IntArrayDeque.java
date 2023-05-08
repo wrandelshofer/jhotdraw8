@@ -283,7 +283,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public @NonNull SequencedCollection<Integer> reversed() {
+    public @NonNull SequencedCollection<Integer> _reversed() {
         return null;
     }
 
