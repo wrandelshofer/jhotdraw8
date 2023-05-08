@@ -8,21 +8,25 @@ package org.jhotdraw8.collection.impl.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
  * Abstract base class for CHAMP sets.
  *
- * @param <E> the element type of the set
- * @param <X> the key type of the CHAMP trie
+ * @param <E>    the element type of the set
+ * @param <SELF> the self type
  */
-public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -40,7 +44,7 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<X> root;
+    protected BitmapIndexedNode<SELF> root;
 
     /**
      * The number of elements in this set.
@@ -64,7 +68,49 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
      * @return {@code true} if this set changed
      */
     @SuppressWarnings("unchecked")
-    public abstract boolean addAll(@NonNull Iterable<? extends E> c);
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        boolean added = false;
+        for (E e : c) {
+            added |= add(e);
+        }
+        return added;
+    }
+
+    /**
+     * Retains all specified elements that are in this set.
+     *
+     * @param c an iterable of elements
+     * @return {@code true} if this set changed
+     */
+    public boolean retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if ((c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            clear();
+            return true;
+        }
+        Predicate<E> predicate;
+        if (c instanceof Collection<?> that) {
+            predicate = that::contains;
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            predicate = that::contains;
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            predicate = that::contains;
+        }
+        boolean removed = false;
+        for (Iterator<E> i = iterator(); i.hasNext(); ) {
+            E e = i.next();
+            if (!predicate.test(e)) {
+                i.remove();
+                removed = true;
+            }
+        }
+        return removed;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -130,10 +176,10 @@ public abstract class AbstractMutableChampSet<E, X> extends AbstractSet<E> imple
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampSet<E, X> clone() {
+    public @NonNull AbstractMutableChampSet<E, SELF> clone() {
         try {
             owner = null;
-            return (AbstractMutableChampSet<E, X>) super.clone();
+            return (AbstractMutableChampSet<E, SELF>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

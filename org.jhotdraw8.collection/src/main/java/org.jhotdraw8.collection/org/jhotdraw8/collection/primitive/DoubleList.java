@@ -82,4 +82,34 @@ public interface DoubleList extends List<Double>, DoubleSequencedCollection {
     default boolean isEmpty() {
         return size() == 0;
     }
+
+    @Override
+    default void addFirst(Double e) {
+        DoubleSequencedCollection.super.addFirst(e);
+    }
+
+    @Override
+    default void addLast(Double e) {
+        DoubleSequencedCollection.super.addLast(e);
+    }
+
+    @Override
+    default Double getFirst() {
+        return DoubleSequencedCollection.super.getFirst();
+    }
+
+    @Override
+    default Double getLast() {
+        return DoubleSequencedCollection.super.getLast();
+    }
+
+    @Override
+    default Double removeFirst() {
+        return DoubleSequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    default Double removeLast() {
+        return DoubleSequencedCollection.super.removeLast();
+    }
 }

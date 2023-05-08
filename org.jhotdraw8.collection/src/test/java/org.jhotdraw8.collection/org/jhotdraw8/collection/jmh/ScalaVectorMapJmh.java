@@ -38,12 +38,12 @@ import java.util.concurrent.TimeUnit;
  * ScalaVectorMapJmh.mContainsNotFound     -65    10000  avgt    2      _    35.706          ns/op
  * ScalaVectorMapJmh.mContainsNotFound     -65   100000  avgt    2      _   104.273          ns/op
  * ScalaVectorMapJmh.mContainsNotFound     -65  1000000  avgt    2      _   254.167          ns/op
- * ScalaVectorMapJmh.mAddAll               -65       10  avgt    2      _   847.698          ns/op
- * ScalaVectorMapJmh.mAddAll               -65      100  avgt    2      _  8552.204          ns/op
- * ScalaVectorMapJmh.mAddAll               -65     1000  avgt    2      _145905.646          ns/op
- * ScalaVectorMapJmh.mAddAll               -65    10000  avgt    2     1_495972.812          ns/op
- * ScalaVectorMapJmh.mAddAll               -65   100000  avgt    2    25_365742.926          ns/op
- * ScalaVectorMapJmh.mAddAll               -65  1000000  avgt    2   469_077151.250          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65       10  avgt    2      _   847.698          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65      100  avgt    2      _  8552.204          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65     1000  avgt    2      _145905.646          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65    10000  avgt    2     1_495972.812          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65   100000  avgt    2    25_365742.926          ns/op
+ * ScalaVectorMapJmh.mCopyOf               -65  1000000  avgt    2   469_077151.250          ns/op
  * ScalaVectorMapJmh.mHead                 -65       10  avgt    2      _     7.234          ns/op
  * ScalaVectorMapJmh.mHead                 -65      100  avgt    2      _    21.065          ns/op
  * ScalaVectorMapJmh.mHead                 -65     1000  avgt    2      _    25.789          ns/op
@@ -154,7 +154,7 @@ public class ScalaVectorMapJmh {
     }
 
     @Benchmark
-    public VectorMap<Key, Boolean> mAddAll() {
+    public VectorMap<Key, Boolean> mCopyOf() {
         Builder<Tuple2<Key, Boolean>, VectorMap<Key, Boolean>> b = VectorMap.newBuilder();
         for (Key key : data.setA) {
             b.addOne(new Tuple2<>(key, Boolean.TRUE));

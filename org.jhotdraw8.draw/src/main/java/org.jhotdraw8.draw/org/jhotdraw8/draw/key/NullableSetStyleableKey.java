@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.SequencedChampSet;
+import org.jhotdraw8.collection.VectorSet;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -38,7 +38,7 @@ public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param converter String converter for a list element
      */
     public NullableSetStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter) {
-        super(name, type.getType(), converter, SequencedChampSet.of());
+        super(name, type.getType(), converter, VectorSet.of());
     }
 
     /**

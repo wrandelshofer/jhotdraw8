@@ -16,6 +16,10 @@ import java.util.Objects;
  * @param <D> the data type
  */
 public class ChangeEvent<D> {
+    public boolean isUnchanged() {
+        return type == Type.UNCHANGED;
+    }
+
     enum Type {
         UNCHANGED,
         ADDED,
@@ -92,5 +96,11 @@ public class ChangeEvent<D> {
      */
     public boolean isReplaced() {
         return type == Type.REPLACED;
+    }
+
+    void reset() {
+        type = Type.UNCHANGED;
+        oldData = null;
+        newData = null;
     }
 }

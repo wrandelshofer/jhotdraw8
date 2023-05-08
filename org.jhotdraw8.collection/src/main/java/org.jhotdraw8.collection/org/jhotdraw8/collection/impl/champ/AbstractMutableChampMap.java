@@ -8,21 +8,27 @@ package org.jhotdraw8.collection.impl.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Abstract base class for CHAMP maps.
  *
- * @param <K> the key type of the map
- * @param <V> the value typeof the map
+ * @param <K>    the key type of the map
+ * @param <V>    the value typeof the map
+ * @param <SELF> the self type
  */
-public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampMap<K, V, SELF> extends AbstractMap<K, V> implements Serializable, Cloneable,
         ReadOnlyMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -41,7 +47,7 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<X> root;
+    protected BitmapIndexedNode<SELF> root;
 
     /**
      * The number of entries in this map.
@@ -63,10 +69,10 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampMap<K, V, X> clone() {
+    public @NonNull AbstractMutableChampMap<K, V, SELF> clone() {
         try {
             owner = null;
-            return (AbstractMutableChampMap<K, V, X>) super.clone();
+            return (AbstractMutableChampMap<K, V, SELF>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }
@@ -104,7 +110,7 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
      * @param c an iterable of elements
      * @return {@code true} if this set changed
      */
-    public boolean putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c == this) {
             return false;
         }
@@ -114,6 +120,62 @@ public abstract class AbstractMutableChampMap<K, V, X> extends AbstractMap<K, V>
             modified = modified || !Objects.equals(oldValue, e);
         }
         return modified;
+    }
+
+    /**
+     * Removes all specified entries that are in this set.
+     *
+     * @param c an iterable of keys
+     * @return {@code true} if this map changed
+     */
+    public boolean removeAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        boolean modified = false;
+        for (Object o : c) {
+            if (containsKey(o)) {
+                remove(o);
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    /**
+     * Retains all specified entries that are in this set.
+     *
+     * @param c an iterable of keys
+     * @return {@code true} if this map changed
+     */
+    public boolean retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if ((c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            clear();
+            return true;
+        }
+        Predicate<K> predicate;
+        if (c instanceof Collection<?> that) {
+            predicate = that::contains;
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            predicate = that::contains;
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            predicate = that::contains;
+        }
+        boolean removed = false;
+        for (Iterator<Map.Entry<K, V>> i = iterator(); i.hasNext(); ) {
+            var e = i.next();
+            if (!predicate.test(e.getKey())) {
+                i.remove();
+                removed = true;
+            }
+        }
+        return removed;
     }
 
     @SuppressWarnings("unchecked")

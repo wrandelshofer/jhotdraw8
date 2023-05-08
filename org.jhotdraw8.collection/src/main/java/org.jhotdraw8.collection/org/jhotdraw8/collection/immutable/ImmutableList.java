@@ -7,10 +7,8 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -142,23 +140,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * a different list instance with elements removed
      */
     @Override
-    @NonNull ImmutableList<E> retainAll(@NonNull Collection<?> c);
-
-    /**
-     * Returns a copy of this list that contains only elements
-     * that are in this list and in the specified collection.
-     *
-     * @param c a collection with elements to be retained in this set
-     * @return this list instance if it has not changed, or
-     * a different list instance with elements removed
-     */
-    @Override
-    default @NonNull ImmutableList<E> retainAll(final @NonNull ReadOnlyCollection<?> c) {
-        if (c == this) {
-            return this;
-        }
-        return retainAll(c.asCollection());
-    }
+    @NonNull ImmutableList<E> retainAll(@NonNull Iterable<?> c);
 
     /**
      * Returns a copy of this list that contains all elements

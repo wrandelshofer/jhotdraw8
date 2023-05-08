@@ -100,6 +100,10 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         return iteratorFunction.get();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 
     @Override
     public int size() {

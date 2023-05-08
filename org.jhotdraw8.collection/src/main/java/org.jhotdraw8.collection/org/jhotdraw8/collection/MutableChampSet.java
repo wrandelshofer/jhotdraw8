@@ -10,12 +10,16 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.BulkChangeEvent;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -58,7 +62,6 @@ import java.util.function.Function;
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
  *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
- *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -100,10 +103,10 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.update(getOrCreateOwner(),
-                e, Objects.hashCode(e), 0, details,
+        root = root.put(getOrCreateOwner(),
+                e, ChampSet.keyHash(e), 0, details,
                 (oldKey, newKey) -> oldKey,
-                Objects::equals, Objects::hashCode);
+                Objects::equals, ChampSet::keyHash);
         if (details.isModified()) {
             size++;
             modCount++;
@@ -119,22 +122,123 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      */
     @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c == this || c == root) {
+        if (c instanceof MutableChampSet<?> m) {
+            c = (Iterable<? extends E>) m.toImmutable();
+        }
+        if (c == root) {
             return false;
         }
         if (isEmpty() && (c instanceof ChampSet<?> cc)) {
             root = (BitmapIndexedNode<E>) cc;
-            size = cc.size();
+            size = cc.size;
+            return true;
+        }
+        if (c instanceof ChampSet<?> that) {
+            var bulkChange = new BulkChangeEvent();
+            var newRootNode = root.putAll(getOrCreateOwner(), (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            if (bulkChange.inBoth == that.size()) {
+                return false;
+            }
+            root = newRootNode;
+            size += that.size - bulkChange.inBoth;
             modCount++;
             return true;
         }
-        boolean modified = false;
-        for (E e : c) {
-            modified |= add(e);
-        }
-        return modified;
+        return super.addAll(c);
     }
 
+    @Override
+    public boolean removeAll(@NonNull Collection<?> c) {
+        return removeAll((Iterable<?>) c);
+    }
+
+    @Override
+    public boolean removeAll(@NonNull Iterable<?> c) {
+        if (isEmpty()
+                || (c instanceof Collection<?> cc) && cc.isEmpty()
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            return false;
+        }
+        if (c == this) {
+            clear();
+            return true;
+        }
+        if (c instanceof MutableChampSet<?> m) {
+            c = m.toImmutable();
+        }
+        if (c instanceof ChampSet<?> that) {
+            BulkChangeEvent bulkChange = new BulkChangeEvent();
+            BitmapIndexedNode<E> newRootNode = root.removeAll(getOrCreateOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            if (bulkChange.removed == 0) {
+                return false;
+            }
+            root = newRootNode;
+            size -= bulkChange.removed;
+            modCount++;
+            return true;
+        }
+        return super.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(@NonNull Collection<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if (c.isEmpty()) {
+            clear();
+            return true;
+        }
+        if (c instanceof MutableChampSet<?> m) {
+            ChampSet<?> that = m.toImmutable();
+            BulkChangeEvent bulkChange = new BulkChangeEvent();
+            BitmapIndexedNode<E> newRootNode = root.retainAll(getOrCreateOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            if (bulkChange.removed == 0) {
+                return false;
+            }
+            root = newRootNode;
+            size -= bulkChange.removed;
+            modCount++;
+            return true;
+        }
+        return super.retainAll(c);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public boolean retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()) {
+            return false;
+        }
+        if ((c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            clear();
+            return true;
+        }
+        if (c instanceof MutableChampSet<?> m) {
+            c = m.toImmutable();
+        }
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<E> newRootNode;
+        if (c instanceof ChampSet<?> that) {
+            newRootNode = root.retainAll(getOrCreateOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+        } else if (c instanceof Collection<?> that) {
+            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
+        }
+        if (bulkChange.removed == 0) {
+            return false;
+        }
+        root = newRootNode;
+        size -= bulkChange.removed;
+        modCount++;
+        return true;
+    }
 
     /**
      * Removes all elements from this set.
@@ -157,7 +261,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.find((E) o, Objects.hashCode(o), 0, Objects::equals);
+        return Node.NO_DATA != root.find((E) o, ChampSet.keyHash(o), 0, Objects::equals);
     }
 
     @Override
@@ -173,7 +277,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     private void iteratorRemove(E e) {
-        owner = null;//XXX we should do this only once!
+        owner = null;
         remove(e);
     }
 
@@ -181,8 +285,8 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @SuppressWarnings("unchecked")
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.remove(
-                getOrCreateOwner(), (E) o, Objects.hashCode(o), 0, details,
+        root = root.remove(getOrCreateOwner(),
+                (E) o, ChampSet.keyHash(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {
             size--;

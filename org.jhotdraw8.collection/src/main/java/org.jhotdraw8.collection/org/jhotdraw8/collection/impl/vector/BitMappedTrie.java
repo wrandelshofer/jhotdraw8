@@ -123,7 +123,7 @@ public class BitMappedTrie<T> implements Serializable {
     @SuppressWarnings("unchecked")
     @NonNull BitMappedTrie<T> prependAll(@NonNull Iterable<? extends T> iterable) {
         if (iterable instanceof SequencedCollection<?> s) {
-            return prepend((Iterator<? extends T>) s.reversed().iterator(), s.size());
+            return prepend((Iterator<? extends T>) s._reversed().iterator(), s.size());
         }
         if (iterable instanceof ReadOnlySequencedCollection<?> c) {
             return append(iterable.iterator(), c.size());

@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.IdentityObject;
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
 /**
@@ -71,6 +72,7 @@ public abstract class Node<D> {
     static final int BIT_PARTITION_SIZE = 5;
     static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
+    static final int MAX_SHIFT = HASH_CODE_LENGTH - HASH_CODE_LENGTH % BIT_PARTITION_SIZE;
 
 
     Node() {
@@ -200,7 +202,7 @@ public abstract class Node<D> {
 
     abstract @Nullable D getData(int index);
 
-    @Nullable IdentityObject getMutator() {
+    @Nullable IdentityObject getOwner() {
         return null;
     }
 
@@ -208,12 +210,20 @@ public abstract class Node<D> {
 
     abstract boolean hasData();
 
+    boolean isNodeEmpty() {
+        return !hasData() && !hasNodes();
+    }
+
+    boolean hasMany() {
+        return hasNodes() || dataArity() > 1;
+    }
+
     abstract boolean hasDataArityOne();
 
     abstract boolean hasNodes();
 
     boolean isAllowedToUpdate(@Nullable IdentityObject y) {
-        IdentityObject x = getMutator();
+        IdentityObject x = getOwner();
         return x != null && x == y;
     }
 
@@ -270,9 +280,83 @@ public abstract class Node<D> {
      *                       object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> update(@Nullable IdentityObject owner, D newData,
-                                     int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                                     @NonNull BiFunction<D, D, D> updateFunction,
-                                     @NonNull BiPredicate<D, D> equalsFunction,
-                                     @NonNull ToIntFunction<D> hashFunction);
+    abstract @NonNull Node<D> put(@Nullable IdentityObject owner, D newData,
+                                  int dataHash, int shift, @NonNull ChangeEvent<D> details,
+                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                  @NonNull ToIntFunction<D> hashFunction);
+
+    /**
+     * Inserts or replaces data elements from the specified other trie in this trie.
+     *
+     * @param owner
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#inBoth}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> putAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift,
+                                               @NonNull BulkChangeEvent bulkChange,
+                                               @NonNull BiFunction<D, D, D> updateFunction,
+                                               @NonNull BiPredicate<D, D> equalsFunction,
+                                               @NonNull ToIntFunction<D> hashFunction,
+                                               @NonNull ChangeEvent<D> details);
+
+    /**
+     * Removes data elements in the specified other trie from this trie.
+     *
+     * @param owner
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#removed}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> removeAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange,
+                                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                                  @NonNull ToIntFunction<D> hashFunction,
+                                                  @NonNull ChangeEvent<D> details);
+
+    /**
+     * Retains data elements in this trie that are also in the other trie - removes the rest.
+     *
+     * @param owner
+     * @param otherNode      a node with the same shift as this node from the other trie
+     * @param shift          the shift of this node and the other node
+     * @param bulkChange     updates the field {@link BulkChangeEvent#removed}
+     * @param updateFunction the update function for data elements
+     * @param equalsFunction the equals function for data elements
+     * @param hashFunction   the hash function for data elements
+     * @param details        the change event for single elements
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> retainAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange,
+                                                  @NonNull BiFunction<D, D, D> updateFunction,
+                                                  @NonNull BiPredicate<D, D> equalsFunction,
+                                                  @NonNull ToIntFunction<D> hashFunction,
+                                                  @NonNull ChangeEvent<D> details);
+
+    /**
+     * Retains data elements in this trie for which the provided predicate returns true.
+     *
+     * @param owner
+     * @param predicate  a predicate that returns true for data elements that should be retained
+     * @param shift      the shift of this node and the other node
+     * @param bulkChange updates the field {@link BulkChangeEvent#removed}
+     * @return the updated trie
+     */
+    protected abstract @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<D> predicate, int shift,
+                                                  @NonNull BulkChangeEvent bulkChange);
+
+    protected abstract int calculateSize();
 }

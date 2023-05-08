@@ -29,10 +29,10 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  * Benchmark                           (size)  Mode  Cnt     _     Score   Error  Units
- * ScalaHashMapJmh.mAddAll               -65        10  avgt               467.142          ns/op
- * ScalaHashMapJmh.mAddAll               -65      1000  avgt            114499.940          ns/op
- * ScalaHashMapJmh.mAddAll               -65    100000  avgt          23510614.310          ns/op
- * ScalaHashMapJmh.mAddAll               -65  10000000  avgt        7447239207.500          ns/op
+ * ScalaHashMapJmh.mCopyOf               -65        10  avgt               467.142          ns/op
+ * ScalaHashMapJmh.mCopyOf               -65      1000  avgt            114499.940          ns/op
+ * ScalaHashMapJmh.mCopyOf               -65    100000  avgt          23510614.310          ns/op
+ * ScalaHashMapJmh.mCopyOf               -65  10000000  avgt        7447239207.500          ns/op
  * ScalaHashMapJmh.mAddOneByOne          -65        10  avgt               432.536          ns/op
  * ScalaHashMapJmh.mAddOneByOne          -65      1000  avgt            138463.447          ns/op
  * ScalaHashMapJmh.mAddOneByOne          -65    100000  avgt          35389172.339          ns/op
@@ -138,7 +138,7 @@ public class ScalaHashMapJmh {
     }
 
     @Benchmark
-    public HashMap<Key, Boolean> mAddAll() {
+    public HashMap<Key, Boolean> mCopyOf() {
         return HashMap.from(listA);
     }
 

@@ -103,7 +103,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     }
 
     @Override
-    public @NonNull SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> _reversed() {
         return new SequencedCollectionFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

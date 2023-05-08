@@ -90,6 +90,30 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
+    public void addNullContainsNullShouldReturnTrue(@NonNull SetData data) throws Exception {
+        Set<HashCollider> instance = newInstance();
+        assertFalse(instance.contains(null));
+        var expected = new LinkedHashSet<HashCollider>();
+        expected.add(null);
+        instance.add(null);
+        assertTrue(instance.contains(null));
+        assertEqualSet(expected, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void addAllNullContainsNullShouldReturnTrue(@NonNull SetData data) throws Exception {
+        Set<HashCollider> instance = newInstance();
+        assertFalse(instance.contains(null));
+        var expected = new LinkedHashSet<HashCollider>();
+        expected.addAll(Collections.singleton(null));
+        instance.addAll(Collections.singleton(null));
+        assertTrue(instance.contains(null));
+        assertEqualSet(expected, instance);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
     public void addAllWithCloneShouldReturnFalse(@NonNull SetData data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
         Set<HashCollider> instance2 = toClonedInstance(instance);

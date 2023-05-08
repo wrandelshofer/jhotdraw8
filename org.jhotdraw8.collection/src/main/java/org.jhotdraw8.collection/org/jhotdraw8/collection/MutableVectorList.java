@@ -6,7 +6,6 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
@@ -60,15 +59,6 @@ import java.util.stream.Stream;
 public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E> {
     @Serial
     private static final long serialVersionUID = 0L;
-    /**
-     * The current owner id of this list.
-     * <p>
-     * All nodes that have the same non-null owner id, are exclusively owned
-     * by this list, and therefore can be mutated without affecting other list.
-     * <p>
-     * If this owner id is null, then this list does not own any nodes.
-     */
-    protected @Nullable IdentityObject owner;
 
     private @NonNull BitMappedTrie<E> root;
     private int size;
@@ -100,7 +90,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull SequencedCollection<E> reversed() {
+    public @NonNull SequencedCollection<E> _reversed() {
         return new ListFacade<E>(
                 this::size,
                 index -> get(size - 1 - index),
@@ -214,7 +204,6 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @NonNull
     public VectorList<E> toImmutable() {
-        owner = null;
         return size == 0 ? VectorList.of() : new VectorList<>(root, size);
     }
 
@@ -292,5 +281,15 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         protected @NonNull Object readResolve() {
             return new MutableVectorList<>(deserialized);
         }
+    }
+
+    @Override
+    public E removeFirst() {
+        return SequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    public E removeLast() {
+        return SequencedCollection.super.removeLast();
     }
 }

@@ -514,7 +514,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
     }
 
     @Override
-    public @NonNull SequencedCollection<Byte> reversed() {
+    public @NonNull SequencedCollection<Byte> _reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)
@@ -523,5 +523,35 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
 
     public byte[] getArray() {
         return items;
+    }
+
+    @Override
+    public void addFirst(Byte e) {
+        ByteList.super.addFirst(e);
+    }
+
+    @Override
+    public void addLast(Byte e) {
+        ByteList.super.addLast(e);
+    }
+
+    @Override
+    public Byte getFirst() {
+        return ByteList.super.getFirst();
+    }
+
+    @Override
+    public Byte getLast() {
+        return ByteList.super.getLast();
+    }
+
+    @Override
+    public Byte removeFirst() {
+        return ByteList.super.removeFirst();
+    }
+
+    @Override
+    public Byte removeLast() {
+        return ByteList.super.removeLast();
     }
 }

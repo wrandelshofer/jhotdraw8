@@ -27,6 +27,7 @@ public class BenchmarkData {
      * Set 'a'.
      */
     public final Set<Key> setA;
+    public final Set<Key> setB;
     /**
      * Map 'a'.
      */
@@ -59,6 +60,7 @@ public class BenchmarkData {
             keysNotInSet.add(createKey(rng, preventDuplicates, mask));
         }
         setA = new HashSet<>(keysInSet);
+        setB = new HashSet<>(keysNotInSet);
         Collections.shuffle(keysInSet);
         Collections.shuffle(keysNotInSet);
         this.listA = Collections.unmodifiableList(keysInSet);

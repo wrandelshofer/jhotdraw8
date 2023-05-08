@@ -26,7 +26,6 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -169,14 +168,14 @@ public class VectorSet<E>
     /**
      * Returns an immutable set that contains the provided elements.
      *
-     * @param iterable an iterable
-     * @param <E>      the element type
+     * @param c   an iterable
+     * @param <E> the element type
      * @return an immutable set of the provided elements
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> iterable) {
-        return VectorSet.<E>of().addAll(iterable);
+    public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+        return VectorSet.<E>of().addAll(c);
     }
 
 
@@ -204,11 +203,8 @@ public class VectorSet<E>
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
     public static <E> @NonNull VectorSet<E> of(E @Nullable ... elements) {
-        if (elements.length == 0) {
-            return (VectorSet<E>) VectorSet.EMPTY;
-        } else {
-            return ((VectorSet<E>) VectorSet.EMPTY).addAll(Arrays.asList(elements));
-        }
+        Objects.requireNonNull(elements, "elements is null");
+        return VectorSet.<E>of().addAll(Arrays.asList(elements));
     }
 
     @Override
@@ -218,9 +214,10 @@ public class VectorSet<E>
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> set) {
-        var t = toMutable();
-        return t.addAll(set) ? t.toImmutable() : this;
+    public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> c) {
+        var m = toMutable();
+        m.addAll(c);
+        return m.toImmutable();
     }
 
     public @NonNull VectorSet<E> addFirst(@Nullable E key) {
@@ -230,17 +227,17 @@ public class VectorSet<E>
     private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-        var newRoot = update(null, newElem,
-                Objects.hashCode(e), 0, details,
-                moveToFirst ? SequencedElement::updateAndMoveToFirst : SequencedElement::update,
-                Objects::equals, Objects::hashCode);
+        var newRoot = put(null, newElem,
+                SequencedElement.keyHash(e), 0, details,
+                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
+                Objects::equals, SequencedElement::elementKeyHash);
         if (details.isModified()) {
             var newVector = vector;
             int newSize = size;
-            IdentityObject owner = new IdentityObject();
+
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, owner, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), details, offset);
                     newVector = result.first();
                 }
             } else {
@@ -261,10 +258,10 @@ public class VectorSet<E>
                                           boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<E>(e, vector.size() - offset);
-        var newRoot = update(null, newElem,
-                Objects.hashCode(e), 0, details,
-                moveToLast ? SequencedElement::updateAndMoveToLast : SequencedElement::update,
-                Objects::equals, Objects::hashCode);
+        var newRoot = put(null, newElem,
+                SequencedElement.keyHash(e), 0, details,
+                moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
+                Objects::equals, SequencedElement::elementKeyHash);
         if (details.isModified()) {
             var newVector = vector;
             int newOffset = offset;
@@ -273,7 +270,7 @@ public class VectorSet<E>
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    var result = ChampSequencedData.vecRemove(newVector, owner, oldElem, details, newOffset);
+                    var result = ChampSequencedData.vecRemove(newVector, oldElem, details, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -302,7 +299,7 @@ public class VectorSet<E>
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
-        return find(new SequencedElement<>(key), Objects.hashCode(key), 0, Objects::equals) != Node.NO_DATA;
+        return find(new SequencedElement<>(key), SequencedElement.keyHash(key), 0, Objects::equals) != Node.NO_DATA;
     }
 
     @Override
@@ -357,15 +354,15 @@ public class VectorSet<E>
 
     @Override
     public @NonNull VectorSet<E> remove(@Nullable E key) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = remove(null,
                 new SequencedElement<>(key),
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, null, removedElem, details, offset);
-            return renumber(newRoot, result.first(), size - 1,
+            var result = ChampSequencedData.vecRemove(vector, removedElem, details, offset);
+            return size == 1 ? VectorSet.of() : renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
         return this;
@@ -373,17 +370,10 @@ public class VectorSet<E>
 
 
     @Override
-    public @NonNull VectorSet<E> removeAll(@NonNull Iterable<?> set) {
-        if (set == this) {
-            return of();
-        }
-        if (isEmpty()
-                || (set instanceof Collection<?> c) && c.isEmpty()
-                || (set instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
-            return this;
-        }
-        var t = toMutable();
-        return t.removeAll(set) ? t.toImmutable() : this;
+    public @NonNull VectorSet<E> removeAll(@NonNull Iterable<?> c) {
+        var m = toMutable();
+        m.removeAll(c);
+        return m.toImmutable();
     }
 
     @SuppressWarnings("unchecked")
@@ -416,7 +406,7 @@ public class VectorSet<E>
         if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
             var result = ChampSequencedData.vecRenumber(
-                    size, root, vector, owner, Objects::hashCode, Objects::equals,
+                    new IdentityObject(), size, root, vector, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return new VectorSet<>(
                     result.first(), result.second(),
@@ -425,16 +415,12 @@ public class VectorSet<E>
         return new VectorSet<>(root, vector, size, offset);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorSet<E> retainAll(@NonNull Collection<?> set) {
-        if (isEmpty()) {
-            return this;
-        }
-        if (set.isEmpty()) {
-            return of();
-        }
-        var t = toMutable();
-        return t.retainAll(set) ? t.toImmutable() : this;
+    public @NonNull VectorSet<E> retainAll(@NonNull Iterable<?> c) {
+        var m = toMutable();
+        m.retainAll(c);
+        return m.toImmutable();
     }
 
     public @NonNull Iterator<E> reverseIterator() {
@@ -490,4 +476,5 @@ public class VectorSet<E>
             return VectorSet.copyOf(deserialized);
         }
     }
+
 }

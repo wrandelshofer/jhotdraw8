@@ -505,7 +505,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
     }
 
     @Override
-    public @NonNull SequencedCollection<Double> reversed() {
+    public @NonNull SequencedCollection<Double> _reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)
@@ -514,5 +514,35 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
 
     public double[] getArray() {
         return items;
+    }
+
+    @Override
+    public void addFirst(Double e) {
+        DoubleList.super.addFirst(e);
+    }
+
+    @Override
+    public void addLast(Double e) {
+        DoubleList.super.addLast(e);
+    }
+
+    @Override
+    public Double getFirst() {
+        return DoubleList.super.getFirst();
+    }
+
+    @Override
+    public Double getLast() {
+        return DoubleList.super.getLast();
+    }
+
+    @Override
+    public Double removeFirst() {
+        return DoubleList.super.removeFirst();
+    }
+
+    @Override
+    public Double removeLast() {
+        return DoubleList.super.removeLast();
     }
 }

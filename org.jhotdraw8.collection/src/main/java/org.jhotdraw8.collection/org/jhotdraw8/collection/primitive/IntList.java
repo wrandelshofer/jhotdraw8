@@ -82,4 +82,34 @@ public interface IntList extends List<Integer>, IntSequencedCollection {
     default boolean isEmpty() {
         return size() == 0;
     }
+
+    @Override
+    default Integer removeFirst() {
+        return IntSequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    default Integer removeLast() {
+        return IntSequencedCollection.super.removeLast();
+    }
+
+    @Override
+    default Integer getFirst() {
+        return IntSequencedCollection.super.getFirst();
+    }
+
+    @Override
+    default Integer getLast() {
+        return IntSequencedCollection.super.getLast();
+    }
+
+    @Override
+    default void addFirst(Integer e) {
+        IntSequencedCollection.super.addFirst(e);
+    }
+
+    @Override
+    default void addLast(Integer e) {
+        IntSequencedCollection.super.addLast(e);
+    }
 }

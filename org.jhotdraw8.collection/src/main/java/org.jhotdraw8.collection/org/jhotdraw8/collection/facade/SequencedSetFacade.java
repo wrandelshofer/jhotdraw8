@@ -129,7 +129,7 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
     }
 
     @Override
-    public @NonNull SequencedSet<E> reversed() {
+    public @NonNull SequencedSet<E> _reversed() {
         return new SequencedSetFacade<>(
                 reverseIteratorFunction,
                 spliteratorFunction, iteratorFunction,

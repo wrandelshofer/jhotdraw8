@@ -32,7 +32,7 @@ class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
     }
 
     @Override
-    protected @NonNull IdentityObject getMutator() {
+    protected @NonNull IdentityObject getOwner() {
         return ownedBy;
     }
 }

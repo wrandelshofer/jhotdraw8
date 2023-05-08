@@ -32,7 +32,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @throws java.util.NoSuchElementException if the map is empty
      */
     default @Nullable Map.Entry<K, V> firstEntry() {
-        return isEmpty() ? null : sequencedEntrySet().iterator().next();
+        return isEmpty() ? null : _sequencedEntrySet().iterator().next();
     }
 
     /**
@@ -42,7 +42,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @throws java.util.NoSuchElementException if the map is empty
      */
     default @Nullable Map.Entry<K, V> lastEntry() {
-        return isEmpty() ? null : reversed().sequencedEntrySet().iterator().next();
+        return isEmpty() ? null : _reversed()._sequencedEntrySet().iterator().next();
     }
 
     /**
@@ -53,7 +53,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      *
      * @return a reversed-order view of this map
      */
-    @NonNull SequencedMap<K, V> reversed();
+    @NonNull SequencedMap<K, V> _reversed();
 
     /**
      * Removes and returns the first entry in this map or code {@code null}
@@ -62,7 +62,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the removed first entry of this map or code {@code null}
      */
     default Map.Entry<K, V> pollFirstEntry() {
-        Iterator<Entry<K, V>> it = sequencedEntrySet().iterator();
+        Iterator<Entry<K, V>> it = _sequencedEntrySet().iterator();
         if (it.hasNext()) {
             Entry<K, V> entry = it.next();
             it.remove();
@@ -79,7 +79,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the removed first entry of this map or code {@code null}
      */
     default Map.Entry<K, V> pollLastEntry() {
-        Iterator<Entry<K, V>> it = reversed().sequencedEntrySet().iterator();
+        Iterator<Entry<K, V>> it = _reversed()._sequencedEntrySet().iterator();
         if (it.hasNext()) {
             Entry<K, V> entry = it.next();
             it.remove();
@@ -119,7 +119,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return a {@link SequencedSet} view of the keys
      */
     @NonNull
-    SequencedSet<K> sequencedKeySet();
+    SequencedSet<K> _sequencedKeySet();
 
     /**
      * Returns a {@link SequencedCollection} view of the values contained in
@@ -128,7 +128,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return a {@link SequencedCollection} view of the values
      */
     @NonNull
-    SequencedCollection<V> sequencedValues();
+    SequencedCollection<V> _sequencedValues();
 
     /**
      * Returns a {@link SequencedSet} view of the entries contained in this map.
@@ -136,7 +136,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return a {@link SequencedSet} view of the entries
      */
     @NonNull
-    SequencedSet<Entry<K, V>> sequencedEntrySet();
+    SequencedSet<Entry<K, V>> _sequencedEntrySet();
 
     @Override
     default V getOrDefault(Object key, V defaultValue) {

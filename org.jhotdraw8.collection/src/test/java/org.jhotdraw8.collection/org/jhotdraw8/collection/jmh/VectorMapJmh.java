@@ -1,6 +1,6 @@
 package org.jhotdraw8.collection.jmh;
 
-import org.jhotdraw8.collection.ChampMap;
+import org.jhotdraw8.collection.VectorMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -21,22 +21,20 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- * Benchmark                           (mask)  (size)  Mode  Cnt         Score   Error  Units
- * ChampMapJmh.mContainsFound             -65  100000  avgt             63.747          ns/op
- * ChampMapJmh.mContainsNotFound          -65  100000  avgt             52.322          ns/op
- * ChampMapJmh.mCopyOf                    -65  100000  avgt       16596781.617          ns/op
- * ChampMapJmh.mCopyOnyByOne              -65  100000  avgt       23044442.214          ns/op
- * ChampMapJmh.mHead                      -65  100000  avgt             57.160          ns/op
- * ChampMapJmh.mIterate                   -65  100000  avgt        2757300.234          ns/op
- * ChampMapJmh.mPut                       -65  100000  avgt            188.573          ns/op
- * ChampMapJmh.mRemoveAll                 -65  100000  avgt       24564043.819          ns/op
- * ChampMapJmh.mRemoveOneByOne            -65  100000  avgt       27647598.699          ns/op
- * ChampMapJmh.mRemoveThenAdd             -65  100000  avgt            325.072          ns/op
- * ChampMapJmh.mRetainAllAllRetained      -65  100000  avgt        5868854.716          ns/op
- * ChampMapJmh.mRetainAllNoneRetained     -65  100000  avgt        4477554.129          ns/op
- * ChampMapJmh.mTail                      -65  100000  avgt            131.363          ns/op
- *
- * Process finished with exit code 0
+ * Benchmark                            (mask)  (size)  Mode  Cnt         Score   Error  Units
+ * VectorMapJmh.mContainsFound             -65  100000  avgt             69.008          ns/op
+ * VectorMapJmh.mContainsNotFound          -65  100000  avgt             62.151          ns/op
+ * VectorMapJmh.mCopyOf                    -65  100000  avgt       29209592.309          ns/op
+ * VectorMapJmh.mCopyOnyByOne              -65  100000  avgt       33329504.498          ns/op
+ * VectorMapJmh.mHead                      -65  100000  avgt             28.013          ns/op
+ * VectorMapJmh.mIterate                   -65  100000  avgt        1591652.712          ns/op
+ * VectorMapJmh.mPut                       -65  100000  avgt            279.123          ns/op
+ * VectorMapJmh.mRemoveAll                 -65  100000  avgt       27430212.184          ns/op
+ * VectorMapJmh.mRemoveOneByOne            -65  100000  avgt       78633296.148          ns/op
+ * VectorMapJmh.mRemoveThenAdd             -65  100000  avgt            551.835          ns/op
+ * VectorMapJmh.mRetainAllAllRetained      -65  100000  avgt        3308725.090          ns/op
+ * VectorMapJmh.mRetainAllNoneRetained     -65  100000  avgt       33450610.485          ns/op
+ * VectorMapJmh.mTail                      -65  100000  avgt            145.555          ns/op *
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -45,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
-public class ChampMapJmh {
+public class VectorMapJmh {
     @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
     private int size;
 
@@ -53,12 +51,12 @@ public class ChampMapJmh {
     private int mask;
 
     private BenchmarkData data;
-    private ChampMap<Key, Boolean> mapA;
+    private VectorMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ChampMap.of();
+        mapA = VectorMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }
@@ -74,25 +72,25 @@ public class ChampMapJmh {
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRemoveThenAdd() {
+    public VectorMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mPut() {
+    public VectorMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.put(key, Boolean.FALSE);
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mCopyOf() {
-        return ChampMap.copyOf(data.mapA);
+    public VectorMap<Key, Boolean> mCopyOf() {
+        return VectorMap.copyOf(data.mapA);
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mCopyOnyByOne() {
-        ChampMap<Key, Boolean> set = ChampMap.of();
+    public VectorMap<Key, Boolean> mCopyOnyByOne() {
+        VectorMap<Key, Boolean> set = VectorMap.of();
         for (Key key : data.listA) {
             set = set.put(key, Boolean.FALSE);
         }
@@ -118,12 +116,12 @@ public class ChampMapJmh {
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mTail() {
+    public VectorMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRemoveOneByOne() {
+    public VectorMap<Key, Boolean> mRemoveOneByOne() {
         var map = mapA;
         for (var e : data.listA) {
             map = map.remove(e);
@@ -134,14 +132,14 @@ public class ChampMapJmh {
 
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRemoveAll() {
+    public VectorMap<Key, Boolean> mRemoveAll() {
         var updated = mapA.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRetainAllNoneRetained() {
+    public VectorMap<Key, Boolean> mRetainAllNoneRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setB);
         assert updated.isEmpty();
@@ -149,7 +147,7 @@ public class ChampMapJmh {
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRetainAllAllRetained() {
+    public VectorMap<Key, Boolean> mRetainAllAllRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setA);
         assert updated == mapA;

@@ -48,7 +48,21 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it already contains the elements, or
      * a different set instance with the elements added
      */
-    @NonNull ImmutableSet<E> addAll(@NonNull Iterable<? extends E> c);
+    @SuppressWarnings("unchecked")
+    default @NonNull ImmutableSet<E> addAll(@NonNull Iterable<? extends E> c) {
+        if (c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return this;
+        }
+        if (isEmpty() && c.getClass() == this.getClass()) {
+            return (ImmutableSet<E>) c;
+        }
+        var s = this;
+        for (var e : c) {
+            s = s.add(e);
+        }
+        return s;
+    }
 
     /**
      * Returns a copy of this set that contains all elements
@@ -69,32 +83,58 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it already does not contain the elements, or
      * a different set instance with the elements removed
      */
-    @NonNull ImmutableSet<E> removeAll(@NonNull Iterable<?> c);
-
-    /**
-     * Returns a copy of this set that contains only elements
-     * that are in this set and in the specified collection.
-     *
-     * @param c a collection with elements to be retained in this set
-     * @return this set instance if it has not changed, or
-     * a different set instance with elements removed
-     */
-    @NonNull ImmutableSet<E> retainAll(@NonNull Collection<?> c);
-
-    /**
-     * Returns a copy of this set that contains only elements
-     * that are in this set and in the specified collection.
-     *
-     * @param c a collection with elements to be retained in this set
-     * @return this set instance if it has not changed, or
-     * a different set instance with elements removed
-     */
-    default @NonNull ImmutableSet<E> retainAll(final @NonNull ReadOnlyCollection<?> c) {
-        if (c == this) {
+    @SuppressWarnings("unchecked")
+    default @NonNull ImmutableSet<E> removeAll(@NonNull Iterable<?> c) {
+        if (isEmpty()
+                || c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
             return this;
         }
-        return retainAll(c.asCollection());
+        var s = this;
+        for (var e : c) {
+            s = s.remove((E) e);
+        }
+        return s;
     }
+
+    /**
+     * Returns a copy of this set that contains only elements
+     * that are in this set and in the specified collection.
+     *
+     * @param c a collection with elements to be retained in this set
+     * @return this set instance if it has not changed, or
+     * a different set instance with elements removed
+     */
+    @SuppressWarnings("unchecked")
+    default @NonNull ImmutableSet<E> retainAll(@NonNull Iterable<?> c) {
+        if (isEmpty()
+                || c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return this;
+        }
+        if (c instanceof Collection<?> co) {
+            var s = this;
+            for (var e : this) {
+                if (!co.contains(e)) {
+                    s = s.remove((E) e);
+                }
+            }
+            return s;
+        }
+        if (!(c instanceof ReadOnlyCollection<?> rc)) {
+            ImmutableSet<Object> clear = (ImmutableSet<Object>) clear();
+            c = clear.addAll(c);
+        }
+        var rc = (ReadOnlyCollection<?>) c;
+        var s = this;
+        for (var e : this) {
+            if (!rc.contains(e)) {
+                s = s.remove((E) e);
+            }
+        }
+        return s;
+    }
+
 
     /**
      * Returns a mutable copy of this set.
