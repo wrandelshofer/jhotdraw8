@@ -33,7 +33,7 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumeratorSpliter
      * @param nextFunction the nextFunction
      * @param root         the root vertex
      * @param vertexCount  the vertex count
-     * @param dfs
+     * @param dfs          whether to perform depth-first-search instead of breadth-first-search
      */
     public BfsDfsIndexedVertexSpliterator(@NonNull Function<Integer, IntSpliterator> nextFunction,
                                           int root,
@@ -46,7 +46,7 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumeratorSpliter
      *
      * @param nextFunction the nextFunction
      * @param root         the root vertex
-     * @param dfs
+     * @param dfs whether to perform depth-first-search instead of breadth-first-search
      */
     public BfsDfsIndexedVertexSpliterator(@NonNull Function<Integer, IntSpliterator> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);

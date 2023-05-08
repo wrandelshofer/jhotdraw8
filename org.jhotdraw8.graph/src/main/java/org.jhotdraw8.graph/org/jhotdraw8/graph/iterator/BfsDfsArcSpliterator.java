@@ -35,7 +35,7 @@ public class BfsDfsArcSpliterator<V, A> extends AbstractEnumeratorSpliterator<Ar
      *
      * @param nextArcsFunction the nextFunction
      * @param root             the root vertex
-     * @param dfs
+     * @param dfs              whether to perform depth-first-search instead of breadth-first-search
      */
     public BfsDfsArcSpliterator(Function<V, Iterable<Arc<V, A>>> nextArcsFunction, V root, boolean dfs) {
         this(nextArcsFunction, root, new HashSet<>()::add, dfs);
@@ -47,8 +47,8 @@ public class BfsDfsArcSpliterator<V, A> extends AbstractEnumeratorSpliterator<Ar
      *
      * @param nextFunction the function that returns the next vertices of a given vertex
      * @param root         the root vertex
-     * @param visited      a predicate with side effect. The predicate returns true
-     * @param dfs
+     * @param visited      a function that adds an arc to a set, and returns true if the arc was not yet in the set
+     * @param dfs whether to perform depth-first-search instead of breadth-first-search
      */
     public BfsDfsArcSpliterator(@Nullable Function<V, Iterable<Arc<V, A>>> nextFunction, @Nullable V root, @Nullable AddToSet<Arc<V, A>> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
