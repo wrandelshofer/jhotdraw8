@@ -7,85 +7,78 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * Tests classes that implement the interface {@link SequencedCollection<Integer>}.
+ * Tests classes that implement the interface {@link SequencedCollection<HashCollider>}.
  */
 
 public abstract class AbstractSequencedCollectionTest {
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+
+    public static @NonNull Stream<SetData> dataProvider() {
+        return Stream.of(
+                NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
+        );
+    }
 
     public AbstractSequencedCollectionTest() {
     }
 
-    /**
-     * Test of addFirst method, of class SequencedCollection<Integer>.
-     */
-    @Test
-    public void shouldAddFirst() {
-        int e = 1;
-        SequencedCollection<Integer> instance = newInstance();
-        instance.addFirst(e);
-        assertFalse(instance.isEmpty());
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldAddFirst(@NonNull SetData data) throws Exception {
+        SequencedCollection<HashCollider> instance = newInstance();
+        instance.addAll(data.b.asCollection());
+        instance.addFirst(data.a.iterator().next());
 
-        assertEquals(1, instance.getFirst());
+        List<HashCollider> expected = new ArrayList<>();
+        expected.addAll(data.b.asCollection());
+        expected.add(0, data.a.iterator().next());
 
-        instance.addFirst(2);
-        assertEquals(2, instance.getFirst());
-        assertEquals(2, instance.size());
+        assertEquals(expected, instance);
     }
 
     @NonNull
-    protected abstract SequencedCollection<Integer> newInstance();
+    protected abstract SequencedCollection<HashCollider> newInstance();
 
-    /**
-     * Test of addLast method, of class SequencedCollection<Integer>.
-     */
-    @Test
-    public void shouldAddLast() {
-        int e = 1;
-        SequencedCollection<Integer> instance = newInstance();
-        instance.addLast(e);
-        assertFalse(instance.isEmpty());
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldAddLast(@NonNull SetData data) throws Exception {
+        SequencedCollection<HashCollider> instance = newInstance();
+        instance.addAll(data.b.asCollection());
+        instance.addLast(data.a.iterator().next());
 
-        assertEquals(1, instance.getLast());
+        List<HashCollider> expected = new ArrayList<>();
+        expected.addAll(data.b.asCollection());
+        expected.add(data.a.iterator().next());
 
-        instance.addLast(2);
-        assertEquals(2, instance.getLast());
-        assertEquals(2, instance.size());
+        assertEquals(expected, instance);
     }
 
-    @Test
-    public void shouldAddAll() {
-        SequencedCollection<Integer> instance = newInstance();
-        instance.addAll(Arrays.<Integer>asList(1, 2, 3));
-        instance.addAll(Arrays.<Integer>asList(4, 5));
-        instance.addAll(Arrays.<Integer>asList(6, 7));
-        assertEquals(1, instance.removeFirst());
-        assertEquals(2, instance.removeFirst());
-        instance.addAll(Arrays.<Integer>asList(8, 9));
-        instance.addAll(Arrays.<Integer>asList(10, 11));
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void shouldAddAll(@NonNull SetData data) throws Exception {
+        SequencedCollection<HashCollider> instance = newInstance();
+        instance.addAll(data.a.asCollection());
+        instance.addAll(data.b.asCollection());
+        instance.addAll(data.c.asCollection());
 
-        SequencedCollection<Integer> expected = newInstance();
-        expected.addAll(Arrays.<Integer>asList(3, 4, 5, 6, 7, 8, 9, 10, 11));
+        List<HashCollider> expected = new ArrayList<>();
+        expected.addAll(data.a.asCollection());
+        expected.addAll(data.b.asCollection());
+        expected.addAll(data.c.asCollection());
+
         assertEquals(expected, instance);
-        assertEquals(expected.hashCode(), instance.hashCode());
-
-        assertEquals(3, instance.removeFirst());
-        assertEquals(4, instance.removeFirst());
-        assertEquals(5, instance.removeFirst());
-        assertEquals(11, instance.removeLast());
-        assertEquals(10, instance.removeLast());
-        instance.addAll(Arrays.<Integer>asList(10, 11, 12, 13, 14, 15, 16, 17, 18, 19));
-
-        expected.clear();
-        expected.addAll(Arrays.<Integer>asList(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19));
-        assertEquals(expected, instance);
-        assertEquals(expected.hashCode(), instance.hashCode());
     }
 }

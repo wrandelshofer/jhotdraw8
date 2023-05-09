@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Elem has a configurable bit mask for its hash code.
  * Allowing to run the same test with many or few hash collisions.
  */
-public class HashCollider implements Serializable {
+public class HashCollider implements Serializable, Cloneable {
     private static final long serialVersionUID = 0L;
     private final int value;
     private final int hash;
@@ -51,5 +51,14 @@ public class HashCollider implements Serializable {
 
     public int getHashBitMask() {
         return hashBitMask;
+    }
+
+    @Override
+    public HashCollider clone() {
+        try {
+            return (HashCollider) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

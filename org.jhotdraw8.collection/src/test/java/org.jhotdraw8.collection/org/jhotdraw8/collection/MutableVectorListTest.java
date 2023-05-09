@@ -7,12 +7,12 @@ import java.util.List;
 
 public class MutableVectorListTest extends AbstractListTest {
     @Override
-    protected @NonNull SequencedCollection<Integer> newInstance() {
-        return new MutableVectorList<Integer>();
+    protected @NonNull SequencedCollection<HashCollider> newInstance() {
+        return new MutableVectorList<HashCollider>();
     }
 
     @Override
-    protected @NonNull List<Integer> newListInstance() {
-        return new MutableVectorList<Integer>();
+    protected @NonNull List<HashCollider> newListInstance() {
+        return new MutableVectorList<HashCollider>();
     }
 }

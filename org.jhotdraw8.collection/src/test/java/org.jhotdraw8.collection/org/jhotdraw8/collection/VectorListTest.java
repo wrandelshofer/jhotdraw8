@@ -8,12 +8,12 @@ import java.util.List;
 
 public class VectorListTest extends AbstractListTest {
     @Override
-    protected @NonNull SequencedCollection<Integer> newInstance() {
-        return new MutableListFacade<Integer>(VectorList.<Integer>of());
+    protected @NonNull SequencedCollection<HashCollider> newInstance() {
+        return new MutableListFacade<HashCollider>(VectorList.<HashCollider>of());
     }
 
     @Override
-    protected @NonNull List<Integer> newListInstance() {
-        return new MutableListFacade<Integer>(VectorList.<Integer>of());
+    protected @NonNull List<HashCollider> newListInstance() {
+        return new MutableListFacade<HashCollider>(VectorList.<HashCollider>of());
     }
 }
