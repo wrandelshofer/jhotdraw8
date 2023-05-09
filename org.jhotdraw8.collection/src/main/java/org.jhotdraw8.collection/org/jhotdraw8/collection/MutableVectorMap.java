@@ -192,7 +192,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         return new ChampVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
-                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
+                0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
 
@@ -321,7 +321,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         if (details.isModified()) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), new ChangeEvent<SequencedEntry<K, V>>(), offset);
+                    var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
                     vector = result.first();
                 }
             } else {
@@ -376,7 +376,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         }
         if (details.isModified()) {
             if (details.isReplaced()) {
-                var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), new ChangeEvent<SequencedEntry<K, V>>(), offset);
+                var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
                 vector = result.first();
                 offset = result.second();
             } else {
@@ -420,7 +420,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
                 SequencedEntry.keyHash(key), 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, oldElem, new ChangeEvent<>(), offset);
+            var result = ChampSequencedData.vecRemove(vector, oldElem, offset);
             vector = result.first();
             offset = result.second();
             size--;

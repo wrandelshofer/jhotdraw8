@@ -335,7 +335,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
+    protected @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
         final int thisSize = this.dataArity();
         int resultSize = 0;
         Object[] buffer = new Object[thisSize];

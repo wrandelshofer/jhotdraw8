@@ -237,7 +237,7 @@ public class VectorSet<E>
 
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), details, offset);
+                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
                     newVector = result.first();
                 }
             } else {
@@ -266,11 +266,10 @@ public class VectorSet<E>
             var newVector = vector;
             int newOffset = offset;
             int newSize = size;
-            var owner = new IdentityObject();
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    var result = ChampSequencedData.vecRemove(newVector, oldElem, details, newOffset);
+                    var result = ChampSequencedData.vecRemove(newVector, oldElem, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -361,7 +360,7 @@ public class VectorSet<E>
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, removedElem, details, offset);
+            var result = ChampSequencedData.vecRemove(vector, removedElem, offset);
             return size == 1 ? VectorSet.of() : renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
@@ -444,7 +443,7 @@ public class VectorSet<E>
     public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new ChampVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
-                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
+                0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
     @Override

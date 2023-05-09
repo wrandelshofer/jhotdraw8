@@ -103,7 +103,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public boolean add(@Nullable E e) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.put(getOrCreateOwner(),
+        root = root.put(makeOwner(),
                 e, ChampSet.keyHash(e), 0, details,
                 (oldKey, newKey) -> oldKey,
                 Objects::equals, ChampSet::keyHash);
@@ -135,7 +135,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         }
         if (c instanceof ChampSet<?> that) {
             var bulkChange = new BulkChangeEvent();
-            var newRootNode = root.putAll(getOrCreateOwner(), (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            var newRootNode = root.putAll(makeOwner(), (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             if (bulkChange.inBoth == that.size()) {
                 return false;
             }
@@ -168,7 +168,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         }
         if (c instanceof ChampSet<?> that) {
             BulkChangeEvent bulkChange = new BulkChangeEvent();
-            BitmapIndexedNode<E> newRootNode = root.removeAll(getOrCreateOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            BitmapIndexedNode<E> newRootNode = root.removeAll(makeOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
                 return false;
             }
@@ -192,7 +192,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         if (c instanceof MutableChampSet<?> m) {
             ChampSet<?> that = m.toImmutable();
             BulkChangeEvent bulkChange = new BulkChangeEvent();
-            BitmapIndexedNode<E> newRootNode = root.retainAll(getOrCreateOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            BitmapIndexedNode<E> newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
                 return false;
             }
@@ -207,7 +207,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
 
     @SuppressWarnings("unchecked")
     public boolean retainAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) {
+        if (c == this || isEmpty()) {
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
@@ -215,21 +215,18 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             clear();
             return true;
         }
-        if (c instanceof MutableChampSet<?> m) {
-            c = m.toImmutable();
-        }
         BulkChangeEvent bulkChange = new BulkChangeEvent();
         BitmapIndexedNode<E> newRootNode;
         if (c instanceof ChampSet<?> that) {
-            newRootNode = root.retainAll(getOrCreateOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
         } else if (c instanceof Collection<?> that) {
-            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
+            newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
         } else if (c instanceof ReadOnlyCollection<?> that) {
-            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
+            newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
         } else {
             HashSet<Object> that = new HashSet<>();
             c.forEach(that::add);
-            newRootNode = root.filterAll(getOrCreateOwner(), that::contains, 0, bulkChange);
+            newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
         }
         if (bulkChange.removed == 0) {
             return false;
@@ -285,7 +282,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @SuppressWarnings("unchecked")
     public boolean remove(Object o) {
         ChangeEvent<E> details = new ChangeEvent<>();
-        root = root.remove(getOrCreateOwner(),
+        root = root.remove(makeOwner(),
                 (E) o, ChampSet.keyHash(o), 0, details,
                 Objects::equals);
         if (details.isModified()) {

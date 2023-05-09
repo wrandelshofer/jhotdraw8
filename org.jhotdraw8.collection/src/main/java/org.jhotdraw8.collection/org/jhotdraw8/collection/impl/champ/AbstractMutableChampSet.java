@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 /**
  * Abstract base class for CHAMP sets.
  *
- * @param <E>    the element type of the set
- * @param <SELF> the self type
+ * @param <E> the element type of the set
+ * @param <D> the data type of the CHAMP trie
  */
-public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> implements Serializable, Cloneable,
+public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> implements Serializable, Cloneable,
         ReadOnlySet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -44,7 +44,7 @@ public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> im
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<SELF> root;
+    protected BitmapIndexedNode<D> root;
 
     /**
      * The number of elements in this set.
@@ -83,7 +83,7 @@ public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> im
      * @return {@code true} if this set changed
      */
     public boolean retainAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) {
+        if (c == this || isEmpty()) {
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
@@ -136,7 +136,7 @@ public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> im
      * @return a new unique id or the existing unique id.
      */
     @NonNull
-    protected IdentityObject getOrCreateOwner() {
+    protected IdentityObject makeOwner() {
         if (owner == null) {
             owner = new IdentityObject();
         }
@@ -176,10 +176,10 @@ public abstract class AbstractMutableChampSet<E, SELF> extends AbstractSet<E> im
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampSet<E, SELF> clone() {
+    public @NonNull AbstractMutableChampSet<E, D> clone() {
         try {
             owner = null;
-            return (AbstractMutableChampSet<E, SELF>) super.clone();
+            return (AbstractMutableChampSet<E, D>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e);
         }

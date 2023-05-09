@@ -65,7 +65,7 @@ public class VectorSetJmh {
         setB = VectorSet.copyOf(data.listB);
         setAA = VectorSet.copyOf(data.listA);
     }
-
+/*
     @Benchmark
     public VectorSet<Key> mCopyOf() {
         VectorSet<Key> set = VectorSet.copyOf(data.listA);
@@ -93,7 +93,7 @@ public class VectorSetJmh {
         assert set.isEmpty();
         return set;
     }
-
+*/
     @Benchmark
     public VectorSet<Key> mRemoveAllFromDifferentType() {
         VectorSet<Key> set = setA;
@@ -143,7 +143,7 @@ public class VectorSetJmh {
         assert updated.isEmpty();
         return updated;
     }
-
+/*
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -180,5 +180,5 @@ public class VectorSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
-
+*/
 }

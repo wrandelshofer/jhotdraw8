@@ -355,7 +355,7 @@ public abstract class Node<D> {
      * @param bulkChange updates the field {@link BulkChangeEvent#removed}
      * @return the updated trie
      */
-    protected abstract @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<D> predicate, int shift,
+    protected abstract @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift,
                                                   @NonNull BulkChangeEvent bulkChange);
 
     protected abstract int calculateSize();

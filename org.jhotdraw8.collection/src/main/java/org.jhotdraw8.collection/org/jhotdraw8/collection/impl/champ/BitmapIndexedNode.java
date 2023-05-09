@@ -609,7 +609,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @Override
     @NonNull
-    public BitmapIndexedNode<D> filterAll(@Nullable IdentityObject owner, Predicate<D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
+    public BitmapIndexedNode<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift, @NonNull BulkChangeEvent bulkChange) {
         var newBitMap = nodeMap | dataMap;
         var buffer = new Object[Integer.bitCount(newBitMap)];
         int newDataMap = this.dataMap;

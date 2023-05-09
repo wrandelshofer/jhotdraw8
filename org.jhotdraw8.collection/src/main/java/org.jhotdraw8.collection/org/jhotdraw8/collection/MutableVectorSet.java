@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
+import static org.jhotdraw8.collection.impl.champ.ChampSequencedData.vecRemove;
+
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
  * (CHAMP), with predictable iteration order.
@@ -135,15 +137,15 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
-                root = root.put(getOrCreateOwner(), newElem,
-                        SequencedElement.keyHash(e), 0, details,
-                        moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
-                        Objects::equals, SequencedElement::elementKeyHash);
+        root = root.put(makeOwner(), newElem,
+                SequencedElement.keyHash(e), 0, details,
+                moveToFirst ? SequencedElement::putAndMoveToFirst : SequencedElement::put,
+                Objects::equals, SequencedElement::elementKeyHash);
         boolean modified = details.isModified();
         if (modified) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), details, offset);
+                    var result = vecRemove(vector, details.getOldDataNonNull(), offset);
                     vector = result.first();
                 }
             } else {
@@ -165,7 +167,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private boolean addLast(@Nullable E e, boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, offset + vector.size());
-        root = root.put(getOrCreateOwner(),
+        root = root.put(makeOwner(),
                 newElem, SequencedElement.keyHash(e), 0,
                 details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
@@ -174,7 +176,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         if (modified) {
             var oldElem = details.getOldData();
             if (details.isReplaced()) {
-                var result = ChampSequencedData.vecRemove(vector, oldElem, details, offset);
+                var result = vecRemove(vector, oldElem, offset);
                 vector = result.first();
                 offset = result.second();
             } else {
@@ -228,29 +230,110 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public @NonNull Iterator<E> iterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(spliterator(),
+        return new FailFastIterator<>(new IteratorFacade<>(new ChampVectorSpliterator<>(vector,
+                (Object o) -> ((SequencedElement<E>) o).getElement(),
+                0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED),
                 this::iteratorRemove), () -> modCount);
     }
+/*
+    public boolean removeAll(@NonNull Iterable<?> c) {
+        if (isEmpty()
+                || (c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            return false;
+        }
+        if (c == this) {
+            clear();
+            return true;
+        }
+        Predicate<E> predicate;
+        if (c instanceof Collection<?> that) {
+            predicate = that::contains;
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            predicate = that::contains;
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            predicate = that::contains;
+        }
+        return filterAll(predicate.negate());
+    }
+/*
+    public boolean retainAll(@NonNull Iterable<?> c) {
+        if(c==this||isEmpty()) {
+            return false;
+        }
+        if ((c instanceof Collection<?> cc && cc.isEmpty())
+                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+            clear();
+            return true;
+        }
+        Predicate<E> predicate;
+        if (c instanceof Collection<?> that) {
+            predicate = that::contains;
+        } else if (c instanceof ReadOnlyCollection<?> that) {
+            predicate = that::contains;
+        } else {
+            HashSet<Object> that = new HashSet<>();
+            c.forEach(that::add);
+            predicate = that::contains;
+        }
+        return filterAll(predicate);
+    }
+    boolean filterAll(@NonNull Predicate<E> predicate) {
+        class VectorPredicate implements Predicate<SequencedElement<E>> {
+            VectorList<Object> newVector = vector;
+            int newOffset = offset;
 
+            @Override
+            public boolean test(SequencedElement<E> e) {
+                if (!predicate.test(e.getElement())) {
+                    OrderedPair<VectorList<Object>, Integer> result = vecRemove(newVector, e, newOffset);
+                    newVector = result.first();
+                    newOffset = result.second();
+                    return false;
+                }
+                return true;
+            }
+        }
+        VectorPredicate vp = new VectorPredicate();
+        BulkChangeEvent bulkChange = new BulkChangeEvent();
+        BitmapIndexedNode<SequencedElement<E>> newRootNode = root.filterAll(makeOwner(), vp, 0, bulkChange);
+        if (bulkChange.removed == 0) {
+            return false;
+        }
+        root = newRootNode;
+        vector = vp.newVector;
+        offset = vp.newOffset;
+        size -= bulkChange.removed;
+        modCount++;
+        return true;
+    }
+*/
+
+    @SuppressWarnings("unchecked")
     private @NonNull Iterator<E> reverseIterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(reverseSpliterator(),
+        return new FailFastIterator<>(new IteratorFacade<>(new ReverseChampVectorSpliterator<>(vector,
+                (Object o) -> ((SequencedElement<E>) o).getElement(),
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED),
                 this::iteratorRemove), () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
     private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ReverseChampVectorSpliterator<>(vector,
+        return new FailFastSpliterator<>(new ReverseChampVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
-                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampVectorSpliterator<>(vector,
+        return new FailFastSpliterator<>(new ChampVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
-                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
+                0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
     }
 
     private void iteratorRemove(E element) {
@@ -267,12 +350,12 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     public boolean remove(Object o) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        root = root.remove(getOrCreateOwner(),
+        root = root.remove(makeOwner(),
                 new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, details, Objects::equals);
         boolean modified = details.isModified();
         if (modified) {
-            var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), details, offset);
+            var result = vecRemove(vector, details.getOldDataNonNull(), offset);
             size--;
             modCount++;
             vector = result.first();
@@ -301,7 +384,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      */
     private void renumber() {
         if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = ChampSequencedData.vecRenumber(getOrCreateOwner(), size, root, vector,
+            var result = ChampSequencedData.vecRenumber(makeOwner(), size, root, vector,
                     SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();

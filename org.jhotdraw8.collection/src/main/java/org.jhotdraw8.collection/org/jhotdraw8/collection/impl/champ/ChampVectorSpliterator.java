@@ -21,9 +21,9 @@ public class ChampVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> 
     private final @NonNull BitMappedTrie.BitMappedTrieSpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;
 
-    public ChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, long est, int additionalCharacteristics) {
+    public ChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int fromIndex, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
-        this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, 0, 0);
+        this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, fromIndex, 0);
         this.mapper = mapper;
     }
 

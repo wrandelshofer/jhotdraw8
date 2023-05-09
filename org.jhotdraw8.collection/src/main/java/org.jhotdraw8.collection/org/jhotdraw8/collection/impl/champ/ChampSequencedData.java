@@ -80,7 +80,7 @@ public interface ChampSequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
         int seq = 0;
-        for (var i = new ChampVectorSpliterator<K>(vector, o -> (K) o, Long.MAX_VALUE, 0); i.moveNext(); ) {
+        for (var i = new ChampVectorSpliterator<K>(vector, o -> (K) o, 0, Long.MAX_VALUE, 0); i.moveNext(); ) {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);
@@ -94,7 +94,7 @@ public interface ChampSequencedData {
 
     final static ChampTombstone TOMB_ZERO_ZERO = new ChampTombstone(0, 0);
 
-    static <K extends ChampSequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, ChangeEvent<K> details, int offset) {
+    static <K extends ChampSequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, int offset) {
         // If the element is the first, we can remove it and its neighboring tombstones from the vector.
         int size = vector.size();
         int index = oldElem.getSequenceNumber() + offset;
