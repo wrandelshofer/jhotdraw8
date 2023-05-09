@@ -110,7 +110,7 @@ public class TreeModelUndoAdapter<E> {
 
         @Override
         public String getPresentationName() {
-            return getResourceBundle().getString("edit.SetRoot");
+            return getResourceBundle().getString("edit.addElement");
         }
 
         @Override
