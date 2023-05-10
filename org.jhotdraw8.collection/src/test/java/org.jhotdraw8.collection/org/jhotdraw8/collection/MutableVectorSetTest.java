@@ -1,5 +1,5 @@
 /*
- * @(#)SequencedChampSetTest.java
+ * @(#)MutableVectorSetTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 

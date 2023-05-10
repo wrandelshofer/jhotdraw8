@@ -91,7 +91,6 @@ public interface ChampSequencedData {
     }
 
 
-
     final static ChampTombstone TOMB_ZERO_ZERO = new ChampTombstone(0, 0);
 
     static <K extends ChampSequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, int offset) {
@@ -134,6 +133,7 @@ public interface ChampSequencedData {
         } else {
             vector = vector.set(index, TOMB_ZERO_ZERO);
         }
+        assert !(vector.getFirst() instanceof ChampTombstone) && !(vector.getLast() instanceof ChampTombstone);
         return new OrderedPair<>(vector, offset);
     }
 
