@@ -17,6 +17,14 @@ import java.util.function.Function;
 /**
  * Enumerates vertices in a graph starting from a root vertex in
  * breadth-first-order or in depth-first-order.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
+ *     <dd>Algorithms, 4th Edition. Chapter 4. Algorithm 4.1 Depth-First Search; Algorithm 4.2. Breadth-First Search.
+ *          <a href="https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/enumerate.pdf">math.cmu.edu</a>
+ *     </dd>
+ * </dl>
  *
  * @param <V> the vertex data type
  * @author Werner Randelshofer
@@ -44,6 +52,8 @@ public class BfsDfsVertexSpliterator<V> extends AbstractEnumeratorSpliterator<V>
      *
      * @param nextFunction a function that returns the next vertices for a given vertex
      * @param root         the root vertex
+     * @param visited      a function that adds a provided vertex to a set, and returns true if the vertex was not in the set.
+     *                     If the graph is known to be a tree, the function can always return true.
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
     public BfsDfsVertexSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
