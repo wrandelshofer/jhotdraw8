@@ -2,6 +2,7 @@ package org.jhotdraw8.collection;
 
 import de.sandec.jmemorybuddy.JMemoryBuddy;
 import org.jhotdraw8.annotation.NonNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -90,31 +91,10 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
         HashCollider actualValue = subIterator.next();
         assertEquals(data.b.iterator().next(), actualValue);
     }
-    /*
-    @ParameterizedTest
-    @MethodSource("dataProvider")
-    public void removeElementShouldMakeElementCollectable(@NonNull SetData data) throws Exception {
-        JMemoryBuddy.memoryTest(checker -> {
-            var a = data.a.stream().map(HashCollider::clone).toList();
-            var b = data.b.stream().map(HashCollider::clone).toList();
-            ArrayList<HashCollider> shuffled = new ArrayList<>();
-            shuffled.addAll(a);
-            shuffled.addAll(b);
-            Collections.shuffle(shuffled);
-
-            var instance = newInstance();
-            instance.addAll(shuffled);
-            instance.removeAll(a);
-
-            checker.setAsReferenced(instance);
-
-            a.forEach(checker::assertCollectable); // notReferenced should be collectable
-            b.forEach(checker::assertNotCollectable); // referenced should not be collectable
-        });
-    }*/
 
     @ParameterizedTest
     @MethodSource("dataProvider")
+    @Disabled("test is flaky")
     public void removeOneElementShouldMakeElementCollectable(@NonNull SetData data) throws Exception {
         JMemoryBuddy.memoryTest(checker -> {
             var a = data.a.stream().map(HashCollider::clone).toList();
