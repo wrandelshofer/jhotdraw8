@@ -18,7 +18,7 @@ import java.util.function.Function;
  */
 public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     private final @NonNull Function<K, E> mappingFunction;
-    private final @NonNull Deque<Node<K>> queue = new ArrayDeque<>(Node.MAX_DEPTH);
+    private final @NonNull Deque<Object> queue = new ArrayDeque<>(Node.MAX_DEPTH);
     private Node<K> node;
     private int dataRemaining;
     private K current;
@@ -51,14 +51,14 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
                 return true;
             }
             // We do not de-reference the nodes, because we do not want to wait until they are fetched from memory!
-            for (int i = 0, n = node.nodeArity(); i < n; i++) {
-                queue.addLast(node.getNode(i));
+            for (int i = node.nodeArity() - 1; i >= 0; i--) {
+                queue.addFirst(node.getNodeRaw(i));
             }
             if (queue.isEmpty()) {
                 node = null;
                 return false;
             }
-            node = queue.removeFirst();
+            node = (Node<K>) queue.removeFirst();
             // We do de-reference the node for the first time. Hopefully the CPU was smart enough to prefetch it.
             dataRemaining = node.dataArity();
         }

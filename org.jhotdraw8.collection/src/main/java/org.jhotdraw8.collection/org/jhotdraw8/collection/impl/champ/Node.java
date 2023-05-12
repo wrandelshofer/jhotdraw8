@@ -218,6 +218,11 @@ public abstract class Node<D> {
 
     abstract @NonNull Node<D> getNode(int index);
 
+    /**
+     * Gets the node without de-referencing it.
+     */
+    abstract @NonNull Object getNodeRaw(int index);
+
     abstract boolean hasData();
 
     boolean isNodeEmpty() {

@@ -118,6 +118,12 @@ class HashCollisionNode<D> extends Node<D> {
         throw new IllegalStateException("Is leaf node.");
     }
 
+    @Override
+    @NonNull
+    Object getNodeRaw(int index) {
+        throw new IllegalStateException("Is leaf node.");
+    }
+
 
     @Override
     boolean hasData() {

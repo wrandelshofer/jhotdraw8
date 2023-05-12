@@ -38,7 +38,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     /**
      * True if data elements are stored at the beginning of the array, and node elements at the end.
      */
-    final static boolean DATA_FIRST = true;
+    final static boolean DATA_FIRST = false;
 
 
     public final Object @NonNull [] mixed;
@@ -225,6 +225,13 @@ public class BitmapIndexedNode<D> extends Node<D> {
     @NonNull
     Node<D> getNode(int index) {
         return (Node<D>) mixed[nodeMixedIndex(index, mixed)];
+    }
+
+    @Override
+
+    @NonNull
+    Object getNodeRaw(int index) {
+        return mixed[nodeMixedIndex(index, mixed)];
     }
 
     @Override

@@ -82,8 +82,8 @@ public class ScalaHashSetJmh {
         vectorA = bvA.result();
     }
 
-    /*
-        @Benchmark
+
+    @Benchmark
         public HashSet<Key> mCopyOf() {
             HashSet<Key> set = HashSet.<Key>newBuilder().result();
             set=set.concat(vectorA);
@@ -138,7 +138,7 @@ public class ScalaHashSetJmh {
             assert updated.isEmpty();
             return updated;
         }
-    */
+
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -147,7 +147,7 @@ public class ScalaHashSetJmh {
         }
         return sum;
     }
-/*
+
     @Benchmark
     public HashSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
@@ -175,5 +175,5 @@ public class ScalaHashSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
-    */
+
 }
