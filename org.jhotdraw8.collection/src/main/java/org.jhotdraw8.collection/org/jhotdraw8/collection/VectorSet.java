@@ -114,10 +114,9 @@ import java.util.Spliterator;
  * For a similar design, see 'VectorMap.scala'. Note, that this code is not a derivative
  * of that code.
  * <dl>
- *      <dt>VectorMap.scala
- *      <br>The Scala library. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
- *      <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
- *      </dd>
+ *     <dt>The Scala library. VectorMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+ *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
+ *     </dd>
  * </dl>
  *
  * @param <E> the element type
