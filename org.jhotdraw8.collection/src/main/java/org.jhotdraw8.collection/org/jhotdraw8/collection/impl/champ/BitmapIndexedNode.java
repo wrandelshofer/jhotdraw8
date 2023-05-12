@@ -35,6 +35,11 @@ import static org.jhotdraw8.collection.impl.champ.NodeFactory.newBitmapIndexedNo
  */
 public class BitmapIndexedNode<D> extends Node<D> {
     static final @NonNull BitmapIndexedNode<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0, new Object[]{});
+    /**
+     * True if data elements are stored at the beginning of the array, and node elements at the end.
+     */
+    final static boolean DATA_FIRST = true;
+
 
     public final Object @NonNull [] mixed;
     private final int nodeMap;
@@ -53,29 +58,38 @@ public class BitmapIndexedNode<D> extends Node<D> {
         return (BitmapIndexedNode<D>) EMPTY_NODE;
     }
 
-    private int dataMixedIndex(int dataIndex) {
-        return dataIndex;
+    private int dataMixedIndex(int dataIndex, Object[] mx) {
+        if (DATA_FIRST) {
+            return dataIndex;
+        } else {
+            return mx.length - 1 - dataIndex;
+        }
     }
 
-    private int nodeMixedIndex(int nodeIndex) {
-        return mixed.length - 1 - nodeIndex;
+    private int nodeMixedIndex(int nodeIndex, Object[] mx) {
+        if (DATA_FIRST) {
+            return mx.length - 1 - nodeIndex;
+        } else {
+            return nodeIndex;
+        }
     }
 
     @NonNull BitmapIndexedNode<D> copyAndInsertData(@Nullable IdentityObject owner, int bitpos,
                                                     D data) {
-        int idx = dataMixedIndex(dataIndex(bitpos));
+        int idx = dataMixedIndex(dataIndex(bitpos), mixed);
+        if (!DATA_FIRST) {
+            idx++;
+        }
         Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
         dst[idx] = data;
         return newBitmapIndexedNode(owner, nodeMap, dataMap | bitpos, dst);
     }
 
-    private final static boolean DATA_FIRST = true;
-
     @NonNull BitmapIndexedNode<D> copyAndMigrateFromDataToNode(@Nullable IdentityObject owner,
                                                                int bitpos, Node<D> node) {
 
-        int idxOld = dataMixedIndex(dataIndex(bitpos));
-        int idxNew = nodeMixedIndex(nodeIndex(bitpos));
+        int idxOld = dataMixedIndex(dataIndex(bitpos), mixed);
+        int idxNew = nodeMixedIndex(nodeIndex(bitpos), mixed);
 
         // copy 'src' and remove entryLength element(s) at position 'idxOld' and
         // insert 1 element(s) at position 'idxNew'
@@ -90,7 +104,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             assert idxOld >= idxNew;
             System.arraycopy(src, 0, dst, 0, idxNew);
             System.arraycopy(src, idxNew, dst, idxNew + 1, idxOld - idxNew);
-            System.arraycopy(src, idxOld + 1, dst, idxOld, src.length - idxOld - 1);
+            System.arraycopy(src, idxOld + 1, dst, idxOld + 1, src.length - idxOld - 1);
         }
         dst[idxNew] = node;
 
@@ -99,8 +113,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
 
     @NonNull BitmapIndexedNode<D> copyAndMigrateFromNodeToData(@Nullable IdentityObject owner,
                                                                int bitpos, @NonNull Node<D> node) {
-        int idxOld = nodeMixedIndex(nodeIndex(bitpos));
-        int idxNew = dataMixedIndex(dataIndex(bitpos));
+        int idxOld = nodeMixedIndex(nodeIndex(bitpos), mixed);
+        int idxNew = dataMixedIndex(dataIndex(bitpos), mixed);
 
         // copy 'src' and remove 1 element(s) at position 'idxOld' and
         // insert entryLength element(s) at position 'idxNew'
@@ -124,7 +138,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     @NonNull BitmapIndexedNode<D> copyAndSetNode(@Nullable IdentityObject owner, int bitpos,
                                                  Node<D> node) {
 
-        int idx = nodeMixedIndex(nodeIndex(bitpos));
+        int idx = nodeMixedIndex(nodeIndex(bitpos), mixed);
         if (isAllowedToUpdate(owner)) {
             // no copying if already editable
             this.mixed[idx] = node;
@@ -202,7 +216,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @NonNull
     D getData(int index) {
-        return (D) mixed[dataMixedIndex(index)];
+        return (D) mixed[dataMixedIndex(index, mixed)];
     }
 
 
@@ -210,7 +224,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     @SuppressWarnings("unchecked")
     @NonNull
     Node<D> getNode(int index) {
-        return (Node<D>) mixed[nodeMixedIndex(index)];
+        return (Node<D>) mixed[nodeMixedIndex(index, mixed)];
     }
 
     @Override
@@ -271,7 +285,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
             Object[] nodes = {getData(dataIndex ^ 1)};
             return newBitmapIndexedNode(owner, 0, newDataMap, nodes);
         }
-        int idx = dataMixedIndex(dataIndex);
+        int idx = dataMixedIndex(dataIndex, mixed);
         Object[] dst = ListHelper.copyComponentRemove(this.mixed, idx, 1);
         return newBitmapIndexedNode(owner, nodeMap, dataMap ^ bitpos, dst);
     }
@@ -336,10 +350,10 @@ public class BitmapIndexedNode<D> extends Node<D> {
     @NonNull
     private BitmapIndexedNode<D> copyAndSetData(@Nullable IdentityObject owner, int dataIndex, D updatedData) {
         if (isAllowedToUpdate(owner)) {
-            this.mixed[dataMixedIndex(dataIndex)] = updatedData;
+            this.mixed[dataMixedIndex(dataIndex, mixed)] = updatedData;
             return this;
         }
-        Object[] newMixed = ListHelper.copySet(this.mixed, dataMixedIndex(dataIndex), updatedData);
+        Object[] newMixed = ListHelper.copySet(this.mixed, dataMixedIndex(dataIndex, mixed), updatedData);
         return newBitmapIndexedNode(owner, nodeMap, dataMap, newMixed);
     }
 
@@ -375,29 +389,29 @@ public class BitmapIndexedNode<D> extends Node<D> {
             if (!(thisIsNode || thisIsData)) {
                 // add 'mixed' (data or node) from that trie
                 if (thatIsData) {
-                    buffer[index(newDataMap, bitpos)] = that.getData(that.dataIndex(bitpos));
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = that.getData(that.dataIndex(bitpos));
                 } else {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = that.getNode(that.nodeIndex(bitpos));
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = that.getNode(that.nodeIndex(bitpos));
                 }
             } else if (!(thatIsNode || thatIsData)) {
                 // add 'mixed' (data or node) from this trie
                 if (thisIsData) {
-                    buffer[index(newDataMap, bitpos)] = this.getData(dataIndex(bitpos));
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = this.getData(dataIndex(bitpos));
                 } else {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = this.getNode(nodeIndex(bitpos));
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = this.getNode(nodeIndex(bitpos));
                 }
             } else if (thisIsNode && thatIsNode) {
                 // add a new node that joins this node and that node
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.putAll(owner, thatNode, shift + BIT_PARTITION_SIZE, bulkChange,
+                buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = thisNode.putAll(owner, thatNode, shift + BIT_PARTITION_SIZE, bulkChange,
                         updateFunction, equalsFunction, hashFunction, details);
             } else if (thisIsData && thatIsNode) {
                 // add a new node that joins this data and that node
                 D thisData = this.getData(this.dataIndex(bitpos));
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
                 details.reset();
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thatNode.put(null, thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, details,
+                buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = thatNode.put(null, thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, details,
                         (a, b) -> updateFunction.apply(b, a),
                         equalsFunction, hashFunction);
                 if (details.isUnchanged()) {
@@ -412,7 +426,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 D thatData = that.getData(that.dataIndex(bitpos));
                 Node<D> thisNode = this.getNode(this.nodeIndex(bitpos));
                 details.reset();
-                buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = thisNode.put(owner, thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
+                buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = thisNode.put(owner, thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);
                 if (!details.isModified()) {
                     bulkChange.inBoth++;
                 }
@@ -424,12 +438,12 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 if (equalsFunction.test(thisData, thatData)) {
                     bulkChange.inBoth++;
                     D updated = updateFunction.apply(thisData, thatData);
-                    buffer[index(newDataMap, bitpos)] = updated;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = updated;
                     bulkChange.replaced |= updated != thisData;
                 } else {
                     newDataMap ^= bitpos;
                     newNodeMap ^= bitpos;
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = mergeTwoDataEntriesIntoNode(owner, thisData, hashFunction.applyAsInt(thisData), thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE);
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = mergeTwoDataEntriesIntoNode(owner, thisData, hashFunction.applyAsInt(thisData), thatData, hashFunction.applyAsInt(thatData), shift + BIT_PARTITION_SIZE);
                 }
             }
         }
@@ -464,9 +478,9 @@ public class BitmapIndexedNode<D> extends Node<D> {
             } else if (!(thatIsNode || thatIsData)) {
                 // keep 'mixed' (data or node) from this trie
                 if (thisIsData) {
-                    buffer[index(newDataMap, bitpos)] = this.getData(dataIndex(bitpos));
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = this.getData(dataIndex(bitpos));
                 } else {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = this.getNode(nodeIndex(bitpos));
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = this.getNode(nodeIndex(bitpos));
                 }
             } else if (thisIsNode && thatIsNode) {
                 // remove all in that node from all in this node
@@ -476,11 +490,11 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = result;
                 } else {
                     newNodeMap ^= bitpos;
                     newDataMap ^= bitpos;
-                    buffer[index(newDataMap, bitpos)] = result.getData(0);
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = result.getData(0);
                 }
             } else if (thisIsData && thatIsNode) {
                 // remove this data if it is contained in that node
@@ -488,7 +502,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 Node<D> thatNode = that.getNode(that.nodeIndex(bitpos));
                 Object result = thatNode.find(thisData, hashFunction.applyAsInt(thisData), shift + BIT_PARTITION_SIZE, equalsFunction);
                 if (result == NO_DATA) {
-                    buffer[index(newDataMap, bitpos)] = thisData;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = thisData;
                 } else {
                     newDataMap ^= bitpos;
                     bulkChange.removed++;
@@ -505,11 +519,11 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = result;
                 } else {
                     newDataMap ^= bitpos;
                     newNodeMap ^= bitpos;
-                    buffer[index(newDataMap, bitpos)] = result.getData(0);
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = result.getData(0);
                 }
             } else {
                 // remove this data if it is equal to that data
@@ -519,7 +533,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                     bulkChange.removed++;
                     newDataMap ^= bitpos;
                 } else {
-                    buffer[index(newDataMap, bitpos)] = thisData;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = thisData;
                 }
             }
         }
@@ -534,8 +548,13 @@ public class BitmapIndexedNode<D> extends Node<D> {
             buffer = new Object[newLength];
             int dataCount = Integer.bitCount(newDataMap);
             int nodeCount = Integer.bitCount(newNodeMap);
-            System.arraycopy(temp, 0, buffer, 0, dataCount);
-            System.arraycopy(temp, temp.length - nodeCount, buffer, dataCount, nodeCount);
+            if (DATA_FIRST) {
+                System.arraycopy(temp, 0, buffer, 0, dataCount);
+                System.arraycopy(temp, temp.length - nodeCount, buffer, dataCount, nodeCount);
+            } else {
+                System.arraycopy(temp, 0, buffer, 0, nodeCount);
+                System.arraycopy(temp, temp.length - dataCount, buffer, nodeCount, dataCount);
+            }
         }
         return new BitmapIndexedNode<>(newNodeMap, newDataMap, buffer);
     }
@@ -582,11 +601,11 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = result;
                 } else {
                     newNodeMap ^= bitpos;
                     newDataMap ^= bitpos;
-                    buffer[index(newDataMap, bitpos)] = result.getData(0);
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = result.getData(0);
                 }
             } else if (thisIsData && thatIsNode) {
                 // retain this data if it is contained in that node
@@ -597,7 +616,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                     newDataMap ^= bitpos;
                     bulkChange.removed++;
                 } else {
-                    buffer[index(newDataMap, bitpos)] = thisData;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = thisData;
                 }
             } else if (thisIsNode) {
                 // retain this data if that data is contained in this node
@@ -610,7 +629,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 } else {
                     newDataMap ^= bitpos;
                     newNodeMap ^= bitpos;
-                    buffer[index(newDataMap, bitpos)] = result;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = result;
                     bulkChange.removed += this.getNode(this.nodeIndex(bitpos)).calculateSize() - 1;
                 }
             } else {
@@ -618,7 +637,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 D thisData = this.getData(this.dataIndex(bitpos));
                 D thatData = that.getData(that.dataIndex(bitpos));
                 if (equalsFunction.test(thisData, thatData)) {
-                    buffer[index(newDataMap, bitpos)] = thisData;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = thisData;
                 } else {
                     bulkChange.removed++;
                     newDataMap ^= bitpos;
@@ -645,16 +664,16 @@ public class BitmapIndexedNode<D> extends Node<D> {
                 if (result.isNodeEmpty()) {
                     newNodeMap ^= bitpos;
                 } else if (result.hasMany()) {
-                    buffer[buffer.length - 1 - index(newNodeMap, bitpos)] = result;
+                    buffer[nodeMixedIndex(index(newNodeMap, bitpos), buffer)] = result;
                 } else {
                     newNodeMap ^= bitpos;
                     newDataMap ^= bitpos;
-                    buffer[index(newDataMap, bitpos)] = result.getData(0);
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = result.getData(0);
                 }
             } else {
                 D thisData = this.getData(this.dataIndex(bitpos));
                 if (predicate.test(thisData)) {
-                    buffer[index(newDataMap, bitpos)] = thisData;
+                    buffer[dataMixedIndex(index(newDataMap, bitpos), buffer)] = thisData;
                 } else {
                     newDataMap ^= bitpos;
                     bulkChange.removed++;

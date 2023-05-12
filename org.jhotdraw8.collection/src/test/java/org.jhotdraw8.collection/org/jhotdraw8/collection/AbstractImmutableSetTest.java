@@ -87,6 +87,10 @@ public abstract class AbstractImmutableSetTest {
         actualValues.sort(Comparator.comparing(HashCollider::getValue));
         assertEquals(expectedValues, actualValues);
 
+        for (var e : expected) {
+            assertTrue(actual.contains(e), "must contain " + e);
+        }
+
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
         assertEquals(expected.hashCode(), actual.hashCode());

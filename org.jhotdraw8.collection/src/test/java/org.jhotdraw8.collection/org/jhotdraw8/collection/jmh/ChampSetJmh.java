@@ -43,8 +43,8 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 4)
-@Warmup(iterations = 4)
+@Measurement(iterations = 1)
+@Warmup(iterations = 1)
 @Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)

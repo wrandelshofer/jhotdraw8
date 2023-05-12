@@ -20,16 +20,14 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     private final @NonNull Function<K, E> mappingFunction;
     private final @NonNull Deque<Node<K>> queue = new ArrayDeque<>(Node.MAX_DEPTH);
     private Node<K> node;
-    private int nodeIndex;
-    private int nodeSize;
+    private int dataRemaining;
     private K current;
 
     @SuppressWarnings("unchecked")
     public ChampSpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         super(size, characteristics);
         node = root;
-        nodeSize = node.dataArity();
-        nodeIndex = 0;
+        dataRemaining = node.dataArity();
         this.mappingFunction = mappingFunction == null ? i -> (E) i : mappingFunction;
     }
 
@@ -47,9 +45,9 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
             return false;
         }
         while (true) {
-            if (nodeIndex < nodeSize) {
+            if (dataRemaining > 0) {
                 // De-referencing a node which we already have fetched from memory is fast.
-                current = node.getData(nodeIndex++);
+                current = node.getData(--dataRemaining);
                 return true;
             }
             // We do not de-reference the nodes, because we do not want to wait until they are fetched from memory!
@@ -62,8 +60,7 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
             }
             node = queue.removeFirst();
             // We do de-reference the node for the first time. Hopefully the CPU was smart enough to prefetch it.
-            nodeSize = node.dataArity();
-            nodeIndex = 0;
+            dataRemaining = node.dataArity();
         }
     }
 }

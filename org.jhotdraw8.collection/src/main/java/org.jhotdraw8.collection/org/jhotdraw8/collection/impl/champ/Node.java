@@ -157,12 +157,22 @@ public abstract class Node<D> {
             int dataMap = bitpos(mask0) | bitpos(mask1);
 
             Object[] entries = new Object[2];
-            if (mask0 < mask1) {
-                entries[0] = k0;
-                entries[1] = k1;
+            if (BitmapIndexedNode.DATA_FIRST) {
+                if (mask0 < mask1) {
+                    entries[0] = k0;
+                    entries[1] = k1;
+                } else {
+                    entries[0] = k1;
+                    entries[1] = k0;
+                }
             } else {
-                entries[0] = k1;
-                entries[1] = k0;
+                if (mask0 < mask1) {
+                    entries[0] = k1;
+                    entries[1] = k0;
+                } else {
+                    entries[0] = k0;
+                    entries[1] = k1;
+                }
             }
             return NodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
         } else {
@@ -254,7 +264,7 @@ public abstract class Node<D> {
     /**
      * Inserts or replaces a data object in the trie.
      *
-     * @param owner        A non-null value means, that this method may update
+     * @param owner          A non-null value means, that this method may update
      *                       nodes that are marked with the same unique id,
      *                       and that this method may create new mutable nodes
      *                       with this unique id.
