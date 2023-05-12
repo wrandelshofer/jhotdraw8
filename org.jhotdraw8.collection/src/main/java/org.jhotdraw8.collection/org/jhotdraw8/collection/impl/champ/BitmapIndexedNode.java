@@ -16,7 +16,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newBitmapIndexedNode;
+import static org.jhotdraw8.collection.impl.champ.NodeFactory.newBitmapIndexedNode;
 
 
 /**

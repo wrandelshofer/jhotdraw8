@@ -16,7 +16,7 @@ import java.util.Objects;
  * {@code hashCode} and {@code equals} are based on the element - the sequence
  * number is not included.
  */
-public class SequencedElement<E> implements ChampSequencedData {
+public class SequencedElement<E> implements SequencedData {
 
     private final @Nullable E element;
     private final int sequenceNumber;

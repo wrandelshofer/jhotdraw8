@@ -17,11 +17,11 @@ import java.util.function.Function;
  *
  * @param <K> the key type
  */
-public class ChampVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class VectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
     private final @NonNull BitMappedTrie.BitMappedTrieSpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;
 
-    public ChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int fromIndex, long est, int additionalCharacteristics) {
+    public VectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int fromIndex, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, fromIndex, 0);
         this.mapper = mapper;
@@ -31,7 +31,7 @@ public class ChampVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> 
     public boolean moveNext() {
         boolean success = vector.moveNext();
         if (!success) return false;
-        if (vector.current() instanceof ChampTombstone t) {
+        if (vector.current() instanceof VectorTombstone t) {
             vector.skip(t.after());
             vector.moveNext();
         }

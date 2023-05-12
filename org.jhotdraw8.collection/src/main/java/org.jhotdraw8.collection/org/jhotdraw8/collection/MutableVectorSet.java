@@ -13,12 +13,12 @@ import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
-import org.jhotdraw8.collection.impl.champ.ChampVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedElement;
+import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 
-import static org.jhotdraw8.collection.impl.champ.ChampSequencedData.vecRemove;
+import static org.jhotdraw8.collection.impl.champ.SequencedData.vecRemove;
 
 /**
  * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
@@ -232,7 +232,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     @SuppressWarnings("unchecked")
     public @NonNull Iterator<E> iterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(new ChampVectorSpliterator<>(vector,
+        return new FailFastIterator<>(new IteratorFacade<>(new VectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED),
                 this::iteratorRemove), () -> modCount);
@@ -331,7 +331,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new FailFastSpliterator<>(new ChampVectorSpliterator<>(vector,
+        return new FailFastSpliterator<>(new VectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
     }
@@ -383,8 +383,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      * Renumbers the sequence numbers if they have overflown.
      */
     private void renumber() {
-        if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = ChampSequencedData.vecRenumber(makeOwner(), size, root, vector,
+        if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
+            var result = SequencedData.vecRenumber(makeOwner(), size, root, vector,
                     SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             root = result.first();

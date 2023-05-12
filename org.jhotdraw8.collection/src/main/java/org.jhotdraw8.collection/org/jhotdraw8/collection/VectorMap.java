@@ -11,12 +11,12 @@ import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
-import org.jhotdraw8.collection.impl.champ.ChampVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedEntry;
+import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
@@ -285,7 +285,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
 
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
+                    var result = SequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
                     newVector = result.first();
                 }
             } else {
@@ -323,7 +323,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldDataNonNull();
-                    var result = ChampSequencedData.vecRemove(newVector, oldElem, newOffset);
+                    var result = SequencedData.vecRemove(newVector, oldElem, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -363,7 +363,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
                 keyHash, 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, oldElem, offset);
+            var result = SequencedData.vecRemove(vector, oldElem, offset);
             return size == 1 ? VectorMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
         }
         return this;
@@ -383,9 +383,9 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
             VectorList<Object> vector,
             int size, int offset) {
 
-        if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
+        if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
-            var result = ChampSequencedData.<SequencedEntry<K, V>>vecRenumber(
+            var result = SequencedData.<SequencedEntry<K, V>>vecRenumber(
                     new IdentityObject(), size, root, vector, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             return new VectorMap<>(
@@ -421,7 +421,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
     public @NonNull EnumeratorSpliterator<Map.Entry<K, V>> spliterator() {
-        return new ChampVectorSpliterator<>(vector,
+        return new VectorSpliterator<>(vector,
                 e -> ((Map.Entry<K, V>) e),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

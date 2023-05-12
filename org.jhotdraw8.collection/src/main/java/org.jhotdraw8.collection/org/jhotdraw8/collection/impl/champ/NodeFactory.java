@@ -12,12 +12,12 @@ import org.jhotdraw8.collection.IdentityObject;
 /**
  * Provides factory methods for {@link Node}s.
  */
-class ChampNodeFactory {
+class NodeFactory {
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private ChampNodeFactory() {
+    private NodeFactory() {
     }
 
     static <K> @NonNull BitmapIndexedNode<K> newBitmapIndexedNode(

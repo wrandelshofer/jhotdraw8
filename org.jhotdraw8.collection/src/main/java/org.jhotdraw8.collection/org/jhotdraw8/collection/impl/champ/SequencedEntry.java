@@ -19,7 +19,7 @@ import java.util.Objects;
  * of the entry - the sequence number is not included.
  */
 public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
-        implements ChampSequencedData {
+        implements SequencedData {
     @Serial
     private static final long serialVersionUID = 0L;
     private final int sequenceNumber;

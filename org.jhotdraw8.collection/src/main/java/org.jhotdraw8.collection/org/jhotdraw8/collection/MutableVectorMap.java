@@ -14,12 +14,12 @@ import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
-import org.jhotdraw8.collection.impl.champ.ChampVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedEntry;
+import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
@@ -189,7 +189,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
-        return new ChampVectorSpliterator<Entry<K, V>>(vector,
+        return new VectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
@@ -321,7 +321,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         if (details.isModified()) {
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
+                    var result = SequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
                     vector = result.first();
                 }
             } else {
@@ -376,7 +376,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         }
         if (details.isModified()) {
             if (details.isReplaced()) {
-                var result = ChampSequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
+                var result = SequencedData.vecRemove(vector, details.getOldDataNonNull(), offset);
                 vector = result.first();
                 offset = result.second();
             } else {
@@ -420,7 +420,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
                 SequencedEntry.keyHash(key), 0, details, SequencedEntry::keyEquals);
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, oldElem, offset);
+            var result = SequencedData.vecRemove(vector, oldElem, offset);
             vector = result.first();
             offset = result.second();
             size--;
@@ -436,8 +436,8 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * 4 times the size of the set.
      */
     private void renumber() {
-        if (ChampSequencedData.vecMustRenumber(size, offset, vector.size())) {
-            var result = ChampSequencedData.vecRenumber(getOrCreateOwner(), size, root, vector,
+        if (SequencedData.vecMustRenumber(size, offset, vector.size())) {
+            var result = SequencedData.vecRenumber(getOrCreateOwner(), size, root, vector,
                     SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             root = result.first();

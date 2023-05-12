@@ -32,7 +32,7 @@ public class ReverseChampVectorSpliterator<K> extends AbstractEnumeratorSplitera
             return false;
         }
         Object o = vector.get(index--);
-        if (o instanceof ChampTombstone t) {
+        if (o instanceof VectorTombstone t) {
             index -= t.before();
             o = vector.get(index--);
         }

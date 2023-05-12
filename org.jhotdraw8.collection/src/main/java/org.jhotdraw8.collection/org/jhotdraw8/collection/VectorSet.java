@@ -12,12 +12,12 @@ import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampSequencedData;
-import org.jhotdraw8.collection.impl.champ.ChampVectorSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedData;
 import org.jhotdraw8.collection.impl.champ.SequencedElement;
+import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -227,7 +227,7 @@ public class VectorSet<E>
 
             if (details.isReplaced()) {
                 if (moveToFirst) {
-                    var result = ChampSequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
+                    var result = SequencedData.vecRemove(newVector, details.getOldDataNonNull(), offset);
                     newVector = result.first();
                 }
             } else {
@@ -259,7 +259,7 @@ public class VectorSet<E>
             if (details.isReplaced()) {
                 if (moveToLast) {
                     var oldElem = details.getOldData();
-                    var result = ChampSequencedData.vecRemove(newVector, oldElem, newOffset);
+                    var result = SequencedData.vecRemove(newVector, oldElem, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                 }
@@ -350,7 +350,7 @@ public class VectorSet<E>
                 keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
-            var result = ChampSequencedData.vecRemove(vector, removedElem, offset);
+            var result = SequencedData.vecRemove(vector, removedElem, offset);
             return size == 1 ? VectorSet.of() : renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
@@ -392,9 +392,9 @@ public class VectorSet<E>
             VectorList<Object> vector,
             int size, int offset) {
 
-        if (ChampSequencedData.vecMustRenumber(size, offset, this.vector.size())) {
+        if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
-            var result = ChampSequencedData.vecRenumber(
+            var result = SequencedData.vecRenumber(
                     new IdentityObject(), size, root, vector, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
             return new VectorSet<>(
@@ -431,7 +431,7 @@ public class VectorSet<E>
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampVectorSpliterator<>(vector,
+        return new VectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

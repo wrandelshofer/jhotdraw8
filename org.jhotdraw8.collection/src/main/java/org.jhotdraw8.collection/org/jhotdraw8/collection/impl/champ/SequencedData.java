@@ -28,7 +28,7 @@ import java.util.function.ToIntFunction;
  * are unique. Sequence numbers range from {@link Integer#MIN_VALUE} (exclusive)
  * to {@link Integer#MAX_VALUE} (inclusive).
  */
-public interface ChampSequencedData {
+public interface SequencedData {
     /**
      * We use {@link Integer#MIN_VALUE} to detect overflows in the sequence number.
      * <p>
@@ -65,7 +65,7 @@ public interface ChampSequencedData {
      * @return a new renumbered root and a new vector with matching entries
      */
     @SuppressWarnings("unchecked")
-    static <K extends ChampSequencedData> OrderedPair<BitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
+    static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
             @Nullable IdentityObject owner, int size,
             @NonNull BitmapIndexedNode<K> root,
             @NonNull VectorList<Object> vector,
@@ -80,7 +80,7 @@ public interface ChampSequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
         int seq = 0;
-        for (var i = new ChampVectorSpliterator<K>(vector, o -> (K) o, 0, Long.MAX_VALUE, 0); i.moveNext(); ) {
+        for (var i = new VectorSpliterator<K>(vector, o -> (K) o, 0, Long.MAX_VALUE, 0); i.moveNext(); ) {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);
@@ -91,16 +91,16 @@ public interface ChampSequencedData {
     }
 
 
-    final static ChampTombstone TOMB_ZERO_ZERO = new ChampTombstone(0, 0);
+    final static VectorTombstone TOMB_ZERO_ZERO = new VectorTombstone(0, 0);
 
-    static <K extends ChampSequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, int offset) {
+    static <K extends SequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, int offset) {
         // If the element is the first, we can remove it and its neighboring tombstones from the vector.
         int size = vector.size();
         int index = oldElem.getSequenceNumber() + offset;
         if (index == 0) {
             if (size > 1) {
                 Object o = vector.get(1);
-                if (o instanceof ChampTombstone t) {
+                if (o instanceof VectorTombstone t) {
                     return new OrderedPair<>(vector.removeRange(0, 2 + t.after()), offset - 2 - t.after());
                 }
             }
@@ -110,7 +110,7 @@ public interface ChampSequencedData {
         // If the element is the last , we can remove it and its neighboring tombstones from the vector.
         if (index == size - 1) {
             Object o = vector.get(size - 2);
-            if (o instanceof ChampTombstone t) {
+            if (o instanceof VectorTombstone t) {
                 return new OrderedPair<>(vector.removeRange(size - 2 - t.before(), size), offset);
             }
             return new OrderedPair<>(vector.removeLast(), offset);
@@ -120,20 +120,20 @@ public interface ChampSequencedData {
         assert index > 0 && index < size - 1;
         Object before = vector.get(index - 1);
         Object after = vector.get(index + 1);
-        if (before instanceof ChampTombstone tb && after instanceof ChampTombstone ta) {
-            vector = vector.set(index - 1 - tb.before(), new ChampTombstone(0, 2 + tb.before() + ta.after()));
+        if (before instanceof VectorTombstone tb && after instanceof VectorTombstone ta) {
+            vector = vector.set(index - 1 - tb.before(), new VectorTombstone(0, 2 + tb.before() + ta.after()));
             vector = vector.set(index, TOMB_ZERO_ZERO);
-            vector = vector.set(index + 1 + ta.after(), new ChampTombstone(2 + tb.before() + ta.after(), 0));
-        } else if (before instanceof ChampTombstone tb) {
-            vector = vector.set(index - 1 - tb.before(), new ChampTombstone(0, 1 + tb.before()));
-            vector = vector.set(index, new ChampTombstone(1 + tb.before(), 0));
-        } else if (after instanceof ChampTombstone ta) {
-            vector = vector.set(index, new ChampTombstone(0, 1 + ta.after()));
-            vector = vector.set(index + 1 + ta.after(), new ChampTombstone(1 + ta.after(), 0));
+            vector = vector.set(index + 1 + ta.after(), new VectorTombstone(2 + tb.before() + ta.after(), 0));
+        } else if (before instanceof VectorTombstone tb) {
+            vector = vector.set(index - 1 - tb.before(), new VectorTombstone(0, 1 + tb.before()));
+            vector = vector.set(index, new VectorTombstone(1 + tb.before(), 0));
+        } else if (after instanceof VectorTombstone ta) {
+            vector = vector.set(index, new VectorTombstone(0, 1 + ta.after()));
+            vector = vector.set(index + 1 + ta.after(), new VectorTombstone(1 + ta.after(), 0));
         } else {
             vector = vector.set(index, TOMB_ZERO_ZERO);
         }
-        assert !(vector.getFirst() instanceof ChampTombstone) && !(vector.getLast() instanceof ChampTombstone);
+        assert !(vector.getFirst() instanceof VectorTombstone) && !(vector.getLast() instanceof VectorTombstone);
         return new OrderedPair<>(vector, offset);
     }
 

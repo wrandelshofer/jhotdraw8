@@ -146,7 +146,7 @@ public abstract class Node<D> {
             Object[] entries = new Object[2];
             entries[0] = k0;
             entries[1] = k1;
-            return ChampNodeFactory.newHashCollisionNode(owner, keyHash0, entries);
+            return NodeFactory.newHashCollisionNode(owner, keyHash0, entries);
         }
 
         int mask0 = mask(keyHash0, shift);
@@ -164,7 +164,7 @@ public abstract class Node<D> {
                 entries[0] = k1;
                 entries[1] = k0;
             }
-            return ChampNodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
+            return NodeFactory.newBitmapIndexedNode(owner, (0), dataMap, entries);
         } else {
             Node<K> node = mergeTwoDataEntriesIntoNode(owner,
                     k0, keyHash0,
@@ -173,7 +173,7 @@ public abstract class Node<D> {
             // values fit on next level
 
             int nodeMap = bitpos(mask0);
-            return ChampNodeFactory.newBitmapIndexedNode(owner, nodeMap, (0), new Object[]{node});
+            return NodeFactory.newBitmapIndexedNode(owner, nodeMap, (0), new Object[]{node});
         }
     }
 

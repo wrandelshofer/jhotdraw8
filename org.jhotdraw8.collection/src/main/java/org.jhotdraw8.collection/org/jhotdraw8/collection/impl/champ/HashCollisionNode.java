@@ -17,7 +17,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.collection.impl.champ.ChampNodeFactory.newHashCollisionNode;
+import static org.jhotdraw8.collection.impl.champ.NodeFactory.newHashCollisionNode;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -151,7 +151,7 @@ class HashCollisionNode<D> extends Node<D> {
                     // Create root node with singleton element.
                     // This node will either be the new root
                     // returned, or be unwrapped and inlined.
-                    return ChampNodeFactory.newBitmapIndexedNode(owner, 0, bitpos(mask(dataHash, 0)),
+                    return NodeFactory.newBitmapIndexedNode(owner, 0, bitpos(mask(dataHash, 0)),
                             new Object[]{getData(idx ^ 1)});
                 }
                 // copy keys and remove 1 element at position idx
