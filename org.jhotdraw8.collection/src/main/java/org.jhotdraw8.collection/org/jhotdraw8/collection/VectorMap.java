@@ -107,9 +107,8 @@ import java.util.Spliterator;
  * <p>
  * References:
  * <p>
- * Portions of the code in this class has been derived from 'vavr' Vector.java.
- * <p>
- * The design of this class is inspired by 'VectorMap.scala'.
+ * For a similar design, see 'VectorMap.scala'. Note, that this code is not a derivative
+ * of that code.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
  *      Efficient Immutable Collections.</dt>
