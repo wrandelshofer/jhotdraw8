@@ -14,26 +14,22 @@ import java.util.Deque;
 import java.util.function.Function;
 
 /**
- * Key iterator over a CHAMP trie.
- * <p>
- * Uses a stack with a fixed maximal depth.
- * Iterates over keys in preorder sequence.
- * <p>
- * Supports the {@code remove} operation. The remove function must
- * create a new version of the trie, so that iterator does not have
- * to deal with structural changes of the trie.
+ * Data iterator over a CHAMP trie.
  */
 public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     private final @NonNull Function<K, E> mappingFunction;
-    private final @NonNull Deque<StackElement<K>> stack = new ArrayDeque<>(Node.MAX_DEPTH);
+    private final @NonNull Deque<Node<K>> queue = new ArrayDeque<>(Node.MAX_DEPTH);
+    private Node<K> node;
+    private int nodeIndex;
+    private int nodeSize;
     private K current;
 
     @SuppressWarnings("unchecked")
     public ChampSpliterator(@NonNull Node<K> root, @Nullable Function<K, E> mappingFunction, int characteristics, long size) {
         super(size, characteristics);
-        if (root.nodeArity() + root.dataArity() > 0) {
-            stack.push(new StackElement<>(root));
-        }
+        node = root;
+        nodeSize = node.dataArity();
+        nodeIndex = 0;
         this.mappingFunction = mappingFunction == null ? i -> (E) i : mappingFunction;
     }
 
@@ -42,64 +38,32 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
         return mappingFunction.apply(current);
     }
 
-
-    int getNextBitpos(StackElement<K> elem) {
-        return 1 << Integer.numberOfTrailingZeros(elem.map);
-    }
-
-    boolean isDone(@NonNull StackElement<K> elem) {
-        return elem.index >= elem.size;
-    }
-
-
-    int moveIndex(@NonNull StackElement<K> elem) {
-        return elem.index++;
-    }
-
-
     @Override
     public boolean moveNext() {
-        while (!stack.isEmpty()) {
-            StackElement<K> elem = stack.peek();
-            Node<K> node = elem.node;
-
-            if (node instanceof HashCollisionNode<K> hcn) {
-                current = hcn.getData(moveIndex(elem));
-                if (isDone(elem)) {
-                    stack.pop();
-                }
-                return true;
-            } else if (node instanceof BitmapIndexedNode<K> bin) {
-                int bitpos = getNextBitpos(elem);
-                elem.map ^= bitpos;
-                moveIndex(elem);
-                if (isDone(elem)) {
-                    stack.pop();
-                }
-                if ((bin.nodeMap() & bitpos) != 0) {
-                    stack.push(new StackElement<>(bin.nodeAt(bitpos)));
-                } else {
-                    current = bin.dataAt(bitpos);
-                    return true;
-                }
-            }
+        // Performance: We carefully avoid de-referencing nodes before we actually need them.
+        //              We use a queue instead of a stack, so that the CPU can prefetch the nodes.
+        //              With stack.addFirst() instead of stack.addLast() the performance is 50% slower!
+        if (node == null) {
+            return false;
         }
-        return false;
-    }
-
-
-    static class StackElement<K> {
-        final @NonNull Node<K> node;
-        final int size;
-        int index;
-        int map;
-
-        public StackElement(@NonNull Node<K> node) {
-            this.node = node;
-            this.size = node.nodeArity() + node.dataArity();
-            this.index = 0;
-            this.map = (node instanceof BitmapIndexedNode<K> bin)
-                    ? (bin.dataMap() | bin.nodeMap()) : 0;
+        while (true) {
+            if (nodeIndex < nodeSize) {
+                // De-referencing a node which we already have fetched from memory is fast.
+                current = node.getData(nodeIndex++);
+                return true;
+            }
+            // We do not de-reference the nodes, because we do not want to wait until they are fetched from memory!
+            for (int i = 0, n = node.nodeArity(); i < n; i++) {
+                queue.addLast(node.getNode(i));
+            }
+            if (queue.isEmpty()) {
+                node = null;
+                return false;
+            }
+            node = queue.removeFirst();
+            // We do de-reference the node for the first time. Hopefully the CPU was smart enough to prefetch it.
+            nodeSize = node.dataArity();
+            nodeIndex = 0;
         }
     }
 }

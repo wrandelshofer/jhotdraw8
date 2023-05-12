@@ -13,6 +13,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import scala.collection.Iterator;
 import scala.collection.immutable.HashSet;
+import scala.collection.immutable.Vector;
 import scala.collection.mutable.ReusableBuilder;
 
 import java.util.concurrent.TimeUnit;
@@ -24,40 +25,120 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  * # org.scala-lang:scala-library:2.13.10
  *
- *                    (size)  Mode  Cnt         Score   Error  Units
- * ContainsFound     1000000  avgt            258.226          ns/op
- * ContainsNotFound  1000000  avgt            213.963          ns/op
- * Head              1000000  avgt             25.830          ns/op
- * Iterate           1000000  avgt       50716705.732          ns/op
- * RemoveAdd         1000000  avgt            809.836          ns/op
- * Tail              1000000  avgt            128.902          ns/op
+ * Benchmark                                           (mask)  (size)  Mode  Cnt         Score   Error  Units
+ * ScalaHashSetJmh.mContainsFound                         -65  100000  avgt             61.797          ns/op
+ * ScalaHashSetJmh.mContainsNotFound                      -65  100000  avgt             57.279          ns/op
+ * ScalaHashSetJmh.mCopyOf                                -65  100000  avgt       19474382.041          ns/op
+ * ScalaHashSetJmh.mCopyOnyByOne                          -65  100000  avgt       27364597.940          ns/op
+ * ScalaHashSetJmh.mHead                                  -65  100000  avgt             19.619          ns/op
+ * ScalaHashSetJmh.mIterate                               -65  100000  avgt         887951.140          ns/op
+ * ScalaHashSetJmh.mRemoveAllFromSameType                 -65  100000  avgt        2575324.916          ns/op
+ * ScalaHashSetJmh.mRemoveOneByOne                        -65  100000  avgt       29285154.137          ns/op
+ * ScalaHashSetJmh.mRemoveThenAdd                         -65  100000  avgt            378.055          ns/op
+ * ScalaHashSetJmh.mRetainAllFromSameTypeAllRetained      -65  100000  avgt        5318272.911          ns/op
+ * ScalaHashSetJmh.mRetainAllFromSameTypeNoneRetained     -65  100000  avgt        5519732.180          ns/op
+ * ScalaHashSetJmh.mTail                                  -65  100000  avgt             95.724          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
+@Measurement(iterations = 4)
+@Warmup(iterations = 4)
 @Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaHashSetJmh {
-    @Param({"1000000"})
+    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
     private int size;
 
-    private final int mask = ~64;
-
+    @Param({"-65"})
+    private int mask;
     private BenchmarkData data;
     private HashSet<Key> setA;
+    private HashSet<Key> setAA;
+    private HashSet<Key> setB;
+
+    private Vector<Key> vectorA;
 
     @Setup
     public void setup() {
+
         data = new BenchmarkData(size, mask);
-        ReusableBuilder<Key, HashSet<Key>> b = HashSet.newBuilder();
+
+        ReusableBuilder<Key, HashSet<Key>> bA = HashSet.newBuilder();
+        ReusableBuilder<Key, HashSet<Key>> bB = HashSet.newBuilder();
+        ReusableBuilder<Key, HashSet<Key>> bAA = HashSet.newBuilder();
+        ReusableBuilder<Key, Vector<Key>> bvA = Vector.newBuilder();
         for (Key key : data.setA) {
-            b.addOne(key);
+            bA.addOne(key);
+            bAA.addOne(key);
+            bvA.addOne(key);
         }
-        setA = b.result();
+        for (Key key : data.setB) {
+            bB.addOne(key);
+        }
+        setA = bA.result();
+        setAA = bAA.result();
+        setB = bB.result();
+        vectorA = bvA.result();
     }
 
+    /*
+        @Benchmark
+        public HashSet<Key> mCopyOf() {
+            HashSet<Key> set = HashSet.<Key>newBuilder().result();
+            set=set.concat(vectorA);
+            assert set.size() == data.listA.size();
+            return set;
+        }
+
+        @Benchmark
+        public HashSet<Key> mCopyOnyByOne() {
+            HashSet<Key> set = HashSet.<Key>newBuilder().result();
+            for (Key key : data.listA) {
+                set = (HashSet<Key>) set.$plus(key);
+            }
+            assert set.size() == data.listA.size();
+            return set;
+        }
+
+
+        @Benchmark
+        public HashSet<Key> mRemoveOneByOne() {
+            HashSet<Key> set = setA;
+            for (Key key : data.listA) {
+                set = (HashSet<Key>) set.$minus(key);
+            }
+            assert set.isEmpty();
+            return set;
+        }
+
+
+        @Benchmark
+        public HashSet<Key> mRemoveAllFromSameType() {
+            HashSet<Key> set = setA;
+            HashSet<Key> updated = set.diff(setAA);
+            assert updated.isEmpty();
+            return updated;
+        }
+
+
+        @Benchmark
+        public HashSet<Key> mRetainAllFromSameTypeAllRetained() {
+            HashSet<Key> set = setA;
+            HashSet<Key> updated = set.intersect(setAA);
+            assert updated == setA;
+            return updated;
+        }
+
+
+        @Benchmark
+        public HashSet<Key> mRetainAllFromSameTypeNoneRetained() {
+            HashSet<Key> set = setA;
+            HashSet<Key> updated = set.intersect(setB);
+            assert updated.isEmpty();
+            return updated;
+        }
+    */
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -66,16 +147,16 @@ public class ScalaHashSetJmh {
         }
         return sum;
     }
-
+/*
     @Benchmark
-    public Object mRemoveAdd() {
+    public HashSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
-        return setA.$minus(key).$plus(key);
+        return (HashSet<Key>) setA.$minus(key).$plus(key);
     }
 
     @Benchmark
     public Key mHead() {
-        return setA.head();
+        return setA.iterator().next();
     }
 
     @Benchmark
@@ -94,4 +175,5 @@ public class ScalaHashSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
+    */
 }

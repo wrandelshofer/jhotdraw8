@@ -14,7 +14,6 @@ import org.openjdk.jmh.annotations.Warmup;
 import scala.Tuple2;
 import scala.collection.Iterator;
 import scala.collection.immutable.HashMap;
-import scala.collection.immutable.Map;
 import scala.collection.immutable.Vector;
 import scala.collection.mutable.Builder;
 
@@ -67,7 +66,7 @@ import java.util.concurrent.TimeUnit;
  * ScalaHashMapJmh.mIterate               100  avgt    2     _   333.533          ns/op
  * ScalaHashMapJmh.mIterate              1000  avgt    2     _  3001.226          ns/op
  * ScalaHashMapJmh.mIterate             10000  avgt    2     _ 41247.895          ns/op
- * ScalaHashMapJmh.mIterate            100000  avgt    2    1_035473.760          ns/op
+ * ScalaHashMapJmh.mIterate       -65  100000  avgt    4  986192.276 ± 111403.283  ns/op
  * ScalaHashMapJmh.mIterate           1000000  avgt    2   41_417461.544          ns/op
  * ScalaHashMapJmh.mPut                    10  avgt    2     _    19.341          ns/op
  * ScalaHashMapJmh.mPut                   100  avgt    2     _    38.989          ns/op
@@ -92,13 +91,13 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 0)
-@Warmup(iterations = 0)
-@Fork(value = 0)
+@Measurement(iterations = 4)
+@Warmup(iterations = 4)
+@Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ScalaHashMapJmh {
-    @Param({"10", "1000", "100000", "10000000"})
+    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
     private int size;
 
     @Param({"-65"})
@@ -137,35 +136,36 @@ public class ScalaHashMapJmh {
 
     }
 
-    @Benchmark
-    public HashMap<Key, Boolean> mCopyOf() {
-        return HashMap.from(listA);
-    }
-
-    @Benchmark
-    public HashMap<Key, Boolean> mAddOneByOne() {
-        HashMap<Key, Boolean> set = HashMap.<Key, Boolean>newBuilder().result();
-        for (Key key : data.listA) {
-            set = set.updated(key, Boolean.TRUE);
+    /*
+        @Benchmark
+        public HashMap<Key, Boolean> mCopyOf() {
+            return HashMap.from(listA);
         }
-        return set;
-    }
 
-    @Benchmark
-    public HashMap<Key, Boolean> mRemoveOneByOne() {
-        HashMap<Key, Boolean> set = mapA;
-        for (Key key : data.listA) {
-            set = set.removed(key);
+        @Benchmark
+        public HashMap<Key, Boolean> mAddOneByOne() {
+            HashMap<Key, Boolean> set = HashMap.<Key, Boolean>newBuilder().result();
+            for (Key key : data.listA) {
+                set = set.updated(key, Boolean.TRUE);
+            }
+            return set;
         }
-        return set;
-    }
 
-    @Benchmark
-    public Map<Key, Boolean> mRemoveAll() {
-        HashMap<Key, Boolean> set = mapA;
-        return set.removedAll(listAKeys);
-    }
+        @Benchmark
+        public HashMap<Key, Boolean> mRemoveOneByOne() {
+            HashMap<Key, Boolean> set = mapA;
+            for (Key key : data.listA) {
+                set = set.removed(key);
+            }
+            return set;
+        }
 
+        @Benchmark
+        public Map<Key, Boolean> mRemoveAll() {
+            HashMap<Key, Boolean> set = mapA;
+            return set.removedAll(listAKeys);
+        }
+    */
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -174,7 +174,7 @@ public class ScalaHashMapJmh {
         }
         return sum;
     }
-
+/*
     @Benchmark
     public void mRemoveThenAdd() {
         Key key = data.nextKeyInA();
@@ -208,5 +208,5 @@ public class ScalaHashMapJmh {
     public HashMap<Key, Boolean> mTail() {
         return mapA.tail();
     }
-
+*/
 }

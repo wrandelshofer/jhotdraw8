@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
@@ -251,7 +252,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return size;
     }
 
-    public @NonNull Spliterator<E> spliterator() {
+    public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new ChampSpliterator<>(this, null, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT, size);
     }
 
