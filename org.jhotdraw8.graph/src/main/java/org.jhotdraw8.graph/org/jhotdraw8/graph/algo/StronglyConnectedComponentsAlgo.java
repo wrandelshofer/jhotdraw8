@@ -10,13 +10,7 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliteratorFacade;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.DirectedGraph;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static java.lang.Math.min;
@@ -29,6 +23,9 @@ import static java.lang.Math.min;
  *     <dt>Stackoverflow. Non-recursive version of Tarjan's algorithm.
  *     Copyright Ivan Stoev. CC BY-SA 4.0 license.</dt>
  *     <dd><a href="https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm">stackoverflow.com</a></dd>
+ *     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
+ *     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
+ *
  * </dl>
  */
 public class StronglyConnectedComponentsAlgo {
