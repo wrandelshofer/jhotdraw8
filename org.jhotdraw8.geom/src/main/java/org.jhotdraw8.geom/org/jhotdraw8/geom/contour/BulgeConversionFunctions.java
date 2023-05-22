@@ -93,7 +93,7 @@ public class BulgeConversionFunctions {
      *     <li>bulge = b = tan(θ/4)</li>
      *     <li>angle = θ = 4*arctan(b)</li>
      *     <li>sagitta = s = b * d</li>
-     *     <li>radius = r = (s^2+d^2)/(2*s) = d*(b^2+1)/(2*b)</li>
+     *     <li>radius = r = (s^2+d^2)/(2*s) = d*(b^2+1)/(4*b)</li>
      *     <li>half chord = d = r * sin(θ/2) = |p2 - p1|/2</li>
      *     <li>c = polar(p1, atan2(p1,p2) + (pi - θ)/2, r)   </li>
      * </ul>
