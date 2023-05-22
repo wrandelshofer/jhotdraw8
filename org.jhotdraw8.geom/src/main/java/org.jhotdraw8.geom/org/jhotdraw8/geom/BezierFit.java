@@ -666,7 +666,7 @@ public class BezierFit {
      * @param last   Indice of last point in d.
      * @param uPrime Parameter values for region .
      * @param tHat1  Unit tangent vectors at start point.
-     * @param tHat2  Unit tanget vector at end point.
+     * @param tHat2  Unit tangent vector at end point.
      * @return A cubic bezier curve consisting of 4 control points.
      */
     private static Point2D[] generateBezier(@NonNull ArrayList<Point2D> d, int first, int last, double[] uPrime, @NonNull Point2D tHat1, @NonNull Point2D tHat2) {
