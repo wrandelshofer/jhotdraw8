@@ -90,6 +90,7 @@ public class BulgeConversionFunctions {
      *                c
      * </pre>
      * <ul>
+     *     <li>chord = d = |p1 - p2|</li>
      *     <li>bulge = b = tan(θ/4)</li>
      *     <li>angle = θ = 4*arctan(b)</li>
      *     <li>sagitta = s = b * d</li>
@@ -99,11 +100,11 @@ public class BulgeConversionFunctions {
      * </ul>
      */
     public static ArcRadiusAndCenter computeCircle(double x1, double y1, double x2, double y2, double b) {
-        double chord = Points.distance(x1, y1, x2, y2);
+        double d = Points.distance(x1, y1, x2, y2);
 
         double theta = 4 * Math.atan(b);
 
-        double r = chord * (b * b + 1) / (4 * b);
+        double r = d * (b * b + 1) / (4 * b);
         double a = Angles.atan2(y2 - y1, x2 - x1) + (Math.PI - theta) / 2;
         double cx = x1 + Math.sin(a) * r;
         double cy = y1 + Math.cos(a) * r;
