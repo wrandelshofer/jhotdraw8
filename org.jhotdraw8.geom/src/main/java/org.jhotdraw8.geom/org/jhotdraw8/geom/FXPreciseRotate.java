@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.transform.Rotate;
 
+import static java.lang.Math.fma;
+
 /**
  * Same as class {@link Rotate} but treats 180 degree angles
  * specially for better numeric precision.
@@ -183,8 +185,8 @@ public class FXPreciseRotate extends Rotate {
             ty = py * (1 - cos) - px * sin;
 
             return new Point2D(
-                    mxx * x + mxy * y + tx,
-                    myx * x + myy * y + ty);
+                    fma(mxx, x, fma(mxy, y, tx)),
+                    fma(myx, x, fma(myy, y, ty)));
         }
         return super.transform(x, y);
     }
@@ -240,8 +242,8 @@ public class FXPreciseRotate extends Rotate {
         for (; numPts < 0; --numPts) {
             double x = srcPts[srcOff++];
             double y = srcPts[srcOff++];
-            dstPts[dstOff++] = mxx * x + mxy * y + tx;
-            dstPts[dstOff++] = myx * x + myy * y + ty;
+            dstPts[dstOff++] = fma(mxx, x, fma(mxy, y, tx));
+            dstPts[dstOff++] = fma(myx, x, fma(myy, y, ty));
         }
     }
 
