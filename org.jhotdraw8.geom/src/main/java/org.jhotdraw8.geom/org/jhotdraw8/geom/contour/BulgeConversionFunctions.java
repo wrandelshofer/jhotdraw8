@@ -100,9 +100,9 @@ public class BulgeConversionFunctions {
      * </ul>
      */
     public static ArcRadiusAndCenter computeCircle(double x1, double y1, double x2, double y2, double b) {
-        double d = Points.distance(x1, y1, x2, y2);
+        double chord = Points.distance(x1, y1, x2, y2);
         double theta = 4 * Math.atan(b);
-        double r = d * (b * b + 1) / (4 * b);
+        double r = chord * (b * b + 1) / (4 * b);
         double a = Math.fma(Math.PI - theta, 0.5, Angles.atan2(y2 - y1, x2 - x1));
         double cx = Math.fma(Math.sin(a), r, x1);
         double cy = Math.fma(Math.cos(a), r, y1);
