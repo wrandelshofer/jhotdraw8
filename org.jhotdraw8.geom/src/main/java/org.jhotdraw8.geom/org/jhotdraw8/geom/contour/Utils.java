@@ -151,10 +151,10 @@ public class Utils {
     }
 
     /**
-     * Normalize radius to be between 0 and 2PI, e.g. -PI/4 becomes 7PI/8 and 5PI becomes PI.
+     * Normalize radians to be between 0 and 2PI, e.g. -PI/4 becomes 7PI/8 and 5PI becomes PI.
      */
     public static double normalizeRadians(double angle) {
-        if (angle >= 0.0 && angle <= tau) {
+        if (angle >= 0.0 && angle < tau) {
             return angle;
         }
 

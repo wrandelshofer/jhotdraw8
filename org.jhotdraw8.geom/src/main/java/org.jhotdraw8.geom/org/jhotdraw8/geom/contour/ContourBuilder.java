@@ -21,14 +21,39 @@ import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
-import java.util.*;
-import java.util.function.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.ContourIntersections.*;
-import static org.jhotdraw8.geom.contour.PlineVertex.*;
+import static org.jhotdraw8.geom.contour.ContourIntersections.allSelfIntersects;
+import static org.jhotdraw8.geom.contour.ContourIntersections.findIntersects;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrCircle2Circle2;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2Circle2;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2LineSeg2;
+import static org.jhotdraw8.geom.contour.ContourIntersections.intrPlineSegs;
+import static org.jhotdraw8.geom.contour.PlineVertex.closestPointOnSeg;
+import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
+import static org.jhotdraw8.geom.contour.PlineVertex.segMidpoint;
+import static org.jhotdraw8.geom.contour.PlineVertex.splitAtPoint;
 import static org.jhotdraw8.geom.contour.PolyArcPath.createApproxSpatialIndex;
-import static org.jhotdraw8.geom.contour.Utils.*;
+import static org.jhotdraw8.geom.contour.Utils.angle;
+import static org.jhotdraw8.geom.contour.Utils.deltaAngle;
+import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.contour.Utils.realPrecision;
+import static org.jhotdraw8.geom.contour.Utils.sliceJoinThreshold;
+import static org.jhotdraw8.geom.contour.Utils.unitPerp;
 
 /**
  * ContourBuilder.
@@ -136,7 +161,7 @@ public class ContourBuilder {
                     // ensure the sign matches (may get flipped if intersect is at the very end of the arc, in
                     // which case we do not want to update the bulge)
                     if ((updatedPrevTheta > 0.0) == prevVertex.bulgeIsPos()) {
-                        result.lastVertex().bulge(Math.tan(updatedPrevTheta / 4.0));
+                        result.lastVertex().bulge(Math.tan(updatedPrevTheta * 0.25));
                     }
                 }
 
@@ -148,7 +173,7 @@ public class ContourBuilder {
                 // ensure the sign matches (may get flipped if intersect is at the very end of the arc, in
                 // which case we do not want to update the bulge)
                 if ((theta > 0.0) == u1.bulgeIsPos()) {
-                    addOrReplaceIfSamePos(result, new PlineVertex(intersect, Math.tan(theta / 4.0)));
+                    addOrReplaceIfSamePos(result, new PlineVertex(intersect, Math.tan(theta * 0.25)));
                 } else {
                     addOrReplaceIfSamePos(result, new PlineVertex(intersect, u1.bulge()));
                 }
@@ -224,7 +249,7 @@ public class ContourBuilder {
                     // ensure the sign matches (may get flipped if intersect is at the very end of the arc, in
                     // which case we do not want to update the bulge)
                     if ((updatedPrevTheta > 0.0) == prevVertex.bulgeIsPos()) {
-                        result.lastVertex().bulge(Math.tan(updatedPrevTheta / 4.0));
+                        result.lastVertex().bulge(Math.tan(updatedPrevTheta * 0.25));
                     }
                 }
 
@@ -267,7 +292,7 @@ public class ContourBuilder {
         double a1 = angle(arcCenter, sp);
         double a2 = angle(arcCenter, ep);
         double absSweepAngle = Math.abs(deltaAngle(a1, a2));
-        double absBulge = Math.tan(absSweepAngle / 4.0);
+        double absBulge = Math.tan(absSweepAngle * 0.25);
         if (isCCW) {
             return absBulge;
         }
@@ -368,7 +393,7 @@ public class ContourBuilder {
                         result.set(0, new PlineVertex(updatedFirstPos, result.get(0).bulge()));
                     } else {
                         // update position and bulge
-                        result.set(0, new PlineVertex(updatedFirstPos, Math.tan(updatedTheta / 4.0)));
+                        result.set(0, new PlineVertex(updatedFirstPos, Math.tan(updatedTheta * 0.25)));
                     }
                 }
             }
@@ -796,7 +821,7 @@ public class ContourBuilder {
                 // ensure the sign matches (may get flipped if intersect is at the very end of the arc, in
                 // which case we do not want to update the bulge)
                 if ((theta > 0.0) == u1.bulgeIsPos()) {
-                    addOrReplaceIfSamePos(result, new PlineVertex(intersect, Math.tan(theta / 4.0)));
+                    addOrReplaceIfSamePos(result, new PlineVertex(intersect, Math.tan(theta * 0.25)));
                 } else {
                     addOrReplaceIfSamePos(result, new PlineVertex(intersect, u1.bulge()));
                 }
