@@ -19,23 +19,28 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 
 /**
- * WordSetConverter converts an Set of Strings from/to a
+ * WordSetConverter converts a set of Strings from/to a
  * String.
  * <p>
- * The word set is actually a "set ofCollection space separated tokens", as specified in
- * HTML 5 and in XML Schema Part 2.
+ * The word set is actually a "set of space separated tokens", as specified in
+ * HTML 5.
+ * <p>
+ * (Do not use this converter for tokens specified in XML Schema Part 2. A token
+ * in XML Schema Part 2 can have internal spaces, but no consecutive sequences
+ * of two or more spaces.)
  * <p>
  * The word set converter coalesces duplicate entries if they have the same
- * Unicode NFC form. The tokens are sorted using their Unicode NFD form.
+ * Unicode NFC form. The tokens are sorted case-insensitively using their Unicode NFD form.
  * <p>
  * References:
  * <dl>
  * <dt>HTML 5, Common Microsyntaxes, Space-separated tokens</dt>
  * <dd><a href="https://dev.w3.org/html5/spec-preview/common-microsyntaxes.html#set-of-space-separated-tokens">w3.org</a></dd>
  *
- * <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, CssToken</dt>
+ * <dt>XML Schema Part 2, Built-in datatypes, Derived datatypes, Token</dt>
  * <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
  * </dl>
  *
@@ -46,7 +51,7 @@ public class XmlWordSetConverter implements Converter<ImmutableSet<String>> {
     private final @Nullable Comparator<String> comparator;
 
     public XmlWordSetConverter() {
-        this(Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD)));
+        this(Comparator.comparing(o -> Normalizer.normalize(o.toLowerCase(Locale.ROOT), Normalizer.Form.NFD)));
     }
 
     public XmlWordSetConverter(@Nullable Comparator<String> comparator) {
