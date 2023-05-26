@@ -46,11 +46,11 @@ import java.util.concurrent.TimeUnit;
  * ChampMapJmh.mHead                      -65  10000000  avgt               29.306          ns/op
  * ChampMapJmh.mIterate                   -65        10  avgt              36.719          ns/op
  * ChampMapJmh.mIterate                   -65      1000  avgt             5458.660          ns/op
- * ChampMapJmh.mIterate                   -65    100000  avgt          3769335.147          ns/op
+ * ChampMapJmh.mIterate                   -65    100000  avgt          3442606.147          ns/op
  * ChampMapJmh.mIterate                   -65  10000000  avgt        465335856.500          ns/op
  * ChampMapJmh.mIterateEnumerator         -65        10  avgt               18.694          ns/op
  * ChampMapJmh.mIterateEnumerator         -65      1000  avgt             6114.990          ns/op
- * ChampMapJmh.mIterateEnumerator         -65    100000  avgt          4011326.584          ns/op
+ * ChampMapJmh.mIterateEnumerator         -65    100000  avgt          3622574.584          ns/op
  * ChampMapJmh.mIterateEnumerator         -65  10000000  avgt        497013579.095          ns/op
  * ChampMapJmh.mPut                       -65        10  avgt               30.346          ns/op
  * ChampMapJmh.mPut                       -65      1000  avgt               71.152          ns/op
@@ -82,18 +82,16 @@ import java.util.concurrent.TimeUnit;
  * ChampMapJmh.mTail                      -65  10000000  avgt              110.721          ns/op
  *
  * Process finished with exit code 0
- *
- * Process finished with exit code 0
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
+@Measurement(iterations = 2)
+@Warmup(iterations = 2)
 @Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampMapJmh {
-    @Param({"10", "1000", "100000", "10000000"})
+    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
     private int size;
 
     @Param({"-65"})
@@ -129,7 +127,7 @@ public class ChampMapJmh {
         }
         return sum;
     }
-
+/*
     @Benchmark
     public ChampMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
@@ -212,4 +210,6 @@ public class ChampMapJmh {
         assert updated == mapA;
         return updated;
     }
+
+ */
 }

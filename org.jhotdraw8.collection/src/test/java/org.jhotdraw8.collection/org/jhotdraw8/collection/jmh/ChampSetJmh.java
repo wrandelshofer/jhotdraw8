@@ -54,11 +54,11 @@ import java.util.concurrent.TimeUnit;
  * ChampSetJmh.mHead                                       -65  10000000  avgt               27.751          ns/op
  * ChampSetJmh.mIterate                                    -65        10  avgt               17.048          ns/op
  * ChampSetJmh.mIterate                                    -65      1000  avgt             3685.048          ns/op
- * ChampSetJmh.mIterate                                    -65    100000  avgt           745195.573          ns/op
+ * ChampSetJmh.mIterate                                    -65    100000  avgt           703833.573          ns/op
  * ChampSetJmh.mIterate                                    -65  10000000  avgt        286645121.114          ns/op
  * ChampSetJmh.mIterateEnumerator                          -65        10  avgt               15.061          ns/op
  * ChampSetJmh.mIterateEnumerator                          -65      1000  avgt             5328.946          ns/op
- * ChampSetJmh.mIterateEnumerator                          -65    100000  avgt          1299676.409          ns/op
+ * ChampSetJmh.mIterateEnumerator                          -65    100000  avgt          1153913.409          ns/op
  * ChampSetJmh.mIterateEnumerator                          -65  10000000  avgt        355126769.310          ns/op
  * ChampSetJmh.mIterateEnumeratorOld                       -65        10  avgt               19.619          ns/op
  * ChampSetJmh.mIterateEnumeratorOld                       -65      1000  avgt             6437.539          ns/op
@@ -103,13 +103,13 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
+@Measurement(iterations = 2)
+@Warmup(iterations = 2)
 @Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g",})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampSetJmh {
-    @Param({"10", "1000", "100000", "10000000"})
+    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
     private int size;
 
     @Param({"-65"})
@@ -131,85 +131,85 @@ public class ChampSetJmh {
         assert setAA.size() == size;
     }
 
-
-    @Benchmark
-    public ChampSet<Key> mCopyOf() {
-        ChampSet<Key> set = ChampSet.copyOf(data.listA);
-        assert set.size() == data.listA.size();
-        return set;
-    }
-
-
-    @Benchmark
-    public ChampSet<Key> mCopyOnyByOne() {
-        ChampSet<Key> set = ChampSet.of();
-        for (Key key : data.listA) {
-            set = set.add(key);
+    /*
+        @Benchmark
+        public ChampSet<Key> mCopyOf() {
+            ChampSet<Key> set = ChampSet.copyOf(data.listA);
+            assert set.size() == data.listA.size();
+            return set;
         }
-        assert set.size() == data.listA.size();
-        return set;
-    }
 
-    @Benchmark
-    public ChampSet<Key> mRemoveOneByOne() {
-        ChampSet<Key> set = setA;
-        for (Key key : data.listA) {
-            set = set.remove(key);
+
+        @Benchmark
+        public ChampSet<Key> mCopyOnyByOne() {
+            ChampSet<Key> set = ChampSet.of();
+            for (Key key : data.listA) {
+                set = set.add(key);
+            }
+            assert set.size() == data.listA.size();
+            return set;
         }
-        assert set.isEmpty();
-        return set;
-    }
 
-    @Benchmark
-    public ChampSet<Key> mRemoveAllFromDifferentType() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.removeAll(data.setA);
-        assert updated.isEmpty();
-        return updated;
-    }
+        @Benchmark
+        public ChampSet<Key> mRemoveOneByOne() {
+            ChampSet<Key> set = setA;
+            for (Key key : data.listA) {
+                set = set.remove(key);
+            }
+            assert set.isEmpty();
+            return set;
+        }
 
-    @Benchmark
-    public ChampSet<Key> mRemoveAllFromSameType() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.removeAll(setAA);
-        assert updated.isEmpty();
-        return updated;
-    }
+        @Benchmark
+        public ChampSet<Key> mRemoveAllFromDifferentType() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.removeAll(data.setA);
+            assert updated.isEmpty();
+            return updated;
+        }
 
-
-    @Benchmark
-    public ChampSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(data.setA);
-        assert updated == setA;
-        return updated;
-    }
-
-    @Benchmark
-    public ChampSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(data.setB);
-        assert updated.isEmpty();
-        return updated;
-    }
-
-    @Benchmark
-    public ChampSet<Key> mRetainAllFromSameTypeAllRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(setAA);
-        assert updated == setA;
-        return updated;
-    }
+        @Benchmark
+        public ChampSet<Key> mRemoveAllFromSameType() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.removeAll(setAA);
+            assert updated.isEmpty();
+            return updated;
+        }
 
 
-    @Benchmark
-    public ChampSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        ChampSet<Key> set = setA;
-        ChampSet<Key> updated = set.retainAll(setB);
-        assert updated.isEmpty();
-        return updated;
-    }
+        @Benchmark
+        public ChampSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(data.setA);
+            assert updated == setA;
+            return updated;
+        }
 
+        @Benchmark
+        public ChampSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(data.setB);
+            assert updated.isEmpty();
+            return updated;
+        }
+
+        @Benchmark
+        public ChampSet<Key> mRetainAllFromSameTypeAllRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(setAA);
+            assert updated == setA;
+            return updated;
+        }
+
+
+        @Benchmark
+        public ChampSet<Key> mRetainAllFromSameTypeNoneRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(setB);
+            assert updated.isEmpty();
+            return updated;
+        }
+    */
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -219,7 +219,6 @@ public class ChampSetJmh {
         return sum;
     }
 
-
     @Benchmark
     public int mIterateEnumerator() {
         int sum = 0;
@@ -228,6 +227,7 @@ public class ChampSetJmh {
         }
         return sum;
     }
+/*
 
     @Benchmark
     public Key mHead() {
@@ -258,5 +258,5 @@ public class ChampSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
-
+*/
 }

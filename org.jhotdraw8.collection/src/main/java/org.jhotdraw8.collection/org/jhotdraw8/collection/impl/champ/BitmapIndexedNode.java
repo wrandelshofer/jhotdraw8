@@ -38,7 +38,7 @@ public class BitmapIndexedNode<D> extends Node<D> {
     /**
      * True if data elements are stored at the beginning of the array, and node elements at the end.
      */
-    final static boolean DATA_FIRST = false;
+    final static boolean DATA_FIRST = true;
 
 
     public final Object @NonNull [] mixed;

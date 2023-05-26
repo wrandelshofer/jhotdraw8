@@ -31,7 +31,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
     protected Node<K> currentValueNode;
 
     private int currentStackLevel = -1;
-    private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
+    private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings("unchecked")
     Node<K>[] nodes = new Node[MAX_DEPTH];
@@ -42,8 +42,8 @@ public class ChampIterator<K, E> implements Iterator<E> {
             currentStackLevel = 0;
 
             nodes[0] = rootNode;
-            nodeCursorsAndLengths[0] = 0;
-            nodeCursorsAndLengths[1] = rootNode.nodeArity();
+            indexAndArity[0] = 0;
+            indexAndArity[1] = rootNode.nodeArity();
         }
 
         if (rootNode.hasData()) {
@@ -57,22 +57,19 @@ public class ChampIterator<K, E> implements Iterator<E> {
      * search for next node that contains values
      */
     private boolean searchNextValueNode() {
+        // For inlining, it is essential that this method has a very small amount of byte code!
         while (currentStackLevel >= 0) {
-            var currentCursorIndex = currentStackLevel * 2;
-            var currentLengthIndex = currentCursorIndex + 1;
-            var nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
-            var nodeLength = nodeCursorsAndLengths[currentLengthIndex];
-            if (nodeCursor < nodeLength) {
-                var nextNode = nodes[currentStackLevel].getNode(nodeCursor);
-                nodeCursorsAndLengths[currentCursorIndex]++;
+            var index = currentStackLevel << 1;
+            if (indexAndArity[index] < indexAndArity[index + 1]) {
+                var nextNode = nodes[currentStackLevel].getNode(indexAndArity[index]);
+                indexAndArity[index]++;
                 if (nextNode.hasNodes()) {
                     // put node on next stack level for depth-first traversal
-                    var nextStackLevel = ++currentStackLevel;
-                    var nextCursorIndex = nextStackLevel * 2;
-                    var nextLengthIndex = nextCursorIndex + 1;
-                    nodes[nextStackLevel] = nextNode;
-                    nodeCursorsAndLengths[nextCursorIndex] = 0;
-                    nodeCursorsAndLengths[nextLengthIndex] = nextNode.nodeArity();
+                    ++currentStackLevel;
+                    index += 2;
+                    nodes[currentStackLevel] = nextNode;
+                    indexAndArity[index] = 0;
+                    indexAndArity[index + 1] = nextNode.nodeArity();
                 }
                 if (nextNode.hasData()) {
                     // found next node that contains values
@@ -85,11 +82,12 @@ public class ChampIterator<K, E> implements Iterator<E> {
                 currentStackLevel--;
             }
         }
-
         return false;
     }
 
     public boolean hasNext() {
+        // For inlining, it is essential that this method has a very small amount of byte code!
+        // Specifically, do not inline searchNextValueNode() into this method!
         return currentValueCursor < currentValueLength || searchNextValueNode();
     }
 

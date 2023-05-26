@@ -35,7 +35,12 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     protected Node<K> currentValueNode;
 
     private int currentStackLevel = -1;
-    private final int[] nodeCursorsAndLengths = new int[MAX_DEPTH * 2];
+
+    /**
+     * Even indexes: node index
+     * Odd indexes: node length
+     */
+    private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings("unchecked")
     Node<K>[] nodes = new Node[MAX_DEPTH];
@@ -49,8 +54,8 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
             currentStackLevel = 0;
 
             nodes[0] = rootNode;
-            nodeCursorsAndLengths[0] = 0;
-            nodeCursorsAndLengths[1] = rootNode.nodeArity();
+            indexAndArity[0] = 0;
+            indexAndArity[1] = rootNode.nodeArity();
         }
 
         if (rootNode.hasData()) {
@@ -66,21 +71,18 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     }
 
     private boolean searchNextValueNode() {
+        // For inlining, it is essential that this method has a very small amount of byte code!
         while (currentStackLevel >= 0) {
-            var currentCursorIndex = currentStackLevel * 2;
-            var currentLengthIndex = currentCursorIndex + 1;
-            var nodeCursor = nodeCursorsAndLengths[currentCursorIndex];
-            var nodeLength = nodeCursorsAndLengths[currentLengthIndex];
-            if (nodeCursor < nodeLength) {
-                var nextNode = nodes[currentStackLevel].getNode(nodeCursor);
-                nodeCursorsAndLengths[currentCursorIndex]++;
+            var index = currentStackLevel << 1;
+            if (indexAndArity[index] < indexAndArity[index + 1]) {
+                var nextNode = nodes[currentStackLevel].getNode(indexAndArity[index]);
+                indexAndArity[index]++;
                 if (nextNode.hasNodes()) {
-                    var nextStackLevel = ++currentStackLevel;
-                    var nextCursorIndex = nextStackLevel * 2;
-                    var nextLengthIndex = nextCursorIndex + 1;
-                    nodes[nextStackLevel] = nextNode;
-                    nodeCursorsAndLengths[nextCursorIndex] = 0;
-                    nodeCursorsAndLengths[nextLengthIndex] = nextNode.nodeArity();
+                    ++currentStackLevel;
+                    index += 2;
+                    nodes[currentStackLevel] = nextNode;
+                    indexAndArity[index] = 0;
+                    indexAndArity[index + 1] = nextNode.nodeArity();
                 }
                 if (nextNode.hasData()) {
                     currentValueNode = nextNode;
@@ -97,6 +99,8 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
 
     @Override
     public boolean moveNext() {
+        // For inlining, it is essential that this method has a very small amount of byte code!
+        // Specifically, do not inline searchNextValueNode() into this method!
         if (currentValueCursor < currentValueLength || searchNextValueNode()) {
             current = currentValueNode.getData(currentValueCursor++);
             return true;
