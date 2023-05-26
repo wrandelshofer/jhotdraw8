@@ -124,6 +124,10 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return super.equals(o);
     }
 
+    protected int getModCount() {
+        return modCount;
+    }
+
     @Override
     public int size() {
         return size;

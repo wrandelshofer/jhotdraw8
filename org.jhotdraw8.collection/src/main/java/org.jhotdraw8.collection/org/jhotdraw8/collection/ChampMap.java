@@ -7,12 +7,15 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampIterator;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.ObjectStreamException;
@@ -23,7 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
-import java.util.Spliterators;
 
 /**
  * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
@@ -208,7 +210,7 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return Spliterators.iterator(spliterator());
+        return new ChampIterator<>(this, null);
     }
 
     @Override
@@ -266,12 +268,21 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     }
 
     @Override
+    public @NonNull ReadOnlySet<K> readOnlyKeySet() {
+        return new ReadOnlySetFacade<>(
+                () -> new ChampIterator<>(this, Map.Entry::getKey),
+                this::size,
+                this::containsKey
+        );
+    }
+
+    @Override
     public int size() {
         return size;
     }
 
     public @NonNull EnumeratorSpliterator<Map.Entry<K, V>> spliterator() {
-        return new ChampSpliterator<>(this, null, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT, size());
+        return new ChampSpliterator<>(this, null, size(), Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
     /**

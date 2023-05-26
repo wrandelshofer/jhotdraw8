@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChampIterator;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
@@ -25,7 +26,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.Spliterators;
 
 
 /**
@@ -212,7 +212,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return Spliterators.iterator(spliterator());
+        return new ChampIterator<E, E>(this, null);
     }
 
     static int keyHash(Object e) {
@@ -253,7 +253,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new ChampSpliterator<>(this, null, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT, size);
+        return new ChampSpliterator<>(this, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
     @Override

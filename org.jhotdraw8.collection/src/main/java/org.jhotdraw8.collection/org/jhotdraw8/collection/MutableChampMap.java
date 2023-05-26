@@ -8,11 +8,11 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.SetFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.BulkChangeEvent;
+import org.jhotdraw8.collection.impl.champ.ChampIterator;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
@@ -145,10 +145,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     @Override
     public @NonNull Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
-                new IteratorFacade<>(new ChampSpliterator<>(root,
-                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                        Spliterator.SIZED | Spliterator.DISTINCT, size()), this::iteratorRemove),
-                this::getModCount
+                new ChampIterator<SimpleImmutableEntry<K, V>, Entry<K, V>>(root,
+                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
+                this::getModCount, this::iteratorRemove
         );
     }
 
@@ -157,7 +156,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         return new FailFastSpliterator<>(
                 new ChampSpliterator<>(root,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                        Spliterator.SIZED | Spliterator.DISTINCT, size()),
+                        size(), Spliterator.SIZED | Spliterator.DISTINCT),
                 this::getModCount);
     }
 

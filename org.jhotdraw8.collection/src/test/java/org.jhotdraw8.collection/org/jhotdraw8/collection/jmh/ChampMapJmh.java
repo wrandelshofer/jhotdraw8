@@ -23,33 +23,77 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- * Benchmark                           (mask)  (size)  Mode  Cnt         Score   Error  Units
- * ChampMapJmh.mContainsFound             -65  100000  avgt            63.747          ns/op
- * ChampMapJmh.mContainsNotFound          -65  100000  avgt            52.322          ns/op
- * ChampMapJmh.mCopyOf                    -65  100000  avgt      16596781.617          ns/op
- * ChampMapJmh.mCopyOnyByOne              -65  100000  avgt      23044442.214          ns/op
- * ChampMapJmh.mHead                      -65  100000  avgt            57.160          ns/op
- * ChampMapJmh.mIterate               -65  100000  avgt    4  2321021.368 ± 148261.658  ns/op
- * ChampMapJmh.mIterateEnumerator     -65  100000  avgt    4  1699585.015 ±  73440.933  ns/op
- * ChampMapJmh.mPut                       -65  100000  avgt           188.573          ns/op
- * ChampMapJmh.mRemoveAll                 -65  100000  avgt      24564043.819          ns/op
- * ChampMapJmh.mRemoveOneByOne            -65  100000  avgt      27647598.699          ns/op
- * ChampMapJmh.mRemoveThenAdd             -65  100000  avgt           325.072          ns/op
- * ChampMapJmh.mRetainAllAllRetained      -65  100000  avgt       5868854.716          ns/op
- * ChampMapJmh.mRetainAllNoneRetained     -65  100000  avgt       4477554.129          ns/op
- * ChampMapJmh.mTail                      -65  100000  avgt           131.363          ns/op
+ * Benchmark                           (mask)    (size)  Mode  Cnt           Score   Error  Units
+ * ChampMapJmh.mContainsFound             -65        10  avgt                8.135          ns/op
+ * ChampMapJmh.mContainsFound             -65      1000  avgt               16.979          ns/op
+ * ChampMapJmh.mContainsFound             -65    100000  avgt               57.673          ns/op
+ * ChampMapJmh.mContainsFound             -65  10000000  avgt              260.768          ns/op
+ * ChampMapJmh.mContainsNotFound          -65        10  avgt                6.709          ns/op
+ * ChampMapJmh.mContainsNotFound          -65      1000  avgt               16.938          ns/op
+ * ChampMapJmh.mContainsNotFound          -65    100000  avgt               59.807          ns/op
+ * ChampMapJmh.mContainsNotFound          -65  10000000  avgt              262.135          ns/op
+ * ChampMapJmh.mCopyOf                    -65        10  avgt              477.720          ns/op
+ * ChampMapJmh.mCopyOf                    -65      1000  avgt           104483.164          ns/op
+ * ChampMapJmh.mCopyOf                    -65    100000  avgt         16088857.957          ns/op
+ * ChampMapJmh.mCopyOf                    -65  10000000  avgt       4313203539.000          ns/op
+ * ChampMapJmh.mCopyOnyByOne              -65        10  avgt              318.818          ns/op
+ * ChampMapJmh.mCopyOnyByOne              -65      1000  avgt            93286.049          ns/op
+ * ChampMapJmh.mCopyOnyByOne              -65    100000  avgt         24708346.472          ns/op
+ * ChampMapJmh.mCopyOnyByOne              -65  10000000  avgt       5741029507.000          ns/op
+ * ChampMapJmh.mHead                      -65        10  avgt                9.839          ns/op
+ * ChampMapJmh.mHead                      -65      1000  avgt               12.357          ns/op
+ * ChampMapJmh.mHead                      -65    100000  avgt               18.366          ns/op
+ * ChampMapJmh.mHead                      -65  10000000  avgt               29.306          ns/op
+ * ChampMapJmh.mIterate                   -65        10  avgt              36.719          ns/op
+ * ChampMapJmh.mIterate                   -65      1000  avgt             5458.660          ns/op
+ * ChampMapJmh.mIterate                   -65    100000  avgt          3769335.147          ns/op
+ * ChampMapJmh.mIterate                   -65  10000000  avgt        465335856.500          ns/op
+ * ChampMapJmh.mIterateEnumerator         -65        10  avgt               18.694          ns/op
+ * ChampMapJmh.mIterateEnumerator         -65      1000  avgt             6114.990          ns/op
+ * ChampMapJmh.mIterateEnumerator         -65    100000  avgt          4011326.584          ns/op
+ * ChampMapJmh.mIterateEnumerator         -65  10000000  avgt        497013579.095          ns/op
+ * ChampMapJmh.mPut                       -65        10  avgt               30.346          ns/op
+ * ChampMapJmh.mPut                       -65      1000  avgt               71.152          ns/op
+ * ChampMapJmh.mPut                       -65    100000  avgt              151.594          ns/op
+ * ChampMapJmh.mPut                       -65  10000000  avgt              657.308          ns/op
+ * ChampMapJmh.mRemoveAll                 -65        10  avgt              359.833          ns/op
+ * ChampMapJmh.mRemoveAll                 -65      1000  avgt           116705.160          ns/op
+ * ChampMapJmh.mRemoveAll                 -65    100000  avgt         23554134.598          ns/op
+ * ChampMapJmh.mRemoveAll                 -65  10000000  avgt       4903560584.333          ns/op
+ * ChampMapJmh.mRemoveOneByOne            -65        10  avgt              326.347          ns/op
+ * ChampMapJmh.mRemoveOneByOne            -65      1000  avgt            97945.848          ns/op
+ * ChampMapJmh.mRemoveOneByOne            -65    100000  avgt         26517407.447          ns/op
+ * ChampMapJmh.mRemoveOneByOne            -65  10000000  avgt       7446733856.500          ns/op
+ * ChampMapJmh.mRemoveThenAdd             -65        10  avgt               68.077          ns/op
+ * ChampMapJmh.mRemoveThenAdd             -65      1000  avgt              185.762          ns/op
+ * ChampMapJmh.mRemoveThenAdd             -65    100000  avgt              328.524          ns/op
+ * ChampMapJmh.mRemoveThenAdd             -65  10000000  avgt              823.737          ns/op
+ * ChampMapJmh.mRetainAllAllRetained      -65        10  avgt              131.176          ns/op
+ * ChampMapJmh.mRetainAllAllRetained      -65      1000  avgt            18451.559          ns/op
+ * ChampMapJmh.mRetainAllAllRetained      -65    100000  avgt          5670748.948          ns/op
+ * ChampMapJmh.mRetainAllAllRetained      -65  10000000  avgt       1811336749.167          ns/op
+ * ChampMapJmh.mRetainAllNoneRetained     -65        10  avgt              115.168          ns/op
+ * ChampMapJmh.mRetainAllNoneRetained     -65      1000  avgt            17648.255          ns/op
+ * ChampMapJmh.mRetainAllNoneRetained     -65    100000  avgt          5040221.174          ns/op
+ * ChampMapJmh.mRetainAllNoneRetained     -65  10000000  avgt       1759449465.000          ns/op
+ * ChampMapJmh.mTail                      -65        10  avgt               29.769          ns/op
+ * ChampMapJmh.mTail                      -65      1000  avgt               50.720          ns/op
+ * ChampMapJmh.mTail                      -65    100000  avgt               92.446          ns/op
+ * ChampMapJmh.mTail                      -65  10000000  avgt              110.721          ns/op
+ *
+ * Process finished with exit code 0
  *
  * Process finished with exit code 0
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 4)
-@Warmup(iterations = 4)
+@Measurement(iterations = 1)
+@Warmup(iterations = 1)
 @Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampMapJmh {
-    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
+    @Param({"10", "1000", "100000", "10000000"})
     private int size;
 
     @Param({"-65"})
@@ -66,6 +110,7 @@ public class ChampMapJmh {
             mapA = mapA.put(key, Boolean.TRUE);
         }
     }
+
 
     @Benchmark
     public int mIterate() {
@@ -84,7 +129,7 @@ public class ChampMapJmh {
         }
         return sum;
     }
-/*
+
     @Benchmark
     public ChampMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
@@ -166,5 +211,5 @@ public class ChampMapJmh {
         var updated = set.retainAll(data.setA);
         assert updated == mapA;
         return updated;
-    }*/
+    }
 }

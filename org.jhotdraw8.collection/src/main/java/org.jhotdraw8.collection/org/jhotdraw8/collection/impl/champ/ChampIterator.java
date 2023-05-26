@@ -1,18 +1,14 @@
-/*
- * @(#)KeySpliterator.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
- */
-
 package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 /**
- * Data iterator over a CHAMP trie.
+ * CHAMP Trie iterator.
  * <p>
  * References:
  * <p>
@@ -26,7 +22,7 @@ import java.util.function.Function;
  * @param <K> the data type of the trie node
  * @param <E> the element type of the iterator
  */
-public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
+public class ChampIterator<K, E> implements Iterator<E> {
     private final @NonNull Function<K, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
 
@@ -39,11 +35,8 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
 
     @SuppressWarnings("unchecked")
     Node<K>[] nodes = new Node[MAX_DEPTH];
-    private K current;
 
-    @SuppressWarnings("unchecked")
-    public ChampSpliterator(@NonNull Node<K> rootNode, @Nullable Function<K, E> mappingFunction, long size, int characteristics) {
-        super(size, characteristics);
+    public ChampIterator(@NonNull Node<K> rootNode, @Nullable Function<K, E> mappingFunction) {
         this.mappingFunction = mappingFunction == null ? k -> (E) k : mappingFunction;
         if (rootNode.hasNodes()) {
             currentStackLevel = 0;
@@ -60,11 +53,9 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
         }
     }
 
-    @Override
-    public E current() {
-        return mappingFunction.apply(current);
-    }
-
+    /*
+     * search for next node that contains values
+     */
     private boolean searchNextValueNode() {
         while (currentStackLevel >= 0) {
             var currentCursorIndex = currentStackLevel * 2;
@@ -75,6 +66,7 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
                 var nextNode = nodes[currentStackLevel].getNode(nodeCursor);
                 nodeCursorsAndLengths[currentCursorIndex]++;
                 if (nextNode.hasNodes()) {
+                    // put node on next stack level for depth-first traversal
                     var nextStackLevel = ++currentStackLevel;
                     var nextCursorIndex = nextStackLevel * 2;
                     var nextLengthIndex = nextCursorIndex + 1;
@@ -83,6 +75,7 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
                     nodeCursorsAndLengths[nextLengthIndex] = nextNode.nodeArity();
                 }
                 if (nextNode.hasData()) {
+                    // found next node that contains values
                     currentValueNode = nextNode;
                     currentValueCursor = 0;
                     currentValueLength = nextNode.dataArity();
@@ -92,15 +85,24 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
                 currentStackLevel--;
             }
         }
+
         return false;
     }
 
+    public boolean hasNext() {
+        return currentValueCursor < currentValueLength || searchNextValueNode();
+    }
+
     @Override
-    public boolean moveNext() {
-        if (currentValueCursor < currentValueLength || searchNextValueNode()) {
-            current = currentValueNode.getData(currentValueCursor++);
-            return true;
+    public E next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        } else {
+            return mappingFunction.apply(currentValueNode.getData(currentValueCursor++));
         }
-        return false;
+    }
+
+    public void remove() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -7,10 +7,10 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.collection.impl.champ.BulkChangeEvent;
+import org.jhotdraw8.collection.impl.champ.ChampIterator;
 import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.collection.impl.champ.ChangeEvent;
 import org.jhotdraw8.collection.impl.champ.Node;
@@ -264,13 +264,14 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new IteratorFacade<>(new ChampSpliterator<>(root, Function.identity(), Spliterator.DISTINCT | Spliterator.SIZED, size), this::iteratorRemove),
-                () -> this.modCount);
+                new ChampIterator<E, E>(root, null),
+                this::getModCount, this::iteratorRemove
+        );
     }
 
     @Override
     public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(new ChampSpliterator<>(root, Function.identity(), Spliterator.DISTINCT | Spliterator.SIZED, size), () -> this.modCount);
+        return new FailFastSpliterator<>(new ChampSpliterator<>(root, Function.identity(), size, Spliterator.DISTINCT | Spliterator.SIZED), () -> this.modCount);
     }
 
     private void iteratorRemove(E e) {
