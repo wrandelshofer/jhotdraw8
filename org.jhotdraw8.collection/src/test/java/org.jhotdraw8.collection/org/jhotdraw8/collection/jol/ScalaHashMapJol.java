@@ -1,6 +1,5 @@
 package org.jhotdraw8.collection.jol;
 
-import org.jhotdraw8.collection.jmh.Key;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
 import scala.collection.immutable.HashMap;
@@ -31,17 +30,35 @@ import java.util.AbstractMap;
  */
 public class ScalaHashMapJol extends AbstractJol {
 
+    /**
+     * <pre>
+     * class scala.collection.immutable.HashMap with 1000 elements.
+     * total size              : 82864
+     * element size            : 48
+     * data size               : 48000 57%
+     * data structure size     : 34864 42%
+     * ----footprint---
+     * scala.collection.immutable.HashMap@4ff8d125d footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *        293        30      8992   [I
+     *        296        47     14016   [Ljava.lang.Object;
+     *       2000        24     48000   org.jhotdraw8.collection.jmh.Key
+     *        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
+     *          1        16        16   scala.collection.immutable.HashMap
+     *       2886               82864   (total)
+     * </pre>
+     */
     @Test
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
         var data = generateMap(size, mask);
-        ReusableBuilder<Tuple2<Key, Key>, HashMap<Key, Key>> b = HashMap.newBuilder();
+        ReusableBuilder<Tuple2<Object, Object>, HashMap<Object, Object>> b = HashMap.newBuilder();
         for (var d : data.entrySet()) {
             b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
         }
-        HashMap<Key, Key> mapA = b.result();
-        Tuple2<Key, Key> head = mapA.head();
+        HashMap<Object, Object> mapA = b.result();
+        Tuple2<Object, Object> head = mapA.head();
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 

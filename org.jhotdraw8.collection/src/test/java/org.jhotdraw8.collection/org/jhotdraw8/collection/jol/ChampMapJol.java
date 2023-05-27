@@ -58,6 +58,7 @@ public class ChampMapJol extends AbstractJol {
     }
 
     /**
+     * <pre>
      * class org.jhotdraw8.collection.champ.ChampMap with 250 elements.
      * total size              : 23224
      * element size            : 48
@@ -66,13 +67,14 @@ public class ChampMapJol extends AbstractJol {
      * ----footprint---
      * org.jhotdraw8.collection.champ.ChampMap@651aed93d footprint:
      * COUNT       AVG       SUM   DESCRIPTION
-     * 79        33      2664   [Ljava.lang.Object;
+     *  79        33      2664   [Ljava.lang.Object;
      * 250        24      6000   java.util.AbstractMap$SimpleImmutableEntry
-     * 2        16        32   org.jhotdraw8.collection.IdentityObject
-     * 1        32        32   org.jhotdraw8.collection.champ.ChampMap
-     * 78        32      2496   org.jhotdraw8.collection.champ.MutableBitmapIndexedNode
+     *   2        16        32   org.jhotdraw8.collection.IdentityObject
+     *   1        32        32   org.jhotdraw8.collection.champ.ChampMap
+     *  78        32      2496   org.jhotdraw8.collection.champ.MutableBitmapIndexedNode
      * 500        24     12000   org.jhotdraw8.collection.jmh.Key
      * 910               23224   (total)
+     * </pre>
      */
     @Test
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
