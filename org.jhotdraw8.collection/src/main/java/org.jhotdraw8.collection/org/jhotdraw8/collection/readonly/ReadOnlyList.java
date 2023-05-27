@@ -11,7 +11,12 @@ import org.jhotdraw8.collection.enumerator.ReadOnlyListSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Read-only interface for a list. The state of the
@@ -117,16 +122,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return an iterator.
      */
     @Override
-    default @NonNull Spliterator<E> spliterator() {
-        return new ReadOnlyListSpliterator<>(this);
-    }
-
-    /**
-     * Returns a spliterator over elements of type {@code E}.
-     *
-     * @return an iterator.
-     */
-    default @NonNull EnumeratorSpliterator<E> enumerator() {
+    default @NonNull EnumeratorSpliterator<E> spliterator() {
         return new ReadOnlyListSpliterator<>(this);
     }
 

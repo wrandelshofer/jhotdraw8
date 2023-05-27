@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.FailFastIterator;
 import org.jhotdraw8.collection.FailFastListIterator;
 import org.jhotdraw8.collection.FailFastSpliterator;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
@@ -96,7 +96,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public @NonNull EnumeratorSpliterator<E> spliterator() {
         return new FailFastSpliterator<>(backingList.spliterator(), () -> this.modCount);
     }
 

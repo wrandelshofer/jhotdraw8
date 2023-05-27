@@ -408,9 +408,9 @@ public class BitMappedTrie<T> implements Serializable {
     }
 
 
-    @NonNull EnumeratorSpliterator<T> spliterator(int fromIndex, int characteristics) {
-        return new BitMappedTrieSpliterator<>(this, fromIndex, characteristics);
-    }
+ public @NonNull EnumeratorSpliterator<T> spliterator(int fromIndex, int characteristics) {
+     return new BitMappedTrieSpliterator<>(this, fromIndex, characteristics);
+ }
 
     @NonNull
     public Iterator<T> iterator(int fromIndex) {

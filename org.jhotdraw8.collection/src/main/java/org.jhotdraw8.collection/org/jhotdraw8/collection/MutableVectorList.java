@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
@@ -252,8 +253,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
-        return super.spliterator();
+    public @NonNull EnumeratorSpliterator<E> spliterator() {
+        return root.spliterator(0, Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
     }
 
     @Override
