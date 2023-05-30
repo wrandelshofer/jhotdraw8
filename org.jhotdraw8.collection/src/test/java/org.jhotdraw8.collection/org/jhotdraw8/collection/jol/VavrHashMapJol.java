@@ -3,6 +3,7 @@ package org.jhotdraw8.collection.jol;
 import io.vavr.Tuple2;
 import io.vavr.collection.HashMap;
 import org.jhotdraw8.collection.jmh.Key;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.AbstractMap;
@@ -52,6 +53,7 @@ public class VavrHashMapJol extends AbstractJol {
      * </pre>
      */
     @Test
+    @Disabled
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;

@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.AddOnlyChampSet;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
@@ -84,7 +84,7 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
 
         VertexBackLinkWithAncestorSet<V> result = null;
         for (final V startVertex : StreamSupport.stream(startVertices.spliterator(), false).collect(Collectors.toSet())) {
-            final OrderedPair<SearchResultType, VertexBackLinkWithAncestorSet<V>> innerResult
+            final SimpleOrderedPair<SearchResultType, VertexBackLinkWithAncestorSet<V>> innerResult
                     = searchSingleStartVertex(startVertex, goalPredicate, nextVerticesFunction, maxDepth);
             final SearchResultType resultType = innerResult.first();
             final @Nullable VertexBackLinkWithAncestorSet<V> backLink = innerResult.second();
@@ -112,7 +112,7 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
      * (the latter is ignored when determining whether
      * the result is unique).
      */
-    private @NonNull OrderedPair<SearchResultType, @Nullable VertexBackLinkWithAncestorSet<V>>
+    private @NonNull SimpleOrderedPair<SearchResultType, @Nullable VertexBackLinkWithAncestorSet<V>>
     searchSingleStartVertex(final @NonNull V startVertex,
                             final @NonNull Predicate<V> goalPredicate,
                             final @NonNull Function<V, Iterable<V>> nextVerticesFunction,
@@ -127,7 +127,7 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
             final VertexBackLinkWithAncestorSet<V> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
                 if (found != null) {
-                    return new OrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null);
+                    return new SimpleOrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null);
                 }
                 found = u;
             }
@@ -147,13 +147,13 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
         // Check if any of the preceding nodes has a non-unique path
         for (VertexBackLinkWithAncestorSet<V> node = found; node != null; node = node.getParent()) {
             if (visitedCount.get(node.getVertex()) > 1) {
-                return new OrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null);
+                return new SimpleOrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null);
             }
         }
 
         return found == null
-                ? new OrderedPair<>(SearchResultType.FAILURE_NO_PATH, null)
-                : new OrderedPair<>(SearchResultType.SUCCESS_UNIQUE_PATH, found);
+                ? new SimpleOrderedPair<>(SearchResultType.FAILURE_NO_PATH, null)
+                : new SimpleOrderedPair<>(SearchResultType.SUCCESS_UNIQUE_PATH, found);
     }
 }
 

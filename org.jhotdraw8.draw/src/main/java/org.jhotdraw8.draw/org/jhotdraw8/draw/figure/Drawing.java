@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.collection.reflect.TypeToken;
@@ -179,7 +179,7 @@ public interface Drawing extends Figure {
             }
         }
 
-        OrderedPair<int[], IntArrayList> pair = new TopologicalSortAlgo().sortTopologicallyIntBatches(graphBuilder);
+        SimpleOrderedPair<int[], IntArrayList> pair = new TopologicalSortAlgo().sortTopologicallyIntBatches(graphBuilder);
         int[] sorted = pair.first();
         if (pair.second().isEmpty()) {
             // graph has a loop => layout sequentially

@@ -11,6 +11,7 @@ import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.jhotdraw8.base.converter.UriResolver;
 import org.jhotdraw8.base.function.TriConsumer;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.css.ast.Declaration;
@@ -405,7 +406,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private Iterable<StyleRule> getCandidateStyleRules(@NonNull Stylesheet s, @NonNull E elem) {
         QualifiedName qualifiedTypeName = getSelectorModel().getType(elem);
         String typeName = qualifiedTypeName.getName();
-        OrderedPair<Stylesheet, QualifiedName> key = new OrderedPair<>(s, qualifiedTypeName);
+        OrderedPair<Stylesheet, QualifiedName> key = new SimpleOrderedPair<>(s, qualifiedTypeName);
         return candidateRules.computeIfAbsent(key, k -> {
             List<StyleRule> candidates = new ArrayList<>();
             for (StyleRule styleRule : s.getStyleRules()) {

@@ -8,6 +8,7 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 
 import java.util.function.ToDoubleFunction;
 
@@ -60,7 +61,7 @@ public class Solvers {
         double a = 13.5 * y1 - 13.5 * y2 + 4.5 * y3;
         double b = -22.5 * y1 + 18.0 * y2 - 4.5 * y3;
         double c = 9.0 * y1 - 4.5 * y2 + y3;
-        return new OrderedPair<>(
+        return new SimpleOrderedPair<>(
                 (x) -> {
                     x = (x - xmin) / (xmax - xmin);
                     return a * x * x * x + b * x * x + c * x;
@@ -104,7 +105,7 @@ public class Solvers {
         double a = (27.0 * t1 - 27.0 * t2 + 9.0 * t3) / (2.0 * f3 * f3 * f3);
         double b = (-45.0 * t1 + 36.0 * t2 - 9.0 * t3) / (2.0 * f3 * f3);
         double c = (18.0 * t1 - 9.0 * t2 + 2.0 * t3) / (2.0 * f3);
-        return new OrderedPair<>(
+        return new SimpleOrderedPair<>(
                 (g) -> {
                     double t = a * g * g * g + b * g * g + c * g;
                     return xmin + (xmax - xmin) * t;
@@ -265,7 +266,7 @@ public class Solvers {
      * @param tmax
      * @return
      */
-    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
+    public static @NonNull SimpleOrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
             int N,
             @NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             @NonNull ToDoubleFunction<Double> fp,
@@ -276,7 +277,7 @@ public class Solvers {
         ToDoubleFunction<Double> fLength = (t) -> Math.abs(quadratureFunction.apply(fp, tmin, t));
         double totalLength = fLength.applyAsDouble(tmax);
         ToDoubleFunction<Double> t = (L) -> bisectionMethod(fLength, L, tmin, tmax);
-        return new OrderedPair<>(polynomialChebyshevApprox(N, t, 0.0, totalLength, tmin, tmax), totalLength);
+        return new SimpleOrderedPair<>(polynomialChebyshevApprox(N, t, 0.0, totalLength, tmin, tmax), totalLength);
     }
 
     /**

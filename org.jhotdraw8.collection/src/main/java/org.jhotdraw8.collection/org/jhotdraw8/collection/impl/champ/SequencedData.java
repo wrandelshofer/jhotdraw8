@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 
 import java.util.function.BiFunction;
@@ -73,7 +74,7 @@ public interface SequencedData {
             @NonNull BiPredicate<K, K> equalsFunction,
             @NonNull BiFunction<K, Integer, K> factoryFunction) {
         if (size == 0) {
-            new OrderedPair<>(root, vector);
+            new SimpleOrderedPair<>(root, vector);
         }
         BitmapIndexedNode<K> renumberedRoot = root;
         VectorList<Object> renumberedVector = VectorList.of();
@@ -87,7 +88,7 @@ public interface SequencedData {
             renumberedRoot = renumberedRoot.put(owner, data, hashFunction.applyAsInt(current), 0, details, forceUpdate, equalsFunction, hashFunction);
         }
 
-        return new OrderedPair<>(renumberedRoot, renumberedVector);
+        return new SimpleOrderedPair<>(renumberedRoot, renumberedVector);
     }
 
 
@@ -101,19 +102,19 @@ public interface SequencedData {
             if (size > 1) {
                 Object o = vector.get(1);
                 if (o instanceof VectorTombstone t) {
-                    return new OrderedPair<>(vector.removeRange(0, 2 + t.after()), offset - 2 - t.after());
+                    return new SimpleOrderedPair<>(vector.removeRange(0, 2 + t.after()), offset - 2 - t.after());
                 }
             }
-            return new OrderedPair<>(vector.removeFirst(), offset - 1);
+            return new SimpleOrderedPair<>(vector.removeFirst(), offset - 1);
         }
 
         // If the element is the last , we can remove it and its neighboring tombstones from the vector.
         if (index == size - 1) {
             Object o = vector.get(size - 2);
             if (o instanceof VectorTombstone t) {
-                return new OrderedPair<>(vector.removeRange(size - 2 - t.before(), size), offset);
+                return new SimpleOrderedPair<>(vector.removeRange(size - 2 - t.before(), size), offset);
             }
-            return new OrderedPair<>(vector.removeLast(), offset);
+            return new SimpleOrderedPair<>(vector.removeLast(), offset);
         }
 
         // Otherwise, we replace the element with a tombstone, and we update before/after skip counts
@@ -134,7 +135,7 @@ public interface SequencedData {
             vector = vector.set(index, TOMB_ZERO_ZERO);
         }
         assert !(vector.getFirst() instanceof VectorTombstone) && !(vector.getLast() instanceof VectorTombstone);
-        return new OrderedPair<>(vector, offset);
+        return new SimpleOrderedPair<>(vector, offset);
     }
 
     /**

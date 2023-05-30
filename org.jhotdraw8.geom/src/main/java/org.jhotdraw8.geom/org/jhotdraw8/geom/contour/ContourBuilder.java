@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.QuintFunction;
 import org.jhotdraw8.base.function.TriConsumer;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
@@ -959,17 +960,17 @@ public class ContourBuilder {
                     continue;
                 } else if (intersections.size() == 1) {
                     if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
-                        output.add(new OrderedPair<>(sIndex,
+                        output.add(new SimpleOrderedPair<>(sIndex,
                                 Arrays.asList(intersections.getFirst())));
                     }
                 } else {
                     assert intersections.size() == 2 : "should be two intersects here";
                     if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
-                        output.add(new OrderedPair<>(sIndex,
+                        output.add(new SimpleOrderedPair<>(sIndex,
                                 Arrays.asList(intersections.getFirst())));
                     }
                     if (validLineSegIntersect.test(intersections.getLast().getArgumentA())) {
-                        output.add(new OrderedPair<>(sIndex,
+                        output.add(new SimpleOrderedPair<>(sIndex,
                                 Arrays.asList(intersections.getLast())));
                     }
                 }
@@ -985,16 +986,16 @@ public class ContourBuilder {
                         ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
                         if (intersections.size() == 1) {
                             if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getFirst())) {
-                                output.add(new OrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
+                                output.add(new SimpleOrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
                             }
                         } else {
                             assert intersections.size() == 2 : "there must be 2 intersections";
 
                             if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getFirst())) {
-                                output.add(new OrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
+                                output.add(new SimpleOrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
                             }
                             if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getLast())) {
-                                output.add(new OrderedPair<>(sIndex, Arrays.asList(intersections.getLast())));
+                                output.add(new SimpleOrderedPair<>(sIndex, Arrays.asList(intersections.getLast())));
                             }
                         }
                         break;
@@ -1333,7 +1334,7 @@ public class ContourBuilder {
                     boolean equalToInitial = Points.almostEqual(slice.pline.lastVertex().pos(), initialStartPoint,
                             Utils.realPrecision);
 
-                    return new OrderedPair<>(indexDist, equalToInitial);
+                    return new SimpleOrderedPair<>(indexDist, equalToInitial);
                 };
 
                 queryResults.sort(

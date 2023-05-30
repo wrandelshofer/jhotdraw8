@@ -1,5 +1,6 @@
 package org.jhotdraw8.collection.jol;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
 import scala.collection.immutable.HashMap;
@@ -49,6 +50,7 @@ public class ScalaHashMapJol extends AbstractJol {
      * </pre>
      */
     @Test
+    @Disabled
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;

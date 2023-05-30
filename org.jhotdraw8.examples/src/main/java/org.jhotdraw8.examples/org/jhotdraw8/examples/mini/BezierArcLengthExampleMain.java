@@ -20,7 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
 import org.jhotdraw8.geom.CubicCurves;
@@ -282,7 +282,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndY()
         };
         ToDoubleFunction<Double> f = getArcLengthIntegrand(b, 0);
-        OrderedPair<ToDoubleFunction<Double>, Double> pair = Solvers.invPolynomialChebyshevApprox(20, Integrals::gaussLegendre7, f, 0, 1);
+        SimpleOrderedPair<ToDoubleFunction<Double>, Double> pair = Solvers.invPolynomialChebyshevApprox(20, Integrals::gaussLegendre7, f, 0, 1);
         //OrderedPair<ToDoubleFunction<Double>, Double> pair = IntegralAlgorithms.invSpeedPolynomialChebyshevApprox(20, (f1, t0, t1) -> IntegralAlgorithms.rombergQuadrature(f1, t0, t1,0.1), f, 0, 1);
         //OrderedPair<ToDoubleFunction<Double>, Double> pair = IntegralAlgorithms.invPolynomialApprox3( IntegralAlgorithms::gaussLegendre7, f, 0, 1);
         ToDoubleFunction<Double> sToT = pair.first();

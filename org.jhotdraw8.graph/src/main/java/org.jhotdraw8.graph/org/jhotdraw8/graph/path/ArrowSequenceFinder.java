@@ -8,6 +8,7 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.algo.AddToSet;
@@ -43,7 +44,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(
+    @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             int maxDepth,
@@ -62,7 +63,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             int maxDepth,
@@ -80,7 +81,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
             @NonNull Iterable<V> startVertices,
             @NonNull Predicate<V> goalPredicate,
             @NonNull C costLimit) {
@@ -118,7 +119,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
             @NonNull V start,
             @NonNull V goal,
             int maxDepth,
@@ -135,7 +136,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
             @NonNull V start,
             @NonNull V goal,
             @NonNull C costLimit) {
@@ -153,7 +154,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
+    @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit,
             @NonNull Supplier<AddToSet<V>> visitedSetFactory);
 
@@ -167,7 +168,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints, int maxDepth, @NonNull C costLimit) {
         return findArrowSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
     }
@@ -180,7 +181,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
             @NonNull Iterable<V> waypoints, @NonNull C costLimit) {
         return findArrowSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
@@ -196,7 +197,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param sumFunction               the sum function
      * @return an ordered pair with the combined sequence
      */
-    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<AA>, CC> findArrowSequenceOverWaypoints(
+    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<AA>, CC> findArrowSequenceOverWaypoints(
             @NonNull Iterable<VV> waypoints,
             @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<AA>, CC>> findArrowSequenceFunction,
             @NonNull CC zero,
@@ -222,10 +223,10 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
 
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new OrderedPair<>(VectorList.of(), zero);
+            return new SimpleOrderedPair<>(VectorList.of(), zero);
         }
 
-        return new OrderedPair<>(VectorList.copyOf(sequence), sum);
+        return new SimpleOrderedPair<>(VectorList.copyOf(sequence), sum);
     }
 
 }

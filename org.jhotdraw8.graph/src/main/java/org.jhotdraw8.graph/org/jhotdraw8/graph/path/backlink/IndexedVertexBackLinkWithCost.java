@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 
@@ -50,8 +50,8 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
      * @param <XX>            the vertex sequence element type
      * @return the vertex sequence
      */
-    public static <XX, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable IndexedVertexBackLinkWithCost<CC> node,
-                                                                                                                         @NonNull Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
+    public static <XX, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable IndexedVertexBackLinkWithCost<CC> node,
+                                                                                                                               @NonNull Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
         if (node == null) {
             return null;
         }
@@ -60,7 +60,7 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
         for (IndexedVertexBackLinkWithCost<CC> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }
-        return new OrderedPair<>(VectorList.copyOf(deque), node.getCost());
+        return new SimpleOrderedPair<>(VectorList.copyOf(deque), node.getCost());
     }
 
 }

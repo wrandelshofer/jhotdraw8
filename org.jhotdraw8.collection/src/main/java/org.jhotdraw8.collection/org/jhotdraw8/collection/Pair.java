@@ -15,7 +15,5 @@ package org.jhotdraw8.collection;
  */
 public interface Pair<U, V> {
 
-     U first();
 
-    V second();
 }

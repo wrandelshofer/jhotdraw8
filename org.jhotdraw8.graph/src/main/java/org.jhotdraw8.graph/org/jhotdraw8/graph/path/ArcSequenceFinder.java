@@ -8,6 +8,7 @@ package org.jhotdraw8.graph.path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.Arc;
@@ -189,9 +190,9 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
         }
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new OrderedPair<>(VectorList.of(), zero);
+            return new SimpleOrderedPair<>(VectorList.of(), zero);
         }
 
-        return new OrderedPair<>(VectorList.copyOf(sequence), sum);
+        return new SimpleOrderedPair<>(VectorList.copyOf(sequence), sum);
     }
 }

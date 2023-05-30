@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Double6Consumer;
 import org.jhotdraw8.base.function.Double8Consumer;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -162,8 +162,8 @@ public class CubicCurves {
      * </dl>
      * .
      */
-    public static OrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> split(CubicCurve2D.Double source,
-                                                                              double t) {
+    public static SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> split(CubicCurve2D.Double source,
+                                                                                    double t) {
         CubicCurve2D.Double left = new CubicCurve2D.Double();
         CubicCurve2D.Double right = new CubicCurve2D.Double();
         split(source.x1, source.y1,
@@ -172,7 +172,7 @@ public class CubicCurves {
                 source.x2, source.y2,
                 t,
                 left::setCurve, right::setCurve);
-        return new OrderedPair<>(left, right);
+        return new SimpleOrderedPair<>(left, right);
     }
 
     /**

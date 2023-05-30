@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.algo.AddToSet;
@@ -109,7 +109,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequence(
+    public @Nullable SimpleOrderedPair<ImmutableList<Integer>, C> findVertexSequence(
             @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate,
             int maxDepth, @NonNull C costLimit, @NonNull AddToSet<Integer> visited) {
         AddToIntSet visitedAsInt = visited instanceof AddToIntSet ? (AddToIntSet) visited : visited::add;
@@ -119,7 +119,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
     }
 
     @Override
-    public @Nullable OrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(
+    public @Nullable SimpleOrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(
             @NonNull Iterable<Integer> waypoints, int maxDepth, @NonNull C costLimit, @NonNull Supplier<AddToSet<Integer>> visitedSetFactory) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,

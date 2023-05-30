@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
@@ -131,7 +131,7 @@ public class UniqueOrOneHopVertexPathSearchAlgoTest {
 
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOrOneHopVertexPathSearchAlgo<>());
-        OrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals, Integer.MAX_VALUE);
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals, Integer.MAX_VALUE);
         if (expPath == null) {
             assertNull(result);
         } else {
@@ -164,7 +164,7 @@ public class UniqueOrOneHopVertexPathSearchAlgoTest {
                 graph::getNextVertices, new UniqueOrOneHopVertexPathSearchAlgo<>());
 
         // Find unique path to any of the goals
-        OrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains, Integer.MAX_VALUE);
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actualPath);
         } else {
@@ -209,7 +209,7 @@ public class UniqueOrOneHopVertexPathSearchAlgoTest {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOrOneHopVertexPathSearchAlgo<>());
-        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);
         } else {

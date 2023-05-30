@@ -7,6 +7,7 @@ package org.jhotdraw8.graph.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.graph.MutableDirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableBidiGraph;
 
@@ -222,10 +223,10 @@ public class GraphvizReader<V, A> {
                 vertexMap.put(next_node_id, vertex);
                 g.addVertex(vertex);
             }
-            arrows.add(new OrderedPair<>(node_id, next_node_id));
+            arrows.add(new SimpleOrderedPair<>(node_id, next_node_id));
 
             if (isEdge) {
-                arrows.add(new OrderedPair<>(next_node_id, node_id));
+                arrows.add(new SimpleOrderedPair<>(next_node_id, node_id));
             }
             node_id = next_node_id;
         } while (tt.nextToken() == '-');

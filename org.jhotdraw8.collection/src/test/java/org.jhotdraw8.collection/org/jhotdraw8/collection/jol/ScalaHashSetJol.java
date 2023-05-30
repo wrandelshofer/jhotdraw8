@@ -1,6 +1,7 @@
 package org.jhotdraw8.collection.jol;
 
 import org.jhotdraw8.collection.jmh.Key;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.collection.immutable.HashSet;
 
@@ -17,6 +18,7 @@ import scala.collection.immutable.HashSet;
 public class ScalaHashSetJol extends AbstractJol {
 
     @Test
+    @Disabled
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;

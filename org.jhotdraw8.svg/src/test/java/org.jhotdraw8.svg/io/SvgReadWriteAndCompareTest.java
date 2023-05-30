@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
@@ -146,7 +147,7 @@ public class SvgReadWriteAndCompareTest {
             try {
                 WritableImage drawing2Image = drawing2Node.snapshot(new SnapshotParameters(), null);
                 WritableImage drawing1Image = drawing1Node.snapshot(new SnapshotParameters(), null);
-                future.complete(new OrderedPair<>(drawing1Image, drawing2Image));
+                future.complete(new SimpleOrderedPair<>(drawing1Image, drawing2Image));
             } catch (Throwable t) {
                 t.printStackTrace();
                 future.completeExceptionally(t);

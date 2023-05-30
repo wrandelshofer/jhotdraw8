@@ -6,6 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.mapped.MappedList;
 import org.jhotdraw8.graph.algo.MinimumSpanningTreeAlgo;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
@@ -52,7 +53,7 @@ public class MinimumSpanningTreeAlgoTest extends AbstractGraphAlgoTest {
         SimpleMutableDirectedGraph<String, OrderedPair<String, String>> actualMst = new MinimumSpanningTreeAlgo().findMinimumSpanningTreeGraph(
                 nonMst.getVertices(),
                 new MappedList<>(
-                        arcs, a -> new OrderedPair<String, String>(a.getStart(), a.getEnd())),
+                        arcs, a -> new SimpleOrderedPair<String, String>(a.getStart(), a.getEnd())),
                 includedList, rejectedList);
         assertEquals(new AdjacencyListWriter().write(expectedMst), new AdjacencyListWriter().write(actualMst));
     }

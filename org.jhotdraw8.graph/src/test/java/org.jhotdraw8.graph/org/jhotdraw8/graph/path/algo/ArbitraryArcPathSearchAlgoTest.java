@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.ToIntTriFunction;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.DirectedGraph;
@@ -104,7 +104,7 @@ public class ArbitraryArcPathSearchAlgoTest {
     public void testFindVertexPath_3args(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
-        @Nullable OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
+        @Nullable SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
                 Integer.MAX_VALUE, Integer.MAX_VALUE, new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
@@ -142,7 +142,7 @@ public class ArbitraryArcPathSearchAlgoTest {
     private void testFindVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
-        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE,
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE,
                 () -> new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());

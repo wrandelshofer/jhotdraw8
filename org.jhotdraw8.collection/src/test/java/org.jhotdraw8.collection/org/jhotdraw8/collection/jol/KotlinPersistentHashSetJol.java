@@ -2,6 +2,7 @@ package org.jhotdraw8.collection.jol;
 
 import kotlinx.collections.immutable.ExtensionsKt;
 import org.jhotdraw8.collection.jmh.Key;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 public class KotlinPersistentHashSetJol extends AbstractJol {
 
     @Test
+    @Disabled
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;

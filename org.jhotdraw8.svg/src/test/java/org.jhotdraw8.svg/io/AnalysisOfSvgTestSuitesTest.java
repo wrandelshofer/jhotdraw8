@@ -26,6 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.svg.io.FigureSvgTinyReader;
@@ -131,7 +132,7 @@ public class AnalysisOfSvgTestSuitesTest {
                         && !f.getFileName().toString().startsWith("udom-")
                 )
                 .filter(f -> f.getFileName().toString().startsWith("paint-"))
-                .map(f -> new OrderedPair<Path, Path>(f,
+                .map(f -> new SimpleOrderedPair<Path, Path>(f,
                         f.getParent().getParent().resolve(
                                 Path.of("png",
                                         f.getFileName().toString().substring(0, f.getFileName().toString().length() - 4)
@@ -173,7 +174,7 @@ public class AnalysisOfSvgTestSuitesTest {
 
         return Files.walk(Path.of(WPT_PATH))
                 .filter(p -> p.toString().endsWith("-ref.svg"))
-                .map(p -> new OrderedPair<>(Path.of(p.toString().substring(0, p.toString().length() - "-ref.svg".length()) + ".svg"), p))
+                .map(p -> new SimpleOrderedPair<>(Path.of(p.toString().substring(0, p.toString().length() - "-ref.svg".length()) + ".svg"), p))
                 .filter(p -> !unwantedTests.contains(getLastTwoPathElements(p.first())))
                 .sorted(Comparator.comparing(p -> getLastTwoPathElements(p.first())))
                 .map(p -> dynamicTest(getLastTwoPathElements(p.first())
@@ -206,7 +207,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 PixelReader pixelReader = referenceImageX.getPixelReader();
                 WritableImage referenceImage = new WritableImage(pixelReader,
                         (int) referenceImageX.getWidth(), (int) referenceImageX.getHeight());
-                future.complete(new OrderedPair<>(testImage, referenceImage));
+                future.complete(new SimpleOrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
                 t.printStackTrace();
                 future.completeExceptionally(t);
@@ -235,7 +236,7 @@ public class AnalysisOfSvgTestSuitesTest {
             try {
                 WritableImage testImage = testNode.snapshot(new SnapshotParameters(), null);
                 WritableImage referenceImage = referenceNode.snapshot(new SnapshotParameters(), null);
-                future.complete(new OrderedPair<>(testImage, referenceImage));
+                future.complete(new SimpleOrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
                 t.printStackTrace();
                 future.completeExceptionally(t);

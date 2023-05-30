@@ -5,14 +5,22 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.enumerator.IntSpliterator;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.graph.AttributedIndexedDirectedGraph;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -121,7 +129,7 @@ public class TopologicalSortAlgo {
      * @return the sorted list of vertices and the list of batches,
      * batches will be empty if the graph has cycles
      */
-    public @NonNull OrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(@NonNull IndexedDirectedGraph model) {
+    public @NonNull SimpleOrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(@NonNull IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
         IntArrayList batches = new IntArrayList();
         boolean hasLoop = false;
@@ -190,7 +198,7 @@ public class TopologicalSortAlgo {
             batches.clear();
         }
 
-        return new OrderedPair<>(result, batches);
+        return new SimpleOrderedPair<>(result, batches);
     }
 
     /**

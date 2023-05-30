@@ -2,6 +2,7 @@ package org.jhotdraw8.collection.jol;
 
 import org.jhotdraw8.collection.VectorMap;
 import org.jhotdraw8.collection.jmh.Key;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class VectorMapJol extends AbstractJol {
      * </pre>
      */
     @Test
+    @Disabled
+
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
@@ -85,6 +88,8 @@ public class VectorMapJol extends AbstractJol {
      * </pre>
      */
     @Test
+    @Disabled
+
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

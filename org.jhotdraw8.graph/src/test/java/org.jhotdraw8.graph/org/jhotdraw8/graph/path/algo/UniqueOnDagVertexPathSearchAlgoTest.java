@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
@@ -130,7 +130,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOnDagVertexPathSearchAlgo<>());
-        OrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
                 Integer.MAX_VALUE);
         if (expPath == null) {
             assertNull(result);
@@ -165,7 +165,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
                 new UniqueOnDagVertexPathSearchAlgo<>());
 
         // Find unique path to any of the goals
-        OrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains,
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains,
                 Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actualPath);
@@ -211,7 +211,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new UniqueOnDagVertexPathSearchAlgo<>());
-        OrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
+        SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);
         } else {

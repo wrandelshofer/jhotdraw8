@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.QuadConsumer;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
@@ -24,7 +25,10 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.Utils.*;
+import static org.jhotdraw8.geom.contour.Utils.angle;
+import static org.jhotdraw8.geom.contour.Utils.closestPointOnLineSeg;
+import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
 
 /**
  * PlineVertex.
@@ -305,12 +309,12 @@ public class PlineVertex implements Cloneable {
             Function<Double, OrderedPair<Boolean, Point2D.Double>> pointInSweep = (Double t) -> {
                 if (t + Rectangles.REAL_THRESHOLD < 0.0 ||
                         t > 1.0 + Rectangles.REAL_THRESHOLD) {
-                    return new OrderedPair<>(false, new Point2D.Double(0, 0));
+                    return new SimpleOrderedPair<>(false, new Point2D.Double(0, 0));
                 }
 
                 Point2D.Double p = pointFromParametric(p0, p1, t);
                 boolean withinSweep = pointWithinArcSweepAngle(arc.center, a1.pos(), a2.pos(), a1.bulge(), p);
-                return new OrderedPair<>(withinSweep, p);
+                return new SimpleOrderedPair<>(withinSweep, p);
             };
 
             if (intrResult.intersections().size() == 0) {
@@ -376,7 +380,7 @@ public class PlineVertex implements Cloneable {
             TriFunction<Point2D.Double, Point2D.Double, Double, OrderedPair<Double, Double>> startAndSweepAngle = (Point2D.Double sp, Point2D.Double center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(angle(center, sp));
                 double sweepAngle = 4.0 * Math.atan(bulge);
-                return new OrderedPair<>(startAngle, sweepAngle);
+                return new SimpleOrderedPair<>(startAngle, sweepAngle);
             };
 
             Predicate<Point2D.Double> bothArcsSweepPoint = (Point2D.Double pt) -> {

@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 
@@ -49,7 +49,7 @@ public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends
      * @param <XX>            the vertex sequence element type
      * @return the vertex sequence
      */
-    public static <VV, CC extends Number & Comparable<CC>, XX> @Nullable OrderedPair<ImmutableList<XX>, CC> toVertexSequence(
+    public static <VV, CC extends Number & Comparable<CC>, XX> @Nullable SimpleOrderedPair<ImmutableList<XX>, CC> toVertexSequence(
             @Nullable VertexBackLinkWithCost<VV, CC> node,
             @NonNull Function<VertexBackLinkWithCost<VV, CC>, XX> mappingFunction) {
         if (node == null) {
@@ -60,7 +60,7 @@ public class VertexBackLinkWithCost<V, C extends Number & Comparable<C>> extends
         for (VertexBackLinkWithCost<VV, CC> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }
-        return new OrderedPair<>(VectorList.copyOf(deque), node.getCost());
+        return new SimpleOrderedPair<>(VectorList.copyOf(deque), node.getCost());
     }
 
 }

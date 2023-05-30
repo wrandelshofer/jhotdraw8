@@ -8,22 +8,34 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.QuadConsumer;
 import org.jhotdraw8.base.function.TriConsumer;
 import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.collection.NonNullOrderedPair;
 import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.OrderedPairNonNull;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
-import org.jhotdraw8.geom.intersect.*;
+import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectLineLine;
+import org.jhotdraw8.geom.intersect.IntersectionPoint;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.*;
+import java.util.function.BiPredicate;
+import java.util.function.DoubleFunction;
+import java.util.function.IntConsumer;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
@@ -323,12 +335,12 @@ public class ContourIntersections {
                     return true;
                 }
                 // skip reversed segment order (would end up comparing the same segments)
-                if (visitedSegmentPairs.contains(new OrderedPair<>(hitIndexStart, i))) {
+                if (visitedSegmentPairs.contains(new SimpleOrderedPair<>(hitIndexStart, i))) {
                     return true;
                 }
 
                 // add the segment pair we're visiting now
-                visitedSegmentPairs.add(new OrderedPair<>(i, hitIndexStart));
+                visitedSegmentPairs.add(new SimpleOrderedPair<>(i, hitIndexStart));
 
                 final PlineVertex u1 = pline.get(hitIndexStart);
                 final PlineVertex u2 = pline.get(hitIndexEnd);
@@ -433,11 +445,11 @@ public class ContourIntersections {
                         coincidentIntrs.add(new PlineCoincidentIntersect(i1, i2, intrResult.point1, intrResult.point2));
                         if (Points.almostEqual(p1v1.pos(), intrResult.point1) ||
                                 Points.almostEqual(p1v1.pos(), intrResult.point2)) {
-                            possibleDuplicates.add(new OrderedPair<>(Utils.prevWrappingIndex(i1, pline1), i2));
+                            possibleDuplicates.add(new SimpleOrderedPair<>(Utils.prevWrappingIndex(i1, pline1), i2));
                         }
                         if (Points.almostEqual(p2v1.pos(), intrResult.point1) ||
                                 Points.almostEqual(p2v1.pos(), intrResult.point2)) {
-                            possibleDuplicates.add(new OrderedPair<>(i1, Utils.prevWrappingIndex(i2, pline2)));
+                            possibleDuplicates.add(new SimpleOrderedPair<>(i1, Utils.prevWrappingIndex(i2, pline2)));
                         }
                         break;
                 }
@@ -451,7 +463,7 @@ public class ContourIntersections {
 
         // remove duplicate points caused by the coincident intersect definition
         intrs.removeIf((final PlineIntersect intr) -> {
-            boolean found = possibleDuplicates.contains(new OrderedPair<>(intr.sIndex1, intr.sIndex2));
+            boolean found = possibleDuplicates.contains(new SimpleOrderedPair<>(intr.sIndex1, intr.sIndex2));
             if (!found) {
                 return false;
             }
@@ -482,22 +494,22 @@ public class ContourIntersections {
             IntersectionResult intrResult = intrLineSeg2Circle2(p0, p1, arc.radius, arc.center);
 
             // helper function to test and get point within arc sweep
-            DoubleFunction<OrderedPairNonNull<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
+            DoubleFunction<NonNullOrderedPair<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
                 if (t + Rectangles.REAL_THRESHOLD < 0.0 ||
                         t > 1.0 + Rectangles.REAL_THRESHOLD) {
-                    return new OrderedPairNonNull<>(false, new Point2D.Double(0, 0));
+                    return new NonNullOrderedPair<>(false, new Point2D.Double(0, 0));
                 }
 
                 Point2D.Double p = pointFromParametric(p0, p1, t);
                 boolean withinSweep = pointWithinArcSweepAngle(arc.center, a1.pos(), a2.pos(), a1.bulge(), p);
-                return new OrderedPairNonNull<>(withinSweep, p);
+                return new NonNullOrderedPair<>(withinSweep, p);
             };
 
             ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
             if (intersections.size() == 0) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intersections.size() == 1) {
-                OrderedPairNonNull<Boolean, Point2D.Double> p = pointInSweep.apply(intersections.getFirst().getArgumentA());
+                NonNullOrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intersections.getFirst().getArgumentA());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -506,8 +518,8 @@ public class ContourIntersections {
                 }
             } else {
                 assert intersections.size() == 2 : "shouldn't get here without 2 intersects";
-                OrderedPairNonNull<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intersections.getFirst().getArgumentA());
-                OrderedPairNonNull<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intersections.getLast().getArgumentA());
+                NonNullOrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intersections.getFirst().getArgumentA());
+                NonNullOrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intersections.getLast().getArgumentA());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;
@@ -562,10 +574,10 @@ public class ContourIntersections {
             BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
             BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
-            TriFunction<Point2D.Double, Point2D.Double, Double, OrderedPairNonNull<Double, Double>> startAndSweepAngle = (final Point2D.Double sp, final Point2D.Double center, Double bulge) -> {
+            TriFunction<Point2D.Double, Point2D.Double, Double, NonNullOrderedPair<Double, Double>> startAndSweepAngle = (final Point2D.Double sp, final Point2D.Double center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(Utils.angle(center, sp));
                 double sweepAngle = 4.0 * Math.atan(bulge);
-                return new OrderedPairNonNull<>(startAngle, sweepAngle);
+                return new NonNullOrderedPair<>(startAngle, sweepAngle);
             };
 
             Predicate<Point2D.Double> bothArcsSweepPoint = (final Point2D.Double pt) ->
@@ -610,9 +622,9 @@ public class ContourIntersections {
                 case NO_INTERSECTION_COINCIDENT:
                     // determine if arcs overlap along their sweep
                     // start and sweep angles
-                    OrderedPairNonNull<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
+                    NonNullOrderedPair<Double, Double> arc1StartAndSweep = startAndSweepAngle.apply(v1.pos(), arc1.center, v1.bulge());
                     // we have the arcs go the same direction to simplify checks
-                    OrderedPairNonNull<Double, Double> arc2StartAndSweep = ((Supplier<OrderedPairNonNull<Double, Double>>) () -> {
+                    NonNullOrderedPair<Double, Double> arc2StartAndSweep = ((Supplier<NonNullOrderedPair<Double, Double>>) () -> {
                         if (v1.bulgeIsNeg() == u1.bulgeIsNeg()) {
                             return startAndSweepAngle.apply(u1.pos(), arc2.center, u1.bulge());
                         }

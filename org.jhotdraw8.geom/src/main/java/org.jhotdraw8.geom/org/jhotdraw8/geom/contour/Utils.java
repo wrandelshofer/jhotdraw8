@@ -6,6 +6,7 @@ package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Lines;
 import org.jhotdraw8.geom.Points;
@@ -43,7 +44,7 @@ public class Utils {
     }
 
     public static OrderedPair<Double, Double> minmax(double a, double b) {
-        return a < b ? new OrderedPair<>(a, b) : new OrderedPair<>(b, a);
+        return a < b ? new SimpleOrderedPair<>(a, b) : new SimpleOrderedPair<>(b, a);
     }
 
     public static boolean fuzzyInRange(double minValue, double value, double maxValue) {

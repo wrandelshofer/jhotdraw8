@@ -1,7 +1,3 @@
-/*
- * @(#)OrderedPair.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
- */
 package org.jhotdraw8.collection;
 
 
@@ -19,63 +15,33 @@ import java.util.Objects;
  * @param <V> the type of the second element of the pair
  * @author Werner Randelshofer
  */
-public class OrderedPair<U, V> implements Pair<U, V> {
+public interface OrderedPair<U, V> {
+    U first();
 
-    private final U a;
-    private final V b;
-    /**
-     * Cached hash-value for faster hashing.
-     */
-    private int hash;
+    V second();
 
-    public OrderedPair(U a, V b) {
-        this.a = a;
-        this.b = b;
-    }
 
-    @Override
-    public U first() {
-        return a;
-    }
-
-    @Override
-    public V second() {
-        return b;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if (this == obj) {
+    static <U, V> boolean orderedPairEquals(@NonNull OrderedPair<U, V> self, @Nullable Object obj) {
+        if (self == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (self.getClass() != obj.getClass()) {
             return false;
         }
         final OrderedPair<?, ?> other = (OrderedPair<?, ?>) obj;
-        if (!Objects.equals(this.a, other.a)) {
+        if (!Objects.equals(self.first(), other.first())) {
             return false;
         }
-        return Objects.equals(this.b, other.b);
+        return Objects.equals(self.second(), other.second());
     }
 
-    @Override
-    public int hashCode() {
-        if (hash == 0) {
-            hash = 3;
-            hash = 59 * hash + Objects.hashCode(this.a);
-            hash = 59 * hash + Objects.hashCode(this.b);
-        }
-        return hash;
-    }
-
-    @Override
-    public @NonNull String toString() {
-        return "OrderedPair{"
-                + a +
-                ", " + b +
-                '}';
+    static <U, V> int orderedPairHashCode(@NonNull OrderedPair<U, V> self) {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(self.first());
+        hash = 59 * hash + Objects.hashCode(self.second());
+        return hash == 0 ? -89 : hash;
     }
 }

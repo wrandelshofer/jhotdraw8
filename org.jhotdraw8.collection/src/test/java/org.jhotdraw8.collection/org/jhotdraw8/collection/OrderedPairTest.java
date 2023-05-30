@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class OrderedPairTest {
     @Test
     public void testNonNull() {
-        OrderedPair<@NonNull Integer, @NonNull Integer> op = new OrderedPair<>(3, 5);
+        SimpleOrderedPair<@NonNull Integer, @NonNull Integer> op = new SimpleOrderedPair<>(3, 5);
         int sum = op.first() + op.second();
         assertEquals(8, sum);
     }
 
     @Test
     public void testNullable() {
-        OrderedPair<@Nullable Integer, @Nullable Integer> op = new OrderedPair<>(3, 5);
+        SimpleOrderedPair<@Nullable Integer, @Nullable Integer> op = new SimpleOrderedPair<>(3, 5);
         int sum = op.first() + op.second();
         assertEquals(8, sum);
     }

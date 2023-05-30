@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.AddOnlyChampSet;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
@@ -114,7 +114,7 @@ public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
         ArcBackLinkWithAncestorSet<V, A> result = null;
         for (final V startVertex : StreamSupport.stream(startVertices.spliterator(), false).collect(Collectors
                 .toCollection(LinkedHashSet::new))) {
-            final OrderedPair<SearchResultType, ArcBackLinkWithAncestorSet<V, A>> innerResult
+            final SimpleOrderedPair<SearchResultType, ArcBackLinkWithAncestorSet<V, A>> innerResult
                     = searchSingleStartVertex(startVertex, goalPredicate, nextArcsFunction, maxDepth);
             final SearchResultType resultType = innerResult.first();
             final @Nullable ArcBackLinkWithAncestorSet<V, A> backLink = innerResult.second();
@@ -142,7 +142,7 @@ public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
      * (the latter is ignored when determining whether
      * the result is unique).
      */
-    private @NonNull OrderedPair<SearchResultType, @Nullable ArcBackLinkWithAncestorSet<V, A>>
+    private @NonNull SimpleOrderedPair<SearchResultType, @Nullable ArcBackLinkWithAncestorSet<V, A>>
     searchSingleStartVertex(
             final @NonNull V startVertex,
             final @NonNull Predicate<V> goalPredicate,
@@ -160,7 +160,7 @@ public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
             final ArcBackLinkWithAncestorSet<V, A> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {
                 if (found != null) {
-                    return new OrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null); // path is not unique!
+                    return new SimpleOrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null); // path is not unique!
                 }
                 found = u;
             }
@@ -181,13 +181,13 @@ public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
         // Check if any of the preceding nodes has a non-unique path
         for (ArcBackLinkWithAncestorSet<V, A> node = found; node != null; node = node.getParent()) {
             if (visitedCount.get(node.getVertex()) > 1) {
-                return new OrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null); // path is not unique!
+                return new SimpleOrderedPair<>(SearchResultType.FAILURE_NOT_UNIQUE, null); // path is not unique!
             }
         }
 
         return found == null
-                ? new OrderedPair<>(SearchResultType.FAILURE_NO_PATH, null)
-                : new OrderedPair<>(SearchResultType.SUCCESS_UNIQUE_PATH, found);
+                ? new SimpleOrderedPair<>(SearchResultType.FAILURE_NO_PATH, null)
+                : new SimpleOrderedPair<>(SearchResultType.SUCCESS_UNIQUE_PATH, found);
     }
 }
 

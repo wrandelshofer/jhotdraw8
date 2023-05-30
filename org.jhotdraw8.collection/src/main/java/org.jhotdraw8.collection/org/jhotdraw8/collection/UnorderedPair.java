@@ -1,7 +1,3 @@
-/*
- * @(#)UnorderedPair.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
- */
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
@@ -17,63 +13,31 @@ import java.util.Objects;
  * @param <V> the type of the elements that form the pair
  * @author Werner Randelshofer
  */
-public class UnorderedPair<V> implements Pair<V, V> {
+public interface UnorderedPair<V> {
 
-    private final V a;
-    private final V b;
-    /**
-     * Cached hash-value for faster hashing.
-     */
-    private int hash;
+    V either();
 
-    public UnorderedPair(V a, V b) {
-        this.a = a;
-        this.b = b;
-    }
+    V other();
 
-    @Override
-    public V first() {
-        return a;
-    }
-
-    @Override
-    public V second() {
-        return b;
-    }
-
-    public boolean isStartEqualsEnd() {
-        return Objects.equals(a, b);
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if (this == obj) {
+    static <V> boolean unorderedPairEquals(@NonNull UnorderedPair<V> self, @Nullable Object obj) {
+        if (self == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (self.getClass() != obj.getClass()) {
             return false;
         }
         final UnorderedPair<?> other = (UnorderedPair<?>) obj;
-        if (Objects.equals(this.a, other.a) && Objects.equals(this.b, other.b)) {
+        if (Objects.equals(self.either(), other.either()) && Objects.equals(self.other(), other.other())) {
             return true;
         }
-        return Objects.equals(this.b, other.a) && Objects.equals(this.a, other.b);
+        return Objects.equals(self.other(), other.either()) && Objects.equals(self.either(), other.other());
     }
 
-    @Override
-    public int hashCode() {
-        if (hash == 0) {
-            hash = 7 + Objects.hashCode(a) + Objects.hashCode(b);
-        }
-        return hash;
+    static <V> int unorderedPairHashCode(@NonNull UnorderedPair<V> self) {
+        final int hash = 7 + Objects.hashCode(self.either()) + Objects.hashCode(self.other());
+        return hash == 0 ? -61 : hash;
     }
-
-    @Override
-    public @NonNull String toString() {
-        return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';
-    }
-
 }

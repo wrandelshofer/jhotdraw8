@@ -8,8 +8,6 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.Objects;
-
 /**
  * An ordered pair which has non-null values.
  * <p>
@@ -19,11 +17,15 @@ import java.util.Objects;
  * @param <V> the type of the second element of the pair
  * @author Werner Randelshofer
  */
-public class OrderedPairNonNull<U, V> implements Pair<U, V> {
+public class NonNullOrderedPair<U, V> implements OrderedPair<U, V> {
     private final @NonNull U a;
     private final @NonNull V b;
+    /**
+     * Cached hash-value for faster hashing.
+     */
+    private int hash;
 
-    public OrderedPairNonNull(@NonNull U a, @NonNull V b) {
+    public NonNullOrderedPair(@NonNull U a, @NonNull V b) {
         this.a = a;
         this.b = b;
     }
@@ -38,33 +40,16 @@ public class OrderedPairNonNull<U, V> implements Pair<U, V> {
         return b;
     }
 
-    public boolean isIntersectionEmpty() {
-        return !Objects.equals(a, b);
-    }
-
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final OrderedPairNonNull<?, ?> other = (OrderedPairNonNull<?, ?>) obj;
-        if (!Objects.equals(this.a, other.a)) {
-            return false;
-        }
-        return Objects.equals(this.b, other.b);
+        return OrderedPair.orderedPairEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.a);
-        hash = 59 * hash + Objects.hashCode(this.b);
+        if (hash == 0) {
+            hash = OrderedPair.orderedPairHashCode(this);
+        }
         return hash;
     }
 
