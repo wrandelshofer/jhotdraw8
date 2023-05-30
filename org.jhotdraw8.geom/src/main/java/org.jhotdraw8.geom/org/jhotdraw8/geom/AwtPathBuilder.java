@@ -57,8 +57,7 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
     @Override
     public @NonNull Path2D.Double build() {
         pathDone();
-        //XXX this method is only available since Java SE 11
-        //path.trimToSize();
+        path.trimToSize();
         return path;
     }
 
