@@ -73,10 +73,16 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
  *                 |
  *                 v
  *            displayColor
+ *
+ *   chooserColorSpace
+ *         |
+ *         v
+ *     hueSliderLightness
  * </pre>
  */
 public class ColorChooserPaneModel {
     public static final CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
+    public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
     public static final OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
     public static final OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
     private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
@@ -92,6 +98,9 @@ public class ColorChooserPaneModel {
     public final @NonNull FloatProperty c1 = new SimpleFloatProperty(this, "c1");
     public final @NonNull FloatProperty c2 = new SimpleFloatProperty(this, "c2");
     public final @NonNull FloatProperty hue = new SimpleFloatProperty(this, "hue");
+    public final @NonNull FloatProperty hueSliderC0 = new SimpleFloatProperty(this, "hueSliderC0", 0.125f);
+    public final @NonNull FloatProperty hueSliderC1 = new SimpleFloatProperty(this, "hueSliderC1", 0.125f);
+    public final @NonNull FloatProperty hueSliderC2 = new SimpleFloatProperty(this, "hueSliderC2", 0.5f);
     public final @NonNull FloatProperty chroma = new SimpleFloatProperty(this, "chroma");
     public final @NonNull FloatProperty lightness = new SimpleFloatProperty(this, "lightness");
     public final @NonNull FloatProperty c3 = new SimpleFloatProperty(this, "c3");
@@ -123,7 +132,7 @@ public class ColorChooserPaneModel {
         targetColorSpace.addListener(this::updateSourceColorSpace);
 
         ChangeListener<? super Object> changeListener = (o, oldv, newv) -> {
-            updateTargetColor(o, oldv, newv);
+            updateDisplayColor(o, oldv, newv);
             updateTargetColorField(o, oldv, newv);
             updateSourceColorField(o, oldv, newv);
         };
@@ -507,6 +516,35 @@ public class ColorChooserPaneModel {
 
     private void updateTargetColorField(Observable o, Object oldv, Object newv) {
         NamedColorSpace tcs = getTargetColorSpace();
+        switch (getTargetColorSyntax()) {
+
+            case AUTOMATIC -> {
+            }
+            case HEX_COLOR -> {
+            }
+            case NAMED_COLOR -> {
+            }
+            case RGB_FUNCTION -> {
+            }
+            case HSL_FUNCTION -> {
+            }
+            case HWB_FUNCTION -> {
+            }
+            case LAB_FUNCTION -> {
+                tcs = CIE_LAB_COLOR_SPACE;
+            }
+            case OKLAB_FUNCTION -> {
+                tcs = OK_LAB_COLOR_SPACE;
+            }
+            case LCH_FUNCTION -> {
+                tcs = CIE_LAB_COLOR_SPACE;
+            }
+            case OKLCH_FUNCTION -> {
+                tcs = OK_LCH_COLOR_SPACE;
+            }
+            case COLOR_FUNCTION -> {
+            }
+        }
         NamedColorSpace scs = getSourceColorSpace();
         if (tcs != null && scs != null) {
             float[] sComponent = {getC0(), getC1(), getC2()};
@@ -600,6 +638,13 @@ public class ColorChooserPaneModel {
                 }
             }
             case COLOR_FUNCTION -> {
+            }
+        }
+
+        // Discard very small values
+        for (int i = 0; i < components.length; i++) {
+            if (Math.abs(components[i]) < 1e-5f) {
+                components[i] = 0;
             }
         }
 
@@ -715,14 +760,28 @@ public class ColorChooserPaneModel {
                 sourceColorSpace.set(new ParametricHsvColorSpace(cs.getName() + " HSV", cs));
             }
             case CIE_LCH -> {
-                sourceColorSpace.set(new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE));
+                sourceColorSpace.set(CIE_LCH_COLOR_SPACE);
             }
             case OK_LCH -> {
                 sourceColorSpace.set(new OKLchColorSpace());
             }
-            default -> sourceColorSpace.set(tcs);
+            default -> {
+                sourceColorSpace.set(tcs);
+                hueSliderC0.set(0.5f);
+                hueSliderC1.set(0.5f);
+            }
         }
         NamedColorSpace newScs = sourceColorSpace.get();
+
+        if (newScs instanceof OKLchColorSpace) {
+            hueSliderC0.set(0.75f);
+            hueSliderC1.set(0.12f);
+            hueSliderC2.set(0.5f);
+        } else {
+            hueSliderC0.set(0.5f * (newScs.getMaxValue(0) - newScs.getMinValue(0)) + newScs.getMinValue(0));
+            hueSliderC1.set(0.5f * (newScs.getMaxValue(1) - newScs.getMinValue(1)) + newScs.getMinValue(1));
+            hueSliderC2.set(0.5f * (newScs.getMaxValue(2) - newScs.getMinValue(2)) + newScs.getMinValue(2));
+        }
 
         // convert color components
         if (oldScs != null && newScs != null) {
@@ -777,7 +836,7 @@ public class ColorChooserPaneModel {
         }
     }
 
-    private void updateTargetColor(Observable o, Object oldv, Object newv) {
+    private void updateDisplayColor(Observable o, Object oldv, Object newv) {
         float[] component = {c0.floatValue(), c1.floatValue(), c2.floatValue()};
         float[] rgb = new float[3];
         NamedColorSpace displayCs = displayColorSpace.get();
@@ -893,5 +952,41 @@ public class ColorChooserPaneModel {
 
     public void setLightness(float lightness) {
         this.lightness.set(lightness);
+    }
+
+    public float getHueSliderC0() {
+        return hueSliderC0.get();
+    }
+
+    public @NonNull FloatProperty hueSliderC0Property() {
+        return hueSliderC0;
+    }
+
+    public void setHueSliderC0(float lightness) {
+        this.hueSliderC0.set(lightness);
+    }
+
+    public float getHueSliderC1() {
+        return hueSliderC1.get();
+    }
+
+    public @NonNull FloatProperty hueSliderC1Property() {
+        return hueSliderC1;
+    }
+
+    public void setHueSliderC1(float hueSliderC1) {
+        this.hueSliderC1.set(hueSliderC1);
+    }
+
+    public float getHueSliderC2() {
+        return hueSliderC2.get();
+    }
+
+    public @NonNull FloatProperty hueSliderC2Property() {
+        return hueSliderC2;
+    }
+
+    public void setHueSliderC2(float hueSliderC2) {
+        this.hueSliderC2.set(hueSliderC2);
     }
 }

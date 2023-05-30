@@ -109,7 +109,7 @@ public class ColorSlider extends AbstractColorSlider {
 
     private void onComponentValueChanged(int i) {
         if (i != getComponentIndex()) {
-            invalidateColorRect();
+            invalidate();
         }
     }
 

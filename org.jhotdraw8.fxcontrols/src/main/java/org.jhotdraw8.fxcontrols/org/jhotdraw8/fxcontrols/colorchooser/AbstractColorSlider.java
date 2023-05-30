@@ -334,7 +334,7 @@ public abstract class AbstractColorSlider extends Pane {
 
     protected abstract void onKeyPressed(KeyEvent keyEvent);
 
-    public void invalidateColorRect() {
+    public void invalidate() {
         if (!invalid) {
             invalid = true;
             requestLayout();
@@ -392,7 +392,7 @@ public abstract class AbstractColorSlider extends Pane {
 
     private void onAdjusting(Observable observable) {
         // if (!isPressed() && !isAdjusting()) {
-        invalidateColorRect();
+        invalidate();
         // }
     }
 

@@ -49,7 +49,7 @@ public class ColorChooserPane extends VBox {
     private URL location;
 
     @FXML // fx:id="slidersPane"
-    private VBox choosersPane; // Value injected by FXMLLoader
+    private VBox chooserPane; // Value injected by FXMLLoader
 
     @FXML // fx:id="displayColorField"
     private Label displayColorField; // Value injected by FXMLLoader
@@ -111,7 +111,7 @@ public class ColorChooserPane extends VBox {
     void initialize() {
         assert targetSyntaxCombo != null : "fx:id=\"targetSyntaxCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert chooserCombo != null : "fx:id=\"chooserCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
-        assert choosersPane != null : "fx:id=\"alphaSliderPane\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
+        assert chooserPane != null : "fx:id=\"alphaSliderPane\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert displayColorField != null : "fx:id=\"displayColorField\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert displayColorSpaceCombo != null : "fx:id=\"displayColorSpaceCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
         assert displayDepthCombo != null : "fx:id=\"displayDepthCombo\" was not injected: check your FXML file 'ColorChooserPane.fxml'.";
@@ -149,7 +149,7 @@ public class ColorChooserPane extends VBox {
         sliderChooser.modelProperty().bind(model);
         alphaChooser.modelProperty().bind(model);
 
-        choosersPane.getChildren().setAll(hlsChooser, alphaChooser);
+        chooserPane.getChildren().setAll(hlsChooser, alphaChooser);
         //choosersPane.getChildren().setAll(sliderChooser,alphaChooser);
 
         VBox.setVgrow(hlsChooser, Priority.ALWAYS);

@@ -9,6 +9,7 @@
 
 package org.jhotdraw8.fxcontrols.colorchooser;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -49,9 +50,29 @@ import java.util.ResourceBundle;
  */
 public class HlsChooser extends HBox {
 
+    private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
+    private final @NonNull Via<ColorChooserPaneModel> viaModel = new Via<>(model);
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private ResourceBundle resources;
+    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    private URL location;
+    @FXML // fx:id="huePane"
+    private StackPane huePane; // Value injected by FXMLLoader
+    @FXML // fx:id="colorRectPane"
+    private StackPane colorRectPane; // Value injected by FXMLLoader
+    private ColorRectangleSlider colorRectSlider;
+    private InvalidationListener colorRectSliderInvalidationListener;
+    private InvalidationListener hueSliderInvalidationListener;
+    private ColorSlider hueSlider;
+    private ChangeListener<NamedColorSpace> targetColorSpaceListener;
 
     public HlsChooser() {
         load();
+    }
+
+    private static URL getFxml() {
+        String name = "HlsChooser.fxml";
+        return Objects.requireNonNull(HlsChooser.class.getResource(name), name);
     }
 
     private void load() {
@@ -65,30 +86,6 @@ public class HlsChooser extends HBox {
             throw new RuntimeException(exc);
         }
     }
-
-    private static URL getFxml() {
-        String name = "HlsChooser.fxml";
-        return Objects.requireNonNull(HlsChooser.class.getResource(name), name);
-    }
-
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
-    @FXML // fx:id="huePane"
-    private StackPane huePane; // Value injected by FXMLLoader
-
-    @FXML // fx:id="colorRectPane"
-    private StackPane colorRectPane; // Value injected by FXMLLoader
-
-    private ColorRectangleSlider colorRectSlider;
-    private ColorSlider hueSlider;
-
-    private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
-    private ChangeListener<NamedColorSpace> targetColorSpaceListener;
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
@@ -107,17 +104,12 @@ public class HlsChooser extends HBox {
 
         hueSlider.setThumbTranslateX(1);
         hueSlider.setOrientation(Orientation.VERTICAL);
-        hueSlider.c0Property().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty).map((NamedColorSpace v) ->
-                0.5f * (v.getMaxValue(0) - v.getMinValue(0)) + v.getMinValue(0)
-        ));
-        hueSlider.c1Property().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty).map((NamedColorSpace v) ->
-                0.5f * (v.getMaxValue(1) - v.getMinValue(1)) + v.getMinValue(1)
-        ));
-        hueSlider.c2Property().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty).map((NamedColorSpace v) ->
-                0.5f * (v.getMaxValue(2) - v.getMinValue(2)) + v.getMinValue(2)
-        ));
-        hueSlider.setMinorTickUnit(0.1);
-        hueSlider.setMajorTickUnit(1);
+
+        hueSlider.c0Property().bind(model.flatMap(ColorChooserPaneModel::hueSliderC0Property));
+        hueSlider.c1Property().bind(model.flatMap(ColorChooserPaneModel::hueSliderC1Property));
+        hueSlider.c2Property().bind(model.flatMap(ColorChooserPaneModel::hueSliderC2Property));
+        hueSlider.setMinorTickUnit(0.1);// foolishly assumes that hue goes from 0 to 360
+        hueSlider.setMajorTickUnit(1);// foolishly assumes that hue goes from 0 to 360
 
         hueSlider.componentIndexProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceHueIndexProperty));
         hueSlider.sourceColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty));
@@ -136,10 +128,16 @@ public class HlsChooser extends HBox {
         colorRectSlider.yComponentIndexProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceLightnessValueIndexProperty));
         colorRectSlider.rgbFilterProperty().bind(model.flatMap(ColorChooserPaneModel::displayBitDepthProperty).map(Map.Entry::getValue));
 
-        hueSlider.valueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::hueProperty).get());
-        colorRectSlider.xValueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::chromaProperty).get());
-        colorRectSlider.yValueProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::lightnessProperty).get());
+        hueSlider.valueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::hueProperty).get());
+        colorRectSlider.xValueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::chromaProperty).get());
+        colorRectSlider.yValueProperty().bindBidirectional(viaModel.via(ColorChooserPaneModel::lightnessProperty).get());
 
+        hueSliderInvalidationListener = o -> hueSlider.invalidate();
+        viaModel.via(ColorChooserPaneModel::chooserTypeProperty).get().addListener(hueSliderInvalidationListener);
+        colorRectSliderInvalidationListener = o -> colorRectSlider.invalidate();
+        viaModel.via(ColorChooserPaneModel::displayBitDepthProperty).get().addListener(colorRectSliderInvalidationListener);
+        viaModel.via(ColorChooserPaneModel::displayColorSpaceProperty).get().addListener(colorRectSliderInvalidationListener);
+        viaModel.via(ColorChooserPaneModel::targetColorSpaceProperty).get().addListener(colorRectSliderInvalidationListener);
     }
 
 
@@ -147,11 +145,11 @@ public class HlsChooser extends HBox {
         return model.get();
     }
 
-    public @NonNull ObjectProperty<ColorChooserPaneModel> modelProperty() {
-        return model;
-    }
-
     public void setModel(ColorChooserPaneModel model) {
         this.model.set(model);
+    }
+
+    public @NonNull ObjectProperty<ColorChooserPaneModel> modelProperty() {
+        return model;
     }
 }

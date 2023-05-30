@@ -24,6 +24,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Shows 3 horizontal sliders:
+ * <pre>
+ *     +---------------------+
+ *     |                     |
+ *     +---------------------+
+ *     +---------------------+
+ *     |                     |
+ *     +---------------------+
+ *     +---------------------+
+ *     |                     |
+ *     +---------------------+
+ * </pre>
+ */
 public class SliderChooser extends VBox {
     private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
 

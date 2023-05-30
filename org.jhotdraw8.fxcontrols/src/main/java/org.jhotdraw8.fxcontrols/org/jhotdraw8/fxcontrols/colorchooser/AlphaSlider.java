@@ -65,7 +65,7 @@ public class AlphaSlider extends AbstractColorSlider {
     @Override
     void initialize() {
         super.initialize();
-        InvalidationListener handler = o -> invalidateColorRect();
+        InvalidationListener handler = o -> invalidate();
         c0Property().addListener(handler);
         c1Property().addListener(handler);
         c2Property().addListener(handler);
